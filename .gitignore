@@ -1,0 +1,15 @@
+.metadata
+.classpath
+.project
+.module_prj
+.settings/
+.idea/
+.run/
+.svn/
+*.iml
+*.log
+bin/
+out/
+target/
+build/
+logs/

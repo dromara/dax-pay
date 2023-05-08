@@ -1,0 +1,4 @@
+# 启用版本为java8
+java-baseline=8
+# 缩进使用空格
+indentation-style=spaces

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bootx.daxpay.core.paymodel.wallet.dao.WalletMapper">
+
+    <!--增加余额-->
+    <update id="increaseBalance">
+        update pay_wallet
+        set balance = (balance + #{amount}),
+            last_modifier = #{operator},
+            last_modified_time = #{date},
+            version = (version+1)
+        where id = #{walletId}
+    </update>
+    <!-- 减少余额 -->
+    <update id="reduceBalance">
+        update pay_wallet
+        set balance = (balance - #{amount}),
+            last_modifier = #{operator},
+            last_modified_time = #{date},
+            version = (version+1)
+        where id = #{walletId} and (balance- #{amount}) >= 0
+    </update>
+    <!-- 减少余额,允许扣成负数 -->
+    <update id="reduceBalanceUnlimited">
+        update pay_wallet
+        set balance = (balance - #{amount}),
+            last_modifier = #{operator},
+            last_modified_time = #{date},
+            version = (version+1)
+        where id = #{walletId}
+    </update>
+
+    <!-- 待开通钱包的用户列表 -->
+    <select id="pageByNotWallet" resultType="cn.bootx.iam.core.user.entity.UserInfo">
+        select
+            iam_user_info.id,
+            iam_user_info.`name`,
+            iam_user_info.username
+        from
+            iam_user_info
+                LEFT JOIN
+            pay_wallet AS w
+            on
+                iam_user_info.id = w.user_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

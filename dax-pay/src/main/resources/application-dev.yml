@@ -1,0 +1,224 @@
+server:
+  port: 9898
+spring:
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        # 默认数据源
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/bootx-dax-pay?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
+          username: root
+          password: root
+    hikari:
+      # 30 秒, 心跳检测
+      keepalive-time: 30000
+      # 300 分钟, 连接最大存活时间
+      max-lifetime: 18000000
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+  # 如果不使用MQ的话, 可以将项目中 @EnableRabbit 给注释掉, 就不会一直报错了
+  rabbitmq:
+    # 虚拟主机
+    virtual-host: dax-pay
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        # 重试机制
+        retry:
+          enabled: true
+          max-attempts: 5
+  #静态资源加载配置
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/public/
+  thymeleaf:
+    cache: false
+  # 数据库版本管理
+  flyway:
+    # 如果 flyway_schema_history 不存在自动创建
+    baseline-on-migrate: true
+    # 开发模式开启
+    enabled: true
+  # 定时任务
+  quartz:
+    # 持久化方式
+    job-store-type: jdbc
+    #定时任务启动开关，true-开  false-关
+    auto-startup: true
+    #启动时更新己存在的Job
+    overwrite-existing-jobs: true
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: quartzScheduler
+            instanceId: AUTO
+          threadPool:
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+
+# 开发时显示debug日志
+logging:
+  level:
+    cn.bootx.**: debug
+# 项目配置
+bootx:
+  common:
+    # 接口文档
+    swagger:
+      enabled: true
+      author: bootx
+      version: 1.2.3
+      title: bootx开发平台单体版
+      description: bootx-platform开发平台单体版
+      # basic认证
+      basic:
+        enable: true
+      # 多模块扫码
+      base-packages:
+        "[基础API]": cn.bootx.baseapi
+        "[身份识别和管理]": cn.bootx.iam
+        "[消息服务]": cn.bootx.notice
+        "[办公服务]":
+          - cn.bootx.office
+          - cn.bootx.starter.flowable
+        "[支付服务]": cn.bootx.daxpay
+        "[演示模块]": cn.bootx.demo
+        "[可视化大屏]": cn.bootx.visualization
+        "[第三方对接]":
+          - cn.bootx.starter.dingtalk
+          - cn.bootx.starter.wecom
+          - cn.bootx.starter.wechat
+        "[认证与权限]":
+          - cn.bootx.starter.auth
+          - cn.bootx.starter.data.perm
+        "[其他starter组件]":
+          - cn.bootx.starter.audit.log
+          - cn.bootx.starter.file
+          - cn.bootx.starter.quartz
+          - cn.bootx.starter.monitor
+    # 缓存
+    cache:
+      # 默认超时时间 30分钟
+      default-ttl: 1800
+      # 对Key设置超时间 (秒)
+      keys-ttl:
+        "[iam:user:path]" : 5200
+        "[iam:ignore:path]" : 28800
+        "[base:china:region]" : 28800
+    # 序列生成器
+    sequence:
+      type: jdbc
+    # 异常
+    exception:
+      # 显示详细异常
+      show-full-message: true
+    # 是否启用Rabbit, 并不是停用了Rabbit, 需配合 ConditionalOnRabbit 注解使用
+    rabbit:
+      enable: false
+    # 表结构自动维护
+    actable:
+      # 数据库类型
+      database-type: mysql
+      # 更新类型 none为不进行任何操作
+      update-type: update
+      # 扫描包路径, 可以用 ,和 ; 分隔
+      scan-package: cn.bootx.**.entity
+      # 指定生成索引前缀
+      prefix-index: idx_
+      # 指定生成唯一约束前缀
+      prefix-unique: uni_
+  starter:
+    # 三方平台
+    third:
+      # 钉钉
+      ding-talk:
+        app-key: ??
+        app-secret: ??
+      #微信(公众平台)
+      wechat:
+        app-id: ??
+        app-secret: ??
+        token: ??
+        encoding-aes-key: ??
+      # 企业微信
+      wecom:
+        agent-id: 1000003
+        corp-id: ??
+        corp-secret: ??
+        token: ??
+        encoding-aes-key: ??
+    # 认证
+    auth:
+      default-password: 123456
+      ignore-urls:
+        - '/actuator/**'
+        - '/v3/api-docs/**'
+        - '/doc.html'
+        - '/swagger-resources/**'
+        - '/token/**'
+        - '/ws/**'
+        - '/demo/**'
+        - '/test/**'
+        - "/plumelog/**"
+        - '/webjars/**'
+        - '/css/**'
+        - '/error'
+        - '/favicon.ico'
+        - '/**'
+      # 第三方登录
+      third-login:
+        ding-talk:
+          redirect-uri: http://127.0.0.1:9999/auth/third/callback/dingTalk
+          client-secret: ${bootx.starter.third.ding-talk.app-secret}
+          client-id: ${bootx.starter.third.ding-talk.app-key}
+        we-com:
+          redirect-uri: http://127.0.0.1:9999/auth/third/callback/weCom
+          client-secret: ${bootx.starter.third.wecom.corp-secret}
+          client-id: ${bootx.starter.third.wecom.corp-id}
+          agent-id: ${bootx.starter.third.wecom.agent-id}
+        # 微信开放平台
+        we-chat-open:
+          redirect-uri: http://127.0.0.1:9999/auth/third/callback/weChat
+          client-id: ??
+          client-secret: ??
+    # 审计日志
+    audit-log:
+      # 审计日志存储
+      store: jdbc
+      # ip归属地
+      ip2region:
+        # 数据文件路径
+        file-path: /data/ip2region/ip2region.xdb
+        # 查询方式
+        search-type: cache
+    # 文件上传
+    file-upload:
+      upload-type: local
+      server-url: http://127.0.0.1:8080
+      local:
+        local-path: /data/file
+      mongo:
+        bucket: fs
+      minio:
+        # 地址
+        endpoint: http://127.0.0.1:9000
+        # 账号
+        access-key: root
+        # 密码
+        access-secret: password
+        # 存储桶 需要至少三位
+        bucket: bootx
+    # 数据权限
+    data-perm:
+      field-decrypt-key: "UCrtxSCwYZNCIlav"
