@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.controller;
 
-import cn.bootx.common.core.annotation.IgnoreAuth;
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.daxpay.core.paymodel.alipay.service.AliPayCallbackService;
 import cn.bootx.daxpay.core.paymodel.wechat.service.WeChatPayCallbackService;
 import com.ijpay.alipay.AliPayApi;

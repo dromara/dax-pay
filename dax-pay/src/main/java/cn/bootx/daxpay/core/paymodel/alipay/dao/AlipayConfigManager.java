@@ -1,8 +1,8 @@
 package cn.bootx.daxpay.core.paymodel.alipay.dao;
 
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.mybatisplus.impl.BaseManager;
-import cn.bootx.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.daxpay.core.paymodel.alipay.entity.AlipayConfig;
 import cn.bootx.daxpay.param.paymodel.alipay.AlipayConfigQuery;
 import cn.hutool.core.util.StrUtil;

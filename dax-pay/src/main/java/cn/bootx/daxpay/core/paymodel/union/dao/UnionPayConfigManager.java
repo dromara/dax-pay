@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.union.dao;
 
-import cn.bootx.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.daxpay.core.paymodel.union.entity.UnionPayConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

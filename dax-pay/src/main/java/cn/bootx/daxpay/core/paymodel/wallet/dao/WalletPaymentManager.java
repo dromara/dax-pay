@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.wallet.dao;
 
-import cn.bootx.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.daxpay.core.paymodel.base.entity.BasePayment;
 import cn.bootx.daxpay.core.paymodel.wallet.entity.WalletPayment;
 import lombok.RequiredArgsConstructor;

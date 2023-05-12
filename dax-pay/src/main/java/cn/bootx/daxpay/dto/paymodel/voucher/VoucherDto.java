@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.dto.paymodel.voucher;
 
-import cn.bootx.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.daxpay.code.paymodel.VoucherCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

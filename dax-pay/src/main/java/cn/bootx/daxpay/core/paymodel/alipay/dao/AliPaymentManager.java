@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.alipay.dao;
 
-import cn.bootx.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.daxpay.core.paymodel.alipay.entity.AliPayment;
 import cn.bootx.daxpay.core.paymodel.base.entity.BasePayment;
 import lombok.RequiredArgsConstructor;

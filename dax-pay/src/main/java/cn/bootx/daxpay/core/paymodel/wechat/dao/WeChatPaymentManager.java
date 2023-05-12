@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.wechat.dao;
 
-import cn.bootx.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.daxpay.core.paymodel.wechat.entity.WeChatPayment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

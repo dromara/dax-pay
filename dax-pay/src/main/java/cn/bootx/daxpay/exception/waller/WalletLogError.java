@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.exception.waller;
 
-import cn.bootx.common.core.exception.FatalException;
+import cn.bootx.platform.common.core.exception.FatalException;
 import cn.bootx.daxpay.code.PaymentCenterErrorCode;
 
 /**

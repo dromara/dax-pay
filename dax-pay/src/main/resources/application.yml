@@ -1,6 +1,6 @@
 spring:
   application:
-    name: bootx-platform
+    name: dax-pay
   profiles:
     active: dev
   config:

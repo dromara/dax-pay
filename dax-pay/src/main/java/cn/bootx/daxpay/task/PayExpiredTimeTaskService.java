@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.task;
 
-import cn.bootx.common.core.util.CollUtil;
+import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.daxpay.core.payment.dao.PaymentExpiredTimeRepository;
 import cn.bootx.daxpay.mq.PaymentEventSender;
 import lombok.RequiredArgsConstructor;

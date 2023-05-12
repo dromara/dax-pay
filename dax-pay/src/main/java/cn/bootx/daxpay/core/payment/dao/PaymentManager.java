@@ -1,11 +1,11 @@
 package cn.bootx.daxpay.core.payment.dao;
 
-import cn.bootx.common.core.rest.param.OrderParam;
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.mybatisplus.impl.BaseManager;
-import cn.bootx.common.mybatisplus.util.MpUtil;
-import cn.bootx.common.query.entity.QueryParams;
-import cn.bootx.common.query.generator.QueryGenerator;
+import cn.bootx.platform.common.core.rest.param.OrderParam;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.query.entity.QueryParams;
+import cn.bootx.platform.common.query.generator.QueryGenerator;
 import cn.bootx.daxpay.core.payment.entity.Payment;
 import cn.bootx.daxpay.param.payment.PaymentQuery;
 import cn.hutool.core.util.StrUtil;

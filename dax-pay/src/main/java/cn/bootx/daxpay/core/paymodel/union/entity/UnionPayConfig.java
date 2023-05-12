@@ -1,7 +1,7 @@
 package cn.bootx.daxpay.core.paymodel.union.entity;
 
-import cn.bootx.common.core.function.EntityBaseFunction;
-import cn.bootx.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
+import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.daxpay.core.paymodel.union.convert.UnionPayConvert;
 import cn.bootx.daxpay.dto.paymodel.union.UnionPayConfigDto;
 import com.baomidou.mybatisplus.annotation.TableName;

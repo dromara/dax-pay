@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.alipay.service;
 
-import cn.bootx.common.core.util.BigDecimalUtil;
+import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.daxpay.code.pay.PayChannelCode;
 import cn.bootx.daxpay.code.pay.PayStatusCode;
 import cn.bootx.daxpay.core.pay.local.AsyncPayInfoLocal;

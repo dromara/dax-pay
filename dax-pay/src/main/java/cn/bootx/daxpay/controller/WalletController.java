@@ -1,18 +1,18 @@
 package cn.bootx.daxpay.controller;
 
-import cn.bootx.common.core.annotation.OperateLog;
-import cn.bootx.common.core.rest.PageResult;
-import cn.bootx.common.core.rest.Res;
-import cn.bootx.common.core.rest.ResResult;
-import cn.bootx.common.core.rest.param.PageParam;
 import cn.bootx.daxpay.core.paymodel.wallet.service.WalletQueryService;
 import cn.bootx.daxpay.core.paymodel.wallet.service.WalletService;
 import cn.bootx.daxpay.dto.paymodel.wallet.WalletDto;
 import cn.bootx.daxpay.dto.paymodel.wallet.WalletInfoDto;
 import cn.bootx.daxpay.param.paymodel.wallet.WalletPayParam;
 import cn.bootx.daxpay.param.paymodel.wallet.WalletRechargeParam;
-import cn.bootx.iam.dto.user.UserInfoDto;
-import cn.bootx.iam.param.user.UserInfoParam;
+import cn.bootx.platform.common.core.annotation.OperateLog;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.Res;
+import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.iam.dto.user.UserInfoDto;
+import cn.bootx.platform.iam.param.user.UserInfoParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;

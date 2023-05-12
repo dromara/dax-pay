@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.alipay.entity;
 
-import cn.bootx.common.core.function.EntityBaseFunction;
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.daxpay.core.paymodel.base.entity.BasePayment;
 import cn.bootx.daxpay.dto.paymodel.alipay.AliPaymentDto;
 import cn.hutool.core.bean.BeanUtil;

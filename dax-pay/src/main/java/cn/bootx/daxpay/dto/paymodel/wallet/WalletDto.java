@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.dto.paymodel.wallet;
 
-import cn.bootx.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

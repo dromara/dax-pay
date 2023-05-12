@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.dto.refund;
 
-import cn.bootx.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.daxpay.code.pay.PayStatusCode;
 import cn.bootx.daxpay.dto.payment.RefundableInfo;
 import io.swagger.v3.oas.annotations.media.Schema;

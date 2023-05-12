@@ -1,8 +1,8 @@
 package cn.bootx.daxpay.core.paymodel.wallet.service;
 
-import cn.bootx.common.core.exception.BizException;
-import cn.bootx.common.core.exception.DataNotExistException;
-import cn.bootx.common.core.util.BigDecimalUtil;
+import cn.bootx.platform.common.core.exception.BizException;
+import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.daxpay.code.paymodel.WalletCode;
 import cn.bootx.daxpay.core.paymodel.wallet.dao.WalletLogManager;
 import cn.bootx.daxpay.core.paymodel.wallet.dao.WalletManager;

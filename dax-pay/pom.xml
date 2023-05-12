@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.bootx.platform</groupId>
-        <artifactId>bootx-platform</artifactId>
-        <version>1.2.3</version>
+        <artifactId>bootx-dax-pay</artifactId>
+        <version>1.3.0</version>
     </parent>
 
-    <groupId>cn.bootxtest</groupId>
+    <groupId>cn.bootx.platform</groupId>
     <artifactId>dax-pay</artifactId>
 
     <properties>
@@ -35,6 +35,24 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+
+        <!-- thymeleaf 模板引擎 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <!-- thymeleaf配套 -->
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+        </dependency>
+
+        <!-- flyway -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
         </dependency>
 
         <!-- lombok -->
@@ -65,18 +83,27 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--若使用redisTemplate作为分布式锁底层，则需要引入-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
+            <version>${lock4j.version}</version>
+        </dependency>
+
         <!-- 基础API -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>service-baseapi</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+
         <!-- 安全认证 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>service-iam</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+
         <!-- 消息通知 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
@@ -93,11 +120,6 @@
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-websocket</artifactId>
-        </dependency>
-        <!-- 分布式锁 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-lock</artifactId>
         </dependency>
         <!-- 定时任务 -->
         <dependency>
@@ -155,6 +177,12 @@
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>${xml-apis.version}</version>
+        </dependency>
+        <!-- plumeLog日志 -->
+        <dependency>
+            <groupId>com.plumelog</groupId>
+            <artifactId>plumelog-logback</artifactId>
+            <version>${plumelog.version}</version>
         </dependency>
 
     </dependencies>

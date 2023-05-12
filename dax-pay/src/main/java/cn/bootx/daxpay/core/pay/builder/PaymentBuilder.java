@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.pay.builder;
 
-import cn.bootx.common.spring.util.WebServletUtil;
+import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.daxpay.code.pay.PayChannelCode;
 import cn.bootx.daxpay.code.pay.PayStatusCode;
 import cn.bootx.daxpay.core.pay.local.AsyncPayInfoLocal;

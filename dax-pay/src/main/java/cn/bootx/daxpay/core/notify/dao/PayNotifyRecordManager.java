@@ -1,9 +1,9 @@
 package cn.bootx.daxpay.core.notify.dao;
 
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.mybatisplus.base.MpIdEntity;
-import cn.bootx.common.mybatisplus.impl.BaseManager;
-import cn.bootx.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.daxpay.core.notify.entity.PayNotifyRecord;
 import cn.bootx.daxpay.dto.notify.PayNotifyRecordDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

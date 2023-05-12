@@ -1,7 +1,7 @@
 package cn.bootx.daxpay.core.paymodel.wallet.dao;
 
 import cn.bootx.daxpay.core.paymodel.wallet.entity.Wallet;
-import cn.bootx.iam.core.user.entity.UserInfo;
+import cn.bootx.platform.iam.core.user.entity.UserInfo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;

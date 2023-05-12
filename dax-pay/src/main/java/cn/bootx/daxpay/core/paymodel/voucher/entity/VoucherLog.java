@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.voucher.entity;
 
-import cn.bootx.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.daxpay.code.paymodel.VoucherCode;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package cn.bootx.daxpay.dto.paymodel.alipay;
 
-import cn.bootx.common.core.rest.dto.BaseDto;
-import cn.bootx.starter.data.perm.sensitive.SensitiveInfo;
+import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

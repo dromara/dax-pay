@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.pay.service;
 
-import cn.bootx.common.core.exception.BizException;
+import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.daxpay.code.pay.PaySyncStatus;
 import cn.bootx.daxpay.core.pay.builder.PayEventBuilder;
 import cn.bootx.daxpay.core.pay.builder.PaymentBuilder;

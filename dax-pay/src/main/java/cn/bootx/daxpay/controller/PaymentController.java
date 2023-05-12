@@ -1,12 +1,12 @@
 package cn.bootx.daxpay.controller;
 
-import cn.bootx.common.core.annotation.IgnoreAuth;
-import cn.bootx.common.core.rest.PageResult;
-import cn.bootx.common.core.rest.Res;
-import cn.bootx.common.core.rest.ResResult;
-import cn.bootx.common.core.rest.param.OrderParam;
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.query.entity.QueryParams;
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.Res;
+import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.rest.param.OrderParam;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.query.entity.QueryParams;
 import cn.bootx.daxpay.core.payment.service.PaymentQueryService;
 import cn.bootx.daxpay.dto.payment.PayChannelInfo;
 import cn.bootx.daxpay.dto.payment.PaymentDto;

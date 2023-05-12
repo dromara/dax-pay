@@ -31,7 +31,7 @@
     </update>
 
     <!-- 待开通钱包的用户列表 -->
-    <select id="pageByNotWallet" resultType="cn.bootx.iam.core.user.entity.UserInfo">
+    <select id="pageByNotWallet" resultType="cn.bootx.platform.iam.core.user.entity.UserInfo">
         select
             iam_user_info.id,
             iam_user_info.`name`,

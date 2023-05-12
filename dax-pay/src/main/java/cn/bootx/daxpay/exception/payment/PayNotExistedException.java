@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.exception.payment;
 
-import cn.bootx.common.core.exception.BizException;
+import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.daxpay.code.PaymentCenterErrorCode;
 
 /**

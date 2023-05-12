@@ -1,10 +1,10 @@
 package cn.bootx.daxpay.controller;
 
-import cn.bootx.common.core.rest.PageResult;
-import cn.bootx.common.core.rest.Res;
-import cn.bootx.common.core.rest.ResResult;
-import cn.bootx.common.core.rest.dto.KeyValue;
-import cn.bootx.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.Res;
+import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.rest.dto.KeyValue;
+import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.daxpay.core.paymodel.wechat.service.WeChatPayConfigService;
 import cn.bootx.daxpay.dto.paymodel.wechat.WeChatPayConfigDto;
 import cn.bootx.daxpay.param.paymodel.wechat.WeChatPayConfigParam;

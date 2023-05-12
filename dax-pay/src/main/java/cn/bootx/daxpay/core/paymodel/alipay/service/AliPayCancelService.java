@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.alipay.service;
 
-import cn.bootx.common.spring.exception.RetryableException;
+import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.daxpay.code.paymodel.AliPayCode;
 import cn.bootx.daxpay.core.pay.local.AsyncRefundLocal;
 import cn.bootx.daxpay.core.payment.entity.Payment;

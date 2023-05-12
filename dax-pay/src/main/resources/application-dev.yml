@@ -8,7 +8,7 @@ spring:
         # 默认数据源
         master:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/bootx-dax-pay?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://127.0.0.1:3306/dax-pay?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
           username: root
           password: root
     hikari:
@@ -91,22 +91,22 @@ bootx:
         "[消息服务]": cn.bootx.notice
         "[办公服务]":
           - cn.bootx.office
-          - cn.bootx.starter.flowable
+          - cn.bootx.platform.starter.flowable
         "[支付服务]": cn.bootx.daxpay
         "[演示模块]": cn.bootx.demo
         "[可视化大屏]": cn.bootx.visualization
         "[第三方对接]":
-          - cn.bootx.starter.dingtalk
-          - cn.bootx.starter.wecom
-          - cn.bootx.starter.wechat
+          - cn.bootx.platform.starter.dingtalk
+          - cn.bootx.platform.starter.wecom
+          - cn.bootx.platform.starter.wechat
         "[认证与权限]":
-          - cn.bootx.starter.auth
-          - cn.bootx.starter.data.perm
+          - cn.bootx.platform.starter.auth
+          - cn.bootx.platform.starter.data.perm
         "[其他starter组件]":
-          - cn.bootx.starter.audit.log
-          - cn.bootx.starter.file
-          - cn.bootx.starter.quartz
-          - cn.bootx.starter.monitor
+          - cn.bootx.platform.starter.audit.log
+          - cn.bootx.platform.starter.file
+          - cn.bootx.platform.starter.quartz
+          - cn.bootx.platform.starter.monitor
     # 缓存
     cache:
       # 默认超时时间 30分钟

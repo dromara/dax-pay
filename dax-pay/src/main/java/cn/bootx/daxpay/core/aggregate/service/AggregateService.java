@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.aggregate.service;
 
-import cn.bootx.common.redis.RedisClient;
+import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.daxpay.code.pay.PayChannelCode;
 import cn.bootx.daxpay.core.aggregate.entity.AggregatePayInfo;
 import cn.bootx.daxpay.exception.payment.PayFailureException;

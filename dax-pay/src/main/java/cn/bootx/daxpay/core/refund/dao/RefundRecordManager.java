@@ -1,9 +1,9 @@
 package cn.bootx.daxpay.core.refund.dao;
 
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.mybatisplus.base.MpIdEntity;
-import cn.bootx.common.mybatisplus.impl.BaseManager;
-import cn.bootx.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.daxpay.core.refund.entity.RefundRecord;
 import cn.bootx.daxpay.dto.refund.RefundRecordDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

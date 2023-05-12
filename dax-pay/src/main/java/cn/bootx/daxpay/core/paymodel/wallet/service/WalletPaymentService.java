@@ -1,7 +1,7 @@
 package cn.bootx.daxpay.core.paymodel.wallet.service;
 
-import cn.bootx.common.core.exception.BizException;
-import cn.bootx.common.core.util.BigDecimalUtil;
+import cn.bootx.platform.common.core.exception.BizException;
+import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.daxpay.code.pay.PayStatusCode;
 import cn.bootx.daxpay.core.payment.entity.Payment;
 import cn.bootx.daxpay.core.paymodel.wallet.dao.WalletPaymentManager;

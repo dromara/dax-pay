@@ -1,14 +1,14 @@
 package cn.bootx.daxpay.core.paymodel.wallet.dao;
 
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.mybatisplus.base.MpIdEntity;
-import cn.bootx.common.mybatisplus.impl.BaseManager;
-import cn.bootx.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.daxpay.core.paymodel.wallet.entity.Wallet;
 import cn.bootx.daxpay.param.paymodel.wallet.WalletPayParam;
-import cn.bootx.iam.core.user.entity.UserInfo;
-import cn.bootx.iam.param.user.UserInfoParam;
-import cn.bootx.starter.auth.util.SecurityUtil;
+import cn.bootx.platform.iam.core.user.entity.UserInfo;
+import cn.bootx.platform.iam.param.user.UserInfoParam;
+import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

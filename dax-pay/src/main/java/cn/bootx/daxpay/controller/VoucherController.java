@@ -1,9 +1,9 @@
 package cn.bootx.daxpay.controller;
 
-import cn.bootx.common.core.rest.PageResult;
-import cn.bootx.common.core.rest.Res;
-import cn.bootx.common.core.rest.ResResult;
-import cn.bootx.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.Res;
+import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.daxpay.core.paymodel.voucher.service.VoucherQueryService;
 import cn.bootx.daxpay.core.paymodel.voucher.service.VoucherService;
 import cn.bootx.daxpay.dto.paymodel.voucher.VoucherDto;

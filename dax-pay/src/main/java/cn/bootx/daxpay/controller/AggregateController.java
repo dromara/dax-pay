@@ -1,10 +1,10 @@
 package cn.bootx.daxpay.controller;
 
-import cn.bootx.common.core.annotation.IgnoreAuth;
-import cn.bootx.common.core.rest.Res;
-import cn.bootx.common.core.rest.ResResult;
 import cn.bootx.daxpay.core.aggregate.service.AggregateService;
 import cn.bootx.daxpay.param.cashier.CashierSinglePayParam;
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
+import cn.bootx.platform.common.core.rest.Res;
+import cn.bootx.platform.common.core.rest.ResResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -72,6 +72,7 @@ dax-pay
 - Bootx-Platform：单体版脚手架 [Gitee地址](https://gitee.com/bootx/bootx-platform)
 - Bootx-Cloud：微服务版脚手架 [Gitee地址](https://gitee.com/bootx/bootx-cloud)
 - dax-pay：开源支付系统 [Gitee地址](https://gitee.com/bootx/daxpay)
+- bpm-plus：协同办公系统 [Gitee地址](https://gitee.com/bootx/bpm-plus)
 - mybatis-table-modify：数据表结构管理 [Gitee地址](https://gitee.com/bootx/mybatis-table-modify)
 
 ##  🥪 关于我们

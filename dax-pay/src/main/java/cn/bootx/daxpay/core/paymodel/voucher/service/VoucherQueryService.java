@@ -1,9 +1,9 @@
 package cn.bootx.daxpay.core.paymodel.voucher.service;
 
-import cn.bootx.common.core.exception.DataNotExistException;
-import cn.bootx.common.core.rest.PageResult;
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.daxpay.core.paymodel.voucher.dao.VoucherManager;
 import cn.bootx.daxpay.core.paymodel.voucher.entity.Voucher;
 import cn.bootx.daxpay.dto.paymodel.voucher.VoucherDto;

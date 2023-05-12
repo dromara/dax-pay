@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.paymodel.wallet.service;
 
-import cn.bootx.common.core.exception.BizException;
+import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.daxpay.code.pay.PayStatusCode;
 import cn.bootx.daxpay.code.paymodel.WalletCode;
 import cn.bootx.daxpay.core.payment.entity.Payment;

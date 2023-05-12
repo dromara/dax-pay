@@ -15,7 +15,7 @@ ENV JAVA_OPTS="-Xms256m -Xmx1G -XX:+UseG1GC -Djava.security.egd=file:/dev/./uran
 WORKDIR /
 
 # 端口暴露
-EXPOSE 9999
+EXPOSE 9898
 
 # 添加执行jar包
 ADD bootx-start/target/bootx-start.jar bootx-start.jar

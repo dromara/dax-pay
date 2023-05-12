@@ -1,8 +1,8 @@
 package cn.bootx.daxpay.controller;
 
-import cn.bootx.common.core.annotation.IgnoreAuth;
-import cn.bootx.common.core.rest.Res;
-import cn.bootx.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
+import cn.bootx.platform.common.core.rest.Res;
+import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.daxpay.core.cashier.service.CashierService;
 import cn.bootx.daxpay.dto.pay.PayResult;
 import cn.bootx.daxpay.exception.payment.PayUnsupportedMethodException;

@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.core.pay.strategy;
 
-import cn.bootx.common.core.util.BigDecimalUtil;
+import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.daxpay.code.pay.PayChannelCode;
 import cn.bootx.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.daxpay.code.paymodel.WeChatPayCode;

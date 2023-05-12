@@ -1,10 +1,10 @@
 package cn.bootx.daxpay.core.paymodel.alipay.service;
 
-import cn.bootx.common.core.exception.DataNotExistException;
-import cn.bootx.common.core.rest.PageResult;
-import cn.bootx.common.core.rest.dto.KeyValue;
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.dto.KeyValue;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.daxpay.code.paymodel.AliPayWay;
 import cn.bootx.daxpay.core.paymodel.alipay.dao.AlipayConfigManager;
 import cn.bootx.daxpay.core.paymodel.alipay.entity.AlipayConfig;

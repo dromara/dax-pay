@@ -7,9 +7,9 @@
     <property name="logdir" value="logs"/>
 
     <!-- 导入 -->
-    <include resource="cn/bootx/common/log/logback-sensitive.xml"/>
-    <include resource="cn/bootx/common/log/logback-console.xml"/>
-    <include resource="cn/bootx/common/log/logback-log-file.xml"/>
+    <include resource="cn/bootx/platform/common/log/logback-sensitive.xml"/>
+    <include resource="cn/bootx/platform/common/log/logback-console.xml"/>
+    <include resource="cn/bootx/platform/common/log/logback-log-file.xml"/>
 
     <!-- 开发输出级别 -->
     <root level="INFO">

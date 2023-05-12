@@ -1,6 +1,6 @@
 package cn.bootx.daxpay.dto.payconfig;
 
-import cn.bootx.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

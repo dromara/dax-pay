@@ -1,18 +1,18 @@
 package cn.bootx.daxpay.core.paymodel.wallet.service;
 
-import cn.bootx.common.core.exception.DataNotExistException;
-import cn.bootx.common.core.rest.PageResult;
-import cn.bootx.common.core.rest.param.PageParam;
-import cn.bootx.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.daxpay.core.paymodel.wallet.dao.WalletManager;
 import cn.bootx.daxpay.core.paymodel.wallet.entity.Wallet;
 import cn.bootx.daxpay.dto.paymodel.wallet.WalletDto;
 import cn.bootx.daxpay.dto.paymodel.wallet.WalletInfoDto;
 import cn.bootx.daxpay.param.paymodel.wallet.WalletPayParam;
-import cn.bootx.iam.core.user.service.UserQueryService;
-import cn.bootx.iam.dto.user.UserInfoDto;
-import cn.bootx.iam.param.user.UserInfoParam;
-import cn.bootx.starter.auth.util.SecurityUtil;
+import cn.bootx.platform.iam.core.user.service.UserQueryService;
+import cn.bootx.platform.iam.dto.user.UserInfoDto;
+import cn.bootx.platform.iam.param.user.UserInfoParam;
+import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

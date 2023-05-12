@@ -1,9 +1,9 @@
 package cn.bootx.daxpay.core.paymodel.wechat.entity;
 
-import cn.bootx.common.core.annotation.BigField;
-import cn.bootx.common.core.annotation.EncryptionField;
-import cn.bootx.common.core.function.EntityBaseFunction;
-import cn.bootx.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.common.core.annotation.BigField;
+import cn.bootx.platform.common.core.annotation.EncryptionField;
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
+import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.daxpay.core.paymodel.wechat.convert.WeChatConvert;
 import cn.bootx.daxpay.dto.paymodel.wechat.WeChatPayConfigDto;

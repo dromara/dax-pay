@@ -1,7 +1,7 @@
 package cn.bootx.daxpay.controller;
 
-import cn.bootx.common.core.rest.Res;
-import cn.bootx.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.rest.Res;
+import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.daxpay.core.pay.service.PayCancelService;
 import cn.bootx.daxpay.core.pay.service.PayRefundService;
 import cn.bootx.daxpay.core.pay.service.PayService;

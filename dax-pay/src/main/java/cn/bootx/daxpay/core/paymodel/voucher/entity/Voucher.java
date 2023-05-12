@@ -1,7 +1,7 @@
 package cn.bootx.daxpay.core.paymodel.voucher.entity;
 
-import cn.bootx.common.core.function.EntityBaseFunction;
-import cn.bootx.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
+import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.daxpay.code.paymodel.VoucherCode;
 import cn.bootx.daxpay.core.paymodel.voucher.convert.VoucherConvert;
 import cn.bootx.daxpay.dto.paymodel.voucher.VoucherDto;
