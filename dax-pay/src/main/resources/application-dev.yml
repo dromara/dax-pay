@@ -66,7 +66,11 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
-
+# 开发时显示debug日志
+mybatis-table:
+  scan-package: cn.bootx.platform.daxpay
+  database-type: mysql
+  update-type: update
 # 开发时显示debug日志
 logging:
   level:
@@ -86,15 +90,10 @@ bootx:
         enable: true
       # 多模块扫码
       base-packages:
-        "[基础API]": cn.bootx.baseapi
-        "[身份识别和管理]": cn.bootx.iam
-        "[消息服务]": cn.bootx.notice
-        "[办公服务]":
-          - cn.bootx.office
-          - cn.bootx.platform.starter.flowable
-        "[支付服务]": cn.bootx.daxpay
-        "[演示模块]": cn.bootx.demo
-        "[可视化大屏]": cn.bootx.visualization
+        "[基础API]": cn.bootx.platform.baseapi
+        "[身份识别和管理]": cn.bootx.platform.iam
+        "[消息服务]": cn.bootx.platform.notice
+        "[支付服务]": cn.bootx.platform.daxpay
         "[第三方对接]":
           - cn.bootx.platform.starter.dingtalk
           - cn.bootx.platform.starter.wecom
