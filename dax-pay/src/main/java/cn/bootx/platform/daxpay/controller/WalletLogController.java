@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.core.paymodel.wallet.service.WalletLogService;
+import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletLogService;
 import cn.bootx.platform.daxpay.dto.paymodel.wallet.WalletLogDto;
 import cn.bootx.platform.daxpay.param.paymodel.wallet.WalletLogQueryParam;
 import io.swagger.v3.oas.annotations.Operation;

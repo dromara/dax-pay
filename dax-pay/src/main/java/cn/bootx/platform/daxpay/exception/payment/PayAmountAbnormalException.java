@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.exception.payment;
 
 import cn.bootx.platform.common.core.exception.FatalException;
-import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
+import cn.bootx.platform.daxpay.code.PaymentErrorCode;
 
 /**
  * 异常金额
@@ -12,11 +12,11 @@ import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
 public class PayAmountAbnormalException extends FatalException {
 
     public PayAmountAbnormalException(String msg) {
-        super(PaymentCenterErrorCode.PAYMENT_AMOUNT_ABNORMAL, msg);
+        super(PaymentErrorCode.PAYMENT_AMOUNT_ABNORMAL, msg);
     }
 
     public PayAmountAbnormalException() {
-        super(PaymentCenterErrorCode.PAYMENT_AMOUNT_ABNORMAL, "异常金额");
+        super(PaymentErrorCode.PAYMENT_AMOUNT_ABNORMAL, "异常金额");
     }
 
 }

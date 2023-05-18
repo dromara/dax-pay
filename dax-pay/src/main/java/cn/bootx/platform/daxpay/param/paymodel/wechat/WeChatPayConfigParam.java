@@ -33,8 +33,8 @@ public class WeChatPayConfigParam {
     /**
      * @see WeChatPayCode#API_V2
      */
-    @Schema(description = "api版本")
-    private String apiVersion;
+//    @Schema(description = "api版本")
+//    private String apiVersion;
 
     @Schema(description = "商户平台「API安全」中的 APIv2 密钥")
     private String apiKeyV2;

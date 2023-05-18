@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.controller;
 
-import cn.bootx.platform.daxpay.core.paymodel.wallet.service.WalletQueryService;
-import cn.bootx.platform.daxpay.core.paymodel.wallet.service.WalletService;
+import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletQueryService;
+import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletService;
 import cn.bootx.platform.daxpay.dto.paymodel.wallet.WalletDto;
 import cn.bootx.platform.daxpay.dto.paymodel.wallet.WalletInfoDto;
 import cn.bootx.platform.daxpay.param.paymodel.wallet.WalletPayParam;

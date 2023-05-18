@@ -1,15 +1,15 @@
 package cn.bootx.platform.daxpay.core.cashier.service;
 
 import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
-import cn.bootx.platform.daxpay.code.pay.PayModelExtraCode;
+import cn.bootx.platform.daxpay.code.pay.PayWayExtraCode;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.code.pay.PayWayCode;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.aggregate.entity.AggregatePayInfo;
 import cn.bootx.platform.daxpay.core.aggregate.service.AggregateService;
 import cn.bootx.platform.daxpay.core.pay.service.PayService;
-import cn.bootx.platform.daxpay.core.paymodel.wechat.dao.WeChatPayConfigManager;
-import cn.bootx.platform.daxpay.core.paymodel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
+import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.dto.pay.PayResult;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
@@ -74,9 +74,9 @@ public class CashierService {
 
         // 处理附加参数
         HashMap<String, String> map = new HashMap<>(1);
-        map.put(PayModelExtraCode.AUTH_CODE, param.getAuthCode());
-        map.put(PayModelExtraCode.OPEN_ID, param.getOpenId());
-        map.put(PayModelExtraCode.VOUCHER_NO, param.getVoucherNo());
+        map.put(PayWayExtraCode.AUTH_CODE, param.getAuthCode());
+        map.put(PayWayExtraCode.OPEN_ID, param.getOpenId());
+        map.put(PayWayExtraCode.VOUCHER_NO, param.getVoucherNo());
         String extraParamsJson = PayModelUtil.buildExtraParamsJson(param.getPayChannel(), map);
         payModeParam.setExtraParamsJson(extraParamsJson);
 

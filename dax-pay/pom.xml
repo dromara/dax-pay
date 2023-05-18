@@ -116,21 +116,32 @@
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-starter-file</artifactId>
         </dependency>
+
+        <!-- 代码生成模块 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-starter-code-gen</artifactId>
+        </dependency>
+
         <!-- websocket模块 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-websocket</artifactId>
         </dependency>
+
         <!-- 定时任务 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-starter-quartz</artifactId>
         </dependency>
-        <!-- 消息队列 -->
+
+        <!-- 消息队列 amqp -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-rabbitmq</artifactId>
         </dependency>
+        <!-- 消息队列 rocketMQ-->
+
         <!-- 自动建表 -->
         <dependency>
             <groupId>cn.bootx</groupId>

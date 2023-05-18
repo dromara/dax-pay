@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.pay.PayModelExtraCode;
+import cn.bootx.platform.daxpay.code.pay.PayWayExtraCode;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayModeParam;
@@ -82,15 +82,15 @@ public class PayModelUtil {
         PayChannelEnum payChannelEnum = PayChannelEnum.findByNo(payChannel);
         switch (payChannelEnum) {
             case ALI: {
-                return JSONUtil.toJsonStr(new AliPayParam().setAuthCode(map.get(PayModelExtraCode.AUTH_CODE))
-                    .setReturnUrl(map.get(PayModelExtraCode.RETURN_URL)));
+                return JSONUtil.toJsonStr(new AliPayParam().setAuthCode(map.get(PayWayExtraCode.AUTH_CODE))
+                    .setReturnUrl(map.get(PayWayExtraCode.RETURN_URL)));
             }
             case WECHAT: {
-                return JSONUtil.toJsonStr(new WeChatPayParam().setOpenId(map.get(PayModelExtraCode.OPEN_ID))
-                    .setAuthCode(map.get(PayModelExtraCode.AUTH_CODE)));
+                return JSONUtil.toJsonStr(new WeChatPayParam().setOpenId(map.get(PayWayExtraCode.OPEN_ID))
+                    .setAuthCode(map.get(PayWayExtraCode.AUTH_CODE)));
             }
             case VOUCHER: {
-                String voucherNo = map.get(PayModelExtraCode.VOUCHER_NO);
+                String voucherNo = map.get(PayWayExtraCode.VOUCHER_NO);
                 List<String> list = new ArrayList<>();
                 if (StrUtil.isNotBlank(voucherNo)) {
                     list.add(voucherNo);

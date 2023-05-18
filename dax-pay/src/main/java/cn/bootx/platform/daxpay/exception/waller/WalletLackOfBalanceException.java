@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.exception.waller;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
+import cn.bootx.platform.daxpay.code.PaymentErrorCode;
 
 /**
  * 余额不足异常
@@ -12,7 +12,7 @@ import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
 public class WalletLackOfBalanceException extends BizException {
 
     public WalletLackOfBalanceException() {
-        super(PaymentCenterErrorCode.WALLET_BALANCE_NOT_ENOUGH, "余额不足异常");
+        super(PaymentErrorCode.WALLET_BALANCE_NOT_ENOUGH, "余额不足异常");
     }
 
 }

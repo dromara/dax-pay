@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.exception.waller;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
+import cn.bootx.platform.daxpay.code.PaymentErrorCode;
 
 /**
  * 钱包被禁用
@@ -12,7 +12,7 @@ import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
 public class WalletBannedException extends BizException {
 
     public WalletBannedException() {
-        super(PaymentCenterErrorCode.WALLET_BANNED, "钱包被禁用");
+        super(PaymentErrorCode.WALLET_BANNED, "钱包被禁用");
     }
 
 }

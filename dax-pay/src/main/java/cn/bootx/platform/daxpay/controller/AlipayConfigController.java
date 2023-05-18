@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.KeyValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.core.paymodel.alipay.service.AlipayConfigService;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipayConfigService;
 import cn.bootx.platform.daxpay.dto.paymodel.alipay.AlipayConfigDto;
 import cn.bootx.platform.daxpay.param.paymodel.alipay.AlipayConfigParam;
 import cn.bootx.platform.daxpay.param.paymodel.alipay.AlipayConfigQuery;

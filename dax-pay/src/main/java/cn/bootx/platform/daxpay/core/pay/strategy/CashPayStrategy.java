@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
-import cn.bootx.platform.daxpay.core.paymodel.cash.service.CashService;
+import cn.bootx.platform.daxpay.core.channel.cash.service.CashService;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.param.pay.PayModeParam;
 import lombok.RequiredArgsConstructor;

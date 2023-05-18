@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.exception.payment;
 
 import cn.bootx.platform.common.core.exception.FatalException;
-import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
+import cn.bootx.platform.daxpay.code.PaymentErrorCode;
 
 /**
  * 付款方式不支持异常
@@ -12,7 +12,7 @@ import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
 public class PayUnsupportedMethodException extends FatalException {
 
     public PayUnsupportedMethodException() {
-        super(PaymentCenterErrorCode.PAYMENT_METHOD_UNSUPPORT, "不支持的支付方式");
+        super(PaymentErrorCode.PAYMENT_METHOD_UNSUPPORT, "不支持的支付方式");
     }
 
 }

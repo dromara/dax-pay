@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.exception.payment;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
+import cn.bootx.platform.daxpay.code.PaymentErrorCode;
 
 /**
  * 付款错误
@@ -12,11 +12,11 @@ import cn.bootx.platform.daxpay.code.PaymentCenterErrorCode;
 public class PayFailureException extends BizException {
 
     public PayFailureException(String message) {
-        super(PaymentCenterErrorCode.PAY_FAILURE, message);
+        super(PaymentErrorCode.PAY_FAILURE, message);
     }
 
     public PayFailureException() {
-        super(PaymentCenterErrorCode.PAY_FAILURE, "支付失败");
+        super(PaymentErrorCode.PAY_FAILURE, "支付失败");
     }
 
 }
