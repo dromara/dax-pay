@@ -145,7 +145,8 @@
         <!-- 自动建表 -->
         <dependency>
             <groupId>cn.bootx</groupId>
-            <artifactId>mybatis-table-modify</artifactId>
+            <artifactId>mybatis-table-modify-mysql-boot-starter</artifactId>
+            <version>1.5.3.alpha1</version>
         </dependency>
 
         <!-- 监控 -->
