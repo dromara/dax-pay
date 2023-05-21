@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.merchant.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
+import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.MySqlIndex;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlIndexType;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
@@ -23,6 +24,7 @@ import lombok.experimental.FieldNameConstants;
 @EqualsAndHashCode(callSuper = true)
 @FieldNameConstants
 @Data
+@DbTable(comment = "商户")
 @Accessors(chain = true)
 @TableName("pay_merchant")
 public class MerchantInfo extends MpBaseEntity implements EntityBaseFunction<MerchantInfoDto> {

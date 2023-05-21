@@ -43,4 +43,18 @@ public interface PayChannelCode {
     /** 异步支付通道 */
     List<Integer> ASYNC_TYPE = Arrays.asList(ALI, WECHAT, UNION_PAY, APPLE_PAY);
 
+    /** 支付排序列表 */
+    List<Integer> SORT_LIST = Arrays.asList(
+            ALI,
+            WECHAT,
+            UNION_PAY,
+            CASH,
+            WALLET,
+            VOUCHER,
+            CREDIT_CARD,
+            APPLE_PAY,
+            CHANNEL_PAY,
+            AGGREGATION
+    );
+
 }

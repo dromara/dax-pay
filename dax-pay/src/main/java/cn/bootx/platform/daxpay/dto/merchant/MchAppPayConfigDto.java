@@ -17,10 +17,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MchAppPayConfigDto extends BaseDto {
 
+    @Schema(description = "关联应用ID")
+    private Long appId;
     @Schema(description = "关联配置ID")
     private Long configId;
     @Schema(description = "支付通道类型")
-    private String channel;
+    private Integer channel;
     @Schema(description = "支付通道名称")
     private String channelName;
     @Schema(description = "状态")

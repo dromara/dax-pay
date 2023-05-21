@@ -23,6 +23,10 @@ import lombok.experimental.Accessors;
 public class MchAppPayConfig extends MpBaseEntity implements EntityBaseFunction<MchAppPayConfigDto> {
 
     /** 关联配置ID */
+    @DbColumn(comment = "关联应用ID")
+    private Long appId;
+
+    /** 关联配置ID */
     @DbColumn(comment = "关联配置ID")
     private Long configId;
 

@@ -1,6 +1,9 @@
 package cn.bootx.platform.daxpay.core.merchant.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
+import cn.bootx.mybatis.table.modify.annotation.DbTable;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.MySqlIndex;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlIndexType;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.merchant.convert.MchApplicationConvert;
@@ -16,7 +19,9 @@ import lombok.experimental.Accessors;
 * @author xxm
 * @date 2023-05-19
 */
+@DbTable(comment = "商户应用")
 @EqualsAndHashCode(callSuper = true)
+@MySqlIndex(columns = "app_no",type = MySqlIndexType.UNIQUE,comment = "应用编码唯一索引")
 @Data
 @Accessors(chain = true)
 @TableName("pay_application")

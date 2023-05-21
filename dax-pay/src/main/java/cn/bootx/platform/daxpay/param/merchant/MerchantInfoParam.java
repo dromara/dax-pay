@@ -29,8 +29,8 @@ public class MerchantInfoParam {
     private String contactName;
     @Schema(description = "联系人手机号")
     private String contactTel;
-    @Schema(description = "是否停用")
-    private String deactivate;
+    @Schema(description = "状态类型")
+    private String state;
     @Schema(description = "商户备注")
     private String remark;
 

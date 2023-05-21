@@ -73,4 +73,6 @@ public class MchApplicationService {
     public void delete(Long id){
         mchApplicationManager.deleteById(id);
     }
+
+
 }
