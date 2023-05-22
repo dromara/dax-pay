@@ -33,6 +33,7 @@ public class MerchantInfoService {
      */
     public void add(MerchantInfoParam param){
         MerchantInfo merchantInfo = MerchantInfo.init(param);
+        merchantInfo.setMchNo("M"+System.currentTimeMillis());
         merchantInfoManager.save(merchantInfo);
     }
 
@@ -41,7 +42,6 @@ public class MerchantInfoService {
      */
     public void update(MerchantInfoParam param){
         MerchantInfo merchantInfo = merchantInfoManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
-
         BeanUtil.copyProperties(param,merchantInfo, CopyOptions.create().ignoreNullValue());
         merchantInfoManager.updateById(merchantInfo);
     }

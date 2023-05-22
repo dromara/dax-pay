@@ -9,6 +9,8 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.merchant.convert.MerchantInfoConvert;
 import cn.bootx.platform.daxpay.dto.merchant.MerchantInfoDto;
 import cn.bootx.platform.daxpay.param.merchant.MerchantInfoParam;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +33,7 @@ public class MerchantInfo extends MpBaseEntity implements EntityBaseFunction<Mer
 
     /** 商户号 */
     @DbColumn(comment = "商户号")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String mchNo;
 
     /** 商户名称 */
