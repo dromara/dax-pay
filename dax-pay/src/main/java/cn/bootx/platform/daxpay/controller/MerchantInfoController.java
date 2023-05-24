@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.controller;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.rest.dto.KeyValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.core.merchant.service.MerchantInfoService;
 import cn.bootx.platform.daxpay.dto.merchant.MerchantInfoDto;
@@ -38,6 +39,12 @@ public class MerchantInfoController {
     public ResResult<Void> update(@RequestBody MerchantInfoParam param){
         merchantInfoService.update(param);
         return Res.ok();
+    }
+
+    @Operation(summary = "下拉列表")
+    @GetMapping("/dropdown")
+    public ResResult<List<KeyValue>> dropdown(){
+        return Res.ok(merchantInfoService.dropdown());
     }
 
     @Operation( summary = "删除")

@@ -9,6 +9,8 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.merchant.convert.MchApplicationConvert;
 import cn.bootx.platform.daxpay.dto.merchant.MchApplicationDto;
 import cn.bootx.platform.daxpay.param.merchant.MchApplicationParam;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,11 +26,12 @@ import lombok.experimental.Accessors;
 @MySqlIndex(columns = "app_no",type = MySqlIndexType.UNIQUE,comment = "应用编码唯一索引")
 @Data
 @Accessors(chain = true)
-@TableName("pay_application")
+@TableName("pay_mch_app")
 public class MchApplication extends MpBaseEntity implements EntityBaseFunction<MchApplicationDto> {
 
     /** 应用编码 */
     @DbColumn(comment = "应用编码")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String appNo;
 
     /** 名称 */
@@ -37,6 +40,7 @@ public class MchApplication extends MpBaseEntity implements EntityBaseFunction<M
 
     /** 商户号 */
     @DbColumn(comment = "商户号")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String mchNo;
 
     /** 状态类型 */

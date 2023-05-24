@@ -13,7 +13,7 @@ import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherLog;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherPayment;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayModeParam;
-import cn.bootx.platform.daxpay.param.paymodel.voucher.VoucherPayParam;
+import cn.bootx.platform.daxpay.param.channel.voucher.VoucherPayParam;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;

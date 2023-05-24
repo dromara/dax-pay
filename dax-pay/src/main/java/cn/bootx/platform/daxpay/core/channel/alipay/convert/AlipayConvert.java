@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.convert;
 
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
-import cn.bootx.platform.daxpay.dto.paymodel.alipay.AlipayConfigDto;
-import cn.bootx.platform.daxpay.param.paymodel.alipay.AlipayConfigParam;
+import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
+import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

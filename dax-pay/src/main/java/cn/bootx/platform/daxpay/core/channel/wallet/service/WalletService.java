@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletLog;
 import cn.bootx.platform.daxpay.exception.waller.WalletBannedException;
 import cn.bootx.platform.daxpay.exception.waller.WalletLogError;
 import cn.bootx.platform.daxpay.exception.waller.WalletNotExistsException;
-import cn.bootx.platform.daxpay.param.paymodel.wallet.WalletRechargeParam;
+import cn.bootx.platform.daxpay.param.channel.wallet.WalletRechargeParam;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.wallet.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.channel.wallet.convert.WalletConvert;
-import cn.bootx.platform.daxpay.dto.paymodel.wallet.WalletDto;
+import cn.bootx.platform.daxpay.dto.channel.wallet.WalletDto;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

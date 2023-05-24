@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.core.merchant.dao;
 
+import cn.bootx.platform.common.core.rest.dto.KeyValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -10,6 +11,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 商户
@@ -29,5 +33,16 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
         wrapper.select(this.getEntityClass(),MpUtil::excludeBigField)
                 .orderByDesc(MpUtil.getColumnName(MerchantInfo::getId));
         return this.page(mpPage,wrapper);
+    }
+
+    /**
+     * 下拉列表
+     */
+    public List<KeyValue> findDropdown() {
+        return lambdaQuery().select(MerchantInfo::getMchNo, MerchantInfo::getMchName)
+                .list()
+                .stream()
+                .map(mch -> new KeyValue(mch.getMchNo(), mch.getMchName()))
+                .collect(Collectors.toList());
     }
 }

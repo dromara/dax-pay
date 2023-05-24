@@ -11,9 +11,11 @@ import cn.bootx.platform.daxpay.dto.merchant.MchApplicationDto;
 import cn.bootx.platform.daxpay.param.merchant.MchApplicationParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,11 +30,14 @@ import java.util.List;
 public class MchApplicationService {
     private final MchApplicationManager mchApplicationManager;
 
+    private final MchAppPayConfigService appPayConfigService;
+
     /**
      * 添加
      */
     public void add(MchApplicationParam param){
         MchApplication mchApplication = MchApplication.init(param);
+        mchApplication.setAppNo(IdUtil.getSnowflakeNextIdStr());
         mchApplicationManager.save(mchApplication);
     }
 
@@ -41,7 +46,6 @@ public class MchApplicationService {
      */
     public void update(MchApplicationParam param){
         MchApplication mchApplication = mchApplicationManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
-
         BeanUtil.copyProperties(param,mchApplication, CopyOptions.create().ignoreNullValue());
         mchApplicationManager.updateById(mchApplication);
     }
@@ -70,9 +74,10 @@ public class MchApplicationService {
     /**
      * 删除
      */
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id){
+        appPayConfigService.deleteByAppId(id);
         mchApplicationManager.deleteById(id);
     }
-
 
 }

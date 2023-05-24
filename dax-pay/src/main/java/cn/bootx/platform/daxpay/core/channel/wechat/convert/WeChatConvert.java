@@ -2,9 +2,9 @@ package cn.bootx.platform.daxpay.core.channel.wechat.convert;
 
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
-import cn.bootx.platform.daxpay.dto.paymodel.wechat.WeChatPayConfigDto;
-import cn.bootx.platform.daxpay.dto.paymodel.wechat.WeChatPaymentDto;
-import cn.bootx.platform.daxpay.param.paymodel.wechat.WeChatPayConfigParam;
+import cn.bootx.platform.daxpay.dto.channel.wechat.WeChatPayConfigDto;
+import cn.bootx.platform.daxpay.dto.channel.wechat.WeChatPaymentDto;
+import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayConfigParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

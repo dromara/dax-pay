@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.core.merchant.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.dto.KeyValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -67,6 +68,12 @@ public class MerchantInfoService {
         return ResultConvertUtil.dtoListConvert(merchantInfoManager.findAll());
     }
 
+    /**
+     * 下拉框
+     */
+    public List<KeyValue> dropdown() {
+        return merchantInfoManager.findDropdown();
+    }
     /**
      * 删除
      */

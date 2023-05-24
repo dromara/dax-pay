@@ -18,7 +18,7 @@ import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipaySyncService;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayModeParam;
-import cn.bootx.platform.daxpay.param.paymodel.alipay.AliPayParam;
+import cn.bootx.platform.daxpay.param.channel.alipay.AliPayParam;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;

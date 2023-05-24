@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.union.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.channel.union.convert.UnionPayConvert;
-import cn.bootx.platform.daxpay.dto.paymodel.union.UnionPayConfigDto;
+import cn.bootx.platform.daxpay.dto.channel.union.UnionPayConfigDto;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

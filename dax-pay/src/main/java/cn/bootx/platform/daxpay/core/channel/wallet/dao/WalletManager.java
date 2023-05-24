@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
-import cn.bootx.platform.daxpay.param.paymodel.wallet.WalletPayParam;
+import cn.bootx.platform.daxpay.param.channel.wallet.WalletPayParam;
 import cn.bootx.platform.iam.core.user.entity.UserInfo;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;

@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
-import cn.bootx.platform.daxpay.param.paymodel.voucher.VoucherParam;
+import cn.bootx.platform.daxpay.param.channel.voucher.VoucherParam;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;

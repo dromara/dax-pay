@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletLog;
-import cn.bootx.platform.daxpay.param.paymodel.wallet.WalletLogQueryParam;
+import cn.bootx.platform.daxpay.param.channel.wallet.WalletLogQueryParam;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

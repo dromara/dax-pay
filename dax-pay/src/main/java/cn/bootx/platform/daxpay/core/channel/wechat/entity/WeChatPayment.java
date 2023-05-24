@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.wechat.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.daxpay.core.channel.wechat.convert.WeChatConvert;
 import cn.bootx.platform.daxpay.core.channel.base.entity.BasePayment;
-import cn.bootx.platform.daxpay.dto.paymodel.wechat.WeChatPaymentDto;
+import cn.bootx.platform.daxpay.dto.channel.wechat.WeChatPaymentDto;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

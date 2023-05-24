@@ -19,7 +19,7 @@ import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaymentService
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayModeParam;
-import cn.bootx.platform.daxpay.param.paymodel.wechat.WeChatPayParam;
+import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayParam;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;

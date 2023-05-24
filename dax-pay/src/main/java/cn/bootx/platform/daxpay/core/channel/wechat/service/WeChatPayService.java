@@ -15,7 +15,7 @@ import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.dto.pay.AsyncPayInfo;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayModeParam;
-import cn.bootx.platform.daxpay.param.paymodel.wechat.WeChatPayParam;
+import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayParam;
 import cn.bootx.platform.daxpay.util.PayModelUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.net.NetUtil;

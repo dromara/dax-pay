@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.voucher.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.daxpay.core.channel.base.entity.BasePayment;
 import cn.bootx.platform.daxpay.core.channel.voucher.convert.VoucherConvert;
-import cn.bootx.platform.daxpay.dto.paymodel.voucher.VoucherPaymentDto;
+import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherPaymentDto;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
