@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.core.pay.service;
 
 import cn.bootx.platform.common.core.exception.ErrorCodeRuntimeException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.pay.builder.PayEventBuilder;
 import cn.bootx.platform.daxpay.core.pay.builder.PaymentBuilder;
@@ -47,7 +47,7 @@ public class PayCallbackService {
      * @see PayStatusCode
      * @param tradeStatus 支付状态
      */
-    public PayCallbackResult callback(Long paymentId, int tradeStatus, Map<String, String> map) {
+    public PayCallbackResult callback(Long paymentId, String tradeStatus, Map<String, String> map) {
 
         // 获取payment和paymentParam数据
         Payment payment = paymentService.findById(paymentId).orElse(null);
@@ -64,7 +64,7 @@ public class PayCallbackService {
         }
 
         // 成功状态
-        if (PayStatusCode.NOTIFY_TRADE_SUCCESS == tradeStatus) {
+        if (Objects.equals(PayStatusCode.NOTIFY_TRADE_SUCCESS,tradeStatus)) {
             return this.success(payment, map);
         }
         else {
@@ -92,7 +92,7 @@ public class PayCallbackService {
         // 2.通过工厂生成对应的策略组
         PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
 
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayModeList());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
             return result.setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("支付单数据非法,未找到对应的支付方式");
         }
@@ -140,7 +140,7 @@ public class PayCallbackService {
 
         // 2.通过工厂生成对应的策略组
         PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayModeList());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
             return result.setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("支付单数据非法,未找到对应的支付方式");
         }
@@ -181,7 +181,7 @@ public class PayCallbackService {
         try {
             // 1.获取异步支付方式，通过工厂生成对应的策略组
             List<AbsPayStrategy> syncPaymentStrategyList = strategyList.stream()
-                .filter(paymentStrategy -> PayChannelCode.ASYNC_TYPE.contains(paymentStrategy.getType()))
+                .filter(paymentStrategy -> PayChannelEnum.ASYNC_TYPE_CODE.contains(paymentStrategy.getType()))
                 .collect(Collectors.toList());
             // 执行成功方法
             successCallback.accept(syncPaymentStrategyList, payment);
@@ -206,7 +206,7 @@ public class PayCallbackService {
         }
         else if (e instanceof ErrorCodeRuntimeException) {
             ErrorCodeRuntimeException ex = (ErrorCodeRuntimeException) e;
-            exceptionInfo = new ExceptionInfo(ex.getCode(), ex.getMessage());
+            exceptionInfo = new ExceptionInfo(String.valueOf(ex.getCode()), ex.getMessage());
         }
 
         // 更新Payment的状态

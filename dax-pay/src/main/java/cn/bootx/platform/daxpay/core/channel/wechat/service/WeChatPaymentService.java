@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
@@ -12,7 +11,7 @@ import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
 import cn.bootx.platform.daxpay.dto.pay.AsyncPayInfo;
 import cn.bootx.platform.daxpay.dto.payment.PayChannelInfo;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,7 @@ public class WeChatPaymentService {
     /**
      * 支付调起成功 更新 payment 中 异步支付类型信息
      */
-    public void updatePaySuccess(Payment payment, PayModeParam payModeParam) {
+    public void updatePaySuccess(Payment payment, PayWayParam payWayParam) {
         AsyncPayInfo asyncPayInfo = AsyncPayInfoLocal.get();
         payment.setAsyncPayMode(true).setAsyncPayChannel(PayChannelCode.WECHAT);
 
@@ -52,39 +51,39 @@ public class WeChatPaymentService {
         refundableInfos.removeIf(payTypeInfo -> PayChannelCode.ASYNC_TYPE.contains(payTypeInfo.getPayChannel()));
         // 添加微信支付类型信息
         payTypeInfos.add(new PayChannelInfo().setPayChannel(PayChannelCode.WECHAT)
-            .setPayWay(payModeParam.getPayWay())
-            .setAmount(payModeParam.getAmount())
-            .setExtraParamsJson(payModeParam.getExtraParamsJson()));
+            .setPayWay(payWayParam.getPayWay())
+            .setAmount(payWayParam.getAmount())
+            .setExtraParamsJson(payWayParam.getExtraParamsJson()));
         payment.setPayChannelInfo(payTypeInfos);
         // 更新微信可退款类型信息
         refundableInfos
-            .add(new RefundableInfo().setPayChannel(PayChannelCode.WECHAT).setAmount(payModeParam.getAmount()));
+            .add(new RefundableInfo().setPayChannel(PayChannelCode.WECHAT).setAmount(payWayParam.getAmount()));
         payment.setRefundableInfo(refundableInfos);
         // 如果支付完成(付款码情况) 调用 updateSyncSuccess 创建微信支付记录
         if (Objects.equals(payment.getPayStatus(), PayStatusCode.TRADE_SUCCESS)) {
-            this.createWeChatPayment(payment, payModeParam, asyncPayInfo.getTradeNo());
+            this.createWeChatPayment(payment, payWayParam, asyncPayInfo.getTradeNo());
         }
     }
 
     /**
      * 异步支付成功, 更新支付记录成功状态, 并创建微信支付记录
      */
-    public void updateAsyncSuccess(Long id, PayModeParam payModeParam, String tradeNo) {
+    public void updateAsyncSuccess(Long id, PayWayParam payWayParam, String tradeNo) {
         Payment payment = paymentService.findById(id).orElseThrow(() -> new BizException("支付记录不存在"));
-        this.createWeChatPayment(payment, payModeParam, tradeNo);
+        this.createWeChatPayment(payment, payWayParam, tradeNo);
     }
 
     /**
      * 更新支付记录成功状态, 并创建微信支付记录
      */
-    private void createWeChatPayment(Payment payment, PayModeParam payModeParam, String tradeNo) {
+    private void createWeChatPayment(Payment payment, PayWayParam payWayParam, String tradeNo) {
 
         // 创建微信支付记录
         WeChatPayment wechatPayment = new WeChatPayment();
         wechatPayment.setTradeNo(tradeNo)
             .setPaymentId(payment.getId())
-            .setAmount(payModeParam.getAmount())
-            .setRefundableBalance(payModeParam.getAmount())
+            .setAmount(payWayParam.getAmount())
+            .setRefundableBalance(payWayParam.getAmount())
             .setBusinessId(payment.getBusinessId())
             .setUserId(payment.getUserId())
             .setPayStatus(PayStatusCode.TRADE_SUCCESS)

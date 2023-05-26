@@ -27,10 +27,10 @@ public class CashierSinglePayParam {
     private String openId;
 
     @Schema(description = "支付通道")
-    private Integer payChannel;
+    private String payChannel;
 
     @Schema(description = "支付方式")
-    private Integer payWay;
+    private String payWay;
 
     @Schema(description = "业务id")
     private String businessId;

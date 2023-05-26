@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.channel.cash.dao.CashPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.cash.entity.CashPayment;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class CashService {
     /**
      * 支付
      */
-    public void pay(PayModeParam payMode, Payment payment, PayParam payParam) {
+    public void pay(PayWayParam payMode, Payment payment, PayParam payParam) {
         CashPayment walletPayment = new CashPayment();
         walletPayment.setPaymentId(payment.getId())
             .setUserId(payment.getUserId())

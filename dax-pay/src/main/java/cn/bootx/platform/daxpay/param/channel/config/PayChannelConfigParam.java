@@ -9,6 +9,7 @@ import static cn.bootx.platform.common.core.annotation.QueryParam.CompareTypeEnu
 
 /**
  * 支付通道配置
+ * 编码见 @see {@link cn.bootx.platform.daxpay.code.pay.PayChannelCode}
  * @author xxm
  * @date 2023-05-24
  */
@@ -27,5 +28,7 @@ public class PayChannelConfigParam {
     private String name;
     @Schema(description = "图片")
     private Long image;
+    @Schema(description = "排序")
+    private Double sortNo;
 
 }

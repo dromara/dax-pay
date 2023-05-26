@@ -83,7 +83,7 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
      * 支付状态
      * @see PayStatusCode#TRADE_PROGRESS
      */
-    private Integer payStatus;
+    private String payStatus;
 
     /** 支付时间 */
     private LocalDateTime payTime;

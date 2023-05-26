@@ -1,13 +1,12 @@
 package cn.bootx.platform.daxpay.core.pay.strategy;
 
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.core.channel.cash.service.CashService;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -37,8 +36,8 @@ public class CashPayStrategy extends AbsPayStrategy {
      * 现金支付
      */
     @Override
-    public int getType() {
-        return PayChannelCode.CASH;
+    public PayChannelEnum getType() {
+        return PayChannelEnum.CASH;
     }
 
     /**
@@ -47,7 +46,7 @@ public class CashPayStrategy extends AbsPayStrategy {
     @Override
     public void doBeforePayHandler() {
         // 检查金额
-        PayModeParam payMode = this.getPayMode();
+        PayWayParam payMode = this.getPayWayParam();
         if (BigDecimalUtil.compareTo(payMode.getAmount(), BigDecimal.ZERO) < 1) {
             throw new PayAmountAbnormalException();
         }
@@ -58,7 +57,7 @@ public class CashPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        cashService.pay(this.getPayMode(), this.getPayment(), this.getPayParam());
+        cashService.pay(this.getPayWayParam(), this.getPayment(), this.getPayParam());
     }
 
     /**
@@ -74,8 +73,8 @@ public class CashPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doRefundHandler() {
-        cashService.refund(this.getPayment().getId(), this.getPayMode().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayMode().getAmount(), PayChannelEnum.CASH);
+        cashService.refund(this.getPayment().getId(), this.getPayWayParam().getAmount());
+        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.CASH);
     }
 
 }

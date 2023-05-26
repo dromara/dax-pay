@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.core.pay.strategy;
 
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
@@ -37,8 +36,8 @@ public class VoucherStrategy extends AbsPayStrategy {
     private List<Voucher> vouchers;
 
     @Override
-    public int getType() {
-        return PayChannelCode.VOUCHER;
+    public PayChannelEnum getType() {
+        return PayChannelEnum.VOUCHER;
     }
 
     /**
@@ -47,7 +46,7 @@ public class VoucherStrategy extends AbsPayStrategy {
     @Override
     public void doBeforePayHandler() {
         // 获取并校验余额
-        this.vouchers = voucherPayService.getAndCheckVoucher(this.getPayMode());
+        this.vouchers = voucherPayService.getAndCheckVoucher(this.getPayWayParam());
     }
 
     /**
@@ -55,8 +54,8 @@ public class VoucherStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        voucherPayService.pay(getPayMode().getAmount(), this.getPayment(), this.vouchers);
-        voucherPaymentService.savePayment(getPayment(), getPayParam(), getPayMode(), vouchers);
+        voucherPayService.pay(getPayWayParam().getAmount(), this.getPayment(), this.vouchers);
+        voucherPaymentService.savePayment(getPayment(), getPayParam(), getPayWayParam(), vouchers);
     }
 
     /**
@@ -81,9 +80,9 @@ public class VoucherStrategy extends AbsPayStrategy {
      */
     @Override
     public void doRefundHandler() {
-        voucherPayService.refund(this.getPayment().getId(), this.getPayMode().getAmount());
-        voucherPaymentService.updateRefund(this.getPayment().getId(), this.getPayMode().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayMode().getAmount(), PayChannelEnum.VOUCHER);
+        voucherPayService.refund(this.getPayment().getId(), this.getPayWayParam().getAmount());
+        voucherPaymentService.updateRefund(this.getPayment().getId(), this.getPayWayParam().getAmount());
+        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.VOUCHER);
     }
 
 }

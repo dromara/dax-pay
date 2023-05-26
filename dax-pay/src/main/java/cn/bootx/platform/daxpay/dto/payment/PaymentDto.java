@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.dto.payment;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

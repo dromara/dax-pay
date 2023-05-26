@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.core.pay.strategy;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.paymodel.AliPayCode;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
@@ -17,7 +16,7 @@ import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPaymentService;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipaySyncService;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.channel.alipay.AliPayParam;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
@@ -64,8 +63,8 @@ public class AliPayStrategy extends AbsPayStrategy {
     private AliPayParam aliPayParam;
 
     @Override
-    public int getType() {
-        return PayChannelCode.ALI;
+    public PayChannelEnum getType() {
+        return PayChannelEnum.ALI;
     }
 
     /**
@@ -75,7 +74,7 @@ public class AliPayStrategy extends AbsPayStrategy {
     public void doBeforePayHandler() {
         try {
             // 支付宝参数验证
-            String extraParamsJson = this.getPayMode().getExtraParamsJson();
+            String extraParamsJson = this.getPayWayParam().getExtraParamsJson();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 this.aliPayParam = JSONUtil.toBean(extraParamsJson, AliPayParam.class);
             }
@@ -87,13 +86,13 @@ public class AliPayStrategy extends AbsPayStrategy {
             throw new PayFailureException("支付参数错误");
         }
         // 检查金额
-        PayModeParam payMode = this.getPayMode();
+        PayWayParam payMode = this.getPayWayParam();
         if (BigDecimalUtil.compareTo(payMode.getAmount(), BigDecimal.ZERO) < 1) {
             throw new PayAmountAbnormalException();
         }
         // 检查并获取支付宝支付配置
         this.initAlipayConfig();
-        aliPayService.validation(this.getPayMode(), alipayConfig);
+        aliPayService.validation(this.getPayWayParam(), alipayConfig);
         // 如果没有显式传入同步回调地址, 使用默认配置
         if (StrUtil.isBlank(aliPayParam.getReturnUrl())) {
             aliPayParam.setReturnUrl(alipayConfig.getReturnUrl());
@@ -106,7 +105,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        aliPayService.pay(this.getPayMode().getAmount(), this.getPayment(), this.aliPayParam, this.getPayMode(),
+        aliPayService.pay(this.getPayWayParam().getAmount(), this.getPayment(), this.aliPayParam, this.getPayWayParam(),
                 this.alipayConfig);
     }
 
@@ -115,7 +114,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        aliPaymentService.updatePaySuccess(this.getPayment(), this.getPayMode());
+        aliPaymentService.updatePaySuccess(this.getPayment(), this.getPayWayParam());
     }
 
     /**
@@ -132,7 +131,7 @@ public class AliPayStrategy extends AbsPayStrategy {
     @Override
     public void doAsyncSuccessHandler(Map<String, String> map) {
         String tradeNo = map.get(AliPayCode.TRADE_NO);
-        aliPaymentService.updateAsyncSuccess(this.getPayment().getId(), this.getPayMode(), tradeNo);
+        aliPaymentService.updateAsyncSuccess(this.getPayment().getId(), this.getPayWayParam(), tradeNo);
     }
 
     /**
@@ -170,9 +169,9 @@ public class AliPayStrategy extends AbsPayStrategy {
     @Override
     public void doRefundHandler() {
         this.initAlipayConfig();
-        aliPayCancelService.refund(this.getPayment(), this.getPayMode().getAmount());
-        aliPaymentService.updatePayRefund(this.getPayment().getId(), this.getPayMode().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayMode().getAmount(), PayChannelEnum.ALI);
+        aliPayCancelService.refund(this.getPayment(), this.getPayWayParam().getAmount());
+        aliPaymentService.updatePayRefund(this.getPayment().getId(), this.getPayWayParam().getAmount());
+        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.ALI);
     }
 
     /**

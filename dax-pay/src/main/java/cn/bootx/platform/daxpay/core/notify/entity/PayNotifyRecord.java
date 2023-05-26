@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.core.notify.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.notify.convert.PayNotifyConvert;
 import cn.bootx.platform.daxpay.dto.notify.PayNotifyRecordDto;

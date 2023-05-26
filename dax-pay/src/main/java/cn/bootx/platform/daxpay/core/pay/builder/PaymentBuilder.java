@@ -1,14 +1,13 @@
 package cn.bootx.platform.daxpay.core.pay.builder;
 
 import cn.bootx.platform.common.spring.util.WebServletUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.dto.pay.PayResult;
 import cn.bootx.platform.daxpay.dto.payment.PayChannelInfo;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
@@ -46,8 +45,8 @@ public class PaymentBuilder {
             .setDescription(payParam.getDescription());
 
         // 支付方式和状态
-        List<PayChannelInfo> payTypeInfos = buildPayTypeInfo(payParam.getPayModeList());
-        List<RefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayModeList());
+        List<PayChannelInfo> payTypeInfos = buildPayTypeInfo(payParam.getPayWayList());
+        List<RefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayWayList());
         // 计算总价
         BigDecimal sumAmount = payTypeInfos.stream()
             .map(PayChannelInfo::getAmount)
@@ -67,17 +66,17 @@ public class PaymentBuilder {
     /**
      * 构建PayTypeInfo
      */
-    private List<PayChannelInfo> buildPayTypeInfo(List<PayModeParam> payModeParamList) {
-        return CollectionUtil.isEmpty(payModeParamList) ? Collections.emptyList()
-                : payModeParamList.stream().map(PayModeParam::toPayTypeInfo).collect(Collectors.toList());
+    private List<PayChannelInfo> buildPayTypeInfo(List<PayWayParam> payWayParamList) {
+        return CollectionUtil.isEmpty(payWayParamList) ? Collections.emptyList()
+                : payWayParamList.stream().map(PayWayParam::toPayTypeInfo).collect(Collectors.toList());
     }
 
     /**
      * 构建RefundableInfo
      */
-    private List<RefundableInfo> buildRefundableInfo(List<PayModeParam> payModeParamList) {
-        return CollectionUtil.isEmpty(payModeParamList) ? Collections.emptyList()
-                : payModeParamList.stream().map(PayModeParam::toRefundableInfo).collect(Collectors.toList());
+    private List<RefundableInfo> buildRefundableInfo(List<PayWayParam> payWayParamList) {
+        return CollectionUtil.isEmpty(payWayParamList) ? Collections.emptyList()
+                : payWayParamList.stream().map(PayWayParam::toRefundableInfo).collect(Collectors.toList());
     }
 
     /**
@@ -86,13 +85,13 @@ public class PaymentBuilder {
     public PayParam buildPayParamByPayment(Payment payment) {
         PayParam payParam = new PayParam();
         // 恢复 payModeList
-        List<PayModeParam> payModeParams = payment.getPayChannelInfo()
+        List<PayWayParam> payWayParams = payment.getPayChannelInfo()
             .stream()
-            .map(payTypeInfo -> new PayModeParam().setAmount(payTypeInfo.getAmount())
+            .map(payTypeInfo -> new PayWayParam().setAmount(payTypeInfo.getAmount())
                 .setPayChannel(payTypeInfo.getPayChannel())
                 .setExtraParamsJson(payTypeInfo.getExtraParamsJson()))
             .collect(Collectors.toList());
-        payParam.setPayModeList(payModeParams)
+        payParam.setPayWayList(payWayParams)
             .setBusinessId(payment.getBusinessId())
             .setUserId(payment.getUserId())
             .setTitle(payment.getTitle())

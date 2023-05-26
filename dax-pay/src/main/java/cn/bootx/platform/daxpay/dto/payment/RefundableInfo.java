@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class RefundableInfo {
 
     @Schema(description = "支付通道")
-    private int payChannel;
+    private String payChannel;
 
     @Schema(description = "金额")
     private BigDecimal amount;

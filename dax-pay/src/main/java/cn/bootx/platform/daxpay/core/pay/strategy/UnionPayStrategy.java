@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.core.pay.strategy;
 
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import lombok.RequiredArgsConstructor;

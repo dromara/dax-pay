@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.redis.RedisClient;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.notify.dao.PayNotifyRecordManager;

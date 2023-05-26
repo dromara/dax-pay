@@ -1,10 +1,11 @@
 package cn.bootx.platform.daxpay.code.pay;
 
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -14,30 +15,23 @@ import java.util.Objects;
  * @date 2021/7/26
  */
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum PayChannelEnum {
 
-    ALI(PayChannelCode.ALI, "ALI"), WECHAT(PayChannelCode.WECHAT, "WECHAT"),
-    UNION_PAY(PayChannelCode.UNION_PAY, "UNION_PAY"), CASH(PayChannelCode.CASH, "CASH"),
-    WALLET(PayChannelCode.WALLET, "WALLET"), VOUCHER(PayChannelCode.VOUCHER, "VOUCHER"),
-    CREDIT_CARD(PayChannelCode.CREDIT_CARD, "CREDIT"), APPLE_PAY(PayChannelCode.APPLE_PAY, "APPLE"),
-    CHANNEL_PAY(PayChannelCode.CHANNEL_PAY, "CHANNEL"), AGGREGATION(PayChannelCode.AGGREGATION, "AGGREGATION");
-
-    /** 支付通道数字编码 */
-    private final int no;
+    ALI("ali_pay","支付宝"),
+    WECHAT("wechat_pay","微信支付"),
+    UNION_PAY("union_pay","云闪付"),
+    CASH("cash_pay","现金支付"),
+    WALLET("wallet_pay","钱包支付"),
+    VOUCHER("voucher_pay","储值卡支付"),
+    CREDIT_CARD("credit_pay","信用卡支付"),
+    APPLE_PAY("apple_pay","苹果支付"),
+    AGGREGATION("aggregation_pay","聚合支付");
 
     /** 支付通道字符编码 */
     private final String code;
-
-    /**
-     * 根据数字编号获取
-     */
-    public static PayChannelEnum findByNo(int no) {
-        return Arrays.stream(PayChannelEnum.values())
-            .filter(e -> e.getNo() == no)
-            .findFirst()
-            .orElseThrow(() -> new PayFailureException("不存在的支付通道"));
-    }
+    /** 名称 */
+    private final String name;
 
     /**
      * 根据字符编码获取
@@ -53,5 +47,16 @@ public enum PayChannelEnum {
         return Arrays.stream(PayChannelEnum.values())
             .anyMatch(payChannelEnum -> Objects.equals(payChannelEnum.getCode(), code));
     }
+
+    /** 支付宝 UA */
+    public static final String UA_ALI_PAY = "Alipay";
+
+    /** 微信 UA */
+    public static final String UA_WECHAT_PAY = "MicroMessenger";
+
+    /** 异步支付通道 */
+    public static final List<PayChannelEnum> ASYNC_TYPE = Arrays.asList(ALI, WECHAT, UNION_PAY, APPLE_PAY);
+    public static final List<String> ASYNC_TYPE_CODE = Arrays.asList(ALI.code, WECHAT.code, UNION_PAY.code, APPLE_PAY.code);
+
 
 }

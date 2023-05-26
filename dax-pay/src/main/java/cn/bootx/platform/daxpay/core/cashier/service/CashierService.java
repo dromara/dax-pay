@@ -1,27 +1,26 @@
 package cn.bootx.platform.daxpay.core.cashier.service;
 
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
-import cn.bootx.platform.daxpay.code.pay.PayWayExtraCode;
+import cn.bootx.platform.baseapi.core.parameter.dao.SystemParamManager;
+import cn.bootx.platform.baseapi.core.parameter.entity.SystemParameter;
+import cn.bootx.platform.common.core.util.BigDecimalUtil;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
-import cn.bootx.platform.daxpay.code.pay.PayWayCode;
+import cn.bootx.platform.daxpay.code.pay.PayWayEnum;
+import cn.bootx.platform.daxpay.code.pay.PayWayExtraCode;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.aggregate.entity.AggregatePayInfo;
 import cn.bootx.platform.daxpay.core.aggregate.service.AggregateService;
-import cn.bootx.platform.daxpay.core.pay.service.PayService;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.core.pay.service.PayService;
 import cn.bootx.platform.daxpay.dto.pay.PayResult;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.param.cashier.CashierCombinationPayParam;
 import cn.bootx.platform.daxpay.param.cashier.CashierSinglePayParam;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.util.PayModelUtil;
-import cn.bootx.platform.baseapi.core.parameter.dao.SystemParamManager;
-import cn.bootx.platform.baseapi.core.parameter.entity.SystemParameter;
-import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.starter.auth.util.SecurityUtil;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.util.PayWaylUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -63,30 +62,29 @@ public class CashierService {
     public PayResult singlePay(CashierSinglePayParam param) {
 
         // 如果是聚合支付,存在付款码时特殊处理(聚合扫码支付不用额外处理)
-        if (Objects.equals(PayChannelCode.AGGREGATION, param.getPayChannel())) {
-            int payChannel = aggregateService.getPayChannel(param.getAuthCode());
+        if (Objects.equals(PayChannelEnum.AGGREGATION.getCode(), param.getPayChannel())) {
+            String payChannel = aggregateService.getPayChannel(param.getAuthCode()).getCode();
             param.setPayChannel(payChannel);
         }
         // 构建支付方式参数
-        PayModeParam payModeParam = new PayModeParam().setPayChannel(param.getPayChannel())
-            .setPayWay(param.getPayWay())
-            .setAmount(param.getAmount());
+        PayWayParam payWayParam = new PayWayParam().setPayChannel(param.getPayChannel())
+                .setPayWay(param.getPayWay())
+                .setAmount(param.getAmount());
 
         // 处理附加参数
         HashMap<String, String> map = new HashMap<>(1);
         map.put(PayWayExtraCode.AUTH_CODE, param.getAuthCode());
         map.put(PayWayExtraCode.OPEN_ID, param.getOpenId());
         map.put(PayWayExtraCode.VOUCHER_NO, param.getVoucherNo());
-        String extraParamsJson = PayModelUtil.buildExtraParamsJson(param.getPayChannel(), map);
-        payModeParam.setExtraParamsJson(extraParamsJson);
+        String extraParamsJson = PayWaylUtil.buildExtraParamsJson(param.getPayChannel(), map);
+        payWayParam.setExtraParamsJson(extraParamsJson);
 
         PayParam payParam = new PayParam().setTitle(param.getTitle())
-            .setBusinessId(param.getBusinessId())
-            .setUserId(SecurityUtil.getUserIdOrDefaultId())
-            .setPayModeList(Collections.singletonList(payModeParam));
+                .setBusinessId(param.getBusinessId())
+                .setPayWayList(Collections.singletonList(payWayParam));
         PayResult payResult = payService.pay(payParam);
 
-        if (PayStatusCode.TRADE_REFUNDED == payResult.getPayStatus()) {
+        if (Objects.equals(PayStatusCode.TRADE_REFUNDED,payResult.getPayStatus())) {
             throw new PayFailureException("已经退款");
         }
         return payResult;
@@ -96,12 +94,12 @@ public class CashierService {
      * 扫码发起自动支付
      */
     public String aggregatePay(String key, String ua) {
-        CashierSinglePayParam cashierSinglePayParam = new CashierSinglePayParam().setPayWay(PayWayCode.QRCODE);
+        CashierSinglePayParam cashierSinglePayParam = new CashierSinglePayParam().setPayWay(PayWayEnum.QRCODE.getCode());
         // 判断是哪种支付方式
-        if (ua.contains(PayChannelCode.UA_ALI_PAY)) {
-            cashierSinglePayParam.setPayChannel(PayChannelCode.ALI);
+        if (ua.contains(PayChannelEnum.UA_ALI_PAY)) {
+            cashierSinglePayParam.setPayChannel(PayChannelEnum.ALI.getCode());
         }
-        else if (ua.contains(PayChannelCode.UA_WECHAT_PAY)) {
+        else if (ua.contains(PayChannelEnum.UA_WECHAT_PAY)) {
             // 跳转微信授权页面, 调用jsapi进行支付
             return this.wxJsapiAuth(key);
         }
@@ -111,8 +109,8 @@ public class CashierService {
 
         AggregatePayInfo aggregatePayInfo = aggregateService.getAggregateInfo(key);
         cashierSinglePayParam.setTitle(aggregatePayInfo.getTitle())
-            .setAmount(aggregatePayInfo.getAmount())
-            .setBusinessId(aggregatePayInfo.getBusinessId());
+                .setAmount(aggregatePayInfo.getAmount())
+                .setBusinessId(aggregatePayInfo.getBusinessId());
         PayResult payResult = this.singlePay(cashierSinglePayParam);
         return payResult.getAsyncPayInfo().getPayBody();
     }
@@ -122,11 +120,11 @@ public class CashierService {
      */
     private String wxJsapiAuth(String key) {
         WeChatPayConfig config = weChatPayConfigManager.findActivity()
-            .orElseThrow(() -> new PayFailureException("未找到启用的微信支付配置"));
+                .orElseThrow(() -> new PayFailureException("未找到启用的微信支付配置"));
         WxMpService wxMpService = getWxMpService(config.getAppId(), config.getAppSecret());
         // 回调地址为 结算台微信jsapi支付的回调地址
         SystemParameter systemParameter = systemParamManager.findByParamKey(WeChatPayCode.JSAPI_REDIRECT_URL)
-            .orElseThrow(() -> new PayFailureException("微信支付回调地址参数不存在"));
+                .orElseThrow(() -> new PayFailureException("微信支付回调地址参数不存在"));
         String url = systemParameter.getValue() + "cashier/wxJsapiPay";
         return wxMpService.getOAuth2Service().buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_BASE, key);
     }
@@ -140,18 +138,19 @@ public class CashierService {
     @SneakyThrows
     public Map<String, String> wxJsapiPay(String code, String state) {
         WeChatPayConfig config = weChatPayConfigManager.findActivity()
-            .orElseThrow(() -> new PayFailureException("未找到启用的微信支付配置"));
+                .orElseThrow(() -> new PayFailureException("未找到启用的微信支付配置"));
         WxMpService wxMpService = this.getWxMpService(config.getAppId(), config.getAppSecret());
         WxOAuth2AccessToken accessToken = wxMpService.getOAuth2Service().getAccessToken(code);
         String openId = accessToken.getOpenId();
         AggregatePayInfo aggregatePayInfo = aggregateService.getAggregateInfo(state);
         // 构造微信API支付参数
-        CashierSinglePayParam cashierSinglePayParam = new CashierSinglePayParam().setPayChannel(PayChannelCode.WECHAT)
-            .setPayWay(PayWayCode.JSAPI)
-            .setTitle(aggregatePayInfo.getTitle())
-            .setAmount(aggregatePayInfo.getAmount())
-            .setOpenId(openId)
-            .setBusinessId(aggregatePayInfo.getBusinessId());
+        CashierSinglePayParam cashierSinglePayParam = new CashierSinglePayParam()
+                .setPayChannel(PayChannelEnum.WECHAT.getCode())
+                .setPayWay(PayWayEnum.JSAPI.getCode())
+                .setTitle(aggregatePayInfo.getTitle())
+                .setAmount(aggregatePayInfo.getAmount())
+                .setOpenId(openId)
+                .setBusinessId(aggregatePayInfo.getBusinessId());
         PayResult payResult = this.singlePay(cashierSinglePayParam);
 
         return WxPayKit.prepayIdCreateSign(payResult.getAsyncPayInfo().getPayBody(), config.getAppId(),
@@ -175,7 +174,7 @@ public class CashierService {
      */
     public PayResult combinationPay(CashierCombinationPayParam param) {
         // 处理支付参数
-        List<PayModeParam> payModeList = param.getPayModeList();
+        List<PayWayParam> payModeList = param.getPayWayList();
         // 删除小于等于零的
         payModeList.removeIf(payModeParam -> BigDecimalUtil.compareTo(payModeParam.getAmount(), BigDecimal.ZERO) < 1);
         if (CollUtil.isEmpty(payModeList)) {
@@ -183,12 +182,11 @@ public class CashierService {
         }
         // 发起支付
         PayParam payParam = new PayParam().setTitle(param.getTitle())
-            .setBusinessId(param.getBusinessId())
-            .setUserId(SecurityUtil.getUserIdOrDefaultId())
-            .setPayModeList(param.getPayModeList());
+                .setBusinessId(param.getBusinessId())
+                .setPayWayList(param.getPayWayList());
         PayResult payResult = payService.pay(payParam);
 
-        if (PayStatusCode.TRADE_REFUNDED == payResult.getPayStatus()) {
+        if (Objects.equals(PayStatusCode.TRADE_REFUNDED, payResult.getPayStatus())) {
             throw new PayFailureException("已经退款");
         }
         return payResult;

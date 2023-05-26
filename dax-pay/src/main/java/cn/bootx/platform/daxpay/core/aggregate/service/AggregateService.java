@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.core.aggregate.service;
 
 import cn.bootx.platform.common.redis.RedisClient;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.aggregate.entity.AggregatePayInfo;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.cashier.CashierSinglePayParam;
@@ -54,7 +54,7 @@ public class AggregateService {
     /**
      * 聚合付款码支付处理
      */
-    public int getPayChannel(String authCode) {
+    public PayChannelEnum getPayChannel(String authCode) {
         if (StrUtil.isBlank(authCode)) {
             throw new PayFailureException("付款码不可为空");
         }
@@ -63,11 +63,11 @@ public class AggregateService {
 
         // 微信
         if (StrUtil.startWithAny(authCode.substring(0, 2), wx)) {
-            return PayChannelCode.WECHAT;
+            return PayChannelEnum.WECHAT;
         }
         // 支付宝
         else if (StrUtil.startWithAny(authCode.substring(0, 2), ali)) {
-            return PayChannelCode.ALI;
+            return PayChannelEnum.ALI;
         }
         else {
             throw new PayFailureException("不支持的支付方式");

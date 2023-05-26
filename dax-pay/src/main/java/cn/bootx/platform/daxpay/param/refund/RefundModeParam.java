@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.param.refund;
 
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -21,26 +21,30 @@ import java.math.BigDecimal;
 public class RefundModeParam {
 
     /**
-     * @see PayChannelCode
+     * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付通道", required = true)
-    private int payChannel;
+    @Schema(description = "支付通道")
+    private String payChannel;
 
-    @Schema(description = "支付金额", required = true)
+    @Schema(description = "支付金额")
     private BigDecimal amount;
 
     /**
      * 转换成支付方式参数
      */
-    public PayModeParam toPayModeParam() {
-        return new PayModeParam().setPayChannel(getPayChannel()).setAmount(getAmount());
+    public PayWayParam toPayModeParam() {
+        return new PayWayParam()
+                .setPayChannel(getPayChannel())
+                .setAmount(getAmount());
     }
 
     /**
      * 转换成退款方式记录对象
      */
     public RefundableInfo toRefundableInfo() {
-        return new RefundableInfo().setPayChannel(getPayChannel()).setAmount(getAmount());
+        return new RefundableInfo()
+                .setPayChannel(getPayChannel())
+                .setAmount(getAmount());
     }
 
 }

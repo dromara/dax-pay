@@ -36,7 +36,7 @@ public class PayController {
 
     private final PaySyncService paySyncService;
 
-    @Operation(summary = "支付")
+    @Operation(summary = "发起支付")
     @PostMapping("/pay")
     public ResResult<PayResult> pay(@RequestBody PayParam payParam) {
         return Res.ok(payService.pay(payParam));
@@ -63,7 +63,7 @@ public class PayController {
         return Res.ok();
     }
 
-    @Operation(summary = "退款")
+    @Operation(summary = "退款(支持部分退款)")
     @PostMapping("/refund")
     public ResResult<Void> refund(@RequestBody RefundParam refundParam) {
         payRefundService.refund(refundParam);

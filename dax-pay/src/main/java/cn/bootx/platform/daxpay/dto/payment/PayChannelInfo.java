@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
+ * 支付通道信息
  * @author xxm
  * @date 2020/12/8
  */

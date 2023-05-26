@@ -1,10 +1,10 @@
 package cn.bootx.platform.daxpay.core.pay.factory;
 
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.core.pay.strategy.*;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.extra.spring.SpringUtil;
 
@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static cn.bootx.platform.daxpay.code.pay.PayChannelEnum.*;
 
 /**
  * 支付策略工厂
@@ -24,92 +26,91 @@ public class PayStrategyFactory {
 
     /**
      * 根据传入的支付通道创建策略
-     * @param payModeParam 支付类型
+     * @param payWayParam 支付类型
      * @return 支付策略
      */
-    public static AbsPayStrategy create(PayModeParam payModeParam) {
+    public static AbsPayStrategy create(PayWayParam payWayParam) {
 
         AbsPayStrategy strategy = null;
-        switch (payModeParam.getPayChannel()) {
-            case PayChannelCode.ALI:
+        PayChannelEnum channelEnum = findByCode(payWayParam.getPayChannel());
+        switch (channelEnum) {
+            case ALI:
                 strategy = SpringUtil.getBean(AliPayStrategy.class);
                 break;
-            case PayChannelCode.WECHAT:
+            case WECHAT:
                 strategy = SpringUtil.getBean(WeChatPayStrategy.class);
                 break;
-            case PayChannelCode.UNION_PAY:
+            case UNION_PAY:
                 strategy = SpringUtil.getBean(UnionPayStrategy.class);
                 break;
-            case PayChannelCode.CASH:
+            case CASH:
                 strategy = SpringUtil.getBean(CashPayStrategy.class);
                 break;
-            case PayChannelCode.WALLET:
+            case WALLET:
                 strategy = SpringUtil.getBean(WalletPayStrategy.class);
                 break;
-            case PayChannelCode.VOUCHER:
+            case VOUCHER:
                 strategy = SpringUtil.getBean(VoucherStrategy.class);
                 break;
-            case PayChannelCode.CREDIT_CARD:
+            case CREDIT_CARD:
                 break;
-            case PayChannelCode.APPLE_PAY:
-                break;
-            case PayChannelCode.CHANNEL_PAY:
+            case APPLE_PAY:
                 break;
             default:
                 throw new PayUnsupportedMethodException();
         }
         // noinspection ConstantConditions
-        strategy.setPayMode(payModeParam);
+        strategy.setPayWayParam(payWayParam);
         return strategy;
     }
 
     /**
      * 根据传入的支付类型批量创建策略, 异步支付在后面
      */
-    public static List<AbsPayStrategy> createDesc(List<PayModeParam> payModeParamList) {
-        return create(payModeParamList, true);
+    public static List<AbsPayStrategy> createDesc(List<PayWayParam> payWayParamList) {
+        return create(payWayParamList, true);
     }
 
     /**
      * 根据传入的支付类型批量创建策略, 默认异步支付在前面
      */
-    public static List<AbsPayStrategy> create(List<PayModeParam> payModeParamList) {
-        return create(payModeParamList, false);
+    public static List<AbsPayStrategy> create(List<PayWayParam> payWayParamList) {
+        return create(payWayParamList, false);
     }
 
     /**
      * 根据传入的支付类型批量创建策略
-     * @param payModeParamList 支付类型
+     * @param payWayParamList 支付类型
      * @return 支付策略
      */
-    private static List<AbsPayStrategy> create(List<PayModeParam> payModeParamList, boolean description) {
-        if (CollectionUtil.isEmpty(payModeParamList)) {
+    private static List<AbsPayStrategy> create(List<PayWayParam> payWayParamList, boolean description) {
+        if (CollectionUtil.isEmpty(payWayParamList)) {
             return Collections.emptyList();
         }
-        List<AbsPayStrategy> list = new ArrayList<>(payModeParamList.size());
+        List<AbsPayStrategy> list = new ArrayList<>(payWayParamList.size());
 
         // 同步支付
-        List<PayModeParam> syncPayModeParamList = payModeParamList.stream()
+        List<PayWayParam> syncPayWayParamList = payWayParamList.stream()
             .filter(Objects::nonNull)
-            .filter(payModeParam -> !PayChannelCode.ASYNC_TYPE.contains(payModeParam.getPayChannel()))
+            .filter(payModeParam -> !ASYNC_TYPE.contains(payModeParam.getPayChannel()))
             .collect(Collectors.toList());
 
         // 异步支付
-        List<PayModeParam> asyncPayModeParamList = payModeParamList.stream()
+        List<PayWayParam> asyncPayWayParamList = payWayParamList.stream()
             .filter(Objects::nonNull)
-            .filter(payModeParam -> PayChannelCode.ASYNC_TYPE.contains(payModeParam.getPayChannel()))
+            .filter(payModeParam -> ASYNC_TYPE.contains(payModeParam.getPayChannel()))
             .collect(Collectors.toList());
 
-        List<PayModeParam> sortList = new ArrayList<>(payModeParamList.size());
+        List<PayWayParam> sortList = new ArrayList<>(payWayParamList.size());
 
         // 异步在后面
         if (description) {
-            sortList.addAll(syncPayModeParamList);
-            sortList.addAll(asyncPayModeParamList);
+            sortList.addAll(syncPayWayParamList);
+            sortList.addAll(asyncPayWayParamList);
         }
         else {
-            sortList.addAll(asyncPayModeParamList);
-            sortList.addAll(syncPayModeParamList);
+            sortList.addAll(asyncPayWayParamList);
+            sortList.addAll(syncPayWayParamList);
         }
 
         // 此处有一个根据Type的反转排序，

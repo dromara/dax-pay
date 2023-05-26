@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.param.cashier;
 
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -28,7 +28,7 @@ public class CashierCombinationPayParam {
     @Schema(description = "业务id")
     private String businessId;
 
-    @Schema(description = "支付信息", required = true)
-    private List<PayModeParam> payModeList;
+    @Schema(description = "支付信息")
+    private List<PayWayParam> payWayList;
 
 }

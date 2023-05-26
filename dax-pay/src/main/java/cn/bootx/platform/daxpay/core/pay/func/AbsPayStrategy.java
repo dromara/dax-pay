@@ -1,12 +1,12 @@
 package cn.bootx.platform.daxpay.core.pay.func;
 
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,13 +29,13 @@ public abstract class AbsPayStrategy {
     private PayParam payParam = null;
 
     /** 支付方式参数 支付参数中的与这个不一致, 以这个为准 */
-    private PayModeParam payMode = null;
+    private PayWayParam payWayParam = null;
 
     /**
      * 策略标示
-     * @see PayChannelCode
+     * @see PayChannelEnum
      */
-    public abstract int getType();
+    public abstract PayChannelEnum getType();
 
     /**
      * 初始化支付的参数

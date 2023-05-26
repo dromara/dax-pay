@@ -58,6 +58,22 @@ public class PayChannelConfigService {
         return MpUtil.convert2DtoPageResult(configManager.page(pageParam,payChannelConfigParam));
     }
 
+
+    /**
+     * 编码是否已经存在
+     */
+    public boolean existsByCode(String code) {
+        return configManager.existsByCode(code);
+    }
+
+    /**
+     * 编码是否已经存在(不包含自身)
+     */
+    public boolean existsByCode(String code, Long id) {
+        return configManager.existsByCode(code, id);
+    }
+
+
     /**
      * 获取单条
      */

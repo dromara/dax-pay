@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletPayment;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class WalletPaymentService {
     /**
      * 保存钱包支付记录
      */
-    public void savePayment(Payment payment, PayParam payParam, PayModeParam payMode, Wallet wallet) {
+    public void savePayment(Payment payment, PayParam payParam, PayWayParam payMode, Wallet wallet) {
         WalletPayment walletPayment = new WalletPayment().setWalletId(wallet.getId());
         walletPayment.setPaymentId(payment.getId())
             .setUserId(payment.getUserId())

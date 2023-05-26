@@ -2,12 +2,11 @@ package cn.bootx.platform.daxpay.util;
 
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayWayExtraCode;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.channel.alipay.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.voucher.VoucherPayParam;
@@ -31,7 +30,7 @@ import java.util.Map;
  * @date 2022/7/12
  */
 @UtilityClass
-public class PayModelUtil {
+public class PayWaylUtil {
 
     /**
      * 获取支付宝的过期时间
@@ -58,36 +57,36 @@ public class PayModelUtil {
     /**
      * 判断是否有异步支付
      */
-    public boolean isNotSync(List<PayModeParam> payModeParams) {
-        return payModeParams.stream().map(PayModeParam::getPayChannel).noneMatch(PayChannelCode.ASYNC_TYPE::contains);
+    public boolean isNotSync(List<PayWayParam> payWayParams) {
+        return payWayParams.stream().map(PayWayParam::getPayChannel).noneMatch(PayChannel.ASYNC_TYPE::contains);
     }
 
     /**
      * 获取异步支付参数
      */
-    public PayModeParam getAsyncPayModeParam(PayParam payParam) {
-        return payParam.getPayModeList()
-            .stream()
-            .filter(payMode -> PayChannelCode.ASYNC_TYPE.contains(payMode.getPayChannel()))
-            .findFirst()
-            .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
+    public PayWayParam getAsyncPayModeParam(PayParam payParam) {
+        return payParam.getPayWayList()
+                .stream()
+                .filter(payMode -> PayChannelCode.ASYNC_TYPE.contains(payMode.getPayChannel()))
+                .findFirst()
+                .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
     }
 
     /**
      * 构建扩展参数构建
-     * @param payChannel 支付通道
+     * @param payChannel 支付通道编码
      * @param map 支付方式扩展字段信息 key 为 PayModelExtraCode中定义的
      */
-    public String buildExtraParamsJson(Integer payChannel, Map<String, String> map) {
-        PayChannelEnum payChannelEnum = PayChannelEnum.findByNo(payChannel);
+    public String buildExtraParamsJson(String payChannel, Map<String, String> map) {
+        PayChannelEnum payChannelEnum = PayChannelEnum.findByCode(payChannel);
         switch (payChannelEnum) {
             case ALI: {
                 return JSONUtil.toJsonStr(new AliPayParam().setAuthCode(map.get(PayWayExtraCode.AUTH_CODE))
-                    .setReturnUrl(map.get(PayWayExtraCode.RETURN_URL)));
+                        .setReturnUrl(map.get(PayWayExtraCode.RETURN_URL)));
             }
             case WECHAT: {
                 return JSONUtil.toJsonStr(new WeChatPayParam().setOpenId(map.get(PayWayExtraCode.OPEN_ID))
-                    .setAuthCode(map.get(PayWayExtraCode.AUTH_CODE)));
+                        .setAuthCode(map.get(PayWayExtraCode.AUTH_CODE)));
             }
             case VOUCHER: {
                 String voucherNo = map.get(PayWayExtraCode.VOUCHER_NO);
@@ -106,10 +105,10 @@ public class PayModelUtil {
     /**
      * 检查支付金额
      */
-    public void validationAmount(List<PayModeParam> payModeList) {
-        for (PayModeParam payModeParam : payModeList) {
+    public void validationAmount(List<PayWayParam> payModeList) {
+        for (PayWayParam payWayParam : payModeList) {
             // 同时满足支付金额小于等于零
-            if (BigDecimalUtil.compareTo(payModeParam.getAmount(), BigDecimal.ZERO) < 1) {
+            if (BigDecimalUtil.compareTo(payWayParam.getAmount(), BigDecimal.ZERO) < 1) {
                 throw new PayAmountAbnormalException();
             }
         }
@@ -120,12 +119,13 @@ public class PayModelUtil {
      */
     public void validationAsyncPayMode(PayParam payParam) {
         // 组合支付时只允许有一个异步支付方式
-        List<PayModeParam> payModeList = payParam.getPayModeList();
+        List<PayWayParam> payModeList = payParam.getPayWayList();
 
         long asyncPayModeCount = payModeList.stream()
-            .map(PayModeParam::getPayChannel)
-            .filter(PayChannelCode.ASYNC_TYPE::contains)
-            .count();
+                .map(PayWayParam::getPayChannel)
+                .map(PayChannelEnum::findByCode)
+                .filter(PayChannelEnum.ASYNC_TYPE::contains)
+                .count();
         if (asyncPayModeCount > 1) {
             throw new PayFailureException("组合支付时只允许有一个异步支付方式");
         }

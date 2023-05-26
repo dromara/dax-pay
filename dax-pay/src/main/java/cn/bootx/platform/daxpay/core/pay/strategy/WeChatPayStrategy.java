@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.core.pay.strategy;
 
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
@@ -18,7 +17,7 @@ import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaySyncService
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaymentService;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayParam;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
@@ -66,8 +65,8 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      * 类型
      */
     @Override
-    public int getType() {
-        return PayChannelCode.WECHAT;
+    public PayChannelEnum getType() {
+        return PayChannelEnum.WECHAT;
     }
 
     /**
@@ -77,7 +76,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     public void doBeforePayHandler() {
         try {
             // 微信参数验证
-            String extraParamsJson = this.getPayMode().getExtraParamsJson();
+            String extraParamsJson = this.getPayWayParam().getExtraParamsJson();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 this.weChatPayParam = JSONUtil.toBean(extraParamsJson, WeChatPayParam.class);
             }
@@ -90,14 +89,14 @@ public class WeChatPayStrategy extends AbsPayStrategy {
         }
 
         // 检查金额
-        PayModeParam payMode = this.getPayMode();
+        PayWayParam payMode = this.getPayWayParam();
         if (BigDecimalUtil.compareTo(payMode.getAmount(), BigDecimal.ZERO) < 1) {
             throw new PayAmountAbnormalException();
         }
 
         // 检查并获取微信支付配置
         this.initWeChatPayConfig();
-        weChatPayService.validation(this.getPayMode(), weChatPayConfig);
+        weChatPayService.validation(this.getPayWayParam(), weChatPayConfig);
     }
 
     /**
@@ -105,7 +104,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        weChatPayService.pay(this.getPayMode().getAmount(), this.getPayment(), this.weChatPayParam, this.getPayMode(),
+        weChatPayService.pay(this.getPayWayParam().getAmount(), this.getPayment(), this.weChatPayParam, this.getPayWayParam(),
                 this.weChatPayConfig);
     }
 
@@ -114,7 +113,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        weChatPaymentService.updatePaySuccess(this.getPayment(), this.getPayMode());
+        weChatPaymentService.updatePaySuccess(this.getPayment(), this.getPayWayParam());
     }
 
     /**
@@ -131,7 +130,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     @Override
     public void doAsyncSuccessHandler(Map<String, String> map) {
         String tradeNo = map.get(WeChatPayCode.TRANSACTION_ID);
-        weChatPaymentService.updateAsyncSuccess(this.getPayment().getId(), this.getPayMode(), tradeNo);
+        weChatPaymentService.updateAsyncSuccess(this.getPayment().getId(), this.getPayWayParam(), tradeNo);
     }
 
     /**
@@ -171,10 +170,10 @@ public class WeChatPayStrategy extends AbsPayStrategy {
         this.initWeChatPayConfig();
         WeChatPayment weChatPayment = weChatPaymentManager.findByPaymentId(this.getPayment().getId())
             .orElseThrow(() -> new PayFailureException("微信支付记录不存在"));
-        weChatPayCancelService.refund(this.getPayment(), weChatPayment, this.getPayMode().getAmount(),
+        weChatPayCancelService.refund(this.getPayment(), weChatPayment, this.getPayWayParam().getAmount(),
                 this.weChatPayConfig);
-        weChatPaymentService.updatePayRefund(weChatPayment, this.getPayMode().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayMode().getAmount(), PayChannelEnum.WECHAT);
+        weChatPaymentService.updatePayRefund(weChatPayment, this.getPayWayParam().getAmount());
+        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.WECHAT);
     }
 
     /**

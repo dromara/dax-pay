@@ -22,38 +22,52 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/channel")
 @RequiredArgsConstructor
 public class PayChannelConfigController {
-    private final PayChannelConfigService payChannelConfigService;
+    private final PayChannelConfigService channelConfigService;
 
     @Operation( summary = "添加")
     @PostMapping(value = "/add")
     public ResResult<Void> add(@RequestBody PayChannelConfigParam param){
-        payChannelConfigService.add(param);
+        channelConfigService.add(param);
         return Res.ok();
     }
 
     @Operation( summary = "修改")
     @PostMapping(value = "/update")
     public ResResult<Void> update(@RequestBody PayChannelConfigParam param){
-        payChannelConfigService.update(param);
+        channelConfigService.update(param);
         return Res.ok();
     }
 
     @Operation( summary = "删除")
     @DeleteMapping(value = "/delete")
     public ResResult<Void> delete(Long id){
-        payChannelConfigService.delete(id);
+        channelConfigService.delete(id);
         return Res.ok();
     }
 
     @Operation( summary = "通过ID查询")
     @GetMapping(value = "/findById")
     public ResResult<PayChannelConfigDto> findById(Long id){
-        return Res.ok(payChannelConfigService.findById(id));
+        return Res.ok(channelConfigService.findById(id));
     }
 
     @Operation( summary = "分页查询")
     @GetMapping(value = "/page")
     public ResResult<PageResult<PayChannelConfigDto>> page(PageParam pageParam, PayChannelConfigParam payChannelConfigParam){
-        return Res.ok(payChannelConfigService.page(pageParam,payChannelConfigParam));
+        return Res.ok(channelConfigService.page(pageParam,payChannelConfigParam));
     }
+
+
+    @Operation(summary = "编码是否被使用")
+    @GetMapping("/existsByCode")
+    public ResResult<Boolean> existsByCode(String code) {
+        return Res.ok(channelConfigService.existsByCode(code));
+    }
+
+    @Operation(summary = "编码是否被使用(不包含自己)")
+    @GetMapping("/existsByCodeNotId")
+    public ResResult<Boolean> existsByCode(String code, Long id) {
+        return Res.ok(channelConfigService.existsByCode(code, id));
+    }
+
 }

@@ -9,24 +9,24 @@ package cn.bootx.platform.daxpay.code.pay;
 public interface PaySyncStatus {
 
     /** -1 不需要同步 */
-    int NOT_SYNC = -1;
+    String NOT_SYNC = "not_sync";
 
     /** 1 远程支付成功 */
-    int TRADE_SUCCESS = 1;
+    String TRADE_SUCCESS = "trade_success";
 
     /** 2 交易创建，等待买家付款 */
-    int WAIT_BUYER_PAY = 2;
+    String WAIT_BUYER_PAY = "wait_buyer_pay";
 
     /** 3 已关闭 */
-    int TRADE_CLOSED = 3;
+    String TRADE_CLOSED = "trade_closed";
 
     /** 4 已退款 */
-    int TRADE_REFUND = 4;
+    String TRADE_REFUND = "trade_refund";
 
     /** 5 查询不到订单 */
-    int NOT_FOUND = 5;
+    String NOT_FOUND = "not_found";
 
     /** 4 查询失败 */
-    int FAIL = 6;
+    String FAIL = "fail";
 
 }

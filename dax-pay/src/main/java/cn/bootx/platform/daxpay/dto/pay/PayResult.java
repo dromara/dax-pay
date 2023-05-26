@@ -28,7 +28,7 @@ public class PayResult implements Serializable {
      * @see PayStatusCode#TRADE_PROGRESS
      */
     @Schema(description = "支付状态")
-    private int payStatus;
+    private String payStatus;
 
     @Schema(description = "异步支付参数")
     private AsyncPayInfo asyncPayInfo;

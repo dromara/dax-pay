@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.core.pay.func;
 
 import cn.bootx.platform.common.redis.RedisClient;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.notify.dao.PayNotifyRecordManager;
 import cn.bootx.platform.daxpay.core.notify.entity.PayNotifyRecord;

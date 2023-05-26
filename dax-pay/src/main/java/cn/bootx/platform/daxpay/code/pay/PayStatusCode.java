@@ -8,38 +8,47 @@ package cn.bootx.platform.daxpay.code.pay;
  */
 public interface PayStatusCode {
 
-    /**
-     * 支付状态 0.支付中 1.成功 2.失败 3.支付取消(超时/手动取消/订单已经关闭,撤销支付单) 4.退款中 5.已退款
-     */
-    int TRADE_PROGRESS = 0;
+    // 支付状态
+    /** 支付中 */
+    String TRADE_PROGRESS = "trade_progress";
 
-    int TRADE_SUCCESS = 1;
+    /** 成功 */
+    String TRADE_SUCCESS = "trade_success";
 
-    int TRADE_FAIL = 2;
+    /** 失败 */
+    String TRADE_FAIL = "trade_fail";
 
-    int TRADE_CANCEL = 3;
+    /** 支付取消(超时/手动取消/订单已经关闭,撤销支付单) */
+    String TRADE_CANCEL = "trade_cancel";
 
-    int TRADE_REFUNDING = 4;
+    /** 退款中 */
+    String TRADE_REFUNDING = "trade_refunding";
 
-    int TRADE_REFUNDED = 5;
+    /** 已退款 */
+    String TRADE_REFUNDED = "trade_refunded";
 
-    /**
-     * 回调信息支付状态 0.失败 1.成功
-     */
-    int NOTIFY_TRADE_FAIL = 0;
+    // 回调信息支付状态
+    /** 失败 */
+    String NOTIFY_TRADE_FAIL = "notify_trade_fail";
 
-    int NOTIFY_TRADE_SUCCESS = 1;
+    /** 成功 */
+    String NOTIFY_TRADE_SUCCESS = "notify_trade_success";
 
-    /** 回调处理状态 */
-    int NOTIFY_PROCESS_FAIL = 0;
+    // 回调处理状态
+    /** 失败 */
+    String NOTIFY_PROCESS_FAIL = "notify_process_fail";
 
-    int NOTIFY_PROCESS_SUCCESS = 1;
+    /** 成功 */
+    String NOTIFY_PROCESS_SUCCESS = "notify_process_success";
 
-    int NOTIFY_PROCESS_IGNORE = 2;
+    /** 忽略 */
+    String NOTIFY_PROCESS_IGNORE = "notify_process_ignore";
 
-    /** 退款处理状态 0.失败 1.成功 */
-    int REFUND_PROCESS_FAIL = 0;
+    // 退款处理状态
+    /** 失败 */
+    String REFUND_PROCESS_FAIL = "refund_process_fail";
 
-    int REFUND_PROCESS_SUCCESS = 1;
+    /** 成功 */
+    String REFUND_PROCESS_SUCCESS = "refund_process_success";
 
 }

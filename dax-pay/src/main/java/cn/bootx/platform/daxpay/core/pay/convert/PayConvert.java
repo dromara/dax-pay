@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.core.pay.convert;
 
 import cn.bootx.platform.daxpay.dto.payment.PayChannelInfo;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -16,6 +16,6 @@ public interface PayConvert {
 
     PayConvert CONVERT = Mappers.getMapper(PayConvert.class);
 
-    PayChannelInfo convert(PayModeParam in);
+    PayChannelInfo convert(PayWayParam in);
 
 }

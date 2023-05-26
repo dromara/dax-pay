@@ -11,9 +11,9 @@ import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.mq.PaymentEventSender;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.util.PayModelUtil;
+import cn.bootx.platform.daxpay.util.PayWaylUtil;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class PayExpiredTimeService {
         // 获取支付网关状态
         PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
         // 1.获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayModeList());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
         if (CollUtil.isEmpty(paymentStrategyList)) {
             throw new PayUnsupportedMethodException();
         }
@@ -68,7 +68,7 @@ public class PayExpiredTimeService {
         }
 
         // 3 拿到异步支付方法, 与支付网关进行同步
-        PayModeParam asyncPayMode = PayModelUtil.getAsyncPayModeParam(payParam);
+        PayWayParam asyncPayMode = PayWaylUtil.getAsyncPayModeParam(payParam);
         AbsPayStrategy syncPayStrategy = PayStrategyFactory.create(asyncPayMode);
         syncPayStrategy.initPayParam(payment, payParam);
         PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();

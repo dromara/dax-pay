@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.config.dao;
 
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
@@ -41,5 +42,13 @@ public class PayChannelConfigManager extends BaseManager<PayChannelConfigMapper,
         return lambdaQuery()
                 .orderByAsc(PayChannelConfig::getSortNo)
                 .list();
+    }
+
+    public boolean existsByCode(String code) {
+        return existedByField(PayChannelConfig::getCode, code);
+    }
+
+    public boolean existsByCode(String code, Long id) {
+        return lambdaQuery().eq(PayChannelConfig::getCode, code).ne(MpIdEntity::getId, id).exists();
     }
 }

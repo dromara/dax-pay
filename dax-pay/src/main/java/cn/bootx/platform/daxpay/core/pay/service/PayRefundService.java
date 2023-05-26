@@ -17,7 +17,7 @@ import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.refund.RefundModeParam;
 import cn.bootx.platform.daxpay.param.refund.RefundParam;
@@ -106,10 +106,10 @@ public class PayRefundService {
         this.payModeCheck(refundModeParams, payment.getRefundableInfo());
 
         // 1.获取退款参数方式，通过工厂生成对应的策略组
-        List<PayModeParam> payModeParams = refundModeParams.stream()
+        List<PayWayParam> payWayParams = refundModeParams.stream()
             .map(RefundModeParam::toPayModeParam)
             .collect(Collectors.toList());
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payModeParams);
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payWayParams);
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
             throw new PayUnsupportedMethodException();
         }

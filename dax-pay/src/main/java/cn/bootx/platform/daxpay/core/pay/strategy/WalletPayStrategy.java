@@ -1,16 +1,19 @@
 package cn.bootx.platform.daxpay.core.pay.strategy;
 
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
-import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPaymentService;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletService;
+import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
+import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
+import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.waller.WalletLackOfBalanceException;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.param.channel.wallet.WalletPayParam;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONException;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -39,8 +42,8 @@ public class WalletPayStrategy extends AbsPayStrategy {
     private Wallet wallet;
 
     @Override
-    public int getType() {
-        return PayChannelCode.WALLET;
+    public PayChannelEnum getType() {
+        return PayChannelEnum.WALLET;
     }
 
     /**
@@ -48,11 +51,20 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doBeforePayHandler() {
-        PayParam payParam = this.getPayParam();
-        // 获取并校验钱包
-        this.wallet = walletService.getNormalWalletByUserId(payParam.getUserId());
+        try {
+            // 支付宝参数验证
+            String extraParamsJson = this.getPayWayParam().getExtraParamsJson();
+            if (StrUtil.isNotBlank(extraParamsJson)) {
+
+                WalletPayParam walletPayParam = JSONUtil.toBean(extraParamsJson, WalletPayParam.class);
+                this.wallet = walletService.getNormalWalletById(walletPayParam.getWalletId());
+            }
+        }
+        catch (JSONException e) {
+            throw new PayFailureException("支付参数错误");
+        }
         // 判断余额
-        if (BigDecimalUtil.compareTo(this.wallet.getBalance(), getPayMode().getAmount()) < 0) {
+        if (BigDecimalUtil.compareTo(this.wallet.getBalance(), getPayWayParam().getAmount()) < 0) {
             throw new WalletLackOfBalanceException();
         }
     }
@@ -62,8 +74,8 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        walletPayService.pay(getPayMode().getAmount(), this.getPayment(), this.wallet);
-        walletPaymentService.savePayment(this.getPayment(), this.getPayParam(), this.getPayMode(), this.wallet);
+        walletPayService.pay(getPayWayParam().getAmount(), this.getPayment(), this.wallet);
+        walletPaymentService.savePayment(this.getPayment(), this.getPayParam(), this.getPayWayParam(), this.wallet);
     }
 
     /**
@@ -88,9 +100,9 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doRefundHandler() {
-        walletPayService.refund(this.getPayment().getId(), this.getPayMode().getAmount());
-        walletPaymentService.updateRefund(this.getPayment().getId(), this.getPayMode().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayMode().getAmount(), PayChannelEnum.WALLET);
+        walletPayService.refund(this.getPayment().getId(), this.getPayWayParam().getAmount());
+        walletPaymentService.updateRefund(this.getPayment().getId(), this.getPayWayParam().getAmount());
+        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.WALLET);
     }
 
 }

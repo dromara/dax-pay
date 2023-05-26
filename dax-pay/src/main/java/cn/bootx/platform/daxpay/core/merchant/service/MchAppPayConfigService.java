@@ -11,6 +11,7 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,12 +49,15 @@ public class MchAppPayConfigService {
         return channels.stream()
                 .map(channel->{
                     MchAppPayConfig config = mchAppPayConfigMap.get(channel.getCode());
-                    return new MchAppPayConfigResult()
-                            .setConfigId(config.getConfigId())
-                            .setState(config.getState())
+                    MchAppPayConfigResult result = new MchAppPayConfigResult()
                             .setImg(channel.getImage())
                             .setChannelCode(channel.getCode())
                             .setChannelName(channel.getName());
+                    if (Objects.nonNull(config)){
+                        result.setConfigId(config.getConfigId())
+                                .setState(config.getState());
+                    }
+                    return result;
                 }).collect(Collectors.toList());
     }
 }

@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.core.pay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.core.util.ValidationUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelCode;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.pay.builder.PayEventBuilder;
 import cn.bootx.platform.daxpay.core.pay.builder.PaymentBuilder;
 import cn.bootx.platform.daxpay.core.pay.factory.PayStrategyFactory;
@@ -15,9 +15,9 @@ import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayNotExistedException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.mq.PaymentEventSender;
-import cn.bootx.platform.daxpay.param.pay.PayModeParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.util.PayModelUtil;
+import cn.bootx.platform.daxpay.util.PayWaylUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,9 +54,10 @@ public class PayService {
      */
     @Transactional(rollbackFor = Exception.class)
     public PayResult pay(PayParam payParam) {
+        // 检验参数
         ValidationUtil.validateParam(payParam);
-        // 异步支付方法检查
-        PayModelUtil.validationAsyncPayMode(payParam);
+        // 异步支付方式检查
+        PayWaylUtil.validationAsyncPayMode(payParam);
 
         // 获取并校验支付状态
         Payment payment = this.getAndCheckPaymentByBusinessId(payParam.getBusinessId());
@@ -64,9 +65,8 @@ public class PayService {
         // 异步支付且非第一次支付
         if (Objects.nonNull(payment) && payment.isAsyncPayMode()) {
             return this.paySyncNotFirst(payParam, payment);
-        }
-        else {
-            // 首次支付或同步支付
+        } else {
+            // 第一次发起支付或同步支付
             return this.payFirst(payParam, payment);
         }
     }
@@ -81,7 +81,7 @@ public class PayService {
         }
 
         // 1. 价格检测
-        PayModelUtil.validationAmount(payParam.getPayModeList());
+        PayWaylUtil.validationAmount(payParam.getPayWayList());
 
         // 2. 创建支付记录
         payment = this.createPayment(payParam);
@@ -108,7 +108,7 @@ public class PayService {
     private void payFirstMethod(PayParam payParam, Payment payment) {
 
         // 1.获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayModeList());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
             throw new PayUnsupportedMethodException();
         }
@@ -126,7 +126,7 @@ public class PayService {
             // 发起支付成功进行的执行方法
             strategyList.forEach(AbsPayStrategy::doSuccessHandler);
             // 所有支付方式都是同步时进行Payment处理
-            if (PayModelUtil.isNotSync(payParam.getPayModeList())) {
+            if (PayWaylUtil.isNotSync(payParam.getPayWayList())) {
                 // 修改payment支付状态为成功
                 paymentObj.setPayStatus(TRADE_SUCCESS);
                 paymentObj.setPayTime(LocalDateTime.now());
@@ -141,15 +141,15 @@ public class PayService {
     private PayResult paySyncNotFirst(PayParam payParam, Payment payment) {
 
         // 0. 处理支付完成情况(完成/退款)
-        List<Integer> trades = Arrays.asList(TRADE_SUCCESS, TRADE_CANCEL, TRADE_REFUNDING, TRADE_REFUNDED);
+        List<String> trades = Arrays.asList(TRADE_SUCCESS, TRADE_CANCEL, TRADE_REFUNDING, TRADE_REFUNDED);
         if (trades.contains(payment.getPayStatus())) {
             return PaymentBuilder.buildResultByPayment(payment);
         }
 
         // 1.获取 异步支付 通道，通过工厂生成对应的策略组
         PayParam oldPayParam = PaymentBuilder.buildPayParamByPayment(payment);
-        PayModeParam payModeParam = this.getAsyncPayModeParam(payParam, oldPayParam);
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(Collections.singletonList(payModeParam));
+        PayWayParam payWayParam = this.getAsyncPayModeParam(payParam, oldPayParam);
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(Collections.singletonList(payWayParam));
 
         // 2.初始化支付的参数
         for (AbsPayStrategy paymentStrategy : paymentStrategyList) {
@@ -192,24 +192,24 @@ public class PayService {
     /**
      * 获取异步支付参数
      */
-    private PayModeParam getAsyncPayModeParam(PayParam payParam, PayParam oldPaymentParam) {
+    private PayWayParam getAsyncPayModeParam(PayParam payParam, PayParam oldPaymentParam) {
 
-        List<PayModeParam> oldPayModes = oldPaymentParam.getPayModeList();
+        List<PayWayParam> oldPayModes = oldPaymentParam.getPayWayList();
         // 旧的异步支付方式
-        PayModeParam oldModeParam = oldPayModes.stream()
-            .filter(payMode -> PayChannelCode.ASYNC_TYPE.contains(payMode.getPayChannel()))
+        PayWayParam oldModeParam = oldPayModes.stream()
+            .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getPayChannel()))
             .findFirst()
             .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
 
         // 新的异步支付方式
-        PayModeParam payModeParam = payParam.getPayModeList()
+        PayWayParam payWayParam = payParam.getPayWayList()
             .stream()
-            .filter(payMode -> PayChannelCode.ASYNC_TYPE.contains(payMode.getPayChannel()))
+            .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getPayChannel()))
             .findFirst()
             .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
-        payModeParam.setAmount(oldModeParam.getAmount());
+        payWayParam.setAmount(oldModeParam.getAmount());
 
-        return payModeParam;
+        return payWayParam;
     }
 
     /**
@@ -229,7 +229,7 @@ public class PayService {
         Payment payment = paymentService.findByBusinessId(businessId).orElse(null);
         if (Objects.nonNull(payment)) {
             // 支付失败
-            List<Integer> trades = Arrays.asList(TRADE_FAIL, TRADE_CANCEL);
+            List<String> trades = Arrays.asList(TRADE_FAIL, TRADE_CANCEL);
             if (trades.contains(payment.getPayStatus())) {
                 throw new PayFailureException("支付失败或已经被撤销");
             }
