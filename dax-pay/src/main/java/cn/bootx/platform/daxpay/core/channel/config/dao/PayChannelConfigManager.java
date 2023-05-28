@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 支付通道配置
+ *
  * @author xxm
  * @date 2023-05-24
  */
@@ -23,25 +24,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PayChannelConfigManager extends BaseManager<PayChannelConfigMapper, PayChannelConfig> {
 
-
     /**
-    * 分页
-    */
+     * 分页
+     */
     public Page<PayChannelConfig> page(PageParam pageParam, PayChannelConfigParam param) {
         Page<PayChannelConfig> mpPage = MpUtil.getMpPage(pageParam, PayChannelConfig.class);
         QueryWrapper<PayChannelConfig> wrapper = QueryGenerator.generator(param, this.getEntityClass());
-        wrapper.select(this.getEntityClass(),MpUtil::excludeBigField)
-                .orderByDesc(MpUtil.getColumnName(PayChannelConfig::getId));
-        return this.page(mpPage,wrapper);
+        wrapper.select(this.getEntityClass(), MpUtil::excludeBigField)
+            .orderByDesc(MpUtil.getColumnName(PayChannelConfig::getId));
+        return this.page(mpPage, wrapper);
     }
 
     /**
      * 查询全部并排序
      */
-    public List<PayChannelConfig> findAllByOrder(){
-        return lambdaQuery()
-                .orderByAsc(PayChannelConfig::getSortNo)
-                .list();
+    public List<PayChannelConfig> findAllByOrder() {
+        return lambdaQuery().orderByAsc(PayChannelConfig::getSortNo).list();
     }
 
     public boolean existsByCode(String code) {
@@ -51,4 +49,5 @@ public class PayChannelConfigManager extends BaseManager<PayChannelConfigMapper,
     public boolean existsByCode(String code, Long id) {
         return lambdaQuery().eq(PayChannelConfig::getCode, code).ne(MpIdEntity::getId, id).exists();
     }
+
 }

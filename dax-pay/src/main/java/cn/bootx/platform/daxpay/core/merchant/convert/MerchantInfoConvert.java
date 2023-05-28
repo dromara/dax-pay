@@ -8,11 +8,13 @@ import org.mapstruct.factory.Mappers;
 
 /**
  * 商户
+ *
  * @author xxm
  * @date 2023-05-17
  */
 @Mapper
 public interface MerchantInfoConvert {
+
     MerchantInfoConvert CONVERT = Mappers.getMapper(MerchantInfoConvert.class);
 
     MerchantInfo convert(MerchantInfoParam in);

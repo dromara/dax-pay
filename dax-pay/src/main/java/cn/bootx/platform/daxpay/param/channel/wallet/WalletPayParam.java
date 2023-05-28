@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @Schema(title = "钱包支付参数")
 public class WalletPayParam implements Serializable {
+
     private static final long serialVersionUID = 3255160458016870367L;
 
     @Schema(description = "钱包ID")

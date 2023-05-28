@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.pay.builder;
 
 import cn.bootx.platform.common.spring.util.WebServletUtil;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
@@ -40,7 +41,6 @@ public class PaymentBuilder {
         String ip = ServletUtil.getClientIP(request);
         // 基础信息
         payment.setBusinessId(payParam.getBusinessId())
-            .setUserId(payParam.getUserId())
             .setTitle(payParam.getTitle())
             .setDescription(payParam.getDescription());
 
@@ -93,7 +93,6 @@ public class PaymentBuilder {
             .collect(Collectors.toList());
         payParam.setPayWayList(payWayParams)
             .setBusinessId(payment.getBusinessId())
-            .setUserId(payment.getUserId())
             .setTitle(payment.getTitle())
             .setTitle(payment.getTitle())
             .setDescription(payment.getDescription());
@@ -118,7 +117,7 @@ public class PaymentBuilder {
 
             // 设置异步支付参数
             List<PayChannelInfo> moneyPayTypeInfos = channelInfos.stream()
-                .filter(payTypeInfo -> PayChannelCode.ASYNC_TYPE.contains(payTypeInfo.getPayChannel()))
+                .filter(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getPayChannel()))
                 .collect(Collectors.toList());
             if (!CollUtil.isEmpty(moneyPayTypeInfos)) {
                 paymentResult.setAsyncPayInfo(AsyncPayInfoLocal.get());

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * 商户应用
+ *
  * @author xxm
  * @date 2023-05-23
  */
@@ -21,13 +22,14 @@ import org.springframework.stereotype.Repository;
 public class MchApplicationManager extends BaseManager<MchApplicationMapper, MchApplication> {
 
     /**
-    * 分页
-    */
+     * 分页
+     */
     public Page<MchApplication> page(PageParam pageParam, MchApplicationParam param) {
         Page<MchApplication> mpPage = MpUtil.getMpPage(pageParam, MchApplication.class);
         QueryWrapper<MchApplication> wrapper = QueryGenerator.generator(param, this.getEntityClass());
-        wrapper.select(this.getEntityClass(),MpUtil::excludeBigField)
-                .orderByDesc(MpUtil.getColumnName(MchApplication::getId));
-        return this.page(mpPage,wrapper);
+        wrapper.select(this.getEntityClass(), MpUtil::excludeBigField)
+            .orderByDesc(MpUtil.getColumnName(MchApplication::getId));
+        return this.page(mpPage, wrapper);
     }
+
 }

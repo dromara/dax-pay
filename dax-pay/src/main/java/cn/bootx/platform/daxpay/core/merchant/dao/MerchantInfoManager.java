@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * 商户
+ *
  * @author xxm
  * @date 2023-05-17
  */
@@ -25,14 +26,14 @@ import java.util.stream.Collectors;
 public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, MerchantInfo> {
 
     /**
-    * 分页
-    */
+     * 分页
+     */
     public Page<MerchantInfo> page(PageParam pageParam, MerchantInfoParam param) {
         Page<MerchantInfo> mpPage = MpUtil.getMpPage(pageParam, MerchantInfo.class);
         QueryWrapper<MerchantInfo> wrapper = QueryGenerator.generator(param, this.getEntityClass());
-        wrapper.select(this.getEntityClass(),MpUtil::excludeBigField)
-                .orderByDesc(MpUtil.getColumnName(MerchantInfo::getId));
-        return this.page(mpPage,wrapper);
+        wrapper.select(this.getEntityClass(), MpUtil::excludeBigField)
+            .orderByDesc(MpUtil.getColumnName(MerchantInfo::getId));
+        return this.page(mpPage, wrapper);
     }
 
     /**
@@ -40,9 +41,10 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
      */
     public List<KeyValue> findDropdown() {
         return lambdaQuery().select(MerchantInfo::getMchNo, MerchantInfo::getMchName)
-                .list()
-                .stream()
-                .map(mch -> new KeyValue(mch.getMchNo(), mch.getMchName()))
-                .collect(Collectors.toList());
+            .list()
+            .stream()
+            .map(mch -> new KeyValue(mch.getMchNo(), mch.getMchName()))
+            .collect(Collectors.toList());
     }
+
 }

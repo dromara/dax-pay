@@ -36,7 +36,6 @@ public class WalletPaymentService {
     public void savePayment(Payment payment, PayParam payParam, PayWayParam payMode, Wallet wallet) {
         WalletPayment walletPayment = new WalletPayment().setWalletId(wallet.getId());
         walletPayment.setPaymentId(payment.getId())
-            .setUserId(payment.getUserId())
             .setBusinessId(payParam.getBusinessId())
             .setAmount(payMode.getAmount())
             .setRefundableBalance(payMode.getAmount())

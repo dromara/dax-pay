@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.TRADE_UNKNOWN;
 
 /**
  * 支付单查询
@@ -42,8 +43,8 @@ public class PaymentQueryService {
     /**
      * 根据业务ID获取支付状态
      */
-    public Integer findStatusByBusinessId(String businessId) {
-        return paymentManager.findByBusinessId(businessId).map(Payment::getPayStatus).orElse(-1);
+    public String findStatusByBusinessId(String businessId) {
+        return paymentManager.findByBusinessId(businessId).map(Payment::getPayStatus).orElse(TRADE_UNKNOWN);
     }
 
     /**
@@ -58,13 +59,6 @@ public class PaymentQueryService {
      */
     public List<PayChannelInfo> findPayTypeInfoById(Long id) {
         return paymentManager.findById(id).map(Payment::getPayChannelInfo).orElse(new ArrayList<>(1));
-    }
-
-    /**
-     * 根据用户id查询
-     */
-    public List<PaymentDto> findByUser(Long userId) {
-        return paymentManager.findByUserId(userId).stream().map(Payment::toDto).collect(Collectors.toList());
     }
 
     /**

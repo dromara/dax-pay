@@ -33,21 +33,21 @@ public class WalletLogController {
     @Operation(summary = "个人钱包日志")
     @PostMapping("/pageByPersonal")
     public ResResult<PageResult<WalletLogDto>> pageByPersonal(@ParameterObject PageParam pageParam,
-                                                              @ParameterObject WalletLogQueryParam param) {
+            @ParameterObject WalletLogQueryParam param) {
         return Res.ok(walletLogService.pageByPersonal(pageParam, param));
     }
 
     @Operation(summary = "查询钱包日志(分页)")
     @GetMapping("/page")
     public ResResult<PageResult<WalletLogDto>> page(@ParameterObject PageParam pageParam,
-                                                    @ParameterObject WalletLogQueryParam param) {
+            @ParameterObject WalletLogQueryParam param) {
         return Res.ok(walletLogService.page(pageParam, param));
     }
 
     @Operation(summary = "根据钱包id查询钱包日志(分页)")
     @GetMapping("/pageByWalletId")
     public ResResult<PageResult<WalletLogDto>> pageByWalletId(@ParameterObject PageParam pageParam,
-                                                              @ParameterObject WalletLogQueryParam param) {
+            @ParameterObject WalletLogQueryParam param) {
         return Res.ok(walletLogService.pageByWalletId(pageParam, param));
     }
 

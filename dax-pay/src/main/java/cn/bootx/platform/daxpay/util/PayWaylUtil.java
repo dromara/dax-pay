@@ -58,7 +58,7 @@ public class PayWaylUtil {
      * 判断是否有异步支付
      */
     public boolean isNotSync(List<PayWayParam> payWayParams) {
-        return payWayParams.stream().map(PayWayParam::getPayChannel).noneMatch(PayChannel.ASYNC_TYPE::contains);
+        return payWayParams.stream().map(PayWayParam::getPayChannel).noneMatch(PayChannelEnum.ASYNC_TYPE_CODE::contains);
     }
 
     /**
@@ -66,10 +66,10 @@ public class PayWaylUtil {
      */
     public PayWayParam getAsyncPayModeParam(PayParam payParam) {
         return payParam.getPayWayList()
-                .stream()
-                .filter(payMode -> PayChannelCode.ASYNC_TYPE.contains(payMode.getPayChannel()))
-                .findFirst()
-                .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
+            .stream()
+            .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getPayChannel()))
+            .findFirst()
+            .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
     }
 
     /**
@@ -82,11 +82,11 @@ public class PayWaylUtil {
         switch (payChannelEnum) {
             case ALI: {
                 return JSONUtil.toJsonStr(new AliPayParam().setAuthCode(map.get(PayWayExtraCode.AUTH_CODE))
-                        .setReturnUrl(map.get(PayWayExtraCode.RETURN_URL)));
+                    .setReturnUrl(map.get(PayWayExtraCode.RETURN_URL)));
             }
             case WECHAT: {
                 return JSONUtil.toJsonStr(new WeChatPayParam().setOpenId(map.get(PayWayExtraCode.OPEN_ID))
-                        .setAuthCode(map.get(PayWayExtraCode.AUTH_CODE)));
+                    .setAuthCode(map.get(PayWayExtraCode.AUTH_CODE)));
             }
             case VOUCHER: {
                 String voucherNo = map.get(PayWayExtraCode.VOUCHER_NO);
@@ -122,10 +122,10 @@ public class PayWaylUtil {
         List<PayWayParam> payModeList = payParam.getPayWayList();
 
         long asyncPayModeCount = payModeList.stream()
-                .map(PayWayParam::getPayChannel)
-                .map(PayChannelEnum::findByCode)
-                .filter(PayChannelEnum.ASYNC_TYPE::contains)
-                .count();
+            .map(PayWayParam::getPayChannel)
+            .map(PayChannelEnum::findByCode)
+            .filter(PayChannelEnum.ASYNC_TYPE::contains)
+            .count();
         if (asyncPayModeCount > 1) {
             throw new PayFailureException("组合支付时只允许有一个异步支付方式");
         }

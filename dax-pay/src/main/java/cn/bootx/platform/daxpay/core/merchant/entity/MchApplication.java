@@ -17,13 +17,14 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
-* 商户应用
-* @author xxm
-* @date 2023-05-19
-*/
+ * 商户应用
+ *
+ * @author xxm
+ * @date 2023-05-19
+ */
 @DbTable(comment = "商户应用")
 @EqualsAndHashCode(callSuper = true)
-@MySqlIndex(columns = "app_no",type = MySqlIndexType.UNIQUE,comment = "应用编码唯一索引")
+@MySqlIndex(columns = "app_no", type = MySqlIndexType.UNIQUE, comment = "应用编码唯一索引")
 @Data
 @Accessors(chain = true)
 @TableName("pay_mch_app")
@@ -53,7 +54,7 @@ public class MchApplication extends MpBaseEntity implements EntityBaseFunction<M
 
     /** 创建对象 */
     public static MchApplication init(MchApplicationParam in) {
-            return MchApplicationConvert.CONVERT.convert(in);
+        return MchApplicationConvert.CONVERT.convert(in);
     }
 
     /** 转换成dto */
@@ -61,4 +62,5 @@ public class MchApplication extends MpBaseEntity implements EntityBaseFunction<M
     public MchApplicationDto toDto() {
         return MchApplicationConvert.CONVERT.convert(this);
     }
+
 }

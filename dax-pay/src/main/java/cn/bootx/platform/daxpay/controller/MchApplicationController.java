@@ -18,59 +18,63 @@ import java.util.List;
 
 /**
  * 商户应用
+ *
  * @author xxm
  * @date 2023-05-23
  */
-@Tag(name ="商户应用")
+@Tag(name = "商户应用")
 @RestController
 @RequestMapping("/mch/app")
 @RequiredArgsConstructor
 public class MchApplicationController {
+
     private final MchApplicationService applicationService;
+
     private final MchAppPayConfigService appPayConfigService;
 
-    @Operation( summary = "添加")
+    @Operation(summary = "添加")
     @PostMapping(value = "/add")
-    public ResResult<Void> add(@RequestBody MchApplicationParam param){
+    public ResResult<Void> add(@RequestBody MchApplicationParam param) {
         applicationService.add(param);
         return Res.ok();
     }
 
-    @Operation( summary = "修改")
+    @Operation(summary = "修改")
     @PostMapping(value = "/update")
-    public ResResult<Void> update(@RequestBody MchApplicationParam param){
+    public ResResult<Void> update(@RequestBody MchApplicationParam param) {
         applicationService.update(param);
         return Res.ok();
     }
 
-    @Operation( summary = "删除")
+    @Operation(summary = "删除")
     @DeleteMapping(value = "/delete")
-    public ResResult<Void> delete(Long id){
+    public ResResult<Void> delete(Long id) {
         applicationService.delete(id);
         return Res.ok();
     }
 
-    @Operation( summary = "通过ID查询")
+    @Operation(summary = "通过ID查询")
     @GetMapping(value = "/findById")
-    public ResResult<MchApplicationDto> findById(Long id){
+    public ResResult<MchApplicationDto> findById(Long id) {
         return Res.ok(applicationService.findById(id));
     }
 
-    @Operation( summary = "查询所有")
+    @Operation(summary = "查询所有")
     @GetMapping(value = "/findAll")
-    public ResResult<List<MchApplicationDto>> findAll(){
+    public ResResult<List<MchApplicationDto>> findAll() {
         return Res.ok(applicationService.findAll());
     }
 
-    @Operation( summary = "分页查询")
+    @Operation(summary = "分页查询")
     @GetMapping(value = "/page")
-    public ResResult<PageResult<MchApplicationDto>> page(PageParam pageParam, MchApplicationParam mchApplicationParam){
-        return Res.ok(applicationService.page(pageParam,mchApplicationParam));
+    public ResResult<PageResult<MchApplicationDto>> page(PageParam pageParam, MchApplicationParam mchApplicationParam) {
+        return Res.ok(applicationService.page(pageParam, mchApplicationParam));
     }
 
     @Operation(summary = "关联支付配置列表")
     @GetMapping("/findAllConfig")
-    public ResResult<List<MchAppPayConfigResult>> findAllConfig(Long appId){
+    public ResResult<List<MchAppPayConfigResult>> findAllConfig(Long appId) {
         return Res.ok(appPayConfigService.ListByAppId(appId));
     }
+
 }

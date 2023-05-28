@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 
 /**
  * 支付通道配置
+ *
  * @author xxm
  * @date 2023-05-24
  */
@@ -19,10 +20,13 @@ public class PayChannelConfigDto extends BaseDto {
 
     @Schema(description = "通道编码")
     private String code;
+
     @Schema(description = "通道名称")
     private String name;
+
     @Schema(description = "图片")
     private Long image;
+
     @Schema(description = "排序")
     private Double sortNo;
 

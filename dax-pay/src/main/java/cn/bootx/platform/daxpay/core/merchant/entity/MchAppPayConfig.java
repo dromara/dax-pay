@@ -9,16 +9,17 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
-* 商户应用支付配置
-* @author xxm
-* @date 2023-05-19
-*/
+ * 商户应用支付配置
+ *
+ * @author xxm
+ * @date 2023-05-19
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @DbTable(comment = "商户应用支付配置")
 @Accessors(chain = true)
 @TableName("pay_mch_app_config")
-public class MchAppPayConfig extends MpBaseEntity{
+public class MchAppPayConfig extends MpBaseEntity {
 
     /** 关联应用ID */
     @DbColumn(comment = "关联应用ID")

@@ -60,7 +60,7 @@ public class WeChatPayCancelService {
      * 退款
      */
     public void refund(Payment payment, WeChatPayment weChatPayment, BigDecimal amount,
-                       WeChatPayConfig weChatPayConfig) {
+            WeChatPayConfig weChatPayConfig) {
         String totalFee = weChatPayment.getAmount().multiply(BigDecimal.valueOf(100)).toBigInteger().toString();
         String refundFee = amount.multiply(BigDecimal.valueOf(100)).toBigInteger().toString();
         // 设置退款号

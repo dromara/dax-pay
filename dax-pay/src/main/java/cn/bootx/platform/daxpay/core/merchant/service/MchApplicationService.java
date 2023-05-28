@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * 商户应用
+ *
  * @author xxm
  * @date 2023-05-19
  */
@@ -28,6 +29,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MchApplicationService {
+
     private final MchApplicationManager mchApplicationManager;
 
     private final MchAppPayConfigService appPayConfigService;
@@ -35,7 +37,7 @@ public class MchApplicationService {
     /**
      * 添加
      */
-    public void add(MchApplicationParam param){
+    public void add(MchApplicationParam param) {
         MchApplication mchApplication = MchApplication.init(param);
         mchApplication.setAppNo(IdUtil.getSnowflakeNextIdStr());
         mchApplicationManager.save(mchApplication);
@@ -44,30 +46,31 @@ public class MchApplicationService {
     /**
      * 修改
      */
-    public void update(MchApplicationParam param){
-        MchApplication mchApplication = mchApplicationManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
-        BeanUtil.copyProperties(param,mchApplication, CopyOptions.create().ignoreNullValue());
+    public void update(MchApplicationParam param) {
+        MchApplication mchApplication = mchApplicationManager.findById(param.getId())
+            .orElseThrow(DataNotExistException::new);
+        BeanUtil.copyProperties(param, mchApplication, CopyOptions.create().ignoreNullValue());
         mchApplicationManager.updateById(mchApplication);
     }
 
     /**
      * 分页
      */
-    public PageResult<MchApplicationDto> page(PageParam pageParam,MchApplicationParam mchApplicationParam){
-        return MpUtil.convert2DtoPageResult(mchApplicationManager.page(pageParam,mchApplicationParam));
+    public PageResult<MchApplicationDto> page(PageParam pageParam, MchApplicationParam mchApplicationParam) {
+        return MpUtil.convert2DtoPageResult(mchApplicationManager.page(pageParam, mchApplicationParam));
     }
 
     /**
      * 获取单条
      */
-    public MchApplicationDto findById(Long id){
+    public MchApplicationDto findById(Long id) {
         return mchApplicationManager.findById(id).map(MchApplication::toDto).orElseThrow(DataNotExistException::new);
     }
 
     /**
      * 获取全部
      */
-    public List<MchApplicationDto> findAll(){
+    public List<MchApplicationDto> findAll() {
         return ResultConvertUtil.dtoListConvert(mchApplicationManager.findAll());
     }
 
@@ -75,7 +78,7 @@ public class MchApplicationService {
      * 删除
      */
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id){
+    public void delete(Long id) {
         appPayConfigService.deleteByAppId(id);
         mchApplicationManager.deleteById(id);
     }

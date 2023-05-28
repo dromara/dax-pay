@@ -18,11 +18,12 @@ import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
 /**
-* 商户
-* @author xxm
-* @date 2023-05-17
-*/
-@MySqlIndex(columns = "mch_no",type = MySqlIndexType.UNIQUE,comment = "商户号唯一索引")
+ * 商户
+ *
+ * @author xxm
+ * @date 2023-05-17
+ */
+@MySqlIndex(columns = "mch_no", type = MySqlIndexType.UNIQUE, comment = "商户号唯一索引")
 @EqualsAndHashCode(callSuper = true)
 @FieldNameConstants
 @Data
@@ -66,7 +67,7 @@ public class MerchantInfo extends MpBaseEntity implements EntityBaseFunction<Mer
 
     /** 创建对象 */
     public static MerchantInfo init(MerchantInfoParam in) {
-            return MerchantInfoConvert.CONVERT.convert(in);
+        return MerchantInfoConvert.CONVERT.convert(in);
     }
 
     /** 转换成dto */
@@ -74,4 +75,5 @@ public class MerchantInfo extends MpBaseEntity implements EntityBaseFunction<Mer
     public MerchantInfoDto toDto() {
         return MerchantInfoConvert.CONVERT.convert(this);
     }
+
 }

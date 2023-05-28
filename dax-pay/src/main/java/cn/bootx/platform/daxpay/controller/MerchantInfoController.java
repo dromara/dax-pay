@@ -17,58 +17,61 @@ import java.util.List;
 
 /**
  * 商户
+ *
  * @author xxm
  * @date 2023-05-17
  */
-@Tag(name ="商户")
+@Tag(name = "商户")
 @RestController
 @RequestMapping("/merchant")
 @RequiredArgsConstructor
 public class MerchantInfoController {
+
     private final MerchantInfoService merchantInfoService;
 
-    @Operation( summary = "添加")
+    @Operation(summary = "添加")
     @PostMapping(value = "/add")
-    public ResResult<Void> add(@RequestBody MerchantInfoParam param){
+    public ResResult<Void> add(@RequestBody MerchantInfoParam param) {
         merchantInfoService.add(param);
         return Res.ok();
     }
 
-    @Operation( summary = "修改")
+    @Operation(summary = "修改")
     @PostMapping(value = "/update")
-    public ResResult<Void> update(@RequestBody MerchantInfoParam param){
+    public ResResult<Void> update(@RequestBody MerchantInfoParam param) {
         merchantInfoService.update(param);
         return Res.ok();
     }
 
     @Operation(summary = "下拉列表")
     @GetMapping("/dropdown")
-    public ResResult<List<KeyValue>> dropdown(){
+    public ResResult<List<KeyValue>> dropdown() {
         return Res.ok(merchantInfoService.dropdown());
     }
 
-    @Operation( summary = "删除")
+    @Operation(summary = "删除")
     @DeleteMapping(value = "/delete")
-    public ResResult<Void> delete(Long id){
+    public ResResult<Void> delete(Long id) {
         merchantInfoService.delete(id);
         return Res.ok();
     }
 
-    @Operation( summary = "通过ID查询")
+    @Operation(summary = "通过ID查询")
     @GetMapping(value = "/findById")
-    public ResResult<MerchantInfoDto> findById(Long id){
+    public ResResult<MerchantInfoDto> findById(Long id) {
         return Res.ok(merchantInfoService.findById(id));
     }
 
-    @Operation( summary = "查询所有")
+    @Operation(summary = "查询所有")
     @GetMapping(value = "/findAll")
-    public ResResult<List<MerchantInfoDto>> findAll(){
+    public ResResult<List<MerchantInfoDto>> findAll() {
         return Res.ok(merchantInfoService.findAll());
     }
 
-    @Operation( summary = "分页查询")
+    @Operation(summary = "分页查询")
     @GetMapping(value = "/page")
-    public ResResult<PageResult<MerchantInfoDto>> page(PageParam pageParam, MerchantInfoParam merchantInfoParam){
-        return Res.ok(merchantInfoService.page(pageParam,merchantInfoParam));
+    public ResResult<PageResult<MerchantInfoDto>> page(PageParam pageParam, MerchantInfoParam merchantInfoParam) {
+        return Res.ok(merchantInfoService.page(pageParam, merchantInfoParam));
     }
+
 }

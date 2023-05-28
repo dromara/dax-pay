@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * 商户
+ *
  * @author xxm
  * @date 2023-05-17
  */
@@ -27,44 +28,45 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MerchantInfoService {
+
     private final MerchantInfoManager merchantInfoManager;
 
     /**
      * 添加
      */
-    public void add(MerchantInfoParam param){
+    public void add(MerchantInfoParam param) {
         MerchantInfo merchantInfo = MerchantInfo.init(param);
-        merchantInfo.setMchNo("M"+System.currentTimeMillis());
+        merchantInfo.setMchNo("M" + System.currentTimeMillis());
         merchantInfoManager.save(merchantInfo);
     }
 
     /**
      * 修改
      */
-    public void update(MerchantInfoParam param){
+    public void update(MerchantInfoParam param) {
         MerchantInfo merchantInfo = merchantInfoManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
-        BeanUtil.copyProperties(param,merchantInfo, CopyOptions.create().ignoreNullValue());
+        BeanUtil.copyProperties(param, merchantInfo, CopyOptions.create().ignoreNullValue());
         merchantInfoManager.updateById(merchantInfo);
     }
 
     /**
      * 分页
      */
-    public PageResult<MerchantInfoDto> page(PageParam pageParam,MerchantInfoParam merchantInfoParam){
-        return MpUtil.convert2DtoPageResult(merchantInfoManager.page(pageParam,merchantInfoParam));
+    public PageResult<MerchantInfoDto> page(PageParam pageParam, MerchantInfoParam merchantInfoParam) {
+        return MpUtil.convert2DtoPageResult(merchantInfoManager.page(pageParam, merchantInfoParam));
     }
 
     /**
      * 获取单条
      */
-    public MerchantInfoDto findById(Long id){
+    public MerchantInfoDto findById(Long id) {
         return merchantInfoManager.findById(id).map(MerchantInfo::toDto).orElseThrow(DataNotExistException::new);
     }
 
     /**
      * 获取全部
      */
-    public List<MerchantInfoDto> findAll(){
+    public List<MerchantInfoDto> findAll() {
         return ResultConvertUtil.dtoListConvert(merchantInfoManager.findAll());
     }
 
@@ -74,10 +76,12 @@ public class MerchantInfoService {
     public List<KeyValue> dropdown() {
         return merchantInfoManager.findDropdown();
     }
+
     /**
      * 删除
      */
-    public void delete(Long id){
+    public void delete(Long id) {
         merchantInfoManager.deleteById(id);
     }
+
 }

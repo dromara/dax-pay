@@ -14,49 +14,51 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 支付通道配置
+ *
  * @author xxm
  * @date 2023-05-24
  */
-@Tag(name ="支付通道配置")
+@Tag(name = "支付通道配置")
 @RestController
 @RequestMapping("/channel")
 @RequiredArgsConstructor
 public class PayChannelConfigController {
+
     private final PayChannelConfigService channelConfigService;
 
-    @Operation( summary = "添加")
+    @Operation(summary = "添加")
     @PostMapping(value = "/add")
-    public ResResult<Void> add(@RequestBody PayChannelConfigParam param){
+    public ResResult<Void> add(@RequestBody PayChannelConfigParam param) {
         channelConfigService.add(param);
         return Res.ok();
     }
 
-    @Operation( summary = "修改")
+    @Operation(summary = "修改")
     @PostMapping(value = "/update")
-    public ResResult<Void> update(@RequestBody PayChannelConfigParam param){
+    public ResResult<Void> update(@RequestBody PayChannelConfigParam param) {
         channelConfigService.update(param);
         return Res.ok();
     }
 
-    @Operation( summary = "删除")
+    @Operation(summary = "删除")
     @DeleteMapping(value = "/delete")
-    public ResResult<Void> delete(Long id){
+    public ResResult<Void> delete(Long id) {
         channelConfigService.delete(id);
         return Res.ok();
     }
 
-    @Operation( summary = "通过ID查询")
+    @Operation(summary = "通过ID查询")
     @GetMapping(value = "/findById")
-    public ResResult<PayChannelConfigDto> findById(Long id){
+    public ResResult<PayChannelConfigDto> findById(Long id) {
         return Res.ok(channelConfigService.findById(id));
     }
 
-    @Operation( summary = "分页查询")
+    @Operation(summary = "分页查询")
     @GetMapping(value = "/page")
-    public ResResult<PageResult<PayChannelConfigDto>> page(PageParam pageParam, PayChannelConfigParam payChannelConfigParam){
-        return Res.ok(channelConfigService.page(pageParam,payChannelConfigParam));
+    public ResResult<PageResult<PayChannelConfigDto>> page(PageParam pageParam,
+            PayChannelConfigParam payChannelConfigParam) {
+        return Res.ok(channelConfigService.page(pageParam, payChannelConfigParam));
     }
-
 
     @Operation(summary = "编码是否被使用")
     @GetMapping("/existsByCode")

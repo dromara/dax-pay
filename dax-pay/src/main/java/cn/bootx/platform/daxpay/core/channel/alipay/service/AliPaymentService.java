@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.core.payment.dao.PaymentManager;
@@ -42,20 +43,21 @@ public class AliPaymentService {
      */
     public void updatePaySuccess(Payment payment, PayWayParam payWayParam) {
         AsyncPayInfo asyncPayInfo = AsyncPayInfoLocal.get();
-        payment.setAsyncPayMode(true).setAsyncPayChannel(PayChannelCode.ALI);
+        payment.setAsyncPayMode(true).setAsyncPayChannel(PayChannelEnum.ALI.getCode());
         List<PayChannelInfo> payTypeInfos = payment.getPayChannelInfo();
         List<RefundableInfo> refundableInfos = payment.getRefundableInfo();
         // 清除已有的异步支付类型信息
-        payTypeInfos.removeIf(payTypeInfo -> PayChannelCode.ASYNC_TYPE.contains(payTypeInfo.getPayChannel()));
-        refundableInfos.removeIf(payTypeInfo -> PayChannelCode.ASYNC_TYPE.contains(payTypeInfo.getPayChannel()));
+        payTypeInfos.removeIf(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getPayChannel()));
+        refundableInfos.removeIf(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getPayChannel()));
         // 更新支付宝支付类型信息
-        payTypeInfos.add(new PayChannelInfo().setPayChannel(PayChannelCode.ALI)
+        payTypeInfos.add(new PayChannelInfo().setPayChannel(PayChannelEnum.ALI.getCode())
             .setPayWay(payWayParam.getPayWay())
             .setAmount(payWayParam.getAmount())
             .setExtraParamsJson(payWayParam.getExtraParamsJson()));
         payment.setPayChannelInfo(payTypeInfos);
         // 更新支付宝可退款类型信息
-        refundableInfos.add(new RefundableInfo().setPayChannel(PayChannelCode.ALI).setAmount(payWayParam.getAmount()));
+        refundableInfos
+            .add(new RefundableInfo().setPayChannel(PayChannelEnum.ALI.getCode()).setAmount(payWayParam.getAmount()));
         payment.setRefundableInfo(refundableInfos);
         // 如果支付完成(付款码情况) 调用 updateSyncSuccess 创建支付宝支付记录
         if (Objects.equals(payment.getPayStatus(), PayStatusCode.TRADE_SUCCESS)) {
@@ -83,7 +85,6 @@ public class AliPaymentService {
             .setAmount(payWayParam.getAmount())
             .setRefundableBalance(payWayParam.getAmount())
             .setBusinessId(payment.getBusinessId())
-            .setUserId(payment.getUserId())
             .setPayStatus(PayStatusCode.TRADE_SUCCESS)
             .setPayTime(LocalDateTime.now());
         aliPaymentManager.save(aliPayment);

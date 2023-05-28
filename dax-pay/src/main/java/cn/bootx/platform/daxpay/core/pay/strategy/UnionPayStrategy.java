@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.core.pay.strategy;
 
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class UnionPayStrategy extends AbsPayStrategy {
 
     @Override
-    public int getType() {
-        return PayChannelCode.UNION_PAY;
+    public PayChannelEnum getType() {
+        return PayChannelEnum.UNION_PAY;
     }
 
     @Override

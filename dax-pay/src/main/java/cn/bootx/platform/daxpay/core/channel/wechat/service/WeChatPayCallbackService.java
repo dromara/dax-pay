@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.redis.RedisClient;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.notify.dao.PayNotifyRecordManager;
@@ -34,14 +35,14 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
     private final WeChatPayConfigManager weChatPayConfigManager;
 
     public WeChatPayCallbackService(RedisClient redisClient, PayNotifyRecordManager payNotifyRecordManager,
-                                    PayCallbackService payCallbackService, WeChatPayConfigManager weChatPayConfigManager) {
+            PayCallbackService payCallbackService, WeChatPayConfigManager weChatPayConfigManager) {
         super(redisClient, payNotifyRecordManager, payCallbackService);
         this.weChatPayConfigManager = weChatPayConfigManager;
     }
 
     @Override
-    public int getPayChannel() {
-        return PayChannelCode.WECHAT;
+    public PayChannelEnum getPayChannel() {
+        return PayChannelEnum.WECHAT;
     }
 
     /**
@@ -58,7 +59,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      * 获取支付状态
      */
     @Override
-    public int getTradeStatus() {
+    public String getTradeStatus() {
         Map<String, String> params = PARAMS.get();
         if (WxPayKit.codeIsOk(params.get(WeChatPayCode.RESULT_CODE))) {
             return PayStatusCode.NOTIFY_TRADE_SUCCESS;

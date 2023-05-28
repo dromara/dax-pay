@@ -104,8 +104,8 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        weChatPayService.pay(this.getPayWayParam().getAmount(), this.getPayment(), this.weChatPayParam, this.getPayWayParam(),
-                this.weChatPayConfig);
+        weChatPayService.pay(this.getPayWayParam().getAmount(), this.getPayment(), this.weChatPayParam,
+                this.getPayWayParam(), this.weChatPayConfig);
     }
 
     /**

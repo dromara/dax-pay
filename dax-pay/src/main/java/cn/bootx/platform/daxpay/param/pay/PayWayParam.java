@@ -69,9 +69,7 @@ public class PayWayParam implements Serializable {
      * 转换为可退款信息
      */
     public RefundableInfo toRefundableInfo() {
-        return new RefundableInfo()
-                .setPayChannel(getPayChannel())
-                .setAmount(getAmount());
+        return new RefundableInfo().setPayChannel(getPayChannel()).setAmount(getAmount());
     }
 
 }

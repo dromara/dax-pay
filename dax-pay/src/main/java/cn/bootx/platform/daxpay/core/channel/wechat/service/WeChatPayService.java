@@ -63,7 +63,7 @@ public class WeChatPayService {
             .map(s -> StrUtil.split(s, ','))
             .orElse(new ArrayList<>(1));
 
-        PayWayEnum payWayEnum = Optional.ofNullable(WeChatPayWay.findByNo(payWayParam.getPayWay()))
+        PayWayEnum payWayEnum = Optional.ofNullable(WeChatPayWay.findByCode(payWayParam.getPayWay()))
             .orElseThrow(() -> new PayFailureException("非法的微信支付类型"));
         if (!payWays.contains(payWayEnum.getCode())) {
             throw new PayFailureException("该微信支付方式不可用");
@@ -74,30 +74,31 @@ public class WeChatPayService {
      * 支付
      */
     public void pay(BigDecimal amount, Payment payment, WeChatPayParam weChatPayParam, PayWayParam payWayParam,
-                    WeChatPayConfig weChatPayConfig) {
+            WeChatPayConfig weChatPayConfig) {
         // 微信传入的是分, 将元转换为分
         String totalFee = String.valueOf(amount.multiply(new BigDecimal(100)).longValue());
         AsyncPayInfo asyncPayInfo = Optional.ofNullable(AsyncPayInfoLocal.get()).orElse(new AsyncPayInfo());
         String payBody = null;
+        PayWayEnum payWayEnum = PayWayEnum.findByCode(payWayParam.getPayWay());
 
         // wap支付
-        if (payWayParam.getPayWay() == PayWayCode.WAP) {
+        if (payWayEnum == PayWayEnum.WAP) {
             payBody = this.wapPay(totalFee, payment, weChatPayConfig);
         }
         // APP支付
-        else if (payWayParam.getPayWay() == PayWayCode.APP) {
+        else if (payWayEnum == PayWayEnum.APP) {
             payBody = this.appPay(totalFee, payment, weChatPayConfig);
         }
         // 微信公众号支付或者小程序支付
-        else if (payWayParam.getPayWay() == PayWayCode.JSAPI) {
+        else if (payWayEnum == PayWayEnum.JSAPI) {
             payBody = this.jsPay(totalFee, payment, weChatPayParam.getOpenId(), weChatPayConfig);
         }
         // 二维码支付
-        else if (payWayParam.getPayWay() == PayWayCode.QRCODE) {
+        else if (payWayEnum == PayWayEnum.QRCODE) {
             payBody = this.qrCodePay(totalFee, payment, weChatPayConfig);
         }
         // 付款码支付
-        else if (payWayParam.getPayWay() == PayWayCode.BARCODE) {
+        else if (payWayEnum == PayWayEnum.BARCODE) {
             String tradeNo = this.barCode(totalFee, payment, weChatPayParam.getAuthCode(), weChatPayConfig);
             asyncPayInfo.setTradeNo(tradeNo).setExpiredTime(false);
         }
@@ -221,7 +222,7 @@ public class WeChatPayService {
      * 构建参数
      */
     private UnifiedOrderModel.UnifiedOrderModelBuilder buildParams(String amount, Payment payment,
-                                                                   WeChatPayConfig weChatPayConfig, String tradeType) {
+            WeChatPayConfig weChatPayConfig, String tradeType) {
         // 过期时间
         payment.setExpiredTime(PayWaylUtil.getPaymentExpiredTime(weChatPayConfig.getExpireTime()));
         return UnifiedOrderModel.builder()

@@ -84,7 +84,7 @@ public class PaySyncService {
         AbsPayStrategy syncPayStrategy = PayStrategyFactory.create(asyncPayMode);
         syncPayStrategy.initPayParam(payment, payParam);
         PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();
-        int paySyncStatus = paySyncResult.getPaySyncStatus();
+        String paySyncStatus = paySyncResult.getPaySyncStatus();
 
         switch (paySyncStatus) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成

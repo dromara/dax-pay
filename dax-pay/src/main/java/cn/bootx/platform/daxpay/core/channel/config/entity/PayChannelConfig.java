@@ -13,17 +13,17 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
-* 支付通道配置
-* @author xxm
-* @date 2023-05-24
-*/
+ * 支付通道配置
+ *
+ * @author xxm
+ * @date 2023-05-24
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @DbTable(comment = "支付通道配置")
 @Accessors(chain = true)
 @TableName("pay_channel_config")
 public class PayChannelConfig extends MpBaseEntity implements EntityBaseFunction<PayChannelConfigDto> {
-
 
     /** 通道编码 */
     @DbColumn(comment = "通道编码")
@@ -43,7 +43,7 @@ public class PayChannelConfig extends MpBaseEntity implements EntityBaseFunction
 
     /** 创建对象 */
     public static PayChannelConfig init(PayChannelConfigParam in) {
-            return PayChannelConfigConvert.CONVERT.convert(in);
+        return PayChannelConfigConvert.CONVERT.convert(in);
     }
 
     /** 转换成dto */
@@ -51,4 +51,5 @@ public class PayChannelConfig extends MpBaseEntity implements EntityBaseFunction
     public PayChannelConfigDto toDto() {
         return PayChannelConfigConvert.CONVERT.convert(this);
     }
+
 }

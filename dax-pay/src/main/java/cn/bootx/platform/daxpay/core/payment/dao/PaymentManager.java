@@ -18,7 +18,6 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -48,13 +47,6 @@ public class PaymentManager extends BaseManager<PaymentMapper, Payment> {
     @Cacheable(value = { PAYMENT_BUSINESS_ID }, key = "#businessId")
     public Optional<Payment> findByBusinessId(String businessId) {
         return findByField(Payment::getBusinessId, businessId);
-    }
-
-    /**
-     * 根据用户查询
-     */
-    public List<Payment> findByUserId(Long userId) {
-        return this.findAllByField(Payment::getUserId, userId);
     }
 
     /**

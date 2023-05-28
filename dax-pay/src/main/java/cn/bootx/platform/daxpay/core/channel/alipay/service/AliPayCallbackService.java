@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.alipay.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.CertUtil;
 import cn.bootx.platform.common.redis.RedisClient;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.code.paymodel.AliPayCode;
 import cn.bootx.platform.daxpay.core.notify.dao.PayNotifyRecordManager;
@@ -36,18 +37,18 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
     private final AlipayConfigManager alipayConfigManager;
 
     public AliPayCallbackService(RedisClient redisClient, PayNotifyRecordManager payNotifyRecordManager,
-                                 PayCallbackService payCallbackService, AlipayConfigManager alipayConfigManager) {
+            PayCallbackService payCallbackService, AlipayConfigManager alipayConfigManager) {
         super(redisClient, payNotifyRecordManager, payCallbackService);
         this.alipayConfigManager = alipayConfigManager;
     }
 
     @Override
-    public int getPayChannel() {
-        return PayChannelCode.ALI;
+    public PayChannelEnum getPayChannel() {
+        return PayChannelEnum.ALI;
     }
 
     @Override
-    public int getTradeStatus() {
+    public String getTradeStatus() {
         Map<String, String> params = PARAMS.get();
         String tradeStatus = params.get(AliPayCode.TRADE_STATUS);
         if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS)) {

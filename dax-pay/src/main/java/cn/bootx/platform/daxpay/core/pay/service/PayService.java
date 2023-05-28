@@ -65,7 +65,8 @@ public class PayService {
         // 异步支付且非第一次支付
         if (Objects.nonNull(payment) && payment.isAsyncPayMode()) {
             return this.paySyncNotFirst(payParam, payment);
-        } else {
+        }
+        else {
             // 第一次发起支付或同步支付
             return this.payFirst(payParam, payment);
         }
@@ -180,7 +181,7 @@ public class PayService {
      * @param successMethod 执行成功的函数
      */
     private void doHandler(Payment payment, List<AbsPayStrategy> strategyList, Consumer<AbsPayStrategy> payMethod,
-                           PayStrategyConsumer<List<AbsPayStrategy>, Payment> successMethod) {
+            PayStrategyConsumer<List<AbsPayStrategy>, Payment> successMethod) {
         // 执行策略操作，如支付前/支付时
         // 等同strategyList.forEach(payMethod.accept(PaymentStrategy))
         strategyList.forEach(payMethod);

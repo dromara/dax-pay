@@ -18,18 +18,13 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public enum PayChannelEnum {
 
-    ALI("ali_pay","支付宝"),
-    WECHAT("wechat_pay","微信支付"),
-    UNION_PAY("union_pay","云闪付"),
-    CASH("cash_pay","现金支付"),
-    WALLET("wallet_pay","钱包支付"),
-    VOUCHER("voucher_pay","储值卡支付"),
-    CREDIT_CARD("credit_pay","信用卡支付"),
-    APPLE_PAY("apple_pay","苹果支付"),
-    AGGREGATION("aggregation_pay","聚合支付");
+    ALI("ali_pay", "支付宝"), WECHAT("wechat_pay", "微信支付"), UNION_PAY("union_pay", "云闪付"), CASH("cash_pay", "现金支付"),
+    WALLET("wallet_pay", "钱包支付"), VOUCHER("voucher_pay", "储值卡支付"), CREDIT_CARD("credit_pay", "信用卡支付"),
+    APPLE_PAY("apple_pay", "苹果支付"), AGGREGATION("aggregation_pay", "聚合支付");
 
     /** 支付通道字符编码 */
     private final String code;
+
     /** 名称 */
     private final String name;
 
@@ -56,7 +51,8 @@ public enum PayChannelEnum {
 
     /** 异步支付通道 */
     public static final List<PayChannelEnum> ASYNC_TYPE = Arrays.asList(ALI, WECHAT, UNION_PAY, APPLE_PAY);
-    public static final List<String> ASYNC_TYPE_CODE = Arrays.asList(ALI.code, WECHAT.code, UNION_PAY.code, APPLE_PAY.code);
 
+    public static final List<String> ASYNC_TYPE_CODE = Arrays.asList(ALI.code, WECHAT.code, UNION_PAY.code,
+            APPLE_PAY.code);
 
 }

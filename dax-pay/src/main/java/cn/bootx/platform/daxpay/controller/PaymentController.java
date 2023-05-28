@@ -36,12 +36,6 @@ public class PaymentController {
         return Res.ok(paymentQueryService.findById(id));
     }
 
-    @Operation(summary = "根据userId获取列表")
-    @GetMapping("/findByUser")
-    public ResResult<List<PaymentDto>> findByUser(Long userid) {
-        return Res.ok(paymentQueryService.findByUser(userid));
-    }
-
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public ResResult<PageResult<PaymentDto>> page(PageParam pageParam, PaymentQuery param, OrderParam orderParam) {
@@ -57,7 +51,7 @@ public class PaymentController {
     @IgnoreAuth
     @Operation(summary = "根据业务ID获取支付状态`")
     @GetMapping("/findStatusByBusinessId")
-    public ResResult<Integer> findStatusByBusinessId(String businessId) {
+    public ResResult<String> findStatusByBusinessId(String businessId) {
         return Res.ok(paymentQueryService.findStatusByBusinessId(businessId));
     }
 

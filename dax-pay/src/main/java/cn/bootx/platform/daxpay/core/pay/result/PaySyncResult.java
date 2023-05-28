@@ -6,6 +6,8 @@ import lombok.experimental.Accessors;
 
 import java.util.Map;
 
+import static cn.bootx.platform.daxpay.code.pay.PaySyncStatus.NOT_SYNC;
+
 /**
  * 支付网关通知状态对象
  *
@@ -18,9 +20,9 @@ public class PaySyncResult {
 
     /**
      * 支付网关同步状态
-     * @see PaySyncStatus
+     * @see PaySyncStatus#NOT_SYNC
      */
-    private int paySyncStatus = -1;
+    private String paySyncStatus = NOT_SYNC;
 
     /** 网关返回参数 */
     private Map<String, String> map;

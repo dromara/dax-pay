@@ -70,13 +70,13 @@ public class PaymentService {
     }
 
     /**
-     * 退款成功处理, 更新可退款信息 不进行持久化
+     * 退款成功处理, 更新可退款信息 不要进行持久化
      */
     public void updateRefundSuccess(Payment payment, BigDecimal amount, PayChannelEnum payChannelEnum) {
         // 删除旧有的退款记录, 替换退款完的新的
         List<RefundableInfo> refundableInfos = payment.getRefundableInfo();
         RefundableInfo refundableInfo = refundableInfos.stream()
-            .filter(o -> o.getPayChannel() == payChannelEnum.getNo())
+            .filter(o -> Objects.equals(o.getPayChannel(), payChannelEnum.getCode()))
             .findFirst()
             .orElseThrow(() -> new PayFailureException("数据不存在"));
         refundableInfos.remove(refundableInfo);

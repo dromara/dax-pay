@@ -35,7 +35,6 @@ import java.util.Optional;
 import static cn.bootx.platform.daxpay.code.paymodel.AliPayCode.BAR_CODE;
 import static cn.bootx.platform.daxpay.code.paymodel.AliPayCode.QUICK_MSECURITY_PAY;
 
-
 /**
  * 支付宝支付service
  *
@@ -67,28 +66,28 @@ public class AliPayService {
      * 调起支付
      */
     public void pay(BigDecimal amount, Payment payment, AliPayParam aliPayParam, PayWayParam payWayParam,
-                    AlipayConfig alipayConfig) {
+            AlipayConfig alipayConfig) {
         String payBody = null;
         // 线程存储
         AsyncPayInfo asyncPayInfo = Optional.ofNullable(AsyncPayInfoLocal.get()).orElse(new AsyncPayInfo());
         // wap支付
-        if (Objects.equals(payWayParam.getPayWay(),PayWayEnum.WAP.getCode())) {
+        if (Objects.equals(payWayParam.getPayWay(), PayWayEnum.WAP.getCode())) {
             payBody = this.wapPay(amount, payment, alipayConfig, aliPayParam);
         }
         // 程序支付
-        else if (Objects.equals(payWayParam.getPayWay(),PayWayEnum.APP.getCode())) {
+        else if (Objects.equals(payWayParam.getPayWay(), PayWayEnum.APP.getCode())) {
             payBody = this.appPay(amount, payment, alipayConfig);
         }
         // pc支付
-        else if (Objects.equals(payWayParam.getPayWay(),PayWayEnum.WEB.getCode())) {
+        else if (Objects.equals(payWayParam.getPayWay(), PayWayEnum.WEB.getCode())) {
             payBody = this.webPay(amount, payment, alipayConfig, aliPayParam);
         }
         // 二维码支付
-        else if (Objects.equals(payWayParam.getPayWay(),PayWayEnum.QRCODE.getCode())) {
+        else if (Objects.equals(payWayParam.getPayWay(), PayWayEnum.QRCODE.getCode())) {
             payBody = this.qrCodePay(amount, payment, alipayConfig);
         }
         // 付款码支付
-        else if (Objects.equals(payWayParam.getPayWay(),PayWayEnum.BARCODE.getCode())) {
+        else if (Objects.equals(payWayParam.getPayWay(), PayWayEnum.BARCODE.getCode())) {
             String tradeNo = this.barCode(amount, payment, aliPayParam, alipayConfig);
             asyncPayInfo.setExpiredTime(false).setTradeNo(tradeNo);
         }

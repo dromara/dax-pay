@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.core.notify.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.notify.convert.PayNotifyConvert;
 import cn.bootx.platform.daxpay.dto.notify.PayNotifyRecordDto;
@@ -29,9 +30,9 @@ public class PayNotifyRecord extends MpBaseEntity implements EntityBaseFunction<
 
     /**
      * 支付通道
-     * @see PayChannelCode
+     * @see PayChannelEnum#getCode()
      */
-    private int payChannel;
+    private String payChannel;
 
     /** 通知消息 */
     private String notifyInfo;
@@ -40,7 +41,7 @@ public class PayNotifyRecord extends MpBaseEntity implements EntityBaseFunction<
      * 处理状态
      * @see PayStatusCode#NOTIFY_PROCESS_SUCCESS
      */
-    private int status;
+    private String status;
 
     /** 提示信息 */
     private String msg;

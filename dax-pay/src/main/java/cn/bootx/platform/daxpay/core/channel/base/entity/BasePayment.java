@@ -23,9 +23,6 @@ public class BasePayment extends MpBaseEntity {
     /** 交易记录ID */
     private Long paymentId;
 
-    /** 用户ID */
-    private Long userId;
-
     /** 交易金额 */
     private BigDecimal amount;
 
@@ -37,9 +34,9 @@ public class BasePayment extends MpBaseEntity {
 
     /**
      * 支付状态
-     * @see PayStatusCode
+     * @see PayStatusCode#TRADE_PROGRESS
      */
-    private Integer payStatus;
+    private String payStatus;
 
     /** 支付时间 */
     private LocalDateTime payTime;

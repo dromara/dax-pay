@@ -82,7 +82,8 @@ public class VoucherStrategy extends AbsPayStrategy {
     public void doRefundHandler() {
         voucherPayService.refund(this.getPayment().getId(), this.getPayWayParam().getAmount());
         voucherPaymentService.updateRefund(this.getPayment().getId(), this.getPayWayParam().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.VOUCHER);
+        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(),
+                PayChannelEnum.VOUCHER);
     }
 
 }

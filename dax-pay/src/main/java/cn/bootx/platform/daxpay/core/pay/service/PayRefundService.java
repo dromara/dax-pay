@@ -92,8 +92,8 @@ public class PayRefundService {
      */
     private void refundPayment(Payment payment, List<RefundModeParam> refundModeParams) {
         // 状态判断, 支付中/失败/撤销不处理
-        List<Integer> trades = Arrays.asList(TRADE_PROGRESS, TRADE_CANCEL, TRADE_FAIL);
-        if (trades.contains(payment.getPayStatus())) {
+        List<String> tradesStatus = Arrays.asList(TRADE_PROGRESS, TRADE_CANCEL, TRADE_FAIL);
+        if (tradesStatus.contains(payment.getPayStatus())) {
             throw new PayFailureException("状态非法, 无法退款");
         }
 
@@ -169,7 +169,7 @@ public class PayRefundService {
      * @param successCallback 成功操作
      */
     private void doHandler(Payment payment, List<AbsPayStrategy> strategyList,
-                           PayStrategyConsumer<List<AbsPayStrategy>, Payment> successCallback) {
+            PayStrategyConsumer<List<AbsPayStrategy>, Payment> successCallback) {
 
         try {
             // 执行
@@ -194,7 +194,7 @@ public class PayRefundService {
         if (CollUtil.isEmpty(refundModeParams)) {
             throw new PayFailureException("传入的退款参数不合法");
         }
-        Map<Integer, RefundableInfo> payModeMap = refundableInfos.stream()
+        Map<String, RefundableInfo> payModeMap = refundableInfos.stream()
             .collect(Collectors.toMap(RefundableInfo::getPayChannel, Function.identity()));
         for (RefundModeParam refundPayMode : refundModeParams) {
             this.payModeCheck(refundPayMode, payModeMap.get(refundPayMode.getPayChannel()));

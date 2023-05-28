@@ -47,12 +47,12 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "微信应用appId")
     private String appId;
 
-//    /**
-//     * api版本
-//     * @see WeChatPayCode#API_V2
-//     */
-//    @DbColumn(comment = "api版本")
-//    private String apiVersion;
+    // /**
+    // * api版本
+    // * @see WeChatPayCode#API_V2
+    // */
+    // @DbColumn(comment = "api版本")
+    // private String apiVersion;
 
     /** 商户平台「API安全」中的 APIv2 密钥 */
     @TableField(updateStrategy = FieldStrategy.IGNORED)

@@ -36,9 +36,6 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
     /** 关联的业务id */
     private String businessId;
 
-    /** 用户ID */
-    private Long userId;
-
     /** 标题 */
     private String title;
 
@@ -48,8 +45,11 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
     /** 是否是异步支付 */
     private boolean asyncPayMode;
 
-    /** 异步支付通道 */
-    private Integer asyncPayChannel;
+    /**
+     * 异步支付通道
+     * @see cn.bootx.platform.daxpay.code.pay.PayChannelEnum#ALI
+     */
+    private String asyncPayChannel;
 
     /** 金额 */
     private BigDecimal amount;

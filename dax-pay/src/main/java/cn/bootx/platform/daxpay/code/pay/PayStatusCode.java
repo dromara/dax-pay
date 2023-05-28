@@ -9,6 +9,9 @@ package cn.bootx.platform.daxpay.code.pay;
 public interface PayStatusCode {
 
     // 支付状态
+    /** 未知状态 */
+    String TRADE_UNKNOWN = "trade_unknown";
+
     /** 支付中 */
     String TRADE_PROGRESS = "trade_progress";
 

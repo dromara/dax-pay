@@ -74,7 +74,7 @@ public class PayExpiredTimeService {
         PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();
 
         // 4 对返回的支付网关各种状态进行处理
-        int paySyncStatus = paySyncResult.getPaySyncStatus();
+        String paySyncStatus = paySyncResult.getPaySyncStatus();
         switch (paySyncStatus) {
             // 成功状态
             case PaySyncStatus.TRADE_SUCCESS: {
@@ -172,7 +172,7 @@ public class PayExpiredTimeService {
      */
     private boolean check(Payment payment) {
         // 支付失败/撤销/退款不需要处理
-        List<Integer> trades = Arrays.asList(TRADE_FAIL, TRADE_CANCEL, TRADE_REFUNDING, TRADE_REFUNDED);
+        List<String> trades = Arrays.asList(TRADE_FAIL, TRADE_CANCEL, TRADE_REFUNDING, TRADE_REFUNDED);
         if (trades.contains(payment.getPayStatus())) {
             log.info("订单在超时撤销期间发生了操作, 需要人工介入处理");
             return false;

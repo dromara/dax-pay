@@ -6,9 +6,11 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 商户应用
+ *
  * @author xxm
  * @date 2023-05-19
  */
 @Mapper
 public interface MchApplicationMapper extends BaseMapper<MchApplication> {
+
 }

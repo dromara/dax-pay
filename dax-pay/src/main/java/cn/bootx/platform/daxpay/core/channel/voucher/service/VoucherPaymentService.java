@@ -44,7 +44,6 @@ public class VoucherPaymentService {
 
         VoucherPayment walletPayment = new VoucherPayment().setVoucherIds(voucherIds);
         walletPayment.setPaymentId(payment.getId())
-            .setUserId(payment.getUserId())
             .setBusinessId(payParam.getBusinessId())
             .setAmount(payMode.getAmount())
             .setRefundableBalance(payMode.getAmount())

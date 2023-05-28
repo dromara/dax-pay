@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.pay.func;
 
 import cn.bootx.platform.common.redis.RedisClient;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.notify.dao.PayNotifyRecordManager;
 import cn.bootx.platform.daxpay.core.notify.entity.PayNotifyRecord;
@@ -60,9 +61,9 @@ public abstract class AbsPayCallbackStrategy {
 
     /**
      * 支付类型
-     * @see PayChannelCode
+     * @see PayChannelEnum
      */
-    public abstract int getPayChannel();
+    public abstract PayChannelEnum getPayChannel();
 
     /**
      * 去重处理
@@ -87,7 +88,7 @@ public abstract class AbsPayCallbackStrategy {
      * 获取支付状态
      * @see PayStatusCode
      */
-    public abstract int getTradeStatus();
+    public abstract String getTradeStatus();
 
     /**
      * 返回响应结果
@@ -101,7 +102,7 @@ public abstract class AbsPayCallbackStrategy {
         PayNotifyRecord payNotifyRecord = new PayNotifyRecord().setNotifyInfo(JSONUtil.toJsonStr(PARAMS.get()))
             .setNotifyTime(LocalDateTime.now())
             .setPaymentId(this.getPaymentId())
-            .setPayChannel(this.getPayChannel())
+            .setPayChannel(this.getPayChannel().getCode())
             .setStatus(result.getCode())
             .setMsg(result.getMsg());
         payNotifyRecordManager.save(payNotifyRecord);

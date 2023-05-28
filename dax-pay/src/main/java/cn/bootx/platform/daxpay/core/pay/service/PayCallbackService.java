@@ -64,7 +64,7 @@ public class PayCallbackService {
         }
 
         // 成功状态
-        if (Objects.equals(PayStatusCode.NOTIFY_TRADE_SUCCESS,tradeStatus)) {
+        if (Objects.equals(PayStatusCode.NOTIFY_TRADE_SUCCESS, tradeStatus)) {
             return this.success(payment, map);
         }
         else {
@@ -176,7 +176,7 @@ public class PayCallbackService {
      * @param successCallback 成功操作
      */
     private boolean doHandler(Payment payment, List<AbsPayStrategy> strategyList,
-                              PayStrategyConsumer<List<AbsPayStrategy>, Payment> successCallback) {
+            PayStrategyConsumer<List<AbsPayStrategy>, Payment> successCallback) {
 
         try {
             // 1.获取异步支付方式，通过工厂生成对应的策略组

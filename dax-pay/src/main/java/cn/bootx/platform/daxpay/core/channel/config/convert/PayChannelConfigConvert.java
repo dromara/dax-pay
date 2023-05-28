@@ -8,11 +8,13 @@ import org.mapstruct.factory.Mappers;
 
 /**
  * 支付通道配置
+ *
  * @author xxm
  * @date 2023-05-24
  */
 @Mapper
 public interface PayChannelConfigConvert {
+
     PayChannelConfigConvert CONVERT = Mappers.getMapper(PayChannelConfigConvert.class);
 
     PayChannelConfig convert(PayChannelConfigParam in);
