@@ -146,7 +146,7 @@
         <dependency>
             <groupId>cn.bootx</groupId>
             <artifactId>mybatis-table-modify-mysql-boot-starter</artifactId>
-            <version>1.5.3.alpha1</version>
+            <version>${mybatis-table-modify.version}</version>
         </dependency>
 
         <!-- 监控 -->

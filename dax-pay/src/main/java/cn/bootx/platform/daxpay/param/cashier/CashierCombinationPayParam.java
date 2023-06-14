@@ -19,6 +19,9 @@ import java.util.List;
 @Schema(title = "结算台组合支付参数")
 public class CashierCombinationPayParam {
 
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     @Schema(description = "标题")
     private String title;
 

@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.core.merchant.service.MchAppPayConfigService;
-import cn.bootx.platform.daxpay.core.merchant.service.MchApplicationService;
+import cn.bootx.platform.daxpay.core.merchant.service.MchAppService;
 import cn.bootx.platform.daxpay.dto.merchant.MchAppPayConfigResult;
 import cn.bootx.platform.daxpay.dto.merchant.MchApplicationDto;
 import cn.bootx.platform.daxpay.param.merchant.MchApplicationParam;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MchApplicationController {
 
-    private final MchApplicationService applicationService;
+    private final MchAppService applicationService;
 
     private final MchAppPayConfigService appPayConfigService;
 

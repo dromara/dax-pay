@@ -41,6 +41,8 @@ public class PaymentBuilder {
         String ip = ServletUtil.getClientIP(request);
         // 基础信息
         payment.setBusinessId(payParam.getBusinessId())
+            .setMchCode(payParam.getMchCode())
+            .setMchAppCode(payment.getMchAppCode())
             .setTitle(payParam.getTitle())
             .setDescription(payParam.getDescription());
 

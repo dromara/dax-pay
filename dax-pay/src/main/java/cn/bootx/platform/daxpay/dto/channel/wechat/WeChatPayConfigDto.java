@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.dto.channel.wechat;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -31,12 +30,6 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @Schema(description = "微信应用appId")
     @SensitiveInfo
     private String appId;
-
-    /**
-     * @see WeChatPayCode#API_V2
-     */
-    // @Schema(description = "api版本")
-    // private String apiVersion;
 
     @Schema(description = "商户平台「API安全」中的 APIv2 密钥")
     @SensitiveInfo

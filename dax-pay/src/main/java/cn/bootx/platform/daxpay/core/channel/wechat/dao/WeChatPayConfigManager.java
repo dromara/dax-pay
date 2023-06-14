@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -24,30 +23,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WeChatPayConfigManager extends BaseManager<WeChatPayConfigMapper, WeChatPayConfig> {
 
-    private Optional<WeChatPayConfig> weChatPayConfig;
 
-    @Override
-    public WeChatPayConfig saveOrUpdate(WeChatPayConfig entity) {
-        this.clearCache();
-        return super.saveOrUpdate(entity);
+    public Optional<WeChatPayConfig> findByMchAppCode(String mchAppCode){
+        return findByField(WeChatPayConfig::getMchAppCode,mchAppCode);
     }
-
-    @Override
-    public WeChatPayConfig updateById(WeChatPayConfig weChatPayConfig) {
-        this.clearCache();
-        return super.updateById(weChatPayConfig);
-    }
-
-    /**
-     * 获取启用的微信配置
-     */
-    public Optional<WeChatPayConfig> findActivity() {
-        if (Objects.isNull(weChatPayConfig)) {
-            weChatPayConfig = findByField(WeChatPayConfig::getActivity, Boolean.TRUE);
-        }
-        return weChatPayConfig;
-    }
-
     /**
      * 分页
      */
@@ -55,25 +34,9 @@ public class WeChatPayConfigManager extends BaseManager<WeChatPayConfigMapper, W
         Page<WeChatPayConfig> mpPage = MpUtil.getMpPage(pageParam, WeChatPayConfig.class);
         return lambdaQuery().select(WeChatPayConfig.class, MpUtil::excludeBigField)
             .like(StrUtil.isNotBlank(param.getName()), WeChatPayConfig::getName, param.getName())
-            .like(StrUtil.isNotBlank(param.getAppId()), WeChatPayConfig::getAppId, param.getAppId())
-            .like(StrUtil.isNotBlank(param.getAppId()), WeChatPayConfig::getMchId, param.getMchId())
+            .like(StrUtil.isNotBlank(param.getAppId()), WeChatPayConfig::getWxAppId, param.getAppId())
+            .like(StrUtil.isNotBlank(param.getAppId()), WeChatPayConfig::getWxMchId, param.getMchId())
             .orderByDesc(MpIdEntity::getId)
             .page(mpPage);
     }
-
-    /**
-     * 清除所有的被启用的
-     */
-    public void removeAllActivity() {
-        this.clearCache();
-        lambdaUpdate().eq(WeChatPayConfig::getActivity, Boolean.TRUE).set(WeChatPayConfig::getActivity, Boolean.FALSE);
-    }
-
-    /**
-     * 清除缓存
-     */
-    public void clearCache() {
-        weChatPayConfig = null;
-    }
-
 }

@@ -22,6 +22,12 @@ public class AlipayConfigParam implements Serializable {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "商户编码")
+    private String mchCode;
+
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     @Schema(description = "支付宝商户appId")
     private String appId;
 
@@ -65,7 +71,7 @@ public class AlipayConfigParam implements Serializable {
     private boolean sandbox;
 
     @Schema(description = "状态")
-    private Integer state;
+    private String state;
 
     @Schema(description = "备注")
     private String remark;

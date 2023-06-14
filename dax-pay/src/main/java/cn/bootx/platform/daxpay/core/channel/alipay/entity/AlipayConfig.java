@@ -2,10 +2,12 @@ package cn.bootx.platform.daxpay.core.channel.alipay.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.paymodel.AliPayCode;
 import cn.bootx.platform.daxpay.core.channel.alipay.convert.AlipayConvert;
 import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
 import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
@@ -35,13 +37,16 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "名称")
     private String name;
 
-    /** 商户Id */
-    @DbColumn(comment = "商户Id")
-    private Long merchantId;
+    /** 商户编码 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @DbColumn(comment = "商户编码")
+    private String mchCode;
 
-    /** 商户应用Id */
-    @DbColumn(comment = "商户应用Id")
-    private Long mchAppId;
+    /** 商户应用编码 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @DbMySqlIndex(comment = "商户应用编码唯一索引")
+    @DbColumn(comment = "商户应用编码")
+    private String mchAppCode;
 
     /** 支付宝商户appId */
     @DbColumn(comment = "支付宝商户appId")
@@ -61,7 +66,10 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "")
     private String serverUrl;
 
-    /** 认证类型 证书/公钥 */
+    /**
+     * 认证类型 证书/公钥
+     * @see AliPayCode#AUTH_TYPE_KEY
+     */
     @DbColumn(comment = "认证类型")
     private Integer authType;
 
@@ -111,13 +119,9 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "可用支付方式")
     private String payWays;
 
-    /** 是否启用 */
-    @DbColumn(comment = "是否启用")
-    private Boolean activity;
-
-    /** 状态 暂时没什么用 */
-    @DbColumn(comment = "状态 暂时没什么用")
-    private Integer state;
+    /** 状态 */
+    @DbColumn(comment = "状态")
+    private String state;
 
     /** 备注 */
     @DbColumn(comment = "备注")

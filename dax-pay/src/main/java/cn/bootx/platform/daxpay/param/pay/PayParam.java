@@ -23,6 +23,10 @@ public class PayParam implements Serializable {
 
     private static final long serialVersionUID = 3895679513150533566L;
 
+    @Schema(description = "商户编码")
+    @NotEmpty(message = "商户应用不可为空")
+    private String mchCode;
+
     @Schema(description = "商户应用编码")
     @NotEmpty(message = "商户应用编码不可为空")
     private String mchAppCode;

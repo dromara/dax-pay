@@ -23,15 +23,15 @@ public class MerchantInfoParam {
 
     @QueryParam(type = LIKE)
     @Schema(description = "商户号")
-    private String mchNo;
+    private String code;
 
     @QueryParam(type = LIKE)
     @Schema(description = "商户名称")
-    private String mchName;
+    private String name;
 
     @QueryParam(type = LIKE)
     @Schema(description = "商户简称")
-    private String mchShortName;
+    private String shortName;
 
     @Schema(description = "类型")
     private String type;

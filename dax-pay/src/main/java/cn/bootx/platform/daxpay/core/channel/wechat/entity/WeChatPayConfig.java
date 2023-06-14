@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.core.channel.wechat.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
@@ -35,24 +36,28 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "名称")
     private String name;
 
-    /** 微信商户号 */
-    @DbColumn(comment = "微信商户号")
-    private String mchId;
+    /** 商户编码 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @DbColumn(comment = "商户编码")
+    private String mchCode;
 
-    /** 商户应用Id */
+    /** 商户应用编码 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @DbMySqlIndex(comment = "商户应用编码唯一索引")
+    @DbColumn(comment = "商户应用编码")
+    private String mchAppCode;
+
+    /** 微信商户Id */
+    @DbColumn(comment = "微信商户号")
+    private String wxMchId;
+
+    /** 微信商户应用Id */
     @DbColumn(comment = "商户应用Id")
-    private Long mchAppId;
+    private Long wxMchAppId;
 
     /** 微信应用appId */
     @DbColumn(comment = "微信应用appId")
-    private String appId;
-
-    // /**
-    // * api版本
-    // * @see WeChatPayCode#API_V2
-    // */
-    // @DbColumn(comment = "api版本")
-    // private String apiVersion;
+    private String wxAppId;
 
     /** 商户平台「API安全」中的 APIv2 密钥 */
     @TableField(updateStrategy = FieldStrategy.IGNORED)
@@ -116,13 +121,12 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "可用支付方式")
     private String payWays;
 
-    /** 是否启用 */
-    @DbColumn(comment = "是否启用")
-    private Boolean activity;
-
-    /** 状态 */
+    /**
+     * 状态
+     * @see cn.bootx.platform.daxpay.code.MchAndAppCode#PAY_CONFIG_STATE_NORMAL
+     */
     @DbColumn(comment = "状态")
-    private Integer state;
+    private String state;
 
     /** 备注 */
     @DbColumn(comment = "备注")

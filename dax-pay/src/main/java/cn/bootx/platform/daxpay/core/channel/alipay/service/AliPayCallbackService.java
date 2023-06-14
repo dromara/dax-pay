@@ -57,9 +57,13 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
         return PayStatusCode.NOTIFY_TRADE_FAIL;
     }
 
+    /**
+     * 验证信息格式
+     * @param mchAppCode 商户应用编码
+     */
     @SneakyThrows
     @Override
-    public boolean verifyNotify() {
+    public boolean verifyNotify(String mchAppCode) {
         Map<String, String> params = PARAMS.get();
         String callReq = JSONUtil.toJsonStr(params);
         String appId = params.get(AliPayCode.APP_ID);
@@ -67,7 +71,8 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
             log.error("支付宝回调报文 appId 为空 {}", callReq);
             return false;
         }
-        AlipayConfig alipayConfig = alipayConfigManager.findActivity().orElseThrow(DataNotExistException::new);
+        AlipayConfig alipayConfig = alipayConfigManager.findByMchAppCode(mchAppCode)
+            .orElseThrow(DataNotExistException::new);
         if (alipayConfig == null) {
             log.error("支付宝支付配置不存在: {}", callReq);
             return false;

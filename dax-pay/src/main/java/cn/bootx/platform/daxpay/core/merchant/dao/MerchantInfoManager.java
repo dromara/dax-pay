@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +25,13 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, MerchantInfo> {
+
+    /**
+     * 根据编码查询
+     */
+    public Optional<MerchantInfo> findByCode(String code) {
+        return findByField(MerchantInfo::getCode, code);
+    }
 
     /**
      * 分页
@@ -40,10 +48,10 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
      * 下拉列表
      */
     public List<KeyValue> findDropdown() {
-        return lambdaQuery().select(MerchantInfo::getMchNo, MerchantInfo::getMchName)
+        return lambdaQuery().select(MerchantInfo::getCode, MerchantInfo::getName)
             .list()
             .stream()
-            .map(mch -> new KeyValue(mch.getMchNo(), mch.getMchName()))
+            .map(mch -> new KeyValue(mch.getCode(), mch.getName()))
             .collect(Collectors.toList());
     }
 

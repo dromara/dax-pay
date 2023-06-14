@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,19 +37,19 @@ public class PayCallbackController {
 
     @SneakyThrows
     @Operation(summary = "支付宝回调")
-    @PostMapping("/alipay")
-    public String aliPay(HttpServletRequest request) {
+    @PostMapping("/alipay/{appCode}")
+    public String aliPay(@PathVariable String appCode, HttpServletRequest request) {
         Map<String, String> stringStringMap = AliPayApi.toMap(request);
-        return aliPayCallbackService.payCallback(stringStringMap);
+        return aliPayCallbackService.payCallback(appCode, stringStringMap);
     }
 
     @SneakyThrows
     @Operation(summary = "微信支付回调")
-    @PostMapping("/wechat")
-    public String wechat(HttpServletRequest request) {
+    @PostMapping("/wechat/{appCode}")
+    public String wechat(@PathVariable String appCode, HttpServletRequest request) {
         String xmlMsg = HttpKit.readData(request);
         Map<String, String> params = WxPayKit.xmlToMap(xmlMsg);
-        return weChatPayCallbackService.payCallback(params);
+        return weChatPayCallbackService.payCallback(appCode, params);
     }
 
 }

@@ -58,7 +58,9 @@ public class PayWaylUtil {
      * 判断是否有异步支付
      */
     public boolean isNotSync(List<PayWayParam> payWayParams) {
-        return payWayParams.stream().map(PayWayParam::getPayChannel).noneMatch(PayChannelEnum.ASYNC_TYPE_CODE::contains);
+        return payWayParams.stream()
+            .map(PayWayParam::getPayChannel)
+            .noneMatch(PayChannelEnum.ASYNC_TYPE_CODE::contains);
     }
 
     /**
@@ -107,7 +109,7 @@ public class PayWaylUtil {
      */
     public void validationAmount(List<PayWayParam> payModeList) {
         for (PayWayParam payWayParam : payModeList) {
-            // 同时满足支付金额小于等于零
+            // 支付金额小于等于零
             if (BigDecimalUtil.compareTo(payWayParam.getAmount(), BigDecimal.ZERO) < 1) {
                 throw new PayAmountAbnormalException();
             }

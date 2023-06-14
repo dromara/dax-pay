@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 public class MchApplicationDto extends BaseDto {
 
     @Schema(description = "应用编码")
-    private String appNo;
+    private String code;
 
     @Schema(description = "名称")
     private String name;

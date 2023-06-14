@@ -91,13 +91,13 @@ public class AliPayStrategy extends AbsPayStrategy {
             throw new PayAmountAbnormalException();
         }
         // 检查并获取支付宝支付配置
-        this.initAlipayConfig();
+        this.initAlipayConfig(this.getPayParam().getMchAppCode());
         aliPayService.validation(this.getPayWayParam(), alipayConfig);
         // 如果没有显式传入同步回调地址, 使用默认配置
         if (StrUtil.isBlank(aliPayParam.getReturnUrl())) {
             aliPayParam.setReturnUrl(alipayConfig.getReturnUrl());
         }
-        this.initAlipayConfig();
+        this.initAlipayConfig(this.getPayParam().getMchAppCode());
     }
 
     /**
@@ -148,7 +148,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doCancelHandler() {
-        this.initAlipayConfig();
+        this.initAlipayConfig(this.getPayParam().getMchAppCode());
         // 撤销支付
         aliPayCancelService.cancelRemote(this.getPayment());
         // 调用关闭本地支付记录
@@ -168,7 +168,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doRefundHandler() {
-        this.initAlipayConfig();
+        this.initAlipayConfig(this.getPayParam().getMchAppCode());
         aliPayCancelService.refund(this.getPayment(), this.getPayWayParam().getAmount());
         aliPaymentService.updatePayRefund(this.getPayment().getId(), this.getPayWayParam().getAmount());
         paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.ALI);
@@ -179,16 +179,17 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public PaySyncResult doSyncPayStatusHandler() {
-        this.initAlipayConfig();
+        this.initAlipayConfig(this.getPayParam().getMchAppCode());
         return alipaySyncService.syncPayStatus(this.getPayment());
     }
 
     /**
      * 初始化支付宝配置信息
      */
-    private void initAlipayConfig() {
+    private void initAlipayConfig(String mchAppCode) {
         // 检查并获取支付宝支付配置
-        this.alipayConfig = alipayConfigManager.findActivity().orElseThrow(() -> new PayFailureException("支付配置不存在"));
+        this.alipayConfig = alipayConfigManager.findByMchAppCode(mchAppCode)
+            .orElseThrow(() -> new PayFailureException("支付配置不存在"));
         this.initApiConfig(this.alipayConfig);
     }
 

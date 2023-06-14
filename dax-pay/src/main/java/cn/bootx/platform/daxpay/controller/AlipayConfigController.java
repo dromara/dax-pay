@@ -42,20 +42,6 @@ public class AlipayConfigController {
         return Res.ok();
     }
 
-    @Operation(summary = "启用指定的支付宝配置")
-    @PostMapping("/setUpActivity")
-    public ResResult<Void> setUpActivity(Long id) {
-        alipayConfigService.setUpActivity(id);
-        return Res.ok();
-    }
-
-    @Operation(summary = "清除指定的支付宝配置")
-    @PostMapping("/clearActivity")
-    public ResResult<Void> clearActivity(Long id) {
-        alipayConfigService.clearActivity(id);
-        return Res.ok();
-    }
-
     @Operation(summary = "分页")
     @GetMapping("/page")
     public ResResult<PageResult<AlipayConfigDto>> page(PageParam pageParam, AlipayConfigQuery param) {

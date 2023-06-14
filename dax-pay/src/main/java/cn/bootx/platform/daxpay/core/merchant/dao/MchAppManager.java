@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * 商户应用
  *
@@ -19,7 +21,14 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @RequiredArgsConstructor
-public class MchApplicationManager extends BaseManager<MchApplicationMapper, MchApplication> {
+public class MchAppManager extends BaseManager<MchApplicationMapper, MchApplication> {
+
+    /**
+     * 根据编码查询
+     */
+    public Optional<MchApplication> findByCode(String code) {
+        return findByField(MchApplication::getCode, code);
+    }
 
     /**
      * 分页
@@ -27,8 +36,7 @@ public class MchApplicationManager extends BaseManager<MchApplicationMapper, Mch
     public Page<MchApplication> page(PageParam pageParam, MchApplicationParam param) {
         Page<MchApplication> mpPage = MpUtil.getMpPage(pageParam, MchApplication.class);
         QueryWrapper<MchApplication> wrapper = QueryGenerator.generator(param, this.getEntityClass());
-        wrapper.select(this.getEntityClass(), MpUtil::excludeBigField)
-            .orderByDesc(MpUtil.getColumnName(MchApplication::getId));
+        wrapper.select(this.getEntityClass(), MpUtil::excludeBigField).orderByDesc(MpUtil.getColumnName(MchApplication::getId));
         return this.page(mpPage, wrapper);
     }
 

@@ -95,7 +95,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
         }
 
         // 检查并获取微信支付配置
-        this.initWeChatPayConfig();
+        this.initWeChatPayConfig(this.getPayParam().getMchAppCode());
         weChatPayService.validation(this.getPayWayParam(), weChatPayConfig);
     }
 
@@ -148,7 +148,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     @Override
     public void doCancelHandler() {
         // 检查并获取微信支付配置
-        this.initWeChatPayConfig();
+        this.initWeChatPayConfig(this.getPayParam().getMchAppCode());
         weChatPayCancelService.cancelRemote(this.getPayment(), weChatPayConfig);
         // 调用关闭本地支付记录
         this.doCloseHandler();
@@ -167,7 +167,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doRefundHandler() {
-        this.initWeChatPayConfig();
+        this.initWeChatPayConfig(this.getPayParam().getMchAppCode());
         WeChatPayment weChatPayment = weChatPaymentManager.findByPaymentId(this.getPayment().getId())
             .orElseThrow(() -> new PayFailureException("微信支付记录不存在"));
         weChatPayCancelService.refund(this.getPayment(), weChatPayment, this.getPayWayParam().getAmount(),
@@ -182,17 +182,17 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     @Override
     public PaySyncResult doSyncPayStatusHandler() {
         // 检查并获取微信支付配置
-        this.initWeChatPayConfig();
+        this.initWeChatPayConfig(this.getPayParam().getMchAppCode());
         return weChatPaySyncService.syncPayStatus(this.getPayment().getId(), this.weChatPayConfig);
     }
 
     /**
      * 初始化微信支付
      */
-    private void initWeChatPayConfig() {
+    private void initWeChatPayConfig(String appCode) {
         // 检查并获取微信支付配置
         this.weChatPayConfig = Optional.ofNullable(this.weChatPayConfig)
-            .orElse(weChatPayConfigManager.findActivity().orElseThrow(() -> new PayFailureException("支付配置不存在")));
+            .orElse(weChatPayConfigManager.findByMchAppCode(appCode).orElseThrow(() -> new PayFailureException("支付配置不存在")));
     }
 
 }

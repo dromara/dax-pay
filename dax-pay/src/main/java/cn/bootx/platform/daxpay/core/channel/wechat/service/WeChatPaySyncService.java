@@ -32,8 +32,8 @@ public class WeChatPaySyncService {
     public PaySyncResult syncPayStatus(Long paymentId, WeChatPayConfig weChatPayConfig) {
         PaySyncResult paySyncResult = new PaySyncResult().setPaySyncStatus(PaySyncStatus.FAIL);
         Map<String, String> params = UnifiedOrderModel.builder()
-            .appid(weChatPayConfig.getAppId())
-            .mch_id(weChatPayConfig.getMchId())
+            .appid(weChatPayConfig.getWxAppId())
+            .mch_id(weChatPayConfig.getWxMchId())
             .nonce_str(WxPayKit.generateStr())
             .out_trade_no(String.valueOf(paymentId))
             .build()

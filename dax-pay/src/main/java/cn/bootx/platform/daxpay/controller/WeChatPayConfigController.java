@@ -41,20 +41,6 @@ public class WeChatPayConfigController {
         return Res.ok();
     }
 
-    @Operation(summary = "设置启用的微信支付配置")
-    @PostMapping("/setUpActivity")
-    public ResResult<Void> setUpActivity(Long id) {
-        weChatPayConfigService.setUpActivity(id);
-        return Res.ok();
-    }
-
-    @Operation(summary = "清除指定的微信支付配置")
-    @PostMapping("/clearActivity")
-    public ResResult<Void> clearActivity(Long id) {
-        weChatPayConfigService.clearActivity(id);
-        return Res.ok();
-    }
-
     @Operation(summary = "分页")
     @GetMapping("/page")
     public ResResult<PageResult<WeChatPayConfigDto>> page(PageParam pageParam, WeChatPayConfigParam param) {

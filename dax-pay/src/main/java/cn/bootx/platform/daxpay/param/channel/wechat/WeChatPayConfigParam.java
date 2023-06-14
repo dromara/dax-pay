@@ -24,6 +24,12 @@ public class WeChatPayConfigParam {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "商户编码")
+    private String mchCode;
+
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     @Schema(description = "微信商户号")
     private String mchId;
 

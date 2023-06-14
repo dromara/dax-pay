@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -23,28 +22,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AlipayConfigManager extends BaseManager<AlipayConfigMapper, AlipayConfig> {
 
-    private Optional<AlipayConfig> alipayConfig;
-
-    @Override
-    public AlipayConfig saveOrUpdate(AlipayConfig entity) {
-        this.clearCache();
-        return super.saveOrUpdate(entity);
-    }
-
-    @Override
-    public AlipayConfig updateById(AlipayConfig alipayConfig) {
-        this.clearCache();
-        return super.updateById(alipayConfig);
-    }
-
     /**
-     * 获取启用的支付宝配置
+     * 获取关联的的支付宝配置
      */
-    public Optional<AlipayConfig> findActivity() {
-        if (Objects.isNull(alipayConfig)) {
-            alipayConfig = findByField(AlipayConfig::getActivity, Boolean.TRUE);
-        }
-        return alipayConfig;
+    public Optional<AlipayConfig> findByMchAppCode(String mchAppCOde) {
+        return findByField(AlipayConfig::getMchAppCode, mchAppCOde);
     }
 
     /**
@@ -56,23 +38,6 @@ public class AlipayConfigManager extends BaseManager<AlipayConfigMapper, AlipayC
             .like(StrUtil.isNotBlank(param.getName()), AlipayConfig::getName, param.getName())
             .like(StrUtil.isNotBlank(param.getAppId()), AlipayConfig::getAppId, param.getAppId())
             .page(mpPage);
-    }
-
-    /**
-     * 清除所有启用的支付配置
-     */
-    public void removeAllActivity() {
-        this.clearCache();
-        lambdaUpdate().eq(AlipayConfig::getActivity, Boolean.TRUE)
-            .set(AlipayConfig::getActivity, Boolean.FALSE)
-            .update();
-    }
-
-    /**
-     * 清除缓存
-     */
-    public void clearCache() {
-        alipayConfig = null;
     }
 
 }

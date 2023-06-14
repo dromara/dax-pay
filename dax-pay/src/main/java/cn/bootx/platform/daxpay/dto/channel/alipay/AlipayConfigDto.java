@@ -25,6 +25,12 @@ public class AlipayConfigDto extends BaseDto implements Serializable {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "商户编码")
+    private String mchCode;
+
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     @Schema(description = "支付宝商户appId")
     @SensitiveInfo
     private String appId;
@@ -77,7 +83,7 @@ public class AlipayConfigDto extends BaseDto implements Serializable {
     private Boolean activity;
 
     @Schema(description = "状态")
-    private Integer state;
+    private String state;
 
     @Schema(description = "备注")
     private String remark;

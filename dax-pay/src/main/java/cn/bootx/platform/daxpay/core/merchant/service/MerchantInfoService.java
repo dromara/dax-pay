@@ -36,7 +36,7 @@ public class MerchantInfoService {
      */
     public void add(MerchantInfoParam param) {
         MerchantInfo merchantInfo = MerchantInfo.init(param);
-        merchantInfo.setMchNo("M" + System.currentTimeMillis());
+        merchantInfo.setCode("M" + System.currentTimeMillis());
         merchantInfoManager.save(merchantInfo);
     }
 

@@ -24,11 +24,14 @@ public class PaymentDto extends BaseDto implements Serializable {
 
     private static final long serialVersionUID = 3269223993950227228L;
 
-    @Schema(description = "用户ID")
-    private Long userId;
-
     @Schema(description = "关联的业务id")
     private String businessId;
+
+    @Schema(description = "商户编码")
+    private String mchNo;
+
+    @Schema(description = "商户应用编码")
+    private String mchAppNo;
 
     @Schema(description = "标题")
     private String title;
@@ -40,10 +43,10 @@ public class PaymentDto extends BaseDto implements Serializable {
     private boolean asyncPayMode;
 
     /**
-     * @see PayChannelCode
+     * @see cn.bootx.platform.daxpay.code.pay.PayChannelEnum#ASYNC_TYPE_CODE
      */
     @Schema(description = "异步支付通道")
-    private Integer asyncPayChannel;
+    private String asyncPayChannel;
 
     /**
      * @see PayStatusCode

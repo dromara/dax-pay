@@ -44,10 +44,10 @@ public class CashierController {
     }
 
     @Operation(summary = "扫码聚合支付(单渠道)")
-    @GetMapping("/aggregatePay")
-    public ModelAndView aggregatePay(String key, @RequestHeader(USER_AGENT) String ua) {
+    @GetMapping("/aggregatePay/{mchAppCode}")
+    public ModelAndView aggregatePay(String key,@PathVariable String mchAppCode, @RequestHeader(USER_AGENT) String ua) {
         try {
-            String url = cashierService.aggregatePay(key, ua);
+            String url = cashierService.aggregatePay(key, mchAppCode, ua);
             return new ModelAndView("redirect:" + url);
         }
         catch (PayUnsupportedMethodException e) {
@@ -56,9 +56,9 @@ public class CashierController {
     }
 
     @Operation(summary = "微信jsapi支付(回调)")
-    @GetMapping("/wxJsapiPay")
-    public ModelAndView wxJsapiPay(String code, String state) {
-        Map<String, String> map = cashierService.wxJsapiPay(code, state);
+    @GetMapping("/wxJsapiPay/{mchAppCode}")
+    public ModelAndView wxJsapiPay(String code, @PathVariable String mchAppCode, String state) {
+        Map<String, String> map = cashierService.wxJsapiPay(code,mchAppCode,state);
         // 跳转页面, 调起微信jsapi支付
         return new ModelAndView("wechatJsapiPay").addAllObjects(map);
     }

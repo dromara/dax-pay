@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 @Schema(title = "结算台单支付参数")
 public class CashierSinglePayParam {
 
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     @Schema(description = "标题")
     private String title;
 

@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.core.merchant.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.MySqlIndex;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlIndexType;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
@@ -17,13 +17,15 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
+import static cn.bootx.platform.daxpay.core.merchant.entity.MerchantInfo.Fields.code;
+
 /**
  * 商户
  *
  * @author xxm
  * @date 2023-05-17
  */
-@MySqlIndex(columns = "mch_no", type = MySqlIndexType.UNIQUE, comment = "商户号唯一索引")
+@DbMySqlIndex(fields = code, type = MySqlIndexType.UNIQUE, comment = "商户号唯一索引")
 @EqualsAndHashCode(callSuper = true)
 @FieldNameConstants
 @Data
@@ -35,15 +37,15 @@ public class MerchantInfo extends MpBaseEntity implements EntityBaseFunction<Mer
     /** 商户号 */
     @DbColumn(comment = "商户号")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
-    private String mchNo;
+    private String code;
 
     /** 商户名称 */
     @DbColumn(comment = "商户名称")
-    private String mchName;
+    private String name;
 
     /** 商户简称 */
     @DbColumn(comment = "商户简称")
-    private String mchShortName;
+    private String shortName;
 
     /** 类型 */
     @DbColumn(comment = "类型")
@@ -57,7 +59,10 @@ public class MerchantInfo extends MpBaseEntity implements EntityBaseFunction<Mer
     @DbColumn(comment = "联系人手机号")
     private String contactTel;
 
-    /** 状态类型 */
+    /**
+     * 状态类型
+     * @see cn.bootx.platform.daxpay.code.MchAndAppCode
+     */
     @DbColumn(comment = "状态类型")
     private String state;
 

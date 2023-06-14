@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "统一支付")
 @RestController
-@RequestMapping("/uni_pay")
+@RequestMapping("/uniPay")
 @AllArgsConstructor
 public class PayController {
 

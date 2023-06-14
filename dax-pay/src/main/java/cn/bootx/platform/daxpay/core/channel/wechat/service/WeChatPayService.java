@@ -169,8 +169,8 @@ public class WeChatPayService {
      */
     private String barCode(String amount, Payment payment, String authCode, WeChatPayConfig weChatPayConfig) {
         Map<String, String> params = MicroPayModel.builder()
-            .appid(weChatPayConfig.getAppId())
-            .mch_id(weChatPayConfig.getMchId())
+            .appid(weChatPayConfig.getWxAppId())
+            .mch_id(weChatPayConfig.getWxMchId())
             .nonce_str(WxPayKit.generateStr())
             .body(payment.getTitle())
             .auth_code(authCode)
@@ -226,8 +226,8 @@ public class WeChatPayService {
         // 过期时间
         payment.setExpiredTime(PayWaylUtil.getPaymentExpiredTime(weChatPayConfig.getExpireTime()));
         return UnifiedOrderModel.builder()
-            .appid(weChatPayConfig.getAppId())
-            .mch_id(weChatPayConfig.getMchId())
+            .appid(weChatPayConfig.getWxAppId())
+            .mch_id(weChatPayConfig.getWxMchId())
             .nonce_str(WxPayKit.generateStr())
             .time_start(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.PURE_DATETIME_PATTERN))
             // 反正v2版本的超时时间无效

@@ -73,7 +73,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      * 验证回调消息
      */
     @Override
-    public boolean verifyNotify() {
+    public boolean verifyNotify(String mchAppCode) {
         Map<String, String> params = PARAMS.get();
         String callReq = JSONUtil.toJsonStr(params);
         log.info("微信发起回调 报文: {}", callReq);
@@ -83,8 +83,8 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
             log.warn("微信回调报文 appId 为空 {}", callReq);
             return false;
         }
-        //
-        WeChatPayConfig weChatPayConfig = weChatPayConfigManager.findActivity().orElseThrow(DataNotExistException::new);
+
+        WeChatPayConfig weChatPayConfig = weChatPayConfigManager.findByMchAppCode(mchAppCode).orElseThrow(DataNotExistException::new);
         if (weChatPayConfig == null) {
             log.warn("微信支付配置不存在: {}", callReq);
             return false;

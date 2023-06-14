@@ -34,7 +34,7 @@ public class MchAppPayConfigService {
      * 根据应用ID删除
      */
     public void deleteByAppId(Long appId) {
-        mchAppPayConfigManager.deleteByField(MchAppPayConfig::getAppId, appId);
+        mchAppPayConfigManager.deleteByField(MchAppPayConfig::getAppCode, appId);
     }
 
     /**
@@ -45,7 +45,7 @@ public class MchAppPayConfigService {
         List<PayChannelConfig> channels = channelConfigManager.findAllByOrder();
         // 查询当前应用所拥有的配置, 进行合并生成相关信息
 
-        val mchAppPayConfigMap = mchAppPayConfigManager.findAllByField(MchAppPayConfig::getAppId, appId)
+        val mchAppPayConfigMap = mchAppPayConfigManager.findAllByField(MchAppPayConfig::getAppCode, appId)
             .stream()
             .collect(Collectors.toMap(MchAppPayConfig::getChannel, Function.identity()));
         // 进行排序并返回
