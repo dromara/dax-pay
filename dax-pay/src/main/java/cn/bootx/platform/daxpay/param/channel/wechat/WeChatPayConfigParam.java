@@ -82,7 +82,7 @@ public class WeChatPayConfigParam {
     private Boolean activity;
 
     @Schema(description = "状态")
-    private Integer state;
+    private String state;
 
     @Schema(description = "备注")
     private String remark;

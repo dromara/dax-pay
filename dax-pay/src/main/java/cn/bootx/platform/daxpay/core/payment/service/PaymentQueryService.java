@@ -2,9 +2,9 @@ package cn.bootx.platform.daxpay.core.payment.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
-import cn.bootx.platform.common.core.rest.param.OrderParam;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.query.entity.QueryOrder;
 import cn.bootx.platform.common.query.entity.QueryParams;
 import cn.bootx.platform.daxpay.core.payment.dao.PaymentManager;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
@@ -64,8 +64,8 @@ public class PaymentQueryService {
     /**
      * 分页
      */
-    public PageResult<PaymentDto> page(PageParam pageParam, PaymentQuery param, OrderParam orderParam) {
-        return MpUtil.convert2DtoPageResult(paymentManager.page(pageParam, param, orderParam));
+    public PageResult<PaymentDto> page(PageParam pageParam, PaymentQuery param, QueryOrder queryOrder) {
+        return MpUtil.convert2DtoPageResult(paymentManager.page(pageParam, param, queryOrder));
     }
 
     /**

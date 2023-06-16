@@ -119,7 +119,10 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "可用支付方式")
     private String payWays;
 
-    /** 状态 */
+    /**
+     * 状态
+     * @see cn.bootx.platform.daxpay.code.MchAndAppCode#PAY_CONFIG_STATE_NORMAL
+     */
     @DbColumn(comment = "状态")
     private String state;
 

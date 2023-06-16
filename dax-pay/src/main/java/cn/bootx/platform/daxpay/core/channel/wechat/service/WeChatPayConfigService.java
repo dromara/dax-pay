@@ -6,6 +6,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.dto.KeyValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.code.MchAndAppCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayWay;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
@@ -48,11 +49,12 @@ public class WeChatPayConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void add(WeChatPayConfigParam param) {
         // 是否有管理关系判断
-        if (mchAppService.checkMatch(param.getMchCode(), param.getMchAppCode())) {
+        if (!mchAppService.checkMatch(param.getMchCode(), param.getMchAppCode())) {
             throw new BizException("应用信息与商户信息不匹配");
         }
 
         WeChatPayConfig weChatPayConfig = WeChatPayConfig.init(param);
+        weChatPayConfig.setState(MchAndAppCode.PAY_CONFIG_STATE_NORMAL);
         weChatPayConfigManager.save(weChatPayConfig);
         // 保存关联关系
         MchAppPayConfig mchAppPayConfig = new MchAppPayConfig().setAppCode(weChatPayConfig.getMchAppCode())

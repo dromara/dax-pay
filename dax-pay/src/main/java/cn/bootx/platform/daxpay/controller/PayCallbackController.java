@@ -37,19 +37,19 @@ public class PayCallbackController {
 
     @SneakyThrows
     @Operation(summary = "支付宝回调")
-    @PostMapping("/alipay/{appCode}")
-    public String aliPay(@PathVariable String appCode, HttpServletRequest request) {
+    @PostMapping("/alipay/{mchCode}/{appCode}")
+    public String aliPay(@PathVariable String mchCode,@PathVariable String appCode, HttpServletRequest request) {
         Map<String, String> stringStringMap = AliPayApi.toMap(request);
-        return aliPayCallbackService.payCallback(appCode, stringStringMap);
+        return aliPayCallbackService.payCallback(mchCode, appCode, stringStringMap);
     }
 
     @SneakyThrows
     @Operation(summary = "微信支付回调")
-    @PostMapping("/wechat/{appCode}")
-    public String wechat(@PathVariable String appCode, HttpServletRequest request) {
+    @PostMapping("/wechat/{mchCode}/{appCode}")
+    public String wechat(@PathVariable String mchCode, @PathVariable String appCode, HttpServletRequest request) {
         String xmlMsg = HttpKit.readData(request);
         Map<String, String> params = WxPayKit.xmlToMap(xmlMsg);
-        return weChatPayCallbackService.payCallback(appCode, params);
+        return weChatPayCallbackService.payCallback(mchCode, appCode, params);
     }
 
 }

@@ -25,7 +25,7 @@ public class MchApplicationDto extends BaseDto {
     private String name;
 
     @Schema(description = "商户号")
-    private String mchNo;
+    private String mchCode;
 
     @Schema(description = "状态类型")
     private String state;

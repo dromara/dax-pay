@@ -36,7 +36,7 @@ public abstract class AbsPayCallbackStrategy {
     /**
      * 支付回调
      */
-    public String payCallback(String appCode, Map<String, String> params) {
+    public String payCallback(String mchCode,String appCode, Map<String, String> params) {
         PARAMS.set(params);
         try {
             log.info("支付回调处理: {}", params);
@@ -49,10 +49,10 @@ public abstract class AbsPayCallbackStrategy {
                 return this.getReturnMsg();
             }
             // 调用统一回调处理
-            PayCallbackResult result = payCallbackService.callback(appCode, this.getPaymentId(), this.getTradeStatus(),
+            PayCallbackResult result = payCallbackService.callback(this.getPaymentId(), this.getTradeStatus(),
                     params);
             // 记录回调记录
-            this.saveNotifyRecord(appCode, result);
+            this.saveNotifyRecord(mchCode,appCode, result);
         }
         finally {
             PARAMS.remove();
@@ -100,14 +100,15 @@ public abstract class AbsPayCallbackStrategy {
     /**
      * 保存回调记录
      */
-    public void saveNotifyRecord(String appCode, PayCallbackResult result) {
+    public void saveNotifyRecord(String mchCode,String appCode, PayCallbackResult result) {
         PayNotifyRecord payNotifyRecord = new PayNotifyRecord().setNotifyInfo(JSONUtil.toJsonStr(PARAMS.get()))
-            .setNotifyTime(LocalDateTime.now())
-            .setPaymentId(this.getPaymentId())
-            .setMchAppCode(appCode)
-            .setPayChannel(this.getPayChannel().getCode())
-            .setStatus(result.getCode())
-            .setMsg(result.getMsg());
+                .setNotifyTime(LocalDateTime.now())
+                .setPaymentId(this.getPaymentId())
+                .setMchAppCode(appCode)
+                .setMchCode(mchCode)
+                .setPayChannel(this.getPayChannel().getCode())
+                .setStatus(result.getCode())
+                .setMsg(result.getMsg());
         payNotifyRecordManager.save(payNotifyRecord);
     }
 

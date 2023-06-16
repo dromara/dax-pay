@@ -28,7 +28,7 @@ public class PaymentDto extends BaseDto implements Serializable {
     private String businessId;
 
     @Schema(description = "商户编码")
-    private String mchNo;
+    private String mchCode;
 
     @Schema(description = "商户应用编码")
     private String mchAppNo;

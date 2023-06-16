@@ -35,4 +35,7 @@ public interface MchAndAppCode {
     /** 停用 */
     String PAY_CONFIG_STATE_FORBIDDEN = "forbidden";
 
+    /** 封禁 */
+    String PAY_CONFIG_STATE_BANNED = "banned";
+
 }

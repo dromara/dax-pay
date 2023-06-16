@@ -40,12 +40,12 @@ public class MchAppPayConfigService {
     /**
      * 支付通道配置列表
      */
-    public List<MchAppPayConfigResult> ListByAppId(Long appId) {
+    public List<MchAppPayConfigResult> ListByAppId(String appCode) {
         // 首先查询系统中配置的支付通道进行排序
         List<PayChannelConfig> channels = channelConfigManager.findAllByOrder();
         // 查询当前应用所拥有的配置, 进行合并生成相关信息
 
-        val mchAppPayConfigMap = mchAppPayConfigManager.findAllByField(MchAppPayConfig::getAppCode, appId)
+        val mchAppPayConfigMap = mchAppPayConfigManager.findAllByField(MchAppPayConfig::getAppCode, appCode)
             .stream()
             .collect(Collectors.toMap(MchAppPayConfig::getChannel, Function.identity()));
         // 进行排序并返回

@@ -4,8 +4,8 @@ import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
-import cn.bootx.platform.common.core.rest.param.OrderParam;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.query.entity.QueryOrder;
 import cn.bootx.platform.common.query.entity.QueryParams;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentQueryService;
 import cn.bootx.platform.daxpay.dto.payment.PayChannelInfo;
@@ -38,8 +38,8 @@ public class PaymentController {
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
-    public ResResult<PageResult<PaymentDto>> page(PageParam pageParam, PaymentQuery param, OrderParam orderParam) {
-        return Res.ok(paymentQueryService.page(pageParam, param, orderParam));
+    public ResResult<PageResult<PaymentDto>> page(PageParam pageParam, PaymentQuery param, QueryOrder queryOrder) {
+        return Res.ok(paymentQueryService.page(pageParam, param, queryOrder));
     }
 
     @Operation(summary = "分页查询(超级查询)")

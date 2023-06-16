@@ -34,6 +34,10 @@ public class PayNotifyRecord extends MpBaseEntity implements EntityBaseFunction<
     @DbComment("支付记录id")
     private Long paymentId;
 
+    /** 商户编码 */
+    @DbComment("商户编码")
+    private String mchCode;
+
     /** 商户应用编码 */
     @DbComment("商户应用编码")
     private String mchAppCode;

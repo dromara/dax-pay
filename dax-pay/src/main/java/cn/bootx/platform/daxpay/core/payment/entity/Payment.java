@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.payment.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
+import cn.bootx.mybatis.table.modify.annotation.DbComment;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
@@ -31,6 +32,7 @@ import java.util.List;
 @DbTable(isAppend = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
+@DbComment("支付记录")
 @FieldNameConstants
 @Accessors(chain = true)
 @TableName(value = "pay_payment", autoResultMap = true)

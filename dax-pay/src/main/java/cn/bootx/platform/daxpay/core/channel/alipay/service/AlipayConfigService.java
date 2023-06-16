@@ -6,6 +6,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.dto.KeyValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.code.MchAndAppCode;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.paymodel.AliPayWay;
 import cn.bootx.platform.daxpay.core.channel.alipay.dao.AlipayConfigManager;
@@ -50,10 +51,11 @@ public class AlipayConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void add(AlipayConfigParam param) {
         // 是否有管理关系判断
-        if (mchAppService.checkMatch(param.getMchCode(), param.getMchAppCode())) {
+        if (!mchAppService.checkMatch(param.getMchCode(), param.getMchAppCode())) {
             throw new BizException("应用信息与商户信息不匹配");
         }
         AlipayConfig alipayConfig = AlipayConfig.init(param);
+        alipayConfig.setState(MchAndAppCode.PAY_CONFIG_STATE_NORMAL);
         alipayConfigManager.save(alipayConfig);
 
         // 保存关联关系
