@@ -52,7 +52,7 @@ public class PaymentDto extends BaseDto implements Serializable {
      * @see PayStatusCode
      */
     @Schema(description = "支付状态")
-    private int payStatus;
+    private String payStatus;
 
     @Schema(description = "金额")
     private BigDecimal amount;

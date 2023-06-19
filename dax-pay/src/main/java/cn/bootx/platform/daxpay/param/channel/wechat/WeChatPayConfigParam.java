@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.param.channel.wechat;
 
+import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.List;
  * @date 2022/7/7
  */
 @Data
+@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "微信支付配置参数")
 public class WeChatPayConfigParam {
@@ -31,10 +33,10 @@ public class WeChatPayConfigParam {
     private String mchAppCode;
 
     @Schema(description = "微信商户号")
-    private String mchId;
+    private String wxMchId;
 
     @Schema(description = "微信应用appId")
-    private String appId;
+    private String wxAppId;
 
     /**
      * @see WeChatPayCode#API_V2

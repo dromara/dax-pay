@@ -3,6 +3,8 @@ package cn.bootx.platform.daxpay.core.payment.entity;
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbComment;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
@@ -29,7 +31,7 @@ import java.util.List;
  * @author xxm
  * @date 2020/12/8
  */
-@DbTable(isAppend = true)
+@DbTable
 @EqualsAndHashCode(callSuper = true)
 @Data
 @DbComment("支付记录")
@@ -39,6 +41,7 @@ import java.util.List;
 public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentDto> {
 
     /** 关联的业务id */
+    @DbColumn(comment = "商户编码")
     private String businessId;
 
     /** 商户编码 */
@@ -82,6 +85,7 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
      */
     @TableField(typeHandler = JacksonRawTypeHandler.class)
     @BigField
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private List<PayChannelInfo> payChannelInfo;
 
     /**
@@ -90,6 +94,7 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
      */
     @TableField(typeHandler = JacksonRawTypeHandler.class)
     @BigField
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private List<RefundableInfo> refundableInfo;
 
     /**

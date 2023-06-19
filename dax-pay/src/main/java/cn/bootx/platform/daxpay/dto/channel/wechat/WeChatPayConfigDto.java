@@ -25,11 +25,11 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
 
     @Schema(description = "微信商户号")
     @SensitiveInfo
-    private String mchId;
+    private String wxMchId;
 
     @Schema(description = "微信应用appId")
     @SensitiveInfo
-    private String appId;
+    private String wxAppId;
 
     @Schema(description = "商户平台「API安全」中的 APIv2 密钥")
     @SensitiveInfo
@@ -76,7 +76,7 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     private Boolean activity;
 
     @Schema(description = "状态")
-    private Integer state;
+    private String state;
 
     @Schema(description = "备注")
     private String remark;

@@ -51,10 +51,6 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "微信商户号")
     private String wxMchId;
 
-    /** 微信商户应用Id */
-    @DbColumn(comment = "商户应用Id")
-    private Long wxMchAppId;
-
     /** 微信应用appId */
     @DbColumn(comment = "微信应用appId")
     private String wxAppId;

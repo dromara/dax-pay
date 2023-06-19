@@ -2,7 +2,9 @@ package cn.bootx.platform.daxpay.core.channel.alipay.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
@@ -79,24 +81,28 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
 
     /** 支付宝公钥 */
     @BigField
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "支付宝公钥")
     public String alipayPublicKey;
 
     /** 私钥 */
     @BigField
     @EncryptionField
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "私钥")
     private String privateKey;
 
     /** 应用公钥证书 */
     @BigField
     @EncryptionField
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "应用公钥证书")
     private String appCert;
 
     /** 支付宝公钥证书 */
     @BigField
     @EncryptionField
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "支付宝公钥证书")
     private String alipayCert;
 
@@ -104,6 +110,7 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @BigField
     @EncryptionField
     @DbColumn(comment = "支付宝CA根证书")
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private String alipayRootCert;
 
     /** 是否沙箱环境 */

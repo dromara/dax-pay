@@ -79,7 +79,10 @@ public class CashierService {
         String extraParamsJson = PayWaylUtil.buildExtraParamsJson(param.getPayChannel(), map);
         payWayParam.setExtraParamsJson(extraParamsJson);
 
-        PayParam payParam = new PayParam().setTitle(param.getTitle())
+        PayParam payParam = new PayParam()
+                .setMchCode(param.getMchCode())
+                .setMchAppCode(param.getMchAppCode())
+                .setTitle(param.getTitle())
                 .setBusinessId(param.getBusinessId())
                 .setPayWayList(Collections.singletonList(payWayParam));
         PayResult payResult = payService.pay(payParam);
