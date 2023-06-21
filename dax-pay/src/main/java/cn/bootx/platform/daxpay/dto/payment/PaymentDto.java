@@ -42,6 +42,9 @@ public class PaymentDto extends BaseDto implements Serializable {
     @Schema(description = "是否是异步支付")
     private boolean asyncPayMode;
 
+    @Schema(description = "是否是组合支付")
+    private boolean combinationPayMode;
+
     /**
      * @see cn.bootx.platform.daxpay.code.pay.PayChannelEnum#ASYNC_TYPE_CODE
      */

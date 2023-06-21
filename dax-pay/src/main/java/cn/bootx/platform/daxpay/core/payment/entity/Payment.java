@@ -4,7 +4,9 @@ import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbComment;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlIndexType;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
@@ -41,7 +43,8 @@ import java.util.List;
 public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentDto> {
 
     /** 关联的业务id */
-    @DbColumn(comment = "商户编码")
+    @DbMySqlIndex(comment = "业务Id索引",type = MySqlIndexType.UNIQUE)
+    @DbColumn(comment = "关联的业务id")
     private String businessId;
 
     /** 商户编码 */
@@ -53,30 +56,42 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
     private String mchAppCode;
 
     /** 标题 */
+    @DbColumn(comment = "标题")
     private String title;
 
     /** 描述 */
+    @DbColumn(comment = "描述")
     private String description;
 
     /** 是否是异步支付 */
+    @DbColumn(comment = "是否是异步支付")
     private boolean asyncPayMode;
+
+    /** 是否是组合支付 */
+    @DbColumn(comment = "是否是组合支付")
+    private boolean combinationPayMode;
 
     /**
      * 异步支付通道
      * @see cn.bootx.platform.daxpay.code.pay.PayChannelEnum#ALI
      */
+    @DbColumn(comment = "异步支付通道")
     private String asyncPayChannel;
 
     /** 金额 */
+    @DbColumn(comment = "金额")
     private BigDecimal amount;
 
     /** 可退款余额 */
+    @DbColumn(comment = "可退款余额")
     private BigDecimal refundableBalance;
 
     /** 错误码 */
+    @DbColumn(comment = "错误码")
     private String errorCode;
 
     /** 错误信息 */
+    @DbColumn(comment = "错误信息")
     private String errorMsg;
 
     /**
@@ -86,6 +101,7 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
     @TableField(typeHandler = JacksonRawTypeHandler.class)
     @BigField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    @DbColumn(comment = "支付通道信息列表")
     private List<PayChannelInfo> payChannelInfo;
 
     /**
@@ -95,21 +111,26 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
     @TableField(typeHandler = JacksonRawTypeHandler.class)
     @BigField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    @DbColumn(comment = "退款信息列表")
     private List<RefundableInfo> refundableInfo;
 
     /**
      * 支付状态
      * @see PayStatusCode#TRADE_PROGRESS
      */
+    @DbColumn(comment = "支付状态")
     private String payStatus;
 
     /** 支付时间 */
+    @DbColumn(comment = "支付时间")
     private LocalDateTime payTime;
 
     /** 支付终端ip */
+    @DbColumn(comment = "支付终端ip")
     private String clientIp;
 
     /** 过期时间 */
+    @DbColumn(comment = "过期时间")
     private LocalDateTime expiredTime;
 
     @Override

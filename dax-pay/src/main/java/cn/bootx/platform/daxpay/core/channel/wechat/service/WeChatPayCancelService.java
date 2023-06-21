@@ -23,7 +23,10 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+
+import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.REFUND_PROCESS_FAIL;
 
 /**
  * 微信支付关闭和退款
@@ -76,6 +79,12 @@ public class WeChatPayCancelService {
             .build()
             .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         // 获取证书文件流
+        if (Objects.isNull(weChatPayConfig.getP12())){
+            String errorMsg = "微信p.12证书未配置，无法进行退款";
+            AsyncRefundLocal.setErrorMsg(errorMsg);
+            AsyncRefundLocal.setErrorCode(REFUND_PROCESS_FAIL);
+            throw new PayFailureException(errorMsg);
+        }
         byte[] fileBytes = uploadService.getFileBytes(weChatPayConfig.getP12());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(fileBytes);
         // 证书密码为 微信商户号
