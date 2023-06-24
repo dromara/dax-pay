@@ -69,7 +69,7 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
     /**
      * 更新钱包状态
      */
-    public void setUpStatus(Long walletId, int status) {
+    public void setUpStatus(Long walletId, String status) {
         lambdaUpdate().eq(Wallet::getId, walletId).set(Wallet::getStatus, status).update();
     }
 

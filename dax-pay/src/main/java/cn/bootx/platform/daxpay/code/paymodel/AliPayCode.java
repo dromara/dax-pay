@@ -10,10 +10,10 @@ public interface AliPayCode {
 
     // 认证类型
     /** 公钥 */
-    int AUTH_TYPE_KEY = 1;
+    String AUTH_TYPE_KEY = "key";
 
     /** 证书 */
-    int AUTH_TYPE_CART = 2;
+    String AUTH_TYPE_CART = "cart";
 
     // 渠道枚举
     /** 目前PC支付必填 */

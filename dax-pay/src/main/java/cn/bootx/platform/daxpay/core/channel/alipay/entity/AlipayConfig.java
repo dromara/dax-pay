@@ -73,7 +73,7 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
      * @see AliPayCode#AUTH_TYPE_KEY
      */
     @DbColumn(comment = "认证类型")
-    private Integer authType;
+    private String authType;
 
     /** 签名类型 RSA/RSA2 */
     @DbColumn(comment = "签名类型 RSA/RSA2")

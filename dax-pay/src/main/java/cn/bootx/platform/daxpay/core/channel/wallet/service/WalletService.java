@@ -133,7 +133,7 @@ public class WalletService {
         }
 
         // 充值类型
-        List<Integer> chargeLogType = Lists.newArrayList(WalletCode.LOG_RECHARGE, WalletCode.LOG_AUTO_RECHARGE,
+        List<String> chargeLogType = Lists.newArrayList(WalletCode.LOG_RECHARGE, WalletCode.LOG_AUTO_RECHARGE,
                 WalletCode.LOG_ADMIN_CHANGER);
 
         // 保证是充值类型 且充值金额大于0

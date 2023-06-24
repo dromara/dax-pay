@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.core.channel.wallet.entity;
 
+import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.daxpay.core.channel.base.entity.BasePayment;
 import cn.bootx.platform.daxpay.core.channel.wallet.convert.WalletConvert;
@@ -17,6 +18,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@DbTable(comment = "钱包交易记录")
 @Accessors(chain = true)
 @TableName("pay_wallet_payment")
 public class WalletPayment extends BasePayment implements EntityBaseFunction<WalletPaymentDto> {

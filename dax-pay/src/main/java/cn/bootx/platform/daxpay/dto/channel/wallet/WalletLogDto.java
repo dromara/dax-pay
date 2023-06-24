@@ -33,7 +33,7 @@ public class WalletLogDto extends BaseDto implements Serializable {
      * @see WalletCode
      */
     @Schema(description = "类型")
-    private Integer type;
+    private String type;
 
     @Schema(description = "交易记录ID")
     private Long paymentId;
@@ -45,10 +45,10 @@ public class WalletLogDto extends BaseDto implements Serializable {
     private String businessId;
 
     /**
-     * @see WalletCode
+     * @see WalletCode#OPERATION_SOURCE_SYSTEM
      */
     @Schema(description = " 1 系统操作  2管理员操作 3用户操作")
-    private Integer operationSource;
+    private String operationSource;
 
     @Schema(description = "金额")
     private BigDecimal amount;
