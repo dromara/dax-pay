@@ -4,7 +4,7 @@ package cn.bootx.platform.daxpay.code.paymodel;
  * 微信参数
  *
  * @author xxm
- * @date 2021/6/21
+ * @since 2021/6/21
  */
 public interface WeChatPayCode {
 

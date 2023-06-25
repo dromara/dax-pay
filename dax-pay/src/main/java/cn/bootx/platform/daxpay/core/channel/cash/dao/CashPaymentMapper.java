@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 现金支付
  *
  * @author xxm
- * @date 2021/6/23
+ * @since 2021/6/23
  */
 @Mapper
 public interface CashPaymentMapper extends BaseMapper<CashPayment> {

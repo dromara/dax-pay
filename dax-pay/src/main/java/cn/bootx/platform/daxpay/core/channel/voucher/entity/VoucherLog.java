@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * 储值卡日志
  *
  * @author xxm
- * @date 2022/3/17
+ * @since 2022/3/17
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

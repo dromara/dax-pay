@@ -31,7 +31,7 @@ import java.util.List;
  * 支付记录
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 @DbTable
 @EqualsAndHashCode(callSuper = true)

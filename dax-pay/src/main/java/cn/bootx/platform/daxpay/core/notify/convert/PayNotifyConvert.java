@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
  * 转换
  *
  * @author xxm
- * @date 2021/6/22
+ * @since 2021/6/22
  */
 @Mapper
 public interface PayNotifyConvert {

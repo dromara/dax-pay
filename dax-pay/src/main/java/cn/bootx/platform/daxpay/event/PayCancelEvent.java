@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
  * 支付撤销事件
  *
  * @author xxm
- * @date 2022/7/11
+ * @since 2022/7/11
  */
 @Data
 @Accessors(chain = true)

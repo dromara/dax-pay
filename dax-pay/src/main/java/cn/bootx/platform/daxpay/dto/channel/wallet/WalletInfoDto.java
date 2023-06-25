@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
  * 钱包综合信息
  *
  * @author xxm
- * @date 2022/3/13
+ * @since 2022/3/13
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 钱包日志相关接口
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 @Tag(name = "钱包日志相关的接口")
 @RestController

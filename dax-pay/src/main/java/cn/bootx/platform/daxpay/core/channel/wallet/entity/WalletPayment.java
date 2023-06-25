@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  * 钱包交易记录表
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

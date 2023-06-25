@@ -6,7 +6,7 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  * 异步退款线程变量
  *
  * @author xxm
- * @date 2022/3/9
+ * @since 2022/3/9
  */
 public final class AsyncRefundLocal {
 

@@ -4,7 +4,7 @@ package cn.bootx.platform.daxpay.code.paymodel;
  * 支付宝支付参数
  *
  * @author xxm
- * @date 2021/2/27
+ * @since 2021/2/27
  */
 public interface AliPayCode {
 

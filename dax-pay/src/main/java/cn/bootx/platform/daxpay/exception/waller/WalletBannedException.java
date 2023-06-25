@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.code.PaymentErrorCode;
  * 钱包被禁用
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 public class WalletBannedException extends BizException {
 

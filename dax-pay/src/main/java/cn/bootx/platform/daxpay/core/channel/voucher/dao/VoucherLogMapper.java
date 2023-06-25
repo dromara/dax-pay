@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author xxm
- * @date 2022/3/19
+ * @since 2022/3/19
  */
 @Mapper
 public interface VoucherLogMapper extends BaseMapper<VoucherLog> {

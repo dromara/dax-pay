@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
  * DaxPay 支付开发平台
  *
  * @author xxm
- * @date 2023/4/20
+ * @since 2023/4/20
  */
 @Slf4j
 @ConfigurationPropertiesScan

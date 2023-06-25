@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
  * 现金支付记录
  *
  * @author xxm
- * @date 2021/6/23
+ * @since 2021/6/23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

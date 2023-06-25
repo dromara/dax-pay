@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 /**
  * @author xxm
- * @date 2022/3/2
+ * @since 2022/3/2
  */
 @Mapper
 public interface RefundConvert {

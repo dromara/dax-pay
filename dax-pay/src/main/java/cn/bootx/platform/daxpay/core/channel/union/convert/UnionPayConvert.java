@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 /**
  * @author xxm
- * @date 2022/3/11
+ * @since 2022/3/11
  */
 @Mapper
 public interface UnionPayConvert {

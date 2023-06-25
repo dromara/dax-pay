@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.code.PaymentErrorCode;
  * 付款正在处理中
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 public class PayIsProcessingException extends BizException {
 

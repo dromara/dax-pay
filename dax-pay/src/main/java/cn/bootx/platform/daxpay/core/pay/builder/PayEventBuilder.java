@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
  * 支付事件生成器
  *
  * @author xxm
- * @date 2022/7/11
+ * @since 2022/7/11
  */
 @UtilityClass
 public class PayEventBuilder {

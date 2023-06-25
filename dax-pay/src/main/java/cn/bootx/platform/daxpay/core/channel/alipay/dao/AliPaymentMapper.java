@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 支付宝支付
  *
  * @author xxm
- * @date 2021/2/26
+ * @since 2021/2/26
  */
 @Mapper
 public interface AliPaymentMapper extends BaseMapper<AliPayment> {

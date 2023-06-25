@@ -11,7 +11,7 @@ import static cn.bootx.platform.common.core.annotation.QueryParam.CompareTypeEnu
  * 支付通道配置 编码见 @see {@link cn.bootx.platform.daxpay.code.pay.PayChannelCode}
  *
  * @author xxm
- * @date 2023-05-24
+ * @since 2023-05-24
  */
 @Data
 @Schema(title = "支付通道配置")

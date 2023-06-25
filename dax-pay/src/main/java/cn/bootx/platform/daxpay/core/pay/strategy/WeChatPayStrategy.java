@@ -36,7 +36,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
  * 微信支付
  *
  * @author xxm
- * @date 2021/4/5
+ * @since 2021/4/5
  */
 @Scope(SCOPE_PROTOTYPE)
 @Component

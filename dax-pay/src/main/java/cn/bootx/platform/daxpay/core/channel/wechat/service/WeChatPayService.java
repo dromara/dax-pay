@@ -43,7 +43,7 @@ import static cn.bootx.platform.daxpay.code.pay.PaySyncStatus.WAIT_BUYER_PAY;
  * 微信支付
  *
  * @author xxm
- * @date 2021/3/2
+ * @since 2021/3/2
  */
 @Slf4j
 @Service

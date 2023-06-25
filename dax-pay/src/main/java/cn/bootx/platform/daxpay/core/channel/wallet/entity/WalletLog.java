@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  * 钱包日志
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -48,7 +48,7 @@ public class WalletLog extends MpBaseEntity implements EntityBaseFunction<Wallet
 
     /**
      * 操作类型
-     * @see
+     * @see cn.bootx.platform.daxpay.code.paymodel.WalletCode#OPERATION_SOURCE_USER
      */
     @DbColumn(comment = "操作类型")
     private String operationSource;

@@ -24,7 +24,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
  * 钱包支付策略
  *
  * @author xxm
- * @date 2020/12/11
+ * @since 2020/12/11
  */
 @Scope(SCOPE_PROTOTYPE)
 @Component
@@ -52,10 +52,9 @@ public class WalletPayStrategy extends AbsPayStrategy {
     @Override
     public void doBeforePayHandler() {
         try {
-            // 支付宝参数验证
+            // 钱包参数验证
             String extraParamsJson = this.getPayWayParam().getExtraParamsJson();
             if (StrUtil.isNotBlank(extraParamsJson)) {
-
                 WalletPayParam walletPayParam = JSONUtil.toBean(extraParamsJson, WalletPayParam.class);
                 this.wallet = walletService.getNormalWalletById(walletPayParam.getWalletId());
             }
@@ -74,7 +73,12 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        walletPayService.pay(getPayWayParam().getAmount(), this.getPayment(), this.wallet);
+        // 异步支付方式时使用冻结方式
+        if (this.getPayment().isAsyncPayMode()){
+            walletPayService.freezeBalance(getPayWayParam().getAmount(), this.getPayment(), this.wallet);
+        } else {
+            walletPayService.pay(getPayWayParam().getAmount(), this.getPayment(), this.wallet);
+        }
         walletPaymentService.savePayment(this.getPayment(), this.getPayParam(), this.getPayWayParam(), this.wallet);
     }
 
@@ -83,6 +87,9 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
+        if (this.getPayment().isAsyncPayMode()){
+            walletPayService.success(this.getPayment().getId());
+        }
         walletPaymentService.updateSuccess(this.getPayment().getId());
     }
 
@@ -91,7 +98,10 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doCloseHandler() {
-        walletPayService.close(this.getPayment().getId());
+        if (this.getPayment().isAsyncPayMode()){
+            walletPayService.success(this.getPayment().getId());
+        }
+        walletPayService.close(this.getPayment().getId(),this.getPayment().isAsyncPayMode());
         walletPaymentService.updateClose(this.getPayment().getId());
     }
 

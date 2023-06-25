@@ -12,7 +12,7 @@ import static cn.bootx.platform.daxpay.code.pay.PaySyncStatus.NOT_SYNC;
  * 支付网关通知状态对象
  *
  * @author xxm
- * @date 2021/4/21
+ * @since 2021/4/21
  */
 @Data
 @Accessors(chain = true)

@@ -31,7 +31,7 @@ import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.*;
  * 支付超时处理
  *
  * @author xxm
- * @date 2022/7/13
+ * @since 2022/7/13
  */
 @Slf4j
 @Service

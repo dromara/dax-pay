@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * 退款方式参数
  *
  * @author xxm
- * @date 2022/3/2
+ * @since 2022/3/2
  */
 @Data
 @Accessors(chain = true)

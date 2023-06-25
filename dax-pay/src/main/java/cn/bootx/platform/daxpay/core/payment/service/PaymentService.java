@@ -28,7 +28,7 @@ import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.TRADE_PROGRESS;
  * 支付记录
  *
  * @author xxm
- * @date 2021/3/8
+ * @since 2021/3/8
  */
 @Slf4j
 @Service

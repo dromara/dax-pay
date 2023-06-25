@@ -11,7 +11,7 @@ import java.util.List;
  * 微信支付配置参数
  *
  * @author xxm
- * @date 2022/7/7
+ * @since 2022/7/7
  */
 @Data
 @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)

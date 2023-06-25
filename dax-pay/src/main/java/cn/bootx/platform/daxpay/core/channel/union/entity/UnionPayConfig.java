@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
  * 云闪付
  *
  * @author xxm
- * @date 2022/3/11
+ * @since 2022/3/11
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

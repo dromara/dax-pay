@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.code.PaymentErrorCode;
  * 钱包日志错误
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 public class WalletLogError extends FatalException {
 

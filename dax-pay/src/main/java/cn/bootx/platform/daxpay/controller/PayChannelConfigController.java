@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * 支付通道配置
  *
  * @author xxm
- * @date 2023-05-24
+ * @since 2023-05-24
  */
 @Tag(name = "支付通道配置")
 @RestController

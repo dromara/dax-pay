@@ -24,11 +24,11 @@ import java.util.List;
  * 钱包
  *
  * @author xxm
- * @date 2021/2/24
+ * @since 2021/2/24
  */
 @Tag(name = "钱包相关的接口")
 @RestController
-@RequestMapping("wallet")
+@RequestMapping("/wallet")
 @AllArgsConstructor
 public class WalletController {
 

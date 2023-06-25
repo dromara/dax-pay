@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
  * 商户应用支付配置
  *
  * @author xxm
- * @date 2023-05-19
+ * @since 2023-05-19
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

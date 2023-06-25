@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
  * 支付宝转换
  *
  * @author xxm
- * @date 2021/7/5
+ * @since 2021/7/5
  */
 @Mapper
 public interface AlipayConvert {

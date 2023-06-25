@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * 结算台发起支付参数
  *
  * @author xxm
- * @date 2022/2/23
+ * @since 2022/2/23
  */
 @Data
 @Accessors(chain = true)
@@ -46,5 +46,8 @@ public class CashierSinglePayParam {
 
     @Schema(description = "储值卡")
     private String voucherNo;
+
+    @Schema(description = "钱包ID")
+    private String walletId;
 
 }

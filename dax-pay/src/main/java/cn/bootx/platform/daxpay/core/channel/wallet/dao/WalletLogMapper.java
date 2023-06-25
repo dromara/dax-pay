@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 钱包日志
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 @Mapper
 public interface WalletLogMapper extends BaseMapper<WalletLog> {

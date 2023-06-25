@@ -11,7 +11,7 @@ import static cn.bootx.platform.common.core.annotation.QueryParam.CompareTypeEnu
  * 商户
  *
  * @author xxm
- * @date 2023-05-17
+ * @since 2023-05-17
  */
 @Data
 @Schema(title = "商户")

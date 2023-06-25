@@ -18,7 +18,7 @@ import java.util.List;
  * 支付通道配置
  *
  * @author xxm
- * @date 2023-05-24
+ * @since 2023-05-24
  */
 @Repository
 @RequiredArgsConstructor

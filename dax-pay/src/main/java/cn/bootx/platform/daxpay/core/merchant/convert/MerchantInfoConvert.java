@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
  * 商户
  *
  * @author xxm
- * @date 2023-05-17
+ * @since 2023-05-17
  */
 @Mapper
 public interface MerchantInfoConvert {

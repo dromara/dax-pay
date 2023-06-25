@@ -6,6 +6,7 @@ import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayWayExtraCode;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
+import cn.bootx.platform.daxpay.param.channel.wallet.WalletPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.channel.alipay.AliPayParam;
@@ -27,7 +28,7 @@ import java.util.Map;
  * 支付方式工具类
  *
  * @author xxm
- * @date 2022/7/12
+ * @since 2022/7/12
  */
 @UtilityClass
 public class PayWaylUtil {
@@ -97,6 +98,10 @@ public class PayWaylUtil {
                     list.add(voucherNo);
                 }
                 return JSONUtil.toJsonStr(new VoucherPayParam().setCardNoList(list));
+            }
+            case WALLET: {
+                String walletId = map.get(PayWayExtraCode.WALLET_ID);
+                return JSONUtil.toJsonStr(new WalletPayParam().setWalletId(Long.valueOf(walletId)));
             }
             default: {
                 return null;

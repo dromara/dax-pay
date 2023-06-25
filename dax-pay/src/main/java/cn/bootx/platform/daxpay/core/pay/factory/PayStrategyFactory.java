@@ -20,7 +20,7 @@ import static cn.bootx.platform.daxpay.code.pay.PayChannelEnum.*;
  * 支付策略工厂
  *
  * @author xxm
- * @date 2020/12/11
+ * @since 2020/12/11
  */
 public class PayStrategyFactory {
 

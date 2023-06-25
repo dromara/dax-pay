@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
  * 支付宝支付配置
  *
  * @author xxm
- * @date 2020/12/15
+ * @since 2020/12/15
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

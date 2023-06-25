@@ -12,7 +12,7 @@ import java.util.List;
  * 结算台发起支付参数
  *
  * @author xxm
- * @date 2022/2/23
+ * @since 2022/2/23
  */
 @Data
 @Accessors(chain = true)

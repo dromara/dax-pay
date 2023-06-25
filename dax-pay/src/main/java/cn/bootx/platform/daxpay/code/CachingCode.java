@@ -4,7 +4,7 @@ package cn.bootx.platform.daxpay.code;
  * 支付服务缓存
  *
  * @author xxm
- * @date 2022/7/11
+ * @since 2022/7/11
  */
 public interface CachingCode {
 

@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * 可退款信息
  *
  * @author xxm
- * @date 2022/3/2
+ * @since 2022/3/2
  */
 @Data
 @Accessors(chain = true)

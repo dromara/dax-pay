@@ -24,7 +24,7 @@ import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.TRADE_UNKNOWN;
  * 支付单查询
  *
  * @author xxm
- * @date 2021/6/28
+ * @since 2021/6/28
  */
 @Slf4j
 @Service

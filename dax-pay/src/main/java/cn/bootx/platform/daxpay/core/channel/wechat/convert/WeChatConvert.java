@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers;
  * 微信转换类
  *
  * @author xxm
- * @date 2021/6/21
+ * @since 2021/6/21
  */
 @Mapper
 public interface WeChatConvert {

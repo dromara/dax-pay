@@ -12,7 +12,7 @@ import java.util.Objects;
  * 支付通道枚举
  *
  * @author xxm
- * @date 2021/7/26
+ * @since 2021/7/26
  */
 @Getter
 @RequiredArgsConstructor

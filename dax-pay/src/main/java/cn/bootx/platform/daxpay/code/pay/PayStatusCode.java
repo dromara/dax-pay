@@ -4,7 +4,7 @@ package cn.bootx.platform.daxpay.code.pay;
  * 支付状态
  *
  * @author xxm
- * @date 2021/3/1
+ * @since 2021/3/1
  */
 public interface PayStatusCode {
 

@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 微信支付配置
  *
  * @author xxm
- * @date 2021/3/19
+ * @since 2021/3/19
  */
 @Mapper
 public interface WeChatPayConfigMapper extends BaseMapper<WeChatPayConfig> {

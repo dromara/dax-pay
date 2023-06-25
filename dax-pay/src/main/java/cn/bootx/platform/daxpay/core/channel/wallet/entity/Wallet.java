@@ -2,8 +2,10 @@ package cn.bootx.platform.daxpay.core.channel.wallet.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.paymodel.WalletCode;
 import cn.bootx.platform.daxpay.core.channel.wallet.convert.WalletConvert;
 import cn.bootx.platform.daxpay.dto.channel.wallet.WalletDto;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +19,7 @@ import java.math.BigDecimal;
  * 钱包
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -27,6 +29,7 @@ import java.math.BigDecimal;
 public class Wallet extends MpBaseEntity implements EntityBaseFunction<WalletDto> {
 
     /** 关联用户id */
+    @DbMySqlIndex
     @DbColumn(comment = "关联用户id")
     private Long userId;
 
@@ -36,9 +39,12 @@ public class Wallet extends MpBaseEntity implements EntityBaseFunction<WalletDto
 
     /** 预冻结额度 */
     @DbColumn(comment = "预冻结额度")
-    private BigDecimal freezeQuota;
+    private BigDecimal freezeBalance;
 
-    /** 状态 */
+    /**
+     * 状态
+     * @see WalletCode#STATUS_FORBIDDEN
+     */
     private String status;
 
     @Override

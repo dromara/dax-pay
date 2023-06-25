@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * 商户应用支付配置
  *
  * @author xxm
- * @date 2023-05-19
+ * @since 2023-05-19
  */
 @Repository
 @RequiredArgsConstructor

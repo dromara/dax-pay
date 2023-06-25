@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 聚合支付
  *
  * @author xxm
- * @date 2022/3/6
+ * @since 2022/3/6
  */
 @IgnoreAuth
 @Tag(name = "聚合支付")

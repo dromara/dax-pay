@@ -10,7 +10,7 @@ import java.util.List;
  * 储值卡支付参数
  *
  * @author xxm
- * @date 2022/3/14
+ * @since 2022/3/14
  */
 @Data
 @Accessors(chain = true)

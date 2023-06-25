@@ -23,7 +23,7 @@ import static cn.bootx.platform.daxpay.core.merchant.entity.MerchantInfo.Fields.
  * 商户
  *
  * @author xxm
- * @date 2023-05-17
+ * @since 2023-05-17
  */
 @DbMySqlIndex(fields = code, type = MySqlIndexType.UNIQUE, comment = "商户号唯一索引")
 @EqualsAndHashCode(callSuper = true)

@@ -4,7 +4,7 @@ package cn.bootx.platform.daxpay.code.pay;
  * 支付网关同步状态
  *
  * @author xxm
- * @date 2021/4/21
+ * @since 2021/4/21
  */
 public interface PaySyncStatus {
 

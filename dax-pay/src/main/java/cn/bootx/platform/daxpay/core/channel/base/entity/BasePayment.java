@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * 基础支付记录类
  *
  * @author xxm
- * @date 2021/2/25
+ * @since 2021/2/25
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

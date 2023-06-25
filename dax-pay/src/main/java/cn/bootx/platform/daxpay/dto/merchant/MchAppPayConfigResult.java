@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
  * 支付通道配置
  *
  * @author xxm
- * @date 2023/5/24
+ * @since 2023/5/24
  */
 @Data
 @Accessors(chain = true)

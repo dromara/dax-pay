@@ -7,7 +7,7 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  * 异步支付线程变量
  *
  * @author xxm
- * @date 2021/4/21
+ * @since 2021/4/21
  */
 public final class AsyncPayInfoLocal {
 

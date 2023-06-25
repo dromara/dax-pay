@@ -4,66 +4,75 @@ package cn.bootx.platform.daxpay.code.paymodel;
  * 钱包涉及到的常量
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 public interface WalletCode {
 
     /* 操作类型 */
     /** 系统操作 */
-    String OPERATION_SOURCE_SYSTEM = "1";
+    String OPERATION_SOURCE_SYSTEM = "system";
 
     /** 管理员操作 */
-    String OPERATION_SOURCE_ADMIN = "";
+    String OPERATION_SOURCE_ADMIN = "admin";
 
     /** 用户操作 */
-    String OPERATION_SOURCE_USER = "3";
+    String OPERATION_SOURCE_USER = "user";
 
     /* 钱包状态 */
     /** 钱包状态-正常 */
-    String STATUS_NORMAL = "";
+    String STATUS_NORMAL = "normal";
 
     /** 钱包状态-禁用 */
-    String STATUS_FORBIDDEN = "";
+    String STATUS_FORBIDDEN = "forbidden";
 
     /* 日志类型 */
     /**
      * 钱包日志-开通
      */
-    String LOG_ACTIVE = "";
+    String LOG_ACTIVE = "active";
 
     /**
-     * 钱包日志-主动充值
+     * 钱包日志-Admin操作余额变动
      */
-    String LOG_RECHARGE = "";
+    String LOG_ADMIN_CHANGER = "adminChanger";
 
     /**
-     * 钱包日志-自动充值
+     * 钱包日志-预冻结额度
      */
-    String LOG_AUTO_RECHARGE = "";
+    String LOG_FREEZE_BALANCE = "freeze";
 
     /**
-     * 钱包日志-Admin余额变动
+     * 钱包日志-解冻额度
      */
-    String LOG_ADMIN_CHANGER = "";
+    String LOG_UNFREEZE_BALANCE = "unfreeze";
 
     /**
-     * 钱包日志-支付
+     * 钱包日志-解冻并扣减余额
      */
-    String LOG_PAY = "";
+    String LOG_REDUCE_AND_UNFREEZE_BALANCE = "reduceAndUnfreeze";
 
     /**
-     * 钱包日志-系统扣除余额的日志
+     * 钱包日志-直接支付
      */
-    String LOG_SYSTEM_REDUCE_BALANCE = "";
+    String LOG_PAY = "pay";
+    /**
+     * 钱包日志-取消支付
+     */
+    String LOG_CLOSE_PAY = "closePay";
 
     /**
      * 钱包日志-退款
      */
-    String LOG_REFUND = "";
+    String LOG_REFUND = "refund";
 
     /**
-     * 钱包日志-取消支付返还
+     * 锁定钱包
      */
-    String LOG_PAY_CLOSE = "";
+    String LOG_LOCK = "lock";
+
+    /**
+     * 解锁钱包
+     */
+    String LOG_UNLOCK = "unlock";
 
 }

@@ -12,7 +12,7 @@ import java.util.Objects;
  * 支付宝支付方式
  *
  * @author xxm
- * @date 2021/7/2
+ * @since 2021/7/2
  */
 @UtilityClass
 public class AliPayWay {

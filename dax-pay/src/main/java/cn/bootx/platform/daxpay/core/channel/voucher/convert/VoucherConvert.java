@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 /**
  * @author xxm
- * @date 2022/3/14
+ * @since 2022/3/14
  */
 @Mapper
 public interface VoucherConvert {

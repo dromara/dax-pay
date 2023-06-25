@@ -43,7 +43,7 @@ import java.util.*;
  * 结算台
  *
  * @author xxm
- * @date 2022/2/23
+ * @since 2022/2/23
  */
 @Slf4j
 @Service
@@ -79,6 +79,7 @@ public class CashierService {
         map.put(PayWayExtraCode.AUTH_CODE, param.getAuthCode());
         map.put(PayWayExtraCode.OPEN_ID, param.getOpenId());
         map.put(PayWayExtraCode.VOUCHER_NO, param.getVoucherNo());
+        map.put(PayWayExtraCode.WALLET_ID, param.getWalletId());
         String extraParamsJson = PayWaylUtil.buildExtraParamsJson(param.getPayChannel(), map);
         payWayParam.setExtraParamsJson(extraParamsJson);
 

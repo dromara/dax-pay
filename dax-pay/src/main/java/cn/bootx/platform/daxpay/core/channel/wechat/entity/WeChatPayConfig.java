@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
  * 微信支付配置
  *
  * @author xxm
- * @date 2021/3/1
+ * @since 2021/3/1
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

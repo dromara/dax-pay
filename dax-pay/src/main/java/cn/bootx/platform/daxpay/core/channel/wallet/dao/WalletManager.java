@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * 钱包管理
  *
  * @author xxm
- * @date 2020/12/8
+ * @since 2020/12/8
  */
 @Repository
 @RequiredArgsConstructor
@@ -34,14 +34,25 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
     private final WalletMapper walletMapper;
 
     /**
-     * 增加余额
-     * @param walletId 钱包
+     * 预占额度
+     * @param walletId 钱包ID
      * @param amount 金额
      * @return 更新数量
      */
-    public int increaseBalance(Long walletId, BigDecimal amount) {
+    public int freezeBalance(Long walletId, BigDecimal amount){
         Long userId = SecurityUtil.getUserIdOrDefaultId();
-        return walletMapper.increaseBalance(walletId, amount, userId, LocalDateTime.now());
+        return walletMapper.freezeBalance(walletId, amount, userId, LocalDateTime.now());
+    }
+
+    /**
+     * 解冻金额
+     * @param walletId 钱包ID
+     * @param amount 金额
+     * @return 更新数量
+     */
+    public int unfreezeBalance(Long walletId, BigDecimal amount){
+        Long userId = SecurityUtil.getUserIdOrDefaultId();
+        return walletMapper.unfreezeBalance(walletId, amount, userId, LocalDateTime.now());
     }
 
     /**
@@ -56,21 +67,36 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
     }
 
     /**
-     * 扣减余额-允许扣成负数
+     * 扣减余额同时解除预冻结的额度
      * @param walletId 钱包ID
      * @param amount 扣减金额
+     * @return 操作条数
+     */
+    public int reduceAndUnfreezeBalance(Long walletId, BigDecimal amount) {
+        Long userId = SecurityUtil.getUserIdOrDefaultId();
+        return walletMapper.reduceAndUnfreezeBalance(walletId, amount, userId, LocalDateTime.now());
+    }
+
+    /**
+     * 增加余额
+     * @param walletId 钱包
+     * @param amount 金额
+     * @return 更新数量
+     */
+    public int increaseBalance(Long walletId, BigDecimal amount) {
+        Long userId = SecurityUtil.getUserIdOrDefaultId();
+        return walletMapper.increaseBalance(walletId, amount, userId, LocalDateTime.now());
+    }
+
+    /**
+     * 更改余额-允许扣成负数
+     * @param walletId 钱包ID
+     * @param amount 更改的额度, 正数增加,负数减少
      * @return 剩余条数
      */
     public int reduceBalanceUnlimited(Long walletId, BigDecimal amount) {
         Long userId = SecurityUtil.getUserIdOrDefaultId();
         return walletMapper.reduceBalanceUnlimited(walletId, amount, userId, LocalDateTime.now());
-    }
-
-    /**
-     * 更新钱包状态
-     */
-    public void setUpStatus(Long walletId, String status) {
-        lambdaUpdate().eq(Wallet::getId, walletId).set(Wallet::getStatus, status).update();
     }
 
     /**

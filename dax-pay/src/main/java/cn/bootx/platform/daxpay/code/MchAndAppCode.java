@@ -4,7 +4,7 @@ package cn.bootx.platform.daxpay.code;
  * 商户和应用相关编码
  *
  * @author xxm
- * @date 2023/6/12
+ * @since 2023/6/12
  */
 public interface MchAndAppCode {
 

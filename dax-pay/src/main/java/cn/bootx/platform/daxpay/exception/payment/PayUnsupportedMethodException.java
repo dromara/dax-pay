@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.code.PaymentErrorCode;
  * 付款方式不支持异常
  *
  * @author xxm
- * @date 2020/12/9
+ * @since 2020/12/9
  */
 public class PayUnsupportedMethodException extends FatalException {
 
