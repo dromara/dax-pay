@@ -8,8 +8,6 @@ import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletLogManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletLog;
-import cn.bootx.platform.daxpay.exception.waller.WalletBannedException;
-import cn.bootx.platform.daxpay.exception.waller.WalletNotExistsException;
 import cn.bootx.platform.daxpay.param.channel.wallet.WalletRechargeParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * 钱包的相关操作
  *
  * @author xxm
- * @since 2020/12/8
+ * @since 2023/6/26
  */
 @Slf4j
 @Service
@@ -79,8 +75,8 @@ public class WalletService {
                         .setUserId(wallet.getUserId())
                         .setAmount(BigDecimal.ZERO)
                         .setType(WalletCode.LOG_ACTIVE)
-                        .setRemark("激活钱包")
-                        .setOperationSource(WalletCode.OPERATION_SOURCE_USER))
+                        .setRemark("批量开通钱包")
+                        .setOperationSource(WalletCode.OPERATION_SOURCE_ADMIN))
                 .collect(Collectors.toList());
         walletLogManager.saveAll(walletLogs);
     }
@@ -141,31 +137,5 @@ public class WalletService {
                 .setRemark(String.format("系统变动余额 %.2f ", param.getAmount()))
                 .setOperationSource(WalletCode.OPERATION_SOURCE_ADMIN);
         walletLogManager.save(walletLog);
-    }
-
-    /**
-     * 查询钱包，如果钱包不存在或者钱包被禁用将抛出异常
-     */
-    public Wallet getNormalWalletById(Long walletId) {
-        // 查询Wallet
-        Wallet wallet = walletManager.findById(walletId).orElseThrow(WalletNotExistsException::new);
-        // 是否被禁用
-        if (Objects.equals(WalletCode.STATUS_FORBIDDEN, wallet.getStatus())) {
-            throw new WalletBannedException();
-        }
-        return wallet;
-    }
-
-    /**
-     * 查询钱包，如果钱包不存在或者钱包被禁用将抛出异常
-     */
-    public Wallet getNormalWalletByUserId(Long userId) {
-        // 查询Wallet
-        Wallet wallet = walletManager.findByUser(userId).orElseThrow(WalletNotExistsException::new);
-        // 是否被禁用
-        if (Objects.equals(WalletCode.STATUS_FORBIDDEN, wallet.getStatus())) {
-            throw new WalletBannedException();
-        }
-        return wallet;
     }
 }

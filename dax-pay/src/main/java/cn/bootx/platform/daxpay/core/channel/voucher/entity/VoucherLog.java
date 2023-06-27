@@ -32,9 +32,9 @@ public class VoucherLog extends MpBaseEntity {
 
     /**
      * 类型
-     * @see VoucherCode
+     * @see VoucherCode#LOG_PAY
      */
-    private Integer type;
+    private String type;
 
     /** 交易记录ID */
     private Long paymentId;

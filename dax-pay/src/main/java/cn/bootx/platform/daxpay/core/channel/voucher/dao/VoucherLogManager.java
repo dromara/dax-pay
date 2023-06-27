@@ -20,7 +20,7 @@ public class VoucherLogManager extends BaseManager<VoucherLogMapper, VoucherLog>
     /**
      * 根据支付id和类型进行查询
      */
-    public List<VoucherLog> findByPaymentIdAndType(Long paymentId, int type) {
+    public List<VoucherLog> findByPaymentIdAndType(Long paymentId, String type) {
         return lambdaQuery().eq(VoucherLog::getPaymentId, paymentId).eq(VoucherLog::getType, type).list();
     }
 

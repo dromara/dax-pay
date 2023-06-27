@@ -38,7 +38,7 @@ public class WalletPayService {
     private final WalletLogManager walletLogManager;
 
     /**
-     * 支付前冻结余额操作
+     * 支付前冻结余额
      * @param amount 付款金额
      * @param payment 支付记录
      * @param wallet 钱包
@@ -63,9 +63,9 @@ public class WalletPayService {
     }
 
     /**
-     * 支付成功更新
+     * 支付成功, 进行扣款
      */
-    public void success(Long paymentId){
+    public void paySuccess(Long paymentId){
         // 钱包支付记录
         walletPaymentManager.findByPaymentId(paymentId).ifPresent(walletPayment -> {
             Optional<Wallet> walletOpt = walletManager.findById(walletPayment.getWalletId());

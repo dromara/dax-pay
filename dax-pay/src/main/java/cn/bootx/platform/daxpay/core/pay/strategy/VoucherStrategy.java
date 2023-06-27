@@ -45,7 +45,7 @@ public class VoucherStrategy extends AbsPayStrategy {
      */
     @Override
     public void doBeforePayHandler() {
-        // 获取并校验余额
+        // 获取并校验储值卡
         this.vouchers = voucherPayService.getAndCheckVoucher(this.getPayWayParam());
     }
 
@@ -54,8 +54,12 @@ public class VoucherStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        voucherPayService.pay(getPayWayParam().getAmount(), this.getPayment(), this.vouchers);
-        voucherPaymentService.savePayment(getPayment(), getPayParam(), getPayWayParam(), vouchers);
+        if (this.getPayment().isAsyncPayMode()){
+            voucherPayService.freezeBalance(this.getPayWayParam().getAmount(), this.getPayment(), this.vouchers);
+        } else {
+             voucherPayService.pay(this.getPayWayParam().getAmount(), this.getPayment(), this.vouchers);
+        }
+        voucherPaymentService.savePayment(this.getPayment(), getPayParam(), getPayWayParam(), vouchers);
     }
 
     /**
@@ -63,6 +67,9 @@ public class VoucherStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
+        if (this.getPayment().isAsyncPayMode()){
+            voucherPayService.paySuccess(this.getPayment().getId());
+        }
         voucherPaymentService.updateSuccess(this.getPayment().getId());
     }
 
@@ -71,7 +78,7 @@ public class VoucherStrategy extends AbsPayStrategy {
      */
     @Override
     public void doCloseHandler() {
-        voucherPayService.close(this.getPayment().getId());
+        voucherPayService.close(this.getPayment().getId(), this.getPayment().isAsyncPayMode());
         voucherPaymentService.updateClose(this.getPayment().getId());
     }
 

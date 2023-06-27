@@ -2,13 +2,15 @@ package cn.bootx.platform.daxpay.core.pay.strategy;
 
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.paymodel.WalletCode;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPaymentService;
-import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletService;
+import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
+import cn.bootx.platform.daxpay.exception.waller.WalletBannedException;
 import cn.bootx.platform.daxpay.exception.waller.WalletLackOfBalanceException;
 import cn.bootx.platform.daxpay.param.channel.wallet.WalletPayParam;
 import cn.hutool.core.util.StrUtil;
@@ -17,6 +19,8 @@ import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -35,7 +39,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
 
     private final WalletPayService walletPayService;
 
-    private final WalletService walletService;
+    private final WalletQueryService walletQueryService;
 
     private final PaymentService paymentService;
 
@@ -51,16 +55,21 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doBeforePayHandler() {
+        WalletPayParam walletPayParam = new WalletPayParam();
         try {
             // 钱包参数验证
             String extraParamsJson = this.getPayWayParam().getExtraParamsJson();
             if (StrUtil.isNotBlank(extraParamsJson)) {
-                WalletPayParam walletPayParam = JSONUtil.toBean(extraParamsJson, WalletPayParam.class);
-                this.wallet = walletService.getNormalWalletById(walletPayParam.getWalletId());
+                walletPayParam = JSONUtil.toBean(extraParamsJson, WalletPayParam.class);
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             throw new PayFailureException("支付参数错误");
+        }
+        // 获取钱包
+        this.wallet = walletQueryService.getWallet(walletPayParam.getWalletId(),walletPayParam.getUserId());
+        // 是否被禁用
+        if (Objects.equals(WalletCode.STATUS_FORBIDDEN, this.wallet.getStatus())) {
+            throw new WalletBannedException();
         }
         // 判断余额
         if (BigDecimalUtil.compareTo(this.wallet.getBalance(), getPayWayParam().getAmount()) < 0) {
@@ -88,7 +97,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
     @Override
     public void doSuccessHandler() {
         if (this.getPayment().isAsyncPayMode()){
-            walletPayService.success(this.getPayment().getId());
+            walletPayService.paySuccess(this.getPayment().getId());
         }
         walletPaymentService.updateSuccess(this.getPayment().getId());
     }
@@ -99,7 +108,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
     @Override
     public void doCloseHandler() {
         if (this.getPayment().isAsyncPayMode()){
-            walletPayService.success(this.getPayment().getId());
+            walletPayService.paySuccess(this.getPayment().getId());
         }
         walletPayService.close(this.getPayment().getId(),this.getPayment().isAsyncPayMode());
         walletPaymentService.updateClose(this.getPayment().getId());

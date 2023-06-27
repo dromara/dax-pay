@@ -20,6 +20,9 @@ public interface PayWayExtraCode {
     /** 钱包ID */
     String WALLET_ID = "wallet_id";
 
+    /** 用户ID */
+    String USER_ID = "user_id";
+
     /** 同步通知路径 支付完成跳转的页面地址 */
     String RETURN_URL = "return_url";
 

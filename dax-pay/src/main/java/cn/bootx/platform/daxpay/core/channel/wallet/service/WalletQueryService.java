@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.core.channel.wallet.service;
 
+import cn.bootx.platform.common.core.entity.UserDetail;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
@@ -18,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * 钱包
  *
@@ -34,10 +37,18 @@ public class WalletQueryService {
     private final UserQueryService userQueryService;
 
     /**
-     * 根据ID查询Wallet
+     * 根据钱包ID查询Wallet
      */
     public WalletDto findById(Long walletId) {
         return walletManager.findById(walletId).map(Wallet::toDto).orElseThrow(DataNotExistException::new);
+    }
+
+
+    /**
+     * 根据用户ID查询钱包
+     */
+    public WalletDto findByUserId(Long userId) {
+        return walletManager.findByUser(userId).map(Wallet::toDto).orElseThrow(DataNotExistException::new);
     }
 
     /**
@@ -45,7 +56,7 @@ public class WalletQueryService {
      */
     public WalletDto findByUser() {
         Long userId = SecurityUtil.getUserId();
-        return walletManager.findByUser(userId).map(Wallet::toDto).orElseThrow(DataNotExistException::new);
+        return walletManager.findByUser(userId).map(Wallet::toDto).orElse(null);
     }
 
     /**
@@ -72,6 +83,28 @@ public class WalletQueryService {
      */
     public PageResult<UserInfoDto> pageByNotWallet(PageParam pageParam, UserInfoParam userInfoParam) {
         return MpUtil.convert2DtoPageResult(walletManager.pageByNotWallet(pageParam, userInfoParam));
+    }
+
+
+    /**
+     * 获取钱包, 获取顺序: 1. 显式传入的钱包ID 2. 显式传入的用户ID 3. 从系统中获取到的用户ID
+     *
+     */
+    public Wallet getWallet(Long walletId,Long userId){
+        Wallet wallet = null;
+        // 首先根据钱包ID查询
+        if (Objects.nonNull(walletId)) {
+            wallet = walletManager.findById(walletId).orElseThrow(null);
+        }
+        if (Objects.nonNull(wallet)){
+            return wallet;
+        }
+        // 根据用户id查询
+        if (Objects.isNull(userId)){
+            userId = SecurityUtil.getCurrentUser().map(UserDetail::getId).orElse(null);
+        }
+        return walletManager.findByUser(userId).orElse(null);
+
     }
 
 }

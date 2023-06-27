@@ -45,6 +45,7 @@ public class Wallet extends MpBaseEntity implements EntityBaseFunction<WalletDto
      * 状态
      * @see WalletCode#STATUS_FORBIDDEN
      */
+    @DbColumn(comment = "状态")
     private String status;
 
     @Override

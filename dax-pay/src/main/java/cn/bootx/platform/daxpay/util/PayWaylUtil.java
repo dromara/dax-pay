@@ -101,7 +101,11 @@ public class PayWaylUtil {
             }
             case WALLET: {
                 String walletId = map.get(PayWayExtraCode.WALLET_ID);
-                return JSONUtil.toJsonStr(new WalletPayParam().setWalletId(Long.valueOf(walletId)));
+                String userId = map.get(PayWayExtraCode.USER_ID);
+                WalletPayParam walletPayParam = new WalletPayParam()
+                        .setWalletId(Long.valueOf(walletId))
+                        .setUserId(Long.valueOf(userId));
+                return JSONUtil.toJsonStr(walletPayParam);
             }
             default: {
                 return null;

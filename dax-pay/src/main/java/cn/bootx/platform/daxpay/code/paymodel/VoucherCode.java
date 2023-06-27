@@ -9,38 +9,38 @@ package cn.bootx.platform.daxpay.code.paymodel;
 public interface VoucherCode {
 
     /**
-     * 状态-启用
+     * 状态-正常
      */
-    int STATUS_NORMAL = 1;
+    String STATUS_NORMAL = "normal";
 
     /**
      * 状态-停用
      */
-    int STATUS_FORBIDDEN = 2;
+    String STATUS_FORBIDDEN = "forbidden";
 
     /**
      * 储值卡日志-开通
      */
-    int LOG_ACTIVE = 1;
+    String LOG_ACTIVE = "active";
 
     /**
      * 储值卡日志-支付
      */
-    int LOG_PAY = 2;
+    String LOG_PAY = "pay";
 
     /**
      * 储值卡日志-退款
      */
-    int LOG_CLOSE = 3;
+    String LOG_CLOSE = "close";
 
     /**
      * 储值卡日志-退款
      */
-    int LOG_REFUND = 4;
+    String LOG_REFUND = "refund";
 
     /**
      * 储值卡日志-Admin余额变动
      */
-    int LOG_ADMIN_CHANGER = 4;
+    String LOG_ADMIN_CHANGER = "changer";
 
 }

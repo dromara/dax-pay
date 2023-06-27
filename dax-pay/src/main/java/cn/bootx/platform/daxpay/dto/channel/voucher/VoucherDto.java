@@ -42,9 +42,9 @@ public class VoucherDto extends BaseDto {
     private LocalDateTime endTime;
 
     /**
-     * @see VoucherCode
+     * @see VoucherCode#STATUS_FORBIDDEN
      */
     @Schema(description = "状态")
-    private Integer status;
+    private String status;
 
 }
