@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.core.channel.base.entity;
 
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import lombok.Data;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 public class BasePayment extends MpBaseEntity {
 
     /** 交易记录ID */
+    @DbMySqlIndex(comment = "交易记录索引")
     private Long paymentId;
 
     /** 交易金额 */
@@ -30,6 +32,7 @@ public class BasePayment extends MpBaseEntity {
     private BigDecimal refundableBalance;
 
     /** 关联的业务id */
+    @DbMySqlIndex(comment = "业务id索引")
     private String businessId;
 
     /**

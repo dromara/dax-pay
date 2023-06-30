@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
+import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherRecord;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
@@ -54,12 +55,13 @@ public class VoucherStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
+        List<VoucherRecord> voucherRecords;
         if (this.getPayment().isAsyncPayMode()){
-            voucherPayService.freezeBalance(this.getPayWayParam().getAmount(), this.getPayment(), this.vouchers);
+            voucherRecords = voucherPayService.freezeBalance(this.getPayWayParam().getAmount(), this.getPayment(), this.vouchers);
         } else {
-             voucherPayService.pay(this.getPayWayParam().getAmount(), this.getPayment(), this.vouchers);
+            voucherRecords = voucherPayService.pay(this.getPayWayParam().getAmount(), this.getPayment(), this.vouchers);
         }
-        voucherPaymentService.savePayment(this.getPayment(), getPayParam(), getPayWayParam(), vouchers);
+        voucherPaymentService.savePayment(this.getPayment(), getPayParam(), getPayWayParam(), voucherRecords);
     }
 
     /**
@@ -87,7 +89,7 @@ public class VoucherStrategy extends AbsPayStrategy {
      */
     @Override
     public void doRefundHandler() {
-        voucherPayService.refund(this.getPayment().getId(), this.getPayWayParam().getAmount());
+        voucherPayService.refund(this.getPayment().getId(), this.getPayWayParam().getAmount(),null);
         voucherPaymentService.updateRefund(this.getPayment().getId(), this.getPayWayParam().getAmount());
         paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(),
                 PayChannelEnum.VOUCHER);

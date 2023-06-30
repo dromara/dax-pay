@@ -24,19 +24,37 @@ public interface VoucherCode {
     String LOG_ACTIVE = "active";
 
     /**
-     * 储值卡日志-支付
+     * 钱包日志-预冻结额度
+     */
+    String LOG_FREEZE_BALANCE = "freeze";
+
+    /**
+     * 钱包日志-解冻额度
+     */
+    String LOG_UNFREEZE_BALANCE = "unfreeze";
+
+    /**
+     * 钱包日志-解冻并扣减余额
+     */
+    String LOG_REDUCE_AND_UNFREEZE_BALANCE = "reduceAndUnfreeze";
+
+    /**
+     * 钱包日志-直接支付
      */
     String LOG_PAY = "pay";
+    /**
+     * 钱包日志-取消支付
+     */
+    String LOG_CLOSE_PAY = "closePay";
 
     /**
-     * 储值卡日志-退款
+     * 钱包日志-退款到本卡中
      */
-    String LOG_CLOSE = "close";
-
+    String LOG_REFUND_SELF = "refundSelf";
     /**
-     * 储值卡日志-退款
+     * 钱包日志-统一退款到指定卡中
      */
-    String LOG_REFUND = "refund";
+    String LOG_REFUND_ONE = "refundOne";
 
     /**
      * 储值卡日志-Admin余额变动

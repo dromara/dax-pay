@@ -25,5 +25,4 @@ public class WalletPayParam implements Serializable {
     @Schema(description = "用户ID")
     private Long userId;
 
-
 }

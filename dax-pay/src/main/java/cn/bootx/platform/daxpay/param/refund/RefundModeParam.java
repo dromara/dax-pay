@@ -2,6 +2,8 @@ package cn.bootx.platform.daxpay.param.refund;
 
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
+import cn.bootx.platform.daxpay.param.channel.voucher.VoucherRefundParam;
+import cn.bootx.platform.daxpay.param.channel.wallet.WalletRefundParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -28,6 +30,13 @@ public class RefundModeParam {
 
     @Schema(description = "支付金额")
     private BigDecimal amount;
+
+    /**
+     * @see VoucherRefundParam
+     * @see WalletRefundParam
+     */
+    @Schema(description = "扩展参数的json字符串")
+    private String extraParamsJson;
 
     /**
      * 转换成支付方式参数

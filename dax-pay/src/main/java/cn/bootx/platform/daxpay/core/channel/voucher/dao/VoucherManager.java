@@ -33,7 +33,7 @@ public class VoucherManager extends BaseManager<VoucherMapper, Voucher> {
         return this.lambdaQuery()
             .ge(Objects.nonNull(param.getStartTime()), Voucher::getStartTime, param.getStartTime())
             .le(Objects.nonNull(param.getEndTime()), Voucher::getEndTime, param.getEndTime())
-            .eq(Objects.nonNull(param.getEnduring()), Voucher::getEnduring, param.getEnduring())
+            .eq(Objects.nonNull(param.getEnduring()), Voucher::isEnduring, param.getEnduring())
             .like(StrUtil.isNotBlank(param.getCardNo()), Voucher::getCardNo, param.getCardNo())
             .like(Objects.nonNull(param.getBatchNo()), Voucher::getBatchNo, param.getBatchNo())
             .orderByDesc(MpIdEntity::getId)

@@ -2,14 +2,13 @@ package cn.bootx.platform.daxpay.core.channel.voucher.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
-import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherPaymentManager;
-import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherPayment;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherRecord;
+import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 储值卡支付记录
@@ -36,19 +34,14 @@ public class VoucherPaymentService {
     /**
      * 添加支付记录
      */
-    public void savePayment(Payment payment, PayParam payParam, PayWayParam payMode, List<Voucher> vouchers) {
-        String voucherIds = vouchers.stream()
-            .map(MpIdEntity::getId)
-            .map(String::valueOf)
-            .collect(Collectors.joining(","));
-
-        VoucherPayment walletPayment = new VoucherPayment().setVoucherIds(voucherIds);
-        walletPayment.setPaymentId(payment.getId())
+    public void savePayment(Payment payment, PayParam payParam, PayWayParam payMode, List<VoucherRecord> voucherRecords) {
+        VoucherPayment voucherPayment = new VoucherPayment().setVoucherRecords(voucherRecords);
+        voucherPayment.setPaymentId(payment.getId())
             .setBusinessId(payParam.getBusinessId())
             .setAmount(payMode.getAmount())
             .setRefundableBalance(payMode.getAmount())
             .setPayStatus(payment.getPayStatus());
-        voucherPaymentManager.save(walletPayment);
+        voucherPaymentManager.save(voucherPayment);
     }
 
     /**
