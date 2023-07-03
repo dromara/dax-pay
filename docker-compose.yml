@@ -1,12 +1,12 @@
 version: '3'
 services:
   platform:
-    image: bootx-platform:latest
+    image: dax-start:latest
     restart: always
     ports:
       - "8080:8080"
     volumes:
       # 宿主机目录:容器目录 日志映射
-      - /data/logs/bootx-platform:/logs
-      # 外部化配置文件
-      - ./application.yml:/application.yml
+      - /data/logs/dax-start:/logs
+      # 读取外部化配置文件
+      - ./:/

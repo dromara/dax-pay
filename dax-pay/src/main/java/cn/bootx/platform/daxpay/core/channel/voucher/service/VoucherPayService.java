@@ -300,7 +300,7 @@ public class VoucherPayService {
             if (Objects.equals(v,voucher)){
                 voucherLog.setAmount(voucherPayment.getAmount())
                         .setType(VoucherCode.LOG_REFUND_SELF)
-                        .setRemark(String.format("退款金额 %.2f, 退款到卡号: %s 储值卡中", voucherAmount, voucher.getCardNo()))
+                        .setRemark(String.format("退款金额 %.2f, 退款到卡号: %s 储值卡中", voucherAmount, voucher.getCardNo()));
             }
         }
         voucherManager.updateById(voucher);

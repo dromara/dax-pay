@@ -18,7 +18,7 @@ WORKDIR /
 EXPOSE 9898
 
 # 添加执行jar包
-ADD bootx-start/target/bootx-start.jar bootx-start.jar
+ADD dax-start/target/dax-start.jar dax-start.jar
 
 # 执行启动命令
-CMD java $JAVA_OPTS -jar bootx-start.jar
+CMD java $JAVA_OPTS -jar dax-start.jar

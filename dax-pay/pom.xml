@@ -18,24 +18,6 @@
     </properties>
 
     <dependencies>
-        <!-- web mvc -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- undertow  -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
-
         <!-- thymeleaf 模板引擎 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -181,32 +163,6 @@
             <artifactId>IJPay-WxPay</artifactId>
             <version>${IJPay.version}</version>
         </dependency>
-
-        <!-- 非项目直接依赖 业务上未直接使用 -->
-        <!-- 2.x版本有问题,直接限定这个版本 -->
-        <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>${xml-apis.version}</version>
-        </dependency>
-        <!-- plumeLog日志 -->
-        <dependency>
-            <groupId>com.plumelog</groupId>
-            <artifactId>plumelog-logback</artifactId>
-            <version>${plumelog.version}</version>
-        </dependency>
-
     </dependencies>
-
-    <build>
-        <finalName>dax-pay</finalName>
-        <plugins>
-            <!-- spring-boot -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
