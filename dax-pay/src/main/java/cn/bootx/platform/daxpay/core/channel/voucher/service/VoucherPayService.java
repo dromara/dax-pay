@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.core.channel.voucher.service;
 
-import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
@@ -31,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -90,7 +88,7 @@ public class VoucherPayService {
     }
 
     /**
-     * 支付前冻结余额
+     * 支付前冻结余额 (异步组合支付环境下)
      */
     public List<VoucherRecord> freezeBalance(BigDecimal amount, Payment payment, List<Voucher> vouchers){
         List<VoucherLog> voucherLogs = new ArrayList<>();
@@ -106,19 +104,23 @@ public class VoucherPayService {
                     .setPaymentId(payment.getId())
                     .setBusinessId(payment.getBusinessId())
                     .setType(VoucherCode.LOG_FREEZE_BALANCE)
+                    .setRemark(String.format("钱包预冻结金额 %.2f ", amount))
                     .setVoucherId(voucher.getId())
                     .setVoucherNo(voucher.getCardNo());
 
-            // 待支付额大于储值卡余额. 全冻结
+            // 待支付额大于储值卡余额. 储值卡的金额全冻结
             if (BigDecimalUtil.compareTo(amount, balance) == 1) {
-                amount = amount.subtract(balance);
                 voucher.setFreezeBalance(balance);
                 voucherLog.setAmount(balance);
+                // 剩余待支付的金额
+                amount = amount.subtract(balance);
             }
             else {
-                amount = BigDecimal.ZERO;
+                // 待支付额小于或储值卡余额, 冻结待支付的金额
                 voucher.setFreezeBalance(amount);
                 voucherLog.setAmount(amount);
+                // 待支付的金额扣减完毕, 值设置为零
+                amount = BigDecimal.ZERO;
             }
             voucherRecords.add(new VoucherRecord().setCardNo(voucher.getCardNo()).setAmount(voucher.getFreezeBalance()));
             voucherLogs.add(voucherLog);
@@ -129,35 +131,30 @@ public class VoucherPayService {
     }
 
     /**
-     * 支付成功, 对冻结的金额进行扣款
+     * 支付成功, 对冻结的金额进行扣款 (异步组合支付环境下)
      */
     public void paySuccess(Long paymentId){
         voucherPaymentManager.findByPaymentId(paymentId).ifPresent(voucherPayment -> {
+            List<VoucherRecord> voucherRecords = voucherPayment.getVoucherRecords();
 
+            List<String> cardNoList = voucherRecords.stream()
+                    .map(VoucherRecord::getCardNo)
+                    .collect(Collectors.toList());
+            List<Voucher> vouchers = voucherManager.findByCardNoList(cardNoList);
             List<VoucherLog> voucherLogs = new ArrayList<>();
             for (Voucher voucher : vouchers) {
-                // 待支付余额为零, 不在处理后面的储值卡
-                if (BigDecimalUtil.compareTo(amount, BigDecimal.ZERO) < 1) {
-                    break;
-                }
-                BigDecimal balance = voucher.getBalance();
+                // 余额扣减
+                voucher.setBalance(voucher.getBalance().subtract(voucher.getFreezeBalance()))
+                        .setFreezeBalance(BigDecimal.ZERO);
                 // 日志
                 VoucherLog voucherLog = new VoucherLog()
-                        .setPaymentId(payment.getId())
-                        .setBusinessId(payment.getBusinessId())
-                        .setType(VoucherCode.LOG_FREEZE_BALANCE)
+                        .setPaymentId(voucherPayment.getPaymentId())
+                        .setBusinessId(voucherPayment.getBusinessId())
+                        .setType(VoucherCode.LOG_REDUCE_AND_UNFREEZE_BALANCE)
+                        .setRemark(String.format("钱包扣款金额 %.2f ", voucherPayment.getAmount()))
                         .setVoucherId(voucher.getId())
+                        .setAmount(voucher.getFreezeBalance())
                         .setVoucherNo(voucher.getCardNo());
-
-                // 待支付额大于储值卡余额. 全冻结
-                if (BigDecimalUtil.compareTo(amount, balance) == 1) {
-                    amount = amount.subtract(balance);
-                    voucher.setFreezeBalance(balance);
-                    voucherLog.setAmount(balance);
-                } else {
-                    voucher.setFreezeBalance(balance.subtract(amount));
-                    voucherLog.setAmount(amount);
-                }
                 voucherLogs.add(voucherLog);
             }
             voucherManager.updateAllById(vouchers);
@@ -183,23 +180,26 @@ public class VoucherPayService {
                     .setPaymentId(payment.getId())
                     .setBusinessId(payment.getBusinessId())
                     .setType(VoucherCode.LOG_PAY)
+                    .setRemark(String.format("钱包支付金额 %.2f ", amount))
                     .setVoucherId(voucher.getId())
                     .setVoucherNo(voucher.getCardNo());
 
             // 记录当前卡扣了多少钱
             BigDecimal amountRecord;
-            // 待支付额大于储值卡余额. 全扣光
+            // 待支付额大于储值卡余额. 储值卡金额全扣光
             if (BigDecimalUtil.compareTo(amount, balance) == 1) {
                 amountRecord = voucher.getBalance();
-                amount = amount.subtract(balance);
                 voucher.setBalance(BigDecimal.ZERO);
                 voucherLog.setAmount(balance);
+                amount = amount.subtract(balance);
             }
             else {
+                // 待支付额小于或储值卡余额, 储值卡余额-待支付额
                 amountRecord = balance.subtract(amount);
-                amount = BigDecimal.ZERO;
                 voucher.setBalance(balance.subtract(amount));
                 voucherLog.setAmount(amount);
+                // 支付完毕, 待支付金额归零
+                amount = BigDecimal.ZERO;
             }
             voucherLogs.add(voucherLog);
             voucherRecords.add(new VoucherRecord().setCardNo(voucher.getCardNo()).setAmount(amountRecord));
@@ -211,35 +211,29 @@ public class VoucherPayService {
 
 
     /**
-     * 取消支付, 可配置解除冻结金额
-     * @param freeze 是否是冻结模式, 是的话对冻结金额进行解冻, 不是的话返还扣减的金额
+     * 取消支付,解除冻结的额度, 只有在异步支付中才会发生取消操作
      */
-    public void close(Long paymentId, boolean freeze) {
-
-        VoucherPayment voucherPayment = voucherPaymentManager.findByPaymentId(paymentId).orElseThrow(DataNotExistException::new);
-
-
-        // 查找支付记录日志
-        List<VoucherLog> voucherLogs = voucherLogManager.findByPaymentIdAndType(paymentId, VoucherCode.LOG_PAY);
-        // 查出关联的储值卡
-        Map<Long, VoucherLog> voucherLogMap = voucherLogs.stream()
-                .collect(Collectors.toMap(VoucherLog::getVoucherId, Function.identity()));
-        List<Voucher> vouchers = voucherManager.findAllByIds(voucherLogMap.keySet());
-        // 执行退款并记录日志
-        List<VoucherLog> logs = new ArrayList<>();
-        for (Voucher voucher : vouchers) {
-            VoucherLog voucherLog = voucherLogMap.get(voucher.getId());
-            voucher.setBalance(voucher.getBalance().add(voucherLog.getAmount()));
-            VoucherLog log = new VoucherLog().setAmount(voucherLog.getAmount())
-                    .setPaymentId(paymentId)
-                    .setBusinessId(voucherLog.getBusinessId())
-                    .setVoucherId(voucher.getId())
-                    .setVoucherNo(voucher.getCardNo())
-                    .setType(VoucherCode.LOG_CLOSE_PAY);
-            logs.add(log);
-        }
-        voucherManager.updateAllById(vouchers);
-        voucherLogManager.saveAll(logs);
+    public void close(Long paymentId) {
+        voucherPaymentManager.findByPaymentId(paymentId).ifPresent(voucherPayment -> {
+            List<String> cardNoList = voucherPayment.getVoucherRecords().stream()
+                    .map(VoucherRecord::getCardNo)
+                    .collect(Collectors.toList());
+            List<Voucher> vouchers = voucherManager.findByCardNoList(cardNoList);
+            // 解冻额度和记录日志
+            List<VoucherLog> logs = new ArrayList<>();
+            for (Voucher voucher : vouchers) {
+                VoucherLog log = new VoucherLog().setAmount(voucher.getFreezeBalance())
+                        .setPaymentId(paymentId)
+                        .setBusinessId(voucherPayment.getBusinessId())
+                        .setVoucherId(voucher.getId())
+                        .setRemark(String.format("取消支付金额 %.2f ", voucher.getFreezeBalance()))
+                        .setVoucherNo(voucher.getCardNo())
+                        .setType(VoucherCode.LOG_CLOSE_PAY);
+                logs.add(log);
+            }
+            voucherManager.updateAllById(vouchers);
+            voucherLogManager.saveAll(logs);
+        });
     }
 
     /**

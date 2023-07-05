@@ -42,9 +42,4 @@ public class UnionPayStrategy extends AbsPayStrategy {
 
     }
 
-    @Override
-    public void doRefundHandler() {
-
-    }
-
 }

@@ -37,9 +37,9 @@ public class VoucherGenerationParam {
     private LocalDateTime endTime;
 
     /**
-     * @see VoucherCode
+     * @see VoucherCode#STATUS_NORMAL
      */
     @Schema(description = "默认状态")
-    private Integer status;
+    private String status;
 
 }

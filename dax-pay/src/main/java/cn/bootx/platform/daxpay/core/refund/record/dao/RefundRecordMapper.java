@@ -1,6 +1,6 @@
-package cn.bootx.platform.daxpay.core.refund.dao;
+package cn.bootx.platform.daxpay.core.refund.record.dao;
 
-import cn.bootx.platform.daxpay.core.refund.entity.RefundRecord;
+import cn.bootx.platform.daxpay.core.refund.record.entity.RefundRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

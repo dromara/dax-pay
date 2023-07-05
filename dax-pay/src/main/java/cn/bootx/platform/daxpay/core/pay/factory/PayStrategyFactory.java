@@ -32,7 +32,7 @@ public class PayStrategyFactory {
     public static AbsPayStrategy create(PayWayParam payWayParam) {
 
         AbsPayStrategy strategy = null;
-        PayChannelEnum channelEnum = findByCode(payWayParam.getPayChannel());
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(payWayParam.getPayChannel());
         switch (channelEnum) {
             case ALI:
                 strategy = SpringUtil.getBean(AliPayStrategy.class);
@@ -50,7 +50,7 @@ public class PayStrategyFactory {
                 strategy = SpringUtil.getBean(WalletPayStrategy.class);
                 break;
             case VOUCHER:
-                strategy = SpringUtil.getBean(VoucherStrategy.class);
+                strategy = SpringUtil.getBean(VoucherPayStrategy.class);
                 break;
             case CREDIT_CARD:
                 break;
@@ -92,13 +92,13 @@ public class PayStrategyFactory {
         // 同步支付
         List<PayWayParam> syncPayWayParamList = payWayParamList.stream()
             .filter(Objects::nonNull)
-            .filter(payModeParam -> !ASYNC_TYPE.contains(payModeParam.getPayChannel()))
+            .filter(payModeParam -> !ASYNC_TYPE_CODE.contains(payModeParam.getPayChannel()))
             .collect(Collectors.toList());
 
         // 异步支付
         List<PayWayParam> asyncPayWayParamList = payWayParamList.stream()
             .filter(Objects::nonNull)
-            .filter(payModeParam -> ASYNC_TYPE.contains(payModeParam.getPayChannel()))
+            .filter(payModeParam -> ASYNC_TYPE_CODE.contains(payModeParam.getPayChannel()))
             .collect(Collectors.toList());
 
         List<PayWayParam> sortList = new ArrayList<>(payWayParamList.size());

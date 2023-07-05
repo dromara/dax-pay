@@ -3,22 +3,19 @@ package cn.bootx.platform.daxpay.core.pay.strategy;
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
-import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
-import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
-import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayCancelService;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayService;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaySyncService;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaymentService;
+import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
+import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
+import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;
@@ -49,13 +46,9 @@ public class WeChatPayStrategy extends AbsPayStrategy {
 
     private final WeChatPaymentService weChatPaymentService;
 
-    private final WeChatPaymentManager weChatPaymentManager;
-
     private final WeChatPayCancelService weChatPayCancelService;
 
     private final WeChatPaySyncService weChatPaySyncService;
-
-    private final PaymentService paymentService;
 
     private WeChatPayConfig weChatPayConfig;
 
@@ -160,20 +153,6 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     @Override
     public void doCloseHandler() {
         weChatPaymentService.updateClose(this.getPayment().getId());
-    }
-
-    /**
-     * 退款
-     */
-    @Override
-    public void doRefundHandler() {
-        this.initWeChatPayConfig(this.getPayParam().getMchAppCode());
-        WeChatPayment weChatPayment = weChatPaymentManager.findByPaymentId(this.getPayment().getId())
-            .orElseThrow(() -> new PayFailureException("微信支付记录不存在"));
-        weChatPayCancelService.refund(this.getPayment(), weChatPayment, this.getPayWayParam().getAmount(),
-                this.weChatPayConfig);
-        weChatPaymentService.updatePayRefund(weChatPayment, this.getPayWayParam().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.WECHAT);
     }
 
     /**

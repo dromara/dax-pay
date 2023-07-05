@@ -8,7 +8,6 @@ import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPaymentService;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.waller.WalletBannedException;
 import cn.bootx.platform.daxpay.exception.waller.WalletLackOfBalanceException;
@@ -40,8 +39,6 @@ public class WalletPayStrategy extends AbsPayStrategy {
     private final WalletPayService walletPayService;
 
     private final WalletQueryService walletQueryService;
-
-    private final PaymentService paymentService;
 
     private Wallet wallet;
 
@@ -107,21 +104,8 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doCloseHandler() {
-        if (this.getPayment().isAsyncPayMode()){
-            walletPayService.paySuccess(this.getPayment().getId());
-        }
-        walletPayService.close(this.getPayment().getId(),this.getPayment().isAsyncPayMode());
+        walletPayService.close(this.getPayment().getId());
         walletPaymentService.updateClose(this.getPayment().getId());
-    }
-
-    /**
-     * 退款
-     */
-    @Override
-    public void doRefundHandler() {
-        walletPayService.refund(this.getPayment().getId(), this.getPayWayParam().getAmount());
-        walletPaymentService.updateRefund(this.getPayment().getId(), this.getPayWayParam().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.WALLET);
     }
 
 }

@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
-import cn.bootx.platform.daxpay.core.pay.local.AsyncRefundLocal;
+import cn.bootx.platform.daxpay.core.refund.local.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;

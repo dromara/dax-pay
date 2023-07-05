@@ -119,10 +119,9 @@ public class WalletPayService {
     }
 
     /**
-     * 取消支付, 可配置解除冻结金额
-     * @param freeze 是否是冻结模式, 是的话对冻结金额进行解冻, 不是的话返还扣减的金额
+     * 取消支付,解除冻结的额度, 只有在异步支付中才会发生取消操作
      */
-    public void close(Long paymentId,boolean freeze) {
+    public void close(Long paymentId) {
         // 钱包支付记录
         walletPaymentManager.findByPaymentId(paymentId).ifPresent(walletPayment -> {
             Optional<Wallet> walletOpt = walletManager.findById(walletPayment.getWalletId());
@@ -134,21 +133,14 @@ public class WalletPayService {
             walletPayment.setPayStatus(PayStatusCode.TRADE_CANCEL);
             walletPaymentManager.save(walletPayment);
 
-            // 是否在进行了额度冻结
-            if (freeze){
-                // 解冻金额
-                walletManager.unfreezeBalance(wallet.getId(), walletPayment.getAmount());
-            } else {
                 // 金额返还
                 walletManager.increaseBalance(wallet.getId(), walletPayment.getAmount());
-            }
-
             // 记录日志
             WalletLog walletLog = new WalletLog().setAmount(walletPayment.getAmount())
                     .setPaymentId(walletPayment.getPaymentId())
                     .setWalletId(wallet.getId())
                     .setUserId(wallet.getUserId())
-                    .setType(freeze?WalletCode.LOG_CLOSE_PAY:WalletCode.LOG_UNFREEZE_BALANCE)
+                    .setType(WalletCode.LOG_CLOSE_PAY)
                     .setRemark(String.format("取消支付金额 %.2f ", walletPayment.getAmount()))
                     .setOperationSource(WalletCode.OPERATION_SOURCE_SYSTEM)
                     .setBusinessId(walletPayment.getBusinessId());

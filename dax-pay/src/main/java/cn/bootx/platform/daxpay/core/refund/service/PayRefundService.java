@@ -1,24 +1,21 @@
-package cn.bootx.platform.daxpay.core.pay.service;
+package cn.bootx.platform.daxpay.core.refund.service;
 
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
-import cn.bootx.platform.daxpay.core.pay.builder.PaymentBuilder;
-import cn.bootx.platform.daxpay.core.pay.factory.PayStrategyFactory;
-import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.pay.func.PayStrategyConsumer;
-import cn.bootx.platform.daxpay.core.pay.local.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.core.payment.dao.PaymentManager;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
-import cn.bootx.platform.daxpay.core.refund.dao.RefundRecordManager;
-import cn.bootx.platform.daxpay.core.refund.entity.RefundRecord;
+import cn.bootx.platform.daxpay.core.refund.factory.PayRefundStrategyFactory;
+import cn.bootx.platform.daxpay.core.refund.func.AbsPayRefundStrategy;
+import cn.bootx.platform.daxpay.core.refund.func.PayRefundStrategyConsumer;
+import cn.bootx.platform.daxpay.core.refund.local.AsyncRefundLocal;
+import cn.bootx.platform.daxpay.core.refund.record.dao.RefundRecordManager;
+import cn.bootx.platform.daxpay.core.refund.record.entity.RefundRecord;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.refund.RefundModeParam;
 import cn.bootx.platform.daxpay.param.refund.RefundParam;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
@@ -67,13 +64,12 @@ public class PayRefundService {
     @Transactional(rollbackFor = Exception.class)
     public void refund(RefundParam refundParam) {
         Payment payment = paymentService.findByBusinessId(refundParam.getBusinessId())
-            .orElseThrow(() -> new PayFailureException("未找到支付单"));
-
-        this.refundPayment(payment, refundParam.getRefundModeParams());
+                .orElseThrow(() -> new PayFailureException("未找到支付单"));
+        this.refundPayment(payment, refundParam);
     }
 
     /**
-     * 根据业务id取消支付记录
+     * 根据业务ID全额退款
      */
     @Transactional(rollbackFor = Exception.class)
     public void refundByBusinessId(String businessId) {
@@ -83,14 +79,19 @@ public class PayRefundService {
             .stream()
             .map(o -> new RefundModeParam().setPayChannel(o.getPayChannel()).setAmount(o.getAmount()))
             .collect(Collectors.toList());
-        this.refundPayment(payment, refundModeParams);
+        RefundParam refundParam = new RefundParam()
+                .setBusinessId(businessId)
+                .setRefundModeParams(refundModeParams);
+        this.refundPayment(payment, refundParam);
 
     }
 
     /**
      * 退款
      */
-    private void refundPayment(Payment payment, List<RefundModeParam> refundModeParams) {
+    private void refundPayment(Payment payment,RefundParam refundParam) {
+
+        List<RefundModeParam> refundModeParams = refundParam.getRefundModeParams();
         // 状态判断, 支付中/失败/撤销不处理
         List<String> tradesStatus = Arrays.asList(TRADE_PROGRESS, TRADE_CANCEL, TRADE_FAIL);
         if (tradesStatus.contains(payment.getPayStatus())) {
@@ -98,32 +99,26 @@ public class PayRefundService {
         }
 
         // 过滤退款金额为0的支付通道参数
-        refundModeParams
-            .removeIf(refundModeParam -> BigDecimalUtil.compareTo(refundModeParam.getAmount(), BigDecimal.ZERO) == 0);
-        // 获取 paymentParam
-        PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
+        refundModeParams.removeIf(refundModeParam -> BigDecimalUtil.compareTo(refundModeParam.getAmount(), BigDecimal.ZERO) == 0);
         // 退款参数检查
         this.payModeCheck(refundModeParams, payment.getRefundableInfo());
 
         // 1.获取退款参数方式，通过工厂生成对应的策略组
-        List<PayWayParam> payWayParams = refundModeParams.stream()
-            .map(RefundModeParam::toPayModeParam)
-            .collect(Collectors.toList());
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payWayParams);
-        if (CollectionUtil.isEmpty(paymentStrategyList)) {
+        List<AbsPayRefundStrategy> payRefundStrategies = PayRefundStrategyFactory.create(refundModeParams);
+        if (CollectionUtil.isEmpty(payRefundStrategies)) {
             throw new PayUnsupportedMethodException();
         }
 
         // 2.初始化支付的参数
-        for (AbsPayStrategy paymentStrategy : paymentStrategyList) {
-            paymentStrategy.initPayParam(payment, payParam);
+        for (AbsPayRefundStrategy refundStrategy : payRefundStrategies) {
+            refundStrategy.initPayParam(payment, refundParam);
         }
 
         // 3.执行退款
-        this.doHandler(payment, paymentStrategyList, (strategyList, paymentObj) -> {
+        this.doHandler(payment, payRefundStrategies, (strategyList, paymentObj) -> {
             // 发起支付成功进行的执行方法
             try {
-                strategyList.forEach(AbsPayStrategy::doRefundHandler);
+                strategyList.forEach(AbsPayRefundStrategy::doRefundHandler);
             }
             catch (Exception e) {
                 // 记录退款失败的记录
@@ -165,12 +160,11 @@ public class PayRefundService {
     /**
      * 处理方法
      * @param payment 支付记录
-     * @param strategyList 支付策略
+     * @param strategyList 退款策略
      * @param successCallback 成功操作
      */
-    private void doHandler(Payment payment, List<AbsPayStrategy> strategyList,
-            PayStrategyConsumer<List<AbsPayStrategy>, Payment> successCallback) {
-
+    private void doHandler(Payment payment, List<AbsPayRefundStrategy> strategyList,
+                           PayRefundStrategyConsumer<List<AbsPayRefundStrategy>, Payment> successCallback) {
         try {
             // 执行
             successCallback.accept(strategyList, payment);

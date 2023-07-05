@@ -34,7 +34,7 @@ public interface VoucherCode {
     String LOG_UNFREEZE_BALANCE = "unfreeze";
 
     /**
-     * 钱包日志-解冻并扣减余额
+     * 钱包日志-扣减并解冻余额
      */
     String LOG_REDUCE_AND_UNFREEZE_BALANCE = "reduceAndUnfreeze";
 

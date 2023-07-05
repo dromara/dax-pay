@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.core.refund.service.RefundRecordService;
+import cn.bootx.platform.daxpay.core.refund.record.service.RefundRecordService;
 import cn.bootx.platform.daxpay.dto.refund.RefundRecordDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

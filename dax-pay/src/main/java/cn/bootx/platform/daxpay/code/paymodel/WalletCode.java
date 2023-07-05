@@ -42,11 +42,6 @@ public interface WalletCode {
     String LOG_FREEZE_BALANCE = "freeze";
 
     /**
-     * 钱包日志-解冻额度
-     */
-    String LOG_UNFREEZE_BALANCE = "unfreeze";
-
-    /**
      * 钱包日志-解冻并扣减余额
      */
     String LOG_REDUCE_AND_UNFREEZE_BALANCE = "reduceAndUnfreeze";

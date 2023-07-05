@@ -4,7 +4,6 @@ import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
 import cn.bootx.platform.daxpay.param.channel.voucher.VoucherRefundParam;
 import cn.bootx.platform.daxpay.param.channel.wallet.WalletRefundParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -38,12 +37,6 @@ public class RefundModeParam {
     @Schema(description = "扩展参数的json字符串")
     private String extraParamsJson;
 
-    /**
-     * 转换成支付方式参数
-     */
-    public PayWayParam toPayModeParam() {
-        return new PayWayParam().setPayChannel(getPayChannel()).setAmount(getAmount());
-    }
 
     /**
      * 转换成退款方式记录对象

@@ -20,6 +20,13 @@ spring:
     host: 127.0.0.1
     port: 6379
     database: 1
+    lettuce:
+      cluster:
+        refresh:
+          # 自适应拓扑刷新
+          adaptive: true
+          # 群集拓扑刷新周期
+          period: 60s
   # 如果不使用MQ的话, 可以将项目中 @EnableRabbit 给注释掉, 就不会一直报错了
   rabbitmq:
     # 虚拟主机

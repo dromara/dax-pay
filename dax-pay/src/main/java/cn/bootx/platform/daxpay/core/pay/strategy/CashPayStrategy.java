@@ -68,13 +68,4 @@ public class CashPayStrategy extends AbsPayStrategy {
         cashService.close(this.getPayment().getId());
     }
 
-    /**
-     * 退款
-     */
-    @Override
-    public void doRefundHandler() {
-        cashService.refund(this.getPayment().getId(), this.getPayWayParam().getAmount());
-        paymentService.updateRefundSuccess(this.getPayment(), this.getPayWayParam().getAmount(), PayChannelEnum.CASH);
-    }
-
 }

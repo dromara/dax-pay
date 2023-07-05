@@ -94,11 +94,6 @@ public abstract class AbsPayStrategy {
     public abstract void doCloseHandler();
 
     /**
-     * 退款
-     */
-    public abstract void doRefundHandler();
-
-    /**
      * 异步支付单与支付网关进行状态比对
      * @see PaySyncStatus
      */

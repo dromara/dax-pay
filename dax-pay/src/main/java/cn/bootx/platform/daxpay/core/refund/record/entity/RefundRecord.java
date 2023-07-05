@@ -1,10 +1,10 @@
-package cn.bootx.platform.daxpay.core.refund.entity;
+package cn.bootx.platform.daxpay.core.refund.record.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.JacksonRawTypeHandler;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
-import cn.bootx.platform.daxpay.core.refund.convert.RefundConvert;
+import cn.bootx.platform.daxpay.core.refund.record.convert.RefundConvert;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
 import cn.bootx.platform.daxpay.dto.refund.RefundRecordDto;
 import com.baomidou.mybatisplus.annotation.TableField;
