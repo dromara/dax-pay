@@ -1,12 +1,14 @@
 package cn.bootx.platform.daxpay.core.channel.voucher.dao;
 
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherLog;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * @author xxm
@@ -18,10 +20,14 @@ import java.util.List;
 public class VoucherLogManager extends BaseManager<VoucherLogMapper, VoucherLog> {
 
     /**
-     * 根据支付id和类型进行查询
+     * 根据储值卡id进行分页
      */
-    public List<VoucherLog> findByPaymentIdAndType(Long paymentId, String type) {
-        return lambdaQuery().eq(VoucherLog::getPaymentId, paymentId).eq(VoucherLog::getType, type).list();
-    }
+    public Page<VoucherLog> pageByVoucherId(PageParam pageParam, Long voucherId) {
+        Page<VoucherLog> mpPage = MpUtil.getMpPage(pageParam,VoucherLog.class);
+        return lambdaQuery()
+                .eq(VoucherLog::getVoucherId, voucherId)
+                .orderByDesc(MpIdEntity::getId)
+                .page(mpPage);
 
+    }
 }

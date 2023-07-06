@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.core.channel.voucher.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.paymodel.VoucherCode;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherLogManager;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherManager;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +46,8 @@ public class VoucherPayService {
     private final VoucherPaymentManager voucherPaymentManager;
 
     private final VoucherLogManager voucherLogManager;
+
+    private final VoucherQueryService voucherQueryService;
 
     /**
      * 获取并检查储值卡
@@ -74,9 +74,10 @@ public class VoucherPayService {
         if (vouchers.size() != cardNoList.size()) {
             throw new PayFailureException("储值卡支付参数错误");
         }
-        boolean timeCheck = this.check(vouchers);
-        if (!timeCheck) {
-            throw new PayFailureException("储值卡不再有效期内");
+        // 卡信息校验
+        String timeCheck = voucherQueryService.check(vouchers);
+        if (StrUtil.isNotBlank(timeCheck)) {
+            throw new PayFailureException(timeCheck);
         }
         // 金额是否满足
         BigDecimal amount = vouchers.stream().map(Voucher::getBalance).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
@@ -333,16 +334,6 @@ public class VoucherPayService {
         voucherLogManager.saveAll(voucherLogs);
     }
 
-    /**
-     * 卡信息检查
-     */
-    private boolean check(List<Voucher> vouchers) {
-        // 判断有效期
-        return vouchers.stream()
-                .filter(voucher -> !Objects.equals(voucher.isEnduring(), true))
-                .allMatch(voucher -> LocalDateTimeUtil.between(LocalDateTime.now(), voucher.getStartTime(),
-                        voucher.getEndTime()));
-    }
 
     /**
      * 对储值卡进行排序

@@ -48,6 +48,12 @@ public class VoucherController {
         return Res.ok(voucherQueryService.findByCardNo(cardNo));
     }
 
+    @Operation(summary = "获取并判断卡状态")
+    @GetMapping("/getAndJudgeVoucher")
+    public ResResult<VoucherDto> getAndJudgeVoucher(String cardNo) {
+        return Res.ok(voucherQueryService.getAndJudgeVoucher(cardNo));
+    }
+
     @Operation(summary = "批量生成储值卡")
     @PostMapping("/generationBatch")
     public ResResult<Void> generationBatch(@RequestBody VoucherGenerationParam param) {

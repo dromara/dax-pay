@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.core.channel.wallet.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.channel.wallet.convert.WalletConvert;
@@ -27,6 +28,7 @@ import java.math.BigDecimal;
 public class WalletLog extends MpBaseEntity implements EntityBaseFunction<WalletLogDto> {
 
     /** 钱包id */
+    @DbMySqlIndex(comment = "钱包索引ID")
     @DbColumn(comment = "钱包id")
     private Long walletId;
 

@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.voucher.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
+import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@DbTable(comment = "储值卡支付记录")
 @Accessors(chain = true)
 @TableName(value = "pay_voucher_payment",autoResultMap = true)
 public class VoucherPayment extends BasePayment implements EntityBaseFunction<VoucherPaymentDto> {
