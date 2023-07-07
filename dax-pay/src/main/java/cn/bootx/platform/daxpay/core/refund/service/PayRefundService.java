@@ -115,7 +115,7 @@ public class PayRefundService {
         // 3.支付前准备
         this.doHandler(refundModeParams,payment, payRefundStrategies, AbsPayRefundStrategy::doBeforeRefundHandler, null);
 
-        // 3.执行退款
+        // 4.执行退款
         this.doHandler(refundModeParams,payment, payRefundStrategies, AbsPayRefundStrategy::doRefundHandler, (strategyList, paymentObj) -> {
             this.paymentHandler(paymentObj, refundModeParams);
         });
@@ -163,7 +163,7 @@ public class PayRefundService {
             // 等同strategyList.forEach(payMethod.accept(PaymentStrategy))
             strategyList.forEach(refundStrategy);
 
-            // 执行操作成功的处理
+            // 执行操作成功的处
             Optional.ofNullable(successCallback).ifPresent(fun -> fun.accept(strategyList, payment));
         }
         catch (Exception e) {

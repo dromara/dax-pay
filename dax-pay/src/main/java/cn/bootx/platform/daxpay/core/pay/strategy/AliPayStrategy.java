@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.core.pay.strategy;
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.paymodel.AliPayCode;
+import cn.bootx.platform.daxpay.core.channel.alipay.dao.AlipayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.*;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
@@ -34,6 +35,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Component
 @RequiredArgsConstructor
 public class AliPayStrategy extends AbsPayStrategy {
+
+    private final AlipayConfigManager alipayConfigManager;
 
     private final AliPaymentService aliPaymentService;
 
@@ -164,7 +167,9 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     private void initAlipayConfig(String mchAppCode) {
         // 检查并获取支付宝支付配置
-        alipayConfigService.initApiConfigByMchAppCode(mchAppCode);
+        this.alipayConfig = alipayConfigManager.findByMchAppCode(mchAppCode)
+                .orElseThrow(() -> new PayFailureException("支付配置不存在"));
+        alipayConfigService.initApiConfig(this.alipayConfig);
     }
 
 }
