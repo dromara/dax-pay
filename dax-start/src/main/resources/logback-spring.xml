@@ -14,7 +14,7 @@
     <!-- plumelog Redis方式日志收集 -->
     <appender name="plumelog" class="com.plumelog.logback.appender.LiteAppender">
         <appName>bootx-platform</appName>
-        <plumelogHost>127</plumelogHost>
+        <plumelogHost>127.0.0.1</plumelogHost>
     </appender>
 
     <!-- 开发输出级别 -->
