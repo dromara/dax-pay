@@ -60,7 +60,7 @@
     </dependencies>
 
     <build>
-        <finalName>dax-pay</finalName>
+        <finalName>dax-start</finalName>
         <plugins>
             <!-- spring-boot -->
             <plugin>
