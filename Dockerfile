@@ -9,7 +9,7 @@ ENV TZ=Asia/Shanghai
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # jvm启动参数, 启动内存256M,最大内存1G,使用G1垃圾回收器
-ENV JAVA_OPTS="-Xms256m -Xmx1G -XX:+UseG1GC -Djava.security.egd=file:/dev/./urandom"
+ENV JAVA_OPTS="-Xms256m -Xmx1G -XX:+UseG1GC -Djava.security.egd=file:/dev/./urandom --Dlogging.config=./logback-spring.xml"
 
 # 工作目录
 WORKDIR /
