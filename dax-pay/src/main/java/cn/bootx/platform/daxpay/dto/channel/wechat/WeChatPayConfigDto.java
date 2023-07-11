@@ -44,7 +44,8 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     private String appSecret;
 
     @Schema(description = "API 证书中的 p12 文件id")
-    private Long p12;
+    @SensitiveInfo
+    private String p12;
 
     @Schema(description = "API 证书中的 cert.pem 证书")
     @SensitiveInfo(value = SensitiveInfo.SensitiveType.OTHER, front = 15)

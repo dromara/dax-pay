@@ -9,10 +9,13 @@ import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipayConfigService;
 import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
 import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
 import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigQuery;
+import cn.hutool.core.codec.Base64;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -60,4 +63,10 @@ public class AlipayConfigController {
         return Res.ok(alipayConfigService.findPayWayList());
     }
 
+    @SneakyThrows
+    @Operation(summary = "将文件转换成base64")
+    @PostMapping("/toBase64")
+    public ResResult<String> toBase64(MultipartFile file){
+        return Res.ok(Base64.encode(file.getBytes()));
+    }
 }

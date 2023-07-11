@@ -2,12 +2,13 @@ package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
-import cn.bootx.platform.daxpay.core.refund.local.AsyncRefundLocal;
-import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
+import cn.bootx.platform.daxpay.core.payment.entity.Payment;
+import cn.bootx.platform.daxpay.core.refund.local.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.starter.file.service.FileUploadService;
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ijpay.core.enums.SignType;
@@ -23,7 +24,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.REFUND_PROCESS_FAIL;
@@ -79,13 +79,13 @@ public class WeChatPayCancelService {
             .build()
             .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         // 获取证书文件流
-        if (Objects.isNull(weChatPayConfig.getP12())){
+        if (StrUtil.isNotBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
             AsyncRefundLocal.setErrorMsg(errorMsg);
             AsyncRefundLocal.setErrorCode(REFUND_PROCESS_FAIL);
             throw new PayFailureException(errorMsg);
         }
-        byte[] fileBytes = uploadService.getFileBytes(weChatPayConfig.getP12());
+        byte[] fileBytes = Base64.decode(weChatPayConfig.getP12());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(fileBytes);
         // 证书密码为 微信商户号
         String xmlResult = WxPayApi.orderRefund(false, params, inputStream, weChatPayConfig.getWxMchId());

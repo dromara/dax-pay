@@ -81,6 +81,7 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
 
     /** 支付宝公钥 */
     @BigField
+    @EncryptionField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "支付宝公钥")
     public String alipayPublicKey;

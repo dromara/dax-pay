@@ -2,7 +2,9 @@ package cn.bootx.platform.daxpay.core.channel.wechat.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbTable;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
+import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
@@ -57,39 +59,44 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
 
     /** 商户平台「API安全」中的 APIv2 密钥 */
     @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @BigField
     @EncryptionField
     @DbColumn(comment = "APIv2 密钥")
     private String apiKeyV2;
 
     /** 商户平台「API安全」中的 APIv3 密钥 */
     @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @BigField
     @EncryptionField
     @DbColumn(comment = "APIv3 密钥")
     private String apiKeyV3;
 
     /** APPID对应的接口密码，用于获取微信公众号jsapi支付时使用 */
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     @EncryptionField
     @DbColumn(comment = "APPID对应的接口密码")
     private String appSecret;
 
-    /** API 证书中的 p12 文件存储的 id */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    @EncryptionField
-    @DbColumn(comment = "API 证书中的 p12 文件存储的 id")
-    private Long p12;
-
-    /** API 证书中的 cert.pem 证书 */
+    /** .p12证书Base64 */
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     @BigField
     @EncryptionField
-    @DbColumn(comment = "API 证书中的 cert.pem 证书 ")
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    @DbColumn(comment = "API 证书中的 p12 文件存储的 id")
+    private String p12;
+
+    /** cert.pem证书的Base64 */
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @BigField
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    @DbColumn(comment = "cert.pem证书的Base64")
     private String certPem;
 
-    /** API 证书中的 key.pem 私钥 */
+    /** key.pem的私钥Base64 */
     @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @BigField
-    @EncryptionField
-    @DbColumn(comment = "API 证书中的 key.pem 私钥")
+    @DbColumn(comment = "私钥key.pem的Base64")
     private String keyPem;
 
     /** 应用域名，回调中会使用此参数 */

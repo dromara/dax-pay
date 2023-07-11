@@ -8,10 +8,13 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.dto.channel.wechat.WeChatPayConfigDto;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayConfigParam;
+import cn.hutool.core.codec.Base64;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -59,4 +62,10 @@ public class WeChatPayConfigController {
         return Res.ok(weChatPayConfigService.findPayWayList());
     }
 
+    @SneakyThrows
+    @Operation(summary = "将文件转换成base64")
+    @PostMapping("/toBase64")
+    public ResResult<String> toBase64(MultipartFile file){
+        return Res.ok(Base64.encode(file.getBytes()));
+    }
 }
