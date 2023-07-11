@@ -9,7 +9,6 @@ import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipayConfigService;
 import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
 import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
 import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigQuery;
-import cn.hutool.core.codec.Base64;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -17,6 +16,7 @@ import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -64,9 +64,9 @@ public class AlipayConfigController {
     }
 
     @SneakyThrows
-    @Operation(summary = "将文件转换成base64")
-    @PostMapping("/toBase64")
-    public ResResult<String> toBase64(MultipartFile file){
-        return Res.ok(Base64.encode(file.getBytes()));
+    @Operation(summary = "读取证书文件内容")
+    @PostMapping("/readPem")
+    public ResResult<String> readPem(MultipartFile file){
+        return Res.ok(new String(file.getBytes(), StandardCharsets.UTF_8));
     }
 }

@@ -47,14 +47,6 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @SensitiveInfo
     private String p12;
 
-    @Schema(description = "API 证书中的 cert.pem 证书")
-    @SensitiveInfo(value = SensitiveInfo.SensitiveType.OTHER, front = 15)
-    private String certPem;
-
-    @Schema(description = "API 证书中的 key.pem 私钥")
-    @SensitiveInfo(value = SensitiveInfo.SensitiveType.OTHER, front = 15)
-    private String keyPem;
-
     @Schema(description = "应用域名，回调中会使用此参数")
     private String domain;
 

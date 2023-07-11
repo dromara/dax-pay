@@ -77,27 +77,13 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "APPID对应的接口密码")
     private String appSecret;
 
-    /** .p12证书Base64 */
+    /** API证书中p12证书Base64 */
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     @BigField
     @EncryptionField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @DbColumn(comment = "API 证书中的 p12 文件存储的 id")
+    @DbColumn(comment = "API证书中p12证书Base64")
     private String p12;
-
-    /** cert.pem证书的Base64 */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    @BigField
-    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @DbColumn(comment = "cert.pem证书的Base64")
-    private String certPem;
-
-    /** key.pem的私钥Base64 */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @BigField
-    @DbColumn(comment = "私钥key.pem的Base64")
-    private String keyPem;
 
     /** 应用域名，回调中会使用此参数 */
     @DbColumn(comment = "应用域名")

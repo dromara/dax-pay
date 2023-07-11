@@ -31,7 +31,7 @@ public class CashierController {
 
     private final CashierService cashierService;
 
-    @Operation(summary = "发起支付(单渠道,包括聚合付款码方式)")
+    @Operation(summary = "发起支付(单渠道)")
     @PostMapping("/singlePay")
     public ResResult<PayResult> singlePay(@RequestBody CashierSinglePayParam cashierSinglePayParam) {
         return Res.ok(cashierService.singlePay(cashierSinglePayParam));
