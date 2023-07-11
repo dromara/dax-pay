@@ -1,5 +1,5 @@
 # java8基础镜像
-FROM registry.cn-beijing.aliyuncs.com/xxm1995/java8
+FROM openjdk:8-jre
 
 # 作者信息
 MAINTAINER xxm1995@outlook.com

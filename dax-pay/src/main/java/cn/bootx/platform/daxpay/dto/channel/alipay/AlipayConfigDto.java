@@ -45,7 +45,7 @@ public class AlipayConfigDto extends BaseDto implements Serializable {
     private String serverUrl;
 
     @Schema(description = "认证类型 证书/公钥")
-    private Integer authType;
+    private String authType;
 
     @Schema(description = "签名类型")
     private String signType;
