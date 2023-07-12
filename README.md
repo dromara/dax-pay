@@ -32,7 +32,7 @@ Dax-Pay是Bootx-Platform的子项目之一，主要是对支付收单和账务�
 ![](https://oscimg.oschina.net/oscnet/up-9f0044b76071d5a7f598ceab591c5fedb02.png)
 
 ## 🍒文档
-- 系统演示地址：[Dax支付系统](http://v3.platform.bootx.cn/)
+- 系统演示地址：[Dax支付系统](http://daxpay.demo.bootx.cn/)
 - 前端项目地址：[前端项目(vue3)](https://gitee.com/bootx/bootx-platform-vue3)
 - 项目文档：[项目文档(GITEE)](https://bootx.gitee.io/)、[项目文档(备用)](https://daxpay.doc.bootx.cn/)
 - 更新日志：[更新日志](./_doc/ChangeLog.md)
