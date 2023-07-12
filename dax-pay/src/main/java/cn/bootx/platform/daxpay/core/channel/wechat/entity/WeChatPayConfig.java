@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
@@ -9,6 +8,7 @@ import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.channel.wechat.convert.WeChatConvert;
 import cn.bootx.platform.daxpay.dto.channel.wechat.WeChatPayConfigDto;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayConfigParam;
@@ -29,7 +29,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "微信支付配置")
+//@DbTable(comment = "微信支付配置")
 @Accessors(chain = true)
 @TableName("pay_wechat_pay_config")
 public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<WeChatPayConfigDto> {
@@ -56,6 +56,13 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     /** 微信应用appId */
     @DbColumn(comment = "微信应用appId")
     private String wxAppId;
+
+     /**
+     * api版本
+     * @see WeChatPayCode#API_V2
+     */
+     @DbColumn(comment = "api版本")
+     private String apiVersion;
 
     /** 商户平台「API安全」中的 APIv2 密钥 */
     @TableField(updateStrategy = FieldStrategy.IGNORED)
@@ -84,10 +91,6 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "API证书中p12证书Base64")
     private String p12;
-
-    /** 应用域名，回调中会使用此参数 */
-    @DbColumn(comment = "应用域名")
-    private String domain;
 
     /** 服务器异步通知页面路径 通知url必须为直接可访问的url，不能携带参数。公网域名必须为https */
     @DbColumn(comment = "异步通知页面")

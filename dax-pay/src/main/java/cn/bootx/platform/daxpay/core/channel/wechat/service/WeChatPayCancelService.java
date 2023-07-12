@@ -55,6 +55,7 @@ public class WeChatPayCancelService {
             .build()
             .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         String xmlResult = WxPayApi.closeOrder(params);
+
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
     }

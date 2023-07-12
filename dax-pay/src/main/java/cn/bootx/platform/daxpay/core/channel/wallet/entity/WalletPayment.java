@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "钱包交易记录")
+//@DbTable(comment = "钱包交易记录")
 @Accessors(chain = true)
 @TableName("pay_wallet_payment")
 public class WalletPayment extends BasePayment implements EntityBaseFunction<WalletPaymentDto> {

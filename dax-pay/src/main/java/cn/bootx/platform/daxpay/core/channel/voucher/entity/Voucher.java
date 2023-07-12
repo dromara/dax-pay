@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.core.channel.voucher.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbComment;
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
@@ -25,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "储值卡")
+//@DbTable(comment = "储值卡")
 @Accessors(chain = true)
 @TableName("pay_voucher")
 public class Voucher extends MpBaseEntity implements EntityBaseFunction<VoucherDto> {

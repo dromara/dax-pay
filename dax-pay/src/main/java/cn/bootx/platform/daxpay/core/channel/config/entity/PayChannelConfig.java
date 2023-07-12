@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.core.channel.config.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.channel.config.convert.PayChannelConfigConvert;
@@ -20,7 +19,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "支付通道配置")
+//@DbTable(comment = "支付通道配置")
 @Accessors(chain = true)
 @TableName("pay_channel_config")
 public class PayChannelConfig extends MpBaseEntity implements EntityBaseFunction<PayChannelConfigDto> {

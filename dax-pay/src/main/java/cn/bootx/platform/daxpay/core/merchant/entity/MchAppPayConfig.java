@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.core.merchant.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +16,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "商户应用支付配置")
+//@DbTable(comment = "商户应用支付配置")
 @Accessors(chain = true)
 @TableName("pay_mch_app_config")
 public class MchAppPayConfig extends MpBaseEntity {

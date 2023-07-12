@@ -9,9 +9,9 @@ package cn.bootx.platform.daxpay.code.paymodel;
 public interface WeChatPayCode {
 
     // 版本
-    String API_V2 = "api_v2";
+    String API_V2 = "apiV2";
 
-    String API_V3 = "api_v3";
+    String API_V3 = "apiV3";
 
     // 请求参数
     /** jsapi发起获取AuthCode时的重定向参数 */

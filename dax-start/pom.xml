@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-dax-pay</artifactId>
-        <version>1.3.0</version>
+        <version>1.0.0</version>
     </parent>
     <artifactId>dax-start</artifactId>
 

@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "回调记录")
+//@DbTable(comment = "回调记录")
 @Accessors(chain = true)
 @TableName("pay_pay_notify_record")
 public class PayNotifyRecord extends MpBaseEntity implements EntityBaseFunction<PayNotifyRecordDto> {

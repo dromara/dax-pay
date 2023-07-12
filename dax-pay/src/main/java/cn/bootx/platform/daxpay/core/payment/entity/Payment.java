@@ -1,8 +1,6 @@
 package cn.bootx.platform.daxpay.core.payment.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
-import cn.bootx.mybatis.table.modify.annotation.DbComment;
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
@@ -33,10 +31,8 @@ import java.util.List;
  * @author xxm
  * @since 2020/12/8
  */
-@DbTable
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbComment("支付记录")
 @FieldNameConstants
 @Accessors(chain = true)
 @TableName(value = "pay_payment", autoResultMap = true)

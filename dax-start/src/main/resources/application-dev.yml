@@ -227,4 +227,5 @@ bootx:
         bucket: bootx
     # 数据权限
     data-perm:
+      #  需要符合AES密钥的要求
       field-decrypt-key: "UCrtxSCwYZNCIlav"

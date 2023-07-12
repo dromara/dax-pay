@@ -2,10 +2,11 @@
 
 <p>
  <img src='https://gitee.com/bootx/bootx-platform/badge/star.svg?theme=dark' alt='star'/>
- <img src="https://img.shields.io/badge/Boot%20Platform-1.2.3-success.svg" alt="Build Status"/>
-<img src="https://img.shields.io/badge/Dax%20Pay-1.0-success.svg" alt="Build Status"/>
-<img src="https://img.shields.io/badge/Author-Bootx-orange.svg" alt="Build Status"/>
- <img src="https://img.shields.io/badge/Spring%20Boot-2.7.10-blue.svg" alt="Downloads"/>
+ <img src="https://img.shields.io/badge/Boot%20Platform-1.3.2-success.svg" alt="Build Status"/>
+ <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
+ <img src="https://img.shields.io/badge/Dax%20Pay-1.0.0-success.svg" alt="Build Status"/>
+ <img src="https://img.shields.io/badge/Author-Bootx-orange.svg" alt="Build Status"/>
+ <img src="https://img.shields.io/badge/Spring%20Boot-2.7.x-blue.svg" alt="Downloads"/>
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
 </p>
 
@@ -17,10 +18,14 @@ Dax-Pay是Bootx-Platform的子项目之一，主要是对支付收单和账务�
 同时扩展了更多支付方式，如储值卡、现金卡等，可以作为一个简单的四方支付进行使用。
 
 ## 🛠️功能亮点
-- 支持单通道支付、聚合支付、组合支付、部分和全部退款等支付功能
-- 支持支付宝、微信、云闪付、现金、钱包、储值卡等多种支付方式
-- 支持退款
-- 支持对账
+- 支持单通道支付、聚合支付、组合支付、退款、对账等支付功能
+- 单通道支付：支持支付宝、微信、现金、钱包、储值卡等多种支付方式
+- 聚合支付：支持微信或支付宝使用同一个码
+- 组合支付：支持多种同步支付和一个异步支付（微信、支付宝）进行组合支付
+- 支持退款：部分对款、全部退款等方式
+- 储值卡：支持单卡支付、多卡支付，退款时支持退款到原储值卡中，也支持将余额退到同一个卡上
+- 支付宝：支持web支付、wap支付、扫码支付、付款码支付、APP支付
+- 微信：wap支付、扫码支付、付款码支付、APP支付、公众号/小程序支付
 
 结算台演示地址：[http://daxpay.demo.bootx.cn/cashier](http://daxpay.demo.bootx.cn/cashier)
 
@@ -40,18 +45,15 @@ Dax-Pay是Bootx-Platform的子项目之一，主要是对支付收单和账务�
 
 ## 名词解释
 
-| 名词   | 英文或简写    | 备注                                             |
-|------|----------|------------------------------------------------|
-| 支付通道 | Channel  | 主要包括第三方支付平台，如支付宝、微信、云闪付等                       |
-| 支付方式 | PayWay   | 主要是进行支付时的方式，如扫码支付、H5支付、APP支付等，一种支付通道通常会有多种支付方式 |
-| 支付策略 | Strategy | 对支付通道和支付方式进行封装，可以完成一种支付操作                      |
-| 聚合支付 |          | 通常是扫码或收款时，根据客户使用应用的不同，自动识别是哪种支付通道，并进行支付        |
-| 组合支付 |          | 同时使用多种支付通道进行支付，如同时使用余额+现金+储值卡+微信支付进行支付         |
-| 商户   | Merchant |                                                |
-| 商户应用 | mchApp   |                                                |
-| 分账   |          |                                                |
-| 对账   |          |                                                |
-
+| 名词   | 英文或简写          | 备注                                             |
+|------|----------------|------------------------------------------------|
+| 支付通道 | Channel        | 主要包括第三方支付平台，如支付宝、微信、云闪付等                       |
+| 支付方式 | PayWay         | 主要是进行支付时的方式，如扫码支付、H5支付、APP支付等，一种支付通道通常会有多种支付方式 |
+| 支付策略 | Strategy       | 对支付通道和支付方式进行封装，可以完成一种支付操作                      |
+| 聚合支付 | AggregationPay | 通常是扫码或收款时，根据客户使用应用的不同，自动识别是哪种支付通道，并进行支付        |
+| 组合支付 | CombinationPay | 同时使用多种支付通道进行支付，如同时使用余额+现金+储值卡+微信支付进行支付         |
+| 商户   | Merchant       | 系统中的一种单元                                       |
+| 商户应用 | mchApp         | 一个商户可以有多个应用，一个应用可以分别进行各种支付通道配置                 |
 
 ## 🥞项目结构(dax-pay)
 ```lua
@@ -62,12 +64,14 @@ dax-pay
     ├── controller -- 使用外部项目对应开源协议
     ├── core -- 核心包
        ├── aggregate -- Quartz定时任务模块
-       ├── cashier -- 微信对接模块
-       ├── pay -- 企业微信对接模块
-       ├── payment -- 企业微信对接模块
-       ├── paymodel -- 企业微信对接模块
-       ├── refund -- 企业微信对接模块
-       ├── order -- 企业微信对接模块
+       ├── cashier -- 结算台
+       ├── channel -- 支付通道
+       ├── merchant -- 商户和应用
+       ├── pay -- 支付
+       ├── payment -- 支付单
+       ├── notify -- 回调通知
+       ├── refund -- 退款
+       ├── order -- 订单
        ├── bill -- 账单
     ├── dto -- 业务实体类
     ├── event -- 事件
@@ -76,7 +80,6 @@ dax-pay
     ├── param -- 参数
     ├── task -- 定时任务
     ├── util -- 工具类
-    ├── DaxPayApplication -- 启动类
  ├── resources
     ├── mapper -- MyBatis映射文件
     ├── templates -- 静态网页

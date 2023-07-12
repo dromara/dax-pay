@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.dto.channel.wechat;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -31,6 +32,12 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @SensitiveInfo
     private String wxAppId;
 
+    /**
+     * @see WeChatPayCode#API_V2
+     */
+    @Schema(description = "api版本")
+    private String apiVersion;
+
     @Schema(description = "商户平台「API安全」中的 APIv2 密钥")
     @SensitiveInfo
     private String apiKeyV2;
@@ -46,9 +53,6 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @Schema(description = "API 证书中的 p12 文件id")
     @SensitiveInfo
     private String p12;
-
-    @Schema(description = "应用域名，回调中会使用此参数")
-    private String domain;
 
     @Schema(description = "服务器异步通知页面路径 通知url必须为直接可访问的url，不能携带参数。公网域名必须为https ")
     private String notifyUrl;

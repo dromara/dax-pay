@@ -23,7 +23,7 @@ import lombok.experimental.FieldNameConstants;
  * @author xxm
  * @since 2023-05-19
  */
-@DbTable(comment = "商户应用")
+//@DbTable(comment = "商户应用")
 @EqualsAndHashCode(callSuper = true)
 @DbMySqlIndex(fields = MchApplication.Fields.code, type = MySqlIndexType.UNIQUE, comment = "应用编码唯一索引")
 @Data

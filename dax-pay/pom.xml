@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-dax-pay</artifactId>
-        <version>1.3.0</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>dax-pay</artifactId>
@@ -151,11 +151,17 @@
             </exclusions>
         </dependency>
 
-        <!-- 微信支付 -->
+        <!-- 微信支付 ijpay -->
         <dependency>
             <groupId>com.github.javen205</groupId>
             <artifactId>IJPay-WxPay</artifactId>
             <version>${IJPay.version}</version>
+        </dependency>
+        <!-- 微信支付 wxjava -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>${wxjava.version}</version>
         </dependency>
     </dependencies>
 
