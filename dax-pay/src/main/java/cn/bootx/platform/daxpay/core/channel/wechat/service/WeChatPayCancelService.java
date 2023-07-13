@@ -1,11 +1,12 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
+import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.refund.local.AsyncRefundLocal;
+import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.starter.file.service.FileUploadService;
 import cn.hutool.core.codec.Base64;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.REFUND_PROCESS_FAIL;
@@ -63,10 +65,14 @@ public class WeChatPayCancelService {
     /**
      * 退款
      */
-    public void refund(Payment payment, WeChatPayment weChatPayment, BigDecimal amount,
+    public void refund(Payment payment, BigDecimal amount,
             WeChatPayConfig weChatPayConfig) {
-        String totalFee = weChatPayment.getAmount().multiply(BigDecimal.valueOf(100)).toBigInteger().toString();
+        RefundableInfo refundableInfo = payment.getRefundableInfo().stream()
+                .filter(o -> Objects.equals(o.getPayChannel(), PayChannelEnum.WECHAT.getCode()))
+                .findFirst()
+                .orElseThrow(() -> new PayFailureException("未找到微信支付的详细信息"));
         String refundFee = amount.multiply(BigDecimal.valueOf(100)).toBigInteger().toString();
+        String totalFee = refundableInfo.getAmount().multiply(BigDecimal.valueOf(100)).toBigInteger().toString();
         // 设置退款号
         AsyncRefundLocal.set(IdUtil.getSnowflakeNextIdStr());
         Map<String, String> params = RefundModel.builder()
@@ -79,7 +85,7 @@ public class WeChatPayCancelService {
             .nonce_str(WxPayKit.generateStr())
             .build()
             .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
-        // 获取证书文件流
+        // 获取证书文件
         if (StrUtil.isNotBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
             AsyncRefundLocal.setErrorMsg(errorMsg);

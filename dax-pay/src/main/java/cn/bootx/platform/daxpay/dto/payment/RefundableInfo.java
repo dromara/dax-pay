@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 @Schema(title = "可退款信息")
 public class RefundableInfo {
 
+    /**
+     * @see cn.bootx.platform.daxpay.code.pay.PayChannelEnum
+     */
     @Schema(description = "支付通道")
     private String payChannel;
 

@@ -1,14 +1,13 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
+import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPaymentManager;
+import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
 import cn.bootx.platform.daxpay.core.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
-import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPaymentManager;
-import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
 import cn.bootx.platform.daxpay.dto.pay.AsyncPayInfo;
 import cn.bootx.platform.daxpay.dto.payment.PayChannelInfo;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
@@ -105,16 +104,7 @@ public class WeChatPaymentService {
     /**
      * 更新退款
      */
-    public void updatePayRefund(WeChatPayment weChatPayment, BigDecimal amount) {
-        BigDecimal refundableBalance = weChatPayment.getRefundableBalance().subtract(amount);
-        weChatPayment.setRefundableBalance(refundableBalance);
-        if (BigDecimalUtil.compareTo(refundableBalance, BigDecimal.ZERO) == 0) {
-            weChatPayment.setPayStatus(PayStatusCode.TRADE_REFUNDED);
-        }
-        else {
-            weChatPayment.setPayStatus(PayStatusCode.TRADE_REFUNDING);
-        }
-        weChatPaymentManager.updateById(weChatPayment);
+    public void updatePayRefund(Long paymentId, BigDecimal amount) {
     }
 
 }
