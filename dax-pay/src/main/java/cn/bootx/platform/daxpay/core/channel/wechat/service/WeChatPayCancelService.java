@@ -86,7 +86,7 @@ public class WeChatPayCancelService {
             .build()
             .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         // 获取证书文件
-        if (StrUtil.isNotBlank(weChatPayConfig.getP12())){
+        if (StrUtil.isBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
             AsyncRefundLocal.setErrorMsg(errorMsg);
             AsyncRefundLocal.setErrorCode(REFUND_PROCESS_FAIL);
