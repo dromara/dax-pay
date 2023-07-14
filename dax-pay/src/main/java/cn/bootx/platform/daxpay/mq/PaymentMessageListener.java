@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.mq;
 
 import cn.bootx.platform.common.rabbit.conditional.ConditionalOnRabbit;
 import cn.bootx.platform.daxpay.code.PaymentEventCode;
-import cn.bootx.platform.daxpay.core.pay.service.PayExpiredTimeService;
+import cn.bootx.platform.daxpay.core.sync.service.PayExpiredTimeService;
 import cn.bootx.platform.daxpay.event.PayCancelEvent;
 import cn.bootx.platform.daxpay.event.PayCompleteEvent;
 import cn.bootx.platform.daxpay.event.PayRefundEvent;

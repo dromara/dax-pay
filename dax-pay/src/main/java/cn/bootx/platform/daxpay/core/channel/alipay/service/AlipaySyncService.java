@@ -2,8 +2,9 @@ package cn.bootx.platform.daxpay.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
 import cn.bootx.platform.daxpay.code.paymodel.AliPayCode;
-import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
+import cn.bootx.platform.daxpay.core.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
+import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.response.AlipayTradeQueryResponse;
@@ -39,7 +40,7 @@ public class AlipaySyncService {
             // 查询退款参数
             AlipayTradeQueryResponse response = AliPayApi.tradeQueryToResponse(queryModel);
             String tradeStatus = response.getTradeStatus();
-
+            paySyncResult.setJson(JSONUtil.toJsonStr(response));
             // 支付完成
             if (Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_SUCCESS)
                     || Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_FINISHED)) {

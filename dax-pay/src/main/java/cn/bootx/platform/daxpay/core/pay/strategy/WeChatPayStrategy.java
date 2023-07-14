@@ -11,7 +11,6 @@ import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaySyncService
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaymentService;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayParam;
@@ -153,16 +152,6 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     @Override
     public void doCloseHandler() {
         weChatPaymentService.updateClose(this.getPayment().getId());
-    }
-
-    /**
-     * 异步支付单与支付网关进行状态比对
-     */
-    @Override
-    public PaySyncResult doSyncPayStatusHandler() {
-        // 检查并获取微信支付配置
-        this.initWeChatPayConfig(this.getPayParam().getMchAppCode());
-        return weChatPaySyncService.syncPayStatus(this.getPayment().getId(), this.weChatPayConfig);
     }
 
     /**

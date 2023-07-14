@@ -1,14 +1,15 @@
-package cn.bootx.platform.daxpay.core.notify.entity;
+package cn.bootx.platform.daxpay.core.sync.record.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbComment;
+import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
-import cn.bootx.platform.daxpay.core.notify.convert.PayNotifyConvert;
-import cn.bootx.platform.daxpay.dto.notify.PayNotifyRecordDto;
+import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
+import cn.bootx.platform.daxpay.core.sync.record.convert.PaySyncRecordConvert;
+import cn.bootx.platform.daxpay.dto.sync.PaySyncRecordDto;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,17 +18,16 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 回调记录
- *
+ * 支付同步记录
  * @author xxm
- * @since 2021/6/22
+ * @since 2023/7/14
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-//@DbTable(comment = "回调记录")
+@DbTable(comment = "支付同步记录")
 @Accessors(chain = true)
-@TableName("pay_pay_notify_record")
-public class PayNotifyRecord extends MpCreateEntity implements EntityBaseFunction<PayNotifyRecordDto> {
+@TableName("pay_sync_record")
+public class PaySyncRecord  extends MpCreateEntity implements EntityBaseFunction<PaySyncRecordDto> {
 
     /** 支付记录id */
     @DbComment("支付记录id")
@@ -51,26 +51,24 @@ public class PayNotifyRecord extends MpCreateEntity implements EntityBaseFunctio
     /** 通知消息 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbComment("通知消息")
-    private String notifyInfo;
+    private String syncInfo;
 
     /**
-     * 处理状态
-     * @see PayStatusCode#NOTIFY_PROCESS_SUCCESS
+     * 同步状态
+     * @see PaySyncStatus#WAIT_BUYER_PAY
      */
-    @DbComment("处理状态")
+    @DbComment("同步状态")
     private String status;
 
-    /** 提示信息 */
-    @DbComment("提示信息")
-    private String msg;
+    /** 同步时间 */
+    @DbComment("同步时间")
+    private LocalDateTime syncTime;
 
-    /** 回调时间 */
-    @DbComment("回调时间")
-    private LocalDateTime notifyTime;
-
+    /**
+     * 转换
+     */
     @Override
-    public PayNotifyRecordDto toDto() {
-        return PayNotifyConvert.CONVERT.convert(this);
+    public PaySyncRecordDto toDto() {
+        return PaySyncRecordConvert.CONVERT.convert(this);
     }
-
 }

@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayNotifyRecordService {
+public class  PayNotifyRecordService {
 
     private final PayNotifyRecordManager payNotifyRecordManager;
 

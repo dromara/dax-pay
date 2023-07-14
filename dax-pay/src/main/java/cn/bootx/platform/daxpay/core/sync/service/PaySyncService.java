@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.core.pay.service;
+package cn.bootx.platform.daxpay.core.sync.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
@@ -6,14 +6,17 @@ import cn.bootx.platform.daxpay.core.pay.builder.PayEventBuilder;
 import cn.bootx.platform.daxpay.core.pay.builder.PaymentBuilder;
 import cn.bootx.platform.daxpay.core.pay.factory.PayStrategyFactory;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
+import cn.bootx.platform.daxpay.core.sync.factory.PaySyncStrategyFactory;
+import cn.bootx.platform.daxpay.core.sync.func.AbsPaySyncStrategy;
+import cn.bootx.platform.daxpay.core.sync.record.service.PaySyncRecordService;
+import cn.bootx.platform.daxpay.core.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.mq.PaymentEventSender;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.util.PayWaylUtil;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,8 @@ import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.*;
 public class PaySyncService {
 
     private final PaymentService paymentService;
+
+    private final PaySyncRecordService paySyncRecordService;
 
     private final PaymentEventSender eventSender;
 
@@ -67,25 +72,39 @@ public class PaySyncService {
      * 同步支付状态 传入 payment 对象
      */
     public void syncPayment(Payment payment) {
+        // 获取同步策略类
+        AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payment.getAsyncPayChannel());
+        syncPayStrategy.initPayParam(payment);
+        // 同步
+        PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();
+        // 处理
+        this.resultHandler(paySyncResult,payment);
+        // 记录
+        paySyncRecordService.saveRecord(paySyncResult,payment);
+    }
+
+    /**
+     * 对同步结果进行处理
+     */
+    public void resultHandler(PaySyncResult paySyncResult, Payment payment){
+        String paySyncStatus = paySyncResult.getPaySyncStatus();
         PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
-        // 1.获取支付方式，通过工厂生成对应的策略组
+        // 获取支付方式，通过工厂生成对应的策略组
         List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
         if (CollUtil.isEmpty(paymentStrategyList)) {
             throw new PayUnsupportedMethodException();
         }
 
-        // 2.初始化支付的参数
+        // 初始化支付的参数
         for (AbsPayStrategy paymentStrategy : paymentStrategyList) {
             paymentStrategy.initPayParam(payment, payParam);
         }
 
-        // 3 拿到异步支付方法, 与支付网关进行同步
+        // 拿到对应的支付方式
         PayWayParam asyncPayMode = PayWaylUtil.getAsyncPayModeParam(payParam);
         AbsPayStrategy syncPayStrategy = PayStrategyFactory.create(asyncPayMode);
-        syncPayStrategy.initPayParam(payment, payParam);
-        PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();
-        String paySyncStatus = paySyncResult.getPaySyncStatus();
 
+        // 对同步结果处理
         switch (paySyncStatus) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
             case PaySyncStatus.TRADE_SUCCESS: {

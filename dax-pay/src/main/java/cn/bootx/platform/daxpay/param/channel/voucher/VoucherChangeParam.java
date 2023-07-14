@@ -6,31 +6,34 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
+ *
  * @author xxm
- * @since 2022/3/14
+ * @since 2023/7/13
  */
 @Data
-@Schema(title = "储值卡导入参数")
-public class VoucherImportParam {
+@Accessors(chain = true)
+@Schema(title = "储值卡信息更改参数")
+public class VoucherChangeParam {
 
     @ExcelProperty("卡号")
     @Schema(description = "卡号")
     private String cardNo;
 
-    @ExcelProperty("面值")
+    @ExcelProperty("卡号")
     @Schema(description = "面值")
     private BigDecimal faceValue;
 
-    @ExcelProperty("余额")
+    @ExcelProperty("卡号")
     @Schema(description = "余额")
     private BigDecimal balance;
 
-    @ExcelProperty("是否长期有效")
+    @ExcelProperty("卡号")
     @Schema(description = "是否长期有效")
     private Boolean enduring;
 

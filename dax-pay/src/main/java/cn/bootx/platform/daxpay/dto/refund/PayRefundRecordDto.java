@@ -22,7 +22,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @Schema(title = "退款记录")
-public class RefundRecordDto extends BaseDto {
+public class PayRefundRecordDto extends BaseDto {
 
     @Schema(description = "关联的业务id")
     private String businessId;

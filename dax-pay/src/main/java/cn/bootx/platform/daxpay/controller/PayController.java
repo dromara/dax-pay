@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.daxpay.core.pay.service.PayCancelService;
 import cn.bootx.platform.daxpay.core.refund.service.PayRefundService;
 import cn.bootx.platform.daxpay.core.pay.service.PayService;
-import cn.bootx.platform.daxpay.core.pay.service.PaySyncService;
+import cn.bootx.platform.daxpay.core.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.dto.pay.PayResult;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.refund.RefundParam;

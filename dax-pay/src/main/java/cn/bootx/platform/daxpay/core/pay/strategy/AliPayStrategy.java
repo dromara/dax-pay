@@ -8,7 +8,6 @@ import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.*;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.alipay.AliPayParam;
@@ -153,14 +152,6 @@ public class AliPayStrategy extends AbsPayStrategy {
         aliPaymentService.updateClose(this.getPayment().getId());
     }
 
-    /**
-     * 异步支付单与支付网关进行状态比对
-     */
-    @Override
-    public PaySyncResult doSyncPayStatusHandler() {
-        this.initAlipayConfig(this.getPayParam().getMchAppCode());
-        return alipaySyncService.syncPayStatus(this.getPayment());
-    }
 
     /**
      * 初始化支付宝配置信息

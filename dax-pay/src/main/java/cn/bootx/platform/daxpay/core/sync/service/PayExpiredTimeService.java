@@ -1,20 +1,11 @@
-package cn.bootx.platform.daxpay.core.pay.service;
+package cn.bootx.platform.daxpay.core.sync.service;
 
-import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
 import cn.bootx.platform.daxpay.core.pay.builder.PayEventBuilder;
-import cn.bootx.platform.daxpay.core.pay.builder.PaymentBuilder;
-import cn.bootx.platform.daxpay.core.pay.factory.PayStrategyFactory;
 import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
-import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
-import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
+import cn.bootx.platform.daxpay.core.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.mq.PaymentEventSender;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.util.PayWaylUtil;
-import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -49,63 +40,63 @@ public class PayExpiredTimeService {
     @Transactional(rollbackFor = Exception.class)
     public void expiredTime(Long paymentId) {
 
-        Payment payment = paymentService.findById(paymentId).orElseThrow(() -> new PayFailureException("支付单未找到"));
-        // 只处理支付中
-        if (!Objects.equals(payment.getPayStatus(), TRADE_PROGRESS)) {
-            return;
-        }
-        // 获取支付网关状态
-        PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
-        // 1.获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
-        if (CollUtil.isEmpty(paymentStrategyList)) {
-            throw new PayUnsupportedMethodException();
-        }
-
-        // 2.初始化支付的参数
-        for (AbsPayStrategy paymentStrategy : paymentStrategyList) {
-            paymentStrategy.initPayParam(payment, payParam);
-        }
-
-        // 3 拿到异步支付方法, 与支付网关进行同步
-        PayWayParam asyncPayMode = PayWaylUtil.getAsyncPayModeParam(payParam);
-        AbsPayStrategy syncPayStrategy = PayStrategyFactory.create(asyncPayMode);
-        syncPayStrategy.initPayParam(payment, payParam);
-        PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();
-
-        // 4 对返回的支付网关各种状态进行处理
-        String paySyncStatus = paySyncResult.getPaySyncStatus();
-        switch (paySyncStatus) {
-            // 成功状态
-            case PaySyncStatus.TRADE_SUCCESS: {
-                this.paySuccess(payment, syncPayStrategy, paySyncResult);
-                break;
-            }
-            // 待付款/ 支付中
-            case PaySyncStatus.WAIT_BUYER_PAY: {
-                this.payCancel(payment, paymentStrategyList);
-                break;
-            }
-            // 超时关闭 和 网关没找到记录
-            case PaySyncStatus.TRADE_CLOSED:
-            case PaySyncStatus.NOT_FOUND: {
-                this.payClose(payment, paymentStrategyList);
-                break;
-            }
-            // 交易退款
-            case PaySyncStatus.TRADE_REFUND: {
-                log.info("交易退款不需要关闭: {}", payment.getId());
-                break;
-            }
-            // 调用出错 进行重试
-            case PaySyncStatus.FAIL: {
-                log.warn("支付状态同步接口调用出错");
-            }
-            case PaySyncStatus.NOT_SYNC:
-            default: {
-                log.error("支付超时代码有问题");
-            }
-        }
+//        Payment payment = paymentService.findById(paymentId).orElseThrow(() -> new PayFailureException("支付单未找到"));
+//        // 只处理支付中
+//        if (!Objects.equals(payment.getPayStatus(), TRADE_PROGRESS)) {
+//            return;
+//        }
+//        // 获取支付网关状态
+//        PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
+//        // 1.获取支付方式，通过工厂生成对应的策略组
+//        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
+//        if (CollUtil.isEmpty(paymentStrategyList)) {
+//            throw new PayUnsupportedMethodException();
+//        }
+//
+//        // 2.初始化支付的参数
+//        for (AbsPayStrategy paymentStrategy : paymentStrategyList) {
+//            paymentStrategy.initPayParam(payment, payParam);
+//        }
+//
+//        // 3 拿到异步支付方法, 与支付网关进行同步
+//        PayWayParam asyncPayMode = PayWaylUtil.getAsyncPayModeParam(payParam);
+//        AbsPayStrategy syncPayStrategy = PayStrategyFactory.create(asyncPayMode);
+//        syncPayStrategy.initPayParam(payment, payParam);
+//        PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();
+//
+//        // 4 对返回的支付网关各种状态进行处理
+//        String paySyncStatus = paySyncResult.getPaySyncStatus();
+//        switch (paySyncStatus) {
+//            // 成功状态
+//            case PaySyncStatus.TRADE_SUCCESS: {
+//                this.paySuccess(payment, syncPayStrategy, paySyncResult);
+//                break;
+//            }
+//            // 待付款/ 支付中
+//            case PaySyncStatus.WAIT_BUYER_PAY: {
+//                this.payCancel(payment, paymentStrategyList);
+//                break;
+//            }
+//            // 超时关闭 和 网关没找到记录
+//            case PaySyncStatus.TRADE_CLOSED:
+//            case PaySyncStatus.NOT_FOUND: {
+//                this.payClose(payment, paymentStrategyList);
+//                break;
+//            }
+//            // 交易退款
+//            case PaySyncStatus.TRADE_REFUND: {
+//                log.info("交易退款不需要关闭: {}", payment.getId());
+//                break;
+//            }
+//            // 调用出错 进行重试
+//            case PaySyncStatus.FAIL: {
+//                log.warn("支付状态同步接口调用出错");
+//            }
+//            case PaySyncStatus.NOT_SYNC:
+//            default: {
+//                log.error("支付超时代码有问题");
+//            }
+//        }
     }
 
     /**

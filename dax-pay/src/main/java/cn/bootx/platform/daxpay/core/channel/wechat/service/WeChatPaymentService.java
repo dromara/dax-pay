@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
+import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPaymentManager;
@@ -38,7 +39,7 @@ public class WeChatPaymentService {
     private final WeChatPaymentManager weChatPaymentManager;
 
     /**
-     * 支付调起成功 更新 payment 中 异步支付类型信息
+     * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建微信支付单
      */
     public void updatePaySuccess(Payment payment, PayWayParam payWayParam) {
         AsyncPayInfo asyncPayInfo = AsyncPayInfoLocal.get();
@@ -74,10 +75,9 @@ public class WeChatPaymentService {
     }
 
     /**
-     * 更新支付记录成功状态, 并创建微信支付记录
+     * 并创建微信支付记录
      */
     private void createWeChatPayment(Payment payment, PayWayParam payWayParam, String tradeNo) {
-
         // 创建微信支付记录
         WeChatPayment wechatPayment = new WeChatPayment();
         wechatPayment.setTradeNo(tradeNo)
@@ -105,6 +105,18 @@ public class WeChatPaymentService {
      * 更新退款
      */
     public void updatePayRefund(Long paymentId, BigDecimal amount) {
+        Optional<WeChatPayment> weChatPayment = weChatPaymentManager.findByPaymentId(paymentId);
+        weChatPayment.ifPresent(payment -> {
+            BigDecimal refundableBalance = payment.getRefundableBalance().subtract(amount);
+            payment.setRefundableBalance(refundableBalance);
+            if (BigDecimalUtil.compareTo(refundableBalance, BigDecimal.ZERO) == 0) {
+                payment.setPayStatus(PayStatusCode.TRADE_REFUNDED);
+            }
+            else {
+                payment.setPayStatus(PayStatusCode.TRADE_REFUNDING);
+            }
+            weChatPaymentManager.updateById(payment);
+        });
     }
 
 }

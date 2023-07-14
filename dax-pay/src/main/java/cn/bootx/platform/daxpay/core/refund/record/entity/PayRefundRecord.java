@@ -6,7 +6,7 @@ import cn.bootx.platform.common.mybatisplus.handler.JacksonRawTypeHandler;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.core.refund.record.convert.RefundConvert;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
-import cn.bootx.platform.daxpay.dto.refund.RefundRecordDto;
+import cn.bootx.platform.daxpay.dto.refund.PayRefundRecordDto;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -27,7 +27,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @TableName(value = "pay_refund_record", autoResultMap = true)
-public class RefundRecord extends MpBaseEntity implements EntityBaseFunction<RefundRecordDto> {
+public class PayRefundRecord extends MpBaseEntity implements EntityBaseFunction<PayRefundRecordDto> {
 
     /** 支付单号 */
     private Long paymentId;
@@ -75,7 +75,7 @@ public class RefundRecord extends MpBaseEntity implements EntityBaseFunction<Ref
     private String errorMsg;
 
     @Override
-    public RefundRecordDto toDto() {
+    public PayRefundRecordDto toDto() {
         return RefundConvert.CONVERT.convert(this);
     }
 

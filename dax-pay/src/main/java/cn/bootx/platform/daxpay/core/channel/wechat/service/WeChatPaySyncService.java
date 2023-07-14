@@ -2,8 +2,9 @@ package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
-import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
+import cn.bootx.platform.daxpay.core.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
+import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
 import com.ijpay.wxpay.WxPayApi;
@@ -41,6 +42,7 @@ public class WeChatPaySyncService {
         try {
             String xmlResult = WxPayApi.orderQuery(params);
             Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
+            paySyncResult.setJson(JSONUtil.toJsonStr(result));
             // 查询失败
             if (!WxPayKit.codeIsOk(result.get(WeChatPayCode.RETURN_CODE))) {
                 log.warn("查询微信订单失败:{}", result);

@@ -4,9 +4,9 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.bootx.platform.daxpay.core.refund.record.dao.RefundRecordManager;
-import cn.bootx.platform.daxpay.core.refund.record.entity.RefundRecord;
-import cn.bootx.platform.daxpay.dto.refund.RefundRecordDto;
+import cn.bootx.platform.daxpay.core.refund.record.dao.PayRefundRecordManager;
+import cn.bootx.platform.daxpay.core.refund.record.entity.PayRefundRecord;
+import cn.bootx.platform.daxpay.dto.refund.PayRefundRecordDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,23 +21,23 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RefundRecordService {
+public class PayRefundRecordService {
 
-    private final RefundRecordManager refundRecordManager;
+    private final PayRefundRecordManager refundRecordManager;
 
     /**
      * 分页查询
      */
-    public PageResult<RefundRecordDto> page(PageParam pageParam, RefundRecordDto param) {
-        Page<RefundRecord> page = refundRecordManager.page(pageParam, param);
+    public PageResult<PayRefundRecordDto> page(PageParam pageParam, PayRefundRecordDto param) {
+        Page<PayRefundRecord> page = refundRecordManager.page(pageParam, param);
         return MpUtil.convert2DtoPageResult(page);
     }
 
     /**
      * 根据id查询
      */
-    public RefundRecordDto findById(Long id) {
-        return refundRecordManager.findById(id).map(RefundRecord::toDto).orElseThrow(DataNotExistException::new);
+    public PayRefundRecordDto findById(Long id) {
+        return refundRecordManager.findById(id).map(PayRefundRecord::toDto).orElseThrow(DataNotExistException::new);
     }
 
 }

@@ -8,12 +8,24 @@ import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherQueryService
 import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherService;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherDto;
 import cn.bootx.platform.daxpay.param.channel.voucher.VoucherGenerationParam;
+import cn.bootx.platform.daxpay.param.channel.voucher.VoucherImportParam;
 import cn.bootx.platform.daxpay.param.channel.voucher.VoucherParam;
+import cn.hutool.core.io.IoUtil;
+import com.alibaba.excel.EasyExcel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -89,4 +101,37 @@ public class VoucherController {
         return Res.ok();
     }
 
+    @SneakyThrows
+    @Operation(summary = "导入已有的储值卡")
+    @PostMapping("/importBatch")
+    public ResResult<Void> importBatch(Boolean skip, MultipartFile file){
+        List<VoucherImportParam> voucherImportParams = EasyExcel.read(file.getInputStream())
+                // 设置与Excel表映射的类
+                .head(VoucherImportParam.class)
+                // 设置sheet,默认读取第一个
+                .sheet()
+                // 设置标题所在行数
+                .headRowNumber(1)
+                // 异步读取
+                .doReadSync();
+        voucherService.importBatch(skip,voucherImportParams);
+        return Res.ok();
+    }
+
+    @SneakyThrows
+    @Operation(summary = "下载导入模板")
+    @GetMapping("/excelTemplate")
+    public ResponseEntity<byte[]> excelTemplate(){
+        //设置header信息
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment",
+                "ImportVoucher.xlsx");
+
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        InputStream inputStream = resourceLoader.getResource("classpath:templates//ImportVoucher.xlsx")
+                .getInputStream();
+
+        return new ResponseEntity<>(IoUtil.readBytes(inputStream),headers, HttpStatus.OK);
+    }
 }

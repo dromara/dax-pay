@@ -1,9 +1,7 @@
 package cn.bootx.platform.daxpay.core.pay.func;
 
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
 import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.core.pay.result.PaySyncResult;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
@@ -92,13 +90,5 @@ public abstract class AbsPayStrategy {
      * 关闭本地支付记录
      */
     public abstract void doCloseHandler();
-
-    /**
-     * 异步支付单与支付网关进行状态比对
-     * @see PaySyncStatus
-     */
-    public PaySyncResult doSyncPayStatusHandler() {
-        return new PaySyncResult();
-    }
 
 }

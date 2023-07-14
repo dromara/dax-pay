@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.core.pay.result;
+package cn.bootx.platform.daxpay.core.sync.result;
 
 import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
 import lombok.Data;
@@ -24,7 +24,10 @@ public class PaySyncResult {
      */
     private String paySyncStatus = NOT_SYNC;
 
-    /** 网关返回参数 */
+    /** 网关返回参数(会被用到的参数) */
     private Map<String, String> map;
+
+    /** 网关返回对象的json字符串 */
+    private String json;
 
 }

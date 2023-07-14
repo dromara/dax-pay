@@ -164,7 +164,7 @@ public class VoucherPayService {
     }
 
     /**
-     * 直接支付
+     * 直接支付 (同步支付方式下)
      */
     @Transactional(rollbackFor = Exception.class)
     public List<VoucherRecord> pay(BigDecimal amount, Payment payment, List<Voucher> vouchers) {
@@ -272,9 +272,16 @@ public class VoucherPayService {
                 .map(VoucherRecord::getCardNo)
                 .collect(Collectors.toList());
         List<Voucher> vouchers = voucherManager.findByCardNoList(cardNoList);
+        // 如果未传入卡号, 默认退到最抗用的一张卡上
+        if (StrUtil.isBlank(refundVoucherNo)){
+            List<Voucher> sort = this.sort(vouchers);
+            refundVoucherNo = sort.get(sort.size()-1).getCardNo();
+        }
+
         // 筛选出来要进行退款的卡
+        String finalRefundVoucherNo = refundVoucherNo;
         Voucher voucher = vouchers.stream()
-                .filter(vr -> Objects.equals(vr.getCardNo(), refundVoucherNo))
+                .filter(vr -> Objects.equals(vr.getCardNo(), finalRefundVoucherNo))
                 .findFirst()
                 .orElseThrow(() -> new PayFailureException("退款卡号不存在"));
         // 将金额全部推到指定的卡上

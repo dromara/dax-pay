@@ -10,8 +10,8 @@ import cn.bootx.platform.daxpay.core.refund.factory.PayRefundStrategyFactory;
 import cn.bootx.platform.daxpay.core.refund.func.AbsPayRefundStrategy;
 import cn.bootx.platform.daxpay.core.refund.func.PayRefundStrategyConsumer;
 import cn.bootx.platform.daxpay.core.refund.local.AsyncRefundLocal;
-import cn.bootx.platform.daxpay.core.refund.record.dao.RefundRecordManager;
-import cn.bootx.platform.daxpay.core.refund.record.entity.RefundRecord;
+import cn.bootx.platform.daxpay.core.refund.record.dao.PayRefundRecordManager;
+import cn.bootx.platform.daxpay.core.refund.record.entity.PayRefundRecord;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
 import cn.bootx.platform.daxpay.exception.payment.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
@@ -54,7 +54,7 @@ public class PayRefundService {
 
     private final PaymentManager paymentManager;
 
-    private final RefundRecordManager refundRecordManager;
+    private final PayRefundRecordManager refundRecordManager;
 
     /**
      * 退款
@@ -229,7 +229,7 @@ public class PayRefundService {
                 .collect(Collectors.toList());
         HttpServletRequest request = WebServletUtil.getRequest();
         String ip = ServletUtil.getClientIP(request);
-        RefundRecord refundRecord = new RefundRecord().setRefundRequestNo(AsyncRefundLocal.get())
+        PayRefundRecord refundRecord = new PayRefundRecord().setRefundRequestNo(AsyncRefundLocal.get())
                 .setRefundableInfo(refundableInfos)
                 .setAmount(amount)
                 .setRefundableBalance(payment.getRefundableBalance())

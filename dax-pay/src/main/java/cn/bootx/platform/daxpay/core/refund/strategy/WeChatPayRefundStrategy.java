@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.core.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
-import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayCancelService;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaymentService;
@@ -25,7 +24,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WeChatPayRefundStrategy extends AbsPayRefundStrategy {
 
-    private final WeChatPaymentManager weChatPaymentManager;
     private final WeChatPayConfigManager weChatPayConfigManager;
 
     private final WeChatPayCancelService weChatPayCancelService;

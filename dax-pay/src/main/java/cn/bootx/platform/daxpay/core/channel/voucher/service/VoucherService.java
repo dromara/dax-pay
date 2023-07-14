@@ -1,12 +1,16 @@
 package cn.bootx.platform.daxpay.core.channel.voucher.service;
 
+import cn.bootx.platform.common.core.exception.BizException;
+import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.daxpay.code.paymodel.VoucherCode;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherLogManager;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherManager;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherLog;
+import cn.bootx.platform.daxpay.param.channel.voucher.VoucherChangeParam;
 import cn.bootx.platform.daxpay.param.channel.voucher.VoucherGenerationParam;
 import cn.bootx.platform.daxpay.param.channel.voucher.VoucherImportParam;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +72,24 @@ public class VoucherService {
 
     /**
      * 批量导入
+     * @param skip 是否跳过已经导入的储值卡,false时将会异常
      */
-    public void importBatch(VoucherImportParam param) {
+    public void importBatch(Boolean skip,List<VoucherImportParam> voucherImports) {
+        List<String> cardNoList = voucherImports.stream()
+                .map(VoucherImportParam::getCardNo)
+                .distinct()
+                .collect(Collectors.toList());
+        // 卡号不能重复
+        if (voucherImports.size()!=cardNoList.size()){
+            throw new BizException("卡号不能重复");
+        }
+        // 查询库中是否已经有对应的储值卡号
+        List<Voucher> vouchersByDB = voucherManager.findByCardNoList(cardNoList);
+        // 不跳过已经导入的储值卡且存在数据, 抛出异常
+        if (Objects.equals(skip,true)&& CollUtil.isNotEmpty(vouchersByDB)){
+            log.warn("数据库中已经存在的卡号:{}",vouchersByDB.stream().map(Voucher::getCardNo).collect(Collectors.toList()));
+            throw new BizException("要导入的卡号在数据中已经存在");
+        }
 
     }
 
@@ -102,10 +122,12 @@ public class VoucherService {
     }
 
     /**
-     * 更改有效期
+     * 更改储值卡信息
      */
-    public void changeEnduring() {
-
+    public void changeInfo(VoucherChangeParam voucherChangeParam) {
+        // 查询对应的卡
+        Voucher voucher = voucherManager.findByCardNo(voucherChangeParam.getCardNo())
+                .orElseThrow(DataNotExistException::new);
     }
 
 }
