@@ -66,6 +66,7 @@ public class AlipaySyncService {
         }
         catch (AlipayApiException e) {
             log.error("查询订单失败:", e);
+            paySyncResult.setMsg(e.getErrMsg());
         }
         return paySyncResult;
     }

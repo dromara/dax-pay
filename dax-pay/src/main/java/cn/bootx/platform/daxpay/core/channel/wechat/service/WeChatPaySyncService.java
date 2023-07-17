@@ -80,6 +80,7 @@ public class WeChatPaySyncService {
         }
         catch (RuntimeException e) {
             log.error("查询订单失败:", e);
+            paySyncResult.setMsg(e.getMessage());
         }
         return paySyncResult;
     }

@@ -30,4 +30,7 @@ public class PaySyncResult {
     /** 网关返回对象的json字符串 */
     private String json;
 
+    /** 错误提示 */
+    private String msg;
+
 }

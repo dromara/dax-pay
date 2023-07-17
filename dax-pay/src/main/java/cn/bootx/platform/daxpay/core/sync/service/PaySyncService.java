@@ -77,10 +77,10 @@ public class PaySyncService {
         syncPayStrategy.initPayParam(payment);
         // 同步
         PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();
-        // 处理
-        this.resultHandler(paySyncResult,payment);
         // 记录
         paySyncRecordService.saveRecord(paySyncResult,payment);
+        // 处理
+        this.resultHandler(paySyncResult,payment);
     }
 
     /**

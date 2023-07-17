@@ -60,6 +60,9 @@ public class PaySyncRecord  extends MpCreateEntity implements EntityBaseFunction
     @DbComment("同步状态")
     private String status;
 
+    @DbComment("错误消息")
+    private String msg;
+
     /** 同步时间 */
     @DbComment("同步时间")
     private LocalDateTime syncTime;

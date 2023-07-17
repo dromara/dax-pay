@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +32,7 @@ public class PaySyncRecordService {
     /**
      * 记录同步记录
      */
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
     public void saveRecord(PaySyncResult paySyncResult, Payment payment){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setPaymentId(payment.getId())
@@ -38,6 +41,7 @@ public class PaySyncRecordService {
                 .setPayChannel(payment.getAsyncPayChannel())
                 .setSyncInfo(paySyncResult.getJson())
                 .setStatus(paySyncResult.getPaySyncStatus())
+                .setMsg(paySyncResult.getMsg())
                 .setSyncTime(LocalDateTime.now());
         syncRecordManager.save(paySyncRecord);
     }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "支付同步记录")
 @RestController
-@RequestMapping("/")
+@RequestMapping("/pay/sync")
 @RequiredArgsConstructor
 public class PaySyncRecordController {
     private final PaySyncRecordService syncRecordService;
