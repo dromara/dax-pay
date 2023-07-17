@@ -42,6 +42,7 @@
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <mybatis-table-modify.version>1.5.3</mybatis-table-modify.version>
         <wxjava.version>4.5.2.B</wxjava.version>
+        <rocketmq.version>2.2.3</rocketmq.version>
         <lock4j.version>2.2.4</lock4j.version>
     </properties>
     <!-- 项目依赖版本管理 -->

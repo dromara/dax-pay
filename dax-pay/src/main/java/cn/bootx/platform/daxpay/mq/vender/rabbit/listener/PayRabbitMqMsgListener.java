@@ -1,14 +1,14 @@
-package cn.bootx.platform.daxpay.mq;
+package cn.bootx.platform.daxpay.mq.vender.rabbit.listener;
 
-import cn.bootx.platform.common.rabbit.conditional.ConditionalOnRabbit;
 import cn.bootx.platform.daxpay.code.PaymentEventCode;
 import cn.bootx.platform.daxpay.core.sync.service.PayExpiredTimeService;
-import cn.bootx.platform.daxpay.event.PayCancelEvent;
-import cn.bootx.platform.daxpay.event.PayCompleteEvent;
-import cn.bootx.platform.daxpay.event.PayRefundEvent;
+import cn.bootx.platform.daxpay.mq.event.PayCancelEvent;
+import cn.bootx.platform.daxpay.mq.event.PayCompleteEvent;
+import cn.bootx.platform.daxpay.mq.event.PayRefundEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,9 +19,9 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@ConditionalOnRabbit
+@ConditionalOnProperty(name ="bootx.daxpay.mq-type", havingValue = "rabbit")
 @RequiredArgsConstructor
-public class PaymentMessageListener {
+public class PayRabbitMqMsgListener {
 
     private final PayExpiredTimeService payExpiredTimeService;
 

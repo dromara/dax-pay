@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.configuration;
+package cn.bootx.platform.daxpay.mq;
 
 import cn.bootx.platform.daxpay.code.PaymentEventCode;
 import org.springframework.amqp.core.Binding;
@@ -6,7 +6,6 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * 消息队列配置
@@ -14,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @author xxm
  * @since 2021/6/25
  */
-@Configuration
+//@Configuration
 public class PaymentRabbitMqConfiguration {
 
     /** 支付完成队列 */

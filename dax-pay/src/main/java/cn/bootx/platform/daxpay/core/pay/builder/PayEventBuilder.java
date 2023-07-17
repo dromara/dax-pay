@@ -1,9 +1,9 @@
 package cn.bootx.platform.daxpay.core.pay.builder;
 
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
-import cn.bootx.platform.daxpay.event.PayCancelEvent;
-import cn.bootx.platform.daxpay.event.PayCompleteEvent;
-import cn.bootx.platform.daxpay.event.PayRefundEvent;
+import cn.bootx.platform.daxpay.mq.event.PayCancelEvent;
+import cn.bootx.platform.daxpay.mq.event.PayCompleteEvent;
+import cn.bootx.platform.daxpay.mq.event.PayRefundEvent;
 import lombok.experimental.UtilityClass;
 
 /**

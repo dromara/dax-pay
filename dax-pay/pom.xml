@@ -110,12 +110,20 @@
             <artifactId>common-starter-quartz</artifactId>
         </dependency>
 
-        <!-- 消息队列 amqp -->
+        <!-- 消息队列 RabbitMQ -->
         <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-rabbitmq</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <optional>true</optional>
         </dependency>
         <!-- 消息队列 rocketMQ-->
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot</artifactId>
+            <version>${rocketmq.version}</version>
+        </dependency>
+
+        <!-- 消息队列 RabbitMQ-->
 
         <!-- 自动建表 -->
         <dependency>

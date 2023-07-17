@@ -1,12 +1,13 @@
 package cn.bootx.platform.daxpay.mq;
 
 import cn.bootx.platform.daxpay.code.PaymentEventCode;
-import cn.bootx.platform.daxpay.event.PayCancelEvent;
-import cn.bootx.platform.daxpay.event.PayCompleteEvent;
-import cn.bootx.platform.daxpay.event.PayRefundEvent;
+import cn.bootx.platform.daxpay.mq.event.PayCancelEvent;
+import cn.bootx.platform.daxpay.mq.event.PayCompleteEvent;
+import cn.bootx.platform.daxpay.mq.event.PayRefundEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PaymentEventSender {
 
-    private final RabbitTemplate rabbitTemplate;
+    private final PayMqMsgSender mqMsgSender;
 
     /**
      * 支付完成 事件发布
@@ -30,7 +31,7 @@ public class PaymentEventSender {
     @Async("bigExecutor")
     @Retryable(value = Exception.class)
     public void sendPayComplete(PayCompleteEvent event) {
-        rabbitTemplate.convertAndSend(PaymentEventCode.EXCHANGE_PAYMENT, PaymentEventCode.PAY_COMPLETE, event);
+        mqMsgSender.send(event);
     }
 
     /**

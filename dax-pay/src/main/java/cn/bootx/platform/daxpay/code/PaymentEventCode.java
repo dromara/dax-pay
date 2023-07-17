@@ -3,7 +3,10 @@ package cn.bootx.platform.daxpay.code;
 public interface PaymentEventCode {
 
     /** 支付中心交换机 */
-    String EXCHANGE_PAYMENT = "service.payment";
+    String EXCHANGE_PAYMENT = "service.exchange";
+
+    /** 支付中心交换机 */
+    String DELAYED_EXCHANGE_PAYMENT = "service.delayedExchange";
 
     /** 支付完成 */
     String PAY_COMPLETE = "pay.complete";
