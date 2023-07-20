@@ -121,9 +121,15 @@
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-spring-boot</artifactId>
             <version>${rocketmq.version}</version>
+            <optional>true</optional>
         </dependency>
 
-        <!-- 消息队列 RabbitMQ-->
+        <!-- 消息队列 ActiveMQ-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- 自动建表 -->
         <dependency>

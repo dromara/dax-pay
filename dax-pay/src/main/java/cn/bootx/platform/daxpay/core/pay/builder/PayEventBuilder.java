@@ -1,9 +1,7 @@
 package cn.bootx.platform.daxpay.core.pay.builder;
 
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
-import cn.bootx.platform.daxpay.mq.event.PayCancelEvent;
-import cn.bootx.platform.daxpay.mq.event.PayCompleteEvent;
-import cn.bootx.platform.daxpay.mq.event.PayRefundEvent;
+import cn.bootx.platform.daxpay.mq.event.*;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -19,27 +17,32 @@ public class PayEventBuilder {
      * 支付完成
      */
     public PayCompleteEvent buildPayComplete(Payment payment) {
-        PayCompleteEvent event = new PayCompleteEvent().setPaymentId(payment.getId())
+        return new PayCompleteEvent().setPaymentId(payment.getId())
             .setBusinessId(payment.getBusinessId());
-        return event;
     }
 
     /**
      * 支付撤销/关闭
      */
     public PayCancelEvent buildPayCancel(Payment payment) {
-        PayCancelEvent event = new PayCancelEvent().setPaymentId(payment.getId())
+        return new PayCancelEvent().setPaymentId(payment.getId())
             .setBusinessId(payment.getBusinessId());
-        return event;
+    }
+
+    /**
+     * 支付超时
+     */
+    public PayExpiredTimeEvent buildPayExpiredTime(Payment payment) {
+        return new PayExpiredTimeEvent().setPaymentId(payment.getId())
+            .setBusinessId(payment.getBusinessId());
     }
 
     /**
      * 支付退款
      */
     public PayRefundEvent buildPayRefund(Payment payment) {
-        PayRefundEvent event = new PayRefundEvent().setPaymentId(payment.getId())
+        return new PayRefundEvent().setPaymentId(payment.getId())
             .setBusinessId(payment.getBusinessId());
-        return event;
     }
 
 }

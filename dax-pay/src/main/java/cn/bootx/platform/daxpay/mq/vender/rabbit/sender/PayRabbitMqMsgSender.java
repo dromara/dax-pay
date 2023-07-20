@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.mq.event.PayEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import static cn.bootx.platform.daxpay.code.PaymentEventCode.DELAYED_EXCHANGE_PAYMENT;
 
@@ -14,7 +14,7 @@ import static cn.bootx.platform.daxpay.code.PaymentEventCode.DELAYED_EXCHANGE_PA
  * @author xxm
  * @since 2023/7/17
  */
-@Service
+@Component
 @RequiredArgsConstructor
 @ConditionalOnProperty(name ="bootx.daxpay.mq-type", havingValue = "rabbit")
 public class PayRabbitMqMsgSender implements PayMqMsgSender {

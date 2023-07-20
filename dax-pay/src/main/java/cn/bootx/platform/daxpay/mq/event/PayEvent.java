@@ -1,5 +1,7 @@
 package cn.bootx.platform.daxpay.mq.event;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
+
 /**
  * Mq事件消息定义
  * @author xxm
@@ -10,7 +12,7 @@ public interface PayEvent {
     String getQueueName();
     /** 要发送的消息体 */
     default Object toMessage(){
-        return this;
-    };
+        return JacksonUtil.toJson(this);
+    }
 
 }

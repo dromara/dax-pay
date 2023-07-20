@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.core.sync.record.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbComment;
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
@@ -24,7 +23,7 @@ import java.time.LocalDateTime;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "支付同步记录")
+//@DbTable(comment = "支付同步记录")
 @Accessors(chain = true)
 @TableName("pay_sync_record")
 public class PaySyncRecord  extends MpCreateEntity implements EntityBaseFunction<PaySyncRecordDto> {

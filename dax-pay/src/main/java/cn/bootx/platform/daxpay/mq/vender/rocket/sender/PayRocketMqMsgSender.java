@@ -5,14 +5,14 @@ import cn.bootx.platform.daxpay.mq.event.PayEvent;
 import lombok.RequiredArgsConstructor;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * rocketMQ 发送器
  * @author xxm
  * @since 2023/7/17
  */
-@Service
+@Component
 @RequiredArgsConstructor
 @ConditionalOnProperty(name ="bootx.daxpay.mq-type", havingValue = "rocket")
 public class PayRocketMqMsgSender implements PayMqMsgSender {

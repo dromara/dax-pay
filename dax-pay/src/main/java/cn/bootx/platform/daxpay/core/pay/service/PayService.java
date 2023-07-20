@@ -21,7 +21,7 @@ import cn.bootx.platform.daxpay.dto.pay.PayResult;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayNotExistedException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.mq.PaymentEventSender;
+import cn.bootx.platform.daxpay.mq.PayEventSender;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.util.PayWaylUtil;
@@ -50,7 +50,7 @@ public class PayService {
 
     private final PaymentService paymentService;
 
-    private final PaymentEventSender eventSender;
+    private final PayEventSender eventSender;
 
     private final MchAppManager mchAppManager;
 

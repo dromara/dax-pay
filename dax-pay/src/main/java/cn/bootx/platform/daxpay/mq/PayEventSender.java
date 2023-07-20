@@ -1,13 +1,11 @@
 package cn.bootx.platform.daxpay.mq;
 
-import cn.bootx.platform.daxpay.code.PaymentEventCode;
 import cn.bootx.platform.daxpay.mq.event.PayCancelEvent;
 import cn.bootx.platform.daxpay.mq.event.PayCompleteEvent;
+import cn.bootx.platform.daxpay.mq.event.PayExpiredTimeEvent;
 import cn.bootx.platform.daxpay.mq.event.PayRefundEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -21,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PaymentEventSender {
+public class PayEventSender {
 
     private final PayMqMsgSender mqMsgSender;
 
@@ -40,7 +38,7 @@ public class PaymentEventSender {
     @Async("bigExecutor")
     @Retryable(value = Exception.class)
     public void sendPayCancel(PayCancelEvent event) {
-        rabbitTemplate.convertAndSend(PaymentEventCode.EXCHANGE_PAYMENT, PaymentEventCode.PAY_CANCEL, event);
+        mqMsgSender.send(event);
     }
 
     /**
@@ -49,7 +47,7 @@ public class PaymentEventSender {
     @Async("bigExecutor")
     @Retryable(value = Exception.class)
     public void sendPayRefund(PayRefundEvent event) {
-        rabbitTemplate.convertAndSend(PaymentEventCode.EXCHANGE_PAYMENT, PaymentEventCode.PAY_REFUND, event);
+        mqMsgSender.send(event);
     }
 
     /**
@@ -57,9 +55,8 @@ public class PaymentEventSender {
      */
     @Async("bigExecutor")
     @Retryable(value = Exception.class)
-    public void sendPaymentExpiredTime(Long paymentId) {
-        rabbitTemplate.convertAndSend(PaymentEventCode.EXCHANGE_PAYMENT, PaymentEventCode.PAYMENT_EXPIRED_TIME,
-                paymentId);
+    public void sendPayExpiredTime(PayExpiredTimeEvent event) {
+        mqMsgSender.send(event);
     }
 
 }

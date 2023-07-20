@@ -14,7 +14,7 @@ import cn.bootx.platform.daxpay.core.pay.func.PayStrategyConsumer;
 import cn.bootx.platform.daxpay.core.pay.result.PayCallbackResult;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
-import cn.bootx.platform.daxpay.mq.PaymentEventSender;
+import cn.bootx.platform.daxpay.mq.PayEventSender;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class PayCallbackService {
 
     private final PaymentService paymentService;
 
-    private final PaymentEventSender eventSender;
+    private final PayEventSender eventSender;
 
     /**
      * 统一回调处理

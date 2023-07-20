@@ -2,7 +2,8 @@ package cn.bootx.platform.daxpay.task;
 
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.daxpay.core.payment.dao.PaymentExpiredTimeRepository;
-import cn.bootx.platform.daxpay.mq.PaymentEventSender;
+import cn.bootx.platform.daxpay.mq.PayEventSender;
+import cn.bootx.platform.daxpay.mq.event.PayExpiredTimeEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class PayExpiredTimeTaskService {
 
     private final PaymentExpiredTimeRepository expiredTimeRepository;
 
-    private final PaymentEventSender paymentEventSender;
+    private final PayEventSender payEventSender;
 
     /**
      * 定时查询, 如果有过时的发送到消息队列
@@ -36,7 +37,7 @@ public class PayExpiredTimeTaskService {
             .collect(Collectors.toList());
         if (CollUtil.isNotEmpty(paymentIds)) {
             expiredTimeRepository.removeKeys(paymentIds.stream().map(String::valueOf).toArray(String[]::new));
-            paymentIds.forEach(paymentEventSender::sendPaymentExpiredTime);
+            paymentIds.forEach(id-> payEventSender.sendPayExpiredTime(new PayExpiredTimeEvent().setPaymentId(id)));
         }
     }
 

@@ -5,6 +5,7 @@ import cn.bootx.platform.daxpay.mq.event.PayEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @author xxm
  * @since 2023/7/17
  */
-@Service
+@Component
 @RequiredArgsConstructor
 @ConditionalOnProperty(name ="bootx.daxpay.mq-type", havingValue = "spring", matchIfMissing = true)
 public class PaySpringMsgSender implements PayMqMsgSender {
