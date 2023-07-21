@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * 钱包配置
  * @author xxm
@@ -15,4 +17,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class WalletConfigManager extends BaseManager<WalletConfigMapper, WalletConfig> {
+
+    public Optional<WalletConfig> findByMchCode(String mchCode){
+        return this.findByField(WalletConfig::getMchCode,mchCode);
+    }
 }

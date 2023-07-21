@@ -25,6 +25,12 @@ public class WalletLogQueryParam implements Serializable {
     @Schema(description = "用户ID (钱包至少存在一个)")
     private Long userId;
 
+    @Schema(description = "商户编码")
+    private String mchCode;
+
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     @Schema(description = "开始日期")
     private LocalDateTime startDate;
 

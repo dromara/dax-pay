@@ -81,14 +81,8 @@ public class WalletAdminController {
 
     @Operation(summary = "分页(未开通钱包的用户)")
     @GetMapping("/pageByNotWallet")
-    public ResResult<PageResult<UserInfoDto>> pageByNotWallet(PageParam pageParam, UserInfoParam param) {
-        return Res.ok(walletQueryService.pageByNotWallet(pageParam, param));
-    }
-
-    @Operation(summary = "根据用户ID查询钱包")
-    @GetMapping("/findByUserId")
-    public ResResult<WalletDto> findByUserId(Long userId) {
-        return Res.ok(walletQueryService.findByUserId(userId));
+    public ResResult<PageResult<UserInfoDto>> pageByNotWallet(PageParam pageParam,String mchCode, UserInfoParam param) {
+        return Res.ok(walletQueryService.pageByNotWallet(pageParam,mchCode,param));
     }
 
     @Operation(summary = "根据钱包ID查询钱包")

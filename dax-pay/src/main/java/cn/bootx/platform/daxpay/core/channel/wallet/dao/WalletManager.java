@@ -125,11 +125,12 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
     /**
      * 待开通钱包的用户列表
      */
-    public Page<UserInfo> pageByNotWallet(PageParam pageParam, UserInfoParam userInfoParam) {
+    public Page<UserInfo> pageByNotWallet(PageParam pageParam, String mchCode, UserInfoParam userInfoParam) {
         Page<UserInfo> mpPage = MpUtil.getMpPage(pageParam, UserInfo.class);
         QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
         wrapper.isNull("w.id")
             .orderByDesc("w.id")
+                .eq("w.mch_code",mchCode)
             .like(StrUtil.isNotBlank(userInfoParam.getUsername()), "w.username", userInfoParam.getUsername())
             .like(StrUtil.isNotBlank(userInfoParam.getName()), "w.name", userInfoParam.getName());
         return walletMapper.pageByNotWallet(mpPage, wrapper);

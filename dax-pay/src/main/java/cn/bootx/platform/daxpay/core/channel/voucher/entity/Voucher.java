@@ -2,12 +2,15 @@ package cn.bootx.platform.daxpay.core.channel.voucher.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.annotation.DbComment;
+import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.paymodel.VoucherCode;
 import cn.bootx.platform.daxpay.core.channel.voucher.convert.VoucherConvert;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherDto;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,10 +27,20 @@ import java.time.LocalDateTime;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-//@DbTable(comment = "储值卡")
+@DbTable(comment = "储值卡")
 @Accessors(chain = true)
 @TableName("pay_voucher")
 public class Voucher extends MpBaseEntity implements EntityBaseFunction<VoucherDto> {
+
+    /** 商户编码 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @DbColumn(comment = "商户编码")
+    private String mchCode;
+
+    /** 商户应用编码 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @DbColumn(comment = "商户应用编码")
+    private String mchAppCode;
 
     /** 卡号 */
     @DbComment("卡号")

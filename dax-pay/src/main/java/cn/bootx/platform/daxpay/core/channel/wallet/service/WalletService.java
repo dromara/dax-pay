@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.BigDecimalUtil;
 import cn.bootx.platform.daxpay.code.paymodel.WalletCode;
+import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletConfigManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletLogManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
@@ -30,6 +31,8 @@ public class WalletService {
 
     private final WalletManager walletManager;
 
+    private final WalletConfigManager walletConfigManager;
+
     private final WalletLogManager walletLogManager;
 
     /**
@@ -37,6 +40,7 @@ public class WalletService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void createWallet(Long userId) {
+
         // 判断钱包是否已开通
         if (walletManager.existsByUser(userId)) {
             throw new BizException("钱包已经开通");

@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.entity;
 
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
+import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
@@ -30,7 +31,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-//@DbTable(comment = "支付宝支付配置")
+@DbTable(comment = "支付宝支付配置")
 @TableName("pay_alipay_config")
 public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<AlipayConfigDto> {
 

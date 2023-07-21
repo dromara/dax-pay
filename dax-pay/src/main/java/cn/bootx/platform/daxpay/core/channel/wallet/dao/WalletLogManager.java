@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * 钱包日志
@@ -24,18 +23,10 @@ import java.util.Optional;
 public class WalletLogManager extends BaseManager<WalletLogMapper, WalletLog> {
 
     /**
-     * 按付款查找优先
-     */
-    public Optional<WalletLog> findFirstByPayment(Long paymentId) {
-        return MpUtil.findOne(lambdaQuery().eq(WalletLog::getPaymentId, paymentId).orderByDesc(MpIdEntity::getId));
-    }
-
-    /**
      * 分页查询指定用户的钱包日志
      */
     public Page<WalletLog> pageByUserId(PageParam pageParam, WalletLogQueryParam param, Long userId) {
         Page<WalletLog> mpPage = MpUtil.getMpPage(pageParam, WalletLog.class);
-
         return this.lambdaQuery().orderByDesc(MpIdEntity::getId).eq(WalletLog::getUserId, userId).page(mpPage);
     }
 
