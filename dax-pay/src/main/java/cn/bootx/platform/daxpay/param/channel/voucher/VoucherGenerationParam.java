@@ -19,6 +19,12 @@ import java.time.LocalDateTime;
 @Schema(title = "储值卡生成参数")
 public class VoucherGenerationParam {
 
+    @Schema(description = "商户编码")
+    private String mchCode;
+
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     @Schema(description = "数量")
     private Integer count;
 

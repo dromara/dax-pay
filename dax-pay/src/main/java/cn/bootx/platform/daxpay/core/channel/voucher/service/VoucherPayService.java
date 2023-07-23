@@ -59,8 +59,7 @@ public class VoucherPayService {
             String extraParamsJson = payWayParam.getExtraParamsJson();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 voucherPayParam = JSONUtil.toBean(extraParamsJson, VoucherPayParam.class);
-            }
-            else {
+            } else {
                 throw new PayFailureException("储值卡支付参数错误");
             }
         }
@@ -70,6 +69,8 @@ public class VoucherPayService {
 
         List<String> cardNoList = voucherPayParam.getCardNoList();
         List<Voucher> vouchers = voucherManager.findByCardNoList(cardNoList);
+
+
         // 判断是否有重复or无效的储值卡
         if (vouchers.size() != cardNoList.size()) {
             throw new PayFailureException("储值卡支付参数错误");

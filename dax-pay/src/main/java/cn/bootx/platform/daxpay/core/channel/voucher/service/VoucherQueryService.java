@@ -8,6 +8,7 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.code.paymodel.VoucherCode;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherManager;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
+import cn.bootx.platform.daxpay.core.merchant.service.MchAppService;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherDto;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.voucher.VoucherParam;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 储值卡查询
@@ -33,6 +35,8 @@ import java.util.Objects;
 public class VoucherQueryService {
 
     private final VoucherManager voucherManager;
+
+    private final MchAppService mchAppService;
 
     /**
      * 分页
@@ -88,6 +92,24 @@ public class VoucherQueryService {
                 .allMatch(voucher -> Objects.equals(voucher.getStatus(), VoucherCode.STATUS_NORMAL));
         if (!statusCheck){
             return "储值卡不是启用状态";
+        }
+        // 判断是否是同一个商户应用下的储值卡
+        List<String> mchCodes = vouchers.stream()
+                .map(Voucher::getMchAppCode)
+                .distinct()
+                .collect(Collectors.toList());
+        List<String> mchAppCodes = vouchers.stream()
+                .map(Voucher::getMchAppCode)
+                .distinct()
+                .collect(Collectors.toList());
+        if (mchAppCodes.size()!=1 || mchCodes.size()!=1){
+            return "这些储值卡不止属于一个商户应用";
+        }
+        String mchCode = mchCodes.get(0);
+        String mchAppCode = mchAppCodes.get(0);
+        // 是否有关联关系判断
+        if (!mchAppService.checkMatch(mchCode, mchAppCode)) {
+            return "应用信息与商户信息不匹配";
         }
         return null;
     }

@@ -24,6 +24,11 @@ public interface VoucherCode {
     String LOG_ACTIVE = "active";
 
     /**
+     * 储值卡日志-导入
+     */
+    String LOG_IMPORT = "import";
+
+    /**
      * 储值卡日志-预冻结额度
      */
     String LOG_FREEZE_BALANCE = "freeze";

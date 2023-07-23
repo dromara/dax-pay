@@ -29,6 +29,12 @@ public class VoucherLogDto extends BaseDto {
     @Schema(description = "储值卡号")
     private String voucherNo;
 
+    @Schema(description = "商户编码")
+    private String mchCode;
+
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     /** 金额 */
     @Schema(description = "金额")
     private BigDecimal amount;

@@ -104,7 +104,7 @@ public class VoucherController {
     @SneakyThrows
     @Operation(summary = "导入已有的储值卡")
     @PostMapping("/importBatch")
-    public ResResult<Void> importBatch(Boolean skip, MultipartFile file){
+    public ResResult<Void> importBatch(Boolean skip, String mchCode, String mchAppCode, MultipartFile file){
         List<VoucherImportParam> voucherImportParams = EasyExcel.read(file.getInputStream())
                 // 设置与Excel表映射的类
                 .head(VoucherImportParam.class)
@@ -114,7 +114,7 @@ public class VoucherController {
                 .headRowNumber(1)
                 // 异步读取
                 .doReadSync();
-        voucherService.importBatch(skip,voucherImportParams);
+        voucherService.importBatch(skip,mchCode,mchAppCode,voucherImportParams);
         return Res.ok();
     }
 
