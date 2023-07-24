@@ -27,6 +27,9 @@ public class WalletConfigParam {
     @Schema(description = "默认余额")
     private BigDecimal defaultBalance;
 
+    @Schema(description = "状态")
+    private String state;
+
     @Schema(description = "备注")
     private String remark;
 

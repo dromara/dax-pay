@@ -44,6 +44,10 @@ public class WalletConfig extends MpBaseEntity implements EntityBaseFunction<Wal
     @DbColumn(comment = "默认余额")
     private BigDecimal defaultBalance;
 
+    /** 状态 */
+    @DbColumn(comment = "状态")
+    private String state;
+
     /** 备注 */
     @DbColumn(comment = "备注")
     private String remark;
