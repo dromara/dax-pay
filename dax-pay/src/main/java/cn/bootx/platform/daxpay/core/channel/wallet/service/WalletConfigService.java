@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.core.channel.wallet.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.daxpay.core.channel.wallet.convert.WalletConvert;
 import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletConfigManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletConfig;
 import cn.bootx.platform.daxpay.core.merchant.service.MchAppService;
@@ -42,7 +41,7 @@ public class WalletConfigService {
         if (!mchAppService.checkMatch(param.getMchCode(), param.getMchAppCode())) {
             throw new BizException("应用信息与商户信息不匹配");
         }
-        WalletConfig walletConfig = WalletConvert.CONVERT.convert(param);
+        WalletConfig walletConfig = WalletConfig.init(param);
         walletConfigManager.save(walletConfig);
     }
 

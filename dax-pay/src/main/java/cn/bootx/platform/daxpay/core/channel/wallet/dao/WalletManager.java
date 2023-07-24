@@ -1,11 +1,12 @@
 package cn.bootx.platform.daxpay.core.channel.wallet.dao;
 
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.query.generator.QueryGenerator;
+import cn.bootx.platform.daxpay.core.channel.config.entity.PayChannelConfig;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
-import cn.bootx.platform.daxpay.param.channel.wallet.WalletPayParam;
+import cn.bootx.platform.daxpay.param.channel.wallet.WalletQueryParam;
 import cn.bootx.platform.iam.core.user.entity.UserInfo;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
@@ -102,24 +103,32 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
     /**
      * 用户钱包是否存在
      */
-    public boolean existsByUser(Long userId) {
-        return existedByField(Wallet::getUserId, userId);
+    public boolean existsByUser(Long userId,String mchAppCode) {
+        return lambdaQuery()
+                .eq(Wallet::getUserId,userId)
+                .eq(Wallet::getMchAppCode,mchAppCode)
+                .exists();
     }
 
     /**
      * 查询用户的钱包
      */
-    public Optional<Wallet> findByUser(Long userId) {
-        return findByField(Wallet::getUserId, userId);
+    public Optional<Wallet> findByUser(Long userId,String mchAppCode) {
+        return lambdaQuery()
+                .eq(Wallet::getUserId,userId)
+                .eq(Wallet::getMchAppCode,mchAppCode)
+                .oneOpt();
     }
 
     /**
      * 分页查询
      */
-    public Page<Wallet> page(PageParam pageParam, WalletPayParam param) {
-
+    public Page<Wallet> page(PageParam pageParam, WalletQueryParam param) {
+        QueryWrapper<Wallet> wrapper = QueryGenerator.generator(param);
         Page<Wallet> mpPage = MpUtil.getMpPage(pageParam, Wallet.class);
-        return this.lambdaQuery().orderByDesc(MpIdEntity::getId).page(mpPage);
+        wrapper.select(this.getEntityClass(), MpUtil::excludeBigField)
+                .orderByDesc(MpUtil.getColumnName(PayChannelConfig::getId));
+        return this.page(mpPage, wrapper);
     }
 
     /**
@@ -129,10 +138,10 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
         Page<UserInfo> mpPage = MpUtil.getMpPage(pageParam, UserInfo.class);
         QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
         wrapper.isNull("w.id")
-            .orderByDesc("w.id")
+                .orderByDesc("w.id")
                 .eq("w.mch_code",mchCode)
-            .like(StrUtil.isNotBlank(userInfoParam.getUsername()), "w.username", userInfoParam.getUsername())
-            .like(StrUtil.isNotBlank(userInfoParam.getName()), "w.name", userInfoParam.getName());
+                .like(StrUtil.isNotBlank(userInfoParam.getUsername()), "w.username", userInfoParam.getUsername())
+                .like(StrUtil.isNotBlank(userInfoParam.getName()), "w.name", userInfoParam.getName());
         return walletMapper.pageByNotWallet(mpPage, wrapper);
     }
 
@@ -141,12 +150,12 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
      */
     public List<Long> findExistUserIds(List<Long> userIds) {
         return this.lambdaQuery()
-            .select(Wallet::getUserId)
-            .in(Wallet::getUserId, userIds)
-            .list()
-            .stream()
-            .map(Wallet::getUserId)
-            .collect(Collectors.toList());
+                .select(Wallet::getUserId)
+                .in(Wallet::getUserId, userIds)
+                .list()
+                .stream()
+                .map(Wallet::getUserId)
+                .collect(Collectors.toList());
 
     }
 

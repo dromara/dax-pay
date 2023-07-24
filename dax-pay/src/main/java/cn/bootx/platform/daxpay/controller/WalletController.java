@@ -24,15 +24,15 @@ public class WalletController {
 
     @Operation(summary = "根据用户查询钱包")
     @GetMapping("/findByUser")
-    public ResResult<WalletDto> findByUser() {
-        return Res.ok(walletQueryService.findByUser());
+    public ResResult<WalletDto> findByUser(String mchAppCode) {
+        return Res.ok(walletQueryService.findByUser(mchAppCode));
     }
 
     @Operation(summary = "开通用户钱包操作")
     @PostMapping("/createWallet")
-    public ResResult<Void> createWallet() {
+    public ResResult<Void> createWallet(String mchCode,String mchAppCode) {
         Long userId = SecurityUtil.getUserId();
-        walletService.createWallet(userId);
+        walletService.createWallet(userId,mchCode,mchAppCode);
         return Res.ok();
     }
 }

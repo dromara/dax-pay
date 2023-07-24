@@ -63,7 +63,10 @@ public class WalletPayStrategy extends AbsPayStrategy {
             throw new PayFailureException("支付参数错误");
         }
         // 获取钱包
-        this.wallet = walletQueryService.getWallet(walletPayParam.getWalletId(),walletPayParam.getUserId());
+        this.wallet = walletQueryService.getWallet(walletPayParam,getPayParam());
+        if (Objects.isNull(this.wallet)){
+            throw new PayFailureException("钱包不存在");
+        }
         // 是否被禁用
         if (Objects.equals(WalletCode.STATUS_FORBIDDEN, this.wallet.getStatus())) {
             throw new WalletBannedException();

@@ -7,6 +7,7 @@ import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.channel.wallet.convert.WalletConvert;
 import cn.bootx.platform.daxpay.dto.channel.wallet.WalletConfigDto;
+import cn.bootx.platform.daxpay.param.channel.wechat.WalletConfigParam;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -25,7 +26,7 @@ import java.math.BigDecimal;
 @Data
 @DbTable(comment = "钱包配置")
 @Accessors(chain = true)
-@TableName("pay_wallet")
+@TableName("pay_wallet_config")
 public class WalletConfig extends MpBaseEntity implements EntityBaseFunction<WalletConfigDto> {
 
     /** 商户编码 */
@@ -43,11 +44,19 @@ public class WalletConfig extends MpBaseEntity implements EntityBaseFunction<Wal
     @DbColumn(comment = "默认余额")
     private BigDecimal defaultBalance;
 
+    /** 备注 */
+    @DbColumn(comment = "备注")
+    private String remark;
+
     /**
      * 转换
      */
     @Override
     public WalletConfigDto toDto() {
         return WalletConvert.CONVERT.convert(this);
+    }
+
+    public static WalletConfig init(WalletConfigParam in){
+        return WalletConvert.CONVERT.convert(in);
     }
 }

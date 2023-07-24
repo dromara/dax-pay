@@ -5,11 +5,11 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletService;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletQueryService;
+import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletService;
 import cn.bootx.platform.daxpay.dto.channel.wallet.WalletDto;
 import cn.bootx.platform.daxpay.dto.channel.wallet.WalletInfoDto;
-import cn.bootx.platform.daxpay.param.channel.wallet.WalletPayParam;
+import cn.bootx.platform.daxpay.param.channel.wallet.WalletQueryParam;
 import cn.bootx.platform.daxpay.param.channel.wallet.WalletRechargeParam;
 import cn.bootx.platform.iam.dto.user.UserInfoDto;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
@@ -38,15 +38,15 @@ public class WalletAdminController {
 
     @Operation(summary = "开通用户钱包操作")
     @PostMapping("/createWallet")
-    public ResResult<Void> createWallet(Long userId) {
-        walletService.createWallet(userId);
+    public ResResult<Void> createWallet(Long userId, String mchCode, String mchAppCode) {
+        walletService.createWallet(userId,mchCode,mchAppCode);
         return Res.ok();
     }
 
     @Operation(summary = "批量开通用户钱包操作")
     @PostMapping("/createWalletBatch")
-    public ResResult<Void> createWalletBatch(@RequestBody List<Long> userIds) {
-        walletService.createWalletBatch(userIds);
+    public ResResult<Void> createWalletBatch(@RequestBody List<Long> userIds, String mchCode, String mchAppCode) {
+        walletService.createWalletBatch(userIds,mchCode,mchAppCode);
         return Res.ok();
     }
 
@@ -75,7 +75,7 @@ public class WalletAdminController {
 
     @Operation(summary = "分页")
     @GetMapping("/page")
-    public ResResult<PageResult<WalletDto>> page(PageParam pageParam, WalletPayParam param) {
+    public ResResult<PageResult<WalletDto>> page(PageParam pageParam, WalletQueryParam param) {
         return Res.ok(walletQueryService.page(pageParam, param));
     }
 
