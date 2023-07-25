@@ -61,6 +61,8 @@ public class WalletService {
         }
         Wallet wallet = new Wallet().setUserId(userId)
                 .setBalance(defaultBalance)
+                .setMchCode(mchCode)
+                .setMchAppCode(mchAppCode)
                 .setFreezeBalance(BigDecimal.ZERO)
                 .setStatus(WalletCode.STATUS_NORMAL);
         walletManager.save(wallet);

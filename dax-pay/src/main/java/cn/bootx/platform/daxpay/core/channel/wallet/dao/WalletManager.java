@@ -137,8 +137,7 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
     public Page<UserInfo> pageByNotWallet(PageParam pageParam, String mchCode, UserInfoParam userInfoParam) {
         Page<UserInfo> mpPage = MpUtil.getMpPage(pageParam, UserInfo.class);
         QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
-        wrapper.isNull("w.id")
-                .orderByDesc("w.id")
+        wrapper.orderByDesc("w.id")
                 .and(o->o.ne("w.mch_code",mchCode).or().isNull("w.mch_code"))
                 .like(StrUtil.isNotBlank(userInfoParam.getUsername()), "u.username", userInfoParam.getUsername())
                 .like(StrUtil.isNotBlank(userInfoParam.getName()), "u.name", userInfoParam.getName());

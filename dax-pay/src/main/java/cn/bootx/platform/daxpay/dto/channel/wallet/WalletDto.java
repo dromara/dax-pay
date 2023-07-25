@@ -27,6 +27,12 @@ public class WalletDto extends BaseDto implements Serializable {
     @Schema(description = "钱包关联的账号ID")
     private Long userId;
 
+    @Schema(description = "商户编码")
+    private String mchCode;
+
+    @Schema(description = "商户应用编码")
+    private String mchAppCode;
+
     @Schema(description = "钱包余额")
     private BigDecimal balance;
 
