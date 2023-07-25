@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.alipay.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
-import cn.bootx.platform.common.core.rest.dto.KeyValue;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.code.MchAndAppCode;
@@ -12,8 +12,8 @@ import cn.bootx.platform.daxpay.code.paymodel.AliPayCode;
 import cn.bootx.platform.daxpay.code.paymodel.AliPayWay;
 import cn.bootx.platform.daxpay.core.channel.alipay.dao.AlipayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
-import cn.bootx.platform.daxpay.core.merchant.dao.MchAppPayConfigManager;
 import cn.bootx.platform.daxpay.core.merchant.entity.MchAppPayConfig;
+import cn.bootx.platform.daxpay.core.merchant.service.MchAppPayConfigService;
 import cn.bootx.platform.daxpay.core.merchant.service.MchAppService;
 import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
 import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
@@ -50,7 +50,7 @@ public class AlipayConfigService {
 
     private final MchAppService mchAppService;
 
-    private final MchAppPayConfigManager mchAppPayConfigManager;
+    private final MchAppPayConfigService appPayConfigService;
 
     /**
      * 添加支付宝配置
@@ -70,7 +70,7 @@ public class AlipayConfigService {
             .setConfigId(alipayConfig.getId())
             .setChannel(PayChannelEnum.ALI.getCode())
             .setState(alipayConfig.getState());
-        mchAppPayConfigManager.save(mchAppPayConfig);
+        appPayConfigService.add(mchAppPayConfig);
     }
 
     /**
@@ -107,10 +107,10 @@ public class AlipayConfigService {
     /**
      * 支付宝支持支付方式
      */
-    public List<KeyValue> findPayWayList() {
+    public List<LabelValue> findPayWayList() {
         return AliPayWay.getPayWays()
             .stream()
-            .map(e -> new KeyValue(e.getCode(), e.getName()))
+            .map(e -> new LabelValue(e.getName(),e.getCode()))
             .collect(Collectors.toList());
     }
 

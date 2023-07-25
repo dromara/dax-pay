@@ -3,6 +3,8 @@ package cn.bootx.platform.daxpay.core.merchant.entity;
 import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,14 +26,17 @@ public class MchAppPayConfig extends MpBaseEntity {
     /** 关联应用编码 */
     @DbMySqlIndex(comment = "关联商户应用编码索引")
     @DbColumn(comment = "关联商户应用编码")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appCode;
 
     /** 关联配置ID */
     @DbColumn(comment = "关联配置ID")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private Long configId;
 
     /** 支付通道编码 */
     @DbColumn(comment = "支付通道编码")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channel;
 
     /** 状态 */

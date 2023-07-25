@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.core.merchant.service;
 
+import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.daxpay.core.channel.config.dao.PayChannelConfigManager;
 import cn.bootx.platform.daxpay.core.channel.config.entity.PayChannelConfig;
 import cn.bootx.platform.daxpay.core.merchant.dao.MchAppPayConfigManager;
@@ -29,6 +30,17 @@ public class MchAppPayConfigService {
     private final MchAppPayConfigManager mchAppPayConfigManager;
 
     private final PayChannelConfigManager channelConfigManager;
+
+    /**
+     * 添加
+     */
+    public void add(MchAppPayConfig config){
+        // 是否重复
+        if (mchAppPayConfigManager.existsByAppCodeAndChannel(config.getAppCode(),config.getChannel())){
+            throw new BizException("该商户应用的支付通道已经进行配置, 请勿重新配置");
+        }
+        mchAppPayConfigManager.save(config);
+    }
 
     /**
      * 根据应用ID删除

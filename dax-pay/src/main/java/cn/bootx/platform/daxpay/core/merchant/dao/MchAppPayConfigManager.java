@@ -15,4 +15,13 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class MchAppPayConfigManager extends BaseManager<MchAppPayConfigMapper, MchAppPayConfig> {
 
+    /**
+     * 该商户应用的指定类型的支付配置是否已经存在
+     */
+    public boolean existsByAppCodeAndChannel(String mchAppCode, String channel){
+        return lambdaQuery()
+                .eq(MchAppPayConfig::getAppCode,mchAppCode)
+                .eq(MchAppPayConfig::getChannel,channel)
+                .exists();
+    }
 }

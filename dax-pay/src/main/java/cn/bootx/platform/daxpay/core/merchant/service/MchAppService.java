@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.core.merchant.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 商户应用
@@ -69,6 +71,15 @@ public class MchAppService {
      */
     public MchApplicationDto findById(Long id) {
         return mchAppManager.findById(id).map(MchApplication::toDto).orElseThrow(DataNotExistException::new);
+    }
+
+    /**
+     * 下拉列表
+     */
+    public List<LabelValue> dropdown(String mchCode){
+        return mchAppManager.findAllByMchCode(mchCode).stream()
+                .map(o->new LabelValue(o.getName(),o.getCode()))
+                .collect(Collectors.toList());
     }
 
     /**

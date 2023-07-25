@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -40,4 +41,10 @@ public class MchAppManager extends BaseManager<MchApplicationMapper, MchApplicat
         return this.page(mpPage, wrapper);
     }
 
+    /**
+     * 根据商户编码查询
+     */
+    public List<MchApplication> findAllByMchCode(String mchCode) {
+        return findAllByField(MchApplication::getMchCode,mchCode);
+    }
 }

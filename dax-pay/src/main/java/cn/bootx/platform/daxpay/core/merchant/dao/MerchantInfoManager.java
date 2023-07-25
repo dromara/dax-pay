@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.core.merchant.dao;
 
-import cn.bootx.platform.common.core.rest.dto.KeyValue;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -47,11 +47,11 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
     /**
      * 下拉列表
      */
-    public List<KeyValue> findDropdown() {
+    public List<LabelValue> findDropdown() {
         return lambdaQuery().select(MerchantInfo::getCode, MerchantInfo::getName)
             .list()
             .stream()
-            .map(mch -> new KeyValue(mch.getCode(), mch.getName()))
+            .map(mch -> new LabelValue(mch.getName(),mch.getCode()))
             .collect(Collectors.toList());
     }
 

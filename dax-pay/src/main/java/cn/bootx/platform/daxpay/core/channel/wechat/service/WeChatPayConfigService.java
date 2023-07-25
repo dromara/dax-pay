@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.wechat.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
-import cn.bootx.platform.common.core.rest.dto.KeyValue;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.code.MchAndAppCode;
@@ -11,8 +11,8 @@ import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.paymodel.WeChatPayWay;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.merchant.dao.MchAppPayConfigManager;
 import cn.bootx.platform.daxpay.core.merchant.entity.MchAppPayConfig;
+import cn.bootx.platform.daxpay.core.merchant.service.MchAppPayConfigService;
 import cn.bootx.platform.daxpay.core.merchant.service.MchAppService;
 import cn.bootx.platform.daxpay.dto.channel.wechat.WeChatPayConfigDto;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
@@ -41,7 +41,7 @@ public class WeChatPayConfigService {
 
     private final WeChatPayConfigManager weChatPayConfigManager;
     private final MchAppService mchAppService;
-    private final MchAppPayConfigManager mchAppPayConfigManager;
+    private final MchAppPayConfigService appPayConfigService;
 
     /**
      * 添加微信支付配置
@@ -61,7 +61,7 @@ public class WeChatPayConfigService {
                 .setConfigId(weChatPayConfig.getId())
                 .setChannel(PayChannelEnum.WECHAT.getCode())
                 .setState(weChatPayConfig.getState());
-        mchAppPayConfigManager.save(mchAppPayConfig);
+        appPayConfigService.add(mchAppPayConfig);
     }
 
     /**
@@ -100,10 +100,10 @@ public class WeChatPayConfigService {
     /**
      * 微信支持支付方式
      */
-    public List<KeyValue> findPayWayList() {
+    public List<LabelValue> findPayWayList() {
         return WeChatPayWay.getPayWays()
             .stream()
-            .map(e -> new KeyValue(e.getCode(), e.getName()))
+            .map(e -> new LabelValue(e.getName(),e.getCode()))
             .collect(Collectors.toList());
     }
 

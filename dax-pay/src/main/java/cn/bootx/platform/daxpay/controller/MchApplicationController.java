@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.controller;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.core.merchant.service.MchAppPayConfigService;
 import cn.bootx.platform.daxpay.core.merchant.service.MchAppService;
@@ -57,6 +58,12 @@ public class MchApplicationController {
     @GetMapping(value = "/findById")
     public ResResult<MchApplicationDto> findById(Long id) {
         return Res.ok(applicationService.findById(id));
+    }
+
+    @Operation(summary = "下拉列表")
+    @GetMapping("/dropdown")
+    public ResResult<List<LabelValue>> dropdown(String mchCode) {
+        return Res.ok(applicationService.dropdown(mchCode));
     }
 
     @Operation(summary = "查询所有")

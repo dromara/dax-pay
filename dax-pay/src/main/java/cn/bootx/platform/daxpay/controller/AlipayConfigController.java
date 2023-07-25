@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.KeyValue;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipayConfigService;
 import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
@@ -59,7 +60,7 @@ public class AlipayConfigController {
 
     @Operation(summary = "支付宝支持支付方式")
     @GetMapping("/findPayWayList")
-    public ResResult<List<KeyValue>> findPayWayList() {
+    public ResResult<List<LabelValue>> findPayWayList() {
         return Res.ok(alipayConfigService.findPayWayList());
     }
 

@@ -106,7 +106,7 @@ public class VoucherPayService {
                     .setPaymentId(payment.getId())
                     .setBusinessId(payment.getBusinessId())
                     .setType(VoucherCode.LOG_FREEZE_BALANCE)
-                    .setRemark(String.format("钱包预冻结金额 %.2f ", amount))
+                    .setRemark(String.format("预冻结金额 %.2f ", amount))
                     .setVoucherId(voucher.getId())
                     .setVoucherNo(voucher.getCardNo());
 
@@ -153,7 +153,7 @@ public class VoucherPayService {
                         .setPaymentId(voucherPayment.getPaymentId())
                         .setBusinessId(voucherPayment.getBusinessId())
                         .setType(VoucherCode.LOG_REDUCE_AND_UNFREEZE_BALANCE)
-                        .setRemark(String.format("钱包扣款金额 %.2f ", voucherPayment.getAmount()))
+                        .setRemark(String.format("扣款金额 %.2f ", voucherPayment.getAmount()))
                         .setVoucherId(voucher.getId())
                         .setAmount(voucher.getFreezeBalance())
                         .setVoucherNo(voucher.getCardNo());
@@ -182,7 +182,7 @@ public class VoucherPayService {
                     .setPaymentId(payment.getId())
                     .setBusinessId(payment.getBusinessId())
                     .setType(VoucherCode.LOG_PAY)
-                    .setRemark(String.format("钱包支付金额 %.2f ", amount))
+                    .setRemark(String.format("支付金额 %.2f ", amount))
                     .setVoucherId(voucher.getId())
                     .setVoucherNo(voucher.getCardNo());
 

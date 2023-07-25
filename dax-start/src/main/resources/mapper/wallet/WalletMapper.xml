@@ -64,16 +64,16 @@
 
     <!-- 待开通钱包的用户列表 -->
     <select id="pageByNotWallet" resultType="cn.bootx.platform.iam.core.user.entity.UserInfo">
-        select
-            iam_user_info.id,
-            iam_user_info.`name`,
-            iam_user_info.username
+        select distinct
+            u.id,
+            u.`name`,
+            u.username
         from
-            iam_user_info
+            iam_user_info AS u
                 LEFT JOIN
             pay_wallet AS w
             on
-                iam_user_info.id = w.user_id
+                u.id = w.user_id
         ${ew.customSqlSegment}
     </select>
 
