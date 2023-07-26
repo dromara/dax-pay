@@ -43,10 +43,16 @@ public class MerchantInfoController {
         return Res.ok();
     }
 
-    @Operation(summary = "下拉列表")
+    @Operation(summary = "下拉列表(所有)")
     @GetMapping("/dropdown")
     public ResResult<List<LabelValue>> dropdown() {
         return Res.ok(merchantInfoService.dropdown());
+    }
+
+    @Operation(summary = "下拉列表(可用状态的)")
+    @GetMapping("/dropdownNormal")
+    public ResResult<List<LabelValue>> dropdownNormal() {
+        return Res.ok(merchantInfoService.dropdownNormal());
     }
 
     @Operation(summary = "删除")

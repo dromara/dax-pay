@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.core.merchant.dao;
 
-import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 商户
@@ -40,19 +38,17 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
         Page<MerchantInfo> mpPage = MpUtil.getMpPage(pageParam, MerchantInfo.class);
         QueryWrapper<MerchantInfo> wrapper = QueryGenerator.generator(param, this.getEntityClass());
         wrapper.select(this.getEntityClass(), MpUtil::excludeBigField)
-            .orderByDesc(MpUtil.getColumnName(MerchantInfo::getId));
+                .orderByDesc(MpUtil.getColumnName(MerchantInfo::getId));
         return this.page(mpPage, wrapper);
     }
 
     /**
-     * 下拉列表
+     * 下拉列表 正常可用的
      */
-    public List<LabelValue> findDropdown() {
-        return lambdaQuery().select(MerchantInfo::getCode, MerchantInfo::getName)
-            .list()
-            .stream()
-            .map(mch -> new LabelValue(mch.getName(),mch.getCode()))
-            .collect(Collectors.toList());
+    public List<MerchantInfo> findAllByState(String state) {
+        return lambdaQuery()
+                .eq(MerchantInfo::getState,state)
+                .list();
     }
 
 }

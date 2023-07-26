@@ -95,7 +95,7 @@ public class VoucherQueryService {
         }
         // 判断是否是同一个商户应用下的储值卡
         List<String> mchCodes = vouchers.stream()
-                .map(Voucher::getMchAppCode)
+                .map(Voucher::getMchCode)
                 .distinct()
                 .collect(Collectors.toList());
         List<String> mchAppCodes = vouchers.stream()
