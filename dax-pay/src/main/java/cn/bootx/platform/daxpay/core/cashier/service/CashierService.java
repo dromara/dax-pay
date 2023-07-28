@@ -21,7 +21,7 @@ import cn.bootx.platform.daxpay.param.cashier.CashierCombinationPayParam;
 import cn.bootx.platform.daxpay.param.cashier.CashierSinglePayParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
-import cn.bootx.platform.daxpay.util.PayWaylUtil;
+import cn.bootx.platform.daxpay.util.PayWayUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ijpay.core.enums.SignType;
@@ -75,11 +75,12 @@ public class CashierService {
                 .setAmount(param.getAmount());
 
         // 处理附加参数
-        HashMap<String, String> map = new HashMap<>(1);
+        HashMap<String, Object> map = new HashMap<>(1);
         map.put(PayWayExtraCode.AUTH_CODE, param.getAuthCode());
         map.put(PayWayExtraCode.OPEN_ID, param.getOpenId());
         map.put(PayWayExtraCode.VOUCHER_NO, param.getVoucherNo());
-        String extraParamsJson = PayWaylUtil.buildExtraParamsJson(param.getPayChannel(), map);
+        map.put(PayWayExtraCode.VOUCHER_NO_LIST, param.getVoucherNoList());
+        String extraParamsJson = PayWayUtil.buildExtraParamsJson(param.getPayChannel(), map);
         payWayParam.setExtraParamsJson(extraParamsJson);
 
         PayParam payParam = new PayParam()

@@ -17,6 +17,9 @@ public interface PayWayExtraCode {
     /** 单张储值卡 */
     String VOUCHER_NO = "voucher_no";
 
+    /** 多张储值卡 */
+    String VOUCHER_NO_LIST = "voucher_no_list";
+
     /** 钱包ID */
     String WALLET_ID = "wallet_id";
 

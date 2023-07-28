@@ -59,7 +59,7 @@ public class PayExpiredTimeService {
 //        }
 //
 //        // 3 拿到异步支付方法, 与支付网关进行同步
-//        PayWayParam asyncPayMode = PayWaylUtil.getAsyncPayModeParam(payParam);
+//        PayWayParam asyncPayMode = PayWayUtil.getAsyncPayModeParam(payParam);
 //        AbsPayStrategy syncPayStrategy = PayStrategyFactory.create(asyncPayMode);
 //        syncPayStrategy.initPayParam(payment, payParam);
 //        PaySyncResult paySyncResult = syncPayStrategy.doSyncPayStatusHandler();

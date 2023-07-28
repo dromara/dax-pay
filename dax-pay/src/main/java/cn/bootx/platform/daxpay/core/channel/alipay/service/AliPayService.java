@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.dto.pay.AsyncPayInfo;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.channel.alipay.AliPayParam;
-import cn.bootx.platform.daxpay.util.PayWaylUtil;
+import cn.bootx.platform.daxpay.util.PayWayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Method;
 import com.alipay.api.AlipayApiException;
@@ -106,8 +106,8 @@ public class AliPayService {
         model.setOutTradeNo(String.valueOf(payment.getId()));
         model.setTotalAmount(amount.toPlainString());
         // 过期时间
-        model.setTimeoutExpress(PayWaylUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
-        payment.setExpiredTime(PayWaylUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
+        model.setTimeoutExpress(PayWayUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
+        payment.setExpiredTime(PayWayUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
         model.setProductCode(AliPayCode.QUICK_WAP_PAY);
         model.setQuitUrl(aliPayParam.getReturnUrl());
 
@@ -137,8 +137,8 @@ public class AliPayService {
         model.setProductCode(QUICK_MSECURITY_PAY);
         model.setOutTradeNo(String.valueOf(payment.getId()));
         // 过期时间
-        model.setTimeoutExpress(PayWaylUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
-        payment.setExpiredTime(PayWaylUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
+        model.setTimeoutExpress(PayWayUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
+        payment.setExpiredTime(PayWayUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
         model.setTotalAmount(amount.toPlainString());
 
         try {
@@ -161,8 +161,8 @@ public class AliPayService {
         model.setSubject(payment.getTitle());
         model.setOutTradeNo(String.valueOf(payment.getId()));
         // 过期时间
-        model.setTimeoutExpress(PayWaylUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
-        payment.setExpiredTime(PayWaylUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
+        model.setTimeoutExpress(PayWayUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
+        payment.setExpiredTime(PayWayUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
         model.setTotalAmount(amount.toPlainString());
         // 目前仅支持FAST_INSTANT_TRADE_PAY
         model.setProductCode(AliPayCode.FAST_INSTANT_TRADE_PAY);
@@ -192,8 +192,8 @@ public class AliPayService {
         model.setTotalAmount(amount.toPlainString());
 
         // 过期时间
-        model.setTimeoutExpress(PayWaylUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
-        payment.setExpiredTime(PayWaylUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
+        model.setTimeoutExpress(PayWayUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
+        payment.setExpiredTime(PayWayUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
 
         try {
             AlipayTradePrecreateResponse response = AliPayApi.tradePrecreatePayToResponse(model,
@@ -219,8 +219,8 @@ public class AliPayService {
         model.setAuthCode(aliPayParam.getAuthCode());
 
         // 过期时间
-        model.setTimeoutExpress(PayWaylUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
-        payment.setExpiredTime(PayWaylUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
+        model.setTimeoutExpress(PayWayUtil.getAliExpiredTime(alipayConfig.getExpireTime()));
+        payment.setExpiredTime(PayWayUtil.getPaymentExpiredTime(alipayConfig.getExpireTime()));
         model.setTotalAmount(amount.toPlainString());
 
         try {

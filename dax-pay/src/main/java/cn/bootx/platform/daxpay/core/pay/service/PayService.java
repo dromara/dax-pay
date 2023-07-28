@@ -24,7 +24,7 @@ import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.mq.PayEventSender;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
-import cn.bootx.platform.daxpay.util.PayWaylUtil;
+import cn.bootx.platform.daxpay.util.PayWayUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class PayService {
         // 检验参数
         ValidationUtil.validateParam(payParam);
         // 异步支付方式检查
-        PayWaylUtil.validationAsyncPayMode(payParam);
+        PayWayUtil.validationAsyncPayMode(payParam);
         // 商户和应用信息检测
         this.checkMchAndApp(payParam);
         // 获取并校验支付状态
@@ -94,7 +94,7 @@ public class PayService {
         }
 
         // 1. 价格检测
-        PayWaylUtil.validationAmount(payParam.getPayWayList());
+        PayWayUtil.validationAmount(payParam.getPayWayList());
 
         // 2. 创建支付记录
         payment = this.createPayment(payParam);
@@ -139,7 +139,7 @@ public class PayService {
             // 发起支付成功进行的执行方法
             strategyList.forEach(AbsPayStrategy::doSuccessHandler);
             // 所有支付方式都是同步时进行Payment处理
-            if (PayWaylUtil.isNotSync(payParam.getPayWayList())) {
+            if (PayWayUtil.isNotSync(payParam.getPayWayList())) {
                 // 修改payment支付状态为成功
                 paymentObj.setPayStatus(TRADE_SUCCESS);
                 paymentObj.setPayTime(LocalDateTime.now());

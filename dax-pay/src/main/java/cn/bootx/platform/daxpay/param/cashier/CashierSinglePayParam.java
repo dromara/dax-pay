@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 结算台发起支付参数
@@ -46,6 +47,9 @@ public class CashierSinglePayParam {
 
     @Schema(description = "储值卡")
     private String voucherNo;
+
+    @Schema(description = "储值卡")
+    private List<String> voucherNoList;
 
     @Schema(description = "钱包ID")
     private String walletId;

@@ -17,7 +17,7 @@ import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.mq.PayEventSender;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
-import cn.bootx.platform.daxpay.util.PayWaylUtil;
+import cn.bootx.platform.daxpay.util.PayWayUtil;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -101,7 +101,7 @@ public class PaySyncService {
         }
 
         // 拿到对应的支付方式
-        PayWayParam asyncPayMode = PayWaylUtil.getAsyncPayModeParam(payParam);
+        PayWayParam asyncPayMode = PayWayUtil.getAsyncPayModeParam(payParam);
         AbsPayStrategy syncPayStrategy = PayStrategyFactory.create(asyncPayMode);
 
         // 对同步结果处理
