@@ -15,7 +15,7 @@
     <groupId>cn.bootx.platform</groupId>
     <artifactId>bootx-dax-pay</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <modules>
         <module>dax-pay</module>
@@ -29,7 +29,7 @@
 
         <!-- 二方库版本 -->
         <bootx-platform.version>1.3.2</bootx-platform.version>
-        <dax.version>1.0.0</dax.version>
+        <dax.version>1.0.1</dax.version>
         <!-- 三方库 -->
         <slf4j.version>1.7.30</slf4j.version>
         <!-- 3.5.3 有bug -->

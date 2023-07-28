@@ -4,7 +4,7 @@
  <img src='https://gitee.com/bootx/bootx-platform/badge/star.svg?theme=dark' alt='star'/>
  <img src="https://img.shields.io/badge/Boot%20Platform-1.3.2-success.svg" alt="Build Status"/>
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
- <img src="https://img.shields.io/badge/Dax%20Pay-1.0.0-success.svg" alt="Build Status"/>
+ <img src="https://img.shields.io/badge/Dax%20Pay-1.0.1-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Author-Bootx-orange.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Spring%20Boot-2.7.x-blue.svg" alt="Downloads"/>
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
