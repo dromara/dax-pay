@@ -14,7 +14,7 @@ import cn.bootx.platform.daxpay.core.sync.record.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.core.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.mq.PayEventSender;
+import cn.bootx.platform.daxpay.event.PayEventSender;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.util.PayWayUtil;

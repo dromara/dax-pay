@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.core.pay.builder;
 
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
-import cn.bootx.platform.daxpay.mq.event.*;
+import cn.bootx.platform.daxpay.event.domain.*;
 import lombok.experimental.UtilityClass;
 
 /**

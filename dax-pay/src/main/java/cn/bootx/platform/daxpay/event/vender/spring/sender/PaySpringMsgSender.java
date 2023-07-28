@@ -1,12 +1,11 @@
-package cn.bootx.platform.daxpay.mq.vender.spring.sender;
+package cn.bootx.platform.daxpay.event.vender.spring.sender;
 
-import cn.bootx.platform.daxpay.mq.PayMqMsgSender;
-import cn.bootx.platform.daxpay.mq.event.PayEvent;
+import cn.bootx.platform.daxpay.event.PayMqMsgSender;
+import cn.bootx.platform.daxpay.event.domain.PayEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * Spring 事件方式

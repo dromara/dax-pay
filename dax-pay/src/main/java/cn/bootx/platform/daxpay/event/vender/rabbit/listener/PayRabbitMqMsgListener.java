@@ -1,10 +1,10 @@
-package cn.bootx.platform.daxpay.mq.vender.rabbit.listener;
+package cn.bootx.platform.daxpay.event.vender.rabbit.listener;
 
 import cn.bootx.platform.daxpay.code.PaymentEventCode;
 import cn.bootx.platform.daxpay.core.sync.service.PayExpiredTimeService;
-import cn.bootx.platform.daxpay.mq.event.PayCancelEvent;
-import cn.bootx.platform.daxpay.mq.event.PayCompleteEvent;
-import cn.bootx.platform.daxpay.mq.event.PayRefundEvent;
+import cn.bootx.platform.daxpay.event.domain.PayCancelEvent;
+import cn.bootx.platform.daxpay.event.domain.PayCompleteEvent;
+import cn.bootx.platform.daxpay.event.domain.PayRefundEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

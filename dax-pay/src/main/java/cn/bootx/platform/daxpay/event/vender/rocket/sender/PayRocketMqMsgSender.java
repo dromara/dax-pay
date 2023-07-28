@@ -1,7 +1,7 @@
-package cn.bootx.platform.daxpay.mq.vender.rocket.sender;
+package cn.bootx.platform.daxpay.event.vender.rocket.sender;
 
-import cn.bootx.platform.daxpay.mq.PayMqMsgSender;
-import cn.bootx.platform.daxpay.mq.event.PayEvent;
+import cn.bootx.platform.daxpay.event.PayMqMsgSender;
+import cn.bootx.platform.daxpay.event.domain.PayEvent;
 import lombok.RequiredArgsConstructor;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

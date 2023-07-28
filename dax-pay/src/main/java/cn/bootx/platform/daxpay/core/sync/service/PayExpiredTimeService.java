@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.core.sync.result.PaySyncResult;
-import cn.bootx.platform.daxpay.mq.PayEventSender;
+import cn.bootx.platform.daxpay.event.PayEventSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.mq.event;
+package cn.bootx.platform.daxpay.event.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

@@ -1,7 +1,7 @@
-package cn.bootx.platform.daxpay.mq.vender.rabbit.sender;
+package cn.bootx.platform.daxpay.event.vender.rabbit.sender;
 
-import cn.bootx.platform.daxpay.mq.PayMqMsgSender;
-import cn.bootx.platform.daxpay.mq.event.PayEvent;
+import cn.bootx.platform.daxpay.event.PayMqMsgSender;
+import cn.bootx.platform.daxpay.event.domain.PayEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

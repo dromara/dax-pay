@@ -1,7 +1,7 @@
-package cn.bootx.platform.daxpay.mq.vender.active.sender;
+package cn.bootx.platform.daxpay.event.vender.active.sender;
 
-import cn.bootx.platform.daxpay.mq.PayMqMsgSender;
-import cn.bootx.platform.daxpay.mq.event.PayEvent;
+import cn.bootx.platform.daxpay.event.PayMqMsgSender;
+import cn.bootx.platform.daxpay.event.domain.PayEvent;
 import lombok.RequiredArgsConstructor;
 import org.apache.activemq.ScheduledMessage;
 import org.apache.activemq.command.ActiveMQQueue;

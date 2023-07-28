@@ -1,6 +1,6 @@
-package cn.bootx.platform.daxpay.mq;
+package cn.bootx.platform.daxpay.event;
 
-import cn.bootx.platform.daxpay.mq.event.PayEvent;
+import cn.bootx.platform.daxpay.event.domain.PayEvent;
 
 /**
  * 支付消息队列发送接口定义

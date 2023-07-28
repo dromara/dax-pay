@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.mq.event;
+package cn.bootx.platform.daxpay.event.domain;
 
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 

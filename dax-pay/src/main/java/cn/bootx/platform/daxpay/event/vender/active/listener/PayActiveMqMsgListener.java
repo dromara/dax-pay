@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.mq.vender.active.listener;
+package cn.bootx.platform.daxpay.event.vender.active.listener;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;

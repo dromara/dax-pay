@@ -1,17 +1,17 @@
-package cn.bootx.platform.daxpay.mq.event;
+package cn.bootx.platform.daxpay.event.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 支付完成事件
+ * 支付退款事件
  *
  * @author xxm
  * @since 2022/7/11
  */
 @Data
 @Accessors(chain = true)
-public class PayCompleteEvent implements PayEvent{
+public class PayRefundEvent implements PayEvent{
 
     /** 支付单ID */
     private Long paymentId;

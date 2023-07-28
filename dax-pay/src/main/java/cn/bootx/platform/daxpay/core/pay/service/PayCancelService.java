@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
 import cn.bootx.platform.daxpay.exception.payment.PayNotExistedException;
 import cn.bootx.platform.daxpay.exception.payment.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.mq.PayEventSender;
+import cn.bootx.platform.daxpay.event.PayEventSender;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;

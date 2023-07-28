@@ -2,8 +2,8 @@ package cn.bootx.platform.daxpay.task;
 
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.daxpay.core.payment.dao.PaymentExpiredTimeRepository;
-import cn.bootx.platform.daxpay.mq.PayEventSender;
-import cn.bootx.platform.daxpay.mq.event.PayExpiredTimeEvent;
+import cn.bootx.platform.daxpay.event.PayEventSender;
+import cn.bootx.platform.daxpay.event.domain.PayExpiredTimeEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

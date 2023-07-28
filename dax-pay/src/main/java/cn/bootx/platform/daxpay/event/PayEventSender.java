@@ -1,9 +1,9 @@
-package cn.bootx.platform.daxpay.mq;
+package cn.bootx.platform.daxpay.event;
 
-import cn.bootx.platform.daxpay.mq.event.PayCancelEvent;
-import cn.bootx.platform.daxpay.mq.event.PayCompleteEvent;
-import cn.bootx.platform.daxpay.mq.event.PayExpiredTimeEvent;
-import cn.bootx.platform.daxpay.mq.event.PayRefundEvent;
+import cn.bootx.platform.daxpay.event.domain.PayCancelEvent;
+import cn.bootx.platform.daxpay.event.domain.PayCompleteEvent;
+import cn.bootx.platform.daxpay.event.domain.PayExpiredTimeEvent;
+import cn.bootx.platform.daxpay.event.domain.PayRefundEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Retryable;

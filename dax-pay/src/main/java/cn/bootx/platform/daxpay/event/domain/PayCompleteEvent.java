@@ -1,17 +1,17 @@
-package cn.bootx.platform.daxpay.mq.event;
+package cn.bootx.platform.daxpay.event.domain;
 
-import cn.bootx.platform.daxpay.code.PaymentEventCode;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 支付超时事件
+ * 支付完成事件
+ *
  * @author xxm
- * @since 2023/7/20
+ * @since 2022/7/11
  */
 @Data
 @Accessors(chain = true)
-public class PayExpiredTimeEvent implements PayEvent{
+public class PayCompleteEvent implements PayEvent{
 
     /** 支付单ID */
     private Long paymentId;
@@ -24,6 +24,6 @@ public class PayExpiredTimeEvent implements PayEvent{
      */
     @Override
     public String getQueueName() {
-        return PaymentEventCode.PAYMENT_EXPIRED_TIME;
+        return null;
     }
 }

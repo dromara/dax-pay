@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.mq.vender.rocket.listener;
+package cn.bootx.platform.daxpay.event.vender.rocket.listener;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQListener;

@@ -1,7 +1,7 @@
-package cn.bootx.platform.daxpay.mq.vender.rabbit.config;
+package cn.bootx.platform.daxpay.event.vender.rabbit.config;
 
 import cn.bootx.platform.daxpay.code.PaymentEventCode;
-import cn.bootx.platform.daxpay.mq.event.PayEvent;
+import cn.bootx.platform.daxpay.event.domain.PayEvent;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
