@@ -68,10 +68,10 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
     private boolean combinationPayMode;
 
     /**
-     * 异步支付通道
+     * 异步支付渠道
      * @see cn.bootx.platform.daxpay.code.pay.PayChannelEnum#ALI
      */
-    @DbColumn(comment = "异步支付通道")
+    @DbColumn(comment = "异步支付渠道")
     private String asyncPayChannel;
 
     /** 金额 */
@@ -91,13 +91,13 @@ public class Payment extends MpBaseEntity implements EntityBaseFunction<PaymentD
     private String errorMsg;
 
     /**
-     * 支付通道信息列表
+     * 支付渠道信息列表
      * @see PayChannelInfo
      */
     @TableField(typeHandler = JacksonRawTypeHandler.class)
     @BigField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @DbColumn(comment = "支付通道信息列表")
+    @DbColumn(comment = "支付渠道信息列表")
     private List<PayChannelInfo> payChannelInfo;
 
     /**

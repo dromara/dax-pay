@@ -33,7 +33,7 @@ public class PayNotifyRecordDto extends BaseDto implements Serializable {
     @Schema(description = "通知消息")
     private String notifyInfo;
 
-    @Schema(description = "支付通道")
+    @Schema(description = "支付渠道")
     private String payChannel;
 
     @Schema(description = "处理状态")

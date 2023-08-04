@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 支付通道配置
+ * 支付渠道配置
  *
  * @author xxm
  * @since 2023-05-24
  */
-@Tag(name = "支付通道配置")
+@Tag(name = "支付渠道配置")
 @RestController
 @RequestMapping("/channel")
 @RequiredArgsConstructor

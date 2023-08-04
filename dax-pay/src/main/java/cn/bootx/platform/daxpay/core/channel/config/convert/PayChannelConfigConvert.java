@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**
- * 支付通道配置
+ * 支付渠道配置
  *
  * @author xxm
  * @since 2023-05-24

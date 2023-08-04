@@ -34,8 +34,8 @@ public class MchAppPayConfig extends MpBaseEntity {
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Long configId;
 
-    /** 支付通道编码 */
-    @DbColumn(comment = "支付通道编码")
+    /** 支付渠道编码 */
+    @DbColumn(comment = "支付渠道编码")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channel;
 

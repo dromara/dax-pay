@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 支付通道配置
+ * 支付渠道配置
  *
  * @author xxm
  * @since 2023-05-24

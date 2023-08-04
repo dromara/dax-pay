@@ -20,7 +20,7 @@ public class RefundableInfo {
     /**
      * @see cn.bootx.platform.daxpay.code.pay.PayChannelEnum
      */
-    @Schema(description = "支付通道")
+    @Schema(description = "支付渠道")
     private String payChannel;
 
     @Schema(description = "金额")

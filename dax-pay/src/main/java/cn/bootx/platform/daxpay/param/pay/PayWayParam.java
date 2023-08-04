@@ -34,8 +34,8 @@ public class PayWayParam implements Serializable {
     /**
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付通道编码")
-    @NotBlank(message = "支付通道编码不可为空")
+    @Schema(description = "支付渠道编码")
+    @NotBlank(message = "支付渠道编码不可为空")
     private String payChannel;
 
     /**
@@ -59,7 +59,7 @@ public class PayWayParam implements Serializable {
     private String extraParamsJson;
 
     /**
-     * 转换为 支付通道信息 对象
+     * 转换为 支付渠道信息 对象
      */
     public PayChannelInfo toPayTypeInfo() {
         return PayConvert.CONVERT.convert(this);

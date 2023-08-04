@@ -25,7 +25,7 @@ import static cn.bootx.platform.daxpay.code.pay.PayChannelEnum.ASYNC_TYPE_CODE;
 public class PayRefundStrategyFactory {
 
     /**
-     * 根据传入的支付通道创建策略
+     * 根据传入的支付渠道创建策略
      * @return 支付策略
      */
     public static AbsPayRefundStrategy create(RefundModeParam refundModeParam) {

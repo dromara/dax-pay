@@ -42,10 +42,10 @@ public class PayNotifyRecord extends MpCreateEntity implements EntityBaseFunctio
     private String mchAppCode;
 
     /**
-     * 支付通道
+     * 支付渠道
      * @see PayChannelEnum#getCode()
      */
-    @DbComment("支付通道")
+    @DbComment("支付渠道")
     private String payChannel;
 
     /** 通知消息 */

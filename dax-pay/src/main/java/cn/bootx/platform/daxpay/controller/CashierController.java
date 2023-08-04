@@ -43,7 +43,7 @@ public class CashierController {
         return Res.ok(cashierService.combinationPay(param));
     }
 
-    @Operation(summary = "扫码聚合支付(单通道)")
+    @Operation(summary = "扫码聚合支付(单渠道)")
     @GetMapping("/aggregatePay/{mchCode}/{mchAppCode}")
     public ModelAndView aggregatePay(String key,@PathVariable String mchCode,@PathVariable String mchAppCode, @RequestHeader(USER_AGENT) String ua) {
         try {

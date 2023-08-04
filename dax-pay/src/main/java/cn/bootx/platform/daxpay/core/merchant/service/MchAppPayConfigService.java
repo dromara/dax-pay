@@ -37,7 +37,7 @@ public class MchAppPayConfigService {
     public void add(MchAppPayConfig config){
         // 是否重复
         if (mchAppPayConfigManager.existsByAppCodeAndChannel(config.getAppCode(),config.getChannel())){
-            throw new BizException("该商户应用的支付通道已经进行配置, 请勿重新配置");
+            throw new BizException("该商户应用的支付渠道已经进行配置, 请勿重新配置");
         }
         mchAppPayConfigManager.save(config);
     }
@@ -50,10 +50,10 @@ public class MchAppPayConfigService {
     }
 
     /**
-     * 支付通道配置列表
+     * 支付渠道配置列表
      */
     public List<MchAppPayConfigResult> ListByAppId(String appCode) {
-        // 首先查询系统中配置的支付通道进行排序
+        // 首先查询系统中配置的支付渠道进行排序
         List<PayChannelConfig> channels = channelConfigManager.findAllByOrder();
         // 查询当前应用所拥有的配置, 进行合并生成相关信息
 

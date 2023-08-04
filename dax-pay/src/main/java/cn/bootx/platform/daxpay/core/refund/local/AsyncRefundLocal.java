@@ -47,7 +47,7 @@ public final class AsyncRefundLocal {
 
     /**
      * 设置 错误码
-     * @see PayStatusCode#REFUND_PROCESS_FAIL 或者其他支付通道返回的错误码
+     * @see PayStatusCode#REFUND_PROCESS_FAIL 或者其他支付渠道返回的错误码
      */
     public static void setErrorCode(String errorCode) {
         ERROR_CODE.set(errorCode);

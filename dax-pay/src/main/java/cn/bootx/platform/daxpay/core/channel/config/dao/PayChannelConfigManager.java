@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 支付通道配置
+ * 支付渠道配置
  *
  * @author xxm
  * @since 2023-05-24

@@ -55,7 +55,7 @@ public class PaymentBuilder {
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
-        // 支付通道信息
+        // 支付渠道信息
         payment.setPayChannelInfo(payTypeInfos)
                 .setRefundableInfo(refundableInfos)
                 .setPayStatus(PayStatusCode.TRADE_PROGRESS)

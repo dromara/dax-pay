@@ -36,10 +36,10 @@ public class PaySyncRecordDto extends BaseDto {
     private String mchAppCode;
 
     /**
-     * 支付通道
+     * 支付渠道
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付通道")
+    @Schema(description = "支付渠道")
     private String payChannel;
 
     /** 通知消息 */

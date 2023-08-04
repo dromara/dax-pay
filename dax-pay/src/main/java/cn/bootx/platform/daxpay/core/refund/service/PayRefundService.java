@@ -96,7 +96,7 @@ public class PayRefundService {
             throw new PayFailureException("状态非法, 无法退款");
         }
 
-        // 过滤退款金额为0的支付通道参数
+        // 过滤退款金额为0的支付渠道参数
         refundModeParams.removeIf(refundModeParam -> BigDecimalUtil.compareTo(refundModeParam.getAmount(), BigDecimal.ZERO) == 0);
         // 退款参数检查
         this.payModeCheck(refundModeParams, payment.getRefundableInfo());

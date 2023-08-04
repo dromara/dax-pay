@@ -79,7 +79,7 @@ public class PayWayUtil {
 
     /**
      * 构建扩展参数构建
-     * @param payChannel 支付通道编码
+     * @param payChannel 支付渠道编码
      * @param map 支付方式扩展字段信息 key 为 PayModelExtraCode中定义的
      */
     public String buildExtraParamsJson(String payChannel, Map<String, Object> map) {

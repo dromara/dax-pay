@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * 支付通道配置
+ * 支付渠道配置
  *
  * @author xxm
  * @since 2023-05-24

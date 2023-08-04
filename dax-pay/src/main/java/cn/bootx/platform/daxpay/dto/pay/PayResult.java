@@ -25,7 +25,7 @@ public class PayResult implements Serializable {
     /**
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "异步支付通道")
+    @Schema(description = "异步支付渠道")
     private String asyncPayChannel;
 
     /**

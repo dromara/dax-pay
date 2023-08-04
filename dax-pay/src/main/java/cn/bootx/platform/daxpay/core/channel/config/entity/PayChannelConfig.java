@@ -12,24 +12,24 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 支付通道配置
+ * 支付渠道配置
  *
  * @author xxm
  * @since 2023-05-24
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-//@DbTable(comment = "支付通道配置")
+//@DbTable(comment = "支付渠道配置")
 @Accessors(chain = true)
 @TableName("pay_channel_config")
 public class PayChannelConfig extends MpBaseEntity implements EntityBaseFunction<PayChannelConfigDto> {
 
-    /** 通道编码 */
-    @DbColumn(comment = "通道编码")
+    /** 渠道编码 */
+    @DbColumn(comment = "渠道编码")
     private String code;
 
-    /** 通道名称 */
-    @DbColumn(comment = "通道名称")
+    /** 渠道名称 */
+    @DbColumn(comment = "渠道名称")
     private String name;
 
     /** 图片 */

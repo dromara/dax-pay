@@ -48,7 +48,7 @@ public class PaymentDto extends BaseDto implements Serializable {
     /**
      * @see cn.bootx.platform.daxpay.code.pay.PayChannelEnum#ASYNC_TYPE_CODE
      */
-    @Schema(description = "异步支付通道")
+    @Schema(description = "异步支付渠道")
     private String asyncPayChannel;
 
     /**
@@ -72,7 +72,7 @@ public class PaymentDto extends BaseDto implements Serializable {
     /**
      * @see PayChannelInfo
      */
-    @Schema(description = "支付通道信息")
+    @Schema(description = "支付渠道信息")
     private List<PayChannelInfo> payChannelInfo;
 
     /**

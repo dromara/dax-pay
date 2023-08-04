@@ -25,7 +25,7 @@ import static cn.bootx.platform.daxpay.code.pay.PayChannelEnum.*;
 public class PayStrategyFactory {
 
     /**
-     * 根据传入的支付通道创建策略
+     * 根据传入的支付渠道创建策略
      * @param payWayParam 支付类型
      * @return 支付策略
      */

@@ -24,7 +24,7 @@ public class RefundModeParam {
     /**
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付通道")
+    @Schema(description = "支付渠道")
     private String payChannel;
 
     @Schema(description = "支付金额")

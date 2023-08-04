@@ -33,7 +33,7 @@ public class CashierSinglePayParam {
     @Schema(description = "openId")
     private String openId;
 
-    @Schema(description = "支付通道")
+    @Schema(description = "支付渠道")
     private String payChannel;
 
     @Schema(description = "支付方式")

@@ -20,7 +20,7 @@ public class RefundParam {
     @Schema(description = "业务id")
     private String businessId;
 
-    @Schema(description = "各通道退款参数")
+    @Schema(description = "各渠道退款参数")
     private List<RefundModeParam> refundModeParams;
 
 }

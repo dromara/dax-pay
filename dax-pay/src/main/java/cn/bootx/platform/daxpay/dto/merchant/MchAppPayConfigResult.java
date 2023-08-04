@@ -5,20 +5,20 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 支付通道配置
+ * 支付渠道配置
  *
  * @author xxm
  * @since 2023/5/24
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "支付通道配置")
+@Schema(title = "支付渠道配置")
 public class MchAppPayConfigResult {
 
-    @Schema(description = "支付通道编码")
+    @Schema(description = "支付渠道编码")
     private String channelCode;
 
-    @Schema(description = "支付通道名称")
+    @Schema(description = "支付渠道名称")
     private String channelName;
 
     @Schema(description = "状态")

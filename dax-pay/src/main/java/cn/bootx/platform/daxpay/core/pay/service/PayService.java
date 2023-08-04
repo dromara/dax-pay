@@ -159,7 +159,7 @@ public class PayService {
             return PaymentBuilder.buildResultByPayment(payment);
         }
 
-        // 1.获取 异步支付 通道，通过工厂生成对应的策略组
+        // 1.获取 异步支付 渠道，通过工厂生成对应的策略组
         PayParam oldPayParam = PaymentBuilder.buildPayParamByPayment(payment);
         PayWayParam payWayParam = this.getAsyncPayModeParam(payParam, oldPayParam);
         List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(Collections.singletonList(payWayParam));
