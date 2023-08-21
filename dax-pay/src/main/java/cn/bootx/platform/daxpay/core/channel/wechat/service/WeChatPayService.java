@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
 import cn.bootx.platform.daxpay.code.pay.PayWayEnum;
@@ -146,7 +147,12 @@ public class WeChatPayService {
         String xmlResult = WxPayApi.pushOrder(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
-        return result.get(WeChatPayCode.PREPAY_ID);
+        String prepayId = result.get(WeChatPayCode.PREPAY_ID);
+        Map<String, String> packageParams = WxPayKit.miniAppPrepayIdCreateSign(weChatPayConfig.getWxAppId(), prepayId,
+                weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+        String jsonStr = JacksonUtil.toJson(packageParams);
+        log.info("小程序支付的参数:" + jsonStr);
+        return jsonStr ;
     }
 
     /**
