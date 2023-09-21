@@ -36,7 +36,7 @@
         <xml-apis.version>1.4.01</xml-apis.version>
         <spring.checkstyle.version>0.0.38</spring.checkstyle.version>
         <plumelog.version>3.5.2</plumelog.version>
-        <IJPay.version>2.9.7</IJPay.version>
+        <IJPay.version>2.9.8</IJPay.version>
         <knife4j.version>4.0.0</knife4j.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
