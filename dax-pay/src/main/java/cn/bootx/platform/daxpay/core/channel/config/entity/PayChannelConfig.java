@@ -1,11 +1,11 @@
 package cn.bootx.platform.daxpay.core.channel.config.entity;
 
-import cn.bootx.mybatis.table.modify.annotation.DbColumn;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.channel.config.convert.PayChannelConfigConvert;
 import cn.bootx.platform.daxpay.dto.channel.config.PayChannelConfigDto;
 import cn.bootx.platform.daxpay.param.channel.config.PayChannelConfigParam;
+import cn.bootx.table.modify.annotation.DbColumn;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

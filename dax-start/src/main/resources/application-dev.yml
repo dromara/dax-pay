@@ -129,21 +129,6 @@ bootx:
     exception:
       # 显示详细异常
       show-full-message: true
-    # 是否启用Rabbit, 并不是停用了Rabbit, 需配合 ConditionalOnRabbit 注解使用
-    rabbit:
-      enable: false
-    # 表结构自动维护
-    actable:
-      # 数据库类型
-      database-type: mysql
-      # 更新类型 none为不进行任何操作
-      update-type: update
-      # 扫描包路径, 可以用 ,和 ; 分隔
-      scan-package: cn.bootx.**.entity
-      # 指定生成索引前缀
-      prefix-index: idx_
-      # 指定生成唯一约束前缀
-      prefix-unique: uni_
   starter:
     # 三方平台
     third:
@@ -164,6 +149,10 @@ bootx:
         corp-secret: ??
         token: ??
         encoding-aes-key: ??
+      # 微信小程序
+      wechat-applet:
+        app-id: ??
+        app-secret: ??
     # 认证
     auth:
       default-password: 123456
@@ -182,22 +171,6 @@ bootx:
         - '/error'
         - '/favicon.ico'
         - '/**'
-      # 第三方登录
-      third-login:
-        ding-talk:
-          redirect-uri: http://127.0.0.1:9999/auth/third/callback/dingTalk
-          client-secret: ${bootx.starter.third.ding-talk.app-secret}
-          client-id: ${bootx.starter.third.ding-talk.app-key}
-        we-com:
-          redirect-uri: http://127.0.0.1:9999/auth/third/callback/weCom
-          client-secret: ${bootx.starter.third.wecom.corp-secret}
-          client-id: ${bootx.starter.third.wecom.corp-id}
-          agent-id: ${bootx.starter.third.wecom.agent-id}
-        # 微信开放平台
-        we-chat-open:
-          redirect-uri: http://127.0.0.1:9999/auth/third/callback/weChat
-          client-id: ??
-          client-secret: ??
     # 审计日志
     audit-log:
       # 审计日志存储

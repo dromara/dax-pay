@@ -1,10 +1,5 @@
 package cn.bootx.platform.daxpay.core.payment.entity;
 
-import cn.bootx.mybatis.table.modify.annotation.DbColumn;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlIndexType;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
@@ -14,6 +9,11 @@ import cn.bootx.platform.daxpay.core.payment.convert.PaymentConvert;
 import cn.bootx.platform.daxpay.dto.payment.PayChannelInfo;
 import cn.bootx.platform.daxpay.dto.payment.PaymentDto;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
+import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
+import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
+import cn.bootx.table.modify.mysql.constants.MySqlIndexType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

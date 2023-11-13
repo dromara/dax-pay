@@ -1,13 +1,13 @@
 package cn.bootx.platform.daxpay.core.merchant.entity;
 
-import cn.bootx.mybatis.table.modify.annotation.DbColumn;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlIndexType;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.core.merchant.convert.MerchantInfoConvert;
 import cn.bootx.platform.daxpay.dto.merchant.MerchantInfoDto;
 import cn.bootx.platform.daxpay.param.merchant.MerchantInfoParam;
+import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
+import cn.bootx.table.modify.mysql.constants.MySqlIndexType;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

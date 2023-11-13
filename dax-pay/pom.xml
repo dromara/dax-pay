@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-dax-pay</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>dax-pay</artifactId>
@@ -134,8 +134,7 @@
         <!-- 自动建表 -->
         <dependency>
             <groupId>cn.bootx</groupId>
-            <artifactId>mybatis-table-modify-mysql-boot-starter</artifactId>
-            <version>${mybatis-table-modify.version}</version>
+            <artifactId>table-modify-mysql-boot-starter</artifactId>
         </dependency>
 
         <!-- 监控 -->
@@ -165,6 +164,12 @@
             </exclusions>
         </dependency>
 
+        <!-- minio -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.5.4</version>
+        </dependency>
         <!-- 微信支付 ijpay -->
         <dependency>
             <groupId>com.github.javen205</groupId>

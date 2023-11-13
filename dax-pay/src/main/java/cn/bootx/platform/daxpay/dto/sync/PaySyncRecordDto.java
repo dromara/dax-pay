@@ -1,7 +1,5 @@
 package cn.bootx.platform.daxpay.dto.sync;
 
-import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.pay.PaySyncStatus;
@@ -43,7 +41,6 @@ public class PaySyncRecordDto extends BaseDto {
     private String payChannel;
 
     /** 通知消息 */
-    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @Schema(description = "通知消息")
     private String syncInfo;
 

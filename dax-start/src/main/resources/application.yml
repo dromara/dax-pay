@@ -30,3 +30,9 @@ mybatis-plus:
 sa-token:
   is-print: false
   token-name: AccessToken
+# 短信配置
+sms:
+  # 是否使用redis进行缓存 默认false
+  redis-cache: true
+  # 打印banner
+  is-print: false

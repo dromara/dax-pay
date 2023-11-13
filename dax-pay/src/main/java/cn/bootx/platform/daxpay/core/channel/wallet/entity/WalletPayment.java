@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.core.channel.wallet.entity;
 
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.daxpay.core.channel.base.entity.BasePayment;
 import cn.bootx.platform.daxpay.core.channel.wallet.convert.WalletConvert;

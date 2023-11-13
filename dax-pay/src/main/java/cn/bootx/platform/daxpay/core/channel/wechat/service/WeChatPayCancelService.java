@@ -8,7 +8,6 @@ import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.core.refund.local.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.dto.payment.RefundableInfo;
 import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
-import cn.bootx.platform.starter.file.service.FileUploadService;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
@@ -40,8 +39,6 @@ import static cn.bootx.platform.daxpay.code.pay.PayStatusCode.REFUND_PROCESS_FAI
 @Service
 @RequiredArgsConstructor
 public class WeChatPayCancelService {
-
-    private final FileUploadService uploadService;
 
     /**
      * 关闭支付

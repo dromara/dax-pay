@@ -1,14 +1,14 @@
 package cn.bootx.platform.daxpay.core.channel.wallet.entity;
 
-import cn.bootx.mybatis.table.modify.annotation.DbColumn;
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlIndexType;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.paymodel.WalletCode;
 import cn.bootx.platform.daxpay.core.channel.wallet.convert.WalletConvert;
 import cn.bootx.platform.daxpay.dto.channel.wallet.WalletDto;
+import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
+import cn.bootx.table.modify.mysql.constants.MySqlIndexType;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -19,7 +19,8 @@ import lombok.experimental.FieldNameConstants;
 
 import java.math.BigDecimal;
 
-import static cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet.Fields.*;
+import static cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet.Fields.mchAppCode;
+import static cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet.Fields.userId;
 
 /**
  * 钱包

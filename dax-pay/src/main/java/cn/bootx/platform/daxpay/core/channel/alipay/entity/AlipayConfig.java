@@ -1,10 +1,5 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.entity;
 
-import cn.bootx.mybatis.table.modify.annotation.DbColumn;
-import cn.bootx.mybatis.table.modify.annotation.DbTable;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlFieldType;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.annotation.DbMySqlIndex;
-import cn.bootx.mybatis.table.modify.mybatis.mysq.constants.MySqlFieldTypeEnum;
 import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
@@ -13,6 +8,11 @@ import cn.bootx.platform.daxpay.code.paymodel.AliPayCode;
 import cn.bootx.platform.daxpay.core.channel.alipay.convert.AlipayConvert;
 import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
 import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
+import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
+import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
