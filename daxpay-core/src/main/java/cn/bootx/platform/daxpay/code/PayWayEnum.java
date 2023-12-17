@@ -17,10 +17,15 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum PayWayEnum {
 
-    NORMAL("NORMAL", "常规支付"), WAP("WAP", "wap支付"), APP("APP", "应用支付"), WEB("WEB", "web支付"), QRCODE("QRCODE", "扫码支付"),
-    BARCODE("BARCODE", "付款码"), JSAPI("JSAPI", "公众号/小程序支付");
+    NORMAL("normal", "常规支付"),
+    WAP("wap", "wap支付"),
+    APP("app", "应用支付"),
+    WEB("web", "web支付"),
+    QRCODE("qrcode", "扫码支付"),
+    BARCODE("barcode", "付款码"),
+    JSAPI("jsapi", "公众号/小程序支付");
 
-    /** 支付方式字符编码 */
+    /** 编码 */
     private final String code;
 
     /** 名称 */

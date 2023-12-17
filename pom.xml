@@ -21,6 +21,7 @@
         <module>daxpay-core</module>
         <module>daxpay-common</module>
         <module>daxpay-single</module>
+        <module>dax-pay-sdk</module>
     </modules>
 
     <properties>

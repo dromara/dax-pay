@@ -14,14 +14,24 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
- * 同意下单支付方式参数
- *
+ * 简单下单参数
  * @author xxm
- * @since 2020/12/8
+ * @since 2023/12/17
  */
 @Data
-@Schema(title = "支付方式参数")
-public class PayWayParam {
+@Schema(title = "简单下单参数")
+public class SimplePayParam {
+
+    @Schema(description = "业务号")
+    @NotBlank(message = "业务号不可为空")
+    private String businessNo;
+
+    @Schema(description = "支付标题")
+    @NotBlank(message = "支付标题不可为空")
+    private String title;
+
+    @Schema(description = "支付描述")
+    private String description;
 
     /**
      * @see PayChannelEnum#getCode()
@@ -49,4 +59,6 @@ public class PayWayParam {
      */
     @Schema(description = "附加支付参数")
     private String channelExtra;
+
+
 }

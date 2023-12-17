@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.param.pay;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.experimental.Accessors;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -10,28 +10,20 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
- * 支付参数
+ * 统一下单参数
  *
  * @author xxm
  * @since 2020/12/9
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Accessors(chain = true)
 @Schema(title = "支付参数")
-public class PayParam {
+public class PayParam extends PayCommonParam{
 
-    @Schema(description = "商户编码")
-    @NotEmpty(message = "商户应用不可为空")
-    private String mchCode;
 
-    @Schema(description = "商户应用编码")
-
-    @NotEmpty(message = "商户应用编码不可为空")
-    private String mchAppCode;
-
-    @Schema(description = "业务ID")
-    @NotBlank(message = "业务ID不可为空")
-    private String businessId;
+    @Schema(description = "业务号")
+    @NotBlank(message = "业务号不可为空")
+    private String businessNo;
 
     @Schema(description = "支付标题")
     @NotBlank(message = "支付标题不可为空")
