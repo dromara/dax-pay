@@ -11,4 +11,11 @@ import lombok.Data;
 @Data
 @Schema(title = "支付取消参数")
 public class CancelParam {
+
+    @Schema(description = "支付单ID")
+    private Long paymentId;
+
+    @Schema(description = "业务号")
+    private String businessNo;
+
 }

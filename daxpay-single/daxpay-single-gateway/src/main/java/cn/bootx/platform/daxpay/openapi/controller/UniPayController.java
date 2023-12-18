@@ -1,9 +1,10 @@
 package cn.bootx.platform.daxpay.openapi.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
+import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.bootx.platform.daxpay.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,22 +38,22 @@ public class UniPayController {
     }
     @Operation(summary = "订单撤销")
     @PostMapping("/cancel")
-    public DaxResult<Void> cancel(){
+    public DaxResult<Void> cancel(@RequestBody CancelParam param){
         return DaxRes.ok();
     }
     @Operation(summary = "订单关闭")
     @PostMapping("/close")
-    public DaxResult<Void> close(){
+    public DaxResult<Void> close(@RequestBody CloseParam param){
         return DaxRes.ok();
     }
     @Operation(summary = "统一退款")
     @PostMapping("/refund")
-    public DaxResult<Void> refund(){
+    public DaxResult<RefundResult> refund(@RequestBody RefundParam param){
         return DaxRes.ok();
     }
     @Operation(summary = "简单退款")
     @PostMapping("/simpleRefund")
-    public DaxResult<Void> simpleRefund(){
+    public DaxResult<RefundResult> simpleRefund(@RequestBody SimpleRefundParam param){
         return DaxRes.ok();
     }
     @Operation(summary = "支付状态同步")
@@ -62,7 +63,7 @@ public class UniPayController {
     }
     @Operation(summary = "退款状态同步")
     @PostMapping("/syncRefund")
-    public DaxResult<Void> syncRefund(){
+    public DaxResult<Void> syncRefund(@RequestBody RefundSyncParam param){
         return DaxRes.ok();
     }
 }

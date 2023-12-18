@@ -12,6 +12,68 @@
     <artifactId>daxpay-single-service</artifactId>
 
     <dependencies>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- lombok 配合 mapstruct -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 类型转换处理器 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 类型转换 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- mp -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+        <!-- MP封装 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-mybatis-plus</artifactId>
+        </dependency>
+        <!-- 表格操作 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
+        <!-- 自动建表 -->
+        <dependency>
+            <groupId>cn.bootx</groupId>
+            <artifactId>table-modify-mysql</artifactId>
+            <version>${table-modify.version}</version>
+        </dependency>
+        <!-- redis客户端封装 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-redis-client</artifactId>
+        </dependency>
+        <!-- Spring相关封装 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-spring</artifactId>
+        </dependency>
+        <!-- 查询构造器 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-super-query</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
         <!-- 支付核心包-->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
@@ -24,10 +86,31 @@
             <artifactId>daxpay-common</artifactId>
             <version>${dax.version}</version>
         </dependency>
-        <!-- mp -->
+
+        <!-- 支付宝支付 -->
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <groupId>com.github.javen205</groupId>
+            <artifactId>IJPay-AliPay</artifactId>
+            <version>${IJPay.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>fastjson</artifactId>
+                    <groupId>com.alibaba</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- 微信支付 ijpay -->
+        <dependency>
+            <groupId>com.github.javen205</groupId>
+            <artifactId>IJPay-WxPay</artifactId>
+            <version>${IJPay.version}</version>
+        </dependency>
+        <!-- 微信支付 wxjava -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>${wxjava.version}</version>
         </dependency>
     </dependencies>
 </project>

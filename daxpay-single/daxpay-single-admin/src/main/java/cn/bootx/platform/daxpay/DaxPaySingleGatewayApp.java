@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay;
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 管理端
@@ -11,5 +12,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  */
 @ConfigurationPropertiesScan
 @MapperScan(annotationClass = Mapper.class)
+@ComponentScan
 public class DaxPaySingleGatewayApp {
 }

@@ -22,10 +22,10 @@ public enum PayStatusEnum {
     PARTIAL_REFUND("partial_refund","部分退款"),
     REFUNDED("REFUNDED","已退款");
 
-    /** 支付方式字符编码 */
+    /** 编码 */
     private final String code;
 
     /** 名称 */
     private final String name;
 
-    }
+}

@@ -11,7 +11,6 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 /**
  * 同意下单支付方式参数
@@ -39,7 +38,7 @@ public class PayWayParam {
 
     @Schema(description = "支付金额")
     @NotNull(message = "支付金额不可为空")
-    private BigDecimal amount;
+    private Integer amount;
 
     /**
      * @see AliPayParam

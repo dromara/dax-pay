@@ -1,17 +1,16 @@
-package cn.bootx.platform.daxpay.core.pay.service;
+package cn.bootx.platform.daxpay.core.channel.union.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * 支付流程服务
- *
  * @author xxm
- * @since 2020/12/9
+ * @since 2022/3/11
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayService {
+public class UnionPaymentService {
+
 }
