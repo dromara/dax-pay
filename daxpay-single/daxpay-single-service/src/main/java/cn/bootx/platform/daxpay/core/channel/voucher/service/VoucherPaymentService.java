@@ -1,21 +1,18 @@
 package cn.bootx.platform.daxpay.core.channel.voucher.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherPayment;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherRecord;
-import cn.bootx.platform.daxpay.core.payment.entity.Payment;
+import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,13 +31,13 @@ public class VoucherPaymentService {
     /**
      * 添加支付记录
      */
-    public void savePayment(Payment payment, PayParam payParam, PayWayParam payMode, List<VoucherRecord> voucherRecords) {
-        VoucherPayment voucherPayment = new VoucherPayment().setVoucherRecords(voucherRecords);
-        voucherPayment.setPaymentId(payment.getId())
-            .setBusinessId(payParam.getBusinessId())
+    public void savePayment(PayOrder payOrder, PayParam payParam, PayWayParam payMode, VoucherRecord voucherRecord) {
+        VoucherPayment voucherPayment = new VoucherPayment().setVoucherRecord(voucherRecord);
+        voucherPayment.setPaymentId(payOrder.getId())
+            .setBusinessNo(payParam.getBusinessNo())
             .setAmount(payMode.getAmount())
             .setRefundableBalance(payMode.getAmount())
-            .setPayStatus(payment.getPayStatus());
+            .setStatus(payOrder.getStatus());
         voucherPaymentManager.save(voucherPayment);
     }
 
@@ -51,7 +48,8 @@ public class VoucherPaymentService {
         Optional<VoucherPayment> payment = voucherPaymentManager.findByPaymentId(paymentId);
         if (payment.isPresent()) {
             VoucherPayment voucherPayment = payment.get();
-            voucherPayment.setPayStatus(PayStatusCode.TRADE_SUCCESS).setPayTime(LocalDateTime.now());
+            voucherPayment.setStatus(PayStatusEnum.SUCCESS.getCode())
+                    .setPayTime(LocalDateTime.now());
             voucherPaymentManager.updateById(voucherPayment);
         }
     }
@@ -62,25 +60,27 @@ public class VoucherPaymentService {
     public void updateClose(Long paymentId) {
         VoucherPayment payment = voucherPaymentManager.findByPaymentId(paymentId)
             .orElseThrow(() -> new BizException("未查询到查询交易记录"));
-        payment.setPayStatus(PayStatusCode.TRADE_CANCEL);
+        payment.setStatus(PayStatusEnum.CLOSE.getCode());
         voucherPaymentManager.updateById(payment);
     }
 
     /**
      * 更新退款
      */
-    public void updateRefund(Long paymentId, BigDecimal amount) {
+    public void updateRefund(Long paymentId, int amount) {
         Optional<VoucherPayment> voucherPayment = voucherPaymentManager.findByPaymentId(paymentId);
-        voucherPayment.ifPresent(payment -> {
-            BigDecimal refundableBalance = payment.getRefundableBalance().subtract(amount);
-            payment.setRefundableBalance(refundableBalance);
-            if (BigDecimalUtil.compareTo(refundableBalance, BigDecimal.ZERO) == 0) {
-                payment.setPayStatus(PayStatusCode.TRADE_REFUNDED);
+        voucherPayment.ifPresent(payOrder -> {
+            int refundableBalance = payOrder.getRefundableBalance() - amount;
+            payOrder.setRefundableBalance(refundableBalance);
+            // 全部退款
+            if (refundableBalance == 0) {
+                payOrder.setStatus(PayStatusEnum.REFUNDED.getCode());
             }
+            // 部分退款
             else {
-                payment.setPayStatus(PayStatusCode.TRADE_REFUNDING);
+                payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
             }
-            voucherPaymentManager.updateById(payment);
+            voucherPaymentManager.updateById(payOrder);
         });
     }
 

@@ -1,13 +1,10 @@
 package cn.bootx.platform.daxpay.core.channel.voucher.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.daxpay.code.paymodel.VoucherCode;
+import cn.bootx.platform.daxpay.code.VoucherCode;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherLogManager;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherManager;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
-import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherLog;
-import cn.bootx.platform.daxpay.core.merchant.service.MchAppService;
 import cn.bootx.platform.daxpay.param.channel.voucher.VoucherImportParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
@@ -17,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -37,46 +33,6 @@ public class VoucherService {
 
     private final VoucherLogManager voucherLogManager;
 
-    private final MchAppService mchAppService;
-
-    /**
-     * 批量生成
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void generationBatch(VoucherGenerationParam param) {
-        // 是否有管理关系判断
-        if (!mchAppService.checkMatch(param.getMchCode(), param.getMchAppCode())) {
-            throw new BizException("应用信息与商户信息不匹配");
-        }
-
-        Integer count = param.getCount();
-        List<Voucher> vouchers = new ArrayList<>(count);
-        long batchNo = IdUtil.getSnowflakeNextId();
-        for (int i = 0; i < count; i++) {
-            Voucher voucher = new Voucher()
-                    .setCardNo('V' + IdUtil.getSnowflakeNextIdStr())
-                    .setMchCode(param.getMchCode())
-                    .setMchAppCode(param.getMchAppCode())
-                    .setBatchNo(batchNo)
-                    .setBalance(param.getFaceValue())
-                    .setFaceValue(param.getFaceValue())
-                    .setEnduring(param.getEnduring())
-                    .setStatus(param.getStatus());
-            if (Objects.equals(param.getEnduring(), Boolean.FALSE)) {
-                voucher.setStartTime(param.getStartTime()).setEndTime(param.getEndTime());
-            }
-            vouchers.add(voucher);
-        }
-        voucherManager.saveAll(vouchers);
-        // 日志
-        List<VoucherLog> voucherLogs = vouchers.stream()
-                .map(voucher -> new VoucherLog().setType(VoucherCode.LOG_ACTIVE)
-                        .setAmount(voucher.getBalance())
-                        .setVoucherId(voucher.getId())
-                        .setVoucherNo(voucher.getCardNo()))
-                .collect(Collectors.toList());
-        voucherLogManager.saveAll(voucherLogs);
-    }
 
     /**
      * 批量导入
@@ -84,10 +40,6 @@ public class VoucherService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void importBatch(Boolean skip, String mchCode, String mchAppCode,List<VoucherImportParam> voucherImports) {
-        // 是否有关联关系判断
-        if (!mchAppService.checkMatch(mchCode, mchAppCode)) {
-            throw new BizException("应用信息与商户信息不匹配");
-        }
         List<String> cardNoList = voucherImports.stream()
                 .map(VoucherImportParam::getCardNo)
                 .distinct()
@@ -152,13 +104,5 @@ public class VoucherService {
         voucherManager.changeStatusBatch(ids, VoucherCode.STATUS_FORBIDDEN);
     }
 
-    /**
-     * 更改储值卡信息
-     */
-    public void changeInfo(VoucherChangeParam voucherChangeParam) {
-        // 查询对应的卡
-        Voucher voucher = voucherManager.findByCardNo(voucherChangeParam.getCardNo())
-                .orElseThrow(DataNotExistException::new);
-    }
 
 }

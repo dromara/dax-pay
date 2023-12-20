@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.func;
 
-import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
-import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.core.payment.entity.Payment;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
+import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.Getter;
@@ -20,8 +20,9 @@ import java.util.Map;
 @Setter
 public abstract class AbsPayStrategy {
 
+
     /** 支付对象 */
-    private Payment payment = null;
+    private PayOrder order = null;
 
     /** 支付参数 */
     private PayParam payParam = null;
@@ -38,8 +39,8 @@ public abstract class AbsPayStrategy {
     /**
      * 初始化支付的参数
      */
-    public void initPayParam(Payment payment, PayParam payParam) {
-        this.payment = payment;
+    public void initPayParam(PayOrder order, PayParam payParam) {
+        this.order = order;
         this.payParam = payParam;
     }
 
@@ -90,5 +91,6 @@ public abstract class AbsPayStrategy {
      * 关闭本地支付记录
      */
     public abstract void doCloseHandler();
+
 
 }

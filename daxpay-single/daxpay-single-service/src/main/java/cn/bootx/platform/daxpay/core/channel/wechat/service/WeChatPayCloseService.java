@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayRefundableInfo;
+import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
 import cn.bootx.platform.daxpay.core.payment.refund.local.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.hutool.core.codec.Base64;
@@ -63,7 +63,7 @@ public class WeChatPayCloseService {
      */
     public void refund(PayOrder payOrder, BigDecimal amount,
                        WeChatPayConfig weChatPayConfig) {
-        PayRefundableInfo refundableInfo = payOrder.getRefundableInfos().stream()
+        PayOrderRefundableInfo refundableInfo = payOrder.getRefundableInfos().stream()
                 .filter(o -> Objects.equals(o.getChannel(), PayChannelEnum.WECHAT.getCode()))
                 .findFirst()
                 .orElseThrow(() -> new PayFailureException("未找到微信支付的详细信息"));

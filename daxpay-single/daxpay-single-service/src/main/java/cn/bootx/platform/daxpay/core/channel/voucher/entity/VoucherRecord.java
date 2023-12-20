@@ -3,8 +3,6 @@ package cn.bootx.platform.daxpay.core.channel.voucher.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 /**
  * 储值卡扣款记录列表
  * @author xxm
@@ -18,5 +16,5 @@ public class VoucherRecord {
     private String cardNo;
 
     /** 扣款金额 */
-    private BigDecimal amount;
+    private Integer amount;
 }

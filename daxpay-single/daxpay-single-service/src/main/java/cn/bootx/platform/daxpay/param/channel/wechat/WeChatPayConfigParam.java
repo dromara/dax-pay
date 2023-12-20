@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.param.channel.wechat;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
-import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
+import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;

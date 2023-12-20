@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.dto.channel.wechat;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.paymodel.WeChatPayCode;
+import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

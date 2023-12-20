@@ -34,5 +34,5 @@ public class PayParam extends PayCommonParam{
     @Schema(description = "支付方式信息参数")
     @NotEmpty(message = "支付方式信息参数不可为空")
     @Valid
-    private List<PayWayParam> payWayList;
+    private List<PayWayParam> payWays;
 }

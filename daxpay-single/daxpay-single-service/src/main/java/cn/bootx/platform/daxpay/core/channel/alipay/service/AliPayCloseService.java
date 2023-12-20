@@ -1,10 +1,10 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.service;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
-import cn.bootx.platform.daxpay.code.paymodel.AliPayCode;
-import cn.bootx.platform.daxpay.core.payment.entity.Payment;
-import cn.bootx.platform.daxpay.core.refund.local.AsyncRefundLocal;
-import cn.bootx.platform.daxpay.exception.payment.PayFailureException;
+import cn.bootx.platform.daxpay.code.AliPayCode;
+import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.payment.refund.local.AsyncRefundLocal;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.hutool.core.util.IdUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeCancelModel;
@@ -35,10 +35,10 @@ public class AliPayCloseService {
      * 关闭支付
      */
     @Retryable(value = RetryableException.class)
-    public void cancelRemote(Payment payment) {
+    public void cancelRemote(PayOrder payOrder) {
         // 只有部分需要调用支付宝网关进行关闭
         AlipayTradeCancelModel model = new AlipayTradeCancelModel();
-        model.setOutTradeNo(String.valueOf(payment.getId()));
+        model.setOutTradeNo(String.valueOf(payOrder.getId()));
 
         try {
             AlipayTradeCancelResponse response = AliPayApi.tradeCancelToResponse(model);
@@ -56,9 +56,9 @@ public class AliPayCloseService {
     /**
      * 退款
      */
-    public void refund(Payment payment, BigDecimal amount) {
+    public void refund(PayOrder payOrder, BigDecimal amount) {
         AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();
-        refundModel.setOutTradeNo(String.valueOf(payment.getId()));
+        refundModel.setOutTradeNo(String.valueOf(payOrder.getId()));
         refundModel.setRefundAmount(amount.toPlainString());
 
         // 设置退款号

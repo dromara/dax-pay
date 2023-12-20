@@ -1,11 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.wallet.dao;
 
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
-import cn.bootx.platform.iam.core.user.entity.UserInfo;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -87,10 +83,5 @@ public interface WalletMapper extends BaseMapper<Wallet> {
      */
     int reduceBalanceUnlimited(@Param("walletId") Long walletId, @Param("amount") BigDecimal amount,
                                @Param("operator") Long operator, @Param("date") LocalDateTime date);
-
-    /**
-     * 待开通钱包的用户列表
-     */
-    Page<UserInfo> pageByNotWallet(Page<UserInfo> mpPage, @Param(Constants.WRAPPER) Wrapper<?> wrapper);
 
 }

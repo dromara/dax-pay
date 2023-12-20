@@ -1,18 +1,15 @@
 package cn.bootx.platform.daxpay.core.channel.cash.service;
 
-import cn.bootx.platform.common.core.util.BigDecimalUtil;
-import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.channel.cash.dao.CashPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.cash.entity.CashPayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.payment.entity.Payment;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
@@ -47,7 +44,7 @@ public class CashService {
     public void close(Long paymentId) {
         Optional<CashPayOrder> cashPaymentOpt = cashPaymentManager.findByPaymentId(paymentId);
         cashPaymentOpt.ifPresent(cashPayOrder -> {
-            cashPayOrder.setStatus(PayStatusCode.TRADE_CANCEL);
+            cashPayOrder.setStatus(PayStatusEnum.CLOSE.getCode());
             cashPaymentManager.updateById(cashPayOrder);
         });
     }
@@ -55,17 +52,19 @@ public class CashService {
     /**
      * 退款
      */
-    public void refund(Long paymentId, BigDecimal amount) {
+    public void refund(Long paymentId, int amount) {
         Optional<CashPayOrder> cashPayment = cashPaymentManager.findByPaymentId(paymentId);
-        cashPayment.ifPresent(payment -> {
-            BigDecimal refundableBalance = payment.getRefundableBalance().subtract(amount);
-            if (BigDecimalUtil.compareTo(refundableBalance, BigDecimal.ZERO) == 0) {
-                payment.setStatus(PayStatusCode.TRADE_REFUNDED);
+        cashPayment.ifPresent(payOrder -> {
+            int refundableBalance = payOrder.getRefundableBalance() - amount;
+            // 全部退款
+            if (refundableBalance == 0) {
+                payOrder.setStatus(PayStatusEnum.REFUNDED.getCode());
             }
+            // 部分退款
             else {
-                payment.setStatus(PayStatusCode.TRADE_REFUNDING);
+                payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getName());
             }
-            cashPaymentManager.updateById(payment);
+            cashPaymentManager.updateById(payOrder);
         });
     }
 

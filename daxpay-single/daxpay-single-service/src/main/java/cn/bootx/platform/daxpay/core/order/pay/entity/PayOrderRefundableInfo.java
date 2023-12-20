@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class PayRefundableInfo {
+public class PayOrderRefundableInfo {
     /**
      * @see PayChannelEnum#getCode()
      */

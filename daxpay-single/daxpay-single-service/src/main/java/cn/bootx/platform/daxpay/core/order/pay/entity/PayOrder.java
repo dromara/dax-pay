@@ -16,7 +16,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -57,21 +56,21 @@ public class PayOrder extends MpBaseEntity {
 
     /** 金额 */
     @DbColumn(comment = "金额")
-    private BigDecimal amount;
+    private Integer amount;
 
     /** 可退款余额 */
     @DbColumn(comment = "可退款余额")
-    private BigDecimal refundableBalance;
+    private Integer refundableBalance;
 
     /**
      * 退款信息列表
-     * @see PayRefundableInfo
+     * @see PayOrderRefundableInfo
      */
     @TableField(typeHandler = JacksonRawTypeHandler.class)
     @BigField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "退款信息列表")
-    private List<PayRefundableInfo> refundableInfos;
+    private List<PayOrderRefundableInfo> refundableInfos;
 
     /**
      * 支付状态

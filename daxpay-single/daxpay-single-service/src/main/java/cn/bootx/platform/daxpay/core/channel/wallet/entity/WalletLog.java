@@ -12,8 +12,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 /**
  * 钱包日志
  *
@@ -50,14 +48,13 @@ public class WalletLog extends MpBaseEntity implements EntityBaseFunction<Wallet
 
     /**
      * 操作类型
-     * @see cn.bootx.platform.daxpay.code.paymodel.WalletCode#OPERATION_SOURCE_USER
      */
     @DbColumn(comment = "操作类型")
     private String operationSource;
 
     /** 金额 */
     @DbColumn(comment = "金额")
-    private BigDecimal amount;
+    private Integer amount;
 
     /** 备注 */
     @DbColumn(comment = "备注")

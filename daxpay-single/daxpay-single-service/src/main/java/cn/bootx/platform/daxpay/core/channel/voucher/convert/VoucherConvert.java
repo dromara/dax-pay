@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherLog;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherPayment;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherDto;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherLogDto;
-import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherPaymentDto;
+import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherPayOrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -22,6 +22,6 @@ public interface VoucherConvert {
 
     VoucherLogDto convert(VoucherLog in);
 
-    VoucherPaymentDto convert(VoucherPayment in);
+    VoucherPayOrderDto convert(VoucherPayment in);
 
 }

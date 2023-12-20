@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.dto.channel.voucher;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.paymodel.VoucherCode;
+import cn.bootx.platform.daxpay.code.VoucherCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

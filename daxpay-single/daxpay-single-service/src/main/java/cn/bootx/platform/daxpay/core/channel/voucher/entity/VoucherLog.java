@@ -2,17 +2,16 @@ package cn.bootx.platform.daxpay.core.channel.voucher.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.bootx.platform.daxpay.code.paymodel.VoucherCode;
+import cn.bootx.platform.daxpay.code.VoucherCode;
 import cn.bootx.platform.daxpay.core.channel.voucher.convert.VoucherConvert;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherLogDto;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.math.BigDecimal;
 
 /**
  * 储值卡日志
@@ -22,7 +21,7 @@ import java.math.BigDecimal;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-//@DbTable(comment = "储值卡日志")
+@DbTable(comment = "储值卡日志")
 @Accessors(chain = true)
 @TableName("pay_voucher_log")
 public class VoucherLog extends MpBaseEntity implements EntityBaseFunction<VoucherLogDto> {
@@ -38,7 +37,7 @@ public class VoucherLog extends MpBaseEntity implements EntityBaseFunction<Vouch
 
     /** 金额 */
     @DbColumn(comment = "金额")
-    private BigDecimal amount;
+    private Integer amount;
 
     /**
      * 类型

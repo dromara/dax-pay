@@ -37,6 +37,6 @@ public class PayResult {
      * @see PayStatusEnum
      */
     @Schema(description = "支付状态")
-    private String payStatus;
+    private String status;
 
 }

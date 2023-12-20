@@ -1,24 +1,16 @@
 package cn.bootx.platform.daxpay.core.payment.callback.service;
 
-import cn.bootx.platform.common.core.exception.ErrorCodeRuntimeException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.code.pay.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.pay.PayStatusCode;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayNotifyStatusEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.core.pay.builder.PayEventBuilder;
-import cn.bootx.platform.daxpay.core.pay.builder.PaymentBuilder;
-import cn.bootx.platform.daxpay.core.pay.exception.BaseException;
-import cn.bootx.platform.daxpay.core.pay.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.core.pay.factory.PayStrategyFactory;
-import cn.bootx.platform.daxpay.core.pay.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.core.pay.func.PayStrategyConsumer;
-import cn.bootx.platform.daxpay.core.pay.result.PayCallbackResult;
 import cn.bootx.platform.daxpay.core.payment.callback.result.PayCallbackResult;
-import cn.bootx.platform.daxpay.core.payment.entity.Payment;
-import cn.bootx.platform.daxpay.core.payment.service.PaymentService;
-import cn.bootx.platform.daxpay.event.PayEventSender;
+import cn.bootx.platform.daxpay.core.payment.pay.factory.PayStrategyFactory;
+import cn.bootx.platform.daxpay.func.AbsPayStrategy;
+import cn.bootx.platform.daxpay.func.PayStrategyConsumer;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;
@@ -47,79 +39,78 @@ public class PayCallbackService {
     /**
      * 统一回调处理
      * @param tradeStatus 支付状态
-     * @see PayStatusCode
      */
     public PayCallbackResult callback(Long paymentId, String tradeStatus, Map<String, String> map) {
 
         // 获取payment和paymentParam数据
-        PayOrder payment = payOrderService.findById(paymentId).orElse(null);
+        PayOrder payOrder = payOrderService.findById(paymentId).orElse(null);
 
         // 支付单不存在,记录回调记录
-        if (Objects.isNull(payment)) {
-            return new PayCallbackResult().setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("支付单不存在,记录回调记录");
+        if (Objects.isNull(payOrder)) {
+            return new PayCallbackResult().setCode(PayNotifyStatusEnum.FAIL.getCode()).setMsg("支付单不存在,记录回调记录");
         }
 
         // 回调时间超出了支付单超时时间, 记录一下, 不做处理
-        if (Objects.nonNull(payment.getExpiredTime())
-                && LocalDateTimeUtil.ge(LocalDateTime.now(), payment.getExpiredTime())) {
-            return new PayCallbackResult().setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("回调时间超出了支付单支付有效时间");
+        if (Objects.nonNull(payOrder.getExpiredTime())
+                && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
+            return new PayCallbackResult().setCode(PayNotifyStatusEnum.FAIL.getCode()).setMsg("回调时间超出了支付单支付有效时间");
         }
 
         // 成功状态
-        if (Objects.equals(PayStatusCode.NOTIFY_TRADE_SUCCESS, tradeStatus)) {
-            return this.success(payment, map);
+        if (Objects.equals(PayNotifyStatusEnum.SUCCESS, tradeStatus)) {
+            return this.success(payOrder, map);
         }
         else {
             // 失败状态
-            return this.fail(payment, map);
+            return this.fail(payOrder, map);
         }
     }
 
     /**
      * 成功处理
      */
-    private PayCallbackResult success(Payment payment, Map<String, String> map) {
-        PayCallbackResult result = new PayCallbackResult().setCode(PayStatusCode.NOTIFY_PROCESS_SUCCESS);
+    private PayCallbackResult success(PayOrder payOrder, Map<String, String> map) {
+        PayCallbackResult result = new PayCallbackResult().setCode(PayNotifyStatusEnum.SUCCESS.getCode());
 
         // payment已经被支付,不需要重复处理
-        if (Objects.equals(payment.getPayStatus(), PayStatusCode.TRADE_SUCCESS)) {
-            return result.setCode(PayStatusCode.NOTIFY_PROCESS_IGNORE).setMsg("支付单已经是支付成功状态,不进行处理");
+        if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
+            return result.setCode(PayNotifyStatusEnum.IGNORE.getCode()).setMsg("支付单已经是支付成功状态,不进行处理");
         }
 
         // payment已被取消,记录回调记录
-        if (!Objects.equals(payment.getPayStatus(), PayStatusCode.TRADE_PROGRESS)) {
-            return result.setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("支付单不是待支付状态,记录回调记录");
+        if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
+            return result.setCode(PayNotifyStatusEnum.FAIL.getCode()).setMsg("支付单不是待支付状态,记录回调记录");
         }
 
         // 2.通过工厂生成对应的策略组
-        PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
+        PayParam payParam = null;
 
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWays());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
-            return result.setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("支付单数据非法,未找到对应的支付方式");
+            return result.setCode(PayStatusEnum.FAIL.getCode()).setMsg("支付单数据非法,未找到对应的支付方式");
         }
 
         // 3.初始化支付的参数
         for (AbsPayStrategy paymentStrategy : paymentStrategyList) {
-            paymentStrategy.initPayParam(payment, payParam);
+            paymentStrategy.initPayParam(payOrder, payParam);
         }
         // 4.处理方法, 支付时只有一种payModel(异步支付), 失败时payment的所有payModel都会生效
-        boolean handlerFlag = this.doHandler(payment, paymentStrategyList, (strategyList, paymentObj) -> {
+        boolean handlerFlag = this.doHandler(payOrder, paymentStrategyList, (strategyList, paymentObj) -> {
             // 执行异步支付方式的成功回调(不会有同步payModel)
             strategyList.forEach(absPaymentStrategy -> absPaymentStrategy.doAsyncSuccessHandler(map));
 
             // 修改payment支付状态为成功
-            paymentObj.setPayStatus(PayStatusCode.TRADE_SUCCESS);
+            paymentObj.setStatus(PayStatusEnum.SUCCESS.getCode());
             paymentObj.setPayTime(LocalDateTime.now());
             payOrderService.updateById(paymentObj);
         });
 
         if (handlerFlag) {
             // 5. 发送成功事件
-            eventSender.sendPayComplete(PayEventBuilder.buildPayComplete(payment));
+//            eventSender.sendPayComplete(PayEventBuilder.buildPayComplete(payOrder));
         }
         else {
-            return result.setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("回调处理过程报错");
+            return result.setCode(PayStatusEnum.FAIL.getCode()).setMsg("回调处理过程报错");
         }
         return result;
     }
@@ -127,45 +118,45 @@ public class PayCallbackService {
     /**
      * 失败处理, 关闭并退款 按说这块不会发生
      */
-    private PayCallbackResult fail(Payment payment, Map<String, String> map) {
-        PayCallbackResult result = new PayCallbackResult().setCode(PayStatusCode.NOTIFY_PROCESS_SUCCESS);
+    private PayCallbackResult fail(PayOrder payOrder, Map<String, String> map) {
+        PayCallbackResult result = new PayCallbackResult().setCode(PayStatusEnum.SUCCESS.getCode());
 
         // payment已被取消,记录回调记录,后期处理
-        if (!Objects.equals(payment.getPayStatus(), PayStatusCode.TRADE_PROGRESS)) {
-            return result.setCode(PayStatusCode.NOTIFY_PROCESS_IGNORE).setMsg("支付单已经取消,记录回调记录");
+        if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
+            return result.setCode(PayNotifyStatusEnum.IGNORE.getCode()).setMsg("支付单已经取消,记录回调记录");
         }
 
         // payment支付成功, 状态非法
-        if (!Objects.equals(payment.getPayStatus(), PayStatusCode.TRADE_SUCCESS)) {
-            return result.setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("支付单状态非法,支付网关状态为失败,但支付单状态为已完成");
+        if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
+            return result.setCode(PayNotifyStatusEnum.FAIL.getCode()).setMsg("支付单状态非法,支付网关状态为失败,但支付单状态为已完成");
         }
 
         // 2.通过工厂生成对应的策略组
-        PayParam payParam = PaymentBuilder.buildPayParamByPayment(payment);
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWayList());
+        PayParam payParam = null;
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWays());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
-            return result.setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("支付单数据非法,未找到对应的支付方式");
+            return result.setCode(PayNotifyStatusEnum.FAIL.getCode()).setMsg("支付单数据非法,未找到对应的支付方式");
         }
         // 3.初始化支付关闭的参数
         for (AbsPayStrategy paymentStrategy : paymentStrategyList) {
-            paymentStrategy.initPayParam(payment, payParam);
+            paymentStrategy.initPayParam(payOrder, payParam);
         }
         // 4.处理方法, 支付时只有一种payModel(异步支付), 失败时payment的所有payModel都会生效
-        boolean handlerFlag = this.doHandler(payment, paymentStrategyList, (strategyList, paymentObj) -> {
+        boolean handlerFlag = this.doHandler(payOrder, paymentStrategyList, (strategyList, paymentObj) -> {
             // 执行异步支付方式的成功回调(不会有同步payModel)
             strategyList.forEach(AbsPayStrategy::doCancelHandler);
 
-            // 修改payment支付状态为成功
-            paymentObj.setPayStatus(PayStatusCode.TRADE_CANCEL);
+            // 修改payment支付状态为撤销
+            paymentObj.setStatus(PayStatusEnum.CLOSE.getCode());
             payOrderService.updateById(paymentObj);
         });
 
         if (handlerFlag) {
             // 5. 发送退款事件
-            eventSender.sendPayRefund(PayEventBuilder.buildPayRefund(payment));
+//            eventSender.sendPayRefund(PayEventBuilder.buildPayRefund(payOrder));
         }
         else {
-            return result.setCode(PayStatusCode.NOTIFY_PROCESS_FAIL).setMsg("回调处理过程报错");
+            return result.setCode(PayNotifyStatusEnum.FAIL.getCode()).setMsg("回调处理过程报错");
         }
 
         return result;
@@ -178,12 +169,12 @@ public class PayCallbackService {
      * @param successCallback 成功操作
      */
     private boolean doHandler(PayOrder payOrder, List<AbsPayStrategy> strategyList,
-            PayStrategyConsumer<List<AbsPayStrategy>, Payment> successCallback) {
+            PayStrategyConsumer<List<AbsPayStrategy>, PayOrder> successCallback) {
 
         try {
             // 1.获取异步支付方式，通过工厂生成对应的策略组
             List<AbsPayStrategy> syncPaymentStrategyList = strategyList.stream()
-                .filter(paymentStrategy -> PayChannelEnum.ASYNC_TYPE_CODE.contains(paymentStrategy.getType()))
+                .filter(paymentStrategy -> PayChannelEnum.ASYNC_TYPE.contains(paymentStrategy.getType()))
                 .collect(Collectors.toList());
             // 执行成功方法
             successCallback.accept(syncPaymentStrategyList, payOrder);
@@ -199,23 +190,23 @@ public class PayCallbackService {
     /**
      * 对Error的处理
      */
-    private void asyncErrorHandler(Payment payment, List<AbsPayStrategy> strategyList, Exception e) {
+    private void asyncErrorHandler(PayOrder payOrder, List<AbsPayStrategy> strategyList, Exception e) {
 
         // 默认的错误信息
-        ExceptionInfo exceptionInfo = new ExceptionInfo(PayStatusCode.TRADE_FAIL, e.getMessage());
-        if (e instanceof BaseException) {
-            exceptionInfo = ((BaseException) e).getExceptionInfo();
-        }
-        else if (e instanceof ErrorCodeRuntimeException) {
-            ErrorCodeRuntimeException ex = (ErrorCodeRuntimeException) e;
-            exceptionInfo = new ExceptionInfo(String.valueOf(ex.getCode()), ex.getMessage());
-        }
+        ExceptionInfo exceptionInfo = new ExceptionInfo(PayStatusEnum.FAIL.getCode(), e.getMessage());
+//        if (e instanceof BaseException) {
+//            exceptionInfo = ((BaseException) e).getExceptionInfo();
+//        }
+//        else if (e instanceof ErrorCodeRuntimeException) {
+//            ErrorCodeRuntimeException ex = (ErrorCodeRuntimeException) e;
+//            exceptionInfo = new ExceptionInfo(String.valueOf(ex.getCode()), ex.getMessage());
+//        }
 
         // 更新Payment的状态
-        payment.setErrorCode(String.valueOf(exceptionInfo.getErrorCode()));
-        payment.setErrorMsg(String.valueOf(exceptionInfo.getErrorMsg()));
-        payment.setPayStatus(PayStatusCode.TRADE_FAIL);
-        payOrderService.updateById(payment);
+//        payOrder.setErrorCode(String.valueOf(exceptionInfo.getErrorCode()));
+//        payOrder.setErrorMsg(String.valueOf(exceptionInfo.getErrorMsg()));
+//        payOrder.setPayStatus(PayStatusCode.TRADE_FAIL);
+        payOrderService.updateById(payOrder);
 
         // 调用失败处理
         for (AbsPayStrategy paymentStrategy : strategyList) {

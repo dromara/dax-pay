@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.dto.channel.wallet;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.paymodel.WalletCode;
+import cn.bootx.platform.daxpay.code.WalletCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +30,7 @@ public class WalletLogDto extends BaseDto implements Serializable {
     private Long userId;
 
     /**
-     * @see WalletCode
+     * @see cn.bootx.platform.daxpay.code.WalletCode
      */
     @Schema(description = "类型")
     private String type;

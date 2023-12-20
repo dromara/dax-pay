@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * @author xxm
@@ -25,5 +24,5 @@ public class WalletRechargeParam implements Serializable {
 
     @NotNull(message = "充值金额不可为空")
     @Schema(description = "充值金额")
-    private BigDecimal amount;
+    private Integer amount;
 }

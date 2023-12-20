@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.dto.channel.wallet;
 
-import cn.bootx.platform.daxpay.dto.payment.BasePaymentDto;
+import cn.bootx.platform.daxpay.dto.pay.order.BasePayOrderDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @Schema(title = "钱包支付记录")
-public class WalletPaymentDto extends BasePaymentDto implements Serializable {
+public class WalletPayOrderDto extends BasePayOrderDto implements Serializable {
 
     private static final long serialVersionUID = 8238920331255597223L;
 
