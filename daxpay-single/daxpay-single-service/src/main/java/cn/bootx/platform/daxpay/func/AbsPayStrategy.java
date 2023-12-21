@@ -45,7 +45,7 @@ public abstract class AbsPayStrategy {
     }
 
     /**
-     * 支付前对处理 包含必要的校验以及对Payment对象的创建和保存操作
+     * 支付前处理 包含必要的校验以及对当前通道支付订单的创建和保存操作
      */
     public void doBeforePayHandler() {
     }
@@ -56,7 +56,7 @@ public abstract class AbsPayStrategy {
     public abstract void doPayHandler();
 
     /**
-     * 支付成功的处理方式
+     * 支付调起成功的处理方式
      */
     public void doSuccessHandler() {
     }

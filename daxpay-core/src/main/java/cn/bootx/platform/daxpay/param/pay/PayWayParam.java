@@ -27,14 +27,14 @@ public class PayWayParam {
      */
     @Schema(description = "支付渠道编码")
     @NotBlank(message = "支付渠道编码不可为空")
-    private String payChannel;
+    private String channel;
 
     /**
      * @see PayWayEnum#getCode()
      */
     @Schema(description = "支付方式编码")
     @NotBlank(message = "支付方式编码不可为空")
-    private String payWay;
+    private String way;
 
     @Schema(description = "支付金额")
     @NotNull(message = "支付金额不可为空")

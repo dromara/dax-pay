@@ -57,7 +57,7 @@ public class PayWayUtil {
      */
     public boolean isNotSync(List<PayWayParam> payWayParams) {
         return payWayParams.stream()
-            .map(PayWayParam::getPayChannel)
+            .map(PayWayParam::getChannel)
             .noneMatch(PayChannelEnum.ASYNC_TYPE_CODE::contains);
     }
 
@@ -67,7 +67,7 @@ public class PayWayUtil {
     public PayWayParam getAsyncPayModeParam(PayParam payParam) {
         return payParam.getPayWays()
             .stream()
-            .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getPayChannel()))
+            .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getChannel()))
             .findFirst()
             .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
     }
@@ -129,7 +129,7 @@ public class PayWayUtil {
     public void validationAmount(List<PayWayParam> payModeList) {
         for (PayWayParam payWayParam : payModeList) {
             // 支付金额小于等于零
-            if (payWayParam.getAmount() < 1) {
+            if (payWayParam.getAmount() < 0) {
                 throw new PayAmountAbnormalException();
             }
         }
@@ -143,7 +143,7 @@ public class PayWayUtil {
         List<PayWayParam> payModeList = payParam.getPayWays();
 
         long asyncPayModeCount = payModeList.stream()
-            .map(PayWayParam::getPayChannel)
+            .map(PayWayParam::getChannel)
             .map(PayChannelEnum::findByCode)
             .filter(PayChannelEnum.ASYNC_TYPE::contains)
             .count();

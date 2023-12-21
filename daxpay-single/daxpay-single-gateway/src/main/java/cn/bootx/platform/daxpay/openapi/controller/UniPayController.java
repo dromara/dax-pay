@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.openapi.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
+import cn.bootx.platform.daxpay.core.payment.pay.service.PayService;
 import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
@@ -25,10 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/unipay")
 @RequiredArgsConstructor
 public class UniPayController {
-
+    private final PayService payService;
     @Operation(summary = "统一下单")
     @PostMapping("/pay")
     public DaxResult<PayResult> pay(@RequestBody PayParam payParam){
+        payService.pay(payParam);
         return DaxRes.ok();
     }
     @Operation(summary = "简单下单")

@@ -1,21 +1,22 @@
 package cn.bootx.platform.daxpay.core.order.pay.builder;
 
-import cn.bootx.platform.common.spring.util.WebServletUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
+import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfo;
+import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.extra.servlet.ServletUtil;
 import lombok.experimental.UtilityClass;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -31,45 +32,45 @@ public class PaymentBuilder {
      * 构建payment记录
      */
     public PayOrder buildPayOrder(PayParam payParam) {
-        PayOrder payOrder = new PayOrder();
-
-        HttpServletRequest request = WebServletUtil.getRequest();
-        String ip = ServletUtil.getClientIP(request);
-        // 基础信息
-        payOrder.setBusinessNo(payParam.getBusinessNo())
-                .setTitle(payParam.getTitle());
-
-        // 支付方式
+        // 可退款信息
         List<PayOrderRefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayWays());
-        List<PayOrderChannel> payOrderChannels = buildPayChannel(payParam.getPayWays());
         // 计算总价
-        int sumAmount = payOrderChannels.stream()
-                .map(PayOrderChannel::getAmount)
+        int sumAmount = payParam.getPayWays().stream()
+                .map(PayWayParam::getAmount)
                 .filter(Objects::nonNull)
                 .reduce(Integer::sum)
                 .orElse(0);
-        // 支付渠道信息
-        payOrder.setRefundableInfos(refundableInfos)
+        // 是否有异步支付方式
+        Optional<String> asyncPayMode = payParam.getPayWays().stream()
+                .map(PayWayParam::getChannel)
+                .filter(PayChannelEnum.ASYNC_TYPE_CODE::contains)
+                .findFirst();
+        // 构建支付订单对象
+        return new PayOrder()
+                .setBusinessNo(payParam.getBusinessNo())
+                .setTitle(payParam.getTitle())
+                .setRefundableInfos(refundableInfos)
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setAmount(sumAmount)
-                .setCombinationPayMode(payParam.getPayWays().size()>1)
+                .setCombinationPayMode(payParam.getPayWays().size() > 1)
+                .setAsyncPayMode(asyncPayMode.isPresent())
+                .setAsyncPayChannel(asyncPayMode.orElse(null))
                 .setRefundableBalance(sumAmount);
-        return payOrder;
     }
 
     /**
      * 构建订单关联通道信息
      */
-    private List<PayOrderChannel> buildPayChannel(List<PayWayParam> payWayParamList) {
-        if (CollectionUtil.isEmpty(payWayParamList)) {
+    public List<PayOrderChannel> buildPayChannel(List<PayWayParam> payWayParams) {
+        if (CollectionUtil.isEmpty(payWayParams)) {
             return Collections.emptyList();
         }
-        return payWayParamList.stream()
+        return payWayParams.stream()
                 .map(o-> new PayOrderChannel()
-                       .setChannel(o.getPayChannel())
-                       .setPayWay(o.getPayWay())
-                       .setAmount(o.getAmount())
-                       .setChannelExtra(o.getChannelExtra()))
+                        .setChannel(o.getChannel())
+                        .setPayWay(o.getWay())
+                        .setAmount(o.getAmount())
+                        .setChannelExtra(o.getChannelExtra()))
                 .collect(Collectors.toList());
     }
 
@@ -82,41 +83,50 @@ public class PaymentBuilder {
         }
         return payWayParamList.stream()
                 .map(o-> new PayOrderRefundableInfo()
-                        .setChannel(o.getPayChannel())
+                        .setChannel(o.getChannel())
                         .setAmount(o.getAmount()))
                 .collect(Collectors.toList());
     }
 
 
     /**
-     * 根据Payment构建PaymentResult
-     * @param payment payment
-     * @return paymentVO
+     * 根据支付订单构建支付结果
+     * @param payOrder 支付订单
+     * @return PayResult 支付结果
      */
-    public PayResult buildResultByPayment(PayOrder payment) {
-//        PayResult paymentResult;
-//        try {
-//            paymentResult = new PayResult();
-//            // 异步支付信息
-//            paymentResult.setAsyncPayChannel(payment.getAsyncPayChannel())
-//                    .setAsyncPayMode(payment.isAsyncPayMode())
-//                    .setStatus(payment.getStatus());
-//
-//
-//            // 设置异步支付参数
-//            List<PayOrderChannel> moneyPayTypeInfos = channelInfos.stream()
-//                    .filter(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getPayChannel()))
-//                    .collect(Collectors.toList());
-//            if (!CollUtil.isEmpty(moneyPayTypeInfos)) {
-//                paymentResult.setAsyncPayInfo(AsyncPayInfoLocal.get());
-//            }
-//        }
-//        finally {
-//            // 清空线程变量
-//            AsyncPayInfoLocal.clear();
-//        }
-//        return paymentResult;
-        return null;
+    public PayResult buildPayResultByPayOrder(PayOrder payOrder) {
+        PayResult paymentResult;
+        try {
+            paymentResult = new PayResult()
+                    .setPaymentId(payOrder.getId())
+                    .setAsyncPayMode(payOrder.isAsyncPayMode())
+                    .setAsyncPayChannel(payOrder.getAsyncPayChannel())
+                    .setStatus(payOrder.getStatus());
+
+            // 设置异步支付参数
+            AsyncPayInfo asyncPayInfo = AsyncPayInfoLocal.get();
+            if (Objects.nonNull(asyncPayInfo)) {
+                paymentResult.setPayBody(AsyncPayInfoLocal.get().getPayBody());
+            }
+        }
+        finally {
+            // 清空线程变量
+            AsyncPayInfoLocal.clear();
+        }
+        return paymentResult;
     }
 
+    /**
+     * 根据新的新传入的支付参数和支付订单构建出当前需要支付参数
+     * 主要是针对其中的异步支付参数进行处理
+     *
+     * @param newPayParam 新传入的参数
+     * @param payOrder 支付订单
+     * @return PayParam 支付参数
+     */
+    public PayParam buildPayParam(PayParam newPayParam, PayOrder payOrder) {
+
+
+        return null;
+    }
 }

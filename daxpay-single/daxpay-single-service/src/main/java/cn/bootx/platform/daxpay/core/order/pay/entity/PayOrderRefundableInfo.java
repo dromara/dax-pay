@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 支付订单可退款信息
+ * 支付订单可退款信息(不持久化,直接保存为json)
  * @author xxm
  * @since 2023/12/18
  */

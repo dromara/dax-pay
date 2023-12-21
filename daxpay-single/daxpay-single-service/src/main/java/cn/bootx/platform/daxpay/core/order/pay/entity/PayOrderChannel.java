@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.core.order.pay.entity;
 
-import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpDelEntity;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @DbTable(comment = "支付订单关联支付时通道信息")
 @TableName("pay_order_channel")
-public class PayOrderChannel extends MpBaseEntity {
+public class PayOrderChannel extends MpDelEntity {
 
     @DbColumn(comment = "支付id")
     private Long paymentId;

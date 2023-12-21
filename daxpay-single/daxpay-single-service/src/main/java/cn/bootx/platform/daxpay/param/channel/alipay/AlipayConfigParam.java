@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,19 +13,10 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付宝配置参数")
-public class AlipayConfigParam implements Serializable {
-
-    @Schema(description = "主键")
-    private Long id;
+public class AlipayConfigParam {
 
     @Schema(description = "名称")
     private String name;
-
-    @Schema(description = "商户编码")
-    private String mchCode;
-
-    @Schema(description = "商户应用编码")
-    private String mchAppCode;
 
     @Schema(description = "支付宝商户appId")
     private String appId;

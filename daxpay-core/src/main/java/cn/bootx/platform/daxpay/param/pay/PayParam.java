@@ -18,7 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付参数")
-public class PayParam extends PayCommonParam{
+public class PayParam extends PayCommonParam {
 
     @Schema(description = "业务号")
     @NotBlank(message = "业务号不可为空")

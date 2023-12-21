@@ -51,7 +51,7 @@ public class WeChatPaymentService {
         refundableInfos.removeIf(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getChannel()));
         // 添加微信支付类型信息
         payTypeInfos.add(new PayOrderChannel().setChannel(PayChannelEnum.WECHAT.getCode())
-            .setPayWay(payWayParam.getPayWay())
+            .setPayWay(payWayParam.getWay())
             .setAmount(payWayParam.getAmount())
             .setChannelExtra(payWayParam.getChannelExtra()));
 //        TODO 更新支付方式列表

@@ -55,7 +55,7 @@ public class AliPayOrderService {
         refundableInfos.removeIf(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getChannel()));
         // 更新支付宝支付类型信息
         payChannelInfo.add(new PayOrderChannel().setChannel(PayChannelEnum.ALI.getCode())
-            .setPayWay(payWayParam.getPayWay())
+            .setPayWay(payWayParam.getWay())
             .setAmount(payWayParam.getAmount())
             .setChannelExtra(payWayParam.getChannelExtra()));
         // TODO 更新支付关联信息

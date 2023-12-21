@@ -32,7 +32,7 @@ public class PayOrder extends MpBaseEntity {
 
     /** 关联的业务id */
     @DbMySqlIndex(comment = "业务业务号索引",type = MySqlIndexType.UNIQUE)
-    @DbColumn(comment = "关联的业务id")
+    @DbColumn(comment = "关联的业务号")
     private String businessNo;
 
     /** 标题 */

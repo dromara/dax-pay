@@ -3,7 +3,6 @@ package cn.bootx.platform.daxpay.core.payment.pay.strategy;
 import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.core.channel.alipay.dao.AlipayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.*;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
@@ -33,11 +32,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliPayStrategy extends AbsPayStrategy {
 
-    private final AlipayConfigManager alipayConfigManager;
-
     private final AliPayOrderService aliPaymentService;
-
-    private final AlipaySyncService alipaySyncService;
 
     private final AliPayService aliPayService;
 
@@ -80,12 +75,6 @@ public class AliPayStrategy extends AbsPayStrategy {
         // 检查并获取支付宝支付配置
         this.initAlipayConfig();
         aliPayService.validation(this.getPayWayParam(), alipayConfig);
-
-        // 如果没有显式传入同步回调地址, 使用默认配置
-//        if (StrUtil.isBlank(aliPayParam.getReturnUrl())) {
-//            aliPayParam.setReturnUrl(alipayConfig.getReturnUrl());
-//        }
-        this.initAlipayConfig();
     }
 
     /**
@@ -156,9 +145,9 @@ public class AliPayStrategy extends AbsPayStrategy {
      * 初始化支付宝配置信息
      */
     private void initAlipayConfig() {
-        // 检查并获取支付宝支付配置
-        this.alipayConfig = null;
-        alipayConfigService.initApiConfig(this.alipayConfig);
+        // 获取并初始化支付宝支付配置
+        this.alipayConfig = alipayConfigService.getConfig();
+        alipayConfigService.initConfig(this.alipayConfig);
     }
 
 }

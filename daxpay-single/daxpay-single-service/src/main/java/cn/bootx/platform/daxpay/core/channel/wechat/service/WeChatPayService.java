@@ -68,7 +68,7 @@ public class WeChatPayService {
             throw new PayFailureException("未配置微信支付方式");
         }
 
-        PayWayEnum payWayEnum = Optional.ofNullable(WeChatPayWay.findByCode(payWayParam.getPayWay()))
+        PayWayEnum payWayEnum = Optional.ofNullable(WeChatPayWay.findByCode(payWayParam.getWay()))
             .orElseThrow(() -> new PayFailureException("非法的微信支付类型"));
         if (!payWays.contains(payWayEnum.getCode())) {
             throw new PayFailureException("该微信支付方式不可用");
@@ -84,7 +84,7 @@ public class WeChatPayService {
         String totalFee = String.valueOf(amount);
         AsyncPayInfo asyncPayInfo = Optional.ofNullable(AsyncPayInfoLocal.get()).orElse(new AsyncPayInfo());
         String payBody = null;
-        PayWayEnum payWayEnum = PayWayEnum.findByCode(payWayParam.getPayWay());
+        PayWayEnum payWayEnum = PayWayEnum.findByCode(payWayParam.getWay());
 
         // wap支付
         if (payWayEnum == PayWayEnum.WAP) {
