@@ -61,6 +61,9 @@ public class PayService {
     public PayResult pay(PayParam payParam) {
         // 检验参数
         ValidationUtil.validateParam(payParam);
+        // 验签
+
+
         // 异步支付方式检查
         PayWayUtil.validationAsyncPayMode(payParam);
         // 获取并校验支付状态
@@ -80,22 +83,19 @@ public class PayService {
      * 发起的第一次支付请求(同步/异步)
      */
     private PayResult payFirst(PayParam payParam, PayOrder payOrder) {
-        // 0. 已经发起过支付情况直接返回支付结果
+        // 1. 已经发起过支付情况直接返回支付结果
         if (Objects.nonNull(payOrder)) {
             return PaymentBuilder.buildPayResultByPayOrder(payOrder);
         }
 
-        // 1. 价格检测
+        // 2. 价格检测
         PayWayUtil.validationAmount(payParam.getPayWays());
 
-        // 2. 创建支付相关的记录并返回支付订单对象
+        // 3. 创建支付相关的记录并返回支付订单对象
         payOrder = this.createPayOrder(payParam);
 
-        // 3. 调用支付方法进行发起支付
+        // 4. 调用支付方法进行发起支付
         this.payFirstMethod(payParam, payOrder);
-
-        // 4. 获取支付记录信息
-//        payOrder = payOrderService.findById(payOrder.getId()).orElseThrow(PayNotExistedException::new);
 
         // 5. 返回支付结果
         return PaymentBuilder.buildPayResultByPayOrder(payOrder);
@@ -166,10 +166,7 @@ public class PayService {
             payOrderService.updateById(paymentObj);
         });
 
-        // 5. 获取支付记录信息
-//        payOrder = payOrderService.findById(payOrder.getId()).orElseThrow(PayNotExistedException::new);
-
-        // 6. 组装返回参数
+        // 5. 组装返回参数
         return PaymentBuilder.buildPayResultByPayOrder(payOrder);
     }
 
@@ -220,10 +217,7 @@ public class PayService {
         PayOrder payOrder = PaymentBuilder.buildPayOrder(payParam);
         payOrderService.saveOder(payOrder);
         // 构建支付订单扩展表并保存
-        PayOrderExtra payOrderExtra = new PayOrderExtra()
-                .setClientIp(payParam.getClientIp())
-                .setDescription(payParam.getDescription());
-        payOrderExtra.setId(payOrder.getId());
+        PayOrderExtra payOrderExtra = PaymentBuilder.buildPayOrderExtra(payParam, payOrder.getId());
         payOrderExtraManager.save(payOrderExtra);
         // 构建支付通道表并保存
         List<PayOrderChannel> payOrderChannels = PaymentBuilder.buildPayChannel(payParam.getPayWays())

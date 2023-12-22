@@ -4,6 +4,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
 import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfo;
 import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfoLocal;
@@ -56,6 +57,27 @@ public class PaymentBuilder {
                 .setAsyncPayMode(asyncPayMode.isPresent())
                 .setAsyncPayChannel(asyncPayMode.orElse(null))
                 .setRefundableBalance(sumAmount);
+    }
+
+    /**
+     * 构建支付订单的额外信息
+     * @param payParam 支付参数
+     * @param paymentId 支付订单id
+     */
+    public PayOrderExtra buildPayOrderExtra(PayParam payParam, Long paymentId) {
+        PayOrderExtra payOrderExtra = new PayOrderExtra()
+                .setClientIp(payParam.getClientIp())
+                .setDescription(payParam.getDescription())
+                .setNotReturn(payParam.isNotReturn())
+                .setReturnUrl(payParam.getReturnUrl())
+                .setNotNotify(payParam.isNotNotify())
+                .setNotifyUrl(payParam.getNotifyUrl())
+                .setSign(payParam.getSign())
+                .setSignType(payParam.getSignType())
+                .setSignType(payParam.getSign())
+                .setReqTime(payParam.getReqTime());
+        payOrderExtra.setId(paymentId);
+        return payOrderExtra;
     }
 
     /**

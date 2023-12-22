@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * 支付订单扩展信息
  * @author xxm
@@ -26,6 +28,37 @@ public class PayOrderExtra extends MpBaseEntity {
     /** 描述 */
     @DbColumn(comment = "描述")
     private String description;
+
+    @DbColumn(comment = "是否不进行同步通知的跳转")
+    private boolean notReturn;
+
+    /** 同步通知URL */
+    @DbColumn(comment = "同步通知URL")
+    private String returnUrl;
+
+    /** 是否不启用异步通知 */
+    @DbColumn(comment = "是否不启用异步通知")
+    private boolean notNotify;
+
+    /** 异步通知地址 */
+    @DbColumn(comment = "异步通知地址")
+    private String notifyUrl;
+
+    /** 签名类型 */
+    @DbColumn(comment = "签名类型")
+    private String signType;
+
+    /** 签名 */
+    @DbColumn(comment = "签名")
+    private String sign;
+
+    /** API版本号 */
+    @DbColumn(comment = "API版本号")
+    private String version;
+
+    /** 请求时间，时间戳转时间 */
+    @DbColumn(comment = "请求时间，传输时间戳")
+    private LocalDateTime reqTime;
 
     /** 错误码 */
     @DbColumn(comment = "错误码")
