@@ -1,11 +1,13 @@
 package cn.bootx.platform.daxpay.param.pay;
 
+import cn.bootx.platform.daxpay.util.PayUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * 支付公共参数
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Schema(title = "支付公共参数")
-public class PayCommonParam {
+public abstract class PayCommonParam {
 
     /** 客户端ip */
     @NotBlank(message = "客户端ip不可为空")
@@ -57,5 +59,18 @@ public class PayCommonParam {
     @Schema(description = "请求时间，传输时间戳")
     @NotNull(message = "请求时间必填")
     private LocalDateTime reqTime;
+
+
+    /**
+     * 如果需要进行签名,
+     *  1. 参数名ASCII码从小到大排序（字典序）
+     *  2. 如果参数的值为空不参与签名
+     *  3. 参数名不区分大小写
+     *  4. 嵌套对象转换成先转换成MAP再序列化为字符串
+     *  5. 支持两层嵌套, 更多层级嵌套未测试, 可能会导致不可预知的问题
+     */
+    public Map<String,String> toMap(){
+        return PayUtil.toMap(this);
+    }
 
 }

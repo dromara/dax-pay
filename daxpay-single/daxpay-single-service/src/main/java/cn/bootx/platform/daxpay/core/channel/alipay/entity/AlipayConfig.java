@@ -42,12 +42,6 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "异步通知页面路径")
     private String notifyUrl;
 
-    /**
-     * 页面跳转同步通知页面路径 需http://或者https://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问 商户可以自定义同步跳转地址
-     */
-    @DbColumn(comment = "同步通知页面路径")
-    private String returnUrl;
-
     /** 请求网关地址 */
     @DbColumn(comment = "")
     private String serverUrl;
@@ -101,10 +95,6 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     /** 是否沙箱环境 */
     @DbColumn(comment = "是否沙箱环境")
     private boolean sandbox;
-
-    /** 超时配置 */
-    @DbColumn(comment = "超时配置")
-    private Integer expireTime;
 
     /** 可用支付方式 */
     @DbColumn(comment = "可用支付方式")

@@ -2,14 +2,14 @@ package cn.bootx.platform.daxpay.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.alipay.dao.AliPayOrderManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
-import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfo;
-import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class AliPayOrderService {
      * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建支付宝支付单
      */
     public void updatePaySuccess(PayOrder payOrder, PayWayParam payWayParam) {
-        AsyncPayInfo asyncPayInfo = AsyncPayInfoLocal.get();
+        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         payOrder.setAsyncPayMode(true).setAsyncPayChannel(PayChannelEnum.ALI.getCode());
 
         // TODO 支付

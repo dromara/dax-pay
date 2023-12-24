@@ -37,7 +37,8 @@ public abstract class AbsPayStrategy {
     public abstract PayChannelEnum getType();
 
     /**
-     * 初始化支付的参数
+     * 初始化支付的参数支付上下文
+     *
      */
     public void initPayParam(PayOrder order, PayParam payParam) {
         this.order = order;

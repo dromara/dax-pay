@@ -54,7 +54,7 @@ public class PayOrderExtra extends MpBaseEntity {
 
     /** API版本号 */
     @DbColumn(comment = "API版本号")
-    private String version;
+    private String apiVersion;
 
     /** 请求时间，时间戳转时间 */
     @DbColumn(comment = "请求时间，传输时间戳")

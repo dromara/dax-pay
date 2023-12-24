@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,9 +17,10 @@ import javax.validation.constraints.NotNull;
  * @author xxm
  * @since 2023/12/18
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "简单退款参数")
-public class SimpleRefundParam {
+public class SimpleRefundParam extends PayCommonParam {
 
     @Schema(description = "支付单ID")
     private Long paymentId;

@@ -4,8 +4,9 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.daxpay.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.common.context.PaymentContext;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.openapi.dao.PayOpenApiInfoManager;
-import cn.bootx.platform.daxpay.core.openapi.entity.PayOpenApiInfo;
+import cn.bootx.platform.daxpay.core.openapi.dao.PayOpenApiManager;
+import cn.bootx.platform.daxpay.core.openapi.entity.PayOpenApi;
+import cn.bootx.platform.daxpay.core.openapi.service.PayOpenApiService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.starter.auth.service.RouterCheck;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,8 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 public class PayOpenApiCheckHandler implements RouterCheck {
-    private final PayOpenApiInfoManager openApiInfoManager;
+    private final PayOpenApiManager openApiInfoManager;
+    private final PayOpenApiService openApiService;
 
     @Override
     public int sortNo() {
@@ -41,21 +43,17 @@ public class PayOpenApiCheckHandler implements RouterCheck {
             if (Objects.isNull(ignoreAuth)){
                 return false;
             }
-            String code = ignoreAuth.code();
-            PayOpenApiInfo openApiInfo = openApiInfoManager.findByCode(code)
+            String code = ignoreAuth.value();
+            PayOpenApi api = openApiInfoManager.findByCode(code)
                     .orElseThrow(() -> new DataNotExistException("未找到接口信息"));
-            if (!openApiInfo.isEnable()){
+            if (!api.isEnable()){
                 throw new PayFailureException("该接口权限未开放");
             }
             // 初始化支付上下文
-            PaymentContext paymentContext = new PaymentContext()
-                    .setApiCode(code)
-                    .setReqSign(openApiInfo.isReqSign())
-                    .setResSign(openApiInfo.isResSign())
-                    .setNotice(openApiInfo.isNotice())
-                    .setNoticeSign(openApiInfo.isNoticeSign())
-                    .setRecord(openApiInfo.isRecord());
+            PaymentContext paymentContext = new PaymentContext();
             PaymentContextLocal.set(paymentContext);
+            // 设置接口信息
+            openApiService.initApiInfo(api);
             return true;
         }
         return false;

@@ -9,6 +9,11 @@ package cn.bootx.platform.daxpay.code;
 public interface DaxPayErrorCode {
 
     /**
+     * 支付失败
+     */
+    int PAY_FAILURE = 20000;
+
+    /**
      * 支付金额异常
      */
     int PAYMENT_AMOUNT_ABNORMAL = 28100;
@@ -22,11 +27,6 @@ public interface DaxPayErrorCode {
      * 支付在进行中
      */
     int PAYMENT_IS_PROCESSING = 28102;
-
-    /**
-     * 支付失败
-     */
-    int PAY_FAILURE = 28103;
 
     /**
      * 支付已经存在

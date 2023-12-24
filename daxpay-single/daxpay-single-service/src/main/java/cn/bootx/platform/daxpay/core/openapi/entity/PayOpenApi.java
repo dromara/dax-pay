@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @DbTable(comment = "支付开放接口管理")
 @TableName("pay_open_api_info")
-public class PayOpenApiInfo extends MpBaseEntity {
+public class PayOpenApi extends MpBaseEntity {
 
     @DbColumn(comment = "编码")
     @TableField(updateStrategy = FieldStrategy.NEVER)
@@ -60,7 +60,7 @@ public class PayOpenApiInfo extends MpBaseEntity {
     /**
      * 初始化
      */
-    public static PayOpenApiInfo init(PayOpenApiInfoParam param){
+    public static PayOpenApi init(PayOpenApiInfoParam param){
         return PayOpenApiInfoConvert.CONVERT.convert(param);
     }
 

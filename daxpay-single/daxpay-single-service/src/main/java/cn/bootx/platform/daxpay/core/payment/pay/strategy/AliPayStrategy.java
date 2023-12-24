@@ -82,8 +82,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        aliPayService.pay(this.getPayWayParam().getAmount(), this.getOrder(), this.aliPayParam, this.getPayWayParam(),
-                this.alipayConfig);
+        aliPayService.pay( this.getOrder(), this.getPayWayParam(), this.aliPayParam, this.alipayConfig);
     }
 
     /**

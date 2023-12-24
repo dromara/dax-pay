@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayCloseService;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayService;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaySyncService;
-import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaymentService;
+import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.func.AbsPayStrategy;
@@ -40,7 +40,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
 
     private final WeChatPayService weChatPayService;
 
-    private final WeChatPaymentService weChatPaymentService;
+    private final WeChatPayOrderService weChatPayOrderService;
 
     private final WeChatPayCloseService weChatPayCloseService;
 
@@ -102,7 +102,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        weChatPaymentService.updatePaySuccess(this.getOrder(), this.getPayWayParam());
+        weChatPayOrderService.updatePaySuccess(this.getOrder(), this.getPayWayParam());
     }
 
     /**
@@ -119,7 +119,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     @Override
     public void doAsyncSuccessHandler(Map<String, String> map) {
         String tradeNo = map.get(WeChatPayCode.TRANSACTION_ID);
-        weChatPaymentService.updateAsyncSuccess(this.getOrder().getId(), this.getPayWayParam(), tradeNo);
+        weChatPayOrderService.updateAsyncSuccess(this.getOrder().getId(), this.getPayWayParam(), tradeNo);
     }
 
     /**
@@ -148,7 +148,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doCloseHandler() {
-        weChatPaymentService.updateClose(this.getOrder().getId());
+        weChatPayOrderService.updateClose(this.getOrder().getId());
     }
 
     /**

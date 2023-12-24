@@ -41,6 +41,7 @@ public class PayWayParam {
     private Integer amount;
 
     /**
+     * 附加支付参数, 传输json格式字符串
      * @see AliPayParam
      * @see WeChatPayParam
      * @see VoucherPayParam

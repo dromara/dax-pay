@@ -8,16 +8,16 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PayWayEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.code.WeChatPayWay;
+import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfo;
-import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.core.payment.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
-import cn.bootx.platform.daxpay.util.PayWayUtil;
+import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
@@ -82,7 +82,7 @@ public class WeChatPayService {
                     WeChatPayConfig weChatPayConfig) {
         // 微信传入的是分, 将元转换为分
         String totalFee = String.valueOf(amount);
-        AsyncPayInfo asyncPayInfo = Optional.ofNullable(AsyncPayInfoLocal.get()).orElse(new AsyncPayInfo());
+        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
         String payBody = null;
         PayWayEnum payWayEnum = PayWayEnum.findByCode(payWayParam.getWay());
 
@@ -108,7 +108,6 @@ public class WeChatPayService {
             asyncPayInfo.setTradeNo(tradeNo).setExpiredTime(false);
         }
         asyncPayInfo.setPayBody(payBody);
-        AsyncPayInfoLocal.set(asyncPayInfo);
     }
 
     /**
@@ -232,17 +231,17 @@ public class WeChatPayService {
     /**
      * 构建参数
      */
-    private UnifiedOrderModelBuilder buildParams(String amount, PayOrder payment,
-            WeChatPayConfig weChatPayConfig, String tradeType) {
-        // 过期时间
-        payment.setExpiredTime(PayWayUtil.getPaymentExpiredTime(weChatPayConfig.getExpireTime()));
+    private UnifiedOrderModelBuilder buildParams(String amount, PayOrder payment, WeChatPayConfig weChatPayConfig, String tradeType) {
+        LocalDateTime expiredTime = PaymentContextLocal.get()
+                .getAsyncPayInfo()
+                .getExpiredTime();
         return builder()
             .appid(weChatPayConfig.getWxAppId())
             .mch_id(weChatPayConfig.getWxMchId())
             .nonce_str(WxPayKit.generateStr())
             .time_start(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.PURE_DATETIME_PATTERN))
             // 反正v2版本的超时时间无效
-            .time_expire(PayWayUtil.getWxExpiredTime(weChatPayConfig.getExpireTime()))
+            .time_expire(PayUtil.getWxExpiredTime(expiredTime))
             .body(payment.getTitle())
             .out_trade_no(String.valueOf(payment.getId()))
             .total_fee(amount)

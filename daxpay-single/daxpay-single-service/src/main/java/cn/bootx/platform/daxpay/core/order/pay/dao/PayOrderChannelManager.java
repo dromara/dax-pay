@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class PayOrderChannelManager extends BaseManager<PayOrderChannelMapper, PayOrderChannel> {
+public class  PayOrderChannelManager extends BaseManager<PayOrderChannelMapper, PayOrderChannel> {
     /**
      * 根据订单id和支付渠道查询
      */

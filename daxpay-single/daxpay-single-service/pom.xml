@@ -112,9 +112,16 @@
             <artifactId>weixin-java-pay</artifactId>
             <version>${wxjava.version}</version>
         </dependency>
+        <!-- 数据权限 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-starter-data-perm</artifactId>
+        </dependency>
+        <!-- 测试库 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

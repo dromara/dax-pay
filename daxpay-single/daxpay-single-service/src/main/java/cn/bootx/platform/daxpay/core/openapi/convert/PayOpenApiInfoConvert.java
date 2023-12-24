@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.core.openapi.convert;
 
-import cn.bootx.platform.daxpay.core.openapi.entity.PayOpenApiInfo;
+import cn.bootx.platform.daxpay.core.openapi.entity.PayOpenApi;
 import cn.bootx.platform.daxpay.param.openapi.PayOpenApiInfoParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -14,5 +14,5 @@ import org.mapstruct.factory.Mappers;
 public interface PayOpenApiInfoConvert {
     PayOpenApiInfoConvert CONVERT = Mappers.getMapper(PayOpenApiInfoConvert.class);
 
-    PayOpenApiInfo convert(PayOpenApiInfoParam in);
+    PayOpenApi convert(PayOpenApiInfoParam in);
 }

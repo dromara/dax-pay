@@ -19,7 +19,7 @@ import cn.bootx.platform.daxpay.func.PayStrategyConsumer;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.bootx.platform.daxpay.util.PayWayUtil;
+import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +45,8 @@ public class PayService {
 
     private final PayOrderService payOrderService;
 
+    private final PayAssistService payAssistService;;
+
     private final PayOrderExtraManager payOrderExtraManager;
 
     private final PayOrderChannelManager payOrderChannelManager;
@@ -61,19 +63,20 @@ public class PayService {
     public PayResult pay(PayParam payParam) {
         // 检验参数
         ValidationUtil.validateParam(payParam);
-        // 验签
-
 
         // 异步支付方式检查
-        PayWayUtil.validationAsyncPayMode(payParam);
+        PayUtil.validationAsyncPayMode(payParam);
+
         // 获取并校验支付状态
         PayOrder payOrder = this.getAndCheckByBusinessId(payParam.getBusinessNo());
+
+        // 初始化上下文
+        payAssistService.initExpiredTime(payOrder, payParam);
 
         // 异步支付且非第一次支付
         if (Objects.nonNull(payOrder) && payOrder.isAsyncPayMode()) {
             return this.paySyncNotFirst(payParam, payOrder);
-        }
-        else {
+        } else {
             // 第一次发起支付或同步支付
             return this.payFirst(payParam, payOrder);
         }
@@ -89,7 +92,7 @@ public class PayService {
         }
 
         // 2. 价格检测
-        PayWayUtil.validationAmount(payParam.getPayWays());
+        PayUtil.validationAmount(payParam.getPayWays());
 
         // 3. 创建支付相关的记录并返回支付订单对象
         payOrder = this.createPayOrder(payParam);
@@ -127,7 +130,7 @@ public class PayService {
             // 发起支付成功进行的执行方法
             strategies.forEach(AbsPayStrategy::doSuccessHandler);
             // 所有支付方式都是同步时, 对支付订单进行处理
-            if (PayWayUtil.isNotSync(payParam.getPayWays())) {
+            if (PayUtil.isNotSync(payParam.getPayWays())) {
                 // 修改支付订单状态为成功
                 payOrderObj.setStatus(PayStatusEnum.SUCCESS.getCode());
                 payOrderObj.setPayTime(LocalDateTime.now());
@@ -251,9 +254,7 @@ public class PayService {
                     && LocalDateTimeUtil.ge(LocalDateTime.now(), payment.getExpiredTime())) {
                 throw new PayFailureException("支付已超时");
             }
-            return payment;
         }
-        return null;
+        return payment;
     }
-
 }

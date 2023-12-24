@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付参数")
-public class PayParam extends PayCommonParam {
+public class PayParam extends PayCommonParam{
 
     @Schema(description = "业务号")
     @NotBlank(message = "业务号不可为空")
@@ -30,6 +31,13 @@ public class PayParam extends PayCommonParam {
 
     @Schema(description = "支付描述")
     private String description;
+
+    /** 过期时间 */
+    @Schema(description = "过期时间")
+    private LocalDateTime expiredTime;
+
+    @Schema(description = "用户付款中途退出返回商户网站的地址(部分支付场景中可用)")
+    private String quitUrl;
 
     @Schema(description = "支付方式信息参数")
     @NotEmpty(message = "支付方式信息参数不可为空")

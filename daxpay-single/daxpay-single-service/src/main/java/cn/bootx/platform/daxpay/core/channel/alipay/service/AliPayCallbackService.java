@@ -57,7 +57,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
     }
 
     /**
-     * 验证信息格式
+     * 验证信息格式是否合法
      */
     @SneakyThrows
     @Override
@@ -70,7 +70,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
             return false;
         }
         AlipayConfig alipayConfig = null;
-        if (alipayConfig == null) {
+        if (Objects.isNull(alipayConfig)) {
             log.error("支付宝支付配置不存在: {}", callReq);
             return false;
         }

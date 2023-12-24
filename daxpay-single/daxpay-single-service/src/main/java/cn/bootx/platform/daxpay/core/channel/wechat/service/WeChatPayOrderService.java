@@ -3,14 +3,14 @@ package cn.bootx.platform.daxpay.core.channel.wechat.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
-import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfo;
-import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WeChatPaymentService {
+public class WeChatPayOrderService {
 
     private final PayOrderManager paymentService;
 
@@ -41,7 +41,7 @@ public class WeChatPaymentService {
      * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建微信支付单
      */
     public void updatePaySuccess(PayOrder payOrder, PayWayParam payWayParam) {
-        AsyncPayInfo asyncPayInfo = AsyncPayInfoLocal.get();
+        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
         payOrder.setAsyncPayMode(true).setAsyncPayChannel(PayChannelEnum.WECHAT.getCode());
 
         List<PayOrderChannel> payTypeInfos = new ArrayList<>();

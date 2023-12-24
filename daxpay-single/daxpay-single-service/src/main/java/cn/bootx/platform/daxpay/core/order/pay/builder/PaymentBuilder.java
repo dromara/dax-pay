@@ -2,16 +2,17 @@ package cn.bootx.platform.daxpay.core.order.pay.builder;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
-import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfo;
-import cn.bootx.platform.daxpay.core.payment.pay.local.AsyncPayInfoLocal;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.experimental.UtilityClass;
 
 import java.util.Collections;
@@ -75,6 +76,7 @@ public class PaymentBuilder {
                 .setSign(payParam.getSign())
                 .setSignType(payParam.getSignType())
                 .setSignType(payParam.getSign())
+                .setApiVersion(payParam.getVersion())
                 .setReqTime(payParam.getReqTime());
         payOrderExtra.setId(paymentId);
         return payOrderExtra;
@@ -118,22 +120,16 @@ public class PaymentBuilder {
      */
     public PayResult buildPayResultByPayOrder(PayOrder payOrder) {
         PayResult paymentResult;
-        try {
-            paymentResult = new PayResult()
-                    .setPaymentId(payOrder.getId())
-                    .setAsyncPayMode(payOrder.isAsyncPayMode())
-                    .setAsyncPayChannel(payOrder.getAsyncPayChannel())
-                    .setStatus(payOrder.getStatus());
+        paymentResult = new PayResult()
+                .setPaymentId(payOrder.getId())
+                .setAsyncPayMode(payOrder.isAsyncPayMode())
+                .setAsyncPayChannel(payOrder.getAsyncPayChannel())
+                .setStatus(payOrder.getStatus());
 
-            // 设置异步支付参数
-            AsyncPayInfo asyncPayInfo = AsyncPayInfoLocal.get();
-            if (Objects.nonNull(asyncPayInfo)) {
-                paymentResult.setPayBody(AsyncPayInfoLocal.get().getPayBody());
-            }
-        }
-        finally {
-            // 清空线程变量
-            AsyncPayInfoLocal.clear();
+        // 设置异步支付参数
+        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
+        if (StrUtil.isNotBlank(asyncPayInfo.getPayBody())) {
+            paymentResult.setPayBody(asyncPayInfo.getPayBody());
         }
         return paymentResult;
     }

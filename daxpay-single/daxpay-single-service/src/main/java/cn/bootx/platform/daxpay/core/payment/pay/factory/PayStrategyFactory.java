@@ -65,7 +65,7 @@ public class PayStrategyFactory {
      * 根据传入的支付类型批量创建策略, 异步支付在后面
      */
     public static List<AbsPayStrategy> createAsyncLast(List<PayWayParam> payWayParamList) {
-        return create(payWayParamList, true);
+        return create(payWayParamList, false);
     }
 
     /**

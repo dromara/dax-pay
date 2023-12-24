@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.common.context;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
@@ -9,26 +8,23 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2023/12/22
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 public class PaymentContext {
 
-    /** 当前支付接口编码 */
-    private String apiCode;
+    /** 支付接口信息 */
+    private final ApiInfoLocal apiInfo = new ApiInfoLocal();;
 
-    /** 是否开启回调通知 */
-    private boolean notice;
+    /** 平台全局配置 */
+    private final PlatformLocal platform = new PlatformLocal();
 
-    /** 请求参数是否签名 */
-    private boolean reqSign;
+    /** 异步支付相关信息 */
+    private final AsyncPayLocal asyncPayInfo = new AsyncPayLocal();
 
-    /** 响应参数是否签名 */
-    private boolean resSign;
+    /** 退款相关信息 */
+    private final AsyncRefundLocal refundInfo = new AsyncRefundLocal();
 
-    /** 回调信息是否签名 */
-    private boolean noticeSign;
+    /** 消息通知相关信息 */
+    private final NoticeLocal noticeInfo = new NoticeLocal();
 
-    /** 是否记录请求的信息 */
-    private boolean record;
 }

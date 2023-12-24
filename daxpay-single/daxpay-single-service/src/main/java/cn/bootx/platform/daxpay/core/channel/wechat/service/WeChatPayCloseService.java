@@ -4,10 +4,11 @@ import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
+import cn.bootx.platform.daxpay.common.context.AsyncRefundLocal;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
-import cn.bootx.platform.daxpay.core.payment.refund.local.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
@@ -69,13 +70,14 @@ public class WeChatPayCloseService {
                 .orElseThrow(() -> new PayFailureException("未找到微信支付的详细信息"));
         String refundFee = amount.multiply(BigDecimal.valueOf(100)).toBigInteger().toString();
         String totalFee = refundableInfo.getAmount().toString();
-        // 设置退款号
-        AsyncRefundLocal.set(IdUtil.getSnowflakeNextIdStr());
+        // 设置退款信息
+        AsyncRefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        refundInfo.setRefundNo(IdUtil.getSnowflakeNextIdStr());
         Map<String, String> params = RefundModel.builder()
             .appid(weChatPayConfig.getWxAppId())
             .mch_id(weChatPayConfig.getWxMchId())
             .out_trade_no(String.valueOf(payOrder.getId()))
-            .out_refund_no(AsyncRefundLocal.get())
+            .out_refund_no(refundInfo.getRefundNo())
             .total_fee(totalFee)
             .refund_fee(refundFee)
             .nonce_str(WxPayKit.generateStr())
@@ -84,8 +86,8 @@ public class WeChatPayCloseService {
         // 获取证书文件
         if (StrUtil.isBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
-            AsyncRefundLocal.setErrorMsg(errorMsg);
-            AsyncRefundLocal.setErrorCode(PayRefundStatusEnum.SUCCESS.getCode());
+            refundInfo.setErrorMsg(errorMsg);
+            refundInfo.setErrorCode(PayRefundStatusEnum.SUCCESS.getCode());
             throw new PayFailureException(errorMsg);
         }
         byte[] fileBytes = Base64.decode(weChatPayConfig.getP12());
@@ -108,8 +110,9 @@ public class WeChatPayCloseService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("订单退款/关闭失败 {}", errorMsg);
-            AsyncRefundLocal.setErrorMsg(errorMsg);
-            AsyncRefundLocal.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
+            AsyncRefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+            refundInfo.setErrorMsg(errorMsg);
+            refundInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
             throw new PayFailureException(errorMsg);
         }
     }

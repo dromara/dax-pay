@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.core.openapi.dao;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import cn.bootx.platform.daxpay.core.openapi.entity.PayOpenApiInfo;
+import cn.bootx.platform.daxpay.core.openapi.entity.PayOpenApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -16,20 +16,20 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class PayOpenApiInfoManager extends BaseManager<PayOpenApiInfoMapper, PayOpenApiInfo> {
+public class PayOpenApiManager extends BaseManager<PayOpenApiMapper, PayOpenApi> {
 
     /**
      * 根据code查询
      */
-    public Optional<PayOpenApiInfo> findByCode(String code){
-        return findByField(PayOpenApiInfo::getCode,code);
+    public Optional<PayOpenApi> findByCode(String code){
+        return findByField(PayOpenApi::getCode,code);
     }
 
     /**
      * 根据api查询
      */
-    public Optional<PayOpenApiInfo> findByApi(String api){
-        return findByField(PayOpenApiInfo::getApi,api);
+    public Optional<PayOpenApi> findByApi(String api){
+        return findByField(PayOpenApi::getApi,api);
     }
 
 }

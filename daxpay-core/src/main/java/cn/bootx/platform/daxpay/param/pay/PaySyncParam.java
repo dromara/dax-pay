@@ -2,15 +2,17 @@ package cn.bootx.platform.daxpay.param.pay;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 支付状态同步参数
  * @author xxm
  * @since 2023/12/17
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付状态同步参数")
-public class PaySyncParam {
+public class PaySyncParam extends PayCommonParam{
 
     @Schema(description = "支付单ID")
     private Long paymentId;
