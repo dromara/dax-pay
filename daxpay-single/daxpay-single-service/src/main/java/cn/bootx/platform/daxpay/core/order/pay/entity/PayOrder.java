@@ -5,6 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.JacksonRawTypeHandler;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
@@ -64,13 +65,13 @@ public class PayOrder extends MpBaseEntity {
 
     /**
      * 退款信息列表
-     * @see PayOrderRefundableInfo
+     * @see OrderRefundableInfo
      */
     @TableField(typeHandler = JacksonRawTypeHandler.class)
     @BigField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "退款信息列表")
-    private List<PayOrderRefundableInfo> refundableInfos;
+    private List<OrderRefundableInfo> refundableInfos;
 
     /**
      * 支付状态

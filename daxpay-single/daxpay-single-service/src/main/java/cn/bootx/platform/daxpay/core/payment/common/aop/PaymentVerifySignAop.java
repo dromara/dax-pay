@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.core.payment.common.aop;
 
+import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.core.payment.common.service.PaymentSignService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
@@ -12,7 +13,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 /**
- * 支付签名切面, 用于对支付参数进行签名
+ * 支付签名切面, 用于对支付参数进行校验和签名
  * 执行顺序: 过滤器 -> 拦截器 -> 切面 -> 方法
  * @author xxm
  * @since 2023/12/24
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PaymentSignAop {
+public class PaymentVerifySignAop {
     private final PaymentSignService paymentSignService;
 
     @Before("@annotation(paymentApi)")
@@ -32,6 +33,9 @@ public class PaymentSignAop {
         }
         Object param = args[0];
         if (param instanceof PayCommonParam){
+            // 参数校验
+            ValidationUtil.validateParam(param);
+            // 验签
             paymentSignService.verifySign((PayCommonParam) param);
         } else {
             throw new PayFailureException("支付参数需要继承PayCommonParam");

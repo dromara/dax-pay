@@ -54,8 +54,16 @@ public class PayUtil {
                     if (ClassUtil.isBasicType(field.getType())|| field.getType().equals(String.class)) {
                         String fieldValueString = String.valueOf(fieldValue);
                         map.put(fieldName, fieldValueString);
-                        // 集合类型
-                    } else if (Collection.class.isAssignableFrom(field.getType())) {
+
+                    }
+                    // java8时间类型 转为时间戳
+                    else if (field.getType().equals(LocalDateTime.class)) {
+                        LocalDateTime localDateTime = (LocalDateTime) fieldValue;
+                        long timestamp = LocalDateTimeUtil.timestamp(localDateTime);
+                        map.put(fieldName, String.valueOf(timestamp));
+                    }
+                    // 集合类型
+                    else if (Collection.class.isAssignableFrom(field.getType())) {
                         Collection<?> collection = (Collection<?>) fieldValue;
                         if (!collection.isEmpty()) {
                             List<Map<String, String>> maps = collection.stream()

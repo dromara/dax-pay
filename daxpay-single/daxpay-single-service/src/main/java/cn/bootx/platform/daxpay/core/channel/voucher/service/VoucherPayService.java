@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -192,7 +191,7 @@ public class VoucherPayService {
      * 部分退款, 会退到指定的一张卡上, 如果不指定, 则自动退到有效期最久的卡上
      */
     @Transactional(rollbackFor = Exception.class)
-    public void refund(Long paymentId, BigDecimal amount) {
+    public void refund(Long paymentId, Integer amount) {
         VoucherPayment voucherPayment = voucherPaymentManager.findByPaymentId(paymentId)
                 .orElseThrow(() -> new PayFailureException("储值卡支付记录不存在"));
         // 全部退款还是部分退款

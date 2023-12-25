@@ -4,7 +4,6 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * 统一下单响应参数
@@ -12,7 +11,6 @@ import lombok.experimental.Accessors;
  * @since 2023/12/17
  */
 @Data
-@Accessors(chain = true)
 @Schema(title = "统一下单响应参数")
 public class PayResult {
 

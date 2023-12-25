@@ -1,16 +1,16 @@
 package cn.bootx.platform.daxpay.core.payment.pay.service;
 
+import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.order.pay.builder.PaymentBuilder;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderChannelManager;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderExtraManager;
+import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderExtra;
-import cn.bootx.platform.daxpay.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.core.payment.pay.factory.PayStrategyFactory;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
@@ -18,8 +18,11 @@ import cn.bootx.platform.daxpay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.func.PayStrategyConsumer;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.util.PayUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +46,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PayService {
 
-    private final PayOrderService payOrderService;
+    private final PayOrderManager payOrderManager;
 
     private final PayAssistService payAssistService;;
 
@@ -51,41 +54,57 @@ public class PayService {
 
     private final PayOrderChannelManager payOrderChannelManager;
 
-
     /**
-     * 支付方法(同步/异步/组合支付) 同步支付：都只会在第一次执行中就完成支付，例如钱包、积分都是调用完就进行了扣减，完成了支付记录
-     * 异步支付：例如支付宝、微信，发起支付后还需要跳转第三方平台进行支付，支付后通常需要进行回调，之后才完成支付记录
-     * 组合支付：主要是混合了同步支付和异步支付，同时异步支付只能有一个，在支付时先对同步支付进行扣减，然后异步支付回调结束后完成整个支付单
-     * 组合支付在非第一次支付的时候，只对新传入的异步支付PayMode进行处理，PayMode的价格使用第一次发起的价格，旧的同步支付如果传入后也不做处理，
-     * Payment中PayModeList将会为 旧有的同步支付+新传入的异步支付方式(在具体支付实现中处理)
+     * 支付下单接口(同步/异步/组合支付)
+     * 1. 同步支付：都只会在第一次执行中就完成支付，例如钱包、储值卡都是调用完就进行了扣减，完成了支付记录
+     * 2. 异步支付：例如支付宝、微信，发起支付后还需要跳转第三方平台进行支付，支付后通常需要进行回调，之后才完成支付记录
+     * 3. 组合支付：主要是混合了同步支付和异步支付，同时异步支付只能有一个，在支付时先对同步支付进行扣减，然后异步支付回调结束后完成整个支付单
+     * 注意:
+     * 组合支付在非第一次支付的时候，只对新传入的异步支付通道进行处理，该通道的价格使用第一次发起的价格，旧的同步支付如果传入后也不做处理，
+     * 支付单中支付通道列表将会为 旧有的同步支付+新传入的异步支付方式(在具体支付实现中处理)
      */
     @Transactional(rollbackFor = Exception.class)
     public PayResult pay(PayParam payParam) {
-        // 检验参数
-        ValidationUtil.validateParam(payParam);
-
         // 异步支付方式检查
         PayUtil.validationAsyncPayMode(payParam);
 
-        // 获取并校验支付状态
-        PayOrder payOrder = this.getAndCheckByBusinessId(payParam.getBusinessNo());
+        // 获取并校验支付订单状态
+        PayOrder payOrder = this.getAndCheckByBusinessNo(payParam.getBusinessNo());
 
         // 初始化上下文
-        payAssistService.initExpiredTime(payOrder, payParam);
+        payAssistService.initPayContext(payOrder, payParam);
 
         // 异步支付且非第一次支付
         if (Objects.nonNull(payOrder) && payOrder.isAsyncPayMode()) {
             return this.paySyncNotFirst(payParam, payOrder);
         } else {
             // 第一次发起支付或同步支付
-            return this.payFirst(payParam, payOrder);
+            return this.firstPay(payParam, payOrder);
         }
+    }
+
+    /**
+     * 简单下单, 可以视为不支持组合支付的下单接口
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public PayResult simplePay(SimplePayParam simplePayParam) {
+        // 组装支付参数
+        PayParam payParam = new PayParam();
+        PayWayParam payWayParam = new PayWayParam();
+        payWayParam.setChannel(simplePayParam.getPayChannel());
+        payWayParam.setWay(simplePayParam.getPayWay());
+        payWayParam.setAmount(simplePayParam.getAmount());
+        payWayParam.setChannelExtra(simplePayParam.getChannelExtra());
+        BeanUtil.copyProperties(simplePayParam,payWayParam, CopyOptions.create().ignoreNullValue());
+        payParam.setPayWays(Collections.singletonList(payWayParam));
+        // 复用支付下单接口
+        return this.pay(payParam);
     }
 
     /**
      * 发起的第一次支付请求(同步/异步)
      */
-    private PayResult payFirst(PayParam payParam, PayOrder payOrder) {
+    private PayResult firstPay(PayParam payParam, PayOrder payOrder) {
         // 1. 已经发起过支付情况直接返回支付结果
         if (Objects.nonNull(payOrder)) {
             return PaymentBuilder.buildPayResultByPayOrder(payOrder);
@@ -98,18 +117,16 @@ public class PayService {
         payOrder = this.createPayOrder(payParam);
 
         // 4. 调用支付方法进行发起支付
-        this.payFirstMethod(payParam, payOrder);
+        this.firstPayHandler(payParam, payOrder);
 
         // 5. 返回支付结果
         return PaymentBuilder.buildPayResultByPayOrder(payOrder);
     }
 
     /**
-     * 执行支付方法 (第一次支付)
-     * @param payParam 支付参数
-     * @param payOrder 支付订单
+     * 执行第一次支付的方法
      */
-    private void payFirstMethod(PayParam payParam, PayOrder payOrder) {
+    private void firstPayHandler(PayParam payParam, PayOrder payOrder) {
 
         // 1.获取支付方式，通过工厂生成对应的策略组
         List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWays());
@@ -135,7 +152,7 @@ public class PayService {
                 payOrderObj.setStatus(PayStatusEnum.SUCCESS.getCode());
                 payOrderObj.setPayTime(LocalDateTime.now());
             }
-            payOrderService.updateById(payOrderObj);
+            payOrderManager.updateById(payOrderObj);
         });
     }
 
@@ -144,32 +161,35 @@ public class PayService {
      */
     private PayResult paySyncNotFirst(PayParam payParam, PayOrder payOrder) {
 
-        // 0. 处理支付完成情况(完成/退款)
-        List<String> trades = Arrays.asList(PayStatusEnum.SUCCESS.getCode(), PayStatusEnum.CANCEL.getCode(),
+        // 1. 处理支付完成情况(完成/退款)
+        List<String> trades = Arrays.asList(PayStatusEnum.SUCCESS.getCode(), PayStatusEnum.CANCEL.getCode(),PayStatusEnum.CLOSE.getCode(),
                 PayStatusEnum.PARTIAL_REFUND.getCode(), PayStatusEnum.REFUNDED.getCode());
         if (trades.contains(payOrder.getStatus())) {
             return PaymentBuilder.buildPayResultByPayOrder(payOrder);
         }
 
-        // 1.获取 异步支付 通道道，通过工厂生成对应的策略组(只包含异步支付的策略, 同步支付不再进行执行)
+        // 2.获取 异步支付通道，通过工厂生成对应的策略组(只包含异步支付的策略, 同步支付相关逻辑不再进行执行)
         PayWayParam payWayParam = this.getAsyncPayParam(payParam, payOrder);
         List<AbsPayStrategy> asyncStrategyList = PayStrategyFactory.create(Collections.singletonList(payWayParam));
 
-        // 2.初始化支付的参数
+        // 3.初始化支付的参数
         for (AbsPayStrategy paymentStrategy : asyncStrategyList) {
             paymentStrategy.initPayParam(payOrder, payParam);
         }
-        // 3.支付前准备
+        // 4.支付前准备
         this.doHandler(payOrder, asyncStrategyList, AbsPayStrategy::doBeforePayHandler, null);
 
-        // 4. 发起支付
+        // 5. 发起支付
         this.doHandler(payOrder, asyncStrategyList, AbsPayStrategy::doPayHandler, (strategyList, paymentObj) -> {
             // 发起支付成功进行的执行方法
             strategyList.forEach(AbsPayStrategy::doSuccessHandler);
-            payOrderService.updateById(paymentObj);
+            payOrderManager.updateById(paymentObj);
         });
 
-        // 5. 组装返回参数
+        // 6. 更新支付订单扩展参数
+        updatePayOrderExtra(payParam,payOrder.getId());
+
+        // 7. 组装返回参数
         return PaymentBuilder.buildPayResultByPayOrder(payOrder);
     }
 
@@ -196,7 +216,7 @@ public class PayService {
     private PayWayParam getAsyncPayParam(PayParam payParam, PayOrder payOrder) {
         // 查询之前的支付方式
         String asyncPayChannel = payOrder.getAsyncPayChannel();
-        PayOrderChannel payOrderChannel = payOrderChannelManager.findByOderIdAndChannel(payOrder.getId(), asyncPayChannel)
+        PayOrderChannel payOrderChannel = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), asyncPayChannel)
                 .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
 
         // 新的异步支付方式
@@ -218,7 +238,7 @@ public class PayService {
     private PayOrder createPayOrder(PayParam payParam) {
         // 构建支付订单并保存
         PayOrder payOrder = PaymentBuilder.buildPayOrder(payParam);
-        payOrderService.saveOder(payOrder);
+        payOrderManager.save(payOrder);
         // 构建支付订单扩展表并保存
         PayOrderExtra payOrderExtra = PaymentBuilder.buildPayOrderExtra(payParam, payOrder.getId());
         payOrderExtraManager.save(payOrderExtra);
@@ -232,11 +252,27 @@ public class PayService {
     }
 
     /**
+     * 更新支付订单扩展参数
+     * @param payParam 支付参数
+     * @param paymentId 支付订单id
+     */
+    private void updatePayOrderExtra(PayParam payParam,Long paymentId){
+        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(paymentId)
+                .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
+        payOrderExtra.setReqTime(payParam.getReqTime())
+                .setSign(payParam.getSign())
+                .setNotNotify(payParam.isNotNotify())
+                .setNotifyUrl(payParam.getNotifyUrl())
+                .setClientIp(payParam.getClientIp());
+        payOrderExtraManager.updateById(payOrderExtra);
+    }
+
+    /**
      * 校验支付状态，支付成功则返回，支付失败则抛出对应的异常
      */
-    private PayOrder getAndCheckByBusinessId(String businessId) {
+    private PayOrder getAndCheckByBusinessNo(String businessNo) {
         // 根据订单查询支付记录
-        PayOrder payment = payOrderService.findByBusinessId(businessId).orElse(null);
+        PayOrder payment = payOrderManager.findByBusinessNo(businessNo).orElse(null);
         if (Objects.nonNull(payment)) {
             // 支付失败类型状态
             List<String> tradesStatus = Arrays.asList(PayStatusEnum.FAIL.getCode(), PayStatusEnum.CANCEL.getCode(),

@@ -1,8 +1,9 @@
-package cn.bootx.platform.daxpay.openapi.controller;
+package cn.bootx.platform.daxpay.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.core.payment.pay.service.PayService;
+import cn.bootx.platform.daxpay.core.payment.refund.service.PayRefundService;
 import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
@@ -28,20 +29,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UniPayController {
     private final PayService payService;
+    private final PayRefundService payRefundService;
 
     @PaymentApi("pay")
     @Operation(summary = "统一下单")
     @PostMapping("/pay")
     public DaxResult<PayResult> pay(@RequestBody PayParam payParam){
-        payService.pay(payParam);
-        return DaxRes.ok();
+        return DaxRes.ok(payService.pay(payParam));
     }
 
     @PaymentApi("simplePay")
     @Operation(summary = "简单下单")
     @PostMapping("/simplePay")
-    public DaxResult<PayResult> simplePay(){
-        return DaxRes.ok();
+    public DaxResult<PayResult> simplePay(@RequestBody SimplePayParam payParam){
+        return DaxRes.ok(payService.simplePay(payParam));
     }
 
     @PaymentApi("cancel")
@@ -62,7 +63,7 @@ public class UniPayController {
     @Operation(summary = "统一退款")
     @PostMapping("/refund")
     public DaxResult<RefundResult> refund(@RequestBody RefundParam param){
-        return DaxRes.ok();
+        return DaxRes.ok(payRefundService.refund(param));
     }
 
     @PaymentApi("simpleRefund")

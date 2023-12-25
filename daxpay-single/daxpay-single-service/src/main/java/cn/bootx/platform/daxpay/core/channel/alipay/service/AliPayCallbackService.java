@@ -6,7 +6,6 @@ import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.callback.dao.CallbackNotifyManager;
-import cn.bootx.platform.daxpay.core.channel.alipay.dao.AlipayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
 import cn.bootx.platform.daxpay.core.payment.callback.service.PayCallbackService;
 import cn.bootx.platform.daxpay.func.AbsPayCallbackStrategy;
@@ -33,12 +32,12 @@ import java.util.Objects;
 @Service
 public class AliPayCallbackService extends AbsPayCallbackStrategy {
 
-    private final AlipayConfigManager alipayConfigManager;
+    private final AlipayConfigService aliasConfigService;
 
     public AliPayCallbackService(RedisClient redisClient, CallbackNotifyManager callbackNotifyManager,
-                                 PayCallbackService payCallbackService, AlipayConfigManager alipayConfigManager) {
+                                 PayCallbackService payCallbackService, AlipayConfigService aliasConfigService) {
         super(redisClient, callbackNotifyManager, payCallbackService);
-        this.alipayConfigManager = alipayConfigManager;
+        this.aliasConfigService = aliasConfigService;
     }
 
     @Override
@@ -69,7 +68,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
             log.error("支付宝回调报文 appId 为空 {}", callReq);
             return false;
         }
-        AlipayConfig alipayConfig = null;
+        AlipayConfig alipayConfig = aliasConfigService.getConfig();
         if (Objects.isNull(alipayConfig)) {
             log.error("支付宝支付配置不存在: {}", callReq);
             return false;

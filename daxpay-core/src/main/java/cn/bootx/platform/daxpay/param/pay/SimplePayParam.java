@@ -6,13 +6,15 @@ import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
+import cn.bootx.platform.daxpay.serializer.TimestampToLocalDateTimeDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 简单下单参数
@@ -35,6 +37,13 @@ public class SimplePayParam extends PayCommonParam{
     @Schema(description = "支付描述")
     private String description;
 
+    @Schema(description = "过期时间")
+    @JsonDeserialize(using = TimestampToLocalDateTimeDeserializer.class)
+    private LocalDateTime expiredTime;
+
+    @Schema(description = "用户付款中途退出返回商户网站的地址(部分支付场景中可用)")
+    private String quitUrl;
+
     /**
      * @see PayChannelEnum#getCode()
      */
@@ -51,7 +60,7 @@ public class SimplePayParam extends PayCommonParam{
 
     @Schema(description = "支付金额")
     @NotNull(message = "支付金额不可为空")
-    private BigDecimal amount;
+    private Integer amount;
 
     /**
      * @see AliPayParam

@@ -18,7 +18,7 @@ public class PayCallbackResult {
      * 处理状态
      * @see PayStatusEnum
      */
-    private String code;
+    private String status;
 
     /** 提示信息 */
     private String msg;

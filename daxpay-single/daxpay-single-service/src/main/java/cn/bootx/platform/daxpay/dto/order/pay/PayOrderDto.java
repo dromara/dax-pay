@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.dto.pay.order;
+package cn.bootx.platform.daxpay.dto.order.pay;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "具体支付日志基类")
-public class BasePayOrderDto extends BaseDto {
+public class PayOrderDto extends BaseDto {
 
     @Schema(description = "支付id")
     private Long paymentId;

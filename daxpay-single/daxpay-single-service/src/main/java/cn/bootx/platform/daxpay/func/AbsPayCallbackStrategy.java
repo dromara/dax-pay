@@ -104,7 +104,7 @@ public abstract class AbsPayCallbackStrategy {
                 .setNotifyTime(LocalDateTime.now())
                 .setPaymentId(this.getPaymentId())
                 .setPayChannel(this.getPayChannel().getCode())
-                .setStatus(result.getCode())
+                .setPayStatus(result.getStatus())
                 .setMsg(result.getMsg());
         callbackNotifyManager.save(payNotifyRecord);
     }

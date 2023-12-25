@@ -10,7 +10,7 @@ import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
+import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -86,8 +86,8 @@ public class PayOrderService {
      */
     public void updateRefundSuccess(PayOrder payment, int amount, PayChannelEnum payChannelEnum) {
         // 删除旧有的退款记录, 替换退款完的新的
-        List<PayOrderRefundableInfo> refundableInfos = payment.getRefundableInfos();
-        PayOrderRefundableInfo refundableInfo = refundableInfos.stream()
+        List<OrderRefundableInfo> refundableInfos = payment.getRefundableInfos();
+        OrderRefundableInfo refundableInfo = refundableInfos.stream()
                 .filter(o -> Objects.equals(o.getChannel(), payChannelEnum.getCode()))
                 .findFirst()
                 .orElseThrow(() -> new PayFailureException("退款数据不存在"));

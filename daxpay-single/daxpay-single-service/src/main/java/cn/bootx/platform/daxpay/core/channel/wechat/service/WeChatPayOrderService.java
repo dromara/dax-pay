@@ -10,7 +10,7 @@ import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
+import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class WeChatPayOrderService {
         payOrder.setAsyncPayMode(true).setAsyncPayChannel(PayChannelEnum.WECHAT.getCode());
 
         List<PayOrderChannel> payTypeInfos = new ArrayList<>();
-        List<PayOrderRefundableInfo> refundableInfos = new ArrayList<>();
+        List<OrderRefundableInfo> refundableInfos = new ArrayList<>();
         // 清除已有的异步支付类型信息
         payTypeInfos.removeIf(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getChannel()));
         refundableInfos.removeIf(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getChannel()));
@@ -57,7 +57,7 @@ public class WeChatPayOrderService {
 //        TODO 更新支付方式列表
         // 更新微信可退款类型信息
         refundableInfos.add(
-                new PayOrderRefundableInfo().setChannel(PayChannelEnum.WECHAT.getCode())
+                new OrderRefundableInfo().setChannel(PayChannelEnum.WECHAT.getCode())
                         .setAmount(payWayParam.getAmount()));
         payOrder.setRefundableInfos(refundableInfos);
         // 如果支付完成(付款码情况) 调用 updateSyncSuccess 创建微信支付记录

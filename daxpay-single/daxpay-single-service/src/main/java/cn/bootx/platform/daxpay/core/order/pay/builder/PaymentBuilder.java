@@ -3,11 +3,13 @@ package cn.bootx.platform.daxpay.core.order.pay.builder;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.common.context.NoticeLocal;
+import cn.bootx.platform.daxpay.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderExtra;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderRefundableInfo;
+import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
@@ -35,7 +37,7 @@ public class PaymentBuilder {
      */
     public PayOrder buildPayOrder(PayParam payParam) {
         // 可退款信息
-        List<PayOrderRefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayWays());
+        List<OrderRefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayWays());
         // 计算总价
         int sumAmount = payParam.getPayWays().stream()
                 .map(PayWayParam::getAmount)
@@ -66,16 +68,15 @@ public class PaymentBuilder {
      * @param paymentId 支付订单id
      */
     public PayOrderExtra buildPayOrderExtra(PayParam payParam, Long paymentId) {
+        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         PayOrderExtra payOrderExtra = new PayOrderExtra()
                 .setClientIp(payParam.getClientIp())
                 .setDescription(payParam.getDescription())
-                .setNotReturn(payParam.isNotReturn())
-                .setReturnUrl(payParam.getReturnUrl())
                 .setNotNotify(payParam.isNotNotify())
-                .setNotifyUrl(payParam.getNotifyUrl())
+                .setNotifyUrl(noticeInfo.getNotifyUrl())
                 .setSign(payParam.getSign())
-                .setSignType(payParam.getSignType())
-                .setSignType(payParam.getSign())
+                .setSignType(platform.getSignType())
                 .setApiVersion(payParam.getVersion())
                 .setReqTime(payParam.getReqTime());
         payOrderExtra.setId(paymentId);
@@ -101,12 +102,12 @@ public class PaymentBuilder {
     /**
      * 构建支付订单的可退款信息列表
      */
-    private List<PayOrderRefundableInfo> buildRefundableInfo(List<PayWayParam> payWayParamList) {
+    private List<OrderRefundableInfo> buildRefundableInfo(List<PayWayParam> payWayParamList) {
         if (CollectionUtil.isEmpty(payWayParamList)) {
             return Collections.emptyList();
         }
         return payWayParamList.stream()
-                .map(o-> new PayOrderRefundableInfo()
+                .map(o-> new OrderRefundableInfo()
                         .setChannel(o.getChannel())
                         .setAmount(o.getAmount()))
                 .collect(Collectors.toList());
@@ -120,11 +121,11 @@ public class PaymentBuilder {
      */
     public PayResult buildPayResultByPayOrder(PayOrder payOrder) {
         PayResult paymentResult;
-        paymentResult = new PayResult()
-                .setPaymentId(payOrder.getId())
-                .setAsyncPayMode(payOrder.isAsyncPayMode())
-                .setAsyncPayChannel(payOrder.getAsyncPayChannel())
-                .setStatus(payOrder.getStatus());
+        paymentResult = new PayResult();
+        paymentResult.setPaymentId(payOrder.getId());
+        paymentResult.setAsyncPayMode(payOrder.isAsyncPayMode());
+        paymentResult.setAsyncPayChannel(payOrder.getAsyncPayChannel());
+        paymentResult.setStatus(payOrder.getStatus());
 
         // 设置异步支付参数
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;

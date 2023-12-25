@@ -1,7 +1,8 @@
 package cn.bootx.platform.daxpay.core.payment.sync.strategy;
 
 
-import cn.bootx.platform.daxpay.core.channel.alipay.dao.AlipayConfigManager;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipayConfigService;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipaySyncService;
 import cn.bootx.platform.daxpay.core.payment.sync.func.AbsPaySyncStrategy;
 import cn.bootx.platform.daxpay.core.payment.sync.result.PaySyncResult;
@@ -21,7 +22,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliPaySyncStrategy extends AbsPaySyncStrategy {
 
-    private final AlipayConfigManager alipayConfigManager;
+    private final AlipayConfigService alipayConfigService;
 
     private final AlipaySyncService alipaySyncService;
 
@@ -39,5 +40,7 @@ public class AliPaySyncStrategy extends AbsPaySyncStrategy {
      */
     private void initAlipayConfig() {
         // 检查并获取支付宝支付配置
+        AlipayConfig config = alipayConfigService.getConfig();
+        alipayConfigService.initConfig(config);
     }
 }

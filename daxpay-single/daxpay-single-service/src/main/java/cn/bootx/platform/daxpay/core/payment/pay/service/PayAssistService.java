@@ -1,16 +1,23 @@
 package cn.bootx.platform.daxpay.core.payment.pay.service;
 
+import cn.bootx.platform.common.core.code.CommonCode;
 import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.common.context.NoticeLocal;
+import cn.bootx.platform.daxpay.common.context.PlatformLocal;
+import cn.bootx.platform.daxpay.common.context.RequestLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.system.entity.PlatformConfig;
 import cn.bootx.platform.daxpay.core.system.service.PlatformConfigService;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.util.PayUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -24,6 +31,32 @@ import java.util.Objects;
 public class PayAssistService {
     private final PlatformConfigService platformConfigService;
     /**
+     * 初始化平台配置上下文
+     */
+    public void initPlatform(){
+        PlatformConfig config = platformConfigService.getConfig();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+        platform.setSignType(config.getSignType());
+        platform.setSignSecret(config.getSignSecret());
+        platform.setNotifyUrl(config.getNotifyUrl());
+        platform.setOrderTimeout(config.getOrderTimeout());
+        platform.setWebsiteUrl(config.getWebsiteUrl());
+    }
+
+    /**
+     * 初始化支付相关上下文
+     */
+    public void initPayContext(PayOrder order, PayParam payParam){
+        // 初始化支付订单超时时间
+        this.initExpiredTime(order,payParam);
+        // 初始化通知相关上下文
+        this.initNotice(payParam);
+        // 初始化请求相关上下文
+        this.initRequest(payParam);
+    }
+
+
+    /**
      * 初始化支付订单超时时间
      * 1. 如果支付记录为空, 超时时间读取顺序 PayParam -> 平台设置
      * 2. 如果支付记录不为空, 超时时间通过支付记录进行反推
@@ -34,6 +67,7 @@ public class PayAssistService {
             return;
         }
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
         // 支付订单是非为空
         if (Objects.nonNull(order)){
             asyncPayInfo.setExpiredTime(order.getExpiredTime());
@@ -44,7 +78,41 @@ public class PayAssistService {
             asyncPayInfo.setExpiredTime(payParam.getExpiredTime());
             return;
         }
-        PlatformConfig config = platformConfigService.getConfig();
-        PayUtil.getPaymentExpiredTime(config.getOrderTimeout());
+        LocalDateTime paymentExpiredTime = PayUtil.getPaymentExpiredTime(platform.getOrderTimeout());
+        asyncPayInfo.setExpiredTime(paymentExpiredTime);
+    }
+
+    /**
+     * 初始化通知相关上下文
+     */
+    private void initNotice(PayParam payParam){
+        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+        // 异步回调
+        if (!payParam.isNotNotify()){
+            noticeInfo.setNotifyUrl(payParam.getReturnUrl());
+            if (StrUtil.isNotBlank(payParam.getNotifyUrl())){
+                noticeInfo.setNotifyUrl(platform.getNotifyUrl());
+            }
+        }
+        // 同步回调
+        if (!payParam.isNotReturn()){
+            noticeInfo.setReturnUrl(payParam.getReturnUrl());
+        }
+        // 退出回调地址
+        noticeInfo.setQuitUrl(payParam.getQuitUrl());
+    }
+
+    /**
+     * 初始化支付请求相关信息
+     */
+    public void initRequest(PayParam payParam){
+        RequestLocal request = PaymentContextLocal.get().getRequest();
+        request.setClientIp(payParam.getClientIp())
+                .setExtraParam(payParam.getExtraParam())
+                .setSign(payParam.getSign())
+                .setVersion(payParam.getVersion())
+                .setReqTime(payParam.getReqTime())
+                .setReqId(MDC.get(CommonCode.TRACE_ID));
     }
 }

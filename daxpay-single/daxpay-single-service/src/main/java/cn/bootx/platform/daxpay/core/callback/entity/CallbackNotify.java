@@ -38,10 +38,17 @@ public class CallbackNotify extends MpCreateEntity {
     private String notifyInfo;
 
     /**
-     * 处理状态
+     * 支付状态
      * @see PayStatusEnum
      */
-    @DbComment("处理状态")
+    @DbComment("支付状态")
+    private String payStatus;
+
+    /**
+     * 回调处理状态
+     * @see
+     */
+    @DbComment("回调处理状态")
     private String status;
 
     /** 提示信息 */

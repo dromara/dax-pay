@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.result.pay;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * 退款响应参数
@@ -10,7 +9,6 @@ import lombok.experimental.Accessors;
  * @since 2023/12/18
  */
 @Data
-@Accessors(chain = true)
 @Schema(title = "退款响应参数")
 public class RefundResult {
 

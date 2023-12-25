@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.openapi.controller;
+package cn.bootx.platform.daxpay.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayCallbackService;

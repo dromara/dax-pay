@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Accessors(chain = true)
 @Schema(title = "分通道退款参数")
-public class RefundModeParam {
+public class RefundChannelParam {
 
     /**
      * @see PayChannelEnum#getCode()

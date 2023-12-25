@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.common.context;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2023/12/22
  */
-@Data
+@Getter
 @Accessors(chain = true)
 public class PaymentContext {
 
@@ -26,5 +26,8 @@ public class PaymentContext {
 
     /** 消息通知相关信息 */
     private final NoticeLocal noticeInfo = new NoticeLocal();
+
+    /** 支付请求相关信息 */
+    private final RequestLocal request = new RequestLocal();
 
 }

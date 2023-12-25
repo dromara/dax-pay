@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.openapi.controller.channel;
+package cn.bootx.platform.daxpay.admin.controller.channel;
 
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Tag(name = "支付宝配置")
 @RestController
-@RequestMapping("/alipay")
+@RequestMapping("/alipay/config")
 @AllArgsConstructor
 public class AlipayConfigController {
 
@@ -35,16 +35,16 @@ public class AlipayConfigController {
         return Res.ok();
     }
 
-    @Operation(summary = "根据Id查询")
-    @GetMapping("/findById")
-    public ResResult<AlipayConfigDto> findById() {
+    @Operation(summary = "获取配置")
+    @GetMapping("/getConfig")
+    public ResResult<AlipayConfigDto> getConfig() {
         return Res.ok(alipayConfigService.getConfig().toDto());
     }
 
     @Operation(summary = "支付宝支持支付方式")
-    @GetMapping("/findPayWayList")
-    public ResResult<List<LabelValue>> findPayWayList() {
-        return Res.ok(alipayConfigService.findPayWayList());
+    @GetMapping("/findPayWays")
+    public ResResult<List<LabelValue>> findPayWays() {
+        return Res.ok(alipayConfigService.findPayWays());
     }
 
     @SneakyThrows

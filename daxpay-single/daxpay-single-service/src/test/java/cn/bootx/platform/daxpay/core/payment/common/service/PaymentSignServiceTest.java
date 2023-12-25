@@ -9,6 +9,7 @@ import com.ijpay.core.kit.PayKit;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +31,9 @@ class PaymentSignServiceTest {
         payParam.setNotReturn(true);
         payParam.setNotifyUrl("http://127.0.0.1:8080/pay/notify");
         payParam.setReturnUrl("http://127.0.0.1:8080/pay/return");
-        payParam.setSignType("MD5");
         payParam.setVersion("1.0");
+        // 传入的话需要传输时间戳
+        payParam.setReqTime(LocalDateTime.now());
 
         PayWayParam p1 = new PayWayParam();
         p1.setAmount(100);

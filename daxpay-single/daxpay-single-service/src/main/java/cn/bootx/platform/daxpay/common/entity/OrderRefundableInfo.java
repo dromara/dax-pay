@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.core.order.pay.entity;
+package cn.bootx.platform.daxpay.common.entity;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class PayOrderRefundableInfo {
+public class OrderRefundableInfo {
     /**
      * @see PayChannelEnum#getCode()
      */

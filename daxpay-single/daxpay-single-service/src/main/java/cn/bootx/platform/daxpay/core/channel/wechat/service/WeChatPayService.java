@@ -78,9 +78,9 @@ public class WeChatPayService {
     /**
      * 支付
      */
-    public void pay(int amount, PayOrder payOrder, WeChatPayParam weChatPayParam, PayWayParam payWayParam,
-                    WeChatPayConfig weChatPayConfig) {
-        // 微信传入的是分, 将元转换为分
+    public void pay(PayOrder payOrder, WeChatPayParam weChatPayParam, PayWayParam payWayParam, WeChatPayConfig weChatPayConfig) {
+
+        Integer amount = payWayParam.getAmount();
         String totalFee = String.valueOf(amount);
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
         String payBody = null;
@@ -105,7 +105,7 @@ public class WeChatPayService {
         // 付款码支付
         else if (payWayEnum == PayWayEnum.BARCODE) {
             String tradeNo = this.barCode(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
-            asyncPayInfo.setTradeNo(tradeNo).setExpiredTime(false);
+            asyncPayInfo.setTradeNo(tradeNo);
         }
         asyncPayInfo.setPayBody(payBody);
     }
@@ -232,6 +232,7 @@ public class WeChatPayService {
      * 构建参数
      */
     private UnifiedOrderModelBuilder buildParams(String amount, PayOrder payment, WeChatPayConfig weChatPayConfig, String tradeType) {
+
         LocalDateTime expiredTime = PaymentContextLocal.get()
                 .getAsyncPayInfo()
                 .getExpiredTime();

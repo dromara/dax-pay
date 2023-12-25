@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.callback.dao.CallbackNotifyManager;
-import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.payment.callback.service.PayCallbackService;
 import cn.bootx.platform.daxpay.func.AbsPayCallbackStrategy;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static cn.bootx.platform.daxpay.code.WeChatPayCode.APPID;
 
@@ -31,13 +31,12 @@ import static cn.bootx.platform.daxpay.code.WeChatPayCode.APPID;
 @Slf4j
 @Service
 public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
-
-    private final WeChatPayConfigManager weChatPayConfigManager;
+    private final WeChatPayConfigService weChatPayConfigService;
 
     public WeChatPayCallbackService(RedisClient redisClient, CallbackNotifyManager callbackNotifyManager,
-                                    PayCallbackService payCallbackService, WeChatPayConfigManager weChatPayConfigManager) {
+                                    PayCallbackService payCallbackService, WeChatPayConfigService weChatPayConfigService) {
         super(redisClient, callbackNotifyManager, payCallbackService);
-        this.weChatPayConfigManager = weChatPayConfigManager;
+        this.weChatPayConfigService = weChatPayConfigService;
     }
 
     @Override
@@ -84,8 +83,8 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
             return false;
         }
 
-        WeChatPayConfig weChatPayConfig = null;
-        if (weChatPayConfig == null) {
+        WeChatPayConfig weChatPayConfig = weChatPayConfigService.getConfig();
+        if (Objects.isNull(weChatPayConfig)) {
             log.warn("微信支付配置不存在: {}", callReq);
             return false;
         }

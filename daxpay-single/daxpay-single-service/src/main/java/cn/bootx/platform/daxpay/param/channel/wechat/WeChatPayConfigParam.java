@@ -20,9 +20,6 @@ import java.util.List;
 @Schema(title = "微信支付配置参数")
 public class WeChatPayConfigParam {
 
-    @Schema(description = "主键")
-    private Long id;
-
     @Schema(description = "名称")
     private String name;
 

@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AlipayConfigService {
-    /** 默认支付包配置的主键ID */
+    /** 默认支付宝配置的主键ID */
     private final static Long ID = 0L;
     private final AlipayConfigManager alipayConfigManager;
 
@@ -50,7 +50,7 @@ public class AlipayConfigService {
     /**
      * 支付宝支持支付方式
      */
-    public List<LabelValue> findPayWayList() {
+    public List<LabelValue> findPayWays() {
         return AliPayWay.getPayWays()
             .stream()
             .map(e -> new LabelValue(e.getName(),e.getCode()))

@@ -1,6 +1,8 @@
 package cn.bootx.platform.daxpay.param.pay;
 
+import cn.bootx.platform.daxpay.serializer.TimestampToLocalDateTimeDeserializer;
 import cn.bootx.platform.daxpay.util.PayUtil;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -42,10 +44,6 @@ public abstract class PayCommonParam {
     @Schema(description = "异步通知地址")
     private String notifyUrl;
 
-    /** 签名类型 */
-    @Schema(description = "签名类型")
-    private String signType;
-
     /** 签名 */
     @Schema(description = "签名")
     private String sign;
@@ -58,6 +56,7 @@ public abstract class PayCommonParam {
     /** 请求时间，时间戳转时间 */
     @Schema(description = "请求时间，传输时间戳")
     @NotNull(message = "请求时间必填")
+    @JsonDeserialize(using = TimestampToLocalDateTimeDeserializer.class)
     private LocalDateTime reqTime;
 
 
