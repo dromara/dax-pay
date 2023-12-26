@@ -31,4 +31,5 @@ public class RequestLocal {
 
     /** 请求链路id */
     private String reqId;
+
 }

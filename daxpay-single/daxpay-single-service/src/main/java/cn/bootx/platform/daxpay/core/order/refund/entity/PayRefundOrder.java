@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.core.order.refund.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.JacksonRawTypeHandler;
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.core.order.refund.convert.RefundConvert;
 import cn.bootx.platform.daxpay.dto.order.refund.PayRefundOrderDto;
@@ -59,9 +60,9 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
 
     /**
      * 退款状态
-     * @see PayStatus#REFUND_PROCESS_FAIL
+     * @see PayRefundStatusEnum
      */
-    private String refundStatus;
+    private String status;
 
     /** 错误码 */
     private String errorCode;

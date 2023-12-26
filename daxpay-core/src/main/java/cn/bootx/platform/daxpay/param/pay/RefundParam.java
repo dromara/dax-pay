@@ -40,7 +40,7 @@ public class RefundParam extends PayCommonParam {
      */
     @Valid
     @Schema(description = "退款参数列表")
-    private List<RefundChannelParam> refundModes;
+    private List<RefundChannelParam> refundChannels;
 
     @Schema(description = "退款原因")
     private String reason;

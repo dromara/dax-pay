@@ -20,7 +20,7 @@ public enum PayStatusEnum {
     /** 超时取消 */
     TIMEOUT("timeout","超时取消"),
     PARTIAL_REFUND("partial_refund","部分退款"),
-    REFUNDED("REFUNDED","已退款");
+    REFUNDED("REFUNDED","全部退款");
 
     /** 编码 */
     private final String code;

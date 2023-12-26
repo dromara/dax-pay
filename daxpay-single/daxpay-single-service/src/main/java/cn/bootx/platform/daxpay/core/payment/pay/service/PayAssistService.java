@@ -1,20 +1,15 @@
 package cn.bootx.platform.daxpay.core.payment.pay.service;
 
-import cn.bootx.platform.common.core.code.CommonCode;
 import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.common.context.PlatformLocal;
-import cn.bootx.platform.daxpay.common.context.RequestLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.system.entity.PlatformConfig;
-import cn.bootx.platform.daxpay.core.system.service.PlatformConfigService;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,19 +24,6 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PayAssistService {
-    private final PlatformConfigService platformConfigService;
-    /**
-     * 初始化平台配置上下文
-     */
-    public void initPlatform(){
-        PlatformConfig config = platformConfigService.getConfig();
-        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
-        platform.setSignType(config.getSignType());
-        platform.setSignSecret(config.getSignSecret());
-        platform.setNotifyUrl(config.getNotifyUrl());
-        platform.setOrderTimeout(config.getOrderTimeout());
-        platform.setWebsiteUrl(config.getWebsiteUrl());
-    }
 
     /**
      * 初始化支付相关上下文
@@ -51,8 +33,6 @@ public class PayAssistService {
         this.initExpiredTime(order,payParam);
         // 初始化通知相关上下文
         this.initNotice(payParam);
-        // 初始化请求相关上下文
-        this.initRequest(payParam);
     }
 
 
@@ -103,16 +83,4 @@ public class PayAssistService {
         noticeInfo.setQuitUrl(payParam.getQuitUrl());
     }
 
-    /**
-     * 初始化支付请求相关信息
-     */
-    public void initRequest(PayParam payParam){
-        RequestLocal request = PaymentContextLocal.get().getRequest();
-        request.setClientIp(payParam.getClientIp())
-                .setExtraParam(payParam.getExtraParam())
-                .setSign(payParam.getSign())
-                .setVersion(payParam.getVersion())
-                .setReqTime(payParam.getReqTime())
-                .setReqId(MDC.get(CommonCode.TRACE_ID));
-    }
 }

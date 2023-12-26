@@ -22,17 +22,14 @@ import javax.validation.constraints.NotNull;
 @Schema(title = "简单退款参数")
 public class SimpleRefundParam extends PayCommonParam {
 
+    /**
+     * 优先级高于业务号
+     */
     @Schema(description = "支付单ID")
     private Long paymentId;
 
     @Schema(description = "业务号")
     private String businessNo;
-
-    /**
-     * 部分退款需要传输refundModes参数
-     */
-    @Schema(description = "是否全部退款")
-    private boolean refundAll;
 
     /**
      * 部分退款时此项必填
@@ -45,6 +42,13 @@ public class SimpleRefundParam extends PayCommonParam {
     @Schema(description = "支付通道编码")
     @NotBlank(message = "支付通道编码不可为空")
     private String payChannel;
+
+    /**
+     * 部分退款需要传输refundModes参数
+     */
+    @Schema(description = "是否全部退款")
+    private boolean refundAll;
+
 
     @Schema(description = "退款金额")
     @NotNull(message = "退款金额不可为空")

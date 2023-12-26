@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.dto.order.refund;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -51,10 +52,10 @@ public class PayRefundOrderDto extends BaseDto {
     private List<OrderRefundableInfo> refundableInfo;
 
     /**
-     * @see PayStatusCode#REFUND_PROCESS_FAIL
+     * @see PayRefundStatusEnum
      */
     @Schema(description = "退款状态")
-    private String refundStatus;
+    private String status;
 
     @Schema(description = "错误码")
     private String errorCode;

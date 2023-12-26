@@ -30,8 +30,8 @@ public class PayRefundStrategyFactory {
      */
     public static AbsPayRefundStrategy create(RefundChannelParam refundChannelParam) {
 
-        AbsPayRefundStrategy strategy = null;
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(refundChannelParam.getPayChannel());
+        AbsPayRefundStrategy strategy;
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(refundChannelParam.getChannel());
         switch (channelEnum) {
             case ALI:
                 strategy = SpringUtil.getBean(AliPayRefundStrategy.class);
@@ -86,13 +86,13 @@ public class PayRefundStrategyFactory {
         // 同步支付
         val syncRefundModeParams = refundChannelParams.stream()
                 .filter(Objects::nonNull)
-                .filter(payModeParam -> !ASYNC_TYPE_CODE.contains(payModeParam.getPayChannel()))
+                .filter(payModeParam -> !ASYNC_TYPE_CODE.contains(payModeParam.getChannel()))
                 .collect(Collectors.toList());
 
         // 异步支付
         val asyncRefundModeParams = refundChannelParams.stream()
                 .filter(Objects::nonNull)
-                .filter(payModeParam -> ASYNC_TYPE_CODE.contains(payModeParam.getPayChannel()))
+                .filter(payModeParam -> ASYNC_TYPE_CODE.contains(payModeParam.getChannel()))
                 .collect(Collectors.toList());
 
         List<RefundChannelParam> sortList = new ArrayList<>(refundChannelParams.size());

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -27,10 +28,11 @@ public class RefundChannelParam {
      */
     @Schema(description = "支付通道编码")
     @NotBlank(message = "支付通道编码不可为空")
-    private String payChannel;
+    private String channel;
 
     @Schema(description = "退款金额")
     @NotNull(message = "退款金额不可为空")
+    @Min(1)
     private Integer amount;
 
     /**
