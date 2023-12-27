@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.core.payment.pay.service.PayService;
 import cn.bootx.platform.daxpay.core.payment.refund.service.PayRefundService;
+import cn.bootx.platform.daxpay.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniPayController {
     private final PayService payService;
     private final PayRefundService payRefundService;
+    private final PaySyncService paySyncService;
 
     @PaymentApi("pay")
     @Operation(summary = "统一下单")
@@ -70,14 +72,14 @@ public class UniPayController {
     @Operation(summary = "简单退款")
     @PostMapping("/simpleRefund")
     public DaxResult<RefundResult> simpleRefund(@RequestBody SimpleRefundParam param){
-        return DaxRes.ok();
+        return DaxRes.ok(payRefundService.simpleRefund(param));
     }
 
     @PaymentApi("syncPay")
     @Operation(summary = "支付状态同步")
     @PostMapping("/syncPay")
-    public DaxResult<Void> syncPay(){
-        return DaxRes.ok();
+    public DaxResult<Void> syncPay(PaySyncParam param){
+        return DaxRes.ok(paySyncService.sync(param));
     }
 
     @PaymentApi("syncRefund")

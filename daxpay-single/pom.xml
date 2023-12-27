@@ -12,6 +12,7 @@
     <artifactId>daxpay-single</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>daxpay-single-core</module>
         <module>daxpay-single-service</module>
         <module>daxpay-single-gateway</module>
         <module>daxpay-single-admin</module>

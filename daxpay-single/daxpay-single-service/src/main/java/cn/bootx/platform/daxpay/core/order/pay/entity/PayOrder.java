@@ -42,11 +42,11 @@ public class PayOrder extends MpBaseEntity {
 
     /** 是否是异步支付 */
     @DbColumn(comment = "是否是异步支付")
-    private boolean asyncPayMode;
+    private boolean asyncPay;
 
     /** 是否是组合支付 */
     @DbColumn(comment = "是否是组合支付")
-    private boolean combinationPayMode;
+    private boolean combinationPay;
 
     /**
      * 异步支付渠道

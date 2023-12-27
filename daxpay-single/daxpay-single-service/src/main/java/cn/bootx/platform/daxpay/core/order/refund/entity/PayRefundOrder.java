@@ -49,6 +49,9 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
     /** 退款终端ip */
     private String clientIp;
 
+    /** 退款原因 */
+    private String reason;
+
     /** 退款时间 */
     private LocalDateTime refundTime;
 

@@ -77,13 +77,7 @@
         <!-- 支付核心包-->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
-            <artifactId>daxpay-core</artifactId>
-            <version>${dax.version}</version>
-        </dependency>
-        <!-- 支付公共的资源包 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>daxpay-common</artifactId>
+            <artifactId>daxpay-single-core</artifactId>
             <version>${dax.version}</version>
         </dependency>
 

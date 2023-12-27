@@ -82,7 +82,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         // 异步支付方式时使用冻结方式
-        if (this.getOrder().isAsyncPayMode()){
+        if (this.getOrder().isAsyncPay()){
             walletPayService.freezeBalance(getPayWayParam().getAmount(), this.getOrder(), this.wallet);
         } else {
             walletPayService.pay(getPayWayParam().getAmount(), this.getOrder(), this.wallet);
@@ -95,7 +95,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        if (this.getOrder().isAsyncPayMode()){
+        if (this.getOrder().isAsyncPay()){
             walletPayService.paySuccess(this.getOrder().getId());
         }
         walletPaymentService.updateSuccess(this.getOrder().getId());

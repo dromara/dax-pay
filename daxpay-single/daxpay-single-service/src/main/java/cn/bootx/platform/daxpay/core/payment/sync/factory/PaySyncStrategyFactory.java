@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.core.payment.sync.factory;
 
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.core.payment.sync.func.AbsPaySyncStrategy;
+import cn.bootx.platform.daxpay.func.AbsPaySyncStrategy;
 import cn.bootx.platform.daxpay.core.payment.sync.strategy.AliPaySyncStrategy;
 import cn.bootx.platform.daxpay.core.payment.sync.strategy.WeChatPaySyncStrategy;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;

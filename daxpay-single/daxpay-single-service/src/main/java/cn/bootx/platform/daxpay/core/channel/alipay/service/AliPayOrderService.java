@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.alipay.dao.AliPayOrderManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayOrder;
@@ -10,8 +10,6 @@ import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderChannelManager;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
-import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +44,7 @@ public class AliPayOrderService {
      * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建支付宝支付单
      */
     public void updatePaySuccess(PayOrder payOrder, PayWayParam payWayParam) {
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
-        payOrder.setAsyncPayMode(true)
+        payOrder.setAsyncPay(true)
                 .setAsyncPayChannel(PayChannelEnum.ALI.getCode());
 
         // 更新支付宝异步支付类型信息
@@ -80,29 +77,31 @@ public class AliPayOrderService {
         payOrder.setRefundableInfos(refundableInfos);
         // 如果支付完成(付款码情况) 调用 updateSyncSuccess 创建支付宝支付记录
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
-            this.createAliPayment(payOrder, payWayParam, asyncPayInfo.getTradeNo());
+            this.updateAsyncSuccess(payOrder, payWayParam.getAmount());
         }
     }
 
     /**
      * 更新异步支付记录成功状态, 并创建支付宝支付记录
      */
-    public void updateAsyncSuccess(Long id, PayWayParam payWayParam, String tradeNo) {
-        // 更新支付记录
-        PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new PayFailureException("支付记录不存在"));
-        this.createAliPayment(payOrder,payWayParam,tradeNo);
+    public void updateAsyncSuccess(PayOrder payOrder, Integer amount) {
+        // 创建支付宝支付订单
+        this.createAliPayOrder(payOrder,amount);
     }
 
     /**
-     * 创建支付宝支付记录(支付调起成功后才会创建)
+     * 创建支付宝支付订单(支付成功后才会创建)
      */
-    private void createAliPayment(PayOrder payOrder, PayWayParam payWayParam, String tradeNo) {
-        // 创建支付宝支付记录
+    private void createAliPayOrder(PayOrder payOrder, Integer amount) {
+        String tradeNo = PaymentContextLocal.get()
+                .getAsyncPayInfo()
+                .getTradeNo();
+
         AliPayOrder aliPayOrder = new AliPayOrder();
         aliPayOrder.setTradeNo(tradeNo)
                 .setPaymentId(payOrder.getId())
-                .setAmount(payWayParam.getAmount())
-                .setRefundableBalance(payWayParam.getAmount())
+                .setAmount(amount)
+                .setRefundableBalance(amount)
                 .setBusinessNo(payOrder.getBusinessNo())
                 .setStatus(PayStatusEnum.SUCCESS.getCode())
                 .setPayTime(LocalDateTime.now());

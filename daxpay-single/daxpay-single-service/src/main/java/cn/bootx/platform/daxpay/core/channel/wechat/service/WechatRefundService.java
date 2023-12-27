@@ -47,7 +47,7 @@ public class WechatRefundService {
         String refundFee = String.valueOf(amount);
         String totalFee = refundableInfo.getAmount().toString();
         // 设置退款信息
-        AsyncRefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
         refundInfo.setRefundNo(IdUtil.getSnowflakeNextIdStr());
         Map<String, String> params = RefundModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
@@ -86,7 +86,7 @@ public class WechatRefundService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("订单退款失败 {}", errorMsg);
-            AsyncRefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+            AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
             refundInfo.setErrorMsg(errorMsg);
             refundInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
             throw new PayFailureException(errorMsg);

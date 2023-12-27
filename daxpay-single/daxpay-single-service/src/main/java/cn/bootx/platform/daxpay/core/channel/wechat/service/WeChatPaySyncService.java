@@ -1,9 +1,9 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
-import cn.bootx.platform.daxpay.code.PaySyncStatus;
+import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.payment.sync.result.PaySyncResult;
+import cn.bootx.platform.daxpay.core.payment.sync.result.SyncResult;
 import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -30,8 +30,8 @@ public class WeChatPaySyncService {
     /**
      * 同步查询
      */
-    public PaySyncResult syncPayStatus(Long paymentId, WeChatPayConfig weChatPayConfig) {
-        PaySyncResult paySyncResult = new PaySyncResult().setPaySyncStatus(PaySyncStatus.FAIL);
+    public SyncResult syncPayStatus(Long paymentId, WeChatPayConfig weChatPayConfig) {
+        SyncResult syncResult = new SyncResult().setSyncStatus(PaySyncStatusEnum.FAIL.getCode());
         Map<String, String> params = UnifiedOrderModel.builder()
             .appid(weChatPayConfig.getWxAppId())
             .mch_id(weChatPayConfig.getWxMchId())
@@ -42,47 +42,47 @@ public class WeChatPaySyncService {
         try {
             String xmlResult = WxPayApi.orderQuery(params);
             Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-            paySyncResult.setJson(JSONUtil.toJsonStr(result));
+            syncResult.setJson(JSONUtil.toJsonStr(result));
             // 查询失败
             if (!WxPayKit.codeIsOk(result.get(WeChatPayCode.RETURN_CODE))) {
                 log.warn("查询微信订单失败:{}", result);
-                return paySyncResult;
+                return syncResult;
             }
 
             // 未查到订单
             if (!WxPayKit.codeIsOk(result.get(WeChatPayCode.RESULT_CODE))) {
                 log.warn("疑似未查询到订单:{}", result);
-                return paySyncResult.setPaySyncStatus(PaySyncStatus.NOT_FOUND);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.NOT_FOUND.getCode());
             }
             String tradeStatus = result.get(WeChatPayCode.TRADE_STATE);
             // 支付完成
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_SUCCESS)
                     || Objects.equals(tradeStatus, WeChatPayCode.TRADE_ACCEPT)) {
-                return paySyncResult.setPaySyncStatus(PaySyncStatus.TRADE_SUCCESS).setMap(result);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS.getCode()).setMap(result);
             }
             // 待支付
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_NOTPAY)
                     || Objects.equals(tradeStatus, WeChatPayCode.TRADE_USERPAYING)) {
-                return paySyncResult.setPaySyncStatus(PaySyncStatus.WAIT_BUYER_PAY);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_WAIT.getCode());
             }
 
             // 已退款/退款中
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_REFUND)) {
-                return paySyncResult.setPaySyncStatus(PaySyncStatus.TRADE_REFUND);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.REFUND.getCode());
             }
             // 已关闭
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_CLOSED)
                     || Objects.equals(tradeStatus, WeChatPayCode.TRADE_REVOKED)
                     || Objects.equals(tradeStatus, WeChatPayCode.TRADE_PAYERROR)) {
-                return paySyncResult.setPaySyncStatus(PaySyncStatus.TRADE_CLOSED);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.CLOSED.getCode());
             }
 
         }
         catch (RuntimeException e) {
             log.error("查询订单失败:", e);
-            paySyncResult.setMsg(e.getMessage());
+            syncResult.setMsg(e.getMessage());
         }
-        return paySyncResult;
+        return syncResult;
     }
 
 }

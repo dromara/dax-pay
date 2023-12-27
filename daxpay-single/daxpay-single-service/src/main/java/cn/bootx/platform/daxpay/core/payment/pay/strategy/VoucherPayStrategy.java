@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
@@ -53,7 +51,7 @@ public class VoucherPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         VoucherRecord voucherRecord;
-        if (this.getOrder().isAsyncPayMode()){
+        if (this.getOrder().isAsyncPay()){
             voucherRecord = voucherPayService.freezeBalance(this.getPayWayParam().getAmount(), this.getOrder(), this.vouchers);
         } else {
             voucherRecord = voucherPayService.pay(this.getPayWayParam().getAmount(), this.getOrder(), this.vouchers);
@@ -66,7 +64,7 @@ public class VoucherPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        if (this.getOrder().isAsyncPayMode()){
+        if (this.getOrder().isAsyncPay()){
             voucherPayService.paySuccess(this.getOrder().getId());
         }
         voucherPaymentService.updateSuccess(this.getOrder().getId());

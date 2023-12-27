@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.core.payment.pay.strategy;
 import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.*;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
@@ -106,8 +107,8 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doAsyncSuccessHandler(Map<String, String> map) {
-        String tradeNo = map.get(AliPayCode.TRADE_NO);
-        aliPaymentService.updateAsyncSuccess(this.getOrder().getId(), this.getPayWayParam(), tradeNo);
+        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo( map.get(AliPayCode.TRADE_NO));
+        aliPaymentService.updateAsyncSuccess(this.getOrder(), this.getPayWayParam().getAmount());
     }
 
     /**

@@ -75,7 +75,7 @@ public class PayService {
         payAssistService.initPayContext(payOrder, payParam);
 
         // 异步支付且非第一次支付
-        if (Objects.nonNull(payOrder) && payOrder.isAsyncPayMode()) {
+        if (Objects.nonNull(payOrder) && payOrder.isAsyncPay()) {
             return this.paySyncNotFirst(payParam, payOrder);
         } else {
             // 第一次发起支付或同步支付

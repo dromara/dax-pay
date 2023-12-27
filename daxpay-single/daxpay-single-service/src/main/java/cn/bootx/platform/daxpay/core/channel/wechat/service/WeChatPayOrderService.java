@@ -42,7 +42,7 @@ public class WeChatPayOrderService {
      */
     public void updatePaySuccess(PayOrder payOrder, PayWayParam payWayParam) {
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
-        payOrder.setAsyncPayMode(true).setAsyncPayChannel(PayChannelEnum.WECHAT.getCode());
+        payOrder.setAsyncPay(true).setAsyncPayChannel(PayChannelEnum.WECHAT.getCode());
 
         List<PayOrderChannel> payTypeInfos = new ArrayList<>();
         List<OrderRefundableInfo> refundableInfos = new ArrayList<>();

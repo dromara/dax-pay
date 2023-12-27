@@ -5,8 +5,7 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.payment.refund.factory.PayRefundStrategyFactory;
-import cn.bootx.platform.daxpay.core.payment.refund.func.AbsPayRefundStrategy;
-import cn.bootx.platform.daxpay.core.payment.refund.func.PayRefundStrategyConsumer;
+import cn.bootx.platform.daxpay.func.AbsPayRefundStrategy;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
@@ -21,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -73,7 +70,7 @@ public class PayRefundService {
         ValidationUtil.validateParam(param);
         PayOrder payOrder = payRefundAssistService.getPayOrderAndCheckByRefundParam(param, simple);
         // 退款上下文初始化
-        payRefundAssistService.initRefundContext(param,payOrder);
+        payRefundAssistService.initRefundContext(param);
         // 是否全部退款
         if (param.isRefundAll()){
             // 全部退款根据支付订单的退款信息构造退款参数
@@ -90,67 +87,42 @@ public class PayRefundService {
     /**
      * 分支付通道进行退款
      */
-    public RefundResult refundByChannel(RefundParam param,PayOrder order){
-        List<RefundChannelParam> refundChannels = param.getRefundChannels();
+    public RefundResult refundByChannel(RefundParam refundParam, PayOrder payOrder){
+        List<RefundChannelParam> refundChannels = refundParam.getRefundChannels();
         // 1.获取退款参数方式，通过工厂生成对应的策略组
         List<AbsPayRefundStrategy> payRefundStrategies = PayRefundStrategyFactory.create(refundChannels);
         if (CollectionUtil.isEmpty(payRefundStrategies)) {
             throw new PayUnsupportedMethodException();
         }
 
-        // 2.初始化支付的参数
-        for (AbsPayRefundStrategy refundStrategy : payRefundStrategies) {
-            refundStrategy.initPayParam(order, param);
-        }
+        // 2.初始化退款策略的参数
+        payRefundStrategies.forEach(refundStrategy -> refundStrategy.initPayParam(payOrder, refundParam));
 
-        // 3.支付前准备
-        this.doHandler(refundChannels, order, payRefundStrategies, AbsPayRefundStrategy::doBeforeRefundHandler, null);
-
-        // 4.执行退款
-        this.doHandler(refundChannels,order, payRefundStrategies, AbsPayRefundStrategy::doRefundHandler, (strategyList, payOrder) -> {
-            this.paymentHandler(payOrder, refundChannels);
-        });
-        return new RefundResult();
-    }
-
-    /**
-     * 处理方法
-     * @param channelParams 退款方式参数
-     * @param payOrder 支付记录
-     * @param strategyList 退款策略
-     * @param refundStrategy 执行方法
-     * @param successCallback 成功操作
-     */
-    private void doHandler( List<RefundChannelParam> channelParams,
-                            PayOrder payOrder,
-                            List<AbsPayRefundStrategy> strategyList,
-                            Consumer<AbsPayRefundStrategy> refundStrategy,
-                            PayRefundStrategyConsumer<List<AbsPayRefundStrategy>, PayOrder> successCallback) {
         try {
-            // 执行策略操作，如退款前/退款时
-            // 等同strategyList.forEach(payMethod.accept(PaymentStrategy))
-            strategyList.forEach(refundStrategy);
+            // 3.退款前准备
+            payRefundStrategies.forEach(AbsPayRefundStrategy::doBeforeRefundHandler);
 
-            // 执行操作成功的处
-            Optional.ofNullable(successCallback).ifPresent(fun -> fun.accept(strategyList, payOrder));
+            // 4.执行退款策略
+            payRefundStrategies.forEach(AbsPayRefundStrategy::doRefundHandler);
         }
         catch (Exception e) {
             // 记录退款失败的记录
-            Integer i = channelParams.stream()
-                    .map(RefundChannelParam::getAmount)
-                    .reduce(0,Integer::sum);
-            // TODO 保存
-//            SpringUtil.getBean(this.getClass()).saveRefund(payOrder, amount, channelParams);
+            payRefundAssistService.saveRefundOrder(refundParam,payOrder);
             throw e;
         }
 
+        // 5.支付成功后处理
+        this.paymentHandler(refundParam, payOrder);
+
+        // 返回结果
+        return new RefundResult();
     }
 
     /**
      * 支付订单处理
      */
-    private void paymentHandler(PayOrder payOrder, List<RefundChannelParam> refundModeParams) {
-        Integer amount = refundModeParams.stream()
+    private void paymentHandler(RefundParam refundParam,PayOrder payOrder) {
+        Integer amount = refundParam.getRefundChannels().stream()
                 .map(RefundChannelParam::getAmount)
                 .reduce(0, Integer::sum);
         // 剩余可退款余额
@@ -165,7 +137,6 @@ public class PayRefundService {
         }
         payOrder.setRefundableBalance(refundableBalance);
         payOrderManager.updateById(payOrder);
-        // TODO 记录退款成功的记录
-//        SpringUtil.getBean(this.getClass()).saveRefund(payOrder, amount, refundModeParams);
+        payRefundAssistService.saveRefundOrder(refundParam,payOrder);
     }
 }

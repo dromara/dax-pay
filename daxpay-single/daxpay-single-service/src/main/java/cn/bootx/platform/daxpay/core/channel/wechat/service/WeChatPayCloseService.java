@@ -62,7 +62,7 @@ public class WeChatPayCloseService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("订单关闭失败 {}", errorMsg);
-            AsyncRefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+            AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
             refundInfo.setErrorMsg(errorMsg);
             refundInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
             throw new PayFailureException(errorMsg);

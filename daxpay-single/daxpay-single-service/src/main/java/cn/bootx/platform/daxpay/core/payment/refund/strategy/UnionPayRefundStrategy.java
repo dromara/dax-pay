@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.core.payment.refund.func.AbsPayRefundStrategy;
+import cn.bootx.platform.daxpay.func.AbsPayRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

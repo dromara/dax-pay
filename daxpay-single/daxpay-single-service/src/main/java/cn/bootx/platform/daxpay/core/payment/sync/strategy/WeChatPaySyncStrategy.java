@@ -3,8 +3,8 @@ package cn.bootx.platform.daxpay.core.payment.sync.strategy;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaySyncService;
-import cn.bootx.platform.daxpay.core.payment.sync.func.AbsPaySyncStrategy;
-import cn.bootx.platform.daxpay.core.payment.sync.result.PaySyncResult;
+import cn.bootx.platform.daxpay.func.AbsPaySyncStrategy;
+import cn.bootx.platform.daxpay.core.payment.sync.result.SyncResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class WeChatPaySyncStrategy extends AbsPaySyncStrategy {
      * 异步支付单与支付网关进行状态比对
      */
     @Override
-    public PaySyncResult doSyncPayStatusHandler() {
+    public SyncResult doSyncPayStatusHandler() {
         // 检查并获取微信支付配置
         this.initWeChatPayConfig();
         return weChatPaySyncService.syncPayStatus(this.getOrder().getId(), this.weChatPayConfig);

@@ -24,6 +24,9 @@ public class AliPayOrder extends BasePayOrder implements EntityBaseFunction<AliP
     /** 支付宝交易号 */
     private String tradeNo;
 
+    /** 支付方式 */
+    private String payWay;
+
     @Override
     public AliPaymentDto toDto() {
         AliPaymentDto dto = new AliPaymentDto();

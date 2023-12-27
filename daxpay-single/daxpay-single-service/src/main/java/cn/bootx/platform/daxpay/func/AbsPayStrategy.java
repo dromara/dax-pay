@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public abstract class AbsPayStrategy {
+public abstract class AbsPayStrategy implements PayStrategy{
 
 
     /** 支付对象 */
@@ -31,7 +31,7 @@ public abstract class AbsPayStrategy {
     private PayWayParam payWayParam = null;
 
     /**
-     * 策略标示
+     * 策略标识
      * @see PayChannelEnum
      */
     public abstract PayChannelEnum getType();
@@ -71,12 +71,14 @@ public abstract class AbsPayStrategy {
     /**
      * 异步支付成功的处理方式
      */
+    @Deprecated
     public void doAsyncSuccessHandler(Map<String, String> map) {
     }
 
     /**
      * 异步支付失败的处理方式, 默认使用支付失败的处理方式 同步支付方式调用时同 this#doErrorHandler
      */
+    @Deprecated
     public void doAsyncErrorHandler(ExceptionInfo exceptionInfo) {
         this.doErrorHandler(exceptionInfo);
     }

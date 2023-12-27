@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Slf4j
 @RequiredArgsConstructor
-public abstract class AbsPayCallbackStrategy {
+public abstract class AbsPayCallbackStrategy implements PayStrategy {
 
     protected static final ThreadLocal<Map<String, String>> PARAMS = new TransmittableThreadLocal<>();
 

@@ -37,7 +37,7 @@ public class AliPayRefundService {
         refundModel.setRefundAmount(refundAmount);
 
         // 设置退款信息
-        AsyncRefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
         refundInfo.setRefundNo(IdUtil.getSnowflakeNextIdStr());
         refundModel.setOutRequestNo(refundInfo.getRefundNo());
         try {

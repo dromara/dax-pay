@@ -56,8 +56,8 @@ public class PaymentBuilder {
                 .setRefundableInfos(refundableInfos)
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setAmount(sumAmount)
-                .setCombinationPayMode(payParam.getPayWays().size() > 1)
-                .setAsyncPayMode(asyncPayMode.isPresent())
+                .setCombinationPay(payParam.getPayWays().size() > 1)
+                .setAsyncPay(asyncPayMode.isPresent())
                 .setAsyncPayChannel(asyncPayMode.orElse(null))
                 .setRefundableBalance(sumAmount);
     }
@@ -123,7 +123,7 @@ public class PaymentBuilder {
         PayResult paymentResult;
         paymentResult = new PayResult();
         paymentResult.setPaymentId(payOrder.getId());
-        paymentResult.setAsyncPayMode(payOrder.isAsyncPayMode());
+        paymentResult.setAsyncPayMode(payOrder.isAsyncPay());
         paymentResult.setAsyncPayChannel(payOrder.getAsyncPayChannel());
         paymentResult.setStatus(payOrder.getStatus());
 

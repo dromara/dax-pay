@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.common.context;
 
+import cn.bootx.platform.daxpay.code.PayWayEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,11 +15,20 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class AsyncPayLocal {
 
+    /** 异步支付方式 */
+    private PayWayEnum payWay;
+
+
+    /**
+     * 第三方支付平台订单号
+     * 1. 如付款码支付直接成功时会出现
+     * 2. 回调或者支付同步时也会有这个值
+     */
+    private String tradeNo;
+
+
     /** 支付参数体(通常用于发起支付的参数) */
     private String payBody;
-
-    /** 第三方支付平台订单号(如付款码支付直接成功时会出现) */
-    private String tradeNo;
 
     /** 订单失效时间, 优先用这个 */
     private LocalDateTime expiredTime;

@@ -18,8 +18,6 @@
     <version>2.0.0</version>
 
     <modules>
-        <module>daxpay-core</module>
-        <module>daxpay-common</module>
         <module>daxpay-single</module>
         <module>dax-pay-sdk</module>
     </modules>
