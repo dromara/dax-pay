@@ -35,7 +35,7 @@ public class WeChatPayCloseService {
      * 关闭支付
      */
     @Retryable(value = RetryableException.class)
-    public void cancelRemote(PayOrder payOrder, WeChatPayConfig weChatPayConfig) {
+    public void close(PayOrder payOrder, WeChatPayConfig weChatPayConfig) {
         // 只有部分需要调用微信网关进行关闭
         Map<String, String> params = CloseOrderModel.builder()
             .appid(weChatPayConfig.getWxAppId())

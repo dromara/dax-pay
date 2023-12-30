@@ -90,13 +90,13 @@ public class PayRefundService {
     public RefundResult refundByChannel(RefundParam refundParam, PayOrder payOrder){
         List<RefundChannelParam> refundChannels = refundParam.getRefundChannels();
         // 1.获取退款参数方式，通过工厂生成对应的策略组
-        List<AbsPayRefundStrategy> payRefundStrategies = PayRefundStrategyFactory.create(refundChannels);
+        List<AbsPayRefundStrategy> payRefundStrategies = PayRefundStrategyFactory.createAsyncLast(refundChannels);
         if (CollectionUtil.isEmpty(payRefundStrategies)) {
             throw new PayUnsupportedMethodException();
         }
 
         // 2.初始化退款策略的参数
-        payRefundStrategies.forEach(refundStrategy -> refundStrategy.initPayParam(payOrder, refundParam));
+        payRefundStrategies.forEach(refundStrategy -> refundStrategy.initRefundParam(payOrder, refundParam));
 
         try {
             // 3.退款前准备
@@ -111,8 +111,8 @@ public class PayRefundService {
             throw e;
         }
 
-        // 5.支付成功后处理
-        this.paymentHandler(refundParam, payOrder);
+        // 5.退款成功后处理
+        this.successHandler(refundParam, payOrder);
 
         // 返回结果
         return new RefundResult();
@@ -121,7 +121,7 @@ public class PayRefundService {
     /**
      * 支付订单处理
      */
-    private void paymentHandler(RefundParam refundParam,PayOrder payOrder) {
+    private void successHandler(RefundParam refundParam, PayOrder payOrder) {
         Integer amount = refundParam.getRefundChannels().stream()
                 .map(RefundChannelParam::getAmount)
                 .reduce(0, Integer::sum);

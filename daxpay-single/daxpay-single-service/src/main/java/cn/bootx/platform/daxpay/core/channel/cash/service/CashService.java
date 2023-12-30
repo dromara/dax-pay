@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.cash.service;
 
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.core.channel.cash.dao.CashPaymentManager;
+import cn.bootx.platform.daxpay.core.channel.cash.dao.CashPayOrderManager;
 import cn.bootx.platform.daxpay.core.channel.cash.entity.CashPayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CashService {
 
-    private final CashPaymentManager cashPaymentManager;
+    private final CashPayOrderManager cashPayOrderManager;
 
     /**
      * 支付
@@ -35,17 +35,17 @@ public class CashService {
             .setAmount(payMode.getAmount())
             .setRefundableBalance(payMode.getAmount())
             .setStatus(payment.getStatus());
-        cashPaymentManager.save(walletPayment);
+        cashPayOrderManager.save(walletPayment);
     }
 
     /**
      * 关闭
      */
     public void close(Long paymentId) {
-        Optional<CashPayOrder> cashPaymentOpt = cashPaymentManager.findByPaymentId(paymentId);
+        Optional<CashPayOrder> cashPaymentOpt = cashPayOrderManager.findByPaymentId(paymentId);
         cashPaymentOpt.ifPresent(cashPayOrder -> {
             cashPayOrder.setStatus(PayStatusEnum.CLOSE.getCode());
-            cashPaymentManager.updateById(cashPayOrder);
+            cashPayOrderManager.updateById(cashPayOrder);
         });
     }
 
@@ -53,7 +53,7 @@ public class CashService {
      * 退款
      */
     public void refund(Long paymentId, int amount) {
-        Optional<CashPayOrder> cashPayment = cashPaymentManager.findByPaymentId(paymentId);
+        Optional<CashPayOrder> cashPayment = cashPayOrderManager.findByPaymentId(paymentId);
         cashPayment.ifPresent(payOrder -> {
             int refundableBalance = payOrder.getRefundableBalance() - amount;
             // 全部退款
@@ -64,7 +64,7 @@ public class CashService {
             else {
                 payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getName());
             }
-            cashPaymentManager.updateById(payOrder);
+            cashPayOrderManager.updateById(payOrder);
         });
     }
 

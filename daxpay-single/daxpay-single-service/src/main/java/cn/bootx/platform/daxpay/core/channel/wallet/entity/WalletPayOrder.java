@@ -19,8 +19,8 @@ import lombok.experimental.Accessors;
 @Data
 //@DbTable(comment = "钱包交易记录")
 @Accessors(chain = true)
-@TableName("pay_wallet_payment")
-public class WalletPayment extends BasePayOrder implements EntityBaseFunction<WalletPayOrderDto> {
+@TableName("pay_wallet_pay_order")
+public class WalletPayOrder extends BasePayOrder implements EntityBaseFunction<WalletPayOrderDto> {
 
     /** 钱包ID */
     private Long walletId;

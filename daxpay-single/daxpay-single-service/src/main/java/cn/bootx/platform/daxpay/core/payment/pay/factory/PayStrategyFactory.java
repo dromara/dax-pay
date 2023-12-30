@@ -32,7 +32,7 @@ public class PayStrategyFactory {
      * @param payWayParam 支付类型
      * @return 支付策略
      */
-    public AbsPayStrategy create(PayWayParam payWayParam) {
+    public AbsPayStrategy createAsyncFront(PayWayParam payWayParam) {
         AbsPayStrategy strategy;
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(payWayParam.getChannel());
         switch (channelEnum) {
@@ -63,16 +63,17 @@ public class PayStrategyFactory {
 
     /**
      * 根据传入的支付类型批量创建策略, 异步支付在后面
+     * 同步支付逻辑完后才执行异步支付的逻辑, 预防异步执行成功, 然同步执行失败. 导致异步支付无法回滚的问题
      */
     public static List<AbsPayStrategy> createAsyncLast(List<PayWayParam> payWayParamList) {
-        return create(payWayParamList, false);
+        return createAsyncFront(payWayParamList, false);
     }
 
     /**
-     * 根据传入的支付类型批量创建策略, 异步支付在前面
+     * 根据传入的支付类型批量创建策略, 异步支付在前面 font
      */
-    public List<AbsPayStrategy> create(List<PayWayParam> payWayParamList) {
-        return create(payWayParamList, true);
+    public List<AbsPayStrategy> createAsyncFront(List<PayWayParam> payWayParamList) {
+        return createAsyncFront(payWayParamList, true);
     }
 
     /**
@@ -80,7 +81,7 @@ public class PayStrategyFactory {
      * @param payWayParamList 支付类型
      * @return 支付策略
      */
-    private List<AbsPayStrategy> create(List<PayWayParam> payWayParamList, boolean asyncFirst) {
+    private List<AbsPayStrategy> createAsyncFront(List<PayWayParam> payWayParamList, boolean asyncFirst) {
         if (CollectionUtil.isEmpty(payWayParamList)) {
             return Collections.emptyList();
         }
@@ -110,7 +111,7 @@ public class PayStrategyFactory {
         }
 
         // 此处有一个根据Type的反转排序，
-        sortList.stream().filter(Objects::nonNull).forEach(payMode -> list.add(create(payMode)));
+        sortList.stream().filter(Objects::nonNull).forEach(payMode -> list.add(createAsyncFront(payMode)));
         return list;
     }
 

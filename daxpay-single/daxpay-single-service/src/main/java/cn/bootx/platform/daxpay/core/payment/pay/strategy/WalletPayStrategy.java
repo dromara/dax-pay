@@ -4,7 +4,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.WalletCode;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPayService;
-import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPaymentService;
+import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPayOrderService;
 import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.waller.WalletBannedException;
@@ -33,7 +33,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WalletPayStrategy extends AbsPayStrategy {
 
-    private final WalletPaymentService walletPaymentService;
+    private final WalletPayOrderService walletPayOrderService;
 
     private final WalletPayService walletPayService;
 
@@ -87,7 +87,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         } else {
             walletPayService.pay(getPayWayParam().getAmount(), this.getOrder(), this.wallet);
         }
-        walletPaymentService.savePayment(this.getOrder(), this.getPayParam(), this.getPayWayParam(), this.wallet);
+        walletPayOrderService.savePayment(this.getOrder(), this.getPayParam(), this.getPayWayParam(), this.wallet);
     }
 
     /**
@@ -98,7 +98,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         if (this.getOrder().isAsyncPay()){
             walletPayService.paySuccess(this.getOrder().getId());
         }
-        walletPaymentService.updateSuccess(this.getOrder().getId());
+        walletPayOrderService.updateSuccess(this.getOrder().getId());
     }
 
     /**
@@ -107,7 +107,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
     @Override
     public void doCloseHandler() {
         walletPayService.close(this.getOrder().getId());
-        walletPaymentService.updateClose(this.getOrder().getId());
+        walletPayOrderService.updateClose(this.getOrder().getId());
     }
 
 }

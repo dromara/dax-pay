@@ -85,7 +85,7 @@ public class PayCallbackService {
         // 2.通过工厂生成对应的策略组
         PayParam payParam = null;
 
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWays());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.createAsyncFront(payParam.getPayWays());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
             return result.setStatus(PayStatusEnum.FAIL.getCode()).setMsg("支付单数据非法,未找到对应的支付方式");
         }
@@ -133,7 +133,7 @@ public class PayCallbackService {
 
         // 2.通过工厂生成对应的策略组
         PayParam payParam = null;
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWays());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.createAsyncFront(payParam.getPayWays());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
             return result.setStatus(PayNotifyStatusEnum.FAIL.getCode()).setMsg("支付单数据非法,未找到对应的支付方式");
         }
@@ -143,7 +143,7 @@ public class PayCallbackService {
         }
         // 4.处理方法, 支付时只有一种payModel(异步支付), 失败时payment的所有payModel都会生效
         boolean handlerFlag = this.doHandler(payOrder, paymentStrategyList, (strategyList, paymentObj) -> {
-            // 执行异步支付方式的成功回调(不会有同步payModel)
+            // 执行异步支付方式的失败回调(不会有同步payModel)
             strategyList.forEach(AbsPayStrategy::doCancelHandler);
 
             // 修改payment支付状态为撤销

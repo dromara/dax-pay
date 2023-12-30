@@ -137,7 +137,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     public void doCancelHandler() {
         // 检查并获取微信支付配置
         this.initWeChatPayConfig();
-        weChatPayCloseService.cancelRemote(this.getOrder(), weChatPayConfig);
+        weChatPayCloseService.close(this.getOrder(), weChatPayConfig);
         // 调用关闭本地支付记录
         this.doCloseHandler();
     }

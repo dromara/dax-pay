@@ -5,8 +5,8 @@ import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.domain.AlipayTradeCancelModel;
-import com.alipay.api.response.AlipayTradeCancelResponse;
+import com.alipay.api.domain.AlipayTradeCloseModel;
+import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.ijpay.alipay.AliPayApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,22 +27,26 @@ import java.util.Objects;
 public class AliPayCloseService {
 
     /**
-     * 关闭支付
+     * 关闭支付 此处使用交易关闭接口
+     * 支付宝支持 交易关闭 和 交易撤销 两种关闭订单的方式,
+     * 交易关闭: 只有订单在未支付的状态下才可以进行关闭, 商户不需要额外申请就有此接口的权限
+     *
+     * 交易撤销: 交易撤销接口会将此订单关闭。如果用户支付成功，会将此订单资金退还给用户. 限制时间为1天，过了24小时，该接口无法再使用。可以视为一个特殊的接口
+     *  需要专门签约这个接口的权限
      */
     @Retryable(value = RetryableException.class)
-    public void cancelRemote(PayOrder payOrder) {
+    public void close(PayOrder payOrder) {
         // 只有部分需要调用支付宝网关进行关闭
-        AlipayTradeCancelModel model = new AlipayTradeCancelModel();
+        AlipayTradeCloseModel model = new AlipayTradeCloseModel();
         model.setOutTradeNo(String.valueOf(payOrder.getId()));
 
         try {
-            AlipayTradeCancelResponse response = AliPayApi.tradeCancelToResponse(model);
+            AlipayTradeCloseResponse response = AliPayApi.tradeCloseToResponse(model);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 log.error("网关返回撤销失败: {}", response.getSubMsg());
                 throw new PayFailureException(response.getSubMsg());
             }
-        }
-        catch (AlipayApiException e) {
+        } catch (AlipayApiException e) {
             log.error("关闭订单失败:", e);
             throw new PayFailureException("关闭订单失败");
         }

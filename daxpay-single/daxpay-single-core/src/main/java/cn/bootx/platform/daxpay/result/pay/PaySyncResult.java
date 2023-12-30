@@ -20,6 +20,9 @@ public class PaySyncResult extends PayCommonResult{
     @Schema(description = "是否同步成功")
     private boolean success;
 
+    @Schema(description = "是否进行了修复")
+    private boolean repair;
+
     /**
      * @see PaySyncStatusEnum
      */

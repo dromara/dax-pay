@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.wallet.convert;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletConfig;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletLog;
-import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletPayment;
+import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletPayOrder;
 import cn.bootx.platform.daxpay.dto.channel.wallet.WalletConfigDto;
 import cn.bootx.platform.daxpay.dto.channel.wallet.WalletDto;
 import cn.bootx.platform.daxpay.dto.channel.wallet.WalletLogDto;
@@ -25,7 +25,7 @@ public interface WalletConvert {
 
     WalletDto convert(Wallet in);
 
-    WalletPayOrderDto convert(WalletPayment in);
+    WalletPayOrderDto convert(WalletPayOrder in);
 
     WalletLogDto convert(WalletLog in);
 

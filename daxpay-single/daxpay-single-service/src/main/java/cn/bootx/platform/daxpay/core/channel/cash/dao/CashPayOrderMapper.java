@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2021/6/23
  */
 @Mapper
-public interface CashPaymentMapper extends BaseMapper<CashPayOrder> {
+public interface CashPayOrderMapper extends BaseMapper<CashPayOrder> {
 
 }

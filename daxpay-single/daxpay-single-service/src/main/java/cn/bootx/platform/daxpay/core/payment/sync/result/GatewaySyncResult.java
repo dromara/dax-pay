@@ -16,7 +16,7 @@ import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.NOT_SYNC;
  */
 @Data
 @Accessors(chain = true)
-public class SyncResult {
+public class GatewaySyncResult {
 
     /**
      * 支付网关同步状态
@@ -24,6 +24,7 @@ public class SyncResult {
      */
     private String syncStatus = NOT_SYNC.getCode();
 
+    // TODO 根据后期情况合并到上下文中
     /** 网关返回参数(会被用到的参数) */
     private Map<String, String> map;
 

@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class CashPaymentManager extends BaseManager<CashPaymentMapper, CashPayOrder> {
+public class CashPayOrderManager extends BaseManager<CashPayOrderMapper, CashPayOrder> {
 
     public Optional<CashPayOrder> findByPaymentId(Long paymentId) {
         return findByField(CashPayOrder::getPaymentId, paymentId);

@@ -107,7 +107,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doAsyncSuccessHandler(Map<String, String> map) {
-        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo( map.get(AliPayCode.TRADE_NO));
+        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(map.get(AliPayCode.TRADE_NO));
         aliPaymentService.updateAsyncSuccess(this.getOrder(), this.getPayWayParam().getAmount());
     }
 
@@ -117,7 +117,7 @@ public class AliPayStrategy extends AbsPayStrategy {
     @Override
     public void doAsyncErrorHandler(ExceptionInfo exceptionInfo) {
         // 调用撤销支付
-        this.doCancelHandler();
+        this.doCloseHandler();
     }
 
     /**
@@ -126,14 +126,14 @@ public class AliPayStrategy extends AbsPayStrategy {
     @Override
     public void doCancelHandler() {
         this.initAlipayConfig();
-        // 撤销支付
-        aliPayCancelService.cancelRemote(this.getOrder());
+        // 关闭支付
+        aliPayCancelService.close(this.getOrder());
         // 调用关闭本地支付记录
         this.doCloseHandler();
     }
 
     /**
-     * 关闭本地支付记录
+     * 关闭支付记录
      */
     @Override
     public void doCloseHandler() {

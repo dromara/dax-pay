@@ -35,13 +35,6 @@ public class VoucherPayRefundStrategy extends AbsPayRefundStrategy {
     }
 
     /**
-     * 退款前对处理
-     */
-    @Override
-    public void doBeforeRefundHandler() {
-    }
-
-    /**
      * 退款
      */
     @Override

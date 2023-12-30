@@ -12,7 +12,7 @@ import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.payment.sync.result.SyncResult;
+import cn.bootx.platform.daxpay.core.payment.sync.result.GatewaySyncResult;
 import cn.bootx.platform.daxpay.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayParam;
@@ -273,7 +273,7 @@ public class WeChatPayService {
     @Async("bigExecutor")
     @Retryable(value = RetryableException.class, maxAttempts = 10, backoff = @Backoff(value = 5000L))
     public void rotationSync(PayOrder payOrder, WeChatPayConfig weChatPayConfig) {
-        SyncResult syncResult = weChatPaySyncService.syncPayStatus(payOrder.getId(), weChatPayConfig);
+        GatewaySyncResult syncResult = weChatPaySyncService.syncPayStatus(payOrder.getId(), weChatPayConfig);
         // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
         if (Objects.equals(PAY_WAIT.getCode(), syncResult.getSyncStatus())) {
             throw new RetryableException();

@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletLog;
-import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletPayment;
+import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletPayOrder;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.waller.WalletLackOfBalanceException;
 import cn.bootx.platform.daxpay.exception.waller.WalletNotExistsException;
@@ -155,20 +155,20 @@ public class WalletPayService {
     @Transactional(rollbackFor = Exception.class)
     public void refund(Long paymentId, int amount) {
         // 钱包支付记录
-        WalletPayment walletPayment = walletPaymentManager.findByPaymentId(paymentId)
+        WalletPayOrder walletPayOrder = walletPaymentManager.findByPaymentId(paymentId)
             .orElseThrow(() -> new BizException("钱包支付记录不存在"));
         // 获取钱包
-        Wallet wallet = walletManager.findById(walletPayment.getWalletId()).orElseThrow(WalletNotExistsException::new);
+        Wallet wallet = walletManager.findById(walletPayOrder.getWalletId()).orElseThrow(WalletNotExistsException::new);
         walletManager.increaseBalance(wallet.getId(), BigDecimal.valueOf(amount));
 
         WalletLog walletLog = new WalletLog().setAmount(amount)
-            .setPaymentId(walletPayment.getPaymentId())
+            .setPaymentId(walletPayOrder.getPaymentId())
             .setWalletId(wallet.getId())
             .setUserId(wallet.getUserId())
             .setType(WalletCode.LOG_REFUND)
             .setRemark(String.format("钱包退款金额 %d ", amount))
             .setOperationSource(WalletCode.OPERATION_SOURCE_ADMIN)
-            .setBusinessId(walletPayment.getBusinessNo());
+            .setBusinessId(walletPayOrder.getBusinessNo());
         // save log
         walletLogManager.save(walletLog);
     }

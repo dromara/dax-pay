@@ -1,6 +1,8 @@
 package cn.bootx.platform.daxpay.core.payment.repair.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayOrderService;
 import cn.bootx.platform.daxpay.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliPayRepairStrategy extends AbsPayRepairStrategy {
     private final AliPayOrderService orderService;
+    private final AliPayCloseService closeService;
     @Override
     public PayChannelEnum getType() {
         return PayChannelEnum.ALI;
@@ -30,7 +33,7 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      * 支付成功处理
      */
     @Override
-    public void successHandler() {
+    public void doSuccessHandler() {
         orderService.updateAsyncSuccess(this.getOrder(), 0);
     }
 
@@ -38,7 +41,11 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      * 取消支付
      */
     @Override
-    public void closeHandler() {
+    public void doCloseHandler() {
+        // 如果非同步出的订单取消状态, 则调用支付宝网关关闭订单
+        if (this.getRepairSource() != PayRepairSourceEnum.SYNC){
+            closeService.close(this.getOrder());
+        }
         orderService.updateClose(this.getOrder().getId());
     }
 
@@ -46,7 +53,7 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      * 退款
      */
     @Override
-    public void refundHandler() {
+    public void doRefundHandler() {
         orderService.updatePayRefund(this.getOrder().getId(), 0);
     }
 }

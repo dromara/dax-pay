@@ -1,9 +1,11 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.payment.sync.result.SyncResult;
+import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.payment.sync.result.GatewaySyncResult;
 import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -30,8 +32,8 @@ public class WeChatPaySyncService {
     /**
      * 同步查询
      */
-    public SyncResult syncPayStatus(Long paymentId, WeChatPayConfig weChatPayConfig) {
-        SyncResult syncResult = new SyncResult().setSyncStatus(PaySyncStatusEnum.FAIL.getCode());
+    public GatewaySyncResult syncPayStatus(Long paymentId, WeChatPayConfig weChatPayConfig) {
+        GatewaySyncResult syncResult = new GatewaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL.getCode());
         Map<String, String> params = UnifiedOrderModel.builder()
             .appid(weChatPayConfig.getWxAppId())
             .mch_id(weChatPayConfig.getWxMchId())
@@ -76,13 +78,40 @@ public class WeChatPaySyncService {
                     || Objects.equals(tradeStatus, WeChatPayCode.TRADE_PAYERROR)) {
                 return syncResult.setSyncStatus(PaySyncStatusEnum.CLOSED.getCode());
             }
-
         }
         catch (RuntimeException e) {
             log.error("查询订单失败:", e);
             syncResult.setMsg(e.getMessage());
         }
         return syncResult;
+    }
+
+
+    /**
+     * 比对网关状态和支付单状态
+     */
+    public boolean isStatusSync(GatewaySyncResult syncResult, PayOrder payOrder) {
+        String syncStatus = syncResult.getSyncStatus();
+        String orderStatus = payOrder.getStatus();
+        // 支付成功比对
+        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_SUCCESS.getCode())){
+            return true;
+        }
+        // 待支付比对
+        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_WAIT.getCode())){
+            return true;
+        }
+
+        // 支付关闭比对
+        if (orderStatus.equals(PayStatusEnum.CLOSE.getCode()) && syncStatus.equals(PaySyncStatusEnum.CLOSED.getCode())){
+            return true;
+        }
+
+        // 退款比对
+        if (orderStatus.equals(PayStatusEnum.REFUNDED.getCode()) && syncStatus.equals(PaySyncStatusEnum.REFUND.getCode())){
+            return true;
+        }
+        return false;
     }
 
 }

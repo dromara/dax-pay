@@ -2,12 +2,14 @@ package cn.bootx.platform.daxpay.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.annotation.PaymentApi;
+import cn.bootx.platform.daxpay.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.core.payment.pay.service.PayService;
 import cn.bootx.platform.daxpay.core.payment.refund.service.PayRefundService;
 import cn.bootx.platform.daxpay.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
+import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.bootx.platform.daxpay.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +34,7 @@ public class UniPayController {
     private final PayService payService;
     private final PayRefundService payRefundService;
     private final PaySyncService paySyncService;
+    private final PayCloseService payCloseService;
 
     @PaymentApi("pay")
     @Operation(summary = "统一下单")
@@ -47,17 +50,11 @@ public class UniPayController {
         return DaxRes.ok(payService.simplePay(payParam));
     }
 
-    @PaymentApi("cancel")
-    @Operation(summary = "订单撤销")
-    @PostMapping("/cancel")
-    public DaxResult<Void> cancel(@RequestBody CancelParam param){
-        return DaxRes.ok();
-    }
-
     @PaymentApi("close")
     @Operation(summary = "订单关闭")
     @PostMapping("/close")
-    public DaxResult<Void> close(@RequestBody CloseParam param){
+    public DaxResult<Void> close(@RequestBody PayCloseParam param){
+        payCloseService.close(param);
         return DaxRes.ok();
     }
 
@@ -78,7 +75,7 @@ public class UniPayController {
     @PaymentApi("syncPay")
     @Operation(summary = "支付状态同步")
     @PostMapping("/syncPay")
-    public DaxResult<Void> syncPay(PaySyncParam param){
+    public DaxResult<PaySyncResult> syncPay(PaySyncParam param){
         return DaxRes.ok(paySyncService.sync(param));
     }
 

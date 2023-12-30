@@ -7,7 +7,7 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.sync.dao.PaySyncOrderManager;
 import cn.bootx.platform.daxpay.core.order.sync.entity.PaySyncOrder;
-import cn.bootx.platform.daxpay.core.payment.sync.result.SyncResult;
+import cn.bootx.platform.daxpay.core.payment.sync.result.GatewaySyncResult;
 import cn.bootx.platform.daxpay.dto.order.sync.PaySyncOrderDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class PaySyncOrderService {
      * 记录同步记录
      */
     @Transactional(propagation= Propagation.REQUIRES_NEW)
-    public void saveRecord(SyncResult paySyncResult, PayOrder payment){
+    public void saveRecord(GatewaySyncResult paySyncResult, PayOrder payment){
         PaySyncOrder paySyncOrder = new PaySyncOrder()
                 .setPaymentId(payment.getId())
                 .setChannel(payment.getAsyncPayChannel())

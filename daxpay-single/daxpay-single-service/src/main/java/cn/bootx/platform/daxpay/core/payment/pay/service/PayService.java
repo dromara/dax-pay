@@ -129,7 +129,7 @@ public class PayService {
     private void firstPayHandler(PayParam payParam, PayOrder payOrder) {
 
         // 1.获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.create(payParam.getPayWays());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.createAsyncLast(payParam.getPayWays());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
             throw new PayUnsupportedMethodException();
         }
@@ -170,7 +170,7 @@ public class PayService {
 
         // 2.获取 异步支付通道，通过工厂生成对应的策略组(只包含异步支付的策略, 同步支付相关逻辑不再进行执行)
         PayWayParam payWayParam = this.getAsyncPayParam(payParam, payOrder);
-        List<AbsPayStrategy> asyncStrategyList = PayStrategyFactory.create(Collections.singletonList(payWayParam));
+        List<AbsPayStrategy> asyncStrategyList = PayStrategyFactory.createAsyncLast(Collections.singletonList(payWayParam));
 
         // 3.初始化支付的参数
         for (AbsPayStrategy paymentStrategy : asyncStrategyList) {

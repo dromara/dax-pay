@@ -28,7 +28,7 @@ public class PayRefundStrategyFactory {
      * 根据传入的支付渠道创建策略
      * @return 支付策略
      */
-    public static AbsPayRefundStrategy create(RefundChannelParam refundChannelParam) {
+    public static AbsPayRefundStrategy createAsyncFront(RefundChannelParam refundChannelParam) {
 
         AbsPayRefundStrategy strategy;
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(refundChannelParam.getChannel());
@@ -60,16 +60,17 @@ public class PayRefundStrategyFactory {
 
     /**
      * 根据传入的支付类型批量创建策略, 异步支付在后面
+     * 同步支付逻辑完后才执行异步支付的逻辑, 预防异步执行成功, 然同步执行失败. 导致异步支付无法回滚的问题
      */
-    public static List<AbsPayRefundStrategy> createDesc(List<RefundChannelParam> refundChannelParams) {
-        return create(refundChannelParams, true);
+    public static List<AbsPayRefundStrategy> createAsyncLast(List<RefundChannelParam> refundChannelParams) {
+        return createAsyncFront(refundChannelParams, true);
     }
 
     /**
-     * 根据传入的支付类型批量创建策略, 默认异步支付在前面
+     * 根据传入的支付类型批量创建策略, 异步支付在前面
      */
-    public static List<AbsPayRefundStrategy> create(List<RefundChannelParam> refundChannelParams) {
-        return create(refundChannelParams, false);
+    public static List<AbsPayRefundStrategy> createAsyncFront(List<RefundChannelParam> refundChannelParams) {
+        return createAsyncFront(refundChannelParams, false);
     }
 
     /**
@@ -77,7 +78,7 @@ public class PayRefundStrategyFactory {
      * @param refundChannelParams 支付类型
      * @return 支付策略
      */
-    private static List<AbsPayRefundStrategy> create(List<RefundChannelParam> refundChannelParams, boolean description) {
+    private static List<AbsPayRefundStrategy> createAsyncFront(List<RefundChannelParam> refundChannelParams, boolean description) {
         if (CollectionUtil.isEmpty(refundChannelParams)) {
             return Collections.emptyList();
         }
@@ -108,7 +109,7 @@ public class PayRefundStrategyFactory {
         }
 
         // 此处有一个根据Type的反转排序，
-        sortList.stream().filter(Objects::nonNull).forEach(payMode -> list.add(create(payMode)));
+        sortList.stream().filter(Objects::nonNull).forEach(payMode -> list.add(createAsyncFront(payMode)));
         return list;
     }
 }

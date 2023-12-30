@@ -1,8 +1,10 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.code.AliPayCode;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
-import cn.bootx.platform.daxpay.core.payment.sync.result.SyncResult;
+import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.payment.sync.result.GatewaySyncResult;
 import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeQueryModel;
@@ -29,8 +31,8 @@ public class AlipaySyncService {
     /**
      * 与支付宝网关同步状态 1 远程支付成功 2 交易创建，等待买家付款 3 超时关闭 4 查询不到 5 查询失败
      */
-    public SyncResult syncPayStatus(Long paymentId) {
-        SyncResult syncResult = new SyncResult().setSyncStatus(PaySyncStatusEnum.FAIL.getCode());
+    public GatewaySyncResult syncPayStatus(Long paymentId) {
+        GatewaySyncResult syncResult = new GatewaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL.getCode());
 
         // 查询
         try {
@@ -41,10 +43,10 @@ public class AlipaySyncService {
             String tradeStatus = response.getTradeStatus();
             syncResult.setJson(JSONUtil.toJsonStr(response));
             // 支付完成
-            if (Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_SUCCESS)
-                    || Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_FINISHED)) {
+            if (Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_FINISHED)) {
 
                 HashMap<String, String> map = new HashMap<>(1);
+                // TODO 写入到
                 map.put(AliPayCode.TRADE_NO, response.getTradeNo());
                 return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS.getCode()).setMap(map);
             }
@@ -60,7 +62,7 @@ public class AlipaySyncService {
             if (Objects.equals(response.getSubCode(), AliPayCode.ACQ_TRADE_NOT_EXIST)) {
                 return syncResult.setSyncStatus(PaySyncStatusEnum.NOT_FOUND.getCode());
             }
-            // 退款 支付宝查不到
+            // 退款 支付宝查不到这个状态
 
         }
         catch (AlipayApiException e) {
@@ -70,4 +72,25 @@ public class AlipaySyncService {
         return syncResult;
     }
 
+    /**
+     * 比对网关状态和支付单状态
+     */
+    public boolean isStatusSync(GatewaySyncResult syncResult, PayOrder payOrder) {
+        String syncStatus = syncResult.getSyncStatus();
+        String orderStatus = payOrder.getStatus();
+        // 支付成功比对
+        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_SUCCESS.getCode())){
+            return true;
+        }
+        // 待支付比对
+        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_WAIT.getCode())){
+            return true;
+        }
+
+        // 支付关闭比对
+        if (orderStatus.equals(PayStatusEnum.CLOSE.getCode()) && syncStatus.equals(PaySyncStatusEnum.CLOSED.getCode())){
+            return true;
+        }
+        return false;
+    }
 }

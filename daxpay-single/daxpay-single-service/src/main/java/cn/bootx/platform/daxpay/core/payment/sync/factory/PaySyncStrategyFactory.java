@@ -15,13 +15,13 @@ import cn.hutool.extra.spring.SpringUtil;
  */
 public class PaySyncStrategyFactory {
     /**
-     * 获取支付同步策略
-     * @param payChannelCode 支付通道编码
+     * 获取支付同步策略, 只有异步支付方式才需要这个功能
+     * @param channelCode 支付通道编码
      * @return 支付同步策略类
      */
-    public static AbsPaySyncStrategy create(String payChannelCode) {
+    public static AbsPaySyncStrategy create(String channelCode) {
         AbsPaySyncStrategy strategy;
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(payChannelCode);
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(channelCode);
         switch (channelEnum) {
             case ALI:
                 strategy = SpringUtil.getBean(AliPaySyncStrategy.class);

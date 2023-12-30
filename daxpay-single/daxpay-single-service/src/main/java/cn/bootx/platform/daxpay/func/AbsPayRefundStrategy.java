@@ -34,9 +34,9 @@ public abstract class AbsPayRefundStrategy implements PayStrategy{
     public abstract PayChannelEnum getType();
 
     /**
-     * 初始化支付的参数
+     * 初始化参数
      */
-    public void initPayParam(PayOrder payOrder, RefundParam refundParam) {
+    public void initRefundParam(PayOrder payOrder, RefundParam refundParam) {
         this.order = payOrder;
         this.refundParam = refundParam;
     }

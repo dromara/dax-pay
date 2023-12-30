@@ -1,24 +1,24 @@
 package cn.bootx.platform.daxpay.core.payment.sync.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.code.PayRepairTypeEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.order.sync.service.PaySyncOrderService;
+import cn.bootx.platform.daxpay.core.payment.repair.param.PayRepairParam;
+import cn.bootx.platform.daxpay.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.core.payment.sync.factory.PaySyncStrategyFactory;
-import cn.bootx.platform.daxpay.func.AbsPaySyncStrategy;
-import cn.bootx.platform.daxpay.core.payment.sync.result.SyncResult;
+import cn.bootx.platform.daxpay.core.payment.sync.result.GatewaySyncResult;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.func.AbsPayStrategy;
+import cn.bootx.platform.daxpay.func.AbsPaySyncStrategy;
 import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -34,6 +34,8 @@ public class PaySyncService {
 
     private final PaySyncOrderService syncOrderService;
 
+    private final PayRepairService repairService;
+
     /**
      * 支付同步
      */
@@ -47,12 +49,11 @@ public class PaySyncService {
             payOrder = payOrderManager.findByBusinessNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
-        // 如果不是异步支付, 直接返回不需要同步的结果
+        // 如果不是异步支付, 直接返回返回
         if (!payOrder.isAsyncPay()){
-            return new PaySyncResult().setSuccess(true).setStatus(PaySyncStatusEnum.NOT_SYNC.getCode());
+            return new PaySyncResult().setSuccess(true).setRepair(false);
         }
-
-        // 执行逻辑
+        // 执行同步逻辑
         return this.syncPayOrder(payOrder);
     }
     /**
@@ -63,10 +64,15 @@ public class PaySyncService {
         AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(order.getAsyncPayChannel());
         syncPayStrategy.initPayParam(order);
         // 同步支付状态
-        SyncResult syncResult = syncPayStrategy.doSyncPayStatusHandler();
-        // 根据同步记录对支付单进行处理处理
-        this.resultHandler(syncResult,order);
+        GatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
 
+        // 判断网关状态是否和支付单一致
+        boolean statusSync = syncPayStrategy.isStatusSync(syncResult);
+        // 状态不一致，执行支付单修复逻辑
+        if (!statusSync){
+            // 根据同步记录对支付单进行处理处理
+            this.resultHandler(syncResult,order);
+        }
         // 记录同步的结果
         syncOrderService.saveRecord(syncResult,order);
         return null;
@@ -74,102 +80,51 @@ public class PaySyncService {
 
     /**
      * 根据同步的结果对支付单进行处理
+     * 1. 如果状态一致, 不进行处理
+     * 2. 如果状态不一致, 调用修复逻辑进行修复
      */
-    public void resultHandler(SyncResult syncResult, PayOrder payment){
+    private void resultHandler(GatewaySyncResult syncResult, PayOrder payOrder){
+
         PaySyncStatusEnum syncStatusEnum = PaySyncStatusEnum.getByCode(syncResult.getSyncStatus());
-        // 对同步结果处理
+        PayRepairParam repairParam = new PayRepairParam()
+                .setRepairSource(PayRepairSourceEnum.SYNC);
+        // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
-            case PaySyncStatusEnum.PAY_SUCCESS: {
-                this.paymentSuccess(payment, syncPayStrategy, syncResult);
+            case PAY_SUCCESS: {
+                repairParam.setRepairType(PayRepairTypeEnum.SUCCESS);
+                repairService.repair(payOrder,repairParam);
                 break;
             }
             // 待付款/ 支付中
-            case PaySyncStatusEnum.PAY_WAIT: {
+            case PAY_WAIT: {
                 log.info("依然是付款状态");
                 break;
             }
             // 订单已经关闭超时关闭 和 网关没找到记录, 支付宝退款完成也是这个状态
-            case PaySyncStatusEnum.CLOSED:
-            case PaySyncStatusEnum.NOT_FOUND: {
+            case CLOSED:
+            case NOT_FOUND: {
                 // 判断下是否超时, 同时payment 变更为取消支付
-                this.paymentCancel(payment, paymentStrategyList);
+                repairParam.setRepairType(PayRepairTypeEnum.CLOSE);
+                repairService.repair(payOrder, repairParam);
                 break;
             }
-            // 交易退款 支付宝没这个状态
-            case PaySyncStatusEnum.REFUND: {
-                this.paymentRefund(payment, syncPayStrategy, syncResult);
+            // 交易退款
+            case REFUND: {
+                repairParam.setRepairType(PayRepairTypeEnum.REFUND);
+                repairService.repair(payOrder, repairParam);
                 break;
             }
             // 调用出错
-            case PaySyncStatusEnum.FAIL: {
+            case FAIL: {
                 // 不进行处理
                 log.warn("支付状态同步接口调用出错");
                 break;
             }
-            case PaySyncStatusEnum.NOT_SYNC:
+            case NOT_SYNC:
             default: {
                 throw new BizException("代码有问题");
             }
         }
     }
-
-    /**
-     * payment 变更为已支付
-     */
-    private void paymentSuccess(PayOrder payment, AbsPayStrategy syncPayStrategy, SyncResult syncResult) {
-
-        // 已支付不在重复处理
-        if (Objects.equals(payment.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
-            return;
-        }
-        // 退款的不处理
-        if (Objects.equals(payment.getStatus(), PayStatusEnum.PARTIAL_REFUND.getCode())
-                || Objects.equals(payment.getStatus(), PayStatusEnum.REFUNDED.getCode())) {
-            return;
-        }
-        // 修改payment支付状态为成功
-        syncPayStrategy.doAsyncSuccessHandler(syncResult.getMap());
-        payment.setStatus(PayStatusEnum.SUCCESS.getCode());
-        payment.setPayTime(LocalDateTime.now());
-        paymentService.updateById(payment);
-
-        // 发送成功事件
-        eventSender.sendPayComplete(PayEventBuilder.buildPayComplete(payment));
-    }
-
-    /**
-     * payment 变更为取消支付
-     */
-    private void paymentCancel(Payment payment, List<AbsPayStrategy> absPayStrategies) {
-        try {
-            // 已关闭的不再进行关闭
-            if (Objects.equals(payment.getPayStatus(), TRADE_CANCEL)) {
-                return;
-            }
-            // 修改payment支付状态为取消, 退款状态则不进行更新
-            if (Objects.equals(payment.getPayStatus(), TRADE_REFUNDED)
-                    || Objects.equals(payment.getPayStatus(), TRADE_REFUNDING)) {
-                return;
-            }
-            payment.setPayStatus(TRADE_CANCEL);
-            // 执行策略的关闭方法
-            absPayStrategies.forEach(AbsPayStrategy::doCloseHandler);
-            paymentService.updateById(payment);
-            // 发送事件
-            eventSender.sendPayCancel(PayEventBuilder.buildPayCancel(payment));
-        }
-        catch (Exception e) {
-            log.warn("支付状态同步后关闭支付单报错了", e);
-            throw new PayFailureException("支付状态同步后关闭支付单报错了");
-        }
-    }
-
-    /**
-     * payment 退款处理 TODO 需要考虑退款详情的合并处理
-     */
-    private void paymentRefund(Payment payment, AbsPayStrategy syncPayStrategy, PaySyncResult paySyncResult) {
-
-    }
-
 }

@@ -5,14 +5,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 支付取消参数
+ * 支付关闭参数
  * @author xxm
  * @since 2023/12/17
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Schema(title = "支付取消参数")
-public class CancelParam extends PayCommonParam{
+@Schema(title = "支付关闭参数")
+public class PayCloseParam extends PayCommonParam{
 
     @Schema(description = "支付单ID")
     private Long paymentId;
