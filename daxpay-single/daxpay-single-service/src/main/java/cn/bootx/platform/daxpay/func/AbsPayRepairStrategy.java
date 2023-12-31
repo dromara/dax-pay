@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.func;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import lombok.Getter;
@@ -32,10 +31,11 @@ public abstract class AbsPayRepairStrategy {
     }
 
     /**
-     * 策略标识
-     * @see PayChannelEnum
+     * 修复前处理
      */
-    public abstract PayChannelEnum getType();
+    public void doBeforeHandler(){
+
+    }
 
     /**
      * 支付成功处理
@@ -50,7 +50,7 @@ public abstract class AbsPayRepairStrategy {
     public abstract void doCloseHandler();
 
     /**
-     * 退款处理
+     * 退款处理 todo 需要结合退款同步功能进行协同实现
      */
     public void doRefundHandler() {
 

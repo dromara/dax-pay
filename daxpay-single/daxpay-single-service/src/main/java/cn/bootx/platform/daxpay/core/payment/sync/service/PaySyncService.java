@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.core.payment.sync.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.daxpay.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
@@ -53,11 +54,13 @@ public class PaySyncService {
         if (!payOrder.isAsyncPay()){
             return new PaySyncResult().setSuccess(true).setRepair(false);
         }
-        // 执行同步逻辑
+        // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);
     }
     /**
-     * 同步支付状态 传入 payment 对象
+     * 同步支付状态
+     * 1. 如果状态一致, 不进行处理
+     * 2. 如果状态不一致, 调用修复逻辑进行修复
      */
     public PaySyncResult syncPayOrder(PayOrder order) {
         // 获取同步策略类
@@ -67,7 +70,7 @@ public class PaySyncService {
         GatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
 
         // 判断网关状态是否和支付单一致
-        boolean statusSync = syncPayStrategy.isStatusSync(syncResult);
+        boolean statusSync = this.isStatusSync(syncResult,order);
         // 状态不一致，执行支付单修复逻辑
         if (!statusSync){
             // 根据同步记录对支付单进行处理处理
@@ -75,19 +78,43 @@ public class PaySyncService {
         }
         // 记录同步的结果
         syncOrderService.saveRecord(syncResult,order);
-        return null;
+        return new PaySyncResult().setSuccess(true).setRepair(!statusSync).setSyncStatus(syncResult.getSyncStatus());
+    }
+
+    /**
+     * 支付单和网关状态是否一致
+     */
+    public boolean isStatusSync(GatewaySyncResult syncResult, PayOrder order){
+        String syncStatus = syncResult.getSyncStatus();
+        String orderStatus = order.getStatus();
+        // 支付成功比对
+        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_SUCCESS.getCode())){
+            return true;
+        }
+        // 待支付比对
+        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_WAIT.getCode())){
+            return true;
+        }
+
+        // 支付关闭比对
+        if (orderStatus.equals(PayStatusEnum.CLOSE.getCode()) && syncStatus.equals(PaySyncStatusEnum.CLOSED.getCode())){
+            return true;
+        }
+
+        // 退款比对
+        if (orderStatus.equals(PayStatusEnum.REFUNDED.getCode()) && syncStatus.equals(PaySyncStatusEnum.REFUND.getCode())){
+            return true;
+        }
+        return false;
     }
 
     /**
      * 根据同步的结果对支付单进行处理
-     * 1. 如果状态一致, 不进行处理
-     * 2. 如果状态不一致, 调用修复逻辑进行修复
      */
     private void resultHandler(GatewaySyncResult syncResult, PayOrder payOrder){
 
         PaySyncStatusEnum syncStatusEnum = PaySyncStatusEnum.getByCode(syncResult.getSyncStatus());
-        PayRepairParam repairParam = new PayRepairParam()
-                .setRepairSource(PayRepairSourceEnum.SYNC);
+        PayRepairParam repairParam = new PayRepairParam().setRepairSource(PayRepairSourceEnum.SYNC);
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
@@ -101,15 +128,15 @@ public class PaySyncService {
                 log.info("依然是付款状态");
                 break;
             }
-            // 订单已经关闭超时关闭 和 网关没找到记录, 支付宝退款完成也是这个状态
+            // 订单已经关闭超时关闭 和 网关没找到记录,
             case CLOSED:
             case NOT_FOUND: {
-                // 判断下是否超时, 同时payment 变更为取消支付
+                // 判断下是否超时, 变更为关闭支付
                 repairParam.setRepairType(PayRepairTypeEnum.CLOSE);
                 repairService.repair(payOrder, repairParam);
                 break;
             }
-            // 交易退款
+            // 交易退款 TODO 未实现
             case REFUND: {
                 repairParam.setRepairType(PayRepairTypeEnum.REFUND);
                 repairService.repair(payOrder, repairParam);
@@ -117,7 +144,7 @@ public class PaySyncService {
             }
             // 调用出错
             case FAIL: {
-                // 不进行处理
+                // 不进行处理 TODO 添加重试
                 log.warn("支付状态同步接口调用出错");
                 break;
             }

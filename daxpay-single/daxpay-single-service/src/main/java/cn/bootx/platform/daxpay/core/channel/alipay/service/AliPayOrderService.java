@@ -6,10 +6,9 @@ import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.alipay.dao.AliPayOrderManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderChannelManager;
 import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.core.order.pay.service.PayOrderChannelService;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,34 +37,15 @@ public class AliPayOrderService {
 
     private final PayOrderManager payOrderManager;
 
-    private final PayOrderChannelManager payOrderChannelManager;
+    private final PayOrderChannelService payOrderChannelService;
 
     /**
      * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建支付宝支付单
      */
     public void updatePaySuccess(PayOrder payOrder, PayWayParam payWayParam) {
-        payOrder.setAsyncPay(true)
-                .setAsyncPayChannel(PayChannelEnum.ALI.getCode());
-
         // 更新支付宝异步支付类型信息
-        Optional<PayOrderChannel> payOrderChannelOpt = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), PayChannelEnum.ALI.getCode());
-        if (!payOrderChannelOpt.isPresent()){
-            payOrderChannelManager.deleteByPaymentIdAndAsync(payOrder.getId());
-            payOrderChannelManager.save(new PayOrderChannel()
-                   .setPaymentId(payOrder.getId())
-                   .setChannel(PayChannelEnum.ALI.getCode())
-                   .setAmount(payWayParam.getAmount())
-                    .setPayWay(payWayParam.getWay())
-                    .setChannelExtra(payWayParam.getChannelExtra())
-                    .setAsync(true)
-            );
-        } else {
-            payOrderChannelOpt.get()
-                   .setChannelExtra(payWayParam.getChannelExtra())
-                   .setPayWay(payWayParam.getWay());
-            payOrderChannelManager.updateById(payOrderChannelOpt.get());
-        }
-
+        payOrder.setAsyncPay(true).setAsyncPayChannel(PayChannelEnum.ALI.getCode());
+        payOrderChannelService.updateChannel(payWayParam,payOrder);
 
         // 更新支付宝可退款类型信息
         List<OrderRefundableInfo> refundableInfos = payOrder.getRefundableInfos();
@@ -109,7 +89,7 @@ public class AliPayOrderService {
     }
 
     /**
-     * 取消状态
+     * 取消状态, 按正常来说不会出现支付宝订单需要取消的情况
      */
     public void updateClose(Long paymentId) {
         Optional<AliPayOrder> aliPaymentOptional = aliPayOrderManager.findByPaymentId(paymentId);
@@ -120,9 +100,9 @@ public class AliPayOrderService {
     }
 
     /**
-     * 更新退款
+     * 更新退款. 分为部分退款和全部退款
      */
-    public void updatePayRefund(Long paymentId, int amount) {
+    public void updateRefund(Long paymentId, int amount) {
         Optional<AliPayOrder> aliPaymentOptional = aliPayOrderManager.findByPaymentId(paymentId);
         aliPaymentOptional.ifPresent(payment -> {
             int refundableBalance = payment.getRefundableBalance() - amount;

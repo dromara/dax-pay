@@ -7,8 +7,8 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.StringListTypeHandler;
 import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.core.channel.alipay.convert.AlipayConvert;
-import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
-import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
+import cn.bootx.platform.daxpay.dto.channel.alipay.AliPayConfigDto;
+import cn.bootx.platform.daxpay.param.channel.alipay.AliPayConfigParam;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
@@ -32,7 +32,7 @@ import java.util.List;
 @Accessors(chain = true)
 @DbTable(comment = "支付宝支付配置")
 @TableName("pay_alipay_config")
-public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<AlipayConfigDto> {
+public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<AliPayConfigDto> {
 
     /** 支付宝商户appId */
     @DbColumn(comment = "支付宝商户appId")
@@ -109,11 +109,11 @@ public class AlipayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     private String remark;
 
     @Override
-    public AlipayConfigDto toDto() {
+    public AliPayConfigDto toDto() {
         return AlipayConvert.CONVERT.convert(this);
     }
 
-    public static AlipayConfig init(AlipayConfigParam in) {
+    public static AliPayConfig init(AliPayConfigParam in) {
         return AlipayConvert.CONVERT.convert(in);
     }
 

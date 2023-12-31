@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- *
+ * 云闪付
  * @author xxm
  * @since 2023/12/30
  */

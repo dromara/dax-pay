@@ -1,9 +1,9 @@
 package cn.bootx.platform.daxpay.core.payment.close.strategy;
 
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayOrderService;
-import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipayConfigService;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.func.AbsPayCloseStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliPayCloseStrategy extends AbsPayCloseStrategy {
 
-    private final AlipayConfigService alipayConfigService;
+    private final AliPayConfigService alipayConfigService;
 
     private final AliPayOrderService aliPayOrderService;
 
@@ -34,7 +34,7 @@ public class AliPayCloseStrategy extends AbsPayCloseStrategy {
      */
     @Override
     public void doBeforeCloseHandler() {
-        AlipayConfig config = alipayConfigService.getConfig();
+        AliPayConfig config = alipayConfigService.getConfig();
         alipayConfigService.initConfig(config);
     }
 

@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.dao;
 
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,6 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023/12/18
  */
 @Mapper
-public interface AlipayConfigMapper extends BaseMapper<AlipayConfig> {
+public interface AliPayConfigMapper extends BaseMapper<AliPayConfig> {
 
 }

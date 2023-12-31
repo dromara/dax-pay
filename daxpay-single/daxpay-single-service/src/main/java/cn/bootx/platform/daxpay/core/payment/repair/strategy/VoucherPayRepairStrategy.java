@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.core.payment.repair.strategy;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherPayOrderService;
+import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherPayService;
 import cn.bootx.platform.daxpay.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,21 +20,15 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @RequiredArgsConstructor
 public class VoucherPayRepairStrategy extends AbsPayRepairStrategy {
-    /**
-     * 策略标识
-     *
-     * @see PayChannelEnum
-     */
-    @Override
-    public PayChannelEnum getType() {
-        return null;
-    }
+    private final VoucherPayService voucherPayService;
+    private final VoucherPayOrderService voucherPayOrderService;
 
     /**
      * 取消支付
      */
     @Override
     public void doCloseHandler() {
-
+        voucherPayService.close(this.getOrder().getId());
+        voucherPayOrderService.updateClose(this.getOrder().getId());
     }
 }

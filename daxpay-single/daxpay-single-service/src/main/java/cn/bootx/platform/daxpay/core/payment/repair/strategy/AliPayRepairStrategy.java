@@ -2,8 +2,13 @@ package cn.bootx.platform.daxpay.core.payment.repair.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayOrderService;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayConfigService;
+import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +18,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 支付宝支付单修复策略
+ * 支付宝订单修复策略
  * @author xxm
  * @since 2023/12/27
  */
@@ -24,17 +29,27 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class AliPayRepairStrategy extends AbsPayRepairStrategy {
     private final AliPayOrderService orderService;
     private final AliPayCloseService closeService;
-    @Override
-    public PayChannelEnum getType() {
-        return PayChannelEnum.ALI;
-    }
+    private final AliPayConfigService aliPayConfigService;
 
+    private final PayOrderChannelManager orderChannelManager;
+
+    /**
+     * 修复前处理
+     */
+    @Override
+    public void doBeforeHandler() {
+        AliPayConfig config = aliPayConfigService.getConfig();
+        aliPayConfigService.initConfig(config);
+
+    }
     /**
      * 支付成功处理
      */
     @Override
     public void doSuccessHandler() {
-        orderService.updateAsyncSuccess(this.getOrder(), 0);
+        PayOrderChannel orderChannel = orderChannelManager.findByPaymentIdAndChannel(this.getOrder().getId(), PayChannelEnum.ALI.getCode())
+                .orElseThrow(() -> new PayFailureException("支付宝订单不存在"));
+        orderService.updateAsyncSuccess(this.getOrder(), orderChannel.getAmount());
     }
 
     /**
@@ -54,6 +69,6 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doRefundHandler() {
-        orderService.updatePayRefund(this.getOrder().getId(), 0);
+        orderService.updateRefund(this.getOrder().getId(), 0);
     }
 }

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.dao;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @RequiredArgsConstructor
-public class AlipayConfigManager extends BaseManager<AlipayConfigMapper, AlipayConfig> {
+public class AliPayConfigManager extends BaseManager<AliPayConfigMapper, AliPayConfig> {
 
 }

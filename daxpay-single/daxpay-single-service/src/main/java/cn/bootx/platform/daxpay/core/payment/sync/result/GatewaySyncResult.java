@@ -4,8 +4,6 @@ import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.Map;
-
 import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.NOT_SYNC;
 
 /**
@@ -23,10 +21,6 @@ public class GatewaySyncResult {
      * @see PaySyncStatusEnum#NOT_SYNC
      */
     private String syncStatus = NOT_SYNC.getCode();
-
-    // TODO 根据后期情况合并到上下文中
-    /** 网关返回参数(会被用到的参数) */
-    private Map<String, String> map;
 
     /** 网关返回对象的json字符串 */
     private String json;

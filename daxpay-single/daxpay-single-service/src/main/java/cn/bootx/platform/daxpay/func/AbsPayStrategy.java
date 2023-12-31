@@ -84,17 +84,8 @@ public abstract class AbsPayStrategy implements PayStrategy{
     }
 
     /**
-     * 撤销支付操作，支付交易返回失败或支付系统超时，调用该接口撤销交易 默认为关闭本地支付记录
+     * 关闭支付. 支付交易返回失败或支付系统超时调通该接口关闭支付
      */
-    @Deprecated
-    public void doCancelHandler() {
-        this.doCloseHandler();
-    }
-
-    /**
-     * 关闭本地支付记录
-     */
-    @Deprecated
     public abstract void doCloseHandler();
 
 

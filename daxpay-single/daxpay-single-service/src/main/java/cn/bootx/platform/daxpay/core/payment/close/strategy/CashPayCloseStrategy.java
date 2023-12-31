@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.core.payment.close.strategy;
 
+import cn.bootx.platform.daxpay.core.channel.cash.service.CashService;
 import cn.bootx.platform.daxpay.func.AbsPayCloseStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +19,12 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @RequiredArgsConstructor
 public class CashPayCloseStrategy extends AbsPayCloseStrategy {
-
+    private final CashService cashService;
     /**
      * 关闭操作
      */
     @Override
     public void doCloseHandler() {
-
+        cashService.close(this.getOrder().getId());
     }
 }

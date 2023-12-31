@@ -1,10 +1,8 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.service;
 
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.payment.sync.result.GatewaySyncResult;
 import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
@@ -60,7 +58,7 @@ public class WeChatPaySyncService {
             // 支付完成
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_SUCCESS)
                     || Objects.equals(tradeStatus, WeChatPayCode.TRADE_ACCEPT)) {
-                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS.getCode()).setMap(result);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS.getCode());
             }
             // 待支付
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_NOTPAY)
@@ -85,33 +83,4 @@ public class WeChatPaySyncService {
         }
         return syncResult;
     }
-
-
-    /**
-     * 比对网关状态和支付单状态
-     */
-    public boolean isStatusSync(GatewaySyncResult syncResult, PayOrder payOrder) {
-        String syncStatus = syncResult.getSyncStatus();
-        String orderStatus = payOrder.getStatus();
-        // 支付成功比对
-        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_SUCCESS.getCode())){
-            return true;
-        }
-        // 待支付比对
-        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_WAIT.getCode())){
-            return true;
-        }
-
-        // 支付关闭比对
-        if (orderStatus.equals(PayStatusEnum.CLOSE.getCode()) && syncStatus.equals(PaySyncStatusEnum.CLOSED.getCode())){
-            return true;
-        }
-
-        // 退款比对
-        if (orderStatus.equals(PayStatusEnum.REFUNDED.getCode()) && syncStatus.equals(PaySyncStatusEnum.REFUND.getCode())){
-            return true;
-        }
-        return false;
-    }
-
 }

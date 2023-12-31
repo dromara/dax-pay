@@ -4,7 +4,7 @@ import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.*;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
@@ -37,11 +37,11 @@ public class AliPayStrategy extends AbsPayStrategy {
 
     private final AliPayService aliPayService;
 
-    private final AlipayConfigService alipayConfigService;
+    private final AliPayConfigService alipayConfigService;
 
     private final AliPayCloseService aliPayCancelService;
 
-    private AlipayConfig alipayConfig;
+    private AliPayConfig alipayConfig;
 
     private AliPayParam aliPayParam;
 
@@ -121,22 +121,12 @@ public class AliPayStrategy extends AbsPayStrategy {
     }
 
     /**
-     * 撤销支付
-     */
-    @Override
-    public void doCancelHandler() {
-        this.initAlipayConfig();
-        // 关闭支付
-        aliPayCancelService.close(this.getOrder());
-        // 调用关闭本地支付记录
-        this.doCloseHandler();
-    }
-
-    /**
      * 关闭支付记录
      */
     @Override
     public void doCloseHandler() {
+        // 关闭支付
+        aliPayCancelService.close(this.getOrder());
         aliPaymentService.updateClose(this.getOrder().getId());
     }
 

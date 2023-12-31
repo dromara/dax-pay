@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- *
+ * 微信支付关闭策略
  * @author xxm
  * @since 2023/12/30
  */

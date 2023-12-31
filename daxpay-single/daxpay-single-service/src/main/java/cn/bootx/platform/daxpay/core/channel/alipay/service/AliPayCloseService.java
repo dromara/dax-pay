@@ -27,23 +27,21 @@ import java.util.Objects;
 public class AliPayCloseService {
 
     /**
-     * 关闭支付 此处使用交易关闭接口
-     * 支付宝支持 交易关闭 和 交易撤销 两种关闭订单的方式,
+     * 关闭支付 此处使用交易关闭接口, 支付宝支持 交易关闭 和 交易撤销 两种关闭订单的方式, 区别如下
      * 交易关闭: 只有订单在未支付的状态下才可以进行关闭, 商户不需要额外申请就有此接口的权限
+     * 交易撤销: 如果用户支付成功，会将此订单资金退还给用户. 限制时间为1天，过了24小时，该接口无法再使用。可以视为一个特殊的接口, 需要专门签约这个接口的权限
      *
-     * 交易撤销: 交易撤销接口会将此订单关闭。如果用户支付成功，会将此订单资金退还给用户. 限制时间为1天，过了24小时，该接口无法再使用。可以视为一个特殊的接口
-     *  需要专门签约这个接口的权限
+     * TODO 如果返回已经关闭, 也视为关闭成功
      */
     @Retryable(value = RetryableException.class)
     public void close(PayOrder payOrder) {
-        // 只有部分需要调用支付宝网关进行关闭
         AlipayTradeCloseModel model = new AlipayTradeCloseModel();
         model.setOutTradeNo(String.valueOf(payOrder.getId()));
 
         try {
             AlipayTradeCloseResponse response = AliPayApi.tradeCloseToResponse(model);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                log.error("网关返回撤销失败: {}", response.getSubMsg());
+                log.error("网关返回关闭失败: {}", response.getSubMsg());
                 throw new PayFailureException(response.getSubMsg());
             }
         } catch (AlipayApiException e) {

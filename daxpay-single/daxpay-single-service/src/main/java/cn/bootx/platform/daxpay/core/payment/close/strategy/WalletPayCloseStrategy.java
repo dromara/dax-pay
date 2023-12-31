@@ -1,5 +1,7 @@
 package cn.bootx.platform.daxpay.core.payment.close.strategy;
 
+import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPayOrderService;
+import cn.bootx.platform.daxpay.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.func.AbsPayCloseStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +20,15 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @RequiredArgsConstructor
 public class WalletPayCloseStrategy extends AbsPayCloseStrategy {
-
+    private final WalletPayService walletPayService;
+    private final WalletPayOrderService walletPayOrderService;
 
     /**
      * 关闭操作
      */
     @Override
     public void doCloseHandler() {
-
+        walletPayService.close(this.getOrder().getId());
+        walletPayOrderService.updateClose(this.getOrder().getId());
     }
 }

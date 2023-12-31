@@ -3,12 +3,13 @@ package cn.bootx.platform.daxpay.core.payment.pay.strategy;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayCloseService;
+import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayService;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPaySyncService;
-import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.func.AbsPayStrategy;
@@ -117,8 +118,8 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doAsyncSuccessHandler(Map<String, String> map) {
-        String tradeNo = map.get(WeChatPayCode.TRANSACTION_ID);
-        weChatPayOrderService.updateAsyncSuccess(this.getOrder().getId(), this.getPayWayParam(), tradeNo);
+        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(map.get(WeChatPayCode.TRANSACTION_ID));
+        weChatPayOrderService.updateAsyncSuccess(this.getOrder().getId(), this.getPayWayParam());
     }
 
     /**
@@ -126,19 +127,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doAsyncErrorHandler(ExceptionInfo exceptionInfo) {
-        // 调用撤销支付
-        this.doCancelHandler();
-    }
-
-    /**
-     * 撤销支付
-     */
-    @Override
-    public void doCancelHandler() {
-        // 检查并获取微信支付配置
-        this.initWeChatPayConfig();
-        weChatPayCloseService.close(this.getOrder(), weChatPayConfig);
-        // 调用关闭本地支付记录
+        // 调用关闭支付
         this.doCloseHandler();
     }
 
@@ -147,6 +136,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doCloseHandler() {
+        weChatPayCloseService.close(this.getOrder(), weChatPayConfig);
         weChatPayOrderService.updateClose(this.getOrder().getId());
     }
 

@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.func;
 
 import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.callback.dao.CallbackNotifyManager;
 import cn.bootx.platform.daxpay.core.callback.entity.CallbackNotify;
 import cn.bootx.platform.daxpay.core.payment.callback.result.PayCallbackResult;
@@ -36,26 +37,20 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
      * 支付回调
      */
     public String payCallback(Map<String, String> params) {
-        PARAMS.set(params);
-        try {
-            log.info("支付回调处理: {}", params);
-            // 验证消息
-            if (!this.verifyNotify()) {
-                return null;
-            }
-            // 去重处理
-            if (!this.duplicateChecker()) {
-                return this.getReturnMsg();
-            }
-            // 调用统一回调处理
-            PayCallbackResult result = payCallbackService.callback(this.getPaymentId(), this.getTradeStatus(),
-                    params);
-            // 记录回调记录
-            this.saveNotifyRecord(result);
+        PaymentContextLocal.get().getCallbackParam().putAll(params);
+        log.info("支付回调处理: {}", params);
+        // 验证消息
+        if (!this.verifyNotify()) {
+            return null;
         }
-        finally {
-            PARAMS.remove();
+        // 去重处理
+        if (!this.duplicateChecker()) {
+            return this.getReturnMsg();
         }
+        // 调用统一回调处理
+        PayCallbackResult result = payCallbackService.callback(this.getPaymentId(), this.getTradeStatus(), params);
+        // 记录回调记录
+        this.saveNotifyRecord(result);
         return this.getReturnMsg();
     }
 
@@ -99,8 +94,9 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
      * 保存回调记录
      */
     public void saveNotifyRecord(PayCallbackResult result) {
+        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
         CallbackNotify payNotifyRecord = new CallbackNotify()
-                .setNotifyInfo(JSONUtil.toJsonStr(PARAMS.get()))
+                .setNotifyInfo(JSONUtil.toJsonStr(callbackParam))
                 .setNotifyTime(LocalDateTime.now())
                 .setPaymentId(this.getPaymentId())
                 .setPayChannel(this.getPayChannel().getCode())

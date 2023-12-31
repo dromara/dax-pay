@@ -5,9 +5,9 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.code.AliPayWay;
-import cn.bootx.platform.daxpay.core.channel.alipay.dao.AlipayConfigManager;
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
-import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
+import cn.bootx.platform.daxpay.core.channel.alipay.dao.AliPayConfigManager;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
+import cn.bootx.platform.daxpay.param.channel.alipay.AliPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.CharsetUtil;
@@ -32,17 +32,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AlipayConfigService {
+public class AliPayConfigService {
     /** 默认支付宝配置的主键ID */
     private final static Long ID = 0L;
-    private final AlipayConfigManager alipayConfigManager;
+    private final AliPayConfigManager alipayConfigManager;
 
     /**
      * 修改
      */
     @Transactional(rollbackFor = Exception.class)
-    public void update(AlipayConfigParam param) {
-        AlipayConfig alipayConfig = alipayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
+    public void update(AliPayConfigParam param) {
+        AliPayConfig alipayConfig = alipayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
         BeanUtil.copyProperties(param, alipayConfig, CopyOptions.create().ignoreNullValue());
         alipayConfigManager.updateById(alipayConfig);
     }
@@ -60,7 +60,7 @@ public class AlipayConfigService {
     /**
      * 获取支付配置
      */
-    public AlipayConfig getConfig(){
+    public AliPayConfig getConfig(){
         return alipayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
     }
 
@@ -69,7 +69,7 @@ public class AlipayConfigService {
      * 初始化IJPay服务
      */
     @SneakyThrows
-    public void initConfig(AlipayConfig alipayConfig) {
+    public void initConfig(AliPayConfig alipayConfig) {
 
         AliPayApiConfig aliPayApiConfig;
         // 公钥

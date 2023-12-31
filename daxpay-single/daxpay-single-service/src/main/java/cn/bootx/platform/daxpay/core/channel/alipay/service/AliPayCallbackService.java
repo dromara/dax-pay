@@ -5,8 +5,9 @@ import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.callback.dao.CallbackNotifyManager;
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.core.payment.callback.service.PayCallbackService;
 import cn.bootx.platform.daxpay.func.AbsPayCallbackStrategy;
 import cn.hutool.core.util.CharsetUtil;
@@ -32,10 +33,10 @@ import java.util.Objects;
 @Service
 public class AliPayCallbackService extends AbsPayCallbackStrategy {
 
-    private final AlipayConfigService aliasConfigService;
+    private final AliPayConfigService aliasConfigService;
 
     public AliPayCallbackService(RedisClient redisClient, CallbackNotifyManager callbackNotifyManager,
-                                 PayCallbackService payCallbackService, AlipayConfigService aliasConfigService) {
+                                 PayCallbackService payCallbackService, AliPayConfigService aliasConfigService) {
         super(redisClient, callbackNotifyManager, payCallbackService);
         this.aliasConfigService = aliasConfigService;
     }
@@ -47,7 +48,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
 
     @Override
     public String getTradeStatus() {
-        Map<String, String> params = PARAMS.get();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
         String tradeStatus = params.get(AliPayCode.TRADE_STATUS);
         if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS)) {
             return PayStatusEnum.SUCCESS.getCode();
@@ -61,14 +62,14 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
     @SneakyThrows
     @Override
     public boolean verifyNotify() {
-        Map<String, String> params = PARAMS.get();
+        Map<String, String> params =PaymentContextLocal.get().getCallbackParam();
         String callReq = JSONUtil.toJsonStr(params);
         String appId = params.get(AliPayCode.APP_ID);
         if (StrUtil.isBlank(appId)) {
             log.error("支付宝回调报文 appId 为空 {}", callReq);
             return false;
         }
-        AlipayConfig alipayConfig = aliasConfigService.getConfig();
+        AliPayConfig alipayConfig = aliasConfigService.getConfig();
         if (Objects.isNull(alipayConfig)) {
             log.error("支付宝支付配置不存在: {}", callReq);
             return false;
@@ -92,7 +93,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
 
     @Override
     public Long getPaymentId() {
-        Map<String, String> params = PARAMS.get();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
         return Long.valueOf(params.get(AliPayCode.OUT_TRADE_NO));
     }
 

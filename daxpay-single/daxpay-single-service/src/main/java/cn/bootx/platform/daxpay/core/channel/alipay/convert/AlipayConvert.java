@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.core.channel.alipay.convert;
 
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
-import cn.bootx.platform.daxpay.dto.channel.alipay.AlipayConfigDto;
-import cn.bootx.platform.daxpay.param.channel.alipay.AlipayConfigParam;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
+import cn.bootx.platform.daxpay.dto.channel.alipay.AliPayConfigDto;
+import cn.bootx.platform.daxpay.param.channel.alipay.AliPayConfigParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -17,10 +17,10 @@ public interface AlipayConvert {
 
     AlipayConvert CONVERT = Mappers.getMapper(AlipayConvert.class);
 
-    AlipayConfig convert(AlipayConfigDto in);
+    AliPayConfig convert(AliPayConfigDto in);
 
-    AlipayConfig convert(AlipayConfigParam in);
+    AliPayConfig convert(AliPayConfigParam in);
 
-    AlipayConfigDto convert(AlipayConfig in);
+    AliPayConfigDto convert(AliPayConfig in);
 
 }

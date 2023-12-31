@@ -3,6 +3,9 @@ package cn.bootx.platform.daxpay.common.context;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 支付上下文
  * @author xxm
@@ -26,6 +29,9 @@ public class PaymentContext {
 
     /** 消息通知相关信息 */
     private final NoticeLocal noticeInfo = new NoticeLocal();
+
+    /** 回调参数内容 */
+    private final Map<String, String> callbackParam = new HashMap<>();
 
     /** 支付请求相关信息 */
     private final RequestLocal request = new RequestLocal();

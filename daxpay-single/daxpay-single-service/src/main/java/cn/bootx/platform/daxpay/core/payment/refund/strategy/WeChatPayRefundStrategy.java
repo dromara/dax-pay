@@ -55,7 +55,7 @@ public class WeChatPayRefundStrategy extends AbsPayRefundStrategy {
     @Override
     public void doRefundHandler() {
         wechatRefundService.refund(this.getOrder(), this.getChannelParam().getAmount(), this.weChatPayConfig);
-        weChatPayOrderService.updatePayRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
+        weChatPayOrderService.updateRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
         payOrderService.updateRefundSuccess(this.getOrder(), this.getChannelParam().getAmount(), PayChannelEnum.WECHAT);
 
     }

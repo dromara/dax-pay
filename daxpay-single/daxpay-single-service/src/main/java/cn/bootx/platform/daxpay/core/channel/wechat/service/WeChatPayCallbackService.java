@@ -4,6 +4,7 @@ import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
+import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.callback.dao.CallbackNotifyManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.payment.callback.service.PayCallbackService;
@@ -49,7 +50,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public Long getPaymentId() {
-        Map<String, String> params = PARAMS.get();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
         String paymentId = params.get(WeChatPayCode.OUT_TRADE_NO);
         return Long.valueOf(paymentId);
     }
@@ -59,7 +60,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public String getTradeStatus() {
-        Map<String, String> params = PARAMS.get();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
         if (WxPayKit.codeIsOk(params.get(WeChatPayCode.RESULT_CODE))) {
             return PayStatusEnum.SUCCESS.getCode();
         }
@@ -73,7 +74,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public boolean verifyNotify() {
-        Map<String, String> params = PARAMS.get();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
         String callReq = JSONUtil.toJsonStr(params);
         log.info("微信发起回调 报文: {}", callReq);
         String appId = params.get(APPID);

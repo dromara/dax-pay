@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.code.PayWayEnum;
 import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
@@ -48,7 +48,7 @@ public class AliPayService {
     /**
      * 支付前检查支付方式是否可用
      */
-    public void validation(PayWayParam payWayParam, AlipayConfig alipayConfig) {
+    public void validation(PayWayParam payWayParam, AliPayConfig alipayConfig) {
 
         if (CollUtil.isNotEmpty(alipayConfig.getPayWays())){
             throw new PayFailureException("支付宝未配置可用的支付方式");
@@ -64,7 +64,7 @@ public class AliPayService {
     /**
      * 调起支付
      */
-    public void pay(PayOrder payOrder, PayWayParam payWayParam, AliPayParam aliPayParam, AlipayConfig alipayConfig) {
+    public void pay(PayOrder payOrder, PayWayParam payWayParam, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
         Integer amount = payWayParam.getAmount();
         String payBody = null;
         // 异步线程存储
@@ -97,7 +97,7 @@ public class AliPayService {
     /**
      * wap支付
      */
-    public String wapPay(int amount, PayOrder payment, AlipayConfig alipayConfig) {
+    public String wapPay(int amount, PayOrder payment, AliPayConfig alipayConfig) {
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
@@ -131,7 +131,7 @@ public class AliPayService {
     /**
      * app支付
      */
-    public String appPay(int amount, PayOrder payment, AlipayConfig alipayConfig) {
+    public String appPay(int amount, PayOrder payment, AliPayConfig alipayConfig) {
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
 
@@ -156,7 +156,7 @@ public class AliPayService {
     /**
      * PC支付
      */
-    public String webPay(int amount, PayOrder payment, AlipayConfig alipayConfig) {
+    public String webPay(int amount, PayOrder payment, AliPayConfig alipayConfig) {
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         AlipayTradePagePayModel model = new AlipayTradePagePayModel();
@@ -189,7 +189,7 @@ public class AliPayService {
     /**
      * 二维码支付(扫码支付)
      */
-    public String qrCodePay(int amount, PayOrder payment, AlipayConfig alipayConfig) {
+    public String qrCodePay(int amount, PayOrder payment, AliPayConfig alipayConfig) {
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
         model.setSubject(payment.getTitle());
@@ -213,7 +213,7 @@ public class AliPayService {
     /**
      * 付款码支付
      */
-    public String barCode(int amount, PayOrder payment, AliPayParam aliPayParam, AlipayConfig alipayConfig) {
+    public String barCode(int amount, PayOrder payment, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         AlipayTradePayModel model = new AlipayTradePayModel();
 

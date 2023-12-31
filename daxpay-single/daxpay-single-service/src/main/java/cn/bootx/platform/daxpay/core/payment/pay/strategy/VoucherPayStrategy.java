@@ -4,7 +4,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherRecord;
 import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherPayService;
-import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherPaymentService;
+import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherPayOrderService;
 import cn.bootx.platform.daxpay.func.AbsPayStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +27,9 @@ public class VoucherPayStrategy extends AbsPayStrategy {
 
     private final VoucherPayService voucherPayService;
 
-    private final VoucherPaymentService voucherPaymentService;
+    private final VoucherPayOrderService voucherPayOrderService;
 
-    private Voucher vouchers;
+    private Voucher voucher;
 
     @Override
     public PayChannelEnum getType() {
@@ -42,21 +42,23 @@ public class VoucherPayStrategy extends AbsPayStrategy {
     @Override
     public void doBeforePayHandler() {
         // 获取并校验储值卡
-        this.vouchers = voucherPayService.getAndCheckVoucher(this.getPayWayParam());
+        this.voucher = voucherPayService.getAndCheckVoucher(this.getPayWayParam());
     }
 
     /**
      * 支付操作
+     * 1. 异步支付: 发起支付时冻结, 支付完成后扣减, 支付失败和关闭支付后解冻
+     * 2. 同步支付: 直接扣减
      */
     @Override
     public void doPayHandler() {
         VoucherRecord voucherRecord;
         if (this.getOrder().isAsyncPay()){
-            voucherRecord = voucherPayService.freezeBalance(this.getPayWayParam().getAmount(), this.getOrder(), this.vouchers);
+            voucherRecord = voucherPayService.freezeBalance(this.getPayWayParam().getAmount(), this.getOrder(), this.voucher);
         } else {
-            voucherRecord = voucherPayService.pay(this.getPayWayParam().getAmount(), this.getOrder(), this.vouchers);
+            voucherRecord = voucherPayService.pay(this.getPayWayParam().getAmount(), this.getOrder(), this.voucher);
         }
-        voucherPaymentService.savePayment(this.getOrder(), getPayParam(), getPayWayParam(), voucherRecord);
+        voucherPayOrderService.savePayment(this.getOrder(), getPayParam(), getPayWayParam(), voucherRecord);
     }
 
     /**
@@ -67,7 +69,7 @@ public class VoucherPayStrategy extends AbsPayStrategy {
         if (this.getOrder().isAsyncPay()){
             voucherPayService.paySuccess(this.getOrder().getId());
         }
-        voucherPaymentService.updateSuccess(this.getOrder().getId());
+        voucherPayOrderService.updateSuccess(this.getOrder().getId());
     }
 
     /**
@@ -76,7 +78,7 @@ public class VoucherPayStrategy extends AbsPayStrategy {
     @Override
     public void doCloseHandler() {
         voucherPayService.close(this.getOrder().getId());
-        voucherPaymentService.updateClose(this.getOrder().getId());
+        voucherPayOrderService.updateClose(this.getOrder().getId());
     }
 
 }

@@ -1,10 +1,10 @@
 package cn.bootx.platform.daxpay.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.core.channel.alipay.entity.AlipayConfig;
+import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayOrderService;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayRefundService;
-import cn.bootx.platform.daxpay.core.channel.alipay.service.AlipayConfigService;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.func.AbsPayRefundStrategy;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliPayRefundStrategy extends AbsPayRefundStrategy {
 
-    private final AlipayConfigService alipayConfigService;
+    private final AliPayConfigService alipayConfigService;
     private final AliPayOrderService aliPayOrderService;
     private final AliPayRefundService aliRefundService;
     /**
@@ -44,7 +44,7 @@ public class AliPayRefundStrategy extends AbsPayRefundStrategy {
      */
     @Override
     public void doBeforeRefundHandler() {
-        AlipayConfig config = alipayConfigService.getConfig();
+        AliPayConfig config = alipayConfigService.getConfig();
         alipayConfigService.initConfig(config);
     }
 
@@ -54,7 +54,7 @@ public class AliPayRefundStrategy extends AbsPayRefundStrategy {
     @Override
     public void doRefundHandler() {
         aliRefundService.refund(this.getOrder(), this.getChannelParam().getAmount());
-        aliPayOrderService.updatePayRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
+        aliPayOrderService.updateRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
         payOrderService.updateRefundSuccess(this.getOrder(), this.getChannelParam().getAmount(), PayChannelEnum.ALI);
     }
 

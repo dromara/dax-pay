@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.core.channel.voucher.convert;
 
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherLog;
-import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherPayment;
+import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherPayOrder;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherDto;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherLogDto;
 import cn.bootx.platform.daxpay.dto.channel.voucher.VoucherPayOrderDto;
@@ -22,6 +22,6 @@ public interface VoucherConvert {
 
     VoucherLogDto convert(VoucherLog in);
 
-    VoucherPayOrderDto convert(VoucherPayment in);
+    VoucherPayOrderDto convert(VoucherPayOrder in);
 
 }

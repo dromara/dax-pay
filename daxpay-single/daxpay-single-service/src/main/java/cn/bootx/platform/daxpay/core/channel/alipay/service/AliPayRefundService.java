@@ -27,7 +27,7 @@ import java.util.Objects;
 public class AliPayRefundService {
 
     /**
-     * 退款
+     * 退款, 调用支付宝退款
      */
     public void refund(PayOrder payOrder, int amount) {
         AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();

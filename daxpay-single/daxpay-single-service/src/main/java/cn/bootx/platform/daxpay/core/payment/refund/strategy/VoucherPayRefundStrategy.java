@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherPayService;
-import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherPaymentService;
+import cn.bootx.platform.daxpay.core.channel.voucher.service.VoucherPayOrderService;
 import cn.bootx.platform.daxpay.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.func.AbsPayRefundStrategy;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class VoucherPayRefundStrategy extends AbsPayRefundStrategy {
     private final VoucherPayService voucherPayService;
-    private final VoucherPaymentService voucherPaymentService;
+    private final VoucherPayOrderService voucherPayOrderService;
     private final PayOrderService payOrderService;
 
     /**
@@ -40,7 +40,7 @@ public class VoucherPayRefundStrategy extends AbsPayRefundStrategy {
     @Override
     public void doRefundHandler() {
         voucherPayService.refund(this.getOrder().getId(), this.getChannelParam().getAmount());
-        voucherPaymentService.updateRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
+        voucherPayOrderService.updateRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
         payOrderService.updateRefundSuccess(this.getOrder(), this.getChannelParam().getAmount(), PayChannelEnum.VOUCHER);
     }
 }

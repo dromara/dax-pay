@@ -50,7 +50,7 @@ public class PayCallbackService {
             return new PayCallbackResult().setStatus(PayNotifyStatusEnum.FAIL.getCode()).setMsg("支付单不存在,记录回调记录");
         }
 
-        // 回调时间超出了支付单超时时间, 记录一下, 不做处理 TODO 这块应该吧订单给正常处理了,
+        // 回调时间超出了支付单超时时间, 记录一下, 不做处理 TODO 这块应该把订单给正常处理了,
         if (Objects.nonNull(payOrder.getExpiredTime())
                 && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
             return new PayCallbackResult().setStatus(PayNotifyStatusEnum.FAIL.getCode()).setMsg("回调时间超出了支付单支付有效时间");
@@ -144,7 +144,7 @@ public class PayCallbackService {
         // 4.处理方法, 支付时只有一种payModel(异步支付), 失败时payment的所有payModel都会生效
         boolean handlerFlag = this.doHandler(payOrder, paymentStrategyList, (strategyList, paymentObj) -> {
             // 执行异步支付方式的失败回调(不会有同步payModel)
-            strategyList.forEach(AbsPayStrategy::doCancelHandler);
+            strategyList.forEach(AbsPayStrategy::doCloseHandler);
 
             // 修改payment支付状态为撤销
             paymentObj.setStatus(PayStatusEnum.CLOSE.getCode());

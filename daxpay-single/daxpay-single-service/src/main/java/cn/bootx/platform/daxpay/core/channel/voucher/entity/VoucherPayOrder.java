@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 @DbTable(comment = "储值卡支付记录")
 @Accessors(chain = true)
 @TableName(value = "pay_voucher_payment",autoResultMap = true)
-public class VoucherPayment extends BasePayOrder implements EntityBaseFunction<VoucherPayOrderDto> {
+public class VoucherPayOrder extends BasePayOrder implements EntityBaseFunction<VoucherPayOrderDto> {
 
     /** 扣款储值卡 */
     @DbColumn(comment = "扣款储值卡")

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.core.channel.wechat.convert;
 
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayment;
+import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayOrder;
 import cn.bootx.platform.daxpay.dto.channel.wechat.WeChatPayConfigDto;
 import cn.bootx.platform.daxpay.dto.channel.wechat.WeChatPayOrderDto;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayConfigParam;
@@ -23,8 +23,8 @@ public interface WeChatConvert {
 
     WeChatPayConfigDto convert(WeChatPayConfig in);
 
-    WeChatPayOrderDto convert(WeChatPayment in);
+    WeChatPayOrderDto convert(WeChatPayOrder in);
 
-    WeChatPayment convert(WeChatPayOrderDto in);
+    WeChatPayOrder convert(WeChatPayOrderDto in);
 
 }
