@@ -34,7 +34,7 @@ public class PayParam extends PayCommonParam{
     @Schema(description = "支付描述")
     private String description;
 
-    @Schema(description = "过期时间")
+    @Schema(description = "过期时间, 多次传输以第一次为准")
     @JsonDeserialize(using = TimestampToLocalDateTimeDeserializer.class)
     private LocalDateTime expiredTime;
 

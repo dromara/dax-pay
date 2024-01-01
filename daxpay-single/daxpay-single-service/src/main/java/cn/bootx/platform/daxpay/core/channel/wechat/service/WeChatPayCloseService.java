@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.common.context.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.hutool.core.util.StrUtil;
 import com.ijpay.core.enums.SignType;

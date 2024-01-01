@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.func;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import lombok.Getter;

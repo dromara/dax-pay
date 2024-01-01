@@ -2,13 +2,11 @@ package cn.bootx.platform.daxpay.func;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Map;
 
 /**
  * 抽象支付策略基类 同步支付 异步支付 错误处理 关闭支付 撤销支付 支付网关同步 退款
@@ -63,24 +61,9 @@ public abstract class AbsPayStrategy implements PayStrategy{
     }
 
     /**
-     * 支付失败的处理方式
+     * 支付失败的处理方式 TODO 后期考虑如何进行错误处理
      */
     public void doErrorHandler(ExceptionInfo exceptionInfo) {
-    }
-
-    /**
-     * 异步支付成功的处理方式
-     */
-    @Deprecated
-    public void doAsyncSuccessHandler(Map<String, String> map) {
-    }
-
-    /**
-     * 异步支付失败的处理方式, 默认使用支付失败的处理方式 同步支付方式调用时同 this#doErrorHandler
-     */
-    @Deprecated
-    public void doAsyncErrorHandler(ExceptionInfo exceptionInfo) {
-        this.doErrorHandler(exceptionInfo);
     }
 
     /**

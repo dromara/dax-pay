@@ -1,11 +1,23 @@
 package cn.bootx.platform.daxpay.core.payment.pay.service;
 
+import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.builder.PaymentBuilder;
+import cn.bootx.platform.daxpay.core.record.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.core.record.pay.dao.PayOrderExtraManager;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrderExtra;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 支付支持服务
@@ -24,6 +39,10 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PayAssistService {
+
+    private final PayOrderService payOrderService;
+    private final PayOrderExtraManager payOrderExtraManager;
+    private final PayOrderChannelManager payOrderChannelManager;
 
     /**
      * 初始化支付相关上下文
@@ -81,6 +100,91 @@ public class PayAssistService {
         }
         // 退出回调地址
         noticeInfo.setQuitUrl(payParam.getQuitUrl());
+    }
+
+
+    /**
+     * 获取异步支付参数
+     */
+    public PayWayParam getAsyncPayParam(PayParam payParam, PayOrder payOrder) {
+        // 查询之前的支付方式
+        String asyncPayChannel = payOrder.getAsyncPayChannel();
+        PayOrderChannel payOrderChannel = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), asyncPayChannel)
+                .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
+
+        // 新的异步支付方式
+        PayWayParam payWayParam = payParam.getPayWays()
+                .stream()
+                .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getChannel()))
+                .findFirst()
+                .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
+        // 新传入的金额是否一致
+        if (!Objects.equals(payOrderChannel.getAmount(), payWayParam.getAmount())){
+            throw new PayFailureException("传入的支付金额非法！与订单金额不一致");
+        }
+        return payWayParam;
+    }
+
+    /**
+     * 创建支付订单/附加表/支付通道表并保存，返回支付订单
+     */
+    public PayOrder createPayOrder(PayParam payParam) {
+        // 构建支付订单并保存
+        PayOrder payOrder = PaymentBuilder.buildPayOrder(payParam);
+        payOrderService.save(payOrder);
+        // 构建支付订单扩展表并保存
+        PayOrderExtra payOrderExtra = PaymentBuilder.buildPayOrderExtra(payParam, payOrder.getId());
+        payOrderExtraManager.save(payOrderExtra);
+        // 构建支付通道表并保存
+        List<PayOrderChannel> payOrderChannels = PaymentBuilder.buildPayChannel(payParam.getPayWays())
+                .stream()
+                .peek(o -> o.setPaymentId(payOrder.getId()))
+                .collect(Collectors.toList());
+        payOrderChannelManager.saveAll(payOrderChannels);
+        return payOrder;
+    }
+
+    /**
+     * 更新支付订单扩展参数
+     * @param payParam 支付参数
+     * @param paymentId 支付订单id
+     */
+    public void updatePayOrderExtra(PayParam payParam,Long paymentId){
+        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(paymentId)
+                .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
+        payOrderExtra.setReqTime(payParam.getReqTime())
+                .setSign(payParam.getSign())
+                .setNotNotify(payParam.isNotNotify())
+                .setNotifyUrl(payParam.getNotifyUrl())
+                .setClientIp(payParam.getClientIp());
+        payOrderExtraManager.updateById(payOrderExtra);
+    }
+
+    /**
+     * 校验支付状态，支付成功则返回，支付失败则抛出对应的异常
+     */
+    public PayOrder getOrderAndCheck(String businessNo) {
+        // 根据订单查询支付记录
+        PayOrder payOrder = payOrderService.findByBusinessNo(businessNo).orElse(null);
+        if (Objects.nonNull(payOrder)) {
+            // 支付失败类型状态
+            List<String> tradesStatus = Arrays.asList(PayStatusEnum.FAIL.getCode(), PayStatusEnum.CANCEL.getCode(),
+                    PayStatusEnum.CLOSE.getCode());
+            if (tradesStatus.contains(payOrder.getStatus())) {
+                throw new PayFailureException("支付失败或已经被撤销");
+            }
+            // 退款类型状态
+            tradesStatus = Arrays.asList(PayStatusEnum.REFUNDED.getCode(), PayStatusEnum.PARTIAL_REFUND.getCode());
+            if (tradesStatus.contains(payOrder.getStatus())) {
+                throw new PayFailureException("支付失败或已经被撤销");
+            }
+            // 支付超时状态
+            if (Objects.nonNull(payOrder.getExpiredTime())
+                    && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
+                throw new PayFailureException("支付已超时");
+            }
+        }
+        return payOrder;
     }
 
 }

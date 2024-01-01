@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.channel.voucher.dao.VoucherPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherPayOrder;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherRecord;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;

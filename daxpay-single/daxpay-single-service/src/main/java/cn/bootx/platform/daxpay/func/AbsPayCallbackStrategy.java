@@ -3,12 +3,11 @@ package cn.bootx.platform.daxpay.func;
 import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.callback.dao.CallbackNotifyManager;
-import cn.bootx.platform.daxpay.core.callback.entity.CallbackNotify;
+import cn.bootx.platform.daxpay.core.record.callback.dao.CallbackRecordManager;
+import cn.bootx.platform.daxpay.core.record.callback.entity.CallbackRecord;
 import cn.bootx.platform.daxpay.core.payment.callback.result.PayCallbackResult;
 import cn.bootx.platform.daxpay.core.payment.callback.service.PayCallbackService;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.ttl.TransmittableThreadLocal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,11 +24,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public abstract class AbsPayCallbackStrategy implements PayStrategy {
 
-    protected static final ThreadLocal<Map<String, String>> PARAMS = new TransmittableThreadLocal<>();
-
     private final RedisClient redisClient;
 
-    private final CallbackNotifyManager callbackNotifyManager;
+    private final CallbackRecordManager callbackRecordManager;
 
     private final PayCallbackService payCallbackService;
 
@@ -47,15 +44,18 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
         if (!this.duplicateChecker()) {
             return this.getReturnMsg();
         }
+        // 分通道特殊处理, 如将解析的数据放到上下文中
+        this.initContext();
+
         // 调用统一回调处理
-        PayCallbackResult result = payCallbackService.callback(this.getPaymentId(), this.getTradeStatus(), params);
+        PayCallbackResult result = payCallbackService.callback(this.getPaymentId(), this.getTradeStatus());
         // 记录回调记录
         this.saveNotifyRecord(result);
         return this.getReturnMsg();
     }
 
     /**
-     * 支付类型
+     * 支付通道
      * @see PayChannelEnum
      */
     public abstract PayChannelEnum getPayChannel();
@@ -75,7 +75,12 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
     public abstract boolean verifyNotify();
 
     /**
-     * 获取paymentId
+     * 分通道特殊处理, 如将解析的数据放到上下文中
+     */
+    public abstract void initContext();
+
+    /**
+     * 获取支付单Id
      */
     public abstract Long getPaymentId();
 
@@ -95,14 +100,14 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
      */
     public void saveNotifyRecord(PayCallbackResult result) {
         Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
-        CallbackNotify payNotifyRecord = new CallbackNotify()
+        CallbackRecord payNotifyRecord = new CallbackRecord()
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackParam))
                 .setNotifyTime(LocalDateTime.now())
                 .setPaymentId(this.getPaymentId())
                 .setPayChannel(this.getPayChannel().getCode())
                 .setPayStatus(result.getStatus())
                 .setMsg(result.getMsg());
-        callbackNotifyManager.save(payNotifyRecord);
+        callbackRecordManager.save(payNotifyRecord);
     }
 
 }

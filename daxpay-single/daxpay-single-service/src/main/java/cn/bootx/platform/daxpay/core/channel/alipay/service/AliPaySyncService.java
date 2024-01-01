@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.alipay.dao.AliPayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.payment.sync.result.GatewaySyncResult;
 import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;

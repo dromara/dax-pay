@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 异步支付信息
+ * 异步支付信息，不只局限在支付流程，同步、退款、回调中都会用到
  * @author xxm
  * @since 2021/2/28
  */

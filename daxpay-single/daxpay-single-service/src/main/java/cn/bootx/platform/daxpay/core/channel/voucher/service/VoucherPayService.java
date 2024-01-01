@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherLog;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherPayOrder;
 import cn.bootx.platform.daxpay.core.channel.voucher.entity.VoucherRecord;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;

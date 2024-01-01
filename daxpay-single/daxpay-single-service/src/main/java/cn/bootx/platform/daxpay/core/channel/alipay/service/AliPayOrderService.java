@@ -6,9 +6,8 @@ import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.alipay.dao.AliPayOrderManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.service.PayOrderChannelService;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderChannelService;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +33,6 @@ import java.util.Optional;
 public class AliPayOrderService {
 
     private final AliPayOrderManager aliPayOrderManager;
-
-    private final PayOrderManager payOrderManager;
 
     private final PayOrderChannelService payOrderChannelService;
 

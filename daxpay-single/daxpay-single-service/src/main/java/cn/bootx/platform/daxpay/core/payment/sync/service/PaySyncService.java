@@ -5,13 +5,13 @@ import cn.bootx.platform.daxpay.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.code.PayRepairTypeEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.order.sync.service.PaySyncOrderService;
 import cn.bootx.platform.daxpay.core.payment.repair.param.PayRepairParam;
 import cn.bootx.platform.daxpay.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.core.payment.sync.factory.PaySyncStrategyFactory;
 import cn.bootx.platform.daxpay.core.payment.sync.result.GatewaySyncResult;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.core.record.sync.service.PaySyncOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.func.AbsPaySyncStrategy;
 import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
@@ -31,7 +31,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PaySyncService {
-    private final PayOrderManager payOrderManager;
+    private final PayOrderService payOrderService;
 
     private final PaySyncOrderService syncOrderService;
 
@@ -43,11 +43,11 @@ public class PaySyncService {
     public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = null;
         if (Objects.nonNull(param.getPaymentId())){
-            payOrder = payOrderManager.findById(param.getPaymentId())
+            payOrder = payOrderService.findById(param.getPaymentId())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderManager.findByBusinessNo(param.getBusinessNo())
+            payOrder = payOrderService.findByBusinessNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         // 如果不是异步支付, 直接返回返回

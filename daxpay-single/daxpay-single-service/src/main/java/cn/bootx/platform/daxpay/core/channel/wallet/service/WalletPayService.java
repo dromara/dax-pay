@@ -9,7 +9,7 @@ import cn.bootx.platform.daxpay.core.channel.wallet.dao.WalletPaymentManager;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletLog;
 import cn.bootx.platform.daxpay.core.channel.wallet.entity.WalletPayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.waller.WalletLackOfBalanceException;
 import cn.bootx.platform.daxpay.exception.waller.WalletNotExistsException;
 import lombok.RequiredArgsConstructor;

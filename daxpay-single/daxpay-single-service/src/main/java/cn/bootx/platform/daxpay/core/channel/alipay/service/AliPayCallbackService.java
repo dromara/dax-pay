@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.callback.dao.CallbackNotifyManager;
+import cn.bootx.platform.daxpay.core.record.callback.dao.CallbackRecordManager;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.core.payment.callback.service.PayCallbackService;
 import cn.bootx.platform.daxpay.func.AbsPayCallbackStrategy;
@@ -35,17 +35,23 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
 
     private final AliPayConfigService aliasConfigService;
 
-    public AliPayCallbackService(RedisClient redisClient, CallbackNotifyManager callbackNotifyManager,
+    public AliPayCallbackService(RedisClient redisClient, CallbackRecordManager callbackRecordManager,
                                  PayCallbackService payCallbackService, AliPayConfigService aliasConfigService) {
-        super(redisClient, callbackNotifyManager, payCallbackService);
+        super(redisClient, callbackRecordManager, payCallbackService);
         this.aliasConfigService = aliasConfigService;
     }
 
+    /**
+     * 获取支付通道
+     */
     @Override
     public PayChannelEnum getPayChannel() {
         return PayChannelEnum.ALI;
     }
 
+    /**
+     * 获取交易状态
+     */
     @Override
     public String getTradeStatus() {
         Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
@@ -74,29 +80,40 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
             log.error("支付宝支付配置不存在: {}", callReq);
             return false;
         }
-
         try {
             if (Objects.equals(alipayConfig.getAuthType(), AliPayCode.AUTH_TYPE_KEY)) {
-                return AlipaySignature.rsaCheckV1(params, alipayConfig.getAlipayPublicKey(), CharsetUtil.UTF_8,
-                        AlipayConstants.SIGN_TYPE_RSA2);
+                return AlipaySignature.rsaCheckV1(params, alipayConfig.getAlipayPublicKey(), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
             }
             else {
-                return AlipaySignature.verifyV1(params, CertUtil.getCertByContent(alipayConfig.getAlipayCert()),
-                        CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
+                return AlipaySignature.verifyV1(params, CertUtil.getCertByContent(alipayConfig.getAlipayCert()), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
             }
-        }
-        catch (AlipayApiException e) {
+        } catch (AlipayApiException e) {
             log.error("支付宝验签失败", e);
             return false;
         }
     }
 
+    /**
+     * 分通道特殊处理, 如将解析的数据放到上下文中
+     */
+    @Override
+    public void initContext() {
+        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
+        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(callbackParam.get(AliPayCode.TRADE_NO));
+    }
+
+    /**
+     * 获取支付id
+     */
     @Override
     public Long getPaymentId() {
         Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
         return Long.valueOf(params.get(AliPayCode.OUT_TRADE_NO));
     }
 
+    /**
+     * 获取返回信息
+     */
     @Override
     public String getReturnMsg() {
         return "success";

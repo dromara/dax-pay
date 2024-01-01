@@ -1,11 +1,12 @@
 package cn.bootx.platform.daxpay.core.payment.pay.strategy;
 
-import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
-import cn.bootx.platform.daxpay.core.channel.alipay.service.*;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayCloseService;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayConfigService;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayOrderService;
+import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayService;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.func.AbsPayStrategy;
@@ -17,8 +18,6 @@ import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -99,24 +98,6 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doErrorHandler(ExceptionInfo exceptionInfo) {
-        this.doCloseHandler();
-    }
-
-    /**
-     * 异步支付成功
-     */
-    @Override
-    public void doAsyncSuccessHandler(Map<String, String> map) {
-        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(map.get(AliPayCode.TRADE_NO));
-        aliPaymentService.updateAsyncSuccess(this.getOrder(), this.getPayWayParam().getAmount());
-    }
-
-    /**
-     * 异步支付失败
-     */
-    @Override
-    public void doAsyncErrorHandler(ExceptionInfo exceptionInfo) {
-        // 调用撤销支付
         this.doCloseHandler();
     }
 

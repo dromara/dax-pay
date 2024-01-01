@@ -2,9 +2,9 @@ package cn.bootx.platform.daxpay.core.payment.close.service;
 
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.payment.close.factory.PayCloseStrategyFactory;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.func.AbsPayCloseStrategy;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PayCloseService {
-    private final PayOrderManager payOrderManager;
+    private final PayOrderService payOrderService;
 
     /**
      * 关闭支付
@@ -37,11 +37,11 @@ public class PayCloseService {
     public void close(PayCloseParam param){
         PayOrder payOrder = null;
         if (Objects.nonNull(param.getPaymentId())){
-            payOrder = payOrderManager.findById(param.getPaymentId())
+            payOrder = payOrderService.findById(param.getPaymentId())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderManager.findByBusinessNo(param.getBusinessNo())
+            payOrder = payOrderService.findByBusinessNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         this.close(payOrder);
@@ -91,6 +91,6 @@ public class PayCloseService {
     private void successHandler(PayOrder payOrder){
         // 取消订单
         payOrder.setStatus(PayStatusEnum.CLOSE.getCode());
-        payOrderManager.updateById(payOrder);
+        payOrderService.updateById(payOrder);
     }
 }

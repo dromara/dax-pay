@@ -1,18 +1,10 @@
 package cn.bootx.platform.daxpay.core.payment.pay.service;
 
-import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.core.order.pay.builder.PaymentBuilder;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderChannelManager;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderExtraManager;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.core.payment.pay.factory.PayStrategyFactory;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.core.record.pay.builder.PaymentBuilder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.func.PayStrategyConsumer;
@@ -32,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 
 /**
@@ -46,13 +37,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PayService {
 
-    private final PayOrderManager payOrderManager;
+    private final PayOrderService payOrderService;
 
-    private final PayAssistService payAssistService;;
-
-    private final PayOrderExtraManager payOrderExtraManager;
-
-    private final PayOrderChannelManager payOrderChannelManager;
+    private final PayAssistService payAssistService;
 
     /**
      * 支付下单接口(同步/异步/组合支付)
@@ -69,7 +56,7 @@ public class PayService {
         PayUtil.validationAsyncPayMode(payParam);
 
         // 获取并校验支付订单状态
-        PayOrder payOrder = this.getAndCheckByBusinessNo(payParam.getBusinessNo());
+        PayOrder payOrder = payAssistService.getOrderAndCheck(payParam.getBusinessNo());
 
         // 初始化上下文
         payAssistService.initPayContext(payOrder, payParam);
@@ -114,7 +101,7 @@ public class PayService {
         PayUtil.validationAmount(payParam.getPayWays());
 
         // 3. 创建支付相关的记录并返回支付订单对象
-        payOrder = this.createPayOrder(payParam);
+        payOrder = payAssistService.createPayOrder(payParam);
 
         // 4. 调用支付方法进行发起支付
         this.firstPayHandler(payParam, payOrder);
@@ -152,7 +139,7 @@ public class PayService {
                 payOrderObj.setStatus(PayStatusEnum.SUCCESS.getCode());
                 payOrderObj.setPayTime(LocalDateTime.now());
             }
-            payOrderManager.updateById(payOrderObj);
+            payOrderService.updateById(payOrderObj);
         });
     }
 
@@ -162,14 +149,14 @@ public class PayService {
     private PayResult paySyncNotFirst(PayParam payParam, PayOrder payOrder) {
 
         // 1. 处理支付完成情况(完成/退款)
-        List<String> trades = Arrays.asList(PayStatusEnum.SUCCESS.getCode(), PayStatusEnum.CANCEL.getCode(),PayStatusEnum.CLOSE.getCode(),
+        List<String> trades = Arrays.asList(PayStatusEnum.SUCCESS.getCode(), PayStatusEnum.CLOSE.getCode(),
                 PayStatusEnum.PARTIAL_REFUND.getCode(), PayStatusEnum.REFUNDED.getCode());
         if (trades.contains(payOrder.getStatus())) {
             return PaymentBuilder.buildPayResultByPayOrder(payOrder);
         }
 
         // 2.获取 异步支付通道，通过工厂生成对应的策略组(只包含异步支付的策略, 同步支付相关逻辑不再进行执行)
-        PayWayParam payWayParam = this.getAsyncPayParam(payParam, payOrder);
+        PayWayParam payWayParam = payAssistService.getAsyncPayParam(payParam, payOrder);
         List<AbsPayStrategy> asyncStrategyList = PayStrategyFactory.createAsyncLast(Collections.singletonList(payWayParam));
 
         // 3.初始化支付的参数
@@ -183,13 +170,16 @@ public class PayService {
         this.doHandler(payOrder, asyncStrategyList, AbsPayStrategy::doPayHandler, (strategyList, paymentObj) -> {
             // 发起支付成功进行的执行方法
             strategyList.forEach(AbsPayStrategy::doSuccessHandler);
-            payOrderManager.updateById(paymentObj);
+            payOrderService.updateById(paymentObj);
         });
 
         // 6. 更新支付订单扩展参数
-        updatePayOrderExtra(payParam,payOrder.getId());
+        payAssistService.updatePayOrderExtra(payParam,payOrder.getId());
 
-        // 7. 组装返回参数
+        // 7. 更新订单过期时间
+
+
+        // 8. 组装返回参数
         return PaymentBuilder.buildPayResultByPayOrder(payOrder);
     }
 
@@ -210,87 +200,4 @@ public class PayService {
         Optional.ofNullable(successMethod).ifPresent(fun -> fun.accept(strategyList, payment));
     }
 
-    /**
-     * 获取异步支付参数
-     */
-    private PayWayParam getAsyncPayParam(PayParam payParam, PayOrder payOrder) {
-        // 查询之前的支付方式
-        String asyncPayChannel = payOrder.getAsyncPayChannel();
-        PayOrderChannel payOrderChannel = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), asyncPayChannel)
-                .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
-
-        // 新的异步支付方式
-        PayWayParam payWayParam = payParam.getPayWays()
-                .stream()
-                .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getChannel()))
-                .findFirst()
-                .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
-        // 新传入的金额是否一致
-        if (!Objects.equals(payOrderChannel.getAmount(), payWayParam.getAmount())){
-            throw new PayFailureException("传入的支付金额非法！与订单金额不一致");
-        }
-        return payWayParam;
-    }
-
-    /**
-     * 创建支付订单/附加表/支付通道表并保存，返回支付订单
-     */
-    private PayOrder createPayOrder(PayParam payParam) {
-        // 构建支付订单并保存
-        PayOrder payOrder = PaymentBuilder.buildPayOrder(payParam);
-        payOrderManager.save(payOrder);
-        // 构建支付订单扩展表并保存
-        PayOrderExtra payOrderExtra = PaymentBuilder.buildPayOrderExtra(payParam, payOrder.getId());
-        payOrderExtraManager.save(payOrderExtra);
-        // 构建支付通道表并保存
-        List<PayOrderChannel> payOrderChannels = PaymentBuilder.buildPayChannel(payParam.getPayWays())
-                .stream()
-                .peek(o -> o.setPaymentId(payOrder.getId()))
-                .collect(Collectors.toList());
-        payOrderChannelManager.saveAll(payOrderChannels);
-        return payOrder;
-    }
-
-    /**
-     * 更新支付订单扩展参数
-     * @param payParam 支付参数
-     * @param paymentId 支付订单id
-     */
-    private void updatePayOrderExtra(PayParam payParam,Long paymentId){
-        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(paymentId)
-                .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
-        payOrderExtra.setReqTime(payParam.getReqTime())
-                .setSign(payParam.getSign())
-                .setNotNotify(payParam.isNotNotify())
-                .setNotifyUrl(payParam.getNotifyUrl())
-                .setClientIp(payParam.getClientIp());
-        payOrderExtraManager.updateById(payOrderExtra);
-    }
-
-    /**
-     * 校验支付状态，支付成功则返回，支付失败则抛出对应的异常
-     */
-    private PayOrder getAndCheckByBusinessNo(String businessNo) {
-        // 根据订单查询支付记录
-        PayOrder payment = payOrderManager.findByBusinessNo(businessNo).orElse(null);
-        if (Objects.nonNull(payment)) {
-            // 支付失败类型状态
-            List<String> tradesStatus = Arrays.asList(PayStatusEnum.FAIL.getCode(), PayStatusEnum.CANCEL.getCode(),
-                    PayStatusEnum.CLOSE.getCode());
-            if (tradesStatus.contains(payment.getStatus())) {
-                throw new PayFailureException("支付失败或已经被撤销");
-            }
-            // 退款类型状态
-            tradesStatus = Arrays.asList(PayStatusEnum.REFUNDED.getCode(), PayStatusEnum.PARTIAL_REFUND.getCode());
-            if (tradesStatus.contains(payment.getStatus())) {
-                throw new PayFailureException("支付失败或已经被撤销");
-            }
-            // 支付超时状态
-            if (Objects.nonNull(payment.getExpiredTime())
-                    && LocalDateTimeUtil.ge(LocalDateTime.now(), payment.getExpiredTime())) {
-                throw new PayFailureException("支付已超时");
-            }
-        }
-        return payment;
-    }
 }

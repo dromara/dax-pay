@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.func;
 
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.code.WeChatPayWay;
 import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.wechat.WeChatPayParam;
@@ -231,20 +231,17 @@ public class WeChatPayService {
     /**
      * 构建参数
      */
-    private UnifiedOrderModelBuilder buildParams(String amount, PayOrder payment, WeChatPayConfig weChatPayConfig, String tradeType) {
+    private UnifiedOrderModelBuilder buildParams(String amount, PayOrder payOrder, WeChatPayConfig weChatPayConfig, String tradeType) {
 
-        LocalDateTime expiredTime = PaymentContextLocal.get()
-                .getAsyncPayInfo()
-                .getExpiredTime();
         return builder()
             .appid(weChatPayConfig.getWxAppId())
             .mch_id(weChatPayConfig.getWxMchId())
             .nonce_str(WxPayKit.generateStr())
             .time_start(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.PURE_DATETIME_PATTERN))
             // 反正v2版本的超时时间无效
-            .time_expire(PayUtil.getWxExpiredTime(expiredTime))
-            .body(payment.getTitle())
-            .out_trade_no(String.valueOf(payment.getId()))
+            .time_expire(PayUtil.getWxExpiredTime(payOrder.getExpiredTime()))
+            .body(payOrder.getTitle())
+            .out_trade_no(String.valueOf(payOrder.getId()))
             .total_fee(amount)
             .spbill_create_ip(NetUtil.getLocalhostStr())
             .notify_url(weChatPayConfig.getNotifyUrl())

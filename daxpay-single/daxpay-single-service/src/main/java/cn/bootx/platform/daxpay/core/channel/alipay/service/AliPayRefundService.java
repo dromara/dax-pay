@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.alipay.service;
 import cn.bootx.platform.daxpay.code.AliPayCode;
 import cn.bootx.platform.daxpay.common.context.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.hutool.core.util.IdUtil;
 import com.alipay.api.AlipayApiException;

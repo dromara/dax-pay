@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.callback.dao.CallbackNotifyManager;
+import cn.bootx.platform.daxpay.core.record.callback.dao.CallbackRecordManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.payment.callback.service.PayCallbackService;
 import cn.bootx.platform.daxpay.func.AbsPayCallbackStrategy;
@@ -34,12 +34,15 @@ import static cn.bootx.platform.daxpay.code.WeChatPayCode.APPID;
 public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
     private final WeChatPayConfigService weChatPayConfigService;
 
-    public WeChatPayCallbackService(RedisClient redisClient, CallbackNotifyManager callbackNotifyManager,
+    public WeChatPayCallbackService(RedisClient redisClient, CallbackRecordManager callbackRecordManager,
                                     PayCallbackService payCallbackService, WeChatPayConfigService weChatPayConfigService) {
-        super(redisClient, callbackNotifyManager, payCallbackService);
+        super(redisClient, callbackRecordManager, payCallbackService);
         this.weChatPayConfigService = weChatPayConfigService;
     }
 
+    /**
+     * 支付通道
+     */
     @Override
     public PayChannelEnum getPayChannel() {
         return PayChannelEnum.WECHAT;
@@ -92,6 +95,18 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
         return WxPayKit.verifyNotify(params, weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256, null);
     }
 
+    /**
+     * 分通道特殊处理, 如将解析的数据放到上下文中
+     */
+    @Override
+    public void initContext() {
+        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
+        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(callbackParam.get(WeChatPayCode.TRANSACTION_ID));
+    }
+
+    /**
+     * 返回响应结果
+     */
     @Override
     public String getReturnMsg() {
         Map<String, String> xml = new HashMap<>(4);

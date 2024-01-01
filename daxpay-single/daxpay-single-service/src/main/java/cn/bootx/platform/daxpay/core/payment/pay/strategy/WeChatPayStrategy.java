@@ -1,9 +1,7 @@
 package cn.bootx.platform.daxpay.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.core.channel.wechat.service.WeChatPayCloseService;
@@ -21,8 +19,6 @@ import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -110,24 +106,6 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doErrorHandler(ExceptionInfo exceptionInfo) {
-        this.doCloseHandler();
-    }
-
-    /**
-     * 异步支付成功
-     */
-    @Override
-    public void doAsyncSuccessHandler(Map<String, String> map) {
-        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(map.get(WeChatPayCode.TRANSACTION_ID));
-        weChatPayOrderService.updateAsyncSuccess(this.getOrder().getId(), this.getPayWayParam());
-    }
-
-    /**
-     * 异步支付失败
-     */
-    @Override
-    public void doAsyncErrorHandler(ExceptionInfo exceptionInfo) {
-        // 调用关闭支付
         this.doCloseHandler();
     }
 

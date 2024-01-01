@@ -6,8 +6,8 @@ import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayOrderService;
 import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayConfigService;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderChannelManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.core.record.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,6 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
     public void doBeforeHandler() {
         AliPayConfig config = aliPayConfigService.getConfig();
         aliPayConfigService.initConfig(config);
-
     }
     /**
      * 支付成功处理

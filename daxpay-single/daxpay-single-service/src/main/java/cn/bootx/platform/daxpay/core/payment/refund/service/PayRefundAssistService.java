@@ -8,10 +8,10 @@ import cn.bootx.platform.daxpay.common.context.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.order.refund.dao.PayRefundOrderManager;
-import cn.bootx.platform.daxpay.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.core.record.refund.dao.PayRefundOrderManager;
+import cn.bootx.platform.daxpay.core.record.refund.entity.PayRefundOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PayRefundAssistService {
-    private final PayOrderManager payOrderManager;
+    private final PayOrderService payOrderService;
 
     private final PayRefundOrderManager payRefundOrderManager;
 
@@ -79,11 +79,11 @@ public class PayRefundAssistService {
 
         PayOrder payOrder = null;
         if (Objects.nonNull(param.getPaymentId())){
-            payOrder = payOrderManager.findById(param.getPaymentId())
+            payOrder = payOrderService.findById(param.getPaymentId())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderManager.findByBusinessNo(param.getBusinessNo())
+            payOrder = payOrderService.findByBusinessNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
 

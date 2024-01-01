@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.core.channel.cash.service;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.core.channel.cash.dao.CashPayOrderManager;
 import cn.bootx.platform.daxpay.core.channel.cash.entity.CashPayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;

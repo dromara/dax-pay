@@ -2,10 +2,10 @@ package cn.bootx.platform.daxpay.core.payment.repair.service;
 
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.payment.repair.factory.PayRepairStrategyFactory;
 import cn.bootx.platform.daxpay.core.payment.repair.param.PayRepairParam;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PayRepairService {
 
-    private final PayOrderManager payOrderManager;
+    private final PayOrderService payOrderService;
 
     /**
      * 修复支付单
@@ -40,9 +40,7 @@ public class PayRepairService {
                 .collect(Collectors.toList());
         // 初始化修复参数
         List<AbsPayRepairStrategy> repairStrategies = PayRepairStrategyFactory.createAsyncLast(channels);
-        for (AbsPayRepairStrategy repairStrategy : repairStrategies) {
-            repairStrategy.initRepairParam(order, repairParam.getRepairSource());
-        }
+        repairStrategies.forEach(repairStrategy -> repairStrategy.initRepairParam(order, repairParam.getRepairSource()));
         // 根据不同的类型执行对应的修复逻辑
         switch (repairParam.getRepairType()) {
             case SUCCESS:
@@ -72,7 +70,7 @@ public class PayRepairService {
         // 修改订单支付状态为成功
         payment.setStatus(PayStatusEnum.SUCCESS.getCode());
         payment.setPayTime(LocalDateTime.now());
-        payOrderManager.updateById(payment);
+        payOrderService.updateById(payment);
     }
 
     /**
@@ -84,7 +82,7 @@ public class PayRepairService {
         // 执行策略的关闭方法
         absPayStrategies.forEach(AbsPayRepairStrategy::doCloseHandler);
         payOrder.setStatus(PayStatusEnum.CLOSE.getCode());
-        payOrderManager.updateById(payOrder);
+        payOrderService.updateById(payOrder);
     }
 
     /**

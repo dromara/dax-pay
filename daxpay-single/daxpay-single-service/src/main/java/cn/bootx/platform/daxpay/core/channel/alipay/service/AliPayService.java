@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.alipay.entity.AliPayConfig;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
@@ -97,15 +97,15 @@ public class AliPayService {
     /**
      * wap支付
      */
-    public String wapPay(int amount, PayOrder payment, AliPayConfig alipayConfig) {
+    public String wapPay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
-        model.setSubject(payment.getTitle());
-        model.setOutTradeNo(String.valueOf(payment.getId()));
+        model.setSubject(payOrder.getTitle());
+        model.setOutTradeNo(String.valueOf(payOrder.getId()));
         model.setTotalAmount(String.valueOf(amount*0.01));
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(asyncPayInfo.getExpiredTime()));
+        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setProductCode(AliPayCode.QUICK_WAP_PAY);
         // 中途退出地址
         model.setQuitUrl(noticeInfo.getQuitUrl());
@@ -131,15 +131,14 @@ public class AliPayService {
     /**
      * app支付
      */
-    public String appPay(int amount, PayOrder payment, AliPayConfig alipayConfig) {
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+    public String appPay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
 
-        model.setSubject(payment.getTitle());
+        model.setSubject(payOrder.getTitle());
         model.setProductCode(QUICK_MSECURITY_PAY);
-        model.setOutTradeNo(String.valueOf(payment.getId()));
+        model.setOutTradeNo(String.valueOf(payOrder.getId()));
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(asyncPayInfo.getExpiredTime()));
+        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(String.valueOf(amount*0.01));
 
         try {
@@ -156,15 +155,14 @@ public class AliPayService {
     /**
      * PC支付
      */
-    public String webPay(int amount, PayOrder payment, AliPayConfig alipayConfig) {
+    public String webPay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         AlipayTradePagePayModel model = new AlipayTradePagePayModel();
 
-        model.setSubject(payment.getTitle());
-        model.setOutTradeNo(String.valueOf(payment.getId()));
+        model.setSubject(payOrder.getTitle());
+        model.setOutTradeNo(String.valueOf(payOrder.getId()));
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(asyncPayInfo.getExpiredTime()));
+        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(String.valueOf(amount*0.01));
         // 目前仅支持FAST_INSTANT_TRADE_PAY
         model.setProductCode(AliPayCode.FAST_INSTANT_TRADE_PAY);
@@ -189,15 +187,14 @@ public class AliPayService {
     /**
      * 二维码支付(扫码支付)
      */
-    public String qrCodePay(int amount, PayOrder payment, AliPayConfig alipayConfig) {
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+    public String qrCodePay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
-        model.setSubject(payment.getTitle());
-        model.setOutTradeNo(String.valueOf(payment.getId()));
+        model.setSubject(payOrder.getTitle());
+        model.setOutTradeNo(String.valueOf(payOrder.getId()));
         model.setTotalAmount(String.valueOf(amount*0.01));
 
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(asyncPayInfo.getExpiredTime()));
+        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
 
         try {
             AlipayTradePrecreateResponse response = AliPayApi.tradePrecreatePayToResponse(model, alipayConfig.getNotifyUrl());
@@ -213,24 +210,23 @@ public class AliPayService {
     /**
      * 付款码支付
      */
-    public String barCode(int amount, PayOrder payment, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+    public String barCode(int amount, PayOrder payOrder, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
         AlipayTradePayModel model = new AlipayTradePayModel();
 
-        model.setSubject(payment.getTitle());
-        model.setOutTradeNo(String.valueOf(payment.getId()));
+        model.setSubject(payOrder.getTitle());
+        model.setOutTradeNo(String.valueOf(payOrder.getId()));
         model.setScene(AliPayCode.BAR_CODE);
         model.setAuthCode(aliPayParam.getAuthCode());
 
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(asyncPayInfo.getExpiredTime()));
+        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(String.valueOf(amount*0.01));
         try {
             AlipayTradePayResponse response = AliPayApi.tradePayToResponse(model, alipayConfig.getNotifyUrl());
 
             // 支付成功处理 金额2000以下免密支付
             if (Objects.equals(response.getCode(), AliPayCode.SUCCESS)) {
-                payment.setStatus(PayStatusEnum.SUCCESS.getCode()).setPayTime(LocalDateTime.now());
+                payOrder.setStatus(PayStatusEnum.SUCCESS.getCode()).setPayTime(LocalDateTime.now());
                 return response.getTradeNo();
             }
             // 非支付中响应码, 进行错误处理

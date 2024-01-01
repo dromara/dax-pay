@@ -21,7 +21,7 @@ public class PaymentContext {
     /** 平台全局配置 */
     private final PlatformLocal platform = new PlatformLocal();
 
-    /** 异步支付相关信息 */
+    /** 异步支付相关信息, 不只局限在支付流程，同步、退款、回调中都会用到 */
     private final AsyncPayLocal asyncPayInfo = new AsyncPayLocal();
 
     /** 异步退款相关信息 */

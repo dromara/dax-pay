@@ -2,11 +2,11 @@ package cn.bootx.platform.daxpay.core.payment.refund.service;
 
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.core.payment.refund.factory.PayRefundStrategyFactory;
-import cn.bootx.platform.daxpay.func.AbsPayRefundStrategy;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
+import cn.bootx.platform.daxpay.func.AbsPayRefundStrategy;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.param.pay.SimpleRefundParam;
@@ -34,7 +34,7 @@ public class PayRefundService {
 
     private final PayRefundAssistService payRefundAssistService;;
 
-    private final PayOrderManager payOrderManager;
+    private final PayOrderService payOrderService;
     /**
      * 支付退款
      */
@@ -136,7 +136,7 @@ public class PayRefundService {
             payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
         }
         payOrder.setRefundableBalance(refundableBalance);
-        payOrderManager.updateById(payOrder);
+        payOrderService.updateById(payOrder);
         payRefundAssistService.saveRefundOrder(refundParam,payOrder);
     }
 }

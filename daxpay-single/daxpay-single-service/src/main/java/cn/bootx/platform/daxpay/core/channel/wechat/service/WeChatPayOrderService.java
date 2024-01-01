@@ -8,9 +8,9 @@ import cn.bootx.platform.daxpay.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.core.channel.wechat.dao.WeChatPayOrderManager;
 import cn.bootx.platform.daxpay.core.channel.wechat.entity.WeChatPayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.core.order.pay.service.PayOrderChannelService;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderChannelService;
+import cn.bootx.platform.daxpay.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WeChatPayOrderService {
 
-    private final PayOrderManager paymentService;
+    private final PayOrderService payOrderService;
 
     private final PayOrderChannelService payOrderChannelService;
 
@@ -65,7 +65,7 @@ public class WeChatPayOrderService {
      * 异步支付成功, 更新支付记录成功状态, 并创建微信支付记录
      */
     public void updateAsyncSuccess(Long id, PayWayParam payWayParam) {
-        PayOrder payOrder = paymentService.findById(id).orElseThrow(() -> new BizException("支付记录不存在"));
+        PayOrder payOrder = payOrderService.findById(id).orElseThrow(() -> new BizException("支付记录不存在"));
         this.createWeChatOrder(payOrder, payWayParam.getAmount());
     }
 

@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.func;
 
-import cn.bootx.platform.daxpay.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.core.record.pay.entity.PayOrder;
 
 import java.util.List;
 
