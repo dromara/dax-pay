@@ -49,12 +49,6 @@ spring:
       static-locations: classpath:/static/,classpath:/public/
   thymeleaf:
     cache: false
-  # 数据库版本管理
-  flyway:
-    # 如果 flyway_schema_history 不存在自动创建
-    baseline-on-migrate: true
-    # 开发模式开启
-    enabled: true
   # 定时任务
   quartz:
     # 持久化方式
@@ -77,6 +71,7 @@ spring:
 logging:
   level:
     cn.bootx.**: debug
+    org.springframework.jdbc.core: debug
 # 项目配置
 bootx:
   common:
@@ -84,27 +79,19 @@ bootx:
     swagger:
       enabled: true
       author: bootx
-      version: 1.2.3
-      title: bootx开发平台单体版
-      description: bootx-platform开发平台单体版
+      version: 2.0.0
+      title: 开源支付平台-单商户
+      description: 开源支付平台-单商户版
       # 多模块扫码
       base-packages:
-        "[支付服务]": cn.bootx.platform.daxpay
-        "[基础API]": cn.bootx.platform.baseapi
-        "[身份识别和管理]": cn.bootx.platform.iam
-        "[消息服务]": cn.bootx.platform.notice
-        "[第三方对接]":
-          - cn.bootx.platform.starter.dingtalk
-          - cn.bootx.platform.starter.wecom
-          - cn.bootx.platform.starter.wechat
-        "[认证与权限]":
-          - cn.bootx.platform.starter.auth
-          - cn.bootx.platform.starter.data.perm
-        "[其他starter组件]":
-          - cn.bootx.platform.starter.audit.log
-          - cn.bootx.platform.starter.file
-          - cn.bootx.platform.starter.quartz
-          - cn.bootx.platform.starter.monitor
+        "[支付网关API]": cn.bootx.platform.daxpay.gateway
+        "[支付管理接口]": cn.bootx.platform.daxpay.admin
+        "[BootxPlatform接口]":
+          - cn.bootx.platform.common
+          - cn.bootx.platform.starter
+          - cn.bootx.platform.iam
+          - cn.bootx.platform.baseapi
+          - cn.bootx.platform.notice
     # 缓存
     cache:
       # 默认超时时间 30分钟
@@ -134,7 +121,6 @@ bootx:
         - '/ws/**'
         - '/demo/**'
         - '/test/**'
-        - "/plumelog/**"
         - '/webjars/**'
         - '/css/**'
         - '/error'
@@ -154,3 +140,9 @@ bootx:
     data-perm:
       #  需要符合AES密钥的要求
       field-decrypt-key: "UCrtxSCwYZNCIlav"
+# 自动建表
+table-modify:
+  update-type: update
+  database-type: mysql
+  fail-fast: true
+  scan-package: cn.bootx.platform.daxpay

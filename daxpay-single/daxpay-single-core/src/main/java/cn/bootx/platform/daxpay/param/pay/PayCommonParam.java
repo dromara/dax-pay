@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.param.pay;
 
 import cn.bootx.platform.daxpay.serializer.TimestampToLocalDateTimeDeserializer;
-import cn.bootx.platform.daxpay.util.PayUtil;
+import cn.bootx.platform.daxpay.service.util.PayUtil;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

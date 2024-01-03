@@ -3,9 +3,9 @@ package cn.bootx.platform.daxpay.admin.controller.channel;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.bootx.platform.daxpay.core.channel.alipay.service.AliPayConfigService;
-import cn.bootx.platform.daxpay.dto.channel.alipay.AliPayConfigDto;
-import cn.bootx.platform.daxpay.param.channel.alipay.AliPayConfigParam;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
+import cn.bootx.platform.daxpay.service.dto.channel.alipay.AliPayConfigDto;
+import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayConfigParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -28,17 +28,17 @@ public class AlipayConfigController {
 
     private final AliPayConfigService alipayConfigService;
 
+    @Operation(summary = "获取配置")
+    @GetMapping("/getConfig")
+    public ResResult<AliPayConfigDto> getConfig() {
+        return Res.ok(alipayConfigService.getConfig().toDto());
+    }
+
     @Operation(summary = "更新")
     @PostMapping("/update")
     public ResResult<Void> update(@RequestBody AliPayConfigParam param) {
         alipayConfigService.update(param);
         return Res.ok();
-    }
-
-    @Operation(summary = "获取配置")
-    @GetMapping("/getConfig")
-    public ResResult<AliPayConfigDto> getConfig() {
-        return Res.ok(alipayConfigService.getConfig().toDto());
     }
 
     @Operation(summary = "支付宝支持支付方式")

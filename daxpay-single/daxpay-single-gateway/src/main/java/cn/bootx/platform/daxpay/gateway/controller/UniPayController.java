@@ -1,17 +1,18 @@
 package cn.bootx.platform.daxpay.gateway.controller;
 
+import cn.bootx.platform.common.core.annotation.CountTime;
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
-import cn.bootx.platform.daxpay.annotation.PaymentApi;
-import cn.bootx.platform.daxpay.core.payment.close.service.PayCloseService;
-import cn.bootx.platform.daxpay.core.payment.pay.service.PayService;
-import cn.bootx.platform.daxpay.core.payment.refund.service.PayRefundService;
-import cn.bootx.platform.daxpay.core.payment.sync.service.PaySyncService;
+import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
+import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
+import cn.bootx.platform.daxpay.service.core.payment.pay.service.PayService;
+import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
+import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
-import cn.bootx.platform.daxpay.util.DaxRes;
+import cn.bootx.platform.daxpay.service.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,8 @@ public class UniPayController {
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
 
+
+    @CountTime
     @PaymentApi("pay")
     @Operation(summary = "统一下单")
     @PostMapping("/pay")
@@ -43,6 +46,7 @@ public class UniPayController {
         return DaxRes.ok(payService.pay(payParam));
     }
 
+    @CountTime
     @PaymentApi("simplePay")
     @Operation(summary = "简单下单")
     @PostMapping("/simplePay")
@@ -50,6 +54,7 @@ public class UniPayController {
         return DaxRes.ok(payService.simplePay(payParam));
     }
 
+    @CountTime
     @PaymentApi("close")
     @Operation(summary = "订单关闭")
     @PostMapping("/close")
@@ -58,6 +63,7 @@ public class UniPayController {
         return DaxRes.ok();
     }
 
+    @CountTime
     @PaymentApi("refund")
     @Operation(summary = "统一退款")
     @PostMapping("/refund")
@@ -65,6 +71,7 @@ public class UniPayController {
         return DaxRes.ok(payRefundService.refund(param));
     }
 
+    @CountTime
     @PaymentApi("simpleRefund")
     @Operation(summary = "简单退款")
     @PostMapping("/simpleRefund")
@@ -72,13 +79,15 @@ public class UniPayController {
         return DaxRes.ok(payRefundService.simpleRefund(param));
     }
 
+    @CountTime
     @PaymentApi("syncPay")
     @Operation(summary = "支付状态同步")
     @PostMapping("/syncPay")
-    public DaxResult<PaySyncResult> syncPay(PaySyncParam param){
+    public DaxResult<PaySyncResult> syncPay(@RequestBody PaySyncParam param){
         return DaxRes.ok(paySyncService.sync(param));
     }
 
+    @CountTime
     @PaymentApi("syncRefund")
     @Operation(summary = "退款状态同步")
     @PostMapping("/syncRefund")

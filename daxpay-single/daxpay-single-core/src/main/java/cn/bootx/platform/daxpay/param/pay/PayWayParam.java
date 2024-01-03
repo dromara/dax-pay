@@ -25,8 +25,8 @@ public class PayWayParam {
     /**
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付渠道编码")
-    @NotBlank(message = "支付渠道编码不可为空")
+    @Schema(description = "支付通道编码")
+    @NotBlank(message = "支付通道编码不可为空")
     private String channel;
 
     /**

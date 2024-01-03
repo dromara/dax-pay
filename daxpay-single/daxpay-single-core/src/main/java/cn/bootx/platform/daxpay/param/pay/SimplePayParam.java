@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -47,8 +48,8 @@ public class SimplePayParam extends PayCommonParam{
     /**
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付渠道编码")
-    @NotBlank(message = "支付渠道编码不可为空")
+    @Schema(description = "支付通道编码")
+    @NotBlank(message = "支付通道编码不可为空")
     private String payChannel;
 
     /**
@@ -60,6 +61,7 @@ public class SimplePayParam extends PayCommonParam{
 
     @Schema(description = "支付金额")
     @NotNull(message = "支付金额不可为空")
+    @Min(1)
     private Integer amount;
 
     /**

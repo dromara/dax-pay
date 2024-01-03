@@ -4,7 +4,7 @@ spring:
   profiles:
     active: dev
   config:
-#    use-legacy-processing: true
+    use-legacy-processing: true
     activate:
       on-profile: dev
   servlet:
@@ -14,11 +14,6 @@ spring:
       enabled: true
   thymeleaf:
     mode: LEGACYHTML5
-  flyway:
-    # 默认不启用
-    enabled: false
-    # 对特殊占位符不进行替换
-    placeholder-replacement: false
 # mp配置
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml

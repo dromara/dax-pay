@@ -36,7 +36,7 @@
         <!-- 自动建表 -->
         <dependency>
             <groupId>cn.bootx</groupId>
-            <artifactId>table-modify-mysql</artifactId>
+            <artifactId>table-modify-mysql-boot-starter</artifactId>
             <version>${table-modify.version}</version>
         </dependency>
         <!-- redis客户端封装 -->

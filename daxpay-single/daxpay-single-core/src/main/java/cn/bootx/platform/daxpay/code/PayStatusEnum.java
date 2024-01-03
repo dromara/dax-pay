@@ -17,7 +17,6 @@ public enum PayStatusEnum {
     FAIL("fail","失败"),
     CANCEL("cancel","支付取消"),
     CLOSE("close","支付关闭"),
-    /** 超时取消 */
     TIMEOUT("timeout","超时取消"),
     PARTIAL_REFUND("partial_refund","部分退款"),
     REFUNDED("refunded","全部退款");

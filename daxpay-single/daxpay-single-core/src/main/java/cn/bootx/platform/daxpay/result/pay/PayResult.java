@@ -18,12 +18,12 @@ public class PayResult {
     private Long paymentId;
 
     @Schema(description = "是否是异步支付")
-    private boolean asyncPayMode;
+    private boolean asyncPay;
 
     /**
      * @see PayChannelEnum#ASYNC_TYPE_CODE
      */
-    @Schema(description = "异步支付渠道")
+    @Schema(description = "异步支付通道")
     private String asyncPayChannel;
 
 

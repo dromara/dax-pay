@@ -39,7 +39,7 @@ public enum PayChannelEnum {
         return Arrays.stream(values())
             .filter(e -> Objects.equals(code, e.getCode()))
             .findFirst()
-            .orElseThrow(() -> new PayFailureException("不存在的支付渠道"));
+            .orElseThrow(() -> new PayFailureException("不存在的支付通道"));
     }
 
     /** 支付宝 UA */
