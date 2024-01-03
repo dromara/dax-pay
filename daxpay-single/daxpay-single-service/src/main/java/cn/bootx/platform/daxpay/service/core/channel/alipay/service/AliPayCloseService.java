@@ -31,7 +31,7 @@ public class AliPayCloseService {
      * 交易关闭: 只有订单在未支付的状态下才可以进行关闭, 商户不需要额外申请就有此接口的权限
      * 交易撤销: 如果用户支付成功，会将此订单资金退还给用户. 限制时间为1天，过了24小时，该接口无法再使用。可以视为一个特殊的接口, 需要专门签约这个接口的权限
      *
-     * TODO 如果返回已经关闭, 也视为关闭成功
+     * TODO 如果返回已经关闭, 也视为关闭成功, 考虑如果关闭识别, 查询一下网关的状态进行对比
      */
     @Retryable(value = RetryableException.class)
     public void close(PayOrder payOrder) {

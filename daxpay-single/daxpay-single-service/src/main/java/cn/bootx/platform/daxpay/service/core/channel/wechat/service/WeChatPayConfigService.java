@@ -36,9 +36,7 @@ public class WeChatPayConfigService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void update(WeChatPayConfigParam param) {
-        WeChatPayConfig weChatPayConfig = weChatPayConfigManager.findById(ID)
-            .orElseThrow(() -> new PayFailureException("微信支付配置不存在"));
-        param.setActivity(null);
+        WeChatPayConfig weChatPayConfig = weChatPayConfigManager.findById(ID).orElseThrow(() -> new PayFailureException("微信支付配置不存在"));
         BeanUtil.copyProperties(param, weChatPayConfig, CopyOptions.create().ignoreNullValue());
         weChatPayConfigManager.updateById(weChatPayConfig);
     }

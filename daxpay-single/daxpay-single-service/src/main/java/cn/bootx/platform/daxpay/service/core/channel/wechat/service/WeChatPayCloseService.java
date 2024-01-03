@@ -32,7 +32,7 @@ import java.util.Optional;
 public class WeChatPayCloseService {
 
     /**
-     * 关闭支付
+     * 关闭支付, 微信对已经关闭的支付单也可以重复关闭
      */
     @Retryable(value = RetryableException.class)
     public void close(PayOrder payOrder, WeChatPayConfig weChatPayConfig) {

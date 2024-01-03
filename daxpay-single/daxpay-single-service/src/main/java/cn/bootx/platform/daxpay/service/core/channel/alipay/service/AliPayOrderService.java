@@ -81,6 +81,7 @@ public class AliPayOrderService {
                 .setRefundableBalance(amount)
                 .setBusinessNo(payOrder.getBusinessNo())
                 .setStatus(PayStatusEnum.SUCCESS.getCode())
+                // 读取回调中的支付时间
                 .setPayTime(LocalDateTime.now());
         aliPayOrderManager.save(aliPayOrder);
     }

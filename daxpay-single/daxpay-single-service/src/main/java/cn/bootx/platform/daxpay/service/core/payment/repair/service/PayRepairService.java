@@ -72,6 +72,7 @@ public class PayRepairService {
 
         // 修改订单支付状态为成功
         payment.setStatus(PayStatusEnum.SUCCESS.getCode());
+        // TODO 读取支付网关中的时间
         payment.setPayTime(LocalDateTime.now());
         payOrderService.updateById(payment);
     }

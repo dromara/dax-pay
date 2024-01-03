@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @DbTable(comment = "微信支付记录")
 @Accessors(chain = true)
-@TableName("pay_wechat_payment")
+@TableName("pay_wechat_pay_order")
 public class WeChatPayOrder extends BasePayOrder implements EntityBaseFunction<WeChatPayOrderDto> {
 
     /**

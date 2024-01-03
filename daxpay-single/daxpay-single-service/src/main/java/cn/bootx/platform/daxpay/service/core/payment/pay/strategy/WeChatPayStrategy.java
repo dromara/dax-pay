@@ -1,18 +1,17 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayConfigManager;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPaySyncService;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;
@@ -33,15 +32,13 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WeChatPayStrategy extends AbsPayStrategy {
 
-    private final WeChatPayConfigManager weChatPayConfigManager;
+    private final WeChatPayConfigService weChatPayConfigService;
 
     private final WeChatPayService weChatPayService;
 
     private final WeChatPayOrderService weChatPayOrderService;
 
     private final WeChatPayCloseService weChatPayCloseService;
-
-    private final WeChatPaySyncService weChatPaySyncService;
 
     private WeChatPayConfig weChatPayConfig;
 
@@ -60,6 +57,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doBeforePayHandler() {
+        this.initWeChatPayConfig();
         try {
             // 微信参数验证
             String extraParamsJson = this.getPayWayParam().getChannelExtra();
@@ -122,6 +120,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      * 初始化微信支付
      */
     private void initWeChatPayConfig() {
+        this.weChatPayConfig = weChatPayConfigService.getConfig();
     }
 
 }
