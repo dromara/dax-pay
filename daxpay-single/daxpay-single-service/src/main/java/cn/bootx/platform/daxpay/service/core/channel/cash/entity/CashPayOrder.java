@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @DbTable(comment = "现金支付记录")
-@TableName("pay_cash_payment")
+@TableName("pay_cash_pay_order")
 @Accessors(chain = true)
 public class CashPayOrder extends BasePayOrder {
 

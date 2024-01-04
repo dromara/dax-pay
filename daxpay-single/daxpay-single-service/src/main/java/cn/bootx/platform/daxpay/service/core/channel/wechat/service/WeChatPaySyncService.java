@@ -1,9 +1,12 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -13,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,7 +46,7 @@ public class WeChatPaySyncService {
         try {
             String xmlResult = WxPayApi.orderQuery(params);
             Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-            syncResult.setJson(JSONUtil.toJsonStr(result));
+            syncResult.setSyncInfo(JSONUtil.toJsonStr(result));
             // 查询失败
             if (!WxPayKit.codeIsOk(result.get(WeChatPayCode.RETURN_CODE))) {
                 log.warn("查询微信订单失败:{}", result);
@@ -56,8 +60,10 @@ public class WeChatPaySyncService {
             }
             String tradeStatus = result.get(WeChatPayCode.TRADE_STATE);
             // 支付完成
-            if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_SUCCESS)
-                    || Objects.equals(tradeStatus, WeChatPayCode.TRADE_ACCEPT)) {
+            if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_SUCCESS) || Objects.equals(tradeStatus, WeChatPayCode.TRADE_ACCEPT)) {
+                String timeEnd = result.get(WeChatPayCode.TIME_END);
+                LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
+                PaymentContextLocal.get().getAsyncPayInfo().setPayTime(time);
                 return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS);
             }
             // 待支付
@@ -79,7 +85,7 @@ public class WeChatPaySyncService {
         }
         catch (RuntimeException e) {
             log.error("查询订单失败:", e);
-            syncResult.setMsg(e.getMessage());
+            syncResult.setErrorMsg(e.getMessage());
         }
         return syncResult;
     }

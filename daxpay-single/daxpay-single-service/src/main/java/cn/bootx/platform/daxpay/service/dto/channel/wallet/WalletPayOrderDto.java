@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.dto.channel.wallet;
 
-import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
+import cn.bootx.platform.daxpay.service.dto.record.pay.PayOrderDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

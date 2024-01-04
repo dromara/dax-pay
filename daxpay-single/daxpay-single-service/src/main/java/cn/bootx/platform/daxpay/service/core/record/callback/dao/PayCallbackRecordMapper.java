@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.record.callback.dao;
 
-import cn.bootx.platform.daxpay.service.core.record.callback.entity.CallbackRecord;
+import cn.bootx.platform.daxpay.service.core.record.callback.entity.PayCallbackRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023/12/18
  */
 @Mapper
-public interface CallbackRecordMapper extends BaseMapper<CallbackRecord> {
+public interface PayCallbackRecordMapper extends BaseMapper<PayCallbackRecord> {
 }

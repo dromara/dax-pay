@@ -5,7 +5,8 @@ import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.core.record.sync.convert.PaySyncRecordConvert;
-import cn.bootx.platform.daxpay.service.dto.order.sync.PaySyncRecordDto;
+import cn.bootx.platform.daxpay.service.dto.record.sync.PaySyncRecordDto;
+import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbComment;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
@@ -14,8 +15,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * 支付同步订单
@@ -32,7 +31,6 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     /** 支付记录id */
     @DbComment("支付记录id")
     private Long paymentId;
-
 
     /**
      * 支付通道
@@ -51,19 +49,32 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
      * @see PaySyncStatusEnum
      */
     @DbComment("同步状态")
-    private String status;
+    private String syncStatus;
 
     /**
      * 支付单如果状态不一致, 是否修复成功
      */
+    @DbComment("是否进行修复")
     private boolean repairOrder;
 
-    @DbComment("错误消息")
-    private String msg;
+    /** 支付单修复前状态 */
+    @DbComment("支付单修复前状态")
+    private String oldStatus;
+    /** 支付单修复后状态 */
 
-    /** 同步时间 */
-    @DbComment("同步时间")
-    private LocalDateTime syncTime;
+    @DbComment("支付单修复后状态")
+    private String repairStatus;
+
+    @DbComment("错误消息")
+    private String errorMsg;
+
+    /** 客户端IP */
+    @DbColumn(comment = "客户端IP")
+    private String clientIp;
+
+    /** 请求链路ID */
+    @DbColumn(comment = "请求链路ID")
+    private String reqId;
 
     /**
      * 转换

@@ -18,7 +18,7 @@ public class RequestLocal {
     private String clientIp;
 
     /** 商户扩展参数,回调时会原样返回 */
-    private String extraParam;
+    private String attach;
 
     /** 签名 */
     private String sign;

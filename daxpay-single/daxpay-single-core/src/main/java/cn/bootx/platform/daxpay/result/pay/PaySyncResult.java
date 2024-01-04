@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.NOT_SYNC;
+import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.FAIL;
 
 /**
  * 支付单同步结果
@@ -21,13 +21,23 @@ public class PaySyncResult extends PayCommonResult{
 
     /**
      * 支付网关同步状态
-     * @see PaySyncStatusEnum#NOT_SYNC
+     * @see PaySyncStatusEnum
      */
-    private String syncStatus = NOT_SYNC.getCode();
+    private String syncStatus = FAIL.getCode();
 
     @Schema(description = "是否同步成功")
     private boolean success;
 
+    @Schema(description = "失败原因")
+    private String errorMsg;
+
     @Schema(description = "是否进行了修复")
     private boolean repair;
+
+    @Schema(description = "支付单修复前状态")
+    private String oldStatus;
+
+    @Schema(description = "支付单修复后状态")
+    private String repairStatus;
+
 }

@@ -108,7 +108,7 @@ public class PayRefundAssistService {
      * 保存退款记录 成不成功都记录
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveRefundOrder(RefundParam refundParam, PayOrder payOrder){
+    public void saveOrder(RefundParam refundParam, PayOrder payOrder){
         AsyncRefundLocal asyncRefundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
         // 退款金额
         Integer amount = refundParam.getRefundChannels()
@@ -119,15 +119,15 @@ public class PayRefundAssistService {
         PayRefundOrder refundOrder = new PayRefundOrder()
                 .setRefundRequestNo(asyncRefundInfo.getRefundNo())
                 .setAmount(amount)
-                .setClientIp(refundParam.getClientIp())
                 .setPaymentId(payOrder.getId())
                 .setBusinessNo(payOrder.getBusinessNo())
                 .setRefundTime(LocalDateTime.now())
                 .setTitle(payOrder.getTitle())
                 .setErrorMsg(asyncRefundInfo.getErrorMsg())
                 .setErrorCode(asyncRefundInfo.getErrorCode())
-                .setStatus(Objects.isNull(asyncRefundInfo.getErrorCode()) ? PayRefundStatusEnum.SUCCESS.getCode()
-                        : PayRefundStatusEnum.FAIL.getCode());
+                .setStatus(Objects.isNull(asyncRefundInfo.getErrorCode()) ? PayRefundStatusEnum.SUCCESS.getCode() : PayRefundStatusEnum.FAIL.getCode())
+                .setClientIp(refundParam.getClientIp())
+                .setReqId(PaymentContextLocal.get().getRequest().getReqId());
         payRefundOrderManager.save(refundOrder);
     }
 }

@@ -44,6 +44,9 @@ public interface AliPayCode {
     /** 支付宝流水号 */
     String TRADE_NO = "trade_no";
 
+    /** 交易付款时间 yyyy-MM-dd HH:mm:ss */
+    String GMT_PAYMENT = "gmt_payment";
+
     /** appId */
     String APP_ID = "app_id";
 
@@ -76,6 +79,8 @@ public interface AliPayCode {
     // 错误提示
     /** 交易不存在 */
     String ACQ_TRADE_NOT_EXIST = "ACQ.TRADE_NOT_EXIST";
+    /** 交易不存在 */
+    String ACQ_TRADE_STATUS_ERROR = "ACQ.TRADE_STATUS_ERROR";
 
     // 网关返回码
     String SUCCESS = "10000";

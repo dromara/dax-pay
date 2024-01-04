@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.dto.order.refund;
+package cn.bootx.platform.daxpay.service.dto.record.refund;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.record.refund.convert;
 
 import cn.bootx.platform.daxpay.service.core.record.refund.entity.PayRefundOrder;
-import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
+import cn.bootx.platform.daxpay.service.dto.record.refund.PayRefundOrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

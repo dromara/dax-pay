@@ -1,14 +1,17 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.service;
 
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.common.entity.OrderRefundableInfo;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.payment.close.factory.PayCloseStrategyFactory;
-import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import cn.bootx.platform.daxpay.param.pay.PayCloseParam;
+import cn.bootx.platform.daxpay.service.common.entity.OrderRefundableInfo;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.payment.close.factory.PayCloseStrategyFactory;
+import cn.bootx.platform.daxpay.service.core.record.close.entity.PayCloseRecord;
+import cn.bootx.platform.daxpay.service.core.record.close.service.PayCloseRecordService;
+import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PayCloseService {
     private final PayOrderService payOrderService;
+    private final PayCloseRecordService payCloseRecordService;
 
     /**
      * 关闭支付
@@ -48,7 +52,7 @@ public class PayCloseService {
     }
 
     /**
-     * 取消支付记录
+     * 关闭支付记录
      */
     private void close(PayOrder payOrder) {
         // 状态检查, 只有支付中可以进行取消支付
@@ -76,8 +80,9 @@ public class PayCloseService {
             // 4.执行关闭策略
             payCloseStrategies.forEach(AbsPayCloseStrategy::doCloseHandler);
         }
-        catch (Exception e) {
-            // TODO 记录关闭失败的记录
+        catch (PayFailureException e) {
+            // 记录关闭失败的记录
+            this.saveRecord(payOrder,false,e.getMessage());
             throw e;
         }
 
@@ -92,5 +97,27 @@ public class PayCloseService {
         // 取消订单
         payOrder.setStatus(PayStatusEnum.CLOSE.getCode());
         payOrderService.updateById(payOrder);
+        this.saveRecord(payOrder,true,null);
     }
+
+    /**
+     * 保存关闭记录
+     */
+    private void saveRecord(PayOrder payOrder, boolean closed, String errMsg){
+        String clientIp = PaymentContextLocal.get()
+                .getRequest()
+                .getClientIp();
+        String reqId = PaymentContextLocal.get()
+                .getRequest()
+                .getReqId();
+        PayCloseRecord record = new PayCloseRecord()
+                .setPaymentId(payOrder.getId())
+                .setAsyncChannel(payOrder.getAsyncChannel())
+                .setClosed(closed)
+                .setErrorMsg(errMsg)
+                .setClientIp(clientIp)
+                .setReqId(reqId);
+        payCloseRecordService.saveRecord(record);
+    }
+
 }

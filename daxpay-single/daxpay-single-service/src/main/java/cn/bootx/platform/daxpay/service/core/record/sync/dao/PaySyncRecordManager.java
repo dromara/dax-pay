@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
-import cn.bootx.platform.daxpay.service.dto.order.sync.PaySyncRecordDto;
+import cn.bootx.platform.daxpay.service.dto.record.sync.PaySyncRecordDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class PaySyncRecordManager extends BaseManager<PaySyncRecordMapper, PaySy
         return lambdaQuery().orderByDesc(MpIdEntity::getId)
                 .like(Objects.nonNull(param.getPaymentId()), PaySyncRecord::getPaymentId, param.getPaymentId())
                 .eq(Objects.nonNull(param.getChannel()), PaySyncRecord::getChannel, param.getChannel())
-                .eq(Objects.nonNull(param.getStatus()), PaySyncRecord::getStatus, param.getStatus())
+                .eq(Objects.nonNull(param.getStatus()), PaySyncRecord::getSyncStatus, param.getStatus())
                 .page(mpPage);
     }
 

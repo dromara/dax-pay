@@ -107,7 +107,7 @@ public class PayRefundService {
         }
         catch (Exception e) {
             // 记录退款失败的记录
-            payRefundAssistService.saveRefundOrder(refundParam,payOrder);
+            payRefundAssistService.saveOrder(refundParam,payOrder);
             throw e;
         }
 
@@ -137,6 +137,6 @@ public class PayRefundService {
         }
         payOrder.setRefundableBalance(refundableBalance);
         payOrderService.updateById(payOrder);
-        payRefundAssistService.saveRefundOrder(refundParam,payOrder);
+        payRefundAssistService.saveOrder(refundParam,payOrder);
     }
 }

@@ -1,10 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayOrderManager;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.hutool.json.JSONUtil;
@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -28,8 +29,6 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class AliPaySyncService {
-    private final AliPayOrderManager payOrderManager;
-
     /**
      * 与支付宝网关同步状态, 退款状态会
      * 1 远程支付成功
@@ -47,10 +46,13 @@ public class AliPaySyncService {
             // 查询退款参数
             AlipayTradeQueryResponse response = AliPayApi.tradeQueryToResponse(queryModel);
             String tradeStatus = response.getTradeStatus();
-            syncResult.setJson(JSONUtil.toJsonStr(response));
+            syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
             // 支付完成
             if (Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_FINISHED)) {
                 PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(response.getTradeNo());
+                // 支付完成时间
+                LocalDateTime payTime = LocalDateTimeUtil.of(response.getSendPayDate());
+                PaymentContextLocal.get().getAsyncPayInfo().setPayTime(payTime);
                 return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS);
             }
             // 待支付
@@ -68,12 +70,12 @@ public class AliPaySyncService {
             }
             // 支付宝支付后, 客户未进行操作将不会创建出订单, 所以交易不存在等于未查询订单
             if (Objects.equals(response.getSubCode(), AliPayCode.ACQ_TRADE_NOT_EXIST)) {
-                return syncResult.setSyncStatus(PaySyncStatusEnum.IGNORE);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_WAIT);
             }
         }
         catch (AlipayApiException e) {
             log.error("查询订单失败:", e);
-            syncResult.setMsg(e.getErrMsg());
+            syncResult.setErrorMsg(e.getErrMsg());
         }
         return syncResult;
     }

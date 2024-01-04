@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.record.sync.convert;
 
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
-import cn.bootx.platform.daxpay.service.dto.order.sync.PaySyncRecordDto;
+import cn.bootx.platform.daxpay.service.dto.record.sync.PaySyncRecordDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

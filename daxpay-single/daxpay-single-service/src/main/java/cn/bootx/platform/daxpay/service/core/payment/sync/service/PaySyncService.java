@@ -9,20 +9,24 @@ import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.PaySyncStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncOrderService;
+import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
+import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,13 +41,14 @@ import java.util.Objects;
 public class PaySyncService {
     private final PayOrderService payOrderService;
 
-    private final PaySyncOrderService syncOrderService;
+    private final PaySyncRecordService paySyncRecordService;
 
     private final PayRepairService repairService;
 
     /**
-     * 支付同步
+     * 支付同步, 开启一个新的事务, 不受外部抛出异常的影响
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = null;
         if (Objects.nonNull(param.getPaymentId())){
@@ -62,28 +67,49 @@ public class PaySyncService {
         return this.syncPayOrder(payOrder);
     }
     /**
-     * 同步支付状态
+     * 同步支付状态, 开启一个新的事务, 不受外部抛出异常的影响
      * 1. 如果状态一致, 不进行处理
      * 2. 如果状态不一致, 调用修复逻辑进行修复
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public PaySyncResult syncPayOrder(PayOrder order) {
         // 获取同步策略类
         AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(order.getAsyncChannel());
         syncPayStrategy.initPayParam(order);
-        // 获取网关支付状态
+        // 记录支付单同步前后的状态
+        String oldStatus = order.getStatus();
+        String repairStatus = null;
+
+        // 执行同步操作, 获取支付网关同步的结果
         GatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
+        // 判断是否同步成功
+        if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
+            // 同步失败, 返回失败响应, 同时记录失败的日志
+            this.saveRecord(order, syncResult, true, oldStatus, null, syncResult.getErrorMsg());
+            return new PaySyncResult().setErrorMsg(syncResult.getErrorMsg());
+        }
+
         // 判断网关状态是否和支付单一致, 同时更新网关同步状态
         boolean statusSync = this.checkStatusSync(syncResult,order);
-        // 状态不一致，执行支付单修复逻辑
-        if (!statusSync){
-            // 根据同步记录对支付单进行处理处理
-            this.resultHandler(syncResult,order);
+        try {
+            // 状态不一致，执行支付单修复逻辑
+            if (!statusSync){
+                this.resultHandler(syncResult, order);
+                repairStatus = order.getStatus();
+            }
+        } catch (Exception e) {
+            // 同步失败, 返回失败响应, 同时记录失败的日志 TODO 后面异常范围能这么宽泛
+            syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
+            this.saveRecord(order, syncResult, false, oldStatus, null, e.getMessage());
+            return new PaySyncResult().setErrorMsg(e.getMessage());
         }
-        // 记录同步的结果
-        syncOrderService.saveRecord(syncResult,order);
+
+        // 同步成功记录日志
+        this.saveRecord( order, syncResult, !statusSync, oldStatus, repairStatus, null);
         return new PaySyncResult()
                 .setSuccess(true)
                 .setRepair(!statusSync)
+                .setRepairStatus(repairStatus)
                 .setSyncStatus(syncResult.getSyncStatus().getCode());
     }
 
@@ -97,9 +123,8 @@ public class PaySyncService {
         if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_SUCCESS)){
             return true;
         }
-
-        // 待支付比对 网关忽略和支付中都代表待支付, 需要处理订单超时的情况
-        List<PaySyncStatusEnum> enums = Arrays.asList(PaySyncStatusEnum.PAY_WAIT, PaySyncStatusEnum.IGNORE);
+        // 待支付比对 支付中都代表待支付, 需要处理订单超时的情况
+        List<PaySyncStatusEnum> enums = Collections.singletonList(PaySyncStatusEnum.PAY_WAIT);
         if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && enums.contains(syncStatus)){
             // 判断支付单是否支付超时, 如果待支付状态下触发超时
             if (LocalDateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
@@ -153,9 +178,6 @@ public class PaySyncService {
                 repairService.repair(payOrder, repairParam);
                 break;
             }
-            // 不需要进行处理
-            case IGNORE:
-                break;
             // 调用出错
             case TIMEOUT:
                 repairParam.setRepairType(PayRepairTypeEnum.TIMEOUT);
@@ -166,10 +188,34 @@ public class PaySyncService {
                 log.warn("支付状态同步接口调用出错");
                 break;
             }
-            case NOT_SYNC:
             default: {
                 throw new BizException("代码有问题");
             }
         }
+    }
+
+
+    /**
+     * 保存同步记录
+     * @param payOrder 支付单
+     * @param syncResult 同步结果
+     * @param repair 是否修复
+     * @param oldStatus 修复前的状态
+     * @param repairStatus 修复后的状态
+     * @param errorMsg 错误信息
+     */
+    private void saveRecord(PayOrder payOrder,GatewaySyncResult syncResult, boolean repair, String oldStatus, String repairStatus, String errorMsg){
+        PaySyncRecord paySyncRecord = new PaySyncRecord()
+                .setPaymentId(payOrder.getId())
+                .setChannel(payOrder.getAsyncChannel())
+                .setSyncInfo(syncResult.getSyncInfo())
+                .setSyncStatus(syncResult.getSyncStatus().getCode())
+                .setRepairOrder(repair)
+                .setOldStatus(oldStatus)
+                .setRepairStatus(repairStatus)
+                .setErrorMsg(errorMsg)
+                .setClientIp(PaymentContextLocal.get().getRequest().getClientIp())
+                .setReqId(PaymentContextLocal.get().getRequest().getReqId());
+        paySyncRecordService.saveRecord(paySyncRecord);
     }
 }

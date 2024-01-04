@@ -52,7 +52,7 @@ public class PaymentAssistService {
     private void initRequest(PayCommonParam payCommonParam){
         RequestLocal request = PaymentContextLocal.get().getRequest();
         request.setClientIp(payCommonParam.getClientIp())
-                .setExtraParam(payCommonParam.getExtraParam())
+                .setAttach(payCommonParam.getAttach())
                 .setSign(payCommonParam.getSign())
                 .setVersion(payCommonParam.getVersion())
                 .setReqTime(payCommonParam.getReqTime())

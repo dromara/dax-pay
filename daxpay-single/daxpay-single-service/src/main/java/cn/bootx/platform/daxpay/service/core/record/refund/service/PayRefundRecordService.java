@@ -6,7 +6,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.service.core.record.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.record.refund.entity.PayRefundOrder;
-import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
+import cn.bootx.platform.daxpay.service.dto.record.refund.PayRefundOrderDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +24,10 @@ import org.springframework.stereotype.Service;
 public class PayRefundRecordService {
 
     private final PayRefundOrderManager refundRecordManager;
+
+    // TODO 记录退款记录
+
+
 
     /**
      * 分页查询

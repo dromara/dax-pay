@@ -13,6 +13,8 @@
 ## 🙏🙏🙏 求star呀，走过路过留个star吧，非常非常感谢。🙏🙏🙏
 
 ## 🍈项目介绍
+[**查看开发进度**](https://gitee.com/bootx/dax-pay/issues/I8TQ9Q)  
+
 单商户模式模式重构中, 敬请期待!!!
 
 

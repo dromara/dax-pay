@@ -18,7 +18,6 @@ public class AsyncPayLocal {
     /** 异步支付方式 */
     private PayWayEnum payWay;
 
-
     /**
      * 第三方支付平台订单号
      * 1. 如付款码支付直接成功时会出现
@@ -32,5 +31,8 @@ public class AsyncPayLocal {
 
     /** 订单失效时间, 优先用这个 */
     private LocalDateTime expiredTime;
+
+    /** 支付完成时间(通常用于接收异步支付返回的时间) */
+    private LocalDateTime payTime;
 
 }

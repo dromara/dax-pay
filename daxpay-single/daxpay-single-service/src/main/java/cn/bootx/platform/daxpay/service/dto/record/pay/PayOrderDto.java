@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.dto.order.pay;
+package cn.bootx.platform.daxpay.service.dto.record.pay;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.record.callback.dao;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import cn.bootx.platform.daxpay.service.core.record.callback.entity.CallbackRecord;
+import cn.bootx.platform.daxpay.service.core.record.callback.entity.PayCallbackRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
  */
 @Slf4j
 @Repository
-public class CallbackRecordManager extends BaseManager<CallbackRecordMapper, CallbackRecord> {
+public class PayCallbackRecordManager extends BaseManager<PayCallbackRecordMapper, PayCallbackRecord> {
 }

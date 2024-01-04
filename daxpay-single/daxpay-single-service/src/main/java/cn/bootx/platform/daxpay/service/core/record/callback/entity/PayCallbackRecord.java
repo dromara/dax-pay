@@ -1,11 +1,16 @@
 package cn.bootx.platform.daxpay.service.core.record.callback.entity;
 
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.core.record.callback.convert.PayCallbackRecordConvert;
+import cn.bootx.platform.daxpay.service.dto.record.callback.PayCallbackRecordDto;
 import cn.bootx.table.modify.annotation.DbComment;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,7 +25,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class CallbackRecord extends MpCreateEntity {
+@DbTable(comment = "网关回调通知")
+@TableName("pay_callback_record")
+public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunction<PayCallbackRecordDto> {
     /** 支付记录id */
     @DbComment("支付记录id")
     private Long paymentId;
@@ -46,7 +53,6 @@ public class CallbackRecord extends MpCreateEntity {
 
     /**
      * 回调处理状态
-     * @see
      */
     @DbComment("回调处理状态")
     private String status;
@@ -58,4 +64,12 @@ public class CallbackRecord extends MpCreateEntity {
     /** 回调时间 */
     @DbComment("回调时间")
     private LocalDateTime notifyTime;
+
+    /**
+     * 转换
+     */
+    @Override
+    public PayCallbackRecordDto toDto() {
+        return PayCallbackRecordConvert.CONVERT.convert(this);
+    }
 }

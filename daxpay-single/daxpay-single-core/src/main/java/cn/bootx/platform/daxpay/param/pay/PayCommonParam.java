@@ -27,7 +27,7 @@ public abstract class PayCommonParam {
 
     /** 商户扩展参数,回调时会原样返回 */
     @Schema(description = "商户扩展参数,回调时会原样返回")
-    private String extraParam;
+    private String attach;
 
     @Schema(description = "是否不进行同步通知的跳转")
     private boolean notReturn;

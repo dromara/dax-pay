@@ -55,7 +55,7 @@ public class PayService {
         // 异步支付方式检查
         PayUtil.validationAsyncPay(payParam);
 
-        // 获取并校验支付订单状态
+        // 获取并校验支付订单状态, 如果超时, 触发支付单同步和修复动作
         PayOrder payOrder = payAssistService.getOrderAndCheck(payParam.getBusinessNo());
 
         // 初始化上下文

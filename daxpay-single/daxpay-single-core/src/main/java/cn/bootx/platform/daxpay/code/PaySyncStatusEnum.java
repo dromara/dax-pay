@@ -16,18 +16,14 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 public enum PaySyncStatusEnum {
-
-    NOT_SYNC("not_sync", "不需要同步"),
+    FAIL("fail", "查询失败"),
     PAY_SUCCESS("pay_success", "支付成功"),
     PAY_WAIT("pay_wait", "等待付款中"),
     CLOSED("closed", "已关闭"),
     REFUND("refund", "已退款"),
     NOT_FOUND("not_found", "未查询到订单"),
-    /** 例如支付宝支付后, 客户未进行操作, 将不会创建出订单, 所以同步会返回未查询到订单 */
-    IGNORE("ignore", "忽略"),
     /** 本地订单到了超时时间, 但是网关和本地都未关闭, 需要触发关闭相关处理 */
-    TIMEOUT("timeout", "超时未关闭"),
-    FAIL("fail", "查询失败");
+    TIMEOUT("timeout", "超时未关闭");
 
     /** 编码 */
     private final String code;

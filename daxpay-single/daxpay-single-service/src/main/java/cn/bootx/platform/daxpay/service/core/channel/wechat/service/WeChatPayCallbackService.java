@@ -1,14 +1,16 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.record.callback.dao.CallbackRecordManager;
+import cn.bootx.platform.daxpay.service.core.record.callback.dao.PayCallbackRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCallbackStrategy;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
@@ -16,11 +18,13 @@ import com.ijpay.core.kit.WxPayKit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.APPID;
+import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.TIME_END;
 
 
 /**
@@ -34,7 +38,7 @@ import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.APPID;
 public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
     private final WeChatPayConfigService weChatPayConfigService;
 
-    public WeChatPayCallbackService(RedisClient redisClient, CallbackRecordManager callbackRecordManager,
+    public WeChatPayCallbackService(RedisClient redisClient, PayCallbackRecordManager callbackRecordManager,
                                     PayCallbackService payCallbackService, WeChatPayConfigService weChatPayConfigService) {
         super(redisClient, callbackRecordManager, payCallbackService);
         this.weChatPayConfigService = weChatPayConfigService;
@@ -101,7 +105,16 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
     @Override
     public void initContext() {
         Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
+        // 订单号
         PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(callbackParam.get(WeChatPayCode.TRANSACTION_ID));
+        // 支付时间
+        String timeEnd = callbackParam.get(TIME_END);
+        if (StrUtil.isNotBlank(timeEnd)) {
+            LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
+            PaymentContextLocal.get().getAsyncPayInfo().setPayTime(time);
+        } else {
+            PaymentContextLocal.get().getAsyncPayInfo().setPayTime(LocalDateTime.now());
+        }
     }
 
     /**

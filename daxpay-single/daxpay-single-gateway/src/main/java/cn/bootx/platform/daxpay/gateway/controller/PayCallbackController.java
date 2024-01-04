@@ -38,6 +38,7 @@ public class PayCallbackController {
     @Operation(summary = "支付宝回调")
     @PostMapping("/alipay")
     public String aliPay(HttpServletRequest request) {
+
         Map<String, String> stringStringMap = AliPayApi.toMap(request);
         return aliPayCallbackService.payCallback(stringStringMap);
     }

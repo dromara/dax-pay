@@ -4,10 +4,10 @@ import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.NOT_SYNC;
+import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.FAIL;
 
 /**
- * 支付网关同步状态记录对象
+ * 支付网关同步结果
  *
  * @author xxm
  * @since 2021/4/21
@@ -17,15 +17,15 @@ import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.NOT_SYNC;
 public class GatewaySyncResult {
 
     /**
-     * 支付网关同步状态
-     * @see PaySyncStatusEnum#NOT_SYNC
+     * 支付网关订单状态
+     * @see PaySyncStatusEnum
      */
-    private PaySyncStatusEnum syncStatus = NOT_SYNC;
+    private PaySyncStatusEnum syncStatus = FAIL;
 
-    /** 网关返回对象的json字符串 */
-    private String json;
+    /** 网关返回的对象, 序列化为json字符串 */
+    private String syncInfo;
 
     /** 错误提示 */
-    private String msg;
+    private String errorMsg;
 
 }

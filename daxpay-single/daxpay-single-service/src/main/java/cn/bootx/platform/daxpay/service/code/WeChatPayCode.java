@@ -57,6 +57,9 @@ public interface WeChatPayCode {
     /** 微信交易单号 */
     String TRANSACTION_ID = "transaction_id";
 
+    /** 支付完成时间 */
+    String TIME_END = "time_end";
+
     // 交易状态
     /** 支付成功 */
     String TRADE_SUCCESS = "SUCCESS";

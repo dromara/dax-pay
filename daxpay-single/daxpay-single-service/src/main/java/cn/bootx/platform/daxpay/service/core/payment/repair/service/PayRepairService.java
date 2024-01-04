@@ -2,8 +2,10 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.common.entity.OrderRefundableInfo;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.repair.factory.PayRepairStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam;
+import cn.bootx.platform.daxpay.service.core.payment.repair.result.RepairResult;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
@@ -32,7 +34,7 @@ public class PayRepairService {
      * 修复支付单
      */
     @Transactional(rollbackFor = Exception.class )
-    public void repair(PayOrder order, PayRepairParam repairParam){
+    public RepairResult repair(PayOrder order, PayRepairParam repairParam){
         // 从退款记录中获取支付通道 退款记录中的支付通道跟支付时关联的支付通道一致
         List<String> channels = order.getRefundableInfos()
                 .stream()
@@ -41,16 +43,20 @@ public class PayRepairService {
         // 初始化修复参数
         List<AbsPayRepairStrategy> repairStrategies = PayRepairStrategyFactory.createAsyncLast(channels);
         repairStrategies.forEach(repairStrategy -> repairStrategy.initRepairParam(order, repairParam.getRepairSource()));
+        RepairResult repairResult = new RepairResult().setOldStatus(PayStatusEnum.findByCode(order.getStatus()));
         // 根据不同的类型执行对应的修复逻辑
         switch (repairParam.getRepairType()) {
             case SUCCESS:
                 this.success(order, repairStrategies);
+                repairResult.setRepairStatus(PayStatusEnum.SUCCESS);
                 break;
             case CLOSE:
                 this.close(order, repairStrategies);
+                repairResult.setRepairStatus(PayStatusEnum.CLOSE);
                 break;
             case TIMEOUT:
                 this.timeout(order, repairStrategies);
+                repairResult.setRepairStatus(PayStatusEnum.TIMEOUT);
                 break;
             case REFUND:
                 this.refund(order, repairStrategies);
@@ -58,6 +64,7 @@ public class PayRepairService {
             default:
                 break;
         }
+        return repairResult;
     }
 
     /**
@@ -66,6 +73,9 @@ public class PayRepairService {
      * 回调: 将异步支付状态修改为成功
      */
     private void success(PayOrder payment, List<AbsPayRepairStrategy> strategies) {
+        LocalDateTime payTime = PaymentContextLocal.get()
+                .getAsyncPayInfo()
+                .getPayTime();
 
         // 执行个通道的成功处理方法
         strategies.forEach(AbsPayRepairStrategy::doSuccessHandler);
@@ -73,7 +83,7 @@ public class PayRepairService {
         // 修改订单支付状态为成功
         payment.setStatus(PayStatusEnum.SUCCESS.getCode());
         // TODO 读取支付网关中的时间
-        payment.setPayTime(LocalDateTime.now());
+        payment.setPayTime(payTime);
         payOrderService.updateById(payment);
     }
 

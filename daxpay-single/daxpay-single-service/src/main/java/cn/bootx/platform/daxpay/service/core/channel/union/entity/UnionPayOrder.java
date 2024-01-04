@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @Data
 @DbTable(comment = "云闪付支付订单")
 @Accessors(chain = true)
-@TableName("pay_union_payment")
+@TableName("pay_union_pay_order")
 public class UnionPayOrder extends BasePayOrder {
 
 }

@@ -3,8 +3,8 @@ package cn.bootx.platform.daxpay.service.func;
 import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.record.callback.dao.CallbackRecordManager;
-import cn.bootx.platform.daxpay.service.core.record.callback.entity.CallbackRecord;
+import cn.bootx.platform.daxpay.service.core.record.callback.dao.PayCallbackRecordManager;
+import cn.bootx.platform.daxpay.service.core.record.callback.entity.PayCallbackRecord;
 import cn.bootx.platform.daxpay.service.core.payment.callback.result.PayCallbackResult;
 import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
 import cn.hutool.json.JSONUtil;
@@ -26,7 +26,7 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
 
     private final RedisClient redisClient;
 
-    private final CallbackRecordManager callbackRecordManager;
+    private final PayCallbackRecordManager callbackRecordManager;
 
     private final PayCallbackService payCallbackService;
 
@@ -100,7 +100,7 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
      */
     public void saveNotifyRecord(PayCallbackResult result) {
         Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
-        CallbackRecord payNotifyRecord = new CallbackRecord()
+        PayCallbackRecord payNotifyRecord = new PayCallbackRecord()
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackParam))
                 .setNotifyTime(LocalDateTime.now())
                 .setPaymentId(this.getPaymentId())

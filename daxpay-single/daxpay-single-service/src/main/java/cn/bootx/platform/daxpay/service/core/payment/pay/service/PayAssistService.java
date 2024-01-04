@@ -4,10 +4,14 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.service.core.record.pay.builder.PaymentBuilder;
 import cn.bootx.platform.daxpay.service.core.record.pay.dao.PayOrderChannelManager;
 import cn.bootx.platform.daxpay.service.core.record.pay.dao.PayOrderExtraManager;
@@ -15,9 +19,6 @@ import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.service.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PayAssistService {
+
+    private final PaySyncService paySyncService;
 
     private final PayOrderService payOrderService;
     private final PayOrderExtraManager payOrderExtraManager;
@@ -167,9 +170,22 @@ public class PayAssistService {
         // 根据订单查询支付记录
         PayOrder payOrder = payOrderService.findByBusinessNo(businessNo).orElse(null);
         if (Objects.nonNull(payOrder)) {
+            // 待支付
+            if (Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())){
+                // 如果支付超时, 触发订单同步操作, 同时抛出异常
+                if (Objects.nonNull(payOrder.getExpiredTime()) && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
+                    paySyncService.syncPayOrder(payOrder);
+                    throw new PayFailureException("支付已超时，请重新确认支付状态");
+                }
+                return payOrder;
+            }
+            // 已经支付状态
+            if (PayStatusEnum.SUCCESS.getCode().equals(payOrder.getStatus())) {
+                throw new PayFailureException("已经支付成功，请勿重新支付");
+            }
             // 支付失败类型状态
             List<String> tradesStatus = Arrays.asList(PayStatusEnum.FAIL.getCode(), PayStatusEnum.CANCEL.getCode(),
-                    PayStatusEnum.CLOSE.getCode());
+                    PayStatusEnum.CLOSE.getCode(), PayStatusEnum.TIMEOUT.getCode());
             if (tradesStatus.contains(payOrder.getStatus())) {
                 throw new PayFailureException("支付失败或已经被关闭");
             }
@@ -178,13 +194,10 @@ public class PayAssistService {
             if (tradesStatus.contains(payOrder.getStatus())) {
                 throw new PayFailureException("退款中");
             }
-            // 支付超时状态
-            if (Objects.nonNull(payOrder.getExpiredTime())
-                    && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
-                throw new PayFailureException("支付已超时");
-            }
+            // 其他状态直接抛出兜底异常
+            throw new PayFailureException("订单不是待支付状态，请重新确认订单状态");
         }
-        return payOrder;
+        return null;
     }
 
 }

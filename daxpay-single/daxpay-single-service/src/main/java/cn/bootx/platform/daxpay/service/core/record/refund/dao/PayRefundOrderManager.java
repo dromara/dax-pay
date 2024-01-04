@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.service.core.record.refund.entity.PayRefundOrder;
-import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
+import cn.bootx.platform.daxpay.service.dto.record.refund.PayRefundOrderDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

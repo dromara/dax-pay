@@ -4,19 +4,15 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.record.sync.dao.PaySyncRecordManager;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
-import cn.bootx.platform.daxpay.service.dto.order.sync.PaySyncRecordDto;
+import cn.bootx.platform.daxpay.service.dto.record.sync.PaySyncRecordDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 /**
  * 支付同步记录
@@ -26,21 +22,14 @@ import java.time.LocalDateTime;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PaySyncOrderService {
+public class PaySyncRecordService {
     private final PaySyncRecordManager orderManager;
 
     /**
-     * 记录同步记录
+     * 记录同步记录 同步支付单的不进行记录
      */
-    @Transactional(propagation= Propagation.REQUIRES_NEW)
-    public void saveRecord(GatewaySyncResult paySyncResult, PayOrder payment){
-        PaySyncRecord paySyncRecord = new PaySyncRecord()
-                .setPaymentId(payment.getId())
-                .setChannel(payment.getAsyncChannel())
-                .setSyncInfo(paySyncResult.getJson())
-                .setStatus(paySyncResult.getSyncStatus().getCode())
-                .setMsg(paySyncResult.getMsg())
-                .setSyncTime(LocalDateTime.now());
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveRecord(PaySyncRecord paySyncRecord){
         orderManager.save(paySyncRecord);
     }
 
