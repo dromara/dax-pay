@@ -28,7 +28,7 @@ public class PaySyncRecordManager extends BaseManager<PaySyncRecordMapper, PaySy
         return lambdaQuery().orderByDesc(MpIdEntity::getId)
                 .like(Objects.nonNull(param.getPaymentId()), PaySyncRecord::getPaymentId, param.getPaymentId())
                 .eq(Objects.nonNull(param.getChannel()), PaySyncRecord::getChannel, param.getChannel())
-                .eq(Objects.nonNull(param.getStatus()), PaySyncRecord::getSyncStatus, param.getStatus())
+                .eq(Objects.nonNull(param.getStatus()), PaySyncRecord::getGatewayStatus, param.getStatus())
                 .page(mpPage);
     }
 

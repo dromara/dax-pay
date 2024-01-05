@@ -23,13 +23,11 @@ public class PaySyncResult extends PayCommonResult{
      * 支付网关同步状态
      * @see PaySyncStatusEnum
      */
-    private String syncStatus = FAIL.getCode();
+    @Schema(description = "支付网关同步状态")
+    private String gatewayStatus = FAIL.getCode();
 
     @Schema(description = "是否同步成功")
     private boolean success;
-
-    @Schema(description = "失败原因")
-    private String errorMsg;
 
     @Schema(description = "是否进行了修复")
     private boolean repair;
@@ -39,5 +37,8 @@ public class PaySyncResult extends PayCommonResult{
 
     @Schema(description = "支付单修复后状态")
     private String repairStatus;
+
+    @Schema(description = "失败原因")
+    private String errorMsg;
 
 }

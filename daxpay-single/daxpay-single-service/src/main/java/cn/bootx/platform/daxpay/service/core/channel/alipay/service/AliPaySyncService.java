@@ -68,9 +68,9 @@ public class AliPaySyncService {
                     return syncResult.setSyncStatus(PaySyncStatusEnum.CLOSED);
                 }
             }
-            // 支付宝支付后, 客户未进行操作将不会创建出订单, 所以交易不存在等于未查询订单
+            // 支付宝支付后, 客户未进行操作将不会创建出订单, 所以交易不存在约等于未查询订单
             if (Objects.equals(response.getSubCode(), AliPayCode.ACQ_TRADE_NOT_EXIST)) {
-                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_WAIT);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.NOT_FOUND_UNKNOWN);
             }
         }
         catch (AlipayApiException e) {

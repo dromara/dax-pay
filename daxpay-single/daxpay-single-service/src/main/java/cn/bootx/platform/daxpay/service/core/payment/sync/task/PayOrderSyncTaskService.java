@@ -25,7 +25,7 @@ public class PayOrderSyncTaskService {
     public void syncTask() {
         log.info("开始同步支付订单");
         // 1. 从超时订单列表中获取到未超时的订单号
-        for (String s : PayExpiredTimeRepository.getNormalKeysBy7Day()) {
+        for (String s : PayExpiredTimeRepository.getNormalKeysBy30Day()) {
             try {
                 Long paymentId = Long.parseLong(s);
                 PaySyncParam paySyncParam = new PaySyncParam();

@@ -17,7 +17,7 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
-import cn.bootx.platform.daxpay.service.util.PayUtil;
+import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
@@ -272,7 +272,7 @@ public class WeChatPayService {
     public void rotationSync(PayOrder payOrder) {
         PaySyncResult paySyncResult = paySyncService.syncPayOrder(payOrder);
         // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
-        if (Objects.equals(PAY_WAIT.getCode(), paySyncResult.getSyncStatus())) {
+        if (Objects.equals(PAY_WAIT.getCode(), paySyncResult.getGatewayStatus())) {
             throw new RetryableException();
         }
     }

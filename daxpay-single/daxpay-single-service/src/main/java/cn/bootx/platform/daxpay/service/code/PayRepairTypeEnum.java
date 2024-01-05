@@ -13,8 +13,10 @@ import lombok.Getter;
 public enum PayRepairTypeEnum {
 
     SUCCESS("success","成功"),
-    CLOSE("close","关闭"),
-    TIMEOUT("timeout","超时关闭"),
+    CLOSE_LOCAL("close_local","关闭本地支付"),
+    WAIT("wait","待支付"),
+    /** 同时也会关闭本地支付 */
+    CLOSE_GATEWAY("close_gateway","关闭网关支付"),
     REFUND("refund","退款");
 
     private final String code;

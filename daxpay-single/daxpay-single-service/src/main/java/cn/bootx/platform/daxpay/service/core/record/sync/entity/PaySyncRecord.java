@@ -32,6 +32,10 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbComment("支付记录id")
     private Long paymentId;
 
+    /** 业务号 */
+    @DbComment("业务号")
+    private String businessNo;
+
     /**
      * 支付通道
      * @see PayChannelEnum#getCode()
@@ -45,14 +49,14 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     private String syncInfo;
 
     /**
-     * 同步状态
+     * 网关返回状态
      * @see PaySyncStatusEnum
      */
     @DbComment("同步状态")
-    private String syncStatus;
+    private String gatewayStatus;
 
     /**
-     * 支付单如果状态不一致, 是否修复成功
+     * 支付单如果状态不一致, 是否进行修复
      */
     @DbComment("是否进行修复")
     private boolean repairOrder;

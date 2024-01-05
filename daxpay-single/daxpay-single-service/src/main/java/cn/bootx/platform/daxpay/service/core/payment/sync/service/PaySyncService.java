@@ -26,9 +26,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.*;
 
 /**
  * 支付同步服务
@@ -90,15 +93,15 @@ public class PaySyncService {
         }
 
         // 判断网关状态是否和支付单一致, 同时更新网关同步状态
-        boolean statusSync = this.checkStatusSync(syncResult,order);
+        boolean statusSync = this.checkAndAdjustSyncStatus(syncResult,order);
         try {
             // 状态不一致，执行支付单修复逻辑
             if (!statusSync){
                 this.resultHandler(syncResult, order);
                 repairStatus = order.getStatus();
             }
-        } catch (Exception e) {
-            // 同步失败, 返回失败响应, 同时记录失败的日志 TODO 后面异常范围能这么宽泛
+        } catch (PayFailureException e) {
+            // 同步失败, 返回失败响应, 同时记录失败的日志
             syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
             this.saveRecord(order, syncResult, false, oldStatus, null, e.getMessage());
             return new PaySyncResult().setErrorMsg(e.getMessage());
@@ -107,39 +110,50 @@ public class PaySyncService {
         // 同步成功记录日志
         this.saveRecord( order, syncResult, !statusSync, oldStatus, repairStatus, null);
         return new PaySyncResult()
+                .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setSuccess(true)
                 .setRepair(!statusSync)
-                .setRepairStatus(repairStatus)
-                .setSyncStatus(syncResult.getSyncStatus().getCode());
+                .setOldStatus(oldStatus)
+                .setRepairStatus(repairStatus);
     }
 
     /**
-     * 支付单和网关状态是否一致, 同时待支付状态下, 处理支付超时情况
+     * 判断支付单和网关状态是否一致, 同时待支付状态下, 支付单支付超时进行状态的更改
      */
-    public boolean checkStatusSync(GatewaySyncResult syncResult, PayOrder order){
+    private boolean checkAndAdjustSyncStatus(GatewaySyncResult syncResult, PayOrder order){
         PaySyncStatusEnum syncStatus = syncResult.getSyncStatus();
         String orderStatus = order.getStatus();
-        // 支付成功比对
-        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(PaySyncStatusEnum.PAY_SUCCESS)){
+        // 本地支付成功/网关支付成功
+        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(PAY_SUCCESS)){
             return true;
         }
-        // 待支付比对 支付中都代表待支付, 需要处理订单超时的情况
-        List<PaySyncStatusEnum> enums = Collections.singletonList(PaySyncStatusEnum.PAY_WAIT);
-        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && enums.contains(syncStatus)){
+
+        /*
+        本地支付中/网关支付中或者订单未找到(未知)  支付宝特殊情况，未找到订单可能是发起支付用户未操作、支付已关闭、交易未找到三种情况
+        所以需要根据本地订单不同的状态进行特殊处理
+         */
+        List<PaySyncStatusEnum> syncWaitEnums = Arrays.asList(PAY_WAIT, NOT_FOUND_UNKNOWN);
+        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && syncWaitEnums.contains(syncStatus)){
             // 判断支付单是否支付超时, 如果待支付状态下触发超时
             if (LocalDateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
+                // 将支付单同步状态状态调整为支付超时, 进行订单的关闭
                 syncResult.setSyncStatus(PaySyncStatusEnum.TIMEOUT);
                 return false;
             }
             return true;
         }
-
-        // 支付关闭比对
-        if (orderStatus.equals(PayStatusEnum.CLOSE.getCode()) && syncStatus.equals(PaySyncStatusEnum.CLOSED)){
+        /*
+         关闭 /网关支付关闭、订单未找到、订单未找到(特殊)， 订单未找到(特殊)主要是支付宝特殊情况，
+         未找到订单可能是发起支付用户未操作、支付已关闭、交易未找到三种情况
+         所以需要根据本地订单不同的状态进行特殊处理, 此处视为支付已关闭、交易未找到这两种, 处理方式相同, 都作为支付关闭处理
+         */
+        List<String> payCloseEnums = Collections.singletonList(PayStatusEnum.CLOSE.getCode());
+        List<PaySyncStatusEnum> syncClose = Arrays.asList(CLOSED, NOT_FOUND, NOT_FOUND_UNKNOWN);
+        if (payCloseEnums.contains(orderStatus) && syncClose.contains(syncStatus)){
             return true;
         }
 
-        // 退款比对
+        // TODO 退款比对
         if (orderStatus.equals(PayStatusEnum.REFUNDED.getCode()) && syncStatus.equals(PaySyncStatusEnum.REFUND)){
             return true;
         }
@@ -160,15 +174,23 @@ public class PaySyncService {
                 repairService.repair(payOrder,repairParam);
                 break;
             }
-            // 待付款/ 支付中
+            // 待支付, 将订单状态重新设置为待支付
             case PAY_WAIT: {
-                log.info("依然是付款状态");
+                repairParam.setRepairType(PayRepairTypeEnum.WAIT);
+                repairService.repair(payOrder,repairParam);
                 break;
             }
-            // 订单已经超时关闭 和 网关没找到记录, 对订单进行关闭
+            // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
-                repairParam.setRepairType(PayRepairTypeEnum.CLOSE);
+                repairParam.setRepairType(PayRepairTypeEnum.CLOSE_LOCAL);
+                repairService.repair(payOrder, repairParam);
+                break;
+            }
+            // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
+            case TIMEOUT:
+            case NOT_FOUND_UNKNOWN:{
+                repairParam.setRepairType(PayRepairTypeEnum.CLOSE_GATEWAY);
                 repairService.repair(payOrder, repairParam);
                 break;
             }
@@ -179,10 +201,6 @@ public class PaySyncService {
                 break;
             }
             // 调用出错
-            case TIMEOUT:
-                repairParam.setRepairType(PayRepairTypeEnum.TIMEOUT);
-                repairService.repair(payOrder, repairParam);
-                break;
             case FAIL: {
                 // 不进行处理 TODO 添加重试
                 log.warn("支付状态同步接口调用出错");
@@ -207,9 +225,10 @@ public class PaySyncService {
     private void saveRecord(PayOrder payOrder,GatewaySyncResult syncResult, boolean repair, String oldStatus, String repairStatus, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setPaymentId(payOrder.getId())
+                .setBusinessNo(payOrder.getBusinessNo())
                 .setChannel(payOrder.getAsyncChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
-                .setSyncStatus(syncResult.getSyncStatus().getCode())
+                .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setRepairOrder(repair)
                 .setOldStatus(oldStatus)
                 .setRepairStatus(repairStatus)

@@ -12,7 +12,7 @@ import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
-import cn.bootx.platform.daxpay.service.util.PayUtil;
+import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Method;

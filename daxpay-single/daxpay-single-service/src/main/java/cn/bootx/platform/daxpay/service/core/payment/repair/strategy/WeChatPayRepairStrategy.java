@@ -1,14 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.repair.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.service.core.record.pay.dao.PayOrderChannelManager;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrderChannel;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,23 +60,19 @@ public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
     }
 
     /**
-     * 取消支付
+     * 关闭本地支付
      */
     @Override
-    public void doCloseHandler() {
-        // 如果非同步出的订单取消状态, 则调用支付网关关闭订单
-        if (this.getRepairSource() != PayRepairSourceEnum.SYNC){
-            closeService.close(this.getOrder(),this.weChatPayConfig);
-        }
+    public void doCloseLocalHandler() {
         orderService.updateClose(this.getOrder().getId());
     }
 
     /**
-     * 订单支付超时取消支付
+     * 关闭本地支付和网关支付
      */
     @Override
-    public void doTimeoutHandler() {
+    public void doCloseGatewayHandler() {
         closeService.close(this.getOrder(),this.weChatPayConfig);
-        orderService.updateClose(this.getOrder().getId());
+        this.doCloseLocalHandler();
     }
 }

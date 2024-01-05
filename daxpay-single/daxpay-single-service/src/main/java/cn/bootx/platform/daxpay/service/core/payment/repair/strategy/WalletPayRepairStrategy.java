@@ -29,7 +29,7 @@ public class WalletPayRepairStrategy extends AbsPayRepairStrategy {
      * 取消支付
      */
     @Override
-    public void doCloseHandler() {
+    public void doCloseLocalHandler() {
         walletPayService.close(this.getOrder().getId());
         walletPayOrderService.updateClose(this.getOrder().getId());
     }

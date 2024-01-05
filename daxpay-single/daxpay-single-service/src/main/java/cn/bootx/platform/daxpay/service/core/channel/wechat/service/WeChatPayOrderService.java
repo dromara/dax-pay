@@ -77,12 +77,13 @@ public class WeChatPayOrderService {
         // 创建微信支付记录
         WeChatPayOrder wechatPayOrder = new WeChatPayOrder();
         wechatPayOrder.setTradeNo(tradeNo)
-            .setPaymentId(payOrder.getId())
-            .setAmount(amount)
-            .setRefundableBalance(amount)
-            .setBusinessNo(payOrder.getBusinessNo())
-            .setStatus(PayStatusEnum.SUCCESS.getCode())
-            .setPayTime(LocalDateTime.now());
+                .setPayWay(PaymentContextLocal.get().getAsyncPayInfo().getPayWay().getCode())
+                .setPaymentId(payOrder.getId())
+                .setAmount(amount)
+                .setRefundableBalance(amount)
+                .setBusinessNo(payOrder.getBusinessNo())
+                .setStatus(PayStatusEnum.SUCCESS.getCode())
+                .setPayTime(LocalDateTime.now());
         weChatPayOrderManager.save(wechatPayOrder);
     }
 

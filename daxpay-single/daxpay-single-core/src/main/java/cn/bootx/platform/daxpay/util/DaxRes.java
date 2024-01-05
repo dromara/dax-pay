@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.util;
+package cn.bootx.platform.daxpay.util;
 
 import cn.bootx.platform.daxpay.result.DaxResult;
 import lombok.experimental.UtilityClass;

@@ -33,30 +33,37 @@ public class PayRepairService {
     /**
      * 修复支付单
      */
-    @Transactional(rollbackFor = Exception.class )
+    @Transactional(rollbackFor = Exception.class)
     public RepairResult repair(PayOrder order, PayRepairParam repairParam){
         // 从退款记录中获取支付通道 退款记录中的支付通道跟支付时关联的支付通道一致
         List<String> channels = order.getRefundableInfos()
                 .stream()
                 .map(OrderRefundableInfo::getChannel)
                 .collect(Collectors.toList());
+
         // 初始化修复参数
         List<AbsPayRepairStrategy> repairStrategies = PayRepairStrategyFactory.createAsyncLast(channels);
         repairStrategies.forEach(repairStrategy -> repairStrategy.initRepairParam(order, repairParam.getRepairSource()));
+        repairStrategies.forEach(AbsPayRepairStrategy::doBeforeHandler);
         RepairResult repairResult = new RepairResult().setOldStatus(PayStatusEnum.findByCode(order.getStatus()));
+
         // 根据不同的类型执行对应的修复逻辑
         switch (repairParam.getRepairType()) {
             case SUCCESS:
                 this.success(order, repairStrategies);
                 repairResult.setRepairStatus(PayStatusEnum.SUCCESS);
                 break;
-            case CLOSE:
-                this.close(order, repairStrategies);
+            case CLOSE_LOCAL:
+                this.closeLocal(order, repairStrategies);
                 repairResult.setRepairStatus(PayStatusEnum.CLOSE);
                 break;
-            case TIMEOUT:
-                this.timeout(order, repairStrategies);
-                repairResult.setRepairStatus(PayStatusEnum.TIMEOUT);
+            case WAIT:
+                this.wait(order, repairStrategies);
+                repairResult.setRepairStatus(PayStatusEnum.PROGRESS);
+                break;
+            case CLOSE_GATEWAY:
+                this.closeGateway(order, repairStrategies);
+                repairResult.setRepairStatus(PayStatusEnum.CLOSE);
                 break;
             case REFUND:
                 this.refund(order, repairStrategies);
@@ -68,43 +75,52 @@ public class PayRepairService {
     }
 
     /**
+     * 变更未待支付
+     *
+     */
+    private void wait(PayOrder order, List<AbsPayRepairStrategy> repairStrategies) {
+        // 修改订单支付状态为成功
+        order.setStatus(PayStatusEnum.PROGRESS.getCode());
+        payOrderService.updateById(order);
+    }
+
+    /**
      * 变更为已支付
      * 同步: 将异步支付状态修改为成功
      * 回调: 将异步支付状态修改为成功
      */
-    private void success(PayOrder payment, List<AbsPayRepairStrategy> strategies) {
+    private void success(PayOrder order, List<AbsPayRepairStrategy> strategies) {
         LocalDateTime payTime = PaymentContextLocal.get()
                 .getAsyncPayInfo()
                 .getPayTime();
-
         // 执行个通道的成功处理方法
         strategies.forEach(AbsPayRepairStrategy::doSuccessHandler);
 
         // 修改订单支付状态为成功
-        payment.setStatus(PayStatusEnum.SUCCESS.getCode());
-        // TODO 读取支付网关中的时间
-        payment.setPayTime(payTime);
-        payOrderService.updateById(payment);
+        order.setStatus(PayStatusEnum.SUCCESS.getCode());
+        // 读取支付网关中的时间
+        order.setPayTime(payTime);
+        payOrderService.updateById(order);
     }
 
     /**
      * 关闭支付
-     * 同步: 执行支付单所有的支付通道关闭支付逻辑, 不再重复调用网关进行支付的关闭
+     * 同步: 执行支付单所有的支付通道关闭支付逻辑, 如果来源是网关同步, 则不需要调用网关关闭
      * 回调: 执行所有的支付通道关闭支付逻辑
      */
-    private void close(PayOrder payOrder, List<AbsPayRepairStrategy> absPayStrategies) {
+    private void closeLocal(PayOrder order, List<AbsPayRepairStrategy> absPayStrategies) {
         // 执行策略的关闭方法
-        absPayStrategies.forEach(AbsPayRepairStrategy::doCloseHandler);
-        payOrder.setStatus(PayStatusEnum.CLOSE.getCode());
-        payOrderService.updateById(payOrder);
+        absPayStrategies.forEach(AbsPayRepairStrategy::doCloseLocalHandler);
+        order.setStatus(PayStatusEnum.CLOSE.getCode());
+        payOrderService.updateById(order);
     }
     /**
-     * 支付超时关闭订单
+     * 关闭网关交易, 同时也会关闭本地支付
      */
-    private void timeout(PayOrder payOrder, List<AbsPayRepairStrategy> absPayStrategies) {
+    private void closeGateway(PayOrder payOrder, List<AbsPayRepairStrategy> absPayStrategies) {
         // 执行策略的关闭方法
-        absPayStrategies.forEach(AbsPayRepairStrategy::doTimeoutHandler);
-        payOrder.setStatus(PayStatusEnum.TIMEOUT.getCode());
+        absPayStrategies.forEach(AbsPayRepairStrategy::doCloseGatewayHandler);
+        payOrder.setStatus(PayStatusEnum.CLOSE.getCode());
         payOrderService.updateById(payOrder);
     }
 

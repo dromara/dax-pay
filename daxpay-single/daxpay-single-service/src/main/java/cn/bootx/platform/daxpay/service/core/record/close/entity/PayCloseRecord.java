@@ -29,6 +29,10 @@ public class PayCloseRecord extends MpCreateEntity implements EntityBaseFunction
     @DbComment("支付记录id")
     private Long paymentId;
 
+    /** 业务号 */
+    @DbComment("业务号")
+    private String businessNo;
+
     /**
      * 关闭的异步支付通道, 可以为空
      * @see PayChannelEnum#getCode()

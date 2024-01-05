@@ -43,10 +43,10 @@ public class PayExpiredTimeRepository {
     /**
      * 获取所有未过期的订单ID. (7天内的订单)
      */
-    public Set<String> getNormalKeysBy7Day(){
+    public Set<String> getNormalKeysBy30Day(){
         LocalDateTime now = LocalDateTime.now();
         long start = LocalDateTimeUtil.timestamp(now);
-        long end = LocalDateTimeUtil.timestamp(now.plusDays(7));
+        long end = LocalDateTimeUtil.timestamp(now.plusDays(30));
         return redisClient.zrangeByScore(KEY, start, end);
     }
 

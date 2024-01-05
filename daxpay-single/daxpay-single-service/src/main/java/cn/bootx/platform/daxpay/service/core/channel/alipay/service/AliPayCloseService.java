@@ -27,7 +27,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class AliPayCloseService {
-    private final AliPaySyncService paySyncService;
+    private final AliPaySyncService aliPaySyncService;
 
     /**
      * 关闭支付 此处使用交易关闭接口, 支付宝支持 交易关闭 和 交易撤销 两种关闭订单的方式, 区别如下
@@ -70,7 +70,7 @@ public class AliPayCloseService {
      * 关闭失败后, 获取支付网关的状态, 如果是关闭返回true, 其他情况抛出异常
      */
     private boolean syncStatus(PayOrder payOrder){
-        GatewaySyncResult gatewaySyncResult = paySyncService.syncPayStatus(payOrder);
+        GatewaySyncResult gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder);
         // 已经关闭
         if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncStatusEnum.CLOSED)){
             return true;

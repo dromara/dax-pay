@@ -12,7 +12,7 @@ import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.bootx.platform.daxpay.service.util.PayUtil;
+import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollectionUtil;

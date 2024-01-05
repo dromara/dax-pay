@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.param.pay;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
@@ -9,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -36,12 +34,6 @@ public class SimpleRefundParam extends PayCommonParam {
      */
     @Schema(description = "退款订单号")
     private String refundNo;
-    /**
-     * @see PayChannelEnum#getCode()
-     */
-    @Schema(description = "支付通道编码")
-    @NotBlank(message = "支付通道编码不可为空")
-    private String payChannel;
 
     /**
      * 部分退款需要传输refundModes参数

@@ -70,7 +70,6 @@ public class AliPayConfigService {
      */
     @SneakyThrows
     public void initConfig(AliPayConfig alipayConfig) {
-
         AliPayApiConfig aliPayApiConfig;
         // 公钥
         if (Objects.equals(alipayConfig.getAuthType(), AliPayCode.AUTH_TYPE_KEY)) {

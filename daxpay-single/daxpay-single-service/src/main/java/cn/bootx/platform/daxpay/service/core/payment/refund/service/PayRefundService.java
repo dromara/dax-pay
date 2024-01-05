@@ -54,7 +54,6 @@ public class PayRefundService {
         BeanUtil.copyProperties(param,refundParam);
         RefundChannelParam channelParam = new RefundChannelParam()
                 .setAmount(param.getAmount())
-                .setChannel(param.getPayChannel())
                 .setChannelExtra(param.getChannelExtra());
         refundParam.setRefundChannels(Collections.singletonList(channelParam));
         return this.refund(refundParam,true);
@@ -66,9 +65,10 @@ public class PayRefundService {
      * @param simple 是否简单退款
      */
     private RefundResult refund(RefundParam param, boolean simple){
+        // 检查获取支付订单, 同时设置退款参数中对应的支付通道参数
+        PayOrder payOrder = payRefundAssistService.getPayOrderAndCheckByRefundParam(param, simple);
         // 参数校验
         ValidationUtil.validateParam(param);
-        PayOrder payOrder = payRefundAssistService.getPayOrderAndCheckByRefundParam(param, simple);
         // 退款上下文初始化
         payRefundAssistService.initRefundContext(param);
         // 是否全部退款

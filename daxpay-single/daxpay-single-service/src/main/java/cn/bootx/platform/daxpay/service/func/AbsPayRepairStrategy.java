@@ -45,15 +45,15 @@ public abstract class AbsPayRepairStrategy {
     }
 
     /**
-     * 取消支付
+     * 关闭本地支付
      */
-    public abstract void doCloseHandler();
+    public abstract void doCloseLocalHandler();
 
     /**
-     * 订单支付超时取消支付
+     * 关闭本地支付和网关支付, 默认为关闭本地支付
      */
-    public void doTimeoutHandler() {
-
+    public void doCloseGatewayHandler() {
+        this.doCloseLocalHandler();
     }
 
     /**

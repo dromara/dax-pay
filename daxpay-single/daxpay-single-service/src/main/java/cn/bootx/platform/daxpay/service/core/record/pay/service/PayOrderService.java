@@ -29,7 +29,8 @@ public class PayOrderService {
 
     private final PayExpiredTimeService expiredTimeService;
 
-    private final List<String> ORDER_FINISH = Arrays.asList(PayStatusEnum.CLOSE.getCode(),PayStatusEnum.TIMEOUT.getCode(), PayStatusEnum.SUCCESS.getCode());
+    //
+    private final List<String> ORDER_FINISH = Arrays.asList(PayStatusEnum.CLOSE.getCode(), PayStatusEnum.SUCCESS.getCode());
 
     /**
      * 根据id查询
@@ -49,12 +50,11 @@ public class PayOrderService {
      * 新增
      */
     public void save(PayOrder payOrder){
+        payOrderManager.save(payOrder);
         // 异步支付需要添加订单超时任务记录
         if (payOrder.isAsyncPay()){
             expiredTimeService.registerExpiredTime(payOrder);
         }
-
-        payOrderManager.save(payOrder);
     }
 
     /**

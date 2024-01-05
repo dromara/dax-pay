@@ -112,6 +112,7 @@ public class PayCloseService {
                 .getReqId();
         PayCloseRecord record = new PayCloseRecord()
                 .setPaymentId(payOrder.getId())
+                .setBusinessNo(payOrder.getBusinessNo())
                 .setAsyncChannel(payOrder.getAsyncChannel())
                 .setClosed(closed)
                 .setErrorMsg(errMsg)

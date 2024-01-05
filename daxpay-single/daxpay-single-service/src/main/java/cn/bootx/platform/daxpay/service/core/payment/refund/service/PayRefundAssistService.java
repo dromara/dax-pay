@@ -67,7 +67,6 @@ public class PayRefundAssistService {
      * 根据退款参数获取支付订单, 并进行检查
      */
     public PayOrder getPayOrderAndCheckByRefundParam(RefundParam param, boolean simple){
-
         if (!param.isRefundAll()) {
             if (CollUtil.isEmpty(param.getRefundChannels())) {
                 throw new ValidationFailedException("退款通道参数不能为空");
@@ -87,19 +86,28 @@ public class PayRefundAssistService {
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
 
-        // 简单退款校验
-        if (payOrder.isCombinationPay() != simple){
-            throw new PayFailureException("组合支付不可以使用简单退款方式");
+        // 简单退款处理
+        if (simple){
+            // 简单退款校验
+            if (payOrder.isCombinationPay()){
+                throw new PayFailureException("组合支付不可以使用简单退款方式");
+            }
+            // 设置退款参数的通道配置
+            String channel = payOrder.getRefundableInfos()
+                    .get(0)
+                    .getChannel();
+            param.getRefundChannels().get(0).setChannel(channel);
         }
+
+
         // 状态判断, 支付中/失败/取消等不能进行退款
         List<String> tradesStatus = Arrays.asList(
                 PayStatusEnum.PROGRESS.getCode(),
                 PayStatusEnum.CLOSE.getCode(),
-                PayStatusEnum.CANCEL.getCode(),
-                PayStatusEnum.TIMEOUT.getCode(),
                 PayStatusEnum.FAIL.getCode());
         if (tradesStatus.contains(payOrder.getStatus())) {
-            throw new PayFailureException("状态非法, 无法退款");
+            PayStatusEnum statusEnum = PayStatusEnum.findByCode(payOrder.getStatus());
+            throw new PayFailureException("当前状态["+statusEnum.getName()+"]不允许状态非法, 无法退款");
         }
         return payOrder;
     }

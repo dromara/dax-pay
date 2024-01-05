@@ -105,7 +105,7 @@ public class PayCallbackService {
         // 执行支付关闭修复逻辑
         PayRepairParam payRepairParam = new PayRepairParam()
                 .setRepairSource(PayRepairSourceEnum.CALLBACK)
-                .setRepairType(PayRepairTypeEnum.CLOSE);
+                .setRepairType(PayRepairTypeEnum.CLOSE_LOCAL);
         payRepairService.repair(payOrder, payRepairParam);
         return result;
     }

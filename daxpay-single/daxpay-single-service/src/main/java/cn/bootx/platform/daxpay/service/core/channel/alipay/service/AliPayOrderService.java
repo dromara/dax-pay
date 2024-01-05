@@ -76,6 +76,7 @@ public class AliPayOrderService {
 
         AliPayOrder aliPayOrder = new AliPayOrder();
         aliPayOrder.setTradeNo(tradeNo)
+                .setPayWay(PaymentContextLocal.get().getAsyncPayInfo().getPayWay().getCode())
                 .setPaymentId(payOrder.getId())
                 .setAmount(amount)
                 .setRefundableBalance(amount)

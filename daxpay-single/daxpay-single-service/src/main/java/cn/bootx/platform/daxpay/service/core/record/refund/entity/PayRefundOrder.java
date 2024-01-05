@@ -33,12 +33,12 @@ import java.util.List;
 @TableName(value = "pay_refund_order", autoResultMap = true)
 public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<PayRefundOrderDto> {
 
-    /** 支付单号 */
-    @DbColumn(comment = "关联的业务号")
+    /** 支付id */
+    @DbColumn(comment = "支付id")
     private Long paymentId;
 
-    /** 关联的业务号 */
-    @DbColumn(comment = "关联的业务号")
+    /** 业务号 */
+    @DbColumn(comment = "业务号")
     private String businessNo;
 
     /** 异步方式关联退款请求号(部分退款情况) */
