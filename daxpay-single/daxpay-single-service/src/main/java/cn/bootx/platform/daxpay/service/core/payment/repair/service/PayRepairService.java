@@ -8,6 +8,8 @@ import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.RepairResult;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.record.repair.entity.PayRepairRecord;
+import cn.bootx.platform.daxpay.service.core.record.repair.service.PayRepairRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
 public class PayRepairService {
 
     private final PayOrderService payOrderService;
+
+    private final PayRepairRecordService recordService;
 
     /**
      * 修复支付单
@@ -71,6 +75,7 @@ public class PayRepairService {
             default:
                 break;
         }
+        this.saveRecord(order, repairParam, repairResult);
         return repairResult;
     }
 
@@ -136,5 +141,20 @@ public class PayRepairService {
 
         // 不为0调用退款同步接口
 
+    }
+
+    /**
+     * 保存记录
+     */
+    private void saveRecord(PayOrder order, PayRepairParam repairParam, RepairResult repairResult){
+
+        PayRepairRecord payRepairRecord = new PayRepairRecord()
+                .setBeforeStatus(repairResult.getOldStatus().getCode())
+                .setAfterStatus(repairResult.getRepairStatus().getCode())
+                .setAmount(repairParam.getAmount())
+                .setBusinessNo(order.getBusinessNo())
+                .setRepairSource(repairParam.getRepairSource().getCode())
+                .setRepairType(repairParam.getRepairType().getCode());
+        recordService.saveRecord(payRepairRecord);
     }
 }
