@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.sync.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
+import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
@@ -19,6 +20,8 @@ import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,8 @@ public class PaySyncService {
 
     private final PayRepairService repairService;
 
+    private final LockTemplate lockTemplate;
+
     /**
      * 支付同步, 开启一个新的事务, 不受外部抛出异常的影响
      */
@@ -75,46 +80,56 @@ public class PaySyncService {
      * 2. 如果状态不一致, 调用修复逻辑进行修复
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public PaySyncResult syncPayOrder(PayOrder order) {
-        // 获取同步策略类
-        AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(order.getAsyncChannel());
-        syncPayStrategy.initPayParam(order);
-        // 记录支付单同步前后的状态
-        String oldStatus = order.getStatus();
-        String repairStatus = null;
-
-        // 执行同步操作, 获取支付网关同步的结果
-        GatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
-        // 判断是否同步成功
-        if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
-            // 同步失败, 返回失败响应, 同时记录失败的日志
-            this.saveRecord(order, syncResult, true, oldStatus, null, syncResult.getErrorMsg());
-            return new PaySyncResult().setErrorMsg(syncResult.getErrorMsg());
+    public PaySyncResult syncPayOrder(PayOrder payOrder) {
+        // 加锁
+        LockInfo lock = lockTemplate.lock("payment:refund:" + payOrder.getId());
+        if (Objects.isNull(lock)){
+            throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }
 
-        // 判断网关状态是否和支付单一致, 同时更新网关同步状态
-        boolean statusSync = this.checkAndAdjustSyncStatus(syncResult,order);
         try {
-            // 状态不一致，执行支付单修复逻辑
-            if (!statusSync){
-                this.resultHandler(syncResult, order);
-                repairStatus = order.getStatus();
-            }
-        } catch (PayFailureException e) {
-            // 同步失败, 返回失败响应, 同时记录失败的日志
-            syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
-            this.saveRecord(order, syncResult, false, oldStatus, null, e.getMessage());
-            return new PaySyncResult().setErrorMsg(e.getMessage());
-        }
+            // 获取同步策略类
+            AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getAsyncChannel());
+            syncPayStrategy.initPayParam(payOrder);
+            // 记录支付单同步前后的状态
+            String oldStatus = payOrder.getStatus();
+            String repairStatus = null;
 
-        // 同步成功记录日志
-        this.saveRecord( order, syncResult, !statusSync, oldStatus, repairStatus, null);
-        return new PaySyncResult()
-                .setGatewayStatus(syncResult.getSyncStatus().getCode())
-                .setSuccess(true)
-                .setRepair(!statusSync)
-                .setOldStatus(oldStatus)
-                .setRepairStatus(repairStatus);
+            // 执行同步操作, 获取支付网关同步的结果
+            GatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
+            // 判断是否同步成功
+            if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
+                // 同步失败, 返回失败响应, 同时记录失败的日志
+                this.saveRecord(payOrder, syncResult, true, oldStatus, null, syncResult.getErrorMsg());
+                return new PaySyncResult().setErrorMsg(syncResult.getErrorMsg());
+            }
+
+            // 判断网关状态是否和支付单一致, 同时更新网关同步状态
+            boolean statusSync = this.checkAndAdjustSyncStatus(syncResult,payOrder);
+            try {
+                // 状态不一致，执行支付单修复逻辑
+                if (!statusSync){
+                    this.resultHandler(syncResult, payOrder);
+                    repairStatus = payOrder.getStatus();
+                }
+            } catch (PayFailureException e) {
+                // 同步失败, 返回失败响应, 同时记录失败的日志
+                syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
+                this.saveRecord(payOrder, syncResult, false, oldStatus, null, e.getMessage());
+                return new PaySyncResult().setErrorMsg(e.getMessage());
+            }
+
+            // 同步成功记录日志
+            this.saveRecord( payOrder, syncResult, !statusSync, oldStatus, repairStatus, null);
+            return new PaySyncResult()
+                    .setGatewayStatus(syncResult.getSyncStatus().getCode())
+                    .setSuccess(true)
+                    .setRepair(!statusSync)
+                    .setOldStatus(oldStatus)
+                    .setRepairStatus(repairStatus);
+        } finally {
+            lockTemplate.releaseLock(lock);
+        }
     }
 
     /**

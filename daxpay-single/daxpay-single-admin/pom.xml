@@ -25,7 +25,7 @@
             <version>${bootx-platform.version}</version>
         </dependency>
 
-        <!--若使用redisTemplate作为分布式锁底层，则需要引入-->
+        <!--分布式锁, 使用redisTemplate作为底层-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>

@@ -1,21 +1,24 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.service;
 
+import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
-import cn.bootx.platform.daxpay.service.core.record.pay.builder.PaymentBuilder;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.service.func.PayStrategyConsumer;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayWayParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
+import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
+import cn.bootx.platform.daxpay.service.core.record.pay.builder.PaymentBuilder;
+import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
+import cn.bootx.platform.daxpay.service.func.PayStrategyConsumer;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,8 @@ public class PayService {
 
     private final PayAssistService payAssistService;
 
+    private final LockTemplate lockTemplate;
+
     /**
      * 支付下单接口(同步/异步/组合支付)
      * 1. 同步支付：都只会在第一次执行中就完成支付，例如钱包、储值卡都是调用完就进行了扣减，完成了支付记录
@@ -55,18 +60,28 @@ public class PayService {
         // 异步支付方式检查
         PayUtil.validationAsyncPay(payParam);
 
-        // 获取并校验支付订单状态, 如果超时, 触发支付单同步和修复动作
-        PayOrder payOrder = payAssistService.getOrderAndCheck(payParam.getBusinessNo());
+        String businessNo = payParam.getBusinessNo();
+        // 加锁
+        LockInfo lock = lockTemplate.lock("payment:pay:" + businessNo);
+        if (Objects.isNull(lock)){
+            throw new RepetitiveOperationException("正在支付中，请勿重复支付");
+        }
+        try {
+            // 获取并校验支付订单状态, 如果超时, 触发支付单同步和修复动作
+            PayOrder payOrder = payAssistService.getOrderAndCheck(payParam.getBusinessNo());
 
-        // 初始化上下文
-        payAssistService.initPayContext(payOrder, payParam);
+            // 初始化上下文
+            payAssistService.initPayContext(payOrder, payParam);
 
-        // 异步支付且非第一次支付
-        if (Objects.nonNull(payOrder) && payOrder.isAsyncPay()) {
-            return this.paySyncNotFirst(payParam, payOrder);
-        } else {
-            // 第一次发起支付或同步支付
-            return this.firstPay(payParam, payOrder);
+            // 异步支付且非第一次支付
+            if (Objects.nonNull(payOrder) && payOrder.isAsyncPay()) {
+                return this.paySyncNotFirst(payParam, payOrder);
+            } else {
+                // 第一次发起支付或同步支付
+                return this.firstPay(payParam, payOrder);
+            }
+        } finally {
+            lockTemplate.releaseLock(lock);
         }
     }
 

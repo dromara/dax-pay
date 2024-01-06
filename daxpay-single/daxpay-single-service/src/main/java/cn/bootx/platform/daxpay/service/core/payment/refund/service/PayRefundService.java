@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 
+import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.payment.refund.factory.PayRefundStrategyFactory;
@@ -13,6 +14,8 @@ import cn.bootx.platform.daxpay.param.pay.SimpleRefundParam;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +39,9 @@ public class PayRefundService {
     private final PayRefundAssistService payRefundAssistService;;
 
     private final PayOrderService payOrderService;
+
+    private final LockTemplate lockTemplate;
+
     /**
      * 支付退款
      */
@@ -69,19 +76,30 @@ public class PayRefundService {
         PayOrder payOrder = payRefundAssistService.getPayOrderAndCheckByRefundParam(param, simple);
         // 参数校验
         ValidationUtil.validateParam(param);
-        // 退款上下文初始化
-        payRefundAssistService.initRefundContext(param);
-        // 是否全部退款
-        if (param.isRefundAll()){
-            // 全部退款根据支付订单的退款信息构造退款参数
-            List<RefundChannelParam> channelParams = payOrder.getRefundableInfos()
-                    .stream()
-                    .map(o -> new RefundChannelParam().setChannel(o.getChannel())
-                            .setAmount(o.getAmount()))
-                    .collect(Collectors.toList());
-            param.setRefundChannels(channelParams);
+
+        // 加锁
+        LockInfo lock = lockTemplate.lock("payment:refund:" + payOrder.getId());
+        if (Objects.isNull(lock)){
+            throw new RepetitiveOperationException("退款处理中，请勿重复操作");
         }
-        return this.refundByChannel(param,payOrder);
+
+        try {
+            // 退款上下文初始化
+            payRefundAssistService.initRefundContext(param);
+            // 是否全部退款
+            if (param.isRefundAll()){
+                // 全部退款根据支付订单的退款信息构造退款参数
+                List<RefundChannelParam> channelParams = payOrder.getRefundableInfos()
+                        .stream()
+                        .map(o -> new RefundChannelParam().setChannel(o.getChannel())
+                                .setAmount(o.getAmount()))
+                        .collect(Collectors.toList());
+                param.setRefundChannels(channelParams);
+            }
+            return this.refundByChannel(param,payOrder);
+        } finally {
+            lockTemplate.releaseLock(lock);
+        }
     }
 
     /**

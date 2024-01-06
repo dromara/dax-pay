@@ -43,7 +43,7 @@
         <table-modify.version>1.5.4</table-modify.version>
         <wxjava.version>4.5.2.B</wxjava.version>
         <rocketmq.version>2.2.3</rocketmq.version>
-        <lock4j.version>2.2.4</lock4j.version>
+        <lock4j.version>2.2.5</lock4j.version>
     </properties>
     <!-- 项目依赖版本管理 -->
     <dependencyManagement>

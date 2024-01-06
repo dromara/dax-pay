@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.service;
 
+import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
@@ -13,6 +14,8 @@ import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,8 @@ public class PayCloseService {
     private final PayOrderService payOrderService;
     private final PayCloseRecordService payCloseRecordService;
 
+    private final LockTemplate lockTemplate;
+
     /**
      * 关闭支付
      */
@@ -48,7 +53,15 @@ public class PayCloseService {
             payOrder = payOrderService.findByBusinessNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
-        this.close(payOrder);
+        LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId());
+        if (Objects.isNull(lock)){
+            throw new RepetitiveOperationException("支付订单已在关闭中，请勿重复发起");
+        }
+        try {
+            this.close(payOrder);
+        } finally {
+            lockTemplate.releaseLock(lock);
+        }
     }
 
     /**
