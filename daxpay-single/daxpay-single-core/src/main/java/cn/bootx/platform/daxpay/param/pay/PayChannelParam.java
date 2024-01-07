@@ -19,8 +19,8 @@ import javax.validation.constraints.NotNull;
  * @since 2020/12/8
  */
 @Data
-@Schema(title = "支付方式参数")
-public class PayWayParam {
+@Schema(title = "支付通道参数")
+public class PayChannelParam {
 
     /**
      * @see PayChannelEnum#getCode()

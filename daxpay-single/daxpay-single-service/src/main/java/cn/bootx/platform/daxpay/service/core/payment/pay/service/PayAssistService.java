@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
@@ -65,7 +65,7 @@ public class PayAssistService {
      */
     public void initExpiredTime(PayOrder order, PayParam payParam){
         // 不是异步支付，没有超时时间
-        if (PayUtil.isNotSync(payParam.getPayWays())){
+        if (PayUtil.isNotSync(payParam.getPayChannels())){
             return;
         }
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
@@ -109,23 +109,23 @@ public class PayAssistService {
     /**
      * 获取异步支付参数
      */
-    public PayWayParam getAsyncPayParam(PayParam payParam, PayOrder payOrder) {
+    public PayChannelParam getAsyncPayParam(PayParam payParam, PayOrder payOrder) {
         // 查询之前的支付方式
         String asyncPayChannel = payOrder.getAsyncChannel();
         PayOrderChannel payOrderChannel = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), asyncPayChannel)
                 .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
 
         // 新的异步支付方式
-        PayWayParam payWayParam = payParam.getPayWays()
+        PayChannelParam payChannelParam = payParam.getPayChannels()
                 .stream()
                 .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getChannel()))
                 .findFirst()
                 .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
         // 新传入的金额是否一致
-        if (!Objects.equals(payOrderChannel.getAmount(), payWayParam.getAmount())){
+        if (!Objects.equals(payOrderChannel.getAmount(), payChannelParam.getAmount())){
             throw new PayFailureException("传入的支付金额非法！与订单金额不一致");
         }
-        return payWayParam;
+        return payChannelParam;
     }
 
     /**
@@ -139,7 +139,7 @@ public class PayAssistService {
         PayOrderExtra payOrderExtra = PaymentBuilder.buildPayOrderExtra(payParam, payOrder.getId());
         payOrderExtraManager.save(payOrderExtra);
         // 构建支付通道表并保存
-        List<PayOrderChannel> payOrderChannels = PaymentBuilder.buildPayChannel(payParam.getPayWays())
+        List<PayOrderChannel> payOrderChannels = PaymentBuilder.buildPayChannel(payParam.getPayChannels())
                 .stream()
                 .peek(o -> o.setPaymentId(payOrder.getId()).setAsync(payOrder.isAsyncPay()))
                 .collect(Collectors.toList());
@@ -155,10 +155,12 @@ public class PayAssistService {
     public void updatePayOrderExtra(PayParam payParam,Long paymentId){
         PayOrderExtra payOrderExtra = payOrderExtraManager.findById(paymentId)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
+        String notifyUrl = PaymentContextLocal.get().getNoticeInfo().getNotifyUrl();
         payOrderExtra.setReqTime(payParam.getReqTime())
                 .setSign(payParam.getSign())
                 .setNotNotify(payParam.isNotNotify())
-                .setNotifyUrl(payParam.getNotifyUrl())
+                .setNotifyUrl(notifyUrl)
+                .setAttach(payParam.getAttach())
                 .setClientIp(payParam.getClientIp());
         payOrderExtraManager.updateById(payOrderExtra);
     }

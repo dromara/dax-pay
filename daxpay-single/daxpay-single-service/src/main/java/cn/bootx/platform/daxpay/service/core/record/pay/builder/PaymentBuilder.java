@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.common.entity.OrderRefundableInfo;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
@@ -42,16 +42,16 @@ public class PaymentBuilder {
                 .getAsyncPayInfo()
                 .getExpiredTime();
         // 可退款信息
-        List<OrderRefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayWays());
+        List<OrderRefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayChannels());
         // 计算总价
-        int sumAmount = payParam.getPayWays().stream()
-                .map(PayWayParam::getAmount)
+        int sumAmount = payParam.getPayChannels().stream()
+                .map(PayChannelParam::getAmount)
                 .filter(Objects::nonNull)
                 .reduce(Integer::sum)
                 .orElse(0);
         // 是否有异步支付方式
-        Optional<String> asyncPay = payParam.getPayWays().stream()
-                .map(PayWayParam::getChannel)
+        Optional<String> asyncPay = payParam.getPayChannels().stream()
+                .map(PayChannelParam::getChannel)
                 .filter(PayChannelEnum.ASYNC_TYPE_CODE::contains)
                 .findFirst();
         // 构建支付订单对象
@@ -62,7 +62,7 @@ public class PaymentBuilder {
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setAmount(sumAmount)
                 .setExpiredTime(expiredTime)
-                .setCombinationPay(payParam.getPayWays().size() > 1)
+                .setCombinationPay(payParam.getPayChannels().size() > 1)
                 .setAsyncPay(asyncPay.isPresent())
                 .setAsyncChannel(asyncPay.orElse(null))
                 .setRefundableBalance(sumAmount);
@@ -83,6 +83,7 @@ public class PaymentBuilder {
                 .setNotifyUrl(noticeInfo.getNotifyUrl())
                 .setSign(payParam.getSign())
                 .setSignType(platform.getSignType())
+                .setAttach(payParam.getAttach())
                 .setApiVersion(payParam.getVersion())
                 .setReqTime(payParam.getReqTime());
         payOrderExtra.setId(paymentId);
@@ -92,11 +93,11 @@ public class PaymentBuilder {
     /**
      * 构建订单关联通道信息
      */
-    public List<PayOrderChannel> buildPayChannel(List<PayWayParam> payWayParams) {
-        if (CollectionUtil.isEmpty(payWayParams)) {
+    public List<PayOrderChannel> buildPayChannel(List<PayChannelParam> payChannelParams) {
+        if (CollectionUtil.isEmpty(payChannelParams)) {
             return Collections.emptyList();
         }
-        return payWayParams.stream()
+        return payChannelParams.stream()
                 .map(o-> new PayOrderChannel()
                         .setChannel(o.getChannel())
                         .setPayWay(o.getWay())
@@ -108,11 +109,11 @@ public class PaymentBuilder {
     /**
      * 构建支付订单的可退款信息列表
      */
-    private List<OrderRefundableInfo> buildRefundableInfo(List<PayWayParam> payWayParamList) {
-        if (CollectionUtil.isEmpty(payWayParamList)) {
+    private List<OrderRefundableInfo> buildRefundableInfo(List<PayChannelParam> payChannelParamList) {
+        if (CollectionUtil.isEmpty(payChannelParamList)) {
             return Collections.emptyList();
         }
-        return payWayParamList.stream()
+        return payChannelParamList.stream()
                 .map(o-> new OrderRefundableInfo()
                         .setChannel(o.getChannel())
                         .setAmount(o.getAmount()))

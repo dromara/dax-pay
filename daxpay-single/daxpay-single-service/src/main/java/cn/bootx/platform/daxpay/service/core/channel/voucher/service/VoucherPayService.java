@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherRecor
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;
@@ -42,11 +42,11 @@ public class VoucherPayService {
     /**
      * 获取并检查储值卡
      */
-    public Voucher getAndCheckVoucher(PayWayParam payWayParam) {
+    public Voucher getAndCheckVoucher(PayChannelParam payChannelParam) {
         VoucherPayParam voucherPayParam;
         try {
             // 储值卡参数验证
-            String extraParamsJson = payWayParam.getChannelExtra();
+            String extraParamsJson = payChannelParam.getChannelExtra();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 voucherPayParam = JSONUtil.toBean(extraParamsJson, VoucherPayParam.class);
             } else {

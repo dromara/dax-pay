@@ -4,7 +4,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.record.pay.dao.PayOrderChannelManager;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrderChannel;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,22 +27,22 @@ public class PayOrderChannelService {
      * 更新支付订单的通道信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updateChannel(PayWayParam payWayParam, PayOrder payOrder){
+    public void updateChannel(PayChannelParam payChannelParam, PayOrder payOrder){
         Optional<PayOrderChannel> payOrderChannelOpt = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), PayChannelEnum.WECHAT.getCode());
         if (!payOrderChannelOpt.isPresent()){
             payOrderChannelManager.deleteByPaymentIdAndAsync(payOrder.getId());
             payOrderChannelManager.save(new PayOrderChannel()
                     .setPaymentId(payOrder.getId())
                     .setChannel(PayChannelEnum.ALI.getCode())
-                    .setAmount(payWayParam.getAmount())
-                    .setPayWay(payWayParam.getWay())
-                    .setChannelExtra(payWayParam.getChannelExtra())
+                    .setAmount(payChannelParam.getAmount())
+                    .setPayWay(payChannelParam.getWay())
+                    .setChannelExtra(payChannelParam.getChannelExtra())
                     .setAsync(true)
             );
         } else {
             payOrderChannelOpt.get()
-                    .setChannelExtra(payWayParam.getChannelExtra())
-                    .setPayWay(payWayParam.getWay());
+                    .setChannelExtra(payChannelParam.getChannelExtra())
+                    .setPayWay(payChannelParam.getWay());
             payOrderChannelManager.updateById(payOrderChannelOpt.get());
         }
     }

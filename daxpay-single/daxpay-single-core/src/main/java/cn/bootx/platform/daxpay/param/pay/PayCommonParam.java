@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.param.pay;
 
 import cn.bootx.platform.daxpay.serializer.TimestampToLocalDateTimeDeserializer;
-import cn.bootx.platform.daxpay.util.PayUtil;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -9,7 +8,6 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * 支付公共参数
@@ -68,8 +66,5 @@ public abstract class PayCommonParam {
      *  4. 嵌套对象转换成先转换成MAP再序列化为字符串
      *  5. 支持两层嵌套, 更多层级嵌套未测试, 可能会导致不可预知的问题
      */
-    public Map<String,String> toMap(){
-        return PayUtil.toMap(this);
-    }
 
 }

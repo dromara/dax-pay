@@ -2,17 +2,16 @@ package cn.bootx.platform.daxpay.core.payment.common.service;
 
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.util.PaySignUtil;
 import cn.hutool.json.JSONUtil;
-import com.ijpay.core.kit.PayKit;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 支付签名服务
@@ -35,7 +34,7 @@ class PaymentSignServiceTest {
         // 传入的话需要传输时间戳
         payParam.setReqTime(LocalDateTime.now());
 
-        PayWayParam p1 = new PayWayParam();
+        PayChannelParam p1 = new PayChannelParam();
         p1.setAmount(100);
         p1.setChannel("wechat");
         p1.setWay("wx_app");
@@ -43,7 +42,7 @@ class PaymentSignServiceTest {
         aliPayParam.setAuthCode("6688");
         p1.setChannelExtra(JSONUtil.toJsonStr(aliPayParam));
 
-        PayWayParam p2 = new PayWayParam();
+        PayChannelParam p2 = new PayChannelParam();
         p2.setAmount(100);
         p2.setChannel("wechat");
         p2.setWay("wx_app");
@@ -51,19 +50,15 @@ class PaymentSignServiceTest {
         weChatPayParam.setOpenId("w2qsz2xawe3gbhyyff28fs01fd");
         weChatPayParam.setAuthCode("8866");
         p2.setChannelExtra(JSONUtil.toJsonStr(weChatPayParam));
-        List<PayWayParam> payWays = Arrays.asList(p1, p2);
-        payParam.setPayWays(payWays);
-        Map<String, String> map = payParam.toMap();
-        log.info("map: {}",map);
-        String data = PayKit.createLinkString(map);
+        List<PayChannelParam> payWays = Arrays.asList(p1, p2);
+        payParam.setPayChannels(payWays);
 
-        log.info("拼接字符串: {}",data);
+        // 签名
         String sign = "123456";
-        data += "&sign="+sign;
-        data = data.toUpperCase();
-        log.info("添加秘钥并转换为大写的字符串: {}",data);
-        log.info("MD5: {}",PayKit.md5(data));
-        log.info("HmacSHA256: {}",PayKit.hmacSha256(data,sign));
+        String md5Sign = PaySignUtil.md5Sign(payParam, sign);
+        String hmacSha256Sign = PaySignUtil.hmacSha256Sign(payParam, sign);
+        log.info("MD5: {}",md5Sign);
+        log.info("HmacSHA256: {}", hmacSha256Sign);
 
     }
 

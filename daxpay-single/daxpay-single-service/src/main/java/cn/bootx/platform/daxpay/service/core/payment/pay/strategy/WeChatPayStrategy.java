@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
@@ -60,7 +60,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
         this.initWeChatPayConfig();
         try {
             // 微信参数验证
-            String extraParamsJson = this.getPayWayParam().getChannelExtra();
+            String extraParamsJson = this.getPayChannelParam().getChannelExtra();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 this.weChatPayParam = JSONUtil.toBean(extraParamsJson, WeChatPayParam.class);
             }
@@ -73,14 +73,14 @@ public class WeChatPayStrategy extends AbsPayStrategy {
         }
 
         // 检查金额
-        PayWayParam payMode = this.getPayWayParam();
+        PayChannelParam payMode = this.getPayChannelParam();
         if (payMode.getAmount() <= 0) {
             throw new PayAmountAbnormalException();
         }
 
         // 检查并获取微信支付配置
         this.initWeChatPayConfig();
-        weChatPayService.validation(this.getPayWayParam(), weChatPayConfig);
+        weChatPayService.validation(this.getPayChannelParam(), weChatPayConfig);
     }
 
     /**
@@ -88,7 +88,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        weChatPayService.pay(this.getOrder(), this.weChatPayParam, this.getPayWayParam(), this.weChatPayConfig);
+        weChatPayService.pay(this.getOrder(), this.weChatPayParam, this.getPayChannelParam(), this.weChatPayConfig);
     }
 
     /**
@@ -96,7 +96,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        weChatPayOrderService.updatePaySuccess(this.getOrder(), this.getPayWayParam());
+        weChatPayOrderService.updatePaySuccess(this.getOrder(), this.getPayChannelParam());
     }
 
     /**

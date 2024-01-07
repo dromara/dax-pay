@@ -15,7 +15,7 @@ import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
@@ -62,13 +62,13 @@ public class WeChatPayService {
     /**
      * 校验
      */
-    public void validation(PayWayParam payWayParam, WeChatPayConfig weChatPayConfig) {
+    public void validation(PayChannelParam payChannelParam, WeChatPayConfig weChatPayConfig) {
         List<String> payWays = weChatPayConfig.getPayWays();
         if (CollUtil.isEmpty(payWays)){
             throw new PayFailureException("未配置微信支付方式");
         }
 
-        PayWayEnum payWayEnum = Optional.ofNullable(WeChatPayWay.findByCode(payWayParam.getWay()))
+        PayWayEnum payWayEnum = Optional.ofNullable(WeChatPayWay.findByCode(payChannelParam.getWay()))
             .orElseThrow(() -> new PayFailureException("非法的微信支付类型"));
         if (!payWays.contains(payWayEnum.getCode())) {
             throw new PayFailureException("该微信支付方式不可用");
@@ -78,13 +78,13 @@ public class WeChatPayService {
     /**
      * 支付
      */
-    public void pay(PayOrder payOrder, WeChatPayParam weChatPayParam, PayWayParam payWayParam, WeChatPayConfig weChatPayConfig) {
+    public void pay(PayOrder payOrder, WeChatPayParam weChatPayParam, PayChannelParam payChannelParam, WeChatPayConfig weChatPayConfig) {
 
-        Integer amount = payWayParam.getAmount();
+        Integer amount = payChannelParam.getAmount();
         String totalFee = String.valueOf(amount);
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
         String payBody = null;
-        PayWayEnum payWayEnum = PayWayEnum.findByCode(payWayParam.getWay());
+        PayWayEnum payWayEnum = PayWayEnum.findByCode(payChannelParam.getWay());
 
         // wap支付
         if (payWayEnum == PayWayEnum.WAP) {

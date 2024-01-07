@@ -16,7 +16,4 @@ public class PayCommonResult {
 
     @Schema(description = "请求ID")
     private String reqId = MDC.get(CommonCode.TRACE_ID);
-
-    @Schema(description = "商户扩展参数,回调时会原样返回")
-    private String attach;
 }

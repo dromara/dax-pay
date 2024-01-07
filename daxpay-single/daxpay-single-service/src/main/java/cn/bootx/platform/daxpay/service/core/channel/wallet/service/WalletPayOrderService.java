@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletPayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class WalletPayOrderService {
     /**
      * 保存钱包支付记录
      */
-    public void savePayment(PayOrder payOrder, PayParam payParam, PayWayParam payMode, Wallet wallet) {
+    public void savePayment(PayOrder payOrder, PayParam payParam, PayChannelParam payMode, Wallet wallet) {
         WalletPayOrder walletPayOrder = new WalletPayOrder().setWalletId(wallet.getId());
         walletPayOrder.setPaymentId(payOrder.getId())
             .setBusinessNo(payParam.getBusinessNo())

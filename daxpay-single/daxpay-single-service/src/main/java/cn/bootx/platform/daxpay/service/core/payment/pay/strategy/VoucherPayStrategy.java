@@ -42,7 +42,7 @@ public class VoucherPayStrategy extends AbsPayStrategy {
     @Override
     public void doBeforePayHandler() {
         // 获取并校验储值卡
-        this.voucher = voucherPayService.getAndCheckVoucher(this.getPayWayParam());
+        this.voucher = voucherPayService.getAndCheckVoucher(this.getPayChannelParam());
     }
 
     /**
@@ -54,11 +54,11 @@ public class VoucherPayStrategy extends AbsPayStrategy {
     public void doPayHandler() {
         VoucherRecord voucherRecord;
         if (this.getOrder().isAsyncPay()){
-            voucherRecord = voucherPayService.freezeBalance(this.getPayWayParam().getAmount(), this.getOrder(), this.voucher);
+            voucherRecord = voucherPayService.freezeBalance(this.getPayChannelParam().getAmount(), this.getOrder(), this.voucher);
         } else {
-            voucherRecord = voucherPayService.pay(this.getPayWayParam().getAmount(), this.getOrder(), this.voucher);
+            voucherRecord = voucherPayService.pay(this.getPayChannelParam().getAmount(), this.getOrder(), this.voucher);
         }
-        voucherPayOrderService.savePayment(this.getOrder(), getPayParam(), getPayWayParam(), voucherRecord);
+        voucherPayOrderService.savePayment(this.getOrder(), getPayParam(), getPayChannelParam(), voucherRecord);
     }
 
     /**

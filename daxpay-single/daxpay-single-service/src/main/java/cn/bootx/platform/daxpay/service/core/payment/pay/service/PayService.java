@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
@@ -92,13 +92,13 @@ public class PayService {
     public PayResult simplePay(SimplePayParam simplePayParam) {
         // 组装支付参数
         PayParam payParam = new PayParam();
-        PayWayParam payWayParam = new PayWayParam();
-        payWayParam.setChannel(simplePayParam.getPayChannel());
-        payWayParam.setWay(simplePayParam.getPayWay());
-        payWayParam.setAmount(simplePayParam.getAmount());
-        payWayParam.setChannelExtra(simplePayParam.getChannelExtra());
+        PayChannelParam payChannelParam = new PayChannelParam();
+        payChannelParam.setChannel(simplePayParam.getPayChannel());
+        payChannelParam.setWay(simplePayParam.getPayWay());
+        payChannelParam.setAmount(simplePayParam.getAmount());
+        payChannelParam.setChannelExtra(simplePayParam.getChannelExtra());
         BeanUtil.copyProperties(simplePayParam,payParam, CopyOptions.create().ignoreNullValue());
-        payParam.setPayWays(Collections.singletonList(payWayParam));
+        payParam.setPayChannels(Collections.singletonList(payChannelParam));
         // 复用支付下单接口
         return this.pay(payParam);
     }
@@ -113,7 +113,7 @@ public class PayService {
         }
 
         // 2. 价格检测
-        PayUtil.validationAmount(payParam.getPayWays());
+        PayUtil.validationAmount(payParam.getPayChannels());
 
         // 3. 创建支付相关的记录并返回支付订单对象
         payOrder = payAssistService.createPayOrder(payParam);
@@ -131,7 +131,7 @@ public class PayService {
     private void firstPayHandler(PayParam payParam, PayOrder payOrder) {
 
         // 1.获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.createAsyncLast(payParam.getPayWays());
+        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
         if (CollectionUtil.isEmpty(paymentStrategyList)) {
             throw new PayUnsupportedMethodException();
         }
@@ -149,7 +149,7 @@ public class PayService {
             // 发起支付成功进行的执行方法
             strategies.forEach(AbsPayStrategy::doSuccessHandler);
             // 所有支付方式都是同步时, 对支付订单进行处理
-            if (PayUtil.isNotSync(payParam.getPayWays())) {
+            if (PayUtil.isNotSync(payParam.getPayChannels())) {
                 // 修改支付订单状态为成功
                 payOrderObj.setStatus(PayStatusEnum.SUCCESS.getCode());
                 payOrderObj.setPayTime(LocalDateTime.now());
@@ -171,8 +171,8 @@ public class PayService {
         }
 
         // 2.获取 异步支付通道，通过工厂生成对应的策略组(只包含异步支付的策略, 同步支付相关逻辑不再进行执行)
-        PayWayParam payWayParam = payAssistService.getAsyncPayParam(payParam, payOrder);
-        List<AbsPayStrategy> asyncStrategyList = PayStrategyFactory.createAsyncLast(Collections.singletonList(payWayParam));
+        PayChannelParam payChannelParam = payAssistService.getAsyncPayParam(payParam, payOrder);
+        List<AbsPayStrategy> asyncStrategyList = PayStrategyFactory.createAsyncLast(Collections.singletonList(payChannelParam));
 
         // 3.初始化支付的参数
         for (AbsPayStrategy paymentStrategy : asyncStrategyList) {

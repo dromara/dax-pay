@@ -7,6 +7,7 @@ import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -42,6 +43,8 @@ public class PayOrderExtra extends MpBaseEntity {
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
+    /** 同步通知 */
+
     /** 签名类型 */
     @DbColumn(comment = "签名类型")
     private String signType;
@@ -49,6 +52,9 @@ public class PayOrderExtra extends MpBaseEntity {
     /** 签名 */
     @DbColumn(comment = "签名，以最后一次为准")
     private String sign;
+
+    @Schema(description = "商户扩展参数,回调时会原样返回")
+    private String attach;
 
     /** API版本号 */
     @DbColumn(comment = "API版本号")

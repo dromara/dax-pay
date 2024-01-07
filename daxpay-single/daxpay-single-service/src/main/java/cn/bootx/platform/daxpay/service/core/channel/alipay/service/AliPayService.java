@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -48,13 +48,13 @@ public class AliPayService {
     /**
      * 支付前检查支付方式是否可用
      */
-    public void validation(PayWayParam payWayParam, AliPayConfig alipayConfig) {
+    public void validation(PayChannelParam payChannelParam, AliPayConfig alipayConfig) {
 
         if (CollUtil.isEmpty(alipayConfig.getPayWays())){
             throw new PayFailureException("支付宝未配置可用的支付方式");
         }
         // 发起的支付类型是否在支持的范围内
-        PayWayEnum payWayEnum = Optional.ofNullable(AliPayWay.findByCode(payWayParam.getWay()))
+        PayWayEnum payWayEnum = Optional.ofNullable(AliPayWay.findByCode(payChannelParam.getWay()))
             .orElseThrow(() -> new PayFailureException("非法的支付宝支付类型"));
         if (!alipayConfig.getPayWays().contains(payWayEnum.getCode())) {
             throw new PayFailureException("该支付宝支付方式不可用");
@@ -64,29 +64,29 @@ public class AliPayService {
     /**
      * 调起支付
      */
-    public void pay(PayOrder payOrder, PayWayParam payWayParam, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
-        Integer amount = payWayParam.getAmount();
+    public void pay(PayOrder payOrder, PayChannelParam payChannelParam, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
+        Integer amount = payChannelParam.getAmount();
         String payBody = null;
         // 异步线程存储
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         // wap支付
-        if (Objects.equals(payWayParam.getWay(), PayWayEnum.WAP.getCode())) {
+        if (Objects.equals(payChannelParam.getWay(), PayWayEnum.WAP.getCode())) {
             payBody = this.wapPay(amount, payOrder, alipayConfig);
         }
         // 程序支付
-        else if (Objects.equals(payWayParam.getWay(), PayWayEnum.APP.getCode())) {
+        else if (Objects.equals(payChannelParam.getWay(), PayWayEnum.APP.getCode())) {
             payBody = this.appPay(amount, payOrder, alipayConfig);
         }
         // pc支付
-        else if (Objects.equals(payWayParam.getWay(), PayWayEnum.WEB.getCode())) {
+        else if (Objects.equals(payChannelParam.getWay(), PayWayEnum.WEB.getCode())) {
             payBody = this.webPay(amount, payOrder, alipayConfig);
         }
         // 二维码支付
-        else if (Objects.equals(payWayParam.getWay(), PayWayEnum.QRCODE.getCode())) {
+        else if (Objects.equals(payChannelParam.getWay(), PayWayEnum.QRCODE.getCode())) {
             payBody = this.qrCodePay(amount, payOrder, alipayConfig);
         }
         // 付款码支付
-        else if (Objects.equals(payWayParam.getWay(), PayWayEnum.BARCODE.getCode())) {
+        else if (Objects.equals(payChannelParam.getWay(), PayWayEnum.BARCODE.getCode())) {
             String tradeNo = this.barCode(amount, payOrder, aliPayParam, alipayConfig);
             asyncPayInfo.setTradeNo(tradeNo);
         }
@@ -112,10 +112,10 @@ public class AliPayService {
 
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         request.setBizModel(model);
-        // 异步回调必须到当前系统中
+        // 异步回调必须到当前支付网关系统中, 然后系统负责转发
         request.setNotifyUrl(alipayConfig.getNotifyUrl());
-        // 同步回调地址
-        request.setReturnUrl(noticeInfo.getReturnUrl());
+        // 同步回调地址必须到当前支付网关系统中, 然后系统负责跳转
+        request.setReturnUrl(alipayConfig.getReturnUrl());
 
         try {
             // 通过GET方式的请求, 返回URL的响应, 默认是POST方式的请求, 返回的是表单响应
@@ -172,7 +172,7 @@ public class AliPayService {
         // 异步回调必须到当前系统中
         request.setNotifyUrl(alipayConfig.getNotifyUrl());
         // 同步回调
-        request.setReturnUrl(noticeInfo.getReturnUrl());
+        request.setReturnUrl(alipayConfig.getReturnUrl());
         try {
             // 通过GET方式的请求, 返回URL的响应, 默认是POST方式的请求, 返回的是表单响应
             AlipayTradePagePayResponse response = AliPayApi.pageExecute(request, Method.GET.name());

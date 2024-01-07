@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.pay.factory;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.core.payment.pay.strategy.*;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.hutool.core.collection.CollectionUtil;
@@ -29,12 +29,12 @@ public class PayStrategyFactory {
 
     /**
      * 根据传入的支付通道创建策略
-     * @param payWayParam 支付类型
+     * @param payChannelParam 支付类型
      * @return 支付策略
      */
-    public AbsPayStrategy createAsyncFront(PayWayParam payWayParam) {
+    public AbsPayStrategy createAsyncFront(PayChannelParam payChannelParam) {
         AbsPayStrategy strategy;
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(payWayParam.getChannel());
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(payChannelParam.getChannel());
         switch (channelEnum) {
             case ALI:
                 strategy = SpringUtil.getBean(AliPayStrategy.class);
@@ -57,7 +57,7 @@ public class PayStrategyFactory {
             default:
                 throw new PayUnsupportedMethodException();
         }
-        strategy.setPayWayParam(payWayParam);
+        strategy.setPayChannelParam(payChannelParam);
         return strategy;
     }
 
@@ -65,49 +65,49 @@ public class PayStrategyFactory {
      * 根据传入的支付类型批量创建策略, 异步支付在后面
      * 同步支付逻辑完后才执行异步支付的逻辑, 预防异步执行成功, 然同步执行失败. 导致异步支付无法回滚的问题
      */
-    public static List<AbsPayStrategy> createAsyncLast(List<PayWayParam> payWayParamList) {
-        return createAsyncFront(payWayParamList, false);
+    public static List<AbsPayStrategy> createAsyncLast(List<PayChannelParam> payChannelParamList) {
+        return createAsyncFront(payChannelParamList, false);
     }
 
     /**
      * 根据传入的支付类型批量创建策略, 异步支付在前面 font
      */
-    public List<AbsPayStrategy> createAsyncFront(List<PayWayParam> payWayParamList) {
-        return createAsyncFront(payWayParamList, true);
+    public List<AbsPayStrategy> createAsyncFront(List<PayChannelParam> payChannelParamList) {
+        return createAsyncFront(payChannelParamList, true);
     }
 
     /**
      * 根据传入的支付类型批量创建策略
-     * @param payWayParamList 支付类型
+     * @param payChannelParamList 支付类型
      * @return 支付策略
      */
-    private List<AbsPayStrategy> createAsyncFront(List<PayWayParam> payWayParamList, boolean asyncFirst) {
-        if (CollectionUtil.isEmpty(payWayParamList)) {
+    private List<AbsPayStrategy> createAsyncFront(List<PayChannelParam> payChannelParamList, boolean asyncFirst) {
+        if (CollectionUtil.isEmpty(payChannelParamList)) {
             return Collections.emptyList();
         }
-        List<AbsPayStrategy> list = new ArrayList<>(payWayParamList.size());
+        List<AbsPayStrategy> list = new ArrayList<>(payChannelParamList.size());
 
         // 同步支付
-        List<PayWayParam> syncPayWayParamList = payWayParamList.stream()
+        List<PayChannelParam> syncPayChannelParamList = payChannelParamList.stream()
             .filter(Objects::nonNull)
             .filter(payModeParam -> !ASYNC_TYPE_CODE.contains(payModeParam.getChannel()))
             .collect(Collectors.toList());
 
         // 异步支付
-        List<PayWayParam> asyncPayWayParamList = payWayParamList.stream()
+        List<PayChannelParam> asyncPayChannelParamList = payChannelParamList.stream()
             .filter(Objects::nonNull)
             .filter(payModeParam -> ASYNC_TYPE_CODE.contains(payModeParam.getChannel()))
             .collect(Collectors.toList());
 
-        List<PayWayParam> sortList = new ArrayList<>(payWayParamList.size());
+        List<PayChannelParam> sortList = new ArrayList<>(payChannelParamList.size());
 
         // 异步在后面
         if (asyncFirst) {
-            sortList.addAll(asyncPayWayParamList);
-            sortList.addAll(syncPayWayParamList);
+            sortList.addAll(asyncPayChannelParamList);
+            sortList.addAll(syncPayChannelParamList);
         } else {
-            sortList.addAll(syncPayWayParamList);
-            sortList.addAll(asyncPayWayParamList);
+            sortList.addAll(syncPayChannelParamList);
+            sortList.addAll(asyncPayChannelParamList);
         }
 
         // 此处有一个根据Type的反转排序，

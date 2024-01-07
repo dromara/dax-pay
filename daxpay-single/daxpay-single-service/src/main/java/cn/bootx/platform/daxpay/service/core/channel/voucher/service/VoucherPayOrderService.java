@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherPayOr
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherRecord;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class VoucherPayOrderService {
     /**
      * 添加支付记录
      */
-    public void savePayment(PayOrder payOrder, PayParam payParam, PayWayParam payMode, VoucherRecord voucherRecord) {
+    public void savePayment(PayOrder payOrder, PayParam payParam, PayChannelParam payMode, VoucherRecord voucherRecord) {
         VoucherPayOrder voucherPayOrder = new VoucherPayOrder().setVoucherRecord(voucherRecord);
         voucherPayOrder.setPaymentId(payOrder.getId())
             .setBusinessNo(payParam.getBusinessNo())

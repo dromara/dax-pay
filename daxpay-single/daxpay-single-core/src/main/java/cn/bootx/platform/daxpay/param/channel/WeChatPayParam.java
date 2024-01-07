@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.param.channel;
 
-import cn.bootx.platform.daxpay.param.ChannelParam;
+import cn.bootx.platform.daxpay.param.IChannelParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Schema(title = "微信支付参数")
-public class WeChatPayParam implements ChannelParam {
+public class WeChatPayParam implements IChannelParam {
 
     @Schema(description = "微信openId")
     private String openId;

@@ -4,7 +4,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +26,7 @@ public abstract class AbsPayStrategy implements PayStrategy{
     private PayParam payParam = null;
 
     /** 支付方式参数 支付参数中的与这个不一致, 以这个为准 */
-    private PayWayParam payWayParam = null;
+    private PayChannelParam payChannelParam = null;
 
     /**
      * 策略标识

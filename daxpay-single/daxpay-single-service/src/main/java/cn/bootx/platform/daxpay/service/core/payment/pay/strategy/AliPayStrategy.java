@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;
@@ -56,7 +56,7 @@ public class AliPayStrategy extends AbsPayStrategy {
     public void doBeforePayHandler() {
         try {
             // 支付宝参数验证
-            String extraParamsJson = this.getPayWayParam().getChannelExtra();
+            String extraParamsJson = this.getPayChannelParam().getChannelExtra();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 this.aliPayParam = JSONUtil.toBean(extraParamsJson, AliPayParam.class);
             }
@@ -68,13 +68,13 @@ public class AliPayStrategy extends AbsPayStrategy {
             throw new PayFailureException("支付参数错误");
         }
         // 检查金额
-        PayWayParam payMode = this.getPayWayParam();
+        PayChannelParam payMode = this.getPayChannelParam();
         if (payMode.getAmount() <= 0) {
             throw new PayAmountAbnormalException();
         }
         // 检查并获取支付宝支付配置
         this.initAlipayConfig();
-        aliPayService.validation(this.getPayWayParam(), alipayConfig);
+        aliPayService.validation(this.getPayChannelParam(), alipayConfig);
     }
 
     /**
@@ -82,7 +82,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        aliPayService.pay( this.getOrder(), this.getPayWayParam(), this.aliPayParam, this.alipayConfig);
+        aliPayService.pay( this.getOrder(), this.getPayChannelParam(), this.aliPayParam, this.alipayConfig);
     }
 
     /**
@@ -90,7 +90,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        aliPaymentService.updatePaySuccess(this.getOrder(), this.getPayWayParam());
+        aliPaymentService.updatePaySuccess(this.getOrder(), this.getPayChannelParam());
     }
 
     /**

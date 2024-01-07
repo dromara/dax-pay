@@ -29,7 +29,7 @@ public class PayWaitOrderSyncTask {
     private final LockTemplate lockTemplate;
 
     public void task(){
-        log.info("开始同步支付订单");
+        log.debug("开始同步支付订单状态");
         // 从超时订单列表中获取到未超时的订单号
         Set<String> keys = repository.getNormalKeysBy30Day();
         for (String key : keys) {

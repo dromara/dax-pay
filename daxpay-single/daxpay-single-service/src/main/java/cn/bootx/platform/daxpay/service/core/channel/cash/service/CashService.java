@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.service.core.channel.cash.dao.CashPayOrderManage
 import cn.bootx.platform.daxpay.service.core.channel.cash.entity.CashPayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class CashService {
     /**
      * 支付
      */
-    public void pay(PayWayParam payMode, PayOrder payment, PayParam payParam) {
+    public void pay(PayChannelParam payMode, PayOrder payment, PayParam payParam) {
         CashPayOrder walletPayment = new CashPayOrder();
         walletPayment.setPaymentId(payment.getId())
             .setBusinessNo(payParam.getBusinessNo())

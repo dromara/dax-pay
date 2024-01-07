@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayOrderManag
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderChannelService;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,22 +39,22 @@ public class AliPayOrderService {
     /**
      * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建支付宝支付单
      */
-    public void updatePaySuccess(PayOrder payOrder, PayWayParam payWayParam) {
+    public void updatePaySuccess(PayOrder payOrder, PayChannelParam payChannelParam) {
         // 更新支付宝异步支付类型信息
         payOrder.setAsyncPay(true).setAsyncChannel(PayChannelEnum.ALI.getCode());
-        payOrderChannelService.updateChannel(payWayParam,payOrder);
+        payOrderChannelService.updateChannel(payChannelParam,payOrder);
 
         // 更新支付宝可退款类型信息
         List<OrderRefundableInfo> refundableInfos = payOrder.getRefundableInfos();
         refundableInfos.removeIf(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getChannel()));
         refundableInfos.add(new OrderRefundableInfo()
                 .setChannel(PayChannelEnum.ALI.getCode())
-                .setAmount(payWayParam.getAmount())
+                .setAmount(payChannelParam.getAmount())
         );
         payOrder.setRefundableInfos(refundableInfos);
         // 如果支付完成(付款码情况) 调用 updateSyncSuccess 创建支付宝支付记录
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
-            this.updateAsyncSuccess(payOrder, payWayParam.getAmount());
+            this.updateAsyncSuccess(payOrder, payChannelParam.getAmount());
         }
     }
 

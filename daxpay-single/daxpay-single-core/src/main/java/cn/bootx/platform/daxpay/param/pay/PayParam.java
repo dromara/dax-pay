@@ -41,8 +41,8 @@ public class PayParam extends PayCommonParam{
     @Schema(description = "用户付款中途退出返回商户网站的地址(部分支付场景中可用)")
     private String quitUrl;
 
-    @Schema(description = "支付方式信息参数")
-    @NotNull(message = "支付方式信息参数不可为空")
+    @Schema(description = "支付通道信息参数")
+    @NotNull(message = "支付通道信息参数不可为空")
     @Valid
-    private List<PayWayParam> payWays;
+    private List<PayChannelParam> payChannels;
 }

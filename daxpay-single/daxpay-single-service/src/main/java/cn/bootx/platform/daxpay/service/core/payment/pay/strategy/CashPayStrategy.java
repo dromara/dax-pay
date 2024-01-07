@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.service.core.channel.cash.service.CashService;
 import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.param.pay.PayWayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -43,8 +43,8 @@ public class CashPayStrategy extends AbsPayStrategy {
     @Override
     public void doBeforePayHandler() {
         // 检查金额
-        PayWayParam payWayParam = this.getPayWayParam();
-        if (payWayParam.getAmount() <= 0) {
+        PayChannelParam payChannelParam = this.getPayChannelParam();
+        if (payChannelParam.getAmount() <= 0) {
             throw new PayAmountAbnormalException();
         }
     }
@@ -54,7 +54,7 @@ public class CashPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        cashService.pay(this.getPayWayParam(), this.getOrder(), this.getPayParam());
+        cashService.pay(this.getPayChannelParam(), this.getOrder(), this.getPayParam());
     }
 
     /**

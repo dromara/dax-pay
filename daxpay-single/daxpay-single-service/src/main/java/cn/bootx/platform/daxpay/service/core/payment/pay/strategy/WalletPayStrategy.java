@@ -54,7 +54,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         WalletPayParam walletPayParam = new WalletPayParam();
         try {
             // 钱包参数验证
-            String extraParamsJson = this.getPayWayParam().getChannelExtra();
+            String extraParamsJson = this.getPayChannelParam().getChannelExtra();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 walletPayParam = JSONUtil.toBean(extraParamsJson, WalletPayParam.class);
             }
@@ -71,7 +71,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
             throw new WalletBannedException();
         }
         // 判断余额
-        if (this.wallet.getBalance() < getPayWayParam().getAmount()) {
+        if (this.wallet.getBalance() < getPayChannelParam().getAmount()) {
             throw new WalletLackOfBalanceException();
         }
     }
@@ -83,11 +83,11 @@ public class WalletPayStrategy extends AbsPayStrategy {
     public void doPayHandler() {
         // 异步支付方式时使用冻结方式
         if (this.getOrder().isAsyncPay()){
-            walletPayService.freezeBalance(getPayWayParam().getAmount(), this.getOrder(), this.wallet);
+            walletPayService.freezeBalance(getPayChannelParam().getAmount(), this.getOrder(), this.wallet);
         } else {
-            walletPayService.pay(getPayWayParam().getAmount(), this.getOrder(), this.wallet);
+            walletPayService.pay(getPayChannelParam().getAmount(), this.getOrder(), this.wallet);
         }
-        walletPayOrderService.savePayment(this.getOrder(), this.getPayParam(), this.getPayWayParam(), this.wallet);
+        walletPayOrderService.savePayment(this.getOrder(), this.getPayParam(), this.getPayChannelParam(), this.wallet);
     }
 
     /**

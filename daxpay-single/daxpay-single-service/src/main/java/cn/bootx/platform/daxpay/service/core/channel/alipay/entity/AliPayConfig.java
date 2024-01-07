@@ -37,9 +37,23 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "支付宝商户appId")
     private String appId;
 
-    /** 服务器异步通知页面路径 需http://或者https://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问 */
+    /**
+     * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
+     * 1. 需http://或者https://格式的完整路径，
+     * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
+     * 3. 调用顺序 支付宝网关 -> 本网关进行处理 -> 发送消息通知业务系统
+     */
     @DbColumn(comment = "异步通知页面路径")
     private String notifyUrl;
+
+    /**
+     * 服务器同步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
+     * 1. 需http://或者https://格式的完整路径，
+     * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
+     * 3. 消息顺序 支付宝网关 -> 本网关进行处理 -> 重定向到业务系统中
+     */
+    @DbColumn(comment = "同步通知页面路径")
+    private String returnUrl;
 
     /** 请求网关地址 */
     @DbColumn(comment = "请求网关地址")

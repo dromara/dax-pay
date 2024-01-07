@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.param.channel;
 
-import cn.bootx.platform.daxpay.param.ChannelParam;
+import cn.bootx.platform.daxpay.param.IChannelParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @Schema(title = "储值卡支付参数")
-public class VoucherPayParam implements ChannelParam {
+public class VoucherPayParam implements IChannelParam {
 
     @Schema(description = "储值卡号")
     private String cardNo;

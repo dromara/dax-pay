@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,6 +18,14 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class  PayOrderChannelManager extends BaseManager<PayOrderChannelMapper, PayOrderChannel> {
+
+    /**
+     * 根据订单查找
+     */
+    public List<PayOrderChannel> findAllByPaymentId(Long paymentId){
+        return findAllByField(PayOrderChannel::getPaymentId,paymentId);
+    }
+
     /**
      * 根据订单id和支付通道查询
      */
