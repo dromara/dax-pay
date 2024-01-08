@@ -140,6 +140,9 @@ bootx:
     data-perm:
       #  需要符合AES密钥的要求
       field-decrypt-key: "UCrtxSCwYZNCIlav"
+    # 文件上传
+    file-upload:
+      server-url: http://127.0.0.1:9000
 # 自动建表
 table-modify:
   update-type: update

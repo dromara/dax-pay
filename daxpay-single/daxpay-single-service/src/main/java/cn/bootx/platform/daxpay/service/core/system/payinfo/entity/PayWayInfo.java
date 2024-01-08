@@ -5,8 +5,10 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.service.core.system.payinfo.convert.PayWayInfoConvert;
 import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayWayInfoDto;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,6 +22,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@DbTable(comment = "支付方式")
+@TableName("pay_way_info")
 public class PayWayInfo extends MpBaseEntity implements EntityBaseFunction<PayWayInfoDto> {
 
     /** 需要与系统中配置的枚举一致 */

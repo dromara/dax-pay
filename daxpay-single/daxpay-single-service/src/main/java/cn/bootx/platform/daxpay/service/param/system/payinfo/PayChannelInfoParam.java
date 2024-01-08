@@ -16,4 +16,16 @@ public class PayChannelInfoParam {
 
     @Schema(description= "主键")
     private Long id;
+
+    /** logo图片 */
+    @Schema(description = "logo图片")
+    private Long iconId;
+
+    /** 卡牌背景色 */
+    @Schema(description = "卡牌背景色")
+    private String bgColor;
+
+    /** 备注 */
+    @Schema(description = "备注")
+    private String remark;
 }

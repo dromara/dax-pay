@@ -29,7 +29,7 @@ public class PayWayInfoService {
     /**
      * 列表
      */
-    public List<PayWayInfoDto> list(){
+    public List<PayWayInfoDto> findAll(){
         return manager.findAll().stream()
                 .map(PayWayInfo::toDto)
                 .collect(Collectors.toList());

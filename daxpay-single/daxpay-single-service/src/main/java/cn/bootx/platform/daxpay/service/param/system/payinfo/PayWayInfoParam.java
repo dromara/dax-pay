@@ -11,9 +11,12 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "")
+@Schema(title = "支付方式信息")
 public class PayWayInfoParam {
 
     @Schema(description= "主键")
     private Long id;
+
+    @Schema(description = "备注")
+    private String remark;
 }

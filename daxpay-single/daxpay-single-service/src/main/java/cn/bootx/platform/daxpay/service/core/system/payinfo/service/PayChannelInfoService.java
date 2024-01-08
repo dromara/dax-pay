@@ -29,7 +29,7 @@ public class PayChannelInfoService {
     /**
      * 列表
      */
-    public List<PayChannelInfoDto> list(){
+    public List<PayChannelInfoDto> findAll(){
         return manager.findAll().stream()
                 .map(PayChannelInfo::toDto)
                 .collect(Collectors.toList());
