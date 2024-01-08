@@ -26,7 +26,7 @@ public class PaymentVerifySignAop {
     private final PaymentSignService paymentSignService;
 
     @Before("@annotation(paymentApi)")
-    public void beforeMethod(JoinPoint joinPoint, PaymentApi paymentApi) throws Throwable {
+    public void beforeMethod(JoinPoint joinPoint, PaymentApi paymentApi) {
         Object[] args = joinPoint.getArgs();
         if (args.length == 0){
             throw new PayFailureException("支付方法至少有一个参数，并且需要签名支付参数需要放在第一位");

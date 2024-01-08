@@ -2,9 +2,9 @@ package cn.bootx.platform.daxpay.admin.controller.system;
 
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
-import cn.bootx.platform.daxpay.service.core.system.service.PayApiConfigService;
-import cn.bootx.platform.daxpay.service.dto.system.PayApiConfigDto;
-import cn.bootx.platform.daxpay.service.param.system.PayApiConfigParam;
+import cn.bootx.platform.daxpay.service.core.system.config.service.PayApiConfigService;
+import cn.bootx.platform.daxpay.service.dto.system.config.PayApiConfigDto;
+import cn.bootx.platform.daxpay.service.param.system.config.PayApiConfigParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

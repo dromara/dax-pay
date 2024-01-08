@@ -2,9 +2,9 @@ package cn.bootx.platform.daxpay.admin.controller.system;
 
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
-import cn.bootx.platform.daxpay.service.core.system.service.WechatNoticeConfigService;
-import cn.bootx.platform.daxpay.service.dto.system.WechatNoticeConfigDto;
-import cn.bootx.platform.daxpay.service.param.system.WechatNoticeConfigParam;
+import cn.bootx.platform.daxpay.service.core.system.config.service.WechatNoticeConfigService;
+import cn.bootx.platform.daxpay.service.dto.system.config.WechatNoticeConfigDto;
+import cn.bootx.platform.daxpay.service.param.system.config.WechatNoticeConfigParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
