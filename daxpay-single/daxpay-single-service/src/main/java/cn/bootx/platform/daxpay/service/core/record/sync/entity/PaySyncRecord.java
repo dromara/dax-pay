@@ -29,47 +29,47 @@ import lombok.experimental.Accessors;
 public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<PaySyncRecordDto> {
 
     /** 支付记录id */
-    @DbComment("支付记录id")
+    @DbColumn(comment = "支付记录id")
     private Long paymentId;
 
     /** 业务号 */
-    @DbComment("业务号")
+    @DbColumn(comment = "业务号")
     private String businessNo;
 
     /**
      * 支付通道
      * @see PayChannelEnum#getCode()
      */
-    @DbComment("支付通道")
+    @DbColumn(comment = "支付通道")
     private String channel;
 
     /** 通知消息 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @DbComment("通知消息")
+    @DbColumn(comment = "通知消息")
     private String syncInfo;
 
     /**
      * 网关返回状态
      * @see PaySyncStatusEnum
      */
-    @DbComment("同步状态")
+    @DbColumn(comment = "同步状态")
     private String gatewayStatus;
 
     /**
      * 支付单如果状态不一致, 是否进行修复
      */
-    @DbComment("是否进行修复")
+    @DbColumn(comment = "是否进行修复")
     private boolean repairOrder;
 
     /** 支付单修复前状态 */
-    @DbComment("支付单修复前状态")
+    @DbColumn(comment = "支付单修复前状态")
     private String oldStatus;
     /** 支付单修复后状态 */
 
-    @DbComment("支付单修复后状态")
+    @DbColumn(comment = "支付单修复后状态")
     private String repairStatus;
 
-    @DbComment("错误消息")
+    @DbColumn(comment = "错误消息")
     private String errorMsg;
 
     /** 客户端IP */

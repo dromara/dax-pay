@@ -7,6 +7,7 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.service.core.record.sync.dao.PaySyncRecordManager;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.dto.record.sync.PaySyncRecordDto;
+import cn.bootx.platform.daxpay.service.param.record.PaySyncRecordQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,18 +27,10 @@ public class PaySyncRecordService {
     private final PaySyncRecordManager orderManager;
 
     /**
-     * 记录同步记录 同步支付单的不进行记录
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveRecord(PaySyncRecord paySyncRecord){
-        orderManager.save(paySyncRecord);
-    }
-
-    /**
      * 分页查询
      */
-    public PageResult<PaySyncRecordDto> page(PageParam pageParam, PaySyncRecordDto param) {
-        Page<PaySyncRecord> page = orderManager.page(pageParam, param);
+    public PageResult<PaySyncRecordDto> page(PageParam pageParam, PaySyncRecordQuery query) {
+        Page<PaySyncRecord> page = orderManager.page(pageParam, query);
         return MpUtil.convert2DtoPageResult(page);
     }
 
@@ -47,4 +40,13 @@ public class PaySyncRecordService {
     public PaySyncRecordDto findById(Long id) {
         return orderManager.findById(id).map(PaySyncRecord::toDto).orElseThrow(DataNotExistException::new);
     }
+
+    /**
+     * 记录同步记录 同步支付单的不进行记录
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveRecord(PaySyncRecord paySyncRecord){
+        orderManager.save(paySyncRecord);
+    }
+
 }

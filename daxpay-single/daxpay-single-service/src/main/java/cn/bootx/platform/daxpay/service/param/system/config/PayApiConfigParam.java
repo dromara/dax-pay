@@ -37,4 +37,7 @@ public class PayApiConfigParam {
 
     @Schema(description = "是否记录请求的信息")
     private boolean record;
+
+    @Schema(description = "备注")
+    private String remark;
 }

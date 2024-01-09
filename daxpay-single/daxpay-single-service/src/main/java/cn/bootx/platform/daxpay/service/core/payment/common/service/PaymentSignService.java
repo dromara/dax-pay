@@ -44,12 +44,12 @@ public class PaymentSignService {
         if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
             boolean verified = PaySignUtil.verifyHmacSha256Sign(param, platform.getSignSecret(), param.getSign());
             if (!verified){
-                throw new PayFailureException("签名验证未通过");
+                throw new PayFailureException("未通过签名验证");
             }
         } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
             boolean verified = PaySignUtil.verifyMd5Sign(param, platform.getSignSecret(), param.getSign());
             if (!verified){
-                throw new PayFailureException("签名验证未通过");
+                throw new PayFailureException("未通过签名验证");
             }
         } else {
             throw new PayFailureException("签名方式错误");

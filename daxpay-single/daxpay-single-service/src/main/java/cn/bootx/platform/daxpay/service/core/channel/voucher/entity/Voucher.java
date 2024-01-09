@@ -43,20 +43,20 @@ public class Voucher extends MpBaseEntity implements EntityBaseFunction<VoucherD
     private String mchAppCode;
 
     /** 卡号 */
-    @DbComment("卡号")
+    @DbColumn(comment = "卡号")
     @DbMySqlIndex(comment = "卡号索引")
     private String cardNo;
 
     /** 生成批次号 */
-    @DbComment("生成批次号")
+    @DbColumn(comment = "生成批次号")
     private Long batchNo;
 
     /** 面值 */
-    @DbComment("面值")
+    @DbColumn(comment = "面值")
     private BigDecimal faceValue;
 
     /** 余额 */
-    @DbComment("余额")
+    @DbColumn(comment = "余额")
     private Integer balance;
 
     /** 预冻结额度 */
@@ -65,22 +65,22 @@ public class Voucher extends MpBaseEntity implements EntityBaseFunction<VoucherD
 
 
     /** 是否长期有效 */
-    @DbComment("是否长期有效")
+    @DbColumn(comment = "是否长期有效")
     private boolean enduring;
 
     /** 开始时间 */
-    @DbComment("开始时间")
+    @DbColumn(comment = "开始时间")
     private LocalDateTime startTime;
 
     /** 结束时间 */
-    @DbComment("结束时间")
+    @DbColumn(comment = "结束时间")
     private LocalDateTime endTime;
 
     /**
      * 状态
      * @see VoucherCode#STATUS_FORBIDDEN
      */
-    @DbComment("状态")
+    @DbColumn(comment = "状态")
     private String status;
 
     @Override

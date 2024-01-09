@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
 import lombok.Getter;
 import lombok.Setter;

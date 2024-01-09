@@ -6,7 +6,6 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.record.close.convert.PayCloseRecordConvert;
 import cn.bootx.platform.daxpay.service.dto.record.close.PayCloseRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
-import cn.bootx.table.modify.annotation.DbComment;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -26,27 +25,27 @@ import lombok.experimental.Accessors;
 public class PayCloseRecord extends MpCreateEntity implements EntityBaseFunction<PayCloseRecordDto> {
 
     /** 支付记录id */
-    @DbComment("支付记录id")
+    @DbColumn(comment = "支付记录id")
     private Long paymentId;
 
     /** 业务号 */
-    @DbComment("业务号")
+    @DbColumn(comment = "业务号")
     private String businessNo;
 
     /**
      * 关闭的异步支付通道, 可以为空
      * @see PayChannelEnum#getCode()
      */
-    @DbComment("关闭的异步支付通道")
+    @DbColumn(comment = "关闭的异步支付通道")
     private String asyncChannel;
 
     /**
      * 是否关闭成功
      */
-    @DbComment("是否关闭成功")
+    @DbColumn(comment = "是否关闭成功")
     private boolean closed;
 
-    @DbComment("错误消息")
+    @DbColumn(comment = "错误消息")
     private String errorMsg;
 
     /** 客户端IP */

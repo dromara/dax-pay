@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConf
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatRefundService;
-import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;

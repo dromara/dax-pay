@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class RepairResult {
     /** 修复前状态 */
-    private PayStatusEnum oldStatus;
+    private PayStatusEnum beforeStatus;
     /** 修复后状态 */
     private PayStatusEnum repairStatus;
 }

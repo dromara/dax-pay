@@ -1,6 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.record.repair.entity;
 
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.daxpay.service.core.record.repair.convert.PayRepairRecordConvert;
+import cn.bootx.platform.daxpay.service.dto.order.repair.PayRepairRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -18,7 +21,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("pay_repair_record")
 @DbTable(comment = "支付修复记录")
-public class PayRepairRecord extends MpCreateEntity {
+public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunction<PayRepairRecordDto> {
 
     /** 支付ID */
     @DbColumn(comment = "支付ID")
@@ -36,6 +39,10 @@ public class PayRepairRecord extends MpCreateEntity {
     @DbColumn(comment = "修复类型")
     private String repairType;
 
+    /** 修复的异步通道 */
+    @DbColumn(comment = "修复的异步通道")
+    private String asyncChannel;
+
     /** 修复前状态 */
     @DbColumn(comment = "修复前状态")
     private String beforeStatus;
@@ -48,4 +55,11 @@ public class PayRepairRecord extends MpCreateEntity {
     @DbColumn(comment = "金额变动")
     private Integer amount;
 
+    /**
+     * 转换
+     */
+    @Override
+    public PayRepairRecordDto toDto() {
+        return PayRepairRecordConvert.CONVERT.convert(this);
+    }
 }

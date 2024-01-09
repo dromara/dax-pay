@@ -2,12 +2,12 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.common.entity.OrderRefundableInfo;
+import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayOrderManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayOrder;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderChannelService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderChannelService;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,9 +45,9 @@ public class AliPayOrderService {
         payOrderChannelService.updateChannel(payChannelParam,payOrder);
 
         // 更新支付宝可退款类型信息
-        List<OrderRefundableInfo> refundableInfos = payOrder.getRefundableInfos();
+        List<RefundableInfo> refundableInfos = payOrder.getRefundableInfos();
         refundableInfos.removeIf(payTypeInfo -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payTypeInfo.getChannel()));
-        refundableInfos.add(new OrderRefundableInfo()
+        refundableInfos.add(new RefundableInfo()
                 .setChannel(PayChannelEnum.ALI.getCode())
                 .setAmount(payChannelParam.getAmount())
         );

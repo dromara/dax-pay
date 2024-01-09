@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.dto.record.sync;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
-import cn.bootx.table.modify.annotation.DbComment;
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,7 +47,7 @@ public class PaySyncRecordDto extends BaseDto {
     /**
      * 支付单如果状态不一致, 是否修复成功
      */
-    @DbComment("是否进行修复")
+    @DbColumn(comment = "是否进行修复")
     private boolean repairOrder;
 
     @Schema(description = "错误消息")

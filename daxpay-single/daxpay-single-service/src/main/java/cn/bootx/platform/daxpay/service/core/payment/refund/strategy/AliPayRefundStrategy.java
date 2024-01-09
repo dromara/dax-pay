@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRefundService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
-import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;

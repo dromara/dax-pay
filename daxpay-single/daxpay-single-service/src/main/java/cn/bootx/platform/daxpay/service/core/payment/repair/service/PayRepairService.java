@@ -1,13 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.common.entity.OrderRefundableInfo;
+import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.repair.factory.PayRepairStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.RepairResult;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.record.repair.entity.PayRepairRecord;
 import cn.bootx.platform.daxpay.service.core.record.repair.service.PayRepairRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
@@ -42,14 +42,14 @@ public class PayRepairService {
         // 从退款记录中获取支付通道 退款记录中的支付通道跟支付时关联的支付通道一致
         List<String> channels = order.getRefundableInfos()
                 .stream()
-                .map(OrderRefundableInfo::getChannel)
+                .map(RefundableInfo::getChannel)
                 .collect(Collectors.toList());
 
         // 初始化修复参数
         List<AbsPayRepairStrategy> repairStrategies = PayRepairStrategyFactory.createAsyncLast(channels);
         repairStrategies.forEach(repairStrategy -> repairStrategy.initRepairParam(order, repairParam.getRepairSource()));
         repairStrategies.forEach(AbsPayRepairStrategy::doBeforeHandler);
-        RepairResult repairResult = new RepairResult().setOldStatus(PayStatusEnum.findByCode(order.getStatus()));
+        RepairResult repairResult = new RepairResult().setBeforeStatus(PayStatusEnum.findByCode(order.getStatus()));
 
         // 根据不同的类型执行对应的修复逻辑
         switch (repairParam.getRepairType()) {
@@ -149,10 +149,12 @@ public class PayRepairService {
     private void saveRecord(PayOrder order, PayRepairParam repairParam, RepairResult repairResult){
 
         PayRepairRecord payRepairRecord = new PayRepairRecord()
-                .setBeforeStatus(repairResult.getOldStatus().getCode())
+                .setPaymentId(order.getId())
+                .setAsyncChannel(order.getAsyncChannel())
+                .setBusinessNo(order.getBusinessNo())
+                .setBeforeStatus(repairResult.getBeforeStatus().getCode())
                 .setAfterStatus(repairResult.getRepairStatus().getCode())
                 .setAmount(repairParam.getAmount())
-                .setBusinessNo(order.getBusinessNo())
                 .setRepairSource(repairParam.getRepairSource().getCode())
                 .setRepairType(repairParam.getRepairType().getCode());
         recordService.saveRecord(payRepairRecord);

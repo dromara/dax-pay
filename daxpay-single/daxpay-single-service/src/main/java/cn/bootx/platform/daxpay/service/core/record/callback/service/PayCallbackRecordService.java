@@ -1,9 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.record.callback.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.service.core.record.callback.dao.PayCallbackRecordManager;
 import cn.bootx.platform.daxpay.service.core.record.callback.entity.PayCallbackRecord;
 import cn.bootx.platform.daxpay.service.dto.record.callback.PayCallbackRecordDto;
+import cn.bootx.platform.daxpay.service.param.record.PayCallbackRecordQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +21,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PayCallbackRecordService {
-
     private final PayCallbackRecordManager callbackRecordManager;
 
     /**
@@ -25,5 +28,12 @@ public class PayCallbackRecordService {
      */
     public PayCallbackRecordDto findById(Long id) {
         return callbackRecordManager.findById(id).map(PayCallbackRecord::toDto).orElseThrow(DataNotExistException::new);
+    }
+
+    /**
+     * 分页查询
+     */
+    public PageResult<PayCallbackRecordDto> page(PageParam pageParam, PayCallbackRecordQuery param){
+        return MpUtil.convert2DtoPageResult(callbackRecordManager.page(pageParam,param));
     }
 }

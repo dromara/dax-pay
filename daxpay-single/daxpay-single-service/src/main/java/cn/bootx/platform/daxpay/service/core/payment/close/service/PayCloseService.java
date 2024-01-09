@@ -5,13 +5,13 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.param.pay.PayCloseParam;
-import cn.bootx.platform.daxpay.service.common.entity.OrderRefundableInfo;
+import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.close.factory.PayCloseStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.record.close.entity.PayCloseRecord;
 import cn.bootx.platform.daxpay.service.core.record.close.service.PayCloseRecordService;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.lock.LockInfo;
@@ -76,7 +76,7 @@ public class PayCloseService {
         // 1.获取支付方式(退款列表中提取)，通过工厂生成对应的策略组
         List<String> channels = payOrder.getRefundableInfos()
                 .stream()
-                .map(OrderRefundableInfo::getChannel)
+                .map(RefundableInfo::getChannel)
                 .collect(Collectors.toList());
         List<AbsPayCloseStrategy> payCloseStrategies = PayCloseStrategyFactory.createAsyncLast(channels);
         if (CollectionUtil.isEmpty(payCloseStrategies)) {

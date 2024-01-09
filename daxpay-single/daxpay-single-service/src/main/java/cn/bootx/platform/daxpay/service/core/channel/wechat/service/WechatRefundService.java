@@ -4,10 +4,10 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.context.AsyncRefundLocal;
-import cn.bootx.platform.daxpay.service.common.entity.OrderRefundableInfo;
+import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
@@ -40,7 +40,7 @@ public class WechatRefundService {
      */
     public void refund(PayOrder payOrder, int amount,
                        WeChatPayConfig weChatPayConfig) {
-        OrderRefundableInfo refundableInfo = payOrder.getRefundableInfos().stream()
+        RefundableInfo refundableInfo = payOrder.getRefundableInfos().stream()
                 .filter(o -> Objects.equals(o.getChannel(), PayChannelEnum.WECHAT.getCode()))
                 .findFirst()
                 .orElseThrow(() -> new PayFailureException("未找到微信支付的详细信息"));

@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.record.callback.convert.PayCallbackRecordConvert;
 import cn.bootx.platform.daxpay.service.dto.record.callback.PayCallbackRecordDto;
-import cn.bootx.table.modify.annotation.DbComment;
+import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
@@ -29,40 +29,40 @@ import java.time.LocalDateTime;
 @TableName("pay_callback_record")
 public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunction<PayCallbackRecordDto> {
     /** 支付记录id */
-    @DbComment("支付记录id")
+    @DbColumn(comment = "支付记录id")
     private Long paymentId;
 
     /**
      * 支付通道
      * @see PayChannelEnum#getCode()
      */
-    @DbComment("支付通道")
+    @DbColumn(comment = "支付通道")
     private String payChannel;
 
     /** 通知消息 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @DbComment("通知消息")
+    @DbColumn(comment = "通知消息")
     private String notifyInfo;
 
     /**
      * 支付状态
      * @see PayStatusEnum
      */
-    @DbComment("支付状态")
+    @DbColumn(comment = "支付状态")
     private String payStatus;
 
     /**
      * 回调处理状态
      */
-    @DbComment("回调处理状态")
+    @DbColumn(comment = "回调处理状态")
     private String status;
 
     /** 提示信息 */
-    @DbComment("提示信息")
+    @DbColumn(comment = "提示信息")
     private String msg;
 
     /** 回调时间 */
-    @DbComment("回调时间")
+    @DbColumn(comment = "回调时间")
     private LocalDateTime notifyTime;
 
     /**

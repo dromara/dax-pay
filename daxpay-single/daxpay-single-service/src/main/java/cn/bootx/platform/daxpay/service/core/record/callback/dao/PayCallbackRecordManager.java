@@ -1,7 +1,12 @@
 package cn.bootx.platform.daxpay.service.core.record.callback.dao;
 
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.service.core.record.callback.entity.PayCallbackRecord;
+import cn.bootx.platform.daxpay.service.param.record.PayCallbackRecordQuery;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +18,14 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @Repository
 public class PayCallbackRecordManager extends BaseManager<PayCallbackRecordMapper, PayCallbackRecord> {
+
+    /**
+     * 分页
+     */
+    public Page<PayCallbackRecord> page(PageParam pageParam, PayCallbackRecordQuery param){
+        Page<PayCallbackRecord> mpPage = MpUtil.getMpPage(pageParam, PayCallbackRecord.class);
+        return lambdaQuery()
+                .orderByDesc(MpIdEntity::getId)
+                .page(mpPage);
+    }
 }

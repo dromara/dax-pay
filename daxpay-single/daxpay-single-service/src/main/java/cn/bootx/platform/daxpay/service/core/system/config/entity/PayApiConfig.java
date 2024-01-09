@@ -61,6 +61,9 @@ public class PayApiConfig extends MpBaseEntity implements EntityBaseFunction<Pay
     @DbColumn(comment = "是否记录请求的信息")
     private boolean record;
 
+    @DbColumn(comment = "备注")
+    private String remark;
+
     /**
      * 转换
      */

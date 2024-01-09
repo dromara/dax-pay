@@ -8,10 +8,7 @@ import cn.bootx.platform.daxpay.service.param.system.payinfo.PayWayInfoParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,7 +37,7 @@ public class PayWayInfoController {
     }
 
     @Operation(summary = "更新")
-    @GetMapping("/update")
+    @PostMapping("/update")
     public ResResult<Void> update(@RequestBody PayWayInfoParam param){
         payWayInfoService.update(param);
         return Res.ok();

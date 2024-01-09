@@ -125,7 +125,6 @@ bootx:
         - '/css/**'
         - '/error'
         - '/favicon.ico'
-        - '/**'
     # 审计日志
     audit-log:
       # 审计日志存储

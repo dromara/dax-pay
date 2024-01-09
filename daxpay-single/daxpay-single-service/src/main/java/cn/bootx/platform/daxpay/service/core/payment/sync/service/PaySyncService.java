@@ -15,8 +15,8 @@ import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.PaySyncStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
-import cn.bootx.platform.daxpay.service.core.record.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.record.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
