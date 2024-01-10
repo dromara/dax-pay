@@ -241,7 +241,7 @@ public class PaySyncService {
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setPaymentId(payOrder.getId())
                 .setBusinessNo(payOrder.getBusinessNo())
-                .setChannel(payOrder.getAsyncChannel())
+                .setAsyncChannel(payOrder.getAsyncChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setRepairOrder(repair)

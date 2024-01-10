@@ -30,7 +30,7 @@ public class PaySyncRecordManager extends BaseManager<PaySyncRecordMapper, PaySy
         Page<PaySyncRecord> mpPage = MpUtil.getMpPage(pageParam, PaySyncRecord.class);
         return lambdaQuery().orderByDesc(MpIdEntity::getId)
                 .like(Objects.nonNull(param.getPaymentId()), PaySyncRecord::getPaymentId, param.getPaymentId())
-                .eq(Objects.nonNull(param.getChannel()), PaySyncRecord::getChannel, param.getChannel())
+                .eq(Objects.nonNull(param.getAsyncChannel()), PaySyncRecord::getAsyncChannel, param.getAsyncChannel())
                 .eq(Objects.nonNull(param.getStatus()), PaySyncRecord::getGatewayStatus, param.getStatus())
                 .page(mpPage);
     }

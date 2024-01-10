@@ -7,7 +7,6 @@ import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.core.record.sync.convert.PaySyncRecordConvert;
 import cn.bootx.platform.daxpay.service.dto.record.sync.PaySyncRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
-import cn.bootx.table.modify.annotation.DbComment;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
@@ -37,11 +36,11 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     private String businessNo;
 
     /**
-     * 支付通道
+     * 同步通道
      * @see PayChannelEnum#getCode()
      */
-    @DbColumn(comment = "支付通道")
-    private String channel;
+    @DbColumn(comment = "同步通道")
+    private String asyncChannel;
 
     /** 通知消息 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)

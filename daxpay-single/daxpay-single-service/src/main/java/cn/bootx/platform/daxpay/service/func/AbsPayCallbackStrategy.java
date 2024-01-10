@@ -105,7 +105,7 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
                 .setNotifyTime(LocalDateTime.now())
                 .setPaymentId(this.getPaymentId())
                 .setPayChannel(this.getPayChannel().getCode())
-                .setPayStatus(result.getStatus())
+                .setStatus(result.getStatus())
                 .setMsg(result.getMsg());
         callbackRecordManager.save(payNotifyRecord);
     }

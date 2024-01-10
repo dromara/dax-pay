@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.service.core.record.repair.service.PayRepairRecordService;
-import cn.bootx.platform.daxpay.service.dto.order.repair.PayRepairRecordDto;
+import cn.bootx.platform.daxpay.service.dto.record.repair.PayRepairRecordDto;
 import cn.bootx.platform.daxpay.service.param.record.PayRepairRecordQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

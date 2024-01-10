@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.record.callback.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import cn.bootx.platform.daxpay.service.core.record.callback.convert.PayCallbackRecordConvert;
 import cn.bootx.platform.daxpay.service.dto.record.callback.PayCallbackRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -45,14 +45,8 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     private String notifyInfo;
 
     /**
-     * 支付状态
-     * @see PayStatusEnum
-     */
-    @DbColumn(comment = "支付状态")
-    private String payStatus;
-
-    /**
      * 回调处理状态
+     * @see PayCallbackStatusEnum
      */
     @DbColumn(comment = "回调处理状态")
     private String status;

@@ -28,7 +28,7 @@ public class PaySyncRecordQuery {
      * @see PayChannelEnum#getCode()
      */
     @Schema(description = "支付通道")
-    private String channel;
+    private String asyncChannel;
 
     /** 通知消息 */
     @Schema(description = "同步消息")

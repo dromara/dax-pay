@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.record.repair.convert;
 
 import cn.bootx.platform.daxpay.service.core.record.repair.entity.PayRepairRecord;
-import cn.bootx.platform.daxpay.service.dto.order.repair.PayRepairRecordDto;
+import cn.bootx.platform.daxpay.service.dto.record.repair.PayRepairRecordDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

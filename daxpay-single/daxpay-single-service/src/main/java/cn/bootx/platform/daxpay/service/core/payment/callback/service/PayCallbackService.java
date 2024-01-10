@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.callback.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.service.code.PayNotifyStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
@@ -43,17 +43,17 @@ public class PayCallbackService {
 
         // 支付单不存在,记录回调记录, TODO 取消支付网关的订单支付情况
         if (Objects.isNull(payOrder)) {
-            return new PayCallbackResult().setStatus(PayNotifyStatusEnum.NOT_FOUND.getCode()).setMsg("支付单不存在,记录回调记录");
+            return new PayCallbackResult().setStatus(PayCallbackStatusEnum.NOT_FOUND.getCode()).setMsg("支付单不存在,记录回调记录");
         }
 
         // 回调时间超出了支付单超时时间, 记录一下, 不做处理 TODO 这块应该把订单给当成正常结束给处理了,
         if (Objects.nonNull(payOrder.getExpiredTime())
                 && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
-            return new PayCallbackResult().setStatus(PayNotifyStatusEnum.TIMEOUT.getCode()).setMsg("回调时间超出了支付单支付有效时间");
+            return new PayCallbackResult().setStatus(PayCallbackStatusEnum.TIMEOUT.getCode()).setMsg("回调时间超出了支付单支付有效时间");
         }
 
         // 成功状态
-        if (Objects.equals(PayNotifyStatusEnum.SUCCESS.getCode(), tradeStatus)) {
+        if (Objects.equals(PayCallbackStatusEnum.SUCCESS.getCode(), tradeStatus)) {
             return this.success(payOrder);
         }
         else {
@@ -66,16 +66,16 @@ public class PayCallbackService {
      * 成功处理 使用补偿
      */
     private PayCallbackResult success(PayOrder payOrder) {
-        PayCallbackResult result = new PayCallbackResult().setStatus(PayNotifyStatusEnum.SUCCESS.getCode());
+        PayCallbackResult result = new PayCallbackResult().setStatus(PayCallbackStatusEnum.SUCCESS.getCode());
 
         // 支付单已经被支付,不需要重复处理
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
-            return result.setStatus(PayNotifyStatusEnum.IGNORE.getCode()).setMsg("支付单已经是支付成功状态,不进行处理");
+            return result.setStatus(PayCallbackStatusEnum.IGNORE.getCode()).setMsg("支付单已经是支付成功状态,不进行处理");
         }
 
         // 支付单已被取消,记录回调记录 TODO 考虑不全, 需要做支付订单的取消处理
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
-            return result.setStatus(PayNotifyStatusEnum.FAIL.getCode()).setMsg("支付单不是待支付状态,记录回调记录");
+            return result.setStatus(PayCallbackStatusEnum.FAIL.getCode()).setMsg("支付单不是待支付状态,记录回调记录");
         }
 
         // 执行支付完成修复逻辑
@@ -94,12 +94,12 @@ public class PayCallbackService {
 
         // payment已被取消,记录回调记录,后期处理 TODO 考虑不完善, 后续优化
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
-            return result.setStatus(PayNotifyStatusEnum.IGNORE.getCode()).setMsg("支付单已经取消,记录回调记录");
+            return result.setStatus(PayCallbackStatusEnum.IGNORE.getCode()).setMsg("支付单已经取消,记录回调记录");
         }
 
         // payment支付成功, 状态非法 TODO 考虑不完善, 后续优化
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
-            return result.setStatus(PayNotifyStatusEnum.FAIL.getCode()).setMsg("支付单状态非法,支付网关状态为失败,但支付单状态为已完成");
+            return result.setStatus(PayCallbackStatusEnum.FAIL.getCode()).setMsg("支付单状态非法,支付网关状态为失败,但支付单状态为已完成");
         }
 
         // 执行支付关闭修复逻辑

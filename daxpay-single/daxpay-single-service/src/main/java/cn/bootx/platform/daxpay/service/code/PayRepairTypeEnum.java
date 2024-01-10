@@ -12,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PayRepairTypeEnum {
 
-    SUCCESS("success","成功"),
+    SUCCESS("success","支付成功"),
     CLOSE_LOCAL("close_local","关闭本地支付"),
     WAIT("wait","待支付"),
     /** 同时也会关闭本地支付 */

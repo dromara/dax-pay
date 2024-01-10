@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.callback.result;
 
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,9 +16,10 @@ public class PayCallbackResult {
 
     /**
      * 处理状态
-     * @see PayStatusEnum
+     * @see PayCallbackStatusEnum
      */
     private String status;
+
 
     /** 提示信息 */
     private String msg;

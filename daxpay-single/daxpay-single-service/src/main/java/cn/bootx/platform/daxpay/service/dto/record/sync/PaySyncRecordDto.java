@@ -26,14 +26,17 @@ public class PaySyncRecordDto extends BaseDto {
     @Schema(description = "支付记录id")
     private Long paymentId;
 
+    @Schema(description = "业务号")
+    private String businessNo;
+
     /**
-     * 支付通道
+     * 同步通道
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付通道")
-    private String channel;
+    @Schema(description = "同步通道")
+    private String asyncChannel;
 
-    /** 通知消息 */
+    /** 同步消息 */
     @Schema(description = "同步消息")
     private String syncInfo;
 
@@ -45,13 +48,13 @@ public class PaySyncRecordDto extends BaseDto {
     private String status;
 
     /**
-     * 支付单如果状态不一致, 是否修复成功
+     * 支付单如果状态不一致, 是否进行修复
      */
     @DbColumn(comment = "是否进行修复")
     private boolean repairOrder;
 
     @Schema(description = "错误消息")
-    private String msg;
+    private String errorMsg;
 
     /** 同步时间 */
     @Schema(description = "同步时间")

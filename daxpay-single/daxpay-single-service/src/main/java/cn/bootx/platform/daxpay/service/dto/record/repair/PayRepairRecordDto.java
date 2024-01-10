@@ -1,6 +1,9 @@
-package cn.bootx.platform.daxpay.service.dto.order.repair;
+package cn.bootx.platform.daxpay.service.dto.record.repair;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -26,23 +29,36 @@ public class PayRepairRecordDto extends BaseDto {
     @Schema(description = "业务号")
     private String businessNo;
 
-    /** 修复来源 */
+    /**
+     * 修复来源
+     * @see PayRepairSourceEnum
+     */
     @Schema(description = "修复来源")
     private String repairSource;
 
-    /** 修复类型 */
+    /**
+     * 修复类型
+     * @see PayRepairTypeEnum
+     */
     @Schema(description = "修复类型")
     private String repairType;
 
+    /** 修复的异步通道 */
     @DbColumn(comment = "修复的异步通道")
     private String asyncChannel;
 
-    /** 修复前状态 */
-    @Schema(description = "修复前状态")
+    /**
+     * 修复前状态
+     * @see PayStatusEnum
+     */
+    @Schema(description = "修复前订单状态")
     private String beforeStatus;
 
-    /** 修复后状态 */
-    @Schema(description = "修复后状态")
+    /**
+     * 修复后状态
+     * @see PayStatusEnum
+     */
+    @Schema(description = "修复后订单状态")
     private String afterStatus;
 
     /** 金额变动 */

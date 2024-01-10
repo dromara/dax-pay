@@ -2,8 +2,11 @@ package cn.bootx.platform.daxpay.service.core.record.repair.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
 import cn.bootx.platform.daxpay.service.core.record.repair.convert.PayRepairRecordConvert;
-import cn.bootx.platform.daxpay.service.dto.order.repair.PayRepairRecordDto;
+import cn.bootx.platform.daxpay.service.dto.record.repair.PayRepairRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -31,11 +34,17 @@ public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "业务号")
     private String businessNo;
 
-    /** 修复来源 */
+    /**
+     * 修复来源
+     * @see PayRepairSourceEnum
+     */
     @DbColumn(comment = "修复来源")
     private String repairSource;
 
-    /** 修复类型 */
+    /**
+     * 修复类型
+     * @see PayRepairTypeEnum
+     */
     @DbColumn(comment = "修复类型")
     private String repairType;
 
@@ -43,11 +52,17 @@ public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "修复的异步通道")
     private String asyncChannel;
 
-    /** 修复前状态 */
+    /**
+     * 修复前状态
+     * @see PayStatusEnum
+     */
     @DbColumn(comment = "修复前状态")
     private String beforeStatus;
 
-    /** 修复后状态 */
+    /**
+     * 修复后状态
+     * @see PayStatusEnum
+     */
     @DbColumn(comment = "修复后状态")
     private String afterStatus;
 

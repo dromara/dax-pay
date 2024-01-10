@@ -6,7 +6,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.service.core.record.repair.dao.PayRepairRecordManager;
 import cn.bootx.platform.daxpay.service.core.record.repair.entity.PayRepairRecord;
-import cn.bootx.platform.daxpay.service.dto.order.repair.PayRepairRecordDto;
+import cn.bootx.platform.daxpay.service.dto.record.repair.PayRepairRecordDto;
 import cn.bootx.platform.daxpay.service.param.record.PayRepairRecordQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
