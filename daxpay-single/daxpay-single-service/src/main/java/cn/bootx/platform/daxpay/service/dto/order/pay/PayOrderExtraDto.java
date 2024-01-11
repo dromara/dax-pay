@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * 支付订单扩展信息
  * @author xxm
@@ -16,4 +18,48 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Schema(title = "支付订单扩展信息")
 public class PayOrderExtraDto extends BaseDto {
+
+    /** 描述 */
+    @Schema(description = "描述")
+    private String description;
+
+    /** 支付终端ip */
+    @Schema(description = "支付终端ip")
+    private String clientIp;
+
+    /** 是否不需要异步通知，以最后一次为准 */
+    @Schema(description = "是否不需要异步通知")
+    private boolean notNotify;
+
+    /** 异步通知地址 */
+    @Schema(description = "异步通知地址，以最后一次为准")
+    private String notifyUrl;
+
+    /** 签名类型 */
+    @Schema(description = "签名类型")
+    private String signType;
+
+    /** 签名，以最后一次为准 */
+    @Schema(description = "签名")
+    private String sign;
+
+    /** 商户扩展参数,回调时会原样返回 */
+    @Schema(description = "商户扩展参数")
+    private String attach;
+
+    /** API版本号 */
+    @Schema(description = "API版本号")
+    private String apiVersion;
+
+    /** 请求时间，时间戳转时间, 以最后一次为准 */
+    @Schema(description = "请求时间，传输时间戳，以最后一次为准")
+    private LocalDateTime reqTime;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误信息 */
+    @Schema(description = "错误信息")
+    private String errorMsg;
 }

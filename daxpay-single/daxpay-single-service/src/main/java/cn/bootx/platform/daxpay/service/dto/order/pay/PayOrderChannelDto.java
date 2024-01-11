@@ -16,4 +16,19 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Schema(title = "支付订单关联通道信息")
 public class PayOrderChannelDto extends BaseDto {
+
+    @Schema(description = "支付id")
+    private Long paymentId;
+
+    @Schema(description = "通道")
+    private String channel;
+
+    @Schema(description = "支付方式")
+    private String payWay;
+
+    @Schema(description = "异步支付方式")
+    private boolean async;
+
+    @Schema(description = "金额")
+    private Integer amount;
 }

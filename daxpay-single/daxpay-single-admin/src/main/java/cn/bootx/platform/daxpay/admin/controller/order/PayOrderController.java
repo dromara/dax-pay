@@ -5,10 +5,15 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.daxpay.param.pay.PayCloseParam;
+import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
+import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderChannelService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderExtraService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
+import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderChannelDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderExtraDto;
@@ -17,6 +22,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +41,9 @@ public class PayOrderController {
     private final PayOrderService payOrderService;
     private final PayOrderExtraService payOrderExtraService;
     private final PayOrderChannelService payOrderChannelService;
+
+    private final PayCloseService PayCloseService;
+    private final PaySyncService paySyncService;
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
@@ -61,5 +70,22 @@ public class PayOrderController {
     @GetMapping("/getChannels")
     public ResResult<List<PayOrderChannelDto>> getChannels(Long paymentId){
         return Res.ok(payOrderChannelService.findAllByPaymentId(paymentId));
+    }
+
+    @Operation(summary = "同步支付状态")
+    @PostMapping("/sync")
+    public ResResult<PaySyncResult> sync(Long id){
+        PaySyncParam param = new PaySyncParam();
+        param.setPaymentId(id);
+        return Res.ok(paySyncService.sync(param));
+    }
+
+    @Operation(summary = "关闭支付记录")
+    @PostMapping("/close")
+    public ResResult<Void> close(Long id){
+        PayCloseParam param = new PayCloseParam();
+        param.setPaymentId(id);
+        PayCloseService.close(param);
+        return Res.ok();
     }
 }
