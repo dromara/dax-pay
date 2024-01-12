@@ -62,11 +62,10 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
 
     /** 支付单修复前状态 */
     @DbColumn(comment = "支付单修复前状态")
-    private String oldStatus;
+    private String beforeStatus;
     /** 支付单修复后状态 */
-
     @DbColumn(comment = "支付单修复后状态")
-    private String repairStatus;
+    private String afterStatus;
 
     @DbColumn(comment = "错误消息")
     private String errorMsg;

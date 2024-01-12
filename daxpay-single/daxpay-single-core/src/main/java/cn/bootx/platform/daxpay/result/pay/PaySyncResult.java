@@ -33,10 +33,10 @@ public class PaySyncResult extends PayCommonResult{
     private boolean repair;
 
     @Schema(description = "支付单修复前状态")
-    private String oldStatus;
+    private String beforeStatus;
 
     @Schema(description = "支付单修复后状态")
-    private String repairStatus;
+    private String afterStatus;
 
     @Schema(description = "失败原因")
     private String errorMsg;

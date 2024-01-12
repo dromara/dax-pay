@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class RefundableInfo {
     /**
+     * 通道
      * @see PayChannelEnum#getCode()
      */
     private String channel;

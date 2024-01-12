@@ -63,7 +63,7 @@ public class WechatRefundService {
         if (StrUtil.isBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
             refundInfo.setErrorMsg(errorMsg);
-            refundInfo.setErrorCode(PayRefundStatusEnum.SUCCESS.getCode());
+            refundInfo.setErrorCode(PayRefundStatusEnum.FAIL.getCode());
             throw new PayFailureException(errorMsg);
         }
         byte[] fileBytes = Base64.decode(weChatPayConfig.getP12());

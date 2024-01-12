@@ -49,7 +49,7 @@ public abstract class PayCommonParam {
     /** API版本号 */
     @Schema(description = "API版本号")
     @NotBlank(message = "API版本号必填")
-    private String version;
+    private String version = "1.0.0";
 
     /** 请求时间，时间戳转时间 */
     @Schema(description = "请求时间，传输时间戳")

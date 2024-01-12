@@ -92,15 +92,15 @@ public class PaySyncService {
             AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getAsyncChannel());
             syncPayStrategy.initPayParam(payOrder);
             // 记录支付单同步前后的状态
-            String oldStatus = payOrder.getStatus();
-            String repairStatus = null;
+            String beforeStatus = payOrder.getStatus();
+            String afterStatus = null;
 
             // 执行同步操作, 获取支付网关同步的结果
             GatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
             // 判断是否同步成功
             if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(payOrder, syncResult, true, oldStatus, null, syncResult.getErrorMsg());
+                this.saveRecord(payOrder, syncResult, true, beforeStatus, null, syncResult.getErrorMsg());
                 return new PaySyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
 
@@ -110,23 +110,23 @@ public class PaySyncService {
                 // 状态不一致，执行支付单修复逻辑
                 if (!statusSync){
                     this.resultHandler(syncResult, payOrder);
-                    repairStatus = payOrder.getStatus();
+                    afterStatus = payOrder.getStatus();
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
-                this.saveRecord(payOrder, syncResult, false, oldStatus, null, e.getMessage());
+                this.saveRecord(payOrder, syncResult, false, beforeStatus, null, e.getMessage());
                 return new PaySyncResult().setErrorMsg(e.getMessage());
             }
 
             // 同步成功记录日志
-            this.saveRecord( payOrder, syncResult, !statusSync, oldStatus, repairStatus, null);
+            this.saveRecord( payOrder, syncResult, !statusSync, beforeStatus, afterStatus, null);
             return new PaySyncResult()
                     .setGatewayStatus(syncResult.getSyncStatus().getCode())
                     .setSuccess(true)
                     .setRepair(!statusSync)
-                    .setOldStatus(oldStatus)
-                    .setRepairStatus(repairStatus);
+                    .setBeforeStatus(beforeStatus)
+                    .setAfterStatus(afterStatus);
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -233,11 +233,11 @@ public class PaySyncService {
      * @param payOrder 支付单
      * @param syncResult 同步结果
      * @param repair 是否修复
-     * @param oldStatus 修复前的状态
+     * @param beforeStatus 修复前的状态
      * @param repairStatus 修复后的状态
      * @param errorMsg 错误信息
      */
-    private void saveRecord(PayOrder payOrder,GatewaySyncResult syncResult, boolean repair, String oldStatus, String repairStatus, String errorMsg){
+    private void saveRecord(PayOrder payOrder,GatewaySyncResult syncResult, boolean repair, String beforeStatus, String repairStatus, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setPaymentId(payOrder.getId())
                 .setBusinessNo(payOrder.getBusinessNo())
@@ -245,8 +245,8 @@ public class PaySyncService {
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setRepairOrder(repair)
-                .setOldStatus(oldStatus)
-                .setRepairStatus(repairStatus)
+                .setBeforeStatus(beforeStatus)
+                .setAfterStatus(repairStatus)
                 .setErrorMsg(errorMsg)
                 .setClientIp(PaymentContextLocal.get().getRequest().getClientIp())
                 .setReqId(PaymentContextLocal.get().getRequest().getReqId());

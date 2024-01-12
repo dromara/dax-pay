@@ -13,7 +13,7 @@ import lombok.Getter;
 public enum PayRefundStatusEnum {
 
     SUCCESS("success","成功"),
-    FAIL("fail","失败");
+    FAIL("fail"," ");
 
     /** 编码 */
     private final String code;

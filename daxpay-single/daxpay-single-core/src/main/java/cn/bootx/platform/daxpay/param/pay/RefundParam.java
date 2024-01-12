@@ -24,7 +24,7 @@ public class RefundParam extends PayCommonParam {
     private String businessNo;
 
     /**
-     * 部分退款需要传输refundModes参数
+     * 部分退款需要传输支付通道参数参数
      */
     @Schema(description = "是否全部退款")
     private boolean refundAll;
