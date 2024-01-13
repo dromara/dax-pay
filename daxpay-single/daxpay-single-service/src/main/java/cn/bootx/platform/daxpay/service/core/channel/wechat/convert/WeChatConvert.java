@@ -25,6 +25,4 @@ public interface WeChatConvert {
 
     WeChatPayOrderDto convert(WeChatPayOrder in);
 
-    WeChatPayOrder convert(WeChatPayOrderDto in);
-
 }

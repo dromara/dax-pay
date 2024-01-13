@@ -51,7 +51,7 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
      * 网关返回状态
      * @see PaySyncStatusEnum
      */
-    @DbColumn(comment = "同步状态")
+    @DbColumn(comment = "网关返回状态")
     private String gatewayStatus;
 
     /**

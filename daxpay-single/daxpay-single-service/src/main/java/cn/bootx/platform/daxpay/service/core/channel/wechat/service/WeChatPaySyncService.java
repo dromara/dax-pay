@@ -58,6 +58,7 @@ public class WeChatPaySyncService {
                 log.warn("疑似未查询到订单:{}", result);
                 return syncResult.setSyncStatus(PaySyncStatusEnum.NOT_FOUND);
             }
+            // 查询到订单的状态
             String tradeStatus = result.get(WeChatPayCode.TRADE_STATE);
             // 支付完成
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_SUCCESS) || Objects.equals(tradeStatus, WeChatPayCode.TRADE_ACCEPT)) {
@@ -89,4 +90,8 @@ public class WeChatPaySyncService {
         }
         return syncResult;
     }
+
+    /**
+     * 退款查询
+     */
 }

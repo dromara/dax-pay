@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -71,8 +72,10 @@ public class PayRepairService {
                 break;
             case REFUND:
                 this.refund(order, repairStrategies);
+//                repairResult.setRepairStatus(PayStatusEnum.REFUNDED);
                 break;
             default:
+                repairResult.setRepairStatus(repairResult.getBeforeStatus());
                 break;
         }
         this.saveRecord(order, repairParam, repairResult);
@@ -147,13 +150,15 @@ public class PayRepairService {
      * 保存记录
      */
     private void saveRecord(PayOrder order, PayRepairParam repairParam, RepairResult repairResult){
+        // 修复后的状态
+        String afterStatus = Optional.ofNullable(repairResult.getRepairStatus()).map(PayStatusEnum::getCode).orElse(null);
 
         PayRepairRecord payRepairRecord = new PayRepairRecord()
                 .setPaymentId(order.getId())
                 .setAsyncChannel(order.getAsyncChannel())
                 .setBusinessNo(order.getBusinessNo())
                 .setBeforeStatus(repairResult.getBeforeStatus().getCode())
-                .setAfterStatus(repairResult.getRepairStatus().getCode())
+                .setAfterStatus(afterStatus)
                 .setAmount(repairParam.getAmount())
                 .setRepairSource(repairParam.getRepairSource().getCode())
                 .setRepairType(repairParam.getRepairType().getCode());

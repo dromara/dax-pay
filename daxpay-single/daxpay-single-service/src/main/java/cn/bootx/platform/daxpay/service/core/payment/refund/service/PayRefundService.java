@@ -91,7 +91,8 @@ public class PayRefundService {
                 // 全部退款根据支付订单的退款信息构造退款参数
                 List<RefundChannelParam> channelParams = payOrder.getRefundableInfos()
                         .stream()
-                        .map(o -> new RefundChannelParam().setChannel(o.getChannel())
+                        .map(o -> new RefundChannelParam()
+                                .setChannel(o.getChannel())
                                 .setAmount(o.getAmount()))
                         .collect(Collectors.toList());
                 param.setRefundChannels(channelParams);

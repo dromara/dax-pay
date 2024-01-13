@@ -3,13 +3,12 @@ package cn.bootx.platform.daxpay.service.dto.record.sync;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
-import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
+import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * 支付同步记录
@@ -23,44 +22,53 @@ import java.time.LocalDateTime;
 public class PaySyncRecordDto extends BaseDto {
 
     /** 支付记录id */
-    @Schema(description = "支付记录id")
+    @Schema(description ="支付记录id")
     private Long paymentId;
 
-    @Schema(description = "业务号")
+    /** 业务号 */
+    @Schema(description ="业务号")
     private String businessNo;
 
     /**
      * 同步通道
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "同步通道")
+    @Schema(description ="同步通道")
     private String asyncChannel;
 
-    /** 同步消息 */
-    @Schema(description = "同步消息")
+    /** 通知消息 */
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    @Schema(description ="通知消息")
     private String syncInfo;
 
     /**
-     * 同步状态
+     * 网关返回状态
      * @see PaySyncStatusEnum
      */
-    @Schema(description = "同步状态")
-    private String status;
+    @Schema(description ="网关返回状态")
+    private String gatewayStatus;
 
     /**
      * 支付单如果状态不一致, 是否进行修复
      */
-    @DbColumn(comment = "是否进行修复")
+    @Schema(description ="是否进行修复")
     private boolean repairOrder;
 
-    @Schema(description = "错误消息")
+    /** 支付单修复前状态 */
+    @Schema(description ="支付单修复前状态")
+    private String beforeStatus;
+    /** 支付单修复后状态 */
+    @Schema(description ="支付单修复后状态")
+    private String afterStatus;
+
+    @Schema(description ="错误消息")
     private String errorMsg;
 
-    /** 同步时间 */
-    @Schema(description = "同步时间")
-    private LocalDateTime syncTime;
-
     /** 客户端IP */
-    @Schema(description = "客户端IP")
+    @Schema(description ="客户端IP")
     private String clientIp;
+
+    /** 请求链路ID */
+    @Schema(description ="请求链路ID")
+    private String reqId;
 }

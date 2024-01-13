@@ -3,10 +3,12 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.code.AliPayWay;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayConfigManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
+import cn.bootx.platform.daxpay.service.core.system.payinfo.service.PayChannelInfoService;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -36,6 +38,7 @@ public class AliPayConfigService {
     /** 默认支付宝配置的主键ID */
     private final static Long ID = 0L;
     private final AliPayConfigManager alipayConfigManager;
+    private final PayChannelInfoService payChannelInfoService;
 
     /**
      * 修改
@@ -43,6 +46,11 @@ public class AliPayConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void update(AliPayConfigParam param) {
         AliPayConfig alipayConfig = alipayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
+        // 启用或停用
+        if (!Objects.equals(param.getEnable(), alipayConfig.getEnable())){
+            payChannelInfoService.setEnable(PayChannelEnum.ALI.getCode(), param.getEnable());
+        }
+
         BeanUtil.copyProperties(param, alipayConfig, CopyOptions.create().ignoreNullValue());
         alipayConfigManager.updateById(alipayConfig);
     }
@@ -52,9 +60,9 @@ public class AliPayConfigService {
      */
     public List<LabelValue> findPayWays() {
         return AliPayWay.getPayWays()
-            .stream()
-            .map(e -> new LabelValue(e.getName(),e.getCode()))
-            .collect(Collectors.toList());
+                .stream()
+                .map(e -> new LabelValue(e.getName(),e.getCode()))
+                .collect(Collectors.toList());
     }
 
     /**

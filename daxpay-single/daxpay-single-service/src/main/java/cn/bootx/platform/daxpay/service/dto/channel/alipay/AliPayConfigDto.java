@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.dto.channel.alipay;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,8 +27,14 @@ public class AliPayConfigDto extends BaseDto implements Serializable {
     @SensitiveInfo
     private String appId;
 
+    @DbColumn(comment = "是否启用")
+    private Boolean enable;
+
     @Schema(description = "服务器异步通知页面路径 需http://或者https://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问")
     private String notifyUrl;
+
+    @Schema(description = "页面跳转同步通知页面路径 需http://或者https://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问 商户可以自定义同步跳转地址")
+    private String returnUrl;
 
     @Schema(description = "请求网关地址")
     private String serverUrl;
@@ -63,9 +70,6 @@ public class AliPayConfigDto extends BaseDto implements Serializable {
 
     @Schema(description = "是否沙箱环境")
     private boolean sandbox;
-
-    @Schema(description = "状态")
-    private String status;
 
     @Schema(description = "备注")
     private String remark;

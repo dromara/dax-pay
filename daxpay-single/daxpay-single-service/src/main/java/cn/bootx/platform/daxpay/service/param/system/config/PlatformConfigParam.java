@@ -31,6 +31,9 @@ public class PlatformConfigParam {
     @DbColumn(comment = "支付通知地址")
     private String notifyUrl;
 
+    @Schema(description ="同步支付通知地址")
+    private String returnUrl;
+
     @DbColumn(comment = "订单默认超时时间")
     private Integer orderTimeout;
 }

@@ -2,15 +2,16 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.context.AsyncRefundLocal;
-import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -35,20 +35,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WechatRefundService {
 
+    private final PayOrderChannelManager payOrderChannelManager;
+
     /**
-     * 退款
+     * 退款方法
+     * 微信需要同时传输订单金额或退款金额
      */
-    public void refund(PayOrder payOrder, int amount,
-                       WeChatPayConfig weChatPayConfig) {
-        RefundableInfo refundableInfo = payOrder.getRefundableInfos().stream()
-                .filter(o -> Objects.equals(o.getChannel(), PayChannelEnum.WECHAT.getCode()))
-                .findFirst()
+    public void refund(PayOrder payOrder, int amount, WeChatPayConfig weChatPayConfig) {
+        PayOrderChannel orderChannel = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), PayChannelEnum.WECHAT.getCode())
                 .orElseThrow(() -> new PayFailureException("未找到微信支付的详细信息"));
         String refundFee = String.valueOf(amount);
-        String totalFee = refundableInfo.getAmount().toString();
+        String totalFee = String.valueOf(orderChannel.getAmount());
         // 设置退款信息
         AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
-        refundInfo.setRefundNo(IdUtil.getSnowflakeNextIdStr());
+        refundInfo.setRefundNo(PayUtil.getRefundNo());
+
         Map<String, String> params = RefundModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())

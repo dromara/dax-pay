@@ -1,11 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.context.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.hutool.core.util.IdUtil;
+import cn.bootx.platform.daxpay.util.PayUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.response.AlipayTradeRefundResponse;
@@ -38,7 +38,7 @@ public class AliPayRefundService {
 
         // 设置退款信息
         AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
-        refundInfo.setRefundNo(IdUtil.getSnowflakeNextIdStr());
+        refundInfo.setRefundNo(PayUtil.getRefundNo());
         refundModel.setOutRequestNo(refundInfo.getRefundNo());
         try {
             AlipayTradeRefundResponse response = AliPayApi.tradeRefundToResponse(refundModel);

@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.system.payinfo.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.daxpay.service.core.system.payinfo.dao.PayChannelInfoManager;
 import cn.bootx.platform.daxpay.service.core.system.payinfo.entity.PayChannelInfo;
 import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayChannelInfoDto;
@@ -39,7 +38,17 @@ public class PayChannelInfoService {
      * 单条
      */
     public PayChannelInfoDto findById(Long id){
-        return ResultConvertUtil.dtoConvert(manager.findById(id));
+        return manager.findById(id).map(PayChannelInfo::toDto).orElseThrow(DataNotExistException::new);
+    }
+
+    /**
+     * 设置是否启用
+     */
+    public void setEnable(String code,boolean enable){
+        PayChannelInfo info = manager.findByCode(code)
+                .orElseThrow(DataNotExistException::new);
+        info.setEnabled(enable);
+        manager.updateById(info);
     }
 
     /**

@@ -45,6 +45,10 @@ public class PayChannelInfo extends MpBaseEntity implements EntityBaseFunction<P
     @DbColumn(comment = "卡牌背景色")
     private String bgColor;
 
+    /** 是否启用 */
+    @DbColumn(comment = "是否启用")
+    private boolean enabled;
+
     /** 备注 */
     @DbColumn(comment = "备注")
     private String remark;

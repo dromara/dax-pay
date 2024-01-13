@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * 支付同步状态
+ * 支付同步结果
  *
  * @author xxm
  * @since 2021/4/21

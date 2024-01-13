@@ -28,6 +28,6 @@ public class PlatformLocal {
     /** 支付通知地址 */
     private String notifyUrl;
 
-    /** 订单支付超时 */
+    /** 订单支付超时(分钟) */
     private Integer orderTimeout;
 }

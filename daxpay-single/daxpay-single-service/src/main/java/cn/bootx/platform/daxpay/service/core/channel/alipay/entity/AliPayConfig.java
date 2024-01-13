@@ -37,6 +37,10 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "支付宝商户appId")
     private String appId;
 
+    /** 是否启用 */
+    @DbColumn(comment = "是否启用")
+    private Boolean enable;
+
     /**
      * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
      * 1. 需http://或者https://格式的完整路径，
@@ -114,9 +118,6 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbMySqlFieldType(MySqlFieldTypeEnum.VARCHAR)
     @TableField(typeHandler = StringListTypeHandler.class)
     private List<String> payWays;
-
-    @DbColumn(comment = "状态")
-    private String status;
 
     /** 备注 */
     @DbColumn(comment = "备注")

@@ -127,6 +127,7 @@ public class PayRefundAssistService {
         PayRefundOrder refundOrder = new PayRefundOrder()
                 .setRefundRequestNo(asyncRefundInfo.getRefundNo())
                 .setAmount(amount)
+                .setRefundableBalance(payOrder.getRefundableBalance())
                 .setPaymentId(payOrder.getId())
                 .setBusinessNo(payOrder.getBusinessNo())
                 .setRefundTime(LocalDateTime.now())

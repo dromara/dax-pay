@@ -11,18 +11,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 平台配置项
+ * 支付平台配置控制器
  * @author xxm
  * @since 2024/1/2
  */
-@Tag(name = "平台配置项")
+@Tag(name = "支付平台配置控制器")
 @RestController
 @RequestMapping("/platform/config")
 @RequiredArgsConstructor
 public class PlatformConfigController {
     private final PlatformConfigService platformConfigService;
 
-    @Operation(summary = "平台配置项")
+    @Operation(summary = "获取平台配置")
     @GetMapping("/getConfig")
     public ResResult<PlatformConfigDto> getConfig(){
         return Res.ok(platformConfigService.getConfig().toDto());

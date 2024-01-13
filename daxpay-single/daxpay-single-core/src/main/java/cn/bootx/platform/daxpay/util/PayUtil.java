@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.util.IdUtil;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
@@ -85,5 +86,12 @@ public class PayUtil {
         return payChannelParams.stream()
                 .map(PayChannelParam::getChannel)
                 .noneMatch(PayChannelEnum.ASYNC_TYPE_CODE::contains);
+    }
+
+    /**
+     * 生成退款号
+     */
+    public String getRefundNo(){
+        return "R" + IdUtil.getSnowflakeNextIdStr();
     }
 }

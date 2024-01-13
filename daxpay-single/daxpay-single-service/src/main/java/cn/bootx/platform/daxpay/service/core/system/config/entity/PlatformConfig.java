@@ -39,7 +39,10 @@ public class PlatformConfig extends MpBaseEntity implements EntityBaseFunction<P
     @DbColumn(comment = "支付通知地址")
     private String notifyUrl;
 
-    @DbColumn(comment = "订单默认超时时间")
+    @DbColumn(comment = "同步支付通知地址")
+    private String returnUrl;
+
+    @DbColumn(comment = "订单默认超时时间(分钟)")
     private Integer orderTimeout;
 
 

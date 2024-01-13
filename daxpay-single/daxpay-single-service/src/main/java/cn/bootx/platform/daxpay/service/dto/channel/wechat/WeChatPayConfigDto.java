@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.dto.channel.wechat;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,6 +29,15 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @SensitiveInfo
     private String wxAppId;
 
+    @DbColumn(comment = "是否启用")
+    private Boolean enable;
+
+    @Schema(description = "异步通知地址")
+    private String notifyUrl;
+
+    @Schema(description = "同步通知地址")
+    private String returnUrl;
+
     @Schema(description = "商户平台「API安全」中的 APIv2 密钥")
     @SensitiveInfo
     private String apiKeyV2;
@@ -44,20 +54,11 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @SensitiveInfo
     private String p12;
 
-    @Schema(description = "服务器异步通知页面路径 通知url必须为直接可访问的url，不能携带参数。公网域名必须为https ")
-    private String notifyUrl;
-
     @Schema(description = "是否沙箱环境")
     private boolean sandbox;
 
     @Schema(description = "可用支付方式")
     private List<String> payWays;
-
-    @Schema(description = "是否启用")
-    private Boolean activity;
-
-    @Schema(description = "状态")
-    private String state;
 
     @Schema(description = "备注")
     private String remark;
