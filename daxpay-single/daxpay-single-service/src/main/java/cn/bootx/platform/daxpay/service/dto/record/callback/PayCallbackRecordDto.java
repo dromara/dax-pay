@@ -3,8 +3,6 @@ package cn.bootx.platform.daxpay.service.dto.record.callback;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
-import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
-import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,7 +33,6 @@ public class PayCallbackRecordDto extends BaseDto {
     private String payChannel;
 
     /** 通知消息 */
-    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @Schema(description = "通知消息")
     private String notifyInfo;
 

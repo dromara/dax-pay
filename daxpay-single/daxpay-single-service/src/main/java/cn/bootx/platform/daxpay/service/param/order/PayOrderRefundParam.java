@@ -18,11 +18,14 @@ import java.util.List;
 public class PayOrderRefundParam {
 
     /** 支付id */
+    @Schema(description = "支付id")
     private Long paymentId;
 
     /** 原因 */
+    @Schema(description = "原因")
     private String reason;
 
     /** 退款明细 */
+    @Schema(description = "退款明细")
     private List<RefundChannelParam> refundChannels;
 }

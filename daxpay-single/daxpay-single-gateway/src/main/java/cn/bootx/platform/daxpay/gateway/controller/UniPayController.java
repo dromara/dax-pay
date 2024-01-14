@@ -16,10 +16,7 @@ import cn.bootx.platform.daxpay.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 统一支付接口
@@ -92,6 +89,22 @@ public class UniPayController {
     @Operation(summary = "退款状态同步")
     @PostMapping("/syncRefund")
     public DaxResult<Void> syncRefund(@RequestBody RefundSyncParam param){
+        return DaxRes.ok();
+    }
+
+    @CountTime
+    @PaymentApi("queryPayOrder")
+    @Operation(summary = "查询支付订单")
+    @PostMapping("/queryPayOrder")
+    public DaxResult<Void> queryPayOrder(){
+        return DaxRes.ok();
+    }
+
+    @CountTime
+    @PaymentApi("queryRefundOrder")
+    @Operation(summary = "查询退款订单")
+    @PostMapping("/queryRefundOrder")
+    public DaxResult<Void> queryRefundOrder(){
         return DaxRes.ok();
     }
 }

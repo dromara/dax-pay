@@ -1,16 +1,19 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.dao;
 
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.query.generator.QueryGenerator;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
+import cn.hutool.core.text.NamingCase;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -31,8 +34,10 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
      */
     public Page<PayOrder> page(PageParam pageParam, PayOrderQuery query){
         Page<PayOrder> mpPage = MpUtil.getMpPage(pageParam, PayOrder.class);
-        return lambdaQuery()
-                .orderByDesc(MpIdEntity::getId)
-                .page(mpPage);
+        QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
+//        if (Objects.nonNull(query.getSortField())){
+//            generator.orderBy(true, query.getAsc(), NamingCase.toUnderlineCase(query.getSortField()));
+//        }
+        return page(mpPage, generator);
     }
 }

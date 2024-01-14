@@ -1,7 +1,10 @@
 package cn.bootx.platform.daxpay.service.param.order;
 
+import cn.bootx.platform.common.core.annotation.QueryParam;
+import cn.bootx.platform.common.core.rest.param.QueryOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -9,20 +12,24 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/1/9
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
+@QueryParam(type = QueryParam.CompareTypeEnum.EQ)
 @Accessors(chain = true)
 @Schema(title = "支付退款查询参数")
-public class PayRefundOrderQuery {
+public class PayRefundOrderQuery extends QueryOrder {
 
-    @Schema(description = "关联的业务号")
-    private String businessNo;
-
-    @Schema(description = "付款付单号")
+    @Schema(description = "支付号")
     private Long paymentId;
 
-    @Schema(description = "异步方式关联退款请求号(部分退款情况)")
+    @Schema(description = "关联的业务号")
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    private String businessNo;
+
+    @Schema(description = "外部网关请求号")
     private String refundRequestNo;
 
     @Schema(description = "标题")
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String title;
 }
