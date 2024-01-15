@@ -96,7 +96,7 @@ public class UniPayController {
     @PaymentApi("queryPayOrder")
     @Operation(summary = "查询支付订单")
     @PostMapping("/queryPayOrder")
-    public DaxResult<Void> queryPayOrder(){
+    public DaxResult<Void> queryPayOrder(@RequestBody QueryPayOrderParam param){
         return DaxRes.ok();
     }
 
@@ -104,7 +104,15 @@ public class UniPayController {
     @PaymentApi("queryRefundOrder")
     @Operation(summary = "查询退款订单")
     @PostMapping("/queryRefundOrder")
-    public DaxResult<Void> queryRefundOrder(){
+    public DaxResult<Void> queryRefundOrder(@RequestBody QueryRefundOrderParam param){
+        return DaxRes.ok();
+    }
+
+    @CountTime
+    @PaymentApi("queryRefundOrderList")
+    @Operation(summary = "批量查询退款订单",description = "根据支付单号或者支付业务号")
+    @PostMapping("/queryRefundOrderList")
+    public DaxResult<Void> queryRefundOrderList(@RequestBody QueryPayOrderParam param){
         return DaxRes.ok();
     }
 }

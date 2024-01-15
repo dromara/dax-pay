@@ -30,7 +30,7 @@ public class SimpleRefundParam extends PayCommonParam {
     private String businessNo;
 
     /**
-     * 部分退款时此项必填
+     * 部分退款时此项必填, 不传输系统会自动生成
      */
     @Schema(description = "退款订单号")
     private String refundNo;
