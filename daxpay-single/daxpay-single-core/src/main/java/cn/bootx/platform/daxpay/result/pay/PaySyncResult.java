@@ -32,11 +32,8 @@ public class PaySyncResult extends PayCommonResult{
     @Schema(description = "是否进行了修复")
     private boolean repair;
 
-    @Schema(description = "支付单修复前状态")
-    private String beforeStatus;
-
-    @Schema(description = "支付单修复后状态")
-    private String afterStatus;
+    @Schema(description = "支付单修复ID")
+    private Long repairId;
 
     @Schema(description = "失败原因")
     private String errorMsg;

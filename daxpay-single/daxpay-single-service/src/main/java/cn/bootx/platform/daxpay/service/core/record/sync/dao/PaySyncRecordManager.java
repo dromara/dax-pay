@@ -1,17 +1,16 @@
 package cn.bootx.platform.daxpay.service.core.record.sync.dao;
 
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.query.generator.QueryGenerator;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.param.record.PaySyncRecordQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
-import java.util.Objects;
 
 /**
  *
@@ -26,13 +25,10 @@ public class PaySyncRecordManager extends BaseManager<PaySyncRecordMapper, PaySy
     /**
      * 分页
      */
-    public Page<PaySyncRecord> page(PageParam pageParam, PaySyncRecordQuery param) {
+    public Page<PaySyncRecord> page(PageParam pageParam, PaySyncRecordQuery query) {
         Page<PaySyncRecord> mpPage = MpUtil.getMpPage(pageParam, PaySyncRecord.class);
-        return lambdaQuery().orderByDesc(MpIdEntity::getId)
-                .like(Objects.nonNull(param.getPaymentId()), PaySyncRecord::getPaymentId, param.getPaymentId())
-                .eq(Objects.nonNull(param.getAsyncChannel()), PaySyncRecord::getAsyncChannel, param.getAsyncChannel())
-                .eq(Objects.nonNull(param.getStatus()), PaySyncRecord::getGatewayStatus, param.getStatus())
-                .page(mpPage);
+        QueryWrapper<PaySyncRecord> generator = QueryGenerator.generator(query);
+        return page(mpPage, generator);
     }
 
 }

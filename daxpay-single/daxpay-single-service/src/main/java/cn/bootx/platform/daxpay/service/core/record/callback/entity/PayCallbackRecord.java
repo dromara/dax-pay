@@ -11,6 +11,7 @@ import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -50,6 +51,10 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
      */
     @DbColumn(comment = "回调处理状态")
     private String status;
+
+
+    @Schema(description = "支付单修复ID")
+    private Long repairOrderId;
 
     /** 提示信息 */
     @DbColumn(comment = "提示信息")

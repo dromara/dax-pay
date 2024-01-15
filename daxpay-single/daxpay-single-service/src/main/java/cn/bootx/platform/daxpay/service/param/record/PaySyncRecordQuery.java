@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.param.record;
 
+import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -7,13 +8,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
-
 /**
  * 支付同步记录查询参数
  * @author xxm
  * @since 2024/1/9
  */
+@QueryParam(type = QueryParam.CompareTypeEnum.EQ)
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付同步记录查询参数")
@@ -30,26 +30,21 @@ public class PaySyncRecordQuery {
     @Schema(description = "支付通道")
     private String asyncChannel;
 
-    /** 通知消息 */
-    @Schema(description = "同步消息")
-    private String syncInfo;
+    @Schema(description = "请求链路ID")
+    private String reqId;
 
     /**
      * 同步状态
      * @see PaySyncStatusEnum
      */
     @Schema(description = "同步状态")
-    private String status;
+    private String gatewayStatus;
 
     /**
      * 支付单如果状态不一致, 是否修复成功
      */
     @DbColumn(comment = "是否进行修复")
-    private boolean repairOrder;
-
-    /** 同步时间 */
-    @Schema(description = "同步时间")
-    private LocalDateTime syncTime;
+    private Boolean repairOrder;
 
     /** 客户端IP */
     @Schema(description = "客户端IP")

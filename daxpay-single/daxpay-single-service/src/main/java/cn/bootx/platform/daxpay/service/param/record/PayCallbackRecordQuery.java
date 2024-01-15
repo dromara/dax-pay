@@ -39,4 +39,7 @@ public class PayCallbackRecordQuery extends QueryOrder {
      */
     @Schema(description = "回调处理状态")
     private String status;
+
+    @Schema(description = "请求链路ID")
+    private String reqId;
 }

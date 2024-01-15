@@ -42,9 +42,9 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "同步通道")
     private String asyncChannel;
 
-    /** 通知消息 */
+    /** 网关返回的同步消息 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @DbColumn(comment = "通知消息")
+    @DbColumn(comment = "同步消息")
     private String syncInfo;
 
     /**
@@ -60,12 +60,8 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "是否进行修复")
     private boolean repairOrder;
 
-    /** 支付单修复前状态 */
-    @DbColumn(comment = "支付单修复前状态")
-    private String beforeStatus;
-    /** 支付单修复后状态 */
-    @DbColumn(comment = "支付单修复后状态")
-    private String afterStatus;
+    @DbColumn(comment = "支付单修复ID")
+    private Long repairOrderId;
 
     @DbColumn(comment = "错误消息")
     private String errorMsg;

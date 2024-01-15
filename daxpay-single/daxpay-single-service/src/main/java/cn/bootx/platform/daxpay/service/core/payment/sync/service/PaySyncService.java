@@ -12,6 +12,7 @@ import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam;
+import cn.bootx.platform.daxpay.service.core.payment.repair.result.RepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.PaySyncStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
@@ -91,42 +92,37 @@ public class PaySyncService {
             // 获取同步策略类
             AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getAsyncChannel());
             syncPayStrategy.initPayParam(payOrder);
-            // 记录支付单同步前后的状态
-            String beforeStatus = payOrder.getStatus();
-            String afterStatus = null;
-
             // 执行同步操作, 获取支付网关同步的结果
             GatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
             // 判断是否同步成功
             if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(payOrder, syncResult, true, beforeStatus, null, syncResult.getErrorMsg());
+                this.saveRecord(payOrder, syncResult, false, null, syncResult.getErrorMsg());
                 return new PaySyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
 
             // 判断网关状态是否和支付单一致, 同时更新网关同步状态
             boolean statusSync = this.checkAndAdjustSyncStatus(syncResult,payOrder);
+            RepairResult repairResult = new RepairResult();
             try {
                 // 状态不一致，执行支付单修复逻辑
                 if (!statusSync){
-                    this.resultHandler(syncResult, payOrder);
-                    afterStatus = payOrder.getStatus();
+                    repairResult = this.resultHandler(syncResult, payOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
-                this.saveRecord(payOrder, syncResult, false, beforeStatus, null, e.getMessage());
+                this.saveRecord(payOrder, syncResult, false, null, e.getMessage());
                 return new PaySyncResult().setErrorMsg(e.getMessage());
             }
 
             // 同步成功记录日志
-            this.saveRecord( payOrder, syncResult, !statusSync, beforeStatus, afterStatus, null);
+            this.saveRecord( payOrder, syncResult, !statusSync, repairResult.getId(), null);
             return new PaySyncResult()
                     .setGatewayStatus(syncResult.getSyncStatus().getCode())
                     .setSuccess(true)
                     .setRepair(!statusSync)
-                    .setBeforeStatus(beforeStatus)
-                    .setAfterStatus(afterStatus);
+                    .setRepairId(repairResult.getId());
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -178,41 +174,42 @@ public class PaySyncService {
     /**
      * 根据同步的结果对支付单进行处理
      */
-    private void resultHandler(GatewaySyncResult syncResult, PayOrder payOrder){
+    private RepairResult resultHandler(GatewaySyncResult syncResult, PayOrder payOrder){
         PaySyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
         PayRepairParam repairParam = new PayRepairParam().setRepairSource(PayRepairSourceEnum.SYNC);
+        RepairResult repair = new RepairResult();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
             case PAY_SUCCESS: {
                 repairParam.setRepairType(PayRepairTypeEnum.SUCCESS);
-                repairService.repair(payOrder,repairParam);
+                repair = repairService.repair(payOrder, repairParam);
                 break;
             }
             // 待支付, 将订单状态重新设置为待支付
             case PAY_WAIT: {
                 repairParam.setRepairType(PayRepairTypeEnum.WAIT);
-                repairService.repair(payOrder,repairParam);
+                repair = repairService.repair(payOrder,repairParam);
                 break;
             }
             // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
                 repairParam.setRepairType(PayRepairTypeEnum.CLOSE_LOCAL);
-                repairService.repair(payOrder, repairParam);
+                repair = repairService.repair(payOrder, repairParam);
                 break;
             }
             // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
             case TIMEOUT:
             case NOT_FOUND_UNKNOWN:{
                 repairParam.setRepairType(PayRepairTypeEnum.CLOSE_GATEWAY);
-                repairService.repair(payOrder, repairParam);
+                repair = repairService.repair(payOrder, repairParam);
                 break;
             }
             // 交易退款 TODO 未实现
             case REFUND: {
                 repairParam.setRepairType(PayRepairTypeEnum.REFUND);
-                repairService.repair(payOrder, repairParam);
+                repair = repairService.repair(payOrder, repairParam);
                 break;
             }
             // 调用出错
@@ -225,6 +222,7 @@ public class PaySyncService {
                 throw new BizException("代码有问题");
             }
         }
+        return repair;
     }
 
 
@@ -233,11 +231,9 @@ public class PaySyncService {
      * @param payOrder 支付单
      * @param syncResult 同步结果
      * @param repair 是否修复
-     * @param beforeStatus 修复前的状态
-     * @param repairStatus 修复后的状态
      * @param errorMsg 错误信息
      */
-    private void saveRecord(PayOrder payOrder,GatewaySyncResult syncResult, boolean repair, String beforeStatus, String repairStatus, String errorMsg){
+    private void saveRecord(PayOrder payOrder,GatewaySyncResult syncResult, boolean repair, Long repairOrderId, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setPaymentId(payOrder.getId())
                 .setBusinessNo(payOrder.getBusinessNo())
@@ -245,8 +241,7 @@ public class PaySyncService {
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setRepairOrder(repair)
-                .setBeforeStatus(beforeStatus)
-                .setAfterStatus(repairStatus)
+                .setRepairOrderId(repairOrderId)
                 .setErrorMsg(errorMsg)
                 .setClientIp(PaymentContextLocal.get().getRequest().getClientIp())
                 .setReqId(PaymentContextLocal.get().getRequest().getReqId());

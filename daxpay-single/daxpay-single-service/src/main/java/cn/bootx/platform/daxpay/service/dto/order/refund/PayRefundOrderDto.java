@@ -27,7 +27,7 @@ public class PayRefundOrderDto extends BaseDto {
     @Schema(description = "关联的业务id")
     private String businessNo;
 
-    @Schema(description = "付款付单号")
+    @Schema(description = "支付号")
     private Long paymentId;
 
     @Schema(description = "异步方式关联退款请求号(部分退款情况)")

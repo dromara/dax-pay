@@ -22,53 +22,49 @@ import lombok.experimental.Accessors;
 public class PaySyncRecordDto extends BaseDto {
 
     /** 支付记录id */
-    @Schema(description ="支付记录id")
+    @Schema(description = "支付记录id")
     private Long paymentId;
 
     /** 业务号 */
-    @Schema(description ="业务号")
+    @Schema(description = "业务号")
     private String businessNo;
 
     /**
      * 同步通道
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description ="同步通道")
+    @Schema(description = "同步通道")
     private String asyncChannel;
 
     /** 通知消息 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @Schema(description ="通知消息")
+    @Schema(description = "通知消息")
     private String syncInfo;
 
     /**
      * 网关返回状态
      * @see PaySyncStatusEnum
      */
-    @Schema(description ="网关返回状态")
+    @Schema(description = "网关返回状态")
     private String gatewayStatus;
 
     /**
      * 支付单如果状态不一致, 是否进行修复
      */
-    @Schema(description ="是否进行修复")
+    @Schema(description = "是否进行修复")
     private boolean repairOrder;
 
-    /** 支付单修复前状态 */
-    @Schema(description ="支付单修复前状态")
-    private String beforeStatus;
-    /** 支付单修复后状态 */
-    @Schema(description ="支付单修复后状态")
-    private String afterStatus;
+    @Schema(description = "支付单修复ID")
+    private Long repairOrderId;
 
-    @Schema(description ="错误消息")
+    @Schema(description = "错误消息")
     private String errorMsg;
 
     /** 客户端IP */
-    @Schema(description ="客户端IP")
+    @Schema(description = "客户端IP")
     private String clientIp;
 
     /** 请求链路ID */
-    @Schema(description ="请求链路ID")
+    @Schema(description = "请求链路ID")
     private String reqId;
 }

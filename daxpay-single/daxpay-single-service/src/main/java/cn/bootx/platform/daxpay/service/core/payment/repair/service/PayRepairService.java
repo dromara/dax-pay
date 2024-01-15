@@ -78,8 +78,8 @@ public class PayRepairService {
                 repairResult.setRepairStatus(repairResult.getBeforeStatus());
                 break;
         }
-        this.saveRecord(order, repairParam, repairResult);
-        return repairResult;
+        PayRepairRecord payRepairRecord = this.saveRecord(order, repairParam, repairResult);
+        return repairResult.setId(payRepairRecord.getId());
     }
 
     /**
@@ -149,7 +149,7 @@ public class PayRepairService {
     /**
      * 保存记录
      */
-    private void saveRecord(PayOrder order, PayRepairParam repairParam, RepairResult repairResult){
+    private PayRepairRecord saveRecord(PayOrder order, PayRepairParam repairParam, RepairResult repairResult){
         // 修复后的状态
         String afterStatus = Optional.ofNullable(repairResult.getRepairStatus()).map(PayStatusEnum::getCode).orElse(null);
 
@@ -163,5 +163,6 @@ public class PayRepairService {
                 .setRepairSource(repairParam.getRepairSource().getCode())
                 .setRepairType(repairParam.getRepairType().getCode());
         recordService.saveRecord(payRepairRecord);
+        return payRepairRecord;
     }
 }

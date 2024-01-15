@@ -1,11 +1,12 @@
 package cn.bootx.platform.daxpay.service.core.record.close.dao;
 
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.query.generator.QueryGenerator;
 import cn.bootx.platform.daxpay.service.core.record.close.entity.PayCloseRecord;
 import cn.bootx.platform.daxpay.service.param.record.PayCloseRecordQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,7 @@ public class PayCloseRecordManager extends BaseManager<PayCloseRecordMapper, Pay
      */
     public Page<PayCloseRecord> page(PageParam pageParam, PayCloseRecordQuery param){
         Page<PayCloseRecord> mpPage = MpUtil.getMpPage(pageParam, PayCloseRecord.class);
-        return lambdaQuery()
-                .orderByDesc(MpIdEntity::getId)
-                .page(mpPage);
+        QueryWrapper<PayCloseRecord> generator = QueryGenerator.generator(param);
+        return page(mpPage, generator);
     }
 }

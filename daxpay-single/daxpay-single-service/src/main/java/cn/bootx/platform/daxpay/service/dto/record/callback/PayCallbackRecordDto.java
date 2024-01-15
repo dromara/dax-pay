@@ -43,6 +43,9 @@ public class PayCallbackRecordDto extends BaseDto {
     @Schema(description = "回调处理状态")
     private String status;
 
+    @Schema(description = "支付单修复ID")
+    private Long repairOrderId;
+
     /** 提示信息 */
     @Schema(description = "提示信息")
     private String msg;
