@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * 支付退款订单管理
  * @author xxm
@@ -28,10 +30,20 @@ public class PayRefundOrderManager extends BaseManager<PayRefundOrderMapper, Pay
     public Page<PayRefundOrder> page(PageParam pageParam, PayRefundOrderQuery query) {
         Page<PayRefundOrder> mpPage = MpUtil.getMpPage(pageParam, PayRefundOrder.class);
         QueryWrapper<PayRefundOrder> generator = QueryGenerator.generator(query);
-//        if (Objects.nonNull(query.getSortField())){
-//            generator.orderBy(true, query.getAsc(), NamingCase.toUnderlineCase(query.getSortField()));
-//        }
         return page(mpPage,generator);
     }
 
+    /**
+     * 根据退款号查询
+     */
+    public Optional<PayRefundOrder> findByRefundNo(String refundNo) {
+        return findByField(PayRefundOrder::getRefundNo, refundNo);
+    }
+
+    /**
+     * 查询支付号是否重复
+     */
+    public boolean existsByRefundNo(String refundNo){
+        return this.existedByField(PayRefundOrder::getRefundNo,refundNo);
+    }
 }

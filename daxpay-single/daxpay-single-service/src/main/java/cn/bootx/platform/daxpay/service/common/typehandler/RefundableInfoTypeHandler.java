@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.common.typehandler;
 
 import cn.bootx.platform.common.mybatisplus.handler.JacksonTypeReferenceHandler;
-import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
+import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.List;

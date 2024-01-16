@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.result.pay;
 
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
+import cn.bootx.platform.daxpay.result.CommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,7 @@ import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.FAIL;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付单同步结果")
-public class PaySyncResult extends PayCommonResult{
+public class PaySyncResult extends CommonResult {
 
     /**
      * 支付网关同步状态

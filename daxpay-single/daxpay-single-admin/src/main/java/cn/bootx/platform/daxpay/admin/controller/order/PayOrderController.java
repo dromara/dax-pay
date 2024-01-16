@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderChannelService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderExtraService;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderChannelDto;
@@ -38,7 +38,7 @@ import java.util.List;
 @RequestMapping("/order/pay")
 @RequiredArgsConstructor
 public class PayOrderController {
-    private final PayOrderService payOrderService;
+    private final PayOrderQueryService queryService;
     private final PayOrderExtraService payOrderExtraService;
     private final PayOrderChannelService payOrderChannelService;
 
@@ -48,13 +48,13 @@ public class PayOrderController {
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public ResResult<PageResult<PayOrderDto>> page(PageParam pageParam, PayOrderQuery param){
-        return Res.ok(payOrderService.page(pageParam,param));
+        return Res.ok(queryService.page(pageParam,param));
     }
 
     @Operation(summary = "查询订单详情")
     @GetMapping("/findById")
     public ResResult<PayOrderDto> findById(Long id){
-        PayOrderDto order = payOrderService.findById(id)
+        PayOrderDto order = queryService.findById(id)
                 .map(PayOrder::toDto)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         return Res.ok(order);

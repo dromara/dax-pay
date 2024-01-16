@@ -20,8 +20,6 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class BasePayOrder extends MpIdEntity {
 
-
-
     /** 交易记录ID */
     @DbColumn(comment = "交易记录ID")
     @DbMySqlIndex(comment = "交易记录ID")

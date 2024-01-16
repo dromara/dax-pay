@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
+import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayOrderManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayOrder;
@@ -76,7 +76,7 @@ public class AliPayOrderService {
 
         AliPayOrder aliPayOrder = new AliPayOrder();
         aliPayOrder.setTradeNo(tradeNo)
-                .setPayWay(PaymentContextLocal.get().getAsyncPayInfo().getPayWay().getCode())
+                .setPayWay(PaymentContextLocal.get().getAsyncPayInfo().getPayWay())
                 .setPaymentId(payOrder.getId())
                 .setAmount(amount)
                 .setRefundableBalance(amount)

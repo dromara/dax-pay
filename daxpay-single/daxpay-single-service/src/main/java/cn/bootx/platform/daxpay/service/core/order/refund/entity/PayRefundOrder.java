@@ -3,9 +3,9 @@ package cn.bootx.platform.daxpay.service.core.order.refund.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
-import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
+import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.typehandler.RefundableInfoTypeHandler;
-import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundConvert;
+import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundConvert;
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
@@ -33,13 +33,19 @@ import java.util.List;
 @TableName(value = "pay_refund_order", autoResultMap = true)
 public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<PayRefundOrderDto> {
 
-    /** 支付id */
-    @DbColumn(comment = "支付id")
+    /** 关联支付id */
+    @DbColumn(comment = "关联支付id")
     private Long paymentId;
 
-    /** 业务号 */
-    @DbColumn(comment = "业务号")
+    /** 关联业务号 */
+    @DbColumn(comment = "关联业务号")
     private String businessNo;
+
+    /**
+     * 需要保证全局唯一
+     */
+    @DbColumn(comment = "退款号")
+    private String refundNo;
 
     /** 异步方式关联退款请求号(部分退款情况) */
     @DbColumn(comment = "异步方式关联退款请求号(部分退款情况)")
@@ -98,7 +104,7 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
 
     @Override
     public PayRefundOrderDto toDto() {
-        return RefundConvert.CONVERT.convert(this);
+        return PayRefundConvert.CONVERT.convert(this);
     }
 
 }

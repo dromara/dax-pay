@@ -12,8 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AsyncRefundLocal {
 
-    /** 退款号 */
-    private String refundNo;
+    /** 退款请求号(调用支付网关时用的) */
+    private String refundRequestNo;
 
     /** 错误码 */
     private String errorCode;

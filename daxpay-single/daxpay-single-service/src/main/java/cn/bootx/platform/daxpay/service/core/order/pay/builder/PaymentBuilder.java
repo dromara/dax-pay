@@ -9,7 +9,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
-import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
+import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;

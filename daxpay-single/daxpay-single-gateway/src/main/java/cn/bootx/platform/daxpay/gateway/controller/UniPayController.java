@@ -4,10 +4,14 @@ import cn.bootx.platform.common.core.annotation.CountTime;
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
+import cn.bootx.platform.daxpay.result.order.PayOrderResult;
+import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.pay.service.PayService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
@@ -33,6 +37,8 @@ public class UniPayController {
     private final PayRefundService payRefundService;
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
+    private final PayOrderQueryService PayOrderQueryService;
+    private final PayRefundOrderService payRefundOrderService;
 
 
     @CountTime
@@ -96,23 +102,15 @@ public class UniPayController {
     @PaymentApi("queryPayOrder")
     @Operation(summary = "查询支付订单")
     @PostMapping("/queryPayOrder")
-    public DaxResult<Void> queryPayOrder(@RequestBody QueryPayOrderParam param){
-        return DaxRes.ok();
+    public DaxResult<PayOrderResult> queryPayOrder(@RequestBody QueryPayParam param){
+        return DaxRes.ok(PayOrderQueryService.queryPayOrder(param));
     }
 
     @CountTime
     @PaymentApi("queryRefundOrder")
     @Operation(summary = "查询退款订单")
     @PostMapping("/queryRefundOrder")
-    public DaxResult<Void> queryRefundOrder(@RequestBody QueryRefundOrderParam param){
-        return DaxRes.ok();
-    }
-
-    @CountTime
-    @PaymentApi("queryRefundOrderList")
-    @Operation(summary = "批量查询退款订单",description = "根据支付单号或者支付业务号")
-    @PostMapping("/queryRefundOrderList")
-    public DaxResult<Void> queryRefundOrderList(@RequestBody QueryPayOrderParam param){
-        return DaxRes.ok();
+    public DaxResult<RefundOrderResult> queryRefundOrder(@RequestBody QueryRefundParam param){
+        return DaxRes.ok(payRefundOrderService.queryRefundOrder(param));
     }
 }

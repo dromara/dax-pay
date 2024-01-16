@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.dto.system.payinfo;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,10 @@ public class PayChannelInfoDto extends BaseDto {
     /** 需要与系统中配置的枚举一致 */
     @Schema(description = "名称")
     private String name;
+
+    /** 是否启用 */
+    @DbColumn(comment = "是否启用")
+    private boolean enabled;
 
     /** logo图片 */
     @Schema(description = "logo图片")

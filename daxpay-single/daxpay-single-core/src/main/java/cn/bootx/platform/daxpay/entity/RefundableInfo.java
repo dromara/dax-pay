@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.common.entity;
+package cn.bootx.platform.daxpay.entity;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import lombok.Data;

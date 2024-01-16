@@ -11,6 +11,7 @@ import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PaymentBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
@@ -44,7 +45,11 @@ public class PayAssistService {
     private final PaySyncService paySyncService;
 
     private final PayOrderService payOrderService;
+
+    private final PayOrderQueryService payOrderQueryService;
+
     private final PayOrderExtraManager payOrderExtraManager;
+
     private final PayOrderChannelManager payOrderChannelManager;
 
     /**
@@ -170,7 +175,7 @@ public class PayAssistService {
      */
     public PayOrder getOrderAndCheck(String businessNo) {
         // 根据订单查询支付记录
-        PayOrder payOrder = payOrderService.findByBusinessNo(businessNo).orElse(null);
+        PayOrder payOrder = payOrderQueryService.findByBusinessNo(businessNo).orElse(null);
         if (Objects.nonNull(payOrder)) {
             // 待支付
             if (Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())){

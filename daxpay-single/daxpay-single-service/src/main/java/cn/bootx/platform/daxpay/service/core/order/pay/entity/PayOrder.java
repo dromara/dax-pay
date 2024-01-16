@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
+import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.typehandler.RefundableInfoTypeHandler;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;

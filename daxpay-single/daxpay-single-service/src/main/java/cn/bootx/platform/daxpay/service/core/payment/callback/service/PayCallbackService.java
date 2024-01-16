@@ -1,15 +1,15 @@
 package cn.bootx.platform.daxpay.service.core.payment.callback.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.callback.result.PayCallbackResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PayCallbackService {
 
-    private final PayOrderService payOrderService;
+    private final PayOrderQueryService payOrderQueryService;
 
     private final PayRepairService payRepairService;
 
@@ -39,7 +39,7 @@ public class PayCallbackService {
     public PayCallbackResult callback(Long paymentId, String tradeStatus) {
 
         // 获取支付单
-        PayOrder payOrder = payOrderService.findById(paymentId).orElse(null);
+        PayOrder payOrder = payOrderQueryService.findById(paymentId).orElse(null);
 
         // 支付单不存在,记录回调记录, TODO 取消支付网关的订单支付情况
         if (Objects.isNull(payOrder)) {

@@ -1,9 +1,9 @@
-package cn.bootx.platform.daxpay.service.dto.order.pay;
+package cn.bootx.platform.daxpay.result.order;
 
-import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.entity.RefundableInfo;
+import cn.bootx.platform.daxpay.result.CommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,14 +13,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
+ * 支付单响应参数
  * @author xxm
- * @since 2021/2/25
+ * @since 2024/1/16
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "具体支付日志基类")
-public class PayOrderDto extends BaseDto {
+@Schema(title = "支付单响应参数")
+public class PayOrderResult extends CommonResult {
 
     /** 关联的业务号 */
     @Schema(description = "关联的业务号")
@@ -29,6 +30,10 @@ public class PayOrderDto extends BaseDto {
     /** 标题 */
     @Schema(description = "标题")
     private String title;
+
+    /** 描述 */
+    @Schema(description = "描述")
+    private String description;
 
     /** 是否是异步支付 */
     @Schema(description = "是否是异步支付")
@@ -54,13 +59,6 @@ public class PayOrderDto extends BaseDto {
     private Integer refundableBalance;
 
     /**
-     * 可退款信息列表
-     * @see RefundableInfo
-     */
-    @Schema(description = "可退款信息列表")
-    private List<RefundableInfo> refundableInfos;
-
-    /**
      * 支付状态
      * @see PayStatusEnum
      */
@@ -75,4 +73,9 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "过期时间")
     private LocalDateTime expiredTime;
 
+    @Schema(description = "可退款信息列表")
+    private List<RefundableInfo> refundableInfos;
+
+    @Schema(description = "支付通道列表")
+    private List<PayOrderChannelResult> channels;
 }
