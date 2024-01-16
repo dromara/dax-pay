@@ -34,7 +34,7 @@ public class WeChatPaySyncStrategy extends AbsPaySyncStrategy {
     public GatewaySyncResult doSyncStatus() {
         // 检查并获取微信支付配置
         this.initWeChatPayConfig();
-        return weChatPaySyncService.syncPayStatus(this.getOrder().getId(), this.weChatPayConfig);
+        return weChatPaySyncService.syncPayStatus(this.getOrder(), this.weChatPayConfig);
     }
 
 

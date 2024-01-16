@@ -5,6 +5,7 @@ import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.json.JSONUtil;
@@ -34,15 +35,15 @@ public class WeChatPaySyncService {
     /**
      * 同步查询
      */
-    public GatewaySyncResult syncPayStatus(Long paymentId, WeChatPayConfig weChatPayConfig) {
+    public GatewaySyncResult syncPayStatus(PayOrder order, WeChatPayConfig weChatPayConfig) {
         GatewaySyncResult syncResult = new GatewaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
         Map<String, String> params = UnifiedOrderModel.builder()
-            .appid(weChatPayConfig.getWxAppId())
-            .mch_id(weChatPayConfig.getWxMchId())
-            .nonce_str(WxPayKit.generateStr())
-            .out_trade_no(String.valueOf(paymentId))
-            .build()
-            .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+                .appid(weChatPayConfig.getWxAppId())
+                .mch_id(weChatPayConfig.getWxMchId())
+                .nonce_str(WxPayKit.generateStr())
+                .out_trade_no(String.valueOf(order.getId()))
+                .build()
+                .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         try {
             String xmlResult = WxPayApi.orderQuery(params);
             Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
@@ -73,9 +74,9 @@ public class WeChatPaySyncService {
                 return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_WAIT);
             }
 
-            // 已退款/退款中
+            // 已退款/退款中 触发一下退款记录的查询
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_REFUND)) {
-                return syncResult.setSyncStatus(PaySyncStatusEnum.REFUND);
+                this.syncRefundStatus(order.getId(), weChatPayConfig);
             }
             // 已关闭
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_CLOSED)
@@ -94,4 +95,16 @@ public class WeChatPaySyncService {
     /**
      * 退款查询
      */
+    private GatewaySyncResult syncRefundStatus(Long paymentId, WeChatPayConfig weChatPayConfig){
+        Map<String, String> params = UnifiedOrderModel.builder()
+                .appid(weChatPayConfig.getWxAppId())
+                .mch_id(weChatPayConfig.getWxMchId())
+                .nonce_str(WxPayKit.generateStr())
+                .out_trade_no(String.valueOf(paymentId))
+                .build()
+                .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+        String xmlResult = WxPayApi.orderRefundQuery(false, params);
+        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
+        return new GatewaySyncResult().setSyncInfo(JSONUtil.toJsonStr(result));
+    }
 }

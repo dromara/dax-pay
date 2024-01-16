@@ -88,4 +88,7 @@ public interface WeChatPayCode {
     /** 支付失败(刷卡支付) */
     String TRADE_PAYERROR = "PAYERROR";
 
+    /** 退款总金额(各退款单的退款金额累加) */
+    String REFUND_FEE = "refund_fee";
+
 }

@@ -8,7 +8,9 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
 import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
+import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.ijpay.alipay.AliPayApi;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -43,13 +44,14 @@ public class AliPaySyncService {
         try {
             AlipayTradeQueryModel queryModel = new AlipayTradeQueryModel();
             queryModel.setOutTradeNo(String.valueOf(payOrder.getId()));
-            queryModel.setQueryOptions(Collections.singletonList("trade_settle_info"));
+//            queryModel.setQueryOptions(Collections.singletonList("trade_settle_info"));
             // 查询参数
             AlipayTradeQueryResponse response = AliPayApi.tradeQueryToResponse(queryModel);
             String tradeStatus = response.getTradeStatus();
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
-            // 支付完成 TODO 部分退款也在这个地方, 但无法区分
+            // 支付完成 TODO 部分退款也在这个地方, 但无法进行区分, 需要借助对账进行处理
             if (Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_FINISHED)) {
+                this.syncRefundStatus(payOrder);
                 PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(response.getTradeNo());
                 // 支付完成时间
                 LocalDateTime payTime = LocalDateTimeUtil.of(response.getSendPayDate());
@@ -80,5 +82,15 @@ public class AliPaySyncService {
             syncResult.setErrorMsg(e.getErrMsg());
         }
         return syncResult;
+    }
+
+    /**
+     * 退款同步查询
+     */
+    private void syncRefundStatus(PayOrder payOrder) throws AlipayApiException {
+        AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();
+        queryModel.setOutTradeNo(String.valueOf(payOrder.getId()));
+        AlipayTradeFastpayRefundQueryResponse response = AliPayApi.tradeRefundQueryToResponse(queryModel);
+        response.getRefundStatus();
     }
 }
