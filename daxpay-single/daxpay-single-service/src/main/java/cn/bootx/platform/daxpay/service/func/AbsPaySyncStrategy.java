@@ -27,7 +27,7 @@ public abstract class AbsPaySyncStrategy implements PayStrategy{
 
 
     /**
-     * 异步支付单与支付网关进行状态比对
+     * 异步支付单与支付网关进行状态比对后的结果
      * @see PaySyncStatusEnum
      */
     public abstract GatewaySyncResult doSyncStatus();
