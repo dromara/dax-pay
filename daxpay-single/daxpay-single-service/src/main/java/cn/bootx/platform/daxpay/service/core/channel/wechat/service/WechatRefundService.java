@@ -48,13 +48,13 @@ public class WechatRefundService {
         String totalFee = String.valueOf(orderChannel.getAmount());
         // 设置退款信息
         AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
-        refundInfo.setRefundNo(PayUtil.getRefundNo());
+        refundInfo.setRefundRequestNo(PayUtil.getRefundNo());
 
         Map<String, String> params = RefundModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .out_trade_no(String.valueOf(payOrder.getId()))
-                .out_refund_no(refundInfo.getRefundNo())
+                .out_refund_no(refundInfo.getRefundRequestNo())
                 .total_fee(totalFee)
                 .refund_fee(refundFee)
                 .nonce_str(WxPayKit.generateStr())

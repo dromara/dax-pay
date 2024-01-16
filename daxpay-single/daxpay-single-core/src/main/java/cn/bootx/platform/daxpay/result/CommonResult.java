@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.result.pay;
+package cn.bootx.platform.daxpay.result;
 
 import cn.bootx.platform.common.core.code.CommonCode;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +12,7 @@ import org.slf4j.MDC;
  */
 @Data
 @Schema(title = "支付通用返回参数")
-public class PayCommonResult {
+public class CommonResult {
 
     @Schema(description = "请求ID")
     private String reqId = MDC.get(CommonCode.TRACE_ID);

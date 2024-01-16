@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
@@ -47,6 +48,8 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
     public void doSuccessHandler() {
         PayOrderChannel orderChannel = orderChannelManager.findByPaymentIdAndChannel(this.getOrder().getId(), PayChannelEnum.ALI.getCode())
                 .orElseThrow(() -> new PayFailureException("支付宝订单不存在"));
+        // 将支付方式写入上下文
+        PaymentContextLocal.get().getAsyncPayInfo().setPayWay(orderChannel.getPayWay());
         orderService.updateAsyncSuccess(this.getOrder(), orderChannel.getAmount());
     }
 

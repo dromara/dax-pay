@@ -15,8 +15,11 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class AsyncPayLocal {
 
-    /** 异步支付方式 */
-    private PayWayEnum payWay;
+    /**
+     * 异步支付方式
+     * @see PayWayEnum
+     */
+    private String payWay;
 
     /**
      * 第三方支付平台订单号

@@ -1,11 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.system.config.dao;
 
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.daxpay.service.core.system.config.entity.PayApiConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,4 +34,11 @@ public class PayApiConfigManager extends BaseManager<PayApiConfigMapper, PayApiC
         return findByField(PayApiConfig::getApi,api);
     }
 
+    /**
+     * 查询全部
+     */
+    @Override
+    public List<PayApiConfig> findAll() {
+        return lambdaQuery().orderByDesc(MpIdEntity::getId).list();
+    }
 }

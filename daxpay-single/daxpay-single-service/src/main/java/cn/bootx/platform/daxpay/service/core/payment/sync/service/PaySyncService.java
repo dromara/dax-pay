@@ -11,13 +11,13 @@ import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.RepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.PaySyncStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
@@ -46,7 +46,7 @@ import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.*;
 @Service
 @RequiredArgsConstructor
 public class PaySyncService {
-    private final PayOrderService payOrderService;
+    private final PayOrderQueryService payOrderQueryService;
 
     private final PaySyncRecordService paySyncRecordService;
 
@@ -61,11 +61,11 @@ public class PaySyncService {
     public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = null;
         if (Objects.nonNull(param.getPaymentId())){
-            payOrder = payOrderService.findById(param.getPaymentId())
+            payOrder = payOrderQueryService.findById(param.getPaymentId())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderService.findByBusinessNo(param.getBusinessNo())
+            payOrder = payOrderQueryService.findByBusinessNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         // 如果不是异步支付, 直接返回返回

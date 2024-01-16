@@ -19,7 +19,7 @@
 
     <modules>
         <module>daxpay-single</module>
-        <module>dax-pay-sdk</module>
+        <module>daxpay-single-sdk</module>
     </modules>
 
     <properties>

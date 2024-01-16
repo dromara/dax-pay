@@ -4,17 +4,18 @@ import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
+import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.service.common.context.AsyncRefundLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
-import cn.bootx.platform.daxpay.param.pay.RefundParam;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PayRefundAssistService {
-    private final PayOrderService payOrderService;
+    private final PayOrderQueryService payOrderQueryService;
 
     private final PayRefundOrderManager payRefundOrderManager;
 
@@ -67,6 +68,7 @@ public class PayRefundAssistService {
      * 根据退款参数获取支付订单, 并进行检查
      */
     public PayOrder getPayOrderAndCheckByRefundParam(RefundParam param, boolean simple){
+        // 全额退款和部分退款校验
         if (!param.isRefundAll()) {
             if (CollUtil.isEmpty(param.getRefundChannels())) {
                 throw new ValidationFailedException("退款通道参数不能为空");
@@ -75,14 +77,19 @@ public class PayRefundAssistService {
                 throw new ValidationFailedException("部分退款时退款单号必传");
             }
         }
+        // 退款号唯一校验
+        if (StrUtil.isNotBlank(param.getRefundNo())
+                && payRefundOrderManager.existsByRefundNo(param.getRefundNo())){
+            throw new PayFailureException("退款单号已存在");
+        }
 
         PayOrder payOrder = null;
         if (Objects.nonNull(param.getPaymentId())){
-            payOrder = payOrderService.findById(param.getPaymentId())
+            payOrder = payOrderQueryService.findById(param.getPaymentId())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderService.findByBusinessNo(param.getBusinessNo())
+            payOrder = payOrderQueryService.findByBusinessNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
 
@@ -125,18 +132,25 @@ public class PayRefundAssistService {
                 .reduce(0, Integer::sum);
 
         PayRefundOrder refundOrder = new PayRefundOrder()
-                .setRefundRequestNo(asyncRefundInfo.getRefundNo())
-                .setAmount(amount)
-                .setRefundableBalance(payOrder.getRefundableBalance())
                 .setPaymentId(payOrder.getId())
                 .setBusinessNo(payOrder.getBusinessNo())
+                .setRefundNo(refundParam.getRefundNo())
+                .setAmount(amount)
+                .setRefundableBalance(payOrder.getRefundableBalance())
+                .setRefundRequestNo(asyncRefundInfo.getRefundRequestNo())
                 .setRefundTime(LocalDateTime.now())
                 .setTitle(payOrder.getTitle())
-                .setErrorMsg(asyncRefundInfo.getErrorMsg())
                 .setErrorCode(asyncRefundInfo.getErrorCode())
+                .setErrorMsg(asyncRefundInfo.getErrorMsg())
                 .setStatus(Objects.isNull(asyncRefundInfo.getErrorCode()) ? PayRefundStatusEnum.SUCCESS.getCode() : PayRefundStatusEnum.FAIL.getCode())
                 .setClientIp(refundParam.getClientIp())
                 .setReqId(PaymentContextLocal.get().getRequest().getReqId());
+        // 退款号, 如不传输, 使用ID作为退款号
+        if(StrUtil.isBlank(refundOrder.getRefundNo())){
+            long id = IdUtil.getSnowflakeNextId();
+            refundOrder.setRefundNo(String.valueOf(id))
+                    .setId(id);
+        }
         payRefundOrderManager.save(refundOrder);
     }
 }

@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.convert;
 
+import cn.bootx.platform.daxpay.result.order.PayOrderChannelResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
@@ -23,4 +24,6 @@ public interface PayOrderConvert {
     PayOrderDto convert(PayOrder in);
 
     PayOrderChannelDto convert(PayOrderChannel in);
+
+    PayOrderChannelResult convertResult(PayOrderChannel in);
 }

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.common.entity.RefundableInfo;
+import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.repair.factory.PayRepairStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam;

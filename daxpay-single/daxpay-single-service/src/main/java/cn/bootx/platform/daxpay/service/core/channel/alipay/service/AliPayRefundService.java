@@ -38,8 +38,8 @@ public class AliPayRefundService {
 
         // 设置退款信息
         AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
-        refundInfo.setRefundNo(PayUtil.getRefundNo());
-        refundModel.setOutRequestNo(refundInfo.getRefundNo());
+        refundInfo.setRefundRequestNo(PayUtil.getRefundNo());
+        refundModel.setOutRequestNo(refundInfo.getRefundRequestNo());
         try {
             AlipayTradeRefundResponse response = AliPayApi.tradeRefundToResponse(refundModel);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {

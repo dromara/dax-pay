@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.result.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.result.CommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "统一下单响应参数")
-public class PayResult extends PayCommonResult{
+public class PayResult extends CommonResult {
 
     @Schema(description = "支付ID")
     private Long paymentId;

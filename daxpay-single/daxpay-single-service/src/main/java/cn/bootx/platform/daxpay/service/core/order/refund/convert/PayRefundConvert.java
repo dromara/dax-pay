@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.order.refund.convert;
 
+import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
 import org.mapstruct.Mapper;
@@ -10,10 +11,12 @@ import org.mapstruct.factory.Mappers;
  * @since 2022/3/2
  */
 @Mapper
-public interface RefundConvert {
+public interface PayRefundConvert {
 
-    RefundConvert CONVERT = Mappers.getMapper(RefundConvert.class);
+    PayRefundConvert CONVERT = Mappers.getMapper(PayRefundConvert.class);
 
     PayRefundOrderDto convert(PayRefundOrder in);
+
+    RefundOrderResult convertResult(PayRefundOrder in);
 
 }
