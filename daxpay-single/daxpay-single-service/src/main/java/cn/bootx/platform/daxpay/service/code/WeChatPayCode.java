@@ -97,4 +97,7 @@ public interface WeChatPayCode {
     /** 订单总退款次数 */
     String TOTAL_REFUND_COUNT = "total_refund_count";
 
+    /**  */
+    String account_type_basic = "Basic";
+
 }
