@@ -91,4 +91,10 @@ public interface WeChatPayCode {
     /** 退款总金额(各退款单的退款金额累加) */
     String REFUND_FEE = "refund_fee";
 
+    /** 当前返回退款笔数 */
+    String REFUND_COUNT = "refund_count";
+
+    /** 订单总退款次数 */
+    String TOTAL_REFUND_COUNT = "total_refund_count";
+
 }

@@ -1,17 +1,22 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
 import com.ijpay.wxpay.WxPayApi;
+import com.ijpay.wxpay.model.OrderQueryModel;
 import com.ijpay.wxpay.model.UnifiedOrderModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +36,14 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class WeChatPaySyncService {
+    private final PayOrderChannelManager payOrderChannelManager;
 
     /**
      * 同步查询
      */
     public GatewaySyncResult syncPayStatus(PayOrder order, WeChatPayConfig weChatPayConfig) {
         GatewaySyncResult syncResult = new GatewaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
-        Map<String, String> params = UnifiedOrderModel.builder()
+        Map<String, String> params = OrderQueryModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
@@ -47,7 +53,7 @@ public class WeChatPaySyncService {
         try {
             String xmlResult = WxPayApi.orderQuery(params);
             Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-            syncResult.setSyncInfo(JSONUtil.toJsonStr(result));
+            syncResult.setSyncPayInfo(JSONUtil.toJsonStr(result));
             // 查询失败
             if (!WxPayKit.codeIsOk(result.get(WeChatPayCode.RETURN_CODE))) {
                 log.warn("查询微信订单失败:{}", result);
@@ -76,7 +82,7 @@ public class WeChatPaySyncService {
 
             // 已退款/退款中 触发一下退款记录的查询
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_REFUND)) {
-                this.syncRefundStatus(order.getId(), weChatPayConfig);
+                this.syncRefundStatus(order, weChatPayConfig);
             }
             // 已关闭
             if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_CLOSED)
@@ -95,16 +101,28 @@ public class WeChatPaySyncService {
     /**
      * 退款查询
      */
-    private GatewaySyncResult syncRefundStatus(Long paymentId, WeChatPayConfig weChatPayConfig){
+    private GatewaySyncResult syncRefundStatus(PayOrder order, WeChatPayConfig weChatPayConfig){
+        PayOrderChannel orderChannel = payOrderChannelManager.findByPaymentIdAndChannel(order.getId(), PayChannelEnum.WECHAT.getCode())
+                .orElseThrow(() -> new PayFailureException("支付订单通道信息不存在"));
+
         Map<String, String> params = UnifiedOrderModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
-                .out_trade_no(String.valueOf(paymentId))
+                .out_trade_no(String.valueOf(order.getId()))
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         String xmlResult = WxPayApi.orderRefundQuery(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-        return new GatewaySyncResult().setSyncInfo(JSONUtil.toJsonStr(result));
+        // 获取
+
+
+
+        // 判断是否全部退款
+        Integer refundFee = Integer.valueOf(result.get(WeChatPayCode.REFUND_FEE));
+        if (Objects.equals(refundFee, orderChannel.getAmount())){
+            return new GatewaySyncResult().setSyncStatus(PaySyncStatusEnum.REFUND);
+        }
+        return new GatewaySyncResult().setSyncPayInfo(JSONUtil.toJsonStr(result));
     }
 }

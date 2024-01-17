@@ -3,6 +3,8 @@ package cn.bootx.platform.daxpay.gateway.controller;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AlipayReconcileService;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.timeout.task.PayExpiredTimeTask;
 import cn.bootx.platform.daxpay.service.core.timeout.task.PayWaitOrderSyncTask;
 import cn.hutool.core.thread.ThreadUtil;
@@ -29,6 +31,8 @@ import java.util.Objects;
 public class TestController {
     private final PayExpiredTimeTask expiredTimeTask;;
     private final PayWaitOrderSyncTask waitOrderSyncTask;
+    private final AlipayReconcileService alipayReconcileService;
+    private final WechatPayReconcileService wechatPayReconcileService;
     private final LockTemplate lockTemplate;
 
     @Operation(summary = "同步")
@@ -64,6 +68,18 @@ public class TestController {
 //    @Lock4j(keys = "#name", acquireTimeout = 50)
     public ResResult<String> lock2(String name){
         return Res.ok(name);
+    }
+
+    @Operation(summary = "下载支付宝对账单")
+    @GetMapping("/aliDownReconcile")
+    public ResResult<String> aliDownReconcile(String date){
+        return Res.ok(alipayReconcileService.downAndSave(date));
+    }
+    @Operation(summary = "下载微信对账单")
+    @GetMapping("/wxDownReconcile")
+    public ResResult<Void> wxDownReconcile(String date){
+        wechatPayReconcileService.downAndSave(date,null);
+        return Res.ok();
     }
 
 }

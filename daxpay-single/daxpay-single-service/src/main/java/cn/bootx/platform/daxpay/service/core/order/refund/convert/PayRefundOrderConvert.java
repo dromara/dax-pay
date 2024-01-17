@@ -11,12 +11,13 @@ import org.mapstruct.factory.Mappers;
  * @since 2022/3/2
  */
 @Mapper
-public interface PayRefundConvert {
+public interface PayRefundOrderConvert {
 
-    PayRefundConvert CONVERT = Mappers.getMapper(PayRefundConvert.class);
+    PayRefundOrderConvert CONVERT = Mappers.getMapper(PayRefundOrderConvert.class);
 
     PayRefundOrderDto convert(PayRefundOrder in);
 
     RefundOrderResult convertResult(PayRefundOrder in);
+
 
 }

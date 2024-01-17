@@ -39,6 +39,6 @@ public class PayApiConfigManager extends BaseManager<PayApiConfigMapper, PayApiC
      */
     @Override
     public List<PayApiConfig> findAll() {
-        return lambdaQuery().orderByDesc(MpIdEntity::getId).list();
+        return lambdaQuery().orderByAsc(MpIdEntity::getId).list();
     }
 }

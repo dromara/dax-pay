@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.typehandler.RefundableInfoTypeHandler;
-import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundConvert;
+import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundOrderConvert;
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
@@ -104,7 +104,7 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
 
     @Override
     public PayRefundOrderDto toDto() {
-        return PayRefundConvert.CONVERT.convert(this);
+        return PayRefundOrderConvert.CONVERT.convert(this);
     }
 
 }

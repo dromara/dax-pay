@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.util;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
@@ -13,6 +14,7 @@ import lombok.experimental.UtilityClass;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 支付工具类
@@ -70,6 +72,16 @@ public class PayUtil {
      */
     public String getWxExpiredTime(LocalDateTime dateTime) {
         return LocalDateTimeUtil.format(dateTime, DatePattern.PURE_DATETIME_PATTERN);
+    }
+
+    /**
+     * 过滤出需要的可退款数据
+     */
+    public RefundableInfo refundableInfoFilter(List<RefundableInfo> refundableInfos, PayChannelEnum payChannelEnum){
+        return refundableInfos.stream()
+                .filter(o -> Objects.equals(o.getChannel(), payChannelEnum.getCode()))
+                .findFirst()
+                .orElseThrow(() -> new PayFailureException("退款数据不存在"));
     }
 
     /**

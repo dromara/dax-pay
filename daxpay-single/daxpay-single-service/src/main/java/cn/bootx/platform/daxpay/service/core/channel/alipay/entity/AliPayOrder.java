@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @DbTable(comment = "支付宝支付记录")
-@TableName("pay_ali_pay_order")
+@TableName("pay_alipay_order")
 public class AliPayOrder extends BasePayOrder implements EntityBaseFunction<AliPaymentDto> {
 
     /** 支付宝交易号 */

@@ -6,10 +6,14 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.param.pay.QueryRefundParam;
+import cn.bootx.platform.daxpay.result.order.RefundOrderChannelResult;
 import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
-import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundConvert;
+import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundOrderConvert;
+import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderChannelConvert;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderChannelManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrderChannel;
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.PayRefundOrderQuery;
 import cn.hutool.core.util.StrUtil;
@@ -18,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 退款
@@ -32,6 +38,7 @@ import java.util.Objects;
 public class PayRefundOrderService {
 
     private final PayRefundOrderManager refundOrderManager;
+    private final PayRefundOrderChannelManager refundOrderChannelManager;
 
     /**
      * 分页查询
@@ -57,7 +64,7 @@ public class PayRefundOrderService {
             throw new ValidationFailedException("退款号或退款ID不能都为空");
         }
 
-        // 查询支付单
+        // 查询退款单
         PayRefundOrder refundOrder = null;
         if (Objects.nonNull(param.getRefundId())){
             refundOrder = refundOrderManager.findById(param.getRefundId())
@@ -67,6 +74,14 @@ public class PayRefundOrderService {
             refundOrder = refundOrderManager.findByRefundNo(param.getRefundNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         }
-        return PayRefundConvert.CONVERT.convertResult(refundOrder);
+        // 查询退款明细
+        List<PayRefundOrderChannel> refundOrderChannels = refundOrderChannelManager.findAllByRefundId(refundOrder.getId());
+        List<RefundOrderChannelResult> channels = refundOrderChannels.stream()
+                .map(RefundOrderChannelConvert.CONVERT::convertResult)
+                .collect(Collectors.toList());
+
+        RefundOrderResult refundOrderResult = PayRefundOrderConvert.CONVERT.convertResult(refundOrder);
+        refundOrderResult.setChannels(channels);
+        return refundOrderResult;
     }
 }

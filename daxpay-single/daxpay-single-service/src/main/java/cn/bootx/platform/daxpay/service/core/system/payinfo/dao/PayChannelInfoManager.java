@@ -32,6 +32,6 @@ public class PayChannelInfoManager extends BaseManager<PayChannelInfoMapper, Pay
      */
     @Override
     public List<PayChannelInfo> findAll() {
-        return lambdaQuery().orderByDesc(MpIdEntity::getId).list();
+        return lambdaQuery().orderByAsc(MpIdEntity::getId).list();
     }
 }

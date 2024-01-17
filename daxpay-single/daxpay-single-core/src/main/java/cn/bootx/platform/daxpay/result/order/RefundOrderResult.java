@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.result.order;
 
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
-import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -28,9 +27,6 @@ public class RefundOrderResult {
     @Schema(description = "退款号")
     private String refundNo;
 
-    @Schema(description = "异步方式关联退款请求号(部分退款情况)")
-    private String refundRequestNo;
-
     @Schema(description = "标题")
     private String title;
 
@@ -46,8 +42,8 @@ public class RefundOrderResult {
     @Schema(description = "退款时间")
     private LocalDateTime refundTime;
 
-    @Schema(description = "退款信息列表")
-    private List<RefundableInfo> refundableInfo;
+    @Schema(description = "支付退款通道明细数据")
+    private List<RefundOrderChannelResult> channels;
 
     /**
      * @see PayRefundStatusEnum

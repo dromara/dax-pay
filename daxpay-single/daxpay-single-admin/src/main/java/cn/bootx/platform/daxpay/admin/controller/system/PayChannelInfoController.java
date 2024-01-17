@@ -27,7 +27,8 @@ public class PayChannelInfoController {
     @Operation(summary = "查询全部")
     @GetMapping("/findAll")
     public ResResult<List<PayChannelInfoDto>> findAll(){
-        return Res.ok(payChannelInfoService.findAll());
+        List<PayChannelInfoDto> all = payChannelInfoService.findAll();
+        return Res.ok(all);
     }
 
     @Operation(summary = "根据ID获取")

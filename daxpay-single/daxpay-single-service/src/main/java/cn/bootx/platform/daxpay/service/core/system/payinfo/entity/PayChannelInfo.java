@@ -47,7 +47,7 @@ public class PayChannelInfo extends MpBaseEntity implements EntityBaseFunction<P
 
     /** 是否启用 */
     @DbColumn(comment = "是否启用")
-    private boolean enabled;
+    private Boolean enabled;
 
     /** 备注 */
     @DbColumn(comment = "备注")

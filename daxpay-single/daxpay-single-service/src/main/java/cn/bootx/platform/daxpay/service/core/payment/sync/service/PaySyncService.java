@@ -227,7 +227,7 @@ public class PaySyncService {
 
 
     /**
-     * 保存同步记录
+     * 保存同步记录 TODO 目前出现一次请求多次与网关同步, 未全部记录
      * @param payOrder 支付单
      * @param syncResult 同步结果
      * @param repair 是否修复
@@ -238,7 +238,7 @@ public class PaySyncService {
                 .setPaymentId(payOrder.getId())
                 .setBusinessNo(payOrder.getBusinessNo())
                 .setAsyncChannel(payOrder.getAsyncChannel())
-                .setSyncInfo(syncResult.getSyncInfo())
+                .setSyncInfo(syncResult.getSyncPayInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setRepairOrder(repair)
                 .setRepairOrderId(repairOrderId)
