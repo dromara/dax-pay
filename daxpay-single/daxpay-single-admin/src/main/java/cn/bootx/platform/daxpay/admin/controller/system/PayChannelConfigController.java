@@ -2,8 +2,8 @@ package cn.bootx.platform.daxpay.admin.controller.system;
 
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
-import cn.bootx.platform.daxpay.service.core.system.payinfo.service.PayChannelInfoService;
-import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayChannelInfoDto;
+import cn.bootx.platform.daxpay.service.core.system.config.service.PayChannelConfigService;
+import cn.bootx.platform.daxpay.service.dto.system.config.PayChannelConfigDto;
 import cn.bootx.platform.daxpay.service.param.system.payinfo.PayChannelInfoParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,28 +19,28 @@ import java.util.List;
  */
 @Tag(name = "支付通道信息")
 @RestController
-@RequestMapping("/pay/channel/info")
+@RequestMapping("/pay/channel/config")
 @RequiredArgsConstructor
-public class PayChannelInfoController {
-    private final PayChannelInfoService payChannelInfoService;
+public class PayChannelConfigController {
+    private final PayChannelConfigService payChannelConfigService;
 
     @Operation(summary = "查询全部")
     @GetMapping("/findAll")
-    public ResResult<List<PayChannelInfoDto>> findAll(){
-        List<PayChannelInfoDto> all = payChannelInfoService.findAll();
+    public ResResult<List<PayChannelConfigDto>> findAll(){
+        List<PayChannelConfigDto> all = payChannelConfigService.findAll();
         return Res.ok(all);
     }
 
     @Operation(summary = "根据ID获取")
     @GetMapping("/findById")
-    public ResResult<PayChannelInfoDto> findById(Long id){
-        return Res.ok(payChannelInfoService.findById(id));
+    public ResResult<PayChannelConfigDto> findById(Long id){
+        return Res.ok(payChannelConfigService.findById(id));
     }
 
     @Operation(summary = "更新")
     @PostMapping("/update")
     public ResResult<Void> update(@RequestBody PayChannelInfoParam param){
-        payChannelInfoService.update(param);
+        payChannelConfigService.update(param);
         return Res.ok();
     }
 }

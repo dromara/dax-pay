@@ -73,7 +73,8 @@ public class TestController {
     @Operation(summary = "下载支付宝对账单")
     @GetMapping("/aliDownReconcile")
     public ResResult<String> aliDownReconcile(String date){
-        return Res.ok(alipayReconcileService.downAndSave(date));
+        alipayReconcileService.downAndSave(date);
+        return Res.ok();
     }
     @Operation(summary = "下载微信对账单")
     @GetMapping("/wxDownReconcile")

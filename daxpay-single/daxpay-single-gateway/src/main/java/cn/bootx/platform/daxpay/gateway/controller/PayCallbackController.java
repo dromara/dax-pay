@@ -19,12 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
+ * 包括支付成功/退款/转账等一系列类型的回调处理
  * @author xxm
  * @since 2021/2/27
  */
 @IgnoreAuth
 @Slf4j
-@Tag(name = "支付回调")
+@Tag(name = "支付通道信息回调")
 @RestController
 @RequestMapping("/pay/callback")
 @AllArgsConstructor
@@ -35,21 +36,20 @@ public class PayCallbackController {
     private final WeChatPayCallbackService weChatPayCallbackService;
 
     @SneakyThrows
-    @Operation(summary = "支付宝回调")
+    @Operation(summary = "支付宝信息回调")
     @PostMapping("/alipay")
-    public String aliPay(HttpServletRequest request) {
+    public String aliPayNotify(HttpServletRequest request) {
 
         Map<String, String> stringStringMap = AliPayApi.toMap(request);
         return aliPayCallbackService.payCallback(stringStringMap);
     }
 
     @SneakyThrows
-    @Operation(summary = "微信支付回调")
+    @Operation(summary = "微信支付信息回调")
     @PostMapping("/wechat")
-    public String wechat(HttpServletRequest request) {
+    public String wechatPayNotify(HttpServletRequest request) {
         String xmlMsg = HttpKit.readData(request);
         Map<String, String> params = WxPayKit.xmlToMap(xmlMsg);
         return weChatPayCallbackService.payCallback(params);
     }
-
 }

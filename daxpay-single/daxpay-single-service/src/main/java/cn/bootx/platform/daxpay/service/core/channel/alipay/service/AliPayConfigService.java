@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.code.AliPayWay;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayConfigManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
-import cn.bootx.platform.daxpay.service.core.system.payinfo.service.PayChannelInfoService;
+import cn.bootx.platform.daxpay.service.core.system.config.service.PayChannelConfigService;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -38,7 +38,7 @@ public class AliPayConfigService {
     /** 默认支付宝配置的主键ID */
     private final static Long ID = 0L;
     private final AliPayConfigManager alipayConfigManager;
-    private final PayChannelInfoService payChannelInfoService;
+    private final PayChannelConfigService payChannelConfigService;
 
     /**
      * 修改
@@ -48,7 +48,7 @@ public class AliPayConfigService {
         AliPayConfig alipayConfig = alipayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
         // 启用或停用
         if (!Objects.equals(param.getEnable(), alipayConfig.getEnable())){
-            payChannelInfoService.setEnable(PayChannelEnum.ALI.getCode(), param.getEnable());
+            payChannelConfigService.setEnable(PayChannelEnum.ALI.getCode(), param.getEnable());
         }
 
         BeanUtil.copyProperties(param, alipayConfig, CopyOptions.create().ignoreNullValue());

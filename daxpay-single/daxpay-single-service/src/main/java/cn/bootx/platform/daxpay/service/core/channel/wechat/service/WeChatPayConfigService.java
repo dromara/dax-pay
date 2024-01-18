@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.service.code.WeChatPayWay;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.service.core.system.payinfo.service.PayChannelInfoService;
+import cn.bootx.platform.daxpay.service.core.system.config.service.PayChannelConfigService;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -33,7 +33,7 @@ public class WeChatPayConfigService {
     /** 默认微信支付配置的主键ID */
     private final static Long ID = 0L;
     private final WeChatPayConfigManager weChatPayConfigManager;
-    private final PayChannelInfoService payChannelInfoService;
+    private final PayChannelConfigService payChannelConfigService;
 
     /**
      * 修改
@@ -43,7 +43,7 @@ public class WeChatPayConfigService {
         WeChatPayConfig weChatPayConfig = weChatPayConfigManager.findById(ID).orElseThrow(() -> new PayFailureException("微信支付配置不存在"));
         // 启用或停用
         if (!Objects.equals(param.getEnable(), weChatPayConfig.getEnable())){
-            payChannelInfoService.setEnable(PayChannelEnum.WECHAT.getCode(), param.getEnable());
+            payChannelConfigService.setEnable(PayChannelEnum.WECHAT.getCode(), param.getEnable());
         }
         BeanUtil.copyProperties(param, weChatPayConfig, CopyOptions.create().ignoreNullValue());
         weChatPayConfigManager.updateById(weChatPayConfig);

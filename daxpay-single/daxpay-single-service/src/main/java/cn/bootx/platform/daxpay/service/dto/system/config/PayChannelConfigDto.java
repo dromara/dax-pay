@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.dto.system.payinfo;
+package cn.bootx.platform.daxpay.service.dto.system.config;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付通道信息")
-public class PayChannelInfoDto extends BaseDto {
+public class PayChannelConfigDto extends BaseDto {
 
     /** 需要与系统中配置的枚举一致 */
     @Schema(description = "代码")
@@ -28,7 +28,7 @@ public class PayChannelInfoDto extends BaseDto {
 
     /** 是否启用 */
     @DbColumn(comment = "是否启用")
-    private Boolean enabled;
+    private Boolean enable;
 
     /** logo图片 */
     @Schema(description = "logo图片")

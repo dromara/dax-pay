@@ -41,7 +41,6 @@ public class WeChatPayOrderService {
      * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建微信支付单
      */
     public void updatePaySuccess(PayOrder payOrder, PayChannelParam payChannelParam) {
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
         payOrder.setAsyncPay(true).setAsyncChannel(PayChannelEnum.WECHAT.getCode());
 
         payOrderChannelService.updateChannel(payChannelParam,payOrder);

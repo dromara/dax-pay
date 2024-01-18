@@ -9,7 +9,7 @@ import lombok.Data;
  * @since 2024/1/17
  */
 @Data
-public class WechatPayReconcileBillDetail {
+public class WxReconcileBillDetail {
     @Alias("交易时间")
     private String transactionTime;
 
@@ -94,7 +94,5 @@ public class WechatPayReconcileBillDetail {
 
     @Alias("费率备注")
     private String packet8;
-
-
 
 }

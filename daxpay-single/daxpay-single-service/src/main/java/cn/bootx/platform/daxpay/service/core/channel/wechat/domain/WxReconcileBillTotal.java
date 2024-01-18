@@ -9,7 +9,7 @@ import lombok.Data;
  * @since 2024/1/17
  */
 @Data
-public class WechatPayReconcileBillTotal {
+public class WxReconcileBillTotal {
 
     @Alias("总交易单数")
     private String totalNum;

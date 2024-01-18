@@ -1,9 +1,9 @@
-package cn.bootx.platform.daxpay.service.core.system.payinfo.service;
+package cn.bootx.platform.daxpay.service.core.system.config.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.daxpay.service.core.system.payinfo.dao.PayChannelInfoManager;
-import cn.bootx.platform.daxpay.service.core.system.payinfo.entity.PayChannelInfo;
-import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayChannelInfoDto;
+import cn.bootx.platform.daxpay.service.core.system.config.dao.PayChannelConfigManager;
+import cn.bootx.platform.daxpay.service.core.system.config.entity.PayChannelConfig;
+import cn.bootx.platform.daxpay.service.dto.system.config.PayChannelConfigDto;
 import cn.bootx.platform.daxpay.service.param.system.payinfo.PayChannelInfoParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -22,32 +22,32 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayChannelInfoService {
-    private final PayChannelInfoManager manager;
+public class PayChannelConfigService {
+    private final PayChannelConfigManager manager;
 
     /**
      * 列表
      */
-    public List<PayChannelInfoDto> findAll(){
+    public List<PayChannelConfigDto> findAll(){
         return manager.findAll().stream()
-                .map(PayChannelInfo::toDto)
+                .map(PayChannelConfig::toDto)
                 .collect(Collectors.toList());
     }
 
     /**
      * 单条
      */
-    public PayChannelInfoDto findById(Long id){
-        return manager.findById(id).map(PayChannelInfo::toDto).orElseThrow(DataNotExistException::new);
+    public PayChannelConfigDto findById(Long id){
+        return manager.findById(id).map(PayChannelConfig::toDto).orElseThrow(DataNotExistException::new);
     }
 
     /**
      * 设置是否启用
      */
     public void setEnable(String code,boolean enable){
-        PayChannelInfo info = manager.findByCode(code)
+        PayChannelConfig info = manager.findByCode(code)
                 .orElseThrow(DataNotExistException::new);
-        info.setEnabled(enable);
+        info.setEnable(enable);
         manager.updateById(info);
     }
 
@@ -55,7 +55,7 @@ public class PayChannelInfoService {
      * 更新
      */
     public void update(PayChannelInfoParam param){
-        PayChannelInfo info = manager.findById(param.getId()).orElseThrow(DataNotExistException::new);
+        PayChannelConfig info = manager.findById(param.getId()).orElseThrow(DataNotExistException::new);
         BeanUtil.copyProperties(param,info, CopyOptions.create().ignoreNullValue());
         manager.updateById(info);
     }

@@ -1,8 +1,8 @@
-package cn.bootx.platform.daxpay.service.core.system.payinfo.dao;
+package cn.bootx.platform.daxpay.service.core.system.config.dao;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import cn.bootx.platform.daxpay.service.core.system.payinfo.entity.PayChannelInfo;
+import cn.bootx.platform.daxpay.service.core.system.config.entity.PayChannelConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -18,20 +18,20 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class PayChannelInfoManager extends BaseManager<PayChannelInfoMapper, PayChannelInfo> {
+public class PayChannelConfigManager extends BaseManager<PayChannelConfigMapper, PayChannelConfig> {
 
     /**
      * 根据code查询
      */
-    public Optional<PayChannelInfo> findByCode(String code){
-        return findByField(PayChannelInfo::getCode, code);
+    public Optional<PayChannelConfig> findByCode(String code){
+        return findByField(PayChannelConfig::getCode, code);
     }
 
     /**
      * 查询全部
      */
     @Override
-    public List<PayChannelInfo> findAll() {
+    public List<PayChannelConfig> findAll() {
         return lambdaQuery().orderByAsc(MpIdEntity::getId).list();
     }
 }

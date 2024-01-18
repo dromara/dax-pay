@@ -36,6 +36,9 @@ public interface WeChatPayCode {
     /** 返回错误代码(例如付款码返回的支付中状态就在这里面) */
     String ERR_CODE = "err_code";
 
+    /** 返回错误代码(如对账错误) */
+    String ERROR_CODE = "error_code";
+
     /** 返回错误信息 */
     String ERR_CODE_DES = "err_code_des";
 
@@ -97,7 +100,7 @@ public interface WeChatPayCode {
     /** 订单总退款次数 */
     String TOTAL_REFUND_COUNT = "total_refund_count";
 
-    /**  */
-    String account_type_basic = "Basic";
+    /** 资金账单 - 基本账户 */
+    String ACCOUNT_TYPE_BASIC = "Basic";
 
 }
