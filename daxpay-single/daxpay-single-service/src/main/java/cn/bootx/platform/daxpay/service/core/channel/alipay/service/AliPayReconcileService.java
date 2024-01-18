@@ -2,8 +2,8 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.domain.AliReconcileBillDetail;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.domain.AliReconcileBillTotal;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillDetail;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AlipayReconcileService {
+public class AliPayReconcileService {
     private final AliPayConfigService configService;
 
     /**

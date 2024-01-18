@@ -2,10 +2,12 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.domain.WxReconcileBillDetail;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.domain.WxReconcileBillTotal;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.domain.WxReconcileFundFlowDetail;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillDetailManager;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillTotalManger;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillDetail;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillTotal;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -34,8 +36,10 @@ import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.ACCOUNT_TYPE_B
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WechatPayReconcileService {
+public class WechatPayReconcileService{
     private final WeChatPayConfigService weChatPayConfigService;
+    private final WxReconcileBillTotalManger reconcileBillTotalManger;
+    private final WxReconcileBillDetailManager reconcileBillDetailManager;
 
     /**
      * 下载对账单并保存

@@ -1,15 +1,20 @@
-package cn.bootx.platform.daxpay.service.core.channel.wechat.domain;
+package cn.bootx.platform.daxpay.service.core.channel.wechat.entity;
 
+import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.hutool.core.annotation.Alias;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 微信对账单明细
  * @author xxm
  * @since 2024/1/17
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class WxReconcileBillDetail {
+@TableName("pay_wechat_reconcile_bill_detail")
+public class WxReconcileBillDetail extends MpCreateEntity {
     @Alias("交易时间")
     private String transactionTime;
 
@@ -33,9 +38,6 @@ public class WxReconcileBillDetail {
 
     @Alias("设备号")
     private String deviceInfo;
-
-    @Alias("交易状态")
-    private String transactionState;
 
     @Alias("交易类型")
     private String type;

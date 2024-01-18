@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.core.channel.alipay.domain;
+package cn.bootx.platform.daxpay.service.core.channel.alipay.entity;
 
 import cn.hutool.core.annotation.Alias;
 import lombok.Data;

@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.gateway.controller;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AlipayReconcileService;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.timeout.task.PayExpiredTimeTask;
 import cn.bootx.platform.daxpay.service.core.timeout.task.PayWaitOrderSyncTask;
@@ -31,7 +31,7 @@ import java.util.Objects;
 public class TestController {
     private final PayExpiredTimeTask expiredTimeTask;;
     private final PayWaitOrderSyncTask waitOrderSyncTask;
-    private final AlipayReconcileService alipayReconcileService;
+    private final AliPayReconcileService alipayReconcileService;
     private final WechatPayReconcileService wechatPayReconcileService;
     private final LockTemplate lockTemplate;
 
