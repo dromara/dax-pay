@@ -1,13 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.service;
 
+import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileOrder;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.service.PayReconcileOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.factory.PayReconcileStrategyFactory;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
 
 /**
  * 支付对账单下载服务
@@ -18,37 +18,34 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PayReconcileService {
+    private final PayReconcileOrderService reconcileOrderService;
+
     /**
-     * 下载对账单
+     * 下载对账单并进行保存
      */
-    public void downAll(LocalDate date){
-        List<AbsReconcileStrategy> strategies = PayReconcileStrategyFactory.create();
-        strategies.forEach(AbsReconcileStrategy::doBeforeHandler);
+    public void downAndSave(Long reconcileOrderId) {
+        PayReconcileOrder payReconcileOrder = reconcileOrderService.findById(reconcileOrderId)
+                .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
+        this.downAndSave(payReconcileOrder);
     }
 
     /**
-     * 手动发起对账下载
+     * 下载对账单并进行保存
      */
-    public void downByChannel(LocalDate date, String channel){
-        AbsReconcileStrategy absReconcileStrategy = PayReconcileStrategyFactory.create(channel);
+    public void downAndSave(PayReconcileOrder recordOrder) {
+        AbsReconcileStrategy absReconcileStrategy = PayReconcileStrategyFactory.create(recordOrder.getChannel());
+        absReconcileStrategy.initParam(recordOrder);
         absReconcileStrategy.doBeforeHandler();
-        absReconcileStrategy.downAndSave(date);
+        try {
+            absReconcileStrategy.downAndSave();
+            recordOrder.setDown(true);
+            reconcileOrderService.update(recordOrder);
+        } catch (Exception e) {
+            log.error("下载对账单异常", e);
+            recordOrder.setErrorMsg(e.getMessage());
+            reconcileOrderService.update(recordOrder);
+            throw new RuntimeException(e);
+        }
     }
 
-    /**
-     * 全部对账
-     */
-    public void offsetting(LocalDate date){
-        List<AbsReconcileStrategy> strategies = PayReconcileStrategyFactory.create();
-        strategies.forEach(AbsReconcileStrategy::doBeforeHandler);
-    }
-
-    /**
-     * 全部对账
-     */
-    public void offsettingByChannel(LocalDate date, String channel){
-        AbsReconcileStrategy absReconcileStrategy = PayReconcileStrategyFactory.create(channel);
-        absReconcileStrategy.doBeforeHandler();
-        absReconcileStrategy.offsetting(date);
-    }
 }

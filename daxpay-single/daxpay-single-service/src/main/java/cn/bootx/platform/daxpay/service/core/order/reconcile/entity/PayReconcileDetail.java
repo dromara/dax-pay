@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.core.record.reconcile.entity;
+package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_reconcile_detail_record")
-public class PayReconcileDetailRecord extends MpCreateEntity {
+public class PayReconcileDetail extends MpCreateEntity {
 
     /** 交易状态 */
     private String status;

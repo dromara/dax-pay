@@ -49,11 +49,21 @@
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-spring</artifactId>
         </dependency>
-
         <!-- 查询构造器 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-super-query</artifactId>
+        </dependency>
+        <!-- 定时任务(quartz) -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-starter-quartz</artifactId>
+        </dependency>
+        <!-- 序列生成器 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-sequence</artifactId>
+            <version>${bootx-platform.version}</version>
         </dependency>
 
         <!-- 支付核心包-->

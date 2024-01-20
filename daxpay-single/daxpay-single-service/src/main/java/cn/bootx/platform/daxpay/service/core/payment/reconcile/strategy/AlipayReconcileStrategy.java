@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
@@ -57,8 +55,8 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
      * 下载对账单
      */
     @Override
-    public void downAndSave(LocalDate date) {
-        String format = LocalDateTimeUtil.format(date, DatePattern.NORM_DATE_PATTERN);
+    public void downAndSave() {
+        String format = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.NORM_DATE_PATTERN);
         reconcileService.downAndSave(format);
     }
 }
