@@ -52,11 +52,11 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
     }
 
     /**
-     * 下载对账单
+     * 下载和保存对账单
      */
     @Override
     public void downAndSave() {
-        String format = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.NORM_DATE_PATTERN);
-        reconcileService.downAndSave(format);
+        String date = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.NORM_DATE_PATTERN);
+        reconcileService.downAndSave(date,this.getRecordOrder().getId());
     }
 }

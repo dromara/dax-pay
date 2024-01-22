@@ -28,7 +28,6 @@ public class PayReconcileOrderService {
     private final PayReconcileOrderManager reconcileOrderManager;
     private final Sequence sequence;
 
-
     /**
      * 更新, 开启一个新事务进行更新
      */

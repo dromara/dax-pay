@@ -2,12 +2,14 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillTotalManger;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -20,11 +22,13 @@ import com.ijpay.wxpay.model.DownloadFundFlowModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.ACCOUNT_TYPE_BASIC;
 
@@ -37,7 +41,6 @@ import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.ACCOUNT_TYPE_B
 @Service
 @RequiredArgsConstructor
 public class WechatPayReconcileService{
-    private final WeChatPayConfigService weChatPayConfigService;
     private final WxReconcileBillTotalManger reconcileBillTotalManger;
     private final WxReconcileBillDetailManager reconcileBillDetailManager;
 
@@ -45,17 +48,20 @@ public class WechatPayReconcileService{
      * 下载对账单并保存
      * @param date 对账日期 yyyyMMdd 格式
      */
-    public void downAndSave(String date, WeChatPayConfig config) {
-        config = weChatPayConfigService.getConfig();
-        this.downBill(date, config);
-        this.downFundFlow(date, config);
+    @Transactional(rollbackFor = Exception.class)
+    public void downAndSave(String date, Long recordOrderId, WeChatPayConfig config) {
+        this.downBill(date, recordOrderId, config);
+        // 资金对账单先不启用
+//        this.downFundFlow(date, recordOrderId, config);
     }
 
     /**
      * 下载交易账单
-     * @param date 对账日期 yyyyMMdd 格式
+     *
+     * @param date          对账日期 yyyyMMdd 格式
+     * @param recordOrderId 对账订单ID
      */
-    public void downBill(String date, WeChatPayConfig config){
+    public void downBill(String date, Long recordOrderId, WeChatPayConfig config){
         // 下载交易账单
         Map<String, String> params = DownloadBillModel.builder()
                 .mch_id(config.getWxMchId())
@@ -74,14 +80,41 @@ public class WechatPayReconcileService{
         result = result.replaceAll("`", "").replaceAll("\uFEFF", "");
         CsvReader reader = CsvUtil.getReader();
 
-        // 获取交易记录
+        // 获取交易记录并保存
         String billDetail = StrUtil.subBefore(result, "总交易单数", false);
         List<WxReconcileBillDetail> billDetails = reader.read(billDetail, WxReconcileBillDetail.class);
+        billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
+        reconcileBillDetailManager.saveAll(billDetails);
 
-        // 获取汇总数据
+        // 获取汇总数据并保存
         String billTotal = result.substring(result.indexOf("总交易单数"));
         List<WxReconcileBillTotal> billTotals = reader.read(billTotal, WxReconcileBillTotal.class);
+        billTotals.forEach(o->o.setRecordOrderId(recordOrderId));
+        reconcileBillTotalManger.saveAll(billTotals);
 
+        // 将原始交易明细对账记录转换通用结构并保存到上下文中
+        this.convertAndSave(billDetails);
+
+    }
+
+    /**
+     * 转换为通用对账记录对象
+     */
+    public void convertAndSave(List<WxReconcileBillDetail> billDetails){
+        List<PayReconcileDetail> collect = billDetails.stream()
+                .map(this::convert)
+                .collect(Collectors.toList());
+        // 写入到上下文中
+        PaymentContextLocal.get().getReconcile().setReconcileDetails(collect);
+    }
+
+    /**
+     * 转换为通用对账记录对象
+     */
+    public PayReconcileDetail convert(WxReconcileBillDetail billDetail){
+        PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
+                .setRecordOrderId(billDetail.getRecordOrderId());
+        return payReconcileDetail;
     }
 
 
@@ -90,9 +123,10 @@ public class WechatPayReconcileService{
      * 如果出现 No appropriate protocol (protocol is disabled or cipher suites are inappropriate)
      * 更换一下最新的JDK即可, 例如 corretto Jdk
      *
-     * @param date 对账日期 yyyyMMdd 格式
+     * @param date          对账日期 yyyyMMdd 格式
+     * @param recordOrderId 对账订单ID
      */
-    public void downFundFlow(String date, WeChatPayConfig config){
+    public void downFundFlow(String date, Long recordOrderId, WeChatPayConfig config){
         if (StrUtil.isBlank(config.getP12())){
             return;
         }

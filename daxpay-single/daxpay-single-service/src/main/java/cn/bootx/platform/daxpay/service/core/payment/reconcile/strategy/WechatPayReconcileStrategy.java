@@ -55,6 +55,6 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
     @Override
     public void downAndSave() {
         String format = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.PURE_DATE_PATTERN);
-        reconcileService.downAndSave(format,this.config);
+        reconcileService.downAndSave(format,this.getRecordOrder().getId(), this.config);
     }
 }

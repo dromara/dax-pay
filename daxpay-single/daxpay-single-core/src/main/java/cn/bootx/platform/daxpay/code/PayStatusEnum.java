@@ -18,9 +18,9 @@ public enum PayStatusEnum {
     PROGRESS("progress","支付中"),
     SUCCESS("success","成功"),
     CLOSE("close","支付关闭"),
-    FAIL("fail","失败"),
     PARTIAL_REFUND("partial_refund","部分退款"),
-    REFUNDED("refunded","全部退款");
+    REFUNDED("refunded","全部退款"),
+    FAIL("fail","失败");
 
     /** 编码 */
     private final String code;

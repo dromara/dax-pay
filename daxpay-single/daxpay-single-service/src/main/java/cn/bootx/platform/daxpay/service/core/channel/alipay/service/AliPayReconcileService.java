@@ -2,9 +2,13 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBillDetailManager;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBillTotalManager;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillTotal;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -20,6 +24,7 @@ import lombok.val;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -40,12 +45,19 @@ import java.util.stream.Collectors;
 public class AliPayReconcileService {
     private final AliPayConfigService configService;
 
+    private final AliReconcileBillDetailManager reconcileBillDetailManager;
+
+    private final AliReconcileBillTotalManager reconcileBillTotalManager;
+
     /**
      * 下载对账单, 并进行解析进行保存
+     *
      * @param date 对账日期 yyyy-MM-dd 格式
+     * @param recordOrderId 对账订单ID
      */
     @SneakyThrows
-    public void downAndSave(String date){
+    @Transactional(rollbackFor = Exception.class)
+    public void downAndSave(String date, Long recordOrderId){
         AliPayConfig config = configService.getConfig();
         configService.initConfig(config);
 
@@ -63,28 +75,72 @@ public class AliPayReconcileService {
             // 获取对账单下载地址并下载
             String url = response.getBillDownloadUrl();
             byte[] bytes = HttpUtil.downloadBytes(url);
-            // 使用 Apache commons-compress 包装流,
+            // 使用 Apache commons-compress 包装流, 读取返回的对账CSV文件
             ZipArchiveInputStream zipArchiveInputStream = new ZipArchiveInputStream(new ByteArrayInputStream(bytes),"GBK");
             ZipArchiveEntry entry;
-            List<AliReconcileBillDetail> billDetails;
-            List<AliReconcileBillTotal> billTotals;
+            List<AliReconcileBillDetail> billDetails = new ArrayList<>();
+            List<AliReconcileBillTotal> billTotals = new ArrayList<>();
             while ((entry= zipArchiveInputStream.getNextZipEntry()) != null){
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zipArchiveInputStream,"GBK"));
                 List<String> strings = IoUtil.readLines(bufferedReader, new ArrayList<>());
                 String name = entry.getName();
                 if (StrUtil.endWith(name,"_业务明细(汇总).csv")){
+                    // 汇总
                     billTotals = this.parseTotal(strings);
                 } else {
+                    // 明细
                     billDetails = this.parseDetail(strings);
                 }
             }
-            // 保存
-            System.out.println();
+            // 保存原始对账记录
+            this.save(billDetails, billTotals, recordOrderId);
+
+            // 将原始交易明细对账记录转换通用结构并保存到上下文中
+            this.convertAndSave(billDetails);
+
         } catch (AlipayApiException e) {
             log.error("下载对账单失败",e);
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 保存原始对账记录
+     */
+    private void save(List<AliReconcileBillDetail> billDetails, List<AliReconcileBillTotal> billTotals, Long recordOrderId){
+        billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
+        reconcileBillDetailManager.saveAll(billDetails);
+        billTotals.forEach(o->o.setRecordOrderId(recordOrderId));
+        reconcileBillTotalManager.saveAll(billTotals);
+    }
+
+    /**
+     * 转换为通用对账记录对象
+     */
+    private void convertAndSave(List<AliReconcileBillDetail> billDetails){
+        List<PayReconcileDetail> collect = billDetails.stream()
+                .map(this::convert)
+                .collect(Collectors.toList());
+        // 写入到上下文中
+        PaymentContextLocal.get().getReconcile().setReconcileDetails(collect);
+    }
+
+    /**
+     * 转换为通用对账记录对象
+     */
+    private PayReconcileDetail convert(AliReconcileBillDetail billDetail){
+        // 默认为支付
+        PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
+                .setRecordOrderId(billDetail.getRecordOrderId())
+                .setOrderId(billDetail.getOutTradeNo())
+                .setTitle(billDetail.getSubject())
+                .setGatewayOrderNo(billDetail.getTradeNo());
+        // 如果是退款
+        if (Objects.equals(billDetail.getTradeType(), "refund")){
+        }
+        return payReconcileDetail;
+    }
+
 
     /**
      * 解析明细

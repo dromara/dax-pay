@@ -36,4 +36,7 @@ public class PaymentContext {
     /** 支付请求相关信息 */
     private final RequestLocal request = new RequestLocal();
 
+    /** 支付对账相关信息 */
+    private final ReconcileLocal reconcile = new ReconcileLocal();
+
 }

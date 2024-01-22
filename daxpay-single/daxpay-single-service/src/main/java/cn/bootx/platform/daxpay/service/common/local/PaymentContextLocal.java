@@ -24,6 +24,18 @@ public final class PaymentContextLocal {
     }
 
     /**
+     * 不存在则进行赋值
+     */
+    public static boolean setIfAbsent(PaymentContext paymentContext){
+        if (THREAD_LOCAL.get() == null){
+            set(paymentContext);
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * 获取
      */
     public PaymentContext get(){
