@@ -80,9 +80,11 @@ public class WechatPayReconcileService{
         result = result.replaceAll("`", "").replaceAll("\uFEFF", "");
         CsvReader reader = CsvUtil.getReader();
 
-        // 获取交易记录并保存
+        // 获取交易记录并保存 同时过滤出当前应用的交易记录
         String billDetail = StrUtil.subBefore(result, "总交易单数", false);
-        List<WxReconcileBillDetail> billDetails = reader.read(billDetail, WxReconcileBillDetail.class);
+        List<WxReconcileBillDetail> billDetails = reader.read(billDetail, WxReconcileBillDetail.class).stream()
+                .filter(o->Objects.equals(o.getAppId(), config.getWxAppId()))
+                .collect(Collectors.toList());
         billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
         reconcileBillDetailManager.saveAll(billDetails);
 
@@ -112,8 +114,34 @@ public class WechatPayReconcileService{
      * 转换为通用对账记录对象
      */
     public PayReconcileDetail convert(WxReconcileBillDetail billDetail){
+        // 默认为支付对账记录
         PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
-                .setRecordOrderId(billDetail.getRecordOrderId());
+                .setRecordOrderId(billDetail.getRecordOrderId())
+                .setOrderId(billDetail.getMchOrderNo())
+                .setTitle(billDetail.getSubject())
+                .setGatewayOrderNo(billDetail.getWeiXinOrderNo());
+        // 支付
+        if (Objects.equals(billDetail.getStatus(), "SUCCESS")){
+            // 金额
+            String orderAmount = billDetail.getOrderAmount();
+            double v = Double.parseDouble(orderAmount) * 100;
+            int amount = Math.abs(((int) v));
+            payReconcileDetail.setType("pay")
+                    .setAmount(amount);
+        }
+        // 退款
+        if (Objects.equals(billDetail.getStatus(), "REFUND")){
+            // 金额
+            String refundAmount = billDetail.getApplyRefundAmount();
+            double v = Double.parseDouble(refundAmount) * 100;
+            int amount = Math.abs(((int) v));
+            payReconcileDetail.setType("refund")
+                    .setAmount(amount);
+        }
+        // TODO 已撤销, 暂时未处理
+        if (Objects.equals(billDetail.getStatus(), "REVOKED")){
+
+        }
         return payReconcileDetail;
     }
 

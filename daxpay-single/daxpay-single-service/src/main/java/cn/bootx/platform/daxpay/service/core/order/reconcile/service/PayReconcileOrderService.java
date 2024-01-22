@@ -56,7 +56,7 @@ public class PayReconcileOrderService {
         // 生成批次号
         String format = LocalDateTimeUtil.format(date, DatePattern.PURE_DATE_PATTERN);
         String key = channelEnum.getReconcilePrefix()+format;
-        String seqNo = this.genSeqNo(key);
+        String seqNo = key + this.genSeqNo(key);
 
         PayReconcileOrder order = new PayReconcileOrder()
                 .setBatchNo(seqNo)
@@ -74,7 +74,6 @@ public class PayReconcileOrderService {
      */
     private String genSeqNo(String key){
         long next = sequence.next(key);
-        return String.format("%2d",next);
-
+        return String.format("%02d",next);
     }
 }

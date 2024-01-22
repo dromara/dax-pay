@@ -129,15 +129,25 @@ public class AliPayReconcileService {
      * 转换为通用对账记录对象
      */
     private PayReconcileDetail convert(AliReconcileBillDetail billDetail){
-        // 默认为支付
+        // 金额
+        String orderAmount = billDetail.getOrderAmount();
+        double v = Double.parseDouble(orderAmount) * 100;
+        int amount = Math.abs(((int) v));
+
+        // 默认为支付对账记录
         PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
                 .setRecordOrderId(billDetail.getRecordOrderId())
                 .setOrderId(billDetail.getOutTradeNo())
+                .setType("pay")
+                .setAmount(amount)
                 .setTitle(billDetail.getSubject())
                 .setGatewayOrderNo(billDetail.getTradeNo());
-        // 如果是退款
-        if (Objects.equals(billDetail.getTradeType(), "refund")){
+        // 退款覆盖更新对应的字段
+        if (Objects.equals(billDetail.getTradeType(), "退款")){
+            payReconcileDetail.setOrderId(billDetail.getBatchNo())
+                    .setType("refund");
         }
+
         return payReconcileDetail;
     }
 
@@ -146,14 +156,15 @@ public class AliPayReconcileService {
      * 解析明细
      */
     public List<AliReconcileBillDetail> parseDetail(List<String> list){
-        // 去除前 4 行和后 2 行 然后合并是个一个字符串
-        String billDetail = list.subList(4, list.size() - 2)
-                .stream()
+        // 截取需要进行解析的文本内容
+        String billDetail = list.stream()
                 .collect(Collectors.joining(System.lineSeparator()));
+        billDetail = StrUtil.subBetween(billDetail,
+                "#-----------------------------------------业务明细列表----------------------------------------"+System.lineSeparator(),
+                "#-----------------------------------------业务明细列表结束------------------------------------");
         billDetail = billDetail.replaceAll("\t", "");
         CsvReader reader = CsvUtil.getReader();
-        List<AliReconcileBillDetail> billDetails = reader.read(billDetail, AliReconcileBillDetail.class);
-        return billDetails;
+        return reader.read(billDetail, AliReconcileBillDetail.class);
     }
 
     /**
@@ -161,13 +172,14 @@ public class AliPayReconcileService {
      */
     public List<AliReconcileBillTotal> parseTotal(List<String> list){
         // 去除前 4 行和后 2 行 然后合并是个一个字符串
-        String billTotal = list.subList(4, list.size() - 2)
-                .stream()
+        String billTotal = list.stream()
                 .collect(Collectors.joining(System.lineSeparator()));
+        billTotal = StrUtil.subBetween(billTotal,
+                "#-----------------------------------------业务汇总列表----------------------------------------"+System.lineSeparator(),
+                "#----------------------------------------业务汇总列表结束-------------------------------------");
+
         billTotal = billTotal.replaceAll("\t", "");
         CsvReader reader = CsvUtil.getReader();
-        List<AliReconcileBillTotal> billTotals = reader.read(billTotal, AliReconcileBillTotal.class);
-        return billTotals;
+        return reader.read(billTotal, AliReconcileBillTotal.class);
     }
-
 }

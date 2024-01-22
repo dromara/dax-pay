@@ -1,8 +1,12 @@
 package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.PayReconcileConvert;
+import cn.bootx.platform.daxpay.service.dto.order.reconcile.PayReconcileOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,13 +24,14 @@ import java.time.LocalDate;
 @Accessors(chain = true)
 @DbTable(comment = "支付对账单订单")
 @TableName("pay_reconcile_order")
-public class PayReconcileOrder extends MpCreateEntity {
+public class PayReconcileOrder extends MpCreateEntity implements EntityBaseFunction<PayReconcileOrderDto> {
 
     /**
      * 批次号
      * 规则：通道简称 + yyyyMMdd + 两位流水号
      * 例子：wx2024012001、ali2024012002
      */
+    @DbMySqlIndex(name="批次号索引")
     @DbColumn(comment = "批次号")
     private String batchNo;
 
@@ -50,4 +55,11 @@ public class PayReconcileOrder extends MpCreateEntity {
     @DbColumn(comment = "错误信息")
     private String errorMsg;
 
+    /**
+     * @return
+     */
+    @Override
+    public PayReconcileOrderDto toDto() {
+        return PayReconcileConvert.CONVERT.convert(this);
+    }
 }

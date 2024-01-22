@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @DbTable(comment = "支付宝业务明细对账单")
-@TableName("pay_ali_reconcile_bill_detail")
+@TableName("pay_alipay_reconcile_bill_detail")
 public class AliReconcileBillDetail extends MpIdEntity {
     /** 关联对账订单ID */
     @DbColumn(comment = "关联对账订单ID")
@@ -33,6 +33,9 @@ public class AliReconcileBillDetail extends MpIdEntity {
     @Alias("商品名称")
     @DbColumn(comment = "商品名称")
     private String subject;
+    @Alias("创建时间")
+    @DbColumn(comment = "完成时间")
+    private String createTime;
     @Alias("完成时间")
     @DbColumn(comment = "完成时间")
     private String endTime;

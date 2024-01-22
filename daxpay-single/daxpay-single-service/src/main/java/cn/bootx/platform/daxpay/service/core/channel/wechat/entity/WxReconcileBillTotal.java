@@ -1,7 +1,8 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.entity;
 
-import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.hutool.core.annotation.Alias;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -14,8 +15,9 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@DbTable(comment = "微信对账单汇总")
 @TableName("pay_wechat_reconcile_bill_total")
-public class WxReconcileBillTotal extends MpCreateEntity {
+public class WxReconcileBillTotal extends MpIdEntity {
 
     @DbColumn(comment = "关联对账订单ID")
     private Long recordOrderId;

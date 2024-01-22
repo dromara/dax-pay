@@ -15,7 +15,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class ReconcileLocal {
 
-    /**  */
+    /** 通用支付对账记录 */
     private List<PayReconcileDetail> reconcileDetails;
 
 

@@ -96,14 +96,16 @@ bootx:
     cache:
       # 默认超时时间 30分钟
       default-ttl: 1800
-      # 对Key设置超时间 (秒)
-      keys-ttl:
-        "[iam:user:path]" : 5200
-        "[iam:ignore:path]" : 28800
-        "[base:china:region]" : 28800
     # 序列生成器
     sequence:
+      # 生成方式
       type: jdbc
+      # 序列生成器起始值
+      range-start: 1
+      # 序列生成器区间, 设置1每次都会操作数据库
+      range-step: 1
+      # 步长
+      step: 1
     # 异常
     exception:
       # 显示详细异常

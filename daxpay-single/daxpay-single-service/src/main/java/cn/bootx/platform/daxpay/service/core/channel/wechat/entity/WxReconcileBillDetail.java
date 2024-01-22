@@ -1,7 +1,8 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.entity;
 
-import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.hutool.core.annotation.Alias;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -14,8 +15,9 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@DbTable(comment = "微信对账单明细")
 @TableName("pay_wechat_reconcile_bill_detail")
-public class WxReconcileBillDetail extends MpCreateEntity {
+public class WxReconcileBillDetail extends MpIdEntity {
 
     @DbColumn(comment = "关联对账订单ID")
     private Long recordOrderId;
@@ -82,51 +84,51 @@ public class WxReconcileBillDetail extends MpCreateEntity {
 
     @Alias("商户退款单号")
     @DbColumn(comment = "商户退款单号")
-    private String packet;
+    private String mchRefundNo;
 
     @Alias("退款金额")
     @DbColumn(comment = "退款金额")
-    private String poundage;
+    private String refundAmount;
 
 
     @Alias("充值券退款金额")
     @DbColumn(comment = "充值券退款金额")
-    private String amount2;
+    private String couponRefundAmount;
 
     @Alias("退款类型")
     @DbColumn(comment = "退款类型")
-    private String rate;
+    private String refundType;
 
     @Alias("退款状态")
     @DbColumn(comment = "退款状态")
-    private String orderAmount;
+    private String refundStatus;
 
     @Alias("商品名称")
     @DbColumn(comment = "商品名称")
-    private String packet2;
+    private String subject;
 
     @Alias("商户数据包")
     @DbColumn(comment = "商户数据包")
-    private String packet3;
+    private String mchDataPacket;
 
     @Alias("手续费")
     @DbColumn(comment = "手续费")
-    private String packet4;
+    private String premium;
 
     @Alias("费率")
     @DbColumn(comment = "费率")
-    private String packet5;
+    private String rates;
 
     @Alias("订单金额")
     @DbColumn(comment = "订单金额")
-    private String packet6;
+    private String orderAmount;
 
     @Alias("申请退款金额")
     @DbColumn(comment = "申请退款金额")
-    private String packet7;
+    private String applyRefundAmount;
 
     @Alias("费率备注")
     @DbColumn(comment = "费率备注")
-    private String packet8;
+    private String ratesRemark;
 
 }

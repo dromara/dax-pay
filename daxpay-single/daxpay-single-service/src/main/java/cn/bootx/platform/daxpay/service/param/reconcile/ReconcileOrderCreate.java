@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Data
 @Accessors(chain = true)
 @Schema(title = "创建对账订单参数")
-public class CreateReconcileOrderParam {
+public class ReconcileOrderCreate {
 
     @NotNull(message = "日期不能为空")
     @Schema(description = "日期")

@@ -1,16 +1,23 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.entity;
 
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.hutool.core.annotation.Alias;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 支付宝业务汇总对账单
  * @author xxm
  * @since 2024/1/17
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AliReconcileBillTotal {
+@DbTable(comment = "支付宝业务汇总对账单")
+@TableName("pay_alipay_reconcile_bill_total")
+public class AliReconcileBillTotal extends MpIdEntity {
     /** 关联对账订单ID */
     @DbColumn(comment = "关联对账订单ID")
     private Long recordOrderId;
