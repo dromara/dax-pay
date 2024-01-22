@@ -137,14 +137,14 @@ public class AliPayReconcileService {
         // 默认为支付对账记录
         PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
                 .setRecordOrderId(billDetail.getRecordOrderId())
-                .setOrderId(billDetail.getOutTradeNo())
+                .setPaymentId(billDetail.getOutTradeNo())
                 .setType("pay")
                 .setAmount(amount)
                 .setTitle(billDetail.getSubject())
                 .setGatewayOrderNo(billDetail.getTradeNo());
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
-            payReconcileDetail.setOrderId(billDetail.getBatchNo())
+            payReconcileDetail.setRefundId(billDetail.getBatchNo())
                     .setType("refund");
         }
 

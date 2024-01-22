@@ -19,19 +19,17 @@ public class ReconcileDetailQuery {
     @Schema(description = "关联对账订单ID")
     private Long recordOrderId;
 
-    /**
-     * @see cn.bootx.platform.daxpay.code.PayStatusEnum
-     */
-    @Schema(description = "交易状态")
-    private String status;
-
     /** 交易类型 支付/退款 */
     @Schema(description = "交易类型")
     private String type;
 
     /** 订单id - 支付ID/退款ID等 */
     @Schema(description = "订单id")
-    private String orderId;
+    private String paymentId;
+
+    /** 本地退款ID */
+    @Schema(description = "本地退款ID")
+    private String refundId;
 
     /** 网关订单号 - 支付宝/微信的订单号 */
     @Schema(description = "网关订单号")

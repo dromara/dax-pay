@@ -80,7 +80,7 @@ public class WxReconcileBillDetail extends MpIdEntity {
 
     @Alias("微信退款单号")
     @DbColumn(comment = "微信退款单号")
-    private String name;
+    private String wxRefundNo;
 
     @Alias("商户退款单号")
     @DbColumn(comment = "商户退款单号")

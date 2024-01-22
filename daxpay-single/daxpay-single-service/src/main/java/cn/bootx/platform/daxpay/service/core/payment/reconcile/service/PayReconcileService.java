@@ -52,7 +52,7 @@ public class PayReconcileService {
             reconcileOrderService.update(recordOrder);
         } catch (Exception e) {
             log.error("下载对账单异常", e);
-            recordOrder.setErrorMsg("错误原因: " + e.getMessage());
+            recordOrder.setErrorMsg("原因: " + e.getMessage());
             reconcileOrderService.update(recordOrder);
             throw new RuntimeException(e);
         }

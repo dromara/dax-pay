@@ -104,6 +104,7 @@ public class PayUtil {
      * 生成退款号
      */
     public String getRefundNo(){
-        return "R" + IdUtil.getSnowflakeNextIdStr();
+//        return "R" + IdUtil.getSnowflakeNextIdStr();
+        return IdUtil.getSnowflakeNextIdStr();
     }
 }

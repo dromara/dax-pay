@@ -27,25 +27,30 @@ public class PayReconcileDetail extends MpCreateEntity implements EntityBaseFunc
     @DbColumn(comment = "关联对账订单ID")
     private Long recordOrderId;
 
-    /** 交易类型 支付/退款 */
-    @DbColumn(comment = "交易类型")
-    private String type;
-
-    /** 订单id - 支付ID/退款ID等 */
-    @DbColumn(comment = "订单id")
-    private String orderId;
-
-    /** 网关订单号 - 支付宝/微信的订单号 */
-    @DbColumn(comment = "网关订单号")
-    private String gatewayOrderNo;
+    /** 商品名称 */
+    @DbColumn(comment = "商品名称")
+    private String title;
 
     /** 交易金额 */
     @DbColumn(comment = "交易金额")
     private Integer amount;
 
-    /** 商品名称 */
-    @DbColumn(comment = "商品名称")
-    private String title;
+    /** 交易类型 pay/refund */
+    @DbColumn(comment = "交易类型")
+    private String type;
+
+    /** 本地订单ID */
+    @DbColumn(comment = "本地订单ID")
+    private String paymentId;
+
+    /** 本地退款ID */
+    @DbColumn(comment = "本地退款ID")
+    private String refundId;
+
+    /** 网关订单号 - 支付宝/微信的订单号 */
+    @DbColumn(comment = "网关订单号")
+    private String gatewayOrderNo;
+
 
     @Override
     public PayReconcileDetailDto toDto() {

@@ -117,7 +117,7 @@ public class WechatPayReconcileService{
         // 默认为支付对账记录
         PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
                 .setRecordOrderId(billDetail.getRecordOrderId())
-                .setOrderId(billDetail.getMchOrderNo())
+                .setPaymentId(billDetail.getMchOrderNo())
                 .setTitle(billDetail.getSubject())
                 .setGatewayOrderNo(billDetail.getWeiXinOrderNo());
         // 支付
@@ -136,7 +136,8 @@ public class WechatPayReconcileService{
             double v = Double.parseDouble(refundAmount) * 100;
             int amount = Math.abs(((int) v));
             payReconcileDetail.setType("refund")
-                    .setAmount(amount);
+                    .setAmount(amount)
+                    .setRefundId(billDetail.getMchRefundNo());
         }
         // TODO 已撤销, 暂时未处理
         if (Objects.equals(billDetail.getStatus(), "REVOKED")){
