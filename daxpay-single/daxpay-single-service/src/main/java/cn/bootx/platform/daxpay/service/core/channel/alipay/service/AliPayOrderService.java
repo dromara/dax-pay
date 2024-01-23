@@ -42,7 +42,7 @@ public class AliPayOrderService {
     public void updatePaySuccess(PayOrder payOrder, PayChannelParam payChannelParam) {
         // 更新支付宝异步支付类型信息
         payOrder.setAsyncPay(true).setAsyncChannel(PayChannelEnum.ALI.getCode());
-        payChannelOrderService.updateChannel(payChannelParam,payOrder);
+        payChannelOrderService.updateAsyncChannelOrder(payOrder,payChannelParam);
 
         // 更新支付宝可退款类型信息
         List<RefundableInfo> refundableInfos = payOrder.getRefundableInfos();
@@ -61,6 +61,7 @@ public class AliPayOrderService {
     /**
      * 更新异步支付记录成功状态, 并创建支付宝支付记录
      */
+    @Deprecated
     public void updateAsyncSuccess(PayOrder payOrder, Integer amount) {
         // 创建支付宝支付订单
         this.createAliPayOrder(payOrder,amount);
@@ -69,10 +70,11 @@ public class AliPayOrderService {
     /**
      * 创建支付宝支付订单(支付成功后才会创建)
      */
+    @Deprecated
     private void createAliPayOrder(PayOrder payOrder, Integer amount) {
         String tradeNo = PaymentContextLocal.get()
                 .getAsyncPayInfo()
-                .getTradeNo();
+                .getGatewayOrderNo();
 
         AliPayOrder aliPayOrder = new AliPayOrder();
         aliPayOrder.setTradeNo(tradeNo)

@@ -4,9 +4,9 @@ import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.service.dto.order.pay.PayChanneOrderlDto;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,15 +29,15 @@ public class PayChannelOrderService {
     /**
      * 根据支付ID查询列表
      */
-    public List<PayChanneOrderlDto> findAllByPaymentId(Long paymentId){
+    public List<PayChannelOrderDto> findAllByPaymentId(Long paymentId){
         return ResultConvertUtil.dtoListConvert(payChannelOrderManager.findAllByPaymentId(paymentId));
     }
 
     /**
-     * 更新支付订单的通道信息
+     * 更新支付订单的异步通道信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updateChannel(PayChannelParam payChannelParam, PayOrder payOrder){
+    public void updateAsyncChannelOrder(PayOrder payOrder, PayChannelParam payChannelParam){
         Optional<PayChannelOrder> payOrderChannelOpt = payChannelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), PayChannelEnum.WECHAT.getCode());
         if (!payOrderChannelOpt.isPresent()){
             payChannelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
@@ -45,6 +45,7 @@ public class PayChannelOrderService {
                     .setPaymentId(payOrder.getId())
                     .setChannel(PayChannelEnum.ALI.getCode())
                     .setAmount(payChannelParam.getAmount())
+                    .setRefundableBalance(payChannelParam.getAmount())
                     .setPayWay(payChannelParam.getWay())
                     .setChannelExtra(payChannelParam.getChannelExtra())
                     .setAsync(true)
@@ -56,4 +57,14 @@ public class PayChannelOrderService {
             payChannelOrderManager.updateById(payOrderChannelOpt.get());
         }
     }
+
+    /**
+     * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建支付宝支付单
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePaySuccess(PayOrder payOrder, PayChannelParam payChannelParam) {
+        // 更新支付宝异步支付类型信息
+        this.updateAsyncChannelOrder(payOrder, payChannelParam);
+    }
+
 }

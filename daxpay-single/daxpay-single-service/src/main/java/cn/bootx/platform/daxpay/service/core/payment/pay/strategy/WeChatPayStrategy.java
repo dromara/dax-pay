@@ -4,12 +4,12 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
 import cn.hutool.core.util.StrUtil;
@@ -32,13 +32,11 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WeChatPayStrategy extends AbsPayStrategy {
 
+    private final PayChannelOrderService channelOrderService;
+
     private final WeChatPayConfigService weChatPayConfigService;
 
     private final WeChatPayService weChatPayService;
-
-    private final WeChatPayOrderService weChatPayOrderService;
-
-    private final WeChatPayCloseService weChatPayCloseService;
 
     private WeChatPayConfig weChatPayConfig;
 
@@ -57,7 +55,6 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doBeforePayHandler() {
-        this.initWeChatPayConfig();
         try {
             // 微信参数验证
             String extraParamsJson = this.getPayChannelParam().getChannelExtra();
@@ -96,24 +93,21 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        weChatPayOrderService.updatePaySuccess(this.getOrder(), this.getPayChannelParam());
+        channelOrderService.updateAsyncChannelOrder(this.getOrder(), this.getPayChannelParam());
+
     }
 
     /**
-     * 错误处理
+     * 生成通道支付单
      */
     @Override
-    public void doErrorHandler(ExceptionInfo exceptionInfo) {
-        this.doCloseHandler();
-    }
-
-    /**
-     * 关闭本地支付记录
-     */
-    @Override
-    public void doCloseHandler() {
-        weChatPayCloseService.close(this.getOrder(), weChatPayConfig);
-        weChatPayOrderService.updateClose(this.getOrder().getId());
+    public PayChannelOrder generateChannelOrder() {
+        String gatewayOrderNo = PaymentContextLocal.get()
+                .getAsyncPayInfo()
+                .getGatewayOrderNo();
+        PayChannelOrder payChannelOrder = super.generateChannelOrder();
+        payChannelOrder.setGatewayOrderNo(gatewayOrderNo);
+        return payChannelOrder;
     }
 
     /**

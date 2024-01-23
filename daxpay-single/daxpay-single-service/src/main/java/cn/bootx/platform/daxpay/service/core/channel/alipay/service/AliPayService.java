@@ -88,7 +88,7 @@ public class AliPayService {
         // 付款码支付
         else if (Objects.equals(payChannelParam.getWay(), PayWayEnum.BARCODE.getCode())) {
             String tradeNo = this.barCode(amount, payOrder, aliPayParam, alipayConfig);
-            asyncPayInfo.setTradeNo(tradeNo);
+            asyncPayInfo.setGatewayOrderNo(tradeNo);
         }
         // 通常是发起支付的参数
         asyncPayInfo.setPayBody(payBody);

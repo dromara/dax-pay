@@ -104,7 +104,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
     public void initContext() {
         Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
         // 订单号
-        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(callbackParam.get(TRADE_NO));
+        PaymentContextLocal.get().getAsyncPayInfo().setGatewayOrderNo(callbackParam.get(TRADE_NO));
         // 支付时间
         String gmpTime = callbackParam.get(GMT_PAYMENT);
         if (StrUtil.isNotBlank(gmpTime)) {

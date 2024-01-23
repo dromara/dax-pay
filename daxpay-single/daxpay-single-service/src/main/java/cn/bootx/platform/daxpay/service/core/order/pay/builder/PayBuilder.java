@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
  * @since 2021/2/25
  */
 @UtilityClass
-public class PaymentBuilder {
+public class PayBuilder {
 
     /**
-     * 构建payment记录
+     * 构建支付订单
      */
     public PayOrder buildPayOrder(PayParam payParam) {
         // 订单超时时间
@@ -42,6 +42,7 @@ public class PaymentBuilder {
                 .getAsyncPayInfo()
                 .getExpiredTime();
         // 可退款信息
+        @Deprecated
         List<RefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayChannels());
         // 计算总价
         int sumAmount = payParam.getPayChannels().stream()
@@ -93,22 +94,20 @@ public class PaymentBuilder {
     /**
      * 构建订单关联通道信息
      */
-    public List<PayChannelOrder> buildPayChannel(List<PayChannelParam> payChannelParams) {
-        if (CollectionUtil.isEmpty(payChannelParams)) {
-            return Collections.emptyList();
-        }
-        return payChannelParams.stream()
-                .map(o-> new PayChannelOrder()
-                        .setChannel(o.getChannel())
-                        .setPayWay(o.getWay())
-                        .setAmount(o.getAmount())
-                        .setChannelExtra(o.getChannelExtra()))
-                .collect(Collectors.toList());
+    public PayChannelOrder buildPayChannelOrder(PayChannelParam channelParam) {
+        return new PayChannelOrder()
+                .setAsync(PayChannelEnum.ASYNC_TYPE_CODE.contains(channelParam.getChannel()))
+                .setChannel(channelParam.getChannel())
+                .setPayWay(channelParam.getWay())
+                .setAmount(channelParam.getAmount())
+                .setRefundableBalance(channelParam.getAmount())
+                .setChannelExtra(channelParam.getChannelExtra());
     }
 
     /**
      * 构建支付订单的可退款信息列表
      */
+    @Deprecated
     private List<RefundableInfo> buildRefundableInfo(List<PayChannelParam> payChannelParamList) {
         if (CollectionUtil.isEmpty(payChannelParamList)) {
             return Collections.emptyList();
@@ -140,19 +139,5 @@ public class PaymentBuilder {
             paymentResult.setPayBody(asyncPayInfo.getPayBody());
         }
         return paymentResult;
-    }
-
-    /**
-     * 根据新的新传入的支付参数和支付订单构建出当前需要支付参数
-     * 主要是针对其中的异步支付参数进行处理
-     *
-     * @param newPayParam 新传入的参数
-     * @param payOrder 支付订单
-     * @return PayParam 支付参数
-     */
-    public PayParam buildPayParam(PayParam newPayParam, PayOrder payOrder) {
-
-
-        return null;
     }
 }

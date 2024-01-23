@@ -118,54 +118,48 @@ public class PayRefundService {
      * 分支付通道进行退款
      */
     public RefundResult refundByChannel(RefundParam refundParam, PayOrder payOrder){
-        // 0.基础数据准备
-        List<RefundChannelParam> refundChannels = refundParam.getRefundChannels();
-        Map<String, PayChannelOrder> orderChannelMap = payChannelOrderManager.findAllByPaymentId(payOrder.getId())
-                .stream()
-                .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
-        // 比对通道支付单是否与可退款记录数量一致
-        if (orderChannelMap.size() != refundChannels.size()){
-            throw new PayFailureException("通道支付单是否与可退款记录数量不一致");
-        }
-
-        // 1.获取退款参数方式，通过工厂生成对应的策略组
-        List<AbsPayRefundStrategy> payRefundStrategies = PayRefundStrategyFactory.createAsyncLast(refundChannels);
-        if (CollectionUtil.isEmpty(payRefundStrategies)) {
-            throw new PayUnsupportedMethodException();
-        }
-
-        // 2.初始化退款策略的参数
-        for (AbsPayRefundStrategy refundStrategy : payRefundStrategies) {
-            refundStrategy.initRefundParam(payOrder, refundParam, orderChannelMap.get(refundStrategy.getType().getCode()));
-        }
-
         try {
+            // 0.基础数据准备
+            List<RefundChannelParam> refundChannels = refundParam.getRefundChannels();
+            Map<String, PayChannelOrder> orderChannelMap = payChannelOrderManager.findAllByPaymentId(payOrder.getId())
+                    .stream()
+                    .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
+            // 比对通道支付单是否与可退款记录数量一致
+            if (orderChannelMap.size() != refundChannels.size()){
+                throw new PayFailureException("通道支付单是否与可退款记录数量不一致");
+            }
+
+            // 1.获取退款参数方式，通过工厂生成对应的策略组
+            List<AbsPayRefundStrategy> payRefundStrategies = PayRefundStrategyFactory.createAsyncLast(refundChannels);
+            if (CollectionUtil.isEmpty(payRefundStrategies)) {
+                throw new PayUnsupportedMethodException();
+            }
+            // 2.初始化退款策略的参数
+            for (AbsPayRefundStrategy refundStrategy : payRefundStrategies) {
+                refundStrategy.initRefundParam(payOrder, refundParam, orderChannelMap.get(refundStrategy.getType().getCode()));
+            }
             // 3.退款前准备操作
             payRefundStrategies.forEach(AbsPayRefundStrategy::doBeforeRefundHandler);
-
             // 4.执行退款策略
             payRefundStrategies.forEach(AbsPayRefundStrategy::doRefundHandler);
+            // 5 生成退款相关订单并保存
+            List<PayRefundChannelOrder> refundChannelOrders = payRefundStrategies.stream()
+                    .map(AbsPayRefundStrategy::generateChannelOrder)
+                    .collect(Collectors.toList());
+            PayRefundOrder refundOrder = payRefundAssistService.generateRefundOrder(refundParam, payOrder);
+            payRefundAssistService.saveOrderAndChannels(refundOrder,refundChannelOrders);
+            // 6.退款成功后支付单处理
+            this.successHandler(refundParam, payOrder);
+            // 7. 返回结果
+            return new RefundResult()
+                    .setRefundId(refundOrder.getId())
+                    .setRefundNo(refundParam.getRefundNo());
         }
         catch (Exception e) {
-            // 5失败处理
+            // 失败处理
             this.errorHandler(refundParam, payOrder, e);
             throw e;
         }
-
-        // 5 生成退款相关订单并保存
-        List<PayRefundChannelOrder> refundChannelOrders = payRefundStrategies.stream()
-                .map(AbsPayRefundStrategy::generateChannelOrder)
-                .collect(Collectors.toList());
-        PayRefundOrder refundOrder = payRefundAssistService.generateRefundOrder(refundParam, payOrder);
-        payRefundAssistService.saveOrderAndChannels(refundOrder,refundChannelOrders);
-
-        // 6.退款成功后支付单处理
-        this.successHandler(refundParam, payOrder);
-
-        // 返回结果
-        return new RefundResult()
-                .setRefundId(refundOrder.getId())
-                .setRefundNo(refundParam.getRefundNo());
     }
 
     /**

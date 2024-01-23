@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
-import cn.bootx.platform.daxpay.service.dto.order.pay.PayChanneOrderlDto;
+import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -24,8 +24,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @DbTable(comment = "支付订单关联支付时通道信息")
-@TableName("pay_order_channel")
-public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunction<PayChanneOrderlDto> {
+@TableName("pay_channel_order")
+public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunction<PayChannelOrderDto> {
 
     @DbColumn(comment = "支付id")
     private Long paymentId;
@@ -33,14 +33,23 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "通道")
     private String channel;
 
+    @DbColumn(comment = "金额")
+    private Integer amount;
+
+    @DbColumn(comment = "可退款余额")
+    private Integer refundableBalance;
+
+    /**
+     * 异步支付通道发给网关的退款号, 用与将记录关联起来
+     */
+    @DbColumn(comment = "关联网关支付号")
+    private String gatewayOrderNo;
+
     @DbColumn(comment = "支付方式")
     private String payWay;
 
     @DbColumn(comment = "异步支付方式")
     private boolean async;
-
-    @DbColumn(comment = "金额")
-    private Integer amount;
 
     /**
      * @see AliPayParam
@@ -55,7 +64,7 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
      * 转换
      */
     @Override
-    public PayChanneOrderlDto toDto() {
+    public PayChannelOrderDto toDto() {
         return PayOrderConvert.CONVERT.convert(this);
     }
 }

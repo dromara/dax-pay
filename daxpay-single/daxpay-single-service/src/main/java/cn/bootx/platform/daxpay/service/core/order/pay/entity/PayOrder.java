@@ -76,6 +76,7 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @BigField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "退款信息列表")
+    @Deprecated
     private List<RefundableInfo> refundableInfos;
 
     /**

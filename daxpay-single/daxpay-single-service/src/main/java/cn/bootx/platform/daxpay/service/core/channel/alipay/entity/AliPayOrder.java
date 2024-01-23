@@ -19,6 +19,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Deprecated
 @Accessors(chain = true)
 @DbTable(comment = "支付宝支付记录")
 @TableName("pay_alipay_order")

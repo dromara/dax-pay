@@ -7,8 +7,10 @@ import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
-import cn.bootx.platform.daxpay.service.core.order.pay.builder.PaymentBuilder;
+import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 
 /**
@@ -43,6 +46,8 @@ public class PayService {
     private final PayOrderService payOrderService;
 
     private final PayAssistService payAssistService;
+
+    private final PayChannelOrderManager payChannelOrderManager;
 
     private final LockTemplate lockTemplate;
 
@@ -109,20 +114,20 @@ public class PayService {
     private PayResult firstPay(PayParam payParam, PayOrder payOrder) {
         // 1. 已经发起过支付情况直接返回支付结果
         if (Objects.nonNull(payOrder)) {
-            return PaymentBuilder.buildPayResultByPayOrder(payOrder);
+            return PayBuilder.buildPayResultByPayOrder(payOrder);
         }
 
         // 2. 价格检测
         PayUtil.validationAmount(payParam.getPayChannels());
 
-        // 3. 创建支付相关的记录并返回支付订单对象
+        // 3. 创建支付订单和扩展记录并返回支付订单对象
         payOrder = payAssistService.createPayOrder(payParam);
 
         // 4. 调用支付方法进行发起支付
         this.firstPayHandler(payParam, payOrder);
 
         // 5. 返回支付结果
-        return PaymentBuilder.buildPayResultByPayOrder(payOrder);
+        return PayBuilder.buildPayResultByPayOrder(payOrder);
     }
 
     /**
@@ -131,31 +136,36 @@ public class PayService {
     private void firstPayHandler(PayParam payParam, PayOrder payOrder) {
 
         // 1.获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> paymentStrategyList = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
-        if (CollectionUtil.isEmpty(paymentStrategyList)) {
+        List<AbsPayStrategy> payStrategyList = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
+        if (CollectionUtil.isEmpty(payStrategyList)) {
             throw new PayUnsupportedMethodException();
         }
 
         // 2.初始化支付的参数
-        for (AbsPayStrategy paymentStrategy : paymentStrategyList) {
+        for (AbsPayStrategy paymentStrategy : payStrategyList) {
             paymentStrategy.initPayParam(payOrder, payParam);
         }
 
-        // 3.支付前准备, 执行支付前处理
-        this.doHandler(payOrder, paymentStrategyList, AbsPayStrategy::doBeforePayHandler, null);
+        // 3.执行支付前处理动作
+        payStrategyList.forEach(AbsPayStrategy::doBeforePayHandler);
 
-        // 4.支付操作
-        this.doHandler(payOrder, paymentStrategyList, AbsPayStrategy::doPayHandler, (strategies, payOrderObj) -> {
-            // 发起支付成功进行的执行方法
-            strategies.forEach(AbsPayStrategy::doSuccessHandler);
-            // 所有支付方式都是同步时, 对支付订单进行处理
-            if (PayUtil.isNotSync(payParam.getPayChannels())) {
-                // 修改支付订单状态为成功
-                payOrderObj.setStatus(PayStatusEnum.SUCCESS.getCode());
-                payOrderObj.setPayTime(LocalDateTime.now());
-            }
-            payOrderService.updateById(payOrderObj);
-        });
+        // 4.1 支付操作
+        payStrategyList.forEach(AbsPayStrategy::doPayHandler);
+        // 4.2 支付调用成功操作, 进行扣款、创建记录类类似的操作
+        payStrategyList.forEach(AbsPayStrategy::doSuccessHandler);
+        // 4.3 获取通道支付订单进行保存
+        List<PayChannelOrder> channelOrders = payStrategyList.stream()
+                .map(AbsPayStrategy::generateChannelOrder)
+                .collect(Collectors.toList());
+        payChannelOrderManager.saveAll(channelOrders);
+
+        // 5. 如果没有异步支付, 直接进行成功处理
+        if (PayUtil.isNotSync(payParam.getPayChannels())) {
+            // 修改支付订单状态为成功
+            payOrder.setStatus(PayStatusEnum.SUCCESS.getCode());
+            payOrder.setPayTime(LocalDateTime.now());
+            payOrderService.updateById(payOrder);
+        }
     }
 
     /**
@@ -167,35 +177,31 @@ public class PayService {
         List<String> trades = Arrays.asList(PayStatusEnum.SUCCESS.getCode(), PayStatusEnum.CLOSE.getCode(),
                 PayStatusEnum.PARTIAL_REFUND.getCode(), PayStatusEnum.REFUNDED.getCode());
         if (trades.contains(payOrder.getStatus())) {
-            return PaymentBuilder.buildPayResultByPayOrder(payOrder);
+            return PayBuilder.buildPayResultByPayOrder(payOrder);
         }
 
         // 2.获取 异步支付通道，通过工厂生成对应的策略组(只包含异步支付的策略, 同步支付相关逻辑不再进行执行)
         PayChannelParam payChannelParam = payAssistService.getAsyncPayParam(payParam, payOrder);
-        List<AbsPayStrategy> asyncStrategyList = PayStrategyFactory.createAsyncLast(Collections.singletonList(payChannelParam));
+        List<AbsPayStrategy> payStrategyList = PayStrategyFactory.createAsyncLast(Collections.singletonList(payChannelParam));
 
         // 3.初始化支付的参数
-        for (AbsPayStrategy paymentStrategy : asyncStrategyList) {
-            paymentStrategy.initPayParam(payOrder, payParam);
+        for (AbsPayStrategy payStrategy : payStrategyList) {
+            payStrategy.initPayParam(payOrder, payParam);
         }
         // 4.支付前准备
-        this.doHandler(payOrder, asyncStrategyList, AbsPayStrategy::doBeforePayHandler, null);
+        payStrategyList.forEach(AbsPayStrategy::doBeforePayHandler);
 
-        // 5. 发起支付
-        this.doHandler(payOrder, asyncStrategyList, AbsPayStrategy::doPayHandler, (strategyList, paymentObj) -> {
-            // 发起支付成功进行的执行方法
-            strategyList.forEach(AbsPayStrategy::doSuccessHandler);
-            payOrderService.updateById(paymentObj);
-        });
+        // 5.1发起支付
+        payStrategyList.forEach(AbsPayStrategy::doPayHandler);
+        // 5.2支付发起成功处理
+        payStrategyList.forEach(AbsPayStrategy::doSuccessHandler);
 
-        // 6. 更新支付订单扩展参数
+        // 6. 更新支付订单和扩展参数
+//        payOrderService.updateById(payOrder);
         payAssistService.updatePayOrderExtra(payParam,payOrder.getId());
 
-        // 7. 更新订单过期时间
-
-
-        // 8. 组装返回参数
-        return PaymentBuilder.buildPayResultByPayOrder(payOrder);
+        // 7. 组装返回参数
+        return PayBuilder.buildPayResultByPayOrder(payOrder);
     }
 
     /**

@@ -51,7 +51,7 @@ public class AliPaySyncService {
             syncResult.setSyncPayInfo(JSONUtil.toJsonStr(response));
             // 支付完成 TODO 部分退款也在这个地方, 但无法进行区分, 需要借助对账进行处理
             if (Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.PAYMENT_TRADE_FINISHED)) {
-                PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(response.getTradeNo());
+                PaymentContextLocal.get().getAsyncPayInfo().setGatewayOrderNo(response.getTradeNo());
                 // 支付完成时间
                 LocalDateTime payTime = LocalDateTimeUtil.of(response.getSendPayDate());
                 PaymentContextLocal.get().getAsyncPayInfo().setPayTime(payTime);

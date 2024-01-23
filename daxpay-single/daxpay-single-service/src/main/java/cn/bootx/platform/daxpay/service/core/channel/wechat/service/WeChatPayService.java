@@ -105,7 +105,7 @@ public class WeChatPayService {
         // 付款码支付
         else if (payWayEnum == PayWayEnum.BARCODE) {
             String tradeNo = this.barCode(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
-            asyncPayInfo.setTradeNo(tradeNo);
+            asyncPayInfo.setGatewayOrderNo(tradeNo);
         }
         asyncPayInfo.setPayBody(payBody);
     }

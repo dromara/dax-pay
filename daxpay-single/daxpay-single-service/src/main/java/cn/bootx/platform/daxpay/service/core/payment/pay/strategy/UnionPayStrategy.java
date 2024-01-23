@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +28,6 @@ public class UnionPayStrategy extends AbsPayStrategy {
 
     @Override
     public void doPayHandler() {
-
-    }
-
-    @Override
-    public void doErrorHandler(ExceptionInfo exceptionInfo) {
 
     }
 

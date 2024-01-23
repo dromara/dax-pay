@@ -1,17 +1,17 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCloseService;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayOrderService;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayService;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
+import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;
@@ -32,13 +32,11 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliPayStrategy extends AbsPayStrategy {
 
-    private final AliPayOrderService aliPaymentService;
+    private final PayChannelOrderService channelOrderService;
 
     private final AliPayService aliPayService;
 
     private final AliPayConfigService alipayConfigService;
-
-    private final AliPayCloseService aliPayCancelService;
 
     private AliPayConfig alipayConfig;
 
@@ -82,7 +80,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        aliPayService.pay( this.getOrder(), this.getPayChannelParam(), this.aliPayParam, this.alipayConfig);
+        aliPayService.pay(this.getOrder(), this.getPayChannelParam(), this.aliPayParam, this.alipayConfig);
     }
 
     /**
@@ -90,25 +88,20 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        aliPaymentService.updatePaySuccess(this.getOrder(), this.getPayChannelParam());
+        channelOrderService.updateAsyncChannelOrder(this.getOrder(), this.getPayChannelParam());
     }
 
     /**
-     * 发起支付失败
+     * 生成通道支付单
      */
     @Override
-    public void doErrorHandler(ExceptionInfo exceptionInfo) {
-        this.doCloseHandler();
-    }
-
-    /**
-     * 关闭支付记录
-     */
-    @Override
-    public void doCloseHandler() {
-        // 关闭支付
-        aliPayCancelService.close(this.getOrder());
-        aliPaymentService.updateClose(this.getOrder().getId());
+    public PayChannelOrder generateChannelOrder() {
+        String gatewayOrderNo = PaymentContextLocal.get()
+                .getAsyncPayInfo()
+                .getGatewayOrderNo();
+        PayChannelOrder payChannelOrder = super.generateChannelOrder();
+        payChannelOrder.setGatewayOrderNo(gatewayOrderNo);
+        return payChannelOrder;
     }
 
 

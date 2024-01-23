@@ -1,10 +1,11 @@
 package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -61,15 +62,14 @@ public abstract class AbsPayStrategy implements PayStrategy{
     }
 
     /**
-     * 支付失败的处理方式 TODO 后期考虑如何进行错误处理
+     * 生成通道支付单
      */
-    public void doErrorHandler(ExceptionInfo exceptionInfo) {
+    public PayChannelOrder generateChannelOrder() {
+        PayChannelOrder payChannelOrder = PayBuilder.buildPayChannelOrder(this.getPayChannelParam());
+        payChannelOrder.setId(this.getOrder().getId());
+        return payChannelOrder;
     }
 
-    /**
-     * 关闭支付. 支付交易返回失败或支付系统超时调通该接口关闭支付
-     */
-    public abstract void doCloseHandler();
 
 
 }

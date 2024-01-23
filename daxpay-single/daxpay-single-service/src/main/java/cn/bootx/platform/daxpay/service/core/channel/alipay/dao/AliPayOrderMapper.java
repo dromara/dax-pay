@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @author xxm
  * @since 2021/2/26
  */
+@Deprecated
 @Mapper
 public interface AliPayOrderMapper extends BaseMapper<AliPayOrder> {
 

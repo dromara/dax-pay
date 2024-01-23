@@ -5,21 +5,21 @@ import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
-import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
-import cn.bootx.platform.daxpay.service.core.order.pay.builder.PaymentBuilder;
+import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 支付支持服务
@@ -138,17 +137,11 @@ public class PayAssistService {
      */
     public PayOrder createPayOrder(PayParam payParam) {
         // 构建支付订单并保存
-        PayOrder payOrder = PaymentBuilder.buildPayOrder(payParam);
+        PayOrder payOrder = PayBuilder.buildPayOrder(payParam);
         payOrderService.save(payOrder);
         // 构建支付订单扩展表并保存
-        PayOrderExtra payOrderExtra = PaymentBuilder.buildPayOrderExtra(payParam, payOrder.getId());
+        PayOrderExtra payOrderExtra = PayBuilder.buildPayOrderExtra(payParam, payOrder.getId());
         payOrderExtraManager.save(payOrderExtra);
-        // 构建支付通道表并保存
-        List<PayChannelOrder> payChannelOrders = PaymentBuilder.buildPayChannel(payParam.getPayChannels())
-                .stream()
-                .peek(o -> o.setPaymentId(payOrder.getId()).setAsync(payOrder.isAsyncPay()))
-                .collect(Collectors.toList());
-        payChannelOrderManager.saveAll(payChannelOrders);
         return payOrder;
     }
 

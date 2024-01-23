@@ -106,7 +106,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
     public void initContext() {
         Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
         // 订单号
-        PaymentContextLocal.get().getAsyncPayInfo().setTradeNo(callbackParam.get(WeChatPayCode.TRANSACTION_ID));
+        PaymentContextLocal.get().getAsyncPayInfo().setGatewayOrderNo(callbackParam.get(WeChatPayCode.TRANSACTION_ID));
         // 支付时间
         String timeEnd = callbackParam.get(TIME_END);
         if (StrUtil.isNotBlank(timeEnd)) {

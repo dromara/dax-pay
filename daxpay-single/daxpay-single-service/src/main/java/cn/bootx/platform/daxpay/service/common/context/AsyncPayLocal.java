@@ -26,7 +26,7 @@ public class AsyncPayLocal {
      * 1. 如付款码支付直接成功时会出现
      * 2. 回调或者支付同步时也会有这个值
      */
-    private String tradeNo;
+    private String gatewayOrderNo;
 
 
     /** 支付参数体(通常用于发起支付的参数) */

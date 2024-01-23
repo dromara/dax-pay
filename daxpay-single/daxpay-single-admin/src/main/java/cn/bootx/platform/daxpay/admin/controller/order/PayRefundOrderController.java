@@ -57,8 +57,8 @@ public class PayRefundOrderController {
 
     @Operation(summary = "查询通道退款订单详情")
     @GetMapping("/findChannelById")
-    public ResResult<Void> findChannelById(Long id){
-        return Res.ok();
+    public ResResult<RefundChannelOrderDto> findChannelById(Long id){
+        return Res.ok(payRefundQueryService.findChannelById(id));
     }
 
     @Operation(summary = "手动发起退款")

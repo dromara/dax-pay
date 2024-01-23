@@ -70,6 +70,6 @@ public class AliPayRefundStrategy extends AbsPayRefundStrategy {
         String refundRequestNo = PaymentContextLocal.get()
                 .getRefundInfo()
                 .getGatewayRequestNo();
-        return payRefundChannelOrder.setGatewayRequestNo(refundRequestNo);
+        return payRefundChannelOrder.setGatewayOrderNo(refundRequestNo);
     }
 }

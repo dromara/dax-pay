@@ -14,7 +14,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderExtraServ
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
-import cn.bootx.platform.daxpay.service.dto.order.pay.PayChanneOrderlDto;
+import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderExtraDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
@@ -68,7 +68,7 @@ public class PayOrderController {
 
     @Operation(summary = "查询支付订单关联支付通道")
     @GetMapping("/getChannels")
-    public ResResult<List<PayChanneOrderlDto>> getChannels(Long paymentId){
+    public ResResult<List<PayChannelOrderDto>> getChannels(Long paymentId){
         return Res.ok(payChannelOrderService.findAllByPaymentId(paymentId));
     }
 
