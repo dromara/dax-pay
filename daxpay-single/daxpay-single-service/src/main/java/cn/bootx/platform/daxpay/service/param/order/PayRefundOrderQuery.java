@@ -30,9 +30,6 @@ public class PayRefundOrderQuery extends QueryOrder {
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String businessNo;
 
-    @Schema(description = "外部网关请求号")
-    private String refundRequestNo;
-
     @Schema(description = "标题")
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String title;

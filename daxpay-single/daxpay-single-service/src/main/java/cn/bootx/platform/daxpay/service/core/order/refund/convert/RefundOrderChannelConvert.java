@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.service.core.order.refund.convert;
 
-import cn.bootx.platform.daxpay.result.order.RefundOrderChannelResult;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrderChannel;
-import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderChannelDto;
+import cn.bootx.platform.daxpay.result.order.RefundChannelOrderResult;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
+import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -16,8 +16,8 @@ public interface RefundOrderChannelConvert {
     RefundOrderChannelConvert CONVERT = Mappers.getMapper(RefundOrderChannelConvert.class);
 
 
-    RefundOrderChannelDto convert(PayRefundOrderChannel in);
+    RefundChannelOrderDto convert(PayRefundChannelOrder in);
 
-    RefundOrderChannelResult convertResult(PayRefundOrderChannel in);
+    RefundChannelOrderResult convertResult(PayRefundChannelOrder in);
 
 }

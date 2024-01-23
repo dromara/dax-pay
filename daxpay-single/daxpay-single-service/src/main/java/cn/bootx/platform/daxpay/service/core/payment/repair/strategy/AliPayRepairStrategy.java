@@ -7,8 +7,8 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayOrderService;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
     private final AliPayCloseService closeService;
     private final AliPayConfigService aliPayConfigService;
 
-    private final PayOrderChannelManager orderChannelManager;
+    private final PayChannelOrderManager orderChannelManager;
 
     /**
      * 修复前处理
@@ -46,7 +46,7 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        PayOrderChannel orderChannel = orderChannelManager.findByPaymentIdAndChannel(this.getOrder().getId(), PayChannelEnum.ALI.getCode())
+        PayChannelOrder orderChannel = orderChannelManager.findByPaymentIdAndChannel(this.getOrder().getId(), PayChannelEnum.ALI.getCode())
                 .orElseThrow(() -> new PayFailureException("支付宝订单不存在"));
         // 将支付方式写入上下文
         PaymentContextLocal.get().getAsyncPayInfo().setPayWay(orderChannel.getPayWay());

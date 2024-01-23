@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
+import cn.bootx.platform.daxpay.code.PayReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
@@ -126,7 +127,7 @@ public class WechatPayReconcileService{
             String orderAmount = billDetail.getOrderAmount();
             double v = Double.parseDouble(orderAmount) * 100;
             int amount = Math.abs(((int) v));
-            payReconcileDetail.setType("pay")
+            payReconcileDetail.setType(PayReconcileTradeEnum.PAY.getCode())
                     .setAmount(amount);
         }
         // 退款
@@ -135,13 +136,13 @@ public class WechatPayReconcileService{
             String refundAmount = billDetail.getApplyRefundAmount();
             double v = Double.parseDouble(refundAmount) * 100;
             int amount = Math.abs(((int) v));
-            payReconcileDetail.setType("refund")
+            payReconcileDetail.setType(PayReconcileTradeEnum.REFUND.getCode())
                     .setAmount(amount)
                     .setRefundId(billDetail.getMchRefundNo());
         }
         // TODO 已撤销, 暂时未处理
         if (Objects.equals(billDetail.getStatus(), "REVOKED")){
-
+            log.warn("对账出现已撤销记录, 后续进行处理");
         }
         return payReconcileDetail;
     }

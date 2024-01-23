@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.daxpay.code.PayReconcileTradeEnum;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.PayReconcileConvert;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.PayReconcileDetailDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -35,7 +36,10 @@ public class PayReconcileDetail extends MpCreateEntity implements EntityBaseFunc
     @DbColumn(comment = "交易金额")
     private Integer amount;
 
-    /** 交易类型 pay/refund */
+    /**
+     * 交易类型
+     * @see PayReconcileTradeEnum
+     */
     @DbColumn(comment = "交易类型")
     private String type;
 

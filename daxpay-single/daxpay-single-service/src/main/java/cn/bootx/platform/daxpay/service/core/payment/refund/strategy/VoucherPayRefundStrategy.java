@@ -39,8 +39,9 @@ public class VoucherPayRefundStrategy extends AbsPayRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        voucherPayService.refund(this.getOrder().getId(), this.getChannelParam().getAmount());
-        voucherPayOrderService.updateRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
-        payOrderService.updateRefundSuccess(this.getOrder(), this.getChannelParam().getAmount(), PayChannelEnum.VOUCHER);
+        voucherPayService.refund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
+        voucherPayOrderService.updateRefund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
+        payOrderService.updateRefundSuccess(this.getPayOrder(), this.getRefundChannelParam().getAmount(), PayChannelEnum.VOUCHER);
     }
+
 }

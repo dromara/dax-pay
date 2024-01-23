@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.dao;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -17,22 +17,22 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class  PayOrderChannelManager extends BaseManager<PayOrderChannelMapper, PayOrderChannel> {
+public class PayChannelOrderManager extends BaseManager<PayChannelOrderMapper, PayChannelOrder> {
 
     /**
      * 根据订单查找
      */
-    public List<PayOrderChannel> findAllByPaymentId(Long paymentId){
-        return findAllByField(PayOrderChannel::getPaymentId,paymentId);
+    public List<PayChannelOrder> findAllByPaymentId(Long paymentId){
+        return findAllByField(PayChannelOrder::getPaymentId,paymentId);
     }
 
     /**
      * 根据订单id和支付通道查询
      */
-    public Optional<PayOrderChannel> findByPaymentIdAndChannel(Long paymentId, String channel) {
+    public Optional<PayChannelOrder> findByPaymentIdAndChannel(Long paymentId, String channel) {
         return lambdaQuery()
-                .eq(PayOrderChannel::getPaymentId,paymentId)
-                .eq(PayOrderChannel::getChannel,channel)
+                .eq(PayChannelOrder::getPaymentId,paymentId)
+                .eq(PayChannelOrder::getChannel,channel)
                 .oneOpt();
     }
 
@@ -41,8 +41,8 @@ public class  PayOrderChannelManager extends BaseManager<PayOrderChannelMapper, 
      */
     public void deleteByPaymentIdAndAsync(Long paymentId){
         lambdaUpdate()
-               .eq(PayOrderChannel::getPaymentId,paymentId)
-               .eq(PayOrderChannel::isAsync,true)
+               .eq(PayChannelOrder::getPaymentId,paymentId)
+               .eq(PayChannelOrder::isAsync,true)
                .remove();
 
     }

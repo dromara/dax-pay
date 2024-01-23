@@ -7,9 +7,9 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.json.JSONUtil;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class WeChatPaySyncService {
-    private final PayOrderChannelManager payOrderChannelManager;
+    private final PayChannelOrderManager payChannelOrderManager;
 
     /**
      * 同步查询
@@ -102,7 +102,7 @@ public class WeChatPaySyncService {
      * 退款查询
      */
     private GatewaySyncResult syncRefundStatus(PayOrder order, WeChatPayConfig weChatPayConfig){
-        PayOrderChannel orderChannel = payOrderChannelManager.findByPaymentIdAndChannel(order.getId(), PayChannelEnum.WECHAT.getCode())
+        PayChannelOrder orderChannel = payChannelOrderManager.findByPaymentIdAndChannel(order.getId(), PayChannelEnum.WECHAT.getCode())
                 .orElseThrow(() -> new PayFailureException("支付订单通道信息不存在"));
 
         Map<String, String> params = UnifiedOrderModel.builder()

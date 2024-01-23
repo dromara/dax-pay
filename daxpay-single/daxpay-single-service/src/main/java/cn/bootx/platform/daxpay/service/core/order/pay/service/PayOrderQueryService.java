@@ -10,11 +10,11 @@ import cn.bootx.platform.daxpay.param.pay.QueryPayParam;
 import cn.bootx.platform.daxpay.result.order.PayOrderChannelResult;
 import cn.bootx.platform.daxpay.result.order.PayOrderResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 public class PayOrderQueryService {
     private final PayOrderManager payOrderManager;
     private final PayOrderExtraManager payOrderExtraManager;
-    private final PayOrderChannelManager payOrderChannelManager;
+    private final PayChannelOrderManager payChannelOrderManager;
 
     /**
      * 分页
@@ -90,7 +90,7 @@ public class PayOrderQueryService {
                 .orElseThrow(() -> new PayFailureException("支付订单不完整"));
 
         // 查询通道数据
-        List<PayOrderChannel> orderChannelList = payOrderChannelManager.findAllByPaymentId(payOrder.getId());
+        List<PayChannelOrder> orderChannelList = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
 
         List<PayOrderChannelResult> channels = orderChannelList.stream()
                 .map(PayOrderConvert.CONVERT::convertResult)

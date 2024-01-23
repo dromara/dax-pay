@@ -10,10 +10,12 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class AsyncRefundLocal {
+public class RefundLocal {
 
-    /** 退款请求号(调用支付网关时用的) */
-    private String refundRequestNo;
+    /**
+     *  异步通道退款时发给网关的退款号, 用与将记录关联起来
+     */
+    private String gatewayRequestNo;
 
     /** 错误码 */
     private String errorCode;

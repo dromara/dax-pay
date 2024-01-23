@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.notice.result.PayChannelResult;
 import cn.bootx.platform.daxpay.service.core.notice.result.PayNoticeResult;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class PayNoticeService {
     private final PayOrderManager payOrderManager;
     private final PayOrderExtraManager payOrderExtraManager;
-    private final PayOrderChannelManager payOrderChannelManager;
+    private final PayChannelOrderManager payChannelOrderManager;
 
     /**
      * 发送支付完成回调通知
@@ -59,7 +59,7 @@ public class PayNoticeService {
                 if (payOrderExtra.isNotNotify()){
                     return;
                 }
-                List<PayChannelResult> orderChannels = payOrderChannelManager.findAllByPaymentId(paymentId).stream()
+                List<PayChannelResult> orderChannels = payChannelOrderManager.findAllByPaymentId(paymentId).stream()
                         .map(o->new PayChannelResult().setChannel(o.getChannel()).setWay(o.getPayWay()).setAmount(o.getAmount()))
                         .collect(Collectors.toList());
                 // 组装内容

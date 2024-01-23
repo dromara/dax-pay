@@ -33,9 +33,6 @@ public class PayRefundOrderDto extends BaseDto {
     @Schema(description = "退款号")
     private String refundNo;
 
-    @Schema(description = "异步方式关联退款请求号(部分退款情况)")
-    private String refundRequestNo;
-
     @Schema(description = "标题")
     private String title;
 

@@ -38,7 +38,7 @@ public class CashPayRefundStrategy extends AbsPayRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        cashService.refund(this.getOrder().getId(), this.getChannelParam().getAmount());
-        paymentService.updateRefundSuccess(this.getOrder(), this.getChannelParam().getAmount(), PayChannelEnum.CASH);
+        cashService.refund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
+        paymentService.updateRefundSuccess(this.getPayOrder(), this.getRefundChannelParam().getAmount(), PayChannelEnum.CASH);
     }
 }

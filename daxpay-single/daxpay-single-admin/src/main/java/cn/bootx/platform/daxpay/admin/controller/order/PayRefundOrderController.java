@@ -6,9 +6,10 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
-import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderService;
+import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
+import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderRefundParam;
 import cn.bootx.platform.daxpay.service.param.order.PayRefundOrderQuery;
 import cn.hutool.core.util.IdUtil;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,23 +33,35 @@ import java.util.Optional;
 @RequestMapping("/order/refund")
 @RequiredArgsConstructor
 public class PayRefundOrderController {
-    private final PayRefundOrderService payRefundOrderService;
+    private final PayRefundQueryService payRefundQueryService;
     private final PayRefundService payRefundService;
 
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public ResResult<PageResult<PayRefundOrderDto>> page(PageParam pageParam, PayRefundOrderQuery query){
-        return Res.ok(payRefundOrderService.page(pageParam, query));
+        return Res.ok(payRefundQueryService.page(pageParam, query));
     }
 
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
     public ResResult<PayRefundOrderDto> findById(Long paymentId){
-        return Res.ok(payRefundOrderService.findById(paymentId));
+        return Res.ok(payRefundQueryService.findById(paymentId));
     }
 
-    @Operation(summary = "发起退款")
+    @Operation(summary = "通道退款订单列表查询")
+    @GetMapping("/listByChannel")
+    public ResResult<List<RefundChannelOrderDto>> listByChannel(Long refundId){
+        return Res.ok(payRefundQueryService.listByChannel(refundId));
+    }
+
+    @Operation(summary = "查询通道退款订单详情")
+    @GetMapping("/findChannelById")
+    public ResResult<Void> findChannelById(Long id){
+        return Res.ok();
+    }
+
+    @Operation(summary = "手动发起退款")
     @PostMapping("/refund")
     public ResResult<Void> refund(@RequestBody PayOrderRefundParam param){
 

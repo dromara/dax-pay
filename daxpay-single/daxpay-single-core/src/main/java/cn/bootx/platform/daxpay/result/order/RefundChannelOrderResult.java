@@ -11,18 +11,23 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "支付退款通道明细数据")
-public class RefundOrderChannelResult {
+@Schema(title = "通道退款订单")
+public class RefundChannelOrderResult {
 
     @Schema(description = "通道")
     private String channel;
 
-    /** 关联支付网关退款请求号 */
-    @Schema(description = "异步方式关联退款请求号(部分退款情况)")
-    private String refundRequestNo;
+    @Schema(description = "通道支付单id")
+    private Long payChannelId;
+
+    @Schema(description = "支付网关订单号")
+    private String gatewayOrderNo;
 
     @Schema(description = "异步支付方式")
     private boolean async;
+
+    @Schema(description = "订单金额")
+    private Integer totalAmount;
 
     @Schema(description = "退款金额")
     private Integer amount;

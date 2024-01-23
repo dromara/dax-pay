@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
-import cn.bootx.platform.daxpay.service.common.context.AsyncRefundLocal;
+import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.util.PayUtil;
@@ -37,9 +37,9 @@ public class AliPayRefundService {
         refundModel.setRefundAmount(refundAmount);
 
         // 设置退款信息
-        AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
-        refundInfo.setRefundRequestNo(PayUtil.getRefundNo());
-        refundModel.setOutRequestNo(refundInfo.getRefundRequestNo());
+        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        refundInfo.setGatewayRequestNo(PayUtil.getRefundNo());
+        refundModel.setOutRequestNo(refundInfo.getGatewayRequestNo());
         try {
             AlipayTradeRefundResponse response = AliPayApi.tradeRefundToResponse(refundModel);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {

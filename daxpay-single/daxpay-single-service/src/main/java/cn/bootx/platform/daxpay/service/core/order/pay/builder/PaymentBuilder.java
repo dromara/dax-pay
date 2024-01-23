@@ -6,8 +6,8 @@ import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
@@ -93,12 +93,12 @@ public class PaymentBuilder {
     /**
      * 构建订单关联通道信息
      */
-    public List<PayOrderChannel> buildPayChannel(List<PayChannelParam> payChannelParams) {
+    public List<PayChannelOrder> buildPayChannel(List<PayChannelParam> payChannelParams) {
         if (CollectionUtil.isEmpty(payChannelParams)) {
             return Collections.emptyList();
         }
         return payChannelParams.stream()
-                .map(o-> new PayOrderChannel()
+                .map(o-> new PayChannelOrder()
                         .setChannel(o.getChannel())
                         .setPayWay(o.getWay())
                         .setAmount(o.getAmount())

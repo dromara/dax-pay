@@ -42,8 +42,8 @@ public class RefundOrderResult {
     @Schema(description = "退款时间")
     private LocalDateTime refundTime;
 
-    @Schema(description = "支付退款通道明细数据")
-    private List<RefundOrderChannelResult> channels;
+    @Schema(description = "通道退款订单")
+    private List<RefundChannelOrderResult> channels;
 
     /**
      * @see PayRefundStatusEnum

@@ -14,10 +14,10 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PaymentBuilder;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.util.PayUtil;
@@ -50,7 +50,7 @@ public class PayAssistService {
 
     private final PayOrderExtraManager payOrderExtraManager;
 
-    private final PayOrderChannelManager payOrderChannelManager;
+    private final PayChannelOrderManager payChannelOrderManager;
 
     /**
      * 初始化支付相关上下文
@@ -117,7 +117,7 @@ public class PayAssistService {
     public PayChannelParam getAsyncPayParam(PayParam payParam, PayOrder payOrder) {
         // 查询之前的支付方式
         String asyncPayChannel = payOrder.getAsyncChannel();
-        PayOrderChannel payOrderChannel = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), asyncPayChannel)
+        PayChannelOrder payChannelOrder = payChannelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), asyncPayChannel)
                 .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
 
         // 新的异步支付方式
@@ -127,7 +127,7 @@ public class PayAssistService {
                 .findFirst()
                 .orElseThrow(() -> new PayFailureException("支付方式数据异常"));
         // 新传入的金额是否一致
-        if (!Objects.equals(payOrderChannel.getAmount(), payChannelParam.getAmount())){
+        if (!Objects.equals(payChannelOrder.getAmount(), payChannelParam.getAmount())){
             throw new PayFailureException("传入的支付金额非法！与订单金额不一致");
         }
         return payChannelParam;
@@ -144,11 +144,11 @@ public class PayAssistService {
         PayOrderExtra payOrderExtra = PaymentBuilder.buildPayOrderExtra(payParam, payOrder.getId());
         payOrderExtraManager.save(payOrderExtra);
         // 构建支付通道表并保存
-        List<PayOrderChannel> payOrderChannels = PaymentBuilder.buildPayChannel(payParam.getPayChannels())
+        List<PayChannelOrder> payChannelOrders = PaymentBuilder.buildPayChannel(payParam.getPayChannels())
                 .stream()
                 .peek(o -> o.setPaymentId(payOrder.getId()).setAsync(payOrder.isAsyncPay()))
                 .collect(Collectors.toList());
-        payOrderChannelManager.saveAll(payOrderChannels);
+        payChannelOrderManager.saveAll(payChannelOrders);
         return payOrder;
     }
 

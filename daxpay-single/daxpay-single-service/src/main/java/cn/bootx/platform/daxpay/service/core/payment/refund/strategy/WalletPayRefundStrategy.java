@@ -38,8 +38,8 @@ public class WalletPayRefundStrategy extends AbsPayRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        walletPayService.refund(this.getOrder().getId(), this.getChannelParam().getAmount());
-        walletPayOrderService.updateRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
-        payOrderService.updateRefundSuccess(this.getOrder(), this.getChannelParam().getAmount(), PayChannelEnum.WALLET);
+        walletPayService.refund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
+        walletPayOrderService.updateRefund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
+        payOrderService.updateRefundSuccess(this.getPayOrder(), this.getRefundChannelParam().getAmount(), PayChannelEnum.WALLET);
     }
 }

@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.admin.controller.record;
+package cn.bootx.platform.daxpay.admin.controller.order;
 
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;

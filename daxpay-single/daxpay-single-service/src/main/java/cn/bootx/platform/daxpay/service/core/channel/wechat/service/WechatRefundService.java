@@ -1,15 +1,14 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
-import cn.bootx.platform.daxpay.service.common.context.AsyncRefundLocal;
+import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
@@ -35,26 +34,24 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WechatRefundService {
 
-    private final PayOrderChannelManager payOrderChannelManager;
+    private final PayChannelOrderManager payChannelOrderManager;
 
     /**
      * 退款方法
      * 微信需要同时传输订单金额或退款金额
      */
-    public void refund(PayOrder payOrder, int amount, WeChatPayConfig weChatPayConfig) {
-        PayOrderChannel orderChannel = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), PayChannelEnum.WECHAT.getCode())
-                .orElseThrow(() -> new PayFailureException("未找到微信支付的详细信息"));
+    public void refund(PayOrder payOrder, int amount, PayChannelOrder orderChannel, WeChatPayConfig weChatPayConfig) {
         String refundFee = String.valueOf(amount);
         String totalFee = String.valueOf(orderChannel.getAmount());
         // 设置退款信息
-        AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
-        refundInfo.setRefundRequestNo(PayUtil.getRefundNo());
+        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        refundInfo.setGatewayRequestNo(PayUtil.getRefundNo());
 
         Map<String, String> params = RefundModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .out_trade_no(String.valueOf(payOrder.getId()))
-                .out_refund_no(refundInfo.getRefundRequestNo())
+                .out_refund_no(refundInfo.getGatewayRequestNo())
                 .total_fee(totalFee)
                 .refund_fee(refundFee)
                 .nonce_str(WxPayKit.generateStr())
@@ -87,7 +84,7 @@ public class WechatRefundService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("订单退款失败 {}", errorMsg);
-            AsyncRefundLocal refundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
+            RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
             refundInfo.setErrorMsg(errorMsg);
             refundInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
             throw new PayFailureException(errorMsg);

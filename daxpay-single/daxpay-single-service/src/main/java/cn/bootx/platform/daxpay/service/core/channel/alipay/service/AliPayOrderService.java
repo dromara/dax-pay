@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayOrderManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderChannelService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class AliPayOrderService {
 
     private final AliPayOrderManager aliPayOrderManager;
 
-    private final PayOrderChannelService payOrderChannelService;
+    private final PayChannelOrderService payChannelOrderService;
 
     /**
      * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建支付宝支付单
@@ -42,7 +42,7 @@ public class AliPayOrderService {
     public void updatePaySuccess(PayOrder payOrder, PayChannelParam payChannelParam) {
         // 更新支付宝异步支付类型信息
         payOrder.setAsyncPay(true).setAsyncChannel(PayChannelEnum.ALI.getCode());
-        payOrderChannelService.updateChannel(payChannelParam,payOrder);
+        payChannelOrderService.updateChannel(payChannelParam,payOrder);
 
         // 更新支付宝可退款类型信息
         List<RefundableInfo> refundableInfos = payOrder.getRefundableInfos();

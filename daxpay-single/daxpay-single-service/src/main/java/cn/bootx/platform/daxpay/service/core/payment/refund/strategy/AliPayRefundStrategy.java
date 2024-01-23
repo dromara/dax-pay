@@ -1,11 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRefundService;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -53,10 +55,21 @@ public class AliPayRefundStrategy extends AbsPayRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        aliRefundService.refund(this.getOrder(), this.getChannelParam().getAmount());
-        aliPayOrderService.updateRefund(this.getOrder().getId(), this.getChannelParam().getAmount());
-        payOrderService.updateRefundSuccess(this.getOrder(), this.getChannelParam().getAmount(), PayChannelEnum.ALI);
+        aliRefundService.refund(this.getPayOrder(), this.getRefundChannelParam().getAmount());
+        aliPayOrderService.updateRefund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
+        payOrderService.updateRefundSuccess(this.getPayOrder(), this.getRefundChannelParam().getAmount(), PayChannelEnum.ALI);
     }
 
-
+    /**
+     * 生成通道退款订单对象
+     */
+    @Override
+    public PayRefundChannelOrder generateChannelOrder() {
+        PayRefundChannelOrder payRefundChannelOrder = super.generateChannelOrder();
+        // 追加关联对款请求号
+        String refundRequestNo = PaymentContextLocal.get()
+                .getRefundInfo()
+                .getGatewayRequestNo();
+        return payRefundChannelOrder.setGatewayRequestNo(refundRequestNo);
+    }
 }

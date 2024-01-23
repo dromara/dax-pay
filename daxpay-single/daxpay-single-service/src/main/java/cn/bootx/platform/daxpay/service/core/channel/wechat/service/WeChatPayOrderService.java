@@ -2,13 +2,12 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayOrderManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderChannelService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,7 @@ public class WeChatPayOrderService {
 
     private final PayOrderService payOrderService;
 
-    private final PayOrderChannelService payOrderChannelService;
+    private final PayChannelOrderService payChannelOrderService;
 
     private final WeChatPayOrderManager weChatPayOrderManager;
 
@@ -43,7 +42,7 @@ public class WeChatPayOrderService {
     public void updatePaySuccess(PayOrder payOrder, PayChannelParam payChannelParam) {
         payOrder.setAsyncPay(true).setAsyncChannel(PayChannelEnum.WECHAT.getCode());
 
-        payOrderChannelService.updateChannel(payChannelParam,payOrder);
+        payChannelOrderService.updateChannel(payChannelParam,payOrder);
 
         // 更新微信可退款类型信息
         List<RefundableInfo> refundableInfos = payOrder.getRefundableInfos();

@@ -7,14 +7,16 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
-import cn.bootx.platform.daxpay.service.common.context.AsyncRefundLocal;
+import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,7 @@ public class PayRefundAssistService {
     private final PayOrderQueryService payOrderQueryService;
 
     private final PayRefundOrderManager payRefundOrderManager;
+    private final PayRefundChannelOrderManager payRefundChannelOrderManager;
 
     /**
      * 初始化上下文
@@ -123,9 +126,9 @@ public class PayRefundAssistService {
      * 保存退款记录 成不成功都记录
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveOrder(RefundParam refundParam, PayOrder payOrder){
-        AsyncRefundLocal asyncRefundInfo = PaymentContextLocal.get().getAsyncRefundInfo();
-        // 退款金额
+    public PayRefundOrder generateRefundOrder(RefundParam refundParam, PayOrder payOrder){
+        RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
+        // 总退款金额
         Integer amount = refundParam.getRefundChannels()
                 .stream()
                 .map(RefundChannelParam::getAmount)
@@ -137,7 +140,6 @@ public class PayRefundAssistService {
                 .setRefundNo(refundParam.getRefundNo())
                 .setAmount(amount)
                 .setRefundableBalance(payOrder.getRefundableBalance())
-                .setRefundRequestNo(asyncRefundInfo.getRefundRequestNo())
                 .setRefundTime(LocalDateTime.now())
                 .setTitle(payOrder.getTitle())
                 .setErrorCode(asyncRefundInfo.getErrorCode())
@@ -151,6 +153,26 @@ public class PayRefundAssistService {
             refundOrder.setRefundNo(String.valueOf(id))
                     .setId(id);
         }
+        return refundOrder;
+    }
+
+    /**
+     * 保存退款记录和对应的通道记录
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveOrderAndChannels(PayRefundOrder refundOrder,List<PayRefundChannelOrder> refundChannelOrders){
+        payRefundOrderManager.save(refundOrder);
+        for (PayRefundChannelOrder refundOrderChannel : refundChannelOrders) {
+            refundOrderChannel.setRefundId(refundOrder.getId());
+        }
+        payRefundChannelOrderManager.saveAll(refundChannelOrders);
+    }
+
+    /**
+     * 保存退款记录, 开启新事物
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveOrder(PayRefundOrder refundOrder){
         payRefundOrderManager.save(refundOrder);
     }
 }

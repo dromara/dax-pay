@@ -47,10 +47,6 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
     @DbColumn(comment = "退款号")
     private String refundNo;
 
-    /** 异步方式关联退款请求号(部分退款情况) */
-    @DbColumn(comment = "异步方式关联退款请求号(部分退款情况)")
-    private String refundRequestNo;
-
     /** 标题 */
     @DbColumn(comment = "标题")
     private String title;

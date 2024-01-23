@@ -6,8 +6,8 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConf
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
     private final WeChatPayCloseService closeService;
     private final WeChatPayOrderService orderService;
-    private final PayOrderChannelManager payOrderChannelManager;
+    private final PayChannelOrderManager payChannelOrderManager;
 
     private final WeChatPayConfigService weChatPayConfigService;
 
@@ -47,7 +47,7 @@ public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        PayOrderChannel orderChannel = payOrderChannelManager.findByPaymentIdAndChannel(this.getOrder().getId(), PayChannelEnum.WECHAT.getCode())
+        PayChannelOrder orderChannel = payChannelOrderManager.findByPaymentIdAndChannel(this.getOrder().getId(), PayChannelEnum.WECHAT.getCode())
                 .orElseThrow(() -> new PayFailureException("支付宝订单不存在"));
         orderService.updateAsyncSuccess(this.getOrder(), orderChannel.getAmount());
     }

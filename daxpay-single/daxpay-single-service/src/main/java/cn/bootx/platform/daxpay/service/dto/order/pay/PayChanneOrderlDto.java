@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付订单关联通道信息")
-public class PayOrderChannelDto extends BaseDto {
+public class PayChanneOrderlDto extends BaseDto {
 
     @Schema(description = "支付id")
     private Long paymentId;

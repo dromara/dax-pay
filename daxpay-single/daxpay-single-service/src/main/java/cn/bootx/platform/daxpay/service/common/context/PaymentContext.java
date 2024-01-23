@@ -25,7 +25,7 @@ public class PaymentContext {
     private final AsyncPayLocal asyncPayInfo = new AsyncPayLocal();
 
     /** 异步退款相关信息 */
-    private final AsyncRefundLocal asyncRefundInfo = new AsyncRefundLocal();
+    private final RefundLocal refundInfo = new RefundLocal();
 
     /** 消息通知相关信息 */
     private final NoticeLocal noticeInfo = new NoticeLocal();

@@ -3,10 +3,10 @@ package cn.bootx.platform.daxpay.service.core.order.pay.service;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderChannelManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderChannel;
-import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderChannelDto;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.dto.order.pay.PayChanneOrderlDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,14 +23,14 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayOrderChannelService {
-    private final PayOrderChannelManager payOrderChannelManager;
+public class PayChannelOrderService {
+    private final PayChannelOrderManager payChannelOrderManager;
 
     /**
      * 根据支付ID查询列表
      */
-    public List<PayOrderChannelDto> findAllByPaymentId(Long paymentId){
-        return ResultConvertUtil.dtoListConvert(payOrderChannelManager.findAllByPaymentId(paymentId));
+    public List<PayChanneOrderlDto> findAllByPaymentId(Long paymentId){
+        return ResultConvertUtil.dtoListConvert(payChannelOrderManager.findAllByPaymentId(paymentId));
     }
 
     /**
@@ -38,10 +38,10 @@ public class PayOrderChannelService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void updateChannel(PayChannelParam payChannelParam, PayOrder payOrder){
-        Optional<PayOrderChannel> payOrderChannelOpt = payOrderChannelManager.findByPaymentIdAndChannel(payOrder.getId(), PayChannelEnum.WECHAT.getCode());
+        Optional<PayChannelOrder> payOrderChannelOpt = payChannelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), PayChannelEnum.WECHAT.getCode());
         if (!payOrderChannelOpt.isPresent()){
-            payOrderChannelManager.deleteByPaymentIdAndAsync(payOrder.getId());
-            payOrderChannelManager.save(new PayOrderChannel()
+            payChannelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
+            payChannelOrderManager.save(new PayChannelOrder()
                     .setPaymentId(payOrder.getId())
                     .setChannel(PayChannelEnum.ALI.getCode())
                     .setAmount(payChannelParam.getAmount())
@@ -53,7 +53,7 @@ public class PayOrderChannelService {
             payOrderChannelOpt.get()
                     .setChannelExtra(payChannelParam.getChannelExtra())
                     .setPayWay(payChannelParam.getWay());
-            payOrderChannelManager.updateById(payOrderChannelOpt.get());
+            payChannelOrderManager.updateById(payOrderChannelOpt.get());
         }
     }
 }

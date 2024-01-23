@@ -9,12 +9,12 @@ import cn.bootx.platform.daxpay.param.pay.PayCloseParam;
 import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderChannelService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderExtraService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
-import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderChannelDto;
+import cn.bootx.platform.daxpay.service.dto.order.pay.PayChanneOrderlDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderExtraDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
@@ -40,7 +40,7 @@ import java.util.List;
 public class PayOrderController {
     private final PayOrderQueryService queryService;
     private final PayOrderExtraService payOrderExtraService;
-    private final PayOrderChannelService payOrderChannelService;
+    private final PayChannelOrderService payChannelOrderService;
 
     private final PayCloseService PayCloseService;
     private final PaySyncService paySyncService;
@@ -68,8 +68,8 @@ public class PayOrderController {
 
     @Operation(summary = "查询支付订单关联支付通道")
     @GetMapping("/getChannels")
-    public ResResult<List<PayOrderChannelDto>> getChannels(Long paymentId){
-        return Res.ok(payOrderChannelService.findAllByPaymentId(paymentId));
+    public ResResult<List<PayChanneOrderlDto>> getChannels(Long paymentId){
+        return Res.ok(payChannelOrderService.findAllByPaymentId(paymentId));
     }
 
     @Operation(summary = "同步支付状态")

@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
+import cn.bootx.platform.daxpay.code.PayReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
@@ -138,14 +139,14 @@ public class AliPayReconcileService {
         PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
                 .setRecordOrderId(billDetail.getRecordOrderId())
                 .setPaymentId(billDetail.getOutTradeNo())
-                .setType("pay")
+                .setType(PayReconcileTradeEnum.PAY.getCode())
                 .setAmount(amount)
                 .setTitle(billDetail.getSubject())
                 .setGatewayOrderNo(billDetail.getTradeNo());
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
             payReconcileDetail.setRefundId(billDetail.getBatchNo())
-                    .setType("refund");
+                    .setType(PayReconcileTradeEnum.REFUND.getCode());
         }
 
         return payReconcileDetail;

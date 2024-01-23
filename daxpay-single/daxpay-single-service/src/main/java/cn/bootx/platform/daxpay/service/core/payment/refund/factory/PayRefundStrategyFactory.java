@@ -54,7 +54,7 @@ public class PayRefundStrategyFactory {
             default:
                 throw new PayUnsupportedMethodException();
         }
-        strategy.setChannelParam(refundChannelParam);
+        strategy.setRefundChannelParam(refundChannelParam);
         return strategy;
     }
 

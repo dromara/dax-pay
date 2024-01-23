@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.param.reconcile;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
+import cn.bootx.platform.daxpay.code.PayReconcileTradeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,12 +20,15 @@ public class ReconcileDetailQuery {
     @Schema(description = "关联对账订单ID")
     private Long recordOrderId;
 
-    /** 交易类型 支付/退款 */
+    /**
+     * 交易类型
+     * @see PayReconcileTradeEnum
+     */
     @Schema(description = "交易类型")
     private String type;
 
-    /** 订单id - 支付ID/退款ID等 */
-    @Schema(description = "订单id")
+    /** 本地支付ID */
+    @Schema(description = "本地支付ID")
     private String paymentId;
 
     /** 本地退款ID */
@@ -39,8 +43,8 @@ public class ReconcileDetailQuery {
     @Schema(description = "交易金额")
     private Integer amount;
 
-    /** 商品名称 */
+    /** 订单名称 */
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "商品名称")
+    @Schema(description = "订单名称")
     private String title;
 }
