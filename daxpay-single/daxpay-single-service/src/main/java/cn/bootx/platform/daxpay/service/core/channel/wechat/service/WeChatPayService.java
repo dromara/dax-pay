@@ -104,8 +104,7 @@ public class WeChatPayService {
         }
         // 付款码支付
         else if (payWayEnum == PayWayEnum.BARCODE) {
-            String tradeNo = this.barCode(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
-            asyncPayInfo.setGatewayOrderNo(tradeNo);
+           this.barCode(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
         }
         asyncPayInfo.setPayBody(payBody);
     }
@@ -176,7 +175,9 @@ public class WeChatPayService {
     /**
      * 付款码支付
      */
-    private String barCode(String amount, PayOrder payment, String authCode, WeChatPayConfig weChatPayConfig) {
+    private void barCode(String amount, PayOrder payment, String authCode, WeChatPayConfig weChatPayConfig) {
+        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+
         Map<String, String> params = MicroPayModel.builder()
             .appid(weChatPayConfig.getWxAppId())
             .mch_id(weChatPayConfig.getWxMchId())
@@ -205,27 +206,27 @@ public class WeChatPayService {
         if (Objects.equals(resultCode, WeChatPayCode.TRADE_SUCCESS)) {
             payment.setStatus(PayStatusEnum.SUCCESS.getCode())
                     .setPayTime(LocalDateTime.now());
-            return result.get(WeChatPayCode.TRANSACTION_ID);
+            asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID))
+                    .setPayComplete(true);
+            return;
         }
         // 支付中, 发起轮训同步
         if (Objects.equals(resultCode, WeChatPayCode.TRADE_FAIL)
                 && Objects.equals(errCode, WeChatPayCode.TRADE_USERPAYING)) {
             SpringUtil.getBean(this.getClass()).rotationSync(payment);
-            return result.get(WeChatPayCode.TRANSACTION_ID);
+            asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID));
+            return;
         }
-
         // 支付撤销
         if (Objects.equals(resultCode, WeChatPayCode.TRADE_REVOKED)) {
             throw new PayFailureException("用户已撤销支付");
         }
-
         // 支付失败
         if (Objects.equals(resultCode, WeChatPayCode.TRADE_PAYERROR)
                 || Objects.equals(resultCode, WeChatPayCode.TRADE_FAIL)) {
             String errorMsg = result.get(WeChatPayCode.ERR_CODE_DES);
             throw new PayFailureException(errorMsg);
         }
-        return null;
     }
 
     /**
@@ -265,7 +266,7 @@ public class WeChatPayService {
     }
 
     /**
-     * 重试同步支付状态, 最多10次, 30秒不操作微信会自动关闭
+     * 多次重试同步支付状态, 最多10次, 30秒不操作微信会自动关闭
      */
     @Async("bigExecutor")
     @Retryable(value = RetryableException.class, maxAttempts = 10, backoff = @Backoff(value = 5000L))

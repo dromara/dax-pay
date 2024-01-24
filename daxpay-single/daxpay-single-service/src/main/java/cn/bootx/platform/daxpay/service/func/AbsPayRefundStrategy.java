@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
@@ -19,17 +20,20 @@ import lombok.Setter;
 @Setter
 public abstract class AbsPayRefundStrategy implements PayStrategy{
 
-    /** 支付对象 */
+    /** 支付订单 */
     private PayOrder payOrder = null;
 
-    /** 支付通道对象 */
+    /** 当前通道的订单 */
     private PayChannelOrder payChannelOrder = null;
 
     /** 退款参数 */
     private RefundParam refundParam = null;
 
-    /** 当前支付通道退款参数 退款参数中的与这个不一致, 以这个为准 */
+    /** 当前通道的退款参数 退款参数中的与这个不一致, 以这个为准 */
     private RefundChannelParam refundChannelParam = null;
+
+    /** 当前通道的退款订单 */
+    private PayRefundChannelOrder refundChannelOrder;
 
     /**
      * 策略标识
@@ -49,8 +53,7 @@ public abstract class AbsPayRefundStrategy implements PayStrategy{
     /**
      * 退款前对处理 包含必要的校验以及对Payment对象的创建和保存操作
      */
-    public void doBeforeRefundHandler() {
-    }
+    public void doBeforeRefundHandler() {}
 
     /**
      * 退款操作
@@ -58,15 +61,22 @@ public abstract class AbsPayRefundStrategy implements PayStrategy{
     public abstract void doRefundHandler();
 
     /**
+     * 退款发起成功操作
+     */
+    public void doSuccessHandler() {
+        this.refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode());
+    }
+
+    /**
      * 生成通道退款订单对象
      */
-    public PayRefundChannelOrder generateChannelOrder() {
-        return new PayRefundChannelOrder()
-                .setChannel(this.getPayChannelOrder().getChannel())
-                .setTotalAmount(this.getPayChannelOrder().getAmount())
-                .setAmount(this.getRefundChannelParam().getAmount())
+    public void generateChannelOrder() {
+        this.refundChannelOrder = new PayRefundChannelOrder()
+                .setPayChannelId(this.getPayChannelOrder().getId())
                 .setAsync(this.getPayChannelOrder().isAsync())
-                .setPayChannelId(this.getPayChannelOrder().getId());
+                .setChannel(this.getPayChannelOrder().getChannel())
+                .setOrderAmount(this.getPayChannelOrder().getAmount())
+                .setAmount(this.getRefundChannelParam().getAmount());
     }
 
 }

@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.strategy;
 
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,11 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class UnionPayCloseStrategy extends AbsPayCloseStrategy {
 
+
+    @Override
+    public PayChannelEnum getType() {
+        return PayChannelEnum.UNION_PAY;
+    }
 
     /**
      * 关闭操作

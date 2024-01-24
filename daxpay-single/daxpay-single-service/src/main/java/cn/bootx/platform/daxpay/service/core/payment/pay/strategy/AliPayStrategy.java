@@ -5,11 +5,9 @@ import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayService;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.hutool.core.util.StrUtil;
@@ -84,7 +82,7 @@ public class AliPayStrategy extends AbsPayStrategy {
     }
 
     /**
-     * 支付调起成功
+     * 支付调起成功, 保存或更新通道支付订单
      */
     @Override
     public void doSuccessHandler() {
@@ -92,18 +90,11 @@ public class AliPayStrategy extends AbsPayStrategy {
     }
 
     /**
-     * 生成通道支付单
+     * 不使用默认的生成通道支付单方法, 异步支付通道的支付订单自己管理
      */
     @Override
-    public PayChannelOrder generateChannelOrder() {
-        String gatewayOrderNo = PaymentContextLocal.get()
-                .getAsyncPayInfo()
-                .getGatewayOrderNo();
-        PayChannelOrder payChannelOrder = super.generateChannelOrder();
-        payChannelOrder.setGatewayOrderNo(gatewayOrderNo);
-        return payChannelOrder;
+    public void generateChannelOrder() {
     }
-
 
     /**
      * 初始化支付宝配置信息

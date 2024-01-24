@@ -7,9 +7,8 @@ import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.util.PayUtil;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import com.ijpay.core.enums.SignType;
@@ -45,13 +44,12 @@ public class WechatRefundService {
         String totalFee = String.valueOf(orderChannel.getAmount());
         // 设置退款信息
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-        refundInfo.setGatewayRequestNo(PayUtil.getRefundNo());
-
         Map<String, String> params = RefundModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
+                .notify_url(weChatPayConfig.getNotifyUrl())
                 .out_trade_no(String.valueOf(payOrder.getId()))
-                .out_refund_no(refundInfo.getGatewayRequestNo())
+                .out_refund_no(String.valueOf(refundInfo.getRefundId()))
                 .total_fee(totalFee)
                 .refund_fee(refundFee)
                 .nonce_str(WxPayKit.generateStr())
@@ -70,6 +68,9 @@ public class WechatRefundService {
         String xmlResult = WxPayApi.orderRefund(false, params, inputStream, weChatPayConfig.getWxMchId());
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
+        // 微信退款是否成功需要查询状态或者回调, 所以设置为退款中状态
+        refundInfo.setStatus(PayRefundStatusEnum.PROGRESS)
+                .setGatewayOrderNo(result.get("refund_id"));
     }
 
     /**

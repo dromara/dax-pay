@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.strategy;
 
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
@@ -23,6 +24,11 @@ public class VoucherPayCloseStrategy extends AbsPayCloseStrategy {
 
     private final VoucherPayService voucherPayService;
     private final VoucherPayOrderService voucherPayOrderService;
+
+    @Override
+    public PayChannelEnum getType() {
+        return PayChannelEnum.VOUCHER;
+    }
 
     /**
      * 关闭操作

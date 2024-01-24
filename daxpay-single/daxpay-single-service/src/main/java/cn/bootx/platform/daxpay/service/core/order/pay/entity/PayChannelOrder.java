@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.pay.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
@@ -14,6 +15,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * 关联支付订单支付时通道信息
@@ -30,14 +33,27 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "支付id")
     private Long paymentId;
 
+    @DbColumn(comment = "异步支付方式")
+    private boolean async;
+
     @DbColumn(comment = "通道")
     private String channel;
+
+    @DbColumn(comment = "支付方式")
+    private String payWay;
 
     @DbColumn(comment = "金额")
     private Integer amount;
 
-    @DbColumn(comment = "可退款余额")
+    @DbColumn(comment = "可退款金额")
     private Integer refundableBalance;
+
+    /**
+     * 支付状态
+     * @see PayStatusEnum
+     */
+    @DbColumn(comment = "支付状态")
+    private String status;
 
     /**
      * 异步支付通道发给网关的退款号, 用与将记录关联起来
@@ -45,11 +61,9 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "关联网关支付号")
     private String gatewayOrderNo;
 
-    @DbColumn(comment = "支付方式")
-    private String payWay;
+    @DbColumn(comment = "支付时间")
+    private LocalDateTime payTime;
 
-    @DbColumn(comment = "异步支付方式")
-    private boolean async;
 
     /**
      * @see AliPayParam

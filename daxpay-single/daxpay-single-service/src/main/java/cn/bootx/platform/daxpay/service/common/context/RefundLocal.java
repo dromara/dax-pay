@@ -1,5 +1,7 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.hutool.core.util.IdUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -13,9 +15,19 @@ import lombok.experimental.Accessors;
 public class RefundLocal {
 
     /**
-     *  异步通道退款时发给网关的退款号, 用与将记录关联起来
+     * 第三方支付网关生成的退款订单号, 用与将记录关联起来
      */
-    private String gatewayRequestNo;
+    private String gatewayOrderNo;
+
+    /**
+     * 支付退款ID, 用于异步支付时传入的退款号, 使用退款单ID
+     */
+    private long refundId = IdUtil.getSnowflakeNextId();
+
+    /**
+     * 退款状态, 默认为成功, 通常含有异步支付时, 才会出现别的状态
+     */
+    private PayRefundStatusEnum status = PayRefundStatusEnum.SUCCESS;
 
     /** 错误码 */
     private String errorCode;

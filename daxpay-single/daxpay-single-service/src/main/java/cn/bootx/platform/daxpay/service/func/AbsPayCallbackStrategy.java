@@ -34,7 +34,7 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
      * 支付回调
      */
     public String payCallback(Map<String, String> params) {
-        PaymentContextLocal.get().getCallbackParam().putAll(params);
+        PaymentContextLocal.get().getCallbackInfo().getCallbackParam().putAll(params);
         log.info("支付回调处理: {}", params);
         // 验证消息
         if (!this.verifyNotify()) {
@@ -99,7 +99,7 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
      * 保存回调记录
      */
     public void saveNotifyRecord(PayCallbackResult result) {
-        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
+        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         PayCallbackRecord payNotifyRecord = new PayCallbackRecord()
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackParam))
                 .setNotifyTime(LocalDateTime.now())

@@ -20,8 +20,11 @@ import lombok.Setter;
 public abstract class AbsPayStrategy implements PayStrategy{
 
 
-    /** 支付对象 */
+    /** 支付订单 */
     private PayOrder order = null;
+
+    /** 通道支付订单, 异步支付通道单独处理通道支付订单 */
+    private PayChannelOrder channelOrder = null;
 
     /** 支付参数 */
     private PayParam payParam = null;
@@ -62,14 +65,11 @@ public abstract class AbsPayStrategy implements PayStrategy{
     }
 
     /**
-     * 生成通道支付单
+     * 生成通道支付单, 如果不需要可以进行覆盖
      */
-    public PayChannelOrder generateChannelOrder() {
+    public void generateChannelOrder() {
         PayChannelOrder payChannelOrder = PayBuilder.buildPayChannelOrder(this.getPayChannelParam());
         payChannelOrder.setId(this.getOrder().getId());
-        return payChannelOrder;
+        this.channelOrder = payChannelOrder;
     }
-
-
-
 }

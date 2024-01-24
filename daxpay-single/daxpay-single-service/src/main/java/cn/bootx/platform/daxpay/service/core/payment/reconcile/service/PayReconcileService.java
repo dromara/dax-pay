@@ -58,7 +58,7 @@ public class PayReconcileService {
         }
         // 保存转换后的通用结构对账单
         List<PayReconcileDetail> reconcileDetails = PaymentContextLocal.get()
-                .getReconcile()
+                .getReconcileInfo()
                 .getReconcileDetails();
         reconcileDetailManager.saveAll(reconcileDetails);
     }

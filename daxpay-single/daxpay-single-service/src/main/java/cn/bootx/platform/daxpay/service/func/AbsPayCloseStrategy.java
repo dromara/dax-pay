@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.service.common.exception.ExceptionInfo;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,11 +15,21 @@ import lombok.Setter;
 @Setter
 public abstract class AbsPayCloseStrategy implements PayStrategy{
 
-    /** 支付对象 */
+    /** 支付订单 */
     private PayOrder order = null;
 
-    public void initCloseParam(PayOrder order){
+    /** 支付通道订单 */
+    private PayChannelOrder channelOrder = null;
+
+    /**
+     * 策略标识
+     * @see PayChannelEnum
+     */
+    public abstract PayChannelEnum getType();
+
+    public void initCloseParam(PayOrder order, PayChannelOrder channelOrder){
         this.order = order;
+        this.channelOrder = channelOrder;
     }
 
     /**
@@ -36,6 +47,6 @@ public abstract class AbsPayCloseStrategy implements PayStrategy{
     /**
      * 关闭失败的处理方式
      */
-    public void doErrorHandler(ExceptionInfo exceptionInfo) {
+    public void doSuccessHandler() {
     }
 }

@@ -1,10 +1,6 @@
 package cn.bootx.platform.daxpay.param.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
-import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
-import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -34,16 +30,5 @@ public class RefundChannelParam {
     @NotNull(message = "退款金额不可为空")
     @Min(1)
     private Integer amount;
-
-    /**
-     * 预留的扩展参数, 暂时未使用
-     * @see AliPayParam
-     * @see WeChatPayParam
-     * @see VoucherPayParam
-     * @see WalletPayParam
-     */
-    @Schema(description = "附加退款参数")
-    private String channelExtra;
-
 
 }

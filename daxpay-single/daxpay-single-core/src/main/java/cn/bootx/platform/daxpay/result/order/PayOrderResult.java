@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.result.order;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.result.CommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -72,9 +71,6 @@ public class PayOrderResult extends CommonResult {
     /** 过期时间 */
     @Schema(description = "过期时间")
     private LocalDateTime expiredTime;
-
-    @Schema(description = "可退款信息列表")
-    private List<RefundableInfo> refundableInfos;
 
     @Schema(description = "支付通道列表")
     private List<PayOrderChannelResult> channels;

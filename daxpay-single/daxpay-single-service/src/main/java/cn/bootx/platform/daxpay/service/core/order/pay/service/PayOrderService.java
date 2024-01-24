@@ -63,7 +63,6 @@ public class PayOrderService {
         refundableInfos.remove(refundableInfo);
         refundableInfo.setAmount(refundableInfo.getAmount() - amount);
         refundableInfos.add(refundableInfo);
-        payment.setRefundableInfos(refundableInfos);
     }
 
 }

@@ -108,7 +108,7 @@ public class WechatPayReconcileService{
                 .map(this::convert)
                 .collect(Collectors.toList());
         // 写入到上下文中
-        PaymentContextLocal.get().getReconcile().setReconcileDetails(collect);
+        PaymentContextLocal.get().getReconcileInfo().setReconcileDetails(collect);
     }
 
     /**

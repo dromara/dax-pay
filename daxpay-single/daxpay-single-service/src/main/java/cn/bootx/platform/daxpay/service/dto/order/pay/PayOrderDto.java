@@ -3,14 +3,12 @@ package cn.bootx.platform.daxpay.service.dto.order.pay;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author xxm
@@ -52,13 +50,6 @@ public class PayOrderDto extends BaseDto {
     /** 可退款余额 */
     @Schema(description = "可退款余额")
     private Integer refundableBalance;
-
-    /**
-     * 可退款信息列表
-     * @see RefundableInfo
-     */
-    @Schema(description = "可退款信息列表")
-    private List<RefundableInfo> refundableInfos;
 
     /**
      * 支付状态

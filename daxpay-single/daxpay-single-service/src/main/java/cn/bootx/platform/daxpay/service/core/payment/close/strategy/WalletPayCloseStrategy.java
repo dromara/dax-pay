@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.strategy;
 
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
@@ -22,6 +23,11 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class WalletPayCloseStrategy extends AbsPayCloseStrategy {
     private final WalletPayService walletPayService;
     private final WalletPayOrderService walletPayOrderService;
+
+    @Override
+    public PayChannelEnum getType() {
+        return PayChannelEnum.WALLET;
+    }
 
     /**
      * 关闭操作

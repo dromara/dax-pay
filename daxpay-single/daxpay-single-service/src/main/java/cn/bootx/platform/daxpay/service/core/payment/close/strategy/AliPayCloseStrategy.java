@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.strategy;
 
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayOrderService;
@@ -28,6 +29,11 @@ public class AliPayCloseStrategy extends AbsPayCloseStrategy {
     private final AliPayOrderService aliPayOrderService;
 
     private final AliPayCloseService aliPayCloseService;
+
+    @Override
+    public PayChannelEnum getType() {
+        return PayChannelEnum.ALI;
+    }
 
     /**
      * 关闭前的处理方式

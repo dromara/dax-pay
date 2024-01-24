@@ -101,13 +101,4 @@ public class WalletPayStrategy extends AbsPayStrategy {
         walletPayOrderService.updateSuccess(this.getOrder().getId());
     }
 
-    /**
-     * 取消支付并返还金额
-     */
-    @Override
-    public void doCloseHandler() {
-        walletPayService.close(this.getOrder().getId());
-        walletPayOrderService.updateClose(this.getOrder().getId());
-    }
-
 }

@@ -27,7 +27,7 @@ public class RefundChannelOrderResult {
     private boolean async;
 
     @Schema(description = "订单金额")
-    private Integer totalAmount;
+    private Integer orderAmount;
 
     @Schema(description = "退款金额")
     private Integer amount;

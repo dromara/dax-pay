@@ -243,8 +243,8 @@ public class PaySyncService {
                 .setRepairOrder(repair)
                 .setRepairOrderId(repairOrderId)
                 .setErrorMsg(errorMsg)
-                .setClientIp(PaymentContextLocal.get().getRequest().getClientIp())
-                .setReqId(PaymentContextLocal.get().getRequest().getReqId());
+                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp())
+                .setReqId(PaymentContextLocal.get().getRequestInfo().getReqId());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
 }

@@ -66,10 +66,15 @@ public class PayOrderController {
         return Res.ok(payOrderExtraService.findById(id));
     }
 
-    @Operation(summary = "查询支付订单关联支付通道")
-    @GetMapping("/getChannels")
-    public ResResult<List<PayChannelOrderDto>> getChannels(Long paymentId){
+    @Operation(summary = "查询支付订单关联支付通道订单")
+    @GetMapping("/listByChannel")
+    public ResResult<List<PayChannelOrderDto>> listByChannel(Long paymentId){
         return Res.ok(payChannelOrderService.findAllByPaymentId(paymentId));
+    }
+    @Operation(summary = "查询支付通道订单详情")
+    @GetMapping("/getChannel")
+    public ResResult<PayChannelOrderDto> getChannel(Long id){
+        return Res.ok(payChannelOrderService.findById(id));
     }
 
     @Operation(summary = "同步支付状态")

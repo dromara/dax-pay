@@ -37,7 +37,7 @@ public class PaymentAssistService {
      */
     private void initPlatform(){
         PlatformConfig config = platformConfigService.getConfig();
-        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         platform.setSignType(config.getSignType());
         platform.setSignSecret(config.getSignSecret());
         platform.setNotifyUrl(config.getNotifyUrl());
@@ -50,7 +50,7 @@ public class PaymentAssistService {
      * 初始化请求相关信息上下文
      */
     private void initRequest(PayCommonParam payCommonParam){
-        RequestLocal request = PaymentContextLocal.get().getRequest();
+        RequestLocal request = PaymentContextLocal.get().getRequestInfo();
         request.setClientIp(payCommonParam.getClientIp())
                 .setAttach(payCommonParam.getAttach())
                 .setSign(payCommonParam.getSign())

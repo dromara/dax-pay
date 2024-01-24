@@ -5,6 +5,7 @@ import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
+import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.record.callback.dao.PayCallbackRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
@@ -57,7 +58,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public Long getPaymentId() {
-        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         String paymentId = params.get(WeChatPayCode.OUT_TRADE_NO);
         return Long.valueOf(paymentId);
     }
@@ -67,7 +68,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public String getTradeStatus() {
-        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         if (WxPayKit.codeIsOk(params.get(WeChatPayCode.RESULT_CODE))) {
             return PayStatusEnum.SUCCESS.getCode();
         }
@@ -81,7 +82,7 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public boolean verifyNotify() {
-        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         String callReq = JSONUtil.toJsonStr(params);
         log.info("微信发起回调 报文: {}", callReq);
         String appId = params.get(APPID);
@@ -104,16 +105,17 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public void initContext() {
-        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
+        CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+        Map<String, String> callbackParam = callbackInfo.getCallbackParam();
         // 订单号
-        PaymentContextLocal.get().getAsyncPayInfo().setGatewayOrderNo(callbackParam.get(WeChatPayCode.TRANSACTION_ID));
+        callbackInfo.setGatewayOrderNo(callbackParam.get(WeChatPayCode.TRANSACTION_ID));
         // 支付时间
         String timeEnd = callbackParam.get(TIME_END);
         if (StrUtil.isNotBlank(timeEnd)) {
             LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
-            PaymentContextLocal.get().getAsyncPayInfo().setPayTime(time);
+            callbackInfo.setPayTime(time);
         } else {
-            PaymentContextLocal.get().getAsyncPayInfo().setPayTime(LocalDateTime.now());
+            callbackInfo.setPayTime(LocalDateTime.now());
         }
     }
 

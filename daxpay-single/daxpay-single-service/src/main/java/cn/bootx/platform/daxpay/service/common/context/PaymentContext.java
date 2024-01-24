@@ -3,9 +3,6 @@ package cn.bootx.platform.daxpay.service.common.context;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 支付上下文
  * @author xxm
@@ -19,24 +16,27 @@ public class PaymentContext {
     private final ApiInfoLocal apiInfo = new ApiInfoLocal();;
 
     /** 平台全局配置 */
-    private final PlatformLocal platform = new PlatformLocal();
+    private final PlatformLocal platformInfo = new PlatformLocal();
 
-    /** 异步支付相关信息, 不只局限在支付流程，同步、回调中都会用到 */
+    /** 异步支付相关信息 */
     private final AsyncPayLocal asyncPayInfo = new AsyncPayLocal();
 
-    /** 异步退款相关信息 */
+    /** 退款相关信息 */
     private final RefundLocal refundInfo = new RefundLocal();
 
-    /** 消息通知相关信息 */
+    /** 消息通知(主动发起)相关信息 */
     private final NoticeLocal noticeInfo = new NoticeLocal();
 
-    /** 回调参数内容 */
-    private final Map<String, String> callbackParam = new HashMap<>();
+    /** 回调相关信息 */
+    private final CallbackLocal callbackInfo = new CallbackLocal();
 
-    /** 支付请求相关信息 */
-    private final RequestLocal request = new RequestLocal();
+    /** 请求相关信息 */
+    private final RequestLocal requestInfo = new RequestLocal();
 
-    /** 支付对账相关信息 */
-    private final ReconcileLocal reconcile = new ReconcileLocal();
+    /** 支付同步相关信息 */
+    private final PaySyncLocal paySyncInfo = new PaySyncLocal();
+
+    /** 对账相关信息 */
+    private final ReconcileLocal reconcileInfo = new ReconcileLocal();
 
 }

@@ -41,9 +41,6 @@ public class PayBuilder {
         LocalDateTime expiredTime = PaymentContextLocal.get()
                 .getAsyncPayInfo()
                 .getExpiredTime();
-        // 可退款信息
-        @Deprecated
-        List<RefundableInfo> refundableInfos = buildRefundableInfo(payParam.getPayChannels());
         // 计算总价
         int sumAmount = payParam.getPayChannels().stream()
                 .map(PayChannelParam::getAmount)
@@ -59,7 +56,6 @@ public class PayBuilder {
         return new PayOrder()
                 .setBusinessNo(payParam.getBusinessNo())
                 .setTitle(payParam.getTitle())
-                .setRefundableInfos(refundableInfos)
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setAmount(sumAmount)
                 .setExpiredTime(expiredTime)
@@ -75,7 +71,7 @@ public class PayBuilder {
      * @param paymentId 支付订单id
      */
     public PayOrderExtra buildPayOrderExtra(PayParam payParam, Long paymentId) {
-        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         PayOrderExtra payOrderExtra = new PayOrderExtra()
                 .setClientIp(payParam.getClientIp())

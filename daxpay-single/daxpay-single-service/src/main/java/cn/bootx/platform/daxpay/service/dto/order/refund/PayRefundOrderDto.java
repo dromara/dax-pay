@@ -48,9 +48,6 @@ public class PayRefundOrderDto extends BaseDto {
     @Schema(description = "退款时间")
     private LocalDateTime refundTime;
 
-    @Schema(description = "退款信息列表")
-    private List<RefundableInfo> refundableInfo;
-
     /**
      * @see PayRefundStatusEnum
      */

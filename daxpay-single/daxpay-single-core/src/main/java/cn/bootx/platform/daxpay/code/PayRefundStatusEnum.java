@@ -12,8 +12,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PayRefundStatusEnum {
 
+    /**
+     * 接口调用成功不代表成功
+     */
+    PROGRESS("progress","退款中"),
     SUCCESS("success","成功"),
-    FAIL("fail"," ");
+    FAIL("fail","失败");
 
     /** 编码 */
     private final String code;

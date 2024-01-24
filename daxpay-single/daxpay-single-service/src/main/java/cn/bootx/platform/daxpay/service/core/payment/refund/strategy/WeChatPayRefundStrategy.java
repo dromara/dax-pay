@@ -1,13 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatRefundService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -59,19 +57,6 @@ public class WeChatPayRefundStrategy extends AbsPayRefundStrategy {
         wechatRefundService.refund(this.getPayOrder(), this.getRefundChannelParam().getAmount(), this.getPayChannelOrder(), this.weChatPayConfig);
         weChatPayOrderService.updateRefund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
         payOrderService.updateRefundSuccess(this.getPayOrder(), this.getRefundChannelParam().getAmount(), PayChannelEnum.WECHAT);
-    }
-
-    /**
-     * 生成通道退款订单对象
-     */
-    @Override
-    public PayRefundChannelOrder generateChannelOrder() {
-        PayRefundChannelOrder payRefundChannelOrder = super.generateChannelOrder();
-        // 追加关联对款请求号
-        String refundRequestNo = PaymentContextLocal.get()
-                .getRefundInfo()
-                .getGatewayRequestNo();
-        return payRefundChannelOrder.setGatewayOrderNo(refundRequestNo);
     }
 
 }

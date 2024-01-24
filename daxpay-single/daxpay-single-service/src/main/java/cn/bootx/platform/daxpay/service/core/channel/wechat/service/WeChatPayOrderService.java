@@ -1,19 +1,15 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayOrderManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -27,22 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WeChatPayOrderService {
 
-    private final PayChannelOrderService payChannelOrderService;
-
     private final WeChatPayOrderManager weChatPayOrderManager;
-
-    /**
-     * 支付调起成功 更新payment中异步支付类型信息, 如果支付完成, 创建微信支付单
-     */
-    public void updatePaySuccess(PayOrder payOrder, PayChannelParam payChannelParam) {
-        payOrder.setAsyncPay(true)
-                .setAsyncChannel(PayChannelEnum.WECHAT.getCode());
-        payChannelOrderService.updateAsyncChannelOrder(payOrder,payChannelParam);
-
-        if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
-            this.createWeChatOrder(payOrder, payChannelParam.getAmount());
-        }
-    }
 
     /**
      * 异步支付成功, 更新支付记录成功状态, 并创建微信支付记录

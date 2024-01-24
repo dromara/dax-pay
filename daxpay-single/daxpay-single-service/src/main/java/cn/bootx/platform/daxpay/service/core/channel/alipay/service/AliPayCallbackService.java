@@ -5,6 +5,7 @@ import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
@@ -58,7 +59,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public String getTradeStatus() {
-        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         String tradeStatus = params.get(TRADE_STATUS);
         if (Objects.equals(tradeStatus, NOTIFY_TRADE_SUCCESS)) {
             return PayStatusEnum.SUCCESS.getCode();
@@ -72,7 +73,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
     @SneakyThrows
     @Override
     public boolean verifyNotify() {
-        Map<String, String> params =PaymentContextLocal.get().getCallbackParam();
+        Map<String, String> params =PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         String callReq = JSONUtil.toJsonStr(params);
         String appId = params.get(APP_ID);
         if (StrUtil.isBlank(appId)) {
@@ -102,16 +103,19 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public void initContext() {
-        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackParam();
+        CallbackLocal callback = PaymentContextLocal.get()
+                .getCallbackInfo();
+        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackInfo()
+                .getCallbackParam();
         // 订单号
-        PaymentContextLocal.get().getAsyncPayInfo().setGatewayOrderNo(callbackParam.get(TRADE_NO));
+        callback.setGatewayOrderNo(callbackParam.get(TRADE_NO));
         // 支付时间
         String gmpTime = callbackParam.get(GMT_PAYMENT);
         if (StrUtil.isNotBlank(gmpTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(gmpTime, DatePattern.NORM_DATETIME_PATTERN);
-            PaymentContextLocal.get().getAsyncPayInfo().setPayTime(time);
+            callback.setPayTime(time);
         } else {
-            PaymentContextLocal.get().getAsyncPayInfo().setPayTime(LocalDateTime.now());
+            callback.setPayTime(LocalDateTime.now());
         }
     }
 
@@ -120,7 +124,7 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
      */
     @Override
     public Long getPaymentId() {
-        Map<String, String> params = PaymentContextLocal.get().getCallbackParam();
+        Map<String, String> params = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         return Long.valueOf(params.get(OUT_TRADE_NO));
     }
 

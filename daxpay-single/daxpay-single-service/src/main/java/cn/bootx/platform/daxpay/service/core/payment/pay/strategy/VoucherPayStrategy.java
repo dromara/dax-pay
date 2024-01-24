@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherRecord;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayService;
@@ -47,17 +48,15 @@ public class VoucherPayStrategy extends AbsPayStrategy {
 
     /**
      * 支付操作
-     * 1. 异步支付: 发起支付时冻结, 支付完成后扣减, 支付失败和关闭支付后解冻
-     * 2. 同步支付: 直接扣减
      */
     @Override
     public void doPayHandler() {
         VoucherRecord voucherRecord;
-        if (this.getOrder().isAsyncPay()){
-            voucherRecord = voucherPayService.freezeBalance(this.getPayChannelParam().getAmount(), this.getOrder(), this.voucher);
-        } else {
-            voucherRecord = voucherPayService.pay(this.getPayChannelParam().getAmount(), this.getOrder(), this.voucher);
-        }
+//        if (this.getOrder().isAsyncPay()){
+//            voucherRecord = voucherPayService.freezeBalance(this.getPayChannelParam().getAmount(), this.getOrder(), this.voucher);
+//        } else {
+        voucherRecord = voucherPayService.pay(this.getPayChannelParam().getAmount(), this.getOrder(), this.voucher);
+//        }
         voucherPayOrderService.savePayment(this.getOrder(), getPayParam(), getPayChannelParam(), voucherRecord);
     }
 
@@ -69,16 +68,8 @@ public class VoucherPayStrategy extends AbsPayStrategy {
         if (this.getOrder().isAsyncPay()){
             voucherPayService.paySuccess(this.getOrder().getId());
         }
+        this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode());
         voucherPayOrderService.updateSuccess(this.getOrder().getId());
-    }
-
-    /**
-     * 关闭支付
-     */
-    @Override
-    public void doCloseHandler() {
-        voucherPayService.close(this.getOrder().getId());
-        voucherPayOrderService.updateClose(this.getOrder().getId());
     }
 
 }

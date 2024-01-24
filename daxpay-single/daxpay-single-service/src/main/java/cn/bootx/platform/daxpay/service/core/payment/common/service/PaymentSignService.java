@@ -39,7 +39,7 @@ public class PaymentSignService {
             return;
         }
         // 参数转换为Map对象
-        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         String signType = platform.getSignType();
         if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
             boolean verified = PaySignUtil.verifyHmacSha256Sign(param, platform.getSignSecret(), param.getSign());

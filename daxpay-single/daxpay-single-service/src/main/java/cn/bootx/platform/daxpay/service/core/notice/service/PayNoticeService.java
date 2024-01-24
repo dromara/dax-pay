@@ -46,7 +46,7 @@ public class PayNoticeService {
         try {
             // 获取通知地址和内容相关的信息
             ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
-            PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+            PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
             // 首先判断接口是开启了通知回调功能
             if (apiInfo.isNotice()){
                 PayOrder payOrder = payOrderManager.findById(paymentId).orElseThrow(DataNotExistException::new);

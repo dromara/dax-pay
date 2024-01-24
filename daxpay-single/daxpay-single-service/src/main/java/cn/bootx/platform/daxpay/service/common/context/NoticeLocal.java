@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 支付通知
+ * 支付通知(主动发起, 用于通知客户系统)
  * @author xxm
  * @since 2023/12/24
  */

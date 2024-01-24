@@ -99,7 +99,7 @@ public class PayRepairService {
      */
     private void success(PayOrder order, List<AbsPayRepairStrategy> strategies) {
         LocalDateTime payTime = PaymentContextLocal.get()
-                .getAsyncPayInfo()
+                .getReconcileInfo()
                 .getPayTime();
         // 执行个通道的成功处理方法
         strategies.forEach(AbsPayRepairStrategy::doSuccessHandler);

@@ -3,7 +3,6 @@ package cn.bootx.platform.daxpay.service.core.payment.pay.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
@@ -30,6 +29,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static cn.bootx.platform.daxpay.code.PayStatusEnum.*;
 
 /**
  * 支付支持服务
@@ -73,7 +74,7 @@ public class PayAssistService {
             return;
         }
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
-        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         // 支付订单是非为空
         if (Objects.nonNull(order)){
             asyncPayInfo.setExpiredTime(order.getExpiredTime());
@@ -93,7 +94,7 @@ public class PayAssistService {
      */
     private void initNotice(PayParam payParam){
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
-        PlatformLocal platform = PaymentContextLocal.get().getPlatform();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         // 异步回调
         if (!payParam.isNotNotify()){
             noticeInfo.setNotifyUrl(payParam.getReturnUrl());
@@ -171,7 +172,7 @@ public class PayAssistService {
         PayOrder payOrder = payOrderQueryService.findByBusinessNo(businessNo).orElse(null);
         if (Objects.nonNull(payOrder)) {
             // 待支付
-            if (Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())){
+            if (Objects.equals(payOrder.getStatus(), PROGRESS.getCode())){
                 // 如果支付超时, 触发订单同步操作, 同时抛出异常
                 if (Objects.nonNull(payOrder.getExpiredTime()) && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
                     paySyncService.syncPayOrder(payOrder);
@@ -180,16 +181,16 @@ public class PayAssistService {
                 return payOrder;
             }
             // 已经支付状态
-            if (PayStatusEnum.SUCCESS.getCode().equals(payOrder.getStatus())) {
+            if (SUCCESS.getCode().equals(payOrder.getStatus())) {
                 throw new PayFailureException("已经支付成功，请勿重新支付");
             }
             // 支付失败类型状态
-            List<String> tradesStatus = Arrays.asList(PayStatusEnum.FAIL.getCode(), PayStatusEnum.CLOSE.getCode());
+            List<String> tradesStatus = Arrays.asList(FAIL.getCode(), CLOSE.getCode());
             if (tradesStatus.contains(payOrder.getStatus())) {
                 throw new PayFailureException("支付失败或已经被关闭");
             }
             // 退款类型状态
-            tradesStatus = Arrays.asList(PayStatusEnum.REFUNDED.getCode(), PayStatusEnum.PARTIAL_REFUND.getCode());
+            tradesStatus = Arrays.asList(REFUNDED.getCode(), PARTIAL_REFUND.getCode(), REFUNDING.getCode());
             if (tradesStatus.contains(payOrder.getStatus())) {
                 throw new PayFailureException("退款中");
             }

@@ -30,7 +30,7 @@ public class RefundParam extends PayCommonParam {
     private boolean refundAll;
 
     /**
-     * 退款号, 可以为空, 但不可以重复, 部分退款时推荐传输
+     * 退款号可以为空, 但不可以重复, 如果退款号为空, 则系统会自动生成退款号, 与退款ID一致
      */
     @Schema(description = "退款号")
     private String refundNo;

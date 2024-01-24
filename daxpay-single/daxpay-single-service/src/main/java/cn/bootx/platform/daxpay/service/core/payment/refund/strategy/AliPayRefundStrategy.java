@@ -1,13 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRefundService;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -26,7 +22,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class AliPayRefundStrategy extends AbsPayRefundStrategy {
 
     private final AliPayConfigService alipayConfigService;
-    private final AliPayOrderService aliPayOrderService;
     private final AliPayRefundService aliRefundService;
     /**
      * 策略标识
@@ -37,8 +32,6 @@ public class AliPayRefundStrategy extends AbsPayRefundStrategy {
     public PayChannelEnum getType() {
         return PayChannelEnum.ALI;
     }
-
-    private final PayOrderService payOrderService;
 
 
     /**
@@ -56,20 +49,13 @@ public class AliPayRefundStrategy extends AbsPayRefundStrategy {
     @Override
     public void doRefundHandler() {
         aliRefundService.refund(this.getPayOrder(), this.getRefundChannelParam().getAmount());
-        aliPayOrderService.updateRefund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
-        payOrderService.updateRefundSuccess(this.getPayOrder(), this.getRefundChannelParam().getAmount(), PayChannelEnum.ALI);
     }
 
     /**
-     * 生成通道退款订单对象
+     * 退款发起成功操作
      */
     @Override
-    public PayRefundChannelOrder generateChannelOrder() {
-        PayRefundChannelOrder payRefundChannelOrder = super.generateChannelOrder();
-        // 追加关联对款请求号
-        String refundRequestNo = PaymentContextLocal.get()
-                .getRefundInfo()
-                .getGatewayRequestNo();
-        return payRefundChannelOrder.setGatewayOrderNo(refundRequestNo);
+    public void doSuccessHandler() {
+        // 查看
     }
 }

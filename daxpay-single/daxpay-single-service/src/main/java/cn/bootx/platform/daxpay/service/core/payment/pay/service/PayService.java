@@ -1,20 +1,18 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.service;
 
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
+import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
-import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.service.func.PayStrategyConsumer;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -27,9 +25,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static cn.bootx.platform.daxpay.code.PayStatusEnum.*;
 
 
 /**
@@ -146,23 +148,26 @@ public class PayService {
             paymentStrategy.initPayParam(payOrder, payParam);
         }
 
-        // 3.执行支付前处理动作
+        // 3.1 执行支付前处理动作
         payStrategyList.forEach(AbsPayStrategy::doBeforePayHandler);
+        // 3.2 执行通道支付但的生成动作
+        payStrategyList.forEach(AbsPayStrategy::generateChannelOrder);
 
         // 4.1 支付操作
         payStrategyList.forEach(AbsPayStrategy::doPayHandler);
         // 4.2 支付调用成功操作, 进行扣款、创建记录类类似的操作
         payStrategyList.forEach(AbsPayStrategy::doSuccessHandler);
-        // 4.3 获取通道支付订单进行保存
+        // 4.3 获取通道支付订单进行保存, 异步支付通道的订单单独处理
         List<PayChannelOrder> channelOrders = payStrategyList.stream()
-                .map(AbsPayStrategy::generateChannelOrder)
+                .map(AbsPayStrategy::getChannelOrder)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         payChannelOrderManager.saveAll(channelOrders);
 
         // 5. 如果没有异步支付, 直接进行成功处理
         if (PayUtil.isNotSync(payParam.getPayChannels())) {
             // 修改支付订单状态为成功
-            payOrder.setStatus(PayStatusEnum.SUCCESS.getCode());
+            payOrder.setStatus(SUCCESS.getCode());
             payOrder.setPayTime(LocalDateTime.now());
             payOrderService.updateById(payOrder);
         }
@@ -173,9 +178,9 @@ public class PayService {
      */
     private PayResult paySyncNotFirst(PayParam payParam, PayOrder payOrder) {
 
-        // 1. 处理支付完成情况(完成/退款)
-        List<String> trades = Arrays.asList(PayStatusEnum.SUCCESS.getCode(), PayStatusEnum.CLOSE.getCode(),
-                PayStatusEnum.PARTIAL_REFUND.getCode(), PayStatusEnum.REFUNDED.getCode());
+        // 1. 处理支付结束情况(完成/退款/关闭/错误)
+        List<String> trades = Arrays.asList(SUCCESS.getCode(), CLOSE.getCode(), PARTIAL_REFUND.getCode(),
+                REFUNDED.getCode(), REFUNDING.getCode(), FAIL.getCode());
         if (trades.contains(payOrder.getStatus())) {
             return PayBuilder.buildPayResultByPayOrder(payOrder);
         }
@@ -203,22 +208,4 @@ public class PayService {
         // 7. 组装返回参数
         return PayBuilder.buildPayResultByPayOrder(payOrder);
     }
-
-    /**
-     * 执行策略中不同的handler
-     * @param payment 主支付对象
-     * @param strategyList 策略列表
-     * @param payMethod 执行支付的函数或者支付前的函数
-     * @param successMethod 执行成功的函数
-     */
-    private void doHandler(PayOrder payment, List<AbsPayStrategy> strategyList, Consumer<AbsPayStrategy> payMethod,
-                           PayStrategyConsumer<List<AbsPayStrategy>, PayOrder> successMethod) {
-        // 执行策略操作，如支付前/支付时
-        // 等同strategyList.forEach(payMethod.accept(PaymentStrategy))
-        strategyList.forEach(payMethod);
-
-        // 执行操作成功的处理
-        Optional.ofNullable(successMethod).ifPresent(fun -> fun.accept(strategyList, payment));
-    }
-
 }
