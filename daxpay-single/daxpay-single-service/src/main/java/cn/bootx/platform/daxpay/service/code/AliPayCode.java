@@ -29,7 +29,7 @@ public interface AliPayCode {
     String BAR_CODE = "bar_code";
 
     // 响应字段
-    /** 支付状态 */
+    /** 交易状态 */
     String TRADE_STATUS = "trade_status";
 
     /** 公用回传参数 */
@@ -38,43 +38,47 @@ public interface AliPayCode {
     /** 对交易或商品的描述(在没有公用回传参数的时候, 这个作为公用回传参数) */
     String BODY = "body";
 
-    /** 外部订单号-paymentId */
+    /** 外部支付订单号 */
     String OUT_TRADE_NO = "out_trade_no";
 
-    /** 支付宝流水号 */
+    /** 支付流水号 */
     String TRADE_NO = "trade_no";
+
+    /** 支付金额 */
+    String TOTAL_AMOUNT = "total_amount";
 
     /** 交易付款时间 yyyy-MM-dd HH:mm:ss */
     String GMT_PAYMENT = "gmt_payment";
 
+
+    /** 退款业务号 */
+    String OUT_BIZ_NO = "out_biz_no";
+
+    /** 退款流水号 */
+
+
+    /** 退款金额 */
+    String REFUND_FEE = "refund_fee";
+
+    /** 退款时间 yyyy-MM-dd HH:mm:ss */
+    String GMT_REFUND = "GMT_REFUND";
+
     /** appId */
     String APP_ID = "app_id";
 
-    // 交易状态说明
+    // 回调通知返回的交易状态说明
     /** 交易创建，等待买家付款 */
-    String PAYMENT_WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
-
-    /** 未付款交易超时关闭，或支付完成后全额退款 */
-    String PAYMENT_TRADE_CLOSED = "TRADE_CLOSED";
-
-    /** 交易支付成功 */
-    String PAYMENT_TRADE_SUCCESS = "TRADE_SUCCESS";
-
-    /** 交易结束，不可退款 */
-    String PAYMENT_TRADE_FINISHED = "TRADE_FINISHED";
-
-    // 通知触发条件
-    /** 交易完成 */
-    String NOTIFY_TRADE_FINISHED = "TRADE_FINISHED";
-
-    /** 支付成功 */
-    String NOTIFY_TRADE_SUCCESS = "TRADE_SUCCESS";
-
-    /** 交易创建,不触发通知 */
     String NOTIFY_WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
 
-    /** 交易关闭 */
+    /** 未付款交易超时关闭，或支付完成后全额退款 */
     String NOTIFY_TRADE_CLOSED = "TRADE_CLOSED";
+
+    /** 交易支付成功 */
+    String NOTIFY_TRADE_SUCCESS = "TRADE_SUCCESS";
+
+    /** 交易结束，不可退款 */
+    String NOTIFY_TRADE_FINISHED = "TRADE_FINISHED";
+
 
     // 错误提示
     /** 交易不存在 */

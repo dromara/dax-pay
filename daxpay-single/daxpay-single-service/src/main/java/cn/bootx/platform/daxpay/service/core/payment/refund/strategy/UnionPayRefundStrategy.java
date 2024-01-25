@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
+import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class UnionPayRefundStrategy extends AbsPayRefundStrategy {
+public class UnionPayRefundStrategy extends AbsRefundStrategy {
     /**
      * 策略标识
      *

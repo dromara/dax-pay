@@ -39,9 +39,8 @@ public class PayCallbackController {
     @Operation(summary = "支付宝信息回调")
     @PostMapping("/alipay")
     public String aliPayNotify(HttpServletRequest request) {
-
         Map<String, String> stringStringMap = AliPayApi.toMap(request);
-        return aliPayCallbackService.payCallback(stringStringMap);
+        return aliPayCallbackService.callback(stringStringMap);
     }
 
     @SneakyThrows
@@ -50,6 +49,6 @@ public class PayCallbackController {
     public String wechatPayNotify(HttpServletRequest request) {
         String xmlMsg = HttpKit.readData(request);
         Map<String, String> params = WxPayKit.xmlToMap(xmlMsg);
-        return weChatPayCallbackService.payCallback(params);
+        return weChatPayCallbackService.callback(params);
     }
 }

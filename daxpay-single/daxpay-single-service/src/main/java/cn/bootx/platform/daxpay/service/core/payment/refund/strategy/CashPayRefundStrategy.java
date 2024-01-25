@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.cash.service.CashService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
+import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class CashPayRefundStrategy extends AbsPayRefundStrategy {
+public class CashPayRefundStrategy extends AbsRefundStrategy {
 
     private final CashService cashService;
     private final PayOrderService paymentService;
@@ -39,6 +39,5 @@ public class CashPayRefundStrategy extends AbsPayRefundStrategy {
     @Override
     public void doRefundHandler() {
         cashService.refund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
-        paymentService.updateRefundSuccess(this.getPayOrder(), this.getRefundChannelParam().getAmount(), PayChannelEnum.CASH);
     }
 }

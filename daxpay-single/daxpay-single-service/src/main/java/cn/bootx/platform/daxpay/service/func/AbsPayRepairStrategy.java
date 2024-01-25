@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,18 +15,17 @@ import lombok.Setter;
 @Setter
 public abstract class AbsPayRepairStrategy {
 
-    /** 支付对象 */
+    /** 支付订单 */
     private PayOrder order = null;
 
-    /** 修复来源 同步/回调/对账 */
-    private PayRepairSourceEnum repairSource = null;
+    /** 支付订单 */
+
 
     /**
      * 初始化修复参数
      */
-    public void initRepairParam(PayOrder order,PayRepairSourceEnum repairSource){
+    public void initRepairParam(PayOrder order){
         this.order = order;
-        this.repairSource = repairSource;
     }
 
     /**
@@ -61,7 +59,5 @@ public abstract class AbsPayRepairStrategy {
      */
     public void doRefundHandler() {
 
-
     }
-
 }

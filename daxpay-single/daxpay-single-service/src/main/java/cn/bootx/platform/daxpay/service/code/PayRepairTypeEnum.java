@@ -14,7 +14,7 @@ public enum PayRepairTypeEnum {
 
     SUCCESS("success","支付成功"),
     CLOSE_LOCAL("close_local","关闭本地支付"),
-    WAIT("wait","待支付"),
+    WAIT_PAY("wait_pay","待支付"),
     /** 同时也会关闭本地支付 */
     CLOSE_GATEWAY("close_gateway","关闭网关支付"),
     REFUND("refund","退款");

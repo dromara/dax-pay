@@ -20,7 +20,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.refund.factory.PayRefundStrategyFactory;
-import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
+import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.lock.LockInfo;
@@ -135,13 +135,13 @@ public class PayRefundService {
 
         try {
             // 1.获取退款参数方式，通过工厂生成对应的策略组
-            List<AbsPayRefundStrategy> payRefundStrategies = PayRefundStrategyFactory.createAsyncLast(refundChannels);
+            List<AbsRefundStrategy> payRefundStrategies = PayRefundStrategyFactory.createAsyncLast(refundChannels);
             if (CollectionUtil.isEmpty(payRefundStrategies)) {
                 throw new PayUnsupportedMethodException();
             }
 
             // 2.初始化退款策略的参数
-            for (AbsPayRefundStrategy refundStrategy : payRefundStrategies) {
+            for (AbsRefundStrategy refundStrategy : payRefundStrategies) {
                 PayChannelOrder payChannelOrder = orderChannelMap.get(refundStrategy.getType().getCode());
                 if (Objects.isNull(payChannelOrder)){
                     throw new PayFailureException("[数据异常]进行退款的通道没有对应的支付单, 无法退款");
@@ -150,23 +150,23 @@ public class PayRefundService {
             }
 
             // 3.1 退款前准备操作
-            payRefundStrategies.forEach(AbsPayRefundStrategy::doBeforeRefundHandler);
+            payRefundStrategies.forEach(AbsRefundStrategy::doBeforeRefundHandler);
             // 3.2 生成各通道退款订单
-            payRefundStrategies.forEach(AbsPayRefundStrategy::generateChannelOrder);
+            payRefundStrategies.forEach(AbsRefundStrategy::generateChannelOrder);
             // 3.3 执行退款策略
-            payRefundStrategies.forEach(AbsPayRefundStrategy::doRefundHandler);
+            payRefundStrategies.forEach(AbsRefundStrategy::doRefundHandler);
             // 3.4 执行退款发起成功后操作
-            payRefundStrategies.forEach(AbsPayRefundStrategy::doSuccessHandler);
+            payRefundStrategies.forEach(AbsRefundStrategy::doSuccessHandler);
 
             // 4 更新各支付通道订单的信息
             List<PayChannelOrder> channelOrders = payRefundStrategies.stream()
-                    .map(AbsPayRefundStrategy::getPayChannelOrder)
+                    .map(AbsRefundStrategy::getPayChannelOrder)
                     .collect(Collectors.toList());
             payChannelOrderManager.updateAllById(channelOrders);
 
             // 5 获取退款通道订单, 进行保存
             List<PayRefundChannelOrder> refundChannelOrders = payRefundStrategies.stream()
-                    .map(AbsPayRefundStrategy::getRefundChannelOrder)
+                    .map(AbsRefundStrategy::getRefundChannelOrder)
                     .collect(Collectors.toList());
 
             // 6.进行成功处理, 分别处理退款订单, 通道退款订单, 支付订单

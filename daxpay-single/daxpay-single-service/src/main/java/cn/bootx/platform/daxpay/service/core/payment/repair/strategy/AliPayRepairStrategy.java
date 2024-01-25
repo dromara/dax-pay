@@ -50,7 +50,7 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
                 .orElseThrow(() -> new PayFailureException("支付宝订单不存在"));
         // 将支付方式写入上下文
         PaymentContextLocal.get().getAsyncPayInfo().setPayWay(orderChannel.getPayWay());
-        orderService.updateAsyncSuccess(this.getOrder(), orderChannel.getAmount());
+
     }
 
     /**

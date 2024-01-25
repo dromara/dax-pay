@@ -1,12 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatRefundService;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
+import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,13 +22,13 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class WeChatPayRefundStrategy extends AbsPayRefundStrategy {
+public class WeChatPayRefundStrategy extends AbsRefundStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
 
     private final WechatRefundService wechatRefundService;
-    private final WeChatPayOrderService weChatPayOrderService;
-    private final PayOrderService payOrderService;
+
+    private final PayChannelOrderService payChannelOrderService;
 
     private WeChatPayConfig weChatPayConfig;
 
@@ -50,13 +51,24 @@ public class WeChatPayRefundStrategy extends AbsPayRefundStrategy {
     }
 
     /**
-     * 退款
+     * 退款操作
      */
     @Override
     public void doRefundHandler() {
         wechatRefundService.refund(this.getPayOrder(), this.getRefundChannelParam().getAmount(), this.getPayChannelOrder(), this.weChatPayConfig);
-        weChatPayOrderService.updateRefund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
-        payOrderService.updateRefundSuccess(this.getPayOrder(), this.getRefundChannelParam().getAmount(), PayChannelEnum.WECHAT);
     }
 
+    /**
+     * 退款发起成功操作
+     */
+    @Override
+    public void doSuccessHandler() {
+        // 更新退款订单数据状态
+        PayRefundStatusEnum refundStatusEnum = PaymentContextLocal.get()
+                .getRefundInfo()
+                .getStatus();
+        this.getRefundChannelOrder().setStatus(refundStatusEnum.getCode());
+        // 更新支付通道订单中的属性
+        payChannelOrderService.updateAsyncPayRefund(this.getPayChannelOrder(), this.getRefundChannelOrder());
+    }
 }

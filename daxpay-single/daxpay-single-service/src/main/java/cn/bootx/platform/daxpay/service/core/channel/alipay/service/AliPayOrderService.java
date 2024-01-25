@@ -22,6 +22,7 @@ import java.util.Optional;
  * @author xxm
  * @since 2021/2/26
  */
+@Deprecated
 @Slf4j
 @Service
 @RequiredArgsConstructor

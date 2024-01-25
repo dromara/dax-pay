@@ -11,6 +11,8 @@ import cn.bootx.platform.daxpay.service.param.record.PayCallbackRecordQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 接收到的支付回调通知
@@ -35,5 +37,13 @@ public class PayCallbackRecordService {
      */
     public PageResult<PayCallbackRecordDto> page(PageParam pageParam, PayCallbackRecordQuery param){
         return MpUtil.convert2DtoPageResult(callbackRecordManager.page(pageParam,param));
+    }
+
+    /**
+     * 保存回调记录
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void save(PayCallbackRecord record) {
+        callbackRecordManager.save(record);
     }
 }

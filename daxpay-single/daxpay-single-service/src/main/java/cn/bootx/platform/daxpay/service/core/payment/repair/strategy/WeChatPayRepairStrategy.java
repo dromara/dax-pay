@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- *
+ * 微信支付订单修复策略类
  * @author xxm
  * @since 2023/12/29
  */

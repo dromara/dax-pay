@@ -4,6 +4,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayOrde
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+@Deprecated
 @Mapper
 public interface WeChatPayOrderMapper extends BaseMapper<WeChatPayOrder> {
 

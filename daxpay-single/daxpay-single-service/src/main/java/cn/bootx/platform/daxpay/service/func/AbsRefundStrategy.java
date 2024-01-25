@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
@@ -18,7 +19,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public abstract class AbsPayRefundStrategy implements PayStrategy{
+public abstract class AbsRefundStrategy implements PayStrategy{
 
     /** 支付订单 */
     private PayOrder payOrder = null;
@@ -61,10 +62,18 @@ public abstract class AbsPayRefundStrategy implements PayStrategy{
     public abstract void doRefundHandler();
 
     /**
-     * 退款发起成功操作
+     * 退款发起成功操作, 异步支付通道需要进行重写
      */
     public void doSuccessHandler() {
+        // 更新退款订单数据状态
         this.refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode());
+
+        // 支付通道订单客可退余额
+        int refundableBalance = this.getPayChannelOrder().getRefundableBalance() - this.refundChannelOrder.getAmount();
+        // 支付通道订单状态
+        PayStatusEnum status = refundableBalance == 0 ? PayStatusEnum.REFUNDED : PayStatusEnum.PARTIAL_REFUND;
+        this.payChannelOrder.setRefundableBalance(refundableBalance)
+                .setStatus(status.getCode());
     }
 
     /**

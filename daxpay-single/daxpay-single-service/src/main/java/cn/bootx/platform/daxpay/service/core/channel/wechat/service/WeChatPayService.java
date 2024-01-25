@@ -4,8 +4,10 @@ import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.exception.RetryableException;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PayWayEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.code.WeChatPayWay;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
@@ -13,10 +15,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
-import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.net.NetUtil;
@@ -202,10 +201,8 @@ public class WeChatPayService {
 
         String resultCode = result.get(WeChatPayCode.RESULT_CODE);
         String errCode = result.get(WeChatPayCode.ERR_CODE);
-        // 支付成功处理
+        // 支付成功处理,
         if (Objects.equals(resultCode, WeChatPayCode.TRADE_SUCCESS)) {
-            payment.setStatus(PayStatusEnum.SUCCESS.getCode())
-                    .setPayTime(LocalDateTime.now());
             asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID))
                     .setPayComplete(true);
             return;

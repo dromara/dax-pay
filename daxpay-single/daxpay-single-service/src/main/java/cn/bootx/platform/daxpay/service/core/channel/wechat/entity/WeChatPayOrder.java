@@ -15,6 +15,7 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2021/6/21
  */
+@Deprecated
 @EqualsAndHashCode(callSuper = true)
 @Data
 @DbTable(comment = "微信支付记录")

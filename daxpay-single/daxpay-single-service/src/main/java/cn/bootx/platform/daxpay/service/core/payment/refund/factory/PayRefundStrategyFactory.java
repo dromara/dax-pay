@@ -4,7 +4,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.service.core.payment.refund.strategy.*;
-import cn.bootx.platform.daxpay.service.func.AbsPayRefundStrategy;
+import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.val;
@@ -28,9 +28,9 @@ public class PayRefundStrategyFactory {
      * 根据传入的支付通道创建策略
      * @return 支付策略
      */
-    public static AbsPayRefundStrategy createAsyncFront(RefundChannelParam refundChannelParam) {
+    public static AbsRefundStrategy createAsyncFront(RefundChannelParam refundChannelParam) {
 
-        AbsPayRefundStrategy strategy;
+        AbsRefundStrategy strategy;
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(refundChannelParam.getChannel());
         switch (channelEnum) {
             case ALI:
@@ -62,14 +62,14 @@ public class PayRefundStrategyFactory {
      * 根据传入的支付类型批量创建策略, 异步支付在后面
      * 同步支付逻辑完后才执行异步支付的逻辑, 预防异步执行成功, 然同步执行失败. 导致异步支付无法回滚的问题
      */
-    public static List<AbsPayRefundStrategy> createAsyncLast(List<RefundChannelParam> refundChannelParams) {
+    public static List<AbsRefundStrategy> createAsyncLast(List<RefundChannelParam> refundChannelParams) {
         return createAsyncFront(refundChannelParams, true);
     }
 
     /**
      * 根据传入的支付类型批量创建策略, 异步支付在前面
      */
-    public static List<AbsPayRefundStrategy> createAsyncFront(List<RefundChannelParam> refundChannelParams) {
+    public static List<AbsRefundStrategy> createAsyncFront(List<RefundChannelParam> refundChannelParams) {
         return createAsyncFront(refundChannelParams, false);
     }
 
@@ -78,11 +78,11 @@ public class PayRefundStrategyFactory {
      * @param refundChannelParams 支付类型
      * @return 支付策略
      */
-    private static List<AbsPayRefundStrategy> createAsyncFront(List<RefundChannelParam> refundChannelParams, boolean description) {
+    private static List<AbsRefundStrategy> createAsyncFront(List<RefundChannelParam> refundChannelParams, boolean description) {
         if (CollectionUtil.isEmpty(refundChannelParams)) {
             return Collections.emptyList();
         }
-        List<AbsPayRefundStrategy> list = new ArrayList<>(refundChannelParams.size());
+        List<AbsRefundStrategy> list = new ArrayList<>(refundChannelParams.size());
 
         // 同步支付
         val syncRefundModeParams = refundChannelParams.stream()

@@ -36,7 +36,4 @@ public class AsyncPayLocal {
     /** 订单失效时间, */
     private LocalDateTime expiredTime;
 
-    /** 支付完成时间 从支付网关中获取 */
-    private LocalDateTime payTime;
-
 }

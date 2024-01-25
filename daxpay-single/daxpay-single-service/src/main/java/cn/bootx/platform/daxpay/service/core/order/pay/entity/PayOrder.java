@@ -60,6 +60,12 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @DbColumn(comment = "异步支付通道")
     private String asyncChannel;
 
+    /**
+     *  如果有异步支付的情况下, 保存关联网关支付号
+     */
+    @DbColumn(comment = "关联网关支付号")
+    private String gatewayOrderNo;
+
     /** 金额 */
     @DbColumn(comment = "金额")
     private Integer amount;

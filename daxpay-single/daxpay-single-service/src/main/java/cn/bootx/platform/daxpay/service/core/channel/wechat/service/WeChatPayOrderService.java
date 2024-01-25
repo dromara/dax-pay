@@ -21,6 +21,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class WeChatPayOrderService {
 
     private final WeChatPayOrderManager weChatPayOrderManager;

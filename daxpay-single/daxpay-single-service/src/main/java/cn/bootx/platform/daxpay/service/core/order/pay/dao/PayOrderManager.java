@@ -35,9 +35,6 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     public Page<PayOrder> page(PageParam pageParam, PayOrderQuery query){
         Page<PayOrder> mpPage = MpUtil.getMpPage(pageParam, PayOrder.class);
         QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
-//        if (Objects.nonNull(query.getSortField())){
-//            generator.orderBy(true, query.getAsc(), NamingCase.toUnderlineCase(query.getSortField()));
-//        }
         return page(mpPage, generator);
     }
 }

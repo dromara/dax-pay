@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import lombok.Getter;
@@ -35,9 +36,7 @@ public abstract class AbsPayCloseStrategy implements PayStrategy{
     /**
      * 关闭前的处理方式
      */
-    public void doBeforeCloseHandler() {
-
-    }
+    public void doBeforeCloseHandler() {}
 
     /**
      * 关闭操作
@@ -45,8 +44,10 @@ public abstract class AbsPayCloseStrategy implements PayStrategy{
     public abstract void doCloseHandler();
 
     /**
-     * 关闭失败的处理方式
+     * 关闭成功的处理方式
      */
     public void doSuccessHandler() {
+        // 更新通道支付订单的状态为关闭
+        this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
     }
 }

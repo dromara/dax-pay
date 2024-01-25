@@ -6,6 +6,8 @@ import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
+import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
@@ -164,13 +166,22 @@ public class PayService {
                 .collect(Collectors.toList());
         payChannelOrderManager.saveAll(channelOrders);
 
-        // 5. 如果没有异步支付, 直接进行成功处理
+        // 5.1 如果没有异步支付, 直接进行订单完成处理
         if (PayUtil.isNotSync(payParam.getPayChannels())) {
             // 修改支付订单状态为成功
-            payOrder.setStatus(SUCCESS.getCode());
-            payOrder.setPayTime(LocalDateTime.now());
+            payOrder.setStatus(SUCCESS.getCode())
+                    .setPayTime(LocalDateTime.now());
             payOrderService.updateById(payOrder);
         }
+        // 5.2 如果异步支付完成, 进行订单完成处理
+        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        if (payOrder.isAsyncPay()) {
+            payOrder.setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
+                    .setStatus(SUCCESS.getCode())
+                    .setPayTime(LocalDateTime.now());
+            payOrderService.updateById(payOrder);
+        }
+
     }
 
     /**

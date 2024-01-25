@@ -55,12 +55,6 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "支付状态")
     private String status;
 
-    /**
-     * 异步支付通道发给网关的退款号, 用与将记录关联起来
-     */
-    @DbColumn(comment = "关联网关支付号")
-    private String gatewayOrderNo;
-
     @DbColumn(comment = "支付时间")
     private LocalDateTime payTime;
 

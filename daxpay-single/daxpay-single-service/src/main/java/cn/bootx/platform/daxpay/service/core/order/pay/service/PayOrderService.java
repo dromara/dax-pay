@@ -1,12 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.service;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.timeout.service.PayExpiredTimeService;
-import cn.bootx.platform.daxpay.util.PayUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +27,6 @@ public class PayOrderService {
     // 支付完成常量集合
     private final List<String> ORDER_FINISH = Arrays.asList(PayStatusEnum.CLOSE.getCode(), PayStatusEnum.SUCCESS.getCode());
 
-
     /**
      * 新增
      */
@@ -52,17 +48,4 @@ public class PayOrderService {
         }
         payOrderManager.updateById(payOrder);
     }
-
-    /**
-     * 退款成功处理, 更新可退款信息 不要进行持久化
-     */
-    public void updateRefundSuccess(PayOrder payment, int amount, PayChannelEnum payChannelEnum) {
-        // 删除旧有的退款记录, 替换退款完的新的
-        List<RefundableInfo> refundableInfos = payment.getRefundableInfos();
-        RefundableInfo refundableInfo = PayUtil.refundableInfoFilter(refundableInfos, payChannelEnum);
-        refundableInfos.remove(refundableInfo);
-        refundableInfo.setAmount(refundableInfo.getAmount() - amount);
-        refundableInfos.add(refundableInfo);
-    }
-
 }

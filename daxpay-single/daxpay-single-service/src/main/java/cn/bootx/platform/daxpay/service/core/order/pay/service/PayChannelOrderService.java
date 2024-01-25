@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.pay.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
@@ -9,13 +10,16 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -44,10 +48,10 @@ public class PayChannelOrderService {
     }
 
     /**
-     * 更新支付订单的异步通道信息
+     * 切换支付订单关联的异步支付通道
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updateAsyncChannelOrder(PayOrder payOrder, PayChannelParam payChannelParam){
+    public void switchAsyncPayChannel(PayOrder payOrder, PayChannelParam payChannelParam){
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         // 是否支付完成
         PayStatusEnum payStatus = asyncPayInfo.isPayComplete() ? PayStatusEnum.SUCCESS : PayStatusEnum.PROGRESS;
@@ -63,8 +67,7 @@ public class PayChannelOrderService {
                     .setPayWay(payChannelParam.getWay())
                     .setAmount(payChannelParam.getAmount())
                     .setRefundableBalance(payChannelParam.getAmount())
-                    .setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
-                    .setPayTime(asyncPayInfo.getPayTime())
+                    .setPayTime(LocalDateTime.now())
                     .setChannelExtra(payChannelParam.getChannelExtra())
                     .setStatus(payStatus.getCode());
             channelOrderManager.deleteByPaymentIdAndAsync(payChannelOrder.getId());
@@ -73,11 +76,26 @@ public class PayChannelOrderService {
             // 更新支付通道信息
             payOrderChannelOpt.get()
                     .setPayWay(payChannelParam.getWay())
-                    .setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
-                    .setPayTime(asyncPayInfo.getPayTime())
+                    .setPayTime(LocalDateTime.now())
                     .setChannelExtra(payChannelParam.getChannelExtra())
                     .setStatus(payStatus.getCode());
             channelOrderManager.updateById(payOrderChannelOpt.get());
+        }
+    }
+
+    /**
+     * 更新异步支付通道退款余额和状态
+     */
+    public void updateAsyncPayRefund(PayChannelOrder payChannelOrder, PayRefundChannelOrder refundChannelOrder){
+        // 支付通道订单客可退余额
+        int refundableBalance = payChannelOrder.getRefundableBalance() - refundChannelOrder.getAmount();
+        payChannelOrder.setRefundableBalance(refundableBalance);
+        // 支付通道订单状态
+        if (Objects.equals(refundChannelOrder.getStatus(), PayRefundStatusEnum.SUCCESS.getCode())){
+            PayStatusEnum status = refundableBalance == 0 ? PayStatusEnum.REFUNDED : PayStatusEnum.PARTIAL_REFUND;
+            payChannelOrder.setStatus(status.getCode());
+        } else {
+            payChannelOrder.setStatus(PayStatusEnum.REFUNDING.getCode());
         }
     }
 

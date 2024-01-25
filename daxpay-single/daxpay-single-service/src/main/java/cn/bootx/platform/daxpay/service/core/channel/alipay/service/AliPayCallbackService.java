@@ -2,14 +2,11 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.CertUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
-import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
-import cn.bootx.platform.daxpay.service.core.record.callback.dao.PayCallbackRecordManager;
 import cn.bootx.platform.daxpay.service.func.AbsPayCallbackStrategy;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.CharsetUtil;
@@ -22,6 +19,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
@@ -38,13 +36,9 @@ import static cn.bootx.platform.daxpay.service.code.AliPayCode.*;
 @Service
 public class AliPayCallbackService extends AbsPayCallbackStrategy {
 
-    private final AliPayConfigService aliasConfigService;
+    @Resource
+    private AliPayConfigService aliasConfigService;
 
-    public AliPayCallbackService(RedisClient redisClient, PayCallbackRecordManager callbackRecordManager,
-                                 PayCallbackService payCallbackService, AliPayConfigService aliasConfigService) {
-        super(redisClient, callbackRecordManager, payCallbackService);
-        this.aliasConfigService = aliasConfigService;
-    }
 
     /**
      * 获取支付通道
@@ -57,16 +51,6 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
     /**
      * 获取交易状态
      */
-    @Override
-    public String getTradeStatus() {
-        Map<String, String> params = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
-        String tradeStatus = params.get(TRADE_STATUS);
-        if (Objects.equals(tradeStatus, NOTIFY_TRADE_SUCCESS)) {
-            return PayStatusEnum.SUCCESS.getCode();
-        }
-        return PayStatusEnum.FAIL.getCode();
-    }
-
     /**
      * 验证信息格式是否合法
      */
@@ -99,37 +83,77 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
     }
 
     /**
-     * 分通道特殊处理, 如将解析的数据放到上下文中
+     * 解析支付数据并放到上下文中
      */
     @Override
-    public void initContext() {
-        CallbackLocal callback = PaymentContextLocal.get()
-                .getCallbackInfo();
-        Map<String, String> callbackParam = PaymentContextLocal.get().getCallbackInfo()
-                .getCallbackParam();
-        // 订单号
+    public void resolvePayData() {
+        CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
+        Map<String, String> callbackParam = callback.getCallbackParam();
+        // 网关订单号
         callback.setGatewayOrderNo(callbackParam.get(TRADE_NO));
+        // 支付订单ID
+        callback.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
+        // 交易状态
+        callback.setGatewayPayStatus(callbackParam.get(TRADE_STATUS));
+        // 支付金额
+        callback.setGatewayPayStatus(callbackParam.get(TOTAL_AMOUNT));
+
         // 支付时间
         String gmpTime = callbackParam.get(GMT_PAYMENT);
         if (StrUtil.isNotBlank(gmpTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(gmpTime, DatePattern.NORM_DATETIME_PATTERN);
-            callback.setPayTime(time);
+            callback.setFinishTime(time);
         } else {
-            callback.setPayTime(LocalDateTime.now());
+            callback.setFinishTime(LocalDateTime.now());
         }
     }
 
     /**
-     * 获取支付id
+     * 解析退款回调数据并放到上下文中
      */
     @Override
-    public Long getPaymentId() {
-        Map<String, String> params = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
-        return Long.valueOf(params.get(OUT_TRADE_NO));
+    public void resolveRefundData() {
+        CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
+        Map<String, String> callbackParam = callback.getCallbackParam();
+        // 网关订单号
+        callback.setGatewayOrderNo(callbackParam.get(OUT_BIZ_NO));
+        // 退款订单Id
+        callback.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
+        // 交易状态
+        callback.setGatewayPayStatus(callbackParam.get(TRADE_STATUS));
+        // 退款金额
+        callback.setGatewayPayStatus(callbackParam.get(REFUND_FEE));
+
+        // 退款时间
+        String gmpTime = callbackParam.get(GMT_REFUND);
+        if (StrUtil.isNotBlank(gmpTime)) {
+            LocalDateTime time = LocalDateTimeUtil.parse(gmpTime, DatePattern.NORM_DATETIME_PATTERN);
+            callback.setFinishTime(time);
+        } else {
+            callback.setFinishTime(LocalDateTime.now());
+        }
     }
 
     /**
-     * 获取返回信息
+     * 判断类型 支付回调/退款回调
+     *
+     * @see PayCallbackTypeEnum
+     */
+    @Override
+    public PayCallbackTypeEnum getCallbackType() {
+        CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
+        Map<String, String> callbackParam = callback.getCallbackParam();
+        String refundFee = callbackParam.get("refund_fee");
+        // 如果有退款金额，说明是退款回调
+        if (StrUtil.isNotBlank(refundFee)){
+            return PayCallbackTypeEnum.REFUND;
+        } else {
+            return PayCallbackTypeEnum.PAY;
+        }
+    }
+
+    /**
+     * 返回响应结果
      */
     @Override
     public String getReturnMsg() {

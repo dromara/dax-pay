@@ -4,7 +4,6 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class WeChatPayCloseStrategy extends AbsPayCloseStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
-    private final WeChatPayOrderService weChatPayOrderService;
     private final WeChatPayCloseService weChatPayCloseService;
 
     private WeChatPayConfig weChatPayConfig;
@@ -49,7 +47,5 @@ public class WeChatPayCloseStrategy extends AbsPayCloseStrategy {
     @Override
     public void doCloseHandler() {
         weChatPayCloseService.close(this.getOrder(), weChatPayConfig);
-        // 调用关闭本地支付记录
-        weChatPayOrderService.updateClose(this.getOrder().getId());
     }
 }

@@ -3,7 +3,6 @@ package cn.bootx.platform.daxpay.service.core.payment.close.strategy;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCloseService;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class AliPayCloseStrategy extends AbsPayCloseStrategy {
 
     private final AliPayConfigService alipayConfigService;
-
-    private final AliPayOrderService aliPayOrderService;
 
     private final AliPayCloseService aliPayCloseService;
 
@@ -50,6 +47,5 @@ public class AliPayCloseStrategy extends AbsPayCloseStrategy {
     @Override
     public void doCloseHandler() {
         aliPayCloseService.close(this.getOrder());
-        aliPayOrderService.updateClose(this.getOrder().getId());
     }
 }

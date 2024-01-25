@@ -108,6 +108,12 @@ public class PayCloseService {
 
             // 5.关闭成功后处理
             payCloseStrategies.forEach(AbsPayCloseStrategy::doSuccessHandler);
+
+            // 6.更新支付通道订单的状态
+            List<PayChannelOrder> payChannelOrders = payCloseStrategies.stream()
+                    .map(AbsPayCloseStrategy::getChannelOrder)
+                    .collect(Collectors.toList());
+            payChannelOrderManager.updateAllById(payChannelOrders);
         }
         catch (PayFailureException e) {
             // 记录关闭失败的记录
@@ -115,7 +121,7 @@ public class PayCloseService {
             throw e;
         }
 
-        // 5.关闭成功后处理
+        // 关闭成功后处理
         this.successHandler(payOrder);
     }
 

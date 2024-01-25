@@ -43,6 +43,12 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "异步支付通道")
     private String asyncChannel;
 
+    /**
+     * 如果有异步支付的情况下, 用与将记录关联起来
+     */
+    @Schema(description = "关联网关支付号")
+    private String gatewayOrderNo;
+
     /** 金额 */
     @Schema(description = "金额")
     private Integer amount;

@@ -14,7 +14,7 @@ import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.FAIL;
  */
 @Data
 @Accessors(chain = true)
-public class GatewaySyncResult {
+public class PayGatewaySyncResult {
 
     /**
      * 支付网关订单状态
@@ -23,15 +23,7 @@ public class GatewaySyncResult {
     private PaySyncStatusEnum syncStatus = FAIL;
 
     /** 同步支付时网关返回的对象, 序列化为json字符串 */
-    private String syncPayInfo;
-
-    /** 同步退款时网关返回的对象, 序列化为json字符串 */
-    private String syncRefundInfo;
-
-    /** 退款信息是否需要修复 */
-    private boolean repairRefund;
-
-    /** 网关返回退款信息列表 */
+    private String syncInfo;
 
     /** 错误提示 */
     private String errorMsg;

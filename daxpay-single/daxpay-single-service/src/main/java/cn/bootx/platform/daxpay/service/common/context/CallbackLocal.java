@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
+import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -17,7 +18,10 @@ import java.util.Map;
 public class CallbackLocal {
 
     /** 回调参数内容 */
-    private final Map<String, String> callbackParam = new HashMap<>();
+    private Map<String, String> callbackParam = new HashMap<>();
+
+    /** 本地订单ID */
+    private Long orderId;
 
     /**
      * 第三方支付平台订单号
@@ -25,6 +29,24 @@ public class CallbackLocal {
      */
     private String gatewayOrderNo;
 
-    /** 支付完成时间 */
-    private LocalDateTime payTime;
+    /** 网关状态 */
+    private String gatewayPayStatus;
+
+    /** 金额(元) */
+    private String amount;
+
+    /** 完成时间(支付/退款) */
+    private LocalDateTime finishTime;
+
+    /** 支付修复ID */
+    private Long payRepairOrderId;
+
+    /**
+     * 回调处理状态
+     * @see PayCallbackStatusEnum
+     */
+    private PayCallbackStatusEnum callbackStatus = PayCallbackStatusEnum.SUCCESS;
+
+    /** 提示信息 */
+    private String msg;
 }

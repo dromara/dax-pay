@@ -15,7 +15,7 @@ public enum PayCallbackStatusEnum {
     SUCCESS("success","成功"),
     FAIL("fail","失败"),
     IGNORE("ignore","忽略"),
-    TIMEOUT("timeout","超时"),
+    EXCEPTION("exception","异常"),
     NOT_FOUND("not_found","未找到");
 
     private final String code;

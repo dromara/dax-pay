@@ -16,6 +16,7 @@ import lombok.experimental.Accessors;
 public class PayRepairParam {
 
     @Schema(description = "修复来源")
+    @Deprecated
     private PayRepairSourceEnum repairSource;
 
     @Schema(description = "修复类型")

@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
 import cn.bootx.platform.daxpay.service.core.record.callback.convert.PayCallbackRecordConvert;
 import cn.bootx.platform.daxpay.service.dto.record.callback.PayCallbackRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -29,9 +30,14 @@ import java.time.LocalDateTime;
 @DbTable(comment = "网关回调通知")
 @TableName("pay_callback_record")
 public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunction<PayCallbackRecordDto> {
-    /** 支付记录id */
-    @DbColumn(comment = "支付记录id")
-    private Long paymentId;
+
+    /** 本地订单id */
+    @DbColumn(comment = "支付订单id")
+    private Long orderId;
+
+    /** 支付网关订单号 */
+    @DbColumn(comment = "支付网关订单号")
+    private String gatewayOrderNo;
 
     /**
      * 支付通道
@@ -40,7 +46,14 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     @DbColumn(comment = "支付通道")
     private String payChannel;
 
-    /** 通知消息 */
+    /**
+     * 回调类型
+     * @see PayCallbackTypeEnum
+     */
+    @DbColumn(comment = "回调类型")
+    private String type;
+
+    /** 通知消息内容 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "通知消息")
     private String notifyInfo;

@@ -91,7 +91,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        channelOrderService.updateAsyncChannelOrder(this.getOrder(), this.getPayChannelParam());
+        channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
     }
 
     /**

@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2021/6/22
  */
+@Deprecated
 @Data
 @Accessors(chain = true)
 public class PayCallbackResult {

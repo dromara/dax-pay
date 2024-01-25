@@ -10,6 +10,7 @@ import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
@@ -17,7 +18,7 @@ import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.RepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.PaySyncStrategyFactory;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.GatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
@@ -89,11 +90,11 @@ public class PaySyncService {
         }
 
         try {
-            // 获取同步策略类
+            // 获取支付同步策略类
             AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getAsyncChannel());
             syncPayStrategy.initPayParam(payOrder);
-            // 执行同步操作, 获取支付网关同步的结果
-            GatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
+            // 执行操作, 获取支付网关同步的结果
+            PayGatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
             // 判断是否同步成功
             if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
@@ -101,7 +102,7 @@ public class PaySyncService {
                 return new PaySyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
 
-            // 判断网关状态是否和支付单一致, 同时更新网关同步状态
+            // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
             boolean statusSync = this.checkAndAdjustSyncStatus(syncResult,payOrder);
             RepairResult repairResult = new RepairResult();
             try {
@@ -131,7 +132,7 @@ public class PaySyncService {
     /**
      * 判断支付单和网关状态是否一致, 同时待支付状态下, 支付单支付超时进行状态的更改
      */
-    private boolean checkAndAdjustSyncStatus(GatewaySyncResult syncResult, PayOrder order){
+    private boolean checkAndAdjustSyncStatus(PayGatewaySyncResult syncResult, PayOrder order){
         PaySyncStatusEnum syncStatus = syncResult.getSyncStatus();
         String orderStatus = order.getStatus();
         // 本地支付成功/网关支付成功
@@ -174,9 +175,15 @@ public class PaySyncService {
     /**
      * 根据同步的结果对支付单进行处理
      */
-    private RepairResult resultHandler(GatewaySyncResult syncResult, PayOrder payOrder){
+    private RepairResult resultHandler(PayGatewaySyncResult syncResult, PayOrder payOrder){
         PaySyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
-        PayRepairParam repairParam = new PayRepairParam().setRepairSource(PayRepairSourceEnum.SYNC);
+        // 如果没有支付来源, 设置支付来源为同步
+        RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
+
+        if (repairInfo.getSource() == null){
+            repairInfo.setSource(PayRepairSourceEnum.SYNC);
+        }
+        PayRepairParam repairParam = new PayRepairParam();
         RepairResult repair = new RepairResult();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
@@ -188,7 +195,7 @@ public class PaySyncService {
             }
             // 待支付, 将订单状态重新设置为待支付
             case PAY_WAIT: {
-                repairParam.setRepairType(PayRepairTypeEnum.WAIT);
+                repairParam.setRepairType(PayRepairTypeEnum.WAIT_PAY);
                 repair = repairService.repair(payOrder,repairParam);
                 break;
             }
@@ -233,12 +240,12 @@ public class PaySyncService {
      * @param repair 是否修复
      * @param errorMsg 错误信息
      */
-    private void saveRecord(PayOrder payOrder,GatewaySyncResult syncResult, boolean repair, Long repairOrderId, String errorMsg){
+    private void saveRecord(PayOrder payOrder, PayGatewaySyncResult syncResult, boolean repair, Long repairOrderId, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setPaymentId(payOrder.getId())
                 .setBusinessNo(payOrder.getBusinessNo())
                 .setAsyncChannel(payOrder.getAsyncChannel())
-                .setSyncInfo(syncResult.getSyncPayInfo())
+                .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setRepairOrder(repair)
                 .setRepairOrderId(repairOrderId)

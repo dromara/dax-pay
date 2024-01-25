@@ -12,11 +12,12 @@ import java.io.Serializable;
  * @author xxm
  * @since 2021/6/21
  */
+@Deprecated
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "微信支付记录")
-public class WeChatPayOrderDto extends PayOrderDto implements Serializable {
+public class  WeChatPayOrderDto extends PayOrderDto implements Serializable {
 
     private static final long serialVersionUID = -2400358210732595795L;
 
