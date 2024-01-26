@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
@@ -35,12 +34,6 @@ public abstract class AbsRefundStrategy implements PayStrategy{
 
     /** 当前通道的退款订单 */
     private PayRefundChannelOrder refundChannelOrder;
-
-    /**
-     * 策略标识
-     * @see PayChannelEnum
-     */
-    public abstract PayChannelEnum getType();
 
     /**
      * 初始化参数

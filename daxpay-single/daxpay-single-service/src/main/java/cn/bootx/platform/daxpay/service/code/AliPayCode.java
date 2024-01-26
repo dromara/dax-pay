@@ -50,7 +50,6 @@ public interface AliPayCode {
     /** 交易付款时间 yyyy-MM-dd HH:mm:ss */
     String GMT_PAYMENT = "gmt_payment";
 
-
     /** 退款业务号 */
     String OUT_BIZ_NO = "out_biz_no";
 

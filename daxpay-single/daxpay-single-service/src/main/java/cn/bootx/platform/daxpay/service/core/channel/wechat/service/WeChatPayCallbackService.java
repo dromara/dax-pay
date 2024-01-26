@@ -2,11 +2,12 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.func.AbsPayCallbackStrategy;
+import cn.bootx.platform.daxpay.service.func.AbsCallbackStrategy;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -32,16 +33,17 @@ import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.*;
  */
 @Slf4j
 @Service
-public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
+public class WeChatPayCallbackService extends AbsCallbackStrategy {
     @Resource
     private WeChatPayConfigService weChatPayConfigService;
 
+
     /**
-     * 支付通道
+     * 策略标识
      */
     @Override
-    public PayChannelEnum getPayChannel() {
-        return PayChannelEnum.WECHAT;
+    public PayChannelEnum getChannel() {
+        return PayChannelEnum.ALI;
     }
 
     /**
@@ -85,10 +87,11 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
         callbackInfo.setGatewayOrderNo(callbackParam.get(TRANSACTION_ID));
         // 支付订单ID
         callbackInfo.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
-        // 交易状态
-        callbackInfo.setGatewayPayStatus(callbackParam.get(RESULT_CODE));
+        // 支付状态
+        PayStatusEnum payStatus = WxPayKit.codeIsOk(callbackParam.get(RESULT_CODE)) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
+        callbackInfo.setGatewayStatus(payStatus.getCode());
         // 支付金额
-        callbackInfo.setGatewayPayStatus(callbackParam.get(TOTAL_FEE));
+        callbackInfo.setAmount(callbackParam.get(TOTAL_FEE));
         String timeEnd = callbackParam.get(TIME_END);
         if (StrUtil.isNotBlank(timeEnd)) {
             LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
@@ -119,9 +122,9 @@ public class WeChatPayCallbackService extends AbsPayCallbackStrategy {
         // 退款订单Id
         callbackInfo.setOrderId(Long.valueOf(callbackParam.get(OUT_REFUND_NO)));
         // 交易状态
-        callbackInfo.setGatewayPayStatus(callbackParam.get(REFUND_STATUS));
+        callbackInfo.setGatewayStatus(callbackParam.get(REFUND_STATUS));
         // 退款金额
-        callbackInfo.setGatewayPayStatus(callbackParam.get(REFUND_FEE));
+        callbackInfo.setAmount(callbackParam.get(REFUND_FEE));
 
         // 退款时间
         String timeEnd = callbackParam.get(SUCCESS_TIME);

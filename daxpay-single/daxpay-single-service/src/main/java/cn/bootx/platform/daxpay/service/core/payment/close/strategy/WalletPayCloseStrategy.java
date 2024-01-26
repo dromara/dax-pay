@@ -25,7 +25,7 @@ public class WalletPayCloseStrategy extends AbsPayCloseStrategy {
     private final WalletPayOrderService walletPayOrderService;
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.WALLET;
     }
 

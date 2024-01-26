@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.sync.strategy;
 
 
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPaySyncService;
@@ -25,6 +26,14 @@ public class AliPaySyncStrategy extends AbsPaySyncStrategy {
     private final AliPayConfigService alipayConfigService;
 
     private final AliPaySyncService alipaySyncService;
+
+    /**
+     * 策略标识
+     */
+    @Override
+    public PayChannelEnum getChannel() {
+        return PayChannelEnum.ALI;
+    }
 
     /**
      * 异步支付单与支付网关进行状态比对

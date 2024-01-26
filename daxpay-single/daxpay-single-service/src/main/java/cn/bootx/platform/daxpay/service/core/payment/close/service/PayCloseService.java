@@ -97,7 +97,7 @@ public class PayCloseService {
 
             // 2.初始化关闭支付的参数
             for (AbsPayCloseStrategy strategy : payCloseStrategies) {
-                strategy.initCloseParam(payOrder, orderChannelMap.get(strategy.getType().getCode()));
+                strategy.initCloseParam(payOrder, orderChannelMap.get(strategy.getChannel().getCode()));
             }
 
             // 3.关闭前准备

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated
 public class WalletPaymentManager extends BaseManager<WalletPaymentMapper, WalletPayOrder> {
 
     public Optional<WalletPayOrder> findByPaymentId(Long paymentId) {

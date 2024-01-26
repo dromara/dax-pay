@@ -38,7 +38,7 @@ public class WeChatPayRefundStrategy extends AbsRefundStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.WECHAT;
     }
 

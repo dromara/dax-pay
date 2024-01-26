@@ -1,5 +1,7 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -25,12 +27,15 @@ public class CallbackLocal {
 
     /**
      * 第三方支付平台订单号
-     * 1. 如付款码支付直接成功时会出现
      */
     private String gatewayOrderNo;
 
-    /** 网关状态 */
-    private String gatewayPayStatus;
+    /**
+     * 网关返回状态
+     * @see PayStatusEnum 支付状态
+     * @see PayRefundStatusEnum 退款状态
+     */
+    private String gatewayStatus;
 
     /** 金额(元) */
     private String amount;

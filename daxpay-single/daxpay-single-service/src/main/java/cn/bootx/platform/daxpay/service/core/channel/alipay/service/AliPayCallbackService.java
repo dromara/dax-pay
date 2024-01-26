@@ -3,11 +3,12 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 import cn.bootx.platform.common.core.util.CertUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
-import cn.bootx.platform.daxpay.service.func.AbsPayCallbackStrategy;
+import cn.bootx.platform.daxpay.service.func.AbsCallbackStrategy;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
@@ -34,23 +35,20 @@ import static cn.bootx.platform.daxpay.service.code.AliPayCode.*;
  */
 @Slf4j
 @Service
-public class AliPayCallbackService extends AbsPayCallbackStrategy {
+public class AliPayCallbackService extends AbsCallbackStrategy {
 
     @Resource
     private AliPayConfigService aliasConfigService;
 
 
     /**
-     * 获取支付通道
+     * 策略标识
      */
     @Override
-    public PayChannelEnum getPayChannel() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.ALI;
     }
 
-    /**
-     * 获取交易状态
-     */
     /**
      * 验证信息格式是否合法
      */
@@ -93,10 +91,11 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
         callback.setGatewayOrderNo(callbackParam.get(TRADE_NO));
         // 支付订单ID
         callback.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
-        // 交易状态
-        callback.setGatewayPayStatus(callbackParam.get(TRADE_STATUS));
+        // 支付状态
+        PayStatusEnum payStatus = Objects.equals(callbackParam.get(TRADE_STATUS), NOTIFY_TRADE_SUCCESS) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
+        callback.setGatewayStatus(payStatus.getCode());
         // 支付金额
-        callback.setGatewayPayStatus(callbackParam.get(TOTAL_AMOUNT));
+        callback.setAmount(callbackParam.get(TOTAL_AMOUNT));
 
         // 支付时间
         String gmpTime = callbackParam.get(GMT_PAYMENT);
@@ -119,10 +118,10 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
         callback.setGatewayOrderNo(callbackParam.get(OUT_BIZ_NO));
         // 退款订单Id
         callback.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
-        // 交易状态
-        callback.setGatewayPayStatus(callbackParam.get(TRADE_STATUS));
+        // 退款状态
+        callback.setGatewayStatus(callbackParam.get(TRADE_STATUS));
         // 退款金额
-        callback.setGatewayPayStatus(callbackParam.get(REFUND_FEE));
+        callback.setAmount(callbackParam.get(REFUND_FEE));
 
         // 退款时间
         String gmpTime = callbackParam.get(GMT_REFUND);
@@ -159,5 +158,4 @@ public class AliPayCallbackService extends AbsPayCallbackStrategy {
     public String getReturnMsg() {
         return "success";
     }
-
 }

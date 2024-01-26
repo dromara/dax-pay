@@ -1,7 +1,11 @@
 package cn.bootx.platform.daxpay.code;
 
+import cn.bootx.platform.common.core.exception.DataNotExistException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 退款状态枚举
@@ -21,7 +25,16 @@ public enum PayRefundStatusEnum {
 
     /** 编码 */
     private final String code;
-
     /** 名称 */
     private final String name;
+
+    /**
+     * 根据编码获取枚举
+     */
+    public static PayRefundStatusEnum findByCode(String code){
+        return Arrays.stream(values())
+                .filter(statusEnum -> Objects.equals(statusEnum.getCode(), code))
+                .findFirst()
+                .orElseThrow(() -> new DataNotExistException("该枚举不存在"));
+    }
 }

@@ -142,7 +142,7 @@ public class PayRefundService {
 
             // 2.初始化退款策略的参数
             for (AbsRefundStrategy refundStrategy : payRefundStrategies) {
-                PayChannelOrder payChannelOrder = orderChannelMap.get(refundStrategy.getType().getCode());
+                PayChannelOrder payChannelOrder = orderChannelMap.get(refundStrategy.getChannel().getCode());
                 if (Objects.isNull(payChannelOrder)){
                     throw new PayFailureException("[数据异常]进行退款的通道没有对应的支付单, 无法退款");
                 }

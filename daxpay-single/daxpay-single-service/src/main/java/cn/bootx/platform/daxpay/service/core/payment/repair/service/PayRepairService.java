@@ -1,26 +1,30 @@
 package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
+import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.repair.factory.PayRepairStrategyFactory;
-import cn.bootx.platform.daxpay.service.core.payment.repair.param.PayRepairParam;
-import cn.bootx.platform.daxpay.service.core.payment.repair.result.RepairResult;
+import cn.bootx.platform.daxpay.service.core.payment.repair.result.PayRepairResult;
 import cn.bootx.platform.daxpay.service.core.record.repair.entity.PayRepairRecord;
 import cn.bootx.platform.daxpay.service.core.record.repair.service.PayRepairRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
+import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -43,54 +47,57 @@ public class PayRepairService {
      * 修复支付单
      */
     @Transactional(rollbackFor = Exception.class)
-    public RepairResult repair(PayOrder order, PayRepairParam repairParam){
-        // 获取支付单管理的通道支付订单
-        List<PayChannelOrder> payChannelOrders = channelOrderManager.findAllByPaymentId(order.getId());
-        List<String> channels = payChannelOrders.stream()
-                .map(PayChannelOrder::getChannel)
-                .collect(Collectors.toList());
+    public PayRepairResult repair(PayOrder order, PayRepairTypeEnum repairType){
+        // 1. 获取支付单管理的通道支付订单
+        Map<String, PayChannelOrder> channelOrderMap = channelOrderManager.findAllByPaymentId(order.getId())
+                .stream()
+                .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
+        List<String> channels = new ArrayList<>(channelOrderMap.keySet());
 
-        // 初始化修复参数
+        // 2.1 初始化修复参数
         List<AbsPayRepairStrategy> repairStrategies = PayRepairStrategyFactory.createAsyncLast(channels);
-        repairStrategies.forEach(repairStrategy -> repairStrategy.initRepairParam(order));
-        repairStrategies.forEach(AbsPayRepairStrategy::doBeforeHandler);
-        RepairResult repairResult = new RepairResult().setBeforeStatus(PayStatusEnum.findByCode(order.getStatus()));
+        for (AbsPayRepairStrategy repairStrategy : repairStrategies) {
+            repairStrategy.initRepairParam(order,channelOrderMap.get(repairStrategy.getChannel().getCode()));
+        }
 
-        // 根据不同的类型执行对应的修复逻辑
-        switch (repairParam.getRepairType()) {
+        // 2.2 执行前置处理
+        repairStrategies.forEach(AbsPayRepairStrategy::doBeforeHandler);
+
+        // 3. 根据不同的类型执行对应的修复逻辑
+        PayRepairResult repairResult = new PayRepairResult().setBeforeStatus(PayStatusEnum.findByCode(order.getStatus()));
+        switch (repairType) {
             case SUCCESS:
                 this.success(order, repairStrategies);
-                repairResult.setRepairStatus(PayStatusEnum.SUCCESS);
+                repairResult.setAfterPayStatus(PayStatusEnum.SUCCESS);
                 break;
             case CLOSE_LOCAL:
                 this.closeLocal(order, repairStrategies);
-                repairResult.setRepairStatus(PayStatusEnum.CLOSE);
+                repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
             case WAIT_PAY:
-                this.wait(order, repairStrategies);
-                repairResult.setRepairStatus(PayStatusEnum.PROGRESS);
+                this.waitPay(order, repairStrategies);
+                repairResult.setAfterPayStatus(PayStatusEnum.PROGRESS);
                 break;
             case CLOSE_GATEWAY:
                 this.closeGateway(order, repairStrategies);
-                repairResult.setRepairStatus(PayStatusEnum.CLOSE);
-                break;
-            case REFUND:
-                this.refund(order, repairStrategies);
-//                repairResult.setRepairStatus(PayStatusEnum.REFUNDED);
+                repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
             default:
-                repairResult.setRepairStatus(repairResult.getBeforeStatus());
-                break;
+                log.error("走到了理论上讲不会走到的分支");
         }
-        PayRepairRecord payRepairRecord = this.saveRecord(order, repairParam, repairResult);
-        return repairResult.setId(payRepairRecord.getId());
+        // 设置修复iD
+        repairResult.setRepairId(IdUtil.getSnowflakeNextId());
+        this.saveRecord(order, repairType, repairResult);
+        return repairResult;
     }
 
     /**
      * 变更未待支付
      *
      */
-    private void wait(PayOrder order, List<AbsPayRepairStrategy> repairStrategies) {
+    private void waitPay(PayOrder order, List<AbsPayRepairStrategy> repairStrategies) {
+
+        repairStrategies.forEach(AbsPayRepairStrategy::doCloseLocalHandler);
         // 修改订单支付状态为成功
         order.setStatus(PayStatusEnum.PROGRESS.getCode());
         payOrderService.updateById(order);
@@ -103,10 +110,10 @@ public class PayRepairService {
      */
     private void success(PayOrder order, List<AbsPayRepairStrategy> strategies) {
         LocalDateTime payTime = PaymentContextLocal.get()
-                .getReconcileInfo()
-                .getPayTime();
+                .getRepairInfo()
+                .getFinishTime();
         // 执行个通道的成功处理方法
-        strategies.forEach(AbsPayRepairStrategy::doSuccessHandler);
+        strategies.forEach(AbsPayRepairStrategy::doPaySuccessHandler);
 
         // 修改订单支付状态为成功
         order.setStatus(PayStatusEnum.SUCCESS.getCode());
@@ -117,8 +124,7 @@ public class PayRepairService {
 
     /**
      * 关闭支付
-     * 同步: 执行支付单所有的支付通道关闭支付逻辑, 如果来源是网关同步, 则不需要调用网关关闭
-     * 回调: 执行所有的支付通道关闭支付逻辑
+     * 同步/对账: 执行支付单所有的支付通道关闭支付逻辑, 不需要调用网关关闭,
      */
     private void closeLocal(PayOrder order, List<AbsPayRepairStrategy> absPayStrategies) {
         // 执行策略的关闭方法
@@ -128,6 +134,7 @@ public class PayRepairService {
     }
     /**
      * 关闭网关交易, 同时也会关闭本地支付
+     * 回调: 执行所有的支付通道关闭支付逻辑
      */
     private void closeGateway(PayOrder payOrder, List<AbsPayRepairStrategy> absPayStrategies) {
         // 执行策略的关闭方法
@@ -137,40 +144,25 @@ public class PayRepairService {
     }
 
     /**
-     * 退款 TODO 需要调用退款同步策略进行补偿
-     * 同步:
-     * 回调:
-     */
-    public void refund(PayOrder payOrder, List<AbsPayRepairStrategy> strategies){
-        // 判断修复后价格总价格是否为0
-
-        // 为0变更为全部退款
-
-        // 不为0调用退款同步接口
-
-    }
-
-    /**
      * 保存记录
      */
-    private PayRepairRecord saveRecord(PayOrder order, PayRepairParam repairParam, RepairResult repairResult){
+    private void saveRecord(PayOrder order, PayRepairTypeEnum recordType, PayRepairResult repairResult){
         // 修复后的状态
-        String afterStatus = Optional.ofNullable(repairResult.getRepairStatus()).map(PayStatusEnum::getCode).orElse(null);
+        String afterStatus = Optional.ofNullable(repairResult.getAfterPayStatus()).map(PayStatusEnum::getCode).orElse(null);
         // 修复发起来源
-        PayRepairSourceEnum source = PaymentContextLocal.get()
+        String source = PaymentContextLocal.get()
                 .getRepairInfo()
                 .getSource();
-
         PayRepairRecord payRepairRecord = new PayRepairRecord()
-                .setPaymentId(order.getId())
+                .setRepairId(repairResult.getRepairId())
+                .setOrderId(order.getId())
                 .setAsyncChannel(order.getAsyncChannel())
-                .setBusinessNo(order.getBusinessNo())
+                .setOrderNo(order.getBusinessNo())
                 .setBeforeStatus(repairResult.getBeforeStatus().getCode())
                 .setAfterStatus(afterStatus)
-                .setAmount(repairParam.getAmount())
-                .setRepairSource(source.getCode())
-                .setRepairType(repairParam.getRepairType().getCode());
+                .setRepairSource(source)
+                .setRepairType(recordType.getCode());
+        payRepairRecord.setId(repairResult.getRepairId());
         recordService.saveRecord(payRepairRecord);
-        return payRepairRecord;
     }
 }

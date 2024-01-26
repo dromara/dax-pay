@@ -37,7 +37,7 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.WECHAT;
     }
 

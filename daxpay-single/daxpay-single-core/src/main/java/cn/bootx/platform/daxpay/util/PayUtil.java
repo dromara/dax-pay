@@ -75,16 +75,6 @@ public class PayUtil {
     }
 
     /**
-     * 过滤出需要的可退款数据
-     */
-    public RefundableInfo refundableInfoFilter(List<RefundableInfo> refundableInfos, PayChannelEnum payChannelEnum){
-        return refundableInfos.stream()
-                .filter(o -> Objects.equals(o.getChannel(), payChannelEnum.getCode()))
-                .findFirst()
-                .orElseThrow(() -> new PayFailureException("退款数据不存在"));
-    }
-
-    /**
      * 获取支付单的超时时间
      */
     public LocalDateTime getPaymentExpiredTime(Integer minute) {

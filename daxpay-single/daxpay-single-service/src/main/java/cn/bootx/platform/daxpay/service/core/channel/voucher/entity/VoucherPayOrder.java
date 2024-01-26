@@ -23,6 +23,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Deprecated
 @DbTable(comment = "储值卡支付记录")
 @Accessors(chain = true)
 @TableName(value = "pay_voucher_pay_order",autoResultMap = true)

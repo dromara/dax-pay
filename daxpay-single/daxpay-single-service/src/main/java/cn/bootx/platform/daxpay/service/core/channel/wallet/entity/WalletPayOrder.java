@@ -16,6 +16,7 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2020/12/8
  */
+@Deprecated
 @EqualsAndHashCode(callSuper = true)
 @Data
 @DbTable(comment = "钱包交易记录")

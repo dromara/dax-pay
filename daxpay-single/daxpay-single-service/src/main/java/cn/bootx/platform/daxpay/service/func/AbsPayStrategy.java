@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
@@ -32,11 +31,6 @@ public abstract class AbsPayStrategy implements PayStrategy{
     /** 支付方式参数 支付参数中的与这个不一致, 以这个为准 */
     private PayChannelParam payChannelParam = null;
 
-    /**
-     * 策略标识
-     * @see PayChannelEnum
-     */
-    public abstract PayChannelEnum getType();
 
     /**
      * 初始化支付的参数支付上下文

@@ -5,17 +5,17 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 修复结果
+ * 支付修复结果
  * @author xxm
  * @since 2024/1/4
  */
 @Data
 @Accessors(chain = true)
-public class RepairResult {
+public class PayRepairResult {
     /** 修复记录ID */
-    private Long id;
+    private Long repairId;
     /** 修复前状态 */
     private PayStatusEnum beforeStatus;
     /** 修复后状态 */
-    private PayStatusEnum repairStatus;
+    private PayStatusEnum afterPayStatus;
 }

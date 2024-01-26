@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.sync.strategy;
 
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPaySyncService;
@@ -26,6 +27,14 @@ public class WeChatPaySyncStrategy extends AbsPaySyncStrategy {
     private final WeChatPaySyncService weChatPaySyncService;
 
     private WeChatPayConfig weChatPayConfig;
+
+    /**
+     * 策略标识
+     */
+    @Override
+    public PayChannelEnum getChannel() {
+        return PayChannelEnum.WECHAT;
+    }
 
     /**
      * 异步支付单与支付网关进行状态比对

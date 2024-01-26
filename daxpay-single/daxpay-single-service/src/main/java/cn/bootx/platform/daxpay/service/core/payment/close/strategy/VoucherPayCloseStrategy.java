@@ -26,7 +26,7 @@ public class VoucherPayCloseStrategy extends AbsPayCloseStrategy {
     private final VoucherPayOrderService voucherPayOrderService;
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.VOUCHER;
     }
 

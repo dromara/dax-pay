@@ -175,7 +175,7 @@ public class PayService {
         }
         // 5.2 如果异步支付完成, 进行订单完成处理
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
-        if (payOrder.isAsyncPay()) {
+        if (asyncPayInfo.isPayComplete()) {
             payOrder.setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
                     .setStatus(SUCCESS.getCode())
                     .setPayTime(LocalDateTime.now());

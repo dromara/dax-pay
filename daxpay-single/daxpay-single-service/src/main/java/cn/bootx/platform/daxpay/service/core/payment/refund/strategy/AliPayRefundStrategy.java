@@ -33,7 +33,7 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.ALI;
     }
 

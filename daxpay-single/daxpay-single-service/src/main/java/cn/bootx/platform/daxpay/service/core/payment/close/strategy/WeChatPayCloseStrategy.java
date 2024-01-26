@@ -29,7 +29,7 @@ public class WeChatPayCloseStrategy extends AbsPayCloseStrategy {
     private WeChatPayConfig weChatPayConfig;
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.WECHAT;
     }
 

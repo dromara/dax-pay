@@ -30,7 +30,7 @@ public class VoucherPayRefundStrategy extends AbsRefundStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.VOUCHER;
     }
 

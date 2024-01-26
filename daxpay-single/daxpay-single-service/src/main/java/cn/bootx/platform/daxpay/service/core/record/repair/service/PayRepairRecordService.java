@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -45,5 +47,12 @@ public class PayRepairRecordService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveRecord(PayRepairRecord record){
         repairRecordManager.save(record);
+    }
+    /**
+     * 保存记录
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveAllRecord(List<PayRepairRecord> records){
+        repairRecordManager.saveAll(records);
     }
 }

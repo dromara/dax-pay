@@ -1,5 +1,7 @@
-package cn.bootx.platform.daxpay.service.core.payment.repair.strategy;
+package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay;
 
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.channel.cash.service.CashService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +26,19 @@ public class CashPayRepairStrategy extends AbsPayRepairStrategy {
 
 
     /**
+     * 策略标识
+     */
+    @Override
+    public PayChannelEnum getChannel() {
+        return PayChannelEnum.CASH;
+    }
+
+    /**
      * 取消支付
      */
     @Override
     public void doCloseLocalHandler() {
         cashService.close(this.getOrder().getId());
-
-
+        this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
     }
 }

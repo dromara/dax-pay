@@ -2,8 +2,8 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.factory;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay.*;
-import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
+import cn.bootx.platform.daxpay.service.core.payment.repair.strategy.refund.*;
+import cn.bootx.platform.daxpay.service.func.AbsRefundRepairStrategy;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.experimental.UtilityClass;
@@ -18,37 +18,38 @@ import java.util.stream.Collectors;
 import static cn.bootx.platform.daxpay.code.PayChannelEnum.ASYNC_TYPE_CODE;
 
 /**
- * 支付修复策略工厂类
+ * 支付退款修复策略工厂
  * @author xxm
- * @since 2023/12/29
+ * @since 2024/1/26
  */
 @UtilityClass
-public class PayRepairStrategyFactory {
+public class RefundRepairStrategyFactory {
+
     /**
      * 根据传入的支付通道创建策略
      * @return 支付策略
      */
-    public static AbsPayRepairStrategy create(PayChannelEnum channelEnum) {
+    public static AbsRefundRepairStrategy create(PayChannelEnum channelEnum) {
 
-        AbsPayRepairStrategy strategy;
+        AbsRefundRepairStrategy strategy;
         switch (channelEnum) {
             case ALI:
-                strategy = SpringUtil.getBean(AliPayRepairStrategy.class);
+                strategy = SpringUtil.getBean(AliRefundRepairStrategy.class);
                 break;
             case WECHAT:
-                strategy = SpringUtil.getBean(WeChatPayRepairStrategy.class);
+                strategy = SpringUtil.getBean(WeChatRefundRepairStrategy.class);
                 break;
             case UNION_PAY:
-                strategy = SpringUtil.getBean(UnionPayRepairStrategy.class);
+                strategy = SpringUtil.getBean(UnionRefundRepairStrategy.class);
                 break;
             case CASH:
-                strategy = SpringUtil.getBean(CashPayRepairStrategy.class);
+                strategy = SpringUtil.getBean(CashRefundRepairStrategy.class);
                 break;
             case WALLET:
-                strategy = SpringUtil.getBean(WalletPayRepairStrategy.class);
+                strategy = SpringUtil.getBean(WalletRefundRepairStrategy.class);
                 break;
             case VOUCHER:
-                strategy = SpringUtil.getBean(VoucherPayRepairStrategy.class);
+                strategy = SpringUtil.getBean(VoucherRefundRepairStrategy.class);
                 break;
             default:
                 throw new PayUnsupportedMethodException();
@@ -59,14 +60,14 @@ public class PayRepairStrategyFactory {
     /**
      * 根据传入的支付类型批量创建策略, 异步支付在后面
      */
-    public static List<AbsPayRepairStrategy> createAsyncLast(List<String> channelCodes) {
+    public static List<AbsRefundRepairStrategy> createAsyncLast(List<String> channelCodes) {
         return create(channelCodes, true);
     }
 
     /**
      * 根据传入的支付类型批量创建策略, 异步支付在前面
      */
-    public static List<AbsPayRepairStrategy> createAsyncFront(List<String> channelCodes) {
+    public static List<AbsRefundRepairStrategy> createAsyncFront(List<String> channelCodes) {
         return create(channelCodes, false);
     }
 
@@ -75,7 +76,7 @@ public class PayRepairStrategyFactory {
      * @param asyncSort 是否异步支付在后面
      * @return 支付策略
      */
-    private static List<AbsPayRepairStrategy> create(List<String> channelCodes, boolean asyncSort) {
+    private static List<AbsRefundRepairStrategy> create(List<String> channelCodes, boolean asyncSort) {
         if (CollectionUtil.isEmpty(channelCodes)) {
             return Collections.emptyList();
         }
@@ -107,7 +108,7 @@ public class PayRepairStrategyFactory {
         // 此处有一个根据Type的反转排序，
         return sortList.stream()
                 .filter(Objects::nonNull)
-                .map(PayRepairStrategyFactory::create)
+                .map(RefundRepairStrategyFactory::create)
                 .collect(Collectors.toList());
     }
 }

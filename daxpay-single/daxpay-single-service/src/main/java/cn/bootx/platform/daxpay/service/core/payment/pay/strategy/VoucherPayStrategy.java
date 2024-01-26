@@ -33,7 +33,7 @@ public class VoucherPayStrategy extends AbsPayStrategy {
     private Voucher voucher;
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.VOUCHER;
     }
 

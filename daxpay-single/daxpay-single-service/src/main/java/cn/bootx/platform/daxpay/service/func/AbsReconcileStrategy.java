@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileOrder;
 import lombok.Getter;
 
@@ -10,16 +9,10 @@ import lombok.Getter;
  * @since 2024/1/18
  */
 @Getter
-public abstract class AbsReconcileStrategy {
+public abstract class AbsReconcileStrategy implements PayStrategy {
 
     /** 对账订单 */
     private PayReconcileOrder recordOrder;
-
-    /**
-     * 策略标识
-     * @see PayChannelEnum
-     */
-    public abstract PayChannelEnum getType();
 
     /**
      * 对账前处理, 主要是初始化支付SDK配置

@@ -1,9 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.callback.service;
 
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
+import cn.bootx.platform.daxpay.service.code.RefundRepairTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.payment.repair.service.RefundRepairService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +25,9 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PayRefundCallbackService {
+    private final PayRefundOrderManager refundOrderManager;
 
-    private final PayOrderQueryService payOrderQueryService;
+    private final RefundRepairService reflectionService;
 
     private final LockTemplate lockTemplate;
 
@@ -33,17 +38,49 @@ public class PayRefundCallbackService {
 
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 加锁
-        LockInfo lock = lockTemplate.lock("payment:callback:" + callbackInfo.getOrderId());
+        LockInfo lock = lockTemplate.lock("callback:refund:" + callbackInfo.getOrderId());
         if (Objects.isNull(lock)){
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("回调正在处理中，忽略本次回调请求");
             log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getOrderId());
             return;
         }
-
         try {
+            // 获取退款单
+            PayRefundOrder refundOrder = refundOrderManager.findById(callbackInfo.getPayRepairOrderId()).orElse(null);
+            // 退款单不存在,记录回调记录
+            if (Objects.isNull(refundOrder)) {
+                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND).setMsg("退款单不存在,记录回调记录");
+                return;
+            }
+
+            // 退款成功还是失败
+            if (Objects.equals(PayRefundStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
+                reflectionService.repair(refundOrder, RefundRepairTypeEnum.SUCCESS);
+            }  else {
+                reflectionService.repair(refundOrder, RefundRepairTypeEnum.FAIL);
+            }
 
         } finally {
             lockTemplate.releaseLock(lock);
         }
+    }
+
+    /**
+     * 成功处理
+     */
+    private void success(PayRefundOrder refundOrder) {
+        // 支付退款订单修复
+
+        // 支付退款订单成功修复
+    }
+
+    /**
+     * 失败处理
+     */
+    private void fail(PayRefundOrder refundOrder) {
+        // 退款订单失败修复
+
+        // 支付订单退款失败修复
+
     }
 }

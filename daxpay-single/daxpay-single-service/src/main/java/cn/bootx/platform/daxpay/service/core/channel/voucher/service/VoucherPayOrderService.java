@@ -23,6 +23,7 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
+@Deprecated
 @RequiredArgsConstructor
 public class VoucherPayOrderService {
 

@@ -1,18 +1,19 @@
-package cn.bootx.platform.daxpay.service.core.payment.repair.strategy;
+package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayOrderService;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -27,12 +28,20 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
     private final WeChatPayCloseService closeService;
-    private final WeChatPayOrderService orderService;
-    private final PayChannelOrderManager payChannelOrderManager;
 
     private final WeChatPayConfigService weChatPayConfigService;
 
+    private final PayChannelOrderManager payChannelOrderManager;
+
     private WeChatPayConfig weChatPayConfig;
+
+    /**
+     * 策略标识
+     */
+    @Override
+    public PayChannelEnum getChannel() {
+        return PayChannelEnum.WECHAT;
+    }
 
     /**
      * 修复前处理
@@ -46,17 +55,13 @@ public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
      * 支付成功处理
      */
     @Override
-    public void doSuccessHandler() {
-        PayChannelOrder orderChannel = payChannelOrderManager.findByPaymentIdAndChannel(this.getOrder().getId(), PayChannelEnum.WECHAT.getCode())
-                .orElseThrow(() -> new PayFailureException("支付宝订单不存在"));
-        orderService.updateAsyncSuccess(this.getOrder(), orderChannel.getAmount());
-    }
-
-    /**
-     * 退款处理 todo 需要结合退款同步功能进行协同实现
-     */
-    @Override
-    public void doRefundHandler() {
+    public void doPaySuccessHandler() {
+        LocalDateTime payTime = PaymentContextLocal.get()
+                .getRepairInfo()
+                .getFinishTime();
+        this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode())
+                .setPayTime(payTime);
+        payChannelOrderManager.updateById(this.getChannelOrder());
     }
 
     /**
@@ -64,7 +69,7 @@ public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doCloseLocalHandler() {
-        orderService.updateClose(this.getOrder().getId());
+        this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
     }
 
     /**

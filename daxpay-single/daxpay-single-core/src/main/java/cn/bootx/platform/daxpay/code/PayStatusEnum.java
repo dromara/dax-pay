@@ -33,7 +33,7 @@ public enum PayStatusEnum {
      * 根据编码获取枚举
      */
     public static PayStatusEnum findByCode(String code){
-        return Arrays.stream(PayStatusEnum.values())
+        return Arrays.stream(values())
                 .filter(payStatusEnum -> Objects.equals(payStatusEnum.getCode(), code))
                 .findFirst()
                 .orElseThrow(() -> new DataNotExistException("该枚举不存在"));

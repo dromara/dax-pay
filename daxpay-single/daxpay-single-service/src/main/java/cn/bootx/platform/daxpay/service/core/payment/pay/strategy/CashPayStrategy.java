@@ -30,7 +30,7 @@ public class CashPayStrategy extends AbsPayStrategy {
      * 现金支付
      */
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.CASH;
     }
 

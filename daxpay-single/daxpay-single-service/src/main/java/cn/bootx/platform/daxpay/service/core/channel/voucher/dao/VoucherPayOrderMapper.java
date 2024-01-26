@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @author xxm
  * @since 2022/3/14
  */
+@Deprecated
 @Mapper
 public interface VoucherPayOrderMapper extends BaseMapper<VoucherPayOrder> {
 

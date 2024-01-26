@@ -41,7 +41,7 @@ public class AliPayStrategy extends AbsPayStrategy {
     private AliPayParam aliPayParam;
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.ALI;
     }
 

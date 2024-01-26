@@ -34,7 +34,7 @@ public class PayReconcileStrategyFactory {
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(channel);
         Map<String, AbsReconcileStrategy> beansOfType = SpringUtil.getBeansOfType(AbsReconcileStrategy.class);
         return beansOfType.values().stream()
-                .filter(strategy -> Objects.equals(strategy.getType(), channelEnum))
+                .filter(strategy -> Objects.equals(strategy.getChannel(), channelEnum))
                 .findFirst()
                 .orElseThrow(PayUnsupportedMethodException::new);
     }

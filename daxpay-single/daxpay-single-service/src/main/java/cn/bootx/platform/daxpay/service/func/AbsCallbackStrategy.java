@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
@@ -18,13 +17,13 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * 支付回调处理抽象类
+ * 回调处理抽象类, 处理支付回调和退款回调
  *
  * @author xxm
  * @since 2021/6/21
  */
 @Slf4j
-public abstract class AbsPayCallbackStrategy implements PayStrategy {
+public abstract class AbsCallbackStrategy implements PayStrategy {
     @Resource
     private PayCallbackRecordService callbackRecordService;
     @Resource
@@ -33,7 +32,7 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
     private PayRefundCallbackService refundCallbackService;
 
     /**
-     * 支付回调
+     * 回调处理入口
      */
     public String callback(Map<String, String> params) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
@@ -46,16 +45,16 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
             this.saveCallbackRecord();
             return null;
         }
-        PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
+        PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK.getCode());
 
         // 判断回调类型
         PayCallbackTypeEnum callbackType = this.getCallbackType();
         if (callbackType == PayCallbackTypeEnum.PAY){
-            // 解析数据并放处理
+            // 解析支付数据并放处理
             this.resolvePayData();
             payCallbackService.payCallback();
         } else {
-            // 解析数据并放处理
+            // 解析退款数据并放处理
             this.resolveRefundData();
             refundCallbackService.refundCallback();
         }
@@ -63,12 +62,6 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
         this.saveCallbackRecord();
         return this.getReturnMsg();
     }
-
-    /**
-     * 支付通道
-     * @see PayChannelEnum
-     */
-    public abstract PayChannelEnum getPayChannel();
 
     /**
      * 验证信息格式
@@ -102,7 +95,7 @@ public abstract class AbsPayCallbackStrategy implements PayStrategy {
     public void saveCallbackRecord() {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         PayCallbackRecord payNotifyRecord = new PayCallbackRecord()
-                .setPayChannel(this.getPayChannel().getCode())
+                .setPayChannel(this.getChannel().getCode())
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackParam()))
                 .setNotifyTime(LocalDateTime.now())
                 .setOrderId(callbackInfo.getOrderId())

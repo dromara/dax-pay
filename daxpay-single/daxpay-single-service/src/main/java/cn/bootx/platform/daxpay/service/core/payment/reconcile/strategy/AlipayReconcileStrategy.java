@@ -38,7 +38,7 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.ALI;
     }
 

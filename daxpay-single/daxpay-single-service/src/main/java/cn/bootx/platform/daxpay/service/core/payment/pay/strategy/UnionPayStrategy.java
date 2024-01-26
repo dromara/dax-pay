@@ -22,7 +22,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class UnionPayStrategy extends AbsPayStrategy {
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.UNION_PAY;
     }
 

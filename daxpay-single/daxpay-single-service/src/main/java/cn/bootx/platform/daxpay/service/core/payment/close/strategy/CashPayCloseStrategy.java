@@ -23,7 +23,7 @@ public class CashPayCloseStrategy extends AbsPayCloseStrategy {
     private final CashService cashService;
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.CASH;
     }
 

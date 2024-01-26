@@ -1,11 +1,12 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
-import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
- * 支付修复上下文
+ * 修复相关信息
  * @author xxm
  * @since 2024/1/25
  */
@@ -14,6 +15,9 @@ import lombok.experimental.Accessors;
 public class RepairLocal {
 
     /** 触发来源 */
-    private PayRepairSourceEnum source;
+    private String source;
+
+    /** 支付完成/退款时间 */
+    private LocalDateTime finishTime;
 
 }

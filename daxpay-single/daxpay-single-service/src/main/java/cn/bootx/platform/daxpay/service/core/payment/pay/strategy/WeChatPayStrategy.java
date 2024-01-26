@@ -44,7 +44,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      * 类型
      */
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.WECHAT;
     }
 

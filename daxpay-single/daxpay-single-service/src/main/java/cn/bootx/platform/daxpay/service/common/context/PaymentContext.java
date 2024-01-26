@@ -36,7 +36,7 @@ public class PaymentContext {
     /** 支付同步相关信息 */
     private final PaySyncLocal paySyncInfo = new PaySyncLocal();
 
-    /** 支付修复相关 */
+    /** 修复相关信息 */
     private final RepairLocal repairInfo = new RepairLocal();
 
     /** 对账相关信息 */

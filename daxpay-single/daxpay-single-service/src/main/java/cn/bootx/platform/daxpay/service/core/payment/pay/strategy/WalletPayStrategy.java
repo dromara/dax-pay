@@ -42,7 +42,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
     private Wallet wallet;
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.WALLET;
     }
 

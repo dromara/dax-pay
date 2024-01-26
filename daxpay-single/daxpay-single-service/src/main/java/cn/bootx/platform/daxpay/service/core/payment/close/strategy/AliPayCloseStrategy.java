@@ -28,7 +28,7 @@ public class AliPayCloseStrategy extends AbsPayCloseStrategy {
     private final AliPayCloseService aliPayCloseService;
 
     @Override
-    public PayChannelEnum getType() {
+    public PayChannelEnum getChannel() {
         return PayChannelEnum.ALI;
     }
 

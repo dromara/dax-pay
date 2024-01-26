@@ -1,28 +1,21 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.entity;
 
-import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.entity.RefundableInfo;
-import cn.bootx.platform.daxpay.service.common.typehandler.RefundableInfoTypeHandler;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
-import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import cn.bootx.table.modify.mysql.constants.MySqlIndexType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * 支付订单
@@ -73,17 +66,6 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     /** 可退款余额 */
     @DbColumn(comment = "可退款余额")
     private Integer refundableBalance;
-
-    /**
-     * 退款信息列表
-     * @see RefundableInfo
-     */
-    @TableField(typeHandler = RefundableInfoTypeHandler.class)
-    @BigField
-    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @DbColumn(comment = "退款信息列表")
-    @Deprecated
-    private List<RefundableInfo> refundableInfos;
 
     /**
      * 支付状态

@@ -21,13 +21,24 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付修复记录")
 public class PayRepairRecordDto extends BaseDto {
 
-    /** 支付ID */
-    @Schema(description = "支付ID")
-    private Long paymentId;
+    /**
+     * 如果一次修复产生的修复记录只有一条, 则该字段为与ID一致
+     * 如果一次修复产生的修复记录有多个, 则使用这个ID作为关联
+     */
+    @Schema(description = "修复ID")
+    private Long repairId;
 
-    /** 业务号 */
+    /** 支付ID/退款ID */
+    @Schema(description = "业务ID")
+    private Long orderId;
+
+    /** 支付业务号/退款号 业务号 */
     @Schema(description = "业务号")
-    private String businessNo;
+    private String orderNo;
+
+    /** 类型  支付修复/退款修复 */
+    @Schema(description = "类型")
+    private String type;
 
     /**
      * 修复来源

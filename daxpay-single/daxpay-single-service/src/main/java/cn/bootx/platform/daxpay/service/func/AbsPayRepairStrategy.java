@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.func;
 
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,19 +14,20 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public abstract class AbsPayRepairStrategy {
+public abstract class AbsPayRepairStrategy implements PayStrategy{
 
     /** 支付订单 */
     private PayOrder order = null;
 
-    /** 支付订单 */
-
+    /** 通道支付订单 */
+    private PayChannelOrder channelOrder = null;
 
     /**
      * 初始化修复参数
      */
-    public void initRepairParam(PayOrder order){
+    public void initRepairParam(PayOrder order, PayChannelOrder channelOrder){
         this.order = order;
+        this.channelOrder = channelOrder;
     }
 
     /**
@@ -38,7 +40,14 @@ public abstract class AbsPayRepairStrategy {
     /**
      * 支付成功处理
      */
-    public void doSuccessHandler(){
+    public void doPaySuccessHandler(){
+
+    }
+
+    /**
+     * 等待支付处理
+     */
+    public void doWaitPayHandler(){
 
     }
 
@@ -54,10 +63,4 @@ public abstract class AbsPayRepairStrategy {
         this.doCloseLocalHandler();
     }
 
-    /**
-     * 退款处理 todo 需要结合退款同步功能进行协同实现
-     */
-    public void doRefundHandler() {
-
-    }
 }
