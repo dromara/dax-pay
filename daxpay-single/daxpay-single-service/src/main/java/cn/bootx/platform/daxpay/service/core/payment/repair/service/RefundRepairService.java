@@ -59,7 +59,7 @@ public class RefundRepairService {
         PayChannelOrder payChannelOrder = payChannelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), payOrder.getAsyncChannel())
                 .orElseThrow(DataNotExistException::new);
         // 异步通道退款单
-        PayRefundChannelOrder refundChannelOrder = refundChannelOrderManager.findByPaymentIdAndChannel(refundOrder.getPaymentId(), payOrder.getAsyncChannel())
+        PayRefundChannelOrder refundChannelOrder = refundChannelOrderManager.findByPaymentIdAndChannel(refundOrder.getId(), payOrder.getAsyncChannel())
                 .orElseThrow(DataNotExistException::new);
 
         // 根据不同的类型执行对应的修复逻辑
@@ -106,7 +106,7 @@ public class RefundRepairService {
         // 设置退款为完成状态
         refundOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode());
         refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode());
-
+        payOrder.setStatus(afterPayRefundStatus.getCode());
         // 更新订单和退款相关订单
         payChannelOrderManager.updateById(payChannelOrder);
         payOrderManager.updateById(payOrder);
@@ -124,42 +124,52 @@ public class RefundRepairService {
      * 退款失败, 将失败的退款金额归还回订单
      */
     private RefundRepairResult closeLocal(PayRefundOrder refundOrder, PayOrder payOrder, PayRefundChannelOrder refundChannelOrder, PayChannelOrder payChannelOrder) {
+        // 要返回的状态
+        RefundRepairResult repairResult = new RefundRepairResult();
 
-        // 更新通道支付单全部退款还是部分退款
-        if (Objects.equals(payChannelOrder.getRefundableBalance(),0)){
-            payChannelOrder.setStatus(PayStatusEnum.REFUNDED.getCode());
-        } else {
-            payChannelOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
-        }
-
-        // 订单相关状态
+        // 订单修复前状态
         PayStatusEnum beforePayStatus = PayStatusEnum.findByCode(refundOrder.getStatus());
-        PayStatusEnum afterPayRefundStatus;
         PayRefundStatusEnum beforeRefundStatus = PayRefundStatusEnum.findByCode(refundOrder.getStatus());
+        repairResult.setBeforePayStatus(beforePayStatus)
+                .setBeforeRefundStatus(beforeRefundStatus);
 
-        // 判断订单是支付成功还是部分退款
-
-
-        if (Objects.equals(payOrder.getRefundableBalance(),0)){
-            afterPayRefundStatus = PayStatusEnum.REFUNDED;
+        // 退款失败返还后的余额
+        int payOrderAmount = refundChannelOrder.getAmount() + payOrder.getRefundableBalance();
+        int payChannelOrderAmount = refundChannelOrder.getAmount() + payChannelOrder.getRefundableBalance();
+        // 退款失败返还后的余额+可退余额 == 订单金额 支付订单回退为为支付成功状态
+        if (payOrderAmount == payOrder.getAmount()){
+            payOrder.setStatus(PayStatusEnum.SUCCESS.getCode());
+            // 说明这个退款只有异步这一个支付, 所以也可以直接回退
+            payChannelOrder.setStatus(PayStatusEnum.SUCCESS.getCode());
+            repairResult.setAfterPayStatus(PayStatusEnum.SUCCESS);
         } else {
-            afterPayRefundStatus = PayStatusEnum.PARTIAL_REFUND;
+            // 回归部分退款状态
+            payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
+            repairResult.setAfterPayStatus(PayStatusEnum.PARTIAL_REFUND);
         }
+        // 更新支付订单相关的可退款金额
+        payOrder.setRefundableBalance(payOrderAmount);
+        payChannelOrder.setRefundableBalance(payChannelOrderAmount);
 
-        // 设置退款为失败状态
-        refundOrder.setStatus(PayRefundStatusEnum.FAIL.getCode());
-        refundChannelOrder.setStatus(PayRefundStatusEnum.FAIL.getCode());
+        // 判断退款订单是否只有异步通道一个关联的通道退款单, 退款值一致说明是一个
+        if (Objects.equals(refundOrder.getAmount(), refundChannelOrder.getAmount())){
+            // 退款单和通道退款单统一设置为失败
+            refundOrder.setStatus(PayRefundStatusEnum.FAIL.getCode());
+            refundChannelOrder.setStatus(PayRefundStatusEnum.FAIL.getCode());
+            repairResult.setAfterRefundStatus(PayRefundStatusEnum.FAIL);
+        } else {
+            // 退款单设置为部分成功状态, 通道退款单设置为失败状态
+            refundOrder.setStatus(PayRefundStatusEnum.FAIL.getCode());
+            refundChannelOrder.setStatus(PayRefundStatusEnum.FAIL.getCode());
+            repairResult.setAfterRefundStatus(PayRefundStatusEnum.PART_SUCCESS);
+        }
 
         // 更新订单和退款相关订单
         payChannelOrderManager.updateById(payChannelOrder);
         payOrderManager.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
         refundChannelOrderManager.updateById(refundChannelOrder);
-        return new RefundRepairResult()
-                .setBeforePayStatus(beforePayStatus)
-                .setAfterPayStatus(afterPayRefundStatus)
-                .setBeforeRefundStatus(beforeRefundStatus)
-                .setAfterRefundStatus(PayRefundStatusEnum.FAIL);
+        return repairResult;
     }
 
     /**

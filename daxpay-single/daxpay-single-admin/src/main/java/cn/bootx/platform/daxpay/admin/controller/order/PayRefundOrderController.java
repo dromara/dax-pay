@@ -45,8 +45,8 @@ public class PayRefundOrderController {
 
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
-    public ResResult<PayRefundOrderDto> findById(Long paymentId){
-        return Res.ok(payRefundQueryService.findById(paymentId));
+    public ResResult<PayRefundOrderDto> findById(Long id){
+        return Res.ok(payRefundQueryService.findById(id));
     }
 
     @Operation(summary = "通道退款订单列表查询")

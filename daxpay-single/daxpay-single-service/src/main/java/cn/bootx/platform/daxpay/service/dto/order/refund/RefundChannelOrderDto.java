@@ -28,9 +28,6 @@ public class RefundChannelOrderDto extends BaseDto {
     @Schema(description = "通道支付单id")
     private Long payChannelId;
 
-    @Schema(description = "支付网关订单号")
-    private String gatewayOrderNo;
-
     @Schema(description = "异步支付方式")
     private boolean async;
 

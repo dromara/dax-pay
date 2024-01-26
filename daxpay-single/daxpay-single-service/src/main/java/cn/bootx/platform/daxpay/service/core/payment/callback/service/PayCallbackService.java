@@ -8,6 +8,7 @@ import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.payment.repair.result.PayRepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -50,21 +51,16 @@ public class PayCallbackService {
         try {
             // 获取支付单
             PayOrder payOrder = payOrderQueryService.findById(callbackInfo.getOrderId()).orElse(null);
-            // 支付单不存在,记录回调记录, TODO 取消支付网关的订单支付情况
+            // 本地支付单不存在,记录回调记录, TODO 需要补单或进行退款
             if (Objects.isNull(payOrder)) {
-                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND)
-                        .setMsg("支付单不存在,记录回调记录");
+                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND).setMsg("支付单不存在,记录回调记录");
                 return;
             }
+            // 设置订单关联网关订单号
+            payOrder.setGatewayOrderNo(callbackInfo.getGatewayOrderNo());
 
             // 成功状态
             if (Objects.equals(PayCallbackStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
-                // 回调时间超出了支付单超时时间, 记录一下, 不做处理 TODO 这块应该把订单给当成正常结束给处理了,
-                if (Objects.nonNull(payOrder.getExpiredTime())
-                        && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
-                    callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setMsg("回调时间超出了支付单支付有效时间");
-                    return;
-                }
                 // 支付成功处理
                 this.success(payOrder);
             } else {
@@ -81,20 +77,25 @@ public class PayCallbackService {
      */
     private void success(PayOrder payOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-
+        // 回调时间超出了支付单超时时间, 记录一下, 不做处理 TODO 这块应该把订单给当成正常结束给处理了,
+        if (Objects.nonNull(payOrder.getExpiredTime())
+                && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
+            callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setMsg("回调时间超出了支付单支付有效时间");
+            return;
+        }
         // 支付单已经被支付,不需要重复处理
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("支付单已经是支付成功状态,不进行处理");
             return;
         }
-
         // 支付单已被取消,记录回调记录 TODO 考虑不全, 需要做退款or人工处理
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setMsg("支付单不是待支付状态,记录回调记录");
             return;
         }
         // 执行支付完成修复逻辑
-        payRepairService.repair(payOrder, PayRepairTypeEnum.SUCCESS);
+        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairTypeEnum.SUCCESS);
+        callbackInfo.setPayRepairId(repair.getRepairId());
     }
 
     /**
@@ -102,21 +103,19 @@ public class PayCallbackService {
      */
     private void fail(PayOrder payOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-
         // payment已被取消,记录回调记录,后期处理 TODO 考虑不完善, 后续优化
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("支付单已经取消,记录回调记录");
             return;
         }
-
         // payment支付成功, 状态非法 TODO 考虑不完善, 后续优化
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())) {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setMsg("支付单状态非法,支付网关状态为失败,但支付单状态为已完成");
             return;
         }
-
         // 执行支付关闭修复逻辑
-        payRepairService.repair(payOrder, PayRepairTypeEnum.CLOSE_LOCAL);
+        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairTypeEnum.CLOSE_LOCAL);
+        callbackInfo.setPayRepairId(repair.getRepairId());
     }
 
 }

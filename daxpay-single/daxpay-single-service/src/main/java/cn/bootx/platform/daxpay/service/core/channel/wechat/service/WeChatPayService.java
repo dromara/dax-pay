@@ -202,25 +202,25 @@ public class WeChatPayService {
         String resultCode = result.get(WeChatPayCode.RESULT_CODE);
         String errCode = result.get(WeChatPayCode.ERR_CODE);
         // 支付成功处理,
-        if (Objects.equals(resultCode, WeChatPayCode.TRADE_SUCCESS)) {
+        if (Objects.equals(resultCode, WeChatPayCode.PAY_SUCCESS)) {
             asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID))
                     .setPayComplete(true);
             return;
         }
         // 支付中, 发起轮训同步
-        if (Objects.equals(resultCode, WeChatPayCode.TRADE_FAIL)
-                && Objects.equals(errCode, WeChatPayCode.TRADE_USERPAYING)) {
+        if (Objects.equals(resultCode, WeChatPayCode.PAY_FAIL)
+                && Objects.equals(errCode, WeChatPayCode.PAY_USERPAYING)) {
             SpringUtil.getBean(this.getClass()).rotationSync(payment);
             asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID));
             return;
         }
         // 支付撤销
-        if (Objects.equals(resultCode, WeChatPayCode.TRADE_REVOKED)) {
+        if (Objects.equals(resultCode, WeChatPayCode.PAY_REVOKED)) {
             throw new PayFailureException("用户已撤销支付");
         }
         // 支付失败
         if (Objects.equals(resultCode, WeChatPayCode.TRADE_PAYERROR)
-                || Objects.equals(resultCode, WeChatPayCode.TRADE_FAIL)) {
+                || Objects.equals(resultCode, WeChatPayCode.PAY_FAIL)) {
             String errorMsg = result.get(WeChatPayCode.ERR_CODE_DES);
             throw new PayFailureException(errorMsg);
         }

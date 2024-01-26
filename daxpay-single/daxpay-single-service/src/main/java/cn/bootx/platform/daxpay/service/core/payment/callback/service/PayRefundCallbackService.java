@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.payment.repair.result.RefundRepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.RefundRepairService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -46,18 +47,24 @@ public class PayRefundCallbackService {
         }
         try {
             // 获取退款单
-            PayRefundOrder refundOrder = refundOrderManager.findById(callbackInfo.getPayRepairOrderId()).orElse(null);
+            PayRefundOrder refundOrder = refundOrderManager.findById(callbackInfo.getOrderId()).orElse(null);
             // 退款单不存在,记录回调记录
             if (Objects.isNull(refundOrder)) {
                 callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND).setMsg("退款单不存在,记录回调记录");
                 return;
             }
+            // 退款单已经被处理, 记录回调记录
+            if (!Objects.equals(PayRefundStatusEnum.PROGRESS.getCode(), refundOrder.getStatus())) {
+                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("退款单状态已处理,记录回调记录");
+            }
 
             // 退款成功还是失败
             if (Objects.equals(PayRefundStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
-                reflectionService.repair(refundOrder, RefundRepairTypeEnum.SUCCESS);
+                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairTypeEnum.SUCCESS);
+                callbackInfo.setPayRepairId(repair.getRepairId());
             }  else {
-                reflectionService.repair(refundOrder, RefundRepairTypeEnum.FAIL);
+                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairTypeEnum.FAIL);
+                callbackInfo.setPayRepairId(repair.getRepairId());
             }
 
         } finally {
@@ -65,22 +72,4 @@ public class PayRefundCallbackService {
         }
     }
 
-    /**
-     * 成功处理
-     */
-    private void success(PayRefundOrder refundOrder) {
-        // 支付退款订单修复
-
-        // 支付退款订单成功修复
-    }
-
-    /**
-     * 失败处理
-     */
-    private void fail(PayRefundOrder refundOrder) {
-        // 退款订单失败修复
-
-        // 支付订单退款失败修复
-
-    }
 }

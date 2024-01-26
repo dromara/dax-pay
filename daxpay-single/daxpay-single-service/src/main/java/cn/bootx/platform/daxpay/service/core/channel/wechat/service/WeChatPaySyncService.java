@@ -68,25 +68,25 @@ public class WeChatPaySyncService {
             // 查询到订单的状态
             String tradeStatus = result.get(WeChatPayCode.TRADE_STATE);
             // 支付完成
-            if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_SUCCESS) || Objects.equals(tradeStatus, WeChatPayCode.TRADE_ACCEPT)) {
+            if (Objects.equals(tradeStatus, WeChatPayCode.PAY_SUCCESS) || Objects.equals(tradeStatus, WeChatPayCode.PAY_ACCEPT)) {
                 String timeEnd = result.get(WeChatPayCode.TIME_END);
                 LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
                 PaymentContextLocal.get().getPaySyncInfo().setPayTime(time);
                 return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS);
             }
             // 待支付
-            if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_NOTPAY)
-                    || Objects.equals(tradeStatus, WeChatPayCode.TRADE_USERPAYING)) {
+            if (Objects.equals(tradeStatus, WeChatPayCode.PAY_NOTPAY)
+                    || Objects.equals(tradeStatus, WeChatPayCode.PAY_USERPAYING)) {
                 return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_WAIT);
             }
 
             // 已退款/退款中 触发一下退款记录的查询
-            if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_REFUND)) {
+            if (Objects.equals(tradeStatus, WeChatPayCode.PAY_REFUND)) {
                 this.syncRefundStatus(order, weChatPayConfig);
             }
             // 已关闭
-            if (Objects.equals(tradeStatus, WeChatPayCode.TRADE_CLOSED)
-                    || Objects.equals(tradeStatus, WeChatPayCode.TRADE_REVOKED)
+            if (Objects.equals(tradeStatus, WeChatPayCode.PAY_CLOSED)
+                    || Objects.equals(tradeStatus, WeChatPayCode.PAY_REVOKED)
                     || Objects.equals(tradeStatus, WeChatPayCode.TRADE_PAYERROR)) {
                 return syncResult.setSyncStatus(PaySyncStatusEnum.CLOSED);
             }

@@ -44,7 +44,7 @@ public class CallbackLocal {
     private LocalDateTime finishTime;
 
     /** 支付修复ID */
-    private Long payRepairOrderId;
+    private Long payRepairId;
 
     /**
      * 回调处理状态

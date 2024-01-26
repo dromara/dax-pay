@@ -30,12 +30,6 @@ public class PayRefundChannelOrder extends MpBaseEntity implements EntityBaseFun
     @DbColumn(comment = "通道支付单id")
     private Long payChannelId;
 
-    /**
-     * 异步支付通道发给网关的退款号, 用与将记录关联起来
-     */
-    @DbColumn(comment = "关联网关退款号")
-    private String gatewayOrderNo;
-
     @DbColumn(comment = "通道")
     private String channel;
 

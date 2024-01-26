@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.service.dto.order.refund;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
-import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +9,6 @@ import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * 退款记录
@@ -32,6 +30,9 @@ public class PayRefundOrderDto extends BaseDto {
 
     @Schema(description = "退款号")
     private String refundNo;
+
+    @Schema(description = "支付网关订单号")
+    private String gatewayOrderNo;
 
     @Schema(description = "标题")
     private String title;

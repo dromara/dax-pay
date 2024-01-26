@@ -1,8 +1,9 @@
-package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay;
+package cn.bootx.platform.daxpay.service.core.payment.repair.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.core.channel.cash.service.CashService;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayOrderService;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,11 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Service
 @RequiredArgsConstructor
-public class CashPayRepairStrategy extends AbsPayRepairStrategy {
+public class WalletPayRepairStrategy extends AbsPayRepairStrategy {
 
-    private final CashService cashService;
+    private final WalletPayOrderService walletPayOrderService;
+
+    private final WalletPayService walletPayService;
 
 
     /**
@@ -30,7 +33,7 @@ public class CashPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public PayChannelEnum getChannel() {
-        return PayChannelEnum.CASH;
+        return PayChannelEnum.WALLET;
     }
 
     /**
@@ -38,7 +41,7 @@ public class CashPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doCloseLocalHandler() {
-        cashService.close(this.getOrder().getId());
+        walletPayService.close(this.getOrder().getId());
         this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
     }
 }

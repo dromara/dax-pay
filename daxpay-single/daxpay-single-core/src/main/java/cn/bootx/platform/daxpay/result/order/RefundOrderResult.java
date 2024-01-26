@@ -36,14 +36,20 @@ public class RefundOrderResult {
     @Schema(description = "剩余可退")
     private BigDecimal refundableBalance;
 
+    /**
+     * 异步支付通道发给网关的退款号, 用与将记录关联起来
+     */
+    @Schema(description = "支付网关订单号")
+    private String gatewayOrderNo;
+
+    @Schema(description = "通道退款订单")
+    private List<RefundChannelOrderResult> channels;
+
     @Schema(description = "退款终端ip")
     private String clientIp;
 
     @Schema(description = "退款时间")
     private LocalDateTime refundTime;
-
-    @Schema(description = "通道退款订单")
-    private List<RefundChannelOrderResult> channels;
 
     /**
      * @see PayRefundStatusEnum

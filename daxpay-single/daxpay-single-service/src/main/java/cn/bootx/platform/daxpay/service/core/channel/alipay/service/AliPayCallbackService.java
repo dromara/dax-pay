@@ -57,14 +57,15 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
     public boolean verifyNotify() {
         Map<String, String> params =PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         String callReq = JSONUtil.toJsonStr(params);
+        log.info("支付宝发起回调 报文: {}", callReq);
         String appId = params.get(APP_ID);
         if (StrUtil.isBlank(appId)) {
-            log.error("支付宝回调报文 appId 为空 {}", callReq);
+            log.error("支付宝回调报文appId为空");
             return false;
         }
         AliPayConfig alipayConfig = aliasConfigService.getConfig();
         if (Objects.isNull(alipayConfig)) {
-            log.error("支付宝支付配置不存在: {}", callReq);
+            log.error("支付宝支付配置不存在");
             return false;
         }
         try {

@@ -120,7 +120,7 @@ public class PayRefundAssistService {
     }
 
     /**
-     * 保存退款记录 成不成功都记录
+     * 保存退款订单 成不成功都记录
      */
     public PayRefundOrder generateRefundOrder(RefundParam refundParam, PayOrder payOrder){
         RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
@@ -139,6 +139,7 @@ public class PayRefundAssistService {
                 .setRefundableBalance(payOrder.getRefundableBalance())
                 .setRefundTime(LocalDateTime.now())
                 .setTitle(payOrder.getTitle())
+                .setGatewayOrderNo(asyncRefundInfo.getGatewayOrderNo())
                 .setErrorCode(asyncRefundInfo.getErrorCode())
                 .setErrorMsg(asyncRefundInfo.getErrorMsg())
                 .setStatus(asyncRefundInfo.getStatus().getCode())

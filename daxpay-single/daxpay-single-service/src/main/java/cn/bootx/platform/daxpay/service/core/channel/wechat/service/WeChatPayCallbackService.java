@@ -43,7 +43,7 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
      */
     @Override
     public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+        return PayChannelEnum.WECHAT;
     }
 
     /**
@@ -57,7 +57,7 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         String appId = params.get(APPID);
 
         if (StrUtil.isBlank(appId)) {
-            log.warn("微信回调报文 appId 为空 {}", callReq);
+            log.warn("微信回调报文 appId 为空");
             return false;
         }
 
@@ -69,7 +69,7 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         // 支付回调信息校验
         WeChatPayConfig weChatPayConfig = weChatPayConfigService.getConfig();
         if (Objects.isNull(weChatPayConfig)) {
-            log.warn("微信支付配置不存在: {}", callReq);
+            log.warn("微信支付配置不存在");
             return false;
         }
         return WxPayKit.verifyNotify(params, weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256, null);
@@ -121,10 +121,12 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         callbackInfo.setGatewayOrderNo(callbackParam.get(REFUND_ID));
         // 退款订单Id
         callbackInfo.setOrderId(Long.valueOf(callbackParam.get(OUT_REFUND_NO)));
-        // 交易状态
-        callbackInfo.setGatewayStatus(callbackParam.get(REFUND_STATUS));
         // 退款金额
         callbackInfo.setAmount(callbackParam.get(REFUND_FEE));
+
+        // 交易状态
+        PayStatusEnum payStatus = Objects.equals(callbackParam.get(REFUND_STATUS), REFUND_USERPAYING) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
+        callbackInfo.setGatewayStatus(payStatus.getCode());
 
         // 退款时间
         String timeEnd = callbackParam.get(SUCCESS_TIME);

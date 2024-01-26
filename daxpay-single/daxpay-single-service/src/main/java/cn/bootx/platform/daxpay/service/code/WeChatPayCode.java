@@ -92,28 +92,37 @@ public interface WeChatPayCode {
 
     // 交易状态
     /** 支付成功 */
-    String TRADE_SUCCESS = "SUCCESS";
+    String PAY_SUCCESS = "SUCCESS";
 
     /** 支付失败 */
-    String TRADE_FAIL = "FAIL";
+    String PAY_FAIL = "FAIL";
 
     /** 退款 */
-    String TRADE_REFUND = "REFUND";
+    String PAY_REFUND = "REFUND";
 
     /** 未支付 */
-    String TRADE_NOTPAY = "NOTPAY";
+    String PAY_NOTPAY = "NOTPAY";
 
     /** 已关闭 */
-    String TRADE_CLOSED = "CLOSED";
+    String PAY_CLOSED = "CLOSED";
 
     /** 已接收，等待扣款 */
-    String TRADE_ACCEPT = "ACCEPT";
+    String PAY_ACCEPT = "ACCEPT";
 
     /** 已撤销(刷卡支付) */
-    String TRADE_REVOKED = "REVOKED";
+    String PAY_REVOKED = "REVOKED";
 
     /** 用户支付中(刷卡支付) */
-    String TRADE_USERPAYING = "USERPAYING";
+    String PAY_USERPAYING = "USERPAYING";
+
+    /** 退款成功 */
+    String REFUND_USERPAYING = "SUCCESS";
+
+    /** 退款异常 */
+    String REFUND_CHANGE = "CHANGE";
+
+    /** 退款关闭 */
+    String REFUND_REFUNDCLOSE = "REFUNDCLOSE";
 
     /** 支付失败(刷卡支付) */
     String TRADE_PAYERROR = "PAYERROR";

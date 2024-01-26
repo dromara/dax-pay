@@ -41,6 +41,10 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
     @DbColumn(comment = "退款号")
     private String refundNo;
 
+    /** 如果有异步通道, 保存关联的网关订单号 */
+    @DbColumn(comment = "网关订单号")
+    private String gatewayOrderNo;
+
     /** 标题 */
     @DbColumn(comment = "标题")
     private String title;
