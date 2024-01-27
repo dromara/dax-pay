@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
 public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunction<PayCallbackRecordDto> {
 
     /** 本地订单id */
-    @DbColumn(comment = "支付订单id")
+    @DbColumn(comment = "本地订单id")
     private Long orderId;
 
     /** 支付网关订单号 */
@@ -59,7 +59,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     private String notifyInfo;
 
     /**
-     * 回调处理状态
+     *
      * @see PayCallbackStatusEnum
      */
     @DbColumn(comment = "回调处理状态")

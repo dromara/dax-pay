@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
@@ -37,7 +36,6 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
     public String callback(Map<String, String> params) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         callbackInfo.getCallbackParam().putAll(params);
-        log.info("支付回调处理: {}", params);
         // 验证消息
         if (!this.verifyNotify()) {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("验证信息格式不通过");
@@ -45,7 +43,6 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
             this.saveCallbackRecord();
             return null;
         }
-        PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK.getCode());
 
         // 判断回调类型
         PayCallbackTypeEnum callbackType = this.getCallbackType();
@@ -100,7 +97,7 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
                 .setNotifyTime(LocalDateTime.now())
                 .setOrderId(callbackInfo.getOrderId())
                 .setGatewayOrderNo(callbackInfo.getGatewayOrderNo())
-                .setRepairOrderId(callbackInfo.getPayRepairOrderId())
+                .setRepairOrderId(callbackInfo.getPayRepairId())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())
                 .setMsg(callbackInfo.getMsg());
         callbackRecordService.save(payNotifyRecord);
