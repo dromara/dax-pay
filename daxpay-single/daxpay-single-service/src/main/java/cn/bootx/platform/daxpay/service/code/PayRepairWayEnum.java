@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付修复类型
+ * 支付修复方式
  * @author xxm
  * @since 2023/12/28
  */
 @Getter
 @AllArgsConstructor
-public enum PayRepairTypeEnum {
+public enum PayRepairWayEnum {
 
     SUCCESS("success","支付成功"),
     CLOSE_LOCAL("close_local","关闭本地支付"),

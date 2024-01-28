@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
@@ -47,7 +47,7 @@ public class PayRepairService {
      * 修复支付单
      */
     @Transactional(rollbackFor = Exception.class)
-    public PayRepairResult repair(PayOrder order, PayRepairTypeEnum repairType){
+    public PayRepairResult repair(PayOrder order, PayRepairWayEnum repairType){
         // 1. 获取支付单管理的通道支付订单
         Map<String, PayChannelOrder> channelOrderMap = channelOrderManager.findAllByPaymentId(order.getId())
                 .stream()
@@ -146,13 +146,13 @@ public class PayRepairService {
     /**
      * 保存记录
      */
-    private void saveRecord(PayOrder order, PayRepairTypeEnum recordType, PayRepairResult repairResult){
+    private void saveRecord(PayOrder order, PayRepairWayEnum recordType, PayRepairResult repairResult){
         // 修复后的状态
         String afterStatus = Optional.ofNullable(repairResult.getAfterPayStatus()).map(PayStatusEnum::getCode).orElse(null);
         // 修复发起来源
         String source = PaymentContextLocal.get()
                 .getRepairInfo()
-                .getSource();
+                .getSource().getCode();
         PayRepairRecord payRepairRecord = new PayRepairRecord()
                 .setRepairId(repairResult.getRepairId())
                 .setOrderId(order.getId())
@@ -161,7 +161,7 @@ public class PayRepairService {
                 .setBeforeStatus(repairResult.getBeforeStatus().getCode())
                 .setAfterStatus(afterStatus)
                 .setRepairSource(source)
-                .setRepairType(recordType.getCode());
+                .setRepairWay(recordType.getCode());
         payRepairRecord.setId(repairResult.getRepairId());
         recordService.saveRecord(payRepairRecord);
     }

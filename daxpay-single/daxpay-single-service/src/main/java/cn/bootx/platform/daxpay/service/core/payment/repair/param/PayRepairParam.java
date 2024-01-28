@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.repair.param;
 
-import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -15,5 +15,5 @@ import lombok.experimental.Accessors;
 public class PayRepairParam {
 
     @Schema(description = "修复类型")
-    private PayRepairTypeEnum repairType;
+    private PayRepairWayEnum repairType;
 }

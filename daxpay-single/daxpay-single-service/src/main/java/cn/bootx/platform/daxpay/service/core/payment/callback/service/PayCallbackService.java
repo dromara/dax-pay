@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.callback.service;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -94,7 +94,7 @@ public class PayCallbackService {
             return;
         }
         // 执行支付完成修复逻辑
-        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairTypeEnum.SUCCESS);
+        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.SUCCESS);
         callbackInfo.setPayRepairId(repair.getRepairId());
     }
 
@@ -114,7 +114,7 @@ public class PayCallbackService {
             return;
         }
         // 执行支付关闭修复逻辑
-        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairTypeEnum.CLOSE_LOCAL);
+        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.CLOSE_LOCAL);
         callbackInfo.setPayRepairId(repair.getRepairId());
     }
 

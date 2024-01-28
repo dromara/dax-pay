@@ -3,7 +3,8 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.code.RefundRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairPayTypeEnum;
+import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
@@ -50,7 +51,7 @@ public class RefundRepairService {
      * 修复支付单
      */
     @Transactional(rollbackFor = Exception.class)
-    public RefundRepairResult repair(PayRefundOrder refundOrder, RefundRepairTypeEnum repairType){
+    public RefundRepairResult repair(PayRefundOrder refundOrder, RefundRepairWayEnum repairType){
 
         // 获取关联支付单
         PayOrder payOrder = payOrderManager.findById(refundOrder.getPaymentId())
@@ -64,9 +65,9 @@ public class RefundRepairService {
 
         // 根据不同的类型执行对应的修复逻辑
         RefundRepairResult repairResult = new RefundRepairResult();
-        if (Objects.requireNonNull(repairType) == RefundRepairTypeEnum.SUCCESS) {
+        if (Objects.requireNonNull(repairType) == RefundRepairWayEnum.SUCCESS) {
             repairResult = this.success(refundOrder,payOrder,refundChannelOrder,payChannelOrder);
-        } else if (repairType == RefundRepairTypeEnum.FAIL) {
+        } else if (repairType == RefundRepairWayEnum.FAIL) {
             repairResult = this.closeLocal(refundOrder,payOrder,refundChannelOrder,payChannelOrder);
         } else {
             log.error("走到了理论上讲不会走到的分支");
@@ -175,39 +176,41 @@ public class RefundRepairService {
     /**
      * 支付订单的修复记录
      */
-    private PayRepairRecord payRepairRecord(PayOrder order, RefundRepairTypeEnum repairType, RefundRepairResult repairResult){
+    private PayRepairRecord payRepairRecord(PayOrder order, RefundRepairWayEnum repairType, RefundRepairResult repairResult){
         // 修复后的状态
         String afterStatus = Optional.ofNullable(repairResult.getBeforePayStatus()).map(PayStatusEnum::getCode).orElse(null);
         // 修复发起来源
         String source = PaymentContextLocal.get()
                 .getRepairInfo()
-                .getSource();
+                .getSource().getCode();
         return new PayRepairRecord()
                 .setOrderId(order.getId())
+                .setRepairType(PayRepairPayTypeEnum.PAY.getCode())
                 .setAsyncChannel(order.getAsyncChannel())
                 .setOrderNo(order.getBusinessNo())
                 .setBeforeStatus(repairResult.getAfterPayStatus().getCode())
                 .setAfterStatus(afterStatus)
                 .setRepairSource(source)
-                .setRepairType(repairType.getCode());
+                .setRepairWay(repairType.getCode());
     }
 
     /**
      * 退款订单的修复记录
      */
-    private PayRepairRecord refundRepairRecord(PayRefundOrder refundOrder, RefundRepairTypeEnum repairType, RefundRepairResult repairResult){
+    private PayRepairRecord refundRepairRecord(PayRefundOrder refundOrder, RefundRepairWayEnum repairType, RefundRepairResult repairResult){
         // 修复后的状态
         String afterStatus = Optional.ofNullable(repairResult.getAfterRefundStatus()).map(PayRefundStatusEnum::getCode).orElse(null);
         // 修复发起来源
         String source = PaymentContextLocal.get()
                 .getRepairInfo()
-                .getSource();
+                .getSource().getCode();
         return new PayRepairRecord()
                 .setOrderId(refundOrder.getId())
                 .setOrderNo(refundOrder.getRefundNo())
+                .setRepairType(PayRepairPayTypeEnum.REFUND.getCode())
                 .setBeforeStatus(repairResult.getBeforeRefundStatus().getCode())
                 .setAfterStatus(afterStatus)
                 .setRepairSource(source)
-                .setRepairType(repairType.getCode());
+                .setRepairWay(repairType.getCode());
     }
 }

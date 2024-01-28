@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
+import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,8 +15,10 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class RepairLocal {
 
-    /** 触发来源 */
-    private String source;
+    /**
+     * 触发来源
+     */
+    private PayRepairSourceEnum source;
 
     /** 支付完成/退款时间 */
     private LocalDateTime finishTime;

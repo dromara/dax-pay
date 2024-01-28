@@ -3,12 +3,11 @@ package cn.bootx.platform.daxpay.service.dto.record.callback;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * 支付回调记录
@@ -21,16 +20,24 @@ import java.time.LocalDateTime;
 @Schema(title = "回调记录")
 public class PayCallbackRecordDto extends BaseDto {
 
-    /** 支付记录id */
-    @Schema(description = "支付记录id")
-    private Long paymentId;
+    @Schema(description = "本地订单ID")
+    private Long orderId;
 
+    @Schema(description = "支付网关订单号")
+    private String gatewayOrderNo;
     /**
      * 支付通道
      * @see PayChannelEnum#getCode()
      */
     @Schema(description = "支付通道")
     private String payChannel;
+
+    /**
+     * 回调类型
+     * @see PayCallbackTypeEnum
+     */
+    @Schema(description = "回调类型")
+    private String callbackType;
 
     /** 通知消息 */
     @Schema(description = "通知消息")
@@ -50,7 +57,4 @@ public class PayCallbackRecordDto extends BaseDto {
     @Schema(description = "提示信息")
     private String msg;
 
-    /** 回调时间 */
-    @Schema(description = "回调时间")
-    private LocalDateTime notifyTime;
 }

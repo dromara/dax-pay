@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.callback.service;
 
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
-import cn.bootx.platform.daxpay.service.code.RefundRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
@@ -60,10 +60,10 @@ public class PayRefundCallbackService {
 
             // 退款成功还是失败
             if (Objects.equals(PayRefundStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
-                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairTypeEnum.SUCCESS);
+                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.SUCCESS);
                 callbackInfo.setPayRepairId(repair.getRepairId());
             }  else {
-                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairTypeEnum.FAIL);
+                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.FAIL);
                 callbackInfo.setPayRepairId(repair.getRepairId());
             }
 

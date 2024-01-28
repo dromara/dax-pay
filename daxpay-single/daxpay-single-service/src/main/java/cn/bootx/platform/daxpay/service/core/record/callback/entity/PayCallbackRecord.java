@@ -17,8 +17,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
-
 /**
  * 回调通知
  * @author xxm
@@ -51,7 +49,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
      * @see PayCallbackTypeEnum
      */
     @DbColumn(comment = "回调类型")
-    private String type;
+    private String callbackType;
 
     /** 通知消息内容 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
@@ -59,7 +57,6 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     private String notifyInfo;
 
     /**
-     *
      * @see PayCallbackStatusEnum
      */
     @DbColumn(comment = "回调处理状态")
@@ -72,10 +69,6 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     /** 提示信息 */
     @DbColumn(comment = "提示信息")
     private String msg;
-
-    /** 回调时间 */
-    @DbColumn(comment = "回调时间")
-    private LocalDateTime notifyTime;
 
     /**
      * 转换

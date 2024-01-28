@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.param.record;
 import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -36,7 +36,7 @@ public class PayRepairRecordQuery {
 
     /**
      * 修复类型
-     * @see PayRepairTypeEnum
+     * @see PayRepairWayEnum
      */
     @Schema(description = "修复类型")
     private String repairType;

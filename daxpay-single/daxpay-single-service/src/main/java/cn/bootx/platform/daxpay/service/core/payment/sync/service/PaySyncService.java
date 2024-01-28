@@ -9,7 +9,7 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
 import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -21,7 +21,6 @@ import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncR
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -179,33 +178,32 @@ public class PaySyncService {
         PaySyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
         // 如果没有支付来源, 设置支付来源为同步
         RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
-
-        if (StrUtil.isBlank(repairInfo.getSource())){
-            repairInfo.setSource(PayRepairSourceEnum.SYNC.getCode());
+        if (Objects.isNull(repairInfo.getSource())){
+            repairInfo.setSource(PayRepairSourceEnum.SYNC);
         }
         PayRepairResult repair = new PayRepairResult();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
             case PAY_SUCCESS: {
-                repair = repairService.repair(payOrder, PayRepairTypeEnum.SUCCESS);
+                repair = repairService.repair(payOrder, PayRepairWayEnum.SUCCESS);
                 break;
             }
             // 待支付, 将订单状态重新设置为待支付
             case PAY_WAIT: {
-                repair = repairService.repair(payOrder,PayRepairTypeEnum.WAIT_PAY);
+                repair = repairService.repair(payOrder, PayRepairWayEnum.WAIT_PAY);
                 break;
             }
             // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
-                repair = repairService.repair(payOrder, PayRepairTypeEnum.CLOSE_LOCAL);
+                repair = repairService.repair(payOrder, PayRepairWayEnum.CLOSE_LOCAL);
                 break;
             }
             // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
             case TIMEOUT:
             case NOT_FOUND_UNKNOWN:{
-                repair = repairService.repair(payOrder, PayRepairTypeEnum.CLOSE_GATEWAY);
+                repair = repairService.repair(payOrder, PayRepairWayEnum.CLOSE_GATEWAY);
                 break;
             }
             // 调用出错

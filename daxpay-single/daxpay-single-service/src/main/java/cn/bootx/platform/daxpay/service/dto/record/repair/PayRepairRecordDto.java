@@ -3,7 +3,8 @@ package cn.bootx.platform.daxpay.service.dto.record.repair;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
+import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -37,8 +38,8 @@ public class PayRepairRecordDto extends BaseDto {
     private String orderNo;
 
     /** 类型  支付修复/退款修复 */
-    @Schema(description = "类型")
-    private String type;
+    @Schema(description = "修复类型")
+    private String repairType;
 
     /**
      * 修复来源
@@ -49,10 +50,11 @@ public class PayRepairRecordDto extends BaseDto {
 
     /**
      * 修复类型
-     * @see PayRepairTypeEnum
+     * @see PayRepairWayEnum
+     * @see RefundRepairWayEnum
      */
     @Schema(description = "修复类型")
-    private String repairType;
+    private String repairWay;
 
     /** 修复的异步通道 */
     @DbColumn(comment = "修复的异步通道")
