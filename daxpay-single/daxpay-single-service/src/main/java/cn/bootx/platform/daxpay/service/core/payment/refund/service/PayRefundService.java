@@ -86,7 +86,7 @@ public class PayRefundService {
         // 获取支付订单
         PayOrder payOrder = payRefundAssistService.getPayOrder(param);
         // 第一次检查退款参数, 校验一些特殊情况
-        payRefundAssistService.checkByRefundParam(param, payOrder);
+        payRefundAssistService.checkAndDisposeParam(param, payOrder);
 
         // 组装退款参数, 处理全部退款和简单退款情况
         List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
@@ -126,6 +126,7 @@ public class PayRefundService {
 
     /**
      * 分支付通道进行退款
+     * TODO 增加错误处理, 目前出现错误后存储的数据不全
      */
     public RefundResult refundByChannel(RefundParam refundParam, PayOrder payOrder, List<PayChannelOrder> payChannelOrders){
         // 0.基础数据准备, 并比对通道支付单是否与可退款记录数量一致

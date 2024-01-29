@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.dto.order.refund;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -30,6 +31,16 @@ public class PayRefundOrderDto extends BaseDto {
 
     @Schema(description = "退款号")
     private String refundNo;
+
+    @Schema(description = "是否含有异步通道")
+    private boolean asyncPay;
+
+    /**
+     * 异步通道
+     * @see PayChannelEnum#ASYNC_TYPE_CODE
+     */
+    @Schema(description = "异步通道")
+    private String asyncChannel;
 
     @Schema(description = "支付网关订单号")
     private String gatewayOrderNo;

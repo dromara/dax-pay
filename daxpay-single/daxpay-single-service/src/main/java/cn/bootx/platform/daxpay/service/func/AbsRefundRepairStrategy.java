@@ -4,6 +4,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import lombok.Getter;
 
 /**
@@ -31,15 +32,10 @@ public abstract class AbsRefundRepairStrategy implements PayStrategy{
         this.payChannelOrder = payChannelOrder;
     }
 
-    /**
-     * 修复前处理
-     */
-    public void doBeforeHandler(){
-
-    }
 
     /**
-     * 支付成功修复
+     * 异步支付单与支付网关进行状态比对后的结果
      */
+    public abstract RefundGatewaySyncResult doSyncStatus();
 
 }

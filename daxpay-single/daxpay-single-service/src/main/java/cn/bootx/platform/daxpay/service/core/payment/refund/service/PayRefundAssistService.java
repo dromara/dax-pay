@@ -2,6 +2,8 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 
 import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.util.CollUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
@@ -27,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 支付退款支撑服务
@@ -84,9 +87,9 @@ public class PayRefundAssistService {
     }
 
     /**
-     * 根据退款参数获取支付订单, 并进行检查
+     * 检查并处理退款参数
      */
-    public void checkByRefundParam(RefundParam param, PayOrder payOrder){
+    public void checkAndDisposeParam(RefundParam param, PayOrder payOrder){
         // 全额退款和部分退款校验
         if (!param.isRefundAll()) {
             if (CollUtil.isEmpty(param.getRefundChannels())) {
@@ -111,6 +114,13 @@ public class PayRefundAssistService {
             PayStatusEnum statusEnum = PayStatusEnum.findByCode(payOrder.getStatus());
             throw new PayFailureException("当前状态["+statusEnum.getName()+"]不允许状态非法, 无法退款");
         }
+
+        // 过滤掉金额为0的退款参数
+        List<RefundChannelParam> channelParams = param.getRefundChannels()
+                .stream()
+                .filter(r -> r.getAmount() > 0)
+                .collect(Collectors.toList());
+        param.setRefundChannels(channelParams);
 
         // 退款号唯一校验
         if (StrUtil.isNotBlank(param.getRefundNo())
@@ -140,11 +150,28 @@ public class PayRefundAssistService {
                 .setRefundTime(LocalDateTime.now())
                 .setTitle(payOrder.getTitle())
                 .setGatewayOrderNo(asyncRefundInfo.getGatewayOrderNo())
-                .setErrorCode(asyncRefundInfo.getErrorCode())
-                .setErrorMsg(asyncRefundInfo.getErrorMsg())
                 .setStatus(asyncRefundInfo.getStatus().getCode())
                 .setClientIp(refundParam.getClientIp())
                 .setReqId(PaymentContextLocal.get().getRequestInfo().getReqId());
+        // 错误状态特殊处理
+        if (asyncRefundInfo.getStatus() == PayRefundStatusEnum.FAIL){
+            refundOrder.setErrorCode(asyncRefundInfo.getErrorCode());
+            refundOrder.setErrorMsg(asyncRefundInfo.getErrorMsg());
+            // 退款失败不保存剩余可退余额, 否则数据看起开会产生困惑
+            refundOrder.setRefundableBalance(null);
+        }
+
+        // 退款参数中是否存在异步通道
+        RefundChannelParam asyncChannel = refundParam.getRefundChannels()
+                .stream()
+                .filter(r -> PayChannelEnum.ASYNC_TYPE_CODE.contains(r.getChannel()))
+                .findFirst()
+                .orElse(null);
+        if (Objects.nonNull(asyncChannel)){
+            refundOrder.setAsyncChannel(asyncChannel.getChannel());
+            refundOrder.setAsyncPay(true);
+        }
+
         // 主键使用预先生成的ID, 如果有异步通道, 关联的退款号就是这个ID
         long refundId = asyncRefundInfo.getRefundId();
         refundOrder.setId(refundId);

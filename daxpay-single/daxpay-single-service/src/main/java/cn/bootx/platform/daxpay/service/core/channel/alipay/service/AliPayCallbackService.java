@@ -143,7 +143,7 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
     public PayCallbackTypeEnum getCallbackType() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
-        String refundFee = callbackParam.get("refund_fee");
+        String refundFee = callbackParam.get(REFUND_FEE);
         // 如果有退款金额，说明是退款回调
         if (StrUtil.isNotBlank(refundFee)){
             return PayCallbackTypeEnum.REFUND;

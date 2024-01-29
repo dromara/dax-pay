@@ -79,11 +79,12 @@ public class PaySyncService {
      * 同步支付状态, 开启一个新的事务, 不受外部抛出异常的影响
      * 1. 如果状态一致, 不进行处理
      * 2. 如果状态不一致, 调用修复逻辑进行修复
+     * todo 需要进行异常处理, 现在会有 Transaction rolled back because it has been marked as rollback-only 问题
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public PaySyncResult syncPayOrder(PayOrder payOrder) {
         // 加锁
-        LockInfo lock = lockTemplate.lock("payment:refund:" + payOrder.getId());
+        LockInfo lock = lockTemplate.lock("sync:payment" + payOrder.getId());
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }

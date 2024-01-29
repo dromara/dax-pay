@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
@@ -68,6 +70,7 @@ public class WeChatPayRefundStrategy extends AbsRefundStrategy {
                 .getRefundInfo()
                 .getStatus();
         this.getRefundChannelOrder().setStatus(refundStatusEnum.getCode());
+
         // 更新支付通道订单中的属性
         payChannelOrderService.updateAsyncPayRefund(this.getPayChannelOrder(), this.getRefundChannelOrder());
     }

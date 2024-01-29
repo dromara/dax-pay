@@ -1,12 +1,12 @@
-package cn.bootx.platform.daxpay.service.core.payment.sync.strategy;
-
+package cn.bootx.platform.daxpay.service.core.payment.sync.strategy.Refund;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPaySyncService;
-import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.func.AbsRefundSyncStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,18 +14,18 @@ import org.springframework.stereotype.Component;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 支付宝支付同步
+ * 支付宝退款同步策略
  * @author xxm
- * @since 2023/7/14
+ * @since 2024/1/29
  */
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class AliPaySyncStrategy extends AbsPaySyncStrategy {
+public class AliRefundSyncStrategy extends AbsRefundSyncStrategy {
 
     private final AliPayConfigService alipayConfigService;
 
-    private final AliPaySyncService alipaySyncService;
+    private final AliPaySyncService aliPaySyncService;;
 
     /**
      * 策略标识
@@ -36,20 +36,14 @@ public class AliPaySyncStrategy extends AbsPaySyncStrategy {
     }
 
     /**
-     * 异步支付单与支付网关进行状态比对
+     * 异步支付单与支付网关进行状态比对后的结果
+     *
+     * @see PaySyncStatusEnum
      */
     @Override
-    public PayGatewaySyncResult doSyncStatus() {
-        this.initAlipayConfig();
-        return alipaySyncService.syncPayStatus(this.getOrder());
-    }
-
-    /**
-     * 初始化支付宝配置信息
-     */
-    private void initAlipayConfig() {
-        // 检查并获取支付宝支付配置
+    public RefundGatewaySyncResult doSyncStatus() {
         AliPayConfig config = alipayConfigService.getConfig();
         alipayConfigService.initConfig(config);
+        return aliPaySyncService.syncRefundStatus(this.getRefundOrder());
     }
 }

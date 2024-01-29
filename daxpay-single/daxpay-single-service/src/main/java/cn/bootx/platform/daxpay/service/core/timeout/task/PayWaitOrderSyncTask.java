@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- *
+ * 待支付订单的状态同步, 先不进行启用
  * @author xxm
  * @since 2024/1/5
  */

@@ -1,11 +1,14 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
@@ -45,7 +48,6 @@ public class AliPaySyncService {
             AlipayTradeQueryModel queryModel = new AlipayTradeQueryModel();
             queryModel.setOutTradeNo(String.valueOf(payOrder.getId()));
 //            queryModel.setQueryOptions(Collections.singletonList("trade_settle_info"));
-            // 查询参数
             AlipayTradeQueryResponse response = AliPayApi.tradeQueryToResponse(queryModel);
             String tradeStatus = response.getTradeStatus();
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
@@ -77,7 +79,7 @@ public class AliPaySyncService {
             }
         }
         catch (AlipayApiException e) {
-            log.error("查询订单失败:", e);
+            log.error("支付订单同步失败:", e);
             syncResult.setErrorMsg(e.getErrMsg());
         }
         return syncResult;
@@ -86,10 +88,23 @@ public class AliPaySyncService {
     /**
      * 退款同步查询
      */
-    private void syncRefundStatus(PayOrder payOrder) throws AlipayApiException {
-        AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();
-        queryModel.setOutTradeNo(String.valueOf(payOrder.getId()));
-        AlipayTradeFastpayRefundQueryResponse response = AliPayApi.tradeRefundQueryToResponse(queryModel);
-        response.getRefundStatus();
+    public RefundGatewaySyncResult syncRefundStatus(PayRefundOrder refundOrder) {
+        RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult().setSyncStatus(PayRefundSyncStatusEnum.FAIL);
+        try {
+            AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();
+            queryModel.setOutTradeNo(String.valueOf(refundOrder.getId()));
+            AlipayTradeFastpayRefundQueryResponse response = AliPayApi.tradeRefundQueryToResponse(queryModel);
+
+            syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
+            String tradeStatus = response.getRefundStatus();
+            // 成功
+            if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS)){
+                return syncResult.setSyncStatus(PayRefundSyncStatusEnum.SUCCESS);
+            }
+        } catch (AlipayApiException e) {
+            log.error("退款订单同步失败:", e);
+            syncResult.setErrorMsg(e.getErrMsg());
+        }
+        return syncResult;
     }
 }

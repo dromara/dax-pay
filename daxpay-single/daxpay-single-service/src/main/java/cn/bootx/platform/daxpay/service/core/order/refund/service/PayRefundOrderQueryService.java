@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayRefundQueryService {
+public class PayRefundOrderQueryService {
 
     private final PayRefundOrderManager refundOrderManager;
     private final PayRefundChannelOrderManager refundOrderChannelManager;

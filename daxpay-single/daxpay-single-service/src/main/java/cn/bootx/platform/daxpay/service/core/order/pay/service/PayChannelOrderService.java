@@ -48,15 +48,15 @@ public class PayChannelOrderService {
     }
 
     /**
-     * 切换支付订单关联的异步支付通道
+     * 切换支付订单关联的异步支付通道, 同时会设置是否支付完成状态
      */
     @Transactional(rollbackFor = Exception.class)
     public void switchAsyncPayChannel(PayOrder payOrder, PayChannelParam payChannelParam){
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         // 是否支付完成
         PayStatusEnum payStatus = asyncPayInfo.isPayComplete() ? PayStatusEnum.SUCCESS : PayStatusEnum.PROGRESS;
-        Optional<PayChannelOrder> payOrderChannelOpt =
-                channelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), payChannelParam.getChannel());
+        // 判断新发起的
+        Optional<PayChannelOrder> payOrderChannelOpt = channelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), payChannelParam.getChannel());
         if (!payOrderChannelOpt.isPresent()){
             PayChannelOrder payChannelOrder = new PayChannelOrder();
             // 替换原有的的支付通道信息
@@ -70,7 +70,7 @@ public class PayChannelOrderService {
                     .setPayTime(LocalDateTime.now())
                     .setChannelExtra(payChannelParam.getChannelExtra())
                     .setStatus(payStatus.getCode());
-            channelOrderManager.deleteByPaymentIdAndAsync(payChannelOrder.getId());
+            channelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
             channelOrderManager.save(payChannelOrder);
         } else {
             // 更新支付通道信息
@@ -94,6 +94,7 @@ public class PayChannelOrderService {
         if (Objects.equals(refundChannelOrder.getStatus(), PayRefundStatusEnum.SUCCESS.getCode())){
             PayStatusEnum status = refundableBalance == 0 ? PayStatusEnum.REFUNDED : PayStatusEnum.PARTIAL_REFUND;
             payChannelOrder.setStatus(status.getCode());
+            refundChannelOrder.setRefundTime(LocalDateTime.now());
         } else {
             payChannelOrder.setStatus(PayStatusEnum.REFUNDING.getCode());
         }

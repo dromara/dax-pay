@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 回调处理抽象类, 处理支付回调和退款回调
@@ -32,35 +33,42 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
 
     /**
      * 回调处理入口
+     * TODO 需要处理异常情况进行保存
      */
     public String callback(Map<String, String> params) {
-        // 将参数写入到上下文中
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        callbackInfo.getCallbackParam().putAll(params);
-        // 验证消息
-        if (!this.verifyNotify()) {
-            callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("验证信息格式不通过");
-            // 消息有问题, 保存记录并返回
-            this.saveCallbackRecord();
-            return null;
-        }
-        // 提前设置订单修复的来源
-        PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
+        try {
+            // 将参数写入到上下文中
+            callbackInfo.getCallbackParam().putAll(params);
+            // 验证消息
+            if (!this.verifyNotify()) {
+                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("验证信息格式不通过");
+                // 消息有问题, 保存记录并返回
+                this.saveCallbackRecord();
+                return null;
+            }
+            // 提前设置订单修复的来源
+            PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
 
-        // 判断回调类型
-        PayCallbackTypeEnum callbackType = this.getCallbackType();
-        if (callbackType == PayCallbackTypeEnum.PAY){
-            // 解析支付数据并放处理
-            this.resolvePayData();
-            payCallbackService.payCallback();
-        } else {
-            // 解析退款数据并放处理
-            this.resolveRefundData();
-            refundCallbackService.refundCallback();
+            // 判断回调类型
+            PayCallbackTypeEnum callbackType = this.getCallbackType();
+            if (callbackType == PayCallbackTypeEnum.PAY){
+                // 解析支付数据并放处理
+                this.resolvePayData();
+                payCallbackService.payCallback();
+            } else {
+                // 解析退款数据并放处理
+                this.resolveRefundData();
+                refundCallbackService.refundCallback();
+            }
+            this.saveCallbackRecord();
+            return this.getReturnMsg();
+        } catch (Exception e) {
+            log.error("回调处理失败", e);
+            callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("回调处理失败: "+e.getMessage());
+            this.saveCallbackRecord();
+            throw e;
         }
-        // 记录回调记录
-        this.saveCallbackRecord();
-        return this.getReturnMsg();
     }
 
     /**
@@ -94,12 +102,18 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
      */
     public void saveCallbackRecord() {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+
+        // 回调类型
+        String callbackType = Optional.ofNullable(this.getCallbackType())
+                .map(PayCallbackTypeEnum::getCode)
+                .orElse(null);
+
         PayCallbackRecord payNotifyRecord = new PayCallbackRecord()
                 .setPayChannel(this.getChannel().getCode())
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackParam()))
                 .setOrderId(callbackInfo.getOrderId())
                 .setGatewayOrderNo(callbackInfo.getGatewayOrderNo())
-                .setCallbackType(this.getCallbackType().getCode())
+                .setCallbackType(callbackType)
                 .setRepairOrderId(callbackInfo.getPayRepairId())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())
                 .setMsg(callbackInfo.getMsg());

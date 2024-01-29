@@ -6,7 +6,8 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
-import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundQueryService;
+import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
@@ -33,8 +34,9 @@ import java.util.Optional;
 @RequestMapping("/order/refund")
 @RequiredArgsConstructor
 public class PayRefundOrderController {
-    private final PayRefundQueryService payRefundQueryService;
+    private final PayRefundOrderQueryService payRefundQueryService;
     private final PayRefundService payRefundService;
+    private final PayRefundOrderService payRefundOrderService;
 
 
     @Operation(summary = "分页查询")
@@ -76,6 +78,13 @@ public class PayRefundOrderController {
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
         payRefundService.refund(refundParam);
+        return Res.ok();
+    }
+
+    @Operation(summary = "退款同步")
+    @PostMapping("/syncById")
+    public ResResult<Void> syncById(Long ID){
+        payRefundOrderService.syncById(ID);
         return Res.ok();
     }
 }

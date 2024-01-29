@@ -2,15 +2,18 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
@@ -82,7 +85,8 @@ public class WeChatPaySyncService {
 
             // 已退款/退款中 触发一下退款记录的查询
             if (Objects.equals(tradeStatus, WeChatPayCode.PAY_REFUND)) {
-                this.syncRefundStatus(order, weChatPayConfig);
+//                this.syncRefundStatus(order, weChatPayConfig);
+                // TODO 特殊处理, 提示用户走退款同步
             }
             // 已关闭
             if (Objects.equals(tradeStatus, WeChatPayCode.PAY_CLOSED)
@@ -101,28 +105,25 @@ public class WeChatPaySyncService {
     /**
      * 退款查询
      */
-    private PayGatewaySyncResult syncRefundStatus(PayOrder order, WeChatPayConfig weChatPayConfig){
-        PayChannelOrder orderChannel = payChannelOrderManager.findByPaymentIdAndChannel(order.getId(), PayChannelEnum.WECHAT.getCode())
+    public RefundGatewaySyncResult syncRefundStatus(PayRefundOrder refundOrder, WeChatPayConfig weChatPayConfig){
+        PayChannelOrder orderChannel = payChannelOrderManager.findByPaymentIdAndChannel(refundOrder.getId(), PayChannelEnum.WECHAT.getCode())
                 .orElseThrow(() -> new PayFailureException("支付订单通道信息不存在"));
 
         Map<String, String> params = UnifiedOrderModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
-                .out_trade_no(String.valueOf(order.getId()))
+                .out_trade_no(String.valueOf(refundOrder.getId()))
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         String xmlResult = WxPayApi.orderRefundQuery(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-        // 获取
+        // TODO 处理退款同步的情况
 
-
-
-        // 判断是否全部退款
         Integer refundFee = Integer.valueOf(result.get(WeChatPayCode.REFUND_FEE));
         if (Objects.equals(refundFee, orderChannel.getAmount())){
-            return new PayGatewaySyncResult().setSyncStatus(PaySyncStatusEnum.REFUND);
+            return new RefundGatewaySyncResult().setSyncStatus(PayRefundSyncStatusEnum.REFUNDING);
         }
-        return new PayGatewaySyncResult().setSyncInfo(JSONUtil.toJsonStr(result));
+        return new RefundGatewaySyncResult().setSyncInfo(JSONUtil.toJsonStr(result));
     }
 }

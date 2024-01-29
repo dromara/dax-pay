@@ -20,11 +20,7 @@ public enum PaySyncStatusEnum {
     PAY_SUCCESS("pay_success", "支付成功"),
     PAY_WAIT("pay_wait", "待支付"),
     CLOSED("closed", "已关闭"),
-    REFUNDING("refunding", "退款中"),
-    /** 部分退款 */
-    PARTIAL_REFUND("partial_refund","部分退款"),
-    /** 全部退款 */
-    REFUND("refund", "已退款"),
+    REFUND("refund", "退款"),
     NOT_FOUND("not_found", "交易不存在"),
     /**
      * 未查询到订单(具体类型未知)

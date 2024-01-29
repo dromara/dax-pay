@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.refund.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundOrderConvert;
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
@@ -40,6 +41,17 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
      */
     @DbColumn(comment = "退款号")
     private String refundNo;
+
+    /** 退款时是否是含有异步通道 */
+    @DbColumn(comment = "是否含有异步通道")
+    private boolean asyncPay;
+
+    /**
+     * 异步通道
+     * @see PayChannelEnum#ASYNC_TYPE_CODE
+     */
+    @DbColumn(comment = "异步通道")
+    private String asyncChannel;
 
     /** 如果有异步通道, 保存关联的网关订单号 */
     @DbColumn(comment = "网关订单号")

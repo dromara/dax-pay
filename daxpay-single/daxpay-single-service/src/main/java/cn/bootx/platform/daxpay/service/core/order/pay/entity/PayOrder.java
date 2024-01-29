@@ -38,13 +38,13 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @DbColumn(comment = "标题")
     private String title;
 
-    /** 是否是异步支付 */
-    @DbColumn(comment = "是否是异步支付")
-    private boolean asyncPay;
-
     /** 是否是组合支付 */
     @DbColumn(comment = "是否是组合支付")
     private boolean combinationPay;
+
+    /** 是否是异步支付 */
+    @DbColumn(comment = "是否是异步支付")
+    private boolean asyncPay;
 
     /**
      * 异步支付通道

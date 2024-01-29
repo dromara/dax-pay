@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -106,7 +107,8 @@ public class RefundRepairService {
         }
         // 设置退款为完成状态
         refundOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode());
-        refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode());
+        refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode())
+                .setRefundTime(LocalDateTime.now());
         payOrder.setStatus(afterPayRefundStatus.getCode());
         // 更新订单和退款相关订单
         payChannelOrderManager.updateById(payChannelOrder);
@@ -175,6 +177,8 @@ public class RefundRepairService {
 
     /**
      * 支付订单的修复记录
+     * 支付完成 -> 退款
+     * 退款 -> 全部退款
      */
     private PayRepairRecord payRepairRecord(PayOrder order, RefundRepairWayEnum repairType, RefundRepairResult repairResult){
         // 修复后的状态
@@ -184,18 +188,20 @@ public class RefundRepairService {
                 .getRepairInfo()
                 .getSource().getCode();
         return new PayRepairRecord()
+                .setRepairId(repairResult.getRepairId())
                 .setOrderId(order.getId())
                 .setRepairType(PayRepairPayTypeEnum.PAY.getCode())
+                .setRepairSource(source)
+                .setRepairWay(repairType.getCode())
                 .setAsyncChannel(order.getAsyncChannel())
                 .setOrderNo(order.getBusinessNo())
                 .setBeforeStatus(repairResult.getAfterPayStatus().getCode())
-                .setAfterStatus(afterStatus)
-                .setRepairSource(source)
-                .setRepairWay(repairType.getCode());
+                .setAfterStatus(afterStatus);
     }
 
     /**
      * 退款订单的修复记录
+     * 退款中 -> 退款成功
      */
     private PayRepairRecord refundRepairRecord(PayRefundOrder refundOrder, RefundRepairWayEnum repairType, RefundRepairResult repairResult){
         // 修复后的状态
@@ -206,6 +212,7 @@ public class RefundRepairService {
                 .getSource().getCode();
         return new PayRepairRecord()
                 .setOrderId(refundOrder.getId())
+                .setRepairId(repairResult.getRepairId())
                 .setOrderNo(refundOrder.getRefundNo())
                 .setRepairType(PayRepairPayTypeEnum.REFUND.getCode())
                 .setBeforeStatus(repairResult.getBeforeRefundStatus().getCode())

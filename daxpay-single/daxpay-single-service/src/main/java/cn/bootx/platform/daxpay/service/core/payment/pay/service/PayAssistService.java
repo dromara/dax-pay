@@ -192,12 +192,11 @@ public class PayAssistService {
             // 退款类型状态
             tradesStatus = Arrays.asList(REFUNDED.getCode(), PARTIAL_REFUND.getCode(), REFUNDING.getCode());
             if (tradesStatus.contains(payOrder.getStatus())) {
-                throw new PayFailureException("退款中");
+                throw new PayFailureException("该订单处于退款状态");
             }
             // 其他状态直接抛出兜底异常
             throw new PayFailureException("订单不是待支付状态，请重新确认订单状态");
         }
         return null;
     }
-
 }

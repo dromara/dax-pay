@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.order.refund.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
-import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderChannelConvert;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * 支付退款订单关联通道信息
@@ -22,7 +24,7 @@ import lombok.experimental.Accessors;
 @DbTable(comment = "支付退款通道订单")
 @Accessors(chain = true)
 @TableName("pay_refund_channel_order")
-public class PayRefundChannelOrder extends MpBaseEntity implements EntityBaseFunction<RefundChannelOrderDto> {
+public class PayRefundChannelOrder extends MpCreateEntity implements EntityBaseFunction<RefundChannelOrderDto> {
 
     @DbColumn(comment = "关联退款id")
     private Long refundId;
@@ -49,6 +51,8 @@ public class PayRefundChannelOrder extends MpBaseEntity implements EntityBaseFun
     @DbColumn(comment = "退款状态")
     private String status;
 
+    @DbColumn(comment = "退款时间")
+    private LocalDateTime refundTime;
 
     /**
      * 转换

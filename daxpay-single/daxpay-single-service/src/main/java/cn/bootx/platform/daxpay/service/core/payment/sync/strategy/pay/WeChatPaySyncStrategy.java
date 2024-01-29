@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.core.payment.sync.strategy;
+package cn.bootx.platform.daxpay.service.core.payment.sync.strategy.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;

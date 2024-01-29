@@ -53,9 +53,6 @@ public interface AliPayCode {
     /** 退款业务号 */
     String OUT_BIZ_NO = "out_biz_no";
 
-    /** 退款流水号 */
-
-
     /** 退款金额 */
     String REFUND_FEE = "refund_fee";
 
@@ -77,6 +74,10 @@ public interface AliPayCode {
 
     /** 交易结束，不可退款 */
     String NOTIFY_TRADE_FINISHED = "TRADE_FINISHED";
+
+    // 退款状态
+    /** 退款成功 */
+    String REFUND_SUCCESS = "REFUND_SUCCESS";
 
 
     // 错误提示

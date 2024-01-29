@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
-import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundQueryService;
+import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.pay.service.PayService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
@@ -38,7 +38,7 @@ public class UniPayController {
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
     private final PayOrderQueryService PayOrderQueryService;
-    private final PayRefundQueryService payRefundQueryService;
+    private final PayRefundOrderQueryService payRefundQueryService;
 
 
     @CountTime

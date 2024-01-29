@@ -10,6 +10,8 @@ import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChanne
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 /**
  * 抽象支付退款策略基类
  *
@@ -59,7 +61,8 @@ public abstract class AbsRefundStrategy implements PayStrategy{
      */
     public void doSuccessHandler() {
         // 更新退款订单数据状态
-        this.refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode());
+        this.refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode())
+                .setRefundTime(LocalDateTime.now());
 
         // 支付通道订单客可退余额
         int refundableBalance = this.getPayChannelOrder().getRefundableBalance() - this.refundChannelOrder.getAmount();
