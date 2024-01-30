@@ -85,10 +85,9 @@ public class WeChatPaySyncService {
                 return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_WAIT);
             }
 
-            // 已退款/退款中 触发一下退款记录的查询
+            // 已退款/退款中
             if (Objects.equals(tradeStatus, WeChatPayCode.PAY_REFUND)) {
-//                this.syncRefundStatus(order, weChatPayConfig);
-                // TODO 特殊处理, 提示用户走退款同步
+                return syncResult.setSyncStatus(PaySyncStatusEnum.REFUND);
             }
             // 已关闭
             if (Objects.equals(tradeStatus, WeChatPayCode.PAY_CLOSED)

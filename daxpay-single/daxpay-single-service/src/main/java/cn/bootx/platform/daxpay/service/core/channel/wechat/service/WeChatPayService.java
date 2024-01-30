@@ -7,7 +7,7 @@ import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.platform.daxpay.code.PayWayEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
+import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.code.WeChatPayWay;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
@@ -268,9 +268,9 @@ public class WeChatPayService {
     @Async("bigExecutor")
     @Retryable(value = RetryableException.class, maxAttempts = 10, backoff = @Backoff(value = 5000L))
     public void rotationSync(PayOrder payOrder) {
-        PaySyncResult paySyncResult = paySyncService.syncPayOrder(payOrder);
+        SyncResult syncResult = paySyncService.syncPayOrder(payOrder);
         // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
-        if (Objects.equals(PAY_WAIT.getCode(), paySyncResult.getGatewayStatus())) {
+        if (Objects.equals(PAY_WAIT.getCode(), syncResult.getGatewayStatus())) {
             throw new RetryableException();
         }
     }

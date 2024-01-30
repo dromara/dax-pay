@@ -15,13 +15,13 @@ import lombok.EqualsAndHashCode;
 public class RefundSyncParam extends PayCommonParam {
 
     /**
-     * 部分退款时 refundId 和 refundNo  必传一个, 同时传输时，以 refundId 为准
+     * 退款订单ID，refundId和refundNo 必传一个, 同时传输时，以 refundId 为准
      */
     @Schema(description = "退款订单ID")
     private Long refundId;
 
     /**
-     * 退款订单号，部分退款时 refundId 和 refundNo  必传一个，同时传输时，以 refundId 为准
+     * 退款订单号，refundId和refundNo 必传一个，同时传输时，以 refundId 为准
      */
     @Schema(description = "退款订单号")
     private String refundNo;

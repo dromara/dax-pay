@@ -1,14 +1,20 @@
 package cn.bootx.platform.daxpay.service.core.payment.sync.service;
 
+import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundSyncParam;
-import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
+import cn.bootx.platform.daxpay.result.pay.SyncResult;
+import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
+import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
+import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.RefundRepairResult;
+import cn.bootx.platform.daxpay.service.core.payment.repair.service.RefundRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.RefundSyncStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
@@ -37,13 +43,15 @@ public class PayRefundSyncService {
 
     private final PaySyncRecordService paySyncRecordService;
 
+    private final RefundRepairService repairService;
+
     private final LockTemplate lockTemplate;
 
     /**
      * 退款同步, 开启一个新的事务, 不受外部抛出异常的影响
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void sync(RefundSyncParam param){
+    public SyncResult sync(RefundSyncParam param){
         // 先获取退款单
         PayRefundOrder requestOrder;
         if (Objects.nonNull(param.getRefundId())){
@@ -55,24 +63,21 @@ public class PayRefundSyncService {
         }
         // 如果不是异步支付, 直接返回返回
         if (!requestOrder.isAsyncPay()){
-            // TODO 需要限制同步的请求不进行同步
-            return;
+            return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步通道的退款，不需要同步");
         }
-        this.syncRefundOrder(requestOrder);
-
+        return this.syncRefundOrder(requestOrder);
     }
 
     /**
      * 退款订单信息同步
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public PaySyncResult syncRefundOrder(PayRefundOrder refundOrder) {
+    public SyncResult syncRefundOrder(PayRefundOrder refundOrder) {
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:refund:" + refundOrder.getId());
         if (Objects.isNull(lock)) {
             throw new RepetitiveOperationException("退款同步处理中，请勿重复操作");
         }
-
         try {
             // 获取支付同步策略类
             AbsRefundSyncStrategy syncPayStrategy = RefundSyncStrategyFactory.create(refundOrder.getAsyncChannel());
@@ -83,14 +88,13 @@ public class PayRefundSyncService {
             // 判断是否同步成功
             if (Objects.equals(syncResult.getSyncStatus(), PayRefundSyncStatusEnum.FAIL)) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                return new PaySyncResult().setErrorMsg(syncResult.getErrorMsg());
+                return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
-
-//             判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
-            boolean statusSync = this.checkAndAdjustSyncStatus(syncResult, refundOrder);
+            // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
+            boolean statusSync = this.checkSyncStatus(syncResult, refundOrder);
             RefundRepairResult repairResult = new RefundRepairResult();
             try {
-//                // 状态不一致，执行支付单修复逻辑
+                // 状态不一致，执行退款单修复逻辑
                 if (!statusSync) {
                     repairResult = this.repairHandler(syncResult, refundOrder);
                 }
@@ -98,11 +102,11 @@ public class PayRefundSyncService {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL);
                 this.saveRecord(refundOrder, syncResult, false, null, e.getMessage());
-                return new PaySyncResult().setErrorMsg(e.getMessage());
+                return new SyncResult().setErrorMsg(e.getMessage());
             }
-//            // 同步成功记录日志
+            // 同步成功记录日志
             this.saveRecord(refundOrder, syncResult, !statusSync, repairResult.getRepairId(), null);
-            return new PaySyncResult()
+            return new SyncResult()
                     .setGatewayStatus(syncResult.getSyncStatus().getCode())
                     .setSuccess(true)
                     .setRepair(!statusSync)
@@ -113,13 +117,45 @@ public class PayRefundSyncService {
     }
 
 
-
-    private boolean checkAndAdjustSyncStatus(RefundGatewaySyncResult syncResult, PayRefundOrder order){
-        return true;
+    /**
+     * 检查状态是否一致
+     */
+    private boolean checkSyncStatus(RefundGatewaySyncResult syncResult, PayRefundOrder order){
+        PayRefundSyncStatusEnum syncStatus = syncResult.getSyncStatus();
+        String orderStatus = order.getStatus();
+        return Objects.equals(orderStatus, syncStatus.getCode());
     }
 
+    /**
+     * 进行退款订单和支付订单的补偿
+     */
     private RefundRepairResult repairHandler(RefundGatewaySyncResult syncResult, PayRefundOrder order){
-        return null;
+        PayRefundSyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
+        // 如果没有支付来源, 设置支付来源为同步
+        RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
+        if (Objects.isNull(repairInfo.getSource())){
+            repairInfo.setSource(PayRepairSourceEnum.SYNC);
+        }
+        RefundRepairResult repair = new RefundRepairResult();
+        // 对支付网关同步的结果进行处理
+        switch (syncStatusEnum) {
+            // 调用出错
+            case SUCCESS:
+                repair = repairService.repair(order, RefundRepairWayEnum.SUCCESS);
+                break;
+            case REFUNDING:
+                // 不进行处理 TODO 添加重试
+                log.warn("退款状态同步接口调用出错");
+                break;
+            case FAIL: {
+                repair = repairService.repair(order, RefundRepairWayEnum.FAIL);
+                break;
+            }
+            default: {
+                throw new BizException("代码有问题");
+            }
+        }
+        return repair;
     }
 
 
@@ -135,6 +171,7 @@ public class PayRefundSyncService {
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setOrderId(payOrder.getId())
                 .setOrderNo(payOrder.getBusinessNo())
+                .setSyncType(PaymentTypeEnum.REFUND.getCode())
                 .setAsyncChannel(payOrder.getAsyncChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())

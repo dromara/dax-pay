@@ -7,9 +7,10 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
-import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
+import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -58,7 +59,7 @@ public class PaySyncService {
      * 支付同步, 开启一个新的事务, 不受外部抛出异常的影响
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public PaySyncResult sync(PaySyncParam param) {
+    public SyncResult sync(PaySyncParam param) {
         PayOrder payOrder = null;
         if (Objects.nonNull(param.getPaymentId())){
             payOrder = payOrderQueryService.findById(param.getPaymentId())
@@ -70,7 +71,7 @@ public class PaySyncService {
         }
         // 如果不是异步支付, 直接返回返回
         if (!payOrder.isAsyncPay()){
-            return new PaySyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步支付方式，不需要同步");
+            return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步支付方式，不需要同步");
         }
         // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);
@@ -82,7 +83,7 @@ public class PaySyncService {
      * todo 需要进行异常处理, 现在会有 Transaction rolled back because it has been marked as rollback-only 问题
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public PaySyncResult syncPayOrder(PayOrder payOrder) {
+    public SyncResult syncPayOrder(PayOrder payOrder) {
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:payment" + payOrder.getId());
         if (Objects.isNull(lock)){
@@ -99,7 +100,7 @@ public class PaySyncService {
             if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(payOrder, syncResult, false, null, syncResult.getErrorMsg());
-                return new PaySyncResult().setErrorMsg(syncResult.getErrorMsg());
+                return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
 
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
@@ -114,12 +115,12 @@ public class PaySyncService {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
                 this.saveRecord(payOrder, syncResult, false, null, e.getMessage());
-                return new PaySyncResult().setErrorMsg(e.getMessage());
+                return new SyncResult().setErrorMsg(e.getMessage());
             }
 
             // 同步成功记录日志
             this.saveRecord( payOrder, syncResult, !statusSync, repairResult.getRepairId(), null);
-            return new PaySyncResult()
+            return new SyncResult()
                     .setGatewayStatus(syncResult.getSyncStatus().getCode())
                     .setSuccess(true)
                     .setRepair(!statusSync)
@@ -234,6 +235,7 @@ public class PaySyncService {
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setOrderId(payOrder.getId())
                 .setOrderNo(payOrder.getBusinessNo())
+                .setSyncType(PaymentTypeEnum.PAY.getCode())
                 .setAsyncChannel(payOrder.getAsyncChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())

@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.order.PayOrderResult;
 import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
+import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
@@ -86,7 +86,7 @@ public class UniPayController {
     @PaymentApi("syncPay")
     @Operation(summary = "支付状态同步")
     @PostMapping("/syncPay")
-    public DaxResult<PaySyncResult> syncPay(@RequestBody PaySyncParam param){
+    public DaxResult<SyncResult> syncPay(@RequestBody PaySyncParam param){
         return DaxRes.ok(paySyncService.sync(param));
     }
 
