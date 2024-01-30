@@ -9,8 +9,9 @@ import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
@@ -20,7 +21,7 @@ import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
 import com.ijpay.wxpay.WxPayApi;
 import com.ijpay.wxpay.model.OrderQueryModel;
-import com.ijpay.wxpay.model.UnifiedOrderModel;
+import com.ijpay.wxpay.model.RefundQueryModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class WeChatPaySyncService {
     private final PayChannelOrderManager payChannelOrderManager;
+    private final PayRefundChannelOrderManager refundChannelOrderManager;
 
     /**
      * 同步查询
@@ -103,22 +105,24 @@ public class WeChatPaySyncService {
     }
 
     /**
-     * 退款查询
+     * 退款信息查询
      */
     public RefundGatewaySyncResult syncRefundStatus(PayRefundOrder refundOrder, WeChatPayConfig weChatPayConfig){
-        PayChannelOrder orderChannel = payChannelOrderManager.findByPaymentIdAndChannel(refundOrder.getId(), PayChannelEnum.WECHAT.getCode())
+        PayRefundChannelOrder orderChannel = refundChannelOrderManager.findByRefundIdAndChannel(refundOrder.getId(), PayChannelEnum.WECHAT.getCode())
                 .orElseThrow(() -> new PayFailureException("支付订单通道信息不存在"));
 
-        Map<String, String> params = UnifiedOrderModel.builder()
+        Map<String, String> params = RefundQueryModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
-                .out_trade_no(String.valueOf(refundOrder.getId()))
+                .out_refund_no(String.valueOf(refundOrder.getId()))
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         String xmlResult = WxPayApi.orderRefundQuery(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         // TODO 处理退款同步的情况
+
+
 
         Integer refundFee = Integer.valueOf(result.get(WeChatPayCode.REFUND_FEE));
         if (Objects.equals(refundFee, orderChannel.getAmount())){

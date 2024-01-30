@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.record.repair.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairPayTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
@@ -48,7 +48,7 @@ public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunctio
 
     /**
      * 修复类型 支付修复/退款修复
-     * @see PayRepairPayTypeEnum
+     * @see PaymentTypeEnum
      */
     @DbColumn(comment = "修复类型")
     private String repairType;

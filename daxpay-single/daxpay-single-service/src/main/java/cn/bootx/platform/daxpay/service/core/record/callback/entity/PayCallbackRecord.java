@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.core.record.callback.convert.PayCallbackRecordConvert;
 import cn.bootx.platform.daxpay.service.dto.record.callback.PayCallbackRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -46,7 +46,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
 
     /**
      * 回调类型
-     * @see PayCallbackTypeEnum
+     * @see PaymentTypeEnum
      */
     @DbColumn(comment = "回调类型")
     private String callbackType;

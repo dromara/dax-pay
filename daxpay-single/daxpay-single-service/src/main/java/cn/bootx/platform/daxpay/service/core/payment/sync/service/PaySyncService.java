@@ -57,7 +57,7 @@ public class PaySyncService {
     /**
      * 支付同步, 开启一个新的事务, 不受外部抛出异常的影响
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = null;
         if (Objects.nonNull(param.getPaymentId())){
@@ -81,7 +81,7 @@ public class PaySyncService {
      * 2. 如果状态不一致, 调用修复逻辑进行修复
      * todo 需要进行异常处理, 现在会有 Transaction rolled back because it has been marked as rollback-only 问题
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public PaySyncResult syncPayOrder(PayOrder payOrder) {
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:payment" + payOrder.getId());
@@ -108,7 +108,7 @@ public class PaySyncService {
             try {
                 // 状态不一致，执行支付单修复逻辑
                 if (!statusSync){
-                    repairResult = this.resultHandler(syncResult, payOrder);
+                    repairResult = this.repairHandler(syncResult, payOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
@@ -173,9 +173,9 @@ public class PaySyncService {
     }
 
     /**
-     * 根据同步的结果对支付单进行处理
+     * 根据同步的结果对支付单进行修复处理
      */
-    private PayRepairResult resultHandler(PayGatewaySyncResult syncResult, PayOrder payOrder){
+    private PayRepairResult repairHandler(PayGatewaySyncResult syncResult, PayOrder payOrder){
         PaySyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
         // 如果没有支付来源, 设置支付来源为同步
         RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
@@ -195,6 +195,8 @@ public class PaySyncService {
                 repair = repairService.repair(payOrder, PayRepairWayEnum.WAIT_PAY);
                 break;
             }
+            case REFUND:
+                throw new PayFailureException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
             // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
@@ -222,7 +224,7 @@ public class PaySyncService {
 
 
     /**
-     * 保存同步记录 TODO 目前出现一次请求多次与网关同步, 未全部记录
+     * 保存同步记录
      * @param payOrder 支付单
      * @param syncResult 同步结果
      * @param repair 是否修复
@@ -230,8 +232,8 @@ public class PaySyncService {
      */
     private void saveRecord(PayOrder payOrder, PayGatewaySyncResult syncResult, boolean repair, Long repairOrderId, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
-                .setPaymentId(payOrder.getId())
-                .setBusinessNo(payOrder.getBusinessNo())
+                .setOrderId(payOrder.getId())
+                .setOrderNo(payOrder.getBusinessNo())
                 .setAsyncChannel(payOrder.getAsyncChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())

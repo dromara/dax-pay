@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
@@ -62,8 +62,8 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         }
 
         // 退款回调不用进行校验
-        PayCallbackTypeEnum callbackType = this.getCallbackType();
-        if (callbackType == PayCallbackTypeEnum.REFUND){
+        PaymentTypeEnum callbackType = this.getCallbackType();
+        if (callbackType == PaymentTypeEnum.REFUND){
             return true;
         }
         // 支付回调信息校验
@@ -141,16 +141,16 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
     /**
      * 判断类型 支付回调/退款回调
      *
-     * @see PayCallbackTypeEnum
+     * @see PaymentTypeEnum
      */
     @Override
-    public PayCallbackTypeEnum getCallbackType() {
+    public PaymentTypeEnum getCallbackType() {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callbackInfo.getCallbackParam();
         if (StrUtil.isNotBlank(callbackParam.get(REQ_INFO))){
-            return PayCallbackTypeEnum.REFUND;
+            return PaymentTypeEnum.REFUND;
         } else {
-            return PayCallbackTypeEnum.PAY;
+            return PaymentTypeEnum.PAY;
         }
     }
 

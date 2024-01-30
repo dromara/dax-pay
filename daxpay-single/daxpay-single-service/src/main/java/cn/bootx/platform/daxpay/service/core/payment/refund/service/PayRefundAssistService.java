@@ -18,6 +18,7 @@ import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundChannelOr
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static cn.bootx.platform.daxpay.code.PayRefundStatusEnum.SUCCESS;
 
 /**
  * 支付退款支撑服务
@@ -109,10 +112,11 @@ public class PayRefundAssistService {
         List<String> tradesStatus = Arrays.asList(
                 PayStatusEnum.PROGRESS.getCode(),
                 PayStatusEnum.CLOSE.getCode(),
+                PayStatusEnum.REFUNDING.getCode(),
                 PayStatusEnum.FAIL.getCode());
         if (tradesStatus.contains(payOrder.getStatus())) {
             PayStatusEnum statusEnum = PayStatusEnum.findByCode(payOrder.getStatus());
-            throw new PayFailureException("当前状态["+statusEnum.getName()+"]不允许状态非法, 无法退款");
+            throw new PayFailureException("当前状态["+statusEnum.getName()+"]不允许发起退款操作");
         }
 
         // 过滤掉金额为0的退款参数
@@ -130,36 +134,29 @@ public class PayRefundAssistService {
     }
 
     /**
-     * 保存退款订单 成不成功都记录
+     * 预先创建退款相关订单并保存, 使用新事务, 防止丢单
      */
-    public PayRefundOrder generateRefundOrder(RefundParam refundParam, PayOrder payOrder){
-        RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    public PayRefundOrder createOrderAndChannel(RefundParam refundParam, PayOrder payOrder, List<PayRefundChannelOrder> refundChannelOrders) {
         // 此次的总退款金额
         Integer amount = refundParam.getRefundChannels()
                 .stream()
                 .map(RefundChannelParam::getAmount)
                 .reduce(0, Integer::sum);
+        int refundableBalance = payOrder.getRefundableBalance();
+
         // 生成退款订单
         PayRefundOrder refundOrder = new PayRefundOrder()
                 .setPaymentId(payOrder.getId())
+                .setStatus(PayRefundStatusEnum.PROGRESS.getCode())
                 .setBusinessNo(payOrder.getBusinessNo())
                 .setRefundNo(refundParam.getRefundNo())
                 .setOrderAmount(payOrder.getAmount())
                 .setAmount(amount)
-                .setRefundableBalance(payOrder.getRefundableBalance())
-                .setRefundTime(LocalDateTime.now())
+                .setRefundableBalance(refundableBalance)
                 .setTitle(payOrder.getTitle())
-                .setGatewayOrderNo(asyncRefundInfo.getGatewayOrderNo())
-                .setStatus(asyncRefundInfo.getStatus().getCode())
                 .setClientIp(refundParam.getClientIp())
                 .setReqId(PaymentContextLocal.get().getRequestInfo().getReqId());
-        // 错误状态特殊处理
-        if (asyncRefundInfo.getStatus() == PayRefundStatusEnum.FAIL){
-            refundOrder.setErrorCode(asyncRefundInfo.getErrorCode());
-            refundOrder.setErrorMsg(asyncRefundInfo.getErrorMsg());
-            // 退款失败不保存剩余可退余额, 否则数据看起开会产生困惑
-            refundOrder.setRefundableBalance(null);
-        }
 
         // 退款参数中是否存在异步通道
         RefundChannelParam asyncChannel = refundParam.getRefundChannels()
@@ -173,33 +170,43 @@ public class PayRefundAssistService {
         }
 
         // 主键使用预先生成的ID, 如果有异步通道, 关联的退款号就是这个ID
-        long refundId = asyncRefundInfo.getRefundId();
-        refundOrder.setId(refundId);
+        refundOrder.setId(IdUtil.getSnowflakeNextId());
 
         // 退款号, 如不传输, 使用ID作为退款号
         if(StrUtil.isBlank(refundOrder.getRefundNo())){
-            refundOrder.setRefundNo(String.valueOf(refundId));
+            refundOrder.setRefundNo(String.valueOf(refundOrder.getId()));
         }
-        return refundOrder;
+        refundChannelOrders.forEach(r->r.setRefundId(refundOrder.getId()));
+        payRefundChannelOrderManager.saveAll(refundChannelOrders);
+        return payRefundOrderManager.save(refundOrder);
     }
 
     /**
-     * 保存退款记录和对应的通道记录
+     * 更新退款成功信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrderAndChannels(PayRefundOrder refundOrder,List<PayRefundChannelOrder> refundChannelOrders){
-        payRefundOrderManager.save(refundOrder);
-        for (PayRefundChannelOrder refundOrderChannel : refundChannelOrders) {
-            refundOrderChannel.setRefundId(refundOrder.getId());
+    public void updateOrderAndChannel(PayRefundOrder refundOrder, List<PayRefundChannelOrder> refundChannelOrders){
+        RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
+        refundOrder.setStatus(asyncRefundInfo.getStatus().getCode())
+                .setGatewayOrderNo(asyncRefundInfo.getGatewayOrderNo());
+        // 退款成功更新退款时间
+        if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
+            refundOrder.setRefundTime(LocalDateTime.now());
         }
-        payRefundChannelOrderManager.saveAll(refundChannelOrders);
+        payRefundOrderManager.updateById(refundOrder);
+        payRefundChannelOrderManager.updateAllById(refundChannelOrders);
     }
 
     /**
-     * 保存退款记录, 开启新事物
+     * 更新退款错误信息
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveOrder(PayRefundOrder refundOrder){
-        payRefundOrderManager.save(refundOrder);
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    public void updateOrderByError(PayRefundOrder refundOrder){
+        RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
+        refundOrder.setErrorCode(asyncRefundInfo.getErrorCode());
+        refundOrder.setErrorMsg(asyncRefundInfo.getErrorMsg());
+        // 退款失败不保存剩余可退余额, 否则数据看起开会产生困惑
+        refundOrder.setRefundableBalance(null);
     }
+
 }

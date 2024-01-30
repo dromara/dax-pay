@@ -31,7 +31,7 @@ public class PayReconcileOrderService {
     /**
      * 更新, 开启一个新事务进行更新
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void update(PayReconcileOrder order){
         reconcileOrderManager.updateById(order);
     }

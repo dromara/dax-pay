@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
@@ -51,8 +51,8 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
             PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
 
             // 判断回调类型
-            PayCallbackTypeEnum callbackType = this.getCallbackType();
-            if (callbackType == PayCallbackTypeEnum.PAY){
+            PaymentTypeEnum callbackType = this.getCallbackType();
+            if (callbackType == PaymentTypeEnum.PAY){
                 // 解析支付数据并放处理
                 this.resolvePayData();
                 payCallbackService.payCallback();
@@ -78,9 +78,9 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
 
     /**
      * 判断类型 支付回调/退款回调
-     * @see PayCallbackTypeEnum
+     * @see PaymentTypeEnum
      */
-    public abstract PayCallbackTypeEnum getCallbackType();
+    public abstract PaymentTypeEnum getCallbackType();
 
     /**
      * 解析支付回调数据并放到上下文中
@@ -105,7 +105,7 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
 
         // 回调类型
         String callbackType = Optional.ofNullable(this.getCallbackType())
-                .map(PayCallbackTypeEnum::getCode)
+                .map(PaymentTypeEnum::getCode)
                 .orElse(null);
 
         PayCallbackRecord payNotifyRecord = new PayCallbackRecord()

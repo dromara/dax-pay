@@ -44,14 +44,14 @@ public class PayRepairRecordService {
     /**
      * 保存记录
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void saveRecord(PayRepairRecord record){
         repairRecordManager.save(record);
     }
     /**
      * 保存记录
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void saveAllRecord(List<PayRepairRecord> records){
         repairRecordManager.saveAll(records);
     }

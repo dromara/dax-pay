@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairPayTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
@@ -57,15 +57,16 @@ public class RefundRepairService {
         // 获取关联支付单
         PayOrder payOrder = payOrderManager.findById(refundOrder.getPaymentId())
                 .orElseThrow(() -> new RuntimeException("支付单不存在"));
-        // 关联异步支付通道支付单
+        // 关联支付通道支付单
         PayChannelOrder payChannelOrder = payChannelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), payOrder.getAsyncChannel())
                 .orElseThrow(DataNotExistException::new);
         // 异步通道退款单
-        PayRefundChannelOrder refundChannelOrder = refundChannelOrderManager.findByPaymentIdAndChannel(refundOrder.getId(), payOrder.getAsyncChannel())
+        PayRefundChannelOrder refundChannelOrder = refundChannelOrderManager.findByRefundIdAndChannel(refundOrder.getId(), payOrder.getAsyncChannel())
                 .orElseThrow(DataNotExistException::new);
 
         // 根据不同的类型执行对应的修复逻辑
         RefundRepairResult repairResult = new RefundRepairResult();
+        //TODO 整个退款单是一个状态, 最终结果要么全部成功, 要么全部回退
         if (Objects.requireNonNull(repairType) == RefundRepairWayEnum.SUCCESS) {
             repairResult = this.success(refundOrder,payOrder,refundChannelOrder,payChannelOrder);
         } else if (repairType == RefundRepairWayEnum.FAIL) {
@@ -164,7 +165,6 @@ public class RefundRepairService {
             // 退款单设置为部分成功状态, 通道退款单设置为失败状态
             refundOrder.setStatus(PayRefundStatusEnum.FAIL.getCode());
             refundChannelOrder.setStatus(PayRefundStatusEnum.FAIL.getCode());
-            repairResult.setAfterRefundStatus(PayRefundStatusEnum.PART_SUCCESS);
         }
 
         // 更新订单和退款相关订单
@@ -190,7 +190,7 @@ public class RefundRepairService {
         return new PayRepairRecord()
                 .setRepairId(repairResult.getRepairId())
                 .setOrderId(order.getId())
-                .setRepairType(PayRepairPayTypeEnum.PAY.getCode())
+                .setRepairType(PaymentTypeEnum.PAY.getCode())
                 .setRepairSource(source)
                 .setRepairWay(repairType.getCode())
                 .setAsyncChannel(order.getAsyncChannel())
@@ -214,7 +214,7 @@ public class RefundRepairService {
                 .setOrderId(refundOrder.getId())
                 .setRepairId(repairResult.getRepairId())
                 .setOrderNo(refundOrder.getRefundNo())
-                .setRepairType(PayRepairPayTypeEnum.REFUND.getCode())
+                .setRepairType(PaymentTypeEnum.REFUND.getCode())
                 .setBeforeStatus(repairResult.getBeforeRefundStatus().getCode())
                 .setAfterStatus(afterStatus)
                 .setRepairSource(source)

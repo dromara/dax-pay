@@ -8,6 +8,8 @@ import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundOrder
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 
 /**
  * 退款记录
+ * 主键作为退款的请求号
  *
  * @author xxm
  * @since 2022/3/2
@@ -71,6 +74,7 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
 
     /** 剩余可退 */
     @DbColumn(comment = "剩余可退")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private Integer refundableBalance;
 
     /** 请求链路ID */

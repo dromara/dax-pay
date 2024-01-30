@@ -51,6 +51,13 @@ public class AliPaySyncService {
             AlipayTradeQueryResponse response = AliPayApi.tradeQueryToResponse(queryModel);
             String tradeStatus = response.getTradeStatus();
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
+            // 失败
+            if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+                syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
+                syncResult.setErrorCode(response.getSubCode());
+                syncResult.setErrorMsg(response.getSubMsg());
+                return syncResult;
+            }
             // 支付完成 TODO 部分退款也在这个地方, 但无法进行区分, 需要借助对账进行处理
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_FINISHED)) {
                 PaymentContextLocal.get().getPaySyncInfo().setGatewayOrderNo(response.getTradeNo());
@@ -92,14 +99,25 @@ public class AliPaySyncService {
         RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult().setSyncStatus(PayRefundSyncStatusEnum.FAIL);
         try {
             AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();
-            queryModel.setOutTradeNo(String.valueOf(refundOrder.getId()));
+            // 退款请求号
+            queryModel.setOutRequestNo(String.valueOf(refundOrder.getId()));
+            // 商户订单号
+            queryModel.setOutTradeNo(String.valueOf(refundOrder.getPaymentId()));
             AlipayTradeFastpayRefundQueryResponse response = AliPayApi.tradeRefundQueryToResponse(queryModel);
-
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
+            // 失败
+            if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+                syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL);
+                syncResult.setErrorCode(response.getSubCode());
+                syncResult.setErrorMsg(response.getSubMsg());
+                return syncResult;
+            }
             String tradeStatus = response.getRefundStatus();
             // 成功
-            if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS)){
+            if (Objects.equals(tradeStatus, AliPayCode.REFUND_SUCCESS)){
                 return syncResult.setSyncStatus(PayRefundSyncStatusEnum.SUCCESS);
+            } else {
+                return syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL).setErrorMsg("支付宝网关反正退款未成功");
             }
         } catch (AlipayApiException e) {
             log.error("退款订单同步失败:", e);

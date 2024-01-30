@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
@@ -54,7 +52,7 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        aliRefundService.refund(this.getPayOrder(), this.getRefundChannelParam().getAmount());
+        aliRefundService.refund(this.getRefundOrder(), this.getRefundChannelParam().getAmount());
     }
 
     /**

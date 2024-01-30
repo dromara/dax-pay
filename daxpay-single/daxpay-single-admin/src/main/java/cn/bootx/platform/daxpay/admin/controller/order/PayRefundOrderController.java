@@ -6,6 +6,7 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
+import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
@@ -83,8 +84,7 @@ public class PayRefundOrderController {
 
     @Operation(summary = "退款同步")
     @PostMapping("/syncById")
-    public ResResult<Void> syncById(Long ID){
-        payRefundOrderService.syncById(ID);
-        return Res.ok();
+    public ResResult<PaySyncResult> syncById(Long id){
+        return Res.ok(payRefundOrderService.syncById(id));
     }
 }

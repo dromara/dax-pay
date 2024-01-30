@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.util.CertUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayCallbackTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
@@ -137,18 +137,18 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
     /**
      * 判断类型 支付回调/退款回调
      *
-     * @see PayCallbackTypeEnum
+     * @see PaymentTypeEnum
      */
     @Override
-    public PayCallbackTypeEnum getCallbackType() {
+    public PaymentTypeEnum getCallbackType() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
         String refundFee = callbackParam.get(REFUND_FEE);
         // 如果有退款金额，说明是退款回调
         if (StrUtil.isNotBlank(refundFee)){
-            return PayCallbackTypeEnum.REFUND;
+            return PaymentTypeEnum.REFUND;
         } else {
-            return PayCallbackTypeEnum.PAY;
+            return PaymentTypeEnum.PAY;
         }
     }
 

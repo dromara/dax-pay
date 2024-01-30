@@ -44,7 +44,7 @@ public class PaySyncRecordService {
     /**
      * 记录同步记录 同步支付单的不进行记录
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void saveRecord(PaySyncRecord paySyncRecord){
         orderManager.save(paySyncRecord);
     }

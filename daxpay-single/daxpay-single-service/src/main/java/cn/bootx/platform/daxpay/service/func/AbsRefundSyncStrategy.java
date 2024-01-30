@@ -23,6 +23,10 @@ public abstract class AbsRefundSyncStrategy implements PayStrategy{
     }
 
     /**
+     * 同步前处理, 主要是预防请求过于迅速, 支付网关没有处理完退款请求, 导致返回的状态不正确
+     */
+    public void doBeforeHandler(){}
+    /**
      * 异步支付单与支付网关进行状态比对后的结果
      * @see PaySyncStatusEnum
      */

@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.code.PayRepairPayTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
@@ -161,7 +161,7 @@ public class PayRepairService {
                 .setOrderNo(order.getBusinessNo())
                 .setBeforeStatus(repairResult.getBeforeStatus().getCode())
                 .setAfterStatus(afterStatus)
-                .setRepairType(PayRepairPayTypeEnum.PAY.getCode())
+                .setRepairType(PaymentTypeEnum.PAY.getCode())
                 .setRepairSource(source)
                 .setRepairWay(recordType.getCode());
         payRepairRecord.setId(repairResult.getRepairId());

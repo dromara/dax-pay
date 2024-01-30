@@ -87,7 +87,7 @@ public class PayChannelOrderService {
      * 更新异步支付通道退款余额和状态
      */
     public void updateAsyncPayRefund(PayChannelOrder payChannelOrder, PayRefundChannelOrder refundChannelOrder){
-        // 支付通道订单客可退余额
+        // 支付通道订单可退余额
         int refundableBalance = payChannelOrder.getRefundableBalance() - refundChannelOrder.getAmount();
         payChannelOrder.setRefundableBalance(refundableBalance);
         // 支付通道订单状态

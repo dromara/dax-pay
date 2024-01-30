@@ -27,13 +27,16 @@ import lombok.experimental.Accessors;
 @TableName("pay_sync_record")
 public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<PaySyncRecordDto> {
 
-    /** 支付记录id */
-    @DbColumn(comment = "支付记录id")
-    private Long paymentId;
+    /** 本地订单ID */
+    @DbColumn(comment = "本地订单ID")
+    private Long orderId;
 
-    /** 业务号 */
-    @DbColumn(comment = "业务号")
-    private String businessNo;
+    /** 本地业务号 */
+    @DbColumn(comment = "本地业务号")
+    private String orderNo;
+
+    @DbColumn(comment = "同步通道")
+    private String syncChannel;
 
     /**
      * 同步通道

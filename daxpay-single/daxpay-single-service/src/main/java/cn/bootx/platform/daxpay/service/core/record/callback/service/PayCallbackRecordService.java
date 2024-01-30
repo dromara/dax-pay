@@ -42,7 +42,7 @@ public class PayCallbackRecordService {
     /**
      * 保存回调记录
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void save(PayCallbackRecord record) {
         callbackRecordManager.save(record);
     }

@@ -1,6 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.payment.sync.strategy.Refund;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPaySyncService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import cn.bootx.platform.daxpay.service.func.AbsRefundSyncStrategy;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Component
 @RequiredArgsConstructor
 public class WeChatRefundSyncStrategy extends AbsRefundSyncStrategy {
+    private final WeChatPaySyncService weChatPaySyncService;
+    private final WeChatPayConfigService weChatPayConfigService;
 
     /**
      * 策略标识
@@ -32,7 +37,8 @@ public class WeChatRefundSyncStrategy extends AbsRefundSyncStrategy {
      */
     @Override
     public RefundGatewaySyncResult doSyncStatus() {
-        return null;
+        WeChatPayConfig config = weChatPayConfigService.getConfig();
+        return weChatPaySyncService.syncRefundStatus(this.getRefundOrder(), config);
     }
 
 }

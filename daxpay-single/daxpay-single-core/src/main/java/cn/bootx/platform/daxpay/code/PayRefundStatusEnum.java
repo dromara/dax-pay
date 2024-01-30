@@ -20,9 +20,8 @@ public enum PayRefundStatusEnum {
      * 接口调用成功不代表成功
      */
     PROGRESS("progress","退款中"),
-    /** 部分成功 */
-    PART_SUCCESS("part_success","部分成功"),
     SUCCESS("success","成功"),
+    CLOSE("close","关闭"),
     FAIL("fail","失败");
 
     /** 编码 */

@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
@@ -52,12 +50,13 @@ public class WeChatPayRefundStrategy extends AbsRefundStrategy {
         this.weChatPayConfig = weChatPayConfigService.getConfig();
     }
 
+
     /**
      * 退款操作
      */
     @Override
     public void doRefundHandler() {
-        wechatRefundService.refund(this.getPayOrder(), this.getRefundChannelParam().getAmount(), this.getPayChannelOrder(), this.weChatPayConfig);
+        wechatRefundService.refund(this.getRefundOrder(), this.getRefundChannelParam().getAmount(), this.getPayChannelOrder(), this.weChatPayConfig);
     }
 
     /**

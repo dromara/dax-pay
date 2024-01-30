@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.order.refund.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.daxpay.result.pay.PaySyncResult;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PayRefundSyncService;
@@ -24,10 +25,10 @@ public class PayRefundOrderService {
     /**
      * 退款同步
      */
-    public void syncById(Long id){
+    public PaySyncResult syncById(Long id){
         PayRefundOrder refundOrder = refundOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("退款订单不存在"));
-        refundSyncService.syncPayOrder(refundOrder);
+        return refundSyncService.syncRefundOrder(refundOrder);
     }
 
 }

@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,9 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     /** 支付订单 */
     private PayOrder payOrder = null;
 
+    /** 退款订单 已经持久化, 后续需要更新 */
+    private PayRefundOrder refundOrder = null;
+
     /** 当前通道的订单 */
     private PayChannelOrder payChannelOrder = null;
 
@@ -34,7 +38,7 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     /** 当前通道的退款参数 退款参数中的与这个不一致, 以这个为准 */
     private RefundChannelParam refundChannelParam = null;
 
-    /** 当前通道的退款订单 */
+    /** 当前通道的退款订单 未持久化, 需要后续更新 */
     private PayRefundChannelOrder refundChannelOrder;
 
     /**
@@ -46,8 +50,19 @@ public abstract class AbsRefundStrategy implements PayStrategy{
         this.refundParam = refundParam;
     }
 
+
     /**
-     * 退款前对处理 包含必要的校验以及对Payment对象的创建和保存操作
+     * 退款前预扣通道和支付订单的金额
+     */
+    public void doPreDeductOrderHandler(){
+        PayChannelOrder payChannelOrder = this.getPayChannelOrder();
+        int refundableBalance = payChannelOrder.getRefundableBalance() - this.getRefundChannelParam().getAmount();
+        payChannelOrder.setRefundableBalance(refundableBalance)
+                .setStatus(PayStatusEnum.REFUNDING.getCode());
+    }
+
+    /**
+     * 退款前对处理
      */
     public void doBeforeRefundHandler() {}
 
@@ -64,7 +79,7 @@ public abstract class AbsRefundStrategy implements PayStrategy{
         this.refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode())
                 .setRefundTime(LocalDateTime.now());
 
-        // 支付通道订单客可退余额
+        // 支付通道订单可退余额
         int refundableBalance = this.getPayChannelOrder().getRefundableBalance() - this.refundChannelOrder.getAmount();
         // 支付通道订单状态
         PayStatusEnum status = refundableBalance == 0 ? PayStatusEnum.REFUNDED : PayStatusEnum.PARTIAL_REFUND;

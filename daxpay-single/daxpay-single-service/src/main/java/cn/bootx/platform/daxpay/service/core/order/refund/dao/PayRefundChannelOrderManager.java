@@ -29,9 +29,9 @@ public class PayRefundChannelOrderManager extends BaseManager<PayRefundChannelOr
     /**
      * 根据退款单ID和退款通道查询
      */
-    public Optional<PayRefundChannelOrder> findByPaymentIdAndChannel(Long paymentId, String channel) {
+    public Optional<PayRefundChannelOrder> findByRefundIdAndChannel(Long refundId, String channel) {
         return lambdaQuery()
-                .eq(PayRefundChannelOrder::getRefundId,paymentId)
+                .eq(PayRefundChannelOrder::getRefundId,refundId)
                 .eq(PayRefundChannelOrder::getChannel,channel)
                 .oneOpt();
     }

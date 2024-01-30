@@ -43,7 +43,7 @@ public class PayCloseRecordService {
     /**
      * 新开事务进行记录保存
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void saveRecord(PayCloseRecord record){
         manager.save(record);
     }
