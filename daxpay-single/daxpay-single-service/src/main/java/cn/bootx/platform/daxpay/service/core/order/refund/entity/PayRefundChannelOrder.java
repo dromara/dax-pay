@@ -7,6 +7,8 @@ import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderCha
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,6 +46,10 @@ public class PayRefundChannelOrder extends MpCreateEntity implements EntityBaseF
     @DbColumn(comment = "退款金额")
     private Integer amount;
 
+    @DbColumn(comment = "剩余可退余额")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private Integer refundableAmount;
+
     /**
      * 退款状态
      * @see PayRefundStatusEnum
@@ -51,7 +57,7 @@ public class PayRefundChannelOrder extends MpCreateEntity implements EntityBaseF
     @DbColumn(comment = "退款状态")
     private String status;
 
-    @DbColumn(comment = "退款时间")
+    @DbColumn(comment = "退款完成时间")
     private LocalDateTime refundTime;
 
     /**

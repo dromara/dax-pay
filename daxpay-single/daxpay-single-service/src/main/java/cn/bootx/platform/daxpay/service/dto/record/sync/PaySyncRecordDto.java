@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.dto.record.sync;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
@@ -21,19 +22,27 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付同步订单")
 public class PaySyncRecordDto extends BaseDto {
 
-    /** 支付记录id */
-    @Schema(description = "支付记录id")
-    private Long paymentId;
+    /** 本地订单ID */
+    @Schema(description = "本地订单ID")
+    private Long orderId;
 
-    /** 业务号 */
-    @Schema(description = "业务号")
-    private String businessNo;
+    /** 本地业务号 */
+    @Schema(description = "本地业务号")
+    private String orderNo;
+
+    /** 网关订单号 */
+    @Schema(description = "网关订单号")
+    private String gatewayOrderNo;
+
+    /** 同步类型 */
+    @Schema(description = "同步类型")
+    private String syncType;
 
     /**
-     * 同步通道
+     * 同步的异步通道
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "同步通道")
+    @Schema(description = "同步的异步通道")
     private String asyncChannel;
 
     /** 通知消息 */
@@ -44,6 +53,7 @@ public class PaySyncRecordDto extends BaseDto {
     /**
      * 网关返回状态
      * @see PaySyncStatusEnum
+     * @see PayRefundSyncStatusEnum
      */
     @Schema(description = "网关返回状态")
     private String gatewayStatus;

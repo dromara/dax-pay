@@ -66,23 +66,32 @@ public interface WeChatPayCode {
     /** 交易状态 */
     String TRADE_STATE = "trade_state";
 
+    // 回调参数
     /** 支付金额 */
     String TOTAL_FEE = "total_fee";
 
     /** 微信退款单号 */
-    String REFUND_ID = "refund_id";
+    String CALLBACK_REFUND_ID = "refund_id";
 
     /** 商户退款单号 */
-    String OUT_REFUND_NO = "out_refund_no";
+    String CALLBACK_OUT_REFUND_NO = "out_refund_no";
 
     /** 退款状态 */
-    String REFUND_STATUS = "refund_status";
+    String CALLBACK_REFUND_STATUS = "refund_status";
 
     /** 申请退款金额 */
-    String REFUND_FEE = "refund_fee";
+    String CALLBACK_REFUND_FEE = "refund_fee";
 
     /** 退款成功时间 yyyyMMddHHmmss */
-    String SUCCESS_TIME = "success_time";
+    String CALLBACK_SUCCESS_TIME = "success_time";
+
+    // 退款信息查询参数
+    /** 退款成功时间 yyyy-MM-dd HH:mm:ss */
+    String REFUND_SUCCESS_TIME = "refund_success_time_0";
+    /** 网关退款订单号 */
+    String REFUND_ID = "refund_id_0";
+    /** 退款成状态 */
+    String REFUND_STATUS = "refund_status_0";
 
     /** 当前返回退款笔数 */
     String REFUND_COUNT = "refund_count";
@@ -116,13 +125,16 @@ public interface WeChatPayCode {
     String PAY_USERPAYING = "USERPAYING";
 
     /** 退款成功 */
-    String REFUND_USERPAYING = "SUCCESS";
+    String REFUND_SUCCESS = "SUCCESS";
 
     /** 退款异常 */
     String REFUND_CHANGE = "CHANGE";
 
     /** 退款关闭 */
     String REFUND_REFUNDCLOSE = "REFUNDCLOSE";
+
+    /** 退款处理中 */
+    String REFUND_PROCESSING = "PROCESSING";
 
     /** 支付失败(刷卡支付) */
     String TRADE_PAYERROR = "PAYERROR";

@@ -72,6 +72,8 @@ public abstract class AbsRefundRepairStrategy implements PayStrategy{
             payChannelOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
 
         }
+        // 如果失败, 可退余额设置为null
+        refundChannelOrder.setRefundableAmount(null);
         refundChannelOrder.setStatus(PayRefundStatusEnum.CLOSE.getCode());
     }
 

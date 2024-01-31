@@ -79,6 +79,9 @@ public interface AliPayCode {
     /** 退款成功 */
     String REFUND_SUCCESS = "REFUND_SUCCESS";
 
+    // 参数
+    /** 返回退款时间 */
+    String GMT_REFUND_PAY = "gmt_refund_pay";
 
     // 错误提示
     /** 交易不存在 */

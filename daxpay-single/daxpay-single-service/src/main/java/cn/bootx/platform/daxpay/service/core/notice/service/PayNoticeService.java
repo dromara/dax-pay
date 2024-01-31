@@ -9,9 +9,9 @@ import cn.bootx.platform.daxpay.service.core.notice.result.PayChannelResult;
 import cn.bootx.platform.daxpay.service.core.notice.result.PayNoticeResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.util.PaySignUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PayNoticeService {
-    private final PayOrderManager payOrderManager;
+    private final PayOrderQueryService payOrderQueryService;
     private final PayOrderExtraManager payOrderExtraManager;
     private final PayChannelOrderManager payChannelOrderManager;
 
@@ -49,7 +49,7 @@ public class PayNoticeService {
             PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
             // 首先判断接口是开启了通知回调功能
             if (apiInfo.isNotice()){
-                PayOrder payOrder = payOrderManager.findById(paymentId).orElseThrow(DataNotExistException::new);
+                PayOrder payOrder = payOrderQueryService.findById(paymentId).orElseThrow(DataNotExistException::new);
                 // 判断是否是同步支付, 并且配置不进行消息通知
                 if (!payOrder.isAsyncPay() && apiInfo.isOnlyAsyncNotice()){
                     return;

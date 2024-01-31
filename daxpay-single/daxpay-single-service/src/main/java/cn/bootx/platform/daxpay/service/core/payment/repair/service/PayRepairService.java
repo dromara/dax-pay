@@ -115,7 +115,6 @@ public class PayRepairService {
                 .getFinishTime();
         // 执行个通道的成功处理方法
         strategies.forEach(AbsPayRepairStrategy::doPaySuccessHandler);
-
         // 修改订单支付状态为成功
         order.setStatus(PayStatusEnum.SUCCESS.getCode());
         // 读取支付网关中的时间

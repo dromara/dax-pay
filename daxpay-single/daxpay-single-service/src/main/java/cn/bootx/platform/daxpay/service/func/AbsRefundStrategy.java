@@ -76,8 +76,7 @@ public abstract class AbsRefundStrategy implements PayStrategy{
      */
     public void doSuccessHandler() {
         // 更新退款订单数据状态
-        this.refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode())
-                .setRefundTime(LocalDateTime.now());
+        this.refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode()).setRefundTime(LocalDateTime.now());
 
         // 支付通道订单可退余额
         int refundableBalance = this.getPayChannelOrder().getRefundableBalance() - this.refundChannelOrder.getAmount();
@@ -91,11 +90,14 @@ public abstract class AbsRefundStrategy implements PayStrategy{
      * 生成通道退款订单对象
      */
     public void generateChannelOrder() {
+        int refundableAmount = this.getPayChannelOrder().getRefundableBalance() - this.getRefundChannelParam().getAmount();
+
         this.refundChannelOrder = new PayRefundChannelOrder()
                 .setPayChannelId(this.getPayChannelOrder().getId())
                 .setAsync(this.getPayChannelOrder().isAsync())
                 .setChannel(this.getPayChannelOrder().getChannel())
                 .setOrderAmount(this.getPayChannelOrder().getAmount())
+                .setRefundableAmount(refundableAmount)
                 .setAmount(this.getRefundChannelParam().getAmount());
     }
 

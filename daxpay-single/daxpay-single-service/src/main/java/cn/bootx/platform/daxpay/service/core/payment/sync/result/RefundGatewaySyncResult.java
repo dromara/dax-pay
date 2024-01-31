@@ -4,7 +4,9 @@ import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import static cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum.FAIL;
+import java.time.LocalDateTime;
+
+import static cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum.REFUNDING;
 
 /**
  * 支付退款同步结果
@@ -16,13 +18,21 @@ import static cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum.FAIL;
 public class RefundGatewaySyncResult {
 
     /**
-     * 支付网关订单状态
+     * 支付网关订单状态, 默认为退款中
      * @see PayRefundSyncStatusEnum
      */
-    private PayRefundSyncStatusEnum syncStatus = FAIL;
+    private PayRefundSyncStatusEnum syncStatus = REFUNDING;
 
     /** 同步时网关返回的对象, 序列化为json字符串 */
     private String syncInfo;
+
+    /**
+     * 第三方支付网关生成的订单号, 用与将记录关联起来
+     */
+    private String gatewayOrderNo;
+
+    /** 退款完成时间(通常用于接收网关返回的时间) */
+    private LocalDateTime refundTime;
 
     /** 错误提示码 */
     private String errorCode;

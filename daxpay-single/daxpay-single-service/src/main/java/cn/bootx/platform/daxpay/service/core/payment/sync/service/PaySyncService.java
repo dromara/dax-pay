@@ -15,6 +15,7 @@ import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.PayRepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.PaySyncStrategyFactory;
@@ -49,6 +50,8 @@ import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.*;
 public class PaySyncService {
     private final PayOrderQueryService payOrderQueryService;
 
+    private final PayOrderService payOrderService;
+
     private final PaySyncRecordService paySyncRecordService;
 
     private final PayRepairService repairService;
@@ -79,8 +82,8 @@ public class PaySyncService {
     /**
      * 同步支付状态, 开启一个新的事务, 不受外部抛出异常的影响
      * 1. 如果状态一致, 不进行处理
-     * 2. 如果状态不一致, 调用修复逻辑进行修复
-     * todo 需要进行异常处理, 现在会有 Transaction rolled back because it has been marked as rollback-only 问题
+     * 2. 如果状态不一致, 调用修复逻辑进行修复, 更新状态和完成时间
+     * 3. 会更新关联网关订单号
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public SyncResult syncPayOrder(PayOrder payOrder) {
@@ -102,13 +105,24 @@ public class PaySyncService {
                 this.saveRecord(payOrder, syncResult, false, null, syncResult.getErrorMsg());
                 return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
-
+            // 支付订单的网关订单号是否一致, 不一致进行更新
+            if (!Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getGatewayOrderNo())){
+                payOrder.setGatewayOrderNo(syncResult.getGatewayOrderNo());
+                payOrderService.updateById(payOrder);
+            }
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
             boolean statusSync = this.checkAndAdjustSyncStatus(syncResult,payOrder);
             PayRepairResult repairResult = new PayRepairResult();
             try {
                 // 状态不一致，执行支付单修复逻辑
                 if (!statusSync){
+                    // 如果没有修复触发来源, 设置修复触发来源为同步
+                    RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
+                    if (Objects.isNull(repairInfo.getSource())){
+                        repairInfo.setSource(PayRepairSourceEnum.SYNC);
+                    }
+                    // 设置支付单完成时间
+                    repairInfo.setFinishTime(syncResult.getPayTime());
                     repairResult = this.repairHandler(syncResult, payOrder);
                 }
             } catch (PayFailureException e) {
@@ -178,11 +192,6 @@ public class PaySyncService {
      */
     private PayRepairResult repairHandler(PayGatewaySyncResult syncResult, PayOrder payOrder){
         PaySyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
-        // 如果没有支付来源, 设置支付来源为同步
-        RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
-        if (Objects.isNull(repairInfo.getSource())){
-            repairInfo.setSource(PayRepairSourceEnum.SYNC);
-        }
         PayRepairResult repair = new PayRepairResult();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {

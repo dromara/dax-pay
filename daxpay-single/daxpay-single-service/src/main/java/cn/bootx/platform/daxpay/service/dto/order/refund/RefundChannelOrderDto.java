@@ -38,6 +38,9 @@ public class RefundChannelOrderDto extends BaseDto {
     @Schema(description = "退款金额")
     private Integer amount;
 
+    @Schema(description = "剩余可退余额")
+    private Integer refundableAmount;
+
     /**
      * 退款状态
      * @see PayRefundStatusEnum

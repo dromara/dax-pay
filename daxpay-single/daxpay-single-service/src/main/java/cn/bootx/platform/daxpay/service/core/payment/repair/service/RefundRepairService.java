@@ -7,9 +7,10 @@ import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
@@ -39,7 +40,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RefundRepairService {
 
-    private final PayOrderManager payOrderManager;
+    private final PayOrderService payOrderService;
+
+    private final PayOrderQueryService payOrderQueryService;
 
     private final PayChannelOrderManager payChannelOrderManager;
 
@@ -56,7 +59,7 @@ public class RefundRepairService {
     public RefundRepairResult repair(PayRefundOrder refundOrder, RefundRepairWayEnum repairType){
 
         // 获取关联支付单
-        PayOrder payOrder = payOrderManager.findById(refundOrder.getPaymentId())
+        PayOrder payOrder = payOrderQueryService.findById(refundOrder.getPaymentId())
                 .orElseThrow(() -> new RuntimeException("支付单不存在"));
         // 关联支付通道支付单
         Map<String, PayChannelOrder> payChannelOrderMap = payChannelOrderManager.findAllByPaymentId(refundOrder.getPaymentId())
@@ -127,7 +130,7 @@ public class RefundRepairService {
                 .collect(Collectors.toList());
 
         // 更新订单和退款相关订单
-        payOrderManager.updateById(payOrder);
+        payOrderService.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
         payChannelOrderManager.updateAllById(payChannelOrders);
         refundChannelOrderManager.updateAllById(refundChannelOrders);
@@ -183,7 +186,7 @@ public class RefundRepairService {
 
         // 更新订单和退款相关订单
         payChannelOrderManager.updateAllById(payChannelOrders);
-        payOrderManager.updateById(payOrder);
+        payOrderService.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
         refundChannelOrderManager.updateAllById(refundChannelOrders);
         return repairResult;

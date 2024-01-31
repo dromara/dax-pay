@@ -90,7 +90,7 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
     private String reason;
 
     /** 退款时间 */
-    @DbColumn(comment = "退款时间")
+    @DbColumn(comment = "退款完成时间")
     private LocalDateTime refundTime;
 
     /**

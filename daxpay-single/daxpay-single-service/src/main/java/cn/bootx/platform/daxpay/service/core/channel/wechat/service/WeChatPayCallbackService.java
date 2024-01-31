@@ -118,18 +118,19 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         callbackParam = WxPayKit.xmlToMap(decryptData);
         callbackInfo.setCallbackParam(callbackParam);
         // 网关订单号
-        callbackInfo.setGatewayOrderNo(callbackParam.get(REFUND_ID));
+        callbackInfo.setGatewayOrderNo(callbackParam.get(CALLBACK_REFUND_ID));
         // 退款订单Id
-        callbackInfo.setOrderId(Long.valueOf(callbackParam.get(OUT_REFUND_NO)));
+        callbackInfo.setOrderId(Long.valueOf(callbackParam.get(CALLBACK_OUT_REFUND_NO)));
         // 退款金额
-        callbackInfo.setAmount(callbackParam.get(REFUND_FEE));
+        callbackInfo.setAmount(callbackParam.get(CALLBACK_REFUND_FEE));
 
         // 交易状态
-        PayStatusEnum payStatus = Objects.equals(callbackParam.get(REFUND_STATUS), REFUND_USERPAYING) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
+        PayStatusEnum payStatus = Objects.equals(callbackParam.get(CALLBACK_REFUND_STATUS), REFUND_SUCCESS)
+                ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
         callbackInfo.setGatewayStatus(payStatus.getCode());
 
         // 退款时间
-        String timeEnd = callbackParam.get(SUCCESS_TIME);
+        String timeEnd = callbackParam.get(CALLBACK_SUCCESS_TIME);
         if (StrUtil.isNotBlank(timeEnd)) {
             LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.NORM_DATETIME_PATTERN);
             callbackInfo.setFinishTime(time);

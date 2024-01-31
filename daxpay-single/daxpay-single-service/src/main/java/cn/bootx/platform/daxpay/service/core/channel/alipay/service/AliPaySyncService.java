@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
+import cn.bootx.platform.daxpay.service.common.context.PaySyncLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
@@ -21,7 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Objects;
+
+import static cn.bootx.platform.daxpay.service.code.AliPayCode.GMT_REFUND_PAY;
 
 /**
  * 支付宝同步
@@ -34,7 +38,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AliPaySyncService {
     /**
-     * 与支付宝网关同步状态, 退款状态会
+     * 与支付宝网关同步状态, 退款状态有
      * 1 远程支付成功
      * 2 交易创建，等待买家付款
      * 3 超时关闭
@@ -42,6 +46,7 @@ public class AliPaySyncService {
      * 5 查询失败
      */
     public PayGatewaySyncResult syncPayStatus(PayOrder payOrder) {
+        PaySyncLocal paySyncLocal = PaymentContextLocal.get().getPaySyncInfo();
         PayGatewaySyncResult syncResult = new PayGatewaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
         // 查询
         try {
@@ -58,13 +63,13 @@ public class AliPaySyncService {
                 syncResult.setErrorMsg(response.getSubMsg());
                 return syncResult;
             }
+            // 设置网关订单号
+            syncResult.setGatewayOrderNo(response.getTradeNo());
             // 支付完成 TODO 部分退款也在这个地方, 但无法进行区分, 需要借助对账进行处理
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_FINISHED)) {
-                PaymentContextLocal.get().getPaySyncInfo().setGatewayOrderNo(response.getTradeNo());
                 // 支付完成时间
                 LocalDateTime payTime = LocalDateTimeUtil.of(response.getSendPayDate());
-                PaymentContextLocal.get().getPaySyncInfo().setPayTime(payTime);
-                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS).setPayTime(payTime);
             }
             // 待支付
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_WAIT_BUYER_PAY)) {
@@ -78,7 +83,6 @@ public class AliPaySyncService {
                 } else {
                     return syncResult.setSyncStatus(PaySyncStatusEnum.CLOSED);
                 }
-
             }
             // 支付宝支付后, 客户未进行操作将不会创建出订单, 所以交易不存在约等于未查询订单
             if (Objects.equals(response.getSubCode(), AliPayCode.ACQ_TRADE_NOT_EXIST)) {
@@ -103,6 +107,8 @@ public class AliPaySyncService {
             queryModel.setOutRequestNo(String.valueOf(refundOrder.getId()));
             // 商户订单号
             queryModel.setOutTradeNo(String.valueOf(refundOrder.getPaymentId()));
+            // 设置返回退款完成时间
+            queryModel.setQueryOptions(Collections.singletonList(GMT_REFUND_PAY));
             AlipayTradeFastpayRefundQueryResponse response = AliPayApi.tradeRefundQueryToResponse(queryModel);
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
             // 失败
@@ -113,9 +119,12 @@ public class AliPaySyncService {
                 return syncResult;
             }
             String tradeStatus = response.getRefundStatus();
+            // 设置网关订单号
+            syncResult.setGatewayOrderNo(response.getTradeNo());
             // 成功
             if (Objects.equals(tradeStatus, AliPayCode.REFUND_SUCCESS)){
-                return syncResult.setSyncStatus(PayRefundSyncStatusEnum.SUCCESS);
+                LocalDateTime localDateTime = LocalDateTimeUtil.of(response.getGmtRefundPay());
+                return syncResult.setRefundTime(localDateTime).setSyncStatus(PayRefundSyncStatusEnum.SUCCESS);
             } else {
                 return syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL).setErrorMsg("支付宝网关反正退款未成功");
             }

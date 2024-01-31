@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.record.sync.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.core.record.sync.convert.PaySyncRecordConvert;
@@ -36,6 +37,10 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "本地业务号")
     private String orderNo;
 
+    /** 网关订单号 */
+    @DbColumn(comment = "网关订单号")
+    private String gatewayOrderNo;
+
     /**
      * 同步类型 支付/退款
      * @see PaymentTypeEnum
@@ -43,14 +48,11 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "同步类型")
     private String syncType;
 
-    @DbColumn(comment = "同步的异步通道")
-    private String syncChannel;
-
     /**
-     * 同步通道
+     * 同步的异步通道
      * @see PayChannelEnum#getCode()
      */
-    @DbColumn(comment = "同步通道")
+    @DbColumn(comment = "同步的异步通道")
     private String asyncChannel;
 
     /** 网关返回的同步消息 */
@@ -61,6 +63,7 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     /**
      * 网关返回状态
      * @see PaySyncStatusEnum
+     * @see PayRefundSyncStatusEnum
      */
     @DbColumn(comment = "网关返回状态")
     private String gatewayStatus;

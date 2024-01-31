@@ -49,9 +49,8 @@ public class AliPayRefundService {
             }
             // 接口返回fund_change=Y为退款成功，fund_change=N或无此字段值返回时需通过退款查询接口进一步确认退款状态
             if (response.getFundChange().equals("Y")){
-                // TODO 测试退款同步
-//                refundInfo.setStatus(PayRefundStatusEnum.SUCCESS)
-//                        .setGatewayOrderNo(response.getTradeNo());
+                refundInfo.setStatus(PayRefundStatusEnum.SUCCESS)
+                        .setGatewayOrderNo(response.getTradeNo());
             }
             refundInfo.setStatus(PayRefundStatusEnum.PROGRESS)
                     .setGatewayOrderNo(response.getTradeNo());
