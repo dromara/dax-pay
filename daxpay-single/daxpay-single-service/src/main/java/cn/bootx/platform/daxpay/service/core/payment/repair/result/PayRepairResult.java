@@ -12,8 +12,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class PayRepairResult {
-    /** 修复记录ID */
-    private Long repairId;
+    /** 修复号 */
+    private String repairNo;
     /** 修复前状态 */
     private PayStatusEnum beforeStatus;
     /** 修复后状态 */

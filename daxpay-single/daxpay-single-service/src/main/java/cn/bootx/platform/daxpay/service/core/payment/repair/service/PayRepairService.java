@@ -87,7 +87,7 @@ public class PayRepairService {
                 log.error("走到了理论上讲不会走到的分支");
         }
         // 设置修复iD
-        repairResult.setRepairId(IdUtil.getSnowflakeNextId());
+        repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
         this.saveRecord(order, repairType, repairResult);
         return repairResult;
     }
@@ -154,7 +154,7 @@ public class PayRepairService {
                 .getRepairInfo()
                 .getSource().getCode();
         PayRepairRecord payRepairRecord = new PayRepairRecord()
-                .setRepairId(repairResult.getRepairId())
+                .setRepairNo(repairResult.getRepairNo())
                 .setOrderId(order.getId())
                 .setAsyncChannel(order.getAsyncChannel())
                 .setOrderNo(order.getBusinessNo())
@@ -163,7 +163,6 @@ public class PayRepairService {
                 .setRepairType(PaymentTypeEnum.PAY.getCode())
                 .setRepairSource(source)
                 .setRepairWay(recordType.getCode());
-        payRepairRecord.setId(repairResult.getRepairId());
         recordService.saveRecord(payRepairRecord);
     }
 }

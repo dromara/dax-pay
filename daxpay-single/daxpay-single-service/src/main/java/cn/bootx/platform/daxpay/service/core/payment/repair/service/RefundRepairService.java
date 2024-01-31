@@ -90,7 +90,7 @@ public class RefundRepairService {
         }
 
         // 设置修复ID并保存修复记录
-        repairResult.setRepairId(IdUtil.getSnowflakeNextId());
+        repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
         PayRepairRecord payRepairRecord = this.payRepairRecord(payOrder, repairType, repairResult);
         PayRepairRecord refundRepairRecord = this.refundRepairRecord(refundOrder, repairType, repairResult);
         recordService.saveAllRecord(Arrays.asList(payRepairRecord, refundRepairRecord));
@@ -205,7 +205,7 @@ public class RefundRepairService {
                 .getRepairInfo()
                 .getSource().getCode();
         return new PayRepairRecord()
-                .setRepairId(repairResult.getRepairId())
+                .setRepairNo(repairResult.getRepairNo())
                 .setOrderId(order.getId())
                 .setRepairType(PaymentTypeEnum.PAY.getCode())
                 .setRepairSource(source)
@@ -229,7 +229,7 @@ public class RefundRepairService {
                 .getSource().getCode();
         return new PayRepairRecord()
                 .setOrderId(refundOrder.getId())
-                .setRepairId(repairResult.getRepairId())
+                .setRepairNo(repairResult.getRepairNo())
                 .setOrderNo(refundOrder.getRefundNo())
                 .setRepairType(PaymentTypeEnum.REFUND.getCode())
                 .setBeforeStatus(repairResult.getBeforeRefundStatus().getCode())

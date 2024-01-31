@@ -64,8 +64,8 @@ public class PaySyncRecordDto extends BaseDto {
     @Schema(description = "是否进行修复")
     private boolean repairOrder;
 
-    @Schema(description = "支付单修复ID")
-    private Long repairOrderId;
+    @Schema(description = "修复单号")
+    private String repairOrderNo;
 
     @Schema(description = "错误消息")
     private String errorMsg;

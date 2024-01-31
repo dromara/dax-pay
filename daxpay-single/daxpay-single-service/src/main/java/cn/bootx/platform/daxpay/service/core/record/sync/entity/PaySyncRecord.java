@@ -74,8 +74,8 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "是否进行修复")
     private boolean repairOrder;
 
-    @DbColumn(comment = "支付单修复ID")
-    private Long repairOrderId;
+    @DbColumn(comment = "修复单号")
+    private String repairOrderNo;
 
     @DbColumn(comment = "错误消息")
     private String errorMsg;

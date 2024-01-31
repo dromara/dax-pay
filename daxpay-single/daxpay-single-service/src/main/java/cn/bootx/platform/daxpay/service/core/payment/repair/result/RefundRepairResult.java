@@ -14,8 +14,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class RefundRepairResult {
 
-    /** 修复ID */
-    private Long repairId;
+    /** 修复号 */
+    private String repairNo;
     /** 退款修复前状态 */
     private PayRefundStatusEnum beforeRefundStatus;
     /** 退款修复后状态 */

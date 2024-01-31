@@ -63,8 +63,8 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     private String status;
 
 
-    @Schema(description = "支付单修复ID")
-    private Long repairOrderId;
+    @Schema(description = "修复号")
+    private String repairOrderNo;
 
     /** 提示信息 */
     @DbColumn(comment = "提示信息")

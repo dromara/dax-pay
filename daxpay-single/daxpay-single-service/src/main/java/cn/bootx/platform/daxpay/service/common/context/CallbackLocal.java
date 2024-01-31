@@ -43,8 +43,8 @@ public class CallbackLocal {
     /** 完成时间(支付/退款) */
     private LocalDateTime finishTime;
 
-    /** 支付修复ID */
-    private Long payRepairId;
+    /** 修复号 */
+    private String payRepairNo;
 
     /**
      * 回调处理状态

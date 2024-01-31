@@ -114,7 +114,7 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
                 .setOrderId(callbackInfo.getOrderId())
                 .setGatewayOrderNo(callbackInfo.getGatewayOrderNo())
                 .setCallbackType(callbackType)
-                .setRepairOrderId(callbackInfo.getPayRepairId())
+                .setRepairOrderNo(callbackInfo.getPayRepairNo())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())
                 .setMsg(callbackInfo.getMsg());
         callbackRecordService.save(payNotifyRecord);

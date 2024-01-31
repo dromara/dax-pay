@@ -29,12 +29,11 @@ import lombok.experimental.Accessors;
 public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunction<PayRepairRecordDto> {
 
     /**
-     * 修复ID
-     * 如果一次修复产生的修复记录只有一条, 则该字段为与ID一致
-     * 如果一次修复产生的修复记录有多个, 则使用这个ID作为关联
+     * 修复号
+     * 如果一次修复产生的修复记录有多个记录, 使用这个ID作为关联
      */
-    @DbColumn(comment = "修复ID")
-    private Long repairId;
+    @DbColumn(comment = "修复号")
+    private String repairNo;
 
     /** 支付ID/退款ID */
     @DbColumn(comment = "本地订单ID")

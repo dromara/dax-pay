@@ -61,10 +61,10 @@ public class PayRefundCallbackService {
             // 退款成功还是失败
             if (Objects.equals(PayRefundStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.SUCCESS);
-                callbackInfo.setPayRepairId(repair.getRepairId());
+                callbackInfo.setPayRepairNo(repair.getRepairNo());
             }  else {
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.FAIL);
-                callbackInfo.setPayRepairId(repair.getRepairId());
+                callbackInfo.setPayRepairNo(repair.getRepairNo());
             }
 
         } finally {

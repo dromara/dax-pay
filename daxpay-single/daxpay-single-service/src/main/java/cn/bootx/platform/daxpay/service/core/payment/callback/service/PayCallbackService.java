@@ -95,7 +95,7 @@ public class PayCallbackService {
         }
         // 执行支付完成修复逻辑
         PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.SUCCESS);
-        callbackInfo.setPayRepairId(repair.getRepairId());
+        callbackInfo.setPayRepairNo(repair.getRepairNo());
     }
 
     /**
@@ -115,7 +115,7 @@ public class PayCallbackService {
         }
         // 执行支付关闭修复逻辑
         PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.CLOSE_LOCAL);
-        callbackInfo.setPayRepairId(repair.getRepairId());
+        callbackInfo.setPayRepairNo(repair.getRepairNo());
     }
 
 }

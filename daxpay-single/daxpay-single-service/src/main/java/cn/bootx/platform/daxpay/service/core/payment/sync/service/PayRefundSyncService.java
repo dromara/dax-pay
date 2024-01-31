@@ -123,12 +123,12 @@ public class PayRefundSyncService {
                 return new SyncResult().setErrorMsg(e.getMessage());
             }
             // 同步成功记录日志
-            this.saveRecord(refundOrder, syncResult, !statusSync, repairResult.getRepairId(), null);
+            this.saveRecord(refundOrder, syncResult, !statusSync, repairResult.getRepairNo(), null);
             return new SyncResult()
                     .setGatewayStatus(syncResult.getSyncStatus().getCode())
                     .setSuccess(true)
                     .setRepair(!statusSync)
-                    .setRepairId(repairResult.getRepairId());
+                    .setRepairOrderNo(repairResult.getRepairNo());
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -194,9 +194,10 @@ public class PayRefundSyncService {
      * @param refundOrder 支付单
      * @param syncResult 同步结果
      * @param repair 是否修复
+     * @param repairOrderNo 修复号
      * @param errorMsg 错误信息
      */
-    private void saveRecord(PayRefundOrder refundOrder, RefundGatewaySyncResult syncResult, boolean repair, Long repairOrderId, String errorMsg){
+    private void saveRecord(PayRefundOrder refundOrder, RefundGatewaySyncResult syncResult, boolean repair, String repairOrderNo, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setOrderId(refundOrder.getId())
                 .setOrderNo(refundOrder.getRefundNo())
@@ -206,7 +207,7 @@ public class PayRefundSyncService {
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setRepairOrder(repair)
-                .setRepairOrderId(repairOrderId)
+                .setRepairOrderNo(repairOrderNo)
                 .setErrorMsg(errorMsg)
                 .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp())
                 .setReqId(PaymentContextLocal.get().getRequestInfo().getReqId());

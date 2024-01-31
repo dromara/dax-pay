@@ -35,8 +35,8 @@ public class SyncResult extends CommonResult {
     @Schema(description = "是否进行了修复")
     private boolean repair;
 
-    @Schema(description = "修复ID")
-    private Long repairId;
+    @Schema(description = "修复号")
+    private String repairOrderNo;
 
     @Schema(description = "失败原因")
     private String errorMsg;
