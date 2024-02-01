@@ -1,6 +1,8 @@
 package cn.bootx.platform.daxpay.service.core.timeout.task;
 
 import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
+import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.service.core.timeout.dao.PayExpiredTimeRepository;
 import com.baomidou.lock.LockInfo;
@@ -44,6 +46,8 @@ public class PayExpiredTimeTask {
                 continue;
             }
             try {
+                // 设置补偿来源为定时任务
+                PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.TASK);
                 // 执行同步操作, 网关同步时会对支付的进行状态的处理
                 Long paymentId = Long.parseLong(expiredKey);
                 PaySyncParam paySyncParam = new PaySyncParam();

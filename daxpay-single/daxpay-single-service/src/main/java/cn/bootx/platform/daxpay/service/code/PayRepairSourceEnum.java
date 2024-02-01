@@ -14,7 +14,8 @@ public enum PayRepairSourceEnum{
 
     SYNC("sync","同步"),
     CALLBACK("callback","回调"),
-    RECONCILE("reconcile","对账"),;
+    TASK("task","定时任务"),
+    RECONCILE("reconcile","对账");
 
     private final String code;
     private final String name;

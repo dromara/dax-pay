@@ -75,7 +75,7 @@ public class PayRepairService {
                 this.closeLocal(order, repairStrategies);
                 repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
-            case WAIT_PAY:
+            case PROGRESS:
                 this.waitPay(order, repairStrategies);
                 repairResult.setAfterPayStatus(PayStatusEnum.PROGRESS);
                 break;

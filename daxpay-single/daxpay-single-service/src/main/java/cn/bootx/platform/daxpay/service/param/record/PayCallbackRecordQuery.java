@@ -21,9 +21,9 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付回调信息记录")
 public class PayCallbackRecordQuery extends QueryOrder {
 
-    /** 支付记录id */
-    @Schema(description = "支付记录id")
-    private Long paymentId;
+    /** 本地订单ID */
+    @Schema(description = "本地订单ID")
+    private Long orderId;
 
     /**
      * 支付通道
@@ -36,6 +36,7 @@ public class PayCallbackRecordQuery extends QueryOrder {
     /**
      * 回调处理状态
      * @see PayCallbackStatusEnum
+     * @see RefundCallbackStatusEnum
      */
     @Schema(description = "回调处理状态")
     private String status;

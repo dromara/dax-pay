@@ -11,9 +11,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum PayRefundSyncStatusEnum {
-    SUCCESS("success","成功"),
-    FAIL("fail","失败"),
-    REFUNDING("refunding","退款中");
+    SUCCESS("refund_success","退款成功"),
+    FAIL("refund_fail","退款失败"),
+    PROGRESS("refund_progress","退款中");
 
     /** 编码 */
     private final String code;

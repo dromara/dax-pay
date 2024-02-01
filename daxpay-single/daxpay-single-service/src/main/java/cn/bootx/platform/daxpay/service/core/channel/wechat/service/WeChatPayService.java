@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.PAY_WAIT;
+import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.PROGRESS;
 import static com.ijpay.wxpay.model.UnifiedOrderModel.UnifiedOrderModelBuilder;
 import static com.ijpay.wxpay.model.UnifiedOrderModel.builder;
 
@@ -270,7 +270,7 @@ public class WeChatPayService {
     public void rotationSync(PayOrder payOrder) {
         SyncResult syncResult = paySyncService.syncPayOrder(payOrder);
         // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
-        if (Objects.equals(PAY_WAIT.getCode(), syncResult.getGatewayStatus())) {
+        if (Objects.equals(PROGRESS.getCode(), syncResult.getGatewayStatus())) {
             throw new RetryableException();
         }
     }

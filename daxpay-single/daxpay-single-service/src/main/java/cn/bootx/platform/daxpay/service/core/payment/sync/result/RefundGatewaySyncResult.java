@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
-import static cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum.REFUNDING;
+import static cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum.PROGRESS;
 
 /**
  * 支付退款同步结果
@@ -21,7 +21,7 @@ public class RefundGatewaySyncResult {
      * 支付网关订单状态, 默认为退款中
      * @see PayRefundSyncStatusEnum
      */
-    private PayRefundSyncStatusEnum syncStatus = REFUNDING;
+    private PayRefundSyncStatusEnum syncStatus = PROGRESS;
 
     /** 同步时网关返回的对象, 序列化为json字符串 */
     private String syncInfo;

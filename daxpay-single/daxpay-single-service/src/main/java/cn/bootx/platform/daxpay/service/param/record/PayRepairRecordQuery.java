@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,14 +20,23 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付修复记录查询参数")
 public class PayRepairRecordQuery {
 
-    /** 支付ID */
-    @Schema(description = "支付ID")
-    private Long paymentId;
+    /** 本地订单ID */
+    @Schema(description = "本地订单ID")
+    private Long orderId;
 
-    /** 业务号 */
-    @Schema(description = "业务号")
-    private String businessNo;
+    /** 本地订单号 */
+    @Schema(description = "本地订单号")
+    private String orderNo;
 
+    @Schema(description = "修复单号")
+    private String repairNo;
+
+    /**
+     * 修复类型
+     * @see PaymentTypeEnum
+     */
+    @Schema(description = "修复类型")
+    private String repairType;
     /**
      * 修复来源
      * @see PayRepairSourceEnum
@@ -35,11 +45,11 @@ public class PayRepairRecordQuery {
     private String repairSource;
 
     /**
-     * 修复类型
+     * 修复方式
      * @see PayRepairWayEnum
      */
-    @Schema(description = "修复类型")
-    private String repairType;
+    @Schema(description = "修复方式")
+    private String repairWay;
 
     /** 修复的异步通道 */
     @Schema(description = "修复的异步通道")

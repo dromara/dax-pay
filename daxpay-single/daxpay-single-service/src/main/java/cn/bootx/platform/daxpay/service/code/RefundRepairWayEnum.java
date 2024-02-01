@@ -12,8 +12,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum RefundRepairWayEnum {
 
-    SUCCESS("success","退款成功"),
-    FAIL("fail","退款失败");
+    SUCCESS("refund_success","退款成功"),
+    FAIL("refund_fail","退款失败");
 
     private final String code;
     private final String name;

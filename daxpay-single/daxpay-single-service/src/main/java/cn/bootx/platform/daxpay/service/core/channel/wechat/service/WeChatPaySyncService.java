@@ -73,12 +73,12 @@ public class WeChatPaySyncService {
             if (Objects.equals(tradeStatus, WeChatPayCode.PAY_SUCCESS) || Objects.equals(tradeStatus, WeChatPayCode.PAY_ACCEPT)) {
                 String timeEnd = result.get(WeChatPayCode.TIME_END);
                 LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
-                return syncResult.setPayTime(time).setSyncStatus(PaySyncStatusEnum.PAY_SUCCESS);
+                return syncResult.setPayTime(time).setSyncStatus(PaySyncStatusEnum.SUCCESS);
             }
             // 待支付
             if (Objects.equals(tradeStatus, WeChatPayCode.PAY_NOTPAY)
                     || Objects.equals(tradeStatus, WeChatPayCode.PAY_USERPAYING)) {
-                return syncResult.setSyncStatus(PaySyncStatusEnum.PAY_WAIT);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.PROGRESS);
             }
 
             // 已退款/退款中
@@ -130,12 +130,12 @@ public class WeChatPaySyncService {
             }
             // 退款中
             if (Objects.equals(tradeStatus, WeChatPayCode.REFUND_PROCESSING)) {
-                return syncResult.setSyncStatus(PayRefundSyncStatusEnum.REFUNDING);
+                return syncResult.setSyncStatus(PayRefundSyncStatusEnum.PROGRESS);
             }
             return syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL);
         } catch (Exception e) {
             log.error("查询退款订单失败:", e);
-            syncResult.setSyncStatus(PayRefundSyncStatusEnum.REFUNDING).setErrorMsg(e.getMessage());
+            syncResult.setSyncStatus(PayRefundSyncStatusEnum.PROGRESS).setErrorMsg(e.getMessage());
         }
         return syncResult;
 

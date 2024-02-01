@@ -98,7 +98,7 @@ public class PayRefundSyncService {
                 return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (!Objects.equals(syncResult.getGatewayOrderNo(), refundOrder.getGatewayOrderNo())){
+            if (Objects.nonNull(syncResult.getGatewayOrderNo()) && !Objects.equals(syncResult.getGatewayOrderNo(), refundOrder.getGatewayOrderNo())){
                 refundOrder.setGatewayOrderNo(syncResult.getGatewayOrderNo());
                 refundOrderManager.updateById(refundOrder);
             }
@@ -155,7 +155,7 @@ public class PayRefundSyncService {
             return true;
         }
         // 退款中
-        if (Objects.equals(syncStatus, PayRefundSyncStatusEnum.REFUNDING)&&
+        if (Objects.equals(syncStatus, PayRefundSyncStatusEnum.PROGRESS)&&
                 Objects.equals(orderStatus, PayRefundStatusEnum.PROGRESS.getCode())) {
             return true;
         }
@@ -174,7 +174,7 @@ public class PayRefundSyncService {
             case SUCCESS:
                 repair = repairService.repair(order, RefundRepairWayEnum.SUCCESS);
                 break;
-            case REFUNDING:
+            case PROGRESS:
                 // 不进行处理 TODO 添加重试
                 log.warn("退款状态同步接口调用出错");
                 break;

@@ -213,7 +213,7 @@ public class PayService {
         payStrategyList.forEach(AbsPayStrategy::doSuccessHandler);
 
         // 6. 更新支付订单和扩展参数
-//        payOrderService.updateById(payOrder);
+        payOrderService.updateById(payOrder);
         payAssistService.updatePayOrderExtra(payParam,payOrder.getId());
 
         // 7. 组装返回参数

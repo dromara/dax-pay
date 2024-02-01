@@ -106,7 +106,7 @@ public class PaySyncService {
                 return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (!Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getGatewayOrderNo())){
+            if (Objects.nonNull(syncResult.getGatewayOrderNo()) && !Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getGatewayOrderNo())){
                 payOrder.setGatewayOrderNo(syncResult.getGatewayOrderNo());
                 payOrderService.updateById(payOrder);
             }
@@ -151,7 +151,7 @@ public class PaySyncService {
         PaySyncStatusEnum syncStatus = syncResult.getSyncStatus();
         String orderStatus = order.getStatus();
         // 本地支付成功/网关支付成功
-        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(PAY_SUCCESS)){
+        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(SUCCESS)){
             return true;
         }
 
@@ -159,7 +159,7 @@ public class PaySyncService {
         本地支付中/网关支付中或者订单未找到(未知)  支付宝特殊情况，未找到订单可能是发起支付用户未操作、支付已关闭、交易未找到三种情况
         所以需要根据本地订单不同的状态进行特殊处理
          */
-        List<PaySyncStatusEnum> syncWaitEnums = Arrays.asList(PAY_WAIT, NOT_FOUND_UNKNOWN);
+        List<PaySyncStatusEnum> syncWaitEnums = Arrays.asList(PROGRESS, NOT_FOUND_UNKNOWN);
         if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && syncWaitEnums.contains(syncStatus)){
             // 判断支付单是否支付超时, 如果待支付状态下触发超时
             if (LocalDateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
@@ -196,13 +196,13 @@ public class PaySyncService {
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
-            case PAY_SUCCESS: {
+            case SUCCESS: {
                 repair = repairService.repair(payOrder, PayRepairWayEnum.SUCCESS);
                 break;
             }
             // 待支付, 将订单状态重新设置为待支付
-            case PAY_WAIT: {
-                repair = repairService.repair(payOrder, PayRepairWayEnum.WAIT_PAY);
+            case PROGRESS: {
+                repair = repairService.repair(payOrder, PayRepairWayEnum.PROGRESS);
                 break;
             }
             case REFUND:

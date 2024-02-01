@@ -19,9 +19,20 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付同步记录查询参数")
 public class PaySyncRecordQuery {
 
-    /** 支付记录id */
-    @Schema(description = "支付记录id")
-    private Long paymentId;
+    /** 本地订单id */
+    @Schema(description = "本地订单id")
+    private Long orderId;
+
+    @Schema(description = "本地订单号")
+    private String orderNo;
+
+    /** 网关订单号 */
+    @Schema(description = "网关订单号")
+    private String gatewayOrderNo;
+
+    /** 同步类型 */
+    @Schema(description = "同步类型")
+    private String syncType;
 
     /**
      * 支付通道
