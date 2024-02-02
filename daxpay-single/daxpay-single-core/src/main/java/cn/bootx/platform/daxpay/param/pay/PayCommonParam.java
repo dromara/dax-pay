@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public abstract class PayCommonParam {
 
     /** 客户端ip */
-    @NotBlank(message = "客户端ip不可为空")
+//    @NotBlank(message = "客户端ip不可为空")
     @Schema(description = "客户端ip")
     private String clientIp;
 
@@ -48,12 +48,12 @@ public abstract class PayCommonParam {
 
     /** API版本号 */
     @Schema(description = "API版本号")
-    @NotBlank(message = "API版本号必填")
+//    @NotBlank(message = "API版本号必填")
     private String version = "1.0.0";
 
     /** 请求时间，时间戳转时间 */
     @Schema(description = "请求时间，传输时间戳")
-    @NotNull(message = "请求时间必填")
+//    @NotNull(message = "请求时间必填")
     @JsonDeserialize(using = TimestampToLocalDateTimeDeserializer.class)
     private LocalDateTime reqTime;
 

@@ -48,5 +48,5 @@ public class PayChannelParam {
      * @see WalletPayParam
      */
     @Schema(description = "附加支付参数")
-    private String channelExtra;
+    private String channelParam;
 }

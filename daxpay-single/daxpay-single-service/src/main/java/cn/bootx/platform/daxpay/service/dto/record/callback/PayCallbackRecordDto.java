@@ -30,7 +30,7 @@ public class PayCallbackRecordDto extends BaseDto {
      * @see PayChannelEnum#getCode()
      */
     @Schema(description = "支付通道")
-    private String payChannel;
+    private String channel;
 
     /**
      * 回调类型

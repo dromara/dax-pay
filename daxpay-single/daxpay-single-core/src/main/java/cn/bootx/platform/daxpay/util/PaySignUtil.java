@@ -153,7 +153,7 @@ public class PaySignUtil {
         // 创建待签名字符串
         String data = createLinkString(map);
         // 将签名key追加到字符串最后
-        return  "&key=" + signKey;
+        return  data + "&key=" + signKey;
     }
 
     /**

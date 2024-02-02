@@ -109,7 +109,7 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
                 .orElse(null);
 
         PayCallbackRecord payNotifyRecord = new PayCallbackRecord()
-                .setPayChannel(this.getChannel().getCode())
+                .setChannel(this.getChannel().getCode())
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackParam()))
                 .setOrderId(callbackInfo.getOrderId())
                 .setGatewayOrderNo(callbackInfo.getGatewayOrderNo())

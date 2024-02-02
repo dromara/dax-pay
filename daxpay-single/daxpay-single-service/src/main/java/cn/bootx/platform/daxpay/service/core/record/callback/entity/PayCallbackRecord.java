@@ -42,7 +42,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
      * @see PayChannelEnum#getCode()
      */
     @DbColumn(comment = "支付通道")
-    private String payChannel;
+    private String channel;
 
     /**
      * 回调类型

@@ -22,4 +22,7 @@ public class RefundResult extends CommonResult {
 
     @Schema(description = "退款订单号, 如果请求时未传, 则默认使用退款ID")
     private String refundNo;
+
+    @Schema(description = "退款状态")
+    private String status;
 }

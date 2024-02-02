@@ -55,7 +55,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     public void doBeforePayHandler() {
         try {
             // 微信参数验证
-            String extraParamsJson = this.getPayChannelParam().getChannelExtra();
+            String extraParamsJson = this.getPayChannelParam().getChannelParam();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 this.weChatPayParam = JSONUtil.toBean(extraParamsJson, WeChatPayParam.class);
             }

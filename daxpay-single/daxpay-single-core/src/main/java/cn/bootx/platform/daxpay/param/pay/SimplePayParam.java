@@ -50,7 +50,7 @@ public class SimplePayParam extends PayCommonParam{
      */
     @Schema(description = "支付通道编码")
     @NotBlank(message = "支付通道编码不可为空")
-    private String payChannel;
+    private String channel;
 
     /**
      * @see PayWayEnum#getCode()
@@ -70,8 +70,8 @@ public class SimplePayParam extends PayCommonParam{
      * @see VoucherPayParam
      * @see WalletPayParam
      */
-    @Schema(description = "附加支付参数")
-    private String channelExtra;
+    @Schema(description = "附加通道支付参数")
+    private String channelParam;
 
 
 }

@@ -46,7 +46,7 @@ public class VoucherPayService {
         VoucherPayParam voucherPayParam;
         try {
             // 储值卡参数验证
-            String extraParamsJson = payChannelParam.getChannelExtra();
+            String extraParamsJson = payChannelParam.getChannelParam();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 voucherPayParam = JSONUtil.toBean(extraParamsJson, VoucherPayParam.class);
             } else {

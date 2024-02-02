@@ -40,7 +40,7 @@ class PaymentSignServiceTest {
         p1.setWay("wx_app");
         AliPayParam aliPayParam = new AliPayParam();
         aliPayParam.setAuthCode("6688");
-        p1.setChannelExtra(JSONUtil.toJsonStr(aliPayParam));
+        p1.setChannelParam(JSONUtil.toJsonStr(aliPayParam));
 
         PayChannelParam p2 = new PayChannelParam();
         p2.setAmount(100);
@@ -49,7 +49,7 @@ class PaymentSignServiceTest {
         WeChatPayParam weChatPayParam = new WeChatPayParam();
         weChatPayParam.setOpenId("w2qsz2xawe3gbhyyff28fs01fd");
         weChatPayParam.setAuthCode("8866");
-        p2.setChannelExtra(JSONUtil.toJsonStr(weChatPayParam));
+        p2.setChannelParam(JSONUtil.toJsonStr(weChatPayParam));
         List<PayChannelParam> payWays = Arrays.asList(p1, p2);
         payParam.setPayChannels(payWays);
 

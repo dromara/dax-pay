@@ -97,7 +97,7 @@ public class PayBuilder {
                 .setPayWay(channelParam.getWay())
                 .setAmount(channelParam.getAmount())
                 .setRefundableBalance(channelParam.getAmount())
-                .setChannelExtra(channelParam.getChannelExtra());
+                .setChannelExtra(channelParam.getChannelParam());
     }
 
     /**
@@ -126,7 +126,7 @@ public class PayBuilder {
         paymentResult = new PayResult();
         paymentResult.setPaymentId(payOrder.getId());
         paymentResult.setAsyncPay(payOrder.isAsyncPay());
-        paymentResult.setAsyncPayChannel(payOrder.getAsyncChannel());
+        paymentResult.setAsyncChannel(payOrder.getAsyncChannel());
         paymentResult.setStatus(payOrder.getStatus());
 
         // 设置异步支付参数

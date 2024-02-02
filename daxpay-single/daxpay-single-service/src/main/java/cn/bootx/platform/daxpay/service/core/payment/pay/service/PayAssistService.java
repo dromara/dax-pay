@@ -85,6 +85,7 @@ public class PayAssistService {
             asyncPayInfo.setExpiredTime(payParam.getExpiredTime());
             return;
         }
+        // 读取本地时间
         LocalDateTime paymentExpiredTime = PayUtil.getPaymentExpiredTime(platform.getOrderTimeout());
         asyncPayInfo.setExpiredTime(paymentExpiredTime);
     }

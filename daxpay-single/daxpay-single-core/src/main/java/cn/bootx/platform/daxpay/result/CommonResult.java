@@ -14,6 +14,6 @@ import org.slf4j.MDC;
 @Schema(title = "支付通用返回参数")
 public class CommonResult {
 
-    @Schema(description = "请求ID")
-    private String reqId = MDC.get(CommonCode.TRACE_ID);
+    @Schema(description = "追踪ID")
+    private String traceId = MDC.get(CommonCode.TRACE_ID);
 }

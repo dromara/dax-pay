@@ -29,7 +29,7 @@ public class PayResult extends CommonResult {
      * @see PayChannelEnum#ASYNC_TYPE_CODE
      */
     @Schema(description = "异步支付通道")
-    private String asyncPayChannel;
+    private String asyncChannel;
 
 
     /** 支付参数体(通常用于发起异步支付的参数) */

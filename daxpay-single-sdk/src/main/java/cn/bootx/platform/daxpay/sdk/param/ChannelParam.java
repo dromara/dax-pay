@@ -1,9 +1,9 @@
-package cn.bootx.platform.daxpay.param;
+package cn.bootx.platform.daxpay.sdk.param;
 
 /**
  * 通道支付参数标识接口
  * @author xxm
  * @since 2023/12/17
  */
-public interface IChannelParam {
+public interface ChannelParam {
 }

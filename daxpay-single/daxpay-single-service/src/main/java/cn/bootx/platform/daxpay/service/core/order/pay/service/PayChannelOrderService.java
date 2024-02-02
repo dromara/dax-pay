@@ -68,7 +68,7 @@ public class PayChannelOrderService {
                     .setAmount(payChannelParam.getAmount())
                     .setRefundableBalance(payChannelParam.getAmount())
                     .setPayTime(LocalDateTime.now())
-                    .setChannelExtra(payChannelParam.getChannelExtra())
+                    .setChannelExtra(payChannelParam.getChannelParam())
                     .setStatus(payStatus.getCode());
             channelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
             channelOrderManager.save(payChannelOrder);
@@ -77,7 +77,7 @@ public class PayChannelOrderService {
             payOrderChannelOpt.get()
                     .setPayWay(payChannelParam.getWay())
                     .setPayTime(LocalDateTime.now())
-                    .setChannelExtra(payChannelParam.getChannelExtra())
+                    .setChannelExtra(payChannelParam.getChannelParam())
                     .setStatus(payStatus.getCode());
             channelOrderManager.updateById(payOrderChannelOpt.get());
         }

@@ -32,7 +32,7 @@ public class PayNoticeResult {
      * @see PayChannelEnum#ASYNC_TYPE_CODE
      */
     @Schema(description = "异步支付通道")
-    private String asyncPayChannel;
+    private String asyncChannel;
 
     @Schema(description = "支付金额")
     private Integer amount;

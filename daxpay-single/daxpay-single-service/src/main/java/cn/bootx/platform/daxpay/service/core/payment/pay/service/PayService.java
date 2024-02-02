@@ -102,10 +102,10 @@ public class PayService {
         // 组装支付参数
         PayParam payParam = new PayParam();
         PayChannelParam payChannelParam = new PayChannelParam();
-        payChannelParam.setChannel(simplePayParam.getPayChannel());
+        payChannelParam.setChannel(simplePayParam.getChannel());
         payChannelParam.setWay(simplePayParam.getPayWay());
         payChannelParam.setAmount(simplePayParam.getAmount());
-        payChannelParam.setChannelExtra(simplePayParam.getChannelExtra());
+        payChannelParam.setChannelParam(simplePayParam.getChannelParam());
         BeanUtil.copyProperties(simplePayParam,payParam, CopyOptions.create().ignoreNullValue());
         payParam.setPayChannels(Collections.singletonList(payChannelParam));
         // 复用支付下单接口

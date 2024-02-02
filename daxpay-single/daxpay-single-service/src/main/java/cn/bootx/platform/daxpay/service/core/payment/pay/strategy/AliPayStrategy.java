@@ -52,7 +52,7 @@ public class AliPayStrategy extends AbsPayStrategy {
     public void doBeforePayHandler() {
         try {
             // 支付宝参数验证
-            String extraParamsJson = this.getPayChannelParam().getChannelExtra();
+            String extraParamsJson = this.getPayChannelParam().getChannelParam();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 this.aliPayParam = JSONUtil.toBean(extraParamsJson, AliPayParam.class);
             }

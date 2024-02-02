@@ -54,7 +54,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         WalletPayParam walletPayParam = new WalletPayParam();
         try {
             // 钱包参数验证
-            String extraParamsJson = this.getPayChannelParam().getChannelExtra();
+            String extraParamsJson = this.getPayChannelParam().getChannelParam();
             if (StrUtil.isNotBlank(extraParamsJson)) {
                 walletPayParam = JSONUtil.toBean(extraParamsJson, WalletPayParam.class);
             }

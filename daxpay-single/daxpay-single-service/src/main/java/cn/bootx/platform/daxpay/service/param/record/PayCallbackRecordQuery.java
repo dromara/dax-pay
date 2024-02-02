@@ -30,13 +30,12 @@ public class PayCallbackRecordQuery extends QueryOrder {
      * @see PayChannelEnum#getCode()
      */
     @Schema(description = "支付通道")
-    private String payChannel;
+    private String channel;
 
 
     /**
      * 回调处理状态
      * @see PayCallbackStatusEnum
-     * @see RefundCallbackStatusEnum
      */
     @Schema(description = "回调处理状态")
     private String status;
