@@ -26,4 +26,7 @@ public class DaxPayResult<T extends DaxPayResponseModel> {
 
     /** 数据签名 */
     private String sign;
+
+    /** 追踪ID */
+    private String traceId;
 }
