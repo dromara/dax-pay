@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.sdk.param.pay;
 
-import cn.bootx.platform.daxpay.sdk.model.PayOrderModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayRequest;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.lang.TypeReference;

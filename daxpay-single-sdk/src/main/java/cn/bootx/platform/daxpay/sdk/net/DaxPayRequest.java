@@ -31,7 +31,7 @@ public abstract class DaxPayRequest<T extends DaxPayResponseModel> {
     /** 是否不进行同步通知的跳转 */
     private boolean notReturn;
 
-    /** 同步通知URL */
+    /** 同步跳转URL, 部分接口不支持该配置，传输了也不会生效 */
     private String returnUrl;
 
     /** 是否不启用异步通知 */

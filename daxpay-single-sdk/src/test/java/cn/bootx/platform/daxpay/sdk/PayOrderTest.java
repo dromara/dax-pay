@@ -5,19 +5,21 @@ import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
 import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
+import cn.bootx.platform.daxpay.sdk.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.sdk.param.pay.PayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
- * 简单支付
+ * 通用支付接口
  * @author xxm
- * @since 2024/2/2
+ * @since 2024/2/5
  */
-public class SimplePayOrderTest {
-
-
+public class PayOrderTest {
 
     @Before
     public void init() {
@@ -29,22 +31,36 @@ public class SimplePayOrderTest {
         DaxPayKit.initConfig(config);
     }
 
+
+    /**
+     * 单通道支付
+     */
     @Test
-    public void simplePay() {
-        // 简单支付参数
-        SimplePayParam param = new SimplePayParam();
-        param.setBusinessNo("1");
-        param.setAmount(1);
-        param.setTitle("测试接口支付");
-        param.setChannel(PayChannelEnum.ALI.getCode());
-        param.setPayWay(PayWayEnum.QRCODE.getCode());
+    public void onePay() {
+        PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
         param.setNotReturn(true);
 
+        param.setBusinessNo("P0001");
+        param.setTitle("测试接口支付");
+        PayChannelParam payChannelParam = new PayChannelParam();
+        payChannelParam.setChannel(PayChannelEnum.WECHAT.getCode());
+        payChannelParam.setWay(PayWayEnum.QRCODE.getCode());
+        payChannelParam.setAmount(1);
+
+        List<PayChannelParam> payChannels = Collections.singletonList(payChannelParam);
+        param.setPayChannels(payChannels);
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
-        PayOrderModel data = execute.getData();
-        System.out.println(data);
+        System.out.println(execute.getData());
+    }
+
+    /**
+     * 多通道支付
+     */
+    @Test
+    public void multiPay() {
+
     }
 }

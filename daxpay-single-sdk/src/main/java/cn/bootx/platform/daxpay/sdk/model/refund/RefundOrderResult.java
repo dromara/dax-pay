@@ -1,7 +1,10 @@
-package cn.bootx.platform.daxpay.sdk.model;
+package cn.bootx.platform.daxpay.sdk.model.refund;
 
 import cn.bootx.platform.daxpay.sdk.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayResponseModel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,6 +15,9 @@ import java.util.List;
  * @author xxm
  * @since 2024/1/16
  */
+@Getter
+@Setter
+@ToString
 public class RefundOrderResult extends DaxPayResponseModel {
 
     /** 支付号 */

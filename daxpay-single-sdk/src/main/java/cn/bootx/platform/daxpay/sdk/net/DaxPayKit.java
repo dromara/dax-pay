@@ -26,8 +26,19 @@ public class DaxPayKit {
     }
 
     /**
+     * 支付请求执行类, 默认对请求参数进行签名
+     * @param request 请求参数
+     * @return DaxPayResult 响应类
+     * @param <T> 业务对象
+     */
+    public <T extends DaxPayResponseModel> DaxPayResult<T> execute(DaxPayRequest<T> request){
+        return execute(request, true);
+    }
+
+    /**
      * 支付请求执行类
      * @param request 请求参数
+     * @param sign 是否进行签名
      * @return DaxPayResult 响应类
      * @param <T> 业务对象
      */

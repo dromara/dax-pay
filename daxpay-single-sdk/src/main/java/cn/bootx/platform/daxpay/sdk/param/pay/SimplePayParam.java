@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.sdk.param.pay;
 
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
-import cn.bootx.platform.daxpay.sdk.model.PayOrderModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayRequest;
 import cn.bootx.platform.daxpay.sdk.param.ChannelParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.AliPayParam;

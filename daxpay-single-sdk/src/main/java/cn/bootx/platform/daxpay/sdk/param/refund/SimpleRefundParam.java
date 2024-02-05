@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.sdk.param.refund;
 
-import cn.bootx.platform.daxpay.sdk.model.RefundModel;
+import cn.bootx.platform.daxpay.sdk.model.refund.RefundModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayRequest;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.lang.TypeReference;

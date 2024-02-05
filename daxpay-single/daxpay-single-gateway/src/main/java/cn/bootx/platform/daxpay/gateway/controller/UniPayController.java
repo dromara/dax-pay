@@ -15,6 +15,7 @@ import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrder
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.pay.service.PayService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
+import cn.bootx.platform.daxpay.service.core.payment.sync.service.PayRefundSyncService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +38,7 @@ public class UniPayController {
     private final PayRefundService payRefundService;
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
+    private final PayRefundSyncService payRefundSyncService;
     private final PayOrderQueryService PayOrderQueryService;
     private final PayRefundOrderQueryService payRefundQueryService;
 
@@ -94,8 +96,8 @@ public class UniPayController {
     @PaymentApi("syncRefund")
     @Operation(summary = "退款状态同步")
     @PostMapping("/syncRefund")
-    public DaxResult<Void> syncRefund(@RequestBody RefundSyncParam param){
-        return DaxRes.ok();
+    public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){
+        return DaxRes.ok(payRefundSyncService.sync(param));
     }
 
     @CountTime

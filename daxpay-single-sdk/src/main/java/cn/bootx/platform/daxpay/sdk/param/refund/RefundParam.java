@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.sdk.param.refund;
 
-import cn.bootx.platform.daxpay.sdk.model.RefundModel;
+import cn.bootx.platform.daxpay.sdk.model.refund.RefundModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayRequest;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.lang.TypeReference;
@@ -26,7 +26,7 @@ public class RefundParam extends DaxPayRequest<RefundModel> {
     private String businessNo;
 
     /**
-     * 部分退款需要传输支付通道参数参数
+     * 是否全部退款, 传false时为部分退款, 通道退款参数不可为空
      */
     private boolean refundAll;
 
@@ -36,6 +36,7 @@ public class RefundParam extends DaxPayRequest<RefundModel> {
     private String refundNo;
 
     /**
+     * 通道退款参数
      * 部分退款时必传
      */
     private List<RefundChannelParam> refundChannels;

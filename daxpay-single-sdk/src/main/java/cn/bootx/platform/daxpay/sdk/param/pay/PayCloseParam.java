@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.sdk.param.pay;
 
-import cn.bootx.platform.daxpay.sdk.model.PayCloseModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.PayCloseModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayRequest;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.lang.TypeReference;
@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class PayCloseParam extends DaxPayRequest<PayCloseModel> {
 
-    /** 支付单ID */
+    /** 支付ID */
     private Long paymentId;
 
     /** 业务号 */

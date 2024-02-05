@@ -28,7 +28,7 @@
         <java.version>1.8</java.version>
 
         <!-- 二方库版本 -->
-        <bootx-platform.version>1.3.6</bootx-platform.version>
+        <bootx-platform.version>1.3.6.1</bootx-platform.version>
         <dax.version>2.0.0</dax.version>
         <!-- 三方库 -->
         <slf4j.version>1.7.30</slf4j.version>

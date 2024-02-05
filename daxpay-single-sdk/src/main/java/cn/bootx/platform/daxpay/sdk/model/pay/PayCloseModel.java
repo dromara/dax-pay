@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.sdk.model;
+package cn.bootx.platform.daxpay.sdk.model.pay;
 
 import cn.bootx.platform.daxpay.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
