@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
@@ -76,7 +76,7 @@ public abstract class AbsRefundStrategy implements PayStrategy{
      */
     public void doSuccessHandler() {
         // 更新退款订单数据状态
-        this.refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode()).setRefundTime(LocalDateTime.now());
+        this.refundChannelOrder.setStatus(RefundStatusEnum.SUCCESS.getCode()).setRefundTime(LocalDateTime.now());
 
         // 支付通道订单可退余额
         int refundableBalance = this.getPayChannelOrder().getRefundableBalance() - this.refundChannelOrder.getAmount();

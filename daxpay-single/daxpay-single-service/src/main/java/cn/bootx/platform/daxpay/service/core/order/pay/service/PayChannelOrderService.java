@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.pay.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
@@ -91,7 +91,7 @@ public class PayChannelOrderService {
         int refundableBalance = payChannelOrder.getRefundableBalance() - refundChannelOrder.getAmount();
         payChannelOrder.setRefundableBalance(refundableBalance);
         // 支付通道订单状态
-        if (Objects.equals(refundChannelOrder.getStatus(), PayRefundStatusEnum.SUCCESS.getCode())){
+        if (Objects.equals(refundChannelOrder.getStatus(), RefundStatusEnum.SUCCESS.getCode())){
             PayStatusEnum status = refundableBalance == 0 ? PayStatusEnum.REFUNDED : PayStatusEnum.PARTIAL_REFUND;
             payChannelOrder.setStatus(status.getCode());
             refundChannelOrder.setRefundTime(LocalDateTime.now());

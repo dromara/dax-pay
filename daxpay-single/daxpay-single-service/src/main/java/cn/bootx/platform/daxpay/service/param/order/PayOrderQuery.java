@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @QueryParam
 @Accessors(chain = true)
 @Schema(title = "支付订单查询参数")
-public class PayOrderQuery  extends QueryOrder {
+public class PayOrderQuery extends QueryOrder {
 
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付订单id")

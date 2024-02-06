@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.dto.order.refund;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -43,7 +43,7 @@ public class RefundChannelOrderDto extends BaseDto {
 
     /**
      * 退款状态
-     * @see PayRefundStatusEnum
+     * @see RefundStatusEnum
      */
     @Schema(description = "退款状态")
     private String status;

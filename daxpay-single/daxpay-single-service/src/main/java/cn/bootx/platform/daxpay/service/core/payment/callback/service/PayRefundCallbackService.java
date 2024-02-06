@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.callback.service;
 
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
@@ -54,12 +54,12 @@ public class PayRefundCallbackService {
                 return;
             }
             // 退款单已经被处理, 记录回调记录
-            if (!Objects.equals(PayRefundStatusEnum.PROGRESS.getCode(), refundOrder.getStatus())) {
+            if (!Objects.equals(RefundStatusEnum.PROGRESS.getCode(), refundOrder.getStatus())) {
                 callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("退款单状态已处理,记录回调记录");
             }
 
             // 退款成功还是失败
-            if (Objects.equals(PayRefundStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
+            if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.SUCCESS);
                 callbackInfo.setPayRepairNo(repair.getRepairNo());
             }  else {

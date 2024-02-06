@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.order.refund.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundOrderConvert;
 import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -95,7 +95,7 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
 
     /**
      * 退款状态
-     * @see PayRefundStatusEnum
+     * @see RefundStatusEnum
      */
     @DbColumn(comment = "退款状态")
     private String status;

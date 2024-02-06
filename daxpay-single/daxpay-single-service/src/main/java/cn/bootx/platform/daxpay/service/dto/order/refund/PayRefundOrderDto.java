@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.dto.order.refund;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,7 +61,7 @@ public class PayRefundOrderDto extends BaseDto {
     private LocalDateTime refundTime;
 
     /**
-     * @see PayRefundStatusEnum
+     * @see RefundStatusEnum
      */
     @Schema(description = "退款状态")
     private String status;

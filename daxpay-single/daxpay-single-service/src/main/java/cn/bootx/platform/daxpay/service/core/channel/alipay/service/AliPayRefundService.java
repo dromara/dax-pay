@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
@@ -49,10 +49,10 @@ public class AliPayRefundService {
             }
             // 接口返回fund_change=Y为退款成功，fund_change=N或无此字段值返回时需通过退款查询接口进一步确认退款状态
             if (response.getFundChange().equals("Y")){
-//                refundInfo.setStatus(PayRefundStatusEnum.SUCCESS)
+//                refundInfo.setStatus(RefundStatusEnum.SUCCESS)
 //                        .setGatewayOrderNo(response.getTradeNo());
             }
-            refundInfo.setStatus(PayRefundStatusEnum.PROGRESS)
+            refundInfo.setStatus(RefundStatusEnum.PROGRESS)
                     .setGatewayOrderNo(response.getTradeNo());
         }
         catch (AlipayApiException e) {

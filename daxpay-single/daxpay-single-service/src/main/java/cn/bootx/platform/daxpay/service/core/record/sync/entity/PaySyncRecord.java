@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.record.sync.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.core.record.sync.convert.PaySyncRecordConvert;
@@ -63,7 +63,7 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     /**
      * 网关返回状态
      * @see PaySyncStatusEnum
-     * @see PayRefundSyncStatusEnum
+     * @see RefundSyncStatusEnum
      */
     @DbColumn(comment = "网关返回状态")
     private String gatewayStatus;

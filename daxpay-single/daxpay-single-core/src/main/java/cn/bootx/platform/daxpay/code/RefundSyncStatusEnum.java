@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum PayRefundSyncStatusEnum {
+public enum RefundSyncStatusEnum {
     SUCCESS("refund_success","退款成功"),
     FAIL("refund_fail","退款失败"),
     PROGRESS("refund_progress","退款中");

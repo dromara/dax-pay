@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
@@ -61,7 +61,7 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
     @Override
     public void doSuccessHandler() {
         // 更新退款订单数据状态
-        PayRefundStatusEnum refundStatusEnum = PaymentContextLocal.get()
+        RefundStatusEnum refundStatusEnum = PaymentContextLocal.get()
                 .getRefundInfo()
                 .getStatus();
         this.getRefundChannelOrder().setStatus(refundStatusEnum.getCode());

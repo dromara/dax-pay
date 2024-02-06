@@ -27,20 +27,6 @@ spring:
           adaptive: true
           # 群集拓扑刷新周期
           period: 60s
-  # 如果不使用MQ的话, 可以将项目中 @EnableRabbit 给注释掉, 就不会一直报错了
-  rabbitmq:
-    # 虚拟主机
-    virtual-host: dax-pay
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
-    listener:
-      simple:
-        # 重试机制
-        retry:
-          enabled: true
-          max-attempts: 5
   #静态资源加载配置
   mvc:
     static-path-pattern: /**

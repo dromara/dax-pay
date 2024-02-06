@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 @Getter
 @AllArgsConstructor
-public enum PayRefundStatusEnum {
+public enum RefundStatusEnum {
 
     /**
      * 接口调用成功不代表成功
@@ -32,7 +32,7 @@ public enum PayRefundStatusEnum {
     /**
      * 根据编码获取枚举
      */
-    public static PayRefundStatusEnum findByCode(String code){
+    public static RefundStatusEnum findByCode(String code){
         return Arrays.stream(values())
                 .filter(statusEnum -> Objects.equals(statusEnum.getCode(), code))
                 .findFirst()

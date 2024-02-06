@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.dto.record.sync;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
@@ -53,7 +53,7 @@ public class PaySyncRecordDto extends BaseDto {
     /**
      * 网关返回状态
      * @see PaySyncStatusEnum
-     * @see PayRefundSyncStatusEnum
+     * @see RefundSyncStatusEnum
      */
     @Schema(description = "网关返回状态")
     private String gatewayStatus;

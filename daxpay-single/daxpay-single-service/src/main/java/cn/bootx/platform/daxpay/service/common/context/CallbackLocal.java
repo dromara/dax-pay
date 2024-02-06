@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import lombok.Data;
@@ -33,7 +33,7 @@ public class CallbackLocal {
     /**
      * 网关返回状态
      * @see PayStatusEnum 支付状态
-     * @see PayRefundStatusEnum 退款状态
+     * @see RefundStatusEnum 退款状态
      */
     private String gatewayStatus;
 

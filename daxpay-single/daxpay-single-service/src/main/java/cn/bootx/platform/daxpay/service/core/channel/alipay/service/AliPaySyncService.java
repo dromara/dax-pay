@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -96,7 +96,7 @@ public class AliPaySyncService {
      * 退款同步查询
      */
     public RefundGatewaySyncResult syncRefundStatus(PayRefundOrder refundOrder) {
-        RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult().setSyncStatus(PayRefundSyncStatusEnum.FAIL);
+        RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
         try {
             AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();
             // 退款请求号
@@ -109,7 +109,7 @@ public class AliPaySyncService {
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
             // 失败
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL);
+                syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL);
                 syncResult.setErrorCode(response.getSubCode());
                 syncResult.setErrorMsg(response.getSubMsg());
                 return syncResult;
@@ -120,9 +120,9 @@ public class AliPaySyncService {
             // 成功
             if (Objects.equals(tradeStatus, AliPayCode.REFUND_SUCCESS)){
                 LocalDateTime localDateTime = LocalDateTimeUtil.of(response.getGmtRefundPay());
-                return syncResult.setRefundTime(localDateTime).setSyncStatus(PayRefundSyncStatusEnum.SUCCESS);
+                return syncResult.setRefundTime(localDateTime).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
             } else {
-                return syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL).setErrorMsg("支付宝网关反正退款未成功");
+                return syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL).setErrorMsg("支付宝网关反正退款未成功");
             }
         } catch (AlipayApiException e) {
             log.error("退款订单同步失败:", e);

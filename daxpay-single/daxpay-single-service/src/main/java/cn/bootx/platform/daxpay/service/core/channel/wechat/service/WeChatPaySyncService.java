@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
@@ -126,16 +126,16 @@ public class WeChatPaySyncService {
             if (Objects.equals(tradeStatus, WeChatPayCode.REFUND_SUCCESS)) {
                 String timeEnd = result.get(WeChatPayCode.REFUND_SUCCESS_TIME);
                 LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.NORM_DATETIME_PATTERN);
-                return syncResult.setRefundTime(time).setSyncStatus(PayRefundSyncStatusEnum.SUCCESS);
+                return syncResult.setRefundTime(time).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
             }
             // 退款中
             if (Objects.equals(tradeStatus, WeChatPayCode.REFUND_PROCESSING)) {
-                return syncResult.setSyncStatus(PayRefundSyncStatusEnum.PROGRESS);
+                return syncResult.setSyncStatus(RefundSyncStatusEnum.PROGRESS);
             }
-            return syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL);
+            return syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL);
         } catch (Exception e) {
             log.error("查询退款订单失败:", e);
-            syncResult.setSyncStatus(PayRefundSyncStatusEnum.PROGRESS).setErrorMsg(e.getMessage());
+            syncResult.setSyncStatus(RefundSyncStatusEnum.PROGRESS).setErrorMsg(e.getMessage());
         }
         return syncResult;
 

@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -52,7 +52,7 @@ public abstract class AbsRefundRepairStrategy implements PayStrategy{
             payChannelOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
 
         }
-        refundChannelOrder.setStatus(PayRefundStatusEnum.SUCCESS.getCode());
+        refundChannelOrder.setStatus(RefundStatusEnum.SUCCESS.getCode());
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class AbsRefundRepairStrategy implements PayStrategy{
         }
         // 如果失败, 可退余额设置为null
         refundChannelOrder.setRefundableAmount(null);
-        refundChannelOrder.setStatus(PayRefundStatusEnum.CLOSE.getCode());
+        refundChannelOrder.setStatus(RefundStatusEnum.CLOSE.getCode());
     }
 
 }

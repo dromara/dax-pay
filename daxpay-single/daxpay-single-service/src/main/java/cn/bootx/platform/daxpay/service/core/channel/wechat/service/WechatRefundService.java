@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
@@ -59,7 +59,7 @@ public class WechatRefundService {
         if (StrUtil.isBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
             refundInfo.setErrorMsg(errorMsg);
-            refundInfo.setErrorCode(PayRefundStatusEnum.FAIL.getCode());
+            refundInfo.setErrorCode(RefundStatusEnum.FAIL.getCode());
             throw new PayFailureException(errorMsg);
         }
         byte[] fileBytes = Base64.decode(weChatPayConfig.getP12());
@@ -69,7 +69,7 @@ public class WechatRefundService {
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
         // 微信退款是否成功需要查询状态或者回调, 所以设置为退款中状态
-        refundInfo.setStatus(PayRefundStatusEnum.PROGRESS)
+        refundInfo.setStatus(RefundStatusEnum.PROGRESS)
                 .setGatewayOrderNo(result.get("refund_id"));
     }
 

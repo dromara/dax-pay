@@ -2,8 +2,8 @@ package cn.bootx.platform.daxpay.service.core.payment.sync.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
-import cn.bootx.platform.daxpay.code.PayRefundSyncStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundSyncParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
@@ -67,7 +67,7 @@ public class PayRefundSyncService {
             return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步通道的退款，不需要同步");
         }
         // 如果订单已经关闭, 直接返回失败
-        if (Objects.equals(refundOrder.getStatus(), PayRefundStatusEnum.CLOSE.getCode())){
+        if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.CLOSE.getCode())){
             return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单已经关闭，不需要同步");
         }
         return this.syncRefundOrder(refundOrder);
@@ -93,7 +93,7 @@ public class PayRefundSyncService {
             RefundGatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
 
             // 判断是否同步成功
-            if (Objects.equals(syncResult.getSyncStatus(), PayRefundSyncStatusEnum.FAIL)) {
+            if (Objects.equals(syncResult.getSyncStatus(), RefundSyncStatusEnum.FAIL)) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
             }
@@ -118,7 +118,7 @@ public class PayRefundSyncService {
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResult.setSyncStatus(PayRefundSyncStatusEnum.FAIL);
+                syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL);
                 this.saveRecord(refundOrder, syncResult, false, null, e.getMessage());
                 return new SyncResult().setErrorMsg(e.getMessage());
             }
@@ -137,26 +137,26 @@ public class PayRefundSyncService {
 
     /**
      * 检查状态是否一致
-     * @see PayRefundSyncStatusEnum 同步返回类型
-     * @see PayRefundStatusEnum 退款单状态
+     * @see RefundSyncStatusEnum 同步返回类型
+     * @see RefundStatusEnum 退款单状态
      */
     private boolean checkSyncStatus(RefundGatewaySyncResult syncResult, PayRefundOrder order){
-        PayRefundSyncStatusEnum syncStatus = syncResult.getSyncStatus();
+        RefundSyncStatusEnum syncStatus = syncResult.getSyncStatus();
         String orderStatus = order.getStatus();
         // 退款完成
-        if (Objects.equals(syncStatus, PayRefundSyncStatusEnum.SUCCESS)&&
-                Objects.equals(orderStatus, PayRefundStatusEnum.SUCCESS.getCode())) {
+        if (Objects.equals(syncStatus, RefundSyncStatusEnum.SUCCESS)&&
+                Objects.equals(orderStatus, RefundStatusEnum.SUCCESS.getCode())) {
             return true;
         }
 
         // 退款失败
-        if (Objects.equals(syncStatus, PayRefundSyncStatusEnum.FAIL)&&
-                Objects.equals(orderStatus, PayRefundStatusEnum.FAIL.getCode())) {
+        if (Objects.equals(syncStatus, RefundSyncStatusEnum.FAIL)&&
+                Objects.equals(orderStatus, RefundStatusEnum.FAIL.getCode())) {
             return true;
         }
         // 退款中
-        if (Objects.equals(syncStatus, PayRefundSyncStatusEnum.PROGRESS)&&
-                Objects.equals(orderStatus, PayRefundStatusEnum.PROGRESS.getCode())) {
+        if (Objects.equals(syncStatus, RefundSyncStatusEnum.PROGRESS)&&
+                Objects.equals(orderStatus, RefundStatusEnum.PROGRESS.getCode())) {
             return true;
         }
         return false;
@@ -166,7 +166,7 @@ public class PayRefundSyncService {
      * 进行退款订单和支付订单的补偿
      */
     private RefundRepairResult repairHandler(RefundGatewaySyncResult syncResult, PayRefundOrder order){
-        PayRefundSyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
+        RefundSyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
         RefundRepairResult repair = new RefundRepairResult();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {

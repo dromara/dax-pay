@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static cn.bootx.platform.daxpay.code.PayRefundStatusEnum.SUCCESS;
+import static cn.bootx.platform.daxpay.code.RefundStatusEnum.SUCCESS;
 
 /**
  * 支付退款支撑服务
@@ -148,7 +148,7 @@ public class PayRefundAssistService {
         // 生成退款订单
         PayRefundOrder refundOrder = new PayRefundOrder()
                 .setPaymentId(payOrder.getId())
-                .setStatus(PayRefundStatusEnum.PROGRESS.getCode())
+                .setStatus(RefundStatusEnum.PROGRESS.getCode())
                 .setBusinessNo(payOrder.getBusinessNo())
                 .setRefundNo(refundParam.getRefundNo())
                 .setOrderAmount(payOrder.getAmount())

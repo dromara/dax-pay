@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.ValidationUtil;
-import cn.bootx.platform.daxpay.code.PayRefundStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
@@ -180,7 +180,7 @@ public class PayRefundService {
         }
         catch (Exception e) {
             // 5. 失败处理
-            PaymentContextLocal.get().getRefundInfo().setStatus(PayRefundStatusEnum.FAIL);
+            PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             this.errorHandler(refundOrder);
             throw e;
         }
@@ -222,7 +222,7 @@ public class PayRefundService {
         // 剩余可退款余额
         int refundableBalance = payRefundOrder.getRefundableBalance();
         // 设置支付订单状态
-        if (asyncRefundInfo.getStatus() == PayRefundStatusEnum.PROGRESS) {
+        if (asyncRefundInfo.getStatus() == RefundStatusEnum.PROGRESS) {
             // 设置为退款中
             payOrder.setStatus(PayStatusEnum.REFUNDING.getCode());
         } else if (refundableBalance == 0) {
