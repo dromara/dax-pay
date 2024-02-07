@@ -47,13 +47,14 @@ public class AliPayRefundService {
                 log.error("网关返回退款失败: {}", response.getSubMsg());
                 throw new PayFailureException(response.getSubMsg());
             }
-            // 接口返回fund_change=Y为退款成功，fund_change=N或无此字段值返回时需通过退款查询接口进一步确认退款状态
-            if (response.getFundChange().equals("Y")){
-//                refundInfo.setStatus(RefundStatusEnum.SUCCESS)
-//                        .setGatewayOrderNo(response.getTradeNo());
-            }
+            // 默认为退款中状态
             refundInfo.setStatus(RefundStatusEnum.PROGRESS)
                     .setGatewayOrderNo(response.getTradeNo());
+
+            // 接口返回fund_change=Y为退款成功，fund_change=N或无此字段值返回时需通过退款查询接口进一步确认退款状态
+            if (response.getFundChange().equals("Y")){
+                refundInfo.setStatus(RefundStatusEnum.SUCCESS);
+            }
         }
         catch (AlipayApiException e) {
             log.error("订单退款失败:", e);

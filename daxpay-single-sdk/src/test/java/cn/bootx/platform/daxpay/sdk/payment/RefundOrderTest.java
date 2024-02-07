@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.sdk;
+package cn.bootx.platform.daxpay.sdk.payment;
 
 import cn.bootx.platform.daxpay.sdk.model.refund.RefundModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;

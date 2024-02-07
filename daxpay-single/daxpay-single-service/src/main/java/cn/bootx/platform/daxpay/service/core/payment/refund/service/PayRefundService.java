@@ -152,8 +152,8 @@ public class PayRefundService {
             refundStrategy.initRefundParam(payOrder, refundParam, payChannelOrder);
         }
 
-        // 对通道支付订单进行预扣款
-        payRefundStrategies.forEach(AbsRefundStrategy::doPreDeductOrderHandler);
+        // 生成通道退款订单对象
+        payRefundStrategies.forEach(AbsRefundStrategy::generateChannelOrder);
 
         // 退款操作的预处理, 使用独立的新事物进行发起, 返回创建成功的退款订单, 成功后才可以进行下一阶段的操作
         PayRefundOrder refundOrder = SpringUtil.getBean(this.getClass()).preRefundMethod(refundParam, payOrder, payRefundStrategies);
@@ -193,7 +193,7 @@ public class PayRefundService {
     public PayRefundOrder preRefundMethod(RefundParam refundParam, PayOrder payOrder, List<AbsRefundStrategy> payRefundStrategies) {
         // --------------------------- 支付订单 -------------------------------------
         // 预扣支付相关订单要退款的金额并进行更新
-        payRefundStrategies.forEach(AbsRefundStrategy::generateChannelOrder);
+        payRefundStrategies.forEach(AbsRefundStrategy::doPreDeductOrderHandler);
         List<PayChannelOrder> channelOrders = payRefundStrategies.stream()
                 .map(AbsRefundStrategy::getPayChannelOrder)
                 .collect(Collectors.toList());

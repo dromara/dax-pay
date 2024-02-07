@@ -4,14 +4,10 @@ import cn.bootx.platform.common.core.annotation.CountTime;
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
-import cn.bootx.platform.daxpay.result.order.PayOrderResult;
-import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
+import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
-import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.pay.service.PayService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
@@ -21,7 +17,10 @@ import cn.bootx.platform.daxpay.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 统一支付接口
@@ -39,8 +38,6 @@ public class UniPayController {
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
     private final PayRefundSyncService payRefundSyncService;
-    private final PayOrderQueryService PayOrderQueryService;
-    private final PayRefundOrderQueryService payRefundQueryService;
 
 
     @CountTime
@@ -98,21 +95,5 @@ public class UniPayController {
     @PostMapping("/syncRefund")
     public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){
         return DaxRes.ok(payRefundSyncService.sync(param));
-    }
-
-    @CountTime
-    @PaymentApi("queryPayOrder")
-    @Operation(summary = "查询支付订单")
-    @PostMapping("/queryPayOrder")
-    public DaxResult<PayOrderResult> queryPayOrder(@RequestBody QueryPayParam param){
-        return DaxRes.ok(PayOrderQueryService.queryPayOrder(param));
-    }
-
-    @CountTime
-    @PaymentApi("queryRefundOrder")
-    @Operation(summary = "查询退款订单")
-    @PostMapping("/queryRefundOrder")
-    public DaxResult<RefundOrderResult> queryRefundOrder(@RequestBody QueryRefundParam param){
-        return DaxRes.ok(payRefundQueryService.queryRefundOrder(param));
     }
 }

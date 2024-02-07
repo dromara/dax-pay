@@ -98,9 +98,9 @@ public class PayRefundAssistService {
             if (CollUtil.isEmpty(param.getRefundChannels())) {
                 throw new ValidationFailedException("退款通道参数不能为空");
             }
-            if (Objects.isNull(param.getRefundNo())) {
-                throw new ValidationFailedException("部分退款时退款单号必传");
-            }
+//            if (Objects.isNull(param.getRefundNo())) {
+//                throw new ValidationFailedException("部分退款时退款单号必传");
+//            }
         }
 
         // 简单退款校验

@@ -1,20 +1,19 @@
-package cn.bootx.platform.daxpay.sdk;
+package cn.bootx.platform.daxpay.sdk.query;
 
-import cn.bootx.platform.daxpay.sdk.model.pay.PayCloseModel;
+import cn.bootx.platform.daxpay.sdk.model.refund.QueryRefundOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.pay.PayCloseParam;
+import cn.bootx.platform.daxpay.sdk.param.refund.QueryRefundParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 支付关闭接口测试类
+ * 退款订单查询接口
  * @author xxm
- * @since 2024/2/5
+ * @since 2024/2/7
  */
-public class PayCloseOrderTest {
-
+public class QueryRefundOrderTest {
 
     @Before
     public void init() {
@@ -27,10 +26,13 @@ public class PayCloseOrderTest {
     }
 
     @Test
-    public void close(){
-        PayCloseParam param = new PayCloseParam();
-        param.setBusinessNo("P0001");
-        DaxPayResult<PayCloseModel> execute = DaxPayKit.execute(param);
+    public void testPay() {
+        QueryRefundParam param = new QueryRefundParam();
+
+        param.setRefundId(1755263825769361408L);
+
+        DaxPayResult<QueryRefundOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
+        System.out.println(execute.getData());
     }
 }

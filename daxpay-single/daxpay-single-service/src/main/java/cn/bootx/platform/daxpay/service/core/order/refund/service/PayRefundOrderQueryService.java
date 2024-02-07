@@ -102,6 +102,7 @@ public class PayRefundOrderQueryService {
                 .collect(Collectors.toList());
 
         RefundOrderResult refundOrderResult = PayRefundOrderConvert.CONVERT.convertResult(refundOrder);
+        refundOrderResult.setRefundId(refundOrder.getId());
         refundOrderResult.setChannels(channels);
         return refundOrderResult;
     }

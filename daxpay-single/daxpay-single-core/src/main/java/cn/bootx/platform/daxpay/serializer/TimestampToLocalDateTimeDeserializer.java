@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
- * 时间戳转LocalDateTime
+ * 时间戳转LocalDateTime(10位秒级时间戳)
  * @author xxm
  * @since 2023/12/25
  */
@@ -22,7 +22,7 @@ public class TimestampToLocalDateTimeDeserializer extends JsonDeserializer<Local
         if (StrUtil.isBlank(value)){
             return null;
         }
-        long timestamp = Long.parseLong(value);
+        long timestamp = Long.parseLong(value) * 1000;
         return LocalDateTimeUtil.of(timestamp);
     }
 }

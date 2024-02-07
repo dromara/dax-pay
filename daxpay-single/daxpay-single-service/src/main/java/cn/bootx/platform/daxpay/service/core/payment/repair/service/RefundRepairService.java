@@ -1,10 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
-import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
+import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
@@ -102,7 +103,7 @@ public class RefundRepairService {
      * 退款成功, 更新退款单和支付单
      */
     private RefundRepairResult success(PayRefundOrder refundOrder, PayOrder payOrder, List<AbsRefundRepairStrategy> repairStrategies) {
-
+        RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
         // 订单相关状态
         PayStatusEnum beforePayStatus = PayStatusEnum.findByCode(refundOrder.getStatus());
         PayStatusEnum afterPayRefundStatus;
@@ -114,8 +115,9 @@ public class RefundRepairService {
         } else {
             afterPayRefundStatus = PayStatusEnum.PARTIAL_REFUND;
         }
-        // 设置退款为完成状态
-        refundOrder.setStatus(RefundStatusEnum.SUCCESS.getCode());
+        // 设置退款为完成状态和完成时间
+        refundOrder.setStatus(RefundStatusEnum.SUCCESS.getCode())
+                .setRefundTime(repairInfo.getFinishTime());
         payOrder.setStatus(afterPayRefundStatus.getCode());
 
         // 执行退款成功逻辑

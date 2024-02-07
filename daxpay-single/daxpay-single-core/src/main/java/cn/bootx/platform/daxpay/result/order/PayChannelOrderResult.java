@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 @Schema(title = "支付订单通道响应参数")
-public class PayOrderChannelResult {
+public class PayChannelOrderResult {
 
 
     @Schema(description = "异步支付方式")

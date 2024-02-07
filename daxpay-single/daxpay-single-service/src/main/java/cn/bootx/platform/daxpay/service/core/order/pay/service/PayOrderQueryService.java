@@ -7,7 +7,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.QueryPayParam;
-import cn.bootx.platform.daxpay.result.order.PayOrderChannelResult;
+import cn.bootx.platform.daxpay.result.order.PayChannelOrderResult;
 import cn.bootx.platform.daxpay.result.order.PayOrderResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
@@ -92,12 +92,13 @@ public class PayOrderQueryService {
         // 查询通道数据
         List<PayChannelOrder> orderChannelList = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
 
-        List<PayOrderChannelResult> channels = orderChannelList.stream()
+        List<PayChannelOrderResult> channels = orderChannelList.stream()
                 .map(PayOrderConvert.CONVERT::convertResult)
                 .collect(Collectors.toList());
 
         PayOrderResult payOrderResult = new PayOrderResult();
         BeanUtil.copyProperties(payOrder, payOrderResult);
+        payOrderResult.setPaymentId(payOrder.getId());
         payOrderResult.setDescription(payOrderExtra.getDescription())
                 .setChannels(channels);
 

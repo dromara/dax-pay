@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.sdk.model.refund;
 
-import cn.bootx.platform.daxpay.sdk.net.DaxPayResponseModel;
+import cn.bootx.platform.daxpay.sdk.code.RefundStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class RefundChannelOrderModel extends DaxPayResponseModel {
+public class QueryRefundChannelOrderModel {
 
     /** 通道 */
     private String channel;
@@ -24,9 +24,21 @@ public class RefundChannelOrderModel extends DaxPayResponseModel {
     /** 异步支付方式 */
     private boolean async;
 
-    /** 订单金额" */
+    /** 订单金额 */
     private Integer orderAmount;
 
     /** 退款金额 */
     private Integer amount;
+
+    /** 剩余可退余额 */
+    private Integer refundableAmount;
+
+    /**
+     * 退款状态
+     * @see RefundStatusEnum
+     */
+    private String status;
+
+    /** 退款完成时间(秒级时间戳) */
+    private Long refundTime;
 }

@@ -1,42 +1,30 @@
-package cn.bootx.platform.daxpay.sdk;
+package cn.bootx.platform.daxpay.sdk.util;
 
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
-import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
-import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
-import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
 import cn.bootx.platform.daxpay.sdk.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.sdk.param.pay.PayParam;
-import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
-import org.junit.Before;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
- * 通用支付接口
+ * 参数签名测试类
  * @author xxm
- * @since 2024/2/5
+ * @since 2024/2/7
  */
-public class PayOrderTest {
-
-    @Before
-    public void init() {
-        // 初始化支付配置
-        DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:9000")
-                .signSecret("123456")
-                .build();
-        DaxPayKit.initConfig(config);
-    }
-
+@Slf4j
+public class PayParamSignTest {
 
     /**
-     * 单通道支付
+     * 签名测试
      */
     @Test
-    public void onePay() {
+    public void sign(){
+
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
@@ -51,16 +39,17 @@ public class PayOrderTest {
 
         List<PayChannelParam> payChannels = Collections.singletonList(payChannelParam);
         param.setPayChannels(payChannels);
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
+
+        Map<String, String> map = PaySignUtil.toMap(param);
+        log.info("转换为有序MAP后的内容: {}",map);
+        String data = PaySignUtil.createLinkString(map);
+        log.info("将MAP拼接字符串: {}",data);
+        String sign = "123456";
+        data += "&sign="+sign;
+        data = data.toUpperCase();
+        log.info("添加秘钥并转换为大写的字符串: {}",data);
+        log.info("MD5: {}",PaySignUtil.md5(data));
+        log.info("HmacSHA256: {}",PaySignUtil.hmacSha256(data,sign));
     }
 
-    /**
-     * 多通道支付
-     */
-    @Test
-    public void multiPay() {
-
-    }
 }

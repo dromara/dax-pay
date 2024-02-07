@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.sdk;
+package cn.bootx.platform.daxpay.sdk.payment;
 
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
@@ -16,8 +16,6 @@ import org.junit.Test;
  * @since 2024/2/2
  */
 public class SimplePayOrderTest {
-
-
 
     @Before
     public void init() {

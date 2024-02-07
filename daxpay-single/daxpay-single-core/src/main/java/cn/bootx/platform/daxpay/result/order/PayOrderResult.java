@@ -3,6 +3,8 @@ package cn.bootx.platform.daxpay.result.order;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.result.CommonResult;
+import cn.bootx.platform.daxpay.serializer.LocalDateTimeToTimestampSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,8 +24,12 @@ import java.util.List;
 @Schema(title = "支付单响应参数")
 public class PayOrderResult extends CommonResult {
 
-    /** 关联的业务号 */
-    @Schema(description = "关联的业务号")
+    /** 支付ID */
+    @Schema(description = "支付ID")
+    private Long paymentId;
+
+    /** 业务号 */
+    @Schema(description = "业务号")
     private String businessNo;
 
     /** 标题 */
@@ -66,12 +72,14 @@ public class PayOrderResult extends CommonResult {
 
     /** 支付时间 */
     @Schema(description = "支付时间")
+    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime payTime;
 
     /** 过期时间 */
     @Schema(description = "过期时间")
+    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime expiredTime;
 
     @Schema(description = "支付通道列表")
-    private List<PayOrderChannelResult> channels;
+    private List<PayChannelOrderResult> channels;
 }

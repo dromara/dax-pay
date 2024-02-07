@@ -87,12 +87,10 @@ public class PayChannelOrderService {
      * 更新异步支付通道退款余额和状态
      */
     public void updateAsyncPayRefund(PayChannelOrder payChannelOrder, PayRefundChannelOrder refundChannelOrder){
-        // 支付通道订单可退余额
-        int refundableBalance = payChannelOrder.getRefundableBalance() - refundChannelOrder.getAmount();
-        payChannelOrder.setRefundableBalance(refundableBalance);
         // 支付通道订单状态
         if (Objects.equals(refundChannelOrder.getStatus(), RefundStatusEnum.SUCCESS.getCode())){
-            PayStatusEnum status = refundableBalance == 0 ? PayStatusEnum.REFUNDED : PayStatusEnum.PARTIAL_REFUND;
+            // 如果可退金额为0说明已经全部退款
+            PayStatusEnum status = payChannelOrder.getRefundableBalance() == 0 ? PayStatusEnum.REFUNDED : PayStatusEnum.PARTIAL_REFUND;
             payChannelOrder.setStatus(status.getCode());
             refundChannelOrder.setRefundTime(LocalDateTime.now());
         } else {

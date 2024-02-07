@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -53,7 +52,7 @@ public abstract class PayCommonParam {
 
     /** 请求时间，时间戳转时间 */
     @Schema(description = "请求时间，传输时间戳")
-//    @NotNull(message = "请求时间必填")
+    @NotNull(message = "请求时间必填")
     @JsonDeserialize(using = TimestampToLocalDateTimeDeserializer.class)
     private LocalDateTime reqTime;
 

@@ -74,7 +74,8 @@ public class PaySyncService {
         }
         // 如果不是异步支付, 直接返回返回
         if (!payOrder.isAsyncPay()){
-            return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步支付方式，不需要同步");
+//            return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步支付方式，不需要同步");
+            throw new PayFailureException("订单没有异步支付方式，不需要同步");
         }
         // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);
@@ -103,7 +104,8 @@ public class PaySyncService {
             if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(payOrder, syncResult, false, null, syncResult.getErrorMsg());
-                return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
+//                return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
+                throw new PayFailureException(syncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
             if (Objects.nonNull(syncResult.getGatewayOrderNo()) && !Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getGatewayOrderNo())){
@@ -129,14 +131,14 @@ public class PaySyncService {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
                 this.saveRecord(payOrder, syncResult, false, null, e.getMessage());
-                return new SyncResult().setErrorMsg(e.getMessage());
+//                return new SyncResult().setErrorMsg(e.getMessage());
+                throw e;
             }
 
             // 同步成功记录日志
             this.saveRecord( payOrder, syncResult, !statusSync, repairResult.getRepairNo(), null);
             return new SyncResult()
                     .setGatewayStatus(syncResult.getSyncStatus().getCode())
-                    .setSuccess(true)
                     .setRepair(!statusSync)
                     .setRepairOrderNo(repairResult.getRepairNo());
         } finally {
@@ -180,7 +182,7 @@ public class PaySyncService {
             return true;
         }
 
-        // TODO 退款比对
+        // 退款比对状态不做额外处理, 需要通过退款接口进行处理
         if (orderStatus.equals(PayStatusEnum.REFUNDED.getCode()) && syncStatus.equals(PaySyncStatusEnum.REFUND)){
             return true;
         }
@@ -221,7 +223,7 @@ public class PaySyncService {
             }
             // 调用出错
             case FAIL: {
-                // 不进行处理 TODO 添加重试
+                // 不进行处理
                 log.warn("支付状态同步接口调用出错");
                 break;
             }

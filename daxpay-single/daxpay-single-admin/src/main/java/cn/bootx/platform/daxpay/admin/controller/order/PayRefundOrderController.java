@@ -15,7 +15,6 @@ import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderRefundParam;
 import cn.bootx.platform.daxpay.service.param.order.PayRefundOrderQuery;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -74,7 +73,6 @@ public class PayRefundOrderController {
                 .orElse("未知");
 
         RefundParam refundParam = new RefundParam();
-        refundParam.setRefundNo(IdUtil.getSnowflakeNextIdStr());
         refundParam.setPaymentId(param.getPaymentId());
         refundParam.setRefundChannels(param.getRefundChannels());
         refundParam.setReqTime(LocalDateTime.now());

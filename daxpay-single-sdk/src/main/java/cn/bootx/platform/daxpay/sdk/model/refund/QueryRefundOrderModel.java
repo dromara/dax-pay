@@ -18,16 +18,19 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class RefundOrderResult extends DaxPayResponseModel {
+public class QueryRefundOrderModel extends DaxPayResponseModel {
 
-    /** 支付号 */
-    private Long paymentId;
-
-    /** 关联的业务id */
-    private String businessNo;
+    /** 退款id */
+    private Long refundId;
 
     /** 退款号 */
     private String refundNo;
+
+    /** 关联支付号 */
+    private Long paymentId;
+
+    /** 关联业务号 */
+    private String businessNo;
 
     /** 标题 */
     private String title;
@@ -43,12 +46,6 @@ public class RefundOrderResult extends DaxPayResponseModel {
      */
     private String gatewayOrderNo;
 
-    /** 通道退款订单 */
-    private List<RefundChannelOrderModel> channels;
-
-    /** 退款终端ip */
-    private String clientIp;
-
     /** 退款时间 */
     private LocalDateTime refundTime;
 
@@ -57,4 +54,7 @@ public class RefundOrderResult extends DaxPayResponseModel {
      * @see RefundStatusEnum
      */
     private String status;
+
+    /** 通道退款订单 */
+    private List<QueryRefundChannelOrderModel> channels;
 }

@@ -26,9 +26,12 @@
 ## 🍒文档和演示地址
 ### 文档地址
 
-在 [Bootx开源文档站](https://bootx.gitee.io/) 下的`支付网关(DaxPay)`模块下可以进行差异相关文档，具体链接地址如下
-[快速指南](https://bootx.gitee.io/daxpay/guides/overview/项目介绍.html)、
-[支付对接](https://bootx.gitee.io/daxpay/gateway/overview/接口清单.html)、
+在 [Bootx开源文档站](https://bootx.gitee.io/) 下的**支付网关(DaxPay)**模块下可以进行查阅相关文档，具体链接地址如下：
+
+[快速指南](https://bootx.gitee.io/daxpay/guides/overview/项目介绍.html)
+
+[支付对接](https://bootx.gitee.io/daxpay/gateway/overview/接口清单.html)
+
 [平台配置](https://bootx.gitee.io/daxpay/admin/config/平台配置.html)
 
 

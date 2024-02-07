@@ -29,16 +29,10 @@ public class SyncResult extends CommonResult {
     @Schema(description = "支付网关同步状态")
     private String gatewayStatus = FAIL.getCode();
 
-    @Schema(description = "是否同步成功")
-    private boolean success;
-
     @Schema(description = "是否进行了修复")
     private boolean repair;
 
     @Schema(description = "修复号")
     private String repairOrderNo;
-
-    @Schema(description = "失败原因")
-    private String errorMsg;
 
 }

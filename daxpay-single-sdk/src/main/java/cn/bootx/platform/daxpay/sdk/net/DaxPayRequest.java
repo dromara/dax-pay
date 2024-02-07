@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.sdk.net;
 
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
+import cn.hutool.core.date.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,6 +48,6 @@ public abstract class DaxPayRequest<T extends DaxPayResponseModel> {
     private String version = "1.0";
 
     /** 请求时间，传输时间戳 */
-    private Long reqTime;
+    private Long reqTime = DateUtil.currentSeconds();
 
 }

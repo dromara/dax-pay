@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class RequestLocal {
 
+    /** 接口信息 */
+
     /** 客户端ip */
     private String clientIp;
 

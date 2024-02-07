@@ -75,12 +75,14 @@ public abstract class AbsRefundStrategy implements PayStrategy{
      * 退款发起成功操作, 异步支付通道需要进行重写
      */
     public void doSuccessHandler() {
-        // 更新退款订单数据状态
-        this.refundChannelOrder.setStatus(RefundStatusEnum.SUCCESS.getCode()).setRefundTime(LocalDateTime.now());
+        // 更新退款订单数据状态和完成时间
+        this.refundChannelOrder
+                .setStatus(RefundStatusEnum.SUCCESS.getCode()).
+                setRefundTime(LocalDateTime.now());
 
         // 支付通道订单可退余额
         int refundableBalance = this.getPayChannelOrder().getRefundableBalance() - this.refundChannelOrder.getAmount();
-        // 支付通道订单状态
+        // 如果可退金额为0说明已经全部退款
         PayStatusEnum status = refundableBalance == 0 ? PayStatusEnum.REFUNDED : PayStatusEnum.PARTIAL_REFUND;
         this.payChannelOrder.setRefundableBalance(refundableBalance)
                 .setStatus(status.getCode());

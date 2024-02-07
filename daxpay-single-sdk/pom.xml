@@ -9,9 +9,40 @@
     <version>2.0.0</version>
     <packaging>jar</packaging>
 
+    <!-- 项目信息 -->
+    <name>bootx-platform</name>
+    <description>bootx-platform 基于Spring Boot框架打造，针对单体式应用进行专门设计，提供整套服务模块，努力为打造全方位企业级开发解决方案</description>
+    <url>https://gitee.com/bootx/bootx-platform</url>
+
+    <!-- 许可证 -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <!-- 开发者信息 -->
+    <developers>
+        <developer>
+            <name>bootx</name>
+            <email>xxm1995@outlook.com</email>
+            <organization>bootx</organization>
+            <url>https://gitee.com/bootx/bootx-platform</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@gitee.com:bootx/bootx-platform.git</connection>
+        <developerConnection>scm:git:git@gitee.com:bootx/bootx-platform.git</developerConnection>
+        <url>https://gitee.com/bootx/bootx-platform</url>
+    </scm>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback-classic.version>1.2.7</logback-classic.version>
         <hutool.version>5.8.25</hutool.version>
@@ -29,6 +60,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback-classic.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -43,5 +75,112 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+    <plugins>
+        <!-- 编译插件，设置源码以及编译的jdk版本 -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.1</version>
+            <configuration>
+                <source>${java.version}</source>
+                <target>${java.version}</target>
+            </configuration>
+        </plugin>
+        <!--打包源码的插件-->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.1</version>
+            <executions>
+                <execution>
+                    <id>attach-sources</id>
+                    <goals>
+                        <goal>jar-no-fork</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <!-- Javadoc 文档生成插件-->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.6.0</version>
+            <configuration>
+                <failOnError>false</failOnError>
+                <doclint>none</doclint>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                    <phase>package</phase>
+                </execution>
+            </executions>
+        </plugin>
+        <!--公钥私钥插件，也就是上传需要进行验证用户名和密码过程中需要用到的插件-->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+                <execution>
+                    <id>sign-artifacts</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>sign</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <!--部署插件-->
+        <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+                <!-- setting.xml中配置仓库平台id -->
+                <serverId>sonatype</serverId>
+                <!-- 仓库平台地址 -->
+                <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                <!-- 自动完成在平台上close后的release的操作 -->
+<!--                <autoReleaseAfterClose>false</autoReleaseAfterClose>-->
+            </configuration>
+        </plugin>
+    </plugins>
+
+        <resources>
+            <!-- 指定打包资源路径 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <!-- java类路径中会被打包的软件 -->
+            <resource>
+                <directory>src/main/java</directory>
+            </resource>
+        </resources>
+    </build>
+
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype</id>
+            <name>OSS Snapshots Repository</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype</id>
+            <name>OSS Staging Repository</name>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
 </project>

@@ -1,20 +1,19 @@
-package cn.bootx.platform.daxpay.sdk;
+package cn.bootx.platform.daxpay.sdk.query;
 
-import cn.bootx.platform.daxpay.sdk.model.sync.PaySyncModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.QueryPayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.sync.PaySyncParam;
+import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 支付同步接口
+ * 查询支付订单测试类
  * @author xxm
- * @since 2024/2/5
+ * @since 2024/2/7
  */
-public class PayOrderSyncTest {
-
+public class QueryPayOrderTest {
 
     @Before
     public void init() {
@@ -28,13 +27,12 @@ public class PayOrderSyncTest {
 
     @Test
     public void testPay() {
-        PaySyncParam param = new PaySyncParam();
+        QueryPayParam param = new QueryPayParam();
 
-        param.setBusinessNo("P0001");
+        param.setBusinessNo("2");
 
-        DaxPayResult<PaySyncModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<QueryPayOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
         System.out.println(execute.getData());
     }
-
 }
