@@ -41,6 +41,7 @@ public class PaySignUtil {
     /**
      * 将参数转换为map对象. 使用ChatGPT生成, 仅局限于对请求支付相关参数进行签名
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @SneakyThrows
     private void toMap(Object object, Map<String, String> map) {
         Class<?> clazz = object.getClass();
@@ -60,8 +61,14 @@ public class PaySignUtil {
                     // java8时间类型 转为时间戳
                     else if (field.getType().equals(LocalDateTime.class)) {
                         LocalDateTime localDateTime = (LocalDateTime) fieldValue;
-                        long timestamp = LocalDateTimeUtil.timestamp(localDateTime);
+                        long timestamp = LocalDateTimeUtil.timestamp(localDateTime)/1000;
                         map.put(fieldName, String.valueOf(timestamp));
+                    }
+                    // map类型
+                    else if (Map.class.isAssignableFrom(field.getType())) {
+                        Map<String, String> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+                        m.putAll((Map) fieldValue);
+                        map.put(fieldName, JSONUtil.toJsonStr(m));
                     }
                     // 集合类型
                     else if (Collection.class.isAssignableFrom(field.getType())) {
@@ -77,11 +84,11 @@ public class PaySignUtil {
                                     .collect(Collectors.toList());
                             map.put(fieldName,  JSONUtil.toJsonStr(maps));
                         }
-                        // 其他类型
+                        // 其他类型直接转换为json
                     } else {
                         Map<String, String> nestedMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                         toMap(fieldValue, nestedMap);
-                        String nestedJson = JSONUtil.toJsonStr(map);
+                        String nestedJson = JSONUtil.toJsonStr(fieldValue);
                         map.put(fieldName, nestedJson);
                     }
                 }

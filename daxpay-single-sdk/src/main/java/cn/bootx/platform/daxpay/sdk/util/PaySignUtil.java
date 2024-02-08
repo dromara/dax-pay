@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.sdk.util;
 
+import cn.bootx.platform.daxpay.sdk.param.SortMapParam;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.HmacAlgorithm;
@@ -38,6 +39,7 @@ public class PaySignUtil {
     /**
      * 将参数转换为map对象. 使用ChatGPT生成, 仅局限于对请求支付相关参数进行签名
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @SneakyThrows
     private void toMap(Object object, Map<String, String> map) {
         Class<?> clazz = object.getClass();
@@ -53,6 +55,12 @@ public class PaySignUtil {
                         String fieldValueString = String.valueOf(fieldValue);
                         map.put(fieldName, fieldValueString);
                     }
+                    // map类型
+                    else if (Map.class.isAssignableFrom(field.getType())) {
+                        Map<String, String> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+                        m.putAll((Map) fieldValue);
+                        toMap(fieldValue, m);
+                    }
                     // 集合类型
                     else if (Collection.class.isAssignableFrom(field.getType())) {
                         Collection<?> collection = (Collection<?>) fieldValue;
@@ -67,11 +75,17 @@ public class PaySignUtil {
                                     .collect(Collectors.toList());
                             map.put(fieldName,  JSONUtil.toJsonStr(maps));
                         }
-                        // 其他类型
-                    } else {
+                    }
+                    // 可以转换为MAP并进行排序的类型
+                    else if (SortMapParam.class.isAssignableFrom(field.getType())) {
                         Map<String, String> nestedMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                         toMap(fieldValue, nestedMap);
-                        String nestedJson = JSONUtil.toJsonStr(map);
+                        String nestedJson = JSONUtil.toJsonStr(nestedMap);
+                        map.put(fieldName, nestedJson);
+                    }
+                    else {
+                        // 其他类型
+                        String nestedJson = JSONUtil.toJsonStr(fieldValue);
                         map.put(fieldName, nestedJson);
                     }
                 }
