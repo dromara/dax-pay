@@ -2,6 +2,9 @@ package cn.bootx.platform.daxpay.service.core.order.pay.builder;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
@@ -9,20 +12,15 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
-import cn.bootx.platform.daxpay.entity.RefundableInfo;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 支付对象构建器
@@ -91,28 +89,19 @@ public class PayBuilder {
      * 构建订单关联通道信息
      */
     public PayChannelOrder buildPayChannelOrder(PayChannelParam channelParam) {
-        return new PayChannelOrder()
+        PayChannelOrder payChannelOrder = new PayChannelOrder()
                 .setAsync(PayChannelEnum.ASYNC_TYPE_CODE.contains(channelParam.getChannel()))
                 .setChannel(channelParam.getChannel())
                 .setPayWay(channelParam.getWay())
                 .setAmount(channelParam.getAmount())
-                .setRefundableBalance(channelParam.getAmount())
-                .setChannelExtra(channelParam.getChannelParam());
-    }
+                .setRefundableBalance(channelParam.getAmount());
 
-    /**
-     * 构建支付订单的可退款信息列表
-     */
-    @Deprecated
-    private List<RefundableInfo> buildRefundableInfo(List<PayChannelParam> payChannelParamList) {
-        if (CollectionUtil.isEmpty(payChannelParamList)) {
-            return Collections.emptyList();
+        Map<String, Object> cp = channelParam.getChannelParam();
+        if (CollUtil.isNotEmpty(cp)){
+            payChannelOrder.setChannelExtra(JSONUtil.toJsonStr(cp));
         }
-        return payChannelParamList.stream()
-                .map(o-> new RefundableInfo()
-                        .setChannel(o.getChannel())
-                        .setAmount(o.getAmount()))
-                .collect(Collectors.toList());
+
+        return payChannelOrder;
     }
 
 

@@ -11,6 +11,8 @@ import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -66,6 +68,7 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
      * @see WalletPayParam
      */
     @DbColumn(comment = "附加支付参数")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channelExtra;
 
     /**

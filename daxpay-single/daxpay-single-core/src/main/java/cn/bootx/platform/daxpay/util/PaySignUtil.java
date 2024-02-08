@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.util;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.HmacAlgorithm;
 import cn.hutool.json.JSONUtil;
@@ -99,7 +100,7 @@ public class PaySignUtil {
 
 
     /**
-     * 把所有元素排序, 并拼接成字符, 用于签名
+     * 把所有元素排序, 并拼接成字符, 用于签名, 同时会过滤掉 " 和 \ 字符
      */
     public static String createLinkString(Map<String, String> params) {
         String connStr = "&";
@@ -121,7 +122,10 @@ public class PaySignUtil {
                         .append(connStr);
             }
         }
-        return content.toString();
+        String s = content.toString();
+        s = StrUtil.replace(s,"\\","");
+        s = StrUtil.replace(s,"\"","");
+        return s;
     }
 
 

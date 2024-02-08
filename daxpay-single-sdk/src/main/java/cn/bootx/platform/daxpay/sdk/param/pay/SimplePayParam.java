@@ -15,6 +15,7 @@ import cn.hutool.json.JSONUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 简单支付请求参数
@@ -27,9 +28,11 @@ import lombok.ToString;
 public class SimplePayParam extends DaxPayRequest<PayOrderModel> {
 
     /** 业务号 */
+    @NotNull
     private String businessNo;
 
     /** 支付标题 */
+    @NotNull
     private String title;
 
     /** 支付描述 */
@@ -42,17 +45,21 @@ public class SimplePayParam extends DaxPayRequest<PayOrderModel> {
     private String quitUrl;
 
     /**
+     * 支付通道
      * @see PayChannelEnum#getCode()
      */
+    @NotNull
     private String channel;
 
     /**
      * 支付方式编码
      * @see PayWayEnum#getCode()
      */
+    @NotNull
     private String payWay;
 
     /** 支付金额 */
+    @NotNull
     private Integer amount;
 
     /**

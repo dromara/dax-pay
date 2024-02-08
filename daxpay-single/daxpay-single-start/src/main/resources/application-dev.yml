@@ -72,6 +72,7 @@ bootx:
       base-packages:
         "[支付网关API]": cn.bootx.platform.daxpay.gateway
         "[支付管理接口]": cn.bootx.platform.daxpay.admin
+        "[支付演示模块]": cn.bootx.platform.daxpay.demo
         "[BootxPlatform接口]":
           - cn.bootx.platform.common
           - cn.bootx.platform.starter
@@ -150,3 +151,11 @@ dromara:
         enableStorage: true
         # 文件存储路径
         storage-path: D:/data/files/
+# 支付系统配置
+dax-pay:
+  # 演示模块
+  demo:
+    # 网关地址
+    server-url: http://localhost:9000
+    # 签名秘钥
+    sign-secret: 123456

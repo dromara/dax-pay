@@ -1,22 +1,17 @@
-package cn.bootx.platform.daxpay.sdk.model.pay;
+package cn.bootx.platform.daxpay.demo.result;
 
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.sdk.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * 发起支付后响应对象
  * @author xxm
- * @since 2024/2/2
+ * @since 2024/2/8
  */
 @Getter
 @Setter
-@ToString
-public class PayOrderModel extends DaxPayResponseModel {
-
+public class PayOrderResult {
     /** 支付ID */
     private Long paymentId;
 
@@ -33,9 +28,4 @@ public class PayOrderModel extends DaxPayResponseModel {
     /** 支付参数体(通常用于发起异步支付的参数) */
     private String payBody;
 
-    /**
-     * 支付状态
-     * @see PayStatusEnum
-     */
-    private String status;
 }

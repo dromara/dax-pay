@@ -12,6 +12,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -57,6 +59,12 @@ public class PayChannelOrderService {
         PayStatusEnum payStatus = asyncPayInfo.isPayComplete() ? PayStatusEnum.SUCCESS : PayStatusEnum.PROGRESS;
         // 判断新发起的
         Optional<PayChannelOrder> payOrderChannelOpt = channelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), payChannelParam.getChannel());
+        // 扩展信息处理
+        Map<String, Object> channelParam = payChannelParam.getChannelParam();
+        String channelParamStr = null;
+        if (Objects.nonNull(channelParam)){
+            channelParamStr = JSONUtil.toJsonStr(channelParam);
+        }
         if (!payOrderChannelOpt.isPresent()){
             PayChannelOrder payChannelOrder = new PayChannelOrder();
             // 替换原有的的支付通道信息
@@ -68,7 +76,7 @@ public class PayChannelOrderService {
                     .setAmount(payChannelParam.getAmount())
                     .setRefundableBalance(payChannelParam.getAmount())
                     .setPayTime(LocalDateTime.now())
-                    .setChannelExtra(payChannelParam.getChannelParam())
+                    .setChannelExtra(channelParamStr)
                     .setStatus(payStatus.getCode());
             channelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
             channelOrderManager.save(payChannelOrder);
@@ -77,7 +85,7 @@ public class PayChannelOrderService {
             payOrderChannelOpt.get()
                     .setPayWay(payChannelParam.getWay())
                     .setPayTime(LocalDateTime.now())
-                    .setChannelExtra(payChannelParam.getChannelParam())
+                    .setChannelExtra(channelParamStr)
                     .setStatus(payStatus.getCode());
             channelOrderManager.updateById(payOrderChannelOpt.get());
         }

@@ -15,7 +15,7 @@
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>daxpay-single-service</artifactId>
-            <version>${dax.version}</version>
+            <version>${daxpay.version}</version>
         </dependency>
     </dependencies>
 

@@ -16,13 +16,13 @@
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>daxpay-single-gateway</artifactId>
-            <version>${dax.version}</version>
+            <version>${daxpay.version}</version>
         </dependency>
         <!-- 管理平台 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>daxpay-single-admin</artifactId>
-            <version>${dax.version}</version>
+            <version>${daxpay.version}</version>
         </dependency>
         <!-- 定时任务 -->
         <dependency>
@@ -35,7 +35,11 @@
             <artifactId>common-starter-code-gen</artifactId>
         </dependency>
         <!-- 支付演示模块 -->
-
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>daxpay-single-demo</artifactId>
+            <version>${daxpay.version}</version>
+        </dependency>
 
     </dependencies>
 

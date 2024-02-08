@@ -10,12 +10,14 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfig
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONException;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -52,9 +54,9 @@ public class AliPayStrategy extends AbsPayStrategy {
     public void doBeforePayHandler() {
         try {
             // 支付宝参数验证
-            String extraParamsJson = this.getPayChannelParam().getChannelParam();
-            if (StrUtil.isNotBlank(extraParamsJson)) {
-                this.aliPayParam = JSONUtil.toBean(extraParamsJson, AliPayParam.class);
+            Map<String, Object> channelParam = this.getPayChannelParam().getChannelParam();
+            if (CollUtil.isNotEmpty(channelParam)) {
+                this.aliPayParam = BeanUtil.toBean(channelParam, AliPayParam.class);
             }
             else {
                 this.aliPayParam = new AliPayParam();

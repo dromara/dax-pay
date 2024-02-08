@@ -1,23 +1,24 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.code.WalletCode;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayOrderService;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.waller.WalletBannedException;
 import cn.bootx.platform.daxpay.exception.waller.WalletLackOfBalanceException;
+import cn.bootx.platform.daxpay.service.code.WalletCode;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayOrderService;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletPayParam;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONException;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Objects;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
@@ -54,9 +55,9 @@ public class WalletPayStrategy extends AbsPayStrategy {
         WalletPayParam walletPayParam = new WalletPayParam();
         try {
             // 钱包参数验证
-            String extraParamsJson = this.getPayChannelParam().getChannelParam();
-            if (StrUtil.isNotBlank(extraParamsJson)) {
-                walletPayParam = JSONUtil.toBean(extraParamsJson, WalletPayParam.class);
+            Map<String, Object> channelParam = this.getPayChannelParam().getChannelParam();
+            if (CollUtil.isNotEmpty(channelParam)) {
+                walletPayParam = BeanUtil.toBean(channelParam, WalletPayParam.class);
             }
         } catch (JSONException e) {
             throw new PayFailureException("支付参数错误");

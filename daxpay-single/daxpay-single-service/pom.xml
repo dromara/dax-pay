@@ -70,7 +70,7 @@
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>daxpay-single-core</artifactId>
-            <version>${dax.version}</version>
+            <version>${daxpay.version}</version>
         </dependency>
 
         <!-- 支付宝支付 -->
@@ -109,6 +109,7 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- 分布式锁 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>

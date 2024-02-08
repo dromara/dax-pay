@@ -54,6 +54,10 @@ public class PayExpiredTimeTask {
                 paySyncParam.setPaymentId(paymentId);
                 paySyncService.sync(paySyncParam);
             } catch (Exception e) {
+                // 如果是未查询到取消支付订单, 则删除这个任务
+                if (Objects.equals("未查询到支付订单", e.getMessage())){
+                    repository.removeKeys(expiredKey);
+                }
                 log.error("超时取消任务 异常", e);
             } finally {
                 lockTemplate.releaseLock(lock);

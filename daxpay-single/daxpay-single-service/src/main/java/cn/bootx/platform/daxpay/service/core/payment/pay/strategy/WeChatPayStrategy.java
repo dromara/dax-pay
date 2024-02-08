@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
@@ -10,12 +9,13 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPaySer
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONException;
-import cn.hutool.json.JSONUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -53,18 +53,12 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doBeforePayHandler() {
-        try {
-            // 微信参数验证
-            String extraParamsJson = this.getPayChannelParam().getChannelParam();
-            if (StrUtil.isNotBlank(extraParamsJson)) {
-                this.weChatPayParam = JSONUtil.toBean(extraParamsJson, WeChatPayParam.class);
-            }
-            else {
-                this.weChatPayParam = new WeChatPayParam();
-            }
-        }
-        catch (JSONException e) {
-            throw new PayFailureException("支付参数错误");
+        // 微信参数验证
+        Map<String, Object> channelParam = this.getPayChannelParam().getChannelParam();
+        if (CollUtil.isNotEmpty(channelParam)) {
+            this.weChatPayParam = BeanUtil.toBean(channelParam, WeChatPayParam.class);
+        } else {
+            this.weChatPayParam = new WeChatPayParam();
         }
 
         // 检查金额

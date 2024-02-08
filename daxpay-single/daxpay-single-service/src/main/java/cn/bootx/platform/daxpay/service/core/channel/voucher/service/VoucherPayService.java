@@ -1,5 +1,8 @@
 package cn.bootx.platform.daxpay.service.core.channel.voucher.service;
 
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
+import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.code.VoucherCode;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherLogManager;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherManager;
@@ -9,16 +12,16 @@ import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherLog;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherPayOrder;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherRecord;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
-import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * 储值卡支付
@@ -46,9 +49,10 @@ public class VoucherPayService {
         VoucherPayParam voucherPayParam;
         try {
             // 储值卡参数验证
-            String extraParamsJson = payChannelParam.getChannelParam();
-            if (StrUtil.isNotBlank(extraParamsJson)) {
-                voucherPayParam = JSONUtil.toBean(extraParamsJson, VoucherPayParam.class);
+
+            Map<String, Object> channelParam = payChannelParam.getChannelParam();
+            if (CollUtil.isNotEmpty(channelParam)) {
+                voucherPayParam = BeanUtil.toBean(channelParam, VoucherPayParam.class);
             } else {
                 throw new PayFailureException("储值卡支付参数错误");
             }

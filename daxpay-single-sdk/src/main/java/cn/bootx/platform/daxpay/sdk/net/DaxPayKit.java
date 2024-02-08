@@ -8,6 +8,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
@@ -16,12 +17,14 @@ import java.util.Objects;
  * @author xxm
  * @since 2024/2/2
  */
+@Slf4j
 @UtilityClass
 public class DaxPayKit {
 
     private DaxPayConfig config;
 
     public void initConfig(DaxPayConfig config){
+        log.debug("DaxPayKit初始化...");
         DaxPayKit.config = config;
     }
 
@@ -54,12 +57,14 @@ public class DaxPayKit {
             }
         }
         String data = JSONUtil.toJsonStr(request);
+        log.debug("请求参数:{}", data);
         String path = config.getServiceUrl() + request.path();
         HttpResponse execute = HttpUtil.createPost(path)
                 .body(data, ContentType.JSON.getValue())
                 .timeout(config.getReqTimeout())
                 .execute();
         String body = execute.body();
+        log.debug("响应参数:{}", body);
         return request.toModel(body);
     }
 }

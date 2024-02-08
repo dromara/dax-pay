@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.sdk.query;
 import cn.bootx.platform.daxpay.sdk.model.refund.QueryRefundOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.refund.QueryRefundParam;
+import cn.bootx.platform.daxpay.sdk.param.refund.QueryRefundOrderParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class QueryRefundOrderTest {
 
     @Test
     public void testPay() {
-        QueryRefundParam param = new QueryRefundParam();
+        QueryRefundOrderParam param = new QueryRefundOrderParam();
 
         param.setRefundId(1755263825769361408L);
 

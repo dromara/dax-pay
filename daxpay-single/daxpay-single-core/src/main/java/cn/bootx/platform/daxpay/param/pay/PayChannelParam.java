@@ -11,6 +11,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 /**
  * 同意下单支付方式参数
@@ -48,5 +49,5 @@ public class PayChannelParam {
      * @see WalletPayParam
      */
     @Schema(description = "附加支付参数")
-    private String channelParam;
+    private Map<String,Object> channelParam;
 }

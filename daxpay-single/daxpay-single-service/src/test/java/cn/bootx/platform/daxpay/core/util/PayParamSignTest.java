@@ -1,17 +1,18 @@
-package cn.bootx.platform.daxpay.core.payment.common.service;
+package cn.bootx.platform.daxpay.core.util;
 
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.util.PaySignUtil;
-import cn.hutool.json.JSONUtil;
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 支付签名服务
@@ -19,7 +20,7 @@ import java.util.List;
  * @since 2023/12/24
  */
 @Slf4j
-class PaymentSignServiceTest {
+class PayParamSignTest {
 
     @Test
     void toMap() {
@@ -40,7 +41,7 @@ class PaymentSignServiceTest {
         p1.setWay("wx_app");
         AliPayParam aliPayParam = new AliPayParam();
         aliPayParam.setAuthCode("6688");
-        p1.setChannelParam(JSONUtil.toJsonStr(aliPayParam));
+        p1.setChannelParam(BeanUtil.beanToMap(aliPayParam,false,true));
 
         PayChannelParam p2 = new PayChannelParam();
         p2.setAmount(100);
@@ -49,17 +50,21 @@ class PaymentSignServiceTest {
         WeChatPayParam weChatPayParam = new WeChatPayParam();
         weChatPayParam.setOpenId("w2qsz2xawe3gbhyyff28fs01fd");
         weChatPayParam.setAuthCode("8866");
-        p2.setChannelParam(JSONUtil.toJsonStr(weChatPayParam));
+        p2.setChannelParam(BeanUtil.beanToMap(aliPayParam,false,true));
         List<PayChannelParam> payWays = Arrays.asList(p1, p2);
         payParam.setPayChannels(payWays);
 
-        // 签名
-        String sign = "123456";
-        String md5Sign = PaySignUtil.md5Sign(payParam, sign);
-        String hmacSha256Sign = PaySignUtil.hmacSha256Sign(payParam, sign);
-        log.info("MD5: {}",md5Sign);
-        log.info("HmacSHA256: {}", hmacSha256Sign);
 
+        Map<String, String> map = PaySignUtil.toMap(payParam);
+        log.info("转换为有序MAP后的内容: {}",map);
+        String data = PaySignUtil.createLinkString(map);
+        log.info("将MAP拼接字符串, 并过滤掉特殊字符: {}",data);
+        String sign = "123456";
+        data += "&sign="+sign;
+        data = data.toUpperCase();
+        log.info("添加秘钥并转换为大写的字符串: {}",data);
+        log.info("MD5: {}",PaySignUtil.md5(data));
+        log.info("HmacSHA256: {}",PaySignUtil.hmacSha256(data,sign));
     }
 
 }

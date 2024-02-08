@@ -5,5 +5,5 @@ package cn.bootx.platform.daxpay.sdk.param;
  * @author xxm
  * @since 2023/12/17
  */
-public interface ChannelParam {
+public interface ChannelParam extends SortMapParam {
 }

@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.sdk.query;
 import cn.bootx.platform.daxpay.sdk.model.pay.QueryPayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayParam;
+import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayOrderParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class QueryPayOrderTest {
 
     @Test
     public void testPay() {
-        QueryPayParam param = new QueryPayParam();
+        QueryPayOrderParam param = new QueryPayOrderParam();
 
         param.setBusinessNo("2");
 

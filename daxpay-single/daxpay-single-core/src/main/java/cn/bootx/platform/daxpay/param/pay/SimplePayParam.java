@@ -16,6 +16,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * 简单下单参数
@@ -71,7 +72,7 @@ public class SimplePayParam extends PayCommonParam{
      * @see WalletPayParam
      */
     @Schema(description = "附加通道支付参数")
-    private String channelParam;
+    private Map<String, Object> channelParam;
 
 
 }
