@@ -82,9 +82,9 @@ public class RefundRepairService {
 
         // 根据不同的类型执行对应的修复逻辑
         RefundRepairResult repairResult = new RefundRepairResult();
-        if (Objects.requireNonNull(repairType) == RefundRepairWayEnum.SUCCESS) {
+        if (Objects.requireNonNull(repairType) == RefundRepairWayEnum.REFUND_SUCCESS) {
             repairResult = this.success(refundOrder,payOrder,repairStrategies);
-        } else if (repairType == RefundRepairWayEnum.FAIL) {
+        } else if (repairType == RefundRepairWayEnum.REFUND_FAIL) {
             repairResult = this.close(refundOrder,payOrder,repairStrategies);
         } else {
             log.error("走到了理论上讲不会走到的分支");
@@ -92,7 +92,9 @@ public class RefundRepairService {
 
         // 设置修复ID并保存修复记录
         repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
+        // 支付修复记录
         PayRepairRecord payRepairRecord = this.payRepairRecord(payOrder, repairType, repairResult);
+        // 退款修复记录
         PayRepairRecord refundRepairRecord = this.refundRepairRecord(refundOrder, repairType, repairResult);
         recordService.saveAllRecord(Arrays.asList(payRepairRecord, refundRepairRecord));
 
@@ -105,7 +107,7 @@ public class RefundRepairService {
     private RefundRepairResult success(PayRefundOrder refundOrder, PayOrder payOrder, List<AbsRefundRepairStrategy> repairStrategies) {
         RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
         // 订单相关状态
-        PayStatusEnum beforePayStatus = PayStatusEnum.findByCode(refundOrder.getStatus());
+        PayStatusEnum beforePayStatus = PayStatusEnum.findByCode(payOrder.getStatus());
         PayStatusEnum afterPayRefundStatus;
         RefundStatusEnum beforeRefundStatus = RefundStatusEnum.findByCode(refundOrder.getStatus());
 
@@ -198,10 +200,11 @@ public class RefundRepairService {
      * 支付订单的修复记录
      * 支付完成 -> 退款
      * 退款 -> 全部退款
+     * @param repairType 支付订单修复方式状态编码跟退款修复的状态一致,
      */
     private PayRepairRecord payRepairRecord(PayOrder order, RefundRepairWayEnum repairType, RefundRepairResult repairResult){
-        // 修复后的状态
-        String afterStatus = Optional.ofNullable(repairResult.getBeforePayStatus()).map(PayStatusEnum::getCode).orElse(null);
+        // 修复前的状态
+        String beforeStatus = Optional.ofNullable(repairResult.getBeforePayStatus()).map(PayStatusEnum::getCode).orElse(null);
         // 修复发起来源
         String source = PaymentContextLocal.get()
                 .getRepairInfo()
@@ -214,8 +217,8 @@ public class RefundRepairService {
                 .setRepairWay(repairType.getCode())
                 .setAsyncChannel(order.getAsyncChannel())
                 .setOrderNo(order.getBusinessNo())
-                .setBeforeStatus(repairResult.getAfterPayStatus().getCode())
-                .setAfterStatus(afterStatus);
+                .setBeforeStatus(beforeStatus)
+                .setAfterStatus(repairResult.getAfterPayStatus().getCode());
     }
 
     /**

@@ -93,8 +93,10 @@ public class PayCallbackService {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setMsg("支付单不是待支付状态,记录回调记录");
             return;
         }
+        // 设置支付成功时间
+        PaymentContextLocal.get().getRepairInfo().setFinishTime(callbackInfo.getFinishTime());
         // 执行支付完成修复逻辑
-        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.SUCCESS);
+        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.PAY_SUCCESS);
         callbackInfo.setPayRepairNo(repair.getRepairNo());
     }
 

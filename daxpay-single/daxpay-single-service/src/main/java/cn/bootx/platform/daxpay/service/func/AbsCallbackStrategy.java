@@ -54,7 +54,6 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
             // 提前设置订单修复的来源
             PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
 
-
             if (callbackType == PaymentTypeEnum.PAY){
                 // 解析支付数据并放处理
                 this.resolvePayData();

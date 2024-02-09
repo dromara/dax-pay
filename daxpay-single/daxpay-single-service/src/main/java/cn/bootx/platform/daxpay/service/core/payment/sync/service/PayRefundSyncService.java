@@ -172,14 +172,14 @@ public class PayRefundSyncService {
         switch (syncStatusEnum) {
             // 调用出错
             case SUCCESS:
-                repair = repairService.repair(order, RefundRepairWayEnum.SUCCESS);
+                repair = repairService.repair(order, RefundRepairWayEnum.REFUND_SUCCESS);
                 break;
             case PROGRESS:
                 // 不进行处理
                 log.warn("退款状态同步接口调用出错");
                 break;
             case FAIL: {
-                repair = repairService.repair(order, RefundRepairWayEnum.FAIL);
+                repair = repairService.repair(order, RefundRepairWayEnum.REFUND_FAIL);
                 break;
             }
             default: {

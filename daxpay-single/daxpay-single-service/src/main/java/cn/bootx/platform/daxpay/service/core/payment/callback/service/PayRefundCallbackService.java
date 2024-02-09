@@ -56,14 +56,17 @@ public class PayRefundCallbackService {
             // 退款单已经被处理, 记录回调记录
             if (!Objects.equals(RefundStatusEnum.PROGRESS.getCode(), refundOrder.getStatus())) {
                 callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("退款单状态已处理,记录回调记录");
+                return;
             }
 
             // 退款成功还是失败
             if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
-                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.SUCCESS);
+                PaymentContextLocal.get().getRepairInfo().setFinishTime(callbackInfo.getFinishTime());
+                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_SUCCESS);
                 callbackInfo.setPayRepairNo(repair.getRepairNo());
             }  else {
-                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.FAIL);
+                // 设置退款订单完成时间
+                RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_FAIL);
                 callbackInfo.setPayRepairNo(repair.getRepairNo());
             }
 
@@ -71,5 +74,4 @@ public class PayRefundCallbackService {
             lockTemplate.releaseLock(lock);
         }
     }
-
 }

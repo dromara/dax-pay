@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * 支付订单关联通道信息
  * @author xxm
@@ -36,6 +38,11 @@ public class PayChannelOrderDto extends BaseDto {
     @Schema(description = "关联网关支付号")
     private String gatewayOrderNo;
 
+    @Schema(description = "金额")
+    private Integer amount;
+
+    @Schema(description = "可退款金额")
+    private Integer refundableBalance;
     /**
      * 支付状态
      * @see PayStatusEnum
@@ -43,9 +50,6 @@ public class PayChannelOrderDto extends BaseDto {
     @Schema(description = "支付状态")
     private String status;
 
-    @Schema(description = "金额")
-    private Integer amount;
-
-    @Schema(description = "可退款金额")
-    private Integer refundableBalance;
+    @Schema(description = "支付时间")
+    private LocalDateTime payTime;
 }

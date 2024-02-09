@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
@@ -67,7 +68,7 @@ public class PayRepairService {
         // 3. 根据不同的类型执行对应的修复逻辑
         PayRepairResult repairResult = new PayRepairResult().setBeforeStatus(PayStatusEnum.findByCode(order.getStatus()));
         switch (repairType) {
-            case SUCCESS:
+            case PAY_SUCCESS:
                 this.success(order, repairStrategies);
                 repairResult.setAfterPayStatus(PayStatusEnum.SUCCESS);
                 break;
@@ -85,6 +86,7 @@ public class PayRepairService {
                 break;
             default:
                 log.error("走到了理论上讲不会走到的分支");
+                throw new PayFailureException("走到了理论上讲不会走到的分支");
         }
         // 设置修复iD
         repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());

@@ -131,7 +131,6 @@ public class PaySyncService {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
                 this.saveRecord(payOrder, syncResult, false, null, e.getMessage());
-//                return new SyncResult().setErrorMsg(e.getMessage());
                 throw e;
             }
 
@@ -199,7 +198,7 @@ public class PaySyncService {
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
             case SUCCESS: {
-                repair = repairService.repair(payOrder, PayRepairWayEnum.SUCCESS);
+                repair = repairService.repair(payOrder, PayRepairWayEnum.PAY_SUCCESS);
                 break;
             }
             // 待支付, 将订单状态重新设置为待支付

@@ -37,7 +37,7 @@ public class PayExpiredTimeTask {
      */
     @Scheduled(cron = "*/5 * * * * ?")
     public void task(){
-        log.debug("执行超时取消任务....");
+//        log.debug("执行超时取消任务....");
         Set<String> expiredKeys = repository.getExpiredKeys(LocalDateTime.now());
         for (String expiredKey : expiredKeys) {
             LockInfo lock = lockTemplate.lock("payment:expired:" + expiredKey,10000,0);
