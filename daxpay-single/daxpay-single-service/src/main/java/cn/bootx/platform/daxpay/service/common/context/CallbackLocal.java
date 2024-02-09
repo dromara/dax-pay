@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.common.context;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -45,6 +46,9 @@ public class CallbackLocal {
 
     /** 修复号 */
     private String payRepairNo;
+
+    /** 回调类型 */
+    private PaymentTypeEnum callbackType;
 
     /**
      * 回调处理状态

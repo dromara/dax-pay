@@ -51,7 +51,8 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
      */
     @Override
     public boolean verifyNotify() {
-        Map<String, String> params = PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
+        CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+        Map<String, String> params = callbackInfo.getCallbackParam();
         String callReq = JSONUtil.toJsonStr(params);
         log.info("微信发起回调 报文: {}", callReq);
         String appId = params.get(APPID);
@@ -62,7 +63,7 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         }
 
         // 退款回调不用进行校验
-        PaymentTypeEnum callbackType = this.getCallbackType();
+        PaymentTypeEnum callbackType = callbackInfo.getCallbackType();
         if (callbackType == PaymentTypeEnum.REFUND){
             return true;
         }

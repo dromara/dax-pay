@@ -110,15 +110,14 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
 
     /**
      * 解析退款回调数据并放到上下文中
+     * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
     @Override
     public void resolveRefundData() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
-        // 网关订单号
-        callback.setGatewayOrderNo(callbackParam.get(OUT_BIZ_NO));
         // 退款订单Id
-        callback.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
+        callback.setOrderId(Long.valueOf(callbackParam.get(OUT_BIZ_NO)));
         // 退款状态
         callback.setGatewayStatus(callbackParam.get(TRADE_STATUS));
         // 退款金额

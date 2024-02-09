@@ -94,6 +94,7 @@ public class AliPaySyncService {
 
     /**
      * 退款同步查询
+     * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
     public RefundGatewaySyncResult syncRefundStatus(PayRefundOrder refundOrder) {
         RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
@@ -115,8 +116,6 @@ public class AliPaySyncService {
                 return syncResult;
             }
             String tradeStatus = response.getRefundStatus();
-            // 设置网关订单号
-            syncResult.setGatewayOrderNo(response.getTradeNo());
             // 成功
             if (Objects.equals(tradeStatus, AliPayCode.REFUND_SUCCESS)){
                 LocalDateTime localDateTime = LocalDateTimeUtil.of(response.getGmtRefundPay());

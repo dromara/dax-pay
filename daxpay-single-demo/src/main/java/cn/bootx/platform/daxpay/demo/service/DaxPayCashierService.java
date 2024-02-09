@@ -105,11 +105,11 @@ public class DaxPayCashierService {
     }
 
     /**
-     * 订单查询接口
+     * 查询订单是否支付成功
      */
-    public boolean queryPayOrder(Long paymentId){
+    public boolean queryPayOrderSuccess(String businessNo){
         QueryPayOrderParam queryPayOrderParam = new QueryPayOrderParam();
-        queryPayOrderParam.setPaymentId(paymentId);
+        queryPayOrderParam.setBusinessNo(businessNo);
         DaxPayResult<QueryPayOrderModel> execute = DaxPayKit.execute(queryPayOrderParam);
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());

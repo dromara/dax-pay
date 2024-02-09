@@ -3,8 +3,6 @@ package cn.bootx.platform.daxpay.service.common.context;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
-
 /**
  * 支付同步信息
  * @author xxm
@@ -13,6 +11,5 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 public class PaySyncLocal {
-
 
 }

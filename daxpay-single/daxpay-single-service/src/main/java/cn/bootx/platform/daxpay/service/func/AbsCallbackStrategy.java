@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * 回调处理抽象类, 处理支付回调和退款回调
@@ -40,6 +39,11 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
         try {
             // 将参数写入到上下文中
             callbackInfo.getCallbackParam().putAll(params);
+
+            // 判断并保存回调类型
+            PaymentTypeEnum callbackType = this.getCallbackType();
+            callbackInfo.setCallbackType(callbackType);
+
             // 验证消息
             if (!this.verifyNotify()) {
                 callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("验证信息格式不通过");
@@ -50,8 +54,7 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
             // 提前设置订单修复的来源
             PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
 
-            // 判断回调类型
-            PaymentTypeEnum callbackType = this.getCallbackType();
+
             if (callbackType == PaymentTypeEnum.PAY){
                 // 解析支付数据并放处理
                 this.resolvePayData();
@@ -103,17 +106,12 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
     public void saveCallbackRecord() {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
 
-        // 回调类型
-        String callbackType = Optional.ofNullable(this.getCallbackType())
-                .map(PaymentTypeEnum::getCode)
-                .orElse(null);
-
         PayCallbackRecord payNotifyRecord = new PayCallbackRecord()
                 .setChannel(this.getChannel().getCode())
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackParam()))
                 .setOrderId(callbackInfo.getOrderId())
                 .setGatewayOrderNo(callbackInfo.getGatewayOrderNo())
-                .setCallbackType(callbackType)
+                .setCallbackType(callbackInfo.getCallbackType().getCode())
                 .setRepairOrderNo(callbackInfo.getPayRepairNo())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())
                 .setMsg(callbackInfo.getMsg());

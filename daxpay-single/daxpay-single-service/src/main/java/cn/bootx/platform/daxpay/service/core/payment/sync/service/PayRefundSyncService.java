@@ -64,12 +64,10 @@ public class PayRefundSyncService {
         }
         // 如果不是异步支付, 直接返回返回
         if (!refundOrder.isAsyncPay()){
-//            return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步通道的退款，不需要同步");
             throw new PayFailureException("订单没有异步通道的退款，不需要同步");
         }
         // 如果订单已经关闭, 直接返回失败
         if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.CLOSE.getCode())){
-//            return new SyncResult().setSuccess(false).setRepair(false). setErrorMsg("订单已经关闭，不需要同步");
             throw new PayFailureException("订单已经关闭，不需要同步");
         }
         return this.syncRefundOrder(refundOrder);
@@ -97,7 +95,6 @@ public class PayRefundSyncService {
             // 判断是否同步成功
             if (Objects.equals(syncResult.getSyncStatus(), RefundSyncStatusEnum.FAIL)) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-//                return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
                 this.saveRecord(refundOrder, syncResult, false, null, syncResult.getErrorMsg());
                 throw new PayFailureException(syncResult.getErrorMsg());
             }

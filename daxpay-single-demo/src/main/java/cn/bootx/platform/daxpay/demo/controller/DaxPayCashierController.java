@@ -32,8 +32,8 @@ public class DaxPayCashierController {
     }
 
     @Operation(summary = "查询支付订单")
-    @GetMapping("/queryPayOrder")
-    public ResResult<Boolean> queryPayOrder(Long paymentId){
-        return Res.ok(cashierService.queryPayOrder(paymentId));
+    @GetMapping("/queryPayOrderSuccess")
+    public ResResult<Boolean> queryPayOrder(String businessNo){
+        return Res.ok(cashierService.queryPayOrderSuccess(businessNo));
     }
 }
