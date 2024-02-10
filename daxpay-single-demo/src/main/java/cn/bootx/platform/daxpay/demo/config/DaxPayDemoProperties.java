@@ -17,6 +17,9 @@ public class DaxPayDemoProperties {
     /** 服务地址 */
     private String serverUrl;
 
+    /** 前端地址 */
+    private String frontUrl;
+
     /** 签名方式 */
     private SignTypeEnum signType = SignTypeEnum.MD5;
 

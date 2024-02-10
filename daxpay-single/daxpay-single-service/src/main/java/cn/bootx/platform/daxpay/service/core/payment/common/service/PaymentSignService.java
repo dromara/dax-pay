@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.common.service;
 
 import cn.bootx.platform.daxpay.code.PaySignTypeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayCommonParam;
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import cn.bootx.platform.daxpay.service.common.context.ApiInfoLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
@@ -28,7 +28,7 @@ public class PaymentSignService {
     /**
      * 签名
      */
-    public void verifySign(PayCommonParam param) {
+    public void verifySign(PaymentCommonParam param) {
         // 先触发上下文的初始化
         paymentAssistService.initContext(param);
         ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();

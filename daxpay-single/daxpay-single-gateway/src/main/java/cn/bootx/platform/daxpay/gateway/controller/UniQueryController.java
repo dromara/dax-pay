@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.CountTime;
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.param.pay.QueryPayParam;
 import cn.bootx.platform.daxpay.param.pay.QueryRefundParam;
 import cn.bootx.platform.daxpay.result.DaxResult;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/2/7
  */
+@IgnoreAuth
 @Tag(name = "统一查询接口")
 @RestController
 @RequestMapping("/uni/query")

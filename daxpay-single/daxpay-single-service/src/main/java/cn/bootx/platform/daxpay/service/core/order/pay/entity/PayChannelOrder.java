@@ -68,7 +68,7 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
      * @see WalletPayParam
      */
     @DbColumn(comment = "附加支付参数")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String channelExtra;
 
     /**

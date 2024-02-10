@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.common.aop;
 
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.PayCommonParam;
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.service.core.payment.common.service.PaymentSignService;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +32,11 @@ public class PaymentVerifySignAop {
             throw new PayFailureException("支付方法至少有一个参数，并且需要签名支付参数需要放在第一位");
         }
         Object param = args[0];
-        if (param instanceof PayCommonParam){
+        if (param instanceof PaymentCommonParam){
             // 参数校验
             ValidationUtil.validateParam(param);
             // 验签
-            paymentSignService.verifySign((PayCommonParam) param);
+            paymentSignService.verifySign((PaymentCommonParam) param);
         } else {
             throw new PayFailureException("支付参数需要继承PayCommonParam");
         }

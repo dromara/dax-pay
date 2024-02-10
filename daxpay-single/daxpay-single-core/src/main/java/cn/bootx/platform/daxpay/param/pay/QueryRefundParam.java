@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.param.pay;
 
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "查询退款订单参数类")
-public class QueryRefundParam extends PayCommonParam{
+public class QueryRefundParam extends PaymentCommonParam {
 
     @Schema(description = "退款订单ID")
     private Long refundId;

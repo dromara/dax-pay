@@ -39,7 +39,6 @@ public class RefundOrderTest {
         RefundParam param = new RefundParam();
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
-        param.setNotReturn(true);
 
         param.setBusinessNo("P0001");
         param.setRefundAll(true);

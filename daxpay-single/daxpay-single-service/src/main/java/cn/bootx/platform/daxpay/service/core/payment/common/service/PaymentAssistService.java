@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.service.common.context.RequestLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.system.config.entity.PlatformConfig;
 import cn.bootx.platform.daxpay.service.core.system.config.service.PlatformConfigService;
-import cn.bootx.platform.daxpay.param.pay.PayCommonParam;
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -27,9 +27,9 @@ public class PaymentAssistService {
     /**
      * 初始化上下文
      */
-    public void initContext(PayCommonParam payCommonParam){
+    public void initContext(PaymentCommonParam paymentCommonParam){
         this.initPlatform();
-        this.initRequest(payCommonParam);
+        this.initRequest(paymentCommonParam);
     }
 
     /**
@@ -49,13 +49,13 @@ public class PaymentAssistService {
     /**
      * 初始化请求相关信息上下文
      */
-    private void initRequest(PayCommonParam payCommonParam){
+    private void initRequest(PaymentCommonParam paymentCommonParam){
         RequestLocal request = PaymentContextLocal.get().getRequestInfo();
-        request.setClientIp(payCommonParam.getClientIp())
-                .setAttach(payCommonParam.getAttach())
-                .setSign(payCommonParam.getSign())
-                .setVersion(payCommonParam.getVersion())
-                .setReqTime(payCommonParam.getReqTime())
+        request.setClientIp(paymentCommonParam.getClientIp())
+//                .setAttach(paymentCommonParam.getAttach())
+                .setSign(paymentCommonParam.getSign())
+                .setVersion(paymentCommonParam.getVersion())
+                .setReqTime(paymentCommonParam.getReqTime())
                 .setReqId(MDC.get(CommonCode.TRACE_ID));
     }
 }

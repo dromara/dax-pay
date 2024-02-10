@@ -43,6 +43,16 @@ public class SimpleRefundParam extends DaxPayRequest<RefundModel> {
     /** 退款原因 */
     private String reason;
 
+    /** 商户扩展参数,回调时会原样返回 */
+    private String attach;
+
+
+    /** 是否不启用异步通知 */
+    private boolean notNotify;
+
+    /** 异步通知地址 */
+    private String notifyUrl;
+
     /**
      * 方法请求路径
      */

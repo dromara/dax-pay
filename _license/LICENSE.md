@@ -41,3 +41,6 @@ https://gitee.com/xiaoym/knife4j
 
 easy_trans 一个注解搞定数据翻译：
 https://gitee.com/dromara/easy_trans
+
+vue3-vant4-mobile Vant4脚手架:
+https://github.com/xiangshu233/vue3-vant4-mobile

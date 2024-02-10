@@ -32,16 +32,6 @@ import java.time.LocalDateTime;
 @TableName("pay_voucher")
 public class Voucher extends MpBaseEntity implements EntityBaseFunction<VoucherDto> {
 
-    /** 商户编码 */
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    @DbColumn(comment = "商户编码")
-    private String mchCode;
-
-    /** 商户应用编码 */
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    @DbColumn(comment = "商户应用编码")
-    private String mchAppCode;
-
     /** 卡号 */
     @DbColumn(comment = "卡号")
     @DbMySqlIndex(comment = "卡号索引")

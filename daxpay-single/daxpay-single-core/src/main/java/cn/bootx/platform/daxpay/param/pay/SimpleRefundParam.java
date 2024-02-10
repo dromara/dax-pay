@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.param.pay;
 
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
@@ -18,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "简单退款参数")
-public class SimpleRefundParam extends PayCommonParam {
+public class SimpleRefundParam extends PaymentCommonParam {
 
     /**
      * 优先级高于业务号
@@ -58,4 +59,17 @@ public class SimpleRefundParam extends PayCommonParam {
 
     @Schema(description = "退款原因")
     private String reason;
+
+
+    /** 商户扩展参数,回调时会原样返回 */
+    @Schema(description = "商户扩展参数,回调时会原样返回")
+    private String attach;
+
+    /** 是否不启用异步通知 */
+    @Schema(description = "是否不启用异步通知")
+    private boolean notNotify;
+
+    /** 异步通知地址 */
+    @Schema(description = "异步通知地址")
+    private String notifyUrl;
 }

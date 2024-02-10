@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.param.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayWayEnum;
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
@@ -26,7 +27,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "简单下单参数")
-public class SimplePayParam extends PayCommonParam{
+public class SimplePayParam extends PaymentCommonParam {
 
     @Schema(description = "业务号")
     @NotBlank(message = "业务号不可为空")
@@ -74,5 +75,22 @@ public class SimplePayParam extends PayCommonParam{
     @Schema(description = "附加通道支付参数")
     private Map<String, Object> channelParam;
 
+    /** 商户扩展参数,回调时会原样返回 */
+    @Schema(description = "商户扩展参数,回调时会原样返回")
+    private String attach;
 
+    @Schema(description = "是否不进行同步通知的跳转")
+    private boolean notReturn;
+
+    /** 同步通知URL */
+    @Schema(description = "同步通知URL")
+    private String returnUrl;
+
+    /** 是否不启用异步通知 */
+    @Schema(description = "是否不启用异步通知")
+    private boolean notNotify;
+
+    /** 异步通知地址 */
+    @Schema(description = "异步通知地址")
+    private String notifyUrl;
 }

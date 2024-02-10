@@ -152,7 +152,7 @@ public class WeChatPayService {
         Map<String, String> packageParams = WxPayKit.miniAppPrepayIdCreateSign(weChatPayConfig.getWxAppId(), prepayId,
                 weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         String jsonStr = JacksonUtil.toJson(packageParams);
-        log.info("小程序支付的参数:" + jsonStr);
+        log.info("Jsapi支付的参数:" + jsonStr);
         return jsonStr ;
     }
 

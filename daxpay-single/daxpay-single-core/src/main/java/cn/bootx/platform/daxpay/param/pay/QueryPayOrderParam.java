@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.param.pay;
 
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付订单查询参数")
-public class QueryPayOrderParam extends PayCommonParam{
+public class QueryPayOrderParam extends PaymentCommonParam {
 
     @Schema(description = "支付号")
     private Long paymentId;

@@ -47,7 +47,7 @@ public class PayRefundChannelOrder extends MpCreateEntity implements EntityBaseF
     private Integer amount;
 
     @DbColumn(comment = "剩余可退余额")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private Integer refundableAmount;
 
     /**

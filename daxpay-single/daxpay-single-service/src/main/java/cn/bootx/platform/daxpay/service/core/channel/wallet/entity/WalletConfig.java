@@ -7,9 +7,6 @@ import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletConfigDto;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WalletConfigParam;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
-import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,17 +25,6 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 @TableName("pay_wallet_config")
 public class WalletConfig extends MpBaseEntity implements EntityBaseFunction<WalletConfigDto> {
-
-    /** 商户编码 */
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    @DbColumn(comment = "商户编码")
-    private String mchCode;
-
-    /** 商户应用编码 */
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    @DbMySqlIndex(comment = "商户应用编码唯一索引")
-    @DbColumn(comment = "商户应用编码")
-    private String mchAppCode;
 
     /** 默认余额 */
     @DbColumn(comment = "默认余额")

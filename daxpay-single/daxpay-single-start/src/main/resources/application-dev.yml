@@ -111,6 +111,8 @@ bootx:
         - '/demo/**'
         - '/test/**'
         - '/webjars/**'
+        - '/front/**'
+        - '/h5/**'
         - '/css/**'
         - '/error'
         - '/favicon.ico'
@@ -156,6 +158,8 @@ dax-pay:
   # 演示模块
   demo:
     # 网关地址
-    server-url: http://localhost:9000
+    server-url: http://pay1.bootx.cn
+    # 前端地址
+    front-url: http://pay1.bootx.cn/h5
     # 签名秘钥
     sign-secret: 123456

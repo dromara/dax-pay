@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.system.config.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.service.code.PayApiCallBackTypeEnum;
 import cn.bootx.platform.daxpay.service.core.system.config.convert.PayApiConfigConvert;
 import cn.bootx.platform.daxpay.service.dto.system.config.PayApiConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -36,6 +37,14 @@ public class PayApiConfig extends MpBaseEntity implements EntityBaseFunction<Pay
     @DbColumn(comment = "名称")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String name;
+
+    /**
+     * 支持回调通知
+     * @see PayApiCallBackTypeEnum
+     */
+    @DbColumn(comment = "支持回调通知")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private boolean noticeSupport;
 
     @DbColumn(comment = "是否启用")
     private boolean enable;

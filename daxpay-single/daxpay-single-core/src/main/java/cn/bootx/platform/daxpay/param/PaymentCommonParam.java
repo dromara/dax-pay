@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.param.pay;
+package cn.bootx.platform.daxpay.param;
 
 import cn.bootx.platform.daxpay.serializer.TimestampToLocalDateTimeDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -15,31 +15,12 @@ import java.time.LocalDateTime;
  */
 @Data
 @Schema(title = "支付公共参数")
-public abstract class PayCommonParam {
+public abstract class PaymentCommonParam {
 
     /** 客户端ip */
 //    @NotBlank(message = "客户端ip不可为空")
     @Schema(description = "客户端ip")
     private String clientIp;
-
-    /** 商户扩展参数,回调时会原样返回 */
-    @Schema(description = "商户扩展参数,回调时会原样返回")
-    private String attach;
-
-    @Schema(description = "是否不进行同步通知的跳转")
-    private boolean notReturn;
-
-    /** 同步通知URL */
-    @Schema(description = "同步通知URL")
-    private String returnUrl;
-
-    /** 是否不启用异步通知 */
-    @Schema(description = "是否不启用异步通知")
-    private boolean notNotify;
-
-    /** 异步通知地址 */
-    @Schema(description = "异步通知地址")
-    private String notifyUrl;
 
     /** 签名 */
     @Schema(description = "签名")

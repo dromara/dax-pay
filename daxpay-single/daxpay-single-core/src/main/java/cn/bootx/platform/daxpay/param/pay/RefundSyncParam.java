@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.param.pay;
 
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "退款状态同步参数")
-public class RefundSyncParam extends PayCommonParam {
+public class RefundSyncParam extends PaymentCommonParam {
 
     /**
      * 退款订单ID，refundId和refundNo 必传一个, 同时传输时，以 refundId 为准

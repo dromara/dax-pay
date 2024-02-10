@@ -3,7 +3,6 @@ package cn.bootx.platform.daxpay.service.core.channel.wallet.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletConfigManager;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletConfig;
-import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletConfigDto;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WalletConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +19,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WalletConfigService {
     private final WalletConfigManager walletConfigManager;
-
-    /**
-     * 根据应用编码获取钱包配置
-     */
-    public WalletConfigDto findByMchCode(String mchCode){
-        return walletConfigManager.findByMchCode(mchCode)
-                .map(WalletConfig::toDto)
-                .orElse(new WalletConfigDto());
-    }
 
     /**
      * 新增或更新

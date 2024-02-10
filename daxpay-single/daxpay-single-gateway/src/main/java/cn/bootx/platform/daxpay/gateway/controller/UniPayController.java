@@ -96,4 +96,5 @@ public class UniPayController {
     public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){
         return DaxRes.ok(payRefundSyncService.sync(param));
     }
+
 }

@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.param.pay;
 
+import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import cn.bootx.platform.daxpay.serializer.TimestampToLocalDateTimeDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +22,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付参数")
-public class PayParam extends PayCommonParam{
+public class PayParam extends PaymentCommonParam {
 
     @Schema(description = "业务号")
     @NotBlank(message = "业务号不可为空")
@@ -45,4 +46,23 @@ public class PayParam extends PayCommonParam{
     @NotNull(message = "支付通道信息参数不可为空")
     @Valid
     private List<PayChannelParam> payChannels;
+
+    /** 商户扩展参数,回调时会原样返回 */
+    @Schema(description = "商户扩展参数,回调时会原样返回")
+    private String attach;
+
+    @Schema(description = "是否不进行同步通知的跳转")
+    private boolean notReturn;
+
+    /** 同步通知URL */
+    @Schema(description = "同步通知URL")
+    private String returnUrl;
+
+    /** 是否不启用异步通知 */
+    @Schema(description = "是否不启用异步通知")
+    private boolean notNotify;
+
+    /** 异步通知地址 */
+    @Schema(description = "异步通知地址")
+    private String notifyUrl;
 }

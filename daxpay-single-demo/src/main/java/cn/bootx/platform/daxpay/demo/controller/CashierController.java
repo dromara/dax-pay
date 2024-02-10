@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.demo.controller;
 
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.util.ValidationUtil;
@@ -16,11 +17,12 @@ import org.springframework.web.bind.annotation.*;
  * @author xxm
  * @since 2024/2/8
  */
+@IgnoreAuth
 @Tag(name = "结算台演示")
 @RestController
 @RequestMapping("/demo/cashier")
 @RequiredArgsConstructor
-public class DaxPayCashierController {
+public class CashierController {
 
     private final DaxPayCashierService cashierService;
 

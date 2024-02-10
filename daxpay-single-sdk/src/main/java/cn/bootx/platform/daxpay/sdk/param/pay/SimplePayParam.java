@@ -71,6 +71,21 @@ public class SimplePayParam extends DaxPayRequest<PayOrderModel> {
      */
     private ChannelParam channelParam;
 
+    /** 商户扩展参数,回调时会原样返回 */
+    private String attach;
+
+    /** 是否不进行同步通知的跳转 */
+    private boolean notReturn;
+
+    /** 同步跳转URL, 部分接口不支持该配置，传输了也不会生效 */
+    private String returnUrl;
+
+    /** 是否不启用异步通知 */
+    private boolean notNotify;
+
+    /** 异步通知地址 */
+    private String notifyUrl;
+
     /**
      * 请求路径
      */

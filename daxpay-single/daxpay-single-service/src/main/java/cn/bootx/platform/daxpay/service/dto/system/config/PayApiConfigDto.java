@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.dto.system.config;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.service.code.PayApiCallBackTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,13 @@ public class PayApiConfigDto extends BaseDto {
 
     @Schema(description = "名称")
     private String name;
+
+    /**
+     * 是否支持回调通知
+     * @see PayApiCallBackTypeEnum
+     */
+    @Schema(description = "是否支持回调通知")
+    private boolean noticeSupport;
 
     @Schema(description = "是否启用")
     private boolean enable;

@@ -65,13 +65,12 @@ public class PayRefundAssistService {
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         // 异步回调
         if (!param.isNotNotify()){
-            noticeInfo.setNotifyUrl(param.getReturnUrl());
+            noticeInfo.setNotifyUrl(param.getNotifyUrl());
             if (StrUtil.isNotBlank(param.getNotifyUrl())){
                 noticeInfo.setNotifyUrl(platform.getNotifyUrl());
             }
         }
     }
-
 
     /**
      * 根据退款参数获取支付订单

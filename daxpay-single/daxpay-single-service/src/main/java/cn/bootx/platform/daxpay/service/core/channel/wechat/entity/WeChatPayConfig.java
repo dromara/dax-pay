@@ -63,6 +63,11 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "同步通知路径")
     private String returnUrl;
 
+    /** 接口版本, 使用v2还是v3接口 */
+    @DbColumn(comment = "接口版本")
+    private String apiVersion;
+
+
     /** 商户平台「API安全」中的 APIv2 密钥 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     @BigField
