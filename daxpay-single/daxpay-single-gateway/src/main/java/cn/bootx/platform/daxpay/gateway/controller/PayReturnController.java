@@ -1,5 +1,8 @@
 package cn.bootx.platform.daxpay.gateway.controller;
 
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
+import cn.bootx.platform.daxpay.service.core.notice.service.PayReturnService;
+import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayReturnParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -13,16 +16,19 @@ import org.springframework.web.servlet.ModelAndView;
  * @author xxm
  * @since 2024/1/13
  */
+@IgnoreAuth
 @Tag(name = "支付同步通知控制器")
 @RestController
 @RequestMapping("/pay/return")
 @RequiredArgsConstructor
 public class PayReturnController {
+    private final PayReturnService payReturnService;
 
     @Operation(summary = "支付宝同步通知")
     @GetMapping("/alipay")
-    public ModelAndView alipay(){
-        return null;
+    public ModelAndView alipay(AliPayReturnParam param){
+        String url = payReturnService.alipay(param);
+        return new ModelAndView("redirect:" + url);
     }
 
     @Operation(summary = "微信同步通知")

@@ -6,11 +6,9 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.daxpay.param.assist.WxAccessTokenParam;
 import cn.bootx.platform.daxpay.param.assist.WxAuthUrlParam;
-import cn.bootx.platform.daxpay.param.assist.WxJsapiPrePayParam;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.assist.WxAccessTokenResult;
 import cn.bootx.platform.daxpay.result.assist.WxAuthUrlResult;
-import cn.bootx.platform.daxpay.result.assist.WxJsapiPrePayResult;
 import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.service.core.payment.assist.service.UniPayAssistService;
 import cn.bootx.platform.daxpay.util.DaxRes;
@@ -50,14 +48,5 @@ public class UniPayAssistController {
     public ResResult<WxAccessTokenResult> getWxAccessToken(@RequestBody WxAccessTokenParam param){
         return Res.ok(uniPayAssistService.getWxAccessToken(param));
     }
-
-    @CountTime
-    @PaymentApi("getWxJsapiPrePay")
-    @Operation(summary = "获取微信预支付信息")
-    @PostMapping("/getWxJsapiPrePay")
-    public ResResult<WxJsapiPrePayResult> getWxJsapiPrePay(@RequestBody WxJsapiPrePayParam param){
-        return Res.ok(uniPayAssistService.getWxJsapiPrePay(param));
-    }
-
 
 }

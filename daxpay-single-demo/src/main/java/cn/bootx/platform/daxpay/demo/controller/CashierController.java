@@ -6,7 +6,7 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.demo.param.CashierSimplePayParam;
 import cn.bootx.platform.daxpay.demo.result.PayOrderResult;
-import cn.bootx.platform.daxpay.demo.service.DaxPayCashierService;
+import cn.bootx.platform.daxpay.demo.service.CashierService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CashierController {
 
-    private final DaxPayCashierService cashierService;
+    private final CashierService cashierService;
 
     @Operation(summary = "创建支付订单并发起")
     @PostMapping("/simplePayCashier")

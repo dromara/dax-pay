@@ -156,10 +156,13 @@ public class PayAssistService {
         PayOrderExtra payOrderExtra = payOrderExtraManager.findById(paymentId)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         String notifyUrl = PaymentContextLocal.get().getNoticeInfo().getNotifyUrl();
+        String returnUrl = PaymentContextLocal.get().getNoticeInfo().getReturnUrl();
         payOrderExtra.setReqTime(payParam.getReqTime())
                 .setSign(payParam.getSign())
                 .setNotNotify(payParam.isNotNotify())
                 .setNotifyUrl(notifyUrl)
+                .setNotReturn(payParam.isNotReturn())
+                .setReturnUrl(returnUrl)
                 .setAttach(payParam.getAttach())
                 .setClientIp(payParam.getClientIp());
         payOrderExtraManager.updateById(payOrderExtra);

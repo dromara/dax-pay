@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.demo.config;
+package cn.bootx.platform.daxpay.demo.configuration;
 
 import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
 import lombok.Getter;

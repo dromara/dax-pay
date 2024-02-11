@@ -155,11 +155,15 @@ dromara:
         storage-path: D:/data/files/
 # 支付系统配置
 dax-pay:
+  # 网关地址
+  server-url: http://pay1.bootx.cn
+  # 前端地址
+  front-url: http://pay1.bootx.cn/h5/#
   # 演示模块
   demo:
     # 网关地址
     server-url: http://pay1.bootx.cn
     # 前端地址
-    front-url: http://pay1.bootx.cn/h5
+    front-url: http://pay1.bootx.cn/h5/#
     # 签名秘钥
     sign-secret: 123456

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping
-public class RedirectH5Controller {
+public class ForwardH5Controller {
     /**
      * 将/h5/*的访问请求代理到/h5/index.html*
      */

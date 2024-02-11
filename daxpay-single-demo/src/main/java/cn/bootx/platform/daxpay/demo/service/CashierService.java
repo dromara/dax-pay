@@ -35,7 +35,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DaxPayCashierService {
+public class CashierService {
 
     /**
      * 结算台简单支付, 创建支付订单并拉起支付
@@ -111,6 +111,11 @@ public class DaxPayCashierService {
         QueryPayOrderParam queryPayOrderParam = new QueryPayOrderParam();
         queryPayOrderParam.setBusinessNo(businessNo);
         DaxPayResult<QueryPayOrderModel> execute = DaxPayKit.execute(queryPayOrderParam);
+        // 未查询到订单
+        if (execute.getCode() == 10010){
+            return false;
+        }
+
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());
         }

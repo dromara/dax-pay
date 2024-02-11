@@ -6,6 +6,7 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.daxpay.demo.domain.AggregatePayInfo;
 import cn.bootx.platform.daxpay.demo.param.AggregateSimplePayParam;
 import cn.bootx.platform.daxpay.demo.result.PayOrderResult;
+import cn.bootx.platform.daxpay.demo.result.WxJsapiSignResult;
 import cn.bootx.platform.daxpay.demo.service.AggregateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,10 +48,22 @@ public class AggregateController {
         return new ModelAndView("redirect:" + url);
     }
 
-    @Operation(summary = "通过聚合支付码发起支付")
-    @PostMapping("/qrPay")
-    public ResResult<PayOrderResult> qrPa(String code){
-        return Res.ok(aggregateService.aliQrPay(code));
+    @Operation(summary = "支付宝通过聚合支付码发起支付")
+    @PostMapping("/aliH5Pay")
+    public ResResult<PayOrderResult> aliH5Pay(String code){
+        return Res.ok(aggregateService.aliH5Pay(code));
+    }
+
+    @Operation(summary = "微信授权回调页面")
+    @GetMapping("/wxAuthCallback")
+    public ModelAndView wxAuthCallback(@RequestParam("state") String aggregateCode, @RequestParam("code") String authCode){
+        return new ModelAndView("redirect:" + aggregateService.wxAuthCallback(aggregateCode, authCode));
+    }
+
+    @Operation(summary = "获取微信支付调起Jsapi支付的信息")
+    @PostMapping("/getWxJsapiPay")
+    public ResResult<WxJsapiSignResult> getWxJsapiPay(String aggregateCode, String openId){
+        return Res.ok(aggregateService.wxJsapiPrePay(aggregateCode, openId));
     }
 
     @Operation(summary = "通过付款码发起支付")

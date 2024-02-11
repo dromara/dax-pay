@@ -1,11 +1,9 @@
 package cn.bootx.platform.daxpay.gateway.controller;
 
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.bootx.platform.daxpay.service.core.timeout.task.PayExpiredTimeTask;
-import cn.bootx.platform.daxpay.service.core.timeout.task.PayWaitOrderSyncTask;
 import cn.hutool.core.thread.ThreadUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -52,5 +50,12 @@ public class TestController {
         return Res.ok(name);
     }
 
+    @IgnoreAuth
+    @Operation(summary = "微信回调测试")
+    @GetMapping(value = {"/wxcs/","wxcs"})
+    public String wxcs(){
+
+        return "ok";
+    }
 
 }
