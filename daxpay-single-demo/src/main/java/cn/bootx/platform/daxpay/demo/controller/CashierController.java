@@ -38,4 +38,10 @@ public class CashierController {
     public ResResult<Boolean> queryPayOrder(String businessNo){
         return Res.ok(cashierService.queryPayOrderSuccess(businessNo));
     }
+
+    @Operation(summary = "获取支付环境")
+    @GetMapping("/getPayEnv")
+    public ResResult<String> getPayEnv(@RequestHeader("User-Agent") String ua){
+        return Res.ok(cashierService.getPayEnv(ua));
+    }
 }

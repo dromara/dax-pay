@@ -2,8 +2,10 @@ package cn.bootx.platform.daxpay.demo.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
+import cn.bootx.platform.daxpay.demo.configuration.DaxPayDemoProperties;
 import cn.bootx.platform.daxpay.demo.param.CashierSimplePayParam;
 import cn.bootx.platform.daxpay.demo.result.PayOrderResult;
+import cn.bootx.platform.daxpay.sdk.code.AggregatePayEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
@@ -16,6 +18,7 @@ import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayOrderParam;
 import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +39,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CashierService {
+    private final DaxPayDemoProperties daxPayDemoProperties;
 
     /**
      * 结算台简单支付, 创建支付订单并拉起支付
@@ -79,10 +83,8 @@ public class CashierService {
                 .map(ServletUtil::getClientIP)
                 .orElse("127.0.0.1");
         simplePayParam.setClientIp(ip);
-        // 异步回调地址
-        simplePayParam.setNotifyUrl("http://localhost:9000");
         // 同步回调地址
-        simplePayParam.setReturnUrl("http://localhost:9000");
+        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontUrl()));
 
         // 发起支付
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
@@ -130,4 +132,25 @@ public class CashierService {
             throw new BizException("订单状态不是支付中或支付完成，请检查");
         }
     }
+
+    /**
+     * 获取当前可用的支付环境
+     */
+    public String getPayEnv(String ua){
+        if (ua.contains(AggregatePayEnum.UA_ALI_PAY.getCode())) {
+            return PayChannelEnum.ALI.getCode();
+        } else if (ua.contains(AggregatePayEnum.UA_WECHAT_PAY.getCode())) {
+            return PayChannelEnum.WECHAT.getCode();
+        } else {
+            // 普通浏览器可以使用全部支付通道
+            return "all";
+        }
+    }
+
+//    /**
+//     * 手机收银台演示
+//     */
+//    public PayOrderResult h5SimplePay(){
+//
+//    }
 }
