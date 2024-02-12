@@ -27,7 +27,7 @@ import java.util.Map;
 @Slf4j
 @Tag(name = "支付通道信息回调")
 @RestController
-@RequestMapping("/pay/callback")
+@RequestMapping("/callback/pay")
 @AllArgsConstructor
 public class PayCallbackController {
 

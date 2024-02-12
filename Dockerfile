@@ -8,17 +8,22 @@ MAINTAINER xxm1995@outlook.com
 ENV TZ=Asia/Shanghai
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# jvm启动参数, 启动内存256M,最大内存1G,使用G1垃圾回收器
-ENV JAVA_OPTS="-Xms256m -Xmx1G -XX:+UseG1GC -Djava.security.egd=file:/dev/./urandom -Dlogging.config=./logback-spring.xml"
-
+# 启动命令
+ENV JAVA_COMM="-Djava.security.egd=file:/dev/./urandom -Dfile.encoding=UTF-8"
+# 启动选项配置
+ENV JAVA_OPTS=""
+# Agent配置
+ENV JAVA_AGENT=""
+# 参数配置
+ENV JAVA_ARGS=""
 # 工作目录
 WORKDIR /
 
 # 端口暴露
-EXPOSE 9898
+EXPOSE 9000
 
 # 添加执行jar包
-ADD dax-start/target/dax-start.jar dax-start.jar
+ADD daxpay-single/daxpay-single-start/target/daxpay-start.jar.jar dax-start.jar
 
 # 执行启动命令
 CMD java $JAVA_OPTS -jar dax-start.jar

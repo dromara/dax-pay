@@ -47,11 +47,15 @@
 ### 网关接口
 > 注：接口平台只开放支付网关相关的接口，不开放系统其他接口。
 
-地址: https://daxpay.server.demo.bootx.cn:9000/doc.html
+地址: https://daxpay.server.bootx.cn/doc.html
 
 账号: daxpay
 
 密码: 123456
+
+### 收银台演示
+
+地址: https://daxpay.demo.bootx.cn/#/cashier
 
 ## 🥞 核心技术栈
 | 名称          | 描述       | 版本要求                       |
@@ -65,6 +69,13 @@
 
 
 ## 💾 系统截图
+
+### 收银台演示
+![pc.jpg](https://s11.ax1x.com/2024/02/12/pF8n9x0.md.jpg)
+### H5收银台演示
+![h5.png](https://s11.ax1x.com/2024/02/12/pF8nPMV.md.png)
+### 
+![pay.png](https://s11.ax1x.com/2024/02/12/pF8np2q.md.png)
 
 ## 🍎 路线图
 [**查看开发进度**](https://gitee.com/bootx/dax-pay/issues/I8TQ9Q)
