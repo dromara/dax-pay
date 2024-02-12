@@ -91,7 +91,7 @@ public class AggregateService {
         }
         else if (ua.contains(AggregatePayEnum.UA_WECHAT_PAY.getCode())) {
             // 微信重定向到中间页, 因为微信需要授权后才能发起支付
-            return this.wxJsapiAuth(code);
+            return this.wxJsapiAuthPage(code);
         }
         else {
             // 跳转到异常页
@@ -102,7 +102,7 @@ public class AggregateService {
     /**
      * 微信jsapi支付 - 跳转到授权页面
      */
-    private String wxJsapiAuth(String code) {
+    private String wxJsapiAuthPage(String code) {
         // 回调地址为 结算台微信jsapi支付的回调地址
         WxAuthUrlParam wxAuthUrlParam = new WxAuthUrlParam();
         wxAuthUrlParam.setState(code);

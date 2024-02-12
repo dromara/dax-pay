@@ -9,9 +9,13 @@ import cn.bootx.platform.daxpay.sdk.code.AggregatePayEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
+import cn.bootx.platform.daxpay.sdk.model.assist.WxAccessTokenModel;
+import cn.bootx.platform.daxpay.sdk.model.assist.WxAuthUrlModel;
 import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.model.pay.QueryPayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
+import cn.bootx.platform.daxpay.sdk.param.assist.WxAccessTokenParam;
+import cn.bootx.platform.daxpay.sdk.param.assist.WxAuthUrlParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayOrderParam;
@@ -147,10 +151,49 @@ public class CashierService {
         }
     }
 
-//    /**
-//     * 手机收银台演示
-//     */
-//    public PayOrderResult h5SimplePay(){
-//
-//    }
+    /**
+     * 获取手机收银台链接
+     */
+    public String getUniCashierUrl() {
+        return StrUtil.format("{}/cashier/uniCashier", daxPayDemoProperties.getFrontUrl());
+    }
+
+    /**
+     * 微信jsapi支付 - 跳转到授权页面
+     */
+    public String getWxAuthUrl() {
+        // 回调地址为 结算台微信jsapi支付的回调地址
+        WxAuthUrlParam wxAuthUrlParam = new WxAuthUrlParam();
+        String url = StrUtil.format("{}/demo/cashier/wxAuthCallback", daxPayDemoProperties.getServerUrl());
+        wxAuthUrlParam.setUrl(url);
+        DaxPayResult<WxAuthUrlModel> execute = DaxPayKit.execute(wxAuthUrlParam);
+        if (execute.getCode() != 0){
+            throw new BizException(execute.getMsg());
+        }
+        // 微信授权页面链接
+        return execute.getData().getUrl();
+    }
+
+    /**
+     * 微信授权回调页面, 然后重定向到统一收银台中, 携带openid
+     */
+    public String wxAuthCallback(String code) {
+        return StrUtil.format("{}/cashier/uniCashier?source=redirect&openId={}", daxPayDemoProperties.getFrontUrl(), this.getOpenId(code));
+    }
+
+    /**
+     * 获取微信OpenId
+     */
+    private String getOpenId(String authCode) {
+        // 获取OpenId
+        WxAccessTokenParam param = new WxAccessTokenParam();
+        param.setCode(authCode);
+
+        DaxPayResult<WxAccessTokenModel> result = DaxPayKit.execute(param);
+        // 判断是否支付成功
+        if (result.getCode() != 0){
+            throw new BizException(result.getMsg());
+        }
+        return result.getData().getOpenId();
+    }
 }

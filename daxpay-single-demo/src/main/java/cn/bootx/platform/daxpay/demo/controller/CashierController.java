@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 结算台演示
@@ -44,4 +45,23 @@ public class CashierController {
     public ResResult<String> getPayEnv(@RequestHeader("User-Agent") String ua){
         return Res.ok(cashierService.getPayEnv(ua));
     }
+
+    @Operation(summary = "获取手机收银台链接")
+    @GetMapping("/getUniCashierUrl")
+    public ResResult<String> getUniCashierUrl(){
+        return Res.ok(cashierService.getUniCashierUrl());
+    }
+
+    @Operation(summary = "获取微信授权链接")
+    @GetMapping("getWxAuthUrl")
+    public ResResult<String> getWxAuthUrl(){
+        return Res.ok(cashierService.getWxAuthUrl());
+    }
+
+    @Operation(summary = "微信授权回调页面")
+    @GetMapping("/wxAuthCallback")
+    public ModelAndView wxAuthCallback(@RequestParam("code") String code){
+        return new ModelAndView("redirect:" + cashierService.wxAuthCallback(code));
+    }
+
 }

@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.demo.result;
 
 import cn.hutool.core.annotation.Alias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -21,6 +22,7 @@ public class WxJsapiSignResult {
     @Schema(description = "随机串")
     private String nonceStr;
     @Alias("package")
+    @JsonProperty("package")
     @Schema(description = "预支付ID, 已经是 prepay_id=xxx 格式")
     private String prePayId;
     @Schema(description = "签名类型")
