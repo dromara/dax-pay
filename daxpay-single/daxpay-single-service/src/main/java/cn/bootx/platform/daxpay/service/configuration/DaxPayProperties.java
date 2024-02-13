@@ -16,6 +16,9 @@ public class DaxPayProperties {
     /** 服务地址 */
     private String serverUrl;
 
-    /** 前端地址 */
-    private String frontUrl;
+    /** 前端地址(h5) */
+    private String frontH5Url;
+
+    /** 前端地址(web) */
+    private String frontWebUrl;
 }

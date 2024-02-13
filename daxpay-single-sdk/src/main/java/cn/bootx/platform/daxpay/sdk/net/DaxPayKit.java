@@ -3,9 +3,7 @@ package cn.bootx.platform.daxpay.sdk.net;
 import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.bootx.platform.daxpay.sdk.util.PaySignUtil;
-import cn.hutool.http.ContentType;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
+import cn.hutool.http.*;
 import cn.hutool.json.JSONUtil;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +61,13 @@ public class DaxPayKit {
                 .body(data, ContentType.JSON.getValue())
                 .timeout(config.getReqTimeout())
                 .execute();
+        // 响应码只有200 才可以进行支付
+        if (execute.getStatus() != HttpStatus.HTTP_OK){
+            throw new HttpException("请求失败，请排查配置的支付网关地址是否正常");
+        }
         String body = execute.body();
+
+
         log.debug("响应参数:{}", body);
         return request.toModel(body);
     }

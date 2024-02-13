@@ -30,7 +30,7 @@ public class PlatformConfigDto {
     @Schema(description ="异步支付通知地址")
     private String notifyUrl;
 
-    @Schema(description ="同步支付通知地址")
+    @Schema(description ="同步支付跳转地址")
     private String returnUrl;
 
     @Schema(description ="订单默认超时时间(分钟)")

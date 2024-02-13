@@ -35,7 +35,7 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @Schema(description = "异步通知地址")
     private String notifyUrl;
 
-    @Schema(description = "同步通知地址")
+    @Schema(description = "同步跳转地址")
     private String returnUrl;
 
     @Schema(description = "商户平台「API安全」中的 APIv2 密钥")

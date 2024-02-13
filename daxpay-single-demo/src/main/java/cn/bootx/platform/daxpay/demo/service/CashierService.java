@@ -88,7 +88,7 @@ public class CashierService {
                 .orElse("127.0.0.1");
         simplePayParam.setClientIp(ip);
         // 同步回调地址
-        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontUrl()));
+        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
 
         // 发起支付
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
@@ -155,7 +155,7 @@ public class CashierService {
      * 获取手机收银台链接
      */
     public String getUniCashierUrl() {
-        return StrUtil.format("{}/cashier/uniCashier", daxPayDemoProperties.getFrontUrl());
+        return StrUtil.format("{}/cashier/uniCashier", daxPayDemoProperties.getFrontH5Url());
     }
 
     /**
@@ -178,7 +178,7 @@ public class CashierService {
      * 微信授权回调页面, 然后重定向到统一收银台中, 携带openid
      */
     public String wxAuthCallback(String code) {
-        return StrUtil.format("{}/cashier/uniCashier?source=redirect&openId={}", daxPayDemoProperties.getFrontUrl(), this.getOpenId(code));
+        return StrUtil.format("{}/cashier/uniCashier?source=redirect&openId={}", daxPayDemoProperties.getFrontH5Url(), this.getOpenId(code));
     }
 
     /**

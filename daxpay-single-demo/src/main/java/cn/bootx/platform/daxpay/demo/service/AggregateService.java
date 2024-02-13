@@ -82,12 +82,12 @@ public class AggregateService {
         boolean exists = redisClient.exists(PREFIX_KEY + code);
         if (!exists){
             // 跳转到过期页面
-            return StrUtil.format("{}/result/error?msg={}", daxPayDemoProperties.getFrontUrl(), URLEncodeUtil.encode("聚合支付码已过期..."));
+            return StrUtil.format("{}/result/error?msg={}", daxPayDemoProperties.getFrontH5Url(), URLEncodeUtil.encode("聚合支付码已过期..."));
         }
         // 根据UA判断是什么环境
         if (ua.contains(AggregatePayEnum.UA_ALI_PAY.getCode())) {
             // 跳转支付宝中间页
-            return StrUtil.format("{}/aggregate/alipay?code={}", daxPayDemoProperties.getFrontUrl(),code);
+            return StrUtil.format("{}/aggregate/alipay?code={}", daxPayDemoProperties.getFrontH5Url(),code);
         }
         else if (ua.contains(AggregatePayEnum.UA_WECHAT_PAY.getCode())) {
             // 微信重定向到中间页, 因为微信需要授权后才能发起支付
@@ -95,7 +95,7 @@ public class AggregateService {
         }
         else {
             // 跳转到异常页
-            return StrUtil.format("{}/result/error?msg={}", daxPayDemoProperties.getFrontUrl(), URLEncodeUtil.encode("请使用微信或支付宝扫码支付"));
+            return StrUtil.format("{}/result/error?msg={}", daxPayDemoProperties.getFrontH5Url(), URLEncodeUtil.encode("请使用微信或支付宝扫码支付"));
         }
     }
 
@@ -126,7 +126,7 @@ public class AggregateService {
         // 获取微信OpenId
         String openId = this.getOpenId(authCode);
         return StrUtil.format("{}/aggregate/wechatPay?aggregateCode={}&openId={}",
-                daxPayDemoProperties.getFrontUrl(),
+                daxPayDemoProperties.getFrontH5Url(),
                 aggregateCode,
                 openId);
     }
@@ -156,7 +156,7 @@ public class AggregateService {
         // 异步回调地址
         simplePayParam.setNotNotify(true);
         // 同步回调地址 无效
-        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontUrl()));
+        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
 
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
         // 判断是否支付成功
@@ -185,9 +185,9 @@ public class AggregateService {
         // 异步回调地址
         simplePayParam.setNotNotify(true);
         // 支付成功同步回调地址
-        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontUrl()));
+        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
         // 中途退出 目前经测试不生效
-        simplePayParam.setQuitUrl(String.format("{}/result/error", daxPayDemoProperties.getFrontUrl()));
+        simplePayParam.setQuitUrl(String.format("{}/result/error", daxPayDemoProperties.getFrontH5Url()));
 
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
 

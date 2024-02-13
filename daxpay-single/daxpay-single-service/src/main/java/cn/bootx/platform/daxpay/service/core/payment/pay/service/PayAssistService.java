@@ -104,9 +104,7 @@ public class PayAssistService {
             }
         }
         // 同步回调
-        if (!payParam.isNotReturn()){
-            noticeInfo.setReturnUrl(payParam.getReturnUrl());
-        }
+        noticeInfo.setReturnUrl(payParam.getReturnUrl());
         // 退出回调地址
         noticeInfo.setQuitUrl(payParam.getQuitUrl());
     }
@@ -161,7 +159,6 @@ public class PayAssistService {
                 .setSign(payParam.getSign())
                 .setNotNotify(payParam.isNotNotify())
                 .setNotifyUrl(notifyUrl)
-                .setNotReturn(payParam.isNotReturn())
                 .setReturnUrl(returnUrl)
                 .setAttach(payParam.getAttach())
                 .setClientIp(payParam.getClientIp());

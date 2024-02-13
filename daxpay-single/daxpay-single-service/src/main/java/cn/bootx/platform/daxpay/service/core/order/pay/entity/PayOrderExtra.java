@@ -45,10 +45,6 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
-    /** 是否不需要同步调转通知 */
-    @DbColumn(comment = "是否不需要同步调转通知")
-    private boolean notReturn;
-
     /** 同步调转地址 */
     @DbColumn(comment = "同步调转地址，以最后一次为准")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)

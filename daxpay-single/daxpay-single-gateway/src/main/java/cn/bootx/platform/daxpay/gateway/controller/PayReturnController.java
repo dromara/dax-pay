@@ -17,14 +17,14 @@ import org.springframework.web.servlet.ModelAndView;
  * @since 2024/1/13
  */
 @IgnoreAuth
-@Tag(name = "支付同步通知控制器")
+@Tag(name = "支付同步通知")
 @RestController
-@RequestMapping("/pay/return")
+@RequestMapping("/return/pay")
 @RequiredArgsConstructor
 public class PayReturnController {
     private final PayReturnService payReturnService;
 
-    @Operation(summary = "支付宝同步通知")
+    @Operation(summary = "支付宝同步跳转连接")
     @GetMapping("/alipay")
     public ModelAndView alipay(AliPayReturnParam param){
         String url = payReturnService.alipay(param);

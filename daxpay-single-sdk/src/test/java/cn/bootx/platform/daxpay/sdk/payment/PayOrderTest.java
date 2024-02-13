@@ -40,7 +40,6 @@ public class PayOrderTest {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
-        param.setNotReturn(true);
 
         param.setBusinessNo("P0001");
         param.setTitle("测试接口支付");

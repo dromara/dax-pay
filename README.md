@@ -68,16 +68,16 @@
 | IJpay       | 支付SDK开发包 | 项目自动管理，不需要额外处理             |
 
 
-## 💾 系统截图
+## 🍎 系统截图
 
 ### 收银台演示
 ![pc.jpg](https://s11.ax1x.com/2024/02/12/pF8n9x0.md.jpg)
 ### H5收银台演示
 ![h5.png](https://s11.ax1x.com/2024/02/12/pF8nPMV.md.png)
-### 
+### 支付演示
 ![pay.png](https://s11.ax1x.com/2024/02/12/pF8np2q.md.png)
 
-## 🍎 路线图
+## 💾 路线图
 [**查看开发进度**](https://gitee.com/bootx/dax-pay/issues/I8TQ9Q)
 
 ### 2.0.X版本:

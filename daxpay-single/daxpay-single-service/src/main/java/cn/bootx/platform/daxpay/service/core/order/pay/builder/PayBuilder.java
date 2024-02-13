@@ -76,7 +76,6 @@ public class PayBuilder {
                 .setDescription(payParam.getDescription())
                 .setNotNotify(payParam.isNotNotify())
                 .setNotifyUrl(noticeInfo.getNotifyUrl())
-                .setNotReturn(payParam.isNotReturn())
                 .setReturnUrl(noticeInfo.getReturnUrl())
                 .setSign(payParam.getSign())
                 .setSignType(platform.getSignType())

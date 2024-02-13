@@ -4,9 +4,12 @@ services:
     image: dax-start:latest
     restart: always
     ports:
-      - "9898:9898"
+      - "9000:9000"
     volumes:
       # 读取外部化配置文件(根据实际服务器环境做修改), 宿主机目录:容器目录
-      - /data/logs/dax-start:/logs # 日志
-      - /root/dax-pay/application-dev.yml:/application-dev.yml # 配置
-      - /root/dax-pay/logback-spring.xml:/logback-spring.xml # 日志框架
+      - ./logs/:/logs # 日志
+      - ./files/:/data/files # 上传文件目录
+      - ./application.yml:/application.yml # 启动配置文件
+      - ./application-demo.yml:/application-demo.yml
+      - ./logback-spring.xml:/logback-spring.xml # 日志框架配置
+      - ./ip2region/ip2region.xdb :/data/ip2region/ip2region.xdb # ip归属地数据库

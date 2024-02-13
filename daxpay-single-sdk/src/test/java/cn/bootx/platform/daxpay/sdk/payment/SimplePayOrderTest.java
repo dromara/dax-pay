@@ -38,7 +38,6 @@ public class SimplePayOrderTest {
         param.setPayWay(PayWayEnum.QRCODE.getCode());
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
-        param.setNotReturn(true);
 
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);

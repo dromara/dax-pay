@@ -79,10 +79,7 @@ public class SimplePayParam extends PaymentCommonParam {
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;
 
-    @Schema(description = "是否不进行同步通知的跳转")
-    private boolean notReturn;
-
-    /** 同步通知URL */
+    /** 同步跳转URL, 不传输跳转到默认地址 */
     @Schema(description = "同步通知URL")
     private String returnUrl;
 

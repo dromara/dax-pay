@@ -42,10 +42,10 @@ public class PayParam extends DaxPayRequest<PayOrderModel> {
     /** 商户扩展参数,回调时会原样返回 */
     private String attach;
 
-    /** 是否不进行同步通知的跳转 */
-    private boolean notReturn;
-
-    /** 同步跳转URL, 部分接口不支持该配置，传输了也不会生效 */
+    /**
+     * 同步跳转URL, 不传输跳转到默认地址.
+     * 部分接口不支持该配置，传输了也不会生效
+     */
     private String returnUrl;
 
     /** 是否不启用异步通知 */
