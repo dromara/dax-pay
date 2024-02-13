@@ -84,7 +84,7 @@ H5前端地址：[https://gitee.com/bootx/dax-pay-h5](https://gitee.com/bootx/da
 ### 收银台演示
 ![pc.jpg](https://s11.ax1x.com/2024/02/12/pF8n9x0.jpg)
 ### 支付通道配置
-[](https://s11.ax1x.com/2024/02/13/pF8s2VS.jpg)
+![](https://s11.ax1x.com/2024/02/13/pF8s2VS.jpg)
 
 ## 💾 路线图
 [**开发进度和任务池**](/_doc/Task.md)
