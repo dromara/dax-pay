@@ -32,11 +32,13 @@
 [操作手册](https://bootx.gitee.io/daxpay/admin/config/平台配置.html)
 
 ### 项目地址
-后端地址：[https://gitee.com/bootx/dax-pay](https://gitee.com/bootx/dax-pay)
 
-Web前端地址：[https://gitee.com/bootx/dax-pay-ui](https://gitee.com/bootx/dax-pay-ui)
+| 项目      | GITEE                                       | GITHUB                                          |
+|---------|---------------------------------------------|-------------------------------------------------|
+| 后端地址    | [GITEE](https://gitee.com/bootx/dax-pay)    | [GITHUB](https://github.com/xxm1995/dax-pay)    |
+| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |
+| H5前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |
 
-H5前端地址：[https://gitee.com/bootx/dax-pay-h5](https://gitee.com/bootx/dax-pay-h5)
 
 ## 🏬 系统演示
 ### 管理平台:
