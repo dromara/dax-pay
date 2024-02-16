@@ -29,7 +29,7 @@
 在 [Bootx开源文档站](https://bootx.gitee.io/) 下的支付网关(DaxPay)模块下可以进行查阅相关文档，具体链接地址如下：
 [快速指南](https://bootx.gitee.io/daxpay/guides/overview/项目介绍.html)、
 [支付对接](https://bootx.gitee.io/daxpay/gateway/overview/接口清单.html)、
-[平台配置](https://bootx.gitee.io/daxpay/admin/config/平台配置.html)
+[操作手册](https://bootx.gitee.io/daxpay/admin/config/平台配置.html)
 
 ### 项目地址
 后端地址：[https://gitee.com/bootx/dax-pay](https://gitee.com/bootx/dax-pay)
@@ -121,14 +121,14 @@ H5前端地址：[https://gitee.com/bootx/dax-pay-h5](https://gitee.com/bootx/da
 
 QQ扫码加入QQ交流群
 <p>
-<img src="_doc/images/qq_qun.jpg" width = "330" height = "500"/>
+<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/bootx-img@master/bootx/qq_qun.3qs0zpity9q0.webp" width = "330" height = "500"/>
 </p>
 
 
 ## 🍻 鸣谢
 感谢 JetBrains 提供的免费开源 License：
 
-[![JetBrains](_doc/images/jetbrains.png)](https://www.jetbrains.com/?from=bootx)
+[![jetbrains](https://jsd.cdn.zzko.cn/gh/xxm1995/bootx-img@master/bootx/jetbrains.y9o7c2ydh80.webp)](https://www.jetbrains.com/?from=bootx)
 
 感谢其他提供灵感和思路的开源项目
 

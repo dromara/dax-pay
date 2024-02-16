@@ -55,6 +55,7 @@ public class PayApiConfig extends MpBaseEntity implements EntityBaseFunction<Pay
     @DbColumn(comment = "只有异步支付才进行通知")
     private boolean onlyAsyncNotice;
 
+    @Deprecated
     @DbColumn(comment = "默认回调地址")
     private String noticeUrl;
 

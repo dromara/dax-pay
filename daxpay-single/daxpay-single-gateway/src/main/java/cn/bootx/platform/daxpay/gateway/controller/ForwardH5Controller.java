@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.demo.controller;
+package cn.bootx.platform.daxpay.gateway.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

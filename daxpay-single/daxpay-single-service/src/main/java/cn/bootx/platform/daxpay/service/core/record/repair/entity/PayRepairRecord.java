@@ -30,7 +30,7 @@ public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunctio
 
     /**
      * 修复号
-     * 如果一次修复产生的修复记录有多个记录, 使用这个ID作为关联
+     * 如果一次修复产生的修复记录有多个记录, 使用这个作为关联
      */
     @DbColumn(comment = "修复号")
     private String repairNo;

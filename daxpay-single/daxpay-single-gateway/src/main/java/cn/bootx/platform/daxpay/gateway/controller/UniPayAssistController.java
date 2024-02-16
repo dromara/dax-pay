@@ -35,7 +35,7 @@ public class UniPayAssistController {
 
     @CountTime
     @PaymentApi("getWxAuthUrl")
-    @Operation(summary = "获取微信oauth2授权的url")
+    @Operation(summary = "获取微信oauth2授权连接")
     @PostMapping("/getWxAuthUrl")
     public DaxResult<WxAuthUrlResult> getWxAuthUrl(@RequestBody WxAuthUrlParam param){
         return DaxRes.ok(uniPayAssistService.getWxAuthUrl(param));
@@ -43,7 +43,7 @@ public class UniPayAssistController {
 
     @CountTime
     @PaymentApi("getWxAccessToken")
-    @Operation(summary = "获取微信AccessToken数据")
+    @Operation(summary = "获取微信AccessToken")
     @PostMapping("/getWxAccessToken")
     public ResResult<WxAccessTokenResult> getWxAccessToken(@RequestBody WxAccessTokenParam param){
         return Res.ok(uniPayAssistService.getWxAccessToken(param));

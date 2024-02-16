@@ -11,9 +11,9 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "微信oauth2授权的url连接")
+@Schema(title = "微信oauth2授权的url")
 public class WxAuthUrlResult {
 
-    @Schema(description = "微信oauth2授权的url连接")
+    @Schema(description = "微信oauth2授权的url")
     private String url;
 }

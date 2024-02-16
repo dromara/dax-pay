@@ -59,8 +59,8 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "同步通知页面路径")
     private String returnUrl;
 
-    /** 请求网关地址 */
-    @DbColumn(comment = "请求网关地址")
+    /** 支付网关地址 */
+    @DbColumn(comment = "支付网关地址")
     private String serverUrl;
 
     /**
@@ -70,8 +70,8 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "认证类型")
     private String authType;
 
-    /** 签名类型 RSA/RSA2 */
-    @DbColumn(comment = "签名类型 RSA/RSA2")
+    /** 签名类型 RSA2 */
+    @DbColumn(comment = "签名类型 RSA2")
     public String signType;
 
     /** 支付宝公钥 */

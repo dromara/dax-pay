@@ -155,7 +155,7 @@ dromara:
         storage-path: D:/data/files/
 # 支付系统配置
 dax-pay:
-  # 网关地址
+  # 服务地址
   server-url: http://pay1.bootx.cn
   # 前端h5地址
   front-h5-url: http://pay1.bootx.cn/h5/#

@@ -10,9 +10,9 @@
     <packaging>jar</packaging>
 
     <!-- 项目信息 -->
-    <name>bootx-platform</name>
-    <description>bootx-platform 基于Spring Boot框架打造，针对单体式应用进行专门设计，提供整套服务模块，努力为打造全方位企业级开发解决方案</description>
-    <url>https://gitee.com/bootx/bootx-platform</url>
+    <name>daxpay-single-sdk</name>
+    <description>daxpay-single-sdk 是 daxpay单商户版的JavaSDK，用于业务系统快速接入到支付网关中</description>
+    <url>https://gitee.com/bootx/daxpay</url>
 
     <!-- 许可证 -->
     <licenses>
@@ -29,14 +29,14 @@
             <name>bootx</name>
             <email>xxm1995@outlook.com</email>
             <organization>bootx</organization>
-            <url>https://gitee.com/bootx/bootx-platform</url>
+            <url>https://gitee.com/bootx/daxpay</url>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git@gitee.com:bootx/bootx-platform.git</connection>
-        <developerConnection>scm:git:git@gitee.com:bootx/bootx-platform.git</developerConnection>
-        <url>https://gitee.com/bootx/bootx-platform</url>
+        <connection>scm:git:git@gitee.com:bootx/daxpay.git</connection>
+        <developerConnection>scm:git:git@gitee.com:bootx/daxpay.git</developerConnection>
+        <url>https://gitee.com/bootx/daxpay</url>
     </scm>
 
     <properties>
