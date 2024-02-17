@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletManager;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.param.channel.wallet.CreateWalletParam;
 import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletRechargeParam;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletReduceParam;
+import cn.bootx.platform.daxpay.service.param.channel.wallet.WalleteeDductParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 /**
- *
+ * 钱包管理接口
  * @author xxm
  * @since 2023/6/26
  */
@@ -27,10 +27,10 @@ public class WalletService {
     private final WalletManager walletManager;
 
     /**
-     * 开通钱包操作，默认为启用状态， 不传输余额则默认为0
+     * 创建钱包操作，默认为启用状态， 不传输余额则默认为0
      */
     @Transactional(rollbackFor = Exception.class)
-    public void createWallet(CreateWalletParam param) {
+    public void create(CreateWalletParam param) {
         // 判断钱包是否已开通
         if (walletManager.existsByUser(param.getUserId())) {
             throw new BizException("钱包已经开通");
@@ -85,7 +85,7 @@ public class WalletService {
      * 余额扣减
      */
     @Transactional(rollbackFor = Exception.class)
-    public void reduce(WalletReduceParam param) {
+    public void deduct(WalleteeDductParam param) {
         Wallet wallet = null;
         if (Objects.nonNull(param.getWalletId())){
             wallet =  walletManager.findById(param.getWalletId()).orElseThrow(DataNotExistException::new);

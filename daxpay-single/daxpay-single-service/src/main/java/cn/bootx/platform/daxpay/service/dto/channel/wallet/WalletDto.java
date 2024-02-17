@@ -21,17 +21,12 @@ public class WalletDto extends BaseDto implements Serializable {
 
     private static final long serialVersionUID = -1563719305334334625L;
 
-    @Schema(description = "ID,钱包的唯一标识")
-    private Long id;
-
     @Schema(description = "钱包关联的账号ID")
-    private Long userId;
+    private String userId;
 
-    @Schema(description = "商户编码")
-    private String mchCode;
-
-    @Schema(description = "商户应用编码")
-    private String mchAppCode;
+    /** 钱包名称 */
+    @Schema(description = "钱包名称")
+    private String name;
 
     @Schema(description = "钱包余额")
     private BigDecimal balance;

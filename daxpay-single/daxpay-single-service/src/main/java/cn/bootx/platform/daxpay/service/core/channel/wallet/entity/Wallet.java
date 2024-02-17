@@ -37,7 +37,7 @@ public class Wallet extends MpBaseEntity implements EntityBaseFunction<WalletDto
     private String userId;
 
     /** 钱包名称 */
-    @DbColumn("钱包名称")
+    @DbColumn(comment = "钱包名称")
     private String name;
 
     /** 余额 */

@@ -77,4 +77,10 @@ public class VoucherManager extends BaseManager<VoucherMapper, Voucher> {
                 .update();
     }
 
+    /**
+     * 卡号是否存在
+     */
+    public boolean existsByCardNo(String cardNo) {
+        return this.existedByField(Voucher::getCardNo, cardNo);
+    }
 }

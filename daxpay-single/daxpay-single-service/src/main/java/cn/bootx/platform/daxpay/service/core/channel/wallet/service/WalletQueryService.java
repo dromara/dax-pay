@@ -29,21 +29,28 @@ public class WalletQueryService {
     private final WalletManager walletManager;
 
     /**
-     * 根据钱包ID查询Wallet
+     * 根据钱包ID查询钱包
      */
-    public WalletDto findById(Long walletId) {
-        return walletManager.findById(walletId).map(Wallet::toDto).orElseThrow(DataNotExistException::new);
+    public WalletDto findById(Long id) {
+        return walletManager.findById(id).map(Wallet::toDto).orElseThrow(DataNotExistException::new);
     }
 
     /**
      * 获取钱包综合信息
      */
-    public WalletDto findById(String userId) {
+    public WalletDto findByUserId(String userId) {
         return walletManager.findByUser(userId).map(Wallet::toDto).orElseThrow(DataNotExistException::new);
     }
 
     /**
-     * 查询用户 分页
+     * 判断用户是否开通了钱包
+     */
+    public boolean existsByUserId(String userId) {
+        return walletManager.existsByUser(userId);
+    }
+
+    /**
+     * 分页
      */
     public PageResult<WalletDto> page(PageParam pageParam, WalletQueryParam param) {
         return MpUtil.convert2DtoPageResult(walletManager.page(pageParam, param));
@@ -51,20 +58,18 @@ public class WalletQueryService {
 
 
     /**
-     * 获取钱包, 获取顺序: 1. 显式传入的钱包ID 2. 显式传入的用户ID 3.
-     *
+     * 获取钱包, 获取顺序: 1. 钱包ID 2. 用户ID
      */
-    public Wallet getWallet(WalletPayParam walletPayParam){
+    public Wallet getWallet(WalletPayParam param){
 
         Wallet wallet = null;
-        // 首先根据钱包ID查询
-        if (Objects.nonNull(walletPayParam.getWalletId())) {
-            wallet = walletManager.findById(walletPayParam.getWalletId()).orElseThrow(null);
+        if (Objects.nonNull(param.getWalletId())){
+            wallet =  walletManager.findById(param.getWalletId()).orElseThrow(DataNotExistException::new);
         }
-        if (Objects.nonNull(wallet)){
-            return wallet;
+        if (Objects.isNull(wallet)){
+            wallet = walletManager.findByUser(param.getUserId()).orElseThrow(DataNotExistException::new);
         }
-        return null;
+        return wallet;
     }
 
 }

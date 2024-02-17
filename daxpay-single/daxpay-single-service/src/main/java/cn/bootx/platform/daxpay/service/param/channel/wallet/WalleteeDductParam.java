@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Accessors(chain = true)
 @Schema(title = "钱包扣减参数")
-public class WalletReduceParam {
+public class WalleteeDductParam {
 
 
     @Schema(description = "钱包ID")

@@ -34,6 +34,10 @@ public class VoucherService {
      */
     public void voucherImport(VoucherImportParam param){
         Voucher voucher = VoucherConvert.CONVERT.convert(param);
+        // 判断重复
+        if (voucherManager.existsByCardNo(param.getCardNo())) {
+            throw new BizException("钱包已经开通");
+        }
         voucherManager.save(voucher);
     }
 

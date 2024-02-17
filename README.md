@@ -123,14 +123,14 @@
 
 QQ扫码加入QQ交流群
 <p>
-<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/bootx-img@master/bootx/qq_qun.3qs0zpity9q0.webp" width = "330" height = "500"/>
+<img src="_doc/images/qq_qun.jpg" width = "330" height = "500"/>
 </p>
 
 
 ## 🍻 鸣谢
 感谢 JetBrains 提供的免费开源 License：
 
-[![jetbrains](https://jsd.cdn.zzko.cn/gh/xxm1995/bootx-img@master/bootx/jetbrains.y9o7c2ydh80.webp)](https://www.jetbrains.com/?from=bootx)
+[![JetBrains](_doc/images/jetbrains.png)](https://www.jetbrains.com/?from=bootx)
 
 感谢其他提供灵感和思路的开源项目
 

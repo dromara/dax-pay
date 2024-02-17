@@ -7,6 +7,8 @@ import cn.bootx.platform.daxpay.exception.waller.WalletLackOfBalanceException;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.service.code.WalletCode;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletConfig;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
@@ -33,12 +35,15 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WalletPayStrategy extends AbsPayStrategy {
 
+    private final WalletConfigService walletConfigService;
 
     private final WalletPayService walletPayService;
 
     private final WalletQueryService walletQueryService;
 
     private Wallet wallet;
+
+    private WalletConfig walletConfig;
 
     @Override
     public PayChannelEnum getChannel() {
@@ -60,6 +65,9 @@ public class WalletPayStrategy extends AbsPayStrategy {
         } catch (JSONException e) {
             throw new PayFailureException("支付参数错误");
         }
+
+        this.walletConfig = walletConfigService.getConfig();
+
         // 获取钱包
         this.wallet = walletQueryService.getWallet(walletPayParam);
         if (Objects.isNull(this.wallet)){
@@ -69,6 +77,8 @@ public class WalletPayStrategy extends AbsPayStrategy {
         if (Objects.equals(WalletCode.STATUS_FORBIDDEN, this.wallet.getStatus())) {
             throw new WalletBannedException();
         }
+        // 判断是否超过限额
+
         // 判断余额
         if (this.wallet.getBalance() < getPayChannelParam().getAmount()) {
             throw new WalletLackOfBalanceException();
