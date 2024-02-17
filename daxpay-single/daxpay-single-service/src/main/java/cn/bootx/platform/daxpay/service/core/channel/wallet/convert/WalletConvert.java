@@ -3,11 +3,9 @@ package cn.bootx.platform.daxpay.service.core.channel.wallet.convert;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletLog;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletPayOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletConfigDto;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletDto;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletLogDto;
-import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletPayOrderDto;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WalletConfigParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -24,8 +22,6 @@ public interface WalletConvert {
     WalletConvert CONVERT = Mappers.getMapper(WalletConvert.class);
 
     WalletDto convert(Wallet in);
-
-    WalletPayOrderDto convert(WalletPayOrder in);
 
     WalletLogDto convert(WalletLog in);
 

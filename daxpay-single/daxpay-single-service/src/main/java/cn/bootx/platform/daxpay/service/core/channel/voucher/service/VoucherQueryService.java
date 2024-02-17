@@ -3,16 +3,19 @@ package cn.bootx.platform.daxpay.service.core.channel.voucher.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherManager;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.service.dto.channel.voucher.VoucherDto;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.service.param.channel.voucher.VoucherParam;
+import cn.bootx.platform.daxpay.service.param.channel.voucher.VoucherQuery;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 /**
  * 储值卡查询
@@ -30,8 +33,8 @@ public class VoucherQueryService {
     /**
      * 分页
      */
-    public PageResult<VoucherDto> page(PageParam pageParam, VoucherParam param) {
-        return MpUtil.convert2DtoPageResult(voucherManager.page(pageParam, param));
+    public PageResult<VoucherDto> page(PageParam pageParam, VoucherQuery query) {
+        return MpUtil.convert2DtoPageResult(voucherManager.page(pageParam, query));
     }
 
     /**
@@ -68,6 +71,14 @@ public class VoucherQueryService {
      * 卡信息检查
      */
     public String check(Voucher voucher) {
+        // 有效期校验
+        if (voucher.isEnduring()){
+            return null;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        if (!LocalDateTimeUtil.between(now, voucher.getStartTime(), voucher.getEndTime())){
+            return "";
+        }
         return null;
     }
 

@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.core.channel.cash.service.CashService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- *
+ * 钱包支付修复策略
  * @author xxm
  * @since 2023/12/29
  */
@@ -21,8 +20,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @RequiredArgsConstructor
 public class CashPayRepairStrategy extends AbsPayRepairStrategy {
-
-    private final CashService cashService;
 
 
     /**
@@ -38,7 +35,6 @@ public class CashPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doCloseLocalHandler() {
-        cashService.close(this.getOrder().getId());
         this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
     }
 }

@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class VoucherPayCloseStrategy extends AbsPayCloseStrategy {
 
     private final VoucherPayService voucherPayService;
-    private final VoucherPayOrderService voucherPayOrderService;
 
     @Override
     public PayChannelEnum getChannel() {
@@ -35,8 +33,7 @@ public class VoucherPayCloseStrategy extends AbsPayCloseStrategy {
      */
     @Override
     public void doCloseHandler() {
-        voucherPayService.close(this.getOrder().getId());
-        voucherPayOrderService.updateClose(this.getOrder().getId());
+        voucherPayService.close(this.getChannelOrder());
 
     }
 }

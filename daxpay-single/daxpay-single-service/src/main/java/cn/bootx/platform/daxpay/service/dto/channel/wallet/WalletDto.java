@@ -36,9 +36,6 @@ public class WalletDto extends BaseDto implements Serializable {
     @Schema(description = "钱包余额")
     private BigDecimal balance;
 
-    @Schema(description = "预冻结额度")
-    private BigDecimal freezeBalance;
-
     @Schema(description = "状态")
     private String status;
 

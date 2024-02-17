@@ -35,7 +35,7 @@ public class UniPayAssistController {
 
     @CountTime
     @PaymentApi("getWxAuthUrl")
-    @Operation(summary = "获取微信oauth2授权连接")
+    @Operation(summary = "获取微信OAuth2授权链接")
     @PostMapping("/getWxAuthUrl")
     public DaxResult<WxAuthUrlResult> getWxAuthUrl(@RequestBody WxAuthUrlParam param){
         return DaxRes.ok(uniPayAssistService.getWxAuthUrl(param));

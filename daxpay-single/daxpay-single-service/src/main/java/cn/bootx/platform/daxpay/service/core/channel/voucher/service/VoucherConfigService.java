@@ -1,11 +1,11 @@
-package cn.bootx.platform.daxpay.service.core.channel.wallet.service;
+package cn.bootx.platform.daxpay.service.core.channel.voucher.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.code.WalletPayWay;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletConfigManager;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletConfig;
+import cn.bootx.platform.daxpay.service.code.VoucherPayWay;
+import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherConfigManager;
+import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherConfig;
 import cn.bootx.platform.daxpay.service.core.system.config.service.PayChannelConfigService;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WalletConfigParam;
 import cn.hutool.core.bean.BeanUtil;
@@ -19,24 +19,24 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * 钱包配置
+ * 储值卡配置
  * @author xxm
- * @since 2023/7/14
+ * @since 2024/2/17
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WalletConfigService {
-    private final static Long ID = 0L;
+public class VoucherConfigService {
+    private final VoucherConfigManager manager;
 
-    private final WalletConfigManager walletConfigManager;
+    private final static Long ID = 0L;
     private final PayChannelConfigService payChannelConfigService;
 
     /**
      * 获取钱包配置
      */
-    public WalletConfig getConfig(){
-        return walletConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("钱包配置不存在"));
+    public VoucherConfig getConfig(){
+        return manager.findById(ID).orElseThrow(() -> new DataNotExistException("钱包配置不存在"));
     }
 
     /**
@@ -44,17 +44,17 @@ public class WalletConfigService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void update(WalletConfigParam param){
-        WalletConfig walletConfig = walletConfigManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
+        VoucherConfig walletConfig = manager.findById(param.getId()).orElseThrow(DataNotExistException::new);
         // 启用或停用
         if (!Objects.equals(param.getEnable(), walletConfig.getEnable())){
-            payChannelConfigService.setEnable(PayChannelEnum.WALLET.getCode(), param.getEnable());
+            payChannelConfigService.setEnable(PayChannelEnum.VOUCHER.getCode(), param.getEnable());
         }
         BeanUtil.copyProperties(param,walletConfig);
-        walletConfigManager.updateById(walletConfig);
+        manager.updateById(walletConfig);
     }
 
     public List<LabelValue> findPayWays() {
-        return WalletPayWay.getPayWays()
+        return VoucherPayWay.getPayWays()
                 .stream()
                 .map(e -> new LabelValue(e.getName(),e.getCode()))
                 .collect(Collectors.toList());

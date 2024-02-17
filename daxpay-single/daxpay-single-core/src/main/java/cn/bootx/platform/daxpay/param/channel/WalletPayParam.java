@@ -15,9 +15,9 @@ import lombok.Data;
 public class WalletPayParam implements ChannelParam {
 
     @Schema(description = "钱包ID")
-    private Long walletId;
+    private String walletId;
 
     @Schema(description = "用户ID")
-    private Long userId;
+    private String userId;
 
 }

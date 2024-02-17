@@ -8,14 +8,15 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * 钱包充值参数
+ * 钱包扣减参数
  * @author xxm
- * @since 2020/12/8
+ * @since 2024/2/17
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "钱包充值参数")
-public class WalletRechargeParam {
+@Schema(title = "钱包扣减参数")
+public class WalletReduceParam {
+
 
     @Schema(description = "钱包ID")
     private Long walletId;
@@ -23,8 +24,8 @@ public class WalletRechargeParam {
     @Schema(description = "用户ID")
     private String userId;
 
-    @NotNull(message = "充值金额不可为空")
-    @Min(value = 1,message = "充值金额最少为1分")
-    @Schema(description = "充值金额")
+    @NotNull(message = "扣减金额不可为空")
+    @Min(value = 1,message = "扣减金额最少为1分")
+    @Schema(description = "扣减金额")
     private Integer amount;
 }

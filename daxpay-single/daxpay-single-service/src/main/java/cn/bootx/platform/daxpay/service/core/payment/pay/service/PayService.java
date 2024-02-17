@@ -152,7 +152,7 @@ public class PayService {
 
         // 3.1 执行支付前处理动作
         payStrategyList.forEach(AbsPayStrategy::doBeforePayHandler);
-        // 3.2 执行通道支付但的生成动作
+        // 3.2 执行通道支付单的生成动作
         payStrategyList.forEach(AbsPayStrategy::generateChannelOrder);
 
         // 4.1 支付操作

@@ -1,13 +1,19 @@
 package cn.bootx.platform.daxpay.service.core.channel.voucher.service;
 
+import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.daxpay.service.code.VoucherCode;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherLogManager;
+import cn.bootx.platform.daxpay.service.core.channel.voucher.convert.VoucherConvert;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherManager;
+import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
+import cn.bootx.platform.daxpay.service.param.channel.voucher.VoucherBatchImportParam;
+import cn.bootx.platform.daxpay.service.param.channel.voucher.VoucherImportParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 储值卡
@@ -22,13 +28,32 @@ public class VoucherService {
 
     private final VoucherManager voucherManager;
 
-    private final VoucherLogManager voucherLogManager;
 
+    /**
+     * 导入
+     */
+    public void voucherImport(VoucherImportParam param){
+        Voucher voucher = VoucherConvert.CONVERT.convert(param);
+        voucherManager.save(voucher);
+    }
+
+    /**
+     * 批量导入
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void voucherBatchImport(VoucherBatchImportParam param){
+        List<Voucher> voucherList = param.cardNoList.stream()
+                .map(cardNo -> VoucherConvert.CONVERT.convert(param)
+                        .setCardNo(cardNo))
+                .collect(Collectors.toList());
+        voucherManager.saveAll(voucherList);
+    }
 
     /**
      * 启用
      */
     public void unlock(Long id) {
+        voucherManager.findById(id).orElseThrow(() -> new BizException("储值卡不存在"));
         voucherManager.changeStatus(id, VoucherCode.STATUS_NORMAL);
     }
 
@@ -37,20 +62,6 @@ public class VoucherService {
      */
     public void lock(Long id) {
         voucherManager.changeStatus(id, VoucherCode.STATUS_FORBIDDEN);
-    }
-
-    /**
-     * 批量启用
-     */
-    public void unlockBatch(List<Long> ids) {
-        voucherManager.changeStatusBatch(ids, VoucherCode.STATUS_NORMAL);
-    }
-
-    /**
-     * 批量冻结
-     */
-    public void lockBatch(List<Long> ids) {
-        voucherManager.changeStatusBatch(ids, VoucherCode.STATUS_FORBIDDEN);
     }
 
 }

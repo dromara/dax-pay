@@ -37,7 +37,7 @@ public class VoucherPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doCloseLocalHandler() {
-        voucherPayService.close(this.getOrder().getId());
+        voucherPayService.close(this.getChannelOrder());
         this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
     }
 }

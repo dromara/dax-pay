@@ -1,15 +1,14 @@
 package cn.bootx.platform.daxpay.service.core.channel.voucher.dao;
 
-import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherPayOrder;
+import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherConfig;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
+ *
  * @author xxm
- * @since 2022/3/14
+ * @since 2024/2/17
  */
-@Deprecated
 @Mapper
-public interface VoucherPayOrderMapper extends BaseMapper<VoucherPayOrder> {
-
+public interface VoucherConfigMapper extends BaseMapper<VoucherConfig> {
 }

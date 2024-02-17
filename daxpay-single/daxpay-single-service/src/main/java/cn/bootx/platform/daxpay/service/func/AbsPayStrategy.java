@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.func;
 
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
@@ -7,6 +8,8 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 /**
  * 抽象支付策略基类 同步支付 异步支付 错误处理 关闭支付 撤销支付 支付网关同步 退款
@@ -56,6 +59,8 @@ public abstract class AbsPayStrategy implements PayStrategy{
      * 支付调起成功的处理方式
      */
     public void doSuccessHandler() {
+        this.channelOrder.setStatus(PayStatusEnum.SUCCESS.getCode())
+                .setPayTime(LocalDateTime.now());
     }
 
     /**
@@ -63,7 +68,7 @@ public abstract class AbsPayStrategy implements PayStrategy{
      */
     public void generateChannelOrder() {
         PayChannelOrder payChannelOrder = PayBuilder.buildPayChannelOrder(this.getPayChannelParam());
-        payChannelOrder.setId(this.getOrder().getId());
+        payChannelOrder.setPaymentId(this.getOrder().getId());
         this.channelOrder = payChannelOrder;
     }
 }

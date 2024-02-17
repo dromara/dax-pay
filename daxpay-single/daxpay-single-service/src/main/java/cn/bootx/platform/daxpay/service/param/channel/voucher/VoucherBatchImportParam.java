@@ -7,18 +7,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
- * 储值卡导入参数
+ * 储值卡批量导入
  * @author xxm
- * @since 2022/3/14
+ * @since 2024/2/17
  */
 @Data
 @Schema(title = "储值卡导入参数")
-public class VoucherImportParam {
+public class VoucherBatchImportParam {
 
     @Schema(description = "卡号")
-    private String cardNo;
+    public List<String> cardNoList;
 
     @Schema(description = "面值")
     private Integer faceValue;
@@ -42,5 +43,4 @@ public class VoucherImportParam {
      */
     @Schema(description = "默认状态")
     private String status;
-
 }

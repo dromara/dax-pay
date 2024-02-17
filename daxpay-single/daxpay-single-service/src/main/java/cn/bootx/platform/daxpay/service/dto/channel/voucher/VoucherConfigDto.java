@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.dto.channel.wallet;
+package cn.bootx.platform.daxpay.service.dto.channel.voucher;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -10,15 +10,15 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- *
+ * 储值卡配置
  * @author xxm
- * @since 2023/7/20
+ * @since 2024/2/17
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "钱包配置")
-public class WalletConfigDto extends BaseDto {
+@Schema(title = "储值卡配置")
+public class VoucherConfigDto extends BaseDto {
 
     /** 是否启用 */
     @Schema(description = "是否启用")

@@ -4,13 +4,12 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.waller.WalletBannedException;
 import cn.bootx.platform.daxpay.exception.waller.WalletLackOfBalanceException;
+import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.service.code.WalletCode;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletPayParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONException;
@@ -34,7 +33,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WalletPayStrategy extends AbsPayStrategy {
 
-    private final WalletPayOrderService walletPayOrderService;
 
     private final WalletPayService walletPayService;
 
@@ -63,7 +61,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
             throw new PayFailureException("支付参数错误");
         }
         // 获取钱包
-        this.wallet = walletQueryService.getWallet(walletPayParam,getPayParam());
+        this.wallet = walletQueryService.getWallet(walletPayParam);
         if (Objects.isNull(this.wallet)){
             throw new PayFailureException("钱包不存在");
         }
@@ -83,23 +81,6 @@ public class WalletPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         // 异步支付方式时使用冻结方式
-        if (this.getOrder().isAsyncPay()){
-            walletPayService.freezeBalance(getPayChannelParam().getAmount(), this.getOrder(), this.wallet);
-        } else {
-            walletPayService.pay(getPayChannelParam().getAmount(), this.getOrder(), this.wallet);
-        }
-        walletPayOrderService.savePayment(this.getOrder(), this.getPayParam(), this.getPayChannelParam(), this.wallet);
+        walletPayService.pay(getPayChannelParam().getAmount(), this.wallet);
     }
-
-    /**
-     * 成功
-     */
-    @Override
-    public void doSuccessHandler() {
-        if (this.getOrder().isAsyncPay()){
-            walletPayService.paySuccess(this.getOrder().getId());
-        }
-        walletPayOrderService.updateSuccess(this.getOrder().getId());
-    }
-
 }

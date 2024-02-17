@@ -35,7 +35,7 @@ public class UniQueryController {
 
     @CountTime
     @PaymentApi("queryPayOrder")
-    @Operation(summary = "查询支付订单")
+    @Operation(summary = "支付订单查询接口")
     @PostMapping("/payOrder")
     public DaxResult<PayOrderResult> queryPayOrder(@RequestBody QueryPayParam param){
         return DaxRes.ok(PayOrderQueryService.queryPayOrder(param));
@@ -43,7 +43,7 @@ public class UniQueryController {
 
     @CountTime
     @PaymentApi("queryRefundOrder")
-    @Operation(summary = "查询退款订单")
+    @Operation(summary = "退款订单查询接口")
     @PostMapping("/refundOrder")
      public DaxResult<RefundOrderResult> queryRefundOrder(@RequestBody QueryRefundParam param){
         return DaxRes.ok(payRefundQueryService.queryRefundOrder(param));

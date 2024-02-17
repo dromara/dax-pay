@@ -1,10 +1,10 @@
-package cn.bootx.platform.daxpay.service.core.channel.wallet.entity;
+package cn.bootx.platform.daxpay.service.core.channel.cash.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.StringListTypeHandler;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.convert.WalletConvert;
-import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletConfigDto;
+import cn.bootx.platform.daxpay.service.core.channel.cash.convert.CashPayConfigConvert;
+import cn.bootx.platform.daxpay.service.dto.channel.cash.CashPayConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
@@ -18,16 +18,16 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- * 钱包配置
+ * 现金支付配置类
  * @author xxm
- * @since 2023/7/14
+ * @since 2024/2/17
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "钱包配置")
 @Accessors(chain = true)
-@TableName(value = "pay_wallet_config",autoResultMap = true)
-public class WalletConfig extends MpBaseEntity implements EntityBaseFunction<WalletConfigDto> {
+@DbTable(comment = "现金支付配置")
+@TableName(value = "pay_cash_config",autoResultMap = true)
+public class CashConfig extends MpBaseEntity implements EntityBaseFunction<CashPayConfigDto> {
 
     /** 是否启用 */
     @DbColumn(comment = "是否启用")
@@ -51,7 +51,7 @@ public class WalletConfig extends MpBaseEntity implements EntityBaseFunction<Wal
      * 转换
      */
     @Override
-    public WalletConfigDto toDto() {
-        return WalletConvert.CONVERT.convert(this);
+    public CashPayConfigDto toDto() {
+        return CashPayConfigConvert.CONVERT.convert(this);
     }
 }

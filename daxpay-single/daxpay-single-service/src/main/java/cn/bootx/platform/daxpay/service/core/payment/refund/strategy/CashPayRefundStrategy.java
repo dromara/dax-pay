@@ -1,8 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.core.channel.cash.service.CashService;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -20,13 +18,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class CashPayRefundStrategy extends AbsRefundStrategy {
 
-    private final CashService cashService;
-    private final PayOrderService paymentService;
-
     /**
      * 策略标识
-     *
-     * @see PayChannelEnum
      */
     @Override
     public PayChannelEnum getChannel() {
@@ -34,10 +27,10 @@ public class CashPayRefundStrategy extends AbsRefundStrategy {
     }
 
     /**
-     * 退款
+     * 退款, 不需要进行操作
      */
     @Override
     public void doRefundHandler() {
-        cashService.refund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
+
     }
 }

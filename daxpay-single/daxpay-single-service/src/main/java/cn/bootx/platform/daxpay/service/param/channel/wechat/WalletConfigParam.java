@@ -1,10 +1,11 @@
 package cn.bootx.platform.daxpay.service.param.channel.wechat;
 
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 钱包配置
@@ -18,20 +19,19 @@ public class WalletConfigParam {
     @Schema(description = "主键")
     private Long id;
 
-    @Schema(description = "商户编码")
-    private String mchCode;
+    /** 是否启用 */
+    @Schema(description = "是否启用")
+    private Boolean enable;
 
-    @Schema(description = "商户应用编码")
-    private String mchAppCode;
+    /** 可用支付方式 */
+    @DbColumn(comment = "可用支付方式")
+    private List<String> payWays;
 
-    @Schema(description = "默认余额")
-    private BigDecimal defaultBalance;
+    /** 单次支付最多少金额 */
+    @Schema(description = "单次支付最多少金额")
+    private Integer singleLimit;
 
-    @Schema(description = "状态")
-    private String state;
-
+    /** 备注 */
     @Schema(description = "备注")
     private String remark;
-
-
 }

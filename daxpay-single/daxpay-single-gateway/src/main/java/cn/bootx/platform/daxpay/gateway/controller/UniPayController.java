@@ -42,7 +42,7 @@ public class UniPayController {
 
     @CountTime
     @PaymentApi("pay")
-    @Operation(summary = "统一下单")
+    @Operation(summary = "统一支付接口")
     @PostMapping("/pay")
     public DaxResult<PayResult> pay(@RequestBody PayParam payParam){
         return DaxRes.ok(payService.pay(payParam));
@@ -50,7 +50,7 @@ public class UniPayController {
 
     @CountTime
     @PaymentApi("simplePay")
-    @Operation(summary = "简单下单")
+    @Operation(summary = "简单支付接口")
     @PostMapping("/simplePay")
     public DaxResult<PayResult> simplePay(@RequestBody SimplePayParam payParam){
         return DaxRes.ok(payService.simplePay(payParam));
@@ -58,7 +58,7 @@ public class UniPayController {
 
     @CountTime
     @PaymentApi("close")
-    @Operation(summary = "订单关闭")
+    @Operation(summary = "支付关闭接口")
     @PostMapping("/close")
     public DaxResult<Void> close(@RequestBody PayCloseParam param){
         payCloseService.close(param);
@@ -67,7 +67,7 @@ public class UniPayController {
 
     @CountTime
     @PaymentApi("refund")
-    @Operation(summary = "统一退款")
+    @Operation(summary = "统一退款接口")
     @PostMapping("/refund")
     public DaxResult<RefundResult> refund(@RequestBody RefundParam param){
         return DaxRes.ok(payRefundService.refund(param));
@@ -75,7 +75,7 @@ public class UniPayController {
 
     @CountTime
     @PaymentApi("simpleRefund")
-    @Operation(summary = "简单退款")
+    @Operation(summary = "简单退款接口")
     @PostMapping("/simpleRefund")
     public DaxResult<RefundResult> simpleRefund(@RequestBody SimpleRefundParam param){
         return DaxRes.ok(payRefundService.simpleRefund(param));
@@ -83,7 +83,7 @@ public class UniPayController {
 
     @CountTime
     @PaymentApi("syncPay")
-    @Operation(summary = "支付状态同步")
+    @Operation(summary = "支付同步接口")
     @PostMapping("/syncPay")
     public DaxResult<SyncResult> syncPay(@RequestBody PaySyncParam param){
         return DaxRes.ok(paySyncService.sync(param));
@@ -91,7 +91,7 @@ public class UniPayController {
 
     @CountTime
     @PaymentApi("syncRefund")
-    @Operation(summary = "退款状态同步")
+    @Operation(summary = "退款同步接口")
     @PostMapping("/syncRefund")
     public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){
         return DaxRes.ok(payRefundSyncService.sync(param));

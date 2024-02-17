@@ -3,18 +3,17 @@ package cn.bootx.platform.daxpay.service.core.channel.wallet.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.daxpay.service.code.WalletCode;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletConfigManager;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletLogManager;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletManager;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletLog;
+import cn.bootx.platform.daxpay.service.param.channel.wallet.CreateWalletParam;
 import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletRechargeParam;
+import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletReduceParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -25,42 +24,24 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WalletService {
-
     private final WalletManager walletManager;
 
-    private final WalletConfigManager walletConfigManager;
-
-    private final WalletLogManager walletLogManager;
-
     /**
-     * 开通操作 创建
+     * 开通钱包操作，默认为启用状态， 不传输余额则默认为0
      */
     @Transactional(rollbackFor = Exception.class)
-    public void createWallet(Long userId) {
+    public void createWallet(CreateWalletParam param) {
         // 判断钱包是否已开通
-        if (walletManager.existsByUser(userId)) {
+        if (walletManager.existsByUser(param.getUserId())) {
             throw new BizException("钱包已经开通");
         }
-        Wallet wallet = new Wallet().setUserId(userId)
-                .setBalance(0)
-                .setFreezeBalance(0)
+        int balance = Objects.isNull(param.getBalance()) ? 0 : param.getBalance();
+        Wallet wallet = new Wallet()
+                .setUserId(param.getUserId())
+                .setName(param.getName())
+                .setBalance(balance)
                 .setStatus(WalletCode.STATUS_NORMAL);
         walletManager.save(wallet);
-        // 激活 log
-        WalletLog activeLog = new WalletLog().setWalletId(wallet.getId())
-                .setUserId(wallet.getUserId())
-                .setType(WalletCode.LOG_ACTIVE)
-                .setAmount(0)
-                .setRemark("激活钱包")
-                .setOperationSource(WalletCode.OPERATION_SOURCE_USER);
-        walletLogManager.save(activeLog);
-    }
-
-    /**
-     * 批量开通
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void createWalletBatch(List<Long> userIds) {
     }
 
     /**
@@ -71,13 +52,6 @@ public class WalletService {
         Wallet wallet = walletManager.findById(walletId).orElseThrow(DataNotExistException::new);
         wallet.setStatus(WalletCode.STATUS_FORBIDDEN);
         walletManager.updateById(wallet);
-        // 激活 log
-        WalletLog log = new WalletLog().setWalletId(wallet.getId())
-                .setUserId(wallet.getUserId())
-                .setType(WalletCode.LOG_LOCK)
-                .setRemark("锁定钱包")
-                .setOperationSource(WalletCode.OPERATION_SOURCE_ADMIN);
-        walletLogManager.save(log);
     }
 
     /**
@@ -88,36 +62,41 @@ public class WalletService {
         Wallet wallet = walletManager.findById(walletId).orElseThrow(DataNotExistException::new);
         wallet.setStatus(WalletCode.STATUS_NORMAL);
         walletManager.updateById(wallet);
-        // 激活 log
-        WalletLog log = new WalletLog().setWalletId(wallet.getId())
-                .setUserId(wallet.getUserId())
-                .setType(WalletCode.LOG_UNLOCK)
-                .setRemark("解锁钱包")
-                .setOperationSource(WalletCode.OPERATION_SOURCE_ADMIN);
-        walletLogManager.save(log);
     }
 
     /**
-     * 更改余额 也可以扣款
+     * 余额充值
      */
     @Transactional(rollbackFor = Exception.class)
-    public void changerBalance(WalletRechargeParam param) {
-//        if (param.getAmount() > 0) {
-//            walletManager.increaseBalance(param.getWalletId(), param.getAmount());
-//        }
-//        else if (BigDecimalUtil.compareTo(param.getAmount(), BigDecimal.ZERO) == -1) {
-//            walletManager.reduceBalanceUnlimited(param.getWalletId(), param.getAmount());
-//        }
-//        else {
-//            return;
-//        }
-//        Wallet wallet = walletManager.findById(param.getWalletId()).orElseThrow(DataNotExistException::new);
-//        WalletLog walletLog = new WalletLog().setAmount(param.getAmount())
-//                .setWalletId(wallet.getId())
-//                .setType(WalletCode.LOG_ADMIN_CHANGER)
-//                .setUserId(wallet.getUserId())
-//                .setRemark(String.format("系统变动余额 %.2f ", param.getAmount()))
-//                .setOperationSource(WalletCode.OPERATION_SOURCE_ADMIN);
-//        walletLogManager.save(walletLog);
+    public void recharge(WalletRechargeParam param) {
+        Wallet wallet = null;
+
+        if (Objects.nonNull(param.getWalletId())){
+            wallet =  walletManager.findById(param.getWalletId()).orElseThrow(DataNotExistException::new);
+        }
+        if (Objects.isNull(wallet)){
+            wallet = walletManager.findByUser(param.getUserId()).orElseThrow(DataNotExistException::new);
+        }
+        wallet.setBalance(wallet.getBalance() + param.getAmount());
+        walletManager.updateById(wallet);
+    }
+
+    /**
+     * 余额扣减
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void reduce(WalletReduceParam param) {
+        Wallet wallet = null;
+        if (Objects.nonNull(param.getWalletId())){
+            wallet =  walletManager.findById(param.getWalletId()).orElseThrow(DataNotExistException::new);
+        }
+        if (Objects.isNull(wallet)){
+            wallet = walletManager.findByUser(param.getUserId()).orElseThrow(DataNotExistException::new);
+        }
+        if (wallet.getBalance() > param.getAmount()){
+            throw new BizException("余额不足");
+        }
+        wallet.setBalance(wallet.getBalance() - param.getAmount());
+        walletManager.updateById(wallet);
     }
 }

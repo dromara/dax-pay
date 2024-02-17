@@ -1,16 +1,20 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherRecord;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayService;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.json.JSONException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -28,8 +32,6 @@ public class VoucherPayStrategy extends AbsPayStrategy {
 
     private final VoucherPayService voucherPayService;
 
-    private final VoucherPayOrderService voucherPayOrderService;
-
     private Voucher voucher;
 
     @Override
@@ -42,8 +44,24 @@ public class VoucherPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doBeforePayHandler() {
-        // 获取并校验储值卡
-        this.voucher = voucherPayService.getAndCheckVoucher(this.getPayChannelParam());
+        VoucherPayParam voucherPayParam;
+        try {
+            // 储值卡参数验证
+            Map<String, Object> channelParam = this.getPayChannelParam().getChannelParam();
+            if (CollUtil.isNotEmpty(channelParam)) {
+                voucherPayParam = BeanUtil.toBean(channelParam, VoucherPayParam.class);
+            } else {
+                throw new PayFailureException("储值卡支付参数错误");
+            }
+        }
+        catch (JSONException e) {
+            throw new PayFailureException("储值卡支付参数错误");
+        }
+        this.voucher = voucherPayService.getAndCheckVoucher(voucherPayParam);
+        // 金额是否满足
+        if (this.getPayChannelParam().getAmount() > this.voucher.getBalance()) {
+            throw new PayFailureException("储值卡余额不足");
+        }
     }
 
     /**
@@ -51,25 +69,7 @@ public class VoucherPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        VoucherRecord voucherRecord;
-//        if (this.getOrder().isAsyncPay()){
-//            voucherRecord = voucherPayService.freezeBalance(this.getPayChannelParam().getAmount(), this.getOrder(), this.voucher);
-//        } else {
-        voucherRecord = voucherPayService.pay(this.getPayChannelParam().getAmount(), this.getOrder(), this.voucher);
-//        }
-        voucherPayOrderService.savePayment(this.getOrder(), getPayParam(), getPayChannelParam(), voucherRecord);
-    }
-
-    /**
-     * 成功
-     */
-    @Override
-    public void doSuccessHandler() {
-        if (this.getOrder().isAsyncPay()){
-            voucherPayService.paySuccess(this.getOrder().getId());
-        }
-        this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode());
-        voucherPayOrderService.updateSuccess(this.getOrder().getId());
+        voucherPayService.pay(this.getPayChannelParam().getAmount(), this.voucher);
     }
 
 }

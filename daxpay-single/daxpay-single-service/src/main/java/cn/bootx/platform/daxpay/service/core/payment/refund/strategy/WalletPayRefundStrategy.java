@@ -1,9 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayOrderService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -21,8 +19,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WalletPayRefundStrategy extends AbsRefundStrategy {
     private final WalletPayService walletPayService;
-    private final WalletPayOrderService walletPayOrderService;
-    private final PayOrderService payOrderService;
     /**
      * 策略标识
      *
@@ -38,7 +34,6 @@ public class WalletPayRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        walletPayService.refund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
-        walletPayOrderService.updateRefund(this.getPayOrder().getId(), this.getRefundChannelParam().getAmount());
+        walletPayService.refund(this.getPayChannelOrder(), this.getRefundChannelParam().getAmount());
     }
 }

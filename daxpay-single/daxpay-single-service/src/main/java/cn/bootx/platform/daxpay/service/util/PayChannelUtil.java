@@ -1,9 +1,9 @@
 package cn.bootx.platform.daxpay.service.util;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.service.code.PayWayExtraCode;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletPayParam;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
@@ -44,11 +44,11 @@ public class PayChannelUtil {
                 WalletPayParam walletPayParam = new WalletPayParam();
 
                 if (StrUtil.isNotBlank(walletId)){
-                    walletPayParam.setWalletId(Long.valueOf(walletId));
+                    walletPayParam.setWalletId(walletId);
                 }
 
                 if (StrUtil.isNotBlank(userId)){
-                    walletPayParam.setUserId(Long.valueOf(userId));
+                    walletPayParam.setUserId(userId);
                 }
                 return JSONUtil.toJsonStr(walletPayParam);
             }
