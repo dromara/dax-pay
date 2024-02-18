@@ -57,6 +57,17 @@ public class WeChatPayConfigService {
         return weChatPayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("微信支付配置不存在"));
     }
 
+    /**
+     * 获取并检查配置
+     */
+    public WeChatPayConfig getAndCheckConfig(){
+        WeChatPayConfig weChatPayConfig = getConfig();
+        if (!weChatPayConfig.getEnable()){
+            throw new PayFailureException("微信支付配置未启用");
+        }
+        return weChatPayConfig;
+    }
+
 
     /**
      * 微信支持支付方式

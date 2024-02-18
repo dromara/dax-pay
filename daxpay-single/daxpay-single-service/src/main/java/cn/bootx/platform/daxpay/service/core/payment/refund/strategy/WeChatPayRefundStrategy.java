@@ -47,7 +47,7 @@ public class WeChatPayRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doBeforeRefundHandler() {
-        this.weChatPayConfig = weChatPayConfigService.getConfig();
+        this.weChatPayConfig = weChatPayConfigService.getAndCheckConfig();
     }
 
 

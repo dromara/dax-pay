@@ -8,25 +8,17 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
+ * 钱包记录查询参数
  * @author xxm
- * @since 2020/12/8
+ * @since 2024/2/18
  */
 @EqualsAndHashCode(callSuper = true)
+@QueryParam
 @Data
-@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
-@Schema(title = "钱包查询参数")
-public class WalletQueryParam extends QueryOrder {
+@Schema(title = "钱包记录查询参数")
+public class WalletRecordQuery extends QueryOrder {
 
-    @Schema(description = "钱包ID")
+    @Schema(description = "钱包id")
     private Long walletId;
-
-    @Schema(description = "用户ID")
-    private Long userId;
-
-    @Schema(description = "商户编码")
-    private String mchCode;
-
-    @Schema(description = "商户应用编码")
-    private String mchAppCode;
 }

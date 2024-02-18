@@ -10,20 +10,15 @@ import lombok.experimental.Accessors;
 /**
  * 储值卡查询参数
  * @author xxm
- * @since 2024/2/17
+ * @since 2024/2/18
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
 @QueryParam
+@Data
 @Accessors(chain = true)
 @Schema(title = "储值卡查询参数")
-public class VoucherQuery extends QueryOrder {
+public class VoucherRecordQuery  extends QueryOrder {
 
-    @Schema(description = "卡号")
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    private String cardNo;
-
-
-    @Schema(description = "面值")
-    private Integer faceValue;
+    @Schema(description = "储值卡id")
+    private Long voucherId;
 }

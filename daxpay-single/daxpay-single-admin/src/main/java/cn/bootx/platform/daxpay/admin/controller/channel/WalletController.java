@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.admin.controller.channel.wallet;
+package cn.bootx.platform.daxpay.admin.controller.channel;
 
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
@@ -6,12 +6,11 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletService;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletDto;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.CreateWalletParam;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletQueryParam;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletRechargeParam;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.WalleteeDductParam;
+import cn.bootx.platform.daxpay.service.dto.channel.wechat.WalletRecordDto;
+import cn.bootx.platform.daxpay.service.param.channel.wallet.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class WalletController {
     private final WalletService walletService;
     private final WalletQueryService walletQueryService;
+    private final WalletRecordService walletRecordService;
 
     @Operation(summary = "创建钱包")
     @PostMapping("/create")
@@ -54,13 +54,13 @@ public class WalletController {
         return Res.ok();
     }
 
-    @Operation(summary = "分页")
+    @Operation(summary = "钱包分页")
     @GetMapping("/page")
-    public ResResult<PageResult<WalletDto>> page(PageParam pageParam, WalletQueryParam query){
+    public ResResult<PageResult<WalletDto>> page(PageParam pageParam, WalletQuery query){
         return Res.ok(walletQueryService.page(pageParam, query));
     }
 
-    @Operation(summary = "查询详情")
+    @Operation(summary = "查询钱包详情")
     @GetMapping("/findById")
     public ResResult<WalletDto> findById(Long id){
         return Res.ok(walletQueryService.findById(id));
@@ -70,5 +70,11 @@ public class WalletController {
     @GetMapping("/existsByUserId")
     public ResResult<Boolean> existsByUserId(String userId){
         return Res.ok(walletQueryService.existsByUserId(userId));
+    }
+
+    @Operation(summary = "记录分页")
+    @GetMapping("/record/page")
+    public ResResult<PageResult<WalletRecordDto>> recordPage(PageParam pageParam, WalletRecordQuery query){
+        return Res.ok(walletRecordService.page(pageParam, query));
     }
 }

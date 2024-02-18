@@ -1,7 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.channel.cash.convert;
 
 import cn.bootx.platform.daxpay.service.core.channel.cash.entity.CashConfig;
+import cn.bootx.platform.daxpay.service.core.channel.cash.entity.CashRecord;
 import cn.bootx.platform.daxpay.service.dto.channel.cash.CashPayConfigDto;
+import cn.bootx.platform.daxpay.service.dto.channel.cash.CashRecordDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -15,5 +17,7 @@ public interface CashPayConfigConvert {
     CashPayConfigConvert CONVERT = Mappers.getMapper(CashPayConfigConvert.class);
 
     CashPayConfigDto convert(CashConfig in);
+
+    CashRecordDto convert(CashRecord in);
 
 }

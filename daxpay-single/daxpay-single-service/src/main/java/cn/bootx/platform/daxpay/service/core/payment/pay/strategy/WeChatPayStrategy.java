@@ -99,7 +99,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      * 初始化微信支付
      */
     private void initWeChatPayConfig() {
-        this.weChatPayConfig = weChatPayConfigService.getConfig();
+        this.weChatPayConfig = weChatPayConfigService.getAndCheckConfig();
     }
 
 }

@@ -3,9 +3,11 @@ package cn.bootx.platform.daxpay.service.core.channel.wallet.convert;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletLog;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletRecord;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletConfigDto;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletDto;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletLogDto;
+import cn.bootx.platform.daxpay.service.dto.channel.wechat.WalletRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WalletConfigParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -28,5 +30,7 @@ public interface WalletConvert {
     WalletConfigDto convert(WalletConfig in);
 
     WalletConfig convert(WalletConfigParam in);
+
+    WalletRecordDto convert(WalletRecord in);
 
 }

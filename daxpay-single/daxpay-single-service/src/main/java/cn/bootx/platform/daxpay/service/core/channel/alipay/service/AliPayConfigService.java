@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.code.AliPayWay;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayConfigManager;
@@ -70,6 +71,17 @@ public class AliPayConfigService {
      */
     public AliPayConfig getConfig(){
         return alipayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
+    }
+
+    /**
+     * 获取并检查支付配置
+     */
+    public AliPayConfig getAndCheckConfig() {
+        AliPayConfig alipayConfig = this.getConfig();
+        if (!alipayConfig.getEnable()){
+            throw new PayFailureException("支付宝支付方式未启用");
+        }
+        return alipayConfig;
     }
 
 

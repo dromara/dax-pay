@@ -1,29 +1,27 @@
-package cn.bootx.platform.daxpay.service.core.channel.voucher.entity;
+package cn.bootx.platform.daxpay.service.core.channel.cash.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.service.code.VoucherRecordTypeEnum;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.convert.VoucherConvert;
-import cn.bootx.platform.daxpay.service.dto.channel.voucher.VoucherRecordDto;
+import cn.bootx.platform.daxpay.service.core.channel.cash.convert.CashPayConfigConvert;
+import cn.bootx.platform.daxpay.service.dto.channel.cash.CashRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 储值卡记录
+ * 现金记录
  * @author xxm
- * @since 2023/6/29
+ * @since 2024/2/17
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "pay_voucher_record")
-@DbTable(comment = "储值卡记录")
-public class VoucherRecord extends MpCreateEntity implements EntityBaseFunction<VoucherRecordDto> {
+@DbTable(comment = "现金记录")
+public class CashRecord extends MpCreateEntity implements EntityBaseFunction<CashRecordDto> {
 
     /** 储值卡id */
     @DbMySqlIndex(comment = "储值卡ID")
@@ -41,14 +39,6 @@ public class VoucherRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "金额")
     private Integer amount;
 
-    /** 变动之前的金额 */
-    @DbColumn(comment = "变动之前的金额")
-    private Integer oldAmount;
-
-    /** 变动之后的金额 */
-    @DbColumn(comment = "变动之后的金额")
-    private Integer newAmount;
-
     /**
      * 交易订单号
      * 支付订单/退款订单
@@ -64,7 +54,7 @@ public class VoucherRecord extends MpCreateEntity implements EntityBaseFunction<
      * 转换
      */
     @Override
-    public VoucherRecordDto toDto() {
-        return VoucherConvert.CONVERT.convert(this);
+    public CashRecordDto toDto() {
+        return CashPayConfigConvert.CONVERT.convert(this);
     }
 }

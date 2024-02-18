@@ -54,13 +54,19 @@ public class VoucherQueryService {
     }
 
     /**
+     * 判断卡号是否存在
+     */
+    public boolean existsByCardNo(String cardNo){
+        return voucherManager.existsByCardNo(cardNo);
+    }
+
+    /**
      * 获取并判断卡状态
      */
     public VoucherDto getAndJudgeVoucher(String cardNo){
-        Voucher voucher = voucherManager.findByCardNo(cardNo)
-                .orElseThrow(() -> new DataNotExistException("储值卡不存在"));
+        Voucher voucher = voucherManager.findByCardNo(cardNo).orElseThrow(() -> new DataNotExistException("储值卡不存在"));
         // 过期
-        String checkMsg = check(voucher);
+        String checkMsg = this.check(voucher);
         if (StrUtil.isNotBlank(checkMsg)){
             throw new PayFailureException(checkMsg);
         }

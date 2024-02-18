@@ -20,17 +20,8 @@ import java.time.LocalDateTime;
 @Schema(title = "储值卡")
 public class VoucherDto extends BaseDto {
 
-    @Schema(description = "商户编码")
-    private String mchCode;
-
-    @Schema(description = "商户应用编码")
-    private String mchAppCode;
-
     @Schema(description = "卡号")
     private String cardNo;
-
-    @Schema(description = "生成批次号")
-    private Long batchNo;
 
     @Schema(description = "面值")
     private BigDecimal faceValue;

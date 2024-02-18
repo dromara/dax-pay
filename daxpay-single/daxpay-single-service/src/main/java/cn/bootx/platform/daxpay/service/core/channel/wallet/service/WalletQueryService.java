@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletManager;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletDto;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletQueryParam;
+import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,7 @@ public class WalletQueryService {
     /**
      * 分页
      */
-    public PageResult<WalletDto> page(PageParam pageParam, WalletQueryParam param) {
+    public PageResult<WalletDto> page(PageParam pageParam, WalletQuery param) {
         return MpUtil.convert2DtoPageResult(walletManager.page(pageParam, param));
     }
 

@@ -43,7 +43,7 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doBeforeRefundHandler() {
-        AliPayConfig config = alipayConfigService.getConfig();
+        AliPayConfig config = alipayConfigService.getAndCheckConfig();
         alipayConfigService.initConfig(config);
     }
 

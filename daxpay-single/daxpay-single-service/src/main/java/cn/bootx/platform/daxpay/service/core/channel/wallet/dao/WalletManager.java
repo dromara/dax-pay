@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
-import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletQueryParam;
+import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class WalletManager extends BaseManager<WalletMapper, Wallet> {
     /**
      * 分页查询
      */
-    public Page<Wallet> page(PageParam pageParam, WalletQueryParam param) {
+    public Page<Wallet> page(PageParam pageParam, WalletQuery param) {
         QueryWrapper<Wallet> wrapper = QueryGenerator.generator(param);
         Page<Wallet> mpPage = MpUtil.getMpPage(pageParam, Wallet.class);
         return this.page(mpPage, wrapper);

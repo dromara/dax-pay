@@ -93,7 +93,7 @@ public class WalletService {
         if (Objects.isNull(wallet)){
             wallet = walletManager.findByUser(param.getUserId()).orElseThrow(DataNotExistException::new);
         }
-        if (wallet.getBalance() > param.getAmount()){
+        if (wallet.getBalance() < param.getAmount()){
             throw new BizException("余额不足");
         }
         wallet.setBalance(wallet.getBalance() - param.getAmount());

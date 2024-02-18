@@ -41,7 +41,6 @@ public class Voucher extends MpBaseEntity implements EntityBaseFunction<VoucherD
     @DbColumn(comment = "余额")
     private Integer balance;
 
-
     /** 是否长期有效 */
     @DbColumn(comment = "是否长期有效")
     private boolean enduring;

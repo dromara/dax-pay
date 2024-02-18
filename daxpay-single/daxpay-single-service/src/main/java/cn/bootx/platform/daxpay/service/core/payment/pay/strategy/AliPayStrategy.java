@@ -104,7 +104,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     private void initAlipayConfig() {
         // 获取并初始化支付宝支付配置
-        this.alipayConfig = alipayConfigService.getConfig();
+        this.alipayConfig = alipayConfigService.getAndCheckConfig();
         alipayConfigService.initConfig(this.alipayConfig);
     }
 

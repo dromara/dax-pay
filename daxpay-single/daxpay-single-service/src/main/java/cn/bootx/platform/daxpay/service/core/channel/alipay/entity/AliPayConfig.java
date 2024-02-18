@@ -37,7 +37,7 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "支付宝商户appId")
     private String appId;
 
-    /** 是否启用 */
+    /** 是否启用, 只影响支付和退款操作 */
     @DbColumn(comment = "是否启用")
     private Boolean enable;
 

@@ -28,15 +28,15 @@ public class VoucherService {
 
     private final VoucherManager voucherManager;
 
-
     /**
      * 导入
      */
+    @Transactional(rollbackFor = Exception.class)
     public void voucherImport(VoucherImportParam param){
         Voucher voucher = VoucherConvert.CONVERT.convert(param);
         // 判断重复
         if (voucherManager.existsByCardNo(param.getCardNo())) {
-            throw new BizException("钱包已经开通");
+            throw new BizException("储值卡已存在");
         }
         voucherManager.save(voucher);
     }

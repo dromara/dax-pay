@@ -1,10 +1,10 @@
-package cn.bootx.platform.daxpay.service.core.channel.voucher.entity;
+package cn.bootx.platform.daxpay.service.core.channel.wallet.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
-import cn.bootx.platform.daxpay.service.code.VoucherRecordTypeEnum;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.convert.VoucherConvert;
-import cn.bootx.platform.daxpay.service.dto.channel.voucher.VoucherRecordDto;
+import cn.bootx.platform.daxpay.service.code.WalletRecordTypeEnum;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.convert.WalletConvert;
+import cn.bootx.platform.daxpay.service.dto.channel.wechat.WalletRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
@@ -14,25 +14,25 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 储值卡记录
+ * 钱包记录
  * @author xxm
- * @since 2023/6/29
+ * @since 2024/2/18
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "pay_voucher_record")
-@DbTable(comment = "储值卡记录")
-public class VoucherRecord extends MpCreateEntity implements EntityBaseFunction<VoucherRecordDto> {
+@DbTable(comment = "钱包记录")
+@TableName("pay_wallet_record")
+public class WalletRecord extends MpCreateEntity implements EntityBaseFunction<WalletRecordDto> {
 
-    /** 储值卡id */
-    @DbMySqlIndex(comment = "储值卡ID")
-    @DbColumn(comment = "储值卡id")
-    private Long voucherId;
+    /** 钱包id */
+    @DbMySqlIndex(comment = "钱包ID")
+    @DbColumn(comment = "钱包id")
+    private Long walletId;
 
     /**
      * 业务类型
-     * @see VoucherRecordTypeEnum
+     * @see WalletRecordTypeEnum
      */
     @DbColumn(comment = "业务类型")
     private String type;
@@ -64,7 +64,7 @@ public class VoucherRecord extends MpCreateEntity implements EntityBaseFunction<
      * 转换
      */
     @Override
-    public VoucherRecordDto toDto() {
-        return VoucherConvert.CONVERT.convert(this);
+    public WalletRecordDto toDto() {
+        return WalletConvert.CONVERT.convert(this);
     }
 }
