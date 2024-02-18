@@ -51,4 +51,8 @@ public class VoucherRecordDto extends BaseDto {
     /** 终端ip */
     @Schema(description = "终端ip")
     private String ip;
+
+    /** 备注 */
+    @Schema(description = "备注")
+    private String remark;
 }

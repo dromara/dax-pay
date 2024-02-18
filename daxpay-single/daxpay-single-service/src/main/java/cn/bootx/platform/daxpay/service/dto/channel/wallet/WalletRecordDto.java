@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.dto.channel.wechat;
+package cn.bootx.platform.daxpay.service.dto.channel.wallet;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.service.code.WalletRecordTypeEnum;
@@ -51,4 +51,8 @@ public class WalletRecordDto extends BaseDto {
     /** 终端ip */
     @Schema(description = "终端ip")
     private String ip;
+
+    /** 备注 */
+    @Schema(description = "备注")
+    private String remark;
 }

@@ -7,7 +7,6 @@ import cn.bootx.platform.daxpay.service.core.channel.cash.convert.CashPayConfigC
 import cn.bootx.platform.daxpay.service.dto.channel.cash.CashRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
-import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,11 +21,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @DbTable(comment = "现金记录")
 public class CashRecord extends MpCreateEntity implements EntityBaseFunction<CashRecordDto> {
-
-    /** 储值卡id */
-    @DbMySqlIndex(comment = "储值卡ID")
-    @DbColumn(comment = "储值卡id")
-    private Long voucherId;
 
     /**
      * 业务类型
@@ -49,6 +43,10 @@ public class CashRecord extends MpCreateEntity implements EntityBaseFunction<Cas
     /** 终端ip */
     @DbColumn(comment = "终端ip")
     private String ip;
+
+    /** 备注 */
+    @DbColumn(comment = "备注")
+    private String remark;
 
     /**
      * 转换

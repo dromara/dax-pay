@@ -9,7 +9,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryS
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletService;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletDto;
-import cn.bootx.platform.daxpay.service.dto.channel.wechat.WalletRecordDto;
+import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.wallet.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -76,5 +76,11 @@ public class WalletController {
     @GetMapping("/record/page")
     public ResResult<PageResult<WalletRecordDto>> recordPage(PageParam pageParam, WalletRecordQuery query){
         return Res.ok(walletRecordService.page(pageParam, query));
+    }
+
+    @Operation(summary = "查询记录详情")
+    @GetMapping("/record/findById")
+    public ResResult<WalletRecordDto> findRecordById(Long id){
+        return Res.ok(walletRecordService.findById(id));
     }
 }

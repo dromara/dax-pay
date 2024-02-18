@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.service.code.WalletRecordTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.convert.WalletConvert;
-import cn.bootx.platform.daxpay.service.dto.channel.wechat.WalletRecordDto;
+import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
@@ -59,6 +59,10 @@ public class WalletRecord extends MpCreateEntity implements EntityBaseFunction<W
     /** 终端ip */
     @DbColumn(comment = "终端ip")
     private String ip;
+
+    /** 备注 */
+    @DbColumn(comment = "备注")
+    private String remark;
 
     /**
      * 转换

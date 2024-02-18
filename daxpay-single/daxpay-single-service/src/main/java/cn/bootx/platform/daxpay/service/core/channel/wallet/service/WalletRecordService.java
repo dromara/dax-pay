@@ -6,7 +6,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletRecord;
-import cn.bootx.platform.daxpay.service.dto.channel.wechat.WalletRecordDto;
+import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletRecordQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

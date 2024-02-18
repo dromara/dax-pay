@@ -60,6 +60,11 @@ public class VoucherRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "终端ip")
     private String ip;
 
+    /** 备注 */
+    @DbColumn(comment = "备注")
+    private String remark;
+
+
     /**
      * 转换
      */
