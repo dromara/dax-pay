@@ -6,6 +6,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherManager;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.service.dto.channel.voucher.VoucherDto;
@@ -51,6 +52,30 @@ public class VoucherQueryService {
         return voucherManager.findByCardNo(cardNo)
                 .map(Voucher::toDto)
                 .orElseThrow(() -> new DataNotExistException("储值卡不存在"));
+    }
+
+    /**
+     * 根据卡号查询
+     */
+    public Voucher getVoucherByCardNo(String cardNo) {
+        return voucherManager.findByCardNo(cardNo)
+                .orElseThrow(() -> new DataNotExistException("储值卡不存在"));
+    }
+
+
+    /**
+     * 获取并检查储值卡
+     */
+    public Voucher getAndCheckVoucher(VoucherPayParam voucherPayParam) {
+        String cardNo = voucherPayParam.getCardNo();
+        Voucher voucher = voucherManager.findByCardNo(cardNo).orElseThrow(()->new PayFailureException("储值卡不存在"));
+
+        // 卡信息校验
+        String timeCheck = this.check(voucher);
+        if (StrUtil.isNotBlank(timeCheck)) {
+            throw new PayFailureException(timeCheck);
+        }
+        return voucher;
     }
 
     /**

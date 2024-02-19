@@ -25,6 +25,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class WalletService {
     private final WalletManager walletManager;
+    private final WalletRecordService walletRecordService;
 
     /**
      * 创建钱包操作，默认为启用状态， 不传输余额则默认为0
@@ -79,6 +80,7 @@ public class WalletService {
         }
         wallet.setBalance(wallet.getBalance() + param.getAmount());
         walletManager.updateById(wallet);
+        walletRecordService.recharge(wallet, param.getAmount());
     }
 
     /**
@@ -98,5 +100,6 @@ public class WalletService {
         }
         wallet.setBalance(wallet.getBalance() - param.getAmount());
         walletManager.updateById(wallet);
+        walletRecordService.deduct(wallet, param.getAmount());
     }
 }

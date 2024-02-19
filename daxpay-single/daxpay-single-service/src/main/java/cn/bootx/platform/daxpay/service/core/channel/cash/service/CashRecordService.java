@@ -3,8 +3,11 @@ package cn.bootx.platform.daxpay.service.core.channel.cash.service;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.service.code.CashRecordTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.cash.dao.CashRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.cash.entity.CashRecord;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.cash.CashRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.cash.CashRecordQuery;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +24,53 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CashRecordService {
-    private final CashRecordManager manager;
+    private final CashRecordManager cashRecordManager;
+
+    /**
+     * 支付保存
+     */
+    public void pay(PayChannelOrder channelOrder){
+        CashRecord record = new CashRecord()
+                .setType(CashRecordTypeEnum.PAY.getCode())
+                .setAmount(channelOrder.getAmount())
+                .setOrderId(String.valueOf(channelOrder.getPaymentId()));
+        cashRecordManager.save(record);
+    }
+
+    /**
+     * 退款保存
+     */
+    public void refund(PayRefundChannelOrder channelOrder){
+        CashRecord record = new CashRecord()
+                .setType(CashRecordTypeEnum.REFUND.getCode())
+                .setAmount(channelOrder.getAmount())
+                .setOrderId(String.valueOf(channelOrder.getRefundId()));
+        cashRecordManager.save(record);
+    }
+
+    /**
+     * 支付关闭
+     */
+    public void payClose(PayChannelOrder channelOrder){
+        CashRecord record = new CashRecord()
+                .setType(CashRecordTypeEnum.CLOSE_PAY.getCode())
+                .setAmount(channelOrder.getAmount())
+                .setOrderId(String.valueOf(channelOrder.getPaymentId()));
+        cashRecordManager.save(record);
+    }
+
 
     /**
      * 分页查询
      */
     public PageResult<CashRecordDto> page(PageParam pageParam, CashRecordQuery param) {
-        return MpUtil.convert2DtoPageResult(manager.page(pageParam, param));
+        return MpUtil.convert2DtoPageResult(cashRecordManager.page(pageParam, param));
     }
 
     /**
      * 查询详情
      */
     public CashRecordDto findById(Long id){
-        return manager.findById(id).map(CashRecord::toDto).orElseGet(CashRecordDto::new);
+        return cashRecordManager.findById(id).map(CashRecord::toDto).orElseGet(CashRecordDto::new);
     }
 }

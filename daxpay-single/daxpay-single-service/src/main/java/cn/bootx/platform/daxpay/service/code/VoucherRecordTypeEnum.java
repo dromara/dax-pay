@@ -22,10 +22,7 @@ public enum VoucherRecordTypeEnum {
     REFUND("refund", "退款"),
 
     /** 支付关闭 */
-    CLOSE_PAY("close_pay", "支付关闭"),
-
-    /** 退款关闭 */
-    CLOSE_REFUND("close_refund", "退款关闭");
+    CLOSE_PAY("close_pay", "支付关闭");
 
     private final String code;
     private final String name;

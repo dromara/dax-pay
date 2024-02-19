@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.core.channel.cash.service.CashRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class CashPayRepairStrategy extends AbsPayRepairStrategy {
 
-
+    private final CashRecordService cashRecordService;
     /**
      * 策略标识
      */
@@ -31,10 +32,11 @@ public class CashPayRepairStrategy extends AbsPayRepairStrategy {
     }
 
     /**
-     * 取消支付
+     * 关闭支付
      */
     @Override
     public void doCloseLocalHandler() {
         this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
+        cashRecordService.payClose(this.getChannelOrder());
     }
 }

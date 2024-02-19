@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherManager;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,20 +26,6 @@ public class VoucherPayService {
 
     private final VoucherQueryService voucherQueryService;
 
-    /**
-     * 获取并检查储值卡
-     */
-    public Voucher getAndCheckVoucher(VoucherPayParam voucherPayParam) {
-        String cardNo = voucherPayParam.getCardNo();
-        Voucher voucher = voucherManager.findByCardNo(cardNo).orElseThrow(()->new PayFailureException("储值卡不存在"));
-
-        // 卡信息校验
-        String timeCheck = voucherQueryService.check(voucher);
-        if (StrUtil.isNotBlank(timeCheck)) {
-            throw new PayFailureException(timeCheck);
-        }
-        return voucher;
-    }
 
     /**
      * 支付
@@ -70,11 +55,7 @@ public class VoucherPayService {
      * 退款
      */
     @Transactional(rollbackFor = Exception.class)
-    public void refund(PayChannelOrder channelOrder, int amount) {
-        String channelExtra = channelOrder.getChannelExtra();
-        VoucherPayParam voucherPayParam = JSONUtil.toBean(channelExtra, VoucherPayParam.class);
-        Voucher voucher = voucherManager.findByCardNo(voucherPayParam.getCardNo())
-                .orElseThrow(() -> new PayFailureException("储值卡不存在"));
+    public void refund(int amount, Voucher voucher) {
         voucher.setBalance(voucher.getBalance()+amount);
         voucherManager.updateById(voucher);
     }

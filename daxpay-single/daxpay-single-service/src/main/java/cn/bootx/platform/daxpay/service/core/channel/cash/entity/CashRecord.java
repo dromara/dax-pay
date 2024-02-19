@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.channel.cash.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
-import cn.bootx.platform.daxpay.service.code.VoucherRecordTypeEnum;
+import cn.bootx.platform.daxpay.service.code.CashRecordTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.cash.convert.CashPayConfigConvert;
 import cn.bootx.platform.daxpay.service.dto.channel.cash.CashRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -24,7 +24,7 @@ public class CashRecord extends MpCreateEntity implements EntityBaseFunction<Cas
 
     /**
      * 业务类型
-     * @see VoucherRecordTypeEnum
+     * @see CashRecordTypeEnum
      */
     @DbColumn(comment = "业务类型")
     private String type;

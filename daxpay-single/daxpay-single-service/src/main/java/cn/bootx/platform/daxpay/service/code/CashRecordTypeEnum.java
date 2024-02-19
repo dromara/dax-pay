@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum CashrRecordTypeEnum {
+public enum CashRecordTypeEnum {
 
     /** 支付 */
     PAY("pay", "支付"),
@@ -19,10 +19,7 @@ public enum CashrRecordTypeEnum {
     REFUND("refund", "退款"),
 
     /** 支付关闭 */
-    CLOSE_PAY("close_pay", "支付关闭"),
-
-    /** 退款关闭 */
-    CLOSE_REFUND("close_refund", "退款关闭");
+    CLOSE_PAY("close_pay", "支付关闭");
 
     private final String code;
     private final String name;

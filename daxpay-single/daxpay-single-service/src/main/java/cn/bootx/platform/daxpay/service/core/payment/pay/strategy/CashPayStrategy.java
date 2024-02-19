@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.service.core.channel.cash.service.CashRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @RequiredArgsConstructor
 public class CashPayStrategy extends AbsPayStrategy {
+
+    private final CashRecordService cashRecordService;
 
     /**
      * 现金支付
@@ -48,7 +51,7 @@ public class CashPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        // 不需要做处理,
+        cashRecordService.pay(this.getChannelOrder());
     }
 
 }

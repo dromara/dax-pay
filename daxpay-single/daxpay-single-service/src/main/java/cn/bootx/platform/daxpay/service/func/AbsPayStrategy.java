@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @Setter
 public abstract class AbsPayStrategy implements PayStrategy{
 
-
     /** 支付订单 */
     private PayOrder order = null;
 

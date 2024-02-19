@@ -97,7 +97,6 @@ public class RefundRepairService {
         // 退款修复记录
         PayRepairRecord refundRepairRecord = this.refundRepairRecord(refundOrder, repairType, repairResult);
         recordService.saveAllRecord(Arrays.asList(payRepairRecord, refundRepairRecord));
-
         return repairResult;
     }
 

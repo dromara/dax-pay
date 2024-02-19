@@ -28,6 +28,8 @@ public class VoucherService {
 
     private final VoucherManager voucherManager;
 
+    private final VoucherRecordService recordService;
+
     /**
      * 导入
      */
@@ -39,6 +41,7 @@ public class VoucherService {
             throw new BizException("储值卡已存在");
         }
         voucherManager.save(voucher);
+        recordService.importVoucher(voucher);
     }
 
     /**

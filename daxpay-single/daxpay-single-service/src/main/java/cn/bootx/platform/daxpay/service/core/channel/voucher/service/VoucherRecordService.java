@@ -3,8 +3,12 @@ package cn.bootx.platform.daxpay.service.core.channel.voucher.service;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.service.code.VoucherRecordTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherRecordManager;
+import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherRecord;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.voucher.VoucherRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.voucher.VoucherRecordQuery;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,61 @@ import org.springframework.stereotype.Service;
 public class VoucherRecordService {
     private final VoucherRecordManager manager;
 
+    /**
+     * 导入保存
+     */
+    public void importVoucher(Voucher voucher){
+        VoucherRecord voucherRecord = new VoucherRecord()
+                .setType(VoucherRecordTypeEnum.IMPORT.getCode())
+                .setAmount(voucher.getBalance())
+                .setNewAmount(voucher.getBalance())
+                .setOldAmount(0)
+                .setVoucherId(voucher.getId());
+        manager.save(voucherRecord);
+    }
+
+
+    /**
+     * 支付保存
+     */
+    public void pay(PayChannelOrder channelOrder, Voucher voucher){
+        VoucherRecord voucherRecord = new VoucherRecord()
+                .setType(VoucherRecordTypeEnum.PAY.getCode())
+                .setAmount(channelOrder.getAmount())
+                .setNewAmount(voucher.getBalance())
+                .setOldAmount(voucher.getBalance() - channelOrder.getAmount())
+                .setOrderId(String.valueOf(channelOrder.getPaymentId()))
+                .setVoucherId(voucher.getId());
+        manager.save(voucherRecord);
+    }
+
+    /**
+     * 退款保存
+     */
+    public void refund(PayRefundChannelOrder channelOrder, Voucher voucher){
+        VoucherRecord voucherRecord = new VoucherRecord()
+                .setType(VoucherRecordTypeEnum.REFUND.getCode())
+                .setAmount(channelOrder.getAmount())
+                .setNewAmount(voucher.getBalance())
+                .setOldAmount(voucher.getBalance() + channelOrder.getAmount())
+                .setOrderId(String.valueOf(channelOrder.getRefundId()))
+                .setVoucherId(voucher.getId());
+        manager.save(voucherRecord);
+    }
+
+    /**
+     * 支付关闭
+     */
+    public void payClose(PayChannelOrder channelOrder, Voucher voucher){
+        VoucherRecord voucherRecord = new VoucherRecord()
+                .setType(VoucherRecordTypeEnum.CLOSE_PAY.getCode())
+                .setAmount(channelOrder.getAmount())
+                .setNewAmount(voucher.getBalance())
+                .setOldAmount(voucher.getBalance() - channelOrder.getAmount())
+                .setOrderId(String.valueOf(channelOrder.getPaymentId()))
+                .setVoucherId(voucher.getId());
+        manager.save(voucherRecord);
+    }
 
     /**
      * 分页查询

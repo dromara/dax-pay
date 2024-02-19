@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.service.code.WalletRecordTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletRecord;
@@ -25,13 +26,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WalletRecordService {
     private final WalletRecordManager walletRecordManager;
-    private final WalletQueryService walletQueryService;
 
     /**
      * 创建保存
      */
     public void create(Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
+                .setType(WalletRecordTypeEnum.CREATE.getCode())
                 .setAmount(wallet.getBalance())
                 .setNewAmount(wallet.getBalance())
                 .setOldAmount(0)
@@ -40,10 +41,37 @@ public class WalletRecordService {
     }
 
     /**
+     * 充值保存
+     */
+    public void recharge(Wallet wallet, int amount){
+        WalletRecord walletRecord = new WalletRecord()
+                .setType(WalletRecordTypeEnum.RECHARGE.getCode())
+                .setAmount(wallet.getBalance())
+                .setNewAmount(wallet.getBalance())
+                .setOldAmount(wallet.getBalance() + amount)
+                .setWalletId(wallet.getId());
+        walletRecordManager.save(walletRecord);
+    }
+
+    /**
+     * 扣减保存
+     */
+    public void deduct(Wallet wallet, int amount){
+        WalletRecord walletRecord = new WalletRecord()
+                .setType(WalletRecordTypeEnum.DEDUCT.getCode())
+                .setWalletId(wallet.getId())
+                .setAmount(wallet.getBalance())
+                .setNewAmount(wallet.getBalance())
+                .setOldAmount(wallet.getBalance() + amount);
+        walletRecordManager.save(walletRecord);
+    }
+
+    /**
      * 支付保存
      */
     public void pay(PayChannelOrder channelOrder, Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
+                .setType(WalletRecordTypeEnum.PAY.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(wallet.getBalance())
                 .setOldAmount(wallet.getBalance() - channelOrder.getAmount())
@@ -57,6 +85,7 @@ public class WalletRecordService {
      */
     public void refund(PayRefundChannelOrder channelOrder, Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
+                .setType(WalletRecordTypeEnum.REFUND.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(wallet.getBalance())
                 .setOldAmount(wallet.getBalance() + channelOrder.getAmount())
@@ -70,23 +99,11 @@ public class WalletRecordService {
      */
     public void payClose(PayChannelOrder channelOrder, Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
+                .setType(WalletRecordTypeEnum.CLOSE_PAY.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(wallet.getBalance())
                 .setOldAmount(wallet.getBalance() - channelOrder.getAmount())
                 .setOrderId(String.valueOf(channelOrder.getPaymentId()))
-                .setWalletId(wallet.getId());
-        walletRecordManager.save(walletRecord);
-    }
-
-    /**
-     * 退款关闭
-     */
-    public void refundClose(PayRefundChannelOrder channelOrder, Wallet wallet){
-        WalletRecord walletRecord = new WalletRecord()
-                .setAmount(channelOrder.getAmount())
-                .setNewAmount(wallet.getBalance())
-                .setOldAmount(wallet.getBalance() - channelOrder.getAmount())
-                .setOrderId(String.valueOf(channelOrder.getRefundId()))
                 .setWalletId(wallet.getId());
         walletRecordManager.save(walletRecord);
     }
