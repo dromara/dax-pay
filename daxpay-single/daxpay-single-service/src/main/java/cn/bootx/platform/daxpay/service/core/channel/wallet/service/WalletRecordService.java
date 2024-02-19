@@ -12,6 +12,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletRecordQuery;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class WalletRecordService {
      */
     public void create(Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
+                .setTitle("创建钱包")
                 .setType(WalletRecordTypeEnum.CREATE.getCode())
                 .setAmount(wallet.getBalance())
                 .setNewAmount(wallet.getBalance())
@@ -45,6 +47,7 @@ public class WalletRecordService {
      */
     public void recharge(Wallet wallet, int amount){
         WalletRecord walletRecord = new WalletRecord()
+                .setTitle(StrUtil.format("余额充值：{} 分", amount))
                 .setType(WalletRecordTypeEnum.RECHARGE.getCode())
                 .setAmount(wallet.getBalance())
                 .setNewAmount(wallet.getBalance())
@@ -58,6 +61,7 @@ public class WalletRecordService {
      */
     public void deduct(Wallet wallet, int amount){
         WalletRecord walletRecord = new WalletRecord()
+                .setTitle(StrUtil.format("余额扣减：{} 分", amount))
                 .setType(WalletRecordTypeEnum.DEDUCT.getCode())
                 .setWalletId(wallet.getId())
                 .setAmount(wallet.getBalance())
@@ -69,8 +73,9 @@ public class WalletRecordService {
     /**
      * 支付保存
      */
-    public void pay(PayChannelOrder channelOrder, Wallet wallet){
+    public void pay(PayChannelOrder channelOrder, String title, Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
+                .setTitle(title)
                 .setType(WalletRecordTypeEnum.PAY.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(wallet.getBalance())
@@ -83,8 +88,9 @@ public class WalletRecordService {
     /**
      * 退款保存
      */
-    public void refund(PayRefundChannelOrder channelOrder, Wallet wallet){
+    public void refund(PayRefundChannelOrder channelOrder, String title, Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
+                .setTitle(title)
                 .setType(WalletRecordTypeEnum.REFUND.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(wallet.getBalance())
@@ -97,8 +103,9 @@ public class WalletRecordService {
     /**
      * 支付关闭
      */
-    public void payClose(PayChannelOrder channelOrder, Wallet wallet){
+    public void payClose(PayChannelOrder channelOrder, String title, Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
+                .setTitle(title)
                 .setType(WalletRecordTypeEnum.CLOSE_PAY.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(wallet.getBalance())

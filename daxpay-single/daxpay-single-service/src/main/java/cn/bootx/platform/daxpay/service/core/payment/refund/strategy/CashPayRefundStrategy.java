@@ -38,7 +38,7 @@ public class CashPayRefundStrategy extends AbsRefundStrategy {
     public void doRefundHandler() {
         // 不包含异步支付
         if (!this.getPayOrder().isAsyncPay()){
-            cashRecordService.refund(this.getRefundChannelOrder());
+            cashRecordService.refund(this.getRefundChannelOrder(),this.getPayOrder().getTitle());
         }
     }
 

@@ -54,6 +54,6 @@ public class WalletPayCloseStrategy extends AbsPayCloseStrategy {
     @Override
     public void doCloseHandler() {
         walletPayService.close(this.getChannelOrder(),this.wallet);
-        walletRecordService.payClose(this.getChannelOrder(),this.wallet);
+        walletRecordService.payClose(this.getChannelOrder(), this.getOrder().getTitle(), this.wallet);
     }
 }

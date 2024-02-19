@@ -8,15 +8,15 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 云闪付支付订单
+ * 云闪付流水记录
  * @author xxm
- * @since 2022/3/11
+ * @since 2024/2/19
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "云闪付支付订单")
+@DbTable(comment = "云闪付流水记录")
 @Accessors(chain = true)
-@TableName("pay_union_pay_order")
-public class UnionPayOrder extends BasePayOrder {
+@TableName("pay_union_pay_record")
+public class UnionPayRecord extends BasePayOrder {
 
 }

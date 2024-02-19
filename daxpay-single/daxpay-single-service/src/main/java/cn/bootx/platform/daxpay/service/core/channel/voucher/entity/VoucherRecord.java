@@ -30,6 +30,10 @@ public class VoucherRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "储值卡id")
     private Long voucherId;
 
+    /** 标题 */
+    @DbColumn(comment = "标题")
+    private String title;
+
     /**
      * 业务类型
      * @see VoucherRecordTypeEnum

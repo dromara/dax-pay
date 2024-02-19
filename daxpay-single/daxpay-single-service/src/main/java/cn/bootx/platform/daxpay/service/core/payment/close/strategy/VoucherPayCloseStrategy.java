@@ -55,6 +55,6 @@ public class VoucherPayCloseStrategy extends AbsPayCloseStrategy {
     @Override
     public void doCloseHandler() {
         voucherPayService.close(this.getChannelOrder());
-        voucherRecordService.payClose(this.getChannelOrder(),this.voucher);
+        voucherRecordService.payClose(this.getChannelOrder(), this.getOrder().getTitle(), this.voucher);
     }
 }

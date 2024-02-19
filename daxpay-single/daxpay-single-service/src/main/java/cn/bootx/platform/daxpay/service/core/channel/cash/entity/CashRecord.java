@@ -22,6 +22,10 @@ import lombok.experimental.Accessors;
 @DbTable(comment = "现金记录")
 public class CashRecord extends MpCreateEntity implements EntityBaseFunction<CashRecordDto> {
 
+    /** 标题 */
+    @DbColumn(comment = "标题")
+    private String title;
+
     /**
      * 业务类型
      * @see CashRecordTypeEnum

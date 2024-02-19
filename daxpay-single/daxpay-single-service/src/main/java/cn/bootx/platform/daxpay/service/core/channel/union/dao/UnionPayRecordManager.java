@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.channel.union.dao;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayOrder;
+import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayRecord;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class UnionPayOrderManager extends BaseManager<UnionPayOrderMapper, UnionPayOrder> {
+public class UnionPayRecordManager extends BaseManager<UnionPayRecordMapper, UnionPayRecord> {
 
 }

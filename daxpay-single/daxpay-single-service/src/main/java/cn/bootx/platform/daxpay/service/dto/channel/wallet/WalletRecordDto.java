@@ -22,6 +22,10 @@ public class WalletRecordDto extends BaseDto {
     @Schema(description = "钱包id")
     private Long walletId;
 
+    /** 标题 */
+    @Schema(description = "标题")
+    private String title;
+
     /**
      * 业务类型
      * @see WalletRecordTypeEnum

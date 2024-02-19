@@ -76,7 +76,7 @@ public class VoucherPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         voucherPayService.pay(this.getPayChannelParam().getAmount(), this.voucher);
-        voucherRecordService.pay(this.getChannelOrder(), this.voucher);
+        voucherRecordService.pay(this.getChannelOrder(), this.getOrder().getTitle(), this.voucher);
     }
 
 }

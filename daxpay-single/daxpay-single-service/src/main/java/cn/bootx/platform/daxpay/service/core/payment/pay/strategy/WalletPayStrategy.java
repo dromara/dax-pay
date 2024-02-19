@@ -97,6 +97,6 @@ public class WalletPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         walletPayService.pay(getPayChannelParam().getAmount(), this.wallet);
-        walletRecordService.pay(this.getChannelOrder(), this.wallet);
+        walletRecordService.pay(this.getChannelOrder(), this.getOrder().getTitle(),this.wallet);
     }
 }

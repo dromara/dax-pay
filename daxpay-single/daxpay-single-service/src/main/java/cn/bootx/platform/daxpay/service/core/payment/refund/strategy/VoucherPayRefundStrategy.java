@@ -66,7 +66,7 @@ public class VoucherPayRefundStrategy extends AbsRefundStrategy {
         // 不包含异步支付
         if (!this.getPayOrder().isAsyncPay()){
             voucherPayService.refund(this.getRefundChannelParam().getAmount(), this.voucher);
-            voucherRecordService.refund(this.getRefundChannelOrder(), this.voucher);
+            voucherRecordService.refund(this.getRefundChannelOrder(), this.getPayOrder().getTitle(), this.voucher);
         }
     }
 

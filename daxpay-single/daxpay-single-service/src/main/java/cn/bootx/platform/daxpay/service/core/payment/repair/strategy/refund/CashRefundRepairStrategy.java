@@ -35,6 +35,6 @@ public class CashRefundRepairStrategy extends AbsRefundRepairStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        cashRecordService.refund(this.getRefundChannelOrder());
+        cashRecordService.refund(this.getRefundChannelOrder(),this.getPayOrder().getTitle());
     }
 }

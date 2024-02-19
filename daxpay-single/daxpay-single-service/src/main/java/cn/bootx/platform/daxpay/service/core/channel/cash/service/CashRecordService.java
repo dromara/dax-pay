@@ -29,8 +29,9 @@ public class CashRecordService {
     /**
      * 支付保存
      */
-    public void pay(PayChannelOrder channelOrder){
+    public void pay(PayChannelOrder channelOrder, String title){
         CashRecord record = new CashRecord()
+                .setTitle(title)
                 .setType(CashRecordTypeEnum.PAY.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setOrderId(String.valueOf(channelOrder.getPaymentId()));
@@ -40,8 +41,9 @@ public class CashRecordService {
     /**
      * 退款保存
      */
-    public void refund(PayRefundChannelOrder channelOrder){
+    public void refund(PayRefundChannelOrder channelOrder, String title){
         CashRecord record = new CashRecord()
+                .setTitle(title)
                 .setType(CashRecordTypeEnum.REFUND.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setOrderId(String.valueOf(channelOrder.getRefundId()));
@@ -51,8 +53,9 @@ public class CashRecordService {
     /**
      * 支付关闭
      */
-    public void payClose(PayChannelOrder channelOrder){
+    public void payClose(PayChannelOrder channelOrder, String title){
         CashRecord record = new CashRecord()
+                .setTitle(title)
                 .setType(CashRecordTypeEnum.CLOSE_PAY.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setOrderId(String.valueOf(channelOrder.getPaymentId()));

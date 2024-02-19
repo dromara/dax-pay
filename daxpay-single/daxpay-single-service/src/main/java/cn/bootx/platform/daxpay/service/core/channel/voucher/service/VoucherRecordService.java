@@ -31,6 +31,7 @@ public class VoucherRecordService {
      */
     public void importVoucher(Voucher voucher){
         VoucherRecord voucherRecord = new VoucherRecord()
+                .setTitle("导入储值卡")
                 .setType(VoucherRecordTypeEnum.IMPORT.getCode())
                 .setAmount(voucher.getBalance())
                 .setNewAmount(voucher.getBalance())
@@ -43,8 +44,9 @@ public class VoucherRecordService {
     /**
      * 支付保存
      */
-    public void pay(PayChannelOrder channelOrder, Voucher voucher){
+    public void pay(PayChannelOrder channelOrder, String title, Voucher voucher){
         VoucherRecord voucherRecord = new VoucherRecord()
+                .setTitle(title)
                 .setType(VoucherRecordTypeEnum.PAY.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(voucher.getBalance())
@@ -57,8 +59,9 @@ public class VoucherRecordService {
     /**
      * 退款保存
      */
-    public void refund(PayRefundChannelOrder channelOrder, Voucher voucher){
+    public void refund(PayRefundChannelOrder channelOrder, String title, Voucher voucher){
         VoucherRecord voucherRecord = new VoucherRecord()
+                .setTitle(title)
                 .setType(VoucherRecordTypeEnum.REFUND.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(voucher.getBalance())
@@ -71,8 +74,9 @@ public class VoucherRecordService {
     /**
      * 支付关闭
      */
-    public void payClose(PayChannelOrder channelOrder, Voucher voucher){
+    public void payClose(PayChannelOrder channelOrder, String title, Voucher voucher){
         VoucherRecord voucherRecord = new VoucherRecord()
+                .setTitle(title)
                 .setType(VoucherRecordTypeEnum.CLOSE_PAY.getCode())
                 .setAmount(channelOrder.getAmount())
                 .setNewAmount(voucher.getBalance())

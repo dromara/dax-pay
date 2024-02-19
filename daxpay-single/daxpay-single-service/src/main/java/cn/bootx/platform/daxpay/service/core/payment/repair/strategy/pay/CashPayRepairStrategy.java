@@ -37,6 +37,6 @@ public class CashPayRepairStrategy extends AbsPayRepairStrategy {
     @Override
     public void doCloseLocalHandler() {
         this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
-        cashRecordService.payClose(this.getChannelOrder());
+        cashRecordService.payClose(this.getChannelOrder(),this.getOrder().getTitle());
     }
 }

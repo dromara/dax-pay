@@ -65,7 +65,7 @@ public class WalletPayRefundStrategy extends AbsRefundStrategy {
         // 不包含异步支付
         if (!this.getPayOrder().isAsyncPay()){
             walletPayService.refund(this.wallet, this.getRefundChannelParam().getAmount());
-            walletRecordService.refund(this.getRefundChannelOrder(), this.wallet);
+            walletRecordService.refund(this.getRefundChannelOrder(), this.getPayOrder().getTitle(), this.wallet);
         }
     }
 

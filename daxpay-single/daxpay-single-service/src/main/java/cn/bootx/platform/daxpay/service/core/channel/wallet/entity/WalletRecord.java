@@ -30,6 +30,10 @@ public class WalletRecord extends MpCreateEntity implements EntityBaseFunction<W
     @DbColumn(comment = "钱包id")
     private Long walletId;
 
+    /** 标题 */
+    @DbColumn(comment = "标题")
+    private String title;
+
     /**
      * 业务类型
      * @see WalletRecordTypeEnum

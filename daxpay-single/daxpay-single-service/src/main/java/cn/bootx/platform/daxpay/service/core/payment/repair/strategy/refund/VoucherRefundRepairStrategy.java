@@ -57,6 +57,6 @@ public class VoucherRefundRepairStrategy extends AbsRefundRepairStrategy {
     @Override
     public void doSuccessHandler() {
         voucherPayService.refund(this.getPayChannelOrder().getAmount(), this.voucher);
-        voucherRecordService.refund(this.getRefundChannelOrder(), this.voucher);
+        voucherRecordService.refund(this.getRefundChannelOrder(), this.getPayOrder().getTitle(), this.voucher);
     }
 }
