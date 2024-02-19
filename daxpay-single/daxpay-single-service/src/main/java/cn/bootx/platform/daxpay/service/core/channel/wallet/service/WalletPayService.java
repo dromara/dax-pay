@@ -39,20 +39,7 @@ public class WalletPayService {
     /**
      * 关闭支付, 将支付成功的金额进行返还
      */
-    public void close(PayChannelOrder channelOrder) {
-        // 从通道扩展参数中取出钱包参数
-        String channelExtra = channelOrder.getChannelExtra();
-        WalletPayParam walletPayParam = JSONUtil.toBean(channelExtra, WalletPayParam.class);
-
-        // 获取钱包
-        Wallet wallet = null;
-        if (Objects.nonNull(walletPayParam.getWalletId())){
-            wallet =  walletManager.findById(walletPayParam.getWalletId()).orElseThrow(DataNotExistException::new);
-        }
-        if (Objects.nonNull(walletPayParam.getUserId())){
-            wallet = walletManager.findByUser(walletPayParam.getUserId()).orElseThrow(DataNotExistException::new);
-        }
-
+    public void close(PayChannelOrder channelOrder, Wallet wallet) {
         // 将订单的金额退款到钱包
         wallet.setBalance(wallet.getBalance() + channelOrder.getAmount());
         walletManager.updateById(wallet);

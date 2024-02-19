@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class VoucherRecordService {
     private final VoucherRecordManager manager;
 
+
     /**
      * 分页查询
      */

@@ -40,6 +40,17 @@ public class WalletConfigService {
     }
 
     /**
+     * 获取并校验配置
+     */
+    public WalletConfig getAndCheckConfig(){
+        WalletConfig config = this.getConfig();
+        if (!config.getEnable()){
+            throw new DataNotExistException("钱包配置未启用");
+        }
+        return config;
+    }
+
+    /**
      * 更新
      */
     @Transactional(rollbackFor = Exception.class)

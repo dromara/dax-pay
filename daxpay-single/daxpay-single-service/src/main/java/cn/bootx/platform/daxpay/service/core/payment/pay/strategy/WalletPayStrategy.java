@@ -11,6 +11,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
@@ -41,6 +42,8 @@ public class WalletPayStrategy extends AbsPayStrategy {
 
     private final WalletQueryService walletQueryService;
 
+    private final WalletRecordService walletRecordService;
+
     private Wallet wallet;
 
     private WalletConfig walletConfig;
@@ -66,7 +69,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
             throw new PayFailureException("支付参数错误");
         }
 
-        this.walletConfig = walletConfigService.getConfig();
+        this.walletConfig = walletConfigService.getAndCheckConfig();
 
         // 获取钱包
         this.wallet = walletQueryService.getWallet(walletPayParam);
@@ -78,6 +81,9 @@ public class WalletPayStrategy extends AbsPayStrategy {
             throw new WalletBannedException();
         }
         // 判断是否超过限额
+        if (getPayChannelParam().getAmount() > this.walletConfig.getSingleLimit()){
+            throw new PayFailureException("钱包单次支付金额超过限额");
+        }
 
         // 判断余额
         if (this.wallet.getBalance() < getPayChannelParam().getAmount()) {
@@ -90,7 +96,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        // 异步支付方式时使用冻结方式
         walletPayService.pay(getPayChannelParam().getAmount(), this.wallet);
+        walletRecordService.pay(this.getChannelOrder(), this.wallet);
     }
 }
