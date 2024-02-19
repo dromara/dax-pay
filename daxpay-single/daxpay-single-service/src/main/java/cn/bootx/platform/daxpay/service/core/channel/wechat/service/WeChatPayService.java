@@ -56,8 +56,6 @@ public class WeChatPayService {
 
     private final PaySyncService paySyncService;
 
-    private final WeChatPaySyncService weChatPaySyncService;
-
     /**
      * 校验
      */

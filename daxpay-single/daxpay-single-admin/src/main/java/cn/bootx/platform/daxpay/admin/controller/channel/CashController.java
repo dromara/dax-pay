@@ -34,7 +34,7 @@ public class CashController {
 
 
     @Operation(summary = "查询记录详情")
-    @GetMapping("/findById")
+    @GetMapping("/record/findById")
     public ResResult<CashRecordDto> findById(Long id){
         return Res.ok(cashRecordService.findById(id));
     }

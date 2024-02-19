@@ -201,9 +201,45 @@ public class AggregateService {
     }
 
     /**
+     * 条码支付
+     */
+    public PayOrderResult barPay(AggregateSimplePayParam param){
+        // 判断通道属于什么
+        PayChannelEnum payChannel = this.getPayChannel(param.getAuthCode());
+
+        int amount = param.getAmount()
+                .multiply(BigDecimal.valueOf(100))
+                .intValue();
+
+        SimplePayParam simplePayParam = new SimplePayParam();
+        simplePayParam.setBusinessNo(param.getBusinessNo());
+        simplePayParam.setTitle(param.getTitle());
+        simplePayParam.setAmount(amount);
+        simplePayParam.setChannel(payChannel.getCode());
+        simplePayParam.setPayWay(PayWayEnum.BARCODE.getCode());
+
+        String ip = Optional.ofNullable(WebServletUtil.getRequest())
+                .map(ServletUtil::getClientIP)
+                .orElse("127.0.0.1");
+        simplePayParam.setClientIp(ip);
+        // 异步回调地址
+        simplePayParam.setNotNotify(true);
+
+        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
+
+        // 判断是否支付成功
+        if (execute.getCode() != 0){
+            throw new BizException(execute.getMsg());
+        }
+        PayOrderResult payOrderResult = new PayOrderResult();
+        BeanUtil.copyProperties(execute.getData(),payOrderResult);
+        return payOrderResult;
+    }
+
+    /**
      * 根据付款码判断属于那种支付通道
      */
-    public PayChannelEnum getPayChannel(String authCode) {
+    private PayChannelEnum getPayChannel(String authCode) {
         if (StrUtil.isBlank(authCode)) {
             throw new BizException("付款码不可为空");
         }

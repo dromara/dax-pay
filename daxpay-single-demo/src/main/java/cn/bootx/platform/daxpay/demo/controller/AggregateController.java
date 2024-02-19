@@ -68,8 +68,8 @@ public class AggregateController {
 
     @Operation(summary = "通过付款码发起支付")
     @PostMapping("/barCodePay")
-    public ResResult<Void> barCodePay(@RequestBody AggregateSimplePayParam param){
-        return Res.ok();
+    public ResResult<PayOrderResult> barCodePay(@RequestBody AggregateSimplePayParam param){
+        return Res.ok(aggregateService.barPay(param));
     }
 
 }

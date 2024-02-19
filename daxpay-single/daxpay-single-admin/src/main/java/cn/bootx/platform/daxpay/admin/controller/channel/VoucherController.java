@@ -63,4 +63,10 @@ public class VoucherController {
     public ResResult<PageResult<VoucherRecordDto>> recordPage(PageParam pageParam, VoucherRecordQuery query){
         return Res.ok(voucherRecordService.page(pageParam, query));
     }
+
+    @Operation(summary = "查询记录详情")
+    @GetMapping("/record/findById")
+    public ResResult<VoucherRecordDto> recordFindById(Long id){
+        return Res.ok(voucherRecordService.findById(id));
+    }
 }
