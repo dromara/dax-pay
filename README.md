@@ -1,10 +1,10 @@
 # Dax-Pay(开源支付系统)
 
 <p>
- <img src='https://gitee.com/bootx/bootx-platform/badge/star.svg?theme=dark' alt='star'/>
- <img src="https://img.shields.io/badge/Boot%20Platform-1.3.6-success.svg" alt="Build Status"/>
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
  <img src="https://img.shields.io/badge/Dax%20Pay-2.0.0-success.svg" alt="Build Status"/>
+ <img src='https://gitee.com/bootx/bootx-platform/badge/star.svg?theme=dark' alt='star'/>
+ <img src="https://img.shields.io/badge/Boot%20Platform-1.3.6-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Author-Bootx-orange.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Spring%20Boot-2.7.18-blue.svg" alt="Downloads"/>
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
@@ -12,10 +12,11 @@
 
 ## 🍈项目介绍
 
-> DaxPay是一套基于Bootx-Platform脚手架构建的一套开源支付网关系统，已经对接支付宝、微信支付相关的接口，以及扩展了钱包支付、储值卡支付、现金支付等新的支付方式。
+> DaxPay是一套基于Bootx-Platform脚手架构建的开源支付网关系统，已经对接支付宝、微信支付相关的接口，以及扩展了钱包支付、储值卡支付、现金支付等新的支付方式。
 > 可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响
 
 ## 🧭 特色功能
+- 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
 - 已对接`微信支付`相关的接口，目前已经支持`V2`版本的接口，后续版本将支持`V3`版本的接口
 - 已对接`支付宝`相关的接口，目前已经支持`V2`版本的接口，后续版本将支持`V3`版本的接口
 - 支持组合支付，满足用户系统需要多种方式同时进行支付的场景。
@@ -24,7 +25,7 @@
 - 提供管理平台，方便运营人员进行管理和操作，不需要懂IT技术也可以轻松使用
 - 提供`聚合支付`、`电脑收银台`和`手机收银台`的演示模块，供开发者参考其实现支付功能的逻辑
 
-## 🍒 文档和源码地址
+## 📃 文档和源码地址
 ### 文档地址
 在 [Bootx开源文档站](https://bootx.gitee.io/) 下的支付网关(DaxPay)模块下可以进行查阅相关文档，具体链接地址如下：
 [快速指南](https://bootx.gitee.io/daxpay/guides/overview/项目介绍.html)、
@@ -76,6 +77,72 @@
 | Vue         | 前端框架     | 3.x                        |
 | IJpay       | 支付SDK开发包 | 项目自动管理，不需要额外处理             |
 
+## 🛠️ 业务系统接入
+> 业务系统想接入支付网关的话，不需要集成到业务系统里，只需要单独部署一份支付系统，然后业务系统通过接口调用即可拥有对应的支付能力，
+不会对原业务系统的架构产生影响。如果是Java项目，可以使用SDK简化接入流程， 其他语言可以参照中的说明使用HTTP接口方式接入。
+
+### Java客户端SDK
+> SDK版本号与支付网关的版本保持一致，如果需要使用，请在pom.xml中添加如下依赖。SDK使用方式参考[SDK使用说明](https://bootx.gitee.io/daxpay/gateway/overview/SDK使用说明.html)。
+
+```xml
+ <!-- 支付SDK -->
+<dependency>
+    <groupId>cn.bootx.platform</groupId>
+    <artifactId>daxpay-single-sdk</artifactId>
+    <version>${latest.version}</version>
+</dependency>
+```
+### SDK调用示例
+> 此处以简单支付接口为例，演示业务系统如何调用支付网关进行支付，其他接口的调用方式类似，具体请参考[支付对接](https://bootx.gitee.io/daxpay/gateway/overview/接口清单.html)。
+
+```java
+package cn.bootx.platform.daxpay.sdk;
+
+import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
+import cn.bootx.platform.daxpay.sdk.model.PayOrderModel;
+import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
+import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
+import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
+import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * 简单支付
+ * @author xxm
+ * @since 2024/2/2
+ */
+public class SimplePayOrderTest {
+
+    @Before
+    public void init() {
+        // 初始化支付配置
+        DaxPayConfig config = DaxPayConfig.builder()
+                .serviceUrl("http://127.0.0.1:9000")
+                // 需要跟网关中配置一致
+                .signSecret("123456")
+                .build();
+        DaxPayKit.initConfig(config);
+    }
+
+    @Test
+    public void simplePay() {
+        // 简单支付参数
+        SimplePayParam param = new SimplePayParam();
+        param.setBusinessNo("P0001");
+        param.setAmount(1);
+        param.setTitle("测试支付宝支付");
+        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setPayWay(PayWayEnum.QRCODE.getCode());
+
+        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param, true);
+        System.out.println(execute);
+        PayOrderModel data = execute.getData();
+        System.out.println(data);
+    }
+}
+```
 
 ## 🍎 系统截图
 
@@ -88,22 +155,24 @@
 ### 支付通道配置
 ![](https://s11.ax1x.com/2024/02/13/pF8s2VS.jpg)
 
-## 💾 路线图
+## 🛣️ 路线图
 [**开发进度和任务池**](/_doc/Task.md)
 
 [**更新记录**](/_doc/ChangeLog.md)
 
 ### 2.0.X版本:
-- [ ] 对账功能剩余比对功能实现
+- [ ] 对账比对功能实现
 - [ ] 支持转账操作
+- [ ] 云闪付支付支持
 - [ ] 微信增加V3版本接口支持
 - [ ] 支付宝增加V3版本接口支持
-- [ ] 钱包功能完善
-- [ ] 储值卡功能完善
-- [ ] 现金支付功能完善
-- [ ] 支付宝进行关闭时，支持通过撤销模式进行订单关闭
+- [x] 钱包功能完善
+- [x] 储值卡功能完善
+- [x] 现金支付功能完善
+- [ ] 支付流水记录功能
 - [ ] 消息通知支持消息中间件模式
 - [ ] 增加验签调试等功能的页面
+- [ ] 支付宝进行关闭时，支持通过撤销模式进行订单关闭
 
 ### 2.1.X版本:
 - [ ] 增加账户金额表
