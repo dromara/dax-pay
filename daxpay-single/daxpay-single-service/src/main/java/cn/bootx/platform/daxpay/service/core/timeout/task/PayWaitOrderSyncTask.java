@@ -33,7 +33,7 @@ public class PayWaitOrderSyncTask {
         // 从超时订单列表中获取到未超时的订单号
         Set<String> keys = repository.getNormalKeysBy30Day();
         for (String key : keys) {
-            LockInfo lock = lockTemplate.lock("payment:sync:" + key,10000,0);
+            LockInfo lock = lockTemplate.lock("payment:sync:" + key,10000,200);
             if (Objects.isNull(lock)){
                 throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
             }

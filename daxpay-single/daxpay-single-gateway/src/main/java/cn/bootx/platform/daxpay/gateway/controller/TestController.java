@@ -32,7 +32,7 @@ public class TestController {
     @GetMapping("/lock1")
 //    @Lock4j(keys = "#name", acquireTimeout = 50)
     public ResResult<String> lock1(String name){
-        LockInfo lock = lockTemplate.lock(name, 10000, 10);
+        LockInfo lock = lockTemplate.lock(name, 10000, 50);
         if (Objects.isNull(lock)){
             throw new BizException("未获取到锁");
         }

@@ -112,7 +112,7 @@ public class PayRefundService {
         ValidationUtil.validateParam(param);
         // ----------------------------- 发起退款操作 --------------------------------------------
         // 加锁
-        LockInfo lock = lockTemplate.lock("payment:refund:" + payOrder.getId());
+        LockInfo lock = lockTemplate.lock("payment:refund:" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("退款处理中，请勿重复操作");
         }

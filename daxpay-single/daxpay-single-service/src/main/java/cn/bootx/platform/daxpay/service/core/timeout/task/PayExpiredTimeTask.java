@@ -40,7 +40,7 @@ public class PayExpiredTimeTask {
 //        log.debug("执行超时取消任务....");
         Set<String> expiredKeys = repository.getExpiredKeys(LocalDateTime.now());
         for (String expiredKey : expiredKeys) {
-            LockInfo lock = lockTemplate.lock("payment:expired:" + expiredKey,10000,0);
+            LockInfo lock = lockTemplate.lock("payment:expired:" + expiredKey,10000,200);
             if (Objects.isNull(lock)){
                 log.warn("支付同步处理中，执行下一个");
                 continue;

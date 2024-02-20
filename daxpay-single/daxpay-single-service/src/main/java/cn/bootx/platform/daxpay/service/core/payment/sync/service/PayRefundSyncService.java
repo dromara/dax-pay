@@ -79,7 +79,7 @@ public class PayRefundSyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public SyncResult syncRefundOrder(PayRefundOrder refundOrder) {
         // 加锁
-        LockInfo lock = lockTemplate.lock("sync:refund:" + refundOrder.getId());
+        LockInfo lock = lockTemplate.lock("sync:refund:" + refundOrder.getId(),10000,200);
         if (Objects.isNull(lock)) {
             throw new RepetitiveOperationException("退款同步处理中，请勿重复操作");
         }

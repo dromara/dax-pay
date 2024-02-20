@@ -89,7 +89,7 @@ public class PaySyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public SyncResult syncPayOrder(PayOrder payOrder) {
         // 加锁
-        LockInfo lock = lockTemplate.lock("sync:payment" + payOrder.getId());
+        LockInfo lock = lockTemplate.lock("sync:payment" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }

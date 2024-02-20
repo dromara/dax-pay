@@ -71,7 +71,7 @@ public class PayService {
 
         String businessNo = payParam.getBusinessNo();
         // 加锁
-        LockInfo lock = lockTemplate.lock("payment:pay:" + businessNo);
+        LockInfo lock = lockTemplate.lock("payment:pay:" + businessNo,10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("正在支付中，请勿重复支付");
         }
