@@ -5,8 +5,11 @@ import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
+import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
@@ -37,6 +40,8 @@ public class AliPayStrategy extends AbsPayStrategy {
     private final AliPayService aliPayService;
 
     private final AliPayConfigService alipayConfigService;
+
+    private final AliPayRecordService aliRecordService;
 
     private AliPayConfig alipayConfig;
 
@@ -88,15 +93,12 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
+        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
-        this.getOrder().setAsyncChannel(this.getChannel().getCode());
-    }
-
-    /**
-     * 不使用默认的生成通道支付单方法, 异步支付通道的支付订单自己管理
-     */
-    @Override
-    public void generateChannelOrder() {
+        // 支付完成, 保存记录
+        if (asyncPayInfo.isPayComplete()) {
+            aliRecordService.pay(this.getOrder(), this.getChannelOrder());
+        }
     }
 
     /**

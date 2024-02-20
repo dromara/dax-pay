@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.refund;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliRefundRepairStrategy extends AbsRefundRepairStrategy {
 
+    private final AliPayRecordService aliPayRecordService;
+
     /**
      * 策略标识
      */
@@ -43,5 +46,7 @@ public class AliRefundRepairStrategy extends AbsRefundRepairStrategy {
         super.doSuccessHandler();
         // 异步支付需要追加完成时间
         this.getRefundChannelOrder().setRefundTime(finishTime);
+        // 记录退款成功记录
+        aliPayRecordService.refund(this.getRefundOrder(), this.getRefundChannelOrder());
     }
 }

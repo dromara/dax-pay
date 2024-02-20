@@ -5,12 +5,15 @@ import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRefundService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -26,6 +29,7 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
 
     private final AliPayConfigService alipayConfigService;
     private final AliPayRefundService aliRefundService;
+    private final AliPayRecordService aliRecordService;;
     private final PayChannelOrderService payChannelOrderService;
     /**
      * 策略标识
@@ -68,5 +72,9 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
 
         // 更新支付通道订单中的属性
         payChannelOrderService.updateAsyncPayRefund(this.getPayChannelOrder(), this.getRefundChannelOrder());
+        // 如果退款完成, 保存流水记录
+        if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), refundStatusEnum.getCode())) {
+            aliRecordService.refund(this.getRefundOrder(), this.getRefundChannelOrder());
+        }
     }
 }

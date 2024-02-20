@@ -32,7 +32,6 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
 
     /**
      * 回调处理入口
-     * TODO 需要处理异常情况进行保存
      */
     public String callback(Map<String, String> params) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();

@@ -6,6 +6,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayRecordService;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,8 @@ public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
     private final WeChatPayConfigService weChatPayConfigService;
 
     private final PayChannelOrderManager payChannelOrderManager;
+
+    private final WeChatPayRecordService weChatPayRecordService;
 
     private WeChatPayConfig weChatPayConfig;
 
@@ -62,6 +65,8 @@ public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
         this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode())
                 .setPayTime(payTime);
         payChannelOrderManager.updateById(this.getChannelOrder());
+        // 保存流水记录
+        weChatPayRecordService.pay(this.getOrder(), this.getChannelOrder());
     }
 
     /**

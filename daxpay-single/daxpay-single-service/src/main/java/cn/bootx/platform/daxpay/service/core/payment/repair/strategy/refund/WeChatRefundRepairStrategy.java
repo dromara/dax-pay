@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.refund;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,9 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @RequiredArgsConstructor
 public class WeChatRefundRepairStrategy extends AbsRefundRepairStrategy {
+
+    private final WeChatPayRecordService wechatPayRecordService;
+
     /**
      * 策略标识
      */
@@ -42,5 +46,7 @@ public class WeChatRefundRepairStrategy extends AbsRefundRepairStrategy {
         super.doSuccessHandler();
         // 异步支付需要追加完成时间
         this.getRefundChannelOrder().setRefundTime(finishTime);
+        // 记录退款成功记录
+        wechatPayRecordService.refund(this.getRefundOrder(), this.getRefundChannelOrder());
     }
 }

@@ -1,7 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.convert;
 
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayRecord;
 import cn.bootx.platform.daxpay.service.dto.channel.wechat.WeChatPayConfigDto;
+import cn.bootx.platform.daxpay.service.dto.channel.wechat.WeChatPayRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayConfigParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -18,6 +20,8 @@ public interface WeChatConvert {
     WeChatConvert CONVERT = Mappers.getMapper(WeChatConvert.class);
 
     WeChatPayConfig convert(WeChatPayConfigParam in);
+
+    WeChatPayRecordDto convert(WeChatPayRecord in);
 
     WeChatPayConfigDto convert(WeChatPayConfig in);
 

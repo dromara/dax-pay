@@ -6,6 +6,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRecordService;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,8 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
     private final AliPayCloseService closeService;
 
     private final AliPayConfigService aliPayConfigService;
+
+    private final AliPayRecordService aliRecordService;
 
     private final PayChannelOrderManager payChannelOrderManager;
 
@@ -61,6 +64,8 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
         this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode())
                 .setPayTime(payTime);
         payChannelOrderManager.updateById(this.getChannelOrder());
+        // 支付完成, 保存记录
+        aliRecordService.pay(this.getOrder(), this.getChannelOrder());
     }
 
     /**

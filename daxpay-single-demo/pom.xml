@@ -32,7 +32,7 @@
             <version>${bootx-platform.version}</version>
         </dependency>
 
-        <!-- 支付SDK 结算台 -->
+        <!-- 支付SDK -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>daxpay-single-sdk</artifactId>

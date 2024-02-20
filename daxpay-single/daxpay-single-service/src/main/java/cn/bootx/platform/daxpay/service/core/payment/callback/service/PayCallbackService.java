@@ -77,7 +77,7 @@ public class PayCallbackService {
      */
     private void success(PayOrder payOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        // 回调时间超出了支付单超时时间, 记录一下, 不做处理 TODO 这块应该把订单给当成正常结束给处理了,
+        // 回调时间超出了支付单超时时间, 记录一下, 不做处理 TODO 考虑不全, 需要做退款or人工处理
         if (Objects.nonNull(payOrder.getExpiredTime())
                 && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setMsg("回调时间超出了支付单支付有效时间");

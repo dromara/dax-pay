@@ -201,8 +201,7 @@ public class WeChatPayService {
         String errCode = result.get(WeChatPayCode.ERR_CODE);
         // 支付成功处理,
         if (Objects.equals(resultCode, WeChatPayCode.PAY_SUCCESS)) {
-            asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID))
-                    .setPayComplete(true);
+            asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID)).setPayComplete(true);
             return;
         }
         // 支付中, 发起轮训同步
