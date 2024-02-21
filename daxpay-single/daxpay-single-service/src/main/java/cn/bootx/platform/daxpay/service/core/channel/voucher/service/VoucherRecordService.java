@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherRecordMa
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherRecord;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.voucher.VoucherRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.voucher.VoucherRecordQuery;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class VoucherRecordService {
     /**
      * 退款保存
      */
-    public void refund(PayRefundChannelOrder channelOrder, String title, Voucher voucher){
+    public void refund(RefundChannelOrder channelOrder, String title, Voucher voucher){
         VoucherRecord voucherRecord = new VoucherRecord()
                 .setTitle(title)
                 .setType(VoucherRecordTypeEnum.REFUND.getCode())

@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import cn.hutool.json.JSONUtil;
@@ -96,7 +96,7 @@ public class AliPaySyncService {
      * 退款同步查询
      * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
-    public RefundGatewaySyncResult syncRefundStatus(PayRefundOrder refundOrder) {
+    public RefundGatewaySyncResult syncRefundStatus(RefundOrder refundOrder) {
         RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
         try {
             AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();

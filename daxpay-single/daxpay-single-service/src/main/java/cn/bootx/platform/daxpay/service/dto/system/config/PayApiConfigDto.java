@@ -40,7 +40,7 @@ public class PayApiConfigDto extends BaseDto {
     @Schema(description = "是否开启回调通知")
     private boolean notice;
 
-    @Schema(description = "默认回调地址")
+    @Schema(description = "默认通知回调地址")
     private String noticeUrl;
 
     @Schema(description = "请求参数是否签名")

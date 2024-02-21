@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.service.code.CashRecordTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.cash.dao.CashRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.cash.entity.CashRecord;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.cash.CashRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.cash.CashRecordQuery;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class CashRecordService {
     /**
      * 退款保存
      */
-    public void refund(PayRefundChannelOrder channelOrder, String title){
+    public void refund(RefundChannelOrder channelOrder, String title){
         CashRecord record = new CashRecord()
                 .setTitle(title)
                 .setType(CashRecordTypeEnum.REFUND.getCode())

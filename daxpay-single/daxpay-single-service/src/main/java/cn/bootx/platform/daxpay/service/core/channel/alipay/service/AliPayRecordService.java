@@ -9,8 +9,8 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayRecordMana
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayRecord;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.alipay.AliPayRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayRecordQuery;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class AliPayRecordService {
     /**
      * 退款
      */
-    public void refund(PayRefundOrder order, PayRefundChannelOrder channelOrder){
+    public void refund(RefundOrder order, RefundChannelOrder channelOrder){
         AliPayRecord aliPayRecord = new AliPayRecord()
                 .setType(AliPayRecordTypeEnum.PAY.getCode())
                 .setTitle(order.getTitle())

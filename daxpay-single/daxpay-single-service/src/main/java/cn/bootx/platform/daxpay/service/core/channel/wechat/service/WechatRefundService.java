@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import com.ijpay.core.enums.SignType;
@@ -39,7 +39,7 @@ public class WechatRefundService {
      * 退款方法
      * 微信需要同时传输订单金额或退款金额
      */
-    public void refund(PayRefundOrder refundOrder, int amount, PayChannelOrder orderChannel, WeChatPayConfig weChatPayConfig) {
+    public void refund(RefundOrder refundOrder, int amount, PayChannelOrder orderChannel, WeChatPayConfig weChatPayConfig) {
         String refundFee = String.valueOf(amount);
         String totalFee = String.valueOf(orderChannel.getAmount());
         // 设置退款信息

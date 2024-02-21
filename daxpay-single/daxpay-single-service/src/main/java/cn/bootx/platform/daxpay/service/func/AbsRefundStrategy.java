@@ -6,8 +6,8 @@ import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,7 +27,7 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     private PayOrder payOrder = null;
 
     /** 退款订单 已经持久化, 后续需要更新 */
-    private PayRefundOrder refundOrder = null;
+    private RefundOrder refundOrder = null;
 
     /** 当前通道的订单 */
     private PayChannelOrder payChannelOrder = null;
@@ -39,7 +39,7 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     private RefundChannelParam refundChannelParam = null;
 
     /** 当前通道的退款订单 未持久化, 需要后续更新 */
-    private PayRefundChannelOrder refundChannelOrder;
+    private RefundChannelOrder refundChannelOrder;
 
     /**
      * 初始化参数
@@ -96,7 +96,7 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     public void generateChannelOrder() {
         int refundableAmount = this.getPayChannelOrder().getRefundableBalance() - this.getRefundChannelParam().getAmount();
 
-        this.refundChannelOrder = new PayRefundChannelOrder()
+        this.refundChannelOrder = new RefundChannelOrder()
                 .setPayChannelId(this.getPayChannelOrder().getId())
                 .setAsync(this.getPayChannelOrder().isAsync())
                 .setChannel(this.getPayChannelOrder().getChannel())

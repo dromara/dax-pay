@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @DbTable(comment = "支付退款通道订单")
 @Accessors(chain = true)
 @TableName("pay_refund_channel_order")
-public class PayRefundChannelOrder extends MpCreateEntity implements EntityBaseFunction<RefundChannelOrderDto> {
+public class RefundChannelOrder extends MpCreateEntity implements EntityBaseFunction<RefundChannelOrderDto> {
 
     @DbColumn(comment = "关联退款id")
     private Long refundId;

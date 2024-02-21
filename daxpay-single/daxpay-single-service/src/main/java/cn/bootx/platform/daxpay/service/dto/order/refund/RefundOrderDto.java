@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "退款记录")
-public class PayRefundOrderDto extends BaseDto {
+public class RefundOrderDto extends BaseDto {
 
     @Schema(description = "支付号")
     private Long paymentId;

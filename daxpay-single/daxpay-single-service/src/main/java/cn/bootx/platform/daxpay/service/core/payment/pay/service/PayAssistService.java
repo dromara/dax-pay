@@ -6,6 +6,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
+import cn.bootx.platform.daxpay.service.common.context.ApiInfoLocal;
 import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
@@ -95,16 +96,26 @@ public class PayAssistService {
      */
     private void initNotice(PayParam payParam){
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
+        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
-        // 异步回调
-        if (!payParam.isNotNotify()){
-            noticeInfo.setNotifyUrl(payParam.getReturnUrl());
-            if (StrUtil.isNotBlank(payParam.getNotifyUrl())){
+        // 异步回调为开启状态
+        if (!payParam.isNotNotify() && apiInfo.isNotice()){
+            // 首先读取请求参数
+            noticeInfo.setNotifyUrl(payParam.getNotifyUrl());
+            // 读取接口配置
+            if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
+                noticeInfo.setNotifyUrl(apiInfo.getNoticeUrl());
+            }
+            // 读取平台配置
+            if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
                 noticeInfo.setNotifyUrl(platform.getNotifyUrl());
             }
         }
         // 同步回调
-        noticeInfo.setReturnUrl(payParam.getReturnUrl());
+        noticeInfo.setNotifyUrl(payParam.getReturnUrl());
+        if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
+            noticeInfo.setNotifyUrl(platform.getNotifyUrl());
+        }
         // 退出回调地址
         noticeInfo.setQuitUrl(payParam.getQuitUrl());
     }
@@ -150,19 +161,24 @@ public class PayAssistService {
      * @param payParam 支付参数
      * @param paymentId 支付订单id
      */
-    public void updatePayOrderExtra(PayParam payParam,Long paymentId){
+    public PayOrderExtra updatePayOrderExtra(PayParam payParam,Long paymentId){
+        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
         PayOrderExtra payOrderExtra = payOrderExtraManager.findById(paymentId)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
-        String notifyUrl = PaymentContextLocal.get().getNoticeInfo().getNotifyUrl();
-        String returnUrl = PaymentContextLocal.get().getNoticeInfo().getReturnUrl();
+
+        NoticeLocal noticeInfo = PaymentContextLocal.get()
+                .getNoticeInfo();
+        String notifyUrl = noticeInfo.getNotifyUrl();
+        String returnUrl = noticeInfo.getReturnUrl();
+
         payOrderExtra.setReqTime(payParam.getReqTime())
                 .setReqSign(payParam.getSign())
-                .setNotNotify(payParam.isNotNotify())
                 .setNotifyUrl(notifyUrl)
                 .setReturnUrl(returnUrl)
+                .setNoticeSign(apiInfo.isNoticeSign())
                 .setAttach(payParam.getAttach())
                 .setClientIp(payParam.getClientIp());
-        payOrderExtraManager.updateById(payOrderExtra);
+        return payOrderExtraManager.updateById(payOrderExtra);
     }
 
     /**

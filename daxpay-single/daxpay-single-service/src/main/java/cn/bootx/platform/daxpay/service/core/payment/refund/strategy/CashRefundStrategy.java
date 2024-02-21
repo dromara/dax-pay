@@ -19,7 +19,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class CashPayRefundStrategy extends AbsRefundStrategy {
+public class CashRefundStrategy extends AbsRefundStrategy {
     private final CashRecordService cashRecordService;
 
     /**

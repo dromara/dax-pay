@@ -60,6 +60,7 @@ public class PayApiConfigService {
                 .setReqSign(api.isReqSign())
                 .setResSign(api.isResSign())
                 .setNotice(api.isNotice())
+                .setNoticeUrl(api.getNoticeUrl())
                 .setNoticeSign(api.isNoticeSign())
                 .setRecord(api.isRecord());
     }

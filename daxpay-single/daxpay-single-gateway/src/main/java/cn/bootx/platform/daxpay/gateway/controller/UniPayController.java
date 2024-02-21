@@ -10,8 +10,8 @@ import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.pay.service.PayService;
-import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
-import cn.bootx.platform.daxpay.service.core.payment.sync.service.PayRefundSyncService;
+import cn.bootx.platform.daxpay.service.core.payment.refund.service.RefundService;
+import cn.bootx.platform.daxpay.service.core.payment.sync.service.RefundSyncService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,10 +34,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UniPayController {
     private final PayService payService;
-    private final PayRefundService payRefundService;
+    private final RefundService refundService;
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
-    private final PayRefundSyncService payRefundSyncService;
+    private final RefundSyncService refundSyncService;
 
 
     @CountTime
@@ -70,7 +70,7 @@ public class UniPayController {
     @Operation(summary = "统一退款接口")
     @PostMapping("/refund")
     public DaxResult<RefundResult> refund(@RequestBody RefundParam param){
-        return DaxRes.ok(payRefundService.refund(param));
+        return DaxRes.ok(refundService.refund(param));
     }
 
     @CountTime
@@ -78,7 +78,7 @@ public class UniPayController {
     @Operation(summary = "简单退款接口")
     @PostMapping("/simpleRefund")
     public DaxResult<RefundResult> simpleRefund(@RequestBody SimpleRefundParam param){
-        return DaxRes.ok(payRefundService.simpleRefund(param));
+        return DaxRes.ok(refundService.simpleRefund(param));
     }
 
     @CountTime
@@ -94,7 +94,7 @@ public class UniPayController {
     @Operation(summary = "退款同步接口")
     @PostMapping("/syncRefund")
     public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){
-        return DaxRes.ok(payRefundSyncService.sync(param));
+        return DaxRes.ok(refundSyncService.sync(param));
     }
 
 }

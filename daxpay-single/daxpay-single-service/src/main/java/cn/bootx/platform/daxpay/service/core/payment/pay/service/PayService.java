@@ -12,6 +12,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
 import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
@@ -220,18 +221,22 @@ public class PayService {
         // 5.2支付发起成功处理
         payStrategyList.forEach(AbsPayStrategy::doSuccessHandler);
 
-        // 6.1 如果异步支付完成, 进行订单完成处理, 并触发通知
+        // 6.1 如果异步支付完成, 进行订单完成处理
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         if (asyncPayInfo.isPayComplete()) {
             payOrder.setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
                     .setStatus(SUCCESS.getCode())
                     .setPayTime(LocalDateTime.now());
-            clientNoticeService.registerPayNotice(payOrder,null,null);
         }
 
         // 6.2 更新支付订单和扩展参数
         payOrderService.updateById(payOrder);
-        payAssistService.updatePayOrderExtra(payParam,payOrder.getId());
+        PayOrderExtra payOrderExtra = payAssistService.updatePayOrderExtra(payParam, payOrder.getId());
+
+        // 订单完成, 触发通知
+        if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())) {
+            clientNoticeService.registerPayNotice(payOrder, payOrderExtra,null);
+        }
 
         // 7. 组装返回参数
         return PayBuilder.buildPayResultByPayOrder(payOrder);

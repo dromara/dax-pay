@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
-import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayRefundCallbackService;
+import cn.bootx.platform.daxpay.service.core.payment.callback.service.RefundCallbackService;
 import cn.bootx.platform.daxpay.service.core.record.callback.entity.PayCallbackRecord;
 import cn.bootx.platform.daxpay.service.core.record.callback.service.PayCallbackRecordService;
 import cn.hutool.json.JSONUtil;
@@ -28,7 +28,7 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
     @Resource
     private PayCallbackService payCallbackService;
     @Resource
-    private PayRefundCallbackService refundCallbackService;
+    private RefundCallbackService refundCallbackService;
 
     /**
      * 回调处理入口

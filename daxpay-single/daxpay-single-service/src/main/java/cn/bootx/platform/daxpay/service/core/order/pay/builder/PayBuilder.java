@@ -74,13 +74,11 @@ public class PayBuilder {
         PayOrderExtra payOrderExtra = new PayOrderExtra()
                 .setClientIp(payParam.getClientIp())
                 .setDescription(payParam.getDescription())
-                .setNotNotify(payParam.isNotNotify())
                 .setNotifyUrl(noticeInfo.getNotifyUrl())
                 .setReturnUrl(noticeInfo.getReturnUrl())
                 .setReqSign(payParam.getSign())
                 .setReqSignType(platform.getSignType())
                 .setAttach(payParam.getAttach())
-                .setApiVersion(payParam.getVersion())
                 .setReqTime(payParam.getReqTime());
         payOrderExtra.setId(paymentId);
         return payOrderExtra;

@@ -5,8 +5,8 @@ import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.RefundRepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.RefundRepairService;
 import com.baomidou.lock.LockInfo;
@@ -18,15 +18,15 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 /**
- * 支付退款回调
+ * 退款回调
  * @author xxm
  * @since 2024/1/24
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayRefundCallbackService {
-    private final PayRefundOrderManager refundOrderManager;
+public class RefundCallbackService {
+    private final RefundOrderManager refundOrderManager;
 
     private final RefundRepairService reflectionService;
 
@@ -47,7 +47,7 @@ public class PayRefundCallbackService {
         }
         try {
             // 获取退款单
-            PayRefundOrder refundOrder = refundOrderManager.findById(callbackInfo.getOrderId()).orElse(null);
+            RefundOrder refundOrder = refundOrderManager.findById(callbackInfo.getOrderId()).orElse(null);
             // 退款单不存在,记录回调记录
             if (Objects.isNull(refundOrder)) {
                 callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND).setMsg("退款单不存在,记录回调记录");

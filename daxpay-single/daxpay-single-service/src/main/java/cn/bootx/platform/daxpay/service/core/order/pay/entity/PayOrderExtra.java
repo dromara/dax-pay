@@ -32,29 +32,22 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
     @DbColumn(comment = "描述")
     private String description;
 
-    /** 支付终端ip */
-    @DbColumn(comment = "支付终端ip")
-    private String clientIp;
+    /** 同步跳转地址, 以最后一次为准 */
+    @DbColumn(comment = "同步跳转地址")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String returnUrl;
 
-    /** 是否不需要异步通知，以最后一次为准 */
-    @DbColumn(comment = "是否不需要异步通知")
-    private boolean notNotify;
+    @DbColumn(comment = "回调通知时是否需要进行签名")
+    private boolean noticeSign;
 
     /** 异步通知地址 */
     @DbColumn(comment = "异步通知地址，以最后一次为准")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
-    /** 同步调转地址 */
-    @DbColumn(comment = "同步调转地址，以最后一次为准")
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String returnUrl;
-
-    @DbColumn(comment = "是否需要通知客户系统")
-    private boolean notice;
-
-    @DbColumn(comment = "回调通知时是否需要进行签名")
-    private boolean noticeSign;
+    /** 商户扩展参数,回调时会原样返回 */
+    @DbColumn(comment = "商户扩展参数")
+    private String attach;
 
     /** 请求签名类型 */
     @DbColumn(comment = "签名类型")
@@ -68,13 +61,19 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
     @DbColumn(comment = "商户扩展参数")
     private String attach;
 
-    /** API版本号 */
-    @DbColumn(comment = "API版本号")
-    private String apiVersion;
-
     /** 请求时间，时间戳转时间, 以最后一次为准 */
     @DbColumn(comment = "请求时间，传输时间戳，以最后一次为准")
     private LocalDateTime reqTime;
+
+    /** 支付终端ip */
+    @DbColumn(comment = "支付终端ip")
+    private String clientIp;
+
+
+    /** 请求链路ID */
+    @DbColumn(comment = "请求链路ID")
+    private String reqId;
+
 
     /** 错误码 */
     @DbColumn(comment = "错误码")

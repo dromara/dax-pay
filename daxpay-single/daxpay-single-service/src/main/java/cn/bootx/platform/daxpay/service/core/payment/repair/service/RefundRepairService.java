@@ -12,10 +12,11 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
+import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
 import cn.bootx.platform.daxpay.service.core.payment.repair.factory.RefundRepairStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.RefundRepairResult;
 import cn.bootx.platform.daxpay.service.core.record.repair.entity.PayRepairRecord;
@@ -45,11 +46,13 @@ public class RefundRepairService {
 
     private final PayOrderQueryService payOrderQueryService;
 
+    private final ClientNoticeService clientNoticeService;
+
     private final PayChannelOrderManager payChannelOrderManager;
 
-    private final PayRefundOrderManager refundOrderManager;
+    private final RefundOrderManager refundOrderManager;
 
-    private final PayRefundChannelOrderManager refundChannelOrderManager;
+    private final RefundChannelOrderManager refundChannelOrderManager;
 
     private final PayRepairRecordService recordService;
 
@@ -57,7 +60,7 @@ public class RefundRepairService {
      * 修复退款单
      */
     @Transactional(rollbackFor = Exception.class)
-    public RefundRepairResult repair(PayRefundOrder refundOrder, RefundRepairWayEnum repairType){
+    public RefundRepairResult repair(RefundOrder refundOrder, RefundRepairWayEnum repairType){
 
         // 获取关联支付单
         PayOrder payOrder = payOrderQueryService.findById(refundOrder.getPaymentId())
@@ -67,17 +70,17 @@ public class RefundRepairService {
                 .stream()
                 .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
         // 异步通道退款单
-        Map<String, PayRefundChannelOrder> refundChannelOrderMap = refundChannelOrderManager.findAllByRefundId(refundOrder.getId())
+        Map<String, RefundChannelOrder> refundChannelOrderMap = refundChannelOrderManager.findAllByRefundId(refundOrder.getId())
                 .stream()
-                .collect(Collectors.toMap(PayRefundChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
+                .collect(Collectors.toMap(RefundChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
 
         // 2 初始化修复参数
         List<String> channels = new ArrayList<>(payChannelOrderMap.keySet());
         List<AbsRefundRepairStrategy> repairStrategies = RefundRepairStrategyFactory.createAsyncLast(channels);
         for (AbsRefundRepairStrategy repairStrategy : repairStrategies) {
             PayChannelOrder payChannelOrder = payChannelOrderMap.get(repairStrategy.getChannel().getCode());
-            PayRefundChannelOrder payRefundChannelOrder = refundChannelOrderMap.get(repairStrategy.getChannel().getCode());
-            repairStrategy.initRepairParam(refundOrder, payRefundChannelOrder, payOrder, payChannelOrder);
+            RefundChannelOrder refundChannelOrder = refundChannelOrderMap.get(repairStrategy.getChannel().getCode());
+            repairStrategy.initRepairParam(refundOrder, refundChannelOrder, payOrder, payChannelOrder);
         }
 
         // 根据不同的类型执行对应的修复逻辑
@@ -103,7 +106,7 @@ public class RefundRepairService {
     /**
      * 退款成功, 更新退款单和支付单
      */
-    private RefundRepairResult success(PayRefundOrder refundOrder, PayOrder payOrder, List<AbsRefundRepairStrategy> repairStrategies) {
+    private RefundRepairResult success(RefundOrder refundOrder, PayOrder payOrder, List<AbsRefundRepairStrategy> repairStrategies) {
         RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
         // 订单相关状态
         PayStatusEnum beforePayStatus = PayStatusEnum.findByCode(payOrder.getStatus());
@@ -127,7 +130,7 @@ public class RefundRepairService {
         List<PayChannelOrder> payChannelOrders = repairStrategies.stream()
                 .map(AbsRefundRepairStrategy::getPayChannelOrder)
                 .collect(Collectors.toList());
-        List<PayRefundChannelOrder> refundChannelOrders = repairStrategies
+        List<RefundChannelOrder> refundChannelOrders = repairStrategies
                 .stream()
                 .map(AbsRefundRepairStrategy::getRefundChannelOrder)
                 .collect(Collectors.toList());
@@ -137,6 +140,12 @@ public class RefundRepairService {
         refundOrderManager.updateById(refundOrder);
         payChannelOrderManager.updateAllById(payChannelOrders);
         refundChannelOrderManager.updateAllById(refundChannelOrders);
+
+        // 发送通知
+        List<String> list = Arrays.asList(PayStatusEnum.REFUNDING.getCode(), PayStatusEnum.REFUNDED.getCode());
+        if (list.contains(payOrder.getStatus())){
+            clientNoticeService.registerRefundNotice(refundOrder, null, refundChannelOrders);
+        }
 
         return new RefundRepairResult()
                 .setBeforePayStatus(beforePayStatus)
@@ -149,7 +158,7 @@ public class RefundRepairService {
     /**
      * 退款失败, 关闭退款单并将失败的退款金额归还回订单
      */
-    private RefundRepairResult close(PayRefundOrder refundOrder, PayOrder payOrder, List<AbsRefundRepairStrategy> repairStrategies) {
+    private RefundRepairResult close(RefundOrder refundOrder, PayOrder payOrder, List<AbsRefundRepairStrategy> repairStrategies) {
         // 要返回的状态
         RefundRepairResult repairResult = new RefundRepairResult();
 
@@ -182,7 +191,7 @@ public class RefundRepairService {
         List<PayChannelOrder> payChannelOrders = repairStrategies.stream()
                 .map(AbsRefundRepairStrategy::getPayChannelOrder)
                 .collect(Collectors.toList());
-        List<PayRefundChannelOrder> refundChannelOrders = repairStrategies
+        List<RefundChannelOrder> refundChannelOrders = repairStrategies
                 .stream()
                 .map(AbsRefundRepairStrategy::getRefundChannelOrder)
                 .collect(Collectors.toList());
@@ -224,7 +233,7 @@ public class RefundRepairService {
      * 退款订单的修复记录
      * 退款中 -> 退款成功
      */
-    private PayRepairRecord refundRepairRecord(PayRefundOrder refundOrder, RefundRepairWayEnum repairType, RefundRepairResult repairResult){
+    private PayRepairRecord refundRepairRecord(RefundOrder refundOrder, RefundRepairWayEnum repairType, RefundRepairResult repairResult){
         // 修复后的状态
         String afterStatus = Optional.ofNullable(repairResult.getAfterRefundStatus()).map(RefundStatusEnum::getCode).orElse(null);
         // 修复发起来源

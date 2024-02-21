@@ -8,13 +8,13 @@ import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.param.pay.RefundSyncParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
-import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderQueryService;
-import cn.bootx.platform.daxpay.service.core.payment.refund.service.PayRefundService;
-import cn.bootx.platform.daxpay.service.core.payment.sync.service.PayRefundSyncService;
-import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
+import cn.bootx.platform.daxpay.service.core.order.refund.service.RefundOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.payment.refund.service.RefundService;
+import cn.bootx.platform.daxpay.service.core.payment.sync.service.RefundSyncService;
+import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderRefundParam;
-import cn.bootx.platform.daxpay.service.param.order.PayRefundOrderQuery;
+import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
 import cn.hutool.extra.servlet.ServletUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,21 +34,21 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/order/refund")
 @RequiredArgsConstructor
-public class PayRefundOrderController {
-    private final PayRefundOrderQueryService payRefundQueryService;
-    private final PayRefundService payRefundService;
-    private final PayRefundSyncService refundSyncService;
+public class RefundOrderController {
+    private final RefundOrderQueryService payRefundQueryService;
+    private final RefundService refundService;
+    private final RefundSyncService refundSyncService;
 
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
-    public ResResult<PageResult<PayRefundOrderDto>> page(PageParam pageParam, PayRefundOrderQuery query){
+    public ResResult<PageResult<RefundOrderDto>> page(PageParam pageParam, RefundOrderQuery query){
         return Res.ok(payRefundQueryService.page(pageParam, query));
     }
 
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
-    public ResResult<PayRefundOrderDto> findById(Long id){
+    public ResResult<RefundOrderDto> findById(Long id){
         return Res.ok(payRefundQueryService.findById(id));
     }
 
@@ -77,7 +77,7 @@ public class PayRefundOrderController {
         refundParam.setRefundChannels(param.getRefundChannels());
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
-        payRefundService.refund(refundParam);
+        refundService.refund(refundParam);
         return Res.ok();
     }
 

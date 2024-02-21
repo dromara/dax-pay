@@ -9,8 +9,8 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayRecordM
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayRecord;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.wechat.WeChatPayRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayRecordQuery;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class WeChatPayRecordService {
     /**
      * 退款
      */
-    public void refund(PayRefundOrder order, PayRefundChannelOrder channelOrder){
+    public void refund(RefundOrder order, RefundChannelOrder channelOrder){
         WeChatPayRecord weChatPayRecord = new WeChatPayRecord()
                 .setType(AliPayRecordTypeEnum.PAY.getCode())
                 .setTitle(order.getTitle())

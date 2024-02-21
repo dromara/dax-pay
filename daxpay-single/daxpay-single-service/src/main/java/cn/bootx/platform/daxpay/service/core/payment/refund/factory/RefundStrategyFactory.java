@@ -22,7 +22,7 @@ import static cn.bootx.platform.daxpay.code.PayChannelEnum.ASYNC_TYPE_CODE;
  * @author xxm
  * @since 2023/7/4
  */
-public class PayRefundStrategyFactory {
+public class RefundStrategyFactory {
 
     /**
      * 根据传入的支付通道创建策略
@@ -34,22 +34,22 @@ public class PayRefundStrategyFactory {
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(refundChannelParam.getChannel());
         switch (channelEnum) {
             case ALI:
-                strategy = SpringUtil.getBean(AliPayRefundStrategy.class);
+                strategy = SpringUtil.getBean(AliRefundStrategy.class);
                 break;
             case WECHAT:
-                strategy = SpringUtil.getBean(WeChatPayRefundStrategy.class);
+                strategy = SpringUtil.getBean(WeChatRefundStrategy.class);
                 break;
             case UNION_PAY:
-                strategy = SpringUtil.getBean(UnionPayRefundStrategy.class);
+                strategy = SpringUtil.getBean(UnionRefundStrategy.class);
                 break;
             case CASH:
-                strategy = SpringUtil.getBean(CashPayRefundStrategy.class);
+                strategy = SpringUtil.getBean(CashRefundStrategy.class);
                 break;
             case WALLET:
-                strategy = SpringUtil.getBean(WalletPayRefundStrategy.class);
+                strategy = SpringUtil.getBean(WalletRefundStrategy.class);
                 break;
             case VOUCHER:
-                strategy = SpringUtil.getBean(VoucherPayRefundStrategy.class);
+                strategy = SpringUtil.getBean(VoucherRefundStrategy.class);
                 break;
             default:
                 throw new PayUnsupportedMethodException();

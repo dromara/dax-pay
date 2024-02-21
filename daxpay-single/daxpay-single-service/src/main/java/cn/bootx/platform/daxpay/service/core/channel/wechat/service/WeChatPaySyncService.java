@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import cn.hutool.core.date.DatePattern;
@@ -102,7 +102,7 @@ public class WeChatPaySyncService {
     /**
      * 退款信息查询
      */
-    public RefundGatewaySyncResult syncRefundStatus(PayRefundOrder refundOrder, WeChatPayConfig weChatPayConfig){
+    public RefundGatewaySyncResult syncRefundStatus(RefundOrder refundOrder, WeChatPayConfig weChatPayConfig){
         RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult();
         Map<String, String> params = RefundQueryModel.builder()
                 .appid(weChatPayConfig.getWxAppId())

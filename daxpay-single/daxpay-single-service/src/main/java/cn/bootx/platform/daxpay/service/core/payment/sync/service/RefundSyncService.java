@@ -12,8 +12,8 @@ import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.RefundRepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.RefundRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.RefundSyncStrategyFactory;
@@ -39,8 +39,8 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayRefundSyncService {
-    private final PayRefundOrderManager refundOrderManager;
+public class RefundSyncService {
+    private final RefundOrderManager refundOrderManager;
 
     private final PaySyncRecordService paySyncRecordService;
 
@@ -54,7 +54,7 @@ public class PayRefundSyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public SyncResult sync(RefundSyncParam param){
         // 先获取退款单
-        PayRefundOrder refundOrder;
+        RefundOrder refundOrder;
         if (Objects.nonNull(param.getRefundId())){
             refundOrder = refundOrderManager.findById(param.getRefundId())
                     .orElseThrow(() -> new PayFailureException("未查询到退款订单"));
@@ -77,7 +77,7 @@ public class PayRefundSyncService {
      * 退款订单信息同步
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public SyncResult syncRefundOrder(PayRefundOrder refundOrder) {
+    public SyncResult syncRefundOrder(RefundOrder refundOrder) {
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:refund:" + refundOrder.getId(),10000,200);
         if (Objects.isNull(lock)) {
@@ -140,7 +140,7 @@ public class PayRefundSyncService {
      * @see RefundSyncStatusEnum 同步返回类型
      * @see RefundStatusEnum 退款单状态
      */
-    private boolean checkSyncStatus(RefundGatewaySyncResult syncResult, PayRefundOrder order){
+    private boolean checkSyncStatus(RefundGatewaySyncResult syncResult, RefundOrder order){
         RefundSyncStatusEnum syncStatus = syncResult.getSyncStatus();
         String orderStatus = order.getStatus();
         // 退款完成
@@ -165,7 +165,7 @@ public class PayRefundSyncService {
     /**
      * 进行退款订单和支付订单的补偿
      */
-    private RefundRepairResult repairHandler(RefundGatewaySyncResult syncResult, PayRefundOrder order){
+    private RefundRepairResult repairHandler(RefundGatewaySyncResult syncResult, RefundOrder order){
         RefundSyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
         RefundRepairResult repair = new RefundRepairResult();
         // 对支付网关同步的结果进行处理
@@ -197,7 +197,7 @@ public class PayRefundSyncService {
      * @param repairOrderNo 修复号
      * @param errorMsg 错误信息
      */
-    private void saveRecord(PayRefundOrder refundOrder, RefundGatewaySyncResult syncResult, boolean repair, String repairOrderNo, String errorMsg){
+    private void saveRecord(RefundOrder refundOrder, RefundGatewaySyncResult syncResult, boolean repair, String repairOrderNo, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setOrderId(refundOrder.getId())
                 .setOrderNo(refundOrder.getRefundNo())

@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.response.AlipayTradeRefundResponse;
@@ -29,7 +29,7 @@ public class AliPayRefundService {
     /**
      * 退款, 调用支付宝退款
      */
-    public void refund(PayRefundOrder refundOrder, int amount) {
+    public void refund(RefundOrder refundOrder, int amount) {
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();
         refundModel.setOutTradeNo(String.valueOf(refundOrder.getPaymentId()));

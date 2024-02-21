@@ -16,7 +16,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class UnionPayRefundStrategy extends AbsRefundStrategy {
+public class UnionRefundStrategy extends AbsRefundStrategy {
     /**
      * 策略标识
      *

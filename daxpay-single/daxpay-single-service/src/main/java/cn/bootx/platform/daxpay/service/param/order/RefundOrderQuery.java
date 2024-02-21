@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
 @Accessors(chain = true)
 @Schema(title = "支付退款查询参数")
-public class PayRefundOrderQuery extends QueryOrder {
+public class RefundOrderQuery extends QueryOrder {
 
     @Schema(description = "退款号")
     private Long id;

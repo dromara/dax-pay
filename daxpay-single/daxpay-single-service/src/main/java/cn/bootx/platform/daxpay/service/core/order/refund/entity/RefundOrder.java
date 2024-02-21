@@ -4,8 +4,8 @@ import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
-import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundOrderConvert;
-import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
+import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderConvert;
+import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @DbTable(comment = "退款订单")
 @TableName(value = "pay_refund_order", autoResultMap = true)
-public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<PayRefundOrderDto> {
+public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<RefundOrderDto> {
 
     /** 关联支付id */
     @DbColumn(comment = "关联支付id")
@@ -77,14 +77,6 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private Integer refundableBalance;
 
-    /** 请求链路ID */
-    @DbColumn(comment = "请求链路ID")
-    private String reqId;
-
-    /** 退款终端ip */
-    @DbColumn(comment = "退款终端ip")
-    private String clientIp;
-
     /** 退款原因 */
     @DbColumn(comment = "退款原因")
     private String reason;
@@ -109,8 +101,8 @@ public class PayRefundOrder extends MpBaseEntity implements EntityBaseFunction<P
     private String errorMsg;
 
     @Override
-    public PayRefundOrderDto toDto() {
-        return PayRefundOrderConvert.CONVERT.convert(this);
+    public RefundOrderDto toDto() {
+        return RefundOrderConvert.CONVERT.convert(this);
     }
 
 }

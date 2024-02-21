@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.core.notice.result;
+package cn.bootx.platform.daxpay.service.core.payment.notice.result;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;

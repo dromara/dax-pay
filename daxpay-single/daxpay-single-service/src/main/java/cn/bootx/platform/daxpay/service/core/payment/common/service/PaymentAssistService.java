@@ -52,9 +52,7 @@ public class PaymentAssistService {
     private void initRequest(PaymentCommonParam paymentCommonParam){
         RequestLocal request = PaymentContextLocal.get().getRequestInfo();
         request.setClientIp(paymentCommonParam.getClientIp())
-//                .setAttach(paymentCommonParam.getAttach())
                 .setSign(paymentCommonParam.getSign())
-                .setVersion(paymentCommonParam.getVersion())
                 .setReqTime(paymentCommonParam.getReqTime())
                 .setReqId(MDC.get(CommonCode.TRACE_ID));
     }

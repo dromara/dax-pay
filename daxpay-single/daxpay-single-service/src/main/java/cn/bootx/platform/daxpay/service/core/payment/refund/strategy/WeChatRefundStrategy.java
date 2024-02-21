@@ -25,7 +25,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class WeChatPayRefundStrategy extends AbsRefundStrategy {
+public class WeChatRefundStrategy extends AbsRefundStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
 

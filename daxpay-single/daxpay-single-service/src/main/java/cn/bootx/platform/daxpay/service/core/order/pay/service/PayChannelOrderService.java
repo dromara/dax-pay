@@ -10,7 +10,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
@@ -94,7 +94,7 @@ public class PayChannelOrderService {
     /**
      * 更新异步支付通道退款余额和状态
      */
-    public void updateAsyncPayRefund(PayChannelOrder payChannelOrder, PayRefundChannelOrder refundChannelOrder){
+    public void updateAsyncPayRefund(PayChannelOrder payChannelOrder, RefundChannelOrder refundChannelOrder){
         // 支付通道订单状态
         if (Objects.equals(refundChannelOrder.getStatus(), RefundStatusEnum.SUCCESS.getCode())){
             // 如果可退金额为0说明已经全部退款

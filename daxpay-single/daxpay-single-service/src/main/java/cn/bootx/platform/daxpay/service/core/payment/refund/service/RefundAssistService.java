@@ -3,21 +3,24 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
+import cn.bootx.platform.daxpay.service.common.context.ApiInfoLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderExtraManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +45,14 @@ import static cn.bootx.platform.daxpay.code.RefundStatusEnum.SUCCESS;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayRefundAssistService {
+public class RefundAssistService {
     private final PayOrderQueryService payOrderQueryService;
 
-    private final PayRefundOrderManager payRefundOrderManager;
+    private final RefundOrderManager refundOrderManager;
 
-    private final PayRefundChannelOrderManager payRefundChannelOrderManager;
+    private final RefundOrderExtraManager refundOrderExtraManager;
+
+    private final RefundChannelOrderManager payRefundChannelOrderManager;
 
     /**
      * 初始化上下文
@@ -62,11 +67,18 @@ public class PayRefundAssistService {
      */
     private void initNotice(RefundParam param) {
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
+        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
-        // 异步回调
-        if (!param.isNotNotify()){
+        // 异步回调为开启状态
+        if (!param.isNotNotify() && apiInfo.isNotice()){
+            // 首先读取请求参数
             noticeInfo.setNotifyUrl(param.getNotifyUrl());
-            if (StrUtil.isNotBlank(param.getNotifyUrl())){
+            // 读取接口配置
+            if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
+                noticeInfo.setNotifyUrl(apiInfo.getNoticeUrl());
+            }
+            // 读取平台配置
+            if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
                 noticeInfo.setNotifyUrl(platform.getNotifyUrl());
             }
         }
@@ -97,9 +109,6 @@ public class PayRefundAssistService {
             if (CollUtil.isEmpty(param.getRefundChannels())) {
                 throw new ValidationFailedException("退款通道参数不能为空");
             }
-//            if (Objects.isNull(param.getRefundNo())) {
-//                throw new ValidationFailedException("部分退款时退款单号必传");
-//            }
         }
 
         // 简单退款校验
@@ -127,7 +136,7 @@ public class PayRefundAssistService {
 
         // 退款号唯一校验
         if (StrUtil.isNotBlank(param.getRefundNo())
-                && payRefundOrderManager.existsByRefundNo(param.getRefundNo())){
+                && refundOrderManager.existsByRefundNo(param.getRefundNo())){
             throw new PayFailureException("退款单号已存在");
         }
     }
@@ -136,7 +145,7 @@ public class PayRefundAssistService {
      * 预先创建退款相关订单并保存, 使用新事务, 防止丢单
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public PayRefundOrder createOrderAndChannel(RefundParam refundParam, PayOrder payOrder, List<PayRefundChannelOrder> refundChannelOrders) {
+    public RefundOrder createOrderAndChannel(RefundParam refundParam, PayOrder payOrder, List<RefundChannelOrder> refundChannelOrders) {
         // 此次的总退款金额
         Integer amount = refundParam.getRefundChannels()
                 .stream()
@@ -145,7 +154,7 @@ public class PayRefundAssistService {
         int refundableBalance = payOrder.getRefundableBalance();
 
         // 生成退款订单
-        PayRefundOrder refundOrder = new PayRefundOrder()
+        RefundOrder refundOrder = new RefundOrder()
                 .setPaymentId(payOrder.getId())
                 .setStatus(RefundStatusEnum.PROGRESS.getCode())
                 .setBusinessNo(payOrder.getBusinessNo())
@@ -154,8 +163,7 @@ public class PayRefundAssistService {
                 .setAmount(amount)
                 .setRefundableBalance(refundableBalance)
                 .setTitle(payOrder.getTitle())
-                .setClientIp(refundParam.getClientIp())
-                .setReqId(PaymentContextLocal.get().getRequestInfo().getReqId());
+                .setReason(refundParam.getReason());
 
         // 退款参数中是否存在异步通道
         RefundChannelParam asyncChannel = refundParam.getRefundChannels()
@@ -175,16 +183,41 @@ public class PayRefundAssistService {
         if(StrUtil.isBlank(refundOrder.getRefundNo())){
             refundOrder.setRefundNo(String.valueOf(refundOrder.getId()));
         }
+
+        RefundOrderExtra refundOrderExtra = this.createRefundOrderExtra(refundParam, refundOrder.getId());
         refundChannelOrders.forEach(r->r.setRefundId(refundOrder.getId()));
         payRefundChannelOrderManager.saveAll(refundChannelOrders);
-        return payRefundOrderManager.save(refundOrder);
+        return refundOrderManager.save(refundOrder);
+    }
+
+    /**
+     * 创建退款扩展订单
+     */
+    public RefundOrderExtra createRefundOrderExtra(RefundParam refundParam, Long refundOrderId){
+        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
+        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
+        NoticeLocal notice = PaymentContextLocal.get().getNoticeInfo();
+        String reqId = PaymentContextLocal.get()
+                .getRequestInfo()
+                .getReqId();
+        RefundOrderExtra orderExtra = new RefundOrderExtra()
+                .setClientIp(refundParam.getClientIp())
+                .setReqId(reqId)
+                .setReqTime(refundParam.getReqTime())
+                .setAttach(refundParam.getAttach())
+                .setReqSign(refundParam.getSign())
+                .setReqSignType(platform.getSignType())
+                .setNoticeSign(apiInfo.isNoticeSign())
+                .setNotifyUrl(notice.getNotifyUrl());
+        orderExtra.setId(refundOrderId);
+        return orderExtra;
     }
 
     /**
      * 更新退款成功信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updateOrderAndChannel(PayRefundOrder refundOrder, List<PayRefundChannelOrder> refundChannelOrders){
+    public void updateOrderAndChannel(RefundOrder refundOrder, List<RefundChannelOrder> refundChannelOrders){
         RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
         refundOrder.setStatus(asyncRefundInfo.getStatus().getCode())
                 .setGatewayOrderNo(asyncRefundInfo.getGatewayOrderNo());
@@ -192,7 +225,7 @@ public class PayRefundAssistService {
         if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
             refundOrder.setRefundTime(LocalDateTime.now());
         }
-        payRefundOrderManager.updateById(refundOrder);
+        refundOrderManager.updateById(refundOrder);
         payRefundChannelOrderManager.updateAllById(refundChannelOrders);
     }
 
@@ -200,7 +233,7 @@ public class PayRefundAssistService {
      * 更新退款错误信息
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void updateOrderByError(PayRefundOrder refundOrder){
+    public void updateOrderByError(RefundOrder refundOrder){
         RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
         refundOrder.setErrorCode(asyncRefundInfo.getErrorCode());
         refundOrder.setErrorMsg(asyncRefundInfo.getErrorMsg());

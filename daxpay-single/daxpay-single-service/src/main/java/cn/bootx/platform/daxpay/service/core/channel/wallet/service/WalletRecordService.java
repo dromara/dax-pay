@@ -9,7 +9,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletRecordMana
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletRecord;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.wallet.WalletRecordQuery;
 import cn.hutool.core.util.StrUtil;
@@ -88,7 +88,7 @@ public class WalletRecordService {
     /**
      * 退款保存
      */
-    public void refund(PayRefundChannelOrder channelOrder, String title, Wallet wallet){
+    public void refund(RefundChannelOrder channelOrder, String title, Wallet wallet){
         WalletRecord walletRecord = new WalletRecord()
                 .setTitle(title)
                 .setType(WalletRecordTypeEnum.REFUND.getCode())

@@ -3,11 +3,11 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.strategy;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
-import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayService;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherQueryService;
-import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherRecordService;
+import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
+import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,21 +17,22 @@ import org.springframework.stereotype.Component;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 储值卡支付退款
+ * 钱包支付退款
  * @author xxm
  * @since 2023/7/5
  */
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class VoucherPayRefundStrategy extends AbsRefundStrategy {
-    private final VoucherPayService voucherPayService;
+public class WalletRefundStrategy extends AbsRefundStrategy {
 
-    private final VoucherQueryService voucherQueryService;
+    private final WalletPayService walletPayService;
 
-    private final VoucherRecordService voucherRecordService;
+    private final WalletRecordService walletRecordService;
 
-    private Voucher voucher;
+    private final WalletQueryService walletQueryService;
+
+    private Wallet wallet;
 
     /**
      * 策略标识
@@ -40,9 +41,8 @@ public class VoucherPayRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public PayChannelEnum getChannel() {
-        return PayChannelEnum.VOUCHER;
+        return PayChannelEnum.WALLET;
     }
-
 
     /**
      * 退款前对处理
@@ -52,21 +52,20 @@ public class VoucherPayRefundStrategy extends AbsRefundStrategy {
         // 从通道扩展参数中取出钱包参数
         if (!this.getPayOrder().isAsyncPay()) {
             String channelExtra = this.getPayChannelOrder().getChannelExtra();
-            VoucherPayParam voucherPayParam = JSONUtil.toBean(channelExtra, VoucherPayParam.class);
-            this.voucher = voucherQueryService.getVoucherByCardNo(voucherPayParam.getCardNo());
+            WalletPayParam walletPayParam = JSONUtil.toBean(channelExtra, WalletPayParam.class);
+            this.wallet = walletQueryService.getWallet(walletPayParam);
         }
     }
 
-
     /**
-     * 退款
+     * 退款操作
      */
     @Override
     public void doRefundHandler() {
         // 不包含异步支付
         if (!this.getPayOrder().isAsyncPay()){
-            voucherPayService.refund(this.getRefundChannelParam().getAmount(), this.voucher);
-            voucherRecordService.refund(this.getRefundChannelOrder(), this.getPayOrder().getTitle(), this.voucher);
+            walletPayService.refund(this.wallet, this.getRefundChannelParam().getAmount());
+            walletRecordService.refund(this.getRefundChannelOrder(), this.getPayOrder().getTitle(), this.wallet);
         }
     }
 
@@ -83,6 +82,5 @@ public class VoucherPayRefundStrategy extends AbsRefundStrategy {
             // 同步支付, 直接标识状态为退款完成
             super.doSuccessHandler();
         }
-
     }
 }

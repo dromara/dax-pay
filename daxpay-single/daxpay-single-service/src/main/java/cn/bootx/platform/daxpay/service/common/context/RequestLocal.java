@@ -14,19 +14,11 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class RequestLocal {
 
-    /** 接口信息 */
-
     /** 客户端ip */
     private String clientIp;
 
-    /** 商户扩展参数,回调时会原样返回 */
-    private String attach;
-
     /** 签名 */
     private String sign;
-
-    /** API版本号 */
-    private String version;
 
     /** 请求时间，时间戳转时间 */
     private LocalDateTime reqTime;

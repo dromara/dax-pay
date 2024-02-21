@@ -8,7 +8,7 @@ import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.order.PayOrderResult;
 import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
 import cn.bootx.platform.daxpay.service.annotation.PaymentApi;
-import cn.bootx.platform.daxpay.service.core.order.refund.service.PayRefundOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.order.refund.service.RefundOrderQueryService;
 import cn.bootx.platform.daxpay.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniQueryController {
 
     private final cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService PayOrderQueryService;
-    private final PayRefundOrderQueryService payRefundQueryService;
+    private final RefundOrderQueryService payRefundQueryService;
 
     @CountTime
     @PaymentApi("queryPayOrder")

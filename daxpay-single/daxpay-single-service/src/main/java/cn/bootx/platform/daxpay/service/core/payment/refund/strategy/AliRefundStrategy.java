@@ -25,7 +25,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class AliPayRefundStrategy extends AbsRefundStrategy {
+public class AliRefundStrategy extends AbsRefundStrategy {
 
     private final AliPayConfigService alipayConfigService;
     private final AliPayRefundService aliRefundService;

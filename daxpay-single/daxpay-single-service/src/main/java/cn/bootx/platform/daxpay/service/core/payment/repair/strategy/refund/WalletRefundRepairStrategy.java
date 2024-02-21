@@ -9,7 +9,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPaySer
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.func.AbsRefundRepairStrategy;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class WalletRefundRepairStrategy extends AbsRefundRepairStrategy {
     @Override
     public void doSuccessHandler() {
         PayChannelOrder payChannelOrder = this.getPayChannelOrder();
-        PayRefundChannelOrder refundChannelOrder = this.getRefundChannelOrder();
+        RefundChannelOrder refundChannelOrder = this.getRefundChannelOrder();
         // 判断是全部退款还是部分退款
         if (Objects.equals(payChannelOrder.getRefundableBalance(), 0)){
             //全部退款

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import lombok.Getter;
 
@@ -13,12 +13,12 @@ import lombok.Getter;
 @Getter
 public abstract class AbsRefundSyncStrategy implements PayStrategy{
 
-    private PayRefundOrder refundOrder;
+    private RefundOrder refundOrder;
 
     /**
      * 初始化参数
      */
-    public void initRefundParam(PayRefundOrder refundOrder){
+    public void initRefundParam(RefundOrder refundOrder){
         this.refundOrder = refundOrder;
     }
 

@@ -18,8 +18,8 @@ public class ApiInfoLocal {
     /** 是否开启通知 */
     private boolean notice;
 
-    /** 只有异步支付才进行通知 */
-    private boolean onlyAsyncNotice;
+    /** 回调地址 */
+    private String noticeUrl;
 
     /** 请求参数是否签名 */
     private boolean reqSign;

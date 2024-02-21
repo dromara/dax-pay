@@ -1,4 +1,4 @@
-# Dax-Pay(开源支付系统)
+# Dromara Dax-Pay(开源支付系统)
 
 <p>
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
@@ -36,7 +36,7 @@
 
 | 项目      | GITEE                                       | GITHUB                                          |
 |---------|---------------------------------------------|-------------------------------------------------|
-| 后端地址    | [GITEE](https://gitee.com/bootx/dax-pay)    | [GITHUB](https://github.com/xxm1995/dax-pay)    |
+| 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    |
 | Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |
 | H5前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |
 

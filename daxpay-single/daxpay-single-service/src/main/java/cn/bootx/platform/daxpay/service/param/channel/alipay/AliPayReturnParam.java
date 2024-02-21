@@ -62,13 +62,6 @@ public class AliPayReturnParam {
     private String app_id;
 
     /**
-     * 调用的接口版本，固定为：1.0。
-     */
-    @Schema(description = "调用的接口版本")
-    @JsonAlias("version")
-    private String version;
-
-    /**
      * 签名算法类型，目前支持 RSA2 和 RSA，推荐使用RSA2
      */
     @Schema(description = "签名算法类型")

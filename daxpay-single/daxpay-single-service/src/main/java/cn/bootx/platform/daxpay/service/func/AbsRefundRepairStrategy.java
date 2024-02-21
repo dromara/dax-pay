@@ -4,8 +4,8 @@ import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import lombok.Getter;
 
 import java.util.Objects;
@@ -17,8 +17,8 @@ import java.util.Objects;
  */
 @Getter
 public abstract class AbsRefundRepairStrategy implements PayStrategy{
-    private PayRefundOrder refundOrder;
-    private PayRefundChannelOrder refundChannelOrder;
+    private RefundOrder refundOrder;
+    private RefundChannelOrder refundChannelOrder;
     private PayOrder payOrder;
     private PayChannelOrder payChannelOrder;
 
@@ -31,8 +31,8 @@ public abstract class AbsRefundRepairStrategy implements PayStrategy{
     /**
      * 初始化参数
      */
-    public void initRepairParam(PayRefundOrder refundOrder,
-                                PayRefundChannelOrder refundChannelOrder,
+    public void initRepairParam(RefundOrder refundOrder,
+                                RefundChannelOrder refundChannelOrder,
                                 PayOrder payOrder,
                                 PayChannelOrder payChannelOrder){
         this.refundOrder = refundOrder;
@@ -46,7 +46,7 @@ public abstract class AbsRefundRepairStrategy implements PayStrategy{
      */
     public void doSuccessHandler(){
         PayChannelOrder payChannelOrder = this.getPayChannelOrder();
-        PayRefundChannelOrder refundChannelOrder = this.getRefundChannelOrder();
+        RefundChannelOrder refundChannelOrder = this.getRefundChannelOrder();
 
         // 判断是全部退款还是部分退款, 更新订单状态
         if (Objects.equals(payChannelOrder.getRefundableBalance(), 0)){
@@ -65,7 +65,7 @@ public abstract class AbsRefundRepairStrategy implements PayStrategy{
      */
     public void doCloseHandler(){
         PayChannelOrder payChannelOrder = this.getPayChannelOrder();
-        PayRefundChannelOrder refundChannelOrder = this.getRefundChannelOrder();
+        RefundChannelOrder refundChannelOrder = this.getRefundChannelOrder();
         int refundableBalance = payChannelOrder.getRefundableBalance() + payChannelOrder.getAmount();
         payChannelOrder.setRefundableBalance(refundableBalance);
         // 判断是支付完成还是部分退款, 修改支付订单状态

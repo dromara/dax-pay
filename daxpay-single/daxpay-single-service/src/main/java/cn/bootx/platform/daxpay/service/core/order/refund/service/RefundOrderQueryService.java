@@ -8,15 +8,15 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.param.pay.QueryRefundParam;
 import cn.bootx.platform.daxpay.result.order.RefundChannelOrderResult;
 import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
-import cn.bootx.platform.daxpay.service.core.order.refund.convert.PayRefundOrderConvert;
+import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderConvert;
 import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderChannelConvert;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.PayRefundOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.PayRefundOrder;
-import cn.bootx.platform.daxpay.service.dto.order.refund.PayRefundOrderDto;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
+import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
-import cn.bootx.platform.daxpay.service.param.order.PayRefundOrderQuery;
+import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -36,24 +36,24 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayRefundOrderQueryService {
+public class RefundOrderQueryService {
 
-    private final PayRefundOrderManager refundOrderManager;
-    private final PayRefundChannelOrderManager refundOrderChannelManager;
+    private final RefundOrderManager refundOrderManager;
+    private final RefundChannelOrderManager refundOrderChannelManager;
 
     /**
      * 分页查询
      */
-    public PageResult<PayRefundOrderDto> page(PageParam pageParam, PayRefundOrderQuery query) {
-        Page<PayRefundOrder> page = refundOrderManager.page(pageParam, query);
+    public PageResult<RefundOrderDto> page(PageParam pageParam, RefundOrderQuery query) {
+        Page<RefundOrder> page = refundOrderManager.page(pageParam, query);
         return MpUtil.convert2DtoPageResult(page);
     }
 
     /**
      * 根据id查询
      */
-    public PayRefundOrderDto findById(Long id) {
-        return refundOrderManager.findById(id).map(PayRefundOrder::toDto)
+    public RefundOrderDto findById(Long id) {
+        return refundOrderManager.findById(id).map(RefundOrder::toDto)
                 .orElseThrow(() -> new DataNotExistException("退款订单不存在"));
     }
 
@@ -61,7 +61,7 @@ public class PayRefundOrderQueryService {
      * 通道退款订单列表查询
      */
     public List<RefundChannelOrderDto> listByChannel(Long refundId){
-        List<PayRefundChannelOrder> refundOrderChannels = refundOrderChannelManager.findAllByRefundId(refundId);
+        List<RefundChannelOrder> refundOrderChannels = refundOrderChannelManager.findAllByRefundId(refundId);
         return refundOrderChannels.stream()
                 .map(RefundOrderChannelConvert.CONVERT::convert)
                 .collect(Collectors.toList());
@@ -72,7 +72,7 @@ public class PayRefundOrderQueryService {
      */
     public RefundChannelOrderDto findChannelById(Long id) {
         return refundOrderChannelManager.findById(id)
-                .map(PayRefundChannelOrder::toDto)
+                .map(RefundChannelOrder::toDto)
                 .orElseThrow(() -> new DataNotExistException("通道退款订单不存在"));
     }
 
@@ -86,7 +86,7 @@ public class PayRefundOrderQueryService {
         }
 
         // 查询退款单
-        PayRefundOrder refundOrder = null;
+        RefundOrder refundOrder = null;
         if (Objects.nonNull(param.getRefundId())){
             refundOrder = refundOrderManager.findById(param.getRefundId())
                     .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
@@ -96,12 +96,12 @@ public class PayRefundOrderQueryService {
                     .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         }
         // 查询退款明细
-        List<PayRefundChannelOrder> refundOrderChannels = refundOrderChannelManager.findAllByRefundId(refundOrder.getId());
+        List<RefundChannelOrder> refundOrderChannels = refundOrderChannelManager.findAllByRefundId(refundOrder.getId());
         List<RefundChannelOrderResult> channels = refundOrderChannels.stream()
                 .map(RefundOrderChannelConvert.CONVERT::convertResult)
                 .collect(Collectors.toList());
 
-        RefundOrderResult refundOrderResult = PayRefundOrderConvert.CONVERT.convertResult(refundOrder);
+        RefundOrderResult refundOrderResult = RefundOrderConvert.CONVERT.convertResult(refundOrder);
         refundOrderResult.setRefundId(refundOrder.getId());
         refundOrderResult.setChannels(channels);
         return refundOrderResult;

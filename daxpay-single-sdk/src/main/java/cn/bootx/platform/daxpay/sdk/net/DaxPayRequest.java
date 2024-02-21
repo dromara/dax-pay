@@ -21,9 +21,6 @@ public abstract class DaxPayRequest<T extends DaxPayResponseModel> {
     /** 签名 */
     private String sign;
 
-    /** API版本号 */
-    private String version = "1.0";
-
     /** 请求时间，传输时间戳 */
     private Long reqTime = DateUtil.currentSeconds();
 
