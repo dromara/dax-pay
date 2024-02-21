@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.core.notice.service;
+package cn.bootx.platform.daxpay.service.core.payment.notice.service;
 
 import cn.bootx.platform.daxpay.service.configuration.DaxPayProperties;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;

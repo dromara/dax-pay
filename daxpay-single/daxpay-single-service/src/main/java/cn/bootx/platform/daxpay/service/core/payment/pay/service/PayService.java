@@ -13,6 +13,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManage
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
 import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.util.PayUtil;
@@ -50,6 +51,8 @@ public class PayService {
     private final PayOrderService payOrderService;
 
     private final PayAssistService payAssistService;
+
+    private final ClientNoticeService clientNoticeService;
 
     private final PayChannelOrderManager payChannelOrderManager;
 
@@ -135,7 +138,7 @@ public class PayService {
     }
 
     /**
-     * 执行第一次支付的方法
+     * 执行第一次发起支付的方法
      */
     private void firstPayHandler(PayParam payParam, PayOrder payOrder) {
 
@@ -173,7 +176,7 @@ public class PayService {
                     .setPayTime(LocalDateTime.now());
             payOrderService.updateById(payOrder);
         }
-        // 5.2 如果异步支付完成, 进行订单完成处理
+        // 5.2 如果异步支付完成, 进行订单完成处理, 同时发送回调消息
         AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
         if (asyncPayInfo.isPayComplete()) {
             payOrder.setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
@@ -182,10 +185,15 @@ public class PayService {
             payOrderService.updateById(payOrder);
         }
 
+        // 如果支付完成 发送通知
+        if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
+            clientNoticeService.registerPayNotice(payOrder, null, channelOrders);
+        }
+
     }
 
     /**
-     * 异步支付执行(非第一次请求), 只执行异步支付策略, 报错不影响继续发起支付
+     * 异步支付执行(非第一次请求), 只执行异步支付策略, 因为同步支付已经支付成功. 报错不影响继续发起支付
      */
     private PayResult paySyncNotFirst(PayParam payParam, PayOrder payOrder) {
 
@@ -196,7 +204,7 @@ public class PayService {
             return PayBuilder.buildPayResultByPayOrder(payOrder);
         }
 
-        // 2.获取 异步支付通道，通过工厂生成对应的策略组(只包含异步支付的策略, 同步支付相关逻辑不再进行执行)
+        // 2.获取 异步支付通道，通过工厂生成对应的策略组(只包含异步支付的策略, 同步支付已经成功不再继续执行)
         PayChannelParam payChannelParam = payAssistService.getAsyncPayParam(payParam, payOrder);
         List<AbsPayStrategy> payStrategyList = PayStrategyFactory.createAsyncLast(Collections.singletonList(payChannelParam));
 
@@ -212,7 +220,16 @@ public class PayService {
         // 5.2支付发起成功处理
         payStrategyList.forEach(AbsPayStrategy::doSuccessHandler);
 
-        // 6. 更新支付订单和扩展参数
+        // 6.1 如果异步支付完成, 进行订单完成处理, 并触发通知
+        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        if (asyncPayInfo.isPayComplete()) {
+            payOrder.setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
+                    .setStatus(SUCCESS.getCode())
+                    .setPayTime(LocalDateTime.now());
+            clientNoticeService.registerPayNotice(payOrder,null,null);
+        }
+
+        // 6.2 更新支付订单和扩展参数
         payOrderService.updateById(payOrder);
         payAssistService.updatePayOrderExtra(payParam,payOrder.getId());
 

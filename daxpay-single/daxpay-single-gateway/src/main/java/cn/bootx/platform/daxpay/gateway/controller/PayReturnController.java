@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
-import cn.bootx.platform.daxpay.service.core.notice.service.PayReturnService;
+import cn.bootx.platform.daxpay.service.core.payment.notice.service.PayReturnService;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayReturnParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

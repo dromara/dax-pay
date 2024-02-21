@@ -77,8 +77,8 @@ public class PayBuilder {
                 .setNotNotify(payParam.isNotNotify())
                 .setNotifyUrl(noticeInfo.getNotifyUrl())
                 .setReturnUrl(noticeInfo.getReturnUrl())
-                .setSign(payParam.getSign())
-                .setSignType(platform.getSignType())
+                .setReqSign(payParam.getSign())
+                .setReqSignType(platform.getSignType())
                 .setAttach(payParam.getAttach())
                 .setApiVersion(payParam.getVersion())
                 .setReqTime(payParam.getReqTime());

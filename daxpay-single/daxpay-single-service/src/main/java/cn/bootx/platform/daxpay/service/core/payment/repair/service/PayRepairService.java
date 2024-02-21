@@ -3,13 +3,15 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
 import cn.bootx.platform.daxpay.service.core.payment.repair.factory.PayRepairStrategyFactory;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.PayRepairResult;
 import cn.bootx.platform.daxpay.service.core.record.repair.entity.PayRepairRecord;
@@ -41,9 +43,13 @@ public class PayRepairService {
 
     private final PayOrderService payOrderService;
 
+    private final ClientNoticeService clientNoticeService;
+
     private final PayChannelOrderManager channelOrderManager;
 
     private final PayRepairRecordService recordService;
+
+    private final PayOrderExtraManager payOrderExtraManager;
 
     /**
      * 修复支付单
@@ -122,6 +128,11 @@ public class PayRepairService {
         // 读取支付网关中的时间
         order.setPayTime(payTime);
         payOrderService.updateById(order);
+        List<PayChannelOrder> channelOrders = strategies.stream()
+                .map(AbsPayRepairStrategy::getChannelOrder)
+                .collect(Collectors.toList());
+        // 发送通知
+        clientNoticeService.registerPayNotice(order, null, channelOrders);
     }
 
     /**

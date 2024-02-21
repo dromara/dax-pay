@@ -50,13 +50,19 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String returnUrl;
 
-    /** 签名类型 */
-    @DbColumn(comment = "签名类型")
-    private String signType;
+    @DbColumn(comment = "是否需要通知客户系统")
+    private boolean notice;
 
-    /** 签名，以最后一次为准 */
+    @DbColumn(comment = "回调通知时是否需要进行签名")
+    private boolean noticeSign;
+
+    /** 请求签名类型 */
+    @DbColumn(comment = "签名类型")
+    private String reqSignType;
+
+    /** 请求签名值，以最后一次为准 */
     @DbColumn(comment = "签名")
-    private String sign;
+    private String reqSign;
 
     /** 商户扩展参数,回调时会原样返回 */
     @DbColumn(comment = "商户扩展参数")

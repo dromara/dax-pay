@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.notice.entity;
 
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.daxpay.service.code.ClientNoticeTypeEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -26,7 +27,7 @@ public class ClientNoticeTask extends MpCreateEntity {
 
     /**
      * 回调类型
-     * @see
+     * @see ClientNoticeTypeEnum
      */
     @DbColumn(comment = "回调类型")
     private String type;
@@ -41,7 +42,7 @@ public class ClientNoticeTask extends MpCreateEntity {
 
     /** 发送次数 */
     @DbColumn(comment = "发送次数")
-    private Integer sendTimes;
+    private Integer sendCount;
 
     /** 发送地址 */
     @DbColumn(comment = "发送地址")

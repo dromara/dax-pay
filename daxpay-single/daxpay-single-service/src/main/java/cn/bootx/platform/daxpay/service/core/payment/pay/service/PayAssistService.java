@@ -156,7 +156,7 @@ public class PayAssistService {
         String notifyUrl = PaymentContextLocal.get().getNoticeInfo().getNotifyUrl();
         String returnUrl = PaymentContextLocal.get().getNoticeInfo().getReturnUrl();
         payOrderExtra.setReqTime(payParam.getReqTime())
-                .setSign(payParam.getSign())
+                .setReqSign(payParam.getSign())
                 .setNotNotify(payParam.isNotNotify())
                 .setNotifyUrl(notifyUrl)
                 .setReturnUrl(returnUrl)
