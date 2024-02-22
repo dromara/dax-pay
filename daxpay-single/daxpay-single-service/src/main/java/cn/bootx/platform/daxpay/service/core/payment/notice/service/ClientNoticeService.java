@@ -334,7 +334,7 @@ public class ClientNoticeService {
         task.setSendCount(task.getSendCount() + 1);
         // 判断发送次数是否未超过15次, 注册任务到redis中
         if (task.getSendCount() < 16){
-            // 根据当前次数和时间计算出毫秒值
+            // 根据当前次数和时间计算出毫秒值, 然后写入到Redis中
             Integer delay = DELAY_TIME.get(task.getSendCount());
             long taskTime = LocalDateTimeUtil.timestamp(now) + delay;
             redisClient.zadd(KEY, String.valueOf(task.getId()), taskTime);

@@ -23,6 +23,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class CashPayRepairStrategy extends AbsPayRepairStrategy {
 
     private final CashRecordService cashRecordService;
+
     /**
      * 策略标识
      */

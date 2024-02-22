@@ -6,10 +6,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.service.common.context.ApiInfoLocal;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
-import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
-import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
+import cn.bootx.platform.daxpay.service.common.context.*;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
@@ -163,6 +160,8 @@ public class PayAssistService {
      */
     public PayOrderExtra updatePayOrderExtra(PayParam payParam,Long paymentId){
         ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
+        RequestLocal requestInfo = PaymentContextLocal.get().getRequestInfo();
+        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
         PayOrderExtra payOrderExtra = payOrderExtraManager.findById(paymentId)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
 
@@ -172,12 +171,14 @@ public class PayAssistService {
         String returnUrl = noticeInfo.getReturnUrl();
 
         payOrderExtra.setReqTime(payParam.getReqTime())
+                .setReqSignType(platformInfo.getSignType())
                 .setReqSign(payParam.getSign())
                 .setNotifyUrl(notifyUrl)
                 .setReturnUrl(returnUrl)
                 .setNoticeSign(apiInfo.isNoticeSign())
                 .setAttach(payParam.getAttach())
-                .setClientIp(payParam.getClientIp());
+                .setClientIp(payParam.getClientIp())
+                .setReqId(requestInfo.getReqId());
         return payOrderExtraManager.updateById(payOrderExtra);
     }
 

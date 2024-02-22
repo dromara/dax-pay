@@ -7,7 +7,6 @@ import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
@@ -48,8 +47,6 @@ public class PayRepairService {
     private final PayChannelOrderManager channelOrderManager;
 
     private final PayRepairRecordService recordService;
-
-    private final PayOrderExtraManager payOrderExtraManager;
 
     /**
      * 修复支付单
@@ -96,6 +93,12 @@ public class PayRepairService {
         }
         // 设置修复iD
         repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
+
+        // 发送通知
+        List<PayChannelOrder> channelOrders = repairStrategies.stream()
+                .map(AbsPayRepairStrategy::getChannelOrder)
+                .collect(Collectors.toList());
+        clientNoticeService.registerPayNotice(order, null, channelOrders);
         this.saveRecord(order, repairType, repairResult);
         return repairResult;
     }
@@ -128,11 +131,6 @@ public class PayRepairService {
         // 读取支付网关中的时间
         order.setPayTime(payTime);
         payOrderService.updateById(order);
-        List<PayChannelOrder> channelOrders = strategies.stream()
-                .map(AbsPayRepairStrategy::getChannelOrder)
-                .collect(Collectors.toList());
-        // 发送通知
-        clientNoticeService.registerPayNotice(order, null, channelOrders);
     }
 
     /**

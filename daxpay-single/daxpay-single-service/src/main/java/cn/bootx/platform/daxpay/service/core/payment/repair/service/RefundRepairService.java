@@ -99,6 +99,9 @@ public class RefundRepairService {
         PayRepairRecord payRepairRecord = this.payRepairRecord(payOrder, repairType, repairResult);
         // 退款修复记录
         PayRepairRecord refundRepairRecord = this.refundRepairRecord(refundOrder, repairType, repairResult);
+
+        // 发送通知
+        clientNoticeService.registerRefundNotice(refundOrder, null, new ArrayList<>(refundChannelOrderMap.values()));
         recordService.saveAllRecord(Arrays.asList(payRepairRecord, refundRepairRecord));
         return repairResult;
     }

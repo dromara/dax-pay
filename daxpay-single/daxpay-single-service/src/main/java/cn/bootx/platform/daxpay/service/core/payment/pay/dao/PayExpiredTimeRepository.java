@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.service.core.timeout.dao;
+package cn.bootx.platform.daxpay.service.core.payment.pay.dao;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.redis.RedisClient;

@@ -7,22 +7,24 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 各支付通道参数
+ * 支付通道信息
  * @author xxm
  * @since 2024/1/7
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "各支付通道参数")
+@Schema(title = "支付通道信息")
 public class PayChannelResult {
     /**
+     * 支付通道编码
      * @see PayChannelEnum#getCode()
      */
     @Schema(description = "支付通道编码")
     private String channel;
 
     /**
-     * @see PayWayEnum#getCode()
+     * 支付方式编码
+     * @see PayWayEnum
      */
     @Schema(description = "支付方式编码")
     private String way;

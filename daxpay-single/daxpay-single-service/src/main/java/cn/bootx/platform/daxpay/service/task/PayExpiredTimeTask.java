@@ -1,15 +1,16 @@
-package cn.bootx.platform.daxpay.service.core.timeout.task;
+package cn.bootx.platform.daxpay.service.task;
 
 import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.payment.pay.dao.PayExpiredTimeRepository;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
-import cn.bootx.platform.daxpay.service.core.timeout.dao.PayExpiredTimeRepository;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,27 +18,23 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- *
+ * 支付超时处理
  * @author xxm
  * @since 2024/1/2
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayExpiredTimeTask {
+public class PayExpiredTimeTask implements Job {
     private final PayExpiredTimeRepository repository;
 
     private final PaySyncService paySyncService;
 
     private final LockTemplate lockTemplate;
 
-    /**
-     * 先使用定时任务实现, 五秒轮训一下
-     *
-     */
-    @Scheduled(cron = "*/5 * * * * ?")
-    public void task(){
-//        log.debug("执行超时取消任务....");
+    @Override
+    public void execute(JobExecutionContext context) {
+        // 获取超时的任务Key
         Set<String> expiredKeys = repository.getExpiredKeys(LocalDateTime.now());
         for (String expiredKey : expiredKeys) {
             LockInfo lock = lockTemplate.lock("payment:expired:" + expiredKey,10000,200);
@@ -62,10 +59,6 @@ public class PayExpiredTimeTask {
             } finally {
                 lockTemplate.releaseLock(lock);
             }
-
         }
-
-
-
     }
 }

@@ -37,15 +37,16 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String returnUrl;
 
+    /** 回调通知时是否需要进行签名, 以最后一次为准 */
     @DbColumn(comment = "回调通知时是否需要进行签名")
     private boolean noticeSign;
 
-    /** 异步通知地址 */
+    /** 异步通知地址 以最后一次为准 */
     @DbColumn(comment = "异步通知地址，以最后一次为准")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
-    /** 商户扩展参数,回调时会原样返回 */
+    /** 商户扩展参数,回调时会原样返回 以最后一次为准 */
     @DbColumn(comment = "商户扩展参数")
     private String attach;
 
@@ -57,23 +58,17 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
     @DbColumn(comment = "签名")
     private String reqSign;
 
-    /** 商户扩展参数,回调时会原样返回 */
-    @DbColumn(comment = "商户扩展参数")
-    private String attach;
-
     /** 请求时间，时间戳转时间, 以最后一次为准 */
     @DbColumn(comment = "请求时间，传输时间戳，以最后一次为准")
     private LocalDateTime reqTime;
 
-    /** 支付终端ip */
+    /** 支付终端ip 以最后一次为准 */
     @DbColumn(comment = "支付终端ip")
     private String clientIp;
 
-
-    /** 请求链路ID */
+    /** 请求链路ID 以最后一次为准 */
     @DbColumn(comment = "请求链路ID")
     private String reqId;
-
 
     /** 错误码 */
     @DbColumn(comment = "错误码")

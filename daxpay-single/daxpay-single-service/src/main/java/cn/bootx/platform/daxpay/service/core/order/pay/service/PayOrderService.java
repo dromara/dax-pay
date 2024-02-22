@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.order.pay.service;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.timeout.service.PayExpiredTimeService;
+import cn.bootx.platform.daxpay.service.core.payment.pay.service.PayExpiredTimeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -186,6 +186,7 @@ public class RefundAssistService {
 
         RefundOrderExtra refundOrderExtra = this.createRefundOrderExtra(refundParam, refundOrder.getId());
         refundChannelOrders.forEach(r->r.setRefundId(refundOrder.getId()));
+        refundOrderExtraManager.save(refundOrderExtra);
         payRefundChannelOrderManager.saveAll(refundChannelOrders);
         return refundOrderManager.save(refundOrder);
     }
