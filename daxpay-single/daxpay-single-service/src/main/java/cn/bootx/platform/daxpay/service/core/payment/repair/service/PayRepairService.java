@@ -140,7 +140,9 @@ public class PayRepairService {
     private void closeLocal(PayOrder order, List<AbsPayRepairStrategy> absPayStrategies) {
         // 执行策略的关闭方法
         absPayStrategies.forEach(AbsPayRepairStrategy::doCloseLocalHandler);
-        order.setStatus(PayStatusEnum.CLOSE.getCode());
+        order.setStatus(PayStatusEnum.CLOSE.getCode())
+                // TODO 尝试是否可以使用网关返回的
+                .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(order);
     }
     /**
@@ -150,7 +152,9 @@ public class PayRepairService {
     private void closeGateway(PayOrder payOrder, List<AbsPayRepairStrategy> absPayStrategies) {
         // 执行策略的关闭方法
         absPayStrategies.forEach(AbsPayRepairStrategy::doCloseGatewayHandler);
-        payOrder.setStatus(PayStatusEnum.CLOSE.getCode());
+        payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
+                // TODO 尝试是否可以使用网关返回的
+                .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);
     }
 

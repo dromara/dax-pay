@@ -2,6 +2,8 @@ package cn.bootx.platform.daxpay.service.core.payment.notice.result;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.serializer.LocalDateTimeToTimestampSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -46,11 +48,17 @@ public class PayNoticeResult {
     @Schema(description = "支付状态")
     private String status;
 
+    @Schema(description = "支付创建时间")
+    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
+    private LocalDateTime createTime;
+
     @Schema(description = "支付成功时间")
+    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime payTime;
 
-    @Schema(description = "支付创建时间")
-    private LocalDateTime createTime;
+    @Schema(description = "支付关闭时间")
+    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
+    private LocalDateTime closeTime;
 
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;

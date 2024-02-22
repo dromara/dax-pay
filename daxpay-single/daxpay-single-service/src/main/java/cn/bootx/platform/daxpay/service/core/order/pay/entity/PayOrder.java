@@ -78,6 +78,10 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @DbColumn(comment = "支付时间")
     private LocalDateTime payTime;
 
+    /** 关闭时间 */
+    @DbColumn(comment = "支付时间")
+    private LocalDateTime closeTime;
+
     /** 过期时间 */
     @DbColumn(comment = "过期时间")
     private LocalDateTime expiredTime;

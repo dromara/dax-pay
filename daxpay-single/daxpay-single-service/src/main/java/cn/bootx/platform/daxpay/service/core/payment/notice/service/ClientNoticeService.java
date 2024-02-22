@@ -152,6 +152,7 @@ public class ClientNoticeService {
                 .setBusinessNo(order.getBusinessNo())
                 .setAmount(order.getAmount())
                 .setPayTime(order.getPayTime())
+                .setCloseTime(order.getCloseTime())
                 .setCreateTime(order.getCreateTime())
                 .setStatus(order.getStatus())
                 .setAttach(orderExtra.getAttach())

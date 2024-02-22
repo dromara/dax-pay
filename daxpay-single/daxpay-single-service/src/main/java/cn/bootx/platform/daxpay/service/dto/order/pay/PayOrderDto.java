@@ -68,6 +68,10 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "支付时间")
     private LocalDateTime payTime;
 
+    /** 关闭时间 */
+    @Schema(description = "关闭时间")
+    private LocalDateTime closeTime;
+
     /** 过期时间 */
     @Schema(description = "过期时间")
     private LocalDateTime expiredTime;

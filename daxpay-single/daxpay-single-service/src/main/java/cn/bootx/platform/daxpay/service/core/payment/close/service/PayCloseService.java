@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -130,7 +131,8 @@ public class PayCloseService {
      */
     private void successHandler(PayOrder payOrder){
         // 取消订单
-        payOrder.setStatus(PayStatusEnum.CLOSE.getCode());
+        payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
+                .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);
         this.saveRecord(payOrder,true,null);
     }
