@@ -19,7 +19,6 @@ import java.util.List;
 @Schema(title = "退款通知消息")
 public class RefundNoticeResult {
 
-
     @Schema(description = "退款ID")
     private Long refundId;
 
@@ -32,7 +31,7 @@ public class RefundNoticeResult {
     /**
      * @see PayChannelEnum#ASYNC_TYPE_CODE
      */
-    @Schema(description = "异步支付通道")
+    @Schema(description = "异步通道")
     private String asyncChannel;
 
     @Schema(description = "退款金额")

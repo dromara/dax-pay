@@ -30,7 +30,6 @@ class PayParamSignTest {
         payParam.setNotNotify(true);
         payParam.setNotifyUrl("http://127.0.0.1:8080/pay/notify");
         payParam.setReturnUrl("http://127.0.0.1:8080/pay/return");
-        payParam.setVersion("1.0");
         // 传入的话需要传输时间戳
         payParam.setReqTime(LocalDateTime.now());
 

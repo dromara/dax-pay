@@ -18,7 +18,7 @@ public class RefundChannelResult {
     /**
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付通道编码")
+    @Schema(description = "通道编码")
     private String channel;
 
     @Schema(description = "退款金额")
