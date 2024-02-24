@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
@@ -92,7 +92,7 @@ public class WeChatPayStrategy extends AbsPayStrategy {
     public void doSuccessHandler() {
         channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
         this.getOrder().setAsyncChannel(this.getChannel().getCode());
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
         // 是否支付完成, 保存流水记录
         if (asyncPayInfo.isPayComplete()){
             weChatPayRecordService.pay(this.getOrder(), this.getChannelOrder());

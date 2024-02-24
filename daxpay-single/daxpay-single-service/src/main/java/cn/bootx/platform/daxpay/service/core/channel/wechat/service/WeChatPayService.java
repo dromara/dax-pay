@@ -10,7 +10,7 @@ import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.code.WeChatPayWay;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -79,7 +79,7 @@ public class WeChatPayService {
 
         Integer amount = payChannelParam.getAmount();
         String totalFee = String.valueOf(amount);
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
         String payBody = null;
         PayWayEnum payWayEnum = PayWayEnum.findByCode(payChannelParam.getWay());
 
@@ -173,7 +173,7 @@ public class WeChatPayService {
      * 付款码支付
      */
     private void barCode(String amount, PayOrder payment, String authCode, WeChatPayConfig weChatPayConfig) {
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
 
         Map<String, String> params = MicroPayModel.builder()
             .appid(weChatPayConfig.getWxAppId())

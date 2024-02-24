@@ -17,6 +17,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
+import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static cn.bootx.platform.daxpay.code.PayStatusEnum.*;
 
@@ -71,7 +73,7 @@ public class PayAssistService {
         if (PayUtil.isNotSync(payParam.getPayChannels())){
             return;
         }
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         // 支付订单是非为空
         if (Objects.nonNull(order)){
@@ -100,18 +102,18 @@ public class PayAssistService {
             // 首先读取请求参数
             noticeInfo.setNotifyUrl(payParam.getNotifyUrl());
             // 读取接口配置
-            if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
+            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
                 noticeInfo.setNotifyUrl(apiInfo.getNoticeUrl());
             }
             // 读取平台配置
-            if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
+            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
                 noticeInfo.setNotifyUrl(platform.getNotifyUrl());
             }
         }
         // 同步回调
-        noticeInfo.setNotifyUrl(payParam.getReturnUrl());
-        if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
-            noticeInfo.setNotifyUrl(platform.getNotifyUrl());
+        noticeInfo.setReturnUrl(payParam.getReturnUrl());
+        if (StrUtil.isBlank(noticeInfo.getReturnUrl())){
+            noticeInfo.setReturnUrl(platform.getNotifyUrl());
         }
         // 退出回调地址
         noticeInfo.setQuitUrl(payParam.getQuitUrl());
@@ -141,16 +143,31 @@ public class PayAssistService {
     }
 
     /**
-     * 创建支付订单/附加表/支付通道表并保存，返回支付订单
+     * 创建支付订单并保存, 返回支付订单
      */
     public PayOrder createPayOrder(PayParam payParam) {
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         // 构建支付订单并保存
-        PayOrder payOrder = PayBuilder.buildPayOrder(payParam);
-        payOrderService.save(payOrder);
+        PayOrder order = PayBuilder.buildPayOrder(payParam);
+        payOrderService.save(order);
         // 构建支付订单扩展表并保存
-        PayOrderExtra payOrderExtra = PayBuilder.buildPayOrderExtra(payParam, payOrder.getId());
+        PayOrderExtra payOrderExtra = PayBuilder.buildPayOrderExtra(payParam, order.getId());
         payOrderExtraManager.save(payOrderExtra);
-        return payOrder;
+        payInfo.setPayOrder(order).setPayOrderExtra(payOrderExtra);
+        return order;
+    }
+
+    /**
+     * 创建并保存通道支付订单
+     */
+    public void createPayChannelOrder(List<AbsPayStrategy> payStrategies) {
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
+        List<PayChannelOrder> channelOrders = payStrategies.stream()
+                .map(AbsPayStrategy::getChannelOrder)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        payChannelOrderManager.saveAll(channelOrders);
+        payInfo.setPayChannelOrders(channelOrders);
     }
 
     /**
@@ -165,8 +182,7 @@ public class PayAssistService {
         PayOrderExtra payOrderExtra = payOrderExtraManager.findById(paymentId)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
 
-        NoticeLocal noticeInfo = PaymentContextLocal.get()
-                .getNoticeInfo();
+        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         String notifyUrl = noticeInfo.getNotifyUrl();
         String returnUrl = noticeInfo.getReturnUrl();
 

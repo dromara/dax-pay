@@ -1,10 +1,14 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
 import cn.bootx.platform.daxpay.code.PayWayEnum;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 异步支付信息
@@ -13,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-public class AsyncPayLocal {
+public class PayLocal {
 
     /**
      * 异步支付方式
@@ -35,5 +39,14 @@ public class AsyncPayLocal {
 
     /** 订单失效时间, */
     private LocalDateTime expiredTime;
+
+    /** 支付订单 */
+    private PayOrder payOrder;
+
+    /** 支付订单扩展 */
+    private PayOrderExtra payOrderExtra;
+
+    /** 通道支付订单 */
+    private List<PayChannelOrder> payChannelOrders;
 
 }

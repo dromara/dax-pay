@@ -18,8 +18,8 @@ public class PaymentContext {
     /** 平台全局配置 */
     private final PlatformLocal platformInfo = new PlatformLocal();
 
-    /** 异步支付相关信息 */
-    private final AsyncPayLocal asyncPayInfo = new AsyncPayLocal();
+    /** 支付相关信息 */
+    private final PayLocal payInfo = new PayLocal();
 
     /** 退款相关信息 */
     private final RefundLocal refundInfo = new RefundLocal();

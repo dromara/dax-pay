@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
@@ -37,7 +37,7 @@ public class PayBuilder {
     public PayOrder buildPayOrder(PayParam payParam) {
         // 订单超时时间
         LocalDateTime expiredTime = PaymentContextLocal.get()
-                .getAsyncPayInfo()
+                .getPayInfo()
                 .getExpiredTime();
         // 计算总价
         int sumAmount = payParam.getPayChannels().stream()
@@ -118,7 +118,7 @@ public class PayBuilder {
         paymentResult.setStatus(payOrder.getStatus());
 
         // 设置异步支付参数
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();;
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
         if (StrUtil.isNotBlank(asyncPayInfo.getPayBody())) {
             paymentResult.setPayBody(asyncPayInfo.getPayBody());
         }

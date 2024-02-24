@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
@@ -54,7 +54,7 @@ public class PayChannelOrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void switchAsyncPayChannel(PayOrder payOrder, PayChannelParam payChannelParam){
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
         // 是否支付完成
         PayStatusEnum payStatus = asyncPayInfo.isPayComplete() ? PayStatusEnum.SUCCESS : PayStatusEnum.PROGRESS;
         // 判断新发起的

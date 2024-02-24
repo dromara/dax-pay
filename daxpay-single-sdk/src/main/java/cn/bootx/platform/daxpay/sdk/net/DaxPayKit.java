@@ -67,7 +67,6 @@ public class DaxPayKit {
         }
         String body = execute.body();
 
-
         log.debug("响应参数:{}", body);
         return request.toModel(body);
     }

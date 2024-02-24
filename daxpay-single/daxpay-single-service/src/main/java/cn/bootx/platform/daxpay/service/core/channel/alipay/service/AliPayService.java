@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.code.AliPayWay;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
@@ -66,7 +66,7 @@ public class AliPayService {
         Integer amount = payChannelParam.getAmount();
         String payBody = null;
         // 异步线程存储
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
         // wap支付
         if (Objects.equals(payChannelParam.getWay(), PayWayEnum.WAP.getCode())) {
             payBody = this.wapPay(amount, payOrder, alipayConfig);
@@ -207,7 +207,7 @@ public class AliPayService {
      * 付款码支付
      */
     public void barCode(int amount, PayOrder payOrder, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
 
         AlipayTradePayModel model = new AlipayTradePayModel();
         model.setSubject(payOrder.getTitle());

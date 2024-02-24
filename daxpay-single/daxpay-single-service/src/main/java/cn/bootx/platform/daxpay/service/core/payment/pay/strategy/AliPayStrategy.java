@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
@@ -93,7 +93,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
         channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
         // 支付完成, 保存记录
         if (asyncPayInfo.isPayComplete()) {

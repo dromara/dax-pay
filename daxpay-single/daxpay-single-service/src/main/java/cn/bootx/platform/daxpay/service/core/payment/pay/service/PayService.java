@@ -6,11 +6,10 @@ import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.bootx.platform.daxpay.service.common.context.AsyncPayLocal;
+import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
@@ -33,7 +32,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static cn.bootx.platform.daxpay.code.PayStatusEnum.*;
 
@@ -144,31 +142,27 @@ public class PayService {
     private void firstPayHandler(PayParam payParam, PayOrder payOrder) {
 
         // 1.获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> payStrategyList = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
-        if (CollectionUtil.isEmpty(payStrategyList)) {
+        List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
+        if (CollectionUtil.isEmpty(strategies)) {
             throw new PayUnsupportedMethodException();
         }
 
         // 2.初始化支付的参数
-        for (AbsPayStrategy paymentStrategy : payStrategyList) {
-            paymentStrategy.initPayParam(payOrder, payParam);
+        for (AbsPayStrategy strategy : strategies) {
+            strategy.initPayParam(payOrder, payParam);
         }
 
         // 3.1 执行支付前处理动作
-        payStrategyList.forEach(AbsPayStrategy::doBeforePayHandler);
+        strategies.forEach(AbsPayStrategy::doBeforePayHandler);
         // 3.2 执行通道支付单的生成动作
-        payStrategyList.forEach(AbsPayStrategy::generateChannelOrder);
+        strategies.forEach(AbsPayStrategy::generateChannelOrder);
 
         // 4.1 支付操作
-        payStrategyList.forEach(AbsPayStrategy::doPayHandler);
+        strategies.forEach(AbsPayStrategy::doPayHandler);
         // 4.2 支付调用成功操作, 进行扣款、创建记录类类似的操作
-        payStrategyList.forEach(AbsPayStrategy::doSuccessHandler);
-        // 4.3 获取通道支付订单进行保存, 异步支付通道的订单单独处理
-        List<PayChannelOrder> channelOrders = payStrategyList.stream()
-                .map(AbsPayStrategy::getChannelOrder)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        payChannelOrderManager.saveAll(channelOrders);
+        strategies.forEach(AbsPayStrategy::doSuccessHandler);
+        // 4.3 保存通道支付订单
+        payAssistService.createPayChannelOrder(strategies);
 
         // 5.1 如果没有异步支付, 直接进行订单完成处理
         if (PayUtil.isNotSync(payParam.getPayChannels())) {
@@ -178,7 +172,7 @@ public class PayService {
             payOrderService.updateById(payOrder);
         }
         // 5.2 如果异步支付完成, 进行订单完成处理, 同时发送回调消息
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
         if (asyncPayInfo.isPayComplete()) {
             payOrder.setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
                     .setStatus(SUCCESS.getCode())
@@ -188,9 +182,9 @@ public class PayService {
 
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
-            clientNoticeService.registerPayNotice(payOrder, null, channelOrders);
+            PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
+            clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra(), payInfo.getPayChannelOrders());
         }
-
     }
 
     /**
@@ -222,7 +216,7 @@ public class PayService {
         payStrategyList.forEach(AbsPayStrategy::doSuccessHandler);
 
         // 6.1 如果异步支付完成, 进行订单完成处理
-        AsyncPayLocal asyncPayInfo = PaymentContextLocal.get().getAsyncPayInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
         if (asyncPayInfo.isPayComplete()) {
             payOrder.setGatewayOrderNo(asyncPayInfo.getGatewayOrderNo())
                     .setStatus(SUCCESS.getCode())

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * 消息通知任务
+ * 发送消息通知任务
  * @author xxm
  * @since 2024/2/22
  */
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
 @RequiredArgsConstructor
-public class ClientNoticeTask implements Job {
+public class ClientNoticeSendTask implements Job {
 
     private final ClientNoticeService clientNoticeService;
 
