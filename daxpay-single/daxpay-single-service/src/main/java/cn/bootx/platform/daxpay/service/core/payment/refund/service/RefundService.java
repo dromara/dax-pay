@@ -3,8 +3,8 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.ValidationUtil;
-import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
@@ -218,11 +218,11 @@ public class RefundService {
      * 成功处理, 更新退款订单, 退款通道订单, 支付订单, 支付通道订单
      */
     private void successHandler(RefundOrder refundOrder, List<RefundChannelOrder> refundChannelOrders, PayOrder payOrder) {
-        RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
+        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         // 剩余可退款余额
         int refundableBalance = refundOrder.getRefundableBalance();
         // 设置支付订单状态
-        if (asyncRefundInfo.getStatus() == RefundStatusEnum.PROGRESS) {
+        if (refundInfo.getStatus() == RefundStatusEnum.PROGRESS) {
             // 设置为退款中
             payOrder.setStatus(PayStatusEnum.REFUNDING.getCode());
         } else if (refundableBalance == 0) {
@@ -238,9 +238,9 @@ public class RefundService {
         refundAssistService.updateOrderAndChannel(refundOrder,refundChannelOrders);
 
         // 发送通知
-        List<String> list = Arrays.asList(PayStatusEnum.REFUNDING.getCode(), PayStatusEnum.REFUNDED.getCode());
-        if (list.contains(payOrder.getStatus())){
-            clientNoticeService.registerRefundNotice(refundOrder, null, refundChannelOrders);
+        List<String> list = Arrays.asList(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
+        if (list.contains(refundOrder.getStatus())){
+            clientNoticeService.registerRefundNotice(refundOrder, refundInfo.getRunOrderExtra(), refundChannelOrders);
         }
     }
 

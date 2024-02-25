@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付宝流水记录类型
+ * 微信支付流水记录类型
  * @author xxm
  * @since 2024/2/20
  */
 @Getter
 @AllArgsConstructor
-public enum AliPayRecordTypeEnum {
+public enum WechatPayRecordTypeEnum {
 
     /** 支付 */
     PAY("pay", "支付"),

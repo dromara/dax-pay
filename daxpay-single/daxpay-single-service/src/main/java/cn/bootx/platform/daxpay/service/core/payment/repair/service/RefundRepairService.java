@@ -145,8 +145,8 @@ public class RefundRepairService {
         refundChannelOrderManager.updateAllById(refundChannelOrders);
 
         // 发送通知
-        List<String> list = Arrays.asList(PayStatusEnum.REFUNDING.getCode(), PayStatusEnum.REFUNDED.getCode());
-        if (list.contains(payOrder.getStatus())){
+        List<String> list = Arrays.asList(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
+        if (list.contains(refundOrder.getStatus())){
             clientNoticeService.registerRefundNotice(refundOrder, null, refundChannelOrders);
         }
 

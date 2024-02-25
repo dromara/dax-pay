@@ -5,7 +5,10 @@ import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.common.spring.util.WebServletUtil;
+import cn.bootx.platform.daxpay.code.PaymentApiCode;
 import cn.bootx.platform.daxpay.param.pay.QueryRefundParam;
+import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.result.order.RefundChannelOrderResult;
 import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
 import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderConvert;
@@ -14,17 +17,26 @@ import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrder
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
+import cn.bootx.platform.daxpay.service.core.payment.common.service.PaymentAssistService;
+import cn.bootx.platform.daxpay.service.core.payment.refund.service.RefundService;
+import cn.bootx.platform.daxpay.service.core.system.config.dao.PayApiConfigManager;
+import cn.bootx.platform.daxpay.service.core.system.config.entity.PayApiConfig;
+import cn.bootx.platform.daxpay.service.core.system.config.service.PayApiConfigService;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
+import cn.bootx.platform.daxpay.service.param.order.PayOrderRefundParam;
 import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -36,8 +48,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RefundOrderQueryService {
+public class RefundOrderService {
 
+    private final RefundService refundService;
+    private final PayApiConfigService apiConfigService;
+    private final PaymentAssistService paymentAssistService;
+
+    private final PayApiConfigManager apiConfigManager;
     private final RefundOrderManager refundOrderManager;
     private final RefundChannelOrderManager refundOrderChannelManager;
 
@@ -105,5 +122,30 @@ public class RefundOrderQueryService {
         refundOrderResult.setRefundId(refundOrder.getId());
         refundOrderResult.setChannels(channels);
         return refundOrderResult;
+    }
+
+    /**
+     *  手动发起退款
+     */
+    public void refund(PayOrderRefundParam param) {
+
+        String ip = Optional.ofNullable(WebServletUtil.getRequest())
+                .map(ServletUtil::getClientIP)
+                .orElse("未知");
+
+        RefundParam refundParam = new RefundParam();
+        refundParam.setPaymentId(param.getPaymentId());
+        refundParam.setRefundChannels(param.getRefundChannels());
+        refundParam.setReason(param.getReason());
+        refundParam.setReqTime(LocalDateTime.now());
+        refundParam.setClientIp(ip);
+        // 手动初始化上下文
+        paymentAssistService.initContext(refundParam);
+        // 初始化接口信息为统一退款
+        PayApiConfig api = apiConfigManager.findByCode(PaymentApiCode.REFUND).orElseThrow(() -> new DataNotExistException("未找到统一退款接口信息"));
+        // 设置接口信息
+        apiConfigService.initApiInfo(api);
+        // 调用统一退款接口
+        refundService.refund(refundParam);
     }
 }

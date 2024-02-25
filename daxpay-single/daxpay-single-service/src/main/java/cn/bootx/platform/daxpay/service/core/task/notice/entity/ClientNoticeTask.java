@@ -7,6 +7,8 @@ import cn.bootx.platform.daxpay.service.core.task.notice.convert.ClientNoticeCon
 import cn.bootx.platform.daxpay.service.dto.record.notice.ClientNoticeTaskDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
+import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,6 +41,7 @@ public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction
 
     /** 消息内容 */
     @DbColumn(comment = "消息内容")
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private String content;
 
     /** 是否发送成功 */

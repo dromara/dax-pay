@@ -3,30 +3,22 @@ package cn.bootx.platform.daxpay.service.core.payment.notice.service;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.redis.RedisClient;
-import cn.bootx.platform.daxpay.code.PaySignTypeEnum;
 import cn.bootx.platform.daxpay.service.code.ClientNoticeSendTypeEnum;
-import cn.bootx.platform.daxpay.service.code.ClientNoticeTypeEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
-import cn.bootx.platform.daxpay.service.core.payment.notice.result.PayChannelResult;
-import cn.bootx.platform.daxpay.service.core.payment.notice.result.PayNoticeResult;
-import cn.bootx.platform.daxpay.service.core.payment.notice.result.RefundChannelResult;
-import cn.bootx.platform.daxpay.service.core.payment.notice.result.RefundNoticeResult;
-import cn.bootx.platform.daxpay.service.core.system.config.entity.PlatformConfig;
-import cn.bootx.platform.daxpay.service.core.system.config.service.PlatformConfigService;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
 import cn.bootx.platform.daxpay.service.core.task.notice.dao.ClientNoticeTaskManager;
 import cn.bootx.platform.daxpay.service.core.task.notice.entity.ClientNoticeRecord;
 import cn.bootx.platform.daxpay.service.core.task.notice.entity.ClientNoticeTask;
 import cn.bootx.platform.daxpay.service.core.task.notice.service.ClientNoticeRecordService;
-import cn.bootx.platform.daxpay.util.PaySignUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpResponse;
@@ -40,10 +32,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * 消息通知任务服务
+ * 客户系统消息通知任务服务
  * 如果失败总共会重新发起15次通知，通知频率为15s/15s/30s/3m/10m/20m/30m/30m/30m/60m/3h/3h/3h/6h/6h
  * @author xxm
  * @since 2024/2/20
@@ -59,7 +50,9 @@ public class ClientNoticeService {
 
     private final RefundChannelOrderManager refundChannelOrderManager;
 
-    private final PlatformConfigService configService;
+    private final RefundOrderExtraManager refundOrderExtraManager;
+
+    private final ClientNoticeAssistService clientNoticeAssistService;
 
     private final ClientNoticeTaskManager taskManager;
 
@@ -116,6 +109,7 @@ public class ClientNoticeService {
         // 判断是否需要进行通知
         if (StrUtil.isBlank(orderExtra.getNotifyUrl())){
             log.info("支付订单无需通知，订单ID：{}",order.getId());
+            return;
         }
 
         // 通道支付订单为空则进行查询
@@ -123,7 +117,7 @@ public class ClientNoticeService {
             channelOrders = payChannelOrderManager.findAllByPaymentId(order.getId());
         }
         // 创建通知任务并保存
-        ClientNoticeTask task = this.buildPayTask(order, orderExtra, channelOrders);
+        ClientNoticeTask task = clientNoticeAssistService.buildPayTask(order, orderExtra, channelOrders);
         try {
             taskManager.save(task);
         } catch (Exception e) {
@@ -135,57 +129,16 @@ public class ClientNoticeService {
     }
 
     /**
-     * 构建出支付通知任务对象
-     */
-    private ClientNoticeTask buildPayTask(PayOrder order, PayOrderExtra orderExtra, List<PayChannelOrder> channelOrders){
-        // 组装内容
-        List<PayChannelResult> channels = channelOrders.stream()
-                .map(o->new PayChannelResult().setChannel(o.getChannel()).setWay(o.getPayWay()).setAmount(o.getAmount()))
-                .collect(Collectors.toList());
-
-        PayNoticeResult payNoticeResult = new PayNoticeResult()
-                .setPaymentId(order.getId())
-                .setAsyncPay(order.isAsyncPay())
-                .setBusinessNo(order.getBusinessNo())
-                .setAmount(order.getAmount())
-                .setPayTime(order.getPayTime())
-                .setCloseTime(order.getCloseTime())
-                .setCreateTime(order.getCreateTime())
-                .setStatus(order.getStatus())
-                .setAttach(orderExtra.getAttach())
-                .setPayChannels(channels);
-
-        PlatformConfig config = configService.getConfig();
-        // 是否需要签名
-        if (orderExtra.isNoticeSign()){
-            // 签名
-            if (Objects.equals(config.getSignType(), PaySignTypeEnum.MD5.getCode())){
-                payNoticeResult.setSign(PaySignUtil.md5Sign(payNoticeResult,config.getSignSecret()));
-            } else {
-                payNoticeResult.setSign(PaySignUtil.hmacSha256Sign(payNoticeResult,config.getSignSecret()));
-            }
-        }
-        return new ClientNoticeTask()
-                .setUrl(orderExtra.getNotifyUrl())
-                // 时间序列化进行了重写
-                .setContent(JacksonUtil.toJson(payNoticeResult))
-                .setType(ClientNoticeTypeEnum.PAY.getType())
-                .setSendCount(0)
-                .setOrderId(order.getId());
-    }
-
-
-    /**
      * 注册退款消息通知任务
      * @param order 退款订单
      * @param orderExtra 退款订单扩展信息
      * @param channelOrders 退款通道订单
      */
     @Async("bigExecutor")
-    public void registerRefundNotice(RefundOrder order, PayOrderExtra orderExtra, List<RefundChannelOrder> channelOrders) {
+    public void registerRefundNotice(RefundOrder order, RefundOrderExtra orderExtra, List<RefundChannelOrder> channelOrders) {
         // 退款订单扩展信息为空则进行查询
         if (Objects.isNull(orderExtra)){
-            Optional<PayOrderExtra> extraOpt =  payOrderExtraManager.findById(order.getId());
+            Optional<RefundOrderExtra> extraOpt =  refundOrderExtraManager.findById(order.getId());
             if (!extraOpt.isPresent()){
                 log.error("未找到支付扩展信息，数据错误，订单ID：{}",order.getId());
                 return;
@@ -195,6 +148,7 @@ public class ClientNoticeService {
         // 判断是否需要进行通知
         if (StrUtil.isBlank(orderExtra.getNotifyUrl())){
             log.info("退款订单无需通知，订单ID：{}",order.getId());
+            return;
         }
 
         // 通道退款订单为空则进行查询
@@ -202,7 +156,7 @@ public class ClientNoticeService {
             channelOrders = refundChannelOrderManager.findAllByRefundId(order.getId());
         }
         // 创建通知任务并保存
-        ClientNoticeTask task = this.buildRefundTask(order, orderExtra, channelOrders);
+        ClientNoticeTask task = clientNoticeAssistService.buildRefundTask(order, orderExtra, channelOrders);
         try {
             taskManager.save(task);
         } catch (Exception e) {
@@ -213,47 +167,6 @@ public class ClientNoticeService {
         // 同时触发一次通知, 如果成功发送, 任务结束
         this.sendData(task, LocalDateTime.now());
     }
-
-    /**
-     * 构建出退款通知任务对象
-     */
-    private ClientNoticeTask buildRefundTask(RefundOrder order, PayOrderExtra orderExtra, List<RefundChannelOrder> channelOrders){
-        // 组装内容
-        List<RefundChannelResult> channels = channelOrders.stream()
-                .map(o->new RefundChannelResult().setChannel(o.getChannel()).setAmount(o.getAmount()))
-                .collect(Collectors.toList());
-
-        RefundNoticeResult payNoticeResult = new RefundNoticeResult()
-                .setRefundId(order.getId())
-                .setAsyncPay(order.isAsyncPay())
-                .setAsyncChannel(order.getAsyncChannel())
-                .setRefundNo(order.getRefundNo())
-                .setAmount(order.getAmount())
-                .setRefundTime(order.getRefundTime())
-                .setCreateTime(order.getCreateTime())
-                .setStatus(order.getStatus())
-                .setAttach(orderExtra.getAttach())
-                .setRefundChannels(channels);
-
-        PlatformConfig config = configService.getConfig();
-        // 是否需要签名
-        if (orderExtra.isNoticeSign()){
-            // 签名
-            if (Objects.equals(config.getSignType(), PaySignTypeEnum.MD5.getCode())){
-                payNoticeResult.setSign(PaySignUtil.md5Sign(payNoticeResult,config.getSignSecret()));
-            } else {
-                payNoticeResult.setSign(PaySignUtil.hmacSha256Sign(payNoticeResult,config.getSignSecret()));
-            }
-        }
-        return new ClientNoticeTask()
-                .setUrl(orderExtra.getNotifyUrl())
-                // 时间序列化进行了重写
-                .setContent(JacksonUtil.toJson(payNoticeResult))
-                .setType(ClientNoticeTypeEnum.PAY.getType())
-                .setSendCount(0)
-                .setOrderId(order.getId());
-    }
-
 
     /**
      * 从redis中执行任务, 通过定时任务触发
@@ -322,7 +235,7 @@ public class ClientNoticeService {
         }
         // 如果响应值等于SUCCESS, 说明发送成功, 进行成功处理
         if (Objects.equals(body, "SUCCESS")){
-            this.successHandler(task);
+            this.successHandler(task,now);
             record.setSuccess(true);
         } else {
             this.failHandler(task,now);
@@ -339,10 +252,9 @@ public class ClientNoticeService {
     /**
      * 成功处理
      */
-    private void successHandler(ClientNoticeTask task){
+    private void successHandler(ClientNoticeTask task, LocalDateTime now){
         // 记录成功并保存
-        task.setSendCount(task.getSendCount() + 1);
-        task.setSuccess(true);
+        task.setSendCount(task.getSendCount() + 1).setLatestTime(now).setSuccess(true);;
         taskManager.updateById(task);
     }
 

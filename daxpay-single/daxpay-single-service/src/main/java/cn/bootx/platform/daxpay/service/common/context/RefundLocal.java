@@ -1,8 +1,13 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * 异步退款信息
@@ -28,4 +33,13 @@ public class RefundLocal {
 
     /** 错误内容 */
     private String errorMsg;
+
+    /** 退款订单 */
+    private RefundOrder refundOrder;
+
+    /** 退款订单扩展 */
+    private RefundOrderExtra runOrderExtra;
+
+    /** 通道退款订单 */
+    private List<RefundChannelOrder> refundChannelOrders;
 }

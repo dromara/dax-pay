@@ -17,25 +17,6 @@ public final class PaymentContextLocal {
     private static final ThreadLocal<PaymentContext> THREAD_LOCAL = new TransmittableThreadLocal<>();
 
     /**
-     * 设置
-     */
-    public static void set(PaymentContext paymentContext){
-        THREAD_LOCAL.set(paymentContext);
-    }
-
-    /**
-     * 不存在则进行赋值
-     */
-    public static boolean setIfAbsent(PaymentContext paymentContext){
-        if (THREAD_LOCAL.get() == null){
-            set(paymentContext);
-            return true;
-        }
-        return false;
-    }
-
-
-    /**
      * 获取
      */
     public PaymentContext get(){
@@ -53,5 +34,4 @@ public final class PaymentContextLocal {
     public static void clear() {
         THREAD_LOCAL.remove();
     }
-
 }

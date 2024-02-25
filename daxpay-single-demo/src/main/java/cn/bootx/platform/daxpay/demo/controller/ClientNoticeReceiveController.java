@@ -49,7 +49,7 @@ public class ClientNoticeReceiveController {
         return "SUCCESS";
     }
 
-    @Operation(summary = "退款消息()")
+    @Operation(summary = "退款消息(对象)")
     @PostMapping("/refundObject")
     public String refund(@RequestBody RefundNoticeModel map) {
         log.info("接收到退款回调消息: {}",map);

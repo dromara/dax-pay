@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 public class PaymentAssistService {
     private final PlatformConfigService platformConfigService;
 
-
     /**
      * 初始化上下文
      */

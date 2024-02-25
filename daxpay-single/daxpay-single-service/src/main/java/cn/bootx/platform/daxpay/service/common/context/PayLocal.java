@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,6 +48,6 @@ public class PayLocal {
     private PayOrderExtra payOrderExtra;
 
     /** 通道支付订单 */
-    private List<PayChannelOrder> payChannelOrders;
+    private List<PayChannelOrder> payChannelOrders = new ArrayList<>();
 
 }

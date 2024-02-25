@@ -35,7 +35,7 @@ public class SimplePayOrderTest {
     public void simplePay() {
         // 简单支付参数
         SimplePayParam param = new SimplePayParam();
-        param.setBusinessNo("1");
+        param.setBusinessNo("P"+ RandomUtil.randomNumbers(5));
         param.setAmount(1);
         param.setTitle("测试接口支付");
         param.setChannel(PayChannelEnum.ALI.getCode());

@@ -54,9 +54,9 @@ public class PayChannelOrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void switchAsyncPayChannel(PayOrder payOrder, PayChannelParam payChannelParam){
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         // 是否支付完成
-        PayStatusEnum payStatus = asyncPayInfo.isPayComplete() ? PayStatusEnum.SUCCESS : PayStatusEnum.PROGRESS;
+        PayStatusEnum payStatus = payInfo.isPayComplete() ? PayStatusEnum.SUCCESS : PayStatusEnum.PROGRESS;
         // 判断新发起的
         Optional<PayChannelOrder> payOrderChannelOpt = channelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), payChannelParam.getChannel());
         // 扩展信息处理
@@ -80,6 +80,7 @@ public class PayChannelOrderService {
                     .setStatus(payStatus.getCode());
             channelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
             channelOrderManager.save(payChannelOrder);
+            payInfo.getPayChannelOrders().add(payChannelOrder);
         } else {
             // 更新支付通道信息
             payOrderChannelOpt.get()
@@ -88,6 +89,7 @@ public class PayChannelOrderService {
                     .setChannelExtra(channelParamStr)
                     .setStatus(payStatus.getCode());
             channelOrderManager.updateById(payOrderChannelOpt.get());
+            payInfo.getPayChannelOrders().add(payOrderChannelOpt.get());
         }
     }
 

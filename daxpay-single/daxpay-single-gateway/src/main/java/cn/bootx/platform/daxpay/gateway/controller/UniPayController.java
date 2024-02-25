@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.CountTime;
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
+import cn.bootx.platform.daxpay.code.PaymentApiCode;
 import cn.bootx.platform.daxpay.param.pay.*;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
@@ -41,7 +42,7 @@ public class UniPayController {
 
 
     @CountTime
-    @PaymentApi("pay")
+    @PaymentApi(PaymentApiCode.PAY)
     @Operation(summary = "统一支付接口")
     @PostMapping("/pay")
     public DaxResult<PayResult> pay(@RequestBody PayParam payParam){
@@ -49,7 +50,7 @@ public class UniPayController {
     }
 
     @CountTime
-    @PaymentApi("simplePay")
+    @PaymentApi(PaymentApiCode.SIMPLE_PAY)
     @Operation(summary = "简单支付接口")
     @PostMapping("/simplePay")
     public DaxResult<PayResult> simplePay(@RequestBody SimplePayParam payParam){
@@ -57,7 +58,7 @@ public class UniPayController {
     }
 
     @CountTime
-    @PaymentApi("close")
+    @PaymentApi(PaymentApiCode.CLOSE)
     @Operation(summary = "支付关闭接口")
     @PostMapping("/close")
     public DaxResult<Void> close(@RequestBody PayCloseParam param){
@@ -66,7 +67,7 @@ public class UniPayController {
     }
 
     @CountTime
-    @PaymentApi("refund")
+    @PaymentApi(PaymentApiCode.REFUND)
     @Operation(summary = "统一退款接口")
     @PostMapping("/refund")
     public DaxResult<RefundResult> refund(@RequestBody RefundParam param){
@@ -74,7 +75,7 @@ public class UniPayController {
     }
 
     @CountTime
-    @PaymentApi("simpleRefund")
+    @PaymentApi(PaymentApiCode.SIMPLE_REFUND)
     @Operation(summary = "简单退款接口")
     @PostMapping("/simpleRefund")
     public DaxResult<RefundResult> simpleRefund(@RequestBody SimpleRefundParam param){
@@ -82,7 +83,7 @@ public class UniPayController {
     }
 
     @CountTime
-    @PaymentApi("syncPay")
+    @PaymentApi(PaymentApiCode.SYNC_PAY)
     @Operation(summary = "支付同步接口")
     @PostMapping("/syncPay")
     public DaxResult<SyncResult> syncPay(@RequestBody PaySyncParam param){
@@ -90,7 +91,7 @@ public class UniPayController {
     }
 
     @CountTime
-    @PaymentApi("syncRefund")
+    @PaymentApi(PaymentApiCode.SYNC_REFUND)
     @Operation(summary = "退款同步接口")
     @PostMapping("/syncRefund")
     public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){

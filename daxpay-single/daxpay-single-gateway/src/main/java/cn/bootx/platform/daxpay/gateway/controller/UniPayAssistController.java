@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.annotation.CountTime;
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.daxpay.code.PaymentApiCode;
 import cn.bootx.platform.daxpay.param.assist.WxAccessTokenParam;
 import cn.bootx.platform.daxpay.param.assist.WxAuthUrlParam;
 import cn.bootx.platform.daxpay.result.DaxResult;
@@ -34,7 +35,7 @@ public class UniPayAssistController {
     private final UniPayAssistService uniPayAssistService;
 
     @CountTime
-    @PaymentApi("getWxAuthUrl")
+    @PaymentApi(PaymentApiCode.GET_WX_AUTH_URL)
     @Operation(summary = "获取微信OAuth2授权链接")
     @PostMapping("/getWxAuthUrl")
     public DaxResult<WxAuthUrlResult> getWxAuthUrl(@RequestBody WxAuthUrlParam param){
@@ -42,7 +43,7 @@ public class UniPayAssistController {
     }
 
     @CountTime
-    @PaymentApi("getWxAccessToken")
+    @PaymentApi(PaymentApiCode.GET_WX_ACCESS_TOKEN)
     @Operation(summary = "获取微信AccessToken")
     @PostMapping("/getWxAccessToken")
     public ResResult<WxAccessTokenResult> getWxAccessToken(@RequestBody WxAccessTokenParam param){

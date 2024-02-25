@@ -31,13 +31,17 @@ import java.time.LocalDateTime;
 @TableName(value = "pay_refund_order", autoResultMap = true)
 public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<RefundOrderDto> {
 
-    /** 关联支付id */
-    @DbColumn(comment = "关联支付id")
+    /** 原支付id */
+    @DbColumn(comment = "原支付id")
     private Long paymentId;
 
-    /** 关联业务号 */
-    @DbColumn(comment = "关联业务号")
+    /** 原支付业务号 */
+    @DbColumn(comment = "原支付业务号")
     private String businessNo;
+
+    /** 原支付标题 */
+    @DbColumn(comment = "原支付标题")
+    private String title;
 
     /**
      * 需要保证全局唯一
@@ -60,9 +64,6 @@ public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<Refu
     @DbColumn(comment = "网关订单号")
     private String gatewayOrderNo;
 
-    /** 标题 */
-    @DbColumn(comment = "标题")
-    private String title;
 
     /** 订单金额 */
     @DbColumn(comment = "订单金额")

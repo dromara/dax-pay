@@ -47,7 +47,7 @@ public class AliPayRecordService {
      */
     public void refund(RefundOrder order, RefundChannelOrder channelOrder){
         AliPayRecord aliPayRecord = new AliPayRecord()
-                .setType(AliPayRecordTypeEnum.PAY.getCode())
+                .setType(AliPayRecordTypeEnum.REFUND.getCode())
                 .setTitle(order.getTitle())
                 .setOrderId(order.getId())
                 .setGatewayOrderNo(order.getGatewayOrderNo())

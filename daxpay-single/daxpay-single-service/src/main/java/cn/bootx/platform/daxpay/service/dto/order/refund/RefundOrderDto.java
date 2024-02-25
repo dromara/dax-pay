@@ -23,11 +23,14 @@ import java.time.LocalDateTime;
 @Schema(title = "退款记录")
 public class RefundOrderDto extends BaseDto {
 
-    @Schema(description = "支付号")
+    @Schema(description = "原支付号")
     private Long paymentId;
 
-    @Schema(description = "关联的业务id")
+    @Schema(description = "原支付业务号")
     private String businessNo;
+
+    @Schema(description = "原支付标题")
+    private String title;
 
     @Schema(description = "退款号")
     private String refundNo;
@@ -45,9 +48,6 @@ public class RefundOrderDto extends BaseDto {
     @Schema(description = "支付网关订单号")
     private String gatewayOrderNo;
 
-    @Schema(description = "标题")
-    private String title;
-
     @Schema(description = "退款金额")
     private BigDecimal amount;
 
@@ -59,6 +59,10 @@ public class RefundOrderDto extends BaseDto {
 
     @Schema(description = "退款时间")
     private LocalDateTime refundTime;
+
+    /** 退款原因 */
+    @Schema(description = "退款原因")
+    private String reason;
 
     /**
      * @see RefundStatusEnum

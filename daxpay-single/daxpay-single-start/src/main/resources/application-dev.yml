@@ -164,7 +164,7 @@ dax-pay:
   # 演示模块
   demo:
     # 网关地址
-    server-url: http://pay1.bootx.cn
+    server-url: http://pay1.bootx.cn/server
     # 前端h5地址
     front-h5-url: http://pay1.bootx.cn/h5/#
     # 签名秘钥

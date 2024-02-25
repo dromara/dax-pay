@@ -187,7 +187,7 @@ public class AggregateService {
         // 支付成功同步回调地址
         simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
         // 中途退出 目前经测试不生效
-        simplePayParam.setQuitUrl(String.format("{}/result/error", daxPayDemoProperties.getFrontH5Url()));
+        simplePayParam.setQuitUrl(StrUtil.format("{}/result/error", daxPayDemoProperties.getFrontH5Url()));
 
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
 
@@ -222,8 +222,6 @@ public class AggregateService {
                 .map(ServletUtil::getClientIP)
                 .orElse("127.0.0.1");
         simplePayParam.setClientIp(ip);
-        // 异步回调地址
-        simplePayParam.setNotNotify(true);
 
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
 

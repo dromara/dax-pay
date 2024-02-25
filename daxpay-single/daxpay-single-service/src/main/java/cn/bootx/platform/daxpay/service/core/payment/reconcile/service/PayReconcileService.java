@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.daxpay.service.common.context.PaymentContext;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.PayReconcileDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
@@ -40,8 +39,6 @@ public class PayReconcileService {
      * 下载对账单并进行保存
      */
     public void downAndSave(PayReconcileOrder recordOrder) {
-        // 初始化上下文
-        PaymentContextLocal.setIfAbsent(new PaymentContext());
         // 构建对账策略
         AbsReconcileStrategy absReconcileStrategy = PayReconcileStrategyFactory.create(recordOrder.getChannel());
         absReconcileStrategy.initParam(recordOrder);

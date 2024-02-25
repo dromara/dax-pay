@@ -89,6 +89,14 @@ public class AliPayStrategy extends AbsPayStrategy {
     }
 
     /**
+     * 不使用默认的生成通道支付单方法, 异步支付通道的支付订单自己管理
+     * channelOrderService.switchAsyncPayChannel 进行切换
+     */
+    @Override
+    public void generateChannelOrder() {
+    }
+
+    /**
      * 支付调起成功, 保存或更新通道支付订单
      */
     @Override

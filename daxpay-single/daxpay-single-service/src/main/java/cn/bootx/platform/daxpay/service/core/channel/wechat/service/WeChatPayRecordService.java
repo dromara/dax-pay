@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.bootx.platform.daxpay.service.code.AliPayRecordTypeEnum;
+import cn.bootx.platform.daxpay.service.code.WechatPayRecordTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayRecord;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
@@ -33,7 +33,7 @@ public class WeChatPayRecordService {
      */
     public void pay(PayOrder order, PayChannelOrder channelOrder){
         WeChatPayRecord weChatPayRecord = new WeChatPayRecord()
-                .setType(AliPayRecordTypeEnum.PAY.getCode())
+                .setType(WechatPayRecordTypeEnum.PAY.getCode())
                 .setTitle(order.getTitle())
                 .setOrderId(order.getId())
                 .setGatewayOrderNo(order.getGatewayOrderNo())
@@ -46,7 +46,7 @@ public class WeChatPayRecordService {
      */
     public void refund(RefundOrder order, RefundChannelOrder channelOrder){
         WeChatPayRecord weChatPayRecord = new WeChatPayRecord()
-                .setType(AliPayRecordTypeEnum.PAY.getCode())
+                .setType(WechatPayRecordTypeEnum.REFUND.getCode())
                 .setTitle(order.getTitle())
                 .setOrderId(order.getId())
                 .setGatewayOrderNo(order.getGatewayOrderNo())

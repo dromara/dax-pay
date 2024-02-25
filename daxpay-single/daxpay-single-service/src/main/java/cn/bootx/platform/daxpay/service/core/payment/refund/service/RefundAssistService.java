@@ -74,11 +74,11 @@ public class RefundAssistService {
             // 首先读取请求参数
             noticeInfo.setNotifyUrl(param.getNotifyUrl());
             // 读取接口配置
-            if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
+            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
                 noticeInfo.setNotifyUrl(apiInfo.getNoticeUrl());
             }
             // 读取平台配置
-            if (StrUtil.isNotBlank(noticeInfo.getNotifyUrl())){
+            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
                 noticeInfo.setNotifyUrl(platform.getNotifyUrl());
             }
         }
@@ -235,9 +235,9 @@ public class RefundAssistService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void updateOrderByError(RefundOrder refundOrder){
-        RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
-        refundOrder.setErrorCode(asyncRefundInfo.getErrorCode());
-        refundOrder.setErrorMsg(asyncRefundInfo.getErrorMsg());
+        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        refundOrder.setErrorCode(refundInfo.getErrorCode());
+        refundOrder.setErrorMsg(refundInfo.getErrorMsg());
         // 退款失败不保存剩余可退余额, 否则数据看起开会产生困惑
         refundOrder.setRefundableBalance(null);
     }

@@ -167,7 +167,7 @@ public class PayAssistService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         payChannelOrderManager.saveAll(channelOrders);
-        payInfo.setPayChannelOrders(channelOrders);
+        payInfo.getPayChannelOrders().addAll(channelOrders);
     }
 
     /**
