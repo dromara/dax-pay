@@ -127,9 +127,10 @@ public class RefundAssistService {
             throw new PayFailureException("当前状态["+statusEnum.getName()+"]不允许发起退款操作");
         }
 
-        // 过滤掉金额为0的退款参数
+        // 过滤掉金额为空和0的退款参数
         List<RefundChannelParam> channelParams = param.getRefundChannels()
                 .stream()
+                .filter(r -> Objects.nonNull(r.getAmount()))
                 .filter(r -> r.getAmount() > 0)
                 .collect(Collectors.toList());
         param.setRefundChannels(channelParams);

@@ -74,8 +74,10 @@ public class RefundService {
         // 构建退款参数
         RefundParam refundParam = new RefundParam();
         BeanUtil.copyProperties(param,refundParam);
-        RefundChannelParam channelParam = new RefundChannelParam().setAmount(param.getAmount());
-        refundParam.setRefundChannels(Collections.singletonList(channelParam));
+        if (!param.isRefundAll()){
+            RefundChannelParam channelParam = new RefundChannelParam().setAmount(param.getAmount());
+            refundParam.setRefundChannels(Collections.singletonList(channelParam));
+        }
         return this.refundAdapter(refundParam,true);
     }
 
