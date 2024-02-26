@@ -61,6 +61,7 @@ public class SimplePayOrderTest {
         param.setChannel(PayChannelEnum.CASH.getCode());
         param.setPayWay(PayWayEnum.NORMAL.getCode());
         param.setClientIp("127.0.0.1");
+        param.setAttach("Attach");
         param.setNotifyUrl("http://127.0.0.1:9000/demo/callback/pay");
         param.setNotifyUrl("http://127.0.0.1:9000/demo/callback/payObject");
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);

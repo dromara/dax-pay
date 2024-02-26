@@ -50,10 +50,10 @@ public class PayChannelOrderService {
     }
 
     /**
-     * 切换支付订单关联的异步支付通道, 同时会设置是否支付完成状态
+     * 切换支付订单关联的异步支付通道, 同时会设置是否支付完成状态, 并返回通道订单
      */
     @Transactional(rollbackFor = Exception.class)
-    public void switchAsyncPayChannel(PayOrder payOrder, PayChannelParam payChannelParam){
+    public PayChannelOrder switchAsyncPayChannel(PayOrder payOrder, PayChannelParam payChannelParam){
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         // 是否支付完成
         PayStatusEnum payStatus = payInfo.isPayComplete() ? PayStatusEnum.SUCCESS : PayStatusEnum.PROGRESS;
@@ -81,15 +81,18 @@ public class PayChannelOrderService {
             channelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
             channelOrderManager.save(payChannelOrder);
             payInfo.getPayChannelOrders().add(payChannelOrder);
+            return payChannelOrder;
         } else {
             // 更新支付通道信息
-            payOrderChannelOpt.get()
+            PayChannelOrder payChannelOrder = payOrderChannelOpt.get();
+            payChannelOrder
                     .setPayWay(payChannelParam.getWay())
                     .setPayTime(LocalDateTime.now())
                     .setChannelExtra(channelParamStr)
                     .setStatus(payStatus.getCode());
-            channelOrderManager.updateById(payOrderChannelOpt.get());
+            channelOrderManager.updateById(payChannelOrder);
             payInfo.getPayChannelOrders().add(payOrderChannelOpt.get());
+            return payChannelOrder;
         }
     }
 

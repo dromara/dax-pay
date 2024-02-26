@@ -22,6 +22,10 @@ public class VoucherRecordDto extends BaseDto {
     @Schema(description = "储值卡id")
     private Long voucherId;
 
+    /** 标题 */
+    @Schema(description = "标题")
+    private String title;
+
     /**
      * 业务类型
      * @see VoucherRecordTypeEnum

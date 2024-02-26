@@ -11,6 +11,7 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.hutool.core.bean.BeanUtil;
@@ -26,7 +27,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 
 /**
  * 支付宝支付
- *
+ * 注意: channelOrder对象需要单独处理, 直接获取会空指针
  * @author xxm
  * @since 2021/2/27
  */
@@ -102,10 +103,10 @@ public class AliPayStrategy extends AbsPayStrategy {
     @Override
     public void doSuccessHandler() {
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
-        channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
+        PayChannelOrder payChannelOrder = channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
         // 支付完成, 保存记录
         if (asyncPayInfo.isPayComplete()) {
-            aliRecordService.pay(this.getOrder(), this.getChannelOrder());
+            aliRecordService.pay(this.getOrder(), payChannelOrder);
         }
     }
 

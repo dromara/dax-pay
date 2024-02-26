@@ -17,6 +17,7 @@ import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
 import cn.bootx.platform.daxpay.sdk.param.assist.WxAccessTokenParam;
 import cn.bootx.platform.daxpay.sdk.param.assist.WxAuthUrlParam;
+import cn.bootx.platform.daxpay.sdk.param.channel.BarCodePayParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
@@ -217,6 +218,9 @@ public class AggregateService {
         simplePayParam.setAmount(amount);
         simplePayParam.setChannel(payChannel.getCode());
         simplePayParam.setPayWay(PayWayEnum.BARCODE.getCode());
+        BarCodePayParam barCodePayParam = new BarCodePayParam();
+        barCodePayParam.setAuthCode(param.getAuthCode());
+        simplePayParam.setChannelParam(barCodePayParam);
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
                 .map(ServletUtil::getClientIP)

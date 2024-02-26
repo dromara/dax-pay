@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * 微信支付记录
  * @author xxm
  * @since 2024/2/19
  */

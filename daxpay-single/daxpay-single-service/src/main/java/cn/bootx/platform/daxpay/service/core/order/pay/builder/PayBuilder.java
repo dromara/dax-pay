@@ -5,6 +5,7 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
+import cn.bootx.platform.daxpay.service.common.context.ApiInfoLocal;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
@@ -71,9 +72,11 @@ public class PayBuilder {
     public PayOrderExtra buildPayOrderExtra(PayParam payParam, Long paymentId) {
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
+        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
         PayOrderExtra payOrderExtra = new PayOrderExtra()
                 .setClientIp(payParam.getClientIp())
                 .setDescription(payParam.getDescription())
+                .setNoticeSign(apiInfo.isNoticeSign())
                 .setNotifyUrl(noticeInfo.getNotifyUrl())
                 .setReturnUrl(noticeInfo.getReturnUrl())
                 .setReqSign(payParam.getSign())

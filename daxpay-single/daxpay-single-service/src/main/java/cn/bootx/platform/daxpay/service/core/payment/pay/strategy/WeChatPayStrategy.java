@@ -9,6 +9,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConf
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
@@ -24,7 +25,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 
 /**
  * 微信支付
- *
+ * 注意: channelOrder对象需要单独处理, 直接获取会空指针
  * @author xxm
  * @since 2021/4/5
  */
@@ -90,12 +91,12 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
+        PayChannelOrder payChannelOrder = channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
         this.getOrder().setAsyncChannel(this.getChannel().getCode());
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
         // 是否支付完成, 保存流水记录
         if (asyncPayInfo.isPayComplete()){
-            weChatPayRecordService.pay(this.getOrder(), this.getChannelOrder());
+            weChatPayRecordService.pay(this.getOrder(), payChannelOrder);
         }
     }
 

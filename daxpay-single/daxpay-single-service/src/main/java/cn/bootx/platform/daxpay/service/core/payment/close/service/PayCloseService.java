@@ -13,6 +13,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.close.factory.PayCloseStrategyFactory;
+import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
 import cn.bootx.platform.daxpay.service.core.record.close.entity.PayCloseRecord;
 import cn.bootx.platform.daxpay.service.core.record.close.service.PayCloseRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
@@ -44,6 +45,7 @@ public class PayCloseService {
     private final PayOrderService payOrderService;
     private final PayOrderQueryService payOrderQueryService;
     private final PayCloseRecordService payCloseRecordService;
+    private final ClientNoticeService clientsService;;
 
     private final LockTemplate lockTemplate;
 
@@ -76,9 +78,10 @@ public class PayCloseService {
      * 关闭支付记录
      */
     private void close(PayOrder payOrder) {
+        List<PayChannelOrder> payChannelOrders;
         try {
             // 状态检查, 只有支付中可以进行取消支付
-            if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())){
+            if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
                 throw new PayFailureException("订单不是支付中, 无法进行关闭订单");
             }
 
@@ -88,7 +91,8 @@ public class PayCloseService {
                     .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
 
             // 1.获取支付方式, 通过工厂生成对应的策略组
-            List<String> channels = orderChannelMap.values().stream()
+            List<String> channels = orderChannelMap.values()
+                    .stream()
                     .map(PayChannelOrder::getChannel)
                     .collect(Collectors.toList());
             List<AbsPayCloseStrategy> payCloseStrategies = PayCloseStrategyFactory.createAsyncLast(channels);
@@ -98,7 +102,8 @@ public class PayCloseService {
 
             // 2.初始化关闭支付的参数
             for (AbsPayCloseStrategy strategy : payCloseStrategies) {
-                strategy.initCloseParam(payOrder, orderChannelMap.get(strategy.getChannel().getCode()));
+                strategy.initCloseParam(payOrder, orderChannelMap.get(strategy.getChannel()
+                        .getCode()));
             }
 
             // 3.关闭前准备
@@ -111,29 +116,30 @@ public class PayCloseService {
             payCloseStrategies.forEach(AbsPayCloseStrategy::doSuccessHandler);
 
             // 6.更新支付通道订单的状态
-            List<PayChannelOrder> payChannelOrders = payCloseStrategies.stream()
+            payChannelOrders = payCloseStrategies.stream()
                     .map(AbsPayCloseStrategy::getChannelOrder)
                     .collect(Collectors.toList());
             payChannelOrderManager.updateAllById(payChannelOrders);
-        }
-        catch (PayFailureException e) {
+        } catch (PayFailureException e) {
             // 记录关闭失败的记录
-            this.saveRecord(payOrder,false,e.getMessage());
+            this.saveRecord(payOrder, false, e.getMessage());
             throw e;
         }
 
         // 关闭成功后处理
-        this.successHandler(payOrder);
+        this.successHandler(payOrder, payChannelOrders);
     }
 
     /**
      * 成功后处理方法
      */
-    private void successHandler(PayOrder payOrder){
+    private void successHandler(PayOrder payOrder, List<PayChannelOrder> payChannelOrders){
         // 取消订单
         payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);
+        // 发送通知
+        clientsService.registerPayNotice(payOrder,null, payChannelOrders);
         this.saveRecord(payOrder,true,null);
     }
 

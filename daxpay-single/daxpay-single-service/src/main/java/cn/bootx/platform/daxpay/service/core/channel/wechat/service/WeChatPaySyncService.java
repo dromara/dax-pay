@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -10,6 +10,7 @@ import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -132,12 +133,31 @@ public class WeChatPaySyncService {
             if (Objects.equals(tradeStatus, WeChatPayCode.REFUND_PROCESSING)) {
                 return syncResult.setSyncStatus(RefundSyncStatusEnum.PROGRESS);
             }
-            return syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL);
+            String errorMsg = this.getErrorMsg(result);
+            return syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL).setErrorMsg(errorMsg);
         } catch (Exception e) {
             log.error("查询退款订单失败:", e);
             syncResult.setSyncStatus(RefundSyncStatusEnum.PROGRESS).setErrorMsg(e.getMessage());
         }
         return syncResult;
+    }
 
+    /**
+     * 错误处理
+     */
+    /**
+     * 验证错误信息
+     */
+    private String getErrorMsg(Map<String, String> result) {
+        String returnCode = result.get(WeChatPayCode.RETURN_CODE);
+        String resultCode = result.get(WeChatPayCode.RESULT_CODE);
+        if (!WxPayKit.codeIsOk(returnCode) || !WxPayKit.codeIsOk(resultCode)) {
+            String errorMsg = result.get(WeChatPayCode.ERR_CODE_DES);
+            if (StrUtil.isBlank(errorMsg)) {
+                errorMsg = result.get(WeChatPayCode.RETURN_MSG);
+            }
+            return errorMsg;
+        }
+        return null;
     }
 }

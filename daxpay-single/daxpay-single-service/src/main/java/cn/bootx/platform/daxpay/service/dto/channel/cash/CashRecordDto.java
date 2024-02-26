@@ -18,6 +18,10 @@ import lombok.experimental.Accessors;
 @Schema(title = "现金记录")
 public class CashRecordDto extends BaseDto {
 
+    /** 标题 */
+    @Schema(description = "标题")
+    private String title;
+
     /**
      * 业务类型
      * @see VoucherRecordTypeEnum

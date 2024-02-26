@@ -53,5 +53,4 @@ public class CashPayStrategy extends AbsPayStrategy {
     public void doPayHandler() {
         cashRecordService.pay(this.getChannelOrder(),this.getOrder().getTitle());
     }
-
 }
