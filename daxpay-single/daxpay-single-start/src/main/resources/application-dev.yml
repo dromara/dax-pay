@@ -65,7 +65,7 @@ bootx:
     swagger:
       enabled: true
       author: bootx
-      version: 2.0.0
+      version: 2.0.1
       title: 开源支付平台-单商户
       description: 开源支付平台-单商户版
       # 多模块扫码
@@ -169,3 +169,5 @@ dax-pay:
     front-h5-url: http://pay1.bootx.cn/h5/#
     # 签名秘钥
     sign-secret: 123456
+    # 签名方式
+    sign-type: hmac_sha256

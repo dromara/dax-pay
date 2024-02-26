@@ -35,7 +35,7 @@ public class CashPayConfigService {
      * 获取钱包配置
      */
     public CashConfig getConfig(){
-        return cashConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("钱包配置不存在"));
+        return cashConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("现金配置不存在"));
     }
 
     /**
