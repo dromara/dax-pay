@@ -37,7 +37,7 @@ public class SimpleRefundOrderTest {
     public void refundAllOrder(){
         SimpleRefundParam param = new SimpleRefundParam();
         param.setClientIp("127.0.0.1");
-        param.setPaymentId(1762014603543281664L);
+        param.setPaymentId(1762025452118953984L);
         param.setRefundNo("R" + RandomUtil.randomNumbers(5));
         param.setRefundAll(true);
         DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
@@ -53,11 +53,11 @@ public class SimpleRefundOrderTest {
         SimpleRefundParam param = new SimpleRefundParam();
         param.setClientIp("127.0.0.1");
 
-        param.setPaymentId(1762018229581910016L);
+        param.setPaymentId(1762025452118953984L);
         param.setRefundAll(false);
         param.setRefundNo("R" + RandomUtil.randomNumbers(5));
         // 设置具体的退款参数
-        param.setAmount(1);
+        param.setAmount(19);
 
         DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);

@@ -120,6 +120,7 @@ public class RefundAssistService {
         List<String> tradesStatus = Arrays.asList(
                 PayStatusEnum.PROGRESS.getCode(),
                 PayStatusEnum.CLOSE.getCode(),
+                PayStatusEnum.REFUNDED.getCode(),
                 PayStatusEnum.REFUNDING.getCode(),
                 PayStatusEnum.FAIL.getCode());
         if (tradesStatus.contains(payOrder.getStatus())) {
@@ -128,12 +129,14 @@ public class RefundAssistService {
         }
 
         // 过滤掉金额为空和0的退款参数
-        List<RefundChannelParam> channelParams = param.getRefundChannels()
-                .stream()
-                .filter(r -> Objects.nonNull(r.getAmount()))
-                .filter(r -> r.getAmount() > 0)
-                .collect(Collectors.toList());
-        param.setRefundChannels(channelParams);
+        if (!param.isRefundAll()) {
+            List<RefundChannelParam> channelParams = param.getRefundChannels()
+                    .stream()
+                    .filter(r -> Objects.nonNull(r.getAmount()))
+                    .filter(r -> r.getAmount() > 0)
+                    .collect(Collectors.toList());
+            param.setRefundChannels(channelParams);
+        }
 
         // 退款号唯一校验
         if (StrUtil.isNotBlank(param.getRefundNo())

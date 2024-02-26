@@ -101,7 +101,7 @@ public class RefundService {
                     .stream()
                     .map(o -> new RefundChannelParam()
                             .setChannel(o.getChannel())
-                            .setAmount(o.getAmount()))
+                            .setAmount(o.getRefundableBalance()))
                     .collect(Collectors.toList());
             param.setRefundChannels(channelParams);
         } else if (simple) {
@@ -154,13 +154,16 @@ public class RefundService {
             refundStrategy.initRefundParam(payOrder, refundParam, payChannelOrder);
         }
 
-        // 生成通道退款订单对象
+        // 2.1 退款前校验操作
+        payRefundStrategies.forEach(AbsRefundStrategy::doBeforeCheckHandler);
+
+        // 2.2 生成通道退款订单对象
         payRefundStrategies.forEach(AbsRefundStrategy::generateChannelOrder);
 
-        // 退款操作的预处理, 使用独立的新事物进行发起, 返回创建成功的退款订单, 成功后才可以进行下一阶段的操作
+        // 2.3 退款操作的预处理, 使用独立的新事物进行发起, 返回创建成功的退款订单, 成功后才可以进行下一阶段的操作
         RefundOrder refundOrder = SpringUtil.getBean(this.getClass()).preRefundMethod(refundParam, payOrder, payRefundStrategies);
 
-        // 设置退款订单对象
+        // 2.4 设置退款订单对象
         payRefundStrategies.forEach(r->r.setRefundOrder(refundOrder));
 
         try {
@@ -168,7 +171,7 @@ public class RefundService {
             payRefundStrategies.forEach(AbsRefundStrategy::doBeforeRefundHandler);
             // 3.2 执行退款策略
             payRefundStrategies.forEach(AbsRefundStrategy::doRefundHandler);
-            // 3.4 执行退款发起成功后操作
+            // 3.3 执行退款发起成功后操作
             payRefundStrategies.forEach(AbsRefundStrategy::doSuccessHandler);
 
             // 4.进行成功处理, 分别处理退款订单, 通道退款订单, 支付订单

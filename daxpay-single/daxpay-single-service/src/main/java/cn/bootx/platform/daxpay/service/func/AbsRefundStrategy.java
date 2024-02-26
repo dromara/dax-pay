@@ -1,7 +1,8 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
@@ -62,9 +63,20 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     }
 
     /**
-     * 退款前对处理
+     * 退款前对退款数据校验
      */
-    public void doBeforeRefundHandler() {}
+    public void doBeforeCheckHandler() {
+        // 退款金额不可以大于可退余额
+        if (this.getRefundChannelParam().getAmount() > this.getPayChannelOrder().getRefundableBalance()) {
+            throw new PayFailureException("["+ this.getChannel().getName() +"]退款金额大于可退余额");
+        }
+    }
+
+    /**
+     * 退款前对处理, 主要进行配置的加载和检查
+     */
+    public void doBeforeRefundHandler() {
+    }
 
     /**
      * 退款操作
