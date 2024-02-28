@@ -73,7 +73,7 @@ public class ClientNoticeAssistService {
                 .setUrl(orderExtra.getNotifyUrl())
                 // 时间序列化进行了重写
                 .setContent(JacksonUtil.toJson(payNoticeResult))
-                .setType(ClientNoticeTypeEnum.PAY.getType())
+                .setNoticeType(ClientNoticeTypeEnum.PAY.getType())
                 .setSendCount(0)
                 .setOrderId(order.getId());
     }
@@ -113,7 +113,7 @@ public class ClientNoticeAssistService {
                 .setUrl(orderExtra.getNotifyUrl())
                 // 时间序列化进行了重写
                 .setContent(JacksonUtil.toJson(payNoticeResult))
-                .setType(ClientNoticeTypeEnum.REFUND.getType())
+                .setNoticeType(ClientNoticeTypeEnum.REFUND.getType())
                 .setSendCount(0)
                 .setOrderId(order.getId());
     }

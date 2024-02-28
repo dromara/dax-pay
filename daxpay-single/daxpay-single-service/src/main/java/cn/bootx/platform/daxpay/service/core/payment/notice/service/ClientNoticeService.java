@@ -219,7 +219,7 @@ public class ClientNoticeService {
         // 创建记录
         ClientNoticeRecord record = new ClientNoticeRecord()
                 .setTaskId(task.getId())
-                .setType(ClientNoticeSendTypeEnum.AUTO.getType())
+                .setSendType(ClientNoticeSendTypeEnum.AUTO.getType())
                 .setReqCount(task.getSendCount()+1);
         String body = null;
         try {
