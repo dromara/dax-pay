@@ -45,6 +45,10 @@ public class PayReconcileDetail extends MpCreateEntity implements EntityBaseFunc
 
     /** 本地订单ID */
     @DbColumn(comment = "本地订单ID")
+    private String orderId;
+
+    /** 支付订单ID */
+    @DbColumn(comment = "本地订单ID")
     private String paymentId;
 
     /** 本地退款ID */

@@ -104,11 +104,10 @@ public class PaySyncService {
             if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(payOrder, syncResult, false, null, syncResult.getErrorMsg());
-//                return new SyncResult().setErrorMsg(syncResult.getErrorMsg());
                 throw new PayFailureException(syncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (Objects.nonNull(syncResult.getGatewayOrderNo()) && !Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getGatewayOrderNo())){
+            if (!Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getGatewayOrderNo())){
                 payOrder.setGatewayOrderNo(syncResult.getGatewayOrderNo());
                 payOrderService.updateById(payOrder);
             }

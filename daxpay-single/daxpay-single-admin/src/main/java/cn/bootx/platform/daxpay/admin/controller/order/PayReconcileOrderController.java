@@ -5,7 +5,6 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.core.util.ValidationUtil;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.service.PayReconcileOrderService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.PayReconcileQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.service.PayReconcileService;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.PayReconcileDetailDto;
@@ -29,14 +28,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PayReconcileOrderController {
     private final PayReconcileService reconcileService;
-    private final PayReconcileOrderService reconcileOrderService;
     private final PayReconcileQueryService reconcileQueryService;
 
     @Operation(summary = "手动创建支付对账订单")
     @PostMapping("/create")
     public ResResult<Void> create(@RequestBody ReconcileOrderCreate param){
         ValidationUtil.validateParam(param);
-        reconcileOrderService.create(param.getDate(), param.getChannel());
+        reconcileService.create(param.getDate(), param.getChannel());
         return Res.ok();
     }
 
@@ -44,6 +42,13 @@ public class PayReconcileOrderController {
     @PostMapping("/downAndSave")
     public ResResult<Void> downAndSave(Long id){
         reconcileService.downAndSave(id);
+        return Res.ok();
+    }
+
+    @Operation(summary = "手动触发对账单比对")
+    @PostMapping("/compare")
+    public ResResult<Void> compare(Long id){
+        reconcileService.compare(id);
         return Res.ok();
     }
 

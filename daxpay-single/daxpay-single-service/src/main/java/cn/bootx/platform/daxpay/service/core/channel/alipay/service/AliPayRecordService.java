@@ -37,8 +37,9 @@ public class AliPayRecordService {
                 .setType(AliPayRecordTypeEnum.PAY.getCode())
                 .setTitle(order.getTitle())
                 .setOrderId(order.getId())
+                .setAmount(channelOrder.getAmount())
                 .setGatewayOrderNo(order.getGatewayOrderNo())
-                .setAmount(channelOrder.getAmount());
+                .setGatewayTime(channelOrder.getPayTime());
         aliPayRecordManager.save(aliPayRecord);
     }
 
@@ -50,8 +51,9 @@ public class AliPayRecordService {
                 .setType(AliPayRecordTypeEnum.REFUND.getCode())
                 .setTitle(order.getTitle())
                 .setOrderId(order.getId())
+                .setAmount(channelOrder.getAmount())
                 .setGatewayOrderNo(order.getGatewayOrderNo())
-                .setAmount(channelOrder.getAmount());
+                .setGatewayTime(channelOrder.getRefundTime());
         aliPayRecordManager.save(aliPayRecord);
     }
 

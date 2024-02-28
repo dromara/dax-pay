@@ -24,7 +24,7 @@ public class PayReconcileTask implements Job {
     private final PayReconcileTaskService reconcileTaskService;
 
     /**
-     * 若参数变量名修改 QuartzJobScheduler 中也需对应修改 需要给一个set方法, 让系统设置值
+     * 要同步的通道
      */
     @Setter
     private String channel;
@@ -47,6 +47,6 @@ public class PayReconcileTask implements Job {
         } else {
             date = date.minusDays(1);
         }
-        reconcileTaskService.x1(date,channel);
+        reconcileTaskService.reconcileTask(date,channel);
     }
 }

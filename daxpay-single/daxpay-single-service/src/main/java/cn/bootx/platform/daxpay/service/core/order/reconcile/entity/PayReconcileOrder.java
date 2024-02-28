@@ -55,9 +55,6 @@ public class PayReconcileOrder extends MpCreateEntity implements EntityBaseFunct
     @DbColumn(comment = "错误信息")
     private String errorMsg;
 
-    /**
-     * @return
-     */
     @Override
     public PayReconcileOrderDto toDto() {
         return PayReconcileConvert.CONVERT.convert(this);

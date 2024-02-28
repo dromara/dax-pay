@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -21,6 +23,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class PayReconcileDetailManager extends BaseManager<PayReconcileDetailMapper, PayReconcileDetail> {
+
+
+    /**
+     * 根据订单id查询
+     */
+    public List<PayReconcileDetail> findAllByOrderId(Long orderId){
+        return this.findAllByField(PayReconcileDetail::getRecordOrderId, orderId);
+    }
 
     /**
      * 分页
