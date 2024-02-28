@@ -36,8 +36,9 @@ public class WeChatPayRecordService {
                 .setType(WechatPayRecordTypeEnum.PAY.getCode())
                 .setTitle(order.getTitle())
                 .setOrderId(order.getId())
+                .setAmount(channelOrder.getAmount())
                 .setGatewayOrderNo(order.getGatewayOrderNo())
-                .setAmount(channelOrder.getAmount());
+                .setGatewayTime(channelOrder.getPayTime());
         weChatPayRecordManager.save(weChatPayRecord);
     }
 
@@ -49,8 +50,9 @@ public class WeChatPayRecordService {
                 .setType(WechatPayRecordTypeEnum.REFUND.getCode())
                 .setTitle(order.getTitle())
                 .setOrderId(order.getId())
+                .setAmount(channelOrder.getAmount())
                 .setGatewayOrderNo(order.getGatewayOrderNo())
-                .setAmount(channelOrder.getAmount());
+                .setGatewayTime(channelOrder.getRefundTime());
         weChatPayRecordManager.save(weChatPayRecord);
     }
 

@@ -47,9 +47,7 @@ public abstract class AbsPayRepairStrategy implements PayStrategy{
     /**
      * 等待支付处理
      */
-    public void doWaitPayHandler(){
-
-    }
+    public void doWaitPayHandler(){}
 
     /**
      * 关闭本地支付

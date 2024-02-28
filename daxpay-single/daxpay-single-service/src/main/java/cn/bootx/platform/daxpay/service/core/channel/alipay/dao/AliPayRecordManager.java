@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -30,5 +33,14 @@ public class AliPayRecordManager extends BaseManager<AliPayRecordMapper, AliPayR
         Page<AliPayRecord> mpPage = MpUtil.getMpPage(pageParam, AliPayRecord.class);
         QueryWrapper<AliPayRecord> generator = QueryGenerator.generator(param);
         return this.page(mpPage, generator);
+    }
+
+    /**
+     * 按时间范围查询
+     */
+    public List<AliPayRecord> findByDate(LocalDateTime startDate, LocalDateTime endDate){
+        return this.lambdaQuery()
+                .between(AliPayRecord::getGatewayTime, startDate, endDate)
+                .list();
     }
 }

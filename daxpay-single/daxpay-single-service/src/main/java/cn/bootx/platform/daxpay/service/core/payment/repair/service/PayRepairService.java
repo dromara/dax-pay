@@ -98,6 +98,9 @@ public class PayRepairService {
         List<PayChannelOrder> channelOrders = repairStrategies.stream()
                 .map(AbsPayRepairStrategy::getChannelOrder)
                 .collect(Collectors.toList());
+        // 更新通道订单
+        channelOrderManager.updateAllById(channelOrders);
+        // 发送通知
         clientNoticeService.registerPayNotice(order, null, channelOrders);
         this.saveRecord(order, repairType, repairResult);
         return repairResult;
@@ -105,13 +108,15 @@ public class PayRepairService {
 
     /**
      * 变更未待支付
-     *
+     * TODO 后期保存为异常订单
      */
     private void waitPay(PayOrder order, List<AbsPayRepairStrategy> repairStrategies) {
-
-        repairStrategies.forEach(AbsPayRepairStrategy::doCloseLocalHandler);
-        // 修改订单支付状态为成功
-        order.setStatus(PayStatusEnum.PROGRESS.getCode());
+        // 待支付批量处理
+        repairStrategies.forEach(AbsPayRepairStrategy::doWaitPayHandler);
+        // 修改订单支付状态为待支付
+        order.setStatus(PayStatusEnum.PROGRESS.getCode())
+                .setPayTime(null)
+                .setCloseTime(null);
         payOrderService.updateById(order);
     }
 
@@ -141,7 +146,7 @@ public class PayRepairService {
         // 执行策略的关闭方法
         absPayStrategies.forEach(AbsPayRepairStrategy::doCloseLocalHandler);
         order.setStatus(PayStatusEnum.CLOSE.getCode())
-                // TODO 尝试是否可以使用网关返回的
+                // TODO 尝试是否可以使用网关返回的时间
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(order);
     }

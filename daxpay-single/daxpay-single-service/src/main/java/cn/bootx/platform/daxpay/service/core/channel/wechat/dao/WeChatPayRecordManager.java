@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -29,5 +32,14 @@ public class WeChatPayRecordManager extends BaseManager<WeChatPayRecordMapper, W
         Page<WeChatPayRecord> mpPage = MpUtil.getMpPage(pageParam, WeChatPayRecord.class);
         QueryWrapper<WeChatPayRecord> generator = QueryGenerator.generator(param);
         return this.page(mpPage, generator);
+    }
+
+    /**
+     * 按时间范围查询
+     */
+    public List<WeChatPayRecord> findByDate(LocalDateTime start, LocalDateTime end) {
+        return this.lambdaQuery()
+                .between(WeChatPayRecord::getGatewayTime, start, end)
+                .list();
     }
 }

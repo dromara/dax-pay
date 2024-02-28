@@ -10,6 +10,8 @@ import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.bootx.table.modify.mysql.constants.MySqlIndexType;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -76,10 +78,12 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
 
     /** 支付时间 */
     @DbColumn(comment = "支付时间")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private LocalDateTime payTime;
 
     /** 关闭时间 */
-    @DbColumn(comment = "支付时间")
+    @DbColumn(comment = "关闭时间")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private LocalDateTime closeTime;
 
     /** 过期时间 */

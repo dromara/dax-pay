@@ -4,7 +4,6 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcile
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -18,9 +17,5 @@ public class ReconcileLocal {
 
     /** 通用支付对账记录 */
     private List<PayReconcileDetail> reconcileDetails;
-
-
-    /** 支付完成时间 从支付网关中获取 */
-    private LocalDateTime payTime;
 
 }

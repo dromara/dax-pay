@@ -20,10 +20,13 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付退款查询参数")
 public class RefundOrderQuery extends QueryOrder {
 
-    @Schema(description = "退款号")
+    @Schema(description = "退款Id")
     private Long id;
 
-    @Schema(description = "支付号")
+    @Schema(description = "退款号")
+    private String refundNo;
+
+    @Schema(description = "支付ID")
     private Long paymentId;
 
     @Schema(description = "关联的业务号")

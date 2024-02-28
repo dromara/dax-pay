@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * 微信支付记录
  * @author xxm
@@ -40,5 +42,9 @@ public class AliPayRecordDto extends BaseDto {
     /** 网关订单号 */
     @Schema(description = "网关订单号")
     private String gatewayOrderNo;
+
+    /** 网关完成时间 */
+    @Schema(description = "网关完成时间")
+    private LocalDateTime gatewayTime;
 
 }
