@@ -41,7 +41,7 @@ public class ClientNoticeRecord extends MpCreateEntity implements EntityBaseFunc
      * @see ClientNoticeSendTypeEnum
      */
     @DbColumn(comment = "发送类型")
-    private String type;
+    private String sendType;
 
     /** 错误信息 */
     @DbColumn(comment = "错误信息")
