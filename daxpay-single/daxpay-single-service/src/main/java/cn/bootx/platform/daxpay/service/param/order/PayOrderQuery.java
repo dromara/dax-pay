@@ -23,7 +23,7 @@ public class PayOrderQuery extends QueryOrder {
 
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付订单id")
-    private Long paymentId;
+    private Long id;
 
     /** 关联的业务号 */
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
