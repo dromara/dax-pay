@@ -13,6 +13,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayReco
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDiffRecord;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
@@ -99,9 +100,11 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
      * 1. 远程有, 本地无  补单(追加回订单/记录差异表)
      * 2. 远程无, 本地有  记录差错表
      * 3. 远程有, 本地有, 但状态不一致 记录差错表
+     *
+     * @return
      */
     @Override
-    public void compare() {
+    public List<PayReconcileDiffRecord> generateDiffRecord() {
         List<PayReconcileDetail> details = this.getReconcileDetails();
         if (CollUtil.isEmpty(details)){
             return;

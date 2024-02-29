@@ -7,7 +7,9 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.PayReconcileDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.PayReconcileOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDiffRecord;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileOrder;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.service.PayReconcileDiffRecordService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.PayReconcileOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.factory.PayReconcileStrategyFactory;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
@@ -29,8 +31,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PayReconcileService {
-    private final PayReconcileOrderManager reconcileOrderManager;
     private final PayReconcileOrderService reconcileOrderService;
+
+    private final PayReconcileDiffRecordService reconcileDiffRecordService;
+
+    private final PayReconcileOrderManager reconcileOrderManager;
     private final PayReconcileDetailManager reconcileDetailManager;
 
     /**
@@ -125,8 +130,8 @@ public class PayReconcileService {
         reconcileStrategy.setRecordOrder(reconcileOrder);
         reconcileStrategy.setReconcileDetails(reconcileDetails);
         try {
-            // 执行比对任务
-            reconcileStrategy.compare();
+            // 执行比对任务, 获取对账差异记录
+            List<PayReconcileDiffRecord> diffRecords = reconcileStrategy.generateDiffRecord();
 //            reconcileOrder.setCompare(true);
 //            reconcileOrderService.update(reconcileOrder);
         } catch (Exception e) {
