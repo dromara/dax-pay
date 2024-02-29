@@ -13,6 +13,7 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayRecord;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDiffRecord;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.hutool.core.date.DatePattern;
 import lombok.Getter;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -104,11 +106,15 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
      * 3. 远程有, 本地有, 但状态不一致 记录差错表
      */
     @Override
-    public void compare() {
+    public List<PayReconcileDiffRecord> generateDiffRecord() {
         List<PayReconcileDetail> details = this.getReconcileDetails();
         if (CollUtil.isEmpty(details)){
-            return;
+            return new ArrayList<>(0);
         }
+
+        // 差异单列表
+        List<PayReconcileDiffRecord> diffRecords = new ArrayList<>();
+
         Map<String, PayReconcileDetail> detailMap = details.stream()
                 .collect(Collectors.toMap(PayReconcileDetail::getOrderId, Function.identity(), CollectorsFunction::retainLatest));
 
@@ -160,5 +166,6 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
                 continue;
             }
         }
+        return diffRecords;
     }
 }
