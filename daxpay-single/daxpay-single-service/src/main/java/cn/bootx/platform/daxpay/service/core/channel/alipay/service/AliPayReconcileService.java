@@ -1,9 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
-import cn.bootx.platform.daxpay.code.PayReconcileTradeEnum;
+import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBillTotalManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
@@ -49,6 +50,8 @@ public class AliPayReconcileService {
     private final AliReconcileBillDetailManager reconcileBillDetailManager;
 
     private final AliReconcileBillTotalManager reconcileBillTotalManager;
+
+    private final AliPayRecordManager recordManager;
 
     /**
      * 下载对账单, 并进行解析进行保存
@@ -139,14 +142,14 @@ public class AliPayReconcileService {
         PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
                 .setRecordOrderId(billDetail.getRecordOrderId())
                 .setOrderId(billDetail.getOutTradeNo())
-                .setType(PayReconcileTradeEnum.PAY.getCode())
+                .setType(ReconcileTradeEnum.PAY.getCode())
                 .setAmount(amount)
                 .setTitle(billDetail.getSubject())
                 .setGatewayOrderNo(billDetail.getTradeNo());
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
             payReconcileDetail.setOrderId(billDetail.getBatchNo())
-                    .setType(PayReconcileTradeEnum.REFUND.getCode());
+                    .setType(ReconcileTradeEnum.REFUND.getCode());
         }
 
         return payReconcileDetail;
@@ -156,7 +159,7 @@ public class AliPayReconcileService {
     /**
      * 解析明细
      */
-    public List<AliReconcileBillDetail> parseDetail(List<String> list){
+    private List<AliReconcileBillDetail> parseDetail(List<String> list){
         // 截取需要进行解析的文本内容
         String billDetail = list.stream()
                 .collect(Collectors.joining(System.lineSeparator()));
@@ -171,7 +174,7 @@ public class AliPayReconcileService {
     /**
      * 解析汇总
      */
-    public List<AliReconcileBillTotal> parseTotal(List<String> list){
+    private List<AliReconcileBillTotal> parseTotal(List<String> list){
         // 去除前 4 行和后 2 行 然后合并是个一个字符串
         String billTotal = list.stream()
                 .collect(Collectors.joining(System.lineSeparator()));
@@ -183,4 +186,5 @@ public class AliPayReconcileService {
         CsvReader reader = CsvUtil.getReader();
         return reader.read(billTotal, AliReconcileBillTotal.class);
     }
+
 }

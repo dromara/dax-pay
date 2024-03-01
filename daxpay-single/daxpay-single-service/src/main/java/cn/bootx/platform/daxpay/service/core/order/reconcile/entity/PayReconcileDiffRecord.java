@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -38,11 +39,17 @@ public class PayReconcileDiffRecord extends MpBaseEntity {
     @DbColumn(comment = "订单标题")
     private String title;
 
-    /** 订单类型 */
-    @DbColumn(comment = "订单类型")
+    /**
+     * 对账订单类型
+     * @see ReconcileTradeEnum
+     */
+    @DbColumn(comment = "对账订单类型")
     private String orderType;
 
-    /** 差异类型 */
+    /**
+     * 差异类型
+     *
+     */
     @DbColumn(comment = "差异类型")
     private String diffType;
 

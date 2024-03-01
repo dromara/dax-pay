@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.convert;
 
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayRecord;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import cn.bootx.platform.daxpay.service.dto.channel.alipay.AliPayConfigDto;
 import cn.bootx.platform.daxpay.service.dto.channel.alipay.AliPayRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayConfigParam;
@@ -19,9 +20,9 @@ public interface AlipayConvert {
 
     AlipayConvert CONVERT = Mappers.getMapper(AlipayConvert.class);
 
-    AliPayConfig convert(AliPayConfigDto in);
-
     AliPayRecordDto convert(AliPayRecord in);
+
+    GeneralReconcileRecord convertReconcileRecord(AliPayRecord in);
 
     AliPayConfig convert(AliPayConfigParam in);
 

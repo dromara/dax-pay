@@ -1,9 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
-import cn.bootx.platform.daxpay.code.PayReconcileTradeEnum;
+import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillTotalManger;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
@@ -44,6 +45,8 @@ import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.ACCOUNT_TYPE_B
 public class WechatPayReconcileService{
     private final WxReconcileBillTotalManger reconcileBillTotalManger;
     private final WxReconcileBillDetailManager reconcileBillDetailManager;
+
+    private final WeChatPayRecordManager recordManager;
 
     /**
      * 下载对账单并保存
@@ -127,7 +130,7 @@ public class WechatPayReconcileService{
             String orderAmount = billDetail.getOrderAmount();
             double v = Double.parseDouble(orderAmount) * 100;
             int amount = Math.abs(((int) v));
-            payReconcileDetail.setType(PayReconcileTradeEnum.PAY.getCode())
+            payReconcileDetail.setType(ReconcileTradeEnum.PAY.getCode())
                     .setAmount(amount);
         }
         // 退款
@@ -136,7 +139,7 @@ public class WechatPayReconcileService{
             String refundAmount = billDetail.getApplyRefundAmount();
             double v = Double.parseDouble(refundAmount) * 100;
             int amount = Math.abs(((int) v));
-            payReconcileDetail.setType(PayReconcileTradeEnum.REFUND.getCode())
+            payReconcileDetail.setType(ReconcileTradeEnum.REFUND.getCode())
                     .setAmount(amount)
                     .setOrderId(billDetail.getMchRefundNo());
         }

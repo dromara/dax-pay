@@ -30,13 +30,13 @@ public class WxReconcileFundFlowDetail extends MpCreateEntity {
     private String flowId;
     @Alias("业务名称")
     @DbColumn(comment = "业务名称")
-    private String packet1;
+    private String name;
     @Alias("业务类型")
     @DbColumn(comment = "业务类型")
-    private String packet2;
+    private String businessType;
     @Alias("收支类型")
     @DbColumn(comment = "收支类型")
-    private String packet3;
+    private String incomeType;
     @Alias("收支金额(元)")
     @DbColumn(comment = "收支金额(元)")
     private String amount;
@@ -45,11 +45,11 @@ public class WxReconcileFundFlowDetail extends MpCreateEntity {
     private String balance;
     @Alias("资金变更提交申请人")
     @DbColumn(comment = "资金变更提交申请人")
-    private String packet4;
+    private String applyUser;
     @Alias("备注")
     @DbColumn(comment = "备注")
-    private String packet5;
+    private String remark;
     @Alias("业务凭证号")
     @DbColumn(comment = "业务凭证号")
-    private String packet6;
+    private String voucherNo;
 }

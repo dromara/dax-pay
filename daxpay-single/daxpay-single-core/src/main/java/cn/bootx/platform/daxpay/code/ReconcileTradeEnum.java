@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付对账交易类型
+ * 对账交易类型
  * @author xxm
  * @since 2024/1/23
  */
 @Getter
 @AllArgsConstructor
-public enum PayReconcileTradeEnum {
+public enum ReconcileTradeEnum {
 
     PAY("pay","支付"),
     REFUND("refund","退款"),
