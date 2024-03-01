@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
-import cn.bootx.platform.daxpay.code.PayReconcileTradeEnum;
+import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.PayReconcileConvert;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.PayReconcileDetailDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * 通用支付对账记录
@@ -38,7 +40,7 @@ public class PayReconcileDetail extends MpCreateEntity implements EntityBaseFunc
 
     /**
      * 交易类型
-     * @see PayReconcileTradeEnum
+     * @see ReconcileTradeEnum
      */
     @DbColumn(comment = "交易类型")
     private String type;
@@ -58,6 +60,10 @@ public class PayReconcileDetail extends MpCreateEntity implements EntityBaseFunc
     /** 网关订单号 - 支付宝/微信的订单号 */
     @DbColumn(comment = "网关订单号")
     private String gatewayOrderNo;
+
+    /** 订单时间 */
+    @DbColumn(comment = "订单时间")
+    private LocalDateTime orderTime;
 
 
     @Override

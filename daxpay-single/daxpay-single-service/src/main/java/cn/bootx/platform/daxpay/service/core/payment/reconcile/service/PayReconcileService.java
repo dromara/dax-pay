@@ -1,8 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.function.CollectorsFunction;
+import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.service.code.AliPayRecordTypeEnum;
+import cn.bootx.platform.daxpay.service.code.ReconcileDiffTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.PayReconcileDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.PayReconcileOrderManager;
@@ -11,6 +16,7 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcile
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileOrder;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.PayReconcileDiffRecordService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.PayReconcileOrderService;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.factory.PayReconcileStrategyFactory;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +26,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 支付对账单下载服务
@@ -131,7 +142,8 @@ public class PayReconcileService {
         reconcileStrategy.setReconcileDetails(reconcileDetails);
         try {
             // 执行比对任务, 获取对账差异记录
-            List<PayReconcileDiffRecord> diffRecords = reconcileStrategy.generateDiffRecord();
+            List<GeneralReconcileRecord> generalReconcileRecord = reconcileStrategy.getGeneralReconcileRecord();
+            List<PayReconcileDiffRecord> diffRecords = this.generateDiffRecord(generalReconcileRecord,reconcileDetails);
 //            reconcileOrder.setCompare(true);
 //            reconcileOrderService.update(reconcileOrder);
         } catch (Exception e) {
@@ -140,5 +152,91 @@ public class PayReconcileService {
             reconcileOrderService.update(reconcileOrder);
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 比对生成对账差异单
+     * 1. 远程有, 本地无  补单(追加回订单/记录差异表)
+     * 2. 远程无, 本地有  记录差错表
+     * 3. 远程有, 本地有, 但状态不一致 记录差错表
+     *
+     */
+    private List<PayReconcileDiffRecord> generateDiffRecord(List<GeneralReconcileRecord> records, List<PayReconcileDetail> details){
+        if (CollUtil.isEmpty(details)){
+            return new ArrayList<>();
+        }
+        Map<String, PayReconcileDetail> detailMap = details.stream()
+                .collect(Collectors.toMap(PayReconcileDetail::getOrderId, Function.identity(), CollectorsFunction::retainLatest));
+
+        List<PayReconcileDiffRecord> diffRecords = new ArrayList<>();
+
+        Map<Long, GeneralReconcileRecord> recordMap = records.stream()
+                .collect(Collectors.toMap(GeneralReconcileRecord::getOrderId, Function.identity(), CollectorsFunction::retainLatest));
+
+        // 对账与流水比对
+        for (PayReconcileDetail detail : details) {
+            // 判断本地流水有没有记录, 流水没有记录查询本地订单
+            GeneralReconcileRecord record = recordMap.get(Long.valueOf(detail.getOrderId()));
+            if (Objects.isNull(record)){
+                log.info("本地订单不存在: {}", detail.getOrderId());
+                PayReconcileDiffRecord diffRecord = new PayReconcileDiffRecord()
+                        .setDiffType(ReconcileDiffTypeEnum.LOCAL_NOT_EXISTS.getCode())
+                        .setOrderId(Long.valueOf(detail.getOrderId()))
+                        .setDetailId(detail.getId())
+                        .setRecordId(detail.getRecordOrderId())
+                        .setTitle(detail.getTitle())
+                        .setDiffType(detail.getType())
+                        .setGatewayOrderNo(detail.getGatewayOrderNo())
+                        .setAmount(detail.getAmount())
+                        .setOrderTime(detail.getOrderTime());
+                diffRecords.add(diffRecord);
+                continue;
+            }
+            // 交易类型 支付/退款
+            if (Objects.equals(detail.getType(), ReconcileTradeEnum.PAY.getCode())){
+                // 判断类型是否存在差异
+                if (!Objects.equals(record.getType(), AliPayRecordTypeEnum.PAY.getCode())){
+                    PayReconcileDiffRecord diffRecord = new PayReconcileDiffRecord()
+                            .setDiffType(ReconcileDiffTypeEnum.NOT_MATCH.getCode())
+                            .setOrderId(Long.valueOf(detail.getOrderId()))
+                            .setDetailId(detail.getId())
+                            .setRecordId(detail.getRecordOrderId())
+                            .setTitle(detail.getTitle())
+                            .setDiffType(detail.getType())
+                            .setGatewayOrderNo(detail.getGatewayOrderNo())
+                            .setAmount(detail.getAmount())
+                            .setOrderTime(detail.getOrderTime());
+                    diffRecords.add(diffRecord);
+                    continue;
+                }
+            } else {
+                // 判断类型是否存在差异
+                if (!Objects.equals(record.getType(), AliPayRecordTypeEnum.REFUND.getCode())) {
+                    log.info("本地订单类型不正常: {}", detail.getOrderId());
+                    continue;
+                }
+            }
+            // 判断是否存在差异 金额, 状态
+            if (!Objects.equals(record.getAmount(), detail.getAmount())){
+                log.info("本地订单金额不正常: {}", detail.getOrderId());
+                continue;
+            }
+        }
+        // 流水与对账单比对, 找出本地有, 远程没有的记录
+        for (GeneralReconcileRecord record : records) {
+            PayReconcileDetail detail = detailMap.get(String.valueOf(record.getOrderId()));
+            if (Objects.isNull(detail)){
+                log.info("远程订单不存在: {}", record.getOrderId());
+                continue;
+            }
+        }
+        return diffRecords;
+    }
+
+    /**
+     * 判断订单之间是否存在差异
+     */
+    public void reconcileDiff(GeneralReconcileRecord record, PayReconcileDetail detail){
+
     }
 }

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.param.reconcile;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
-import cn.bootx.platform.daxpay.code.PayReconcileTradeEnum;
+import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -22,7 +22,7 @@ public class ReconcileDetailQuery {
 
     /**
      * 交易类型
-     * @see PayReconcileTradeEnum
+     * @see ReconcileTradeEnum
      */
     @Schema(description = "交易类型")
     private String type;

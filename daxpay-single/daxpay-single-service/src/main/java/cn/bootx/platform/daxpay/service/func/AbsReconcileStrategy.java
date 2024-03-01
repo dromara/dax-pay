@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDiffRecord;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileOrder;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,13 +42,8 @@ public abstract class AbsReconcileStrategy implements PayStrategy {
     public abstract void downAndSave();
 
     /**
-     * 比对生成对账差异单
-     * 1. 远程有, 本地无  补单(追加回订单/记录差异表)
-     * 2. 远程无, 本地有  记录差错表
-     * 3. 远程有, 本地有, 但状态不一致 记录差错表
-     *
-     * @return
+     * 获取通用对账对象, 将流水记录转换为对账对象
      */
-    public abstract List<PayReconcileDiffRecord> generateDiffRecord();
+    public abstract List<GeneralReconcileRecord> getGeneralReconcileRecord();
 
 }
