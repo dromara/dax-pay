@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Data
 @Accessors(chain = true)
 @Schema(title = "对账订单")
-public class PayReconcileOrderDto extends BaseDto {
+public class ReconcileOrderDto extends BaseDto {
 
     @Schema(description = "日期")
     private LocalDate date;

@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.task;
 
-import cn.bootx.platform.daxpay.service.task.service.PayReconcileTaskService;
+import cn.bootx.platform.daxpay.service.task.service.ReconcileTaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +20,8 @@ import java.util.Objects;
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
 @RequiredArgsConstructor
-public class PayReconcileTask implements Job {
-    private final PayReconcileTaskService reconcileTaskService;
+public class ReconcileTask implements Job {
+    private final ReconcileTaskService reconcileTaskService;
 
     /**
      * 要同步的通道

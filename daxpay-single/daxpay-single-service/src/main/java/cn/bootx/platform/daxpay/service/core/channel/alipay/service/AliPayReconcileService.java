@@ -10,7 +10,7 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBill
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillTotal;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -122,7 +122,7 @@ public class AliPayReconcileService {
      * 转换为通用对账记录对象
      */
     private void convertAndSave(List<AliReconcileBillDetail> billDetails){
-        List<PayReconcileDetail> collect = billDetails.stream()
+        List<ReconcileDetail> collect = billDetails.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
         // 写入到上下文中
@@ -132,14 +132,14 @@ public class AliPayReconcileService {
     /**
      * 转换为通用对账记录对象
      */
-    private PayReconcileDetail convert(AliReconcileBillDetail billDetail){
+    private ReconcileDetail convert(AliReconcileBillDetail billDetail){
         // 金额
         String orderAmount = billDetail.getOrderAmount();
         double v = Double.parseDouble(orderAmount) * 100;
         int amount = Math.abs(((int) v));
 
         // 默认为支付对账记录
-        PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
+        ReconcileDetail reconcileDetail = new ReconcileDetail()
                 .setRecordOrderId(billDetail.getRecordOrderId())
                 .setOrderId(billDetail.getOutTradeNo())
                 .setType(ReconcileTradeEnum.PAY.getCode())
@@ -148,11 +148,11 @@ public class AliPayReconcileService {
                 .setGatewayOrderNo(billDetail.getTradeNo());
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
-            payReconcileDetail.setOrderId(billDetail.getBatchNo())
+            reconcileDetail.setOrderId(billDetail.getBatchNo())
                     .setType(ReconcileTradeEnum.REFUND.getCode());
         }
 
-        return payReconcileDetail;
+        return reconcileDetail;
     }
 
 

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileOrder;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +19,10 @@ import java.util.List;
 public abstract class AbsReconcileStrategy implements PayStrategy {
 
     /** 对账订单 */
-    private PayReconcileOrder recordOrder;
+    private ReconcileOrder recordOrder;
 
     /** 对账订单明细 */
-    private List<PayReconcileDetail> reconcileDetails;
+    private List<ReconcileDetail> reconcileDetails;
 
 
     /**

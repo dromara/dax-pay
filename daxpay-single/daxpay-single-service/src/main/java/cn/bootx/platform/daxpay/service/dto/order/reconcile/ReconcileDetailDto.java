@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "对账订单详情")
-public class PayReconcileDetailDto extends BaseDto {
+public class ReconcileDetailDto extends BaseDto {
 
     /** 关联对账订单ID */
     @Schema(description = "关联对账订单ID")

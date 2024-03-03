@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.common.context;
 
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,6 +16,6 @@ import java.util.List;
 public class ReconcileLocal {
 
     /** 通用支付对账记录 */
-    private List<PayReconcileDetail> reconcileDetails;
+    private List<ReconcileDetail> reconcileDetails;
 
 }
