@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.task.service;
 
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileOrder;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.service.PayReconcileService;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.service.ReconcileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ import java.time.LocalDate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayReconcileTaskService {
-    private final PayReconcileService reconcileService;
+public class ReconcileTaskService {
+    private final ReconcileService reconcileService;
 
     /**
      * 执行任务
@@ -25,7 +25,7 @@ public class PayReconcileTaskService {
     public void reconcileTask(LocalDate date, String channel){
 
         // 1. 查询需要定时对账的通道, 创建出来对账订单
-        PayReconcileOrder reconcileOrder = reconcileService.create(date, channel);
+        ReconcileOrder reconcileOrder = reconcileService.create(date, channel);
 
         // 2. 执行对账任务, 下载对账单并解析, 分别存储为原始数据和通用对账数据
         reconcileService.downAndSave(reconcileOrder);

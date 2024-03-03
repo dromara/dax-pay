@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.order.reconcile.dao;
 
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2024/1/20
  */
 @Mapper
-public interface PayReconcileDetailMapper extends BaseMapper<PayReconcileDetail> {
+public interface ReconcileDetailMapper extends BaseMapper<ReconcileDetail> {
 }

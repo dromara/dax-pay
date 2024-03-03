@@ -3,8 +3,8 @@ package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.PayReconcileConvert;
-import cn.bootx.platform.daxpay.service.dto.order.reconcile.PayReconcileDetailDto;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.ReconcileConvert;
+import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDetailDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @DbTable(comment = "支付对账记录")
 @TableName("pay_reconcile_detail")
-public class PayReconcileDetail extends MpCreateEntity implements EntityBaseFunction<PayReconcileDetailDto> {
+public class ReconcileDetail extends MpCreateEntity implements EntityBaseFunction<ReconcileDetailDto> {
 
     /** 关联对账订单ID */
     @DbColumn(comment = "关联对账订单ID")
@@ -67,7 +67,7 @@ public class PayReconcileDetail extends MpCreateEntity implements EntityBaseFunc
 
 
     @Override
-    public PayReconcileDetailDto toDto() {
-        return PayReconcileConvert.CONVERT.convert(this);
+    public ReconcileDetailDto toDto() {
+        return ReconcileConvert.CONVERT.convert(this);
     }
 }

@@ -261,7 +261,6 @@ public class AggregateService {
         }
     }
 
-
     /**
      * 获取微信OpenId
      */

@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConf
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.PayReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -107,7 +107,7 @@ public class WechatPayReconcileService{
      * 转换为通用对账记录对象
      */
     public void convertAndSave(List<WxReconcileBillDetail> billDetails){
-        List<PayReconcileDetail> collect = billDetails.stream()
+        List<ReconcileDetail> collect = billDetails.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
         // 写入到上下文中
@@ -117,9 +117,9 @@ public class WechatPayReconcileService{
     /**
      * 转换为通用对账记录对象
      */
-    public PayReconcileDetail convert(WxReconcileBillDetail billDetail){
+    public ReconcileDetail convert(WxReconcileBillDetail billDetail){
         // 默认为支付对账记录
-        PayReconcileDetail payReconcileDetail = new PayReconcileDetail()
+        ReconcileDetail reconcileDetail = new ReconcileDetail()
                 .setRecordOrderId(billDetail.getRecordOrderId())
                 .setOrderId(billDetail.getMchOrderNo())
                 .setTitle(billDetail.getSubject())
@@ -130,7 +130,7 @@ public class WechatPayReconcileService{
             String orderAmount = billDetail.getOrderAmount();
             double v = Double.parseDouble(orderAmount) * 100;
             int amount = Math.abs(((int) v));
-            payReconcileDetail.setType(ReconcileTradeEnum.PAY.getCode())
+            reconcileDetail.setType(ReconcileTradeEnum.PAY.getCode())
                     .setAmount(amount);
         }
         // 退款
@@ -139,7 +139,7 @@ public class WechatPayReconcileService{
             String refundAmount = billDetail.getApplyRefundAmount();
             double v = Double.parseDouble(refundAmount) * 100;
             int amount = Math.abs(((int) v));
-            payReconcileDetail.setType(ReconcileTradeEnum.REFUND.getCode())
+            reconcileDetail.setType(ReconcileTradeEnum.REFUND.getCode())
                     .setAmount(amount)
                     .setOrderId(billDetail.getMchRefundNo());
         }
@@ -147,7 +147,7 @@ public class WechatPayReconcileService{
         if (Objects.equals(billDetail.getStatus(), "REVOKED")){
             log.warn("对账出现已撤销记录, 后续进行处理");
         }
-        return payReconcileDetail;
+        return reconcileDetail;
     }
 
 

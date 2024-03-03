@@ -17,7 +17,7 @@ import java.util.Objects;
  * @since 2024/1/18
  */
 @UtilityClass
-public class PayReconcileStrategyFactory {
+public class ReconcileStrategyFactory {
 
     /**
      * 根据传入的支付类型批量创建策略
