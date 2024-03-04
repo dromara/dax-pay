@@ -35,11 +35,7 @@ public class ReconcileDetailDto extends BaseDto {
 
     /** 本地订单ID */
     @Schema(description = "本地订单ID")
-    private String paymentId;
-
-    /** 本地退款ID */
-    @Schema(description = "本地退款ID")
-    private String refundId;
+    private String orderId;
 
     /** 网关订单号 - 支付宝/微信的订单号 */
     @Schema(description = "网关订单号")

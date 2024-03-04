@@ -205,6 +205,7 @@ public class ReconcileService {
                         .setOrderType(detail.getType())
                         .setGatewayOrderNo(detail.getGatewayOrderNo())
                         .setAmount(detail.getAmount())
+                        .setDiffs(reconcileDiffs)
                         .setOrderTime(detail.getOrderTime());
                 diffRecords.add(diffRecord);
             }
@@ -219,7 +220,6 @@ public class ReconcileService {
                         .setRecordId(reconcileOrder.getId())
                         .setDetailId(null)
                         .setTitle(gateway.getTitle())
-                        .setDiffType(gateway.getType())
                         .setOrderType(gateway.getType())
                         .setGatewayOrderNo(gateway.getGatewayOrderNo())
                         .setAmount(gateway.getAmount())
@@ -239,8 +239,13 @@ public class ReconcileService {
         List<ReconcileDiff> diffs = new ArrayList<>();
 
         // 判断类型是否相同
-        if (!(Objects.equals(detail.getType(), ReconcileTradeEnum.PAY.getCode())
-                && Objects.equals(record.getType(), AliPayRecordTypeEnum.PAY.getCode()))){
+        if (Objects.equals(detail.getType(), ReconcileTradeEnum.PAY.getCode())
+                && !Objects.equals(record.getType(), AliPayRecordTypeEnum.PAY.getCode())){
+            log.warn("订单类型不一致: {},{}", detail.getType(), record.getType());
+            diffs.add(new ReconcileDiff().setFieldName("订单类型").setLocalValue(detail.getType()).setGatewayValue(record.getType()));
+        }
+        if (Objects.equals(detail.getType(), ReconcileTradeEnum.REFUND.getCode())
+                && !Objects.equals(record.getType(), AliPayRecordTypeEnum.REFUND.getCode())){
             log.warn("订单类型不一致: {},{}", detail.getType(), record.getType());
             diffs.add(new ReconcileDiff().setFieldName("订单类型").setLocalValue(detail.getType()).setGatewayValue(record.getType()));
         }
