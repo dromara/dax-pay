@@ -49,14 +49,6 @@ public class ReconcileDetail extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "本地订单ID")
     private String orderId;
 
-    /** 支付订单ID */
-    @DbColumn(comment = "支付订单ID")
-    private String paymentId;
-
-    /** 本地退款ID */
-    @DbColumn(comment = "本地退款ID")
-    private String refundId;
-
     /** 网关订单号 - 支付宝/微信的订单号 */
     @DbColumn(comment = "网关订单号")
     private String gatewayOrderNo;
