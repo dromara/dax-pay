@@ -27,7 +27,7 @@ public class ClientNoticeRecordDto extends BaseDto {
      * @see ClientNoticeSendTypeEnum
      */
     @Schema(description = "发送类型")
-    private String type;
+    private String sendType;
 
     /** 请求次数 */
     @Schema(description = "请求次数")

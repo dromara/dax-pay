@@ -75,7 +75,8 @@ public class ClientNoticeAssistService {
                 .setContent(JacksonUtil.toJson(payNoticeResult))
                 .setNoticeType(ClientNoticeTypeEnum.PAY.getType())
                 .setSendCount(0)
-                .setOrderId(order.getId());
+                .setOrderId(order.getId())
+                .setOrderStatus(order.getStatus());
     }
 
     /**
@@ -115,7 +116,8 @@ public class ClientNoticeAssistService {
                 .setContent(JacksonUtil.toJson(payNoticeResult))
                 .setNoticeType(ClientNoticeTypeEnum.REFUND.getType())
                 .setSendCount(0)
-                .setOrderId(order.getId());
+                .setOrderId(order.getId())
+                .setOrderStatus(order.getStatus());
     }
 
 }
