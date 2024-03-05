@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>dax-pay</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.2</version>
     </parent>
 
     <artifactId>daxpay-single-demo</artifactId>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>daxpay-single-sdk</artifactId>
-            <version>2.0.1</version>
+            <version>2.0.2</version>
         </dependency>
     </dependencies>
 
