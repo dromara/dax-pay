@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
@@ -13,6 +14,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBi
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.StrUtil;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -124,6 +127,13 @@ public class WechatPayReconcileService{
                 .setOrderId(billDetail.getMchOrderNo())
                 .setTitle(billDetail.getSubject())
                 .setGatewayOrderNo(billDetail.getWeiXinOrderNo());
+        // 交易时间
+        String transactionTime = billDetail.getTransactionTime();
+        if (StrUtil.isNotBlank(transactionTime)) {
+            LocalDateTime time = LocalDateTimeUtil.parse(transactionTime, DatePattern.NORM_DATETIME_PATTERN);
+            reconcileDetail.setOrderTime(time);
+        }
+
         // 支付
         if (Objects.equals(billDetail.getStatus(), "SUCCESS")){
             // 金额

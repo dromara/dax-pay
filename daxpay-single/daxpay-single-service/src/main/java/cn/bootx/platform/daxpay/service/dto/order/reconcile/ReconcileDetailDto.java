@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * 对账订单详情
  * @author xxm
@@ -40,4 +42,8 @@ public class ReconcileDetailDto extends BaseDto {
     /** 网关订单号 - 支付宝/微信的订单号 */
     @Schema(description = "网关订单号")
     private String gatewayOrderNo;
+
+    /** 订单时间 */
+    @Schema(description = "订单时间")
+    private LocalDateTime orderTime;
 }

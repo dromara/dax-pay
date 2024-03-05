@@ -22,6 +22,7 @@ public class WxReconcileBillDetail extends MpIdEntity {
     @DbColumn(comment = "关联对账订单ID")
     private Long recordOrderId;
 
+    /** yyyy-MM-dd HH:mm:ss */
     @Alias("交易时间")
     @DbColumn(comment = "交易时间")
     private String transactionTime;

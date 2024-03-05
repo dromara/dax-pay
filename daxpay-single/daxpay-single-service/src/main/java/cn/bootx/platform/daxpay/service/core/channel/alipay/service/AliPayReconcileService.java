@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
@@ -11,6 +12,7 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -138,6 +141,7 @@ public class AliPayReconcileService {
         double v = Double.parseDouble(orderAmount) * 100;
         int amount = Math.abs(((int) v));
 
+
         // 默认为支付对账记录
         ReconcileDetail reconcileDetail = new ReconcileDetail()
                 .setRecordOrderId(billDetail.getRecordOrderId())
@@ -146,6 +150,14 @@ public class AliPayReconcileService {
                 .setAmount(amount)
                 .setTitle(billDetail.getSubject())
                 .setGatewayOrderNo(billDetail.getTradeNo());
+
+        // 时间
+        String endTime = billDetail.getEndTime();
+        if (StrUtil.isNotBlank(endTime)) {
+            LocalDateTime time = LocalDateTimeUtil.parse(endTime, DatePattern.NORM_DATETIME_PATTERN);
+            reconcileDetail.setOrderTime(time);
+        }
+
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
             reconcileDetail.setOrderId(billDetail.getBatchNo())
