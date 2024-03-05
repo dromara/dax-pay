@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
  * @author xxm
  * @since 2024/1/18
  */
-@Tag(name = "支付对账控制器")
+@Tag(name = "对账控制器")
 @RestController
 @RequestMapping("/order/reconcile")
 @RequiredArgsConstructor
@@ -34,7 +34,7 @@ public class ReconcileOrderController {
     private final ReconcileQueryService reconcileQueryService;
     private final ReconcileDiffService reconcileDiffService;
 
-    @Operation(summary = "手动创建支付对账订单")
+    @Operation(summary = "手动创建对账订单")
     @PostMapping("/create")
     public ResResult<Void> create(@RequestBody ReconcileOrderCreate param){
         ValidationUtil.validateParam(param);
