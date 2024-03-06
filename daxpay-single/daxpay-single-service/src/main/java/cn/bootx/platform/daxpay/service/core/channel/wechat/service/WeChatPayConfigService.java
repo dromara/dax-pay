@@ -63,7 +63,7 @@ public class WeChatPayConfigService {
     public WeChatPayConfig getAndCheckConfig(){
         WeChatPayConfig weChatPayConfig = getConfig();
         if (!weChatPayConfig.getEnable()){
-            throw new PayFailureException("微信支付配置未启用");
+            throw new PayFailureException("微信支付未启用");
         }
         return weChatPayConfig;
     }

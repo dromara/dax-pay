@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.util;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.entity.RefundableInfo;
 import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
@@ -14,7 +13,6 @@ import lombok.experimental.UtilityClass;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 支付工具类
@@ -61,16 +59,23 @@ public class PayUtil {
     }
 
     /**
-     * 获取支付宝的过期时间
+     * 获取支付宝的过期时间 yyyy-MM-dd HH:mm:ss
      */
     public String getAliTimeExpire(LocalDateTime dateTime) {
         return LocalDateTimeUtil.format(dateTime, DatePattern.NORM_DATETIME_PATTERN);
     }
 
     /**
-     * 获取微信的过期时间
+     * 获取微信的过期时间 yyyyMMddHHmmss
      */
     public String getWxExpiredTime(LocalDateTime dateTime) {
+        return LocalDateTimeUtil.format(dateTime, DatePattern.PURE_DATETIME_PATTERN);
+    }
+
+    /**
+     * 获取云闪付的过期时间 yyyyMMddHHmmss
+     */
+    public String getUnionExpiredTime(LocalDateTime dateTime) {
         return LocalDateTimeUtil.format(dateTime, DatePattern.PURE_DATETIME_PATTERN);
     }
 

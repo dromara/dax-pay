@@ -92,11 +92,19 @@
             <artifactId>IJPay-WxPay</artifactId>
             <version>${IJPay.version}</version>
         </dependency>
+
         <!-- 微信支付 wxjava -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
             <version>${wxjava.version}</version>
+        </dependency>
+
+        <!-- 云闪付 -->
+        <dependency>
+            <groupId>com.github.javen205</groupId>
+            <artifactId>IJPay-UnionPay</artifactId>
+            <version>${IJPay.version}</version>
         </dependency>
 
         <!-- 微信工具包 -->
