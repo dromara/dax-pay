@@ -109,14 +109,4 @@ public class WalletRefundStrategy extends AbsRefundStrategy {
         }
     }
 
-    /**
-     * 生成通道退款订单对象
-     */
-    @Override
-    public void generateChannelOrder() {
-        // 先生成通用的通道退款订单对象
-        super.generateChannelOrder();
-        // 设置扩展参数
-        this.getRefundChannelOrder().setChannelExtra(JSONUtil.toJsonStr(this.walletPayParam));
-    }
 }
