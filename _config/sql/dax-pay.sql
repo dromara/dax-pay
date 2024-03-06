@@ -3674,8 +3674,8 @@ CREATE TABLE `starter_quartz_job`  (
 INSERT INTO `starter_quartz_job` VALUES (1456579473573867520, '测试任务', 'cn.bootx.platform.starter.quartz.task.TestTask', '0/3 0 * * * ? *', '{\"aaa\":\"5255\"}', 0, '测试任务', 1399985191002447872, '2021-11-05 19:09:43', 1399985191002447872, '2024-02-24 23:57:57', 29, 0);
 INSERT INTO `starter_quartz_job` VALUES (1546857070483939328, '支付单超时检测', 'cn.bootx.platform.daxpay.service.task.PayExpiredTimeTask', '0/5 * * * * ? *', NULL, 1, '检测超时的支付单, 超时后调用同步事件状态修复', 1399985191002447872, '2022-07-12 22:00:39', 1399985191002447872, '2024-02-25 14:56:56', 4, 0);
 INSERT INTO `starter_quartz_job` VALUES (1761419490908958720, '客户系统通知重发任务', 'cn.bootx.platform.daxpay.service.task.ClientNoticeSendTask', '0/1 * * * * ? *', '', 0, '每秒调用一下当前需要进行通知的任务', 1399985191002447872, '2024-02-24 23:55:07', 1399985191002447872, '2024-02-25 15:03:28', 1, 0);
-INSERT INTO `starter_quartz_job` VALUES (1764664552203743232, '支付宝定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '* * 11 * * ? *', '{\"channel\":\"ali_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 22:49:50', 1399985191002447872, '2024-03-04 22:49:50', 0, 0);
-INSERT INTO `starter_quartz_job` VALUES (1764667388106887168, '微信支付定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '* * 11 * * ? *', '{\"channel\":\"wechat_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 23:01:06', 1399985191002447872, '2024-03-04 23:01:06', 0, 0);
+INSERT INTO `starter_quartz_job` VALUES (1764664552203743232, '支付宝定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '0 0 11 * * ? *', '{\"channel\":\"ali_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 22:49:50', 1399985191002447872, '2024-03-04 22:49:50', 0, 0);
+INSERT INTO `starter_quartz_job` VALUES (1764667388106887168, '微信支付定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '0 0 11 * * ? *', '{\"channel\":\"wechat_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 23:01:06', 1399985191002447872, '2024-03-04 23:01:06', 0, 0);
 
 -- ----------------------------
 -- Table structure for starter_quartz_job_log
