@@ -4,7 +4,6 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
-import cn.bootx.platform.daxpay.param.pay.RefundParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
@@ -33,9 +32,6 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     /** 当前通道的订单 */
     private PayChannelOrder payChannelOrder = null;
 
-    /** 退款参数 */
-    private RefundParam refundParam = null;
-
     /** 当前通道的退款参数 退款参数中的与这个不一致, 以这个为准 */
     private RefundChannelParam refundChannelParam = null;
 
@@ -45,15 +41,14 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     /**
      * 初始化参数
      */
-    public void initRefundParam(PayOrder payOrder, RefundParam refundParam, PayChannelOrder payChannelOrder) {
+    public void initRefundParam(PayOrder payOrder, PayChannelOrder payChannelOrder) {
         this.payOrder = payOrder;
         this.payChannelOrder = payChannelOrder;
-        this.refundParam = refundParam;
     }
 
 
     /**
-     * 退款前预扣通道和支付订单的金额
+     * 退款前预扣通道支付订单的金额
      */
     public void doPreDeductOrderHandler(){
         PayChannelOrder payChannelOrder = this.getPayChannelOrder();

@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 
+import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.ValidationUtil;
@@ -17,6 +18,8 @@ import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManage
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
@@ -54,6 +57,10 @@ public class RefundService {
     private final ClientNoticeService clientNoticeService;
 
     private final PayChannelOrderManager payChannelOrderManager;
+
+    private final RefundOrderManager refundOrderManager;
+
+    private final RefundChannelOrderManager refundChannelOrderManager;
 
     private final LockTemplate lockTemplate;
 
@@ -151,7 +158,7 @@ public class RefundService {
             if (Objects.isNull(payChannelOrder)){
                 throw new PayFailureException("[数据异常]进行退款的通道没有对应的支付单, 无法退款");
             }
-            refundStrategy.initRefundParam(payOrder, refundParam, payChannelOrder);
+            refundStrategy.initRefundParam(payOrder, payChannelOrder);
         }
 
         // 2.1 退款前校验操作
@@ -184,7 +191,7 @@ public class RefundService {
                     .setRefundNo(refundParam.getRefundNo());
         }
         catch (Exception e) {
-            // 5. 失败处理
+            // 5. 失败处理, 所有记录都会回滚, 可以调用重新
             PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             this.errorHandler(refundOrder);
             throw e;
@@ -217,6 +224,60 @@ public class RefundService {
                 .map(AbsRefundStrategy::getRefundChannelOrder)
                 .collect(Collectors.toList());
         return refundAssistService.createOrderAndChannel(refundParam, payOrder,refundChannelOrders);
+    }
+
+    /**
+     * 重新发退款处理
+     * 1. 查出相关退款订单
+     * 2. 构建退款策略, 发起退款
+     */
+    public void resetRefund(Long id){
+        // 查询
+        RefundOrder refundOrder = refundOrderManager.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未查找到退款订单"));
+
+        // 退款失败才可以重新发起退款, 重新发起退款
+        if (!Objects.equals(refundOrder.getStatus(), RefundStatusEnum.FAIL.getCode())){
+            throw new PayFailureException("退款状态不正确, 无法重新发起退款");
+        }
+
+        // 构建策略
+        List<RefundChannelOrder> refundChannels = refundChannelOrderManager
+                .findAllByRefundId(refundOrder.getId());
+        PayOrder payOrder = payOrderService.findById(refundOrder.getPaymentId())
+                .orElseThrow(() -> new DataNotExistException("未查找到支付订单"));
+        List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
+        Map<String, PayChannelOrder> orderChannelMap = payChannelOrders.stream()
+                .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
+
+        List<AbsRefundStrategy> strategies = RefundStrategyFactory.createAsyncFrontByOrder(refundChannels);
+        for (AbsRefundStrategy strategy : strategies) {
+            strategy.initRefundParam(payOrder, orderChannelMap.get(strategy.getChannel().getCode()));
+        }
+
+        // 设置退款订单对象
+        strategies.forEach(r->r.setRefundOrder(refundOrder));
+
+        try {
+            // 3.1 退款前准备操作
+            strategies.forEach(AbsRefundStrategy::doBeforeRefundHandler);
+            // 3.2 执行退款策略
+            strategies.forEach(AbsRefundStrategy::doRefundHandler);
+            // 3.3 执行退款发起成功后操作
+            strategies.forEach(AbsRefundStrategy::doSuccessHandler);
+
+            // 4.进行成功处理, 分别处理退款订单, 通道退款订单, 支付订单
+            List<RefundChannelOrder> refundChannelOrders = strategies.stream()
+                    .map(AbsRefundStrategy::getRefundChannelOrder)
+                    .collect(Collectors.toList());
+            this.successHandler(refundOrder, refundChannelOrders, payOrder);
+        }
+        catch (Exception e) {
+            // 5. 失败处理, 所有记录都会回滚, 可以调用重新
+            PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
+            this.errorHandler(refundOrder);
+            throw e;
+        }
     }
 
     /**
@@ -254,6 +315,6 @@ public class RefundService {
      */
     private void errorHandler(RefundOrder refundOrder) {
         // 记录退款失败的记录
-         refundAssistService.updateOrderByError(refundOrder);
+        refundAssistService.updateOrderByError(refundOrder);
     }
 }

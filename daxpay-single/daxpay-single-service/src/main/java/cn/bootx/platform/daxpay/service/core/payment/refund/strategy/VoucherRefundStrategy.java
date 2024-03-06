@@ -8,11 +8,15 @@ import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayService;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherQueryService;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherRecordService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -33,6 +37,8 @@ public class VoucherRefundStrategy extends AbsRefundStrategy {
 
     private Voucher voucher;
 
+    private VoucherPayParam voucherPayParam;
+
     /**
      * 策略标识
      *
@@ -43,17 +49,30 @@ public class VoucherRefundStrategy extends AbsRefundStrategy {
         return PayChannelEnum.VOUCHER;
     }
 
+    /**
+     * 退款前对处理
+     */
+    @Override
+    public void initRefundParam(PayOrder payOrder, PayChannelOrder payChannelOrder) {
+        // 先设置参数
+        super.initRefundParam(payOrder, payChannelOrder);
+        // 从通道扩展参数中取出钱包参数
+        String channelExtra = this.getPayChannelOrder().getChannelExtra();
+        this.voucherPayParam = JSONUtil.toBean(channelExtra, VoucherPayParam.class);
+    }
 
     /**
      * 退款前对处理
      */
     @Override
     public void doBeforeRefundHandler() {
-        // 从通道扩展参数中取出钱包参数
+        // 如果任务执行完成, 则跳过
+        if (Objects.equals(this.getRefundChannelOrder().getStatus(), RefundStatusEnum.SUCCESS.getCode())){
+            return;
+        }
+        // 不包含异步支付, 则只在支付订单中进行扣减, 等待异步退款完成, 再进行退款
         if (!this.getPayOrder().isAsyncPay()) {
-            String channelExtra = this.getPayChannelOrder().getChannelExtra();
-            VoucherPayParam voucherPayParam = JSONUtil.toBean(channelExtra, VoucherPayParam.class);
-            this.voucher = voucherQueryService.getVoucherByCardNo(voucherPayParam.getCardNo());
+            this.voucher = voucherQueryService.getVoucherByCardNo(this.voucherPayParam.getCardNo());
         }
     }
 
@@ -63,7 +82,11 @@ public class VoucherRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        // 不包含异步支付
+        // 如果任务执行完成, 则跳过
+        if (Objects.equals(this.getRefundChannelOrder().getStatus(), RefundStatusEnum.SUCCESS.getCode())){
+            return;
+        }
+        // 不包含异步支付, 直接完成退款
         if (!this.getPayOrder().isAsyncPay()){
             voucherPayService.refund(this.getRefundChannelParam().getAmount(), this.voucher);
             voucherRecordService.refund(this.getRefundChannelOrder(), this.getPayOrder().getTitle(), this.voucher);
@@ -75,6 +98,10 @@ public class VoucherRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doSuccessHandler() {
+        // 如果任务执行完成, 则跳过
+        if (Objects.equals(this.getRefundChannelOrder().getStatus(), RefundStatusEnum.SUCCESS.getCode())){
+            return;
+        }
         // 包含异步支付, 变更状态到退款中
         if (this.getPayOrder().isAsyncPay()) {
             this.getPayChannelOrder().setStatus(PayStatusEnum.REFUNDING.getCode());
@@ -83,6 +110,16 @@ public class VoucherRefundStrategy extends AbsRefundStrategy {
             // 同步支付, 直接标识状态为退款完成
             super.doSuccessHandler();
         }
+    }
 
+    /**
+     * 生成通道退款订单对象
+     */
+    @Override
+    public void generateChannelOrder() {
+        // 先生成通用的通道退款订单对象
+        super.generateChannelOrder();
+        // 设置扩展参数
+        this.getRefundChannelOrder().setChannelExtra(JSONUtil.toJsonStr(this.voucherPayParam));
     }
 }

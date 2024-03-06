@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 支付订单服务
@@ -26,6 +27,13 @@ public class PayOrderService {
 
     // 支付完成常量集合
     private final List<String> ORDER_FINISH = Arrays.asList(PayStatusEnum.CLOSE.getCode(), PayStatusEnum.SUCCESS.getCode());
+
+    /**
+     * 查询
+     */
+    public Optional<PayOrder> findById(Long id){
+        return payOrderManager.findById(id);
+    }
 
     /**
      * 新增

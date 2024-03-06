@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
@@ -36,6 +38,10 @@ public class CashRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
+        // 如果任务执行完成, 则跳过
+        if (Objects.equals(this.getRefundChannelOrder().getStatus(), RefundStatusEnum.SUCCESS.getCode())){
+            return;
+        }
         // 不包含异步支付
         if (!this.getPayOrder().isAsyncPay()){
             cashRecordService.refund(this.getRefundChannelOrder(),this.getPayOrder().getTitle());
@@ -47,6 +53,10 @@ public class CashRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doSuccessHandler() {
+        // 如果任务执行完成, 则跳过
+        if (Objects.equals(this.getRefundChannelOrder().getStatus(), RefundStatusEnum.SUCCESS.getCode())){
+            return;
+        }
         // 包含异步支付, 变更状态到退款中
         if (this.getPayOrder().isAsyncPay()) {
             this.getPayChannelOrder().setStatus(PayStatusEnum.REFUNDING.getCode());
@@ -56,4 +66,6 @@ public class CashRefundStrategy extends AbsRefundStrategy {
             super.doSuccessHandler();
         }
     }
+
+
 }

@@ -7,6 +7,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.param.pay.RefundSyncParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.core.order.refund.service.RefundOrderService;
+import cn.bootx.platform.daxpay.service.core.payment.refund.service.RefundService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.RefundSyncService;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
@@ -31,8 +32,7 @@ import java.util.List;
 public class RefundOrderController {
     private final RefundOrderService refundOrderService;
     private final RefundSyncService refundSyncService;
-
-
+    private final RefundService refundService;
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
@@ -62,6 +62,13 @@ public class RefundOrderController {
     @PostMapping("/refund")
     public ResResult<Void> refund(@RequestBody PayOrderRefundParam param){
         refundOrderService.refund(param);
+        return Res.ok();
+    }
+
+    @Operation(summary = "重新发起退款")
+    @PostMapping("/resetRefund")
+    public ResResult<Void> resetRefund(Long id){
+        refundService.resetRefund(id);
         return Res.ok();
     }
 
