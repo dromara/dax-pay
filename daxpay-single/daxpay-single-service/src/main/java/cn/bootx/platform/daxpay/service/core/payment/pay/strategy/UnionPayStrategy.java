@@ -9,6 +9,7 @@ import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
+import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayService;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
@@ -38,9 +39,12 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class UnionPayStrategy extends AbsPayStrategy {
 
     private final PayChannelOrderService channelOrderService;
+
     private final UnionPayService unionPayService;
 
     private final UnionPayConfigService unionPayConfigService;
+
+    private final UnionPayRecordService unionPayRecordService;
 
     private UnionPayParam unionPayParam;
 
@@ -56,7 +60,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
     @Override
     public void doBeforePayHandler() {
         try {
-            // 支付宝参数验证
+            // 云闪付参数验证
             Map<String, Object> channelParam = this.getPayChannelParam().getChannelParam();
             if (CollUtil.isNotEmpty(channelParam)) {
                 this.unionPayParam = BeanUtil.toBean(channelParam, UnionPayParam.class);
@@ -73,7 +77,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
         if (payMode.getAmount() <= 0) {
             throw new PayAmountAbnormalException();
         }
-        // 检查并获取支付宝支付配置
+        // 检查并获取云闪付支付配置
         this.unionPayConfig = unionPayConfigService.getAndCheckConfig();
         unionPayService.validation(this.getPayChannelParam(), unionPayConfig);
     }
@@ -103,7 +107,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
         PayChannelOrder payChannelOrder = channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
         // 支付完成, 保存记录
         if (asyncPayInfo.isPayComplete()) {
-//            aliRecordService.pay(this.getOrder(), payChannelOrder);
+            unionPayRecordService.pay(this.getOrder(), payChannelOrder);
         }
     }
 

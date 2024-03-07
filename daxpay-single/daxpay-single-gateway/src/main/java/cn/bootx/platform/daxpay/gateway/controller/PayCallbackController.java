@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCallbackService;
+import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayCallbackService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCallbackService;
 import com.ijpay.alipay.AliPayApi;
 import com.ijpay.core.kit.HttpKit;
@@ -35,6 +36,8 @@ public class PayCallbackController {
 
     private final WeChatPayCallbackService weChatPayCallbackService;
 
+    private final UnionPayCallbackService unionPayCallbackService;
+
     @SneakyThrows
     @Operation(summary = "支付宝信息回调")
     @PostMapping("/alipay")
@@ -50,5 +53,14 @@ public class PayCallbackController {
         String xmlMsg = HttpKit.readData(request);
         Map<String, String> params = WxPayKit.xmlToMap(xmlMsg);
         return weChatPayCallbackService.callback(params);
+    }
+
+    @SneakyThrows
+    @Operation(summary = "云闪付支付信息回调")
+    @PostMapping("/union")
+    public String unionPayNotify(HttpServletRequest request) {
+        String xmlMsg = HttpKit.readData(request);
+        Map<String, String> params = WxPayKit.xmlToMap(xmlMsg);
+        return unionPayCallbackService.callback(params);
     }
 }

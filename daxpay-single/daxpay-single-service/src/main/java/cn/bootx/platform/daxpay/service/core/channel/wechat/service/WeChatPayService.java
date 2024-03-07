@@ -101,7 +101,7 @@ public class WeChatPayService {
         }
         // 付款码支付
         else if (payWayEnum == PayWayEnum.BARCODE) {
-           this.barCode(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
+           this.barCodePay(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
         }
         asyncPayInfo.setPayBody(payBody);
     }
@@ -172,7 +172,7 @@ public class WeChatPayService {
     /**
      * 付款码支付
      */
-    private void barCode(String amount, PayOrder payment, String authCode, WeChatPayConfig weChatPayConfig) {
+    private void barCodePay(String amount, PayOrder payment, String authCode, WeChatPayConfig weChatPayConfig) {
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
 
         Map<String, String> params = MicroPayModel.builder()

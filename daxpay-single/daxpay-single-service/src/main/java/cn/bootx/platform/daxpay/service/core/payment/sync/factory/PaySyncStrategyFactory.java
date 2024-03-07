@@ -2,10 +2,11 @@ package cn.bootx.platform.daxpay.service.core.payment.sync.factory;
 
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
-import cn.bootx.platform.daxpay.service.core.payment.sync.strategy.pay.AliPaySyncStrategy;
-import cn.bootx.platform.daxpay.service.core.payment.sync.strategy.pay.WeChatPaySyncStrategy;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
+import cn.bootx.platform.daxpay.service.core.payment.sync.strategy.pay.AliPaySyncStrategy;
+import cn.bootx.platform.daxpay.service.core.payment.sync.strategy.pay.UnionPaySyncStrategy;
+import cn.bootx.platform.daxpay.service.core.payment.sync.strategy.pay.WeChatPaySyncStrategy;
+import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
 import cn.hutool.extra.spring.SpringUtil;
 
 /**
@@ -28,6 +29,9 @@ public class PaySyncStrategyFactory {
                 break;
             case WECHAT:
                 strategy = SpringUtil.getBean(WeChatPaySyncStrategy.class);
+                break;
+            case UNION_PAY:
+                strategy = SpringUtil.getBean(UnionPaySyncStrategy.class);
                 break;
             default:
                 throw new PayUnsupportedMethodException();

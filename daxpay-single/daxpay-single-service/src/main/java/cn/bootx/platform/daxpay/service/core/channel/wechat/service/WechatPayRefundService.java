@@ -2,11 +2,9 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.hutool.core.codec.Base64;
@@ -23,6 +21,8 @@ import java.io.ByteArrayInputStream;
 import java.util.Map;
 import java.util.Optional;
 
+import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.*;
+
 /**
  * 微信退款服务
  * @author xxm
@@ -31,9 +31,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WechatRefundService {
-
-    private final PayChannelOrderManager payChannelOrderManager;
+public class WechatPayRefundService {
 
     /**
      * 退款方法
@@ -70,19 +68,19 @@ public class WechatRefundService {
         this.verifyErrorMsg(result);
         // 微信退款是否成功需要查询状态或者回调, 所以设置为退款中状态
         refundInfo.setStatus(RefundStatusEnum.PROGRESS)
-                .setGatewayOrderNo(result.get("refund_id"));
+                .setGatewayOrderNo(result.get(CALLBACK_REFUND_ID));
     }
 
     /**
      * 验证错误信息
      */
     private void verifyErrorMsg(Map<String, String> result) {
-        String returnCode = result.get(WeChatPayCode.RETURN_CODE);
-        String resultCode = result.get(WeChatPayCode.RESULT_CODE);
+        String returnCode = result.get(RETURN_CODE);
+        String resultCode = result.get(RESULT_CODE);
         if (!WxPayKit.codeIsOk(returnCode) || !WxPayKit.codeIsOk(resultCode)) {
-            String errorMsg = result.get(WeChatPayCode.ERR_CODE_DES);
+            String errorMsg = result.get(ERR_CODE_DES);
             if (StrUtil.isBlank(errorMsg)) {
-                errorMsg = result.get(WeChatPayCode.RETURN_MSG);
+                errorMsg = result.get(RETURN_MSG);
             }
             log.error("订单退款失败 {}", errorMsg);
             RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();

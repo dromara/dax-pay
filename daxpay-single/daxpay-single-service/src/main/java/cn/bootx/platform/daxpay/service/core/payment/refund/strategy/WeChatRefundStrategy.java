@@ -6,7 +6,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayRecordService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatRefundService;
+import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatPayRefundService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class WeChatRefundStrategy extends AbsRefundStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
 
-    private final WechatRefundService wechatRefundService;
+    private final WechatPayRefundService wechatPayRefundService;
 
     private final WeChatPayRecordService weChatPayRecordService;
 
@@ -61,7 +61,7 @@ public class WeChatRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        wechatRefundService.refund(this.getRefundOrder(), this.getRefundChannelParam().getAmount(), this.getPayChannelOrder(), this.weChatPayConfig);
+        wechatPayRefundService.refund(this.getRefundOrder(), this.getRefundChannelParam().getAmount(), this.getPayChannelOrder(), this.weChatPayConfig);
     }
 
     /**
