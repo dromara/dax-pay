@@ -44,3 +44,6 @@ https://gitee.com/dromara/easy_trans
 
 vue3-vant4-mobile Vant4脚手架:
 https://github.com/xiangshu233/vue3-vant4-mobile
+
+全能第三方支付对接Java开发工具包: 
+https://gitee.com/egzosn/pay-java-parent

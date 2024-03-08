@@ -5,6 +5,7 @@ import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -48,6 +49,7 @@ public class UnionPayCloseStrategy extends AbsPayCloseStrategy {
      */
     @Override
     public void doCloseHandler() {
-        unionPayCloseService.close(this.getOrder(), this.unionPayConfig);
+        UnionPayKit unionPayKit = unionPayConfigService.initPayService(this.unionPayConfig);
+        unionPayCloseService.close(this.getOrder(), unionPayKit);
     }
 }

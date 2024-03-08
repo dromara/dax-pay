@@ -100,11 +100,11 @@
             <version>${wxjava.version}</version>
         </dependency>
 
-        <!-- 云闪付 -->
+        <!-- 云闪付 pay-java-parent  -->
         <dependency>
-            <groupId>com.github.javen205</groupId>
-            <artifactId>IJPay-UnionPay</artifactId>
-            <version>${IJPay.version}</version>
+            <groupId>com.egzosn</groupId>
+            <artifactId>pay-java-union</artifactId>
+            <version>${egzosn-java.version}</version>
         </dependency>
 
         <!-- 微信工具包 -->

@@ -8,10 +8,11 @@ import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.func.AbsCallbackStrategy;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.ijpay.core.enums.SignType;
+import com.egzosn.pay.common.bean.NoticeParams;
 import com.ijpay.core.kit.WxPayKit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,13 +59,15 @@ public class UnionPayCallbackService extends AbsCallbackStrategy {
 
         // 支付回调信息校验
         UnionPayConfig config = unionPayConfigService.getConfig();
+        UnionPayKit unionPayKit = unionPayConfigService.initPayService(config);
         if (Objects.isNull(config)) {
             log.warn("云闪付支付配置不存在");
             return false;
         }
 
-        // 注意此处签名方式需与统一下单的签名类型一致
-        return WxPayKit.verifyNotify(params, config.getAppKey(), SignType.MD5);
+        NoticeParams noticeParams = new NoticeParams();
+        noticeParams.setBody(Collections.unmodifiableMap(params));
+        return unionPayKit.verify(noticeParams);
     }
 
     /**

@@ -5,10 +5,8 @@ import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBillTotalManager;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
@@ -48,13 +46,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AliPayReconcileService {
-    private final AliPayConfigService configService;
 
     private final AliReconcileBillDetailManager reconcileBillDetailManager;
 
     private final AliReconcileBillTotalManager reconcileBillTotalManager;
-
-    private final AliPayRecordManager recordManager;
 
     /**
      * 下载对账单, 并进行解析进行保存
@@ -65,8 +60,6 @@ public class AliPayReconcileService {
     @SneakyThrows
     @Transactional(rollbackFor = Exception.class)
     public void downAndSave(String date, Long recordOrderId){
-        AliPayConfig config = configService.getConfig();
-        configService.initConfig(config);
 
         try {
             AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
