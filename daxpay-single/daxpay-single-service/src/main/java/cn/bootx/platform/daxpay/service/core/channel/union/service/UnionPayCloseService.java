@@ -2,14 +2,10 @@ package cn.bootx.platform.daxpay.service.core.channel.union.service;
 
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.UnionPayCode;
-import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.util.StrUtil;
-import com.ijpay.core.enums.SignType;
-import com.ijpay.core.kit.WxPayKit;
-import com.ijpay.unionpay.enums.ServiceEnum;
-import com.ijpay.unionpay.model.CloseOrderModel;
-import com.ijpay.wxpay.WxPayApi;
+import com.egzosn.pay.common.bean.AssistOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,17 +28,14 @@ public class UnionPayCloseService {
     /**
      * 关闭订单
      */
-    public void close(PayOrder payOrder, UnionPayConfig unionPayConfig) {
-        Map<String, String> params = CloseOrderModel.builder()
-                .service(ServiceEnum.CLOSE.toString())
-                .mch_id(unionPayConfig.getMachId())
-                .out_trade_no(String.valueOf(payOrder.getId()))
-                .nonce_str(WxPayKit.generateStr())
-                .build()
-                .createSign(unionPayConfig.getAppKey(), SignType.HMACSHA256);
-        String xmlResult = WxPayApi.closeOrder(params);
-        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-        this.verifyErrorMsg(result);
+    public void close(PayOrder payOrder, UnionPayKit unionPayKit) {
+        AssistOrder closeOrder = new AssistOrder();
+
+        closeOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+
+        Map<String, Object> result = unionPayKit.close(closeOrder);
+
+//        this.verifyErrorMsg(result);
     }
 
     /**

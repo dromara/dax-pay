@@ -10,19 +10,17 @@ import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.util.PayUtil;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
+import cn.bootx.platform.daxpay.service.sdk.union.bean.UnionPayOrder;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.ijpay.core.enums.SignType;
-import com.ijpay.core.kit.WxPayKit;
-import com.ijpay.unionpay.UnionPayApi;
-import com.ijpay.unionpay.enums.ServiceEnum;
-import com.ijpay.unionpay.model.MicroPayModel;
-import com.ijpay.unionpay.model.UnifiedOrderModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -59,180 +57,110 @@ public class UnionPayService {
     /**
      * 支付接口
      */
-    public void pay(PayOrder payOrder, PayChannelParam payChannelParam, UnionPayParam unionPayParam, UnionPayConfig unionPayConfig){
+    public void pay(PayOrder payOrder, PayChannelParam payChannelParam, UnionPayParam unionPayParam, UnionPayKit unionPayKit){
         Integer amount = payChannelParam.getAmount();
-        String totalFee = String.valueOf(amount);
+        BigDecimal totalFee = BigDecimal.valueOf(amount * 0.01);
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
         String payBody = null;
         PayWayEnum payWayEnum = PayWayEnum.findByCode(payChannelParam.getWay());
 
-        // 微信APP支付
-        if (payWayEnum == PayWayEnum.APP) {
-            payBody = this.wxAppPay(totalFee, payOrder, unionPayParam, unionPayConfig);
-        }
-        // 微信公众号支付或者小程序支付
-        else if (payWayEnum == PayWayEnum.JSAPI_WX_PAY) {
-            payBody = this.wxJsPay(totalFee, payOrder, unionPayParam.getOpenId(), unionPayConfig);
-        }
-        // 支付宝JS支付
-        else if (payWayEnum == PayWayEnum.JSAPI_ALI_PAY) {
-            payBody = this.aliJsPay(totalFee, payOrder, unionPayParam, unionPayConfig);
-        }
-        // 银联JS支付
-        else if (payWayEnum == PayWayEnum.JSAPI) {
-            payBody = this.unionJsPay(totalFee, payOrder, unionPayParam, unionPayConfig);
-        }
         // 二维码支付
-        else if (payWayEnum == PayWayEnum.QRCODE) {
-            payBody = this.qrCodePay(totalFee, payOrder, unionPayConfig);
+        if (payWayEnum == PayWayEnum.QRCODE) {
+            payBody = this.qrCodePay(totalFee, payOrder, unionPayKit);
         }
         // 付款码支付
         else if (payWayEnum == PayWayEnum.BARCODE) {
-            this.barCodePay(totalFee, payOrder, unionPayParam.getAuthCode(), unionPayConfig);
+            this.barCodePay(totalFee, payOrder, unionPayParam.getAuthCode(), unionPayKit);
+        }
+        // APP支付
+        else if (payWayEnum == PayWayEnum.APP) {
+            payBody = this.appPay(totalFee, payOrder, unionPayParam, unionPayKit);
         }
 
         asyncPayInfo.setPayBody(payBody);
     }
 
     /**
-     * 支付宝生活号支付
+     * APP支付
      */
-    private String aliJsPay(String amount, PayOrder payOrder, UnionPayParam unionPayParam, UnionPayConfig unionPayConfig) {
-        Map<String, String> params = UnifiedOrderModel.builder()
-                .service(ServiceEnum.ALI_PAY_JS_PAY.toString())
-                .mch_id(unionPayConfig.getMachId())
-                .out_trade_no(WxPayKit.generateStr())
-                .body(payOrder.getTitle())
-                .total_fee(amount)
-                .mch_create_ip("127.0.0.15")
-                .notify_url(unionPayConfig.getNotifyUrl())
-                .nonce_str(WxPayKit.generateStr())
-                .buyer_id(unionPayParam.getBuyerId())
-                .build()
-                .createSign(unionPayConfig.getAppKey(), SignType.MD5);
+    private String appPay(BigDecimal amount, PayOrder payOrder, UnionPayParam unionPayParam, UnionPayKit unionPayKit) {
 
-        String xmlResult = UnionPayApi.execution(unionPayConfig.getServerUrl(), params);
-        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-        this.verifyErrorMsg(result);
-        return null;
-    }
+        Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
 
-    /**
-     * 银联JS支付
-     */
-    private String unionJsPay(String amount, PayOrder payOrder, UnionPayParam unionPayParam, UnionPayConfig unionPayConfig) {
-        Map<String, String> params = UnifiedOrderModel.builder()
-                .service(ServiceEnum.UNION_JS_PAY.toString())
-                .mch_id(unionPayConfig.getMachId())
-                .out_trade_no(WxPayKit.generateStr())
-                .body(payOrder.getTitle())
-                .user_id(unionPayParam.getUserId())
-                .customer_ip(unionPayParam.getCustomerIp())
-                .total_fee(amount)
-                .mch_create_ip("127.0.0.1")
-                .notify_url(unionPayConfig.getNotifyUrl())
-                .nonce_str(WxPayKit.generateStr())
-                .build()
-                .createSign(unionPayConfig.getAppKey(), SignType.MD5);
 
-        System.out.println(params);
+        UnionPayOrder unionPayOrder = new UnionPayOrder();
+        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setSubject(payOrder.getTitle());
+        unionPayOrder.setPrice(amount);
+        unionPayOrder.setExpirationTime(expiredTime);
 
-        String xmlResult = UnionPayApi.execution(unionPayConfig.getServerUrl(), params);
-        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-        this.verifyErrorMsg(result);
-        return null;
-    }
-
-    /**
-     * 微信APP支付
-     */
-    private String wxAppPay(String amount, PayOrder payOrder, UnionPayParam unionPayParam, UnionPayConfig unionPayConfig) {
-        Map<String, String> params = UnifiedOrderModel.builder()
-                .service(ServiceEnum.WEI_XIN_APP_PAY.toString())
-                .mch_id(unionPayConfig.getMachId())
-                .appid(unionPayParam.getAppId())
-                .sub_appid(unionPayParam.getSubAppId())
-                .out_trade_no(WxPayKit.generateStr())
-                .body(payOrder.getTitle())
-                .attach("聚合支付 SDK")
-                .total_fee(amount)
-                .mch_create_ip("127.0.0.1")
-                .notify_url(unionPayConfig.getNotifyUrl())
-                .nonce_str(WxPayKit.generateStr())
-                .build()
-                .createSign(unionPayConfig.getAppKey(), SignType.MD5);
-
-        String xmlResult = UnionPayApi.execution(unionPayConfig.getServerUrl(), params);
-        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-        this.verifyErrorMsg(result);
-        return null;
-    }
-
-    /**
-     * 微信公众号支付或者小程序支付
-     */
-    private String wxJsPay(String amount, PayOrder payOrder, String openId, UnionPayConfig unionPayConfig) {
-
-        Map<String, String> params = UnifiedOrderModel.builder()
-                .service(ServiceEnum.WEI_XIN_JS_PAY.toString())
-                .mch_id(unionPayConfig.getMachId())
-                // 原生JS 值为1
-                .is_raw("1")
-                .out_trade_no(WxPayKit.generateStr())
-                .body(payOrder.getTitle())
-                .sub_openid(openId)
-                .total_fee(amount)
-                .mch_create_ip("127.0.0.1")
-                .notify_url(unionPayConfig.getNotifyUrl())
-                .nonce_str(WxPayKit.generateStr())
-                .build()
-                .createSign(unionPayConfig.getAppKey(), SignType.MD5);
-        String xmlResult = UnionPayApi.execution(unionPayConfig.getServerUrl(), params);
-        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-        this.verifyErrorMsg(result);
+        Map<String, Object> app = unionPayKit.app(unionPayOrder);
         return null;
     }
 
     /**
      * 扫码支付
      */
-    private String qrCodePay(String amount, PayOrder payOrder, UnionPayConfig config){
-        Map<String, String> params = UnifiedOrderModel.builder()
-                .service(ServiceEnum.NATIVE.toString())
-                .mch_id(config.getMachId())
-                .out_trade_no(String.valueOf(payOrder.getId()))
-                .body(payOrder.getTitle())
-                .total_fee(amount)
-                .time_expire(PayUtil.getUnionExpiredTime(payOrder.getExpiredTime()))
-                .mch_create_ip("127.0.0.1")
-                .notify_url(config.getNotifyUrl())
-                .nonce_str(WxPayKit.generateStr())
-                .build()
-                .createSign(config.getAppKey(), SignType.MD5);
-        String xmlResult = UnionPayApi.execution(config.getServerUrl(), params);
-        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-        this.verifyErrorMsg(result);
-        return result.get("code_url");
+    private String qrCodePay(BigDecimal amount, PayOrder payOrder, UnionPayKit unionPayKit){
+        Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
+
+        UnionPayOrder unionPayOrder = new UnionPayOrder();
+
+        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setSubject(payOrder.getTitle());
+        unionPayOrder.setPrice(amount);
+        unionPayOrder.setExpirationTime(expiredTime);
+
+        return unionPayKit.getQrPay(unionPayOrder);
+
+
+//        Map<String, String> params = UnifiedOrderModel.builder()
+//                .service(ServiceEnum.NATIVE.toString())
+//                .mch_id(unionPayKit.getMachId())
+//                .out_trade_no(String.valueOf(payOrder.getId()))
+//                .body(payOrder.getTitle())
+//                .total_fee(amount)
+//                .time_expire(PayUtil.getUnionExpiredTime(payOrder.getExpiredTime()))
+//                .mch_create_ip("127.0.0.1")
+//                .notify_url(unionPayKit.getNotifyUrl())
+//                .nonce_str(WxPayKit.generateStr())
+//                .build()
+//                .createSign(unionPayKit.getAppKey(), SignType.MD5);
+//        String xmlResult = UnionPayApi.execution(unionPayKit.getServerUrl(), params);
+//        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
+//        this.verifyErrorMsg(result);
+//        return result.get("code_url");
     }
 
     /**
      * 付款码支付
      */
-    private void barCodePay(String amount, PayOrder payOrder, String authCode, UnionPayConfig unionPayConfig) {
-        Map<String, String> params = MicroPayModel.builder()
-                .service(ServiceEnum.MICRO_PAY.toString())
-                .mch_id(unionPayConfig.getMachId())
-                .out_trade_no(WxPayKit.generateStr())
-                .body(payOrder.getTitle())
-                .total_fee(amount)
-                .op_device_id("daxpay")
-                .mch_create_ip("127.0.0.1")
-                .auth_code(authCode)
-                .nonce_str(WxPayKit.generateStr())
-                .build()
-                .createSign(unionPayConfig.getAppKey(), SignType.MD5);
+    private void barCodePay(BigDecimal amount, PayOrder payOrder, String authCode, UnionPayKit unionPayKit) {
+        Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
 
-        String xmlResult = UnionPayApi.execution(unionPayConfig.getServerUrl(), params);
+        UnionPayOrder unionPayOrder = new UnionPayOrder();
+
+        unionPayOrder.setAuthCode(authCode);
+        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setSubject(payOrder.getTitle());
+        unionPayOrder.setPrice(amount);
+        unionPayOrder.setExpirationTime(expiredTime);
+        Map<String, Object> stringObjectMap = unionPayKit.microPay(unionPayOrder);
+
+//        Map<String, String> params = MicroPayModel.builder()
+//                .service(ServiceEnum.MICRO_PAY.toString())
+//                .mch_id(unionPayKit.getMachId())
+//                .out_trade_no(WxPayKit.generateStr())
+//                .body(payOrder.getTitle())
+//                .total_fee(amount)
+//                .op_device_id("daxpay")
+//                .mch_create_ip("127.0.0.1")
+//                .auth_code(authCode)
+//                .nonce_str(WxPayKit.generateStr())
+//                .build()
+//                .createSign(unionPayKit.getAppKey(), SignType.MD5);
+//
+//        String xmlResult = UnionPayApi.execution(unionPayKit.getServerUrl(), params);
 
     }
 

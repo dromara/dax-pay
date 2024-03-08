@@ -9,8 +9,12 @@ import cn.bootx.platform.daxpay.service.core.channel.union.dao.UnionPayConfigMan
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.system.config.service.PayChannelConfigService;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayConfigParam;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.egzosn.pay.common.bean.CertStoreType;
+import com.egzosn.pay.common.http.HttpConfigStorage;
+import com.egzosn.pay.union.api.UnionPayConfigStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -75,6 +79,47 @@ public class UnionPayConfigService {
             throw new PayFailureException("云闪付支付未启用");
         }
         return unionPayConfig;
+    }
+
+
+    /**
+     * 生成云闪付支付服务
+     */
+    public UnionPayKit initPayService(UnionPayConfig config){
+        UnionPayConfigStorage unionPayConfigStorage = new UnionPayConfigStorage();
+        unionPayConfigStorage.setMerId(config.getMachId());
+        //是否为证书签名
+        unionPayConfigStorage.setCertSign(config.isCertSign());
+
+        //中级证书  证书字符串信息
+        unionPayConfigStorage.setAcpMiddleCert(config.getAcpMiddleCert());
+        //根证书路径 证书字符串信息
+        unionPayConfigStorage.setAcpRootCert(config.getAcpRootCert());
+        // 私钥证书路径 证书字符串信息
+        unionPayConfigStorage.setKeyPrivateCert(config.getKeyPrivateCert());
+        //私钥证书对应的密码 私钥证书对应的密码
+        unionPayConfigStorage.setKeyPrivateCertPwd(config.getKeyPrivateCertPwd());
+        //设置证书对应的存储方式，证书字符串信息
+        unionPayConfigStorage.setCertStoreType(CertStoreType.STR);
+
+        // 回调地址
+        unionPayConfigStorage.setNotifyUrl(config.getNotifyUrl());
+        // 同步回调可不填
+        unionPayConfigStorage.setReturnUrl(config.getReturnUrl());
+        unionPayConfigStorage.setSignType(config.signType);
+        //是否为测试账号，沙箱环境
+        unionPayConfigStorage.setTest(config.isSandbox());
+
+        // 网络请求配置
+        HttpConfigStorage httpConfigStorage = new HttpConfigStorage();
+        httpConfigStorage.setCertStoreType(CertStoreType.STR);
+        //最大连接数
+        httpConfigStorage.setMaxTotal(20);
+        //默认的每个路由的最大连接数
+        httpConfigStorage.setDefaultMaxPerRoute(10);
+
+        // 创建支付服务
+        return new UnionPayKit(unionPayConfigStorage, httpConfigStorage);
     }
 
 }

@@ -14,6 +14,7 @@ import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayServi
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONException;
@@ -87,7 +88,8 @@ public class UnionPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        unionPayService.pay(this.getOrder(), this.getPayChannelParam(), this.unionPayParam, this.unionPayConfig);
+        UnionPayKit unionPayKit = unionPayConfigService.initPayService(unionPayConfig);
+        unionPayService.pay(this.getOrder(), this.getPayChannelParam(), this.unionPayParam, unionPayKit);
     }
 
     /**

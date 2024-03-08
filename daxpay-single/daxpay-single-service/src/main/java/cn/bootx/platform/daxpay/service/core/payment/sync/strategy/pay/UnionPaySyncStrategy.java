@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfi
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPaySyncService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,8 @@ public class UnionPaySyncStrategy extends AbsPaySyncStrategy {
     @Override
     public PayGatewaySyncResult doSyncStatus() {
         UnionPayConfig config = unionPayConfigService.getConfig();
-        return unionPaySyncService.syncPayStatus(this.getOrder(),config);
+        UnionPayKit unionPayKit = unionPayConfigService.initPayService(config);
+        return unionPaySyncService.syncPayStatus(this.getOrder(),unionPayKit);
     }
 
     /**

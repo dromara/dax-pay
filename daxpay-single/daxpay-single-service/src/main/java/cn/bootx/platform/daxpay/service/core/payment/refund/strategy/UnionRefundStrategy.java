@@ -9,6 +9,7 @@ import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayRecor
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayRefundService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -61,7 +62,8 @@ public class UnionRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        unionPayRefundService.refund(this.getRefundOrder(), this.getRefundChannelParam().getAmount(), this.getPayChannelOrder(), this.unionPayConfig);
+        UnionPayKit unionPayKit = unionPayConfigService.initPayService(unionPayConfig);
+        unionPayRefundService.refund(this.getRefundOrder(), this.getRefundChannelParam().getAmount(), this.getPayChannelOrder(), unionPayKit);
     }
 
     /**

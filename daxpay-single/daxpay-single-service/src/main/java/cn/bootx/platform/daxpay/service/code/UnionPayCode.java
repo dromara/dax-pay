@@ -64,4 +64,7 @@ public interface UnionPayCode {
     String ERR_MSG = "err_msg";
 
 
+    /** 对账单下载类型编码 */
+    String RECONCILE_BILL_TYPE = "00";
+
 }
