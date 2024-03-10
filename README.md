@@ -190,9 +190,8 @@ QQ扫码加入QQ交流群
 
 微信扫码加入微信交流群
 <p>
-<img alt="微信图片_20240226144703" height="500" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/3bf09e365c43146b158d01c97f00d55.8aczzvuovi.webp" width="330"/>
+<img alt="微信图片_20240226144703" height="500" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240310224719.4jnuoluofy.webp" width="330"/>
 </p>
-
 
 ## 🍻 鸣谢
 感谢 JetBrains 提供的免费开源 License：
