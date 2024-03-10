@@ -89,15 +89,15 @@ public class UnionPayCallbackService extends AbsCallbackStrategy {
         Map<String, String> callbackParam = callbackInfo.getCallbackParam();
 
         // 网关订单号
-        callbackInfo.setGatewayOrderNo(callbackParam.get(TRANSACTION_ID));
+        callbackInfo.setGatewayOrderNo(callbackParam.get(QUERY_ID));
         // 支付订单ID
-        callbackInfo.setOrderId(Long.valueOf(callbackParam.get(OUT_TRANSACTION_ID)));
+        callbackInfo.setOrderId(Long.valueOf(callbackParam.get(ORDER_ID)));
         // 支付结果
         PayStatusEnum payStatus = WxPayKit.codeIsOk(callbackParam.get(PAY_RESULT)) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
         callbackInfo.setGatewayStatus(payStatus.getCode());
         // 支付金额
         callbackInfo.setAmount(callbackParam.get(TOTAL_FEE));
-        String timeEnd = callbackParam.get(TIME_END);
+        String timeEnd = callbackParam.get(TXN_TIME);
         if (StrUtil.isNotBlank(timeEnd)) {
             LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
             callbackInfo.setFinishTime(time);

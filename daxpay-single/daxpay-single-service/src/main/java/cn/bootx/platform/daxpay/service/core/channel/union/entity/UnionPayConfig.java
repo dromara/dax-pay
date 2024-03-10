@@ -53,7 +53,7 @@ public class UnionPayConfig extends MpBaseEntity implements EntityBaseFunction<U
      * @see UnionPaySignTypeEnum
      */
     @DbColumn(comment = "签名类型")
-    public String signType;
+    private String signType;
 
     /**
      * 是否为证书签名

@@ -36,4 +36,10 @@ public class PayReturnController {
     public ModelAndView wechat(){
         return null;
     }
+
+    @Operation(summary = "云闪付同步通知")
+    @GetMapping("/union")
+    public ModelAndView union(){
+        return null;
+    }
 }

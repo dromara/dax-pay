@@ -1,24 +1,21 @@
-package cn.bootx.platform.daxpay.service.dto.channel.union;
+package cn.bootx.platform.daxpay.service.param.channel.union;
 
-import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.service.code.UnionPaySignTypeEnum;
-import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.List;
 
 /**
+ * 云闪付支付配置参数
  * @author xxm
- * @since 2022/3/11
+ * @since 2024/3/9
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "云闪付配置")
-public class UnionPayConfigDto extends BaseDto {
+@Schema(title = "云闪付支付配置参数")
+public class UnionPayConfigParam {
 
     /** 商户号 */
     @Schema(description = "商户号")
@@ -27,7 +24,6 @@ public class UnionPayConfigDto extends BaseDto {
     /** 是否启用, 只影响支付和退款操作 */
     @Schema(description = "是否启用")
     private Boolean enable;
-
 
     /**
      * 商户收款账号
@@ -49,38 +45,30 @@ public class UnionPayConfigDto extends BaseDto {
     private boolean certSign;
 
     /**
-     * 应用私钥证书 字符串
+     * 应用私钥证书
      */
-    @SensitiveInfo(value = SensitiveInfo.SensitiveType.OTHER, front = 15)
     @Schema(description = "应用私钥证书")
     private String keyPrivateCert;
     /**
      * 私钥证书对应的密码
      */
-    @SensitiveInfo(value = SensitiveInfo.SensitiveType.PASSWORD)
     @Schema(description = "私钥证书对应的密码")
     private String keyPrivateCertPwd;
 
     /**
      * 中级证书
      */
-    @SensitiveInfo(value = SensitiveInfo.SensitiveType.OTHER, front = 15)
     @Schema(description = "中级证书")
     private String acpMiddleCert;
     /**
      * 根证书
      */
-    @SensitiveInfo(value = SensitiveInfo.SensitiveType.OTHER, front = 15)
     @Schema(description = "根证书")
     private String acpRootCert;
 
     /** 是否沙箱环境 */
     @Schema(description = "是否沙箱环境")
     private boolean sandbox;
-
-    /** 支付网关地址 */
-    @Schema(description = "支付网关地址")
-    private String serverUrl;
 
     /**
      * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
