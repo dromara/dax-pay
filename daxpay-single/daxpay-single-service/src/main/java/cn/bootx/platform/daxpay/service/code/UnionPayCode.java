@@ -18,26 +18,26 @@ public interface UnionPayCode {
     String RESULT_CODE = "result_code";
 
     /** 网关订单号 */
-    String TRANSACTION_ID = "transaction_id";
+    String QUERY_ID = "queryId";
 
     /** 第三方订单号 */
-    String OUT_TRANSACTION_ID = "out_transaction_id";
+    String ORDER_ID = "orderId";
 
     /** 退款ID */
     String REFUND_ID = "refund_id";
 
 
     /**
-     * 支付完成时间
+     * 订单发送时间
      * 格式: yyyyMMddHHmmss
      */
-    String TIME_END = "time_end";
+    String TXN_TIME = "txnTime";
 
     /** 支付结果 */
     String PAY_RESULT = "pay_result";
 
     /** 总金额 */
-    String TOTAL_FEE = "total_fee";
+    String TOTAL_FEE = "settleAmt";
 
     /** 交易状态 */
     String TRADE_STATE = "trade_state";
