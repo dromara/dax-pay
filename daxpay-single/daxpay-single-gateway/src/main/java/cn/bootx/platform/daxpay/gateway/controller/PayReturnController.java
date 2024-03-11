@@ -3,10 +3,12 @@ package cn.bootx.platform.daxpay.gateway.controller;
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.service.core.payment.notice.service.PayReturnService;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayReturnParam;
+import cn.bootx.platform.daxpay.service.param.channel.union.UnionPayReturnParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,8 +40,9 @@ public class PayReturnController {
     }
 
     @Operation(summary = "云闪付同步通知")
-    @GetMapping("/union")
-    public ModelAndView union(){
-        return null;
+    @PostMapping("/union")
+    public ModelAndView union(UnionPayReturnParam param){
+        String url = payReturnService.union(param);
+        return new ModelAndView("redirect:" + url);
     }
 }

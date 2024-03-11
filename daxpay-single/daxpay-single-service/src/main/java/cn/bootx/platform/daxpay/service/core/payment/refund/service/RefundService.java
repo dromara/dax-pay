@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 
+import cn.bootx.platform.common.core.annotation.CountTime;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
@@ -67,6 +68,7 @@ public class RefundService {
     /**
      * 支付退款
      */
+    @CountTime
     @Transactional(rollbackFor = Exception.class )
     public RefundResult refund(RefundParam param){
         return this.refundAdapter(param,false);
@@ -75,6 +77,7 @@ public class RefundService {
     /**
      * 简单退款
      */
+    @CountTime
     @Transactional(rollbackFor = Exception.class )
     public RefundResult simpleRefund(SimpleRefundParam param){
         ValidationUtil.validateParam(param);
@@ -273,7 +276,7 @@ public class RefundService {
             this.successHandler(refundOrder, refundChannelOrders, payOrder);
         }
         catch (Exception e) {
-            // 5. 失败处理, 所有记录都会回滚, 可以调用重新
+            // 5. 失败处理, 所有记录都会回滚, 可以调用退款重试
             PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             this.errorHandler(refundOrder);
             throw e;
@@ -289,13 +292,10 @@ public class RefundService {
         int refundableBalance = refundOrder.getRefundableBalance();
         // 设置支付订单状态
         if (refundInfo.getStatus() == RefundStatusEnum.PROGRESS) {
-            // 设置为退款中
             payOrder.setStatus(PayStatusEnum.REFUNDING.getCode());
         } else if (refundableBalance == 0) {
-            // 退款完成
             payOrder.setStatus(PayStatusEnum.REFUNDED.getCode());
         } else {
-            // 部分退款
             payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
         }
         payOrderService.updateById(payOrder);

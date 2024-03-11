@@ -43,7 +43,6 @@ public class UnionPaySyncService {
         PayGatewaySyncResult syncResult = new PayGatewaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
 
         AssistOrder query = new AssistOrder();
-//        query.setOutTradeNo("1766811070348001280");
         query.setOutTradeNo(String.valueOf(order.getId()));
 
         Map<String, Object> result = unionPayKit.query(query);
@@ -85,6 +84,11 @@ public class UnionPaySyncService {
         // 待支付
         if (Objects.equals(origRespCode, "05")) {
             return syncResult.setSyncStatus(PaySyncStatusEnum.PROGRESS);
+        }
+
+        // 二维码支付无效
+        if (Objects.equals(origRespCode, "86")) {
+            return syncResult.setSyncStatus(PaySyncStatusEnum.CLOSED).setErrorMsg("支付二维码无效");
         }
 
         return syncResult;

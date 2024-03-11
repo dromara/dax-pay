@@ -10,11 +10,14 @@ import com.egzosn.pay.union.bean.SDKConstants;
 public interface UnionPayCode {
 
 
-    /** 成功状态 */
-    String SUCCESS = "0";
-
-    /** 状态 00表示成功 */
+    /** 应答码 00表示成功 */
     String RESP_CODE = SDKConstants.param_respCode;
+
+    /** 原交易应答码 00表示成功 */
+    String RESP_ORIG_CODE = SDKConstants.param_origRespCode;
+
+    /** 应答码信息 */
+    String RESP_MSG = SDKConstants.param_respMsg;
 
     /** 业务结果 00表示成功 */
     String RESP_SUCCESS = SDKConstants.OK_RESP_CODE;
@@ -28,8 +31,8 @@ public interface UnionPayCode {
     /** 第三方订单号(本地订单号) */
     String ORDER_ID = "orderId";
 
-    /** 退款ID */
-    String REFUND_ID = "refund_id";
+    /** APP支付 银联订单号 */
+    String PAY_APP_TN = SDKConstants.param_tn;
 
     /** 交易类型 支付 */
     String TXN_TYPE_PAY = "01";
