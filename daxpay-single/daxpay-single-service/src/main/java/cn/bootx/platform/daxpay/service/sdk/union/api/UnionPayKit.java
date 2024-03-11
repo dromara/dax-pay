@@ -81,6 +81,11 @@ public class UnionPayKit extends UnionPayService {
         if (null != certDescriptor) {
             return this;
         }
+        //
+        if (!payConfigStorage.isCertSign()){
+            return this;
+        }
+
         try {
             certDescriptor = new CertDescriptor();
             certDescriptor.initPrivateSignCert(payConfigStorage.getKeyPrivateCertInputStream(), payConfigStorage.getKeyPrivateCertPwd(), "PKCS12");
@@ -683,7 +688,7 @@ public class UnionPayKit extends UnionPayService {
      */
     @Override
     public Map<String, Object> refundquery(RefundOrder refundOrder) {
-        return Collections.emptyMap();
+        return this.query(refundOrder);
     }
 
     /**
