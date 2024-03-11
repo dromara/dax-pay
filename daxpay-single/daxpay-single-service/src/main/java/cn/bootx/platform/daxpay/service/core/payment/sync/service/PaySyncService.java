@@ -181,7 +181,11 @@ public class PaySyncService {
         }
 
         // 退款比对状态不做额外处理, 需要通过退款接口进行处理
-        if (orderStatus.equals(PayStatusEnum.REFUNDED.getCode()) && syncStatus.equals(PaySyncStatusEnum.REFUND)){
+        List<String> orderClose = Arrays.asList(
+                PayStatusEnum.REFUNDED.getCode(),
+                PayStatusEnum.REFUNDING.getCode(),
+                PayStatusEnum.PARTIAL_REFUND.getCode());
+        if (orderClose.contains(orderStatus) || syncStatus.equals(PaySyncStatusEnum.REFUND)){
             return true;
         }
         return false;

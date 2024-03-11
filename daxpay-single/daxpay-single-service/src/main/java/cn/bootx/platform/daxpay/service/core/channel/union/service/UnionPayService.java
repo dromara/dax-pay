@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.UnionPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.code.AliPayWay;
-import cn.bootx.platform.daxpay.service.code.UnionPayCode;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
@@ -14,7 +13,6 @@ import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.bootx.platform.daxpay.service.sdk.union.bean.UnionPayOrder;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,10 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-
-import static cn.bootx.platform.daxpay.service.code.UnionPayCode.*;
 
 /**
  * 云闪付支付
@@ -163,23 +158,4 @@ public class UnionPayService {
 //        String xmlResult = UnionPayApi.execution(unionPayKit.getServerUrl(), params);
 
     }
-
-    /**
-     * 验证错误信息
-     */
-    private void verifyErrorMsg(Map<String, String> result) {
-        String status = result.get(UnionPayCode.STATUS);
-        String returnCode = result.get(UnionPayCode.RESULT_CODE);
-
-        // 判断查询是否成功
-        if (!(Objects.equals(SUCCESS, status) && Objects.equals(SUCCESS, returnCode))){
-            String errorMsg = result.get(ERR_MSG);
-            if (StrUtil.isBlank(errorMsg)) {
-                errorMsg = result.get(MESSAGE);
-            }
-            log.error("订单关闭失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
-        }
-    }
-
 }

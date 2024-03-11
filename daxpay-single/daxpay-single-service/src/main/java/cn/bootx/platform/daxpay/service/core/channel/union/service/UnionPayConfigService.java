@@ -93,19 +93,19 @@ public class UnionPayConfigService {
         unionPayConfigStorage.setInputCharset(CharsetUtil.UTF_8);
         // 商户号
         unionPayConfigStorage.setMerId(config.getMachId());
-        //是否为证书签名
-        unionPayConfigStorage.setCertSign(config.isCertSign());
+        // 云闪付必须使用证书才可以进行调用
+        unionPayConfigStorage.setCertSign(true);
 
-        //中级证书 流
+        // 中级证书 流
         unionPayConfigStorage.setAcpMiddleCert(new ByteArrayInputStream(Base64.decode(config.getAcpMiddleCert())));
-        //根证书 流
+        // 根证书 流
         unionPayConfigStorage.setAcpRootCert(new ByteArrayInputStream(Base64.decode(config.getAcpRootCert())));
         // 私钥证书 流
         unionPayConfigStorage.setKeyPrivateCert(new ByteArrayInputStream(Base64.decode(config.getKeyPrivateCert())));
 
         //私钥证书对应的密码 私钥证书对应的密码
         unionPayConfigStorage.setKeyPrivateCertPwd(config.getKeyPrivateCertPwd());
-        //设置证书对应的存储方式，证书字符串信息
+        //设置证书对应的存储方式，证书流
         unionPayConfigStorage.setCertStoreType(CertStoreType.INPUT_STREAM);
 
         // 回调地址

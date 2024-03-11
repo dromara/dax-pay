@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.sdk.payment;
 
+import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
 import cn.bootx.platform.daxpay.sdk.model.pay.PayCloseModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
@@ -22,6 +23,7 @@ public class PayCloseOrderTest {
         DaxPayConfig config = DaxPayConfig.builder()
                 .serviceUrl("http://127.0.0.1:9000")
                 .signSecret("123456")
+                .signType(SignTypeEnum.HMAC_SHA256)
                 .build();
         DaxPayKit.initConfig(config);
     }

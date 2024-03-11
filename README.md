@@ -126,6 +126,7 @@ public class SimplePayOrderTest {
                 .serviceUrl("http://127.0.0.1:9000")
                 // 需要跟网关中配置一致
                 .signSecret("123456")
+                .signType(SignTypeEnum.HMAC_SHA256)
                 .build();
         DaxPayKit.initConfig(config);
     }
