@@ -65,7 +65,6 @@ public class RefundCallbackService {
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_SUCCESS);
                 callbackInfo.setPayRepairNo(repair.getRepairNo());
             }  else {
-                // 设置退款订单完成时间
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_FAIL);
                 callbackInfo.setPayRepairNo(repair.getRepairNo());
             }

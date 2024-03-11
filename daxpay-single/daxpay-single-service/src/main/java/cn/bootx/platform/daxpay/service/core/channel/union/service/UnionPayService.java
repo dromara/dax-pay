@@ -5,6 +5,7 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.UnionPayParam;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.code.AliPayWay;
+import cn.bootx.platform.daxpay.service.code.UnionPayCode;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
@@ -13,6 +14,8 @@ import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.bootx.platform.daxpay.service.sdk.union.bean.UnionPayOrder;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.map.MapUtil;
+import com.egzosn.pay.common.bean.NoticeParams;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -89,8 +93,17 @@ public class UnionPayService {
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
 
-        Map<String, Object> app = unionPayKit.app(unionPayOrder);
-        return null;
+        Map<String, Object> result = unionPayKit.app(unionPayOrder);
+        String resultCode = MapUtil.getStr(result, UnionPayCode.RESP_CODE);
+
+        // 支付失败
+        if (!(Objects.equals(resultCode, UnionPayCode.RESP_SUCCESS))) {
+            log.warn("云闪付支付失败:{}", result);
+            String errMsg = MapUtil.getStr(result, UnionPayCode.RESP_MSG);
+            throw new PayFailureException(errMsg);
+        }
+
+        return MapUtil.getStr(result, UnionPayCode.PAY_APP_TN);
     }
 
     /**
@@ -100,31 +113,11 @@ public class UnionPayService {
         Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
 
         UnionPayOrder unionPayOrder = new UnionPayOrder();
-
         unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
-
         return unionPayKit.getQrPay(unionPayOrder);
-
-
-//        Map<String, String> params = UnifiedOrderModel.builder()
-//                .service(ServiceEnum.NATIVE.toString())
-//                .mch_id(unionPayKit.getMachId())
-//                .out_trade_no(String.valueOf(payOrder.getId()))
-//                .body(payOrder.getTitle())
-//                .total_fee(amount)
-//                .time_expire(PayUtil.getUnionExpiredTime(payOrder.getExpiredTime()))
-//                .mch_create_ip("127.0.0.1")
-//                .notify_url(unionPayKit.getNotifyUrl())
-//                .nonce_str(WxPayKit.generateStr())
-//                .build()
-//                .createSign(unionPayKit.getAppKey(), SignType.MD5);
-//        String xmlResult = UnionPayApi.execution(unionPayKit.getServerUrl(), params);
-//        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
-//        this.verifyErrorMsg(result);
-//        return result.get("code_url");
     }
 
     /**
@@ -134,28 +127,26 @@ public class UnionPayService {
         Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
 
         UnionPayOrder unionPayOrder = new UnionPayOrder();
-
         unionPayOrder.setAuthCode(authCode);
         unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
-        Map<String, Object> stringObjectMap = unionPayKit.microPay(unionPayOrder);
+        Map<String, Object> result = unionPayKit.microPay(unionPayOrder);
 
-//        Map<String, String> params = MicroPayModel.builder()
-//                .service(ServiceEnum.MICRO_PAY.toString())
-//                .mch_id(unionPayKit.getMachId())
-//                .out_trade_no(WxPayKit.generateStr())
-//                .body(payOrder.getTitle())
-//                .total_fee(amount)
-//                .op_device_id("daxpay")
-//                .mch_create_ip("127.0.0.1")
-//                .auth_code(authCode)
-//                .nonce_str(WxPayKit.generateStr())
-//                .build()
-//                .createSign(unionPayKit.getAppKey(), SignType.MD5);
-//
-//        String xmlResult = UnionPayApi.execution(unionPayKit.getServerUrl(), params);
+        if (!unionPayKit.verify(new NoticeParams(result))) {
+            log.warn("云闪付支付验签失败:{}", result);
+            throw new PayFailureException("云闪付支付验签失败");
+        }
+
+        String resultCode = MapUtil.getStr(result, UnionPayCode.RESP_CODE);
+
+        // 支付失败
+        if (!(Objects.equals(resultCode, UnionPayCode.RESP_SUCCESS))) {
+            log.warn("云闪付支付失败:{}", result);
+            String errMsg = MapUtil.getStr(result, UnionPayCode.RESP_MSG);
+            throw new PayFailureException(errMsg);
+        }
 
     }
 }

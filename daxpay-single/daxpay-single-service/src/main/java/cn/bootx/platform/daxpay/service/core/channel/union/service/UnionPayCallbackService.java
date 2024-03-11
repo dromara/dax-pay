@@ -110,7 +110,7 @@ public class UnionPayCallbackService extends AbsCallbackStrategy {
     @Override
     public void resolveRefundData() {
         // 云闪付需要延迟半秒再进行处理, 不然会出现业务未处理完, 但回调已经到达的情况
-        ThreadUtil.sleep(300);
+        ThreadUtil.sleep(100);
 
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callbackInfo.getCallbackParam();

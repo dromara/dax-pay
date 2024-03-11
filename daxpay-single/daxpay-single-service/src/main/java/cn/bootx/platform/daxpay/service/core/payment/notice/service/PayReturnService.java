@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.system.config.service.PlatformConfigService;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayReturnParam;
+import cn.bootx.platform.daxpay.service.param.channel.union.UnionPayReturnParam;
 import cn.hutool.core.net.URLEncodeUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,25 @@ public class PayReturnService {
     public String alipay(AliPayReturnParam param){
         PayOrderExtra payOrderExtra = payOrderExtraManager.findById(param.getOut_trade_no()).orElse(null);
         PayOrder prOrder = payOrderQueryService.findById(param.getOut_trade_no()).orElse(null);
+        if (Objects.isNull(payOrderExtra) || Objects.isNull(prOrder)){
+            return StrUtil.format("{}/result/error?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付订单有问题，请排查"));
+        }
+
+        // 如果同步跳转参数为空, 获取系统配置地址, 系统配置如果也为空, 则返回默认地址
+        String returnUrl = payOrderExtra.getReturnUrl();
+        if (StrUtil.isBlank(returnUrl)){
+            returnUrl = platformConfigService.getConfig().getReturnUrl();
+        }
+        if (StrUtil.isNotBlank(returnUrl)){
+            return StrUtil.format("{}?paymentId={}&businessNo={}", payOrderExtra.getReturnUrl(),prOrder.getId(),prOrder.getBusinessNo());
+        }
+        // 跳转到默认页
+        return StrUtil.format("{}/result/success?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付成功..."));
+    }
+
+    public String union(UnionPayReturnParam param) {
+        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(param.getOrderNo()).orElse(null);
+        PayOrder prOrder = payOrderQueryService.findById(Long.valueOf(param.getOrderNo())).orElse(null);
         if (Objects.isNull(payOrderExtra) || Objects.isNull(prOrder)){
             return StrUtil.format("{}/result/error?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付订单有问题，请排查"));
         }

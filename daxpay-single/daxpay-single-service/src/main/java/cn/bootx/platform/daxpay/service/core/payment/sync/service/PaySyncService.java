@@ -74,7 +74,6 @@ public class PaySyncService {
         }
         // 如果不是异步支付, 直接返回返回
         if (!payOrder.isAsyncPay()){
-//            return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步支付方式，不需要同步");
             throw new PayFailureException("订单没有异步支付方式，不需要同步");
         }
         // 执行订单同步逻辑
