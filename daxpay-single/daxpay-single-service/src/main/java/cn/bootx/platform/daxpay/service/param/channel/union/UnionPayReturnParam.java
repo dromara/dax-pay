@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 
 /**
  * 云闪付同步回调参数
+ * 不同支付方式回调的字段会不一样
  * @author xxm
  * @since 2024/2/11
  */
@@ -13,24 +14,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Schema(title = "云闪付同步回调参数")
 public class UnionPayReturnParam {
+    /** 条码支付返回的 */
     private String orderNo;
-    private String signature;
-    private String merName;
-    private String settleDate;
-    private String certId;
-    private String voucherNum;
-    private String version;
-    private String settleKey;
-    private String termId;
-    private String origReqType;
-    private String qrNo;
-    private String reqReserved;
-    private String reqType;
-    private String origRespMsg;
-    private String comInfo;
-    private String merId;
-    private String merCatCode;
-    private String currencyCode;
-    private String origRespCode;
-    private String txnAmt;
+    /** Web/Wap支付返回的 */
+    private String orderId;
 }
