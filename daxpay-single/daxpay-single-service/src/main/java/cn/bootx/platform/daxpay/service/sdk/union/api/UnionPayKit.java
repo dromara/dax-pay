@@ -555,7 +555,6 @@ public class UnionPayKit extends UnionPayService {
             if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
 //                //成功,获取tn号
 //                String tn =  (String)response.get(SDKConstants.param_tn);
-//                //TODO
                 return response;
             }
             throw new PayErrorException(new PayException((String) response.get(SDKConstants.param_respCode), (String) response.get(SDKConstants.param_respMsg), response.toJSONString()));
