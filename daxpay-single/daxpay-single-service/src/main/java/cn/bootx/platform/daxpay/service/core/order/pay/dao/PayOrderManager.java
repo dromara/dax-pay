@@ -37,4 +37,12 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
         QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
         return page(mpPage, generator);
     }
+
+    /**
+     * 强制更新 (忽略版本号)
+     */
+    public void updateForceById(PayOrder payOrder) {
+        payOrder.setVersion(null);
+        this.updateById(payOrder);
+    }
 }
