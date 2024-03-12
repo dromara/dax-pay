@@ -284,14 +284,13 @@ public class UnionPayKit extends UnionPayService {
             params.put(SDKConstants.param_reqReserved, order.getAddition());
         }
         switch (type) {
+            //
             case WAP:
             case WEB:
-                //todo PCwap网关跳转支付特殊用法.txt
             case B2B:
                 params.put(SDKConstants.param_txnAmt, Util.conversionCentAmount(order.getPrice()));
                 params.put("orderDesc", order.getSubject());
                 params.put(SDKConstants.param_payTimeout, getPayTimeout(order.getExpirationTime()));
-
                 params.put(SDKConstants.param_frontUrl, payConfigStorage.getReturnUrl());
                 break;
             case CONSUME:

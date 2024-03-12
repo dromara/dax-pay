@@ -84,6 +84,10 @@ public class UnionPayService {
         else if (payWayEnum == PayWayEnum.WAP) {
             payBody = this.formPay(totalFee, payOrder, unionPayKit, UnionTransactionType.WAP );
         }
+        // b2b支付
+        else if (payWayEnum == PayWayEnum.B2B) {
+            payBody = this.b2bPay(totalFee, payOrder, unionPayKit);
+        }
 
         asyncPayInfo.setPayBody(payBody);
     }
@@ -98,8 +102,24 @@ public class UnionPayService {
         unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
+        unionPayOrder.setBankType();
         unionPayOrder.setExpirationTime(expiredTime);
         unionPayOrder.setTransactionType(type);
+        return unionPayKit.toPay(unionPayOrder);
+    }
+
+    /**
+     * jsapi支付
+     */
+    private String b2bPay(BigDecimal amount, PayOrder payOrder, UnionPayKit unionPayKit) {
+        Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
+
+        UnionPayOrder unionPayOrder = new UnionPayOrder();
+        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setSubject(payOrder.getTitle());
+        unionPayOrder.setPrice(amount);
+        unionPayOrder.setExpirationTime(expiredTime);
+        unionPayOrder.setTransactionType(UnionTransactionType.B2B);
         return unionPayKit.toPay(unionPayOrder);
     }
 

@@ -24,7 +24,8 @@ public enum PayWayEnum {
     QRCODE("qrcode", "扫码支付"),
     BARCODE("barcode", "付款码"),
     // 通用
-    JSAPI("jsapi", "公众号/小程序支付");
+    JSAPI("jsapi", "JSAPI方式"),
+    B2B("b2b", "企业网银");
 
     /** 编码 */
     private final String code;
