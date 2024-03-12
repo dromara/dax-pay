@@ -189,7 +189,7 @@ public class ClientNoticeService {
     private void run(Long taskId){
         LocalDateTime now = LocalDateTime.now();
         // 开启分布式锁
-        LockInfo lock = lockTemplate.lock(KEY + ":" + taskId,2000, 50);
+        LockInfo lock = lockTemplate.lock(KEY + ":" + taskId,10000, 200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }

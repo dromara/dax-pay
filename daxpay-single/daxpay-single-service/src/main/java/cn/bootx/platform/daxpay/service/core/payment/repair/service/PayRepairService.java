@@ -17,16 +17,15 @@ import cn.bootx.platform.daxpay.service.core.record.repair.entity.PayRepairRecor
 import cn.bootx.platform.daxpay.service.core.record.repair.service.PayRepairRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import cn.hutool.core.util.IdUtil;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,11 +47,20 @@ public class PayRepairService {
 
     private final PayRepairRecordService recordService;
 
+    private final LockTemplate lockTemplate;
+
     /**
      * 修复支付单
      */
     @Transactional(rollbackFor = Exception.class)
     public PayRepairResult repair(PayOrder order, PayRepairWayEnum repairType){
+        // 添加分布式锁
+        LockInfo lock = lockTemplate.lock("repair:pay:" + order.getId(), 10000, 200);
+        if (Objects.isNull(lock)){
+            log.warn("当前支付定单正在修复中: {}", order.getId());
+            return new PayRepairResult();
+        }
+
         // 1. 获取支付单管理的通道支付订单
         Map<String, PayChannelOrder> channelOrderMap = channelOrderManager.findAllByPaymentId(order.getId())
                 .stream()
