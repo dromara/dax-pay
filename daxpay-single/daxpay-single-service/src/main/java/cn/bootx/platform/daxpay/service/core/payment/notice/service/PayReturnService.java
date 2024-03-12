@@ -54,8 +54,14 @@ public class PayReturnService {
     }
 
     public String union(UnionPayReturnParam param) {
-        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(param.getOrderNo()).orElse(null);
-        PayOrder prOrder = payOrderQueryService.findById(Long.valueOf(param.getOrderNo())).orElse(null);
+        // 获取orderId
+        String orderId = param.getOrderId();
+        if (StrUtil.isBlank(orderId)){
+            orderId = param.getOrderNo();
+        }
+
+        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(orderId).orElse(null);
+        PayOrder prOrder = payOrderQueryService.findById(Long.valueOf(orderId)).orElse(null);
         if (Objects.isNull(payOrderExtra) || Objects.isNull(prOrder)){
             return StrUtil.format("{}/result/error?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付订单有问题，请排查"));
         }
