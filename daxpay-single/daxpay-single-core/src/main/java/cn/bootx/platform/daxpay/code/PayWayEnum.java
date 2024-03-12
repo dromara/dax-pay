@@ -24,10 +24,7 @@ public enum PayWayEnum {
     QRCODE("qrcode", "扫码支付"),
     BARCODE("barcode", "付款码"),
     // 通用
-    JSAPI("jsapi", "公众号/小程序支付"),
-    // 在非支付宝和微信中, 但支持这两类支付的时候, 需要进行区分
-    JSAPI_WX_PAY("jsapi_wx_pay", "微信JS支付"),
-    JSAPI_ALI_PAY("jsapi_ali_pay", "支付宝JS支付");
+    JSAPI("jsapi", "公众号/小程序支付");
 
     /** 编码 */
     private final String code;

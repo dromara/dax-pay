@@ -18,7 +18,7 @@ public class UnionPayWay {
 
     // 支付方式
     private static final List<PayWayEnum> PAY_WAYS = Arrays.asList(PayWayEnum.WAP, PayWayEnum.APP, PayWayEnum.WEB,
-            PayWayEnum.QRCODE, PayWayEnum.BARCODE);
+            PayWayEnum.JSAPI, PayWayEnum.QRCODE, PayWayEnum.BARCODE);
 
     /**
      * 根据编码获取
