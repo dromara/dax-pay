@@ -84,7 +84,7 @@ public class UnionPayService {
         else if (payWayEnum == PayWayEnum.WAP) {
             payBody = this.formPay(totalFee, payOrder, unionPayKit, UnionTransactionType.WAP );
         }
-        // b2b支付
+        // b2b支付 TODO 未完成
         else if (payWayEnum == PayWayEnum.B2B) {
             payBody = this.b2bPay(totalFee, payOrder, unionPayKit);
         }
@@ -102,7 +102,6 @@ public class UnionPayService {
         unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
-        unionPayOrder.setBankType();
         unionPayOrder.setExpirationTime(expiredTime);
         unionPayOrder.setTransactionType(type);
         return unionPayKit.toPay(unionPayOrder);
