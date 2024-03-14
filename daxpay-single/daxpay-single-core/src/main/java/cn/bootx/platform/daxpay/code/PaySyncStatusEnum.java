@@ -28,7 +28,7 @@ public enum PaySyncStatusEnum {
      * 所以查询为了区分，增加一个未知的状态, 用于处理这种特殊情况, 然后根据业务需要，关闭订单或者进行其他操作
      */
     NOT_FOUND_UNKNOWN("pay_not_found_unknown","交易不存在(特殊)"),
-    /** 订单到了超时时间, 不分情况可以进行手动设置支付超时状态 */
+    /** 订单到了超时时间, 可以进行手动设置支付超时状态 */
     TIMEOUT("pay_timeout", "支付超时");
 
     /** 编码 */

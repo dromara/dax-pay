@@ -284,7 +284,6 @@ public class UnionPayKit extends UnionPayService {
             params.put(SDKConstants.param_reqReserved, order.getAddition());
         }
         switch (type) {
-            //
             case WAP:
             case WEB:
             case B2B:
