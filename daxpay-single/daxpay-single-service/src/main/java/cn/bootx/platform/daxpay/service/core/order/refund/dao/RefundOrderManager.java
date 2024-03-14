@@ -56,8 +56,8 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     public List<RefundOrder> findAllByProgress() {
         LocalDateTime now = LocalDateTime.now();
         return lambdaQuery()
-                .le(RefundOrder::getRefundTime,now)
-                .eq(RefundOrder::getStatus, RefundStatusEnum.PROGRESS)
+                .le(RefundOrder::getCreateTime,now)
+                .eq(RefundOrder::getStatus, RefundStatusEnum.PROGRESS.getCode())
                 .list();
     }
 }

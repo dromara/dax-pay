@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.channel.union.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.daxpay.service.code.UnionPayRecordTypeEnum;
+import cn.bootx.platform.daxpay.service.core.channel.union.convert.UnionPayConvert;
 import cn.bootx.platform.daxpay.service.dto.channel.union.UnionPayRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
@@ -57,6 +58,6 @@ public class UnionPayRecord extends MpCreateEntity implements EntityBaseFunction
      */
     @Override
     public UnionPayRecordDto toDto() {
-        return null;
+        return UnionPayConvert.CONVERT.convert(this);
     }
 }

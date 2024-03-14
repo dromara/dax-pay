@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.sequence.func.Sequence;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.core.channel.union.convert.UnionPayConvert;
 import cn.bootx.platform.daxpay.service.core.channel.union.dao.UnionPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
@@ -75,6 +76,10 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
      */
     @Override
     public void downAndSave() {
+        if (true){
+            throw new PayFailureException("功能暂时未实现");
+        }
+
         Date date = DateUtil.date(this.getRecordOrder().getDate());
         reconcileService.downAndSave(date, this.getRecordOrder().getId(), this.unionPayKit);
     }

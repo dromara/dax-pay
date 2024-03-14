@@ -103,7 +103,7 @@ public class RefundSyncService {
                 refundOrder.setGatewayOrderNo(syncResult.getGatewayOrderNo());
                 refundOrderManager.updateById(refundOrder);
             }
-            // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
+            // 判断网关状态是否和支付单一致
             boolean statusSync = this.checkSyncStatus(syncResult, refundOrder);
             RefundRepairResult repairResult = new RefundRepairResult();
             try {

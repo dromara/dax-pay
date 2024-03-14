@@ -35,6 +35,7 @@ public class RefundSyncTaskService {
                 refundSyncService.syncRefundOrder(refundOrder);
             } catch (Exception e) {
                 log.warn("退款执行同步失败, ID: {}",refundOrder.getId());
+                log.warn("退款执行同步失败",e);
             }
         }
     }
