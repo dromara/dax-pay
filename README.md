@@ -2,7 +2,7 @@
 
 <p>
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
- <img src="https://img.shields.io/badge/Dax%20Pay-2.0.2-success.svg" alt="Build Status"/>
+ <img src="https://img.shields.io/badge/Dax%20Pay-2.0.3-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Boot%20Platform-1.3.6-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Author-Bootx-orange.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Spring%20Boot-2.7.18-blue.svg" alt="Downloads"/>
