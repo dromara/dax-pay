@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,5 +48,16 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
      */
     public boolean existsByRefundNo(String refundNo){
         return this.existedByField(RefundOrder::getRefundNo,refundNo);
+    }
+
+    /**
+     * 查询退款中的支付订单
+     */
+    public List<RefundOrder> findAllByProgress() {
+        LocalDateTime now = LocalDateTime.now();
+        return lambdaQuery()
+                .le(RefundOrder::getCreateTime,now)
+                .eq(RefundOrder::getStatus, RefundStatusEnum.PROGRESS.getCode())
+                .list();
     }
 }

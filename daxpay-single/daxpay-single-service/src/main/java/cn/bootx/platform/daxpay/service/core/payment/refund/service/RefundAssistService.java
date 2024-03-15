@@ -244,6 +244,7 @@ public class RefundAssistService {
         refundOrder.setErrorMsg(refundInfo.getErrorMsg());
         // 退款失败不保存剩余可退余额, 否则数据看起开会产生困惑
         refundOrder.setRefundableBalance(null);
+        refundOrderManager.updateById(refundOrder);
     }
 
 }

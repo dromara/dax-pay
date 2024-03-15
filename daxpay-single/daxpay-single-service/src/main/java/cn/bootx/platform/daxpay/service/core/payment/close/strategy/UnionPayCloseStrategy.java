@@ -1,7 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
+import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayCloseService;
+import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
+import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -20,6 +24,12 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class UnionPayCloseStrategy extends AbsPayCloseStrategy {
 
+    private final UnionPayCloseService unionPayCloseService;
+
+    private final UnionPayConfigService unionPayConfigService;
+
+    private UnionPayConfig unionPayConfig;
+
 
     @Override
     public PayChannelEnum getChannel() {
@@ -27,10 +37,19 @@ public class UnionPayCloseStrategy extends AbsPayCloseStrategy {
     }
 
     /**
+     * 关闭前的处理方式
+     */
+    @Override
+    public void doBeforeCloseHandler() {
+        this.unionPayConfig = unionPayConfigService.getConfig();
+    }
+
+    /**
      * 关闭操作
      */
     @Override
     public void doCloseHandler() {
-
+        UnionPayKit unionPayKit = unionPayConfigService.initPayService(this.unionPayConfig);
+        unionPayCloseService.close(this.getOrder(), unionPayKit);
     }
 }

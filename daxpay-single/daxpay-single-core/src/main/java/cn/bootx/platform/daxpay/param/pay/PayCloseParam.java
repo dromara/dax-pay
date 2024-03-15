@@ -21,4 +21,7 @@ public class PayCloseParam extends PaymentCommonParam {
     @Schema(description = "业务号")
     private String businessNo;
 
+    @Schema(description = "使用撤销来关闭订单")
+    private Boolean cancel;
+
 }

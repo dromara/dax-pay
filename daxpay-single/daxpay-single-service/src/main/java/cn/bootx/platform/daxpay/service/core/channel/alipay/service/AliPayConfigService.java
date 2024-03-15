@@ -79,7 +79,7 @@ public class AliPayConfigService {
     public AliPayConfig getAndCheckConfig() {
         AliPayConfig alipayConfig = this.getConfig();
         if (!alipayConfig.getEnable()){
-            throw new PayFailureException("支付宝支付方式未启用");
+            throw new PayFailureException("支付宝支付未启用");
         }
         return alipayConfig;
     }

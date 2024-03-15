@@ -39,7 +39,7 @@ public class RefundCallbackService {
 
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 加锁
-        LockInfo lock = lockTemplate.lock("callback:refund:" + callbackInfo.getOrderId());
+        LockInfo lock = lockTemplate.lock("callback:refund:" + callbackInfo.getOrderId(),10000, 200);
         if (Objects.isNull(lock)){
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("回调正在处理中，忽略本次回调请求");
             log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getOrderId());
@@ -65,7 +65,6 @@ public class RefundCallbackService {
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_SUCCESS);
                 callbackInfo.setPayRepairNo(repair.getRepairNo());
             }  else {
-                // 设置退款订单完成时间
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_FAIL);
                 callbackInfo.setPayRepairNo(repair.getRepairNo());
             }

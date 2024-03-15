@@ -63,7 +63,7 @@ public class PayCloseService {
             payOrder = payOrderQueryService.findByBusinessNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
-        LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId());
+        LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId(),10000, 50);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付订单已在关闭中，请勿重复发起");
         }

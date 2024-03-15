@@ -42,11 +42,11 @@ public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction
     private String noticeType;
 
     /**
-     * 订单类型
+     * 订单状态
      * @see PayStatusEnum
      * @see RefundStatusEnum
      */
-    @DbColumn(comment = "订单类型")
+    @DbColumn(comment = "订单状态")
     private String orderStatus;
 
     /** 消息内容 */

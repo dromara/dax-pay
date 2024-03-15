@@ -6,13 +6,13 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 微信同步回调参数
+ * 支付宝同步回调参数
  * @author xxm
  * @since 2024/2/11
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "微信同步回调参数")
+@Schema(title = "支付宝同步回调参数")
 public class AliPayReturnParam {
 
     /**

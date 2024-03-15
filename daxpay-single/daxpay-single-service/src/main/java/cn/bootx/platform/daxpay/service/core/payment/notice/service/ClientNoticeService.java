@@ -189,7 +189,7 @@ public class ClientNoticeService {
     private void run(Long taskId){
         LocalDateTime now = LocalDateTime.now();
         // 开启分布式锁
-        LockInfo lock = lockTemplate.lock(KEY + ":" + taskId,2000, 50);
+        LockInfo lock = lockTemplate.lock(KEY + ":" + taskId,10000, 200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }
@@ -239,6 +239,46 @@ public class ClientNoticeService {
             record.setSuccess(true);
         } else {
             this.failHandler(task,now);
+            // 如果响应地址不为空, 将错误响应写到记录中
+            if (Objects.nonNull(body)){
+                // 预防返回值过长, 只保留100位
+                record.setErrorMsg(StrUtil.sub(body,0,100));
+            }
+        }
+        // 保存请求记录
+        recordService.save(record);
+    }
+
+    /**
+     * 发送通知数据, 手动触发,
+     */
+    public void sendDataByManual(ClientNoticeTask task){
+        LocalDateTime now = LocalDateTime.now();
+        // 创建记录
+        ClientNoticeRecord record = new ClientNoticeRecord()
+                .setTaskId(task.getId())
+                .setSendType(ClientNoticeSendTypeEnum.MANUAL.getType());
+        String body = null;
+        try {
+            HttpResponse execute = HttpUtil.createPost(task.getUrl())
+                    .body(task.getContent(), ContentType.JSON.getValue())
+                    .timeout(5000)
+                    .execute();
+            body = execute.body();
+        } catch (Exception e) {
+            log.error("发送通知失败，数据错误，任务ID：{}",task.getOrderId());
+            log.error("错误内容",e);
+            record.setErrorMsg(e.getMessage());
+        }
+        // 如果响应值等于SUCCESS, 说明发送成功
+        if (Objects.equals(body, "SUCCESS")){
+            record.setSuccess(true);
+            // 如果任务不是成功状态, 修改为成功状态
+            if (!task.isSuccess()){
+                task.setLatestTime(now).setSuccess(true);
+                taskManager.updateById(task);
+            }
+        } else {
             // 如果响应地址不为空, 将错误响应写到记录中
             if (Objects.nonNull(body)){
                 // 预防返回值过长, 只保留100位

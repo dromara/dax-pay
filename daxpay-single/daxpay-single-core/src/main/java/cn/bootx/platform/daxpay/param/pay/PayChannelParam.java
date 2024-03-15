@@ -2,10 +2,7 @@ package cn.bootx.platform.daxpay.param.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayWayEnum;
-import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
-import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
-import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
+import cn.bootx.platform.daxpay.param.channel.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -47,6 +44,7 @@ public class PayChannelParam {
      * @see WeChatPayParam
      * @see VoucherPayParam
      * @see WalletPayParam
+     * @see UnionPayParam
      */
     @Schema(description = "附加支付参数")
     private Map<String,Object> channelParam;

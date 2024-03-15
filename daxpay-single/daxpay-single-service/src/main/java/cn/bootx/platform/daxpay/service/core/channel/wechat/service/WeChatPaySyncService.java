@@ -143,9 +143,6 @@ public class WeChatPaySyncService {
     }
 
     /**
-     * 错误处理
-     */
-    /**
      * 验证错误信息
      */
     private String getErrorMsg(Map<String, String> result) {

@@ -103,7 +103,7 @@ public class RefundSyncService {
                 refundOrder.setGatewayOrderNo(syncResult.getGatewayOrderNo());
                 refundOrderManager.updateById(refundOrder);
             }
-            // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
+            // 判断网关状态是否和支付单一致
             boolean statusSync = this.checkSyncStatus(syncResult, refundOrder);
             RefundRepairResult repairResult = new RefundRepairResult();
             try {
@@ -170,18 +170,19 @@ public class RefundSyncService {
         RefundRepairResult repair = new RefundRepairResult();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
-            // 调用出错
             case SUCCESS:
                 repair = repairService.repair(order, RefundRepairWayEnum.REFUND_SUCCESS);
                 break;
             case PROGRESS:
                 // 不进行处理
-                log.warn("退款状态同步接口调用出错");
                 break;
             case FAIL: {
                 repair = repairService.repair(order, RefundRepairWayEnum.REFUND_FAIL);
                 break;
             }
+            case NOT_FOUND:
+                repair = repairService.repair(order, RefundRepairWayEnum.REFUND_FAIL);
+                break;
             default: {
                 throw new BizException("代码有问题");
             }

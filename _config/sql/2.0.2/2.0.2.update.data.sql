@@ -62,8 +62,16 @@ INSERT INTO `iam_role_path`(`id`, `role_id`, `permission_id`) VALUES (1764931648
 
 INSERT INTO `iam_role_path`(`id`, `role_id`, `permission_id`) VALUES (1764931648924622852, 1757297023118462976, 1764663810424303616);
 
-INSERT INTO `starter_quartz_job`(`id`, `name`, `job_class_name`, `cron`, `parameter`, `state`, `remark`, `creator`, `create_time`, `last_modifier`, `last_modified_time`, `version`, `deleted`) VALUES (1764664552203743232, '支付宝定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '* * 11 * * ? *', '{\"channel\":\"ali_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 22:49:50', 1399985191002447872, '2024-03-04 22:49:50', 0, 0);
+INSERT INTO `iam_role_menu`(`id`, `role_id`, `client_code`, `permission_id`) VALUES (1764945575888781312, 1757297023118462976, 'dax-pay', 1764638353289027584);
 
-INSERT INTO `starter_quartz_job`(`id`, `name`, `job_class_name`, `cron`, `parameter`, `state`, `remark`, `creator`, `create_time`, `last_modifier`, `last_modified_time`, `version`, `deleted`) VALUES (1764667388106887168, '微信支付定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '* * 11 * * ? *', '{\"channel\":\"wechat_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 23:01:06', 1399985191002447872, '2024-03-04 23:01:06', 0, 0);
+INSERT INTO `iam_role_menu`(`id`, `role_id`, `client_code`, `permission_id`) VALUES (1764945575888781313, 1757297023118462976, 'dax-pay', 1764638678821543936);
+
+INSERT INTO `iam_role_menu`(`id`, `role_id`, `client_code`, `permission_id`) VALUES (1764945576350154752, 1757298887092326400, 'dax-pay', 1764638353289027584);
+
+INSERT INTO `iam_role_menu`(`id`, `role_id`, `client_code`, `permission_id`) VALUES (1764945576350154753, 1757298887092326400, 'dax-pay', 1764638678821543936);
+
+INSERT INTO `starter_quartz_job`(`id`, `name`, `job_class_name`, `cron`, `parameter`, `state`, `remark`, `creator`, `create_time`, `last_modifier`, `last_modified_time`, `version`, `deleted`) VALUES (1764664552203743232, '支付宝定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '0 0 11 * * ? *', '{\"channel\":\"ali_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 22:49:50', 1399985191002447872, '2024-03-04 22:49:50', 0, 0);
+
+INSERT INTO `starter_quartz_job`(`id`, `name`, `job_class_name`, `cron`, `parameter`, `state`, `remark`, `creator`, `create_time`, `last_modifier`, `last_modified_time`, `version`, `deleted`) VALUES (1764667388106887168, '微信支付定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '0 0 11 * * ? *', '{\"channel\":\"wechat_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 23:01:06', 1399985191002447872, '2024-03-04 23:01:06', 0, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

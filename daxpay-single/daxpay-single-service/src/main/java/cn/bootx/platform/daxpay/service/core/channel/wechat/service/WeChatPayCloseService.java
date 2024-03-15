@@ -1,12 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
-import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
-import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.hutool.core.util.StrUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -18,7 +16,6 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * 微信支付关闭和退款
@@ -62,9 +59,6 @@ public class WeChatPayCloseService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("订单关闭失败 {}", errorMsg);
-            RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-            refundInfo.setErrorMsg(errorMsg);
-            refundInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
             throw new PayFailureException(errorMsg);
         }
     }

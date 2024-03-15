@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.factory;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.payment.refund.strategy.*;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import cn.hutool.core.collection.CollectionUtil;
@@ -23,6 +24,20 @@ import static cn.bootx.platform.daxpay.code.PayChannelEnum.ASYNC_TYPE_CODE;
  * @since 2023/7/4
  */
 public class RefundStrategyFactory {
+
+    /**
+     * 通过订单生成退款策略
+     */
+    public static List<AbsRefundStrategy> createAsyncFrontByOrder(List<RefundChannelOrder> refundChannelOrders) {
+        // 生成通道订单参数
+        List<RefundChannelParam> channelParams = refundChannelOrders.stream()
+                .map(o -> new RefundChannelParam()
+                        .setAmount(o.getAmount())
+                        .setChannel(o.getChannel()))
+                .collect(Collectors.toList());
+        return createAsyncFront(channelParams);
+    }
+
 
     /**
      * 根据传入的支付通道创建策略

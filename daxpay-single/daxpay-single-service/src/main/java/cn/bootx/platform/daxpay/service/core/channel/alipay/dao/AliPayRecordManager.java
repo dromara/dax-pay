@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AliPayRecordManager extends BaseManager<AliPayRecordMapper, AliPayRecord> {
 
-
     /**
      * 分页
      */

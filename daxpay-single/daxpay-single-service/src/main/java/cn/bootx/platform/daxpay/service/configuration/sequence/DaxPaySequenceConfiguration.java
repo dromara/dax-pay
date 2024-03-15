@@ -31,4 +31,12 @@ public class DaxPaySequenceConfiguration {
     public Sequence wechatReconcileSequence(SeqRangeManager seqRangeManager) {
         return SequenceUtil.create(1,1,1,"WechatReconcileSequence");
     }
+
+    /**
+     * 云闪付对账单序列生成器
+     */
+    @Bean
+    public Sequence unionPayReconcileSequence(SeqRangeManager seqRangeManager) {
+        return SequenceUtil.create(1,1,1,"UnionPayReconcileSequence");
+    }
 }

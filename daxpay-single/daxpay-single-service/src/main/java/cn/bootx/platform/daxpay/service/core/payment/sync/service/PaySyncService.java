@@ -74,7 +74,6 @@ public class PaySyncService {
         }
         // 如果不是异步支付, 直接返回返回
         if (!payOrder.isAsyncPay()){
-//            return new SyncResult().setSuccess(false).setRepair(false).setErrorMsg("订单没有异步支付方式，不需要同步");
             throw new PayFailureException("订单没有异步支付方式，不需要同步");
         }
         // 执行订单同步逻辑
@@ -89,7 +88,7 @@ public class PaySyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public SyncResult syncPayOrder(PayOrder payOrder) {
         // 加锁
-        LockInfo lock = lockTemplate.lock("sync:payment" + payOrder.getId(),10000,200);
+        LockInfo lock = lockTemplate.lock("sync:pay" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }
@@ -181,7 +180,11 @@ public class PaySyncService {
         }
 
         // 退款比对状态不做额外处理, 需要通过退款接口进行处理
-        if (orderStatus.equals(PayStatusEnum.REFUNDED.getCode()) && syncStatus.equals(PaySyncStatusEnum.REFUND)){
+        List<String> orderClose = Arrays.asList(
+                PayStatusEnum.REFUNDED.getCode(),
+                PayStatusEnum.REFUNDING.getCode(),
+                PayStatusEnum.PARTIAL_REFUND.getCode());
+        if (orderClose.contains(orderStatus) || syncStatus.equals(PaySyncStatusEnum.REFUND)){
             return true;
         }
         return false;

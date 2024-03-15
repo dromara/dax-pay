@@ -36,8 +36,14 @@ public class ClientNoticeTaskService {
 
     /**
      * 手动触发消息发送
+     * 1. 手动触发消息发送次数不会变更
+     * 2. 会记录发送历史
+     * 3. 不受次数限制, 也不受状态控制. 任务完成与否都可以推送
      */
     public void sendData(Long taskId){
+        ClientNoticeTask task = taskManager.findById(taskId)
+                .orElseThrow(() -> new DataNotExistException("任务不存在"));
+        clientNoticeService.sendDataByManual(task);
     }
 
     /**

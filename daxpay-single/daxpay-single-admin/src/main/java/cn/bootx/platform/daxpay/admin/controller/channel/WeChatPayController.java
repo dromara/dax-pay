@@ -33,7 +33,6 @@ public class WeChatPayController {
         return Res.ok(weChatPayRecordService.page(pageParam, query));
     }
 
-
     @Operation(summary = "查询记录详情")
     @GetMapping("/record/findById")
     public ResResult<WeChatPayRecordDto> findById(Long id){

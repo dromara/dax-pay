@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
@@ -126,9 +127,9 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         callbackInfo.setAmount(callbackParam.get(CALLBACK_REFUND_FEE));
 
         // 交易状态
-        PayStatusEnum payStatus = Objects.equals(callbackParam.get(CALLBACK_REFUND_STATUS), REFUND_SUCCESS)
-                ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
-        callbackInfo.setGatewayStatus(payStatus.getCode());
+        RefundStatusEnum refundStatus = Objects.equals(callbackParam.get(CALLBACK_REFUND_STATUS), REFUND_SUCCESS)
+                ? RefundStatusEnum.SUCCESS : RefundStatusEnum.FAIL;
+        callbackInfo.setGatewayStatus(refundStatus.getCode());
 
         // 退款时间
         String timeEnd = callbackParam.get(CALLBACK_SUCCESS_TIME);

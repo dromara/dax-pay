@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>daxpay-single</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.3</version>
     </parent>
 
     <artifactId>daxpay-single-service</artifactId>
@@ -92,11 +92,19 @@
             <artifactId>IJPay-WxPay</artifactId>
             <version>${IJPay.version}</version>
         </dependency>
+
         <!-- 微信支付 wxjava -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
             <version>${wxjava.version}</version>
+        </dependency>
+
+        <!-- 云闪付 pay-java-parent  -->
+        <dependency>
+            <groupId>com.egzosn</groupId>
+            <artifactId>pay-java-union</artifactId>
+            <version>${egzosn-java.version}</version>
         </dependency>
 
         <!-- 微信工具包 -->

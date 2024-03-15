@@ -8,11 +8,15 @@ import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -32,6 +36,8 @@ public class WalletRefundStrategy extends AbsRefundStrategy {
 
     private final WalletQueryService walletQueryService;
 
+    private WalletPayParam walletPayParam;
+
     private Wallet wallet;
 
     /**
@@ -44,16 +50,31 @@ public class WalletRefundStrategy extends AbsRefundStrategy {
         return PayChannelEnum.WALLET;
     }
 
+
+    /**
+     * 退款前对处理
+     */
+    @Override
+    public void initRefundParam(PayOrder payOrder, PayChannelOrder payChannelOrder) {
+        // 先设置参数
+        super.initRefundParam(payOrder, payChannelOrder);
+        // 从通道扩展参数中取出钱包参数
+        String channelExtra = this.getPayChannelOrder().getChannelExtra();
+        this.walletPayParam = JSONUtil.toBean(channelExtra, WalletPayParam.class);
+    }
+
     /**
      * 退款前对处理
      */
     @Override
     public void doBeforeRefundHandler() {
-        // 从通道扩展参数中取出钱包参数
+        // 如果任务执行完成, 则跳过
+        if (Objects.equals(this.getRefundChannelOrder().getStatus(), RefundStatusEnum.SUCCESS.getCode())){
+            return;
+        }
+        //
         if (!this.getPayOrder().isAsyncPay()) {
-            String channelExtra = this.getPayChannelOrder().getChannelExtra();
-            WalletPayParam walletPayParam = JSONUtil.toBean(channelExtra, WalletPayParam.class);
-            this.wallet = walletQueryService.getWallet(walletPayParam);
+            this.wallet = walletQueryService.getWallet(this.walletPayParam);
         }
     }
 
@@ -62,7 +83,11 @@ public class WalletRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        // 不包含异步支付
+        // 如果任务执行完成, 则跳过
+        if (Objects.equals(this.getRefundChannelOrder().getStatus(), RefundStatusEnum.SUCCESS.getCode())){
+            return;
+        }
+        // 不包含异步支付, 则只在支付订单中进行扣减, 等待异步退款完成, 再进行退款
         if (!this.getPayOrder().isAsyncPay()){
             walletPayService.refund(this.wallet, this.getRefundChannelParam().getAmount());
             walletRecordService.refund(this.getRefundChannelOrder(), this.getPayOrder().getTitle(), this.wallet);
@@ -83,4 +108,5 @@ public class WalletRefundStrategy extends AbsRefundStrategy {
             super.doSuccessHandler();
         }
     }
+
 }
