@@ -163,24 +163,9 @@ public class SimplePayOrderTest {
 ## 🛣️ 路线图
 > 当前处于功能开发阶段，部分功能可能会有调整，`V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容
 
-[**开发进度和任务池**](/_doc/Task.md)
+[**当前开发进度和任务池**](/_doc/Task.md)
 
-[**更新记录**](/_doc/ChangeLog.md)
-
-### 2.0.X版本:
-- [x] 对账比对功能实现
-- [ ] 支持转账、分账操作
-- [ ] 云闪付支付支持
-- [ ] 支付宝和微信增加V3版本接口支持
-- [ ] 消息通知支持消息中间件模式
-
-### 2.1.X版本:
-- [ ] 增加账户金额表
-- [ ] 增加统计管理
-- [ ] 支持微信消息通知
-- [ ] 支持钉钉消息通知
-- [ ] 新增支付单预警功能, 处理支付单与网关状态不一致且无法自动修复的情况
-
+[**历史更新记录**](/_doc/ChangeLog.md)
 
 ##  🥂 Bootx 项目合集
 - Bootx-Platform：单体版脚手架 [Gitee地址](https://gitee.com/bootx/bootx-platform)
@@ -197,7 +182,7 @@ QQ扫码加入QQ交流群
 
 微信扫码加入微信交流群
 <p>
-<img alt="微信图片_20240226144703" height="500" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240310224719.4jnuoluofy.webp" width="330"/>
+<img alt="微信图片_20240226144703" height="500" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/7ea3e91d78f07dad16a480f5f48f74e.70a3dbwew7.webp" width="330"/>
 </p>
 
 ## 🍻 鸣谢
