@@ -5,6 +5,7 @@ import cn.bootx.platform.daxpay.service.param.report.CockpitReportQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 查询报表
@@ -17,12 +18,12 @@ public interface CockpitReportMapper {
     /**
      * 获取支付金额
      */
-    Integer getPayAmount(CockpitReportQuery query);
+    Optional<Integer> getPayAmount(CockpitReportQuery query);
 
     /**
      * 获取退款金额
      */
-    Integer getRefundAmount(CockpitReportQuery query);
+    Optional<Integer> getRefundAmount(CockpitReportQuery query);
 
     /**
      * 获取支付订单数量
@@ -37,12 +38,12 @@ public interface CockpitReportMapper {
     /**
      * 支付通道订单折线图
      */
-    List<ChannelOrderLine> getPayChannelLine(CockpitReportQuery query);
+    List<ChannelOrderLine> getPayChannelInfo(CockpitReportQuery query);
 
     /**
      * 退款通道订单折线图
      */
-    List<ChannelOrderLine> getRefundChannelLine(CockpitReportQuery query);
+    List<ChannelOrderLine> getRefundChannelInfo(CockpitReportQuery query);
 
 
 }
