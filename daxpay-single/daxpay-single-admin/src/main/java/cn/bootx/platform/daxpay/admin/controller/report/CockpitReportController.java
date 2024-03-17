@@ -58,18 +58,18 @@ public class CockpitReportController {
         return Res.ok(cockpitReportService.getRefundOrderCount(query));
     }
 
-    @Operation(summary = "支付通道折线图")
-    @GetMapping("/getPayChannelLine")
-    public ResResult<List<ChannelLineReport>> getPayChannelLine(@ParameterObject CockpitReportQuery query){
+    @Operation(summary = "显示通道支付订单金额和订单数")
+    @GetMapping("/getPayChannelInfo")
+    public ResResult<List<ChannelLineReport>> getPayChannelInfo(@ParameterObject CockpitReportQuery query){
         ValidationUtil.validateParam(query);
-        return Res.ok(cockpitReportService.getPayChannelLine(query));
+        return Res.ok(cockpitReportService.getPayChannelInfo(query));
     }
 
-    @Operation(summary = "退款通道折线图")
-    @GetMapping("/getRefundChannelLine")
-    public ResResult<List<ChannelLineReport>> getRefundChannelLine(@ParameterObject CockpitReportQuery query){
+    @Operation(summary = "显示通道退款订单金额和订单数")
+    @GetMapping("/getRefundChannelInfo")
+    public ResResult<List<ChannelLineReport>> getRefundChannelInfo(@ParameterObject CockpitReportQuery query){
         ValidationUtil.validateParam(query);
-        return Res.ok(cockpitReportService.getRefundChannelLine(query));
+        return Res.ok(cockpitReportService.getRefundChannelInfo(query));
     }
 
 }

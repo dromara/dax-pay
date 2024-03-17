@@ -34,14 +34,14 @@ public class CockpitReportService {
      */
     public Integer getPayAmount(CockpitReportQuery query){
         // 获取支付成功的订单
-        return cockpitReportMapper.getPayAmount(query);
+        return cockpitReportMapper.getPayAmount(query).orElse(0);
     }
 
     /**
      * 退款金额(分)
      */
     public Integer getRefundAmount(CockpitReportQuery query){
-        return cockpitReportMapper.getRefundAmount(query);
+        return cockpitReportMapper.getRefundAmount(query).orElse(0);
     }
 
     /**
@@ -59,10 +59,10 @@ public class CockpitReportService {
     }
 
     /**
-     * (折线图)显示各通道支付分为支付金额和订单数,
+     * (折线图/占比图)显示各通道支付分为支付金额和订单数
      */
-    public List<ChannelLineReport> getPayChannelLine(CockpitReportQuery query){
-        Map<String, ChannelOrderLine> lineMap = cockpitReportMapper.getPayChannelLine(query)
+    public List<ChannelLineReport> getPayChannelInfo(CockpitReportQuery query){
+        Map<String, ChannelOrderLine> lineMap = cockpitReportMapper.getPayChannelInfo(query)
                 .stream()
                 .collect(Collectors.toMap(ChannelOrderLine::getChannel, Function.identity(), CollectorsFunction::retainLatest));
         // 根据系统中有的通道编码,获取对应的通道名称
@@ -83,10 +83,10 @@ public class CockpitReportService {
     }
 
     /**
-     * (折线图)显示各通道退款金额和订单数,
+     * (折线图/占比图)显示各通道退款金额和订单数,
      */
-    public List<ChannelLineReport> getRefundChannelLine(CockpitReportQuery query){
-        Map<String, ChannelOrderLine> lineMap = cockpitReportMapper.getRefundChannelLine(query)
+    public List<ChannelLineReport> getRefundChannelInfo(CockpitReportQuery query){
+        Map<String, ChannelOrderLine> lineMap = cockpitReportMapper.getRefundChannelInfo(query)
                 .stream()
                 .collect(Collectors.toMap(ChannelOrderLine::getChannel, Function.identity(), CollectorsFunction::retainLatest));
         // 根据系统中有的通道编码,获取对应的通道名称

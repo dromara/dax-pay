@@ -26,8 +26,8 @@ public class CockpitReportQuery {
     @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime startTime;
 
-    @NotNull(message = "开始时间不得为空")
-    @Schema(description = "开始时间")
+    @NotNull(message = "结束时间不得为空")
+    @Schema(description = "结束时间")
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime endTime;

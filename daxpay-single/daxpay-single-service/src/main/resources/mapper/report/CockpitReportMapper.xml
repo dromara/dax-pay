@@ -47,7 +47,7 @@
     </select>
 
     <!-- 支付通道折线图 -->
-    <select id="getPayChannelLine" resultType="cn.bootx.platform.daxpay.service.core.report.entity.ChannelOrderLine">
+    <select id="getPayChannelInfo" resultType="cn.bootx.platform.daxpay.service.core.report.entity.ChannelOrderLine">
         SELECT
             channel,
             count(*) as count,
@@ -62,7 +62,7 @@
     </select>
 
     <!-- 退款通道折线图 -->
-    <select id="getRefundChannelLine" resultType="cn.bootx.platform.daxpay.service.core.report.entity.ChannelOrderLine">
+    <select id="getRefundChannelInfo" resultType="cn.bootx.platform.daxpay.service.core.report.entity.ChannelOrderLine">
         SELECT
             channel,
             count(*) as count,
