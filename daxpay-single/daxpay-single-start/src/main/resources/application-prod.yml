@@ -53,32 +53,21 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
-# 开发时显示debug日志
-logging:
-  level:
-    cn.bootx.**: debug
-    org.springframework.jdbc.core: debug
+knife4j:
+  # 开启增强配置
+  enable: true
+  # 开启生产环境屏蔽
+  production: true
 # 项目配置
 bootx:
   common:
     # 接口文档
     swagger:
-      enabled: true
+      enabled: false
       author: bootx
       version: 2.0.3
       title: 开源支付平台-单商户
       description: 开源支付平台-单商户版
-      # 多模块扫码
-      base-packages:
-        "[支付网关API]": cn.bootx.platform.daxpay.gateway
-        "[支付管理接口]": cn.bootx.platform.daxpay.admin
-        "[支付演示模块]": cn.bootx.platform.daxpay.demo
-        "[BootxPlatform接口]":
-          - cn.bootx.platform.common
-          - cn.bootx.platform.starter
-          - cn.bootx.platform.iam
-          - cn.bootx.platform.baseapi
-          - cn.bootx.platform.notice
     # 缓存
     cache:
       # 默认超时时间 30分钟
@@ -101,6 +90,8 @@ bootx:
     # 认证
     auth:
       default-password: 123456
+      # 关闭超级管理员登录
+      enable-admin: false
       ignore-urls:
         - '/actuator/**'
         - '/v3/api-docs/**'
@@ -135,10 +126,7 @@ bootx:
       server-url: http://127.0.0.1:9000
 # 自动建表 生产环境关闭
 table-modify:
-  update-type: update
-  database-type: mysql
-  fail-fast: true
-  scan-package: cn.bootx.platform.daxpay
+  update-type: none
 dromara:
   #文件存储配置,
   x-file-storage:

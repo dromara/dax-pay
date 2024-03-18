@@ -38,7 +38,6 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
     @Resource
     private WeChatPayConfigService weChatPayConfigService;
 
-
     /**
      * 策略标识
      */
