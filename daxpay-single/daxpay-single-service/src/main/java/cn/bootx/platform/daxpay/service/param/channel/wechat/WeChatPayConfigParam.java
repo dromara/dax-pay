@@ -35,6 +35,10 @@ public class WeChatPayConfigParam {
     @Schema(description ="同步通知地址")
     private String returnUrl;
 
+    /** 接口版本, 使用v2还是v3接口 */
+    @Schema(description = "接口版本")
+    private String apiVersion;
+
     @Schema(description = "商户平台「API安全」中的 APIv2 密钥")
     private String apiKeyV2;
 

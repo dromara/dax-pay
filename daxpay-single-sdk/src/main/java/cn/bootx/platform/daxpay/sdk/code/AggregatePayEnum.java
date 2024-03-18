@@ -13,7 +13,8 @@ import lombok.Getter;
 public enum AggregatePayEnum {
 
     UA_ALI_PAY("Alipay", "支付宝"),
-    UA_WECHAT_PAY("MicroMessenger", "微信支付");
+    UA_WECHAT_PAY("MicroMessenger", "微信支付"),
+    UA_UNION_PAY("CloudPay", "云闪付");
 
     /** 支付渠道字符编码 */
     private final String code;

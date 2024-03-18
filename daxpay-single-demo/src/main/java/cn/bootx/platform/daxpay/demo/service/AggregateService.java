@@ -90,11 +90,15 @@ public class AggregateService {
             // 跳转支付宝中间页
             return StrUtil.format("{}/aggregate/alipay?code={}", daxPayDemoProperties.getFrontH5Url(),code);
         }
+        // 微信支付
         else if (ua.contains(AggregatePayEnum.UA_WECHAT_PAY.getCode())) {
             // 微信重定向到中间页, 因为微信需要授权后才能发起支付
             return this.wxJsapiAuthPage(code);
         }
-        else {
+        // 云闪付
+        else if (ua.contains(AggregatePayEnum.UA_UNION_PAY.getCode())) {
+            return StrUtil.format("{}/aggregate/wechatPay?code={}", daxPayDemoProperties.getFrontH5Url(),code);
+        } else {
             // 跳转到异常页
             return StrUtil.format("{}/result/error?msg={}", daxPayDemoProperties.getFrontH5Url(), URLEncodeUtil.encode("请使用微信或支付宝扫码支付"));
         }
@@ -247,6 +251,7 @@ public class AggregateService {
         }
         String[] wx = { "10", "11", "12", "13", "14", "15" };
         String[] ali = { "25", "26", "27", "28", "29", "30" };
+        String[] union = { "62" };
 
         // 微信
         if (StrUtil.startWithAny(authCode.substring(0, 2), wx)) {
@@ -255,6 +260,10 @@ public class AggregateService {
         // 支付宝
         else if (StrUtil.startWithAny(authCode.substring(0, 2), ali)) {
             return PayChannelEnum.ALI;
+        }
+        // 云闪付
+        else if (StrUtil.startWithAny(authCode.substring(0, 2), union)) {
+            return PayChannelEnum.UNION_PAY;
         }
         else {
             throw new BizException("不支持的支付方式");

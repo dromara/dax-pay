@@ -5,6 +5,7 @@ import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.StringListTypeHandler;
+import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.convert.WeChatConvert;
 import cn.bootx.platform.daxpay.service.dto.channel.wechat.WeChatPayConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -63,10 +64,12 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "同步通知路径")
     private String returnUrl;
 
-    /** 接口版本, 使用v2还是v3接口 */
+    /**
+     * 接口版本, 使用v2还是v3接口
+     * @see WeChatPayCode#API_V2
+     */
     @DbColumn(comment = "接口版本")
     private String apiVersion;
-
 
     /** 商户平台「API安全」中的 APIv2 密钥 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
