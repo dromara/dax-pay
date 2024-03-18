@@ -75,8 +75,8 @@ public class CockpitReportService {
                     if (Objects.isNull(channelOrderLine)){
                         channelLineReport.setOrderAmount(0).setOrderCount(0);
                     } else {
-                        channelLineReport.setOrderAmount(channelOrderLine.getCount())
-                                .setOrderCount(channelOrderLine.getSum());
+                        channelLineReport.setOrderAmount(channelOrderLine.getSum())
+                                .setOrderCount(channelOrderLine.getCount());
                     }
                     return channelLineReport;
                 }).collect(Collectors.toList());
@@ -99,8 +99,8 @@ public class CockpitReportService {
                     if (Objects.isNull(channelOrderLine)){
                         channelLineReport.setOrderAmount(0).setOrderCount(0);
                     } else {
-                        channelLineReport.setOrderAmount(channelOrderLine.getCount())
-                                .setOrderCount(channelOrderLine.getSum());
+                        channelLineReport.setOrderAmount(channelOrderLine.getSum())
+                                .setOrderCount(channelOrderLine.getCount());
                     }
                     return channelLineReport;
                 }).collect(Collectors.toList());
