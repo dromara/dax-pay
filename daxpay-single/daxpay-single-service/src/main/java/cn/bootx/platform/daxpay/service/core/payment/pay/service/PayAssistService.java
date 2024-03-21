@@ -160,7 +160,7 @@ public class PayAssistService {
     /**
      * 创建并保存通道支付订单
      */
-    public void createPayChannelOrder(List<AbsPayStrategy> payStrategies) {
+    public void savePayChannelOrder(List<AbsPayStrategy> payStrategies) {
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         List<PayChannelOrder> channelOrders = payStrategies.stream()
                 .map(AbsPayStrategy::getChannelOrder)

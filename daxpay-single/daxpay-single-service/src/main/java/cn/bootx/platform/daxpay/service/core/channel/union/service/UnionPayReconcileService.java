@@ -27,4 +27,11 @@ public class UnionPayReconcileService {
         // 下载对账单
         Map<String, Object> stringObjectMap = unionPayKit.downloadBill(date, RECONCILE_BILL_TYPE);
     }
+
+    /**
+     * 转换和保存
+     */
+    public void convertAndSave(){
+
+    }
 }

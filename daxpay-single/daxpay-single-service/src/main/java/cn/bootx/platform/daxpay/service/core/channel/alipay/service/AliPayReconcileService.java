@@ -156,7 +156,6 @@ public class AliPayReconcileService {
             reconcileDetail.setOrderId(billDetail.getBatchNo())
                     .setType(ReconcileTradeEnum.REFUND.getCode());
         }
-
         return reconcileDetail;
     }
 
