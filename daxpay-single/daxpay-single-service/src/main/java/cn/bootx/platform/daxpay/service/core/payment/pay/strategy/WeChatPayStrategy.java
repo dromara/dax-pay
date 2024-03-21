@@ -104,7 +104,9 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      * 不使用默认的生成通道支付单方法, 异步支付通道的支付订单自己管理
      */
     @Override
-    public void generateChannelOrder() {}
+    public void generateChannelOrder() {
+        super.generateChannelOrder();
+    }
 
     /**
      * 初始化微信支付
