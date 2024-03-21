@@ -58,8 +58,7 @@ public abstract class AbsPayStrategy implements PayStrategy{
      * 支付调起成功的处理方式
      */
     public void doSuccessHandler() {
-        this.channelOrder.setStatus(PayStatusEnum.SUCCESS.getCode())
-                .setPayTime(LocalDateTime.now());
+        this.channelOrder.setStatus(PayStatusEnum.SUCCESS.getCode()).setPayTime(LocalDateTime.now());
     }
 
     /**

@@ -98,6 +98,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void generateChannelOrder() {
+        super.generateChannelOrder();
     }
 
     /**

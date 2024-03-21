@@ -95,6 +95,7 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void generateChannelOrder() {
+        super.generateChannelOrder();
     }
 
     /**
