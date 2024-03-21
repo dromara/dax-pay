@@ -1,0 +1,76 @@
+@startuml
+
+autonumber
+skinparam responseMessageBelowArrow true
+
+title  退款代码时序图-以支付宝退款全部退款为例
+
+actor       客户端       as Client
+participant RefundService
+participant RefundStrategyFactory
+participant AliRefundStrategy
+participant RefundAssistService
+participant AlipayConfigService
+participant AliRefundService
+participant PayOrderService
+participant PayChannelOrderManager
+participant PayChannelOrderService
+participant AliRecordService
+participant ClientNoticeService
+participant 支付宝网关 as AlliGateway
+
+Client -> RefundService: 发起退款请求
+
+group 1. 退款发起前准备
+autonumber 1
+RefundService -> RefundService: 使用适配方法发起全部退款
+RefundService <- RefundAssistService: 获取支付订单
+RefundService --> RefundAssistService: 检查退款参数, 同时补充一些数据
+RefundService --> RefundAssistService: 上下文初始化
+
+RefundService -> RefundStrategyFactory: 通过工厂生成对应的策略组
+RefundService <- RefundStrategyFactory: 返回支付策略组
+
+RefundService --> AliRefundStrategy: 初始化退款策略的参数
+AliRefundStrategy --> AliRefundStrategy: 执行初始化退款策略的参数
+
+RefundService --> AliRefundStrategy: 退款前校验操作
+RefundService --> AliRefundStrategy: 生成通道退款订单对象
+
+RefundService --> PayChannelOrderManager: 预扣支付相关订单要退款的金额并进行更新
+RefundService --> PayOrderService: 更新支付订单退款状态
+RefundService --> RefundAssistService: 创建退款相关订单，并对数据进行持久化保存
+
+end
+
+group 2. 退款操作
+autonumber 1
+
+RefundService -> AliRefundStrategy: 退款前准备操作
+AliRefundStrategy --> AlipayConfigService: 获取并初始化支付配置信息
+RefundService <- AliRefundStrategy: 退款前准备结束
+
+RefundService -> AliRefundStrategy: 执行退款策略
+AliRefundStrategy -> AliRefundService : 执行退款操作
+AliRefundService --> AlliGateway: 发送退款指令
+AliRefundService -> AliRefundStrategy: 返回结果
+RefundService <- AliRefundStrategy: 退款执行结束
+
+end
+
+group 3. 退款发起成功后操作
+autonumber 1
+RefundService -> AliRefundStrategy: 执行退款发起成功后操作
+AliRefundStrategy --> AliRefundStrategy: 更新退款订单数据状态
+AliRefundStrategy --> PayChannelOrderService: 更新支付通道订单中的状态属性
+AliRefundStrategy --> AliRecordService: 如果退款完成, 保存流水记录
+RefundService <- AliRefundStrategy: 执行完成
+
+RefundService --> PayOrderService: 更新支付订单信息
+RefundService --> RefundAssistService: 更新退款订单和相关通道退款订单
+RefundService --> ClientNoticeService: 如果支付完成发送退款成功通知
+
+end
+autonumber 2
+Client <- RefundService: 返回退款调用结果
+@enduml

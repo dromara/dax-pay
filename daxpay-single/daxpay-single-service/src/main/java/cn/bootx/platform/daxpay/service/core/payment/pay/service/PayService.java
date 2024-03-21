@@ -9,7 +9,6 @@ import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
@@ -52,8 +51,6 @@ public class PayService {
     private final PayAssistService payAssistService;
 
     private final ClientNoticeService clientNoticeService;
-
-    private final PayChannelOrderManager payChannelOrderManager;
 
     private final LockTemplate lockTemplate;
 
@@ -162,7 +159,7 @@ public class PayService {
         // 4.2 支付调用成功操作, 进行扣款、创建记录类类似的操作
         strategies.forEach(AbsPayStrategy::doSuccessHandler);
         // 4.3 保存通道支付订单
-        payAssistService.createPayChannelOrder(strategies);
+        payAssistService.savePayChannelOrder(strategies);
 
         // 5.1 如果没有异步支付, 直接进行订单完成处理
         if (PayUtil.isNotSync(payParam.getPayChannels())) {
