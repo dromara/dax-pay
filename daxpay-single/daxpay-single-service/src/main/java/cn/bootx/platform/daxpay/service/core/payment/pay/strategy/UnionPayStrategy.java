@@ -98,7 +98,8 @@ public class UnionPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void generateChannelOrder() {
-        super.generateChannelOrder();
+        // 创建或切换支付通道订单
+        channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
     }
 
     /**
@@ -107,6 +108,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
     @Override
     public void doSuccessHandler() {
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
+        // 更新支付通道信息
         PayChannelOrder payChannelOrder = channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
         // 支付完成, 保存记录
         if (asyncPayInfo.isPayComplete()) {

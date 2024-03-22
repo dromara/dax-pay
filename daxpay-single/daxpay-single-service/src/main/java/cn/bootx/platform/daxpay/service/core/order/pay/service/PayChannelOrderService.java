@@ -16,6 +16,7 @@ import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -51,13 +52,13 @@ public class PayChannelOrderService {
 
     /**
      * 切换支付订单关联的异步支付通道, 同时会设置是否支付完成状态, 并返回通道订单
+     * 使用单独事务
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public PayChannelOrder switchAsyncPayChannel(PayOrder payOrder, PayChannelParam payChannelParam){
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         // 是否支付完成
         PayStatusEnum payStatus = payInfo.isPayComplete() ? PayStatusEnum.SUCCESS : PayStatusEnum.PROGRESS;
-        // 判断新发起的
         Optional<PayChannelOrder> payOrderChannelOpt = channelOrderManager.findByPaymentIdAndChannel(payOrder.getId(), payChannelParam.getChannel());
         // 扩展信息处理
         Map<String, Object> channelParam = payChannelParam.getChannelParam();
@@ -91,7 +92,10 @@ public class PayChannelOrderService {
                     .setChannelExtra(channelParamStr)
                     .setStatus(payStatus.getCode());
             channelOrderManager.updateById(payChannelOrder);
-            payInfo.getPayChannelOrders().add(payOrderChannelOpt.get());
+            // 更新时一次请求有多次访问, 对上下文中的通道支付订单进行替换
+            List<PayChannelOrder> payChannelOrders = payInfo.getPayChannelOrders();
+            payChannelOrders.removeIf(o->Objects.equals(o.getChannel(),payChannelOrder.getChannel()));
+            payChannelOrders.add(payOrderChannelOpt.get());
             return payChannelOrder;
         }
     }

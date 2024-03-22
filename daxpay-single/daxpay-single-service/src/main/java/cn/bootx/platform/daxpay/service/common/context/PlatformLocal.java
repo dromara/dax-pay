@@ -33,4 +33,7 @@ public class PlatformLocal {
 
     /** 订单支付超时(分钟) */
     private Integer orderTimeout;
+
+    /** 支付限额 */
+    private Integer limitAmount;
 }
