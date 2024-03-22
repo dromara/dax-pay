@@ -44,9 +44,19 @@ public abstract class AbsPayStrategy implements PayStrategy{
     }
 
     /**
-     * 支付前处理 包含必要的校验以及对当前通道支付订单的创建和保存操作
+     * 支付前处理 包含必要的校验以及对当前通道支付配置信息的初始化
      */
     public void doBeforePayHandler() {
+    }
+
+    /**
+     * 生成通道支付单, 如果不需要可以进行覆盖
+     * 异步支付通道都进行了重新, 通道支付单由自己控制
+     */
+    public void generateChannelOrder() {
+        PayChannelOrder payChannelOrder = PayBuilder.buildPayChannelOrder(this.getPayChannelParam());
+        payChannelOrder.setPaymentId(this.getOrder().getId());
+        this.channelOrder = payChannelOrder;
     }
 
     /**
@@ -61,12 +71,4 @@ public abstract class AbsPayStrategy implements PayStrategy{
         this.channelOrder.setStatus(PayStatusEnum.SUCCESS.getCode()).setPayTime(LocalDateTime.now());
     }
 
-    /**
-     * 生成通道支付单, 如果不需要可以进行覆盖
-     */
-    public void generateChannelOrder() {
-        PayChannelOrder payChannelOrder = PayBuilder.buildPayChannelOrder(this.getPayChannelParam());
-        payChannelOrder.setPaymentId(this.getOrder().getId());
-        this.channelOrder = payChannelOrder;
-    }
 }

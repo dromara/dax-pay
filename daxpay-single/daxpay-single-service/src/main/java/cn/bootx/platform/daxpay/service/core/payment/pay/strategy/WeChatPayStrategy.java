@@ -78,6 +78,16 @@ public class WeChatPayStrategy extends AbsPayStrategy {
         weChatPayService.validation(this.getPayChannelParam(), weChatPayConfig);
     }
 
+
+    /**
+     * 不使用默认的生成通道支付单方法, 异步支付通道的支付订单自己管理
+     */
+    @Override
+    public void generateChannelOrder() {
+        // 创建或切换支付通道订单
+        channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
+    }
+
     /**
      * 发起支付
      */
@@ -98,14 +108,6 @@ public class WeChatPayStrategy extends AbsPayStrategy {
         if (asyncPayInfo.isPayComplete()){
             weChatPayRecordService.pay(this.getOrder(), payChannelOrder);
         }
-    }
-
-    /**
-     * 不使用默认的生成通道支付单方法, 异步支付通道的支付订单自己管理
-     */
-    @Override
-    public void generateChannelOrder() {
-        super.generateChannelOrder();
     }
 
     /**

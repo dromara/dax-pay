@@ -15,17 +15,17 @@ import org.springframework.stereotype.Service;
 public class AliPayTransferService {
 
     private final AliPayConfigService payConfigService;
+
     /**
      * 余额查询接口
      */
     @SneakyThrows
     public void queryAccountAmount() {
-
         AliPayConfig config = payConfigService.getAndCheckConfig();
         payConfigService.initConfig(config);
         AlipayFundAccountQueryModel model = new AlipayFundAccountQueryModel();
         model.setAccountType("ACCTRANS_ACCOUNT");
-        model.setAlipayUserId(config.getAppId());
+        model.setAlipayUserId("2088441532699265");
         AlipayFundAccountQueryResponse response = AliPayApi.accountQueryToResponse(model, null);
         System.out.println(response);
     }

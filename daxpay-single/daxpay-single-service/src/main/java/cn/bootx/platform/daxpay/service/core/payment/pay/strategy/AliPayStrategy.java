@@ -95,7 +95,8 @@ public class AliPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void generateChannelOrder() {
-        super.generateChannelOrder();
+        // 创建或切换支付通道订单
+        channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
     }
 
     /**
@@ -104,6 +105,7 @@ public class AliPayStrategy extends AbsPayStrategy {
     @Override
     public void doSuccessHandler() {
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
+        // 更新通道支付订单
         PayChannelOrder payChannelOrder = channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
         // 支付完成, 保存记录
         if (asyncPayInfo.isPayComplete()) {

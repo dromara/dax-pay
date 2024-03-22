@@ -156,17 +156,17 @@ dromara:
 # 支付系统配置
 dax-pay:
   # 服务地址
-  server-url: http://pay1.bootx.cn
+  server-url: http://localhost:9000
   # 前端h5地址
-  front-h5-url: http://pay1.bootx.cn/h5/#
+  front-h5-url: http://localhost:5173/#
   # 前端web地址
-  front-web-url: http://pay1.bootx.cn/#
+  front-web-url: http://localhost:9000/#
   # 演示模块
   demo:
     # 网关地址
-    server-url: http://pay1.bootx.cn/server
+    server-url: http://localhost:9000/server
     # 前端h5地址
-    front-h5-url: http://pay1.bootx.cn/h5/#
+    front-h5-url: http://localhost:5173/#
     # 签名秘钥
     sign-secret: 123456
     # 签名方式
