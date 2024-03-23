@@ -3,10 +3,11 @@ package cn.bootx.platform.daxpay.service.core.order.pay.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
-import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderExtraDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 支付订单扩展信息
@@ -22,7 +23,16 @@ public class PayOrderExtraService {
     /**
      * 查询详情
      */
-    public PayOrderExtraDto findById(Long id){
-        return payOrderExtraManager.findById(id).map(PayOrderExtra::toDto).orElseThrow(()->new DataNotExistException("支付订单扩展信息不存在"));
+    public PayOrderExtra findById(Long id){
+        return payOrderExtraManager.findById(id).orElseThrow(()->new DataNotExistException("支付订单扩展信息不存在"));
     }
+
+    /**
+     * 更新, 使用单独事务
+     */
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void update(PayOrderExtra payOrderExtra){
+        payOrderExtraManager.updateById(payOrderExtra);
+    }
+
 }

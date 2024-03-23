@@ -2,12 +2,13 @@ package cn.bootx.platform.daxpay.service.core.order.pay.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
-import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
@@ -16,7 +17,6 @@ import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -36,6 +36,8 @@ import java.util.Optional;
 public class PayChannelOrderService {
     private final PayChannelOrderManager channelOrderManager;
 
+    private final PayOrderManager payOrderManager;
+
     /**
      * 根据支付ID查询列表
      */
@@ -51,10 +53,10 @@ public class PayChannelOrderService {
     }
 
     /**
-     * 切换支付订单关联的异步支付通道, 同时会设置是否支付完成状态, 并返回通道订单
-     * 使用单独事务
+     * 切换支付订单关联的异步支付通道, 设置是否支付完成状态, 并返回通道订单
+     * 同时会更新支付订单上的异步通道信息
      */
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(rollbackFor = Exception.class)
     public PayChannelOrder switchAsyncPayChannel(PayOrder payOrder, PayChannelParam payChannelParam){
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         // 是否支付完成
@@ -66,8 +68,9 @@ public class PayChannelOrderService {
         if (Objects.nonNull(channelParam)){
             channelParamStr = JSONUtil.toJsonStr(channelParam);
         }
+        PayChannelOrder payChannelOrder;
         if (!payOrderChannelOpt.isPresent()){
-            PayChannelOrder payChannelOrder = new PayChannelOrder();
+            payChannelOrder = new PayChannelOrder();
             // 替换原有的的支付通道信息
             payChannelOrder.setPayWay(payChannelParam.getWay())
                     .setPaymentId(payOrder.getId())
@@ -76,28 +79,27 @@ public class PayChannelOrderService {
                     .setPayWay(payChannelParam.getWay())
                     .setAmount(payChannelParam.getAmount())
                     .setRefundableBalance(payChannelParam.getAmount())
-                    .setPayTime(LocalDateTime.now())
                     .setChannelExtra(channelParamStr)
                     .setStatus(payStatus.getCode());
             channelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
             channelOrderManager.save(payChannelOrder);
             payInfo.getPayChannelOrders().add(payChannelOrder);
-            return payChannelOrder;
         } else {
             // 更新支付通道信息
-            PayChannelOrder payChannelOrder = payOrderChannelOpt.get();
-            payChannelOrder
-                    .setPayWay(payChannelParam.getWay())
-                    .setPayTime(LocalDateTime.now())
+            payChannelOrder = payOrderChannelOpt.get();
+            payChannelOrder.setPayWay(payChannelParam.getWay())
                     .setChannelExtra(channelParamStr)
                     .setStatus(payStatus.getCode());
             channelOrderManager.updateById(payChannelOrder);
-            // 更新时一次请求有多次访问, 对上下文中的通道支付订单进行替换
-            List<PayChannelOrder> payChannelOrders = payInfo.getPayChannelOrders();
-            payChannelOrders.removeIf(o->Objects.equals(o.getChannel(),payChannelOrder.getChannel()));
-            payChannelOrders.add(payOrderChannelOpt.get());
-            return payChannelOrder;
         }
+        // 对上下文中的通道支付订单进行替换
+        List<PayChannelOrder> payChannelOrders = payInfo.getPayChannelOrders();
+        payChannelOrders.removeIf(o->Objects.equals(o.getChannel(),payChannelOrder.getChannel()));
+        payChannelOrders.add(payChannelOrder);
+        // 更新支付订单中的异步通道信息
+        payOrder.setAsyncChannel(payChannelOrder.getChannel());
+        payOrderManager.updateById(payOrder);
+        return payChannelOrder;
     }
 
     /**

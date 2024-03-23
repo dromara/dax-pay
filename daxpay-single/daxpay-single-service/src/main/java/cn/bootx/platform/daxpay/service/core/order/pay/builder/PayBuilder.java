@@ -60,7 +60,6 @@ public class PayBuilder {
                 .setExpiredTime(expiredTime)
                 .setCombinationPay(payParam.getPayChannels().size() > 1)
                 .setAsyncPay(asyncPay.isPresent())
-                .setAsyncChannel(asyncPay.orElse(null))
                 .setRefundableBalance(sumAmount);
     }
 

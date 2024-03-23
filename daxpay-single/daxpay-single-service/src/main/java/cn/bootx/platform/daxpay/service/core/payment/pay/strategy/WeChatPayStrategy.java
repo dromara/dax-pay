@@ -101,9 +101,9 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doSuccessHandler() {
-        PayChannelOrder payChannelOrder = channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
-        this.getOrder().setAsyncChannel(this.getChannel().getCode());
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
+        // 更新通道支付订单
+        PayChannelOrder payChannelOrder = channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
         // 是否支付完成, 保存流水记录
         if (asyncPayInfo.isPayComplete()){
             weChatPayRecordService.pay(this.getOrder(), payChannelOrder);

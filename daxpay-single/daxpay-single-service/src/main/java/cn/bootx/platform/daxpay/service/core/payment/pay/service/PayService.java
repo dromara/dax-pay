@@ -10,8 +10,11 @@ import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderExtraService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
 import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
@@ -26,7 +29,6 @@ import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -53,9 +55,13 @@ public class PayService {
 
     private final PayOrderService payOrderService;
 
+    private final PayOrderExtraService payOrderExtraManager;
+
     private final PayAssistService payAssistService;
 
     private final ClientNoticeService clientNoticeService;
+
+    private final PayChannelOrderManager payChannelOrderManager;
 
     private final LockTemplate lockTemplate;
 
@@ -63,7 +69,6 @@ public class PayService {
     /**
      * 简单下单, 可以视为不支持组合支付的下单接口
      */
-    @Transactional(rollbackFor = Exception.class)
     public PayResult simplePay(SimplePayParam simplePayParam) {
         // 组装支付参数
         PayParam payParam = new PayParam();
@@ -82,14 +87,13 @@ public class PayService {
     /**
      * 支付入口
      * 支付下单接口(同步/异步/组合支付)
-     * 1. 同步支付：包含一个或多个同步支付通道进行支付
-     * 2. 异步支付：例如支付宝、微信，发起支付后还需要跳转第三方平台进行支付，支付后通常需要进行回调，之后才完成支付记录
-     * 3. 组合支付：主要是混合了同步支付和异步支付，同时异步支付只能有一个，在支付时先对同步支付进行扣减，然后异步支付回调结束后完成整个支付单
-     * 注意:
-     * 组合支付在非第一次支付的时候，只对新传入的异步支付通道进行处理，该通道的价格使用第一次发起的价格，旧的同步支付如果传入后也不做处理，
-     * 支付单中支付通道列表将会为 旧有的同步支付+新传入的异步支付方式(在具体支付实现中处理)
+     * 1. 同步支付：包含一个或多个同步支付通道进行支付, 使用一个事务进行包裹，要么成功要么失败
+     * 2. 异步支付：会首先创建订单信息，然后再发起支付，支付成功后更新订单和通道订单信息，支付失败也会存在订单信息，预防丢单
+     * 3. 组合支付(包含异步支付)：会首先进行同步通道的支付，支付完成后才会调用异步支付，如果同步支付失败会回滚信息，不会进行存库
+     *  执行异步通道支付的逻辑与上面异步支付的逻辑一致
+     * 4. 同步支付一次支付完成，不允许重复发起支付
+     * 5. 重复支付时，不允许中途将异步支付换为同步支付，也不允许更改出支付通道和支付方式之外的支付参数（请求时间、IP、签名等可以更改）
      *
-     * 订单数据会先进行入库, 才会进行发起支付, 在调用各通道支付之前发生错误, 数据不会入库
      */
     public PayResult pay(PayParam payParam){
 
@@ -115,7 +119,7 @@ public class PayService {
                 List<PayChannelParam> payChannels = payParam.getPayChannels();
                 // 不包含异步支付通道
                 if (PayUtil.isNotSync(payChannels)){
-                    return this.firstSyncPay(payParam);
+                    return SpringUtil.getBean(this.getClass()).firstSyncPay(payParam);
                 }
                 // 单个异步通道支付
                 else if (payChannels.size() == 1 && !PayUtil.isNotSync(payChannels)) {
@@ -128,21 +132,35 @@ public class PayService {
                     throw new PayFailureException("支付参数错误");
                 }
             } else {
+                List<PayChannelParam> payChannels = payParam.getPayChannels();
+                // 不包含异步支付通道
+                if (PayUtil.isNotSync(payChannels)){
+                    throw new PayFailureException("支付参数错误, 不可以中途切换为同步支付通道");
+                }
                 // 单个异步通道支付
-
+                if (payOrder.isAsyncPay() && !payOrder.isCombinationPay()){
+                    return this.repeatAsyncPay(payParam,payOrder);
+                }
                 // 包含异步通道的组合支付
-
+                else if (payOrder.isAsyncPay()){
+                    return this.repeatCombinationPay(payParam, payOrder);
+                } else {
+                    throw new PayFailureException("支付参数错误");
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            lockTemplate.releaseLock(lock);
         }
-        return null;
     }
 
     /**
      * 首次同步支付, 可以为一个或多个同步通道进行支付
+     * 使用事务，保证支付只有成功或失败两种状态
      */
-    private PayResult firstSyncPay(PayParam payParam){
+    @Transactional(rollbackFor = Exception.class)
+    public PayResult firstSyncPay(PayParam payParam){
         // 创建支付订单和扩展记录并返回支付订单对象
         PayOrder payOrder = payAssistService.createPayOrder(payParam);
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
@@ -179,11 +197,27 @@ public class PayService {
 
     /**
      * 首次单个异步通道支付
+     * 拆分为多阶段，1. 保存订单记录信息 2 调起支付 3. 支付成功后操作
      */
     private PayResult firstAsyncPay(PayParam payParam){
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
-        // 开启新事务执行订单预保存操作, 并返回对应的支付策略组
-        AbsPayStrategy asyncPayStrategy = SpringUtil.getBean(this.getClass()).asyncPayPreSave(payParam);
+        // 开启新事务执行订单预保存操作
+        PayOrder payOrder = payAssistService.createPayOrder(payParam);
+
+        // 获取支付方式，通过工厂生成对应的策略组
+        List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
+        if (CollectionUtil.isEmpty(strategies)) {
+            throw new PayUnsupportedMethodException();
+        }
+        // 获取异步通道
+        AbsPayStrategy asyncPayStrategy = Optional.ofNullable(strategies.get(0))
+                .orElseThrow(() -> new PayFailureException("数据和代码异常, 请排查代码"));
+
+        // 初始化支付的参数
+        asyncPayStrategy.initPayParam(payOrder, payParam);
+
+        // 执行支付前处理动作
+        asyncPayStrategy.doBeforePayHandler();
 
         // 支付操作
         try {
@@ -192,19 +226,30 @@ public class PayService {
             // 记录错误原因
             PayOrderExtra payOrderExtra = payInfo.getPayOrderExtra();
             payOrderExtra.setErrorMsg(e.getMessage());
+            payOrderExtraManager.update(payOrderExtra);
             throw e;
         }
+        // 支付调起成功后操作, 使用事务来保证数据一致性
+        return SpringUtil.getBean(this.getClass()).firstAsyncPaySuccess(asyncPayStrategy,payOrder);
+
+    }
+
+    /**
+     * 首次单通道异步支付成功后操作, 更新订单和扥爱松
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public PayResult firstAsyncPaySuccess(AbsPayStrategy asyncPayStrategy, PayOrder payOrder){
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         // 支付调用成功操作,
         asyncPayStrategy.doSuccessHandler();
-        PayOrder payOrder = payInfo.getPayOrder();
         // 如果支付完成, 进行订单完成处理, 同时发送回调消息
         if (payInfo.isPayComplete()) {
+            // TODO 使用网关返回的时间
             payOrder.setGatewayOrderNo(payInfo.getGatewayOrderNo())
                     .setStatus(SUCCESS.getCode())
                     .setPayTime(LocalDateTime.now());
-            // TODO 使用网关返回的时间
-            payOrderService.updateById(payOrder);
         }
+        payOrderService.updateById(payOrder);
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
             clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra(), payInfo.getPayChannelOrders());
@@ -217,6 +262,40 @@ public class PayService {
      */
     private PayResult firstCombinationPay(PayParam payParam){
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
+        // ------------------------- 进行同步支付 -------------------------------
+        PayOrder payOrder = SpringUtil.getBean(this.getClass()).firstCombinationSyncPay(payParam);
+        // ------------------------- 进行异步支付 -------------------------------
+        // 创建异步通道策略类
+        //获取异步支付通道参数并构建支付策略
+        PayChannelParam payChannelParam = payAssistService.getAsyncPayParam(payParam, payOrder);
+        AbsPayStrategy asyncPayStrategy = PayStrategyFactory.create(payChannelParam);
+        // 初始化支付的参数
+        asyncPayStrategy.initPayParam(payOrder, payParam);
+
+        // 支付前准备
+        asyncPayStrategy.doBeforePayHandler();
+        // 设置异步支付通道订单信息
+        asyncPayStrategy.generateChannelOrder();
+        try {
+            // 异步支付操作
+            asyncPayStrategy.doPayHandler();
+        } catch (Exception e) {
+            // 记录错误原因
+            PayOrderExtra payOrderExtra = payInfo.getPayOrderExtra();
+            payOrderExtra.setErrorMsg(e.getMessage());
+            payOrderExtraManager.update(payOrderExtra);
+            throw e;
+        }
+        // 支付调起成功后操作, 使用事务来保证数据一致性
+        return SpringUtil.getBean(this.getClass()).firstCombinationPaySuccess(asyncPayStrategy);
+    }
+
+    /**
+     * 首次组合支付, 先进行同步支付, 如果成功返回支付订单
+     * 注意: 同时也执行异步支付通道订单的保存, 保证订单操作的原子性
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public PayOrder firstCombinationSyncPay(PayParam payParam){
         // 创建支付订单和扩展记录并返回支付订单对象
         PayOrder payOrder = payAssistService.createPayOrder(payParam);
 
@@ -230,7 +309,7 @@ public class PayService {
             strategy.initPayParam(payOrder, payParam);
         }
 
-        // 取出同步通道 然后进行支付
+        // 取出同步通道 然后进行同步通道的支付, 使用单独事务
         List<AbsPayStrategy> syncStrategies = strategies.stream()
                 .filter(strategy -> !ASYNC_TYPE.contains(strategy.getChannel()))
                 .collect(Collectors.toList());
@@ -242,94 +321,120 @@ public class PayService {
 
         // 执行支付前处理动作
         syncStrategies.forEach(AbsPayStrategy::doBeforePayHandler);
-        // 生成支付通道订单
-        syncStrategies.forEach(AbsPayStrategy::generateChannelOrder);
+        // 生成支付通道订单, 同时也执行异步支付通道订单的保存, 保证订单操作的原子性
+        strategies.forEach(AbsPayStrategy::generateChannelOrder);
         // 支付操作
         syncStrategies.forEach(AbsPayStrategy::doPayHandler);
-        // 支付成功操作, 进行扣款、创建记录类类似的操作
+        // 支付调起成功操作, 进行扣款、创建记录类类似的操作
         syncStrategies.forEach(AbsPayStrategy::doSuccessHandler);
-        payOrder.setStatus(SUCCESS.getCode())
-                .setPayTime(LocalDateTime.now());
         // 保存通道支付订单
         payAssistService.savePayChannelOrder(strategies);
-        // ------------------------- 进行异步支付 -------------------------------
-        // 筛选出异步通道策略类
-        AbsPayStrategy asyncPayStrategy = strategies.stream()
-                .filter(strategy -> !ASYNC_TYPE.contains(strategy.getChannel()))
-                .findFirst()
-                .orElseThrow(() -> new PayFailureException("数据和代码异常, 请排查代码"));
+        return payOrder;
+    }
 
+    /**
+     * 首次组合支付成功后操作
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public PayResult firstCombinationPaySuccess(AbsPayStrategy asyncPayStrategy){
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
+        PayOrder payOrder = payInfo.getPayOrder();
+        // 支付调起成功的处理
+        asyncPayStrategy.doSuccessHandler();
+        // 如果支付完成, 进行订单完成处理, 同时发送回调消息
+        if (payInfo.isPayComplete()) {
+            // TODO 使用网关返回的时间
+            payOrder.setGatewayOrderNo(payInfo.getGatewayOrderNo())
+                    .setStatus(SUCCESS.getCode())
+                    .setPayTime(LocalDateTime.now());
+        }
+        payOrderService.updateById(payOrder);
+        payOrderService.updateById(payOrder);
+        // 如果支付完成 发送通知
+        if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
+            clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra(), payInfo.getPayChannelOrders());
+        }
+        return PayBuilder.buildPayResultByPayOrder(payOrder);
+    }
+
+    /**
+     * 重复支付-单异步通道支付
+     */
+    public PayResult repeatAsyncPay(PayParam payParam, PayOrder payOrder){
+        // 查询支付扩展订单信息
+        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(payOrder.getId());
+        //获取异步支付通道参数并构建支付策略
+        PayChannelParam payChannelParam = payAssistService.switchAsyncPayParam(payParam, payOrder);
+        AbsPayStrategy asyncPayStrategy = PayStrategyFactory.create(payChannelParam);
+        // 初始化支付的参数
+        asyncPayStrategy.initPayParam(payOrder, payParam);
+        // 执行支付前处理动作
+        asyncPayStrategy.doBeforePayHandler();
+        // 更新支付通道订单的信息
+        asyncPayStrategy.generateChannelOrder();
+        try {
+            // 支付操作
+            asyncPayStrategy.doPayHandler();
+        } catch (Exception e) {
+            // 记录错误原因
+            payOrderExtra.setErrorMsg(e.getMessage());
+            payOrderExtraManager.update(payOrderExtra);
+            throw e;
+        }
+        // 支付调起成功后操作, 使用事务来保证数据一致性
+        return SpringUtil.getBean(this.getClass()).repeatPaySuccess(asyncPayStrategy, payOrder, payOrderExtra);
+    }
+
+    /**
+     * 重复发起组合支付(包含异步支付)
+     */
+    public PayResult repeatCombinationPay(PayParam payParam, PayOrder payOrder){
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
+        PayOrderExtra payOrderExtra = payInfo.getPayOrderExtra();
+        PayChannelParam payChannelParam = payAssistService.switchAsyncPayParam(payParam, payOrder);
+        // 取出异步通道 然后进行支付
+        AbsPayStrategy asyncPayStrategy = PayStrategyFactory.create(payChannelParam);
+        // 初始化参数
+        asyncPayStrategy.initPayParam(payOrder, payParam);
         // 支付前准备
         asyncPayStrategy.doBeforePayHandler();
-        // 设置异步支付通道订单信息
+        // 更新异步支付通道订单信息
         asyncPayStrategy.generateChannelOrder();
         try {
             // 异步支付操作
             asyncPayStrategy.doPayHandler();
         } catch (Exception e) {
             // 记录错误原因
-            PayOrderExtra payOrderExtra = payInfo.getPayOrderExtra();
             payOrderExtra.setErrorMsg(e.getMessage());
+            payOrderExtraManager.update(payOrderExtra);
             throw e;
         }
-        // 支付调用成功操作, 进行扣款、创建记录类类似的操作
+        // 支付调起成功后操作, 使用事务来保证数据一致性
+        return SpringUtil.getBean(this.getClass()).repeatPaySuccess(asyncPayStrategy, payOrder,payOrderExtra);
+
+    }
+
+    /**
+     * 重复支付成功后操作
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public PayResult repeatPaySuccess(AbsPayStrategy asyncPayStrategy, PayOrder payOrder, PayOrderExtra payOrderExtra) {
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         asyncPayStrategy.doSuccessHandler();
         // 如果支付完成, 进行订单完成处理, 同时发送回调消息
         if (payInfo.isPayComplete()) {
+            // TODO 使用网关返回的时间
             payOrder.setGatewayOrderNo(payInfo.getGatewayOrderNo())
                     .setStatus(SUCCESS.getCode())
                     .setPayTime(LocalDateTime.now());
-            // TODO 使用网关返回的时间
-            payOrderService.updateById(payOrder);
         }
+        payOrderService.updateById(payOrder);
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
-            clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra(), payInfo.getPayChannelOrders());
+            // 查询通道订单
+            List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
+            clientNoticeService.registerPayNotice(payOrder, payOrderExtra, payChannelOrders);
         }
         return PayBuilder.buildPayResultByPayOrder(payOrder);
-
-    }
-
-    /**
-     * 异步支付预报保存处理, 无论请求成功还是失败, 各种订单对象都会保存
-     * 1. 创建支付订单/通道支付订单/扩展信息
-     * 2, 返回支付列表记录
-     */
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public AbsPayStrategy asyncPayPreSave(PayParam payParam){
-        // 创建支付订单和扩展记录并返回支付订单对象
-        PayOrder payOrder = payAssistService.createPayOrder(payParam);
-
-        // 获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
-        if (CollectionUtil.isEmpty(strategies)) {
-            throw new PayUnsupportedMethodException();
-        }
-
-        AbsPayStrategy absPayStrategy = Optional.ofNullable(strategies.get(0))
-                .orElseThrow(() -> new PayFailureException("数据和代码异常, 请排查代码"));
-
-        // 初始化支付的参数
-        absPayStrategy.initPayParam(payOrder, payParam);
-
-        // 执行支付前处理动作
-        absPayStrategy.doBeforePayHandler();
-        // 执行支付通道订单的生成和保存
-        absPayStrategy.generateChannelOrder();
-        return absPayStrategy;
-    }
-
-    /**
-     * 重复支付
-     */
-    public void repeatAsyncPay(){
-
-    }
-
-    /**
-     *
-     */
-    public void repeatCombinationPay(){
-
     }
 }
