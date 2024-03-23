@@ -63,7 +63,7 @@ public class PayOrderController {
     @Operation(summary = "查询支付订单扩展信息")
     @GetMapping("/getExtraById")
     public ResResult<PayOrderExtraDto> getExtraById(Long id){
-        return Res.ok(payOrderExtraService.findById(id));
+        return Res.ok(payOrderExtraService.findById(id).toDto());
     }
 
     @Operation(summary = "查询支付订单关联支付通道订单")

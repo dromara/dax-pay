@@ -57,7 +57,7 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "支付状态")
     private String status;
 
-    @DbColumn(comment = "支付时间")
+    @DbColumn(comment = "支付完成时间")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private LocalDateTime payTime;
 

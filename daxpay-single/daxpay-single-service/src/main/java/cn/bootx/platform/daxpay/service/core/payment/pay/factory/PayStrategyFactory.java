@@ -32,7 +32,7 @@ public class PayStrategyFactory {
      * @param payChannelParam 支付类型
      * @return 支付策略
      */
-    public AbsPayStrategy createAsyncFront(PayChannelParam payChannelParam) {
+    public AbsPayStrategy create(PayChannelParam payChannelParam) {
         AbsPayStrategy strategy;
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(payChannelParam.getChannel());
         switch (channelEnum) {
@@ -111,7 +111,7 @@ public class PayStrategyFactory {
         }
 
         // 此处有一个根据Type的反转排序，
-        sortList.stream().filter(Objects::nonNull).forEach(payMode -> list.add(createAsyncFront(payMode)));
+        sortList.stream().filter(Objects::nonNull).forEach(payMode -> list.add(create(payMode)));
         return list;
     }
 

@@ -134,7 +134,7 @@ public class PayCloseService {
      * 成功后处理方法
      */
     private void successHandler(PayOrder payOrder, List<PayChannelOrder> payChannelOrders){
-        // 取消订单
+        // 关闭订单
         payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);

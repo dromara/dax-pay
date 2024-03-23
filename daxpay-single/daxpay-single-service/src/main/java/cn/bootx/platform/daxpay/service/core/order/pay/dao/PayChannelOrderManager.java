@@ -35,6 +35,15 @@ public class PayChannelOrderManager extends BaseManager<PayChannelOrderMapper, P
                 .eq(PayChannelOrder::getChannel,channel)
                 .oneOpt();
     }
+    /**
+     * 根据订单id和支付通道查询
+     */
+    public Optional<PayChannelOrder> findByAsyncChannel(Long paymentId) {
+        return lambdaQuery()
+                .eq(PayChannelOrder::getPaymentId,paymentId)
+                .eq(PayChannelOrder::isAsync,true)
+                .oneOpt();
+    }
 
     /**
      * 根据订单id删除异步支付记录

@@ -36,7 +36,6 @@ public class PayOrderTest {
         DaxPayKit.initConfig(config);
     }
 
-
     /**
      * 单通道支付
      */
@@ -46,10 +45,10 @@ public class PayOrderTest {
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
 
-        param.setBusinessNo("P0001");
+        param.setBusinessNo("P0004");
         param.setTitle("测试接口支付");
         PayChannelParam payChannelParam = new PayChannelParam();
-        payChannelParam.setChannel(PayChannelEnum.WECHAT.getCode());
+        payChannelParam.setChannel(PayChannelEnum.UNION_PAY.getCode());
         payChannelParam.setWay(PayWayEnum.QRCODE.getCode());
         payChannelParam.setAmount(1);
 
@@ -64,13 +63,13 @@ public class PayOrderTest {
      * 多通道支付. 全部为同步支付方式
      */
     @Test
-    public void multiPay() {
+    public void multiSyncPay() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
 
-        param.setBusinessNo("P0002");
-        param.setTitle("测试组合支付");
+        param.setBusinessNo("P0005");
+        param.setTitle("测试组合支付(全同步)");
         // 现金支付
         PayChannelParam cash = new PayChannelParam();
         cash.setChannel(PayChannelEnum.CASH.getCode());
@@ -99,6 +98,37 @@ public class PayOrderTest {
 
         // 组装组合支付的参数
         List<PayChannelParam> payChannels = Arrays.asList(cash, card, wallet);
+        param.setPayChannels(payChannels);
+        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
+        System.out.println(execute);
+        System.out.println(execute.getData());
+    }
+
+    /**
+     * 多通道支付. 包含异步支付
+     */
+    @Test
+    public void multiAsyncPay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setNotNotify(true);
+
+        param.setBusinessNo("P0009");
+        param.setTitle("测试组合支付(包含异步支付)");
+        // 现金支付
+        PayChannelParam cash = new PayChannelParam();
+        cash.setChannel(PayChannelEnum.CASH.getCode());
+        cash.setWay(PayWayEnum.NORMAL.getCode());
+        cash.setAmount(10);
+
+        // 异步支付
+        PayChannelParam async = new PayChannelParam();
+        async.setChannel(PayChannelEnum.ALI.getCode());
+        async.setWay(PayWayEnum.WEB.getCode());
+        async.setAmount(1);
+
+        // 组装组合支付的参数
+        List<PayChannelParam> payChannels = Arrays.asList(cash, async);
         param.setPayChannels(payChannels);
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
