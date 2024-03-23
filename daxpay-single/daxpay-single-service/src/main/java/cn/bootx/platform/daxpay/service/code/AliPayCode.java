@@ -25,6 +25,9 @@ public interface AliPayCode {
     /** APP支付必填 APP支付产品 */
     String QUICK_MSECURITY_PAY = "QUICK_MSECURITY_PAY";
 
+    /** 询余额账户类型 */
+    String QUERY_ACCOUNT_TYPE = "ACCTRANS_ACCOUNT";
+
     /** 付款码支付 */
     String BAR_CODE = "bar_code";
 

@@ -41,7 +41,7 @@ public class PaymentAssistService {
         platform.setSignSecret(config.getSignSecret());
         platform.setNotifyUrl(config.getNotifyUrl());
         platform.setOrderTimeout(config.getOrderTimeout());
-        platform.setLimitAmount(config.getLimitAmount());
+        platform.setSingleLimit(config.getSingleLimit());
         platform.setWebsiteUrl(config.getWebsiteUrl());
     }
 

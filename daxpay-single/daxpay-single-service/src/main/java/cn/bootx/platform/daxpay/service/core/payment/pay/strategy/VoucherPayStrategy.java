@@ -4,6 +4,8 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.Voucher;
+import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherConfig;
+import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherPayService;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherQueryService;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.service.VoucherRecordService;
@@ -38,6 +40,8 @@ public class VoucherPayStrategy extends AbsPayStrategy {
 
     private final VoucherRecordService voucherRecordService;
 
+    private final VoucherConfigService voucherConfigService;
+
     private Voucher voucher;
 
     @Override
@@ -63,8 +67,14 @@ public class VoucherPayStrategy extends AbsPayStrategy {
         catch (JSONException e) {
             throw new PayFailureException("储值卡支付参数错误");
         }
-        this.voucher = voucherQueryService.getAndCheckVoucher(voucherPayParam);
+        VoucherConfig config = voucherConfigService.getAndCheckConfig();
+        // 支付金额是否超限
+        if (this.getPayChannelParam().getAmount() > config.getSingleLimit()) {
+            throw new PayFailureException("现金支付金额超过限制");
+        }
+
         // 金额是否满足
+        this.voucher = voucherQueryService.getAndCheckVoucher(voucherPayParam);
         if (this.getPayChannelParam().getAmount() > this.voucher.getBalance()) {
             throw new PayFailureException("储值卡余额不足");
         }

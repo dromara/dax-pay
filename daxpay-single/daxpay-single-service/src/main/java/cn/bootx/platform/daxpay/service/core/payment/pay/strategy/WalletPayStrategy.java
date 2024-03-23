@@ -82,7 +82,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         }
         // 判断是否超过限额
         if (getPayChannelParam().getAmount() > this.walletConfig.getSingleLimit()){
-            throw new PayFailureException("钱包单次支付金额超过限额");
+            throw new PayFailureException("钱包支付金额超过限额");
         }
 
         // 判断余额

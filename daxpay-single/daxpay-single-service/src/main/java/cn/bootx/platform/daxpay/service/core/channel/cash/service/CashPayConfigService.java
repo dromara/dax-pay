@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.channel.cash.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WalletPayWay;
 import cn.bootx.platform.daxpay.service.core.channel.cash.dao.CashConfigManager;
 import cn.bootx.platform.daxpay.service.core.channel.cash.entity.CashConfig;
@@ -37,6 +38,18 @@ public class CashPayConfigService {
     public CashConfig getConfig(){
         return cashConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("现金配置不存在"));
     }
+
+    /**
+     * 获取并检查钱包配置
+     */
+    public CashConfig getAndCheckConfig() {
+        CashConfig config = this.getConfig();
+        if (!config.getEnable()){
+            throw new PayFailureException("钱包支付未启用");
+        }
+        return config;
+    }
+
 
     /**
      * 更新

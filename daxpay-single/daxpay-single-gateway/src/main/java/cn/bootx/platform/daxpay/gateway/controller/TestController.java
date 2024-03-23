@@ -4,7 +4,6 @@ import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayTransferService;
 import cn.hutool.core.thread.ThreadUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -28,7 +27,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TestController {
     private final LockTemplate lockTemplate;
-    private final AliPayTransferService aliPayTransferService;
 
     @Operation(summary = "锁测试1")
     @GetMapping("/lock1")
@@ -59,13 +57,5 @@ public class TestController {
         return "ok";
     }
 
-    @IgnoreAuth
-    @Operation(summary = "支付宝回调测试")
-    @GetMapping("/queryAmount")
-    public String alipay(){
-
-        aliPayTransferService.queryAccountAmount();
-        return "ok";
-    }
 
 }

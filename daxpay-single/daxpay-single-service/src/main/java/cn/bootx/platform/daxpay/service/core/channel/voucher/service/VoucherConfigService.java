@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.channel.voucher.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.VoucherPayWay;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.dao.VoucherConfigManager;
 import cn.bootx.platform.daxpay.service.core.channel.voucher.entity.VoucherConfig;
@@ -33,10 +34,22 @@ public class VoucherConfigService {
     private final PayChannelConfigService payChannelConfigService;
 
     /**
-     * 获取钱包配置
+     * 获取储值卡配置
      */
     public VoucherConfig getConfig(){
-        return manager.findById(ID).orElseThrow(() -> new DataNotExistException("钱包配置不存在"));
+        return manager.findById(ID).orElseThrow(() -> new DataNotExistException("储值卡配置不存在"));
+    }
+
+
+    /**
+     * 获取并检查储值卡配置
+     */
+    public VoucherConfig getAndCheckConfig() {
+        VoucherConfig config = this.getConfig();
+        if (!config.getEnable()){
+            throw new PayFailureException("储值卡支付未启用");
+        }
+        return config;
     }
 
     /**
