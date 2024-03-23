@@ -46,6 +46,10 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "是否启用")
     private Boolean enable;
 
+    /** 支付限额 */
+    @DbColumn(comment = "支付限额")
+    private Integer singleLimit;
+
     /**
      * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
      * 1. 需http://或者https://格式的完整路径，

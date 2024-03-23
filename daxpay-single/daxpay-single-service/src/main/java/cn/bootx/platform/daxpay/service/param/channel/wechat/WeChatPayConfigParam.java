@@ -29,6 +29,9 @@ public class WeChatPayConfigParam {
     @DbColumn(comment = "是否启用")
     private Boolean enable;
 
+    @Schema(description = "支付限额")
+    private Integer singleLimit;
+
     @Schema(description = "异步通知地址")
     private String notifyUrl;
 

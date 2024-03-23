@@ -43,7 +43,7 @@ public class PlatformConfig extends MpBaseEntity implements EntityBaseFunction<P
     private String returnUrl;
 
     @DbColumn(comment = "支付限额")
-    private Integer limitAmount;
+    private Integer singleLimit;
 
     @DbColumn(comment = "订单默认超时时间(分钟)")
     private Integer orderTimeout;

@@ -25,6 +25,9 @@ public class UnionPayConfigParam {
     @Schema(description = "是否启用")
     private Boolean enable;
 
+    @Schema(description = "支付限额")
+    private Integer singleLimit;
+
     /**
      * 商户收款账号
      */

@@ -70,6 +70,10 @@ public class WeChatPayService {
         if (!payWays.contains(payWayEnum.getCode())) {
             throw new PayFailureException("该微信支付方式不可用");
         }
+        // 支付金额是否超限
+        if (payChannelParam.getAmount() > weChatPayConfig.getSingleLimit()) {
+            throw new PayFailureException("微信支付金额超限");
+        }
     }
 
     /**

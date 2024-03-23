@@ -57,6 +57,10 @@ public class AliPayService {
         if (!alipayConfig.getPayWays().contains(payWayEnum.getCode())) {
             throw new PayFailureException("该支付宝支付方式不可用");
         }
+        // 验证订单金额是否超限
+        if(payChannelParam.getAmount() > alipayConfig.getSingleLimit()){
+            throw new PayFailureException("支付宝支付金额超过限额");
+        }
     }
 
     /**
