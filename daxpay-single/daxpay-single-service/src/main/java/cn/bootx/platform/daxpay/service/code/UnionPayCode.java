@@ -53,9 +53,19 @@ public interface UnionPayCode {
     /** 总金额 */
     String TOTAL_FEE = "settleAmt";
 
-
-
     /** 对账单下载类型编码 */
     String RECONCILE_BILL_TYPE = "00";
+
+    /* 对账单交易代码 */
+    /** 消费 */
+    String RECONCILE_TYPE_PAY = "S22";
+
+    /** 退款 */
+    String RECONCILE_TYPE_REFUND = "S30 ";
+
+
+    /** 对账各字段位数游标 */
+    int[] RECONCILE_BILL_SPLIT = {3,11,11,6,10,19,12,4,2,21,2,32,2,6,10,13,13,4,15,2,2,6,2,4,32,1,21,15,1,15,32,13,13,8,32,13,13,12,2,1,32,13,2,1,12,67};
+
 
 }

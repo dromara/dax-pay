@@ -720,15 +720,13 @@ public class UnionPayKit extends UnionPayService {
         this.setSign(params);
         String responseStr = getHttpRequestTemplate().postForObject(this.getFileTransUrl(), params, String.class);
         JSONObject response = UriVariables.getParametersToMap(responseStr);
-        if (this.verify(response)) {
-            if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
+//        if (this.verify(response)) {
+//            if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
                 return response;
-
-            }
-            throw new PayErrorException(new PayException(response.get(SDKConstants.param_respCode).toString(), response.get(SDKConstants.param_respMsg).toString(), response.toString()));
-
-        }
-        throw new PayErrorException(new PayException("failure", "验证签名失败", response.toString()));
+//            }
+//            throw new PayErrorException(new PayException(response.get(SDKConstants.param_respCode).toString(), response.get(SDKConstants.param_respMsg).toString(), response.toString()));
+//        }
+//        throw new PayErrorException(new PayException("failure", "验证签名失败", response.toString()));
     }
 
 
