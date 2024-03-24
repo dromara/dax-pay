@@ -35,7 +35,7 @@ public class WeChatPayConfigParam {
     @Schema(description = "异步通知地址")
     private String notifyUrl;
 
-    @Schema(description ="同步通知地址")
+    @Schema(description = "同步通知地址")
     private String returnUrl;
 
     /** 接口版本, 使用v2还是v3接口 */

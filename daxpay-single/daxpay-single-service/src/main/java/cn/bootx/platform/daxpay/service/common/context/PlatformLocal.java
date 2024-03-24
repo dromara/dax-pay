@@ -35,5 +35,5 @@ public class PlatformLocal {
     private Integer orderTimeout;
 
     /** 支付限额 */
-    private Integer singleLimit;
+    private Integer limitAmount;
 }

@@ -27,7 +27,7 @@ public class PayChannelConfigDto extends BaseDto {
     private String name;
 
     /** 是否启用 */
-    @DbColumn(comment = "是否启用")
+    @Schema(description = "是否启用")
     private Boolean enable;
 
     /** logo图片 */

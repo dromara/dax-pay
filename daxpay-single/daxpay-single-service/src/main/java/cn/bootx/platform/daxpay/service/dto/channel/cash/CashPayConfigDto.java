@@ -24,7 +24,7 @@ public class CashPayConfigDto extends BaseDto {
     private Boolean enable;
 
     /** 可用支付方式 */
-    @DbColumn(comment = "可用支付方式")
+    @Schema(description = "可用支付方式")
     private List<String> payWays;
 
     /** 单次支持支持多少钱 */

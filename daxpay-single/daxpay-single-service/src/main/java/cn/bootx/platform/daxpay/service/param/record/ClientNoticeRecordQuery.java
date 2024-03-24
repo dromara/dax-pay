@@ -20,18 +20,18 @@ import lombok.experimental.Accessors;
 public class ClientNoticeRecordQuery extends QueryOrder {
 
     /** 任务ID */
-    @Schema(description ="任务ID")
+    @Schema(description = "任务ID")
     private Long taskId;
 
     /** 请求次数 */
-    @Schema(description ="请求次数")
+    @Schema(description = "请求次数")
     private Integer reqCount;
 
     /** 发送是否成功 */
-    @Schema(description ="发送是否成功")
+    @Schema(description = "发送是否成功")
     private Boolean success;
 
     /** 错误信息 */
-    @Schema(description ="错误信息")
+    @Schema(description = "错误信息")
     private String errorMsg;
 }

@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
-import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,7 +57,7 @@ public class PayRepairRecordDto extends BaseDto {
     private String repairWay;
 
     /** 修复的异步通道 */
-    @DbColumn(comment = "修复的异步通道")
+    @Schema(description = "修复的异步通道")
     private String asyncChannel;
 
     /**

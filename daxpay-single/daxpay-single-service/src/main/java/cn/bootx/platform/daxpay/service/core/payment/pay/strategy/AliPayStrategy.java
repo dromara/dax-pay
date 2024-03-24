@@ -78,6 +78,7 @@ public class AliPayStrategy extends AbsPayStrategy {
         }
         // 检查并获取支付宝支付配置
         this.initAlipayConfig();
+        // 校验
         aliPayService.validation(this.getPayChannelParam(), alipayConfig);
     }
 
