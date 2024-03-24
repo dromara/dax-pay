@@ -182,7 +182,7 @@ QQ扫码加入QQ交流群
 
 微信扫码加入微信交流群
 <p>
-<img alt="微信图片_20240226144703" height="500" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/7ea3e91d78f07dad16a480f5f48f74e.70a3dbwew7.webp" width="330"/>
+<img alt="微信图片_20240226144703" height="500" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240324094342.5fkcnaal5g.webp" width="330"/>
 </p>
 
 ## 🍻 鸣谢
