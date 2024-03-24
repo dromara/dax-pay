@@ -78,7 +78,6 @@ public class WeChatPayStrategy extends AbsPayStrategy {
         weChatPayService.validation(this.getPayChannelParam(), weChatPayConfig);
     }
 
-
     /**
      * 不使用默认的生成通道支付单方法, 异步支付通道的支付订单自己管理
      */

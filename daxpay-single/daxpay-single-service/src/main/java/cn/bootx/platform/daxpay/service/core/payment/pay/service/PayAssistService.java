@@ -219,4 +219,19 @@ public class PayAssistService {
         }
         return null;
     }
+
+    /**
+     * 检验订单是否超过限额
+     */
+    public void validationLimitAmount(PayParam payParam) {
+        // 总额校验
+        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
+        Integer amount = payParam.getPayChannels()
+                .stream()
+                .map(PayChannelParam::getAmount)
+                .reduce(0, Integer::sum);
+        if (amount > platformInfo.getLimitAmount()) {
+            throw new PayFailureException("支付金额超过限额");
+        }
+    }
 }

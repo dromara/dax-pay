@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.service.dto.order.refund;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
-import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +18,6 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付退款通道订单")
 public class RefundChannelOrderDto extends BaseDto {
 
-    @DbColumn(comment = "关联退款id")
     @Schema(description = "关联退款id")
     private Long refundId;
 

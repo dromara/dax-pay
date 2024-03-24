@@ -74,13 +74,13 @@ public class PayOrderTest {
         PayChannelParam cash = new PayChannelParam();
         cash.setChannel(PayChannelEnum.CASH.getCode());
         cash.setWay(PayWayEnum.NORMAL.getCode());
-        cash.setAmount(10);
+        cash.setAmount(22);
 
         // 储值卡支付
         PayChannelParam card = new PayChannelParam();
         card.setChannel(PayChannelEnum.VOUCHER.getCode());
         card.setWay(PayWayEnum.NORMAL.getCode());
-        card.setAmount(10);
+        card.setAmount(20001);
         // 储值卡通道参数
         VoucherPayParam voucherPayParam = new VoucherPayParam();
         voucherPayParam.setCardNo("123456");
@@ -113,19 +113,19 @@ public class PayOrderTest {
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
 
-        param.setBusinessNo("P0009");
+        param.setBusinessNo("P0015");
         param.setTitle("测试组合支付(包含异步支付)");
         // 现金支付
         PayChannelParam cash = new PayChannelParam();
         cash.setChannel(PayChannelEnum.CASH.getCode());
         cash.setWay(PayWayEnum.NORMAL.getCode());
-        cash.setAmount(10);
+        cash.setAmount(201);
 
         // 异步支付
         PayChannelParam async = new PayChannelParam();
         async.setChannel(PayChannelEnum.ALI.getCode());
         async.setWay(PayWayEnum.WEB.getCode());
-        async.setAmount(1);
+        async.setAmount(2207);
 
         // 组装组合支付的参数
         List<PayChannelParam> payChannels = Arrays.asList(cash, async);

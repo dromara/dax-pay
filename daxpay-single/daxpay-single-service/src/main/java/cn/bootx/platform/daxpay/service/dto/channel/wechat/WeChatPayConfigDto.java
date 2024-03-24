@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.service.dto.channel.wechat;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
-import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +28,7 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @SensitiveInfo
     private String wxAppId;
 
-    @DbColumn(comment = "是否启用")
+    @Schema(description = "是否启用")
     private Boolean enable;
 
     @Schema(description = "支付限额")

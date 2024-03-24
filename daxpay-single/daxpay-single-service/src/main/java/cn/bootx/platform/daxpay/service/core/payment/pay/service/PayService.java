@@ -101,6 +101,8 @@ public class PayService {
         PayUtil.validationAsyncPay(payParam);
         // 检查支付金额
         PayUtil.validationAmount(payParam.getPayChannels());
+        // 校验支付限额
+        payAssistService.validationLimitAmount(payParam);
 
         String businessNo = payParam.getBusinessNo();
         // 加锁
@@ -161,8 +163,6 @@ public class PayService {
      */
     @Transactional(rollbackFor = Exception.class)
     public PayResult firstSyncPay(PayParam payParam){
-        // 创建支付订单和扩展记录并返回支付订单对象
-        PayOrder payOrder = payAssistService.createPayOrder(payParam);
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
 
         // 获取支付方式，通过工厂生成对应的策略组
@@ -172,12 +172,15 @@ public class PayService {
         }
 
         // 初始化支付参数
-        for (AbsPayStrategy strategy : strategies) {
-            strategy.initPayParam(payOrder, payParam);
-        }
+        strategies.forEach(strategy -> strategy.setPayParam(payParam));
 
-        // 执行支付前处理动作
+        // 执行支付前处理动作, 进行校验
         strategies.forEach(AbsPayStrategy::doBeforePayHandler);
+
+        // 创建支付订单和扩展记录并返回支付订单对象
+        PayOrder payOrder = payAssistService.createPayOrder(payParam);
+        strategies.forEach(strategy -> strategy.setOrder(payOrder));
+
         // 生成支付通道订单
         strategies.forEach(AbsPayStrategy::generateChannelOrder);
         // 支付操作
@@ -201,8 +204,6 @@ public class PayService {
      */
     private PayResult firstAsyncPay(PayParam payParam){
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
-        // 开启新事务执行订单预保存操作
-        PayOrder payOrder = payAssistService.createPayOrder(payParam);
 
         // 获取支付方式，通过工厂生成对应的策略组
         List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
@@ -214,10 +215,13 @@ public class PayService {
                 .orElseThrow(() -> new PayFailureException("数据和代码异常, 请排查代码"));
 
         // 初始化支付的参数
-        asyncPayStrategy.initPayParam(payOrder, payParam);
+        asyncPayStrategy.setPayParam(payParam);
 
-        // 执行支付前处理动作
+        // 执行支付前处理动作, 进行各种校验
         asyncPayStrategy.doBeforePayHandler();
+        // 创建支付订单和扩展记录并返回支付订单对象
+        PayOrder payOrder = payAssistService.createPayOrder(payParam);
+        asyncPayStrategy.setOrder(payOrder);
 
         // 支付操作
         try {
@@ -262,20 +266,9 @@ public class PayService {
      */
     private PayResult firstCombinationPay(PayParam payParam){
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
-        // ------------------------- 进行同步支付 -------------------------------
-        PayOrder payOrder = SpringUtil.getBean(this.getClass()).firstCombinationSyncPay(payParam);
+        // ------------------------- 进行同步支付, 成功后返回异步通道策略类 -------------------------------
+        AbsPayStrategy asyncPayStrategy = SpringUtil.getBean(this.getClass()).firstCombinationSyncPay(payParam);
         // ------------------------- 进行异步支付 -------------------------------
-        // 创建异步通道策略类
-        //获取异步支付通道参数并构建支付策略
-        PayChannelParam payChannelParam = payAssistService.getAsyncPayParam(payParam, payOrder);
-        AbsPayStrategy asyncPayStrategy = PayStrategyFactory.create(payChannelParam);
-        // 初始化支付的参数
-        asyncPayStrategy.initPayParam(payOrder, payParam);
-
-        // 支付前准备
-        asyncPayStrategy.doBeforePayHandler();
-        // 设置异步支付通道订单信息
-        asyncPayStrategy.generateChannelOrder();
         try {
             // 异步支付操作
             asyncPayStrategy.doPayHandler();
@@ -291,13 +284,11 @@ public class PayService {
     }
 
     /**
-     * 首次组合支付, 先进行同步支付, 如果成功返回支付订单
-     * 注意: 同时也执行异步支付通道订单的保存, 保证订单操作的原子性
+     * 首次组合支付, 先进行同步支付, 如果成功返回异步支付策略
+     * 注意: 同时也对异步支付通道进行校验和订单的保存, 保证整个订单操作的原子性
      */
     @Transactional(rollbackFor = Exception.class)
-    public PayOrder firstCombinationSyncPay(PayParam payParam){
-        // 创建支付订单和扩展记录并返回支付订单对象
-        PayOrder payOrder = payAssistService.createPayOrder(payParam);
+    public AbsPayStrategy firstCombinationSyncPay(PayParam payParam){
 
         // 获取支付方式，通过工厂生成对应的策略组
         List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
@@ -306,30 +297,38 @@ public class PayService {
         }
         // 初始化支付的参数
         for (AbsPayStrategy strategy : strategies) {
-            strategy.initPayParam(payOrder, payParam);
+            strategy.setPayParam(payParam);
         }
 
-        // 取出同步通道 然后进行同步通道的支付, 使用单独事务
+        // 初始化支付参数
+        strategies.forEach(strategy -> strategy.setPayParam(payParam));
+
+        // 执行支付前处理动作, 对各通道进行检验
+        strategies.forEach(AbsPayStrategy::doBeforePayHandler);
+        // 创建支付订单和扩展记录并返回支付订单对象
+        PayOrder payOrder = payAssistService.createPayOrder(payParam);
+        strategies.forEach(strategy -> strategy.setOrder(payOrder));
+
+        // 生成支付通道订单, 同时也执行异步支付通道订单的保存, 保证订单操作的原子性
+        strategies.forEach(AbsPayStrategy::generateChannelOrder);
+
+        // 取出同步通道 然后进行同步通道的支付操作
         List<AbsPayStrategy> syncStrategies = strategies.stream()
                 .filter(strategy -> !ASYNC_TYPE.contains(strategy.getChannel()))
                 .collect(Collectors.toList());
+        syncStrategies.forEach(strategy -> strategy.setPayParam(payParam));
 
-        // 初始化支付参数
-        for (AbsPayStrategy strategy : syncStrategies) {
-            strategy.initPayParam(payOrder, payParam);
-        }
-
-        // 执行支付前处理动作
-        syncStrategies.forEach(AbsPayStrategy::doBeforePayHandler);
-        // 生成支付通道订单, 同时也执行异步支付通道订单的保存, 保证订单操作的原子性
-        strategies.forEach(AbsPayStrategy::generateChannelOrder);
         // 支付操作
         syncStrategies.forEach(AbsPayStrategy::doPayHandler);
         // 支付调起成功操作, 进行扣款、创建记录类类似的操作
         syncStrategies.forEach(AbsPayStrategy::doSuccessHandler);
         // 保存通道支付订单
         payAssistService.savePayChannelOrder(strategies);
-        return payOrder;
+
+        return strategies.stream()
+                .filter(o-> ASYNC_TYPE.contains(o.getChannel()))
+                .findFirst()
+                .orElseThrow(()->new PayFailureException("支付代码异常,请检查"));
     }
 
     /**

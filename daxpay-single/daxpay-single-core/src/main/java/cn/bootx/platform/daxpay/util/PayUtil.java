@@ -43,6 +43,7 @@ public class PayUtil {
      * 检查支付金额
      */
     public void validationAmount(List<PayChannelParam> payModeList) {
+        // 验证支付金额
         for (PayChannelParam payChannelParam : payModeList) {
             // 支付金额小于等于零
             if (payChannelParam.getAmount() < 0) {

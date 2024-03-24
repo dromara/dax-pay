@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.service.dto.channel.voucher;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +24,7 @@ public class VoucherConfigDto extends BaseDto {
     private Boolean enable;
 
     /** 可用支付方式 */
-    @DbColumn(comment = "可用支付方式")
+    @Schema(description = "可用支付方式")
     private List<String> payWays;
 
     /** 单次支持支持多少钱 */
