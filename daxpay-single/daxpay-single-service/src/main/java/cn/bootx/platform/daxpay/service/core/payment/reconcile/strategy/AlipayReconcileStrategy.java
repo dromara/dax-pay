@@ -14,9 +14,11 @@ import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.bootx.platform.daxpay.service.handler.sequence.DaxPaySequenceHandler;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -82,12 +84,21 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
     }
 
     /**
+     * 上传对账单解析并保存
+     */
+    @SneakyThrows
+    @Override
+    public void upload(MultipartFile file) {
+        reconcileService.upload(file.getBytes());
+    }
+
+    /**
      * 下载和保存对账单
      */
     @Override
     public void downAndSave() {
         String date = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.NORM_DATE_PATTERN);
-        reconcileService.downAndSave(date,this.getRecordOrder().getId());
+        reconcileService.downAndSave(date);
     }
 
     /**

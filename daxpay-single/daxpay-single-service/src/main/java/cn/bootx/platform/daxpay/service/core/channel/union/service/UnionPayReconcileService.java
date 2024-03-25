@@ -19,6 +19,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.egzosn.pay.union.bean.SDKConstants;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
@@ -47,7 +48,7 @@ public class UnionPayReconcileService {
     /**
      * 下载对账单
      */
-    public void downAndSave(Date date, Long recordOrderId, UnionPayKit unionPayKit){
+    public void downAndSave(Date date, UnionPayKit unionPayKit){
         // 下载对账单
         Map<String, Object> map = unionPayKit.downloadBill(date, RECONCILE_BILL_TYPE);
         String fileContent = map.get(FILE_CONTENT).toString();
@@ -81,12 +82,27 @@ public class UnionPayReconcileService {
                 }
             }
             // 保存原始对账记录
-            this.save(billDetails, recordOrderId);
+            this.save(billDetails);
             // 转换为通用对账记录对象
             this.convertAndSave(billDetails);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 解析上传的对账单
+     */
+    @SneakyThrows
+    public void upload(byte[] bytes){
+            // 明细解析
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes),"GBK"));
+            List<String> strings = IoUtil.readLines(bufferedReader, new ArrayList<>());
+            List<UnionReconcileBillDetail> billDetails = this.parseDetail(strings);
+            // 保存原始对账记录
+            this.save(billDetails);
+            // 转换为通用对账记录对象
+            this.convertAndSave(billDetails);
     }
 
     /**
@@ -146,6 +162,7 @@ public class UnionPayReconcileService {
 
         // 默认为支付对账记录
         ReconcileDetail reconcileDetail = new ReconcileDetail()
+                .setTitle("未知")
                 .setRecordOrderId(billDetail.getRecordOrderId())
                 .setOrderId(billDetail.getOrderId())
                 .setType(ReconcileTradeEnum.PAY.getCode())
@@ -172,7 +189,8 @@ public class UnionPayReconcileService {
     /**
      * 保存原始对账记录
      */
-    private void save(List<UnionReconcileBillDetail> billDetails, Long recordOrderId){
+    private void save(List<UnionReconcileBillDetail> billDetails){
+        Long recordOrderId = PaymentContextLocal.get().getReconcileInfo().getReconcileOrder().getId();
         billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
         unionReconcileBillDetailManager.saveAll(billDetails);
     }
