@@ -2,11 +2,14 @@ package cn.bootx.platform.daxpay.service.core.channel.union.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.UnionPayCode;
 import cn.bootx.platform.daxpay.service.code.UnionReconcileFieldEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.channel.union.dao.UnionReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
@@ -14,6 +17,7 @@ import cn.hutool.core.compress.Deflate;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
+import com.egzosn.pay.union.bean.SDKConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -21,12 +25,12 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.bootx.platform.daxpay.service.code.UnionPayCode.RECONCILE_BILL_SPLIT;
-import static cn.bootx.platform.daxpay.service.code.UnionPayCode.RECONCILE_BILL_TYPE;
+import static cn.bootx.platform.daxpay.service.code.UnionPayCode.*;
 
 /**
  * 云闪付对账
@@ -38,16 +42,22 @@ import static cn.bootx.platform.daxpay.service.code.UnionPayCode.RECONCILE_BILL_
 @RequiredArgsConstructor
 public class UnionPayReconcileService {
 
+    private final UnionReconcileBillDetailManager unionReconcileBillDetailManager;
+
     /**
      * 下载对账单
      */
     public void downAndSave(Date date, Long recordOrderId, UnionPayKit unionPayKit){
         // 下载对账单
-        Map<String, Object> stringObjectMap = unionPayKit.downloadBill(date, RECONCILE_BILL_TYPE);
+        Map<String, Object> map = unionPayKit.downloadBill(date, RECONCILE_BILL_TYPE);
+        String fileContent = map.get(FILE_CONTENT).toString();
+        // 判断是否成功
+        if (!SDKConstants.OK_RESP_CODE.equals(map.get(SDKConstants.param_respCode))) {
+            log.warn("云闪付获取对账文件失败");
+            throw new PayFailureException("云闪付获取对账文件失败");
+        }
 
-        String fileContent = stringObjectMap.get("fileContent").toString();
         try {
-
             // 先解base64，再DEFLATE解压为zip流
             byte[] decode = Base64.decode(fileContent);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -61,9 +71,8 @@ public class UnionPayReconcileService {
             ZipArchiveEntry entry;
             List<UnionReconcileBillDetail> billDetails = new ArrayList<>();
             while ((entry= zipArchiveInputStream.getNextZipEntry()) != null){
-                System.out.println(StrUtil.startWith(entry.getName(), "INN"));
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zipArchiveInputStream,"GBK"));
-                if (StrUtil.startWith(entry.getName(), "INN")){
+                if (StrUtil.startWith(entry.getName(), RECONCILE_FILE_PREFIX)){
                     // 明细解析
                     List<String> strings = IoUtil.readLines(bufferedReader, new ArrayList<>());
                     billDetails = this.parseDetail(strings);
@@ -73,13 +82,8 @@ public class UnionPayReconcileService {
             }
             // 保存原始对账记录
             this.save(billDetails, recordOrderId);
-
-            // 将原始交易明细对账记录转换通用结构并保存到上下文中
+            // 转换为通用对账记录对象
             this.convertAndSave(billDetails);
-//            Reader bufferedReader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get("D:/data/INN24031100ZM_777290058206553.txt"))));
-//            List<String> strings = IoUtil.readLines(bufferedReader, new ArrayList<>());
-//            List<UnionReconcileBillDetail> unionReconcileBillDetails = this.parseDetail(strings);
-//            System.out.println(unionReconcileBillDetails);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -102,13 +106,12 @@ public class UnionPayReconcileService {
         Map<String,String> zmDataMap = new HashMap<>();
         //左侧游标
         int leftIndex = 0;
-        //右侧游标
-        int rightIndex = 0;
         for(int i=0;i<RECONCILE_BILL_SPLIT.length;i++){
-            rightIndex = leftIndex + RECONCILE_BILL_SPLIT[i];
+            //右侧游标
+            int rightIndex = leftIndex + RECONCILE_BILL_SPLIT[i];
             String filed = StrUtil.sub(line, leftIndex, rightIndex);
             leftIndex = rightIndex+1;
-
+            // 映射到数据对象
             UnionReconcileFieldEnum fieldEnum = UnionReconcileFieldEnum.findByNo(i);
             if (Objects.nonNull(fieldEnum)){
                 zmDataMap.put(fieldEnum.getFiled(), filed.trim());
@@ -123,17 +126,20 @@ public class UnionPayReconcileService {
     private void convertAndSave(List<UnionReconcileBillDetail> billDetails){
         List<ReconcileDetail> collect = billDetails.stream()
                 .map(this::convert)
+                // 只处理支付和退款的对账记录
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         // 写入到上下文中
         PaymentContextLocal.get().getReconcileInfo().setReconcileDetails(collect);
     }
 
-
-
     /**
      * 转换为通用对账记录对象
      */
     private ReconcileDetail convert(UnionReconcileBillDetail billDetail){
+        ReconcileOrder reconcileOrder = PaymentContextLocal.get()
+                .getReconcileInfo()
+                .getReconcileOrder();
         // 金额
         String orderAmount = billDetail.getTxnAmt();
         int amount = Integer.parseInt(orderAmount);
@@ -146,10 +152,13 @@ public class UnionPayReconcileService {
                 .setAmount(amount)
                 .setGatewayOrderNo(billDetail.getQueryId());
 
-        // 时间
-        String txnTime = billDetail.getTxnTime();
+        // 时间, 从对账订单获取年份
+        LocalDate date = reconcileOrder.getDate();
+        String year = LocalDateTimeUtil.format(date, DatePattern.NORM_YEAR_PATTERN);
+
+        String txnTime = year + billDetail.getTxnTime();
         if (StrUtil.isNotBlank(txnTime)) {
-            LocalDateTime time = LocalDateTimeUtil.parse(txnTime, DatePattern.NORM_DATETIME_PATTERN);
+            LocalDateTime time = LocalDateTimeUtil.parse(txnTime, DatePattern.PURE_DATETIME_PATTERN);
             reconcileDetail.setOrderTime(time);
         }
 
@@ -165,6 +174,6 @@ public class UnionPayReconcileService {
      */
     private void save(List<UnionReconcileBillDetail> billDetails, Long recordOrderId){
         billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
+        unionReconcileBillDetailManager.saveAll(billDetails);
     }
-
 }

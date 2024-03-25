@@ -56,6 +56,12 @@ public interface UnionPayCode {
     /** 对账单下载类型编码 */
     String RECONCILE_BILL_TYPE = "00";
 
+    /** 文件内容 */
+    String FILE_CONTENT = "fileContent";
+
+    /** 明细对账单文件前缀 */
+    String RECONCILE_FILE_PREFIX = "INN";
+
     /* 对账单交易代码 */
     /** 消费 */
     String RECONCILE_TYPE_PAY = "S22";

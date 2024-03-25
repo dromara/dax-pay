@@ -89,13 +89,17 @@ public class ReconcileService {
      * 下载对账单并进行保存
      */
     public void downAndSave(ReconcileOrder reconcileOrder) {
+        // 将对账订单写入到上下文中
+        PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
+
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
         reconcileStrategy.setRecordOrder(reconcileOrder);
         reconcileStrategy.doBeforeHandler();
         try {
             reconcileStrategy.downAndSave();
-            reconcileOrder.setDown(true);
+            reconcileOrder.setDown(true)
+                    .setErrorMsg(null);
             reconcileOrderService.update(reconcileOrder);
         } catch (Exception e) {
             log.error("下载对账单异常", e);
