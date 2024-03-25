@@ -7,6 +7,8 @@ import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,6 +55,7 @@ public class ReconcileOrder extends MpCreateEntity implements EntityBaseFunction
 
     /** 错误信息 */
     @DbColumn(comment = "错误信息")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
 
     @Override

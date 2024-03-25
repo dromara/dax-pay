@@ -21,7 +21,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReconcileOrderService {
     private final ReconcileOrderManager reconcileOrderManager;
-    private final Sequence sequence;
 
     /**
      * 更新, 开启一个新事务进行更新

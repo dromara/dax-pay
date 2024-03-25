@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 
-import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.sequence.func.Sequence;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
@@ -12,12 +11,12 @@ import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfi
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
+import cn.bootx.platform.daxpay.service.handler.sequence.DaxPaySequenceHandler;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +45,7 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
 
     private final UnionPayRecordManager recordManager;
 
-    @Qualifier("unionPayReconcileSequence")
-    private final Sequence sequence;
+    private final DaxPaySequenceHandler daxPaySequenceHandler;
 
     private UnionPayKit unionPayKit;
 
@@ -58,6 +56,7 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
     public String generateSequence(LocalDate date) {
         String prefix = getChannel().getReconcilePrefix();
         String dateStr = LocalDateTimeUtil.format(date, DatePattern.PURE_DATE_PATTERN);
+        Sequence sequence = daxPaySequenceHandler.unionPayReconcileSequence(dateStr);
         String key = String.format("%02d", sequence.next());
         return prefix + dateStr + key;
     }
@@ -82,7 +81,6 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
     public void downAndSave() {
         Date date = DateUtil.date(this.getRecordOrder().getDate());
         reconcileService.downAndSave(date, this.getRecordOrder().getId(), this.unionPayKit);
-        throw new BizException("123");
     }
 
     /**

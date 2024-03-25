@@ -194,8 +194,6 @@ public class UnionPayKit extends UnionPayService {
     @Deprecated
     @Override
     public boolean verify(Map<String, Object> result) {
-
-
         return verify(new NoticeParams(result));
     }
 

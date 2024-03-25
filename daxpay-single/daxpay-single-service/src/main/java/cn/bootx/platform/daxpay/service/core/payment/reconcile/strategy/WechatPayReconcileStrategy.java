@@ -11,10 +11,10 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCon
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
+import cn.bootx.platform.daxpay.service.handler.sequence.DaxPaySequenceHandler;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +42,7 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
 
     private final WeChatPayRecordManager recordManager;
 
-    @Qualifier("wechatReconcileSequence")
-    private final Sequence sequence;
+    private final DaxPaySequenceHandler daxPaySequenceHandler;
 
     private WeChatPayConfig config;
 
@@ -67,6 +66,7 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
     public String generateSequence(LocalDate date) {
         String prefix = getChannel().getReconcilePrefix();
         String dateStr = LocalDateTimeUtil.format(date, DatePattern.PURE_DATE_PATTERN);
+        Sequence sequence = daxPaySequenceHandler.wechatReconcileSequence(dateStr);
         String key = String.format("%02d", sequence.next());
         return prefix + dateStr + key;
     }
