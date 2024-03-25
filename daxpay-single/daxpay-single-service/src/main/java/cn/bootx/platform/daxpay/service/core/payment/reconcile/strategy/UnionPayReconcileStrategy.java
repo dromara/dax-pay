@@ -16,9 +16,11 @@ import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -75,12 +77,21 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
     }
 
     /**
+     * 上传对账单解析并保存
+     */
+    @SneakyThrows
+    @Override
+    public void upload(MultipartFile file) {
+        reconcileService.upload(file.getBytes());
+    }
+
+    /**
      * 下载对账单到本地进行保存
      */
     @Override
     public void downAndSave() {
         Date date = DateUtil.date(this.getRecordOrder().getDate());
-        reconcileService.downAndSave(date, this.getRecordOrder().getId(), this.unionPayKit);
+        reconcileService.downAndSave(date, this.unionPayKit);
     }
 
     /**

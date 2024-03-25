@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 支付对账
@@ -46,6 +47,13 @@ public class ReconcileOrderController {
     @PostMapping("/downAndSave")
     public ResResult<Void> downAndSave(Long id){
         reconcileService.downAndSave(id);
+        return Res.ok();
+    }
+
+    @Operation(summary = "手动上传对账单文件")
+    @PostMapping("/upload")
+    public ResResult<Void> upload(Long id, MultipartFile file){
+        reconcileService.upload(id,file);
         return Res.ok();
     }
 

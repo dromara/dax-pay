@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -86,12 +87,46 @@ public class ReconcileService {
     }
 
     /**
+     * 手动传输对账单
+     * @param id 对账单ID
+     * @param file 文件
+     */
+    public void upload(Long id, MultipartFile file) {
+        ReconcileOrder reconcileOrder = reconcileOrderService.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
+        // 将对账订单写入到上下文中
+        PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
+        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
+        reconcileStrategy.setRecordOrder(reconcileOrder);
+        reconcileStrategy.doBeforeHandler();
+        try {
+            reconcileStrategy.upload(file);
+            reconcileOrder.setDown(true)
+                    .setErrorMsg(null);
+            reconcileOrderService.update(reconcileOrder);
+        } catch (Exception e) {
+            log.error("上传对账单异常", e);
+            reconcileOrder.setErrorMsg("原因: " + e.getMessage());
+            reconcileOrderService.update(reconcileOrder);
+            throw new RuntimeException(e);
+        }
+        // 保存转换后的通用结构对账单
+        List<ReconcileDetail> reconcileDetails = PaymentContextLocal.get()
+                .getReconcileInfo()
+                .getReconcileDetails();
+        reconcileDetailManager.saveAll(reconcileDetails);
+    }
+
+    /**
      * 下载对账单并进行保存
      */
     public void downAndSave(ReconcileOrder reconcileOrder) {
+        // 如果对账单已经存在
+        if (reconcileOrder.isDown()){
+            throw new PayFailureException("对账单文件已经下载或上传");
+        }
         // 将对账订单写入到上下文中
         PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
-
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
         reconcileStrategy.setRecordOrder(reconcileOrder);
@@ -130,6 +165,10 @@ public class ReconcileService {
         // 判断是否已经下载了对账单明细
         if (!reconcileOrder.isDown()){
             throw new PayFailureException("请先下载对账单");
+        }
+        // 是否对比完成
+        if (reconcileOrder.isCompare()){
+            throw new PayFailureException("对账单比对已经完成");
         }
 
         // 查询对账单
@@ -269,4 +308,5 @@ public class ReconcileService {
         }
         return diffs;
     }
+
 }

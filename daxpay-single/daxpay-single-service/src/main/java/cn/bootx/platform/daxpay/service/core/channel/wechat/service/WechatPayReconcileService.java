@@ -13,8 +13,10 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBi
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.StrUtil;
@@ -24,11 +26,15 @@ import com.ijpay.wxpay.WxPayApi;
 import com.ijpay.wxpay.model.DownloadBillModel;
 import com.ijpay.wxpay.model.DownloadFundFlowModel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +62,8 @@ public class WechatPayReconcileService{
      * @param date 对账日期 yyyyMMdd 格式
      */
     @Transactional(rollbackFor = Exception.class)
-    public void downAndSave(String date, Long recordOrderId, WeChatPayConfig config) {
-        this.downBill(date, recordOrderId, config);
+    public void downAndSave(String date,  WeChatPayConfig config) {
+        this.downBill(date, config);
         // 资金对账单先不启用
 //        this.downFundFlow(date, recordOrderId, config);
     }
@@ -66,9 +72,8 @@ public class WechatPayReconcileService{
      * 下载交易账单
      *
      * @param date          对账日期 yyyyMMdd 格式
-     * @param recordOrderId 对账订单ID
      */
-    public void downBill(String date, Long recordOrderId, WeChatPayConfig config){
+    public void downBill(String date, WeChatPayConfig config){
         // 下载交易账单
         Map<String, String> params = DownloadBillModel.builder()
                 .mch_id(config.getWxMchId())
@@ -92,6 +97,9 @@ public class WechatPayReconcileService{
         List<WxReconcileBillDetail> billDetails = reader.read(billDetail, WxReconcileBillDetail.class).stream()
                 .filter(o->Objects.equals(o.getAppId(), config.getWxAppId()))
                 .collect(Collectors.toList());
+
+        Long recordOrderId = PaymentContextLocal.get().getReconcileInfo().getReconcileOrder().getId();
+
         billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
         reconcileBillDetailManager.saveAll(billDetails);
 
@@ -103,7 +111,42 @@ public class WechatPayReconcileService{
 
         // 将原始交易明细对账记录转换通用结构并保存到上下文中
         this.convertAndSave(billDetails);
+    }
 
+    /**
+     * 上传对账单
+     */
+    @SneakyThrows
+    public void uploadBill(byte[] bytes, WeChatPayConfig config){
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes), "GBK"));
+        String result = IoUtil.read(reader);
+        // 过滤特殊字符
+        result = result.replaceAll("`", "").replaceAll("\uFEFF", "");
+        CsvReader csvRows = CsvUtil.getReader();
+
+        // 对账订单
+        ReconcileOrder reconcileOrder = PaymentContextLocal.get()
+                .getReconcileInfo()
+                .getReconcileOrder();
+
+        // 获取交易记录并保存 同时过滤出当前应用的交易记录
+        String billDetail = StrUtil.subBefore(result, "总交易单数", false);
+        List<WxReconcileBillDetail> billDetails = csvRows.read(billDetail, WxReconcileBillDetail.class).stream()
+                // 只读取当前商户的订单
+                .filter(o->Objects.equals(o.getAppId(), config.getWxAppId()))
+                // 只读取对账日的记录
+                .filter(o->{
+                    String transactionTime = o.getTransactionTime();
+                    LocalDateTime time = LocalDateTimeUtil.parse(transactionTime, DatePattern.NORM_DATETIME_PATTERN);
+                    return Objects.equals(reconcileOrder.getDate(), LocalDate.from(time));
+                })
+                .collect(Collectors.toList());
+
+        billDetails.forEach(o->o.setRecordOrderId(reconcileOrder.getId()));
+        reconcileBillDetailManager.saveAll(billDetails);
+
+        // 将原始交易明细对账记录转换通用结构并保存到上下文中
+        this.convertAndSave(billDetails);
     }
 
     /**

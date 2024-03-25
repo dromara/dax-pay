@@ -55,11 +55,10 @@ public class AliPayReconcileService {
      * 下载对账单, 并进行解析进行保存
      *
      * @param date 对账日期 yyyy-MM-dd 格式
-     * @param recordOrderId 对账订单ID
      */
     @SneakyThrows
     @Transactional(rollbackFor = Exception.class)
-    public void downAndSave(String date, Long recordOrderId){
+    public void downAndSave(String date){
 
         try {
             AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
@@ -93,7 +92,7 @@ public class AliPayReconcileService {
                 }
             }
             // 保存原始对账记录
-            this.save(billDetails, billTotals, recordOrderId);
+            this.save(billDetails, billTotals);
 
             // 将原始交易明细对账记录转换通用结构并保存到上下文中
             this.convertAndSave(billDetails);
@@ -103,13 +102,42 @@ public class AliPayReconcileService {
             throw new RuntimeException(e);
         }
     }
+    /**
+     * 上传对账单解析并保存
+     */
+    @SneakyThrows
+    public void upload(byte[] bytes) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes),"GBK"));
+        List<String> strings = IoUtil.readLines(bufferedReader, new ArrayList<>());
+        List<AliReconcileBillDetail> billDetails = this.parseDetail(strings);
+        // 保存原始对账记录
+        this.saveBillDetail(billDetails);
+        // 将原始交易明细对账记录转换通用结构并保存到上下文中
+        this.convertAndSave(billDetails);
+    }
 
     /**
      * 保存原始对账记录
      */
-    private void save(List<AliReconcileBillDetail> billDetails, List<AliReconcileBillTotal> billTotals, Long recordOrderId){
+    private void save(List<AliReconcileBillDetail> billDetails, List<AliReconcileBillTotal> billTotals){
+       this.saveBillDetail(billDetails);
+       this.saveBillTotal(billTotals);
+    }
+
+    /**
+     * 保存原始对账明细记录
+     */
+    private void saveBillDetail(List<AliReconcileBillDetail> billDetails){
+        Long recordOrderId = PaymentContextLocal.get().getReconcileInfo().getReconcileOrder().getId();
         billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
         reconcileBillDetailManager.saveAll(billDetails);
+    }
+
+    /**
+     * 保存原始对账汇总记录
+     */
+    private void saveBillTotal(List<AliReconcileBillTotal> billTotals){
+        Long recordOrderId = PaymentContextLocal.get().getReconcileInfo().getReconcileOrder().getId();
         billTotals.forEach(o->o.setRecordOrderId(recordOrderId));
         reconcileBillTotalManager.saveAll(billTotals);
     }

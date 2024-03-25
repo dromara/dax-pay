@@ -5,6 +5,7 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrd
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,6 +36,11 @@ public abstract class AbsReconcileStrategy implements PayStrategy {
      */
     public void doBeforeHandler() {
     }
+
+    /**
+     * 上传对账单解析并保存
+     */
+    public abstract void upload(MultipartFile file);
 
     /**
      * 下载对账单到本地进行保存
