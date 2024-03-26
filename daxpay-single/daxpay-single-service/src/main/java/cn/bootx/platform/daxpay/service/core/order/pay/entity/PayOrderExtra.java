@@ -72,10 +72,12 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
 
     /** 错误码 */
     @DbColumn(comment = "错误码")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorCode;
 
     /** 错误信息 */
     @DbColumn(comment = "错误信息")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
 
     /**

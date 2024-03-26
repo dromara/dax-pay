@@ -22,7 +22,7 @@
 
 ## 🧭 特色功能
 - 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
-- 已对接`微信支付`和`支付宝`相关的接口，目前已经支持`V2`版本的接口，后续版本将支持`V3`版本的接口
+- 已对接`微信支付`、`支付宝`和云闪付相关的接口，后续版本将支持`V3`版本的接口
 - 支持组合支付，满足用户系统需要多种方式同时进行支付的场景。
 - 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
 - 接口请求和响应数据支持启用签名机制，可根据实际需要进行开关，保证交易安全可靠
@@ -150,16 +150,14 @@ public class SimplePayOrderTest {
 ```
 
 ## 🍎 系统截图
-
-### H5收银台演示
-![h5.png](https://s11.ax1x.com/2024/02/12/pF8nPMV.png)
-### 支付演示
-![pay.png](https://s11.ax1x.com/2024/02/12/pF8np2q.png)
 ### 收银台演示
-![pc.jpg](https://s11.ax1x.com/2024/02/12/pF8n9x0.jpg)
+![微信截图_20240326141126](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326141126.es9yupxd3.webp)
+### 驾驶舱
+![QQ截图20240326141912](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
+### H5收银台演示
+![h5](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
 ### 支付通道配置
-![](https://s11.ax1x.com/2024/02/13/pF8s2VS.jpg)
-
+![微信截图_20240326142208](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
 ## 🛣️ 路线图
 > 当前处于功能开发阶段，部分功能可能会有调整，`V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容
 

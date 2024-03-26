@@ -81,7 +81,7 @@ public class PayService {
         payParam.setPayChannels(Collections.singletonList(payChannelParam));
         // 复用支付下单接口
         return this.pay(payParam);
-    }
+        }
 
 
     /**
@@ -206,7 +206,7 @@ public class PayService {
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
 
         // 获取支付方式，通过工厂生成对应的策略组
-        List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
+         List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
         if (CollectionUtil.isEmpty(strategies)) {
             throw new PayUnsupportedMethodException();
         }
@@ -219,9 +219,8 @@ public class PayService {
 
         // 执行支付前处理动作, 进行各种校验
         asyncPayStrategy.doBeforePayHandler();
-        // 创建支付订单和扩展记录并返回支付订单对象
-        PayOrder payOrder = payAssistService.createPayOrder(payParam);
-        asyncPayStrategy.setOrder(payOrder);
+        // 执行支付前的保存动作, 保持订单和通道订单的原子性
+        PayOrder payOrder = SpringUtil.getBean(this.getClass()).firstPreAsyncPay(asyncPayStrategy, payParam);
 
         // 支付操作
         try {
@@ -236,6 +235,19 @@ public class PayService {
         // 支付调起成功后操作, 使用事务来保证数据一致性
         return SpringUtil.getBean(this.getClass()).firstAsyncPaySuccess(asyncPayStrategy,payOrder);
 
+    }
+
+    /**
+     * 异步单通道支付的订单预保存, 保存订单和通道订单
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public PayOrder firstPreAsyncPay(AbsPayStrategy asyncPayStrategy, PayParam payParam){
+        // 创建支付订单和扩展记录并返回支付订单对象
+        PayOrder payOrder = payAssistService.createPayOrder(payParam);
+        asyncPayStrategy.setOrder(payOrder);
+        // 生成通道支付订单
+        asyncPayStrategy.generateChannelOrder();
+        return payOrder;
     }
 
     /**
@@ -254,9 +266,13 @@ public class PayService {
                     .setPayTime(LocalDateTime.now());
         }
         payOrderService.updateById(payOrder);
+        // 扩展记录更新
+        PayOrderExtra payOrderExtra = payInfo.getPayOrderExtra();
+        payOrderExtra.setErrorMsg(null);
+        payOrderExtraManager.update(payOrderExtra);
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
-            clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra(), payInfo.getPayChannelOrders());
+            clientNoticeService.registerPayNotice(payOrder, payOrderExtra, payInfo.getPayChannelOrders());
         }
         return PayBuilder.buildPayResultByPayOrder(payOrder);
     }
@@ -348,10 +364,13 @@ public class PayService {
                     .setPayTime(LocalDateTime.now());
         }
         payOrderService.updateById(payOrder);
-        payOrderService.updateById(payOrder);
+        // 扩展记录更新
+        PayOrderExtra payOrderExtra = payInfo.getPayOrderExtra();
+        payOrderExtra.setErrorMsg(null);
+        payOrderExtraManager.update(payOrderExtra);
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
-            clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra(), payInfo.getPayChannelOrders());
+            clientNoticeService.registerPayNotice(payOrder, payOrderExtra, payInfo.getPayChannelOrders());
         }
         return PayBuilder.buildPayResultByPayOrder(payOrder);
     }
@@ -428,6 +447,9 @@ public class PayService {
                     .setPayTime(LocalDateTime.now());
         }
         payOrderService.updateById(payOrder);
+        // 扩展记录更新
+        payOrderExtra.setErrorMsg(null);
+        payOrderExtraManager.update(payOrderExtra);
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
             // 查询通道订单
