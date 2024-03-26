@@ -8,7 +8,7 @@
  Target Server Version : 50743
  File Encoding         : 65001
 
- Date: 26/03/2024 10:58:01
+ Date: 14/03/2024 18:59:35
 */
 
 SET NAMES utf8mb4;
@@ -1494,13 +1494,6 @@ INSERT INTO `iam_perm_path` VALUES (1768219994979528708, 'PayReturnController#un
 INSERT INTO `iam_perm_path` VALUES (1768219994979528709, 'PayCallbackController#unionPayNotify', '云闪付支付信息回调', 'POST', '/callback/pay/union', '支付通道信息回调', b'1', b'1', '支付通道信息回调 云闪付支付信息回调', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
 INSERT INTO `iam_perm_path` VALUES (1768219994979528710, 'UnionPayConfigController#toBase64', '读取证书文件内容', 'POST', '/union/pay/config/toBase64', '云闪付配置', b'1', b'1', '云闪付配置 读取证书文件内容', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
 INSERT INTO `iam_perm_path` VALUES (1768219994979528711, 'UnionPayConfigController#findPayWays', '支持的支付方式', 'GET', '/union/pay/config/findPayWays', '云闪付配置', b'1', b'1', '云闪付配置 支持的支付方式', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460544, 'CockpitReportController#getRefundChannelInfo', '显示通道退款订单金额和订单数', 'GET', '/report/cockpit/getRefundChannelInfo', '驾驶舱接口', b'1', b'1', '驾驶舱接口 显示通道退款订单金额和订单数', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460545, 'CockpitReportController#getRefundAmount', '退款金额(分)', 'GET', '/report/cockpit/getRefundAmount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 退款金额(分)', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460546, 'CockpitReportController#getRefundOrderCount', '退款订单数量', 'GET', '/report/cockpit/getRefundOrderCount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 退款订单数量', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460547, 'CockpitReportController#getPayChannelInfo', '显示通道支付订单金额和订单数', 'GET', '/report/cockpit/getPayChannelInfo', '驾驶舱接口', b'1', b'1', '驾驶舱接口 显示通道支付订单金额和订单数', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460548, 'ReconcileOrderController#upload', '手动上传对账单文件', 'POST', '/order/reconcile/upload', '对账控制器', b'1', b'1', '对账控制器 手动上传对账单文件', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460549, 'CockpitReportController#getPayAmount', '支付金额(分)', 'GET', '/report/cockpit/getPayAmount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 支付金额(分)', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460550, 'CockpitReportController#getPayOrderCount', '支付订单数量', 'GET', '/report/cockpit/getPayOrderCount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 支付订单数量', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
 
 -- ----------------------------
 -- Table structure for iam_role
@@ -1700,6 +1693,8 @@ INSERT INTO `iam_role_path` VALUES (1757299898825560079, 1757298887092326400, 17
 INSERT INTO `iam_role_path` VALUES (1757299898825560080, 1757298887092326400, 1757297527152169054);
 INSERT INTO `iam_role_path` VALUES (1757299898825560081, 1757298887092326400, 1757297527152169041);
 INSERT INTO `iam_role_path` VALUES (1757299898825560082, 1757298887092326400, 1757297527152169016);
+INSERT INTO `iam_role_path` VALUES (1757299898825560083, 1757298887092326400, 1757297527147974712);
+INSERT INTO `iam_role_path` VALUES (1757299898825560084, 1757298887092326400, 1757297527147974657);
 INSERT INTO `iam_role_path` VALUES (1757299898825560086, 1757298887092326400, 1757297527152169126);
 INSERT INTO `iam_role_path` VALUES (1757299898825560087, 1757298887092326400, 1757297527152169084);
 INSERT INTO `iam_role_path` VALUES (1757299898825560089, 1757298887092326400, 1757297527156363312);
@@ -1825,32 +1820,6 @@ INSERT INTO `iam_role_path` VALUES (1768220144112201730, 1757297023118462976, 17
 INSERT INTO `iam_role_path` VALUES (1768220144611323904, 1757298887092326400, 1768219994971140096);
 INSERT INTO `iam_role_path` VALUES (1768220144611323905, 1757298887092326400, 1768219994979528705);
 INSERT INTO `iam_role_path` VALUES (1768220144611323906, 1757298887092326400, 1768219994979528706);
-INSERT INTO `iam_role_path` VALUES (1772446949400571904, 1757297023118462976, 1772446740356460550);
-INSERT INTO `iam_role_path` VALUES (1772446949400571905, 1757297023118462976, 1772446740356460549);
-INSERT INTO `iam_role_path` VALUES (1772446949400571906, 1757297023118462976, 1772446740356460547);
-INSERT INTO `iam_role_path` VALUES (1772446949400571907, 1757297023118462976, 1772446740356460546);
-INSERT INTO `iam_role_path` VALUES (1772446949400571908, 1757297023118462976, 1772446740356460545);
-INSERT INTO `iam_role_path` VALUES (1772446949400571909, 1757297023118462976, 1772446740356460544);
-INSERT INTO `iam_role_path` VALUES (1772446949400571910, 1757297023118462976, 1772446740356460548);
-INSERT INTO `iam_role_path` VALUES (1772446949400571911, 1757297023118462976, 1768219994979528711);
-INSERT INTO `iam_role_path` VALUES (1772446949400571912, 1757297023118462976, 1768219994979528710);
-INSERT INTO `iam_role_path` VALUES (1772446949400571913, 1757297023118462976, 1768219994979528704);
-INSERT INTO `iam_role_path` VALUES (1772446949400571914, 1757297023118462976, 1768219994979528707);
-INSERT INTO `iam_role_path` VALUES (1772446952005234688, 1757298887092326400, 1772446740356460550);
-INSERT INTO `iam_role_path` VALUES (1772446952005234689, 1757298887092326400, 1772446740356460549);
-INSERT INTO `iam_role_path` VALUES (1772446952005234690, 1757298887092326400, 1772446740356460547);
-INSERT INTO `iam_role_path` VALUES (1772446952005234691, 1757298887092326400, 1772446740356460546);
-INSERT INTO `iam_role_path` VALUES (1772446952005234692, 1757298887092326400, 1772446740356460545);
-INSERT INTO `iam_role_path` VALUES (1772446952005234693, 1757298887092326400, 1772446740356460544);
-INSERT INTO `iam_role_path` VALUES (1772446952005234694, 1757298887092326400, 1772446740356460548);
-INSERT INTO `iam_role_path` VALUES (1772446952005234695, 1757298887092326400, 1768219994979528711);
-INSERT INTO `iam_role_path` VALUES (1772446952005234696, 1757298887092326400, 1768219994979528710);
-INSERT INTO `iam_role_path` VALUES (1772446952005234697, 1757298887092326400, 1768219994979528704);
-INSERT INTO `iam_role_path` VALUES (1772447125519396864, 1757298887092326400, 1764663810424303620);
-INSERT INTO `iam_role_path` VALUES (1772447125519396865, 1757298887092326400, 1764663810424303619);
-INSERT INTO `iam_role_path` VALUES (1772447125519396866, 1757298887092326400, 1764663810424303618);
-INSERT INTO `iam_role_path` VALUES (1772447125519396867, 1757298887092326400, 1764663810424303617);
-INSERT INTO `iam_role_path` VALUES (1772447125519396868, 1757298887092326400, 1764663810424303616);
 
 -- ----------------------------
 -- Table structure for iam_user_data_role
@@ -2327,15 +2296,13 @@ CREATE TABLE `pay_alipay_config`  (
   `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
   `version` int(11) NOT NULL COMMENT '乐观锁',
   `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  `alipay_user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '合作者身份ID',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付宝支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_alipay_config
 -- ----------------------------
-INSERT INTO `pay_alipay_config` VALUES (0, '123456', b'1', 'ServerUrl/callback/pay/alipay', 'ServerUrl/return/pay/alipay', 'https://openapi.alipay.com/gateway.do', 'key', 'RSA2', 'ImfODRp7hnJ3DUk9fCes0Q==', 'ImfODRp7hnJ3DUk9fCes0Q==', NULL, NULL, NULL, b'0', 'wap,app,web,qrcode,barcode', '支付宝支付', 0, '2024-01-02 21:17:58', 1399985191002447872, '2024-02-13 15:43:51', 23, b'0', NULL, NULL);
+INSERT INTO `pay_alipay_config` VALUES (0, '123456', b'1', 'ServerUrl/callback/pay/alipay', 'ServerUrl/return/pay/alipay', 'https://openapi.alipay.com/gateway.do', 'key', 'RSA2', 'ImfODRp7hnJ3DUk9fCes0Q==', 'ImfODRp7hnJ3DUk9fCes0Q==', NULL, NULL, NULL, b'0', 'wap,app,web,qrcode,barcode', '支付宝支付', 0, '2024-01-02 21:17:58', 1399985191002447872, '2024-02-13 15:43:51', 23, b'0');
 
 -- ----------------------------
 -- Table structure for pay_alipay_reconcile_bill_detail
@@ -2558,7 +2525,7 @@ CREATE TABLE `pay_channel_order`  (
   `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
   `refundable_balance` int(11) NULL DEFAULT NULL COMMENT '可退款金额',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付状态',
-  `pay_time` datetime(0) NULL DEFAULT NULL COMMENT '支付完成时间',
+  `pay_time` datetime(0) NULL DEFAULT NULL COMMENT '支付时间',
   `channel_extra` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '附加支付参数',
   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
@@ -2711,7 +2678,7 @@ CREATE TABLE `pay_platform_config`  (
   `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名方式',
   `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名秘钥',
   `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通知地址',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步支付跳转地址',
+  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步支付通知地址',
   `order_timeout` int(11) NULL DEFAULT NULL COMMENT '订单默认超时时间(分钟)',
   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
@@ -2719,14 +2686,13 @@ CREATE TABLE `pay_platform_config`  (
   `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
   `version` int(11) NOT NULL COMMENT '乐观锁',
   `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `limit_amount` int(11) NULL DEFAULT NULL COMMENT '支付限额',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付平台配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_platform_config
 -- ----------------------------
-INSERT INTO `pay_platform_config` VALUES (0, 'http://127.0.0.1', 'HMAC_SHA256', '132456', 'http://127.0.0.1/h5/#/result/success', 'http://127.0.0.1/h5/#/result/success', 30, 0, '2024-01-02 20:23:19', 1757299137932677120, '2024-02-13 15:08:51', 3, b'0', NULL);
+INSERT INTO `pay_platform_config` VALUES (0, 'http://127.0.0.1', 'HMAC_SHA256', '132456', 'http://127.0.0.1/h5/#/result/success', 'http://127.0.0.1/h5/#/result/success', 30, 0, '2024-01-02 20:23:19', 1757299137932677120, '2024-02-13 15:08:51', 3, b'0');
 
 -- ----------------------------
 -- Table structure for pay_reconcile_detail
@@ -2938,32 +2904,6 @@ CREATE TABLE `pay_sync_record`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for pay_transfer_order
--- ----------------------------
-DROP TABLE IF EXISTS `pay_transfer_order`;
-CREATE TABLE `pay_transfer_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `amount` int(11) NULL DEFAULT NULL,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `payer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `payee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `success_time` datetime(0) NULL DEFAULT NULL,
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '转账订单' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_transfer_order
--- ----------------------------
-
--- ----------------------------
 -- Table structure for pay_union_pay_config
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_union_pay_config`;
@@ -2990,14 +2930,13 @@ CREATE TABLE `pay_union_pay_config`  (
   `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
   `version` int(11) NOT NULL COMMENT '乐观锁',
   `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '云闪付支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_union_pay_config
 -- ----------------------------
-INSERT INTO `pay_union_pay_config` VALUES (0, '123456', b'1', 'https://qra.95516.com/pay/gateway', 'ServerUrl/callback/pay/union', 'wap,app,web,qrcode,barcode,jsapi,b2b', NULL, NULL, 'RSA2', b'0', NULL, NULL, NULL, NULL, b'1', 'ServerUrl/return/pay/union', 0, '2024-03-06 22:56:22', 1399985191002447872, '2024-03-12 23:30:18', 11, b'0', NULL);
+INSERT INTO `pay_union_pay_config` VALUES (0, '123456', b'1', 'https://qra.95516.com/pay/gateway', 'ServerUrl/callback/pay/union', 'wap,app,web,qrcode,barcode,jsapi,b2b', NULL, NULL, 'RSA2', b'0', NULL, NULL, NULL, NULL, b'1', 'ServerUrl/return/pay/union', 0, '2024-03-06 22:56:22', 1399985191002447872, '2024-03-12 23:30:18', 11, b'0');
 
 -- ----------------------------
 -- Table structure for pay_union_pay_record
@@ -3018,23 +2957,6 @@ CREATE TABLE `pay_union_pay_record`  (
 
 -- ----------------------------
 -- Records of pay_union_pay_record
--- ----------------------------
-
--- ----------------------------
--- Table structure for pay_union_reconcile_bill_detail
--- ----------------------------
-DROP TABLE IF EXISTS `pay_union_reconcile_bill_detail`;
-CREATE TABLE `pay_union_reconcile_bill_detail`  (
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易代码',
-  `txn_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易传输时间',
-  `txn_amt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易金额',
-  `query_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询流水号',
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号'
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '云闪付业务明细对账单' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_union_reconcile_bill_detail
 -- ----------------------------
 
 -- ----------------------------
@@ -3267,14 +3189,13 @@ CREATE TABLE `pay_wechat_pay_config`  (
   `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
   `version` int(11) NOT NULL COMMENT '乐观锁',
   `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_wechat_pay_config
 -- ----------------------------
-INSERT INTO `pay_wechat_pay_config` VALUES (0, '123', '123', b'1', 'ServerUrl/callback/pay/wechat', 'ServerUrl/pay/wechat', '0', NULL, 'E0jIzPNngkpkZYL19H3vFQ==', 'E0jIzPNngkpkZYL19H3vFQ==', 'E0jIzPNngkpkZYL19H3vFQ==', NULL, '0', 'wap,app,jsapi,qrcode,barcode', 0, '0000-00-00 00:00:00', 2024, '0000-00-00 00:00:00', 2024, b'1', NULL);
+INSERT INTO `pay_wechat_pay_config` VALUES (0, '123', '123', b'1', 'ServerUrl/callback/pay/wechat', 'ServerUrl/pay/wechat', '0', NULL, 'E0jIzPNngkpkZYL19H3vFQ==', 'E0jIzPNngkpkZYL19H3vFQ==', 'E0jIzPNngkpkZYL19H3vFQ==', NULL, '0', 'wap,app,jsapi,qrcode,barcode', 0, '0000-00-00 00:00:00', 2024, '0000-00-00 00:00:00', 2024, b'1');
 
 -- ----------------------------
 -- Table structure for pay_wechat_pay_record
@@ -3441,7 +3362,6 @@ CREATE TABLE `qrtz_fired_triggers`  (
 -- ----------------------------
 -- Records of qrtz_fired_triggers
 -- ----------------------------
-INSERT INTO `qrtz_fired_triggers` VALUES ('quartzScheduler', 'NON_CLUSTERED1711420949184', '1546857070483939328', 'DEFAULT', 'NON_CLUSTERED', 1711421986284, 1711421990000, 5, 'ACQUIRED', NULL, NULL, '0', '0');
 
 -- ----------------------------
 -- Table structure for qrtz_job_details
@@ -3599,7 +3519,7 @@ CREATE TABLE `qrtz_triggers`  (
 -- ----------------------------
 -- Records of qrtz_triggers
 -- ----------------------------
-INSERT INTO `qrtz_triggers` VALUES ('quartzScheduler', '1546857070483939328', 'DEFAULT', '1546857070483939328', 'DEFAULT', NULL, 1711421995000, 1711421990000, 5, 'ACQUIRED', 'CRON', 1708844216000, 0, NULL, 0, '');
+INSERT INTO `qrtz_triggers` VALUES ('quartzScheduler', '1546857070483939328', 'DEFAULT', '1546857070483939328', 'DEFAULT', NULL, 1708956430000, 1708956425000, 5, 'WAITING', 'CRON', 1708844216000, 0, NULL, 0, '');
 
 -- ----------------------------
 -- Table structure for starter_audit_data_version
