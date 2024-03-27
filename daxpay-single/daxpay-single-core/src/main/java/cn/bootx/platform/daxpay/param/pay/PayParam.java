@@ -35,6 +35,9 @@ public class PayParam extends PaymentCommonParam {
     @Schema(description = "支付描述")
     private String description;
 
+    @Schema(description = "是否开启分账")
+    private boolean allocation;
+
     @Schema(description = "过期时间, 多次传输以第一次为准")
     @JsonDeserialize(using = TimestampToLocalDateTimeDeserializer.class)
     private LocalDateTime expiredTime;
@@ -54,6 +57,7 @@ public class PayParam extends PaymentCommonParam {
     /** 同步跳转URL, 不传输跳转到默认地址 */
     @Schema(description = "同步跳转URL")
     private String returnUrl;
+
 
     /** 是否不启用异步通知 */
     @Schema(description = "是否不启用异步通知")

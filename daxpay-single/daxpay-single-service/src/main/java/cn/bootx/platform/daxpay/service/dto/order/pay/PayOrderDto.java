@@ -36,6 +36,10 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "是否是组合支付")
     private boolean combinationPay;
 
+    /** 是否需要分账 */
+    @Schema(description = "是否需要分账")
+    private boolean allocation;
+
     /**
      * 异步支付通道
      * @see PayChannelEnum#ASYNC_TYPE_CODE

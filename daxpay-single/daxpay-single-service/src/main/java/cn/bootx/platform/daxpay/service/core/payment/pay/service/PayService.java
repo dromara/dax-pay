@@ -93,14 +93,12 @@ public class PayService {
      *  执行异步通道支付的逻辑与上面异步支付的逻辑一致
      * 4. 同步支付一次支付完成，不允许重复发起支付
      * 5. 重复支付时，不允许中途将异步支付换为同步支付，也不允许更改出支付通道和支付方式之外的支付参数（请求时间、IP、签名等可以更改）
-     *
+     * 6. 如果要进行分账, 请求时就需要将分账标识字段穿true
      */
     public PayResult pay(PayParam payParam){
 
-        // 异步支付方式检查
-        PayUtil.validationAsyncPay(payParam);
-        // 检查支付金额
-        PayUtil.validationAmount(payParam.getPayChannels());
+        // 支付参数检查
+        PayUtil.validation(payParam);
         // 校验支付限额
         payAssistService.validationLimitAmount(payParam);
 

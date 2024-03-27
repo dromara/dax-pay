@@ -109,6 +109,12 @@ public class AliPayService {
         model.setProductCode(AliPayCode.QUICK_WAP_PAY);
         // 中途退出地址
         model.setQuitUrl(noticeInfo.getQuitUrl());
+        // 是否分账
+        if (payOrder.isAllocation()){
+            ExtendParams extendParams = new ExtendParams();
+            extendParams.setRoyaltyFreeze("true");
+            model.setExtendParams(extendParams);
+        }
 
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         request.setBizModel(model);
@@ -140,6 +146,12 @@ public class AliPayService {
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(String.valueOf(amount*0.01));
+        // 是否分账
+        if (payOrder.isAllocation()){
+            ExtendParams extendParams = new ExtendParams();
+            extendParams.setRoyaltyFreeze("true");
+            model.setExtendParams(extendParams);
+        }
 
         try {
             // 异步回调必须到当前系统中
@@ -156,7 +168,6 @@ public class AliPayService {
      * PC支付
      */
     public String webPay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
-        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         AlipayTradePagePayModel model = new AlipayTradePagePayModel();
 
         model.setSubject(payOrder.getTitle());
@@ -166,6 +177,13 @@ public class AliPayService {
         model.setTotalAmount(String.valueOf(amount*0.01));
         // 目前仅支持FAST_INSTANT_TRADE_PAY
         model.setProductCode(AliPayCode.FAST_INSTANT_TRADE_PAY);
+
+        // 是否分账
+        if (payOrder.isAllocation()){
+            ExtendParams extendParams = new ExtendParams();
+            extendParams.setRoyaltyFreeze("true");
+            model.setExtendParams(extendParams);
+        }
 
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         request.setBizModel(model);
@@ -192,7 +210,12 @@ public class AliPayService {
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(String.valueOf(payOrder.getId()));
         model.setTotalAmount(String.valueOf(amount*0.01));
-
+        // 是否分账
+        if (payOrder.isAllocation()){
+            ExtendParams extendParams = new ExtendParams();
+            extendParams.setRoyaltyFreeze("true");
+            model.setExtendParams(extendParams);
+        }
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
 
@@ -218,7 +241,12 @@ public class AliPayService {
         model.setOutTradeNo(String.valueOf(payOrder.getId()));
         model.setScene(AliPayCode.BAR_CODE);
         model.setAuthCode(aliPayParam.getAuthCode());
-
+        // 是否分账
+        if (payOrder.isAllocation()){
+            ExtendParams extendParams = new ExtendParams();
+            extendParams.setRoyaltyFreeze("true");
+            model.setExtendParams(extendParams);
+        }
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(String.valueOf(amount*0.01));
