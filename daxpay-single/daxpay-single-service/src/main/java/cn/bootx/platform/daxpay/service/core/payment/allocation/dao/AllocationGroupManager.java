@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-/**   
- * 
- * @author xxm  
- * @since 2024/3/27 
+/**
+ *
+ * @author xxm
+ * @since 2024/3/27
  */
 @Slf4j
 @Repository

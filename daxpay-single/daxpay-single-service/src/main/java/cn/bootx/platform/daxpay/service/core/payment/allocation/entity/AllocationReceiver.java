@@ -1,8 +1,14 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.entity;
 
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.AllocationRelationTypeEnum;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.core.payment.allocation.convert.AllocationReceiverConvert;
+import cn.bootx.platform.daxpay.service.dto.allocation.AllocationReceiverDto;
 import cn.bootx.table.modify.annotation.DbColumn;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,36 +21,58 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class AllocationReceiver extends MpBaseEntity {
+public class AllocationReceiver extends MpBaseEntity implements EntityBaseFunction<AllocationReceiverDto> {
 
-    @DbColumn(name = "账号别名")
+    @DbColumn(comment = "账号别名")
     private String name;
 
-    @DbColumn(name = "所属通道")
+    /**
+     * @see PayChannelEnum
+     */
+    @DbColumn(comment = "所属通道")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channel;
 
     /**
      * 分账接收方类型 个人/商户
      */
-    @DbColumn(name = "分账接收方类型")
+    @DbColumn(comment = "分账接收方类型")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String receiverType;
 
 
-    @DbColumn(name = "接收方账号")
+    @DbColumn(comment = "接收方账号")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String receiverAccount;
 
+    @DbColumn(comment = "账号类型")
+    private String accountType;
+
     /** 接收方姓名 */
-    @DbColumn(name = "接收方姓名")
+    @DbColumn(comment = "接收方姓名")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String receiverName;
 
     /**
      * 分账关系类型
      * @see AllocationRelationTypeEnum
      */
-    @DbColumn(name = "分账关系类型")
+    @DbColumn(comment = "分账关系类型")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String relationType;
 
-    @DbColumn(name = "关系名称")
+    @DbColumn(comment = "关系名称")
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String relationName;
 
+    @DbColumn(comment = "是否已经同步到网关")
+    private boolean sync;
+
+    /**
+     * 转换
+     */
+    @Override
+    public AllocationReceiverDto toDto() {
+        return AllocationReceiverConvert.CONVERT.convert(this);
+    }
 }

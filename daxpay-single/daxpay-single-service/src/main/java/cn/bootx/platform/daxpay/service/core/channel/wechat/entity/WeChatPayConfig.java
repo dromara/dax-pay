@@ -46,6 +46,10 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "是否启用")
     private Boolean enable;
 
+    /** 是否支付分账 */
+    @DbColumn(comment = "是否支付分账")
+    private Boolean allocation;
+
     /** 支付限额 */
     @DbColumn(comment = "支付限额")
     private Integer singleLimit;
