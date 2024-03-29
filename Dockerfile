@@ -23,7 +23,7 @@ WORKDIR /
 EXPOSE 9000
 
 # 添加执行jar包
-ADD daxpay-single/daxpay-single-start/target/daxpay-start.jar.jar dax-start.jar
+ADD daxpay-single/daxpay-single-start/target/daxpay-start.jar dax-start.jar
 
 # 执行启动命令
 CMD java $JAVA_OPTS -jar dax-start.jar
