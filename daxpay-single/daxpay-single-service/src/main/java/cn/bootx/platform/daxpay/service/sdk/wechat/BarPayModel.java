@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.sdk.wechat;
 
-import com.ijpay.wxpay.model.MicroPayModel;
+import com.ijpay.core.model.BaseModel;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class BarPayModel extends MicroPayModel {
+public class BarPayModel extends BaseModel {
     /**
      * 是否押金支付
      */

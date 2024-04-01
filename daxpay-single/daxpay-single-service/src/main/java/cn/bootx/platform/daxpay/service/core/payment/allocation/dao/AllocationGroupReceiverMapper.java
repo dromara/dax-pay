@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.dao;
 
-import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationReceiverGroup;
+import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationGroupReceiver;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2024/3/27
  */
 @Mapper
-public interface AllocationReceiverGroupMapper extends BaseMapper<AllocationReceiverGroup> {
+public interface AllocationGroupReceiverMapper extends BaseMapper<AllocationGroupReceiver> {
 }

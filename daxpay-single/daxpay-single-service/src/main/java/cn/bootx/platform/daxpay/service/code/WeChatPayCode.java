@@ -140,4 +140,10 @@ public interface WeChatPayCode {
     /** 资金账单 - 基本账户 */
     String ACCOUNT_TYPE_BASIC = "Basic";
 
+    /* 分账 */
+    /** 商户号 */
+    String MERCHANT_ID = "MERCHANT_ID";
+    /** 个人openid */
+    String PERSONAL_OPENID = "PERSONAL_OPENID";
+
 }

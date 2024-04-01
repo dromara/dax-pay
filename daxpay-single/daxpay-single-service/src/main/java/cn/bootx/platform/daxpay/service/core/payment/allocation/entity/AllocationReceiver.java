@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
 import cn.bootx.platform.daxpay.code.AllocationRelationTypeEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.convert.AllocationReceiverConvert;
@@ -34,7 +35,8 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
     private String channel;
 
     /**
-     * 分账接收方类型 个人/商户
+     * 分账接收方类型
+     * @see AllocationReceiverTypeEnum
      */
     @DbColumn(comment = "分账接收方类型")
     @TableField(updateStrategy = FieldStrategy.NEVER)
@@ -44,9 +46,6 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
     @DbColumn(comment = "接收方账号")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String receiverAccount;
-
-    @DbColumn(comment = "账号类型")
-    private String accountType;
 
     /** 接收方姓名 */
     @DbColumn(comment = "接收方姓名")

@@ -14,11 +14,14 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class AllocationReceiverGroup extends MpCreateEntity {
+public class AllocationGroupReceiver extends MpCreateEntity {
 
-    @DbColumn("分账ID")
+    @DbColumn(comment = "分账ID")
     private Long groupId;
 
-    @DbColumn("接收者ID")
+    @DbColumn(comment = "接收者ID")
     private Long receiverId;
+
+    @DbColumn(comment = "分账比例(万分之多少)")
+    private Integer rate;
 }

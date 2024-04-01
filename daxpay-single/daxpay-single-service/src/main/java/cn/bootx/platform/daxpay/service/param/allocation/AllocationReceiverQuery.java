@@ -1,25 +1,22 @@
 package cn.bootx.platform.daxpay.service.param.allocation;
 
+import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.daxpay.code.AllocationRelationTypeEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 分账接收方参数
+ * 分账接收方查询条件
  * @author xxm
- * @since 2024/3/28
+ * @since 2024/4/1
  */
-@Data
-@Accessors(chain = true)
-@Schema(title = "分账接收方参数")
-public class AllocationReceiverParam {
+@Getter
+@Setter
+public class AllocationReceiverQuery {
 
-
-    @Schema(description = "主键")
-    private Long id;
-
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     @Schema(description = "账号别名")
     private String name;
 
@@ -35,11 +32,12 @@ public class AllocationReceiverParam {
     @Schema(description = "分账接收方类型")
     private String receiverType;
 
-
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     @Schema(description = "接收方账号")
     private String receiverAccount;
 
     /** 接收方姓名 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     @Schema(description = "接收方姓名")
     private String receiverName;
 
@@ -50,10 +48,6 @@ public class AllocationReceiverParam {
     @Schema(description = "分账关系类型")
     private String relationType;
 
-    @Schema(description = "关系名称")
-    private String relationName;
-
     @Schema(description = "是否已经同步到网关")
     private boolean sync;
-
 }
