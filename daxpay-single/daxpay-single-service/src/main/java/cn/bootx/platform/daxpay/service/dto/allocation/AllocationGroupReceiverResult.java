@@ -1,39 +1,32 @@
 package cn.bootx.platform.daxpay.service.dto.allocation;
 
-import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
 import cn.bootx.platform.daxpay.code.AllocationRelationTypeEnum;
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 分账接收方参数
+ * 分账组接收方信息
  * @author xxm
- * @since 2024/3/28
+ * @since 2024/4/1
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "分账接收方参数")
-public class AllocationReceiverDto extends BaseDto {
+@Schema(title = "分账组接收方信息")
+public class AllocationGroupReceiverResult {
 
     @Schema(description = "主键")
     private Long id;
 
-    @Schema(description = "账号别名")
-    private String name;
+    @Schema(description = "接收者ID")
+    private Long receiverId;
+
+    @Schema(description = "分账比例(万分之多少)")
+    private Integer rate;
 
     /**
-     * @see PayChannelEnum
-     */
-    @Schema(description = "所属通道")
-    private String channel;
-
-    /**
-     * 分账接收方类型 个人/商户
+     * 分账接收方类型
      * @see AllocationReceiverTypeEnum
      */
     @Schema(description = "分账接收方类型")
@@ -56,10 +49,4 @@ public class AllocationReceiverDto extends BaseDto {
 
     @Schema(description = "关系名称")
     private String relationName;
-
-    @Schema(description = "是否已经同步到网关")
-    private boolean sync;
-
-    @Schema(description = "备注")
-    private String remark;
 }

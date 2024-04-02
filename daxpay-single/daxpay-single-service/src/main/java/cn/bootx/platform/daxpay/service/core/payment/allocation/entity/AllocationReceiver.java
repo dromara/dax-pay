@@ -8,8 +8,10 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.convert.AllocationReceiverConvert;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationReceiverDto;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,6 +24,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@DbTable(comment = "分账接收方")
+@TableName("pay_allocation_receiver")
 public class AllocationReceiver extends MpBaseEntity implements EntityBaseFunction<AllocationReceiverDto> {
 
     @DbColumn(comment = "账号别名")
@@ -66,6 +70,9 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
 
     @DbColumn(comment = "是否已经同步到网关")
     private boolean sync;
+
+    @DbColumn(comment = "备注")
+    private String remark;
 
     /**
      * 转换

@@ -6,6 +6,7 @@ import cn.bootx.platform.daxpay.service.core.payment.allocation.convert.Allocati
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbComment;
+import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,6 +22,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@DbTable(comment = "分账组")
 @TableName("pay_allocation_receiver_group")
 public class AllocationGroup extends MpBaseEntity implements EntityBaseFunction<AllocationGroupDto> {
 

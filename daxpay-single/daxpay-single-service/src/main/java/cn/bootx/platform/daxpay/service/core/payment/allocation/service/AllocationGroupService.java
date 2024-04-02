@@ -1,6 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.function.CollectorsFunction;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.convert.AllocationGroupConvert;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.dao.AllocationGroupManager;
@@ -9,6 +13,8 @@ import cn.bootx.platform.daxpay.service.core.payment.allocation.dao.AllocationRe
 import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationGroup;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationGroupReceiver;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationReceiver;
+import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupDto;
+import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupReceiverResult;
 import cn.bootx.platform.daxpay.service.param.allocation.AllocationGroupBindParam;
 import cn.bootx.platform.daxpay.service.param.allocation.AllocationGroupParam;
 import cn.bootx.platform.daxpay.service.param.allocation.AllocationGroupReceiverParam;
@@ -21,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -37,12 +45,56 @@ public class AllocationGroupService {
     private final AllocationReceiverManager receiverManager;
 
     /**
+     * 分页
+     */
+    public PageResult<AllocationGroupDto> page(PageParam pageParam, AllocationGroupParam query){
+        return MpUtil.convert2DtoPageResult(groupManager.page(pageParam,query));
+    }
+
+    /**
+     * 查询详情
+     */
+    public AllocationGroupDto findById(Long id){
+        return groupManager.findById(id).map(AllocationGroup::toDto).orElseThrow(()->new DataNotExistException("分账组不存在"));
+    }
+
+    /**
+     * 查询分账接收方
+     */
+    public List<AllocationGroupReceiverResult> findReceiversByGroups(Long groupId){
+        List<AllocationGroupReceiver> groupReceivers = groupReceiverManager.findByGroupId(groupId);
+        List<Long> receiverIds = groupReceivers.stream()
+                .map(AllocationGroupReceiver::getReceiverId)
+                .collect(Collectors.toList());
+        // 查询关联接收方信息
+        Map<Long, AllocationReceiver> receiverMap = receiverManager.findAllByIds(receiverIds)
+                .stream()
+                .collect(Collectors.toMap(AllocationReceiver::getId, Function.identity(), CollectorsFunction::retainLatest));
+        // 组装信息
+        return groupReceivers.stream()
+                .map(o -> {
+                    AllocationReceiver allocationReceiver = receiverMap.get(o.getReceiverId());
+                    return new AllocationGroupReceiverResult()
+                            .setId(o.getId())
+                            .setReceiverId(allocationReceiver.getId())
+                            .setReceiverAccount(allocationReceiver.getReceiverAccount())
+                            .setReceiverName(allocationReceiver.getReceiverName())
+                            .setRate(o.getRate())
+                            .setReceiverType(allocationReceiver.getReceiverType())
+                            .setRelationName(allocationReceiver.getRelationName())
+                            .setRelationType(allocationReceiver.getRelationType());
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 创建分账组
      */
     public void create(AllocationGroupParam param){
         PayChannelEnum.findByCode(param.getChannel());
-        AllocationGroup allocation = AllocationGroupConvert.CONVERT.convert(param);
-        groupManager.save(allocation);
+        AllocationGroup group = AllocationGroupConvert.CONVERT.convert(param);
+        group.setTotalRate(0);
+        groupManager.save(group);
     }
 
     /**
@@ -52,22 +104,24 @@ public class AllocationGroupService {
         AllocationGroup group = groupManager.findById(param.getId())
                 .orElseThrow(() -> new DataNotExistException("未找到分账组"));
         BeanUtil.copyProperties(param,group, CopyOptions.create().ignoreNullValue());
-        group.setTotalRate(0);
+        group.setTotalRate(null);
         groupManager.updateById(group);
     }
 
     /**
      * 删除分账组
      */
-    public void delete(){
-
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long id){
+        groupManager.deleteById(id);
+        groupReceiverManager.deleteByGroupId(id);
     }
 
     /**
      * 绑定分账接收方
      */
     @Transactional(rollbackFor = Exception.class)
-    public void bind(AllocationGroupBindParam param) {
+    public void bindReceivers(AllocationGroupBindParam param) {
         // 分账组
         AllocationGroup group = groupManager.findById(param.getGroupId())
                 .orElseThrow(() -> new DataNotExistException("未找到分账组"));
@@ -108,7 +162,7 @@ public class AllocationGroupService {
      * 批量删除分账接收方
      */
     @Transactional(rollbackFor = Exception.class)
-    public void removeReceivers(AllocationGroupUnbindParam param){
+    public void unbindReceivers(AllocationGroupUnbindParam param){
         // 分账组
         AllocationGroup group = groupManager.findById(param.getGroupId())
                 .orElseThrow(() -> new DataNotExistException("未找到分账组"));
@@ -130,7 +184,7 @@ public class AllocationGroupService {
      * 删除单个分账接收方
      */
     @Transactional
-    public void removeReceiver(Long receiverId){
+    public void unbindReceiver(Long receiverId){
         AllocationGroupReceiver groupReceiver = groupReceiverManager.findById(receiverId)
                 .orElseThrow(() -> new DataNotExistException("未找到分账接收方"));
         AllocationGroup group = groupManager.findById(groupReceiver.getGroupId())
@@ -145,6 +199,7 @@ public class AllocationGroupService {
     /**
      * 修改分账比例
      */
+    @Transactional(rollbackFor = Exception.class)
     public void updateRate(Long receiverId, Integer rate){
         AllocationGroupReceiver groupReceiver = groupReceiverManager.findById(receiverId)
                 .orElseThrow(() -> new DataNotExistException("未找到分账接收方"));

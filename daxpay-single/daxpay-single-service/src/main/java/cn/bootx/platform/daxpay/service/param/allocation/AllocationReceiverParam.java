@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.param.allocation;
 
+import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
 import cn.bootx.platform.daxpay.code.AllocationRelationTypeEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,6 +32,7 @@ public class AllocationReceiverParam {
 
     /**
      * 分账接收方类型 个人/商户
+     * @see AllocationReceiverTypeEnum
      */
     @Schema(description = "分账接收方类型")
     private String receiverType;
@@ -55,5 +57,8 @@ public class AllocationReceiverParam {
 
     @Schema(description = "是否已经同步到网关")
     private boolean sync;
+
+    @Schema(description = "备注")
+    private String remark;
 
 }

@@ -32,7 +32,7 @@ public class AliPayAllocationReceiverService {
      * 校验
      */
     public boolean validation(AllocationReceiver allocationReceiver){
-        List<String> list = Arrays.asList(ALI_USER_ID.getCode(), ALI_OPEN_ID.getCode(), ALI_LOGIN_NAME.getCode());
+        List<String> list = Arrays.asList(ALI_USER_ID.getOutCode(), ALI_OPEN_ID.getOutCode(), ALI_LOGIN_NAME.getOutCode());
         String receiverType = allocationReceiver.getReceiverType();
         return list.contains(receiverType);
     }

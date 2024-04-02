@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 分账组关联接收方
  * @author xxm
@@ -21,5 +23,19 @@ public class AllocationGroupReceiverManager extends BaseManager<AllocationGroupR
      */
     public boolean isUsed(Long receiverId){
         return existedByField(AllocationGroupReceiver::getReceiverId, receiverId);
+    }
+
+    /**
+     * 根据分组ID进行查询
+     */
+    public List<AllocationGroupReceiver> findByGroupId(Long groupId){
+        return findAllByField(AllocationGroupReceiver::getGroupId, groupId);
+    }
+
+    /**
+     * 根据分组ID进行批量删除
+     */
+    public void deleteByGroupId(Long groupId){
+        deleteByField(AllocationGroupReceiver::getGroupId, groupId);
     }
 }

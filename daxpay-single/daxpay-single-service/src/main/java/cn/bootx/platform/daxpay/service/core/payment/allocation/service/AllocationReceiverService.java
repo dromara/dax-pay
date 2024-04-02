@@ -1,9 +1,12 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.service;
 
+import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.convert.AllocationReceiverConvert;
@@ -18,6 +21,10 @@ import cn.bootx.platform.daxpay.service.param.allocation.AllocationReceiverQuery
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 分账接收方服务类
@@ -48,6 +55,34 @@ public class AllocationReceiverService {
     }
 
     /**
+     * 获取可以分账的通道
+     */
+    public List<LabelValue> findChannels(){
+        return Arrays.asList(
+                new LabelValue(PayChannelEnum.ALI.getName(),PayChannelEnum.ALI.getCode()),
+                new LabelValue(PayChannelEnum.WECHAT.getName(),PayChannelEnum.WECHAT.getCode())
+        );
+    }
+
+    /**
+     * 根据通道获取分账接收方类型
+     */
+    public List<LabelValue> findReceiverTypeByChannel(String channel){
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(channel);
+        List<AllocationReceiverTypeEnum> list;
+        if (channelEnum == PayChannelEnum.ALI){
+            list = AllocationReceiverTypeEnum.ALI_LIST;
+        } else if (channelEnum == PayChannelEnum.WECHAT){
+            list = AllocationReceiverTypeEnum.WECHAT_LIST;
+        } else {
+            throw new BizException("非法的分账通道类型");
+        }
+        return list.stream()
+                .map(item -> new LabelValue(item.getName(),item.getCode()))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 添加分账接收方
      */
     public void add(AllocationReceiverParam param){
@@ -69,16 +104,26 @@ public class AllocationReceiverService {
      * 修改信息
      */
     public void update(AllocationReceiverParam param){
-        // 未同步状态可以修改
-
-
+        AllocationReceiver receiver = manager.findById(param.getId()).orElseThrow(() -> new PayFailureException("未找到分账接收方"));
+        receiver.setName(param.getName())
+                .setRemark(param.getRemark());
+        manager.updateById(receiver);
     }
 
     /**
      * 删除分账接收方
      */
     public void remove(Long id){
-
+        // 未同步可以删除
+        AllocationReceiver receiver = manager.findById(id).orElseThrow(() -> new PayFailureException("未找到分账接收方"));
+        if (receiver.isSync()){
+            throw new BizException("该接收方已同步到三方支付系统中,无法删除");
+        }
+        // 判断是否绑定了分账组
+        if (groupReceiverManager.isUsed(id)){
+            throw new PayFailureException("该接收方已被分账组使用,无法删除");
+        }
+        manager.deleteById(id);
     }
 
     /**
@@ -120,4 +165,5 @@ public class AllocationReceiverService {
         receiver.setSync(false);
         manager.updateById(receiver);
     }
+
 }

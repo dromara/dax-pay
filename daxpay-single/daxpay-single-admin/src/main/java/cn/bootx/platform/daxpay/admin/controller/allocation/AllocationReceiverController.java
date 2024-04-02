@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.admin.controller.allocation;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationReceiverDto;
@@ -11,10 +12,9 @@ import cn.bootx.platform.daxpay.service.param.allocation.AllocationReceiverQuery
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 对账接收方控制器
@@ -41,17 +41,35 @@ public class AllocationReceiverController {
         return Res.ok(receiverService.findById(id));
     }
 
+    @Operation(summary = "获取可以分账的通道")
+    @GetMapping("/findChannels")
+    public ResResult<List<LabelValue>> findChannels(){
+        return Res.ok(receiverService.findChannels());
+    }
+    @Operation(summary = "根据通道获取分账接收方类型")
+    @GetMapping("/findReceiverTypeByChannel")
+    public ResResult<List<LabelValue>> findReceiverTypeByChannel(String channel){
+        return Res.ok(receiverService.findReceiverTypeByChannel(channel));
+    }
+
     @Operation(summary = "新增")
-    @PostMapping("")
-    public ResResult<Void> add(AllocationReceiverParam param){
+    @PostMapping("add")
+    public ResResult<Void> add(@RequestBody AllocationReceiverParam param){
         receiverService.add(param);
         return Res.ok();
     }
 
     @Operation(summary = "修改")
     @PostMapping("update")
-    public ResResult<Void> update(AllocationReceiverParam param){
+    public ResResult<Void> update(@RequestBody AllocationReceiverParam param){
         receiverService.update(param);
+        return Res.ok();
+    }
+
+    @Operation(summary = "删除")
+    @PostMapping("delete")
+    public ResResult<Void> delete(Long id){
+        receiverService.remove(id);
         return Res.ok();
     }
 

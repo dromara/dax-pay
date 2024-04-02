@@ -1,6 +1,10 @@
-# Dromara Dax-Pay(开源支付系统)
 
-<p>
+<p align="center">
+	<img src="_doc/images/dax-pay.svg" width="45%">
+</p>
+
+<p align="center">
+ <img src="https://img.shields.io/github/stars/dromara/dax-pay?style=flat&label=Github">
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
  <img src="https://img.shields.io/badge/Dax%20Pay-2.0.4-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Boot%20Platform-1.3.6-success.svg" alt="Build Status"/>
@@ -9,6 +13,7 @@
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
 </p>
 
+# Dromara Dax-Pay(开源支付系统)
 ## ❗使用须知
 
 `DaxPay`是一款基于`Apache License 2.0`协议分发的开源软件，受中华人民共和国相关法律法规的保护和限制，可以在符合[《用户授权使用协议》](用户授权使用协议.txt)和 
@@ -24,6 +29,7 @@
 - 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
 - 已对接`微信支付`、`支付宝`和云闪付相关的接口，后续版本将支持`V3`版本的接口
 - 支持组合支付，满足用户系统需要多种方式同时进行支付的场景。
+- 支持支付、退款、对账、分账等支付相关的能力
 - 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
 - 接口请求和响应数据支持启用签名机制，可根据实际需要进行开关，保证交易安全可靠
 - 提供管理平台，方便运营人员进行管理和操作，不需要懂IT技术也可以轻松使用
@@ -204,12 +210,9 @@ Apache License Version 2.0
         display: flex;
         flex-wrap: wrap;
     }
-
-
     .member-project a {
         padding: 10px;
     }
-    
     .member-project a img {
         height: 40px;
     }

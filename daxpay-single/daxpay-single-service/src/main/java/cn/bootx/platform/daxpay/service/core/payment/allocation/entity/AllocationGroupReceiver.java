@@ -2,6 +2,8 @@ package cn.bootx.platform.daxpay.service.core.payment.allocation.entity;
 
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -14,9 +16,11 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@DbTable(comment = "分账接收组关系")
+@TableName("pay_allocation_group_receiver")
 public class AllocationGroupReceiver extends MpCreateEntity {
 
-    @DbColumn(comment = "分账ID")
+    @DbColumn(comment = "分账组ID")
     private Long groupId;
 
     @DbColumn(comment = "接收者ID")
