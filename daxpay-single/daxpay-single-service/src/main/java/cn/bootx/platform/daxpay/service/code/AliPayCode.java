@@ -98,4 +98,8 @@ public interface AliPayCode {
     // 网关返回码 支付进行中 order success pay inprocess
     String INPROCESS = "10003";
 
+    /* 分账相关 */
+    /** 分账接收方不存在 */
+    String USER_NOT_EXIST = "USER_NOT_EXIST";
+
 }

@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -136,7 +137,7 @@ public class AllocationGroupService {
         }
         // 接收方需要已经同步到三方值系统中
         receivers.stream()
-                .filter(receiver -> !receiver.isSync())
+                .filter(receiver -> Objects.equals(receiver.getSync(), Boolean.FALSE))
                 .findAny()
                 .ifPresent(receiver -> {
                     throw new DataNotExistException("接收方未同步到三方值系统中");

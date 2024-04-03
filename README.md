@@ -157,13 +157,13 @@ public class SimplePayOrderTest {
 
 ## 🍎 系统截图
 ### 收银台演示
-![微信截图_20240326141126](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326141126.es9yupxd3.webp)
+![微信截图_20240326141126](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326141126.es9yupxd3.webp)
 ### 驾驶舱
-![QQ截图20240326141912](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
+![QQ截图20240326141912](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
 ### H5收银台演示
-![h5](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
+![h5](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
 ### 支付通道配置
-![微信截图_20240326142208](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
+![微信截图_20240326142208](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
 ## 🛣️ 路线图
 > 当前处于功能开发阶段，部分功能可能会有调整，`V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容
 

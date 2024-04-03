@@ -43,17 +43,15 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
      * @see AllocationReceiverTypeEnum
      */
     @DbColumn(comment = "分账接收方类型")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String receiverType;
 
 
     @DbColumn(comment = "接收方账号")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String receiverAccount;
 
     /** 接收方姓名 */
     @DbColumn(comment = "接收方姓名")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String receiverName;
 
     /**
@@ -61,15 +59,13 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
      * @see AllocationRelationTypeEnum
      */
     @DbColumn(comment = "分账关系类型")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String relationType;
 
     @DbColumn(comment = "关系名称")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String relationName;
 
     @DbColumn(comment = "是否已经同步到网关")
-    private boolean sync;
+    private Boolean sync;
 
     @DbColumn(comment = "备注")
     private String remark;

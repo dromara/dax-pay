@@ -18,12 +18,14 @@ import cn.bootx.platform.daxpay.service.dto.allocation.AllocationReceiverDto;
 import cn.bootx.platform.daxpay.service.func.AbsAllocationReceiverStrategy;
 import cn.bootx.platform.daxpay.service.param.allocation.AllocationReceiverParam;
 import cn.bootx.platform.daxpay.service.param.allocation.AllocationReceiverQuery;
+import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -94,7 +96,9 @@ public class AllocationReceiverService {
         AbsAllocationReceiverStrategy receiverStrategy = AllocationReceiverFactory.create(channelEnum);
         // 校验
         receiverStrategy.setAllocationReceiver(receiver);
-        receiverStrategy.validation();
+        if (!receiverStrategy.validation()){
+            throw new BizException("接收方信息校验失败");
+        }
 
         receiver.setSync(false);
         manager.save(receiver);
@@ -105,8 +109,11 @@ public class AllocationReceiverService {
      */
     public void update(AllocationReceiverParam param){
         AllocationReceiver receiver = manager.findById(param.getId()).orElseThrow(() -> new PayFailureException("未找到分账接收方"));
-        receiver.setName(param.getName())
-                .setRemark(param.getRemark());
+        if (Objects.equals(receiver.getSync(),true)){
+            throw new BizException("该接收方已同步到三方支付系统中,无法修改");
+        }
+        receiver.setSync(null);
+        BeanUtil.copyProperties(param,receiver);
         manager.updateById(receiver);
     }
 
@@ -116,7 +123,7 @@ public class AllocationReceiverService {
     public void remove(Long id){
         // 未同步可以删除
         AllocationReceiver receiver = manager.findById(id).orElseThrow(() -> new PayFailureException("未找到分账接收方"));
-        if (receiver.isSync()){
+        if (Objects.equals(receiver.getSync(),true)){
             throw new BizException("该接收方已同步到三方支付系统中,无法删除");
         }
         // 判断是否绑定了分账组

@@ -34,6 +34,16 @@ public enum AllocationReceiverTypeEnum {
     /** 名称 */
     private final String name;
 
+    /**
+     * 根据编码查找
+     */
+    public static AllocationReceiverTypeEnum findByCode(String code) {
+        return Arrays.stream(AllocationReceiverTypeEnum.values())
+                .filter(e -> e.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("未找到对应的分账接收方类型"));
+    }
+
     /** 微信支持类型 */
     public static final List<AllocationReceiverTypeEnum> WECHAT_LIST = Collections.unmodifiableList(Arrays.asList(WX_PERSONAL, WX_MERCHANT));
     /** 支付宝支持类型 */

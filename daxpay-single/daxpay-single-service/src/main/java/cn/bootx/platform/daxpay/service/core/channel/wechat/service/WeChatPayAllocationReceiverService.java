@@ -1,13 +1,16 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
+import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationReceiver;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
 import com.ijpay.wxpay.WxPayApi;
+import com.ijpay.wxpay.model.ProfitSharingModel;
 import com.ijpay.wxpay.model.ReceiverModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +36,7 @@ public class WeChatPayAllocationReceiverService {
      * 校验参数是否合法
      */
     public boolean validation(AllocationReceiver allocationReceiver){
-        List<String> list = Arrays.asList(WX_MERCHANT.getOutCode(), WX_MERCHANT.getOutCode());
+        List<String> list = Arrays.asList(WX_MERCHANT.getCode(), WX_MERCHANT.getCode());
         String receiverType = allocationReceiver.getReceiverType();
         return !list.contains(receiverType);
     }
@@ -42,18 +45,25 @@ public class WeChatPayAllocationReceiverService {
      * 绑定
      */
     public void bind(AllocationReceiver allocationReceiver, WeChatPayConfig weChatPayConfig){
-
-        Map<String, String> param = ReceiverModel.builder()
-                .type(allocationReceiver.getReceiverType())
+        AllocationReceiverTypeEnum receiverTypeEnum = AllocationReceiverTypeEnum.findByCode(allocationReceiver.getReceiverType());
+        // 接收者参数
+        ReceiverModel receiver = ReceiverModel.builder()
+                .type(receiverTypeEnum.getOutCode())
                 .account(allocationReceiver.getReceiverAccount())
                 .name(allocationReceiver.getReceiverName())
                 .relation_type(allocationReceiver.getRelationType())
-                .custom_relation(allocationReceiver.getRelationType())
                 .custom_relation(allocationReceiver.getRelationName())
+                .build();
+        // 请求参数
+        Map<String, String> params = ProfitSharingModel.builder()
+                .mch_id(weChatPayConfig.getWxMchId())
+                .appid(weChatPayConfig.getWxAppId())
+                .nonce_str(WxPayKit.generateStr())
+                .receiver(JSONUtil.toJsonStr(receiver))
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
-        String xmlResult = WxPayApi.profitSharingAddReceiver(param);
+        String xmlResult = WxPayApi.profitSharingAddReceiver(params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
     }
@@ -62,13 +72,26 @@ public class WeChatPayAllocationReceiverService {
      * 解除绑定
      */
     public void unbind(AllocationReceiver allocationReceiver, WeChatPayConfig weChatPayConfig){
-        Map<String, String> param = ReceiverModel.builder()
-                .type(allocationReceiver.getReceiverType())
+        AllocationReceiverTypeEnum receiverTypeEnum = AllocationReceiverTypeEnum.findByCode(allocationReceiver.getReceiverType());
+        // 原始参数
+        ReceiverModel receiver = ReceiverModel.builder()
+                .type(receiverTypeEnum.getOutCode())
                 .account(allocationReceiver.getReceiverAccount())
+                .name(allocationReceiver.getReceiverName())
+                .relation_type(allocationReceiver.getRelationType())
+                .custom_relation(allocationReceiver.getRelationName())
+                .build();
+
+        // 原始参数
+        Map<String, String> params = ProfitSharingModel.builder()
+                .mch_id(weChatPayConfig.getWxMchId())
+                .appid(weChatPayConfig.getWxAppId())
+                .nonce_str(WxPayKit.generateStr())
+                .receiver(JSONUtil.toJsonStr(receiver))
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
-        String xmlResult = WxPayApi.profitSharingRemoveReceiver(param);
+        String xmlResult = WxPayApi.profitSharingRemoveReceiver(params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
     }
@@ -84,7 +107,7 @@ public class WeChatPayAllocationReceiverService {
             if (StrUtil.isBlank(errorMsg)) {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
-            log.error("支付失败 {}", errorMsg);
+            log.error("分账绑定或解绑失败 {}", errorMsg);
             throw new PayFailureException(errorMsg);
         }
     }

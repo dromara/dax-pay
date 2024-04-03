@@ -58,6 +58,7 @@ public class AliPayAllocationReceiverStrategy extends AbsAllocationReceiverStrat
         if (Objects.equals(aliPayConfig.getAllocation(),false)){
             throw new PayFailureException("微信支付配置不支持分账");
         }
+        payConfigService.initConfig(this.aliPayConfig);
     }
 
     /**
