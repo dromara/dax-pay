@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @DbTable(comment = "分账组")
-@TableName("pay_allocation_receiver_group")
+@TableName("pay_allocation_group")
 public class AllocationGroup extends MpBaseEntity implements EntityBaseFunction<AllocationGroupDto> {
 
     @DbComment("名称")

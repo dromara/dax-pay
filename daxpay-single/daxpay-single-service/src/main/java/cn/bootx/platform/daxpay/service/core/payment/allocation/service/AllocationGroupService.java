@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.service;
 
+import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.rest.PageResult;
@@ -77,6 +78,7 @@ public class AllocationGroupService {
                     AllocationReceiver allocationReceiver = receiverMap.get(o.getReceiverId());
                     return new AllocationGroupReceiverResult()
                             .setId(o.getId())
+                            .setName(allocationReceiver.getName())
                             .setReceiverId(allocationReceiver.getId())
                             .setReceiverAccount(allocationReceiver.getReceiverAccount())
                             .setReceiverName(allocationReceiver.getReceiverName())
@@ -135,13 +137,25 @@ public class AllocationGroupService {
         if (receivers.size() != receiverIds.size()){
             throw new DataNotExistException("传入的分账接收房数量与查询到的不一致");
         }
-        // 接收方需要已经同步到三方值系统中
+        // 接收方需要已经同步到三方系统中
         receivers.stream()
                 .filter(receiver -> Objects.equals(receiver.getSync(), Boolean.FALSE))
                 .findAny()
                 .ifPresent(receiver -> {
-                    throw new DataNotExistException("接收方未同步到三方值系统中");
+                    throw new BizException("接收方未同步到三方值系统中");
                 });
+        // 接收方只能为一个支付通道
+        long count = receivers.stream()
+                .map(AllocationReceiver::getChannel)
+                .distinct()
+                .count();
+        if (count > 1){
+            throw new BizException("接收方只能为一个支付通道");
+        }
+        // 检查接收方和传入的通道是否是不一致
+        if (!Objects.equals(group.getChannel(), receivers.get(0).getChannel())){
+            throw new BizException("接收方和传入的通道不一致");
+        }
 
         // 保存分账接收者
         List<AllocationGroupReceiver> groupReceivers = receivers.stream()
@@ -193,8 +207,8 @@ public class AllocationGroupService {
         // 更新分账比例
         group.setTotalRate(group.getTotalRate() - groupReceiver.getRate());
         // 更新接收比例
-        groupReceiverManager.updateById(groupReceiver);
-        groupManager.deleteById(group);
+        groupReceiverManager.deleteById(receiverId);
+        groupManager.updateById(group);
     }
 
     /**

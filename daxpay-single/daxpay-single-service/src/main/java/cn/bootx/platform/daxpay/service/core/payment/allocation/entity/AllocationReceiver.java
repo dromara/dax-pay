@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.entity;
 
+import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
@@ -47,6 +48,7 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
 
 
     @DbColumn(comment = "接收方账号")
+    @EncryptionField
     private String receiverAccount;
 
     /** 接收方姓名 */

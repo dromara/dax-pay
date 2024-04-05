@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -23,6 +24,7 @@ public class AllocationGroupReceiverParam {
 
     @Schema(description = "分账比例(万分之多少)")
     @NotNull(message = "分账比例不可为空")
-    @Min(value = 1,message = "分账比例最低为1")
+    @Min(value = 0,message = "分账比例不可为负数")
+    @Max(value = 10000,message = "分账比例不可超过100%")
     private Integer rate;
 }

@@ -19,8 +19,11 @@ public class AllocationGroupReceiverResult {
     @Schema(description = "主键")
     private Long id;
 
-    @Schema(description = "接收者ID")
+    @Schema(description = "接收方ID")
     private Long receiverId;
+
+    @Schema(description = "接收方账号别名")
+    private String name;
 
     @Schema(description = "分账比例(万分之多少)")
     private Integer rate;
