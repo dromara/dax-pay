@@ -16,8 +16,8 @@ import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.Allocatio
 import cn.bootx.platform.daxpay.service.core.payment.allocation.factory.AllocationReceiverFactory;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationReceiverDto;
 import cn.bootx.platform.daxpay.service.func.AbsAllocationReceiverStrategy;
-import cn.bootx.platform.daxpay.service.param.allocation.AllocationReceiverParam;
-import cn.bootx.platform.daxpay.service.param.allocation.AllocationReceiverQuery;
+import cn.bootx.platform.daxpay.service.param.allocation.group.AllocationReceiverParam;
+import cn.bootx.platform.daxpay.service.param.allocation.group.AllocationReceiverQuery;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -157,7 +157,7 @@ public class AllocationReceiverService {
      */
     public void removeByGateway(Long id){
         if (groupReceiverManager.isUsed(id)){
-            throw new PayFailureException("该接收方已被使用,无法删除");
+            throw new PayFailureException("该接收方已被使用，无法从第三方支付平台中删除");
         }
 
         AllocationReceiver receiver = manager.findById(id).orElseThrow(() -> new PayFailureException("未找到分账接收方"));

@@ -40,6 +40,9 @@ public class SimplePayParam extends PaymentCommonParam {
     @Schema(description = "支付描述")
     private String description;
 
+    @Schema(description = "是否开启分账")
+    private boolean allocation;
+
     @Schema(description = "过期时间")
     @JsonDeserialize(using = TimestampToLocalDateTimeDeserializer.class)
     private LocalDateTime expiredTime;

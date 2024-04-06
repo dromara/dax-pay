@@ -41,6 +41,9 @@ public class SimplePayParam extends DaxPayRequest<PayOrderModel> {
     /** 过期时间 */
     private Long expiredTime;
 
+    /** 是否开启分账 */
+    private boolean allocation;
+
     /** 用户付款中途退出返回商户网站的地址(部分支付场景中可用) */
     private String quitUrl;
 

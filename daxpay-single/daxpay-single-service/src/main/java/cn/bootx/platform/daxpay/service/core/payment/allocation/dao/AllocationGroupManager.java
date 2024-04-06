@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationGroup;
-import cn.bootx.platform.daxpay.service.param.allocation.AllocationGroupParam;
+import cn.bootx.platform.daxpay.service.param.allocation.group.AllocationGroupParam;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;

@@ -42,7 +42,7 @@ public class PayUtil {
             return;
         }
         // 只有异步支付方式支持分账
-        if (!isNotSync(payParam.getPayChannels())) {
+        if (isNotSync(payParam.getPayChannels())) {
             throw new PayFailureException("分账只支持包含异步支付通道的订单");
         }
     }

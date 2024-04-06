@@ -16,10 +16,10 @@ import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.Allocatio
 import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationReceiver;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupDto;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupReceiverResult;
-import cn.bootx.platform.daxpay.service.param.allocation.AllocationGroupBindParam;
-import cn.bootx.platform.daxpay.service.param.allocation.AllocationGroupParam;
-import cn.bootx.platform.daxpay.service.param.allocation.AllocationGroupReceiverParam;
-import cn.bootx.platform.daxpay.service.param.allocation.AllocationGroupUnbindParam;
+import cn.bootx.platform.daxpay.service.param.allocation.group.AllocationGroupBindParam;
+import cn.bootx.platform.daxpay.service.param.allocation.group.AllocationGroupParam;
+import cn.bootx.platform.daxpay.service.param.allocation.group.AllocationGroupReceiverParam;
+import cn.bootx.platform.daxpay.service.param.allocation.group.AllocationGroupUnbindParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.RequiredArgsConstructor;
