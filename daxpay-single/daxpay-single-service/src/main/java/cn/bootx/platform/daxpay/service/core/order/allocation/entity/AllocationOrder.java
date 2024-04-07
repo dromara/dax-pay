@@ -2,13 +2,18 @@ package cn.bootx.platform.daxpay.service.core.order.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.allocation.convert.AllocationConvert;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.bootx.table.modify.mysql.constants.MySqlIndexType;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -23,6 +28,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@DbTable(comment = "分账订单")
+@TableName("pay_allocation_order")
 public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<AllocationOrderDto> {
 
     /**
@@ -30,6 +37,12 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
      */
     @DbColumn(comment = "支付订单ID")
     private Long paymentId;
+
+    /**
+     * 支付订单标题
+     */
+    @Schema(description = "支付订单标题")
+    private String title;
 
     /**
      * 网关支付订单号
@@ -59,6 +72,7 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
 
     /**
      * 所属通道
+     * @see PayChannelEnum
      */
     @DbColumn(comment = "所属通道")
     private String channel;
@@ -77,6 +91,7 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
 
     /**
      * 状态
+     * @see AllocationStatusEnum
      */
     @DbColumn(comment = "状态")
     private String status;

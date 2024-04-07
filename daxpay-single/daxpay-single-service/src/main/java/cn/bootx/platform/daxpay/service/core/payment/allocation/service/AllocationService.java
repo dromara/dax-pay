@@ -20,6 +20,7 @@ import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.Allocatio
 import cn.bootx.platform.daxpay.service.core.payment.allocation.factory.AllocationFactory;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupReceiverResult;
 import cn.bootx.platform.daxpay.service.func.AbsAllocationStrategy;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,25 +50,12 @@ public class AllocationService {
 
     private final AllocationOrderService allocationOrderService;
 
-
     /**
      * 开启分账, 使用分账组进行分账
      */
     public AllocationResult allocation(AllocationStartParam param) {
-        // 查询支付单
-        PayOrder payOrder = null;
-        if (Objects.nonNull(param.getPaymentId())){
-            payOrder = payOrderManager.findById(param.getPaymentId())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
-        if (Objects.isNull(payOrder)){
-            payOrder = payOrderManager.findByBusinessNo(param.getBusinessNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
-        // 判断订单是否可以分账
-        if (!payOrder.isAllocation()){
-            throw new PayFailureException("该订单不允许分账");
-        }
+
+        PayOrder payOrder = this.getAndCheckPayOrder(param);
 
         // 查询待分账的通道支付订单
         PayChannelOrder channelOrder = payChannelOrderManager.findByAsyncChannel(payOrder.getId())
@@ -144,4 +132,27 @@ public class AllocationService {
 
         allocationOrderManager.updateById(allocationOrder);
     }
+
+    /**
+     * 获取并检查支付订单
+     */
+    private PayOrder getAndCheckPayOrder(AllocationStartParam param) {
+        // 查询支付单
+        PayOrder payOrder = null;
+        if (Objects.nonNull(param.getPaymentId())){
+            payOrder = payOrderManager.findById(param.getPaymentId())
+                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
+        }
+        if (StrUtil.isNotBlank(param.getBusinessNo())){
+            payOrder = payOrderManager.findByBusinessNo(param.getBusinessNo())
+                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
+        }
+        // 判断订单是否可以分账
+        if (!payOrder.isAllocation()){
+            throw new PayFailureException("该订单不允许分账");
+        }
+        return payOrder;
+    }
+
+
 }

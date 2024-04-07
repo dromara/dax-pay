@@ -46,6 +46,7 @@ public class AllocationReceiverController {
     public ResResult<List<LabelValue>> findChannels(){
         return Res.ok(receiverService.findChannels());
     }
+
     @Operation(summary = "根据通道获取分账接收方类型")
     @GetMapping("/findReceiverTypeByChannel")
     public ResResult<List<LabelValue>> findReceiverTypeByChannel(String channel){

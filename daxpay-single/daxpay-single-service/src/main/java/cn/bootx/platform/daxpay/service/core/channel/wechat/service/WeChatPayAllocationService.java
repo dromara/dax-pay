@@ -39,14 +39,18 @@ public class WeChatPayAllocationService {
      */
     @SneakyThrows
     public void allocation(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails, WeChatPayConfig config){
-
+        String description = allocationOrder.getDescription();
+        if (StrUtil.isBlank(description)){
+            description = "分账";
+        }
+        String finalDescription = description;
         List<ReceiverModel> list = orderDetails.stream().map(o->{
             AllocationReceiverTypeEnum receiverTypeEnum = AllocationReceiverTypeEnum.findByCode(o.getReceiverType());
             return ReceiverModel.builder()
                     .type(receiverTypeEnum.getOutCode())
                     .account(o.getReceiverAccount())
                     .amount(o.getAmount())
-                    .description(allocationOrder.getDescription())
+                    .description(finalDescription)
                     .build();
         }).collect(Collectors.toList());
 

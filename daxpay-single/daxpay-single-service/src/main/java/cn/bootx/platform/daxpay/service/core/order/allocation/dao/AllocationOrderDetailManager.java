@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -15,4 +17,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class AllocationOrderDetailManager extends BaseManager<AllocationOrderDetailMapper, AllocationOrderDetail> {
+
+    /**
+     * 根据订单ID查询
+     */
+    public List<AllocationOrderDetail> findAllByOrderId(Long orderId) {
+        return findAllByField(AllocationOrderDetail::getOrderId, orderId);
+    }
 }
