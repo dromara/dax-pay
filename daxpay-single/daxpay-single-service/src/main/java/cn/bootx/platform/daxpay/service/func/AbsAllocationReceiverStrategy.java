@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 分账接收方管理抽象策略
+ * 分账抽象策略
  * @author xxm
  * @since 2024/4/1
  */
@@ -17,10 +17,13 @@ public abstract class AbsAllocationReceiverStrategy implements PayStrategy{
 
     private AllocationReceiver allocationReceiver;
 
+    /**
+     * 操作前校验
+     */
     public abstract boolean validation();
 
     /**
-     * 支付前处理, 校验和初始化支付配置
+     * 操作前处理, 校验和初始化支付配置
      */
     public abstract void doBeforeHandler();
 

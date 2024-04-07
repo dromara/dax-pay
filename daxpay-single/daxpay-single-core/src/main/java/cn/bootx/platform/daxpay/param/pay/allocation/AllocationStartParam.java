@@ -1,23 +1,19 @@
-package cn.bootx.platform.daxpay.param.pay;
+package cn.bootx.platform.daxpay.param.pay.allocation;
 
 import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
-import javax.validation.constraints.NotNull;
 
 /**
- * 分账请求参数
+ * 开始分账请求参数
  * @author xxm
  * @since 2024/4/6
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Accessors(chain = true)
-@Schema(title = "分账请求参数")
-public class AllocationParam extends PaymentCommonParam {
+@Schema(title = "开始分账请求参数")
+public class AllocationStartParam extends PaymentCommonParam {
 
     @Schema(description = "支付单ID")
     private Long paymentId;
@@ -25,8 +21,16 @@ public class AllocationParam extends PaymentCommonParam {
     @Schema(description = "业务号")
     private String businessNo;
 
+    @Schema(description = "分账单号(保证唯一)")
+    private String allocationNo;
+
+    @Schema(description = "分账描述")
+    private String description;
+
+    /**
+     * 不传输分账组使用默认分账组进行分账
+     */
     @Schema(description = "分账组ID")
-    @NotNull(message = "分账组ID不可为空")
     private Long allocationGroupId;
 
 }

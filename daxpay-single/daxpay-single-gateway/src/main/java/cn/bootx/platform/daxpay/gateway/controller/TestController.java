@@ -1,10 +1,8 @@
 package cn.bootx.platform.daxpay.gateway.controller;
 
-import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayAllocationService;
 import cn.hutool.core.thread.ThreadUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -28,7 +26,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TestController {
     private final LockTemplate lockTemplate;
-    private final AliPayAllocationService allocationService;
 
     @Operation(summary = "锁测试1")
     @GetMapping("/lock1")
@@ -51,15 +48,5 @@ public class TestController {
     public ResResult<String> lock2(String name){
         return Res.ok(name);
     }
-
-
-    @IgnoreAuth
-    @Operation(summary = "支付宝分账")
-    @GetMapping("/ali")
-    public ResResult<String> ali(){
-        allocationService.allocation(null,null);
-        return Res.ok();
-    }
-
 
 }

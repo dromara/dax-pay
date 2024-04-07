@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.dto.allocation;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,9 @@ public class AllocationGroupDto extends BaseDto {
 
     @Schema(description = "通道")
     private String channel;
+
+    @DbColumn(comment = "默认分账组")
+    private Boolean defaultGroup;
 
     @Schema(description = "总分账比例(万分之多少)")
     private Integer totalRate;

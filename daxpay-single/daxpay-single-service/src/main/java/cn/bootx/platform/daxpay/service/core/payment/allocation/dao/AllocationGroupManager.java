@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  *
  * @author xxm
@@ -26,5 +28,22 @@ public class AllocationGroupManager extends BaseManager<AllocationGroupMapper,Al
         Page<AllocationGroup> mpPage = MpUtil.getMpPage(pageParam, AllocationGroup.class);
         QueryWrapper<AllocationGroup> generator = QueryGenerator.generator(query);
         return page(mpPage,generator);
+    }
+
+    /**
+     * 清除默认分账组
+     */
+    public void clearDefault(String channel) {
+        lambdaUpdate()
+                .set(AllocationGroup::isDefaultGroup,false)
+                .eq(AllocationGroup::getChannel,channel)
+                .update();
+    }
+
+    /**
+     * 获取默认分账组
+     */
+    public Optional<AllocationGroup> findDefaultGroup(String asyncChannel) {
+       return findByField(AllocationGroup::getChannel,asyncChannel);
     }
 }

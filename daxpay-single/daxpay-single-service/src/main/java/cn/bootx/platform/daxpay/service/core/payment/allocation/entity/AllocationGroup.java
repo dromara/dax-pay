@@ -33,6 +33,9 @@ public class AllocationGroup extends MpBaseEntity implements EntityBaseFunction<
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channel;
 
+    @DbColumn(comment = "默认分账组")
+    private boolean defaultGroup;
+
     @DbColumn(comment = "总分账比例(万分之多少)")
     private Integer totalRate;
 

@@ -17,6 +17,10 @@ public interface PaymentApiCode {
 
     String CLOSE = "close";
 
+    String ALLOCATION = "allocation";
+
+    String ALLOCATION_FINISH = "allocationFinish";
+
     String SYNC_PAY = "syncPay";
 
     String SYNC_REFUND = "syncRefund";

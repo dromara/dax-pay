@@ -101,6 +101,19 @@ public class AllocationGroupService {
     }
 
     /**
+     * 设置默认分账组
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void setDefault(Long id){
+        // 分账组
+        AllocationGroup group = groupManager.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未找到分账组"));
+        groupManager.clearDefault(group.getChannel());
+        group.setDefaultGroup(true);
+        groupManager.updateById(group);
+    }
+
+    /**
      * 更新分账组
      */
     public void update(AllocationGroupParam param){
