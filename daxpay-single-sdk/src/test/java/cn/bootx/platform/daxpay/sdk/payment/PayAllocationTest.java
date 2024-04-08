@@ -40,7 +40,7 @@ public class PayAllocationTest {
         param.setBusinessNo("P"+ RandomUtil.randomNumbers(5));
         param.setAmount(10);
         param.setTitle("测试分账支付");
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(PayChannelEnum.WECHAT.getCode());
         param.setPayWay(PayWayEnum.QRCODE.getCode());
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);

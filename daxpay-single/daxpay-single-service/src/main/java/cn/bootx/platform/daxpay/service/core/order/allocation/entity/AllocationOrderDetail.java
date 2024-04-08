@@ -27,7 +27,7 @@ public class AllocationOrderDetail extends MpBaseEntity implements EntityBaseFun
 
     /** 分账订单ID */
     @DbColumn(comment = "分账订单ID")
-    private Long orderId;
+    private Long allocationId;
 
     /** 接收者ID */
     @DbColumn(comment = "接收者ID")

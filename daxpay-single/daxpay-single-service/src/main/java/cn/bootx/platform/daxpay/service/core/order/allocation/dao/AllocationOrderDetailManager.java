@@ -22,6 +22,6 @@ public class AllocationOrderDetailManager extends BaseManager<AllocationOrderDet
      * 根据订单ID查询
      */
     public List<AllocationOrderDetail> findAllByOrderId(Long orderId) {
-        return findAllByField(AllocationOrderDetail::getOrderId, orderId);
+        return findAllByField(AllocationOrderDetail::getAllocationId, orderId);
     }
 }

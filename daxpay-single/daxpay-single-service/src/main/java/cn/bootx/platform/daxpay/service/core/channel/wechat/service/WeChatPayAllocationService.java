@@ -80,7 +80,7 @@ public class WeChatPayAllocationService {
                 .appid(config.getWxAppId())
                 .nonce_str(WxPayKit.generateStr())
                 .transaction_id(allocationOrder.getGatewayPayOrderNo())
-                .out_order_no(allocationOrder.getOutReqNo())
+                .out_order_no(allocationOrder.getOrderNo())
                 .description("分账完成")
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);

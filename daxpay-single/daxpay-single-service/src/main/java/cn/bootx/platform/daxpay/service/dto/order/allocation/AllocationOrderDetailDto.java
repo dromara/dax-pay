@@ -22,7 +22,7 @@ public class AllocationOrderDetailDto extends BaseDto {
 
     /** 分账订单ID */
     @Schema(description = "分账订单ID")
-    private Long orderId;
+    private Long allocationId;
 
     /** 接收者ID */
     @Schema(description = "接收者ID")

@@ -33,6 +33,12 @@ import java.time.LocalDateTime;
 public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<AllocationOrderDto> {
 
     /**
+     * 分账订单号
+     */
+    @DbColumn(comment = "分账订单号")
+    private String orderNo;
+
+    /**
      * 支付订单ID
      */
     @DbColumn(comment = "支付订单ID")
@@ -63,12 +69,6 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "分账单号")
     private String allocationNo;
 
-
-    /**
-     * 外部请求号
-     */
-    @DbColumn(comment = "外部请求号")
-    private String outReqNo;
 
     /**
      * 所属通道

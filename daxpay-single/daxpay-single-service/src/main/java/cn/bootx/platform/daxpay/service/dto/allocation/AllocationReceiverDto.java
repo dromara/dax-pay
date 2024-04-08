@@ -11,14 +11,14 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 分账接收方参数
+ * 分账接收方
  * @author xxm
  * @since 2024/3/28
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "分账接收方参数")
+@Schema(title = "分账接收方")
 public class AllocationReceiverDto extends BaseDto {
 
     @Schema(description = "主键")

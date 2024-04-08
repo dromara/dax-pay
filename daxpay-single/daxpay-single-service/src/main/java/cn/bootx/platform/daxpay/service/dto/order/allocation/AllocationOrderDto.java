@@ -20,6 +20,13 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @Schema(title = "分账订单")
 public class AllocationOrderDto extends BaseDto {
+
+    /**
+     * 分账订单号
+     */
+    @Schema(description = "分账订单号")
+    private String orderNo;
+
     /**
      * 支付订单ID
      */
@@ -49,13 +56,6 @@ public class AllocationOrderDto extends BaseDto {
      */
     @Schema(description = "分账单号")
     private String allocationNo;
-
-
-    /**
-     * 外部请求号
-     */
-    @Schema(description = "外部请求号")
-    private String outReqNo;
 
     /**
      * 所属通道

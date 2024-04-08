@@ -2,6 +2,8 @@ package cn.bootx.platform.daxpay.service.core.payment.allocation.factory;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
+import cn.bootx.platform.daxpay.service.core.payment.allocation.strategy.allocation.AliPayAllocationStrategy;
+import cn.bootx.platform.daxpay.service.core.payment.allocation.strategy.allocation.WeChatPayAllocationStrategy;
 import cn.bootx.platform.daxpay.service.func.AbsAllocationStrategy;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.experimental.UtilityClass;
@@ -24,10 +26,10 @@ public class AllocationFactory {
         AbsAllocationStrategy strategy;
         switch (channelEnum) {
             case ALI:
-                strategy = SpringUtil.getBean(AbsAllocationStrategy.class);
+                strategy = SpringUtil.getBean(AliPayAllocationStrategy.class);
                 break;
             case WECHAT:
-                strategy = SpringUtil.getBean(AbsAllocationStrategy.class);
+                strategy = SpringUtil.getBean(WeChatPayAllocationStrategy.class);
                 break;
             default:
                 throw new PayUnsupportedMethodException();

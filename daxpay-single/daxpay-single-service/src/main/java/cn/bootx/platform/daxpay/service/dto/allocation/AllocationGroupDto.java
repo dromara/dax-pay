@@ -8,14 +8,14 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- *
+ * 分账组
  * @author xxm
  * @since 2024/4/1
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "")
+@Schema(title = "分账组")
 public class AllocationGroupDto extends BaseDto {
 
     @Schema(description = "名称")

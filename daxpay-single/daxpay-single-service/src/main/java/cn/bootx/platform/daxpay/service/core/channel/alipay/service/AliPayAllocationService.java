@@ -33,7 +33,7 @@ public class AliPayAllocationService {
 
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(String.valueOf(allocationOrder.getOutReqNo()));
+        model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
         model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
         model.setRoyaltyMode("async");
 
@@ -59,7 +59,7 @@ public class AliPayAllocationService {
     public void finish(AllocationOrder allocationOrder){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(String.valueOf(allocationOrder.getOutReqNo()));
+        model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
         model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
         // 分账完结参数
         SettleExtendParams extendParams = new SettleExtendParams();

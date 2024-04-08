@@ -56,6 +56,7 @@ public class PayBuilder {
                 .setBusinessNo(payParam.getBusinessNo())
                 .setTitle(payParam.getTitle())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
+                .setAllocation(payParam.isAllocation())
                 .setAmount(sumAmount)
                 .setExpiredTime(expiredTime)
                 .setCombinationPay(payParam.getPayChannels().size() > 1)

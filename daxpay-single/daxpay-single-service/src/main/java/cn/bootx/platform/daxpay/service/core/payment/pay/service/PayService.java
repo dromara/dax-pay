@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
+import cn.bootx.platform.daxpay.service.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
@@ -270,6 +271,10 @@ public class PayService {
         payOrderExtraManager.update(payOrderExtra);
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
+            // 如果是是允许分账的订单, 设置为待分装
+            if (payOrder.isAllocation()){
+                payOrder.setAllocationStatus(AllocationStatusEnum.WAITING.getCode());
+            }
             clientNoticeService.registerPayNotice(payOrder, payOrderExtra, payInfo.getPayChannelOrders());
         }
         return PayBuilder.buildPayResultByPayOrder(payOrder);
@@ -368,6 +373,10 @@ public class PayService {
         payOrderExtraManager.update(payOrderExtra);
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
+            // 如果是是允许分账的订单, 设置为待分装
+            if (payOrder.isAllocation()){
+                payOrder.setAllocationStatus(AllocationStatusEnum.WAITING.getCode());
+            }
             clientNoticeService.registerPayNotice(payOrder, payOrderExtra, payInfo.getPayChannelOrders());
         }
         return PayBuilder.buildPayResultByPayOrder(payOrder);

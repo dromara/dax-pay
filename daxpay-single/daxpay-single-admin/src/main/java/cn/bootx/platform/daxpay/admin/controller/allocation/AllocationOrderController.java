@@ -5,7 +5,6 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.param.pay.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.service.core.order.allocation.service.AllocationOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationService;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
@@ -15,7 +14,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +26,7 @@ import java.util.List;
  */
 @Tag(name = "对账订单控制器")
 @RestController
-@RequestMapping("/allocation/order")
+@RequestMapping("/order/allocation")
 @RequiredArgsConstructor
 public class AllocationOrderController {
 
@@ -65,15 +63,6 @@ public class AllocationOrderController {
     @GetMapping("/findChannels")
     public ResResult<List<LabelValue>> findChannels(){
         return Res.ok(allocationOrderService.findChannels());
-    }
-
-    @Operation(summary = "发起分账")
-    @PostMapping("/start")
-    public ResResult<Void> start(Long paymentId){
-        AllocationStartParam param = new AllocationStartParam();
-        param.setPaymentId(paymentId);
-        allocationService.allocation(param);
-        return Res.ok();
     }
 
 }

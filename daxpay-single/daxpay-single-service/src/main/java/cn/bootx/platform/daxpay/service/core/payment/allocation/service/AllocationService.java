@@ -70,8 +70,8 @@ public class AllocationService {
         }
         List<AllocationGroupReceiverResult> receiversByGroups = allocationGroupService.findReceiversByGroups(allocationGroup.getId());
 
-        // 创建分账单和明细并保存, 使用事务
-        OrderAndDetail orderAndDetail = allocationOrderService.create(param ,payOrder, channelOrder.getAmount(), receiversByGroups);
+        // 创建分账单和明细并保存, 同时更新支付订单状态 使用事务
+        OrderAndDetail orderAndDetail = allocationOrderService.createAndUpdate(param ,payOrder, channelOrder.getAmount(), receiversByGroups);
 
         // 创建分账策略并初始化
         AbsAllocationStrategy allocationStrategy = AllocationFactory.create(payOrder.getAsyncChannel());
@@ -120,7 +120,7 @@ public class AllocationService {
         allocationStrategy.doBeforeHandler();
         try {
             // 分账处理
-            allocationStrategy.allocation();
+            allocationStrategy.finish();
             // 执行中
             allocationOrder.setStatus(AllocationStatusEnum.FINISH_PROCESSING.getCode())
                     .setErrorMsg(null);
@@ -150,6 +150,10 @@ public class AllocationService {
         // 判断订单是否可以分账
         if (!payOrder.isAllocation()){
             throw new PayFailureException("该订单不允许分账");
+        }
+        // 判断分账状态
+        if (Objects.equals(AllocationStatusEnum.FINISH_SUCCESS.getCode(), payOrder.getAllocationStatus())){
+            throw new PayFailureException("该订单已分账完成");
         }
         return payOrder;
     }

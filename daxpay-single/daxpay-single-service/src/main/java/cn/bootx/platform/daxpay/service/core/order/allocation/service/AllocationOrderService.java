@@ -19,6 +19,7 @@ import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupReceiverRe
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.AllocationOrderQuery;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -87,7 +88,7 @@ public class AllocationOrderService {
      * 生成分账订单
      */
     @Transactional(rollbackFor = Exception.class)
-    public OrderAndDetail create(AllocationStartParam param, PayOrder payOrder, int orderAmount, List<AllocationGroupReceiverResult> receiversByGroups){
+    public OrderAndDetail createAndUpdate(AllocationStartParam param, PayOrder payOrder, int orderAmount, List<AllocationGroupReceiverResult> receiversByGroups){
         long orderId = IdUtil.getSnowflakeNextId();
 
         // 请求号不存在使用订单ID
@@ -103,7 +104,7 @@ public class AllocationOrderService {
                     Integer rate = o.getRate();
                     Integer amount = orderAmount * rate / 10000;
                     AllocationOrderDetail detail = new AllocationOrderDetail();
-                    detail.setOrderId(orderId)
+                    detail.setAllocationId(orderId)
                             .setReceiverId(o.getId())
                             .setStatus(AllocationStatusEnum.WAITING.getCode())
                             .setAmount(amount)
@@ -125,16 +126,23 @@ public class AllocationOrderService {
                 .setAllocationNo(allocationNo)
                 .setChannel(payOrder.getAsyncChannel())
                 .setGatewayPayOrderNo(payOrder.getGatewayOrderNo())
-                .setOutReqNo(String.valueOf(orderId))
+                .setOrderNo(String.valueOf(orderId))
                 .setDescription(param.getDescription())
                 .setStatus(AllocationStatusEnum.WAITING.getCode())
                 .setAmount(sumAmount);
         allocationOrder.setId(orderId);
         // 保存
+        // 因为加密后字段值会发生变更, 所以在保存前备份一下
+        List<AllocationOrderDetail> detailsBack = details.stream()
+                .map(o -> {
+                    AllocationOrderDetail allocationOrderDetail = new AllocationOrderDetail();
+                    BeanUtil.copyProperties(o, allocationOrderDetail);
+                    return allocationOrderDetail;
+                })
+                .collect(Collectors.toList());
         allocationOrderDetailManager.saveAll(details);
         allocationOrderManager.save(allocationOrder);
-
-        return new OrderAndDetail().setOrder(allocationOrder).setDetails(details);
+        return new OrderAndDetail().setOrder(allocationOrder).setDetails(detailsBack);
     }
 
 }
