@@ -98,4 +98,18 @@ public class AllocationGroupController {
         return Res.ok();
     }
 
+    @Operation(summary = "设置默认分账组")
+    @PostMapping("/setDefault")
+    public ResResult<Void> setDefault(Long id){
+        allocationGroupService.setUpDefault(id);
+        return Res.ok();
+    }
+
+    @Operation(summary = "清除默认分账组")
+    @PostMapping("/clearDefault")
+    public ResResult<Void> clearDefault(Long id){
+        allocationGroupService.clearDefault(id);
+        return Res.ok();
+    }
+
 }
