@@ -14,5 +14,22 @@ import lombok.experimental.Accessors;
 @Schema(title = "分账订单查询参数")
 public class AllocationOrderQuery {
 
+    @Schema(description = "分账订单号")
+    private String orderNo;
+
+    @Schema(description = "支付订单ID")
+    private Long paymentId;
+
+    @Schema(description = "支付订单标题")
+    private String title;
+
+    @Schema(description = "分账业务号")
+    private String allocationNo;
+
+    @Schema(description = "分账通道")
+    private String channel;
+
+
+
 
 }

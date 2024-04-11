@@ -34,6 +34,11 @@
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-starter-code-gen</artifactId>
         </dependency>
+        <!-- 系统监控 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-starter-monitor</artifactId>
+        </dependency>
         <!-- 支付演示模块 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
