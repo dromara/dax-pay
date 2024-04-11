@@ -1,10 +1,14 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
+import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrderDetail;
-import com.alipay.api.domain.AlipayTradeOrderSettleModel;
-import com.alipay.api.domain.OpenApiRoyaltyDetailInfoPojo;
-import com.alipay.api.domain.SettleExtendParams;
+import cn.hutool.core.util.StrUtil;
+import com.alipay.api.AlipayResponse;
+import com.alipay.api.domain.*;
+import com.alipay.api.request.AlipayTradeOrderSettleQueryRequest;
+import com.alipay.api.response.AlipayTradeOrderSettleQueryResponse;
 import com.alipay.api.response.AlipayTradeOrderSettleResponse;
 import com.ijpay.alipay.AliPayApi;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +54,10 @@ public class AliPayAllocationService {
         model.setRoyaltyParameters(royaltyParameters);
 
         AlipayTradeOrderSettleResponse response = AliPayApi.tradeOrderSettleToResponse(model);
-        System.out.println(response);
+        // TODO 需要写入到分账订单中
+        String settleNo = response.getSettleNo();
+        this.verifyErrorMsg(response);
+
     }
 
     /**
@@ -67,6 +75,37 @@ public class AliPayAllocationService {
         model.setExtendParams(extendParams);
 
         AlipayTradeOrderSettleResponse response = AliPayApi.tradeOrderSettleToResponse(model);
-        System.out.println(response);
+        this.verifyErrorMsg(response);
+    }
+
+    /**
+     * 分账状态查询
+     */
+    @SneakyThrows
+    public void query(AllocationOrder allocationOrder){
+        AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
+        model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
+        model.setOutRequestNo(allocationOrder.getOrderNo());
+        AlipayTradeOrderSettleQueryRequest request = new AlipayTradeOrderSettleQueryRequest();
+        request.setBizModel(model);
+        AlipayTradeOrderSettleQueryResponse response = AliPayApi.execute(request);
+        // 验证
+        this.verifyErrorMsg(response);
+        List<RoyaltyDetail> royaltyDetailList = response.getRoyaltyDetailList();
+        System.out.println(royaltyDetailList);
+    }
+
+    /**
+     * 验证错误信息
+     */
+    private void verifyErrorMsg(AlipayResponse alipayResponse) {
+        if (!Objects.equals(alipayResponse.getCode(), AliPayCode.SUCCESS)) {
+            String errorMsg = alipayResponse.getSubMsg();
+            if (StrUtil.isBlank(errorMsg)) {
+                errorMsg = alipayResponse.getMsg();
+            }
+            log.error("分账接收方处理失败 {}", errorMsg);
+            throw new PayFailureException(errorMsg);
+        }
     }
 }

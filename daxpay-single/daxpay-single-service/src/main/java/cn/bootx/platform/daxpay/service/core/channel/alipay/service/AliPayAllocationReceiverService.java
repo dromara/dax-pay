@@ -96,7 +96,7 @@ public class AliPayAllocationReceiverService {
             if (StrUtil.isBlank(errorMsg)) {
                 errorMsg = alipayResponse.getMsg();
             }
-            log.error("支付失败 {}", errorMsg);
+            log.error("分账接收方处理失败 {}", errorMsg);
             throw new PayFailureException(errorMsg);
         }
     }
