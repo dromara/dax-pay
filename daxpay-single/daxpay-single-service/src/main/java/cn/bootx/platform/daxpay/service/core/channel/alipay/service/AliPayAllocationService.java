@@ -82,7 +82,7 @@ public class AliPayAllocationService {
      * 分账状态查询
      */
     @SneakyThrows
-    public void query(AllocationOrder allocationOrder){
+    public void queryStatus(AllocationOrder allocationOrder){
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
         model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
         model.setOutRequestNo(allocationOrder.getOrderNo());
@@ -93,6 +93,13 @@ public class AliPayAllocationService {
         this.verifyErrorMsg(response);
         List<RoyaltyDetail> royaltyDetailList = response.getRoyaltyDetailList();
         System.out.println(royaltyDetailList);
+    }
+
+    /**
+     * 分账剩余金额查询
+     */
+    public void queryAmount(AllocationOrder allocationOrder){
+
     }
 
     /**

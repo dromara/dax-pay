@@ -2,8 +2,8 @@ package cn.bootx.platform.daxpay.service.core.order.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.allocation.convert.AllocationConvert;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -33,10 +33,18 @@ import java.time.LocalDateTime;
 public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<AllocationOrderDto> {
 
     /**
-     * 分账订单号
+     * 分账订单号(传输给三方支付系统做关联)
      */
     @DbColumn(comment = "分账订单号")
     private String orderNo;
+
+    /**
+     * 分账单号
+     */
+    @DbMySqlIndex(comment = "分账单号索引", type = MySqlIndexType.UNIQUE)
+    @DbColumn(comment = "分账单号")
+    private String allocationNo;
+
 
     /**
      * 支付订单ID
@@ -61,14 +69,6 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
      */
     @DbColumn(comment = "网关分账单号")
     private String gatewayAllocationNo;
-
-    /**
-     * 分账单号
-     */
-    @DbMySqlIndex(comment = "分账单号索引", type = MySqlIndexType.UNIQUE)
-    @DbColumn(comment = "分账单号")
-    private String allocationNo;
-
 
     /**
      * 所属通道

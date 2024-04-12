@@ -7,7 +7,7 @@ import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.bootx.platform.daxpay.service.code.AllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;

@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationFinishParam;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.result.allocation.AllocationResult;
-import cn.bootx.platform.daxpay.service.code.AllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrderDetail;

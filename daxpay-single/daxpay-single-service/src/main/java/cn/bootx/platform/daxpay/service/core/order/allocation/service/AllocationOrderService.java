@@ -8,7 +8,7 @@ import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationStartParam;
-import cn.bootx.platform.daxpay.service.code.AllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;

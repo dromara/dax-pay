@@ -196,6 +196,9 @@ QQ扫码加入QQ交流群
 <img alt="微信图片_20240226144703" height="480" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
 </p>
 
+## Star History
+
+[![Stargazers over time](https://starchart.cc/dromara/dax-pay.svg?variant=adaptive)](https://starchart.cc/dromara/dax-pay)
 
 
 ## 🍻 鸣谢

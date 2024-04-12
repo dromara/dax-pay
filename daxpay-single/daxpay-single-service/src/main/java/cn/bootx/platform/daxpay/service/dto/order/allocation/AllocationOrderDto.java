@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.dto.order.allocation;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -77,7 +78,7 @@ public class AllocationOrderDto extends BaseDto {
 
     /**
      * 状态
-     * @see cn.bootx.platform.daxpay.service.code.AllocationStatusEnum
+     * @see AllocationStatusEnum
      */
     @Schema(description = "状态")
     private String status;

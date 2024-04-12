@@ -68,4 +68,5 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
         weChatPayAllocationService.finish(getAllocationOrder(), weChatPayConfig);
     }
 
+
 }

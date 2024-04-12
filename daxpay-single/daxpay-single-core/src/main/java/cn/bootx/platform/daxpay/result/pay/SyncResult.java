@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.result.pay;
 
+import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.result.CommonResult;
@@ -11,7 +12,7 @@ import lombok.experimental.Accessors;
 import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.FAIL;
 
 /**
- * 支付单同步结果
+ * 各种单据同步结果
  * @author xxm
  * @since 2023/12/27
  */
@@ -25,6 +26,7 @@ public class SyncResult extends CommonResult {
      * 支付网关同步状态
      * @see PaySyncStatusEnum
      * @see RefundSyncStatusEnum
+     * @see AllocationStatusEnum
      */
     @Schema(description = "支付网关同步状态")
     private String gatewayStatus = FAIL.getCode();

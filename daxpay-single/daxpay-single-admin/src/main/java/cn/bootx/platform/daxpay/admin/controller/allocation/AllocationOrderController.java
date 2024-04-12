@@ -5,8 +5,9 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.daxpay.param.pay.AllocationSyncParam;
 import cn.bootx.platform.daxpay.service.core.order.allocation.service.AllocationOrderService;
-import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationService;
+import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationSyncService;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.AllocationOrderQuery;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +34,7 @@ public class AllocationOrderController {
 
     private final AllocationOrderService allocationOrderService;
 
-    private final AllocationService allocationService;
+    private final AllocationSyncService allocationSyncService;
 
     @Operation(summary = "分页")
     @GetMapping("/page")
@@ -65,4 +67,12 @@ public class AllocationOrderController {
         return Res.ok(allocationOrderService.findChannels());
     }
 
+    @Operation(summary = "同步分账结果")
+    @PostMapping("/sync")
+    public ResResult<Void> sync(Long id){
+        AllocationSyncParam param = new AllocationSyncParam();
+        param.setAllocationId(id);
+        allocationSyncService.sync(param);
+        return Res.ok();
+    }
 }

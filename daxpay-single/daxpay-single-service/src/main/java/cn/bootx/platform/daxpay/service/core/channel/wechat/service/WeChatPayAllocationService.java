@@ -93,6 +93,24 @@ public class WeChatPayAllocationService {
     }
 
     /**
+     * 查询分账状态
+     */
+    public void queryStatus(AllocationOrder allocationOrder,  WeChatPayConfig config){
+        Map<String, String> params = ProfitSharingModel.builder()
+                .mch_id(config.getWxMchId())
+                .appid(config.getWxAppId())
+                .nonce_str(WxPayKit.generateStr())
+                .transaction_id(allocationOrder.getGatewayPayOrderNo())
+                .out_order_no(allocationOrder.getOrderNo())
+                .build()
+                .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
+        String xmlResult = WxPayApi.profitSharingQuery(params);
+        Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
+        this.verifyErrorMsg(result);
+    }
+
+
+    /**
      * 验证错误信息
      */
     private void verifyErrorMsg(Map<String, String> result) {
