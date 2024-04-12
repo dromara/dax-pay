@@ -30,7 +30,6 @@
 ## 🧭 特色功能
 - 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
 - 已对接`微信支付`、`支付宝`和云闪付相关的接口，后续版本将支持`V3`版本的接口
-- 支持组合支付，满足用户系统需要多种方式同时进行支付的场景。
 - 支持支付、退款、对账、分账等支付相关的能力
 - 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
 - 接口请求和响应数据支持启用签名机制，可根据实际需要进行开关，保证交易安全可靠
@@ -87,7 +86,6 @@
 | Redis       | 分布式缓存    | 5.x版本及以上                   |
 | MySQL       | 数据库      | 基于5.7.X版本开发，基本支持8.x版本      |
 | Vue         | 前端框架     | 3.x                        |
-| IJpay       | 支付SDK开发包 | 项目自动管理，不需要额外处理             |
 
 ## 🛠️ 业务系统接入
 > 业务系统想接入支付网关的话，不需要集成到业务系统里，只需要单独部署一份支付系统，然后业务系统通过接口调用即可拥有对应的支付能力，
@@ -159,13 +157,13 @@ public class SimplePayOrderTest {
 
 ## 🍎 系统截图
 ### 收银台演示
-![微信截图_20240326141126](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326141126.es9yupxd3.webp)
+![微信截图_20240326141126](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326141126.es9yupxd3.webp)
 ### 驾驶舱
-![QQ截图20240326141912](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
+![QQ截图20240326141912](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
 ### H5收银台演示
-![h5](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
+![h5](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
 ### 支付通道配置
-![微信截图_20240326142208](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
+![微信截图_20240326142208](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
 ## 🛣️ 路线图
 > 当前处于功能开发阶段，部分功能可能会有调整，`V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容
 
@@ -181,10 +179,17 @@ public class SimplePayOrderTest {
 
 ##  🥪 关于我们
 
+钉钉扫码加入钉钉交流群(推荐)
+<p>
+<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/png-(1).7egk526qnp.webp" width = "400" height = "400"/>
+</p>
+
+
 QQ扫码加入QQ交流群
 <p>
-<img src="_doc/images/qq_qun.jpg" width = "330" height = "500"/>
+<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412132238.3rb0hgrf2z.webp" width = "330" height = "500"/>
 </p>
+
 
 微信扫码加入微信交流群
 <p>
