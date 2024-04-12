@@ -191,9 +191,9 @@ QQ扫码加入QQ交流群
 </p>
 
 
-微信扫码加入微信交流群
+微信扫码加小助手拉群
 <p>
-<img alt="微信图片_20240226144703" height="500" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240410133630.2obb3qj1pw.webp" width="330"/>
+<img alt="微信图片_20240226144703" height="480" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
 </p>
 
 
