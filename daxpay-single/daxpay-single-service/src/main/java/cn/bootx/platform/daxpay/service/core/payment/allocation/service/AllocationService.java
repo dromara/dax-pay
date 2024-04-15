@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.param.pay.allocation.AllocationFinishParam;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationResetParam;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.result.allocation.AllocationResult;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;
@@ -96,6 +97,11 @@ public class AllocationService {
             order.setStatus(AllocationStatusEnum.PARTIAL_FAILED.getCode())
                     .setErrorMsg(e.getMessage());
         }
+        // 网关分账号
+        String gatewayNo = PaymentContextLocal.get()
+                .getAllocationInfo()
+                .getGatewayNo();
+        order.setGatewayAllocationNo(gatewayNo);
         allocationOrderManager.updateById(order);
 
         return new AllocationResult().setOrderId(order.getId())
@@ -106,7 +112,7 @@ public class AllocationService {
     /**
      * 重新分账
      */
-    public void resetAllocation(AllocationResetParam param){
+    public void retryAllocation(AllocationResetParam param){
         AllocationOrder allocationOrder;
         if (Objects.nonNull(param.getOrderId())){
             allocationOrder = allocationOrderManager.findById(param.getOrderId())

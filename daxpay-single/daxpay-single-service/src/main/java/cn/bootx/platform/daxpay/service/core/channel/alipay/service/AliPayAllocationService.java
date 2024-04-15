@@ -85,7 +85,6 @@ public class AliPayAllocationService {
                 })
                 .collect(Collectors.toList());
         model.setRoyaltyParameters(royaltyParameters);
-
         AlipayTradeOrderSettleResponse response = AliPayApi.tradeOrderSettleToResponse(model);
         this.verifyErrorMsg(response);
     }
@@ -104,7 +103,14 @@ public class AliPayAllocationService {
         // 验证
         this.verifyErrorMsg(response);
         List<RoyaltyDetail> royaltyDetailList = response.getRoyaltyDetailList();
-        System.out.println(royaltyDetailList);
+
+        // 转换成通用的明细详情
+        for (RoyaltyDetail royaltyDetail : royaltyDetailList) {
+            System.out.println(royaltyDetail);
+            System.out.println(royaltyDetail.getState());
+            System.out.println(royaltyDetail.getDetailId());
+
+        }
     }
 
     /**

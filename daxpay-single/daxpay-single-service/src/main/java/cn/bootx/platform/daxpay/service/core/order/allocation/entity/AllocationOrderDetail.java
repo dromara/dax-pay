@@ -61,6 +61,14 @@ public class AllocationOrderDetail extends MpBaseEntity implements EntityBaseFun
     @DbColumn(comment = "状态")
     private String status;
 
+    /** 错误代码 */
+    @DbColumn(comment = "错误代码")
+    private String errorCode;
+
+    /** 错误原因 */
+    @DbColumn(comment = "错误原因")
+    private String errorMsg;
+
     /**
      * 转换
      */

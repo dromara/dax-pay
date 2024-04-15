@@ -7,6 +7,7 @@ import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.param.pay.AllocationSyncParam;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationFinishParam;
+import cn.bootx.platform.daxpay.param.pay.allocation.AllocationResetParam;
 import cn.bootx.platform.daxpay.service.core.order.allocation.service.AllocationOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationService;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationSyncService;
@@ -85,6 +86,15 @@ public class AllocationOrderController {
         AllocationFinishParam param = new AllocationFinishParam();
         param.setOrderId(id);
         allocationService.finish(param);
+        return Res.ok();
+    }
+
+    @Operation(summary = "分账重试")
+    @PostMapping("/retry")
+    public ResResult<Void> retryAllocation(Long id){
+        AllocationResetParam param = new AllocationResetParam();
+        param.setOrderId(id);
+        allocationService.retryAllocation(param);
         return Res.ok();
     }
 }

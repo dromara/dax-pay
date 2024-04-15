@@ -8,6 +8,7 @@ import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationO
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrderDetail;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -107,6 +108,7 @@ public class WeChatPayAllocationService {
         String xmlResult = WxPayApi.profitSharingQuery(params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
+        JSONUtil.parse(result.get("receivers"));
     }
 
 
