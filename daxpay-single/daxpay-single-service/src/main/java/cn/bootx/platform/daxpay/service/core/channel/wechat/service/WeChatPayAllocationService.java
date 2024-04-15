@@ -59,7 +59,7 @@ public class WeChatPayAllocationService {
                 .appid(config.getWxAppId())
                 .nonce_str(WxPayKit.generateStr())
                 .transaction_id(allocationOrder.getGatewayPayOrderNo())
-                .out_order_no(WxPayKit.generateStr())
+                .out_order_no(allocationOrder.getOrderNo())
                 .receivers(JSON.toJSONString(list))
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
@@ -74,7 +74,7 @@ public class WeChatPayAllocationService {
     /**
      * 完成分账
      */
-    public void finish(AllocationOrder allocationOrder, WeChatPayConfig config){
+    public void finish(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails, WeChatPayConfig config){
         Map<String, String> params = ProfitSharingModel.builder()
                 .mch_id(config.getWxMchId())
                 .appid(config.getWxAppId())

@@ -6,7 +6,9 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.param.pay.AllocationSyncParam;
+import cn.bootx.platform.daxpay.param.pay.allocation.AllocationFinishParam;
 import cn.bootx.platform.daxpay.service.core.order.allocation.service.AllocationOrderService;
+import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationService;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationSyncService;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
@@ -35,6 +37,7 @@ public class AllocationOrderController {
     private final AllocationOrderService allocationOrderService;
 
     private final AllocationSyncService allocationSyncService;
+    private final AllocationService allocationService;
 
     @Operation(summary = "分页")
     @GetMapping("/page")
@@ -73,6 +76,15 @@ public class AllocationOrderController {
         AllocationSyncParam param = new AllocationSyncParam();
         param.setAllocationId(id);
         allocationSyncService.sync(param);
+        return Res.ok();
+    }
+
+    @Operation(summary = "分账完结")
+    @PostMapping("/finish")
+    public ResResult<Void> finish(Long id){
+        AllocationFinishParam param = new AllocationFinishParam();
+        param.setOrderId(id);
+        allocationService.finish(param);
         return Res.ok();
     }
 }

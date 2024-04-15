@@ -102,4 +102,7 @@ public interface AliPayCode {
     /** 分账接收方不存在 */
     String USER_NOT_EXIST = "USER_NOT_EXIST";
 
+    /** 分账金额超过最大可分账金额 */
+    String ALLOC_AMOUNT_VALIDATE_ERROR = "ACQ.ALLOC_AMOUNT_VALIDATE_ERROR";
+
 }

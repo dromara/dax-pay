@@ -179,15 +179,21 @@ public class SimplePayOrderTest {
 
 ##  🥪 关于我们
 
-钉钉扫码加入钉钉交流群(推荐)
+扫码加入QQ交流群
+<p>
+<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412132238.3rb0hgrf2z.webp" width = "330" height = "500"/>
+</p>
+
+
+扫码加入钉钉交流群
 <p>
 <img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/png-(1).7egk526qnp.webp" width = "400" height = "400"/>
 </p>
 
 
-QQ扫码加入QQ交流群
+扫码加入飞书交流群
 <p>
-<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412132238.3rb0hgrf2z.webp" width = "330" height = "500"/>
+<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240415124136.231noivcuz.webp" width = "390" height = "500"/>
 </p>
 
 

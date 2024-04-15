@@ -1,11 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationFinishParam;
+import cn.bootx.platform.daxpay.param.pay.allocation.AllocationResetParam;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.result.allocation.AllocationResult;
-import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
+import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrderDetail;
@@ -49,6 +51,8 @@ public class AllocationService {
     private final AllocationGroupService allocationGroupService;
 
     private final AllocationOrderService allocationOrderService;
+
+    private final AllocationOrderDetailManager allocationOrderDetailManager;
 
     /**
      * 开启分账, 使用分账组进行分账
@@ -100,6 +104,34 @@ public class AllocationService {
     }
 
     /**
+     * 重新分账
+     */
+    public void resetAllocation(AllocationResetParam param){
+        AllocationOrder allocationOrder;
+        if (Objects.nonNull(param.getOrderId())){
+            allocationOrder = allocationOrderManager.findById(param.getOrderId())
+                    .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
+        } else {
+            allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
+                    .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
+        }
+        List<AllocationOrderDetail> details = allocationOrderDetailManager.findAllByOrderId(allocationOrder.getId());
+
+        // 创建分账策略并初始化
+        AbsAllocationStrategy allocationStrategy = AllocationFactory.create(allocationOrder.getChannel());
+        allocationStrategy.initParam(allocationOrder, details);
+
+        // 分账预处理
+        allocationStrategy.doBeforeHandler();
+        try {
+            // 重复分账处理
+            allocationStrategy.allocation();
+        } catch (Exception e) {
+            // 失败
+        }
+    }
+
+    /**
      * 分账完结
      */
     public void finish(AllocationFinishParam param) {
@@ -111,10 +143,11 @@ public class AllocationService {
             allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
         }
+        List<AllocationOrderDetail> details = allocationOrderDetailManager.findAllByOrderId(allocationOrder.getId());
 
         // 创建分账策略并初始化
         AbsAllocationStrategy allocationStrategy = AllocationFactory.create(allocationOrder.getChannel());
-        allocationStrategy.initParam(allocationOrder, null);
+        allocationStrategy.initParam(allocationOrder, details);
 
         // 分账完结预处理
         allocationStrategy.doBeforeHandler();

@@ -67,7 +67,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void finish() {
-        aliPayAllocationService.finish(this.getAllocationOrder());
+        aliPayAllocationService.finish(this.getAllocationOrder(), this.getAllocationOrderDetails());
     }
 
 }

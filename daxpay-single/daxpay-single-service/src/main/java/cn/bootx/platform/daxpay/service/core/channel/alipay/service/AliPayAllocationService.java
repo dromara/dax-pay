@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrderDetail;
 import cn.hutool.core.util.StrUtil;
@@ -35,7 +36,6 @@ public class AliPayAllocationService {
      */
     @SneakyThrows
     public void allocation(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails){
-
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
@@ -54,25 +54,37 @@ public class AliPayAllocationService {
         model.setRoyaltyParameters(royaltyParameters);
 
         AlipayTradeOrderSettleResponse response = AliPayApi.tradeOrderSettleToResponse(model);
-        // TODO 需要写入到分账订单中
+        // 需要写入到分账订单中
         String settleNo = response.getSettleNo();
+        PaymentContextLocal.get().getAllocationInfo().setGatewayNo(settleNo);
         this.verifyErrorMsg(response);
-
     }
 
     /**
      * 分账完结
      */
     @SneakyThrows
-    public void finish(AllocationOrder allocationOrder){
+    public void finish(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails ){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
         model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
+        model.setRoyaltyMode("async");
         // 分账完结参数
         SettleExtendParams extendParams = new SettleExtendParams();
         extendParams.setRoyaltyFinish("true");
         model.setExtendParams(extendParams);
+
+        // 分账子参数
+        List<OpenApiRoyaltyDetailInfoPojo> royaltyParameters = orderDetails.stream()
+                .map(o -> {
+                    OpenApiRoyaltyDetailInfoPojo infoPojo = new OpenApiRoyaltyDetailInfoPojo();
+                    infoPojo.setAmount(String.valueOf(o.getAmount() / 100.0));
+                    infoPojo.setTransIn(o.getReceiverAccount());
+                    return infoPojo;
+                })
+                .collect(Collectors.toList());
+        model.setRoyaltyParameters(royaltyParameters);
 
         AlipayTradeOrderSettleResponse response = AliPayApi.tradeOrderSettleToResponse(model);
         this.verifyErrorMsg(response);
