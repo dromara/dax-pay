@@ -21,6 +21,7 @@ import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
+import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -159,10 +160,11 @@ public class RefundAssistService {
 
         // 生成退款订单
         RefundOrder refundOrder = new RefundOrder()
-                .setPaymentId(payOrder.getId())
+                .setOrderNo(payOrder.getOrderNo())
                 .setStatus(RefundStatusEnum.PROGRESS.getCode())
                 .setBusinessNo(payOrder.getBusinessNo())
-                .setRefundNo(refundParam.getRefundNo())
+                .setRefundNo(OrderNoGenerateUtil.refund())
+                .setRefundBusinessNo(refundParam.getRefundNo())
                 .setOrderAmount(payOrder.getAmount())
                 .setAmount(amount)
                 .setRefundableBalance(refundableBalance)
@@ -183,10 +185,6 @@ public class RefundAssistService {
         // 主键使用预先生成的ID, 如果有异步通道, 关联的退款号就是这个ID
         refundOrder.setId(IdUtil.getSnowflakeNextId());
 
-        // 退款号, 如不传输, 使用ID作为退款号
-        if(StrUtil.isBlank(refundOrder.getRefundNo())){
-            refundOrder.setRefundNo(String.valueOf(refundOrder.getId()));
-        }
 
         RefundOrderExtra refundOrderExtra = this.createRefundOrderExtra(refundParam, refundOrder.getId());
         refundChannelOrders.forEach(r->r.setRefundId(refundOrder.getId()));

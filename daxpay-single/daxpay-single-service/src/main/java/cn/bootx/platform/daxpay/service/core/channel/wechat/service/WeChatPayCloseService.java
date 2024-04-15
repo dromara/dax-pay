@@ -37,7 +37,7 @@ public class WeChatPayCloseService {
         Map<String, String> params = CloseOrderModel.builder()
             .appid(weChatPayConfig.getWxAppId())
             .mch_id(weChatPayConfig.getWxMchId())
-            .out_trade_no(String.valueOf(payOrder.getId()))
+            .out_trade_no(payOrder.getOrderNo())
             .nonce_str(WxPayKit.generateStr())
             .build()
             .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);

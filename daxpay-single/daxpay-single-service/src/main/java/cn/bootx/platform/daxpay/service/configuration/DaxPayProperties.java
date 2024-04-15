@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.configuration;
 
+import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,4 +22,11 @@ public class DaxPayProperties {
 
     /** 前端地址(web) */
     private String frontWebUrl;
+
+    private String machineNo;
+
+    public void setMachineNo(String machineNo) {
+        this.machineNo = machineNo;
+        OrderNoGenerateUtil.setMachineNo(machineNo);
+    }
 }

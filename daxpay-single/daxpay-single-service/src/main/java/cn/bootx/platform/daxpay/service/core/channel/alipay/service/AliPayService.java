@@ -102,7 +102,7 @@ public class AliPayService {
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setSubject(payOrder.getTitle());
-        model.setOutTradeNo(String.valueOf(payOrder.getId()));
+        model.setOutTradeNo(payOrder.getOrderNo());
         model.setTotalAmount(String.valueOf(amount*0.01));
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
@@ -136,7 +136,7 @@ public class AliPayService {
 
         model.setSubject(payOrder.getTitle());
         model.setProductCode(QUICK_MSECURITY_PAY);
-        model.setOutTradeNo(String.valueOf(payOrder.getId()));
+        model.setOutTradeNo(payOrder.getOrderNo());
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(String.valueOf(amount*0.01));
@@ -160,7 +160,7 @@ public class AliPayService {
         AlipayTradePagePayModel model = new AlipayTradePagePayModel();
 
         model.setSubject(payOrder.getTitle());
-        model.setOutTradeNo(String.valueOf(payOrder.getId()));
+        model.setOutTradeNo(payOrder.getOrderNo());
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(String.valueOf(amount*0.01));
@@ -190,7 +190,7 @@ public class AliPayService {
     public String qrCodePay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
         model.setSubject(payOrder.getTitle());
-        model.setOutTradeNo(String.valueOf(payOrder.getId()));
+        model.setOutTradeNo(payOrder.getOrderNo());
         model.setTotalAmount(String.valueOf(amount*0.01));
 
         // 过期时间
@@ -215,7 +215,7 @@ public class AliPayService {
 
         AlipayTradePayModel model = new AlipayTradePayModel();
         model.setSubject(payOrder.getTitle());
-        model.setOutTradeNo(String.valueOf(payOrder.getId()));
+        model.setOutTradeNo(payOrder.getOrderNo());
         model.setScene(AliPayCode.BAR_CODE);
         model.setAuthCode(aliPayParam.getAuthCode());
 

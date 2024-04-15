@@ -48,7 +48,7 @@ public class AliPaySyncService {
         // 查询
         try {
             AlipayTradeQueryModel queryModel = new AlipayTradeQueryModel();
-            queryModel.setOutTradeNo(String.valueOf(payOrder.getId()));
+            queryModel.setOutTradeNo(payOrder.getOrderNo());
             AlipayTradeQueryResponse response = AliPayApi.tradeQueryToResponse(queryModel);
             String tradeStatus = response.getTradeStatus();
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
@@ -103,7 +103,7 @@ public class AliPaySyncService {
             // 退款请求号
             queryModel.setOutRequestNo(String.valueOf(refundOrder.getId()));
             // 商户订单号
-            queryModel.setOutTradeNo(String.valueOf(refundOrder.getPaymentId()));
+            queryModel.setOutTradeNo(String.valueOf(refundOrder.getRefundNo()));
             // 设置返回退款完成时间
             queryModel.setQueryOptions(Collections.singletonList(GMT_REFUND_PAY));
             AlipayTradeFastpayRefundQueryResponse response = AliPayApi.tradeRefundQueryToResponse(queryModel);

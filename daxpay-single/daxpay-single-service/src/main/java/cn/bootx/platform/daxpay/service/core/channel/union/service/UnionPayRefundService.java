@@ -36,7 +36,7 @@ public class UnionPayRefundService {
         BigDecimal orderAmount = BigDecimal.valueOf(channelOrder.getAmount() * 0.01);
 
         UnionRefundOrder unionRefundOrder = new UnionRefundOrder();
-        unionRefundOrder.setRefundNo(String.valueOf(refundOrder.getId()));
+        unionRefundOrder.setRefundNo(refundOrder.getRefundNo());
         unionRefundOrder.setTradeNo(String.valueOf(payOrder.getGatewayOrderNo()));
         unionRefundOrder.setRefundAmount(refundAmount);
         unionRefundOrder.setTotalAmount(orderAmount);

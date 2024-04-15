@@ -133,5 +133,10 @@
             <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
             <version>${lock4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 </project>

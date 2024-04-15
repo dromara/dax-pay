@@ -247,7 +247,7 @@ public class RefundService {
         // 构建策略
         List<RefundChannelOrder> refundChannels = refundChannelOrderManager
                 .findAllByRefundId(refundOrder.getId());
-        PayOrder payOrder = payOrderService.findById(refundOrder.getPaymentId())
+        PayOrder payOrder = payOrderService.findById(refundOrder.getId())
                 .orElseThrow(() -> new DataNotExistException("未查找到支付订单"));
         List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
         Map<String, PayChannelOrder> orderChannelMap = payChannelOrders.stream()

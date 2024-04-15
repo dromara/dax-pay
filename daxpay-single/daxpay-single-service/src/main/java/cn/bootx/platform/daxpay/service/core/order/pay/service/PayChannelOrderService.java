@@ -73,7 +73,7 @@ public class PayChannelOrderService {
             payChannelOrder = new PayChannelOrder();
             // 替换原有的的支付通道信息
             payChannelOrder.setPayWay(payChannelParam.getWay())
-                    .setPaymentId(payOrder.getId())
+                    .setPaymentId(payOrder.getOrderNo())
                     .setAsync(true)
                     .setChannel(payChannelParam.getChannel())
                     .setPayWay(payChannelParam.getWay())

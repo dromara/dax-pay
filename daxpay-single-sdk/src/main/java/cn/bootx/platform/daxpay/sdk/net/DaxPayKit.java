@@ -63,7 +63,8 @@ public class DaxPayKit {
                 .execute();
         // 响应码只有200 才可以进行支付
         if (execute.getStatus() != HttpStatus.HTTP_OK){
-            throw new HttpException("请求失败，请排查配置的支付网关地址是否正常");
+            log.error("请求第三方支付平台失败，请排查配置的支付网关地址是否正常");
+            throw new HttpException("请求失败，内部异常");
         }
         String body = execute.body();
 

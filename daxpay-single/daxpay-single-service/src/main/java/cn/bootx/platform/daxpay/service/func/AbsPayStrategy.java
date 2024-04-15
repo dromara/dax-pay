@@ -55,7 +55,7 @@ public abstract class AbsPayStrategy implements PayStrategy{
      */
     public void generateChannelOrder() {
         PayChannelOrder payChannelOrder = PayBuilder.buildPayChannelOrder(this.getPayChannelParam());
-        payChannelOrder.setPaymentId(this.getOrder().getId());
+        payChannelOrder.setPaymentId(this.getOrder().getOrderNo());
         this.channelOrder = payChannelOrder;
     }
 

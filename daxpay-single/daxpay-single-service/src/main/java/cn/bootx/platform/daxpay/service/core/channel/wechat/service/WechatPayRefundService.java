@@ -46,7 +46,7 @@ public class WechatPayRefundService {
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .notify_url(weChatPayConfig.getNotifyUrl())
-                .out_trade_no(String.valueOf(refundOrder.getPaymentId()))
+                .out_trade_no(String.valueOf(refundOrder.getRefundNo()))
                 .out_refund_no(String.valueOf(refundOrder.getId()))
                 .total_fee(totalFee)
                 .refund_fee(refundFee)

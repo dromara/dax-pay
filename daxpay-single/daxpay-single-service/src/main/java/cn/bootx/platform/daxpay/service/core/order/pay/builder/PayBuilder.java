@@ -13,6 +13,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
+import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -54,6 +55,7 @@ public class PayBuilder {
         // 构建支付订单对象
         return new PayOrder()
                 .setBusinessNo(payParam.getBusinessNo())
+                .setOrderNo(OrderNoGenerateUtil.trade())
                 .setTitle(payParam.getTitle())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setAmount(sumAmount)

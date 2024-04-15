@@ -36,6 +36,9 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @DbColumn(comment = "关联的业务号")
     private String businessNo;
 
+    @DbColumn(comment = "支付订单编号")
+    private String orderNo;
+
     /** 标题 */
     @DbColumn(comment = "标题")
     private String title;

@@ -103,7 +103,7 @@ public class UnionPayService {
         Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
 
         UnionPayOrder unionPayOrder = new UnionPayOrder();
-        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setOutTradeNo(payOrder.getOrderNo());
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
@@ -118,7 +118,7 @@ public class UnionPayService {
         Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
 
         UnionPayOrder unionPayOrder = new UnionPayOrder();
-        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setOutTradeNo(payOrder.getOrderNo());
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
@@ -135,7 +135,7 @@ public class UnionPayService {
 
 
         UnionPayOrder unionPayOrder = new UnionPayOrder();
-        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setOutTradeNo(payOrder.getOrderNo());
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
@@ -160,7 +160,7 @@ public class UnionPayService {
         Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
 
         UnionPayOrder unionPayOrder = new UnionPayOrder();
-        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setOutTradeNo(payOrder.getOrderNo());
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
@@ -175,7 +175,7 @@ public class UnionPayService {
 
         UnionPayOrder unionPayOrder = new UnionPayOrder();
         unionPayOrder.setAuthCode(authCode);
-        unionPayOrder.setOutTradeNo(String.valueOf(payOrder.getId()));
+        unionPayOrder.setOutTradeNo(payOrder.getOrderNo());
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);

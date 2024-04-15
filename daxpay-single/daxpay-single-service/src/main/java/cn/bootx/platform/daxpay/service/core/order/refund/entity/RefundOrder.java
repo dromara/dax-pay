@@ -32,8 +32,9 @@ import java.time.LocalDateTime;
 public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<RefundOrderDto> {
 
     /** 原支付id */
-    @DbColumn(comment = "原支付id")
-    private Long paymentId;
+    @DbColumn(comment = "原支付订单号")
+    private String orderNo;
+
 
     /** 原支付业务号 */
     @DbColumn(comment = "原支付业务号")
@@ -48,6 +49,8 @@ public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<Refu
      */
     @DbColumn(comment = "退款号")
     private String refundNo;
+
+    private String refundBusinessNo;
 
     /** 退款时是否是含有异步通道 */
     @DbColumn(comment = "是否含有异步通道")

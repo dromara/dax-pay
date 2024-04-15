@@ -240,7 +240,7 @@ public class WeChatPayService {
             // 反正v2版本的超时时间无效
             .time_expire(PayUtil.getWxExpiredTime(payOrder.getExpiredTime()))
             .body(payOrder.getTitle())
-            .out_trade_no(String.valueOf(payOrder.getId()))
+            .out_trade_no(payOrder.getOrderNo())
             .total_fee(amount)
             .spbill_create_ip(NetUtil.getLocalhostStr())
             .notify_url(weChatPayConfig.getNotifyUrl())

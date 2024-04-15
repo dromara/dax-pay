@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
 public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunction<PayChannelOrderDto> {
 
     @DbColumn(comment = "支付id")
-    private Long paymentId;
+    private String paymentId;
 
     @DbColumn(comment = "异步支付方式")
     private boolean async;

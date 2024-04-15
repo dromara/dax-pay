@@ -41,7 +41,7 @@ public class AliPayCloseService {
     @Retryable(value = RetryableException.class)
     public void close(PayOrder payOrder) {
         AlipayTradeCloseModel model = new AlipayTradeCloseModel();
-        model.setOutTradeNo(String.valueOf(payOrder.getId()));
+        model.setOutTradeNo(payOrder.getOrderNo());
 
         try {
             AlipayTradeCloseResponse response = AliPayApi.tradeCloseToResponse(model);

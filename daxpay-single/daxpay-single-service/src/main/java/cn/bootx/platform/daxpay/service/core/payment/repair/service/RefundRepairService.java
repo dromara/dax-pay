@@ -73,10 +73,10 @@ public class RefundRepairService {
         }
         try {
             // 获取关联支付单
-            PayOrder payOrder = payOrderQueryService.findById(refundOrder.getPaymentId())
+            PayOrder payOrder = payOrderQueryService.findById(refundOrder.getId())
                     .orElseThrow(() -> new RuntimeException("支付单不存在"));
             // 关联支付通道支付单
-            Map<String, PayChannelOrder> payChannelOrderMap = payChannelOrderManager.findAllByPaymentId(refundOrder.getPaymentId())
+            Map<String, PayChannelOrder> payChannelOrderMap = payChannelOrderManager.findAllByPaymentId(refundOrder.getId())
                     .stream()
                     .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
             // 异步通道退款单
