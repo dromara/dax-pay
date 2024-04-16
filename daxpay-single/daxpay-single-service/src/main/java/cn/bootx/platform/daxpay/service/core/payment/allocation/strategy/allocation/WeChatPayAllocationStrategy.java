@@ -65,8 +65,15 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void finish() {
-        weChatPayAllocationService.finish(getAllocationOrder(), this.getAllocationOrderDetails(), weChatPayConfig);
+        weChatPayAllocationService.finish(getAllocationOrder(), weChatPayConfig);
     }
 
+    /**
+     * 同步状态
+     */
+    @Override
+    public void doSync() {
+        weChatPayAllocationService.sync(this.getAllocationOrder(),this.getAllocationOrderDetails(),weChatPayConfig);
+    }
 
 }

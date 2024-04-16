@@ -146,4 +146,7 @@ public interface WeChatPayCode {
     /** 个人openid */
     String PERSONAL_OPENID = "PERSONAL_OPENID";
 
+    /** 获取分账订单明细 */
+    String ALLOC_RECEIVERS = "receivers";
+
 }

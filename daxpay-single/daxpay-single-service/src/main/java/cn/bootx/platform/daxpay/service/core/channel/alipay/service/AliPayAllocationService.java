@@ -1,10 +1,14 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
+import cn.bootx.platform.common.core.function.CollectorsFunction;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.daxpay.code.AllocationDetailResultEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.*;
@@ -17,8 +21,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -40,9 +48,10 @@ public class AliPayAllocationService {
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
         model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
-        model.setRoyaltyMode("async");
+        model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
 
-        // 分账子参数
+        // 分账子参数 根据Id排序
+        orderDetails.sort(Comparator.comparing(MpIdEntity::getId));
         List<OpenApiRoyaltyDetailInfoPojo> royaltyParameters = orderDetails.stream()
                 .map(o -> {
                     OpenApiRoyaltyDetailInfoPojo infoPojo = new OpenApiRoyaltyDetailInfoPojo();
@@ -69,13 +78,14 @@ public class AliPayAllocationService {
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
         model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
-        model.setRoyaltyMode("async");
+        model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
         // 分账完结参数
         SettleExtendParams extendParams = new SettleExtendParams();
         extendParams.setRoyaltyFinish("true");
         model.setExtendParams(extendParams);
 
-        // 分账子参数
+        // 分账子参数 根据Id排序
+        orderDetails.sort(Comparator.comparing(MpIdEntity::getId));
         List<OpenApiRoyaltyDetailInfoPojo> royaltyParameters = orderDetails.stream()
                 .map(o -> {
                     OpenApiRoyaltyDetailInfoPojo infoPojo = new OpenApiRoyaltyDetailInfoPojo();
@@ -90,10 +100,10 @@ public class AliPayAllocationService {
     }
 
     /**
-     * 分账状态查询
+     * 分账状态同步
      */
     @SneakyThrows
-    public void queryStatus(AllocationOrder allocationOrder){
+    public void sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails){
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
         model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
         model.setOutRequestNo(allocationOrder.getOrderNo());
@@ -102,22 +112,23 @@ public class AliPayAllocationService {
         AlipayTradeOrderSettleQueryResponse response = AliPayApi.execute(request);
         // 验证
         this.verifyErrorMsg(response);
+        Map<String, AllocationOrderDetail> detailMap = allocationOrderDetails.stream()
+                .collect(Collectors.toMap(AllocationOrderDetail::getReceiverAccount, Function.identity(), CollectorsFunction::retainLatest));
         List<RoyaltyDetail> royaltyDetailList = response.getRoyaltyDetailList();
-
         // 转换成通用的明细详情
-        for (RoyaltyDetail royaltyDetail : royaltyDetailList) {
-            System.out.println(royaltyDetail);
-            System.out.println(royaltyDetail.getState());
-            System.out.println(royaltyDetail.getDetailId());
-
+        for (RoyaltyDetail receiver : royaltyDetailList) {
+            AllocationOrderDetail detail = detailMap.get(receiver.getTransIn());
+            if (Objects.nonNull(detail)) {
+                detail.setResult(this.getDetailResultEnum(receiver.getState()).getCode());
+                detail.setErrorCode(receiver.getErrorCode());
+                detail.setErrorMsg(receiver.getErrorDesc());
+                // 如果是完成, 更新时间
+                if (AllocationDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){
+                    LocalDateTime finishTime = LocalDateTimeUtil.of(receiver.getExecuteDt());
+                    detail.setFinishTime(finishTime);
+                }
+            }
         }
-    }
-
-    /**
-     * 分账剩余金额查询
-     */
-    public void queryAmount(AllocationOrder allocationOrder){
-
     }
 
     /**
@@ -129,8 +140,24 @@ public class AliPayAllocationService {
             if (StrUtil.isBlank(errorMsg)) {
                 errorMsg = alipayResponse.getMsg();
             }
-            log.error("分账接收方处理失败 {}", errorMsg);
+            log.error("分账处理失败 {}", errorMsg);
             throw new PayFailureException(errorMsg);
         }
+    }
+
+    /**
+     * 转换支付宝分账类型到系统中统一的
+     */
+    private AllocationDetailResultEnum getDetailResultEnum (String result){
+        // 进行中
+        if(Objects.equals(AliPayCode.ALLOC_PROCESSING, result)){
+            return AllocationDetailResultEnum.PENDING;
+        }
+        // 成功
+        if(Objects.equals(AliPayCode.ALLOC_SUCCESS, result)){
+            return AllocationDetailResultEnum.SUCCESS;
+        }
+        // 失败
+        return AllocationDetailResultEnum.FAIL;
     }
 }

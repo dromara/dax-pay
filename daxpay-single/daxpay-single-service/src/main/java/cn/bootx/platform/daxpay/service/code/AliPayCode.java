@@ -105,4 +105,15 @@ public interface AliPayCode {
     /** 分账金额超过最大可分账金额 */
     String ALLOC_AMOUNT_VALIDATE_ERROR = "ACQ.ALLOC_AMOUNT_VALIDATE_ERROR";
 
+    /** 分账 进行中 */
+    String ALLOC_PROCESSING = "PROCESSING";
+    /** 分账 成功 */
+    String ALLOC_SUCCESS = "SUCCESS";
+    /** 分账 失败 */
+    String ALLOC_FAIL = "FAIL";
+
+    /** 异步分账 */
+    String ALLOC_ASYNC = "ASYNC";
+    /** 同步分账 */
+    String ALLOC_SYNC = "SYNC";
 }

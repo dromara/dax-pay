@@ -10,7 +10,6 @@ import cn.bootx.platform.daxpay.param.pay.allocation.AllocationFinishParam;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationResetParam;
 import cn.bootx.platform.daxpay.service.core.order.allocation.service.AllocationOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationService;
-import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationSyncService;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.AllocationOrderQuery;
@@ -37,7 +36,6 @@ public class AllocationOrderController {
 
     private final AllocationOrderService allocationOrderService;
 
-    private final AllocationSyncService allocationSyncService;
     private final AllocationService allocationService;
 
     @Operation(summary = "分页")
@@ -76,7 +74,7 @@ public class AllocationOrderController {
     public ResResult<Void> sync(Long id){
         AllocationSyncParam param = new AllocationSyncParam();
         param.setAllocationId(id);
-        allocationSyncService.sync(param);
+        allocationService.sync(param);
         return Res.ok();
     }
 

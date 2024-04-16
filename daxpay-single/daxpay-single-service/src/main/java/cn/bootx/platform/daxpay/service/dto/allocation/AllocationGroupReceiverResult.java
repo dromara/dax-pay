@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.dto.allocation;
 
 import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
 import cn.bootx.platform.daxpay.code.AllocationRelationTypeEnum;
+import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -37,6 +38,7 @@ public class AllocationGroupReceiverResult {
 
 
     @Schema(description = "接收方账号")
+    @SensitiveInfo
     private String receiverAccount;
 
     /** 接收方姓名 */

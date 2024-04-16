@@ -70,4 +70,12 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
         aliPayAllocationService.finish(this.getAllocationOrder(), this.getAllocationOrderDetails());
     }
 
+    /**
+     * 同步状态
+     */
+    @Override
+    public void doSync() {
+        aliPayAllocationService.sync(this.getAllocationOrder(), this.getAllocationOrderDetails());
+    }
+
 }

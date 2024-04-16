@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.dto.order.pay;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -71,7 +71,7 @@ public class PayOrderDto extends BaseDto {
 
     /**
      * 分账状态
-     * @see AllocationStatusEnum
+     * @see AllocationOrderStatusEnum
      */
     @Schema(description = "分账状态")
     private String allocationStatus;

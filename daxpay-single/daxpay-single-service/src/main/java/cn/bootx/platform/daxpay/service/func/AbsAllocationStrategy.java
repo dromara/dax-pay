@@ -44,4 +44,9 @@ public abstract class AbsAllocationStrategy implements PayStrategy{
      * 分账完结
      */
     public abstract void finish();
+
+    /**
+     * 同步状态
+     */
+    public abstract void doSync();
 }

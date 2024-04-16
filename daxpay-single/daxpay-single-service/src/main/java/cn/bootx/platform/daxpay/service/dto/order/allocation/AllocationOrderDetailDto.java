@@ -1,12 +1,15 @@
 package cn.bootx.platform.daxpay.service.dto.order.allocation;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.code.AllocationDetailResultEnum;
 import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * 分账订单详情
@@ -52,7 +55,23 @@ public class AllocationOrderDetailDto extends BaseDto {
     @Schema(description = "接收方姓名")
     private String receiverName;
 
-    /** 状态 */
-    @Schema(description = "状态")
-    private String status;
+    /**
+     * 分账结果
+     * @see AllocationDetailResultEnum
+     */
+    @Schema(description = "分账结果")
+    private String result;
+
+    /** 错误代码 */
+    @Schema(description = "错误代码")
+    private String errorCode;
+
+    /** 错误原因 */
+    @Schema(description = "错误原因")
+    private String errorMsg;
+
+    /** 分账完成时间 */
+    @Schema(description = "分账完成时间")
+    private LocalDateTime finishTime;
+
 }

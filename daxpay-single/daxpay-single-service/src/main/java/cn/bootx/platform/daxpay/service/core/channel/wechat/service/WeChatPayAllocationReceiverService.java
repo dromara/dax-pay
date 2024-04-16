@@ -38,7 +38,7 @@ public class WeChatPayAllocationReceiverService {
     public boolean validation(AllocationReceiver allocationReceiver){
         List<String> list = Arrays.asList(WX_MERCHANT.getCode(), WX_MERCHANT.getCode());
         String receiverType = allocationReceiver.getReceiverType();
-        return !list.contains(receiverType);
+        return list.contains(receiverType);
     }
 
     /**

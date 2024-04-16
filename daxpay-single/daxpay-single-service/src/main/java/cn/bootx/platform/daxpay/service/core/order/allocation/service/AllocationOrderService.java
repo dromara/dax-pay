@@ -6,14 +6,17 @@ import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.code.AllocationDetailResultEnum;
+import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.allocation.AllocationStartParam;
-import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrderDetail;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.OrderAndDetail;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupReceiverResult;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
@@ -42,6 +45,8 @@ import java.util.stream.Collectors;
 public class AllocationOrderService {
     private final AllocationOrderManager allocationOrderManager;
     private final AllocationOrderDetailManager allocationOrderDetailManager;
+
+    private final PayOrderManager payOrderManager;
 
 
     /**
@@ -106,8 +111,8 @@ public class AllocationOrderService {
                     AllocationOrderDetail detail = new AllocationOrderDetail();
                     detail.setAllocationId(orderId)
                             .setReceiverId(o.getId())
-                            .setStatus(AllocationStatusEnum.WAITING.getCode())
                             .setAmount(amount)
+                            .setResult(AllocationDetailResultEnum.PENDING.getCode())
                             .setRate(rate)
                             .setReceiverType(o.getReceiverType())
                             .setReceiverName(o.getReceiverName())
@@ -128,10 +133,12 @@ public class AllocationOrderService {
                 .setGatewayPayOrderNo(payOrder.getGatewayOrderNo())
                 .setOrderNo(String.valueOf(orderId))
                 .setDescription(param.getDescription())
-                .setStatus(AllocationStatusEnum.WAITING.getCode())
+                .setStatus(AllocationOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
                 .setAmount(sumAmount);
         allocationOrder.setId(orderId);
-        // 保存
+        // 更新支付订单分账状态
+        payOrder.setAllocationStatus(PayOrderAllocationStatusEnum.ALLOCATION.getCode());
+        payOrderManager.updateById(payOrder);
         // 因为加密后字段值会发生变更, 所以在保存前备份一下
         List<AllocationOrderDetail> detailsBack = details.stream()
                 .map(o -> {

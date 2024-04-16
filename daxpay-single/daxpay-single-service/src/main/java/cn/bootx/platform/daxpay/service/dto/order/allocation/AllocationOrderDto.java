@@ -1,15 +1,12 @@
 package cn.bootx.platform.daxpay.service.dto.order.allocation;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
+import cn.bootx.platform.daxpay.code.AllocationOrderResultEnum;
+import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * 分账订单
@@ -78,22 +75,21 @@ public class AllocationOrderDto extends BaseDto {
 
     /**
      * 状态
-     * @see AllocationStatusEnum
+     * @see AllocationOrderStatusEnum
      */
     @Schema(description = "状态")
     private String status;
 
     /**
+     * 分账处理结果
+     * @see AllocationOrderResultEnum
+     */
+    @Schema(description = "分账处理结果")
+    private String result;
+    /**
      * 错误原因
      */
     @Schema(description = "错误原因")
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
-
-    /**
-     * 完成时间
-     */
-    @Schema(description = "完成时间")
-    private LocalDateTime finishTime;
 
 }

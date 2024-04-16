@@ -2,7 +2,8 @@ package cn.bootx.platform.daxpay.service.core.order.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.bootx.platform.daxpay.code.AllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.AllocationOrderResultEnum;
+import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.order.allocation.convert.AllocationConvert;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
@@ -17,8 +18,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * 分账订单
@@ -91,10 +90,17 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
 
     /**
      * 状态
-     * @see AllocationStatusEnum
+     * @see AllocationOrderStatusEnum
      */
     @DbColumn(comment = "状态")
     private String status;
+
+    /**
+     * 分账处理结果
+     * @see AllocationOrderResultEnum
+     */
+    @DbColumn(comment = "分账处理结果")
+    private String result;
 
     /**
      * 错误原因
@@ -102,12 +108,6 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "错误原因")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
-
-    /**
-     * 完成时间
-     */
-    @DbColumn(comment = "完成时间")
-    private LocalDateTime finishTime;
 
     /**
      * 转换
