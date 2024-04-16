@@ -23,11 +23,12 @@ import java.time.LocalDateTime;
 @Schema(title = "退款记录")
 public class RefundOrderDto extends BaseDto {
 
-    @Schema(description = "原支付号")
-    private Long paymentId;
 
     @Schema(description = "原支付业务号")
     private String businessNo;
+
+    @Schema(description = "原支付订单号")
+    private String orderNo;
 
     @Schema(description = "原支付标题")
     private String title;

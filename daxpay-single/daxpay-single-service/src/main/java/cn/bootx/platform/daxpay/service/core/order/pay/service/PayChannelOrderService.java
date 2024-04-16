@@ -41,8 +41,8 @@ public class PayChannelOrderService {
     /**
      * 根据支付ID查询列表
      */
-    public List<PayChannelOrderDto> findAllByPaymentId(Long paymentId){
-        return ResultConvertUtil.dtoListConvert(channelOrderManager.findAllByPaymentId(paymentId));
+    public List<PayChannelOrderDto> findAllByPaymentId(String orderNo){
+        return ResultConvertUtil.dtoListConvert(channelOrderManager.findAllByPaymentId(orderNo));
     }
 
     /**
@@ -81,7 +81,7 @@ public class PayChannelOrderService {
                     .setRefundableBalance(payChannelParam.getAmount())
                     .setChannelExtra(channelParamStr)
                     .setStatus(payStatus.getCode());
-            channelOrderManager.deleteByPaymentIdAndAsync(payOrder.getId());
+            channelOrderManager.deleteByPaymentIdAndAsync(payOrder.getOrderNo());
             channelOrderManager.save(payChannelOrder);
             payInfo.getPayChannelOrders().add(payChannelOrder);
         } else {

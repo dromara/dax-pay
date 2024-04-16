@@ -22,8 +22,8 @@ public class PayChannelOrderManager extends BaseManager<PayChannelOrderMapper, P
     /**
      * 根据订单查找
      */
-    public List<PayChannelOrder> findAllByPaymentId(Long paymentId){
-        return findAllByField(PayChannelOrder::getPaymentId,paymentId);
+    public List<PayChannelOrder> findAllByPaymentId(String orderNo){
+        return findAllByField(PayChannelOrder::getPaymentId,orderNo);
     }
 
     /**
@@ -48,9 +48,9 @@ public class PayChannelOrderManager extends BaseManager<PayChannelOrderMapper, P
     /**
      * 根据订单id删除异步支付记录
      */
-    public void deleteByPaymentIdAndAsync(Long paymentId){
+    public void deleteByPaymentIdAndAsync(String orderNo){
         lambdaUpdate()
-               .eq(PayChannelOrder::getPaymentId,paymentId)
+               .eq(PayChannelOrder::getPaymentId,orderNo)
                .eq(PayChannelOrder::isAsync,true)
                .remove();
 

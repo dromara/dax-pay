@@ -139,6 +139,7 @@ public class RefundOrderService {
         refundParam.setReason(param.getReason());
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
+        refundParam.setRefundAll(true);
         // 手动初始化上下文
         paymentAssistService.initContext(refundParam);
         // 初始化接口信息为统一退款

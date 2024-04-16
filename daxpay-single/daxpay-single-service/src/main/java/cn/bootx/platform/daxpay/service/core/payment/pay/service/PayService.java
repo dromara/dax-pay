@@ -453,7 +453,7 @@ public class PayService {
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
             // 查询通道订单
-            List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
+            List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getOrderNo());
             clientNoticeService.registerPayNotice(payOrder, payOrderExtra, payChannelOrders);
         }
         return PayBuilder.buildPayResultByPayOrder(payOrder);

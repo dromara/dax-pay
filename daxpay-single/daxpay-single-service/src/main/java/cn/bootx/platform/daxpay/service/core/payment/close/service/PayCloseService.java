@@ -86,7 +86,7 @@ public class PayCloseService {
             }
 
             // 0.基础数据准备
-            Map<String, PayChannelOrder> orderChannelMap = payChannelOrderManager.findAllByPaymentId(payOrder.getId())
+            Map<String, PayChannelOrder> orderChannelMap = payChannelOrderManager.findAllByPaymentId(payOrder.getOrderNo())
                     .stream()
                     .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
 

@@ -24,6 +24,10 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "关联的业务号")
     private String businessNo;
 
+    /** 支付网关订单号 */
+    @Schema(description = "支付网关订单号")
+    private String orderNo;
+
     /** 标题 */
     @Schema(description = "标题")
     private String title;

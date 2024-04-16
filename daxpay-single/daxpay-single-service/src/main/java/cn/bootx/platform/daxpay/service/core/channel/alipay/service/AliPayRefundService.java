@@ -32,8 +32,8 @@ public class AliPayRefundService {
     public void refund(RefundOrder refundOrder, int amount) {
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();
-        refundModel.setOutTradeNo(String.valueOf(refundOrder.getRefundNo()));
-        refundModel.setOutRequestNo(String.valueOf(refundOrder.getId()));
+        refundModel.setOutTradeNo(String.valueOf(refundOrder.getOrderNo()));
+        refundModel.setOutRequestNo(String.valueOf(refundOrder.getRefundNo()));
         // 金额转换
         String refundAmount = String.valueOf(amount*0.01);
         refundModel.setRefundAmount(refundAmount);

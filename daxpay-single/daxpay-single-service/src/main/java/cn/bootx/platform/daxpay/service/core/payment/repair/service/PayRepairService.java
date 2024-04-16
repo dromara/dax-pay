@@ -62,7 +62,7 @@ public class PayRepairService {
         }
 
         // 1. 获取支付单管理的通道支付订单
-        Map<String, PayChannelOrder> channelOrderMap = channelOrderManager.findAllByPaymentId(order.getId())
+        Map<String, PayChannelOrder> channelOrderMap = channelOrderManager.findAllByPaymentId(order.getOrderNo())
                 .stream()
                 .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
         List<String> channels = new ArrayList<>(channelOrderMap.keySet());

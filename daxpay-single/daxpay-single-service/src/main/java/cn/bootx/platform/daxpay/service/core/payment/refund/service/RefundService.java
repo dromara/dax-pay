@@ -103,7 +103,7 @@ public class RefundService {
         refundAssistService.checkAndDisposeParam(param, payOrder);
 
         // 组装退款参数, 处理全部退款和简单退款情况
-        List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
+        List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getOrderNo());
         // 是否全部退款
         if (param.isRefundAll()){
             // 全部退款根据支付订单的退款信息构造退款参数
@@ -249,7 +249,7 @@ public class RefundService {
                 .findAllByRefundId(refundOrder.getId());
         PayOrder payOrder = payOrderService.findById(refundOrder.getId())
                 .orElseThrow(() -> new DataNotExistException("未查找到支付订单"));
-        List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
+        List<PayChannelOrder> payChannelOrders = payChannelOrderManager.findAllByPaymentId(payOrder.getOrderNo());
         Map<String, PayChannelOrder> orderChannelMap = payChannelOrders.stream()
                 .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
 

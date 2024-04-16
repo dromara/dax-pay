@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class PayChannelOrderDto extends BaseDto {
 
     @Schema(description = "支付id")
-    private Long paymentId;
+    private String paymentId;
 
     @Schema(description = "异步支付方式")
     private boolean async;

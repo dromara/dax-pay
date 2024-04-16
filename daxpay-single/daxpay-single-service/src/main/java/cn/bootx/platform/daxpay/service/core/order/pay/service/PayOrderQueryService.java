@@ -90,7 +90,7 @@ public class PayOrderQueryService {
                 .orElseThrow(() -> new PayFailureException("支付订单不完整"));
 
         // 查询通道数据
-        List<PayChannelOrder> orderChannelList = payChannelOrderManager.findAllByPaymentId(payOrder.getId());
+        List<PayChannelOrder> orderChannelList = payChannelOrderManager.findAllByPaymentId(payOrder.getOrderNo());
 
         List<PayChannelOrderResult> channels = orderChannelList.stream()
                 .map(PayOrderConvert.CONVERT::convertResult)
@@ -103,5 +103,9 @@ public class PayOrderQueryService {
                 .setChannels(channels);
 
         return payOrderResult;
+    }
+
+    public  Optional<PayOrder> findByOrderNo(String  orderNo) {
+        return payOrderManager.findByField(PayOrder::getOrderNo,orderNo);
     }
 }

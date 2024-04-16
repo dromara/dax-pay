@@ -114,7 +114,7 @@ public class ClientNoticeService {
 
         // 通道支付订单为空则进行查询
         if (CollUtil.isEmpty(channelOrders)){
-            channelOrders = payChannelOrderManager.findAllByPaymentId(order.getId());
+            channelOrders = payChannelOrderManager.findAllByPaymentId(order.getOrderNo());
         }
         // 创建通知任务并保存
         ClientNoticeTask task = clientNoticeAssistService.buildPayTask(order, orderExtra, channelOrders);
