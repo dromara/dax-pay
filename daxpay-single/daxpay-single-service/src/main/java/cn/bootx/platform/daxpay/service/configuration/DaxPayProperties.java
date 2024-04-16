@@ -23,6 +23,7 @@ public class DaxPayProperties {
     /** 前端地址(web) */
     private String frontWebUrl;
 
+    /** 机器码, 御用控制生成流水号 */
     private String machineNo;
 
     public void setMachineNo(String machineNo) {
