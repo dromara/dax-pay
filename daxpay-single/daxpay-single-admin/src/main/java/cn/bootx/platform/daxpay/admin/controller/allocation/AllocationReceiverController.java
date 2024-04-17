@@ -21,7 +21,7 @@ import java.util.List;
  * @author xxm
  * @since 2024/3/28
  */
-@Tag(name = "对账接收方控制器")
+@Tag(name = "分账接收方控制器")
 @RestController
 @RequestMapping("/allocation/receiver")
 @RequiredArgsConstructor

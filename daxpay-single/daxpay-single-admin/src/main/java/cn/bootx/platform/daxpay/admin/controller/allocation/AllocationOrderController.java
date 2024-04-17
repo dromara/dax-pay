@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 对账订单控制器
+ * 分账订单控制器
  * @author xxm
  * @since 2024/4/7
  */
-@Tag(name = "对账订单控制器")
+@Tag(name = "分账订单控制器")
 @RestController
 @RequestMapping("/order/allocation")
 @RequiredArgsConstructor
@@ -72,7 +72,7 @@ public class AllocationOrderController {
     @Operation(summary = "同步分账结果")
     @PostMapping("/sync")
     public ResResult<Void> sync(Long id){
-        AllocationSyncParam param = new AllocationSyncParam();
+        AllocationSyncParam  param = new AllocationSyncParam();
         param.setAllocationId(id);
         allocationService.sync(param);
         return Res.ok();
