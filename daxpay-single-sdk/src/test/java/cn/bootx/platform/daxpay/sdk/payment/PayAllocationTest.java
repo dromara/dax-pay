@@ -3,9 +3,11 @@ package cn.bootx.platform.daxpay.sdk.payment;
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
 import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
+import cn.bootx.platform.daxpay.sdk.model.allocation.AllocationModel;
 import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
+import cn.bootx.platform.daxpay.sdk.param.allocation.AllocationParam;
 import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.util.RandomUtil;
@@ -31,7 +33,7 @@ public class PayAllocationTest {
     }
 
     /**
-     * 异步通道测试
+     * 创建用于分账的订单
      */
     @Test
     public void simplePay() {
@@ -50,6 +52,22 @@ public class PayAllocationTest {
         System.out.println(execute);
         PayOrderModel data = execute.getData();
         System.out.println(data);
+    }
+    /**
+     * 开启分账
+     */
+    @Test
+    public void allocation() {
+        // 分账参数
+        AllocationParam param = new AllocationParam();
+        param.setAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setDescription("测试分账");
+        param.setAllocationGroupId(1L);
+        param.setClientIp("127.0.0.1");
+        param.setPaymentId(1L);
+
+        DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
+        System.out.println(execute);
     }
 
 }
