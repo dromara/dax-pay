@@ -1,0 +1,19 @@
+@startuml
+
+progress : 支付中
+success : 成功
+close : 支付关闭
+refunding : 退款中
+partial_refund : 部分退款
+refunded : 全部退款
+fail : 失败
+
+[*] --> progress
+progress --> success
+progress --> close
+progress --> fail
+success --> refunding
+refunding --> partial_refund
+refunding --> refunded
+
+@enduml

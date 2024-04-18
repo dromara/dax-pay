@@ -58,6 +58,7 @@ public class AggregateService {
         AggregatePayInfo aggregatePayInfo = new AggregatePayInfo()
                 .setTitle(param.getTitle())
                 .setBusinessNo(param.getBusinessNo())
+                .setAllocation(param.isAllocation())
                 .setAmount(amount);
         String code = IdUtil.getSnowflakeNextIdStr();
         String serverUrl = daxPayDemoProperties.getServerUrl();
@@ -218,6 +219,7 @@ public class AggregateService {
 
         SimplePayParam simplePayParam = new SimplePayParam();
         simplePayParam.setBusinessNo(param.getBusinessNo());
+        simplePayParam.setAllocation(param.isAllocation());
         simplePayParam.setTitle(param.getTitle());
         simplePayParam.setAmount(amount);
         simplePayParam.setChannel(payChannel.getCode());

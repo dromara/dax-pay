@@ -16,6 +16,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConf
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.service.param.channel.wechat.WeChatPayParam;
+import cn.bootx.platform.daxpay.service.sdk.wechat.BarPayModel;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.net.NetUtil;
@@ -25,7 +26,6 @@ import com.ijpay.core.enums.SignType;
 import com.ijpay.core.enums.TradeType;
 import com.ijpay.core.kit.WxPayKit;
 import com.ijpay.wxpay.WxPayApi;
-import com.ijpay.wxpay.model.MicroPayModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
@@ -66,7 +66,7 @@ public class WeChatPayService {
         }
 
         PayWayEnum payWayEnum = Optional.ofNullable(WeChatPayWay.findByCode(payChannelParam.getWay()))
-            .orElseThrow(() -> new PayFailureException("非法的微信支付类型"));
+                .orElseThrow(() -> new PayFailureException("非法的微信支付类型"));
         if (!payWays.contains(payWayEnum.getCode())) {
             throw new PayFailureException("该微信支付方式不可用");
         }
@@ -105,7 +105,7 @@ public class WeChatPayService {
         }
         // 付款码支付
         else if (payWayEnum == PayWayEnum.BARCODE) {
-           this.barCodePay(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
+            this.barCodePay(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
         }
         asyncPayInfo.setPayBody(payBody);
     }
@@ -113,10 +113,10 @@ public class WeChatPayService {
     /**
      * wap支付
      */
-    private String wapPay(String amount, PayOrder payment, WeChatPayConfig weChatPayConfig) {
-        Map<String, String> params = this.buildParams(amount, payment, weChatPayConfig, TradeType.MWEB.getTradeType())
-            .build()
-            .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+    private String wapPay(String amount, PayOrder payOrder, WeChatPayConfig weChatPayConfig) {
+        Map<String, String> params = this.buildParams(amount, payOrder, weChatPayConfig, TradeType.MWEB.getTradeType())
+                .build()
+                .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
         String xmlResult = WxPayApi.pushOrder(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
@@ -127,10 +127,10 @@ public class WeChatPayService {
     /**
      * 程序支付
      */
-    private String appPay(String amount, PayOrder payment, WeChatPayConfig weChatPayConfig) {
-        Map<String, String> params = this.buildParams(amount, payment, weChatPayConfig, TradeType.APP.getTradeType())
-            .build()
-            .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+    private String appPay(String amount, PayOrder payOrder, WeChatPayConfig weChatPayConfig) {
+        Map<String, String> params = this.buildParams(amount, payOrder, weChatPayConfig, TradeType.APP.getTradeType())
+                .build()
+                .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
         String xmlResult = WxPayApi.pushOrder(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
@@ -141,11 +141,11 @@ public class WeChatPayService {
     /**
      * 微信公众号支付或者小程序支付
      */
-    private String jsPay(String amount, PayOrder payment, String openId, WeChatPayConfig weChatPayConfig) {
-        Map<String, String> params = this.buildParams(amount, payment, weChatPayConfig, TradeType.JSAPI.getTradeType())
-            .openid(openId)
-            .build()
-            .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+    private String jsPay(String amount, PayOrder payOrder, String openId, WeChatPayConfig weChatPayConfig) {
+        Map<String, String> params = this.buildParams(amount, payOrder, weChatPayConfig, TradeType.JSAPI.getTradeType())
+                .openid(openId)
+                .build()
+                .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
         String xmlResult = WxPayApi.pushOrder(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
@@ -161,11 +161,11 @@ public class WeChatPayService {
     /**
      * 二维码支付
      */
-    private String qrCodePay(String amount, PayOrder payment, WeChatPayConfig weChatPayConfig) {
+    private String qrCodePay(String amount, PayOrder payOrder, WeChatPayConfig weChatPayConfig) {
 
-        Map<String, String> params = this.buildParams(amount, payment, weChatPayConfig, TradeType.NATIVE.getTradeType())
-            .build()
-            .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+        Map<String, String> params = this.buildParams(amount, payOrder, weChatPayConfig, TradeType.NATIVE.getTradeType())
+                .build()
+                .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
         String xmlResult = WxPayApi.pushOrder(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
@@ -176,20 +176,21 @@ public class WeChatPayService {
     /**
      * 付款码支付
      */
-    private void barCodePay(String amount, PayOrder payment, String authCode, WeChatPayConfig weChatPayConfig) {
+    private void barCodePay(String amount, PayOrder payOrder, String authCode, WeChatPayConfig weChatPayConfig) {
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
 
-        Map<String, String> params = MicroPayModel.builder()
-            .appid(weChatPayConfig.getWxAppId())
-            .mch_id(weChatPayConfig.getWxMchId())
-            .nonce_str(WxPayKit.generateStr())
-            .body(payment.getTitle())
-            .auth_code(authCode)
-            .out_trade_no(String.valueOf(payment.getId()))
-            .total_fee(amount)
-            .spbill_create_ip(NetUtil.getLocalhostStr())
-            .build()
-            .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+        Map<String, String> params = BarPayModel.builder()
+                .appid(weChatPayConfig.getWxAppId())
+                .mch_id(weChatPayConfig.getWxMchId())
+                .nonce_str(WxPayKit.generateStr())
+                .profit_sharing(payOrder.isAllocation()?"Y":"N")
+                .body(payOrder.getTitle())
+                .auth_code(authCode)
+                .out_trade_no(String.valueOf(payOrder.getId()))
+                .total_fee(amount)
+                .spbill_create_ip(NetUtil.getLocalhostStr())
+                .build()
+                .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
         String xmlResult = WxPayApi.microPay(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
@@ -211,7 +212,7 @@ public class WeChatPayService {
         // 支付中, 发起轮训同步
         if (Objects.equals(resultCode, WeChatPayCode.PAY_FAIL)
                 && Objects.equals(errCode, WeChatPayCode.PAY_USERPAYING)) {
-            SpringUtil.getBean(this.getClass()).rotationSync(payment);
+            SpringUtil.getBean(this.getClass()).rotationSync(payOrder);
             asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID));
             return;
         }
@@ -233,18 +234,19 @@ public class WeChatPayService {
     private UnifiedOrderModelBuilder buildParams(String amount, PayOrder payOrder, WeChatPayConfig weChatPayConfig, String tradeType) {
 
         return builder()
-            .appid(weChatPayConfig.getWxAppId())
-            .mch_id(weChatPayConfig.getWxMchId())
-            .nonce_str(WxPayKit.generateStr())
-            .time_start(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.PURE_DATETIME_PATTERN))
-            // 反正v2版本的超时时间无效
-            .time_expire(PayUtil.getWxExpiredTime(payOrder.getExpiredTime()))
-            .body(payOrder.getTitle())
-            .out_trade_no(payOrder.getOrderNo())
-            .total_fee(amount)
-            .spbill_create_ip(NetUtil.getLocalhostStr())
-            .notify_url(weChatPayConfig.getNotifyUrl())
-            .trade_type(tradeType);
+                .appid(weChatPayConfig.getWxAppId())
+                .mch_id(weChatPayConfig.getWxMchId())
+                .nonce_str(WxPayKit.generateStr())
+                .time_start(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.PURE_DATETIME_PATTERN))
+                // 反正v2版本的超时时间无效
+                .time_expire(PayUtil.getWxExpiredTime(payOrder.getExpiredTime()))
+                .body(payOrder.getTitle())
+                .profit_sharing(payOrder.isAllocation()?"Y":"N")
+                .out_trade_no(payOrder.getOrderNo())
+                .total_fee(amount)
+                .spbill_create_ip(NetUtil.getLocalhostStr())
+                .notify_url(weChatPayConfig.getNotifyUrl())
+                .trade_type(tradeType);
     }
 
     /**

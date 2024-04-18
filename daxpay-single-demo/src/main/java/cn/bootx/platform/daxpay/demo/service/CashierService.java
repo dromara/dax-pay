@@ -52,6 +52,7 @@ public class CashierService {
         // 将参数转换为简单支付参数
         SimplePayParam simplePayParam = new SimplePayParam();
         simplePayParam.setBusinessNo(param.getBusinessNo());
+        simplePayParam.setAllocation(param.isAllocation());
         int amount = param.getAmount()
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();

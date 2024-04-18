@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.builder;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
@@ -53,16 +54,22 @@ public class PayBuilder {
                 .filter(PayChannelEnum.ASYNC_TYPE_CODE::contains)
                 .findFirst();
         // 构建支付订单对象
-        return new PayOrder()
+        PayOrder payOrder = new PayOrder()
                 .setBusinessNo(payParam.getBusinessNo())
                 .setOrderNo(OrderNoGenerateUtil.trade())
                 .setTitle(payParam.getTitle())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
+                .setAllocation(payParam.isAllocation())
                 .setAmount(sumAmount)
                 .setExpiredTime(expiredTime)
                 .setCombinationPay(payParam.getPayChannels().size() > 1)
                 .setAsyncPay(asyncPay.isPresent())
                 .setRefundableBalance(sumAmount);
+        // 设置分账状态
+        if (payOrder.isAllocation()) {
+            payOrder.setAllocationStatus(PayOrderAllocationStatusEnum.WAITING.getCode());
+        }
+        return payOrder;
     }
 
     /**

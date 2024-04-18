@@ -7,11 +7,13 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.daxpay.param.pay.PayCloseParam;
 import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
+import cn.bootx.platform.daxpay.param.pay.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderExtraService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
+import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationService;
 import cn.bootx.platform.daxpay.service.core.payment.close.service.PayCloseService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
@@ -45,6 +47,7 @@ public class PayOrderController {
 
     private final PayCloseService PayCloseService;
     private final PaySyncService paySyncService;
+    private final AllocationService allocationService;
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
@@ -104,6 +107,15 @@ public class PayOrderController {
         PayCloseParam param = new PayCloseParam();
         param.setPaymentId(id);
         PayCloseService.close(param);
+        return Res.ok();
+    }
+
+    @Operation(summary = "发起分账")
+    @PostMapping("/allocation")
+    public ResResult<Void> allocation(Long id){
+        AllocationStartParam param = new AllocationStartParam();
+        param.setPaymentId(id);
+        allocationService.allocation(param);
         return Res.ok();
     }
 }

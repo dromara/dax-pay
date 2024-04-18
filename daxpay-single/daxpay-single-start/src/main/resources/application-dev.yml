@@ -65,7 +65,7 @@ bootx:
     swagger:
       enabled: true
       author: bootx
-      version: 2.0.4
+      version: 2.0.5
       title: 开源支付平台-单商户
       description: 开源支付平台-单商户版
       # 多模块扫码
@@ -159,7 +159,7 @@ dax-pay:
   # 服务地址
   server-url: http://localhost:9000
   # 前端h5地址
-  front-h5-url: http://localhost:5173/#
+  front-h5-url: http://pay1.bootx.cn/h5/#
   # 前端web地址
   front-web-url: http://localhost:9000/#
   # 演示模块
@@ -167,8 +167,8 @@ dax-pay:
     # 网关地址
     server-url: http://localhost:9000
     # 前端h5地址
-    front-h5-url: http://localhost:5173/#
-    # 签名秘钥
+    front-h5-url: http://pay1.bootx.cn/h5/#
+    # 签名秘钥, 需要与系统中配置一致
     sign-secret: 123456
     # 签名方式
     sign-type: hmac_sha256
