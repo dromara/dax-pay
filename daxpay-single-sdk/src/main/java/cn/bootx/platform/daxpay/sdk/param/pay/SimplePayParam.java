@@ -6,7 +6,6 @@ import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayRequest;
 import cn.bootx.platform.daxpay.sdk.param.ChannelParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.sdk.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;

@@ -77,40 +77,4 @@ public class RefundOrderTest {
         System.out.println(execute.getData());
     }
 
-    /**
-     * 多通道退款
-     */
-    @Test
-    public void refundOrderByMultiple(){
-        RefundParam param = new RefundParam();
-        param.setClientIp("127.0.0.1");
-
-        param.setBusinessNo("P0001");
-        param.setRefundAll(false);
-        param.setRefundNo("R0001");
-
-        // 设置具体的退款参数
-        RefundChannelParam alipay = new RefundChannelParam();
-        // 支付宝
-        alipay.setChannel(PayChannelEnum.ALI.getCode());
-        alipay.setAmount(12);
-
-        // 钱包
-        RefundChannelParam wallet = new RefundChannelParam();
-        alipay.setChannel(PayChannelEnum.WALLET.getCode());
-        alipay.setAmount(10);
-
-        // 现金
-        RefundChannelParam cash = new RefundChannelParam();
-        alipay.setChannel(PayChannelEnum.CASH.getCode());
-        alipay.setAmount(20);
-
-        List<RefundChannelParam> refundChannels = Arrays.asList(alipay, wallet, cash);
-        param.setRefundChannels(refundChannels);
-
-        DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
-    }
-
 }

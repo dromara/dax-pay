@@ -57,14 +57,8 @@ public class RefundStrategyFactory {
             case UNION_PAY:
                 strategy = SpringUtil.getBean(UnionRefundStrategy.class);
                 break;
-            case CASH:
-                strategy = SpringUtil.getBean(CashRefundStrategy.class);
-                break;
             case WALLET:
                 strategy = SpringUtil.getBean(WalletRefundStrategy.class);
-                break;
-            case VOUCHER:
-                strategy = SpringUtil.getBean(VoucherRefundStrategy.class);
                 break;
             default:
                 throw new PayUnsupportedMethodException();

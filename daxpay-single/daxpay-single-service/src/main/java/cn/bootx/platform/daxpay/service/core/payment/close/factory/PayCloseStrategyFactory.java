@@ -42,14 +42,8 @@ public class PayCloseStrategyFactory {
             case UNION_PAY:
                 strategy = SpringUtil.getBean(UnionPayCloseStrategy.class);
                 break;
-            case CASH:
-                strategy = SpringUtil.getBean(CashPayCloseStrategy.class);
-                break;
             case WALLET:
                 strategy = SpringUtil.getBean(WalletPayCloseStrategy.class);
-                break;
-            case VOUCHER:
-                strategy = SpringUtil.getBean(VoucherPayCloseStrategy.class);
                 break;
             default:
                 throw new PayUnsupportedMethodException();

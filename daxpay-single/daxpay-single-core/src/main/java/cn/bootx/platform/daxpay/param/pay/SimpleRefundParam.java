@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.param.pay;
 
 import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -4,7 +4,6 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayWayEnum;
 import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.serializer.TimestampToLocalDateTimeDeserializer;

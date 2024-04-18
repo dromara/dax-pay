@@ -19,9 +19,8 @@ public enum PayChannelEnum {
     ALI("ali_pay", "支付宝"),
     WECHAT("wechat_pay", "微信支付"),
     UNION_PAY("union_pay", "云闪付"),
-    CASH("cash_pay", "现金支付"),
     WALLET("wallet_pay", "钱包支付"),
-    VOUCHER("voucher_pay", "储值卡支付");
+    ;
     /** 支付通道编码 */
     private final String code;
     /** 支付通道名称 */

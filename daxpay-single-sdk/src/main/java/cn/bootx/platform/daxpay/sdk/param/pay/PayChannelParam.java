@@ -4,7 +4,6 @@ import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
 import cn.bootx.platform.daxpay.sdk.param.ChannelParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.sdk.param.channel.VoucherPayParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.WeChatPayParam;
 import lombok.Getter;

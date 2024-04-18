@@ -45,14 +45,8 @@ public class PayStrategyFactory {
             case UNION_PAY:
                 strategy = SpringUtil.getBean(UnionPayStrategy.class);
                 break;
-            case CASH:
-                strategy = SpringUtil.getBean(CashPayStrategy.class);
-                break;
             case WALLET:
                 strategy = SpringUtil.getBean(WalletPayStrategy.class);
-                break;
-            case VOUCHER:
-                strategy = SpringUtil.getBean(VoucherPayStrategy.class);
                 break;
             default:
                 throw new PayUnsupportedMethodException();

@@ -51,23 +51,4 @@ public class SimplePayOrderTest {
         System.out.println(data);
     }
 
-    /**
-     * 同步通道+回调测试
-     */
-    @Test
-    public void simplePayCallback() {
-        SimplePayParam param = new SimplePayParam();
-        param.setBusinessNo("P" + RandomUtil.randomNumbers(5));
-        param.setAmount(12);
-        param.setTitle("测试接口支付");
-        param.setChannel(PayChannelEnum.CASH.getCode());
-        param.setPayWay(PayWayEnum.NORMAL.getCode());
-        param.setClientIp("127.0.0.1");
-        param.setAttach("Attach");
-        param.setNotifyUrl("http://127.0.0.1:9000/demo/callback/payObject");
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        PayOrderModel data = execute.getData();
-        System.out.println(data);
-    }
 }
