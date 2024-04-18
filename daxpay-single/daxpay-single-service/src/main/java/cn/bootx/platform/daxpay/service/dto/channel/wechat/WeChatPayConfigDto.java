@@ -31,6 +31,9 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @Schema(description = "是否启用")
     private Boolean enable;
 
+    @Schema(description = "是否支付分账")
+    private Boolean allocation;
+
     @Schema(description = "支付限额")
     private Integer singleLimit;
 

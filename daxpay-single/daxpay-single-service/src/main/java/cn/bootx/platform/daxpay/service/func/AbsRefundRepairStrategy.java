@@ -11,7 +11,7 @@ import lombok.Getter;
 import java.util.Objects;
 
 /**
- * 支付退款修复策略, 只要异步支付订单的退款才会有修复选项
+ * 支付退款修复策略, 只有异步支付订单的退款才有修复选项
  * @author xxm
  * @since 2024/1/25
  */

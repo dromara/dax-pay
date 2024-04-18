@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.gateway.controller;
 
-import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
@@ -49,13 +48,5 @@ public class TestController {
     public ResResult<String> lock2(String name){
         return Res.ok(name);
     }
-
-    @IgnoreAuth
-    @Operation(summary = "微信回调测试")
-    @GetMapping(value = {"/wxcs/","wxcs"})
-    public String wxcs(){
-        return "ok";
-    }
-
 
 }

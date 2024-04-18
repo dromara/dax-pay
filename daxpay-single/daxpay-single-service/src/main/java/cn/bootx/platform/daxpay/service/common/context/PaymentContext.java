@@ -42,4 +42,7 @@ public class PaymentContext {
     /** 对账相关信息 */
     private final ReconcileLocal reconcileInfo = new ReconcileLocal();
 
+    /** 分账相关信息 */
+    private final AllocationLocal allocationInfo = new AllocationLocal();
+
 }
