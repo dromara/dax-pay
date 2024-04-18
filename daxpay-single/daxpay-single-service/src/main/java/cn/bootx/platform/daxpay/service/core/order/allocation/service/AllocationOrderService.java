@@ -10,7 +10,7 @@ import cn.bootx.platform.daxpay.code.AllocationDetailResultEnum;
 import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
-import cn.bootx.platform.daxpay.param.pay.allocation.AllocationStartParam;
+import cn.bootx.platform.daxpay.param.payment.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;

@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.param.pay;
+package cn.bootx.platform.daxpay.param.payment.allocation;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -12,9 +12,9 @@ import lombok.Data;
 @Schema(title = "分账同步请求参数")
 public class AllocationSyncParam {
 
-    @Schema(description = "分账单ID")
-    private Long allocationId;
-
-    @Schema(description = "分账单号")
+    @Schema(description = "分账号")
     private String allocationNo;
+
+    @Schema(description = "商户分账号")
+    private String outAllocationNo;
 }

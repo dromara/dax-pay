@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.param.pay.RefundSyncParam;
+import cn.bootx.platform.daxpay.param.payment.refund.RefundSyncParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.core.order.refund.service.RefundOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.RefundService;

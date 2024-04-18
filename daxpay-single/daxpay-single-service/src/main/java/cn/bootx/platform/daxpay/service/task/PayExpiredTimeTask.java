@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.task;
 
-import cn.bootx.platform.daxpay.param.pay.PaySyncParam;
+import cn.bootx.platform.daxpay.param.payment.pay.PaySyncParam;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.payment.pay.dao.PayExpiredTimeRepository;

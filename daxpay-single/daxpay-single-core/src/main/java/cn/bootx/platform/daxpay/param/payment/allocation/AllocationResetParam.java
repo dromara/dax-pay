@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.param.pay.allocation;
+package cn.bootx.platform.daxpay.param.payment.allocation;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

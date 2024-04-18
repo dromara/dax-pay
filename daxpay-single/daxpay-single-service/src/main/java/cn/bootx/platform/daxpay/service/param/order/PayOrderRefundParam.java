@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.param.order;
 
-import cn.bootx.platform.daxpay.param.pay.RefundChannelParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;

@@ -5,9 +5,9 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.param.pay.AllocationSyncParam;
-import cn.bootx.platform.daxpay.param.pay.allocation.AllocationFinishParam;
-import cn.bootx.platform.daxpay.param.pay.allocation.AllocationResetParam;
+import cn.bootx.platform.daxpay.param.payment.allocation.AllocationSyncParam;
+import cn.bootx.platform.daxpay.param.payment.allocation.AllocationFinishParam;
+import cn.bootx.platform.daxpay.param.payment.allocation.AllocationResetParam;
 import cn.bootx.platform.daxpay.service.core.order.allocation.service.AllocationOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationService;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
@@ -72,7 +72,7 @@ public class AllocationOrderController {
     @Operation(summary = "同步分账结果")
     @PostMapping("/sync")
     public ResResult<Void> sync(Long id){
-        AllocationSyncParam  param = new AllocationSyncParam();
+        AllocationSyncParam param = new AllocationSyncParam();
         param.setAllocationId(id);
         allocationService.sync(param);
         return Res.ok();

@@ -3,9 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.pay.service;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
-import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
-import cn.bootx.platform.daxpay.param.pay.PayParam;
-import cn.bootx.platform.daxpay.param.pay.SimplePayParam;
+import cn.bootx.platform.daxpay.param.payment.pay.PayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
@@ -20,8 +18,6 @@ import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNotice
 import cn.bootx.platform.daxpay.service.core.payment.pay.factory.PayStrategyFactory;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.util.PayUtil;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
@@ -32,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -67,21 +62,12 @@ public class PayService {
 
 
     /**
-     * 简单下单, 可以视为不支持组合支付的下单接口
+     * 支付下单流程
      */
     public PayResult simplePay(SimplePayParam simplePayParam) {
         // 组装支付参数
-        PayParam payParam = new PayParam();
-        PayChannelParam payChannelParam = new PayChannelParam();
-        payChannelParam.setChannel(simplePayParam.getChannel());
-        payChannelParam.setWay(simplePayParam.getPayWay());
-        payChannelParam.setAmount(simplePayParam.getAmount());
-        payChannelParam.setChannelParam(simplePayParam.getChannelParam());
-        BeanUtil.copyProperties(simplePayParam,payParam, CopyOptions.create().ignoreNullValue());
-        payParam.setPayChannels(Collections.singletonList(payChannelParam));
-        // 复用支付下单接口
-        return this.pay(payParam);
-        }
+        return null;
+    }
 
 
     /**
@@ -204,7 +190,7 @@ public class PayService {
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
 
         // 获取支付方式，通过工厂生成对应的策略组
-         List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
+        List<AbsPayStrategy> strategies = PayStrategyFactory.createAsyncLast(payParam.getPayChannels());
         if (CollectionUtil.isEmpty(strategies)) {
             throw new PayUnsupportedMethodException();
         }

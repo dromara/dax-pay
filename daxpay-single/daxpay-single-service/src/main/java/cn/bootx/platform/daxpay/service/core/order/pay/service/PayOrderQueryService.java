@@ -6,7 +6,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.param.pay.QueryPayParam;
+import cn.bootx.platform.daxpay.param.payment.pay.QueryPayParam;
 import cn.bootx.platform.daxpay.result.order.PayChannelOrderResult;
 import cn.bootx.platform.daxpay.result.order.PayOrderResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;

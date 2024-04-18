@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.param.pay;
+package cn.bootx.platform.daxpay.param.payment.refund;
 
 import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,16 +15,10 @@ import lombok.EqualsAndHashCode;
 @Schema(title = "退款状态同步参数")
 public class RefundSyncParam extends PaymentCommonParam {
 
-    /**
-     * 退款订单ID，refundId和refundNo 必传一个, 同时传输时，以 refundId 为准
-     */
-    @Schema(description = "退款订单ID")
-    private Long refundId;
-
-    /**
-     * 退款订单号，refundId和refundNo 必传一个，同时传输时，以 refundId 为准
-     */
-    @Schema(description = "退款订单号")
+    @Schema(description = "退款号")
     private String refundNo;
+
+    @Schema(description = "商户退款号")
+    private String outRefundNo;
 
 }

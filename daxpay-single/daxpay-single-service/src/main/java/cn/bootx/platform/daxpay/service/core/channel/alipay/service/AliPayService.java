@@ -3,7 +3,6 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 import cn.bootx.platform.daxpay.code.PayWayEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.code.AliPayWay;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
