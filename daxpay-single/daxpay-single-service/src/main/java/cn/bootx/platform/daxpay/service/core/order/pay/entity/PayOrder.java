@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.pay.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
@@ -48,6 +49,10 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @DbColumn(comment = "是否是异步支付")
     private boolean asyncPay;
 
+    /** 是否需要分账 */
+    @DbColumn(comment = "是否需要分账")
+    private boolean allocation;
+
     /**
      * 异步支付通道
      * @see PayChannelEnum#ASYNC_TYPE_CODE
@@ -75,6 +80,13 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
      */
     @DbColumn(comment = "支付状态")
     private String status;
+
+    /**
+     * 分账状态
+     * @see PayOrderAllocationStatusEnum
+     */
+    @DbColumn(comment = "分账状态")
+    private String allocationStatus;
 
     /** 支付时间 */
     @DbColumn(comment = "支付时间")

@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:发起支付;
+:基础参数校验;
+switch (订单类型?)
+
+stop
+
+@enduml

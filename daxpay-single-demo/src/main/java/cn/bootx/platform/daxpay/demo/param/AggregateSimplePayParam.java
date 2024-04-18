@@ -20,6 +20,9 @@ public class AggregateSimplePayParam {
     @NotNull
     private String businessNo;
 
+    @Schema(description = "是否分账")
+    private boolean allocation;
+
     @Schema(description = "标题")
     @NotNull
     private String title;

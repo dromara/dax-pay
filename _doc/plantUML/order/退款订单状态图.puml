@@ -1,0 +1,13 @@
+@startuml
+
+progress : 退款中
+success : 成功
+close : 关闭
+fail : 失败
+
+[*] --> progress
+progress --> success
+progress --> close
+progress --> fail
+
+@enduml

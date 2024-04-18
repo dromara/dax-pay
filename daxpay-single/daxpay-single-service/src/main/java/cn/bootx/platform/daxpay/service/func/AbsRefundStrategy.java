@@ -14,7 +14,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 /**
- * 抽象支付退款策略基类
+ * 抽象支付退款策略
  *
  * @author xxm
  * @since 2020/12/11

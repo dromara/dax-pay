@@ -7,7 +7,6 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.param.pay.PayParam;
 import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.util.IdUtil;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
@@ -21,6 +20,34 @@ import java.util.List;
  */
 @UtilityClass
 public class PayUtil {
+
+    /**
+     * 校验参数
+     */
+    public void validation(PayParam payParam) {
+        // 验证支付金额
+        validationAmount(payParam.getPayChannels());
+        // 验证异步支付方式
+        validationAsyncPay(payParam);
+        // 验证是否可以分账
+        validationAllocation(payParam);
+    }
+
+    /**
+     * 验证是否可以分账
+     */
+    private void validationAllocation(PayParam payParam) {
+        // 如果分账不启用, 不需要校验
+        if (!payParam.isAllocation()) {
+            return;
+        }
+        // 只有异步支付方式支持分账
+        if (isNotSync(payParam.getPayChannels())) {
+            throw new PayFailureException("分账只支持包含异步支付通道的订单");
+        }
+    }
+
+
     /**
      * 检查异步支付方式
      */
@@ -36,8 +63,8 @@ public class PayUtil {
         if (asyncPayCount > 1) {
             throw new PayFailureException("组合支付时只允许有一个异步支付方式");
         }
-    }
 
+    }
 
     /**
      * 检查支付金额
@@ -50,13 +77,6 @@ public class PayUtil {
                 throw new PayAmountAbnormalException();
             }
         }
-    }
-
-    /**
-     * 获取支付宝的过期时间
-     */
-    public String getAliExpiredTime(int minute) {
-        return minute + "m";
     }
 
     /**
@@ -96,11 +116,4 @@ public class PayUtil {
                 .noneMatch(PayChannelEnum.ASYNC_TYPE_CODE::contains);
     }
 
-    /**
-     * 生成退款号
-     */
-    public String getRefundNo(){
-//        return "R" + IdUtil.getSnowflakeNextIdStr();
-        return IdUtil.getSnowflakeNextIdStr();
-    }
 }

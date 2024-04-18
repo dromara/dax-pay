@@ -45,12 +45,6 @@ public enum PayChannelEnum {
             .orElseThrow(() -> new PayFailureException("不存在的支付通道"));
     }
 
-    /** 支付宝 UA */
-    public static final String UA_ALI_PAY = "Alipay";
-
-    /** 微信 UA */
-    public static final String UA_WECHAT_PAY = "MicroMessenger";
-
     /** 异步支付通道 */
     public static final List<PayChannelEnum> ASYNC_TYPE = Collections.unmodifiableList(Arrays.asList(ALI, WECHAT, UNION_PAY));
     /** 异步支付通道的编码 */
