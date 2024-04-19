@@ -46,7 +46,7 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
-    /** 商户扩展参数,回调时会原样返回 以最后一次为准 */
+    /** 商户扩展参数,回调时会原样返回 */
     @DbColumn(comment = "商户扩展参数")
     private String attach;
 

@@ -47,9 +47,6 @@ public class PayParam extends PaymentCommonParam {
     @JsonDeserialize(using = TimestampToLocalDateTimeDeserializer.class)
     private LocalDateTime expiredTime;
 
-    @Schema(description = "用户付款中途退出返回商户网站的地址(部分支付场景中可用)")
-    private String quitUrl;
-
     /**
      * @see PayChannelEnum#getCode()
      */
@@ -74,22 +71,26 @@ public class PayParam extends PaymentCommonParam {
      * @see WeChatPayParam
      * @see WalletPayParam
      */
-    @Schema(description = "附加通道支付参数")
+    @Schema(description = "通道附加支付参数")
     private Map<String, Object> channelParam;
 
     /** 商户扩展参数,回调时会原样返回 */
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;
 
-    /** 同步跳转URL, 支付完毕后用户浏览器返回到该地址, 不传输跳转到默认地址 */
+    /** 同步跳转地址, 支付完毕后用户浏览器返回到该地址, 不传输跳转到默认地址 */
     @Schema(description = "同步通知URL")
     private String returnUrl;
 
-    /** 是否不启用异步通知 */
-    @Schema(description = "是否不启用异步通知")
-    private boolean notNotify;
+    /** 退出地址 */
+    @Schema(description = "用户付款中途退出返回商户网站的地址(部分支付场景中可用)")
+    private String quitUrl;
 
     /** 异步通知地址 */
     @Schema(description = "异步通知地址")
     private String notifyUrl;
+
+    /** 是否不启用异步通知 */
+    @Schema(description = "是否不启用异步通知")
+    private boolean notNotify;
 }

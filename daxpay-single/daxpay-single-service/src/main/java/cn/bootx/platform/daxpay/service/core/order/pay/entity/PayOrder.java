@@ -52,7 +52,7 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @DbColumn(comment = "是否是异步支付")
     private boolean asyncPay;
 
-    /** 是否需要分账 */
+    /** 是否支持分账 */
     @DbColumn(comment = "是否需要分账")
     private boolean allocation;
 
