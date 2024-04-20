@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.daxpay.multi</groupId>
+        <artifactId>daxpay-multi-server</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>cn.bootx.platform</groupId>
+    <artifactId>bootx-platform</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>bootx-platform-core</module>
+        <module>bootx-platform-commons</module>
+        <module>bootx-platform-starters</module>
+        <module>bootx-platform-service</module>
+    </modules>
+
+    <properties>
+        <springdoc.version>1.7.0</springdoc.version>
+        <hutool.version>5.8.23</hutool.version>
+    </properties>
+
+</project>
