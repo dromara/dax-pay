@@ -29,6 +29,12 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>bootx-platform-core</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
