@@ -69,7 +69,7 @@ public class PaySyncService {
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderQueryService.findByBusinessNo(param.getBusinessNo())
+            payOrder = payOrderQueryService.findByOutOrderNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         // 如果不是异步支付, 直接返回返回

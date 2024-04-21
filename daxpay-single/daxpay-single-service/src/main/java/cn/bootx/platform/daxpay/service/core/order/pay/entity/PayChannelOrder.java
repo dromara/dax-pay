@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @DbTable(comment = "支付订单关联支付时通道信息")
 @TableName("pay_channel_order")
+@Deprecated
 public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunction<PayChannelOrderDto> {
 
     @DbColumn(comment = "支付id")
@@ -64,7 +65,6 @@ public class PayChannelOrder extends MpCreateEntity implements EntityBaseFunctio
     /**
      * @see AliPayParam
      * @see WeChatPayParam
-     * @see VoucherPayParam
      * @see WalletPayParam
      */
     @DbColumn(comment = "附加支付参数")

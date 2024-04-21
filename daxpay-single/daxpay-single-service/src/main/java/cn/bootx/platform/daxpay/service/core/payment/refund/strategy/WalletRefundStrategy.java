@@ -7,7 +7,6 @@ import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.func.AbsRefundStrategy;

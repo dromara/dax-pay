@@ -6,7 +6,6 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

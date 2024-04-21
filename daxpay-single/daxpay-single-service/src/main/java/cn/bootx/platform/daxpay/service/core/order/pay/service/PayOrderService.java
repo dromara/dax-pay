@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.service;
 
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -40,8 +42,8 @@ public class PayOrderService {
      */
     public void save(PayOrder payOrder){
         payOrderManager.save(payOrder);
-        // 异步支付需要添加订单超时任务记录
-        if (payOrder.isAsyncPay()){
+        // TODO 钱包支付不需要注册超时任务
+        if (Objects.equals(payOrder.getChannel(), PayChannelEnum.WALLET.getCode())){
             expiredTimeService.registerExpiredTime(payOrder);
         }
     }
@@ -51,22 +53,9 @@ public class PayOrderService {
      */
     public void updateById(PayOrder payOrder){
         // 如果是异步支付且支付订单完成, 需要删除订单超时任务记录
-        if (payOrder.isAsyncPay() && ORDER_FINISH.contains(payOrder.getStatus())){
+        if (ORDER_FINISH.contains(payOrder.getStatus())){
             expiredTimeService.cancelExpiredTime(payOrder.getId());
         }
         payOrderManager.updateById(payOrder);
     }
-
-    /**
-     * 使用强制更新
-     */
-    public void updateForceById(PayOrder payOrder){
-        // 如果是异步支付且支付订单完成, 需要删除订单超时任务记录
-        if (payOrder.isAsyncPay() && ORDER_FINISH.contains(payOrder.getStatus())){
-            expiredTimeService.cancelExpiredTime(payOrder.getId());
-        }
-        payOrder.setVersion(null);
-        payOrderManager.updateForceById(payOrder);
-    }
-
 }

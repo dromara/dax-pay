@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.channel.wallet.service;
 
 import cn.bootx.platform.daxpay.service.core.channel.wallet.dao.WalletManager;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,9 +34,9 @@ public class WalletPayService {
     /**
      * 关闭支付, 将支付成功的金额进行返还
      */
-    public void close(PayChannelOrder channelOrder, Wallet wallet) {
+    public void close(PayOrder payOrder, Wallet wallet) {
         // 将订单的金额退款到钱包
-        wallet.setBalance(wallet.getBalance() + channelOrder.getAmount());
+        wallet.setBalance(wallet.getBalance() + payOrder.getAmount());
         walletManager.updateById(wallet);
     }
 

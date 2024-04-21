@@ -4,7 +4,6 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayRecordService;
 import cn.bootx.platform.daxpay.service.dto.channel.union.UnionPayRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.union.UnionPayRecordQuery;
 import io.swagger.v3.oas.annotations.Operation;

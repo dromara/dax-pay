@@ -6,7 +6,6 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

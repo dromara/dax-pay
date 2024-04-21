@@ -42,8 +42,6 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
 
-    private final WeChatPayRecordManager recordManager;
-
     private final DaxPaySequenceHandler daxPaySequenceHandler;
 
     private WeChatPayConfig config;

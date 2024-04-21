@@ -25,8 +25,19 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
-    public Optional<PayOrder> findByBusinessNo(String businessNo) {
-        return findByField(PayOrder::getBusinessNo,businessNo);
+
+    /**
+     * 根据订单号查询
+     */
+    public Optional<PayOrder> findByOrderNo(String orderNo) {
+        return findByField(PayOrder::getOrderNo,orderNo);
+    }
+
+    /**
+     * 根据商户订单号查询
+     */
+    public Optional<PayOrder> findByBizOrderNo(String bizOrderNo) {
+        return findByField(PayOrder::getBizOrderNo,bizOrderNo);
     }
 
     /**

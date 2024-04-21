@@ -19,6 +19,6 @@ public class RefundSyncParam extends PaymentCommonParam {
     private String refundNo;
 
     @Schema(description = "商户退款号")
-    private String outRefundNo;
+    private String bizRefundNo;
 
 }

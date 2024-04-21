@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.notice.result;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayWayEnum;
+import cn.bootx.platform.daxpay.code.PayMethodEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -14,6 +14,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付通道信息")
+@Deprecated
 public class PayChannelResult {
     /**
      * 支付通道编码
@@ -24,7 +25,7 @@ public class PayChannelResult {
 
     /**
      * 支付方式编码
-     * @see PayWayEnum
+     * @see PayMethodEnum
      */
     @Schema(description = "支付方式编码")
     private String way;

@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 @Getter
 @AllArgsConstructor
-public enum PayWayEnum {
+public enum PayMethodEnum {
 
     NORMAL("normal", "常规支付"),
     WAP("wap", "wap支付"),
@@ -36,8 +36,8 @@ public enum PayWayEnum {
     /**
      * 根据字符编码获取
      */
-    public static PayWayEnum findByCode(String code) {
-        return Arrays.stream(PayWayEnum.values())
+    public static PayMethodEnum findByCode(String code) {
+        return Arrays.stream(PayMethodEnum.values())
             .filter(e -> Objects.equals(code, e.getCode()))
             .findFirst()
             .orElseThrow(() -> new PayFailureException("不存在的支付方式"));

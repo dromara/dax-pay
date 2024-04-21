@@ -4,8 +4,9 @@ import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.exception.RetryableException;
-import cn.bootx.platform.daxpay.code.PayWayEnum;
+import cn.bootx.platform.daxpay.code.PayMethodEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.param.payment.pay.PayParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.code.WeChatPayWay;
@@ -58,52 +59,56 @@ public class WeChatPayService {
     /**
      * 校验
      */
-    public void validation(PayChannelParam payChannelParam, WeChatPayConfig weChatPayConfig) {
+    public void validation(PayParam payParam, WeChatPayConfig weChatPayConfig) {
         List<String> payWays = weChatPayConfig.getPayWays();
         if (CollUtil.isEmpty(payWays)){
             throw new PayFailureException("未配置微信支付方式");
         }
 
-        PayWayEnum payWayEnum = Optional.ofNullable(WeChatPayWay.findByCode(payChannelParam.getWay()))
+        PayMethodEnum payMethodEnum = Optional.ofNullable(WeChatPayWay.findByCode(payParam.getMethod()))
                 .orElseThrow(() -> new PayFailureException("非法的微信支付类型"));
-        if (!payWays.contains(payWayEnum.getCode())) {
+        if (!payWays.contains(payMethodEnum.getCode())) {
             throw new PayFailureException("该微信支付方式不可用");
         }
         // 支付金额是否超限
-        if (payChannelParam.getAmount() > weChatPayConfig.getSingleLimit()) {
+        if (payParam.getAmount() > weChatPayConfig.getSingleLimit()) {
             throw new PayFailureException("微信支付金额超限");
+        }
+        // 是否支持分账
+        if (payParam.isAllocation() && !weChatPayConfig.getAllocation()) {
+            throw new PayFailureException("未开启分账配置");
         }
     }
 
     /**
      * 支付
      */
-    public void pay(PayOrder payOrder, WeChatPayParam weChatPayParam, PayChannelParam payChannelParam, WeChatPayConfig weChatPayConfig) {
+    public void pay(PayOrder payOrder, WeChatPayParam weChatPayParam, WeChatPayConfig weChatPayConfig) {
 
-        Integer amount = payChannelParam.getAmount();
+        Integer amount = payOrder.getAmount();
         String totalFee = String.valueOf(amount);
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
         String payBody = null;
-        PayWayEnum payWayEnum = PayWayEnum.findByCode(payChannelParam.getWay());
+        PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
         // wap支付
-        if (payWayEnum == PayWayEnum.WAP) {
+        if (payMethodEnum == PayMethodEnum.WAP) {
             payBody = this.wapPay(totalFee, payOrder, weChatPayConfig);
         }
         // APP支付
-        else if (payWayEnum == PayWayEnum.APP) {
+        else if (payMethodEnum == PayMethodEnum.APP) {
             payBody = this.appPay(totalFee, payOrder, weChatPayConfig);
         }
         // 微信公众号支付或者小程序支付
-        else if (payWayEnum == PayWayEnum.JSAPI) {
+        else if (payMethodEnum == PayMethodEnum.JSAPI) {
             payBody = this.jsPay(totalFee, payOrder, weChatPayParam.getOpenId(), weChatPayConfig);
         }
         // 二维码支付
-        else if (payWayEnum == PayWayEnum.QRCODE) {
+        else if (payMethodEnum == PayMethodEnum.QRCODE) {
             payBody = this.qrCodePay(totalFee, payOrder, weChatPayConfig);
         }
         // 付款码支付
-        else if (payWayEnum == PayWayEnum.BARCODE) {
+        else if (payMethodEnum == PayMethodEnum.BARCODE) {
             this.barCodePay(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
         }
         asyncPayInfo.setPayBody(payBody);
@@ -205,14 +210,14 @@ public class WeChatPayService {
         String errCode = result.get(WeChatPayCode.ERR_CODE);
         // 支付成功处理,
         if (Objects.equals(resultCode, WeChatPayCode.PAY_SUCCESS)) {
-            asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID)).setPayComplete(true);
+            asyncPayInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID)).setComplete(true);
             return;
         }
         // 支付中, 发起轮训同步
         if (Objects.equals(resultCode, WeChatPayCode.PAY_FAIL)
                 && Objects.equals(errCode, WeChatPayCode.PAY_USERPAYING)) {
             SpringUtil.getBean(this.getClass()).rotationSync(payOrder);
-            asyncPayInfo.setGatewayOrderNo(result.get(WeChatPayCode.TRANSACTION_ID));
+            asyncPayInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID));
             return;
         }
         // 支付撤销

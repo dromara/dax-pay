@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.util;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,8 @@ public class OrderNoGenerateUtil {
 
     private static final AtomicLong ATOMIC_LONG = new AtomicLong();
     private final static long ORDER_MAX_LIMIT = 999999L;
-
+    /** 机器号 */
+    @Setter
     private static String machineNo;
 
     /**
@@ -26,8 +28,7 @@ public class OrderNoGenerateUtil {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();
-        log.info("dataStr:{},id:{}", dateStr, id);
-        orderNo.append("T").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        orderNo.append("P").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
 
@@ -38,12 +39,40 @@ public class OrderNoGenerateUtil {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();
-        log.info("dataStr:{},id:{}", dateStr, id);
         orderNo.append("R").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
 
-    public static void setMachineNo(String machineNo) {
-        OrderNoGenerateUtil.machineNo = machineNo;
+    /**
+     * 生成转账订单号
+     */
+    public static String transfer() {
+        StringBuilder orderNo = new StringBuilder();
+        String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
+        long id = ATOMIC_LONG.incrementAndGet();
+        orderNo.append("T").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        return orderNo.toString();
+    }
+
+    /**
+     * 生成分账订单号
+     */
+    public static String allocation() {
+        StringBuilder orderNo = new StringBuilder();
+        String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
+        long id = ATOMIC_LONG.incrementAndGet();
+        orderNo.append("A").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        return orderNo.toString();
+    }
+
+    /**
+     * 生成对账订单号
+     */
+    public static String reconciliation() {
+        StringBuilder orderNo = new StringBuilder();
+        String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
+        long id = ATOMIC_LONG.incrementAndGet();
+        orderNo.append("C").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        return orderNo.toString();
     }
 }

@@ -7,7 +7,6 @@ import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.service.code.ClientNoticeSendTypeEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
@@ -93,10 +92,9 @@ public class ClientNoticeService {
      * 注册支付消息通知任务
      * @param order 支付订单
      * @param orderExtra 支付订单扩展信息
-     * @param channelOrders 支付通道订单
      */
     @Async("bigExecutor")
-    public void registerPayNotice(PayOrder order, PayOrderExtra orderExtra, List<PayChannelOrder> channelOrders) {
+    public void registerPayNotice(PayOrder order, PayOrderExtra orderExtra) {
         // 支付订单扩展信息为空则进行查询
         if (Objects.isNull(orderExtra)){
             Optional<PayOrderExtra> extraOpt =  payOrderExtraManager.findById(order.getId());
@@ -112,12 +110,8 @@ public class ClientNoticeService {
             return;
         }
 
-        // 通道支付订单为空则进行查询
-        if (CollUtil.isEmpty(channelOrders)){
-            channelOrders = payChannelOrderManager.findAllByPaymentId(order.getOrderNo());
-        }
         // 创建通知任务并保存
-        ClientNoticeTask task = clientNoticeAssistService.buildPayTask(order, orderExtra, channelOrders);
+        ClientNoticeTask task = clientNoticeAssistService.buildPayTask(order, orderExtra);
         try {
             taskManager.save(task);
         } catch (Exception e) {

@@ -85,14 +85,14 @@ public class UnionPayCallbackService extends AbsCallbackStrategy {
         Map<String, String> callbackParam = callbackInfo.getCallbackParam();
 
         // 网关订单号
-        callbackInfo.setGatewayOrderNo(callbackParam.get(QUERY_ID));
+        callbackInfo.setOutOrderNo(callbackParam.get(QUERY_ID));
         // 支付订单ID
         callbackInfo.setOrderId(Long.valueOf(callbackParam.get(ORDER_ID)));
         // 支付结果
         String resultCode = callbackParam.get(UnionPayCode.RESP_CODE);
         PayStatusEnum payStatus = UnionPayCode.RESP_SUCCESS.equals(resultCode) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
 
-        callbackInfo.setGatewayStatus(payStatus.getCode());
+        callbackInfo.setOutStatus(payStatus.getCode());
         // 支付金额
         callbackInfo.setAmount(callbackParam.get(UnionPayCode.TXN_AMT));
         String timeEnd = callbackParam.get(TXN_TIME);
@@ -115,7 +115,7 @@ public class UnionPayCallbackService extends AbsCallbackStrategy {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callbackInfo.getCallbackParam();
         // 网关订单号
-        callbackInfo.setGatewayOrderNo(callbackParam.get(QUERY_ID));
+        callbackInfo.setOutOrderNo(callbackParam.get(QUERY_ID));
         // 退款订单Id
         callbackInfo.setOrderId(Long.valueOf(callbackParam.get(ORDER_ID)));
         // 退款金额
@@ -124,7 +124,7 @@ public class UnionPayCallbackService extends AbsCallbackStrategy {
         // 交易状态
         String resultCode = callbackParam.get(UnionPayCode.RESP_CODE);
         RefundStatusEnum refundStatus = UnionPayCode.RESP_SUCCESS.equals(resultCode) ? RefundStatusEnum.SUCCESS : RefundStatusEnum.FAIL;
-        callbackInfo.setGatewayStatus(refundStatus.getCode());
+        callbackInfo.setOutStatus(refundStatus.getCode());
 
         // 退款时间
         String timeEnd = callbackParam.get(TXN_TIME);

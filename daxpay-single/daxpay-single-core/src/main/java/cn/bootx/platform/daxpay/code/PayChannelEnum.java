@@ -45,8 +45,10 @@ public enum PayChannelEnum {
     }
 
     /** 异步支付通道 */
+    @Deprecated
     public static final List<PayChannelEnum> ASYNC_TYPE = Collections.unmodifiableList(Arrays.asList(ALI, WECHAT, UNION_PAY));
     /** 异步支付通道的编码 */
+    @Deprecated
     public static final List<String> ASYNC_TYPE_CODE = Collections.unmodifiableList(Arrays.asList(ALI.code, WECHAT.code, UNION_PAY.code));
 
 }

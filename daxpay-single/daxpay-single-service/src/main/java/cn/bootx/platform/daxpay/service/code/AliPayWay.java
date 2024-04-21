@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.code;
 
-import cn.bootx.platform.daxpay.code.PayWayEnum;
+import cn.bootx.platform.daxpay.code.PayMethodEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import lombok.experimental.UtilityClass;
 
@@ -18,13 +18,13 @@ import java.util.Objects;
 public class AliPayWay {
 
     // 支付方式
-    private static final List<PayWayEnum> PAY_WAYS = Arrays.asList(PayWayEnum.WAP, PayWayEnum.APP, PayWayEnum.WEB,
-            PayWayEnum.QRCODE, PayWayEnum.BARCODE);
+    private static final List<PayMethodEnum> PAY_WAYS = Arrays.asList(PayMethodEnum.WAP, PayMethodEnum.APP, PayMethodEnum.WEB,
+            PayMethodEnum.QRCODE, PayMethodEnum.BARCODE);
 
     /**
      * 根据编码获取
      */
-    public PayWayEnum findByCode(String code) {
+    public PayMethodEnum findByCode(String code) {
         return PAY_WAYS.stream()
             .filter(e -> Objects.equals(code, e.getCode()))
             .findFirst()
@@ -34,7 +34,7 @@ public class AliPayWay {
     /**
      * 获取支持的支付方式
      */
-    public List<PayWayEnum> getPayWays() {
+    public List<PayMethodEnum> getPayWays() {
         return PAY_WAYS;
     }
 }

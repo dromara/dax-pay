@@ -1,17 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.exception.pay.PayAmountAbnormalException;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.UnionPayParam;
-import cn.bootx.platform.daxpay.service.common.context.PayLocal;
-import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
-import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayService;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
@@ -38,13 +32,9 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class UnionPayStrategy extends AbsPayStrategy {
 
-    private final PayChannelOrderService channelOrderService;
-
     private final UnionPayService unionPayService;
 
     private final UnionPayConfigService unionPayConfigService;
-
-    private final UnionPayRecordService unionPayRecordService;
 
     private UnionPayParam unionPayParam;
 
@@ -61,7 +51,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
     public void doBeforePayHandler() {
         try {
             // 云闪付参数验证
-            Map<String, Object> channelParam = this.getPayChannelParam().getChannelParam();
+            Map<String, Object> channelParam = this.getPayParam().getExtraParam();
             if (CollUtil.isNotEmpty(channelParam)) {
                 this.unionPayParam = BeanUtil.toBean(channelParam, UnionPayParam.class);
             }
@@ -72,14 +62,9 @@ public class UnionPayStrategy extends AbsPayStrategy {
         catch (JSONException e) {
             throw new PayFailureException("支付参数错误");
         }
-        // 检查金额
-        PayChannelParam payMode = this.getPayChannelParam();
-        if (payMode.getAmount() <= 0) {
-            throw new PayAmountAbnormalException();
-        }
         // 检查并获取云闪付支付配置
         this.unionPayConfig = unionPayConfigService.getAndCheckConfig();
-        unionPayService.validation(this.getPayChannelParam(), unionPayConfig);
+        unionPayService.validation(this.getPayParam(), unionPayConfig);
     }
 
     /**
@@ -88,32 +73,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         UnionPayKit unionPayKit = unionPayConfigService.initPayService(unionPayConfig);
-        unionPayService.pay(this.getOrder(), this.getPayChannelParam(), this.unionPayParam, unionPayKit);
+        unionPayService.pay(this.getOrder(), this.unionPayParam, unionPayKit);
     }
-
-    /**
-     * 不使用默认的生成通道支付单方法, 异步支付通道的支付订单自己管理
-     * channelOrderService.switchAsyncPayChannel 进行切换
-     */
-    @Override
-    public void generateChannelOrder() {
-        // 创建或切换支付通道订单
-        channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
-    }
-
-    /**
-     * 支付调起成功, 保存或更新通道支付订单
-     */
-    @Override
-    public void doSuccessHandler() {
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
-        // 更新支付通道信息
-        PayChannelOrder payChannelOrder = channelOrderService.switchAsyncPayChannel(this.getOrder(), this.getPayChannelParam());
-        // 支付完成, 保存记录
-        if (asyncPayInfo.isPayComplete()) {
-            unionPayRecordService.pay(this.getOrder(), payChannelOrder);
-        }
-    }
-
 
 }

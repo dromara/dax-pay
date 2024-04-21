@@ -59,14 +59,6 @@ public class UniPayController {
     }
 
     @CountTime
-    @PaymentApi(PaymentApiCode.SIMPLE_PAY)
-    @Operation(summary = "简单支付接口")
-    @PostMapping("/simplePay")
-    public DaxResult<PayResult> simplePay(@RequestBody SimplePayParam payParam){
-        return DaxRes.ok(payService.simplePay(payParam));
-    }
-
-    @CountTime
     @PaymentApi(PaymentApiCode.CLOSE)
     @Operation(summary = "支付关闭接口")
     @PostMapping("/close")
@@ -81,14 +73,6 @@ public class UniPayController {
     @PostMapping("/refund")
     public DaxResult<RefundResult> refund(@RequestBody RefundParam param){
         return DaxRes.ok(refundService.refund(param));
-    }
-
-    @CountTime
-    @PaymentApi(PaymentApiCode.SIMPLE_REFUND)
-    @Operation(summary = "简单退款接口")
-    @PostMapping("/simpleRefund")
-    public DaxResult<RefundResult> simpleRefund(@RequestBody SimpleRefundParam param){
-        return DaxRes.ok(refundService.simpleRefund(param));
     }
 
     @CountTime

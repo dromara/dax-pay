@@ -85,12 +85,12 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         Map<String, String> callbackParam = callbackInfo.getCallbackParam();
 
         // 网关订单号
-        callbackInfo.setGatewayOrderNo(callbackParam.get(TRANSACTION_ID));
+        callbackInfo.setOutOrderNo(callbackParam.get(TRANSACTION_ID));
         // 支付订单ID
         callbackInfo.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
         // 支付状态
         PayStatusEnum payStatus = WxPayKit.codeIsOk(callbackParam.get(RESULT_CODE)) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
-        callbackInfo.setGatewayStatus(payStatus.getCode());
+        callbackInfo.setOutStatus(payStatus.getCode());
         // 支付金额
         callbackInfo.setAmount(callbackParam.get(TOTAL_FEE));
         String timeEnd = callbackParam.get(TIME_END);
@@ -119,7 +119,7 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         callbackParam = WxPayKit.xmlToMap(decryptData);
         callbackInfo.setCallbackParam(callbackParam);
         // 网关订单号
-        callbackInfo.setGatewayOrderNo(callbackParam.get(CALLBACK_REFUND_ID));
+        callbackInfo.setOutOrderNo(callbackParam.get(CALLBACK_REFUND_ID));
         // 退款订单Id
         callbackInfo.setOrderId(Long.valueOf(callbackParam.get(CALLBACK_OUT_REFUND_NO)));
         // 退款金额
@@ -128,7 +128,7 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         // 交易状态
         RefundStatusEnum refundStatus = Objects.equals(callbackParam.get(CALLBACK_REFUND_STATUS), REFUND_SUCCESS)
                 ? RefundStatusEnum.SUCCESS : RefundStatusEnum.FAIL;
-        callbackInfo.setGatewayStatus(refundStatus.getCode());
+        callbackInfo.setOutStatus(refundStatus.getCode());
 
         // 退款时间
         String timeEnd = callbackParam.get(CALLBACK_SUCCESS_TIME);

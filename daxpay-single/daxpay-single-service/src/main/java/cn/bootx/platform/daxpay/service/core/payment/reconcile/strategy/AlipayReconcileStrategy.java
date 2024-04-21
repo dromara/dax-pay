@@ -46,8 +46,6 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
 
     private final DaxPaySequenceHandler daxPaySequenceHandler;
 
-    private AliPayConfig config;
-
 
     /**
      * 策略标识
@@ -79,8 +77,8 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
      */
     @Override
     public void doBeforeHandler() {
-        this.config = configService.getConfig();
-        configService.initConfig(this.config);
+        AliPayConfig config = configService.getConfig();
+        configService.initConfig(config);
     }
 
     /**

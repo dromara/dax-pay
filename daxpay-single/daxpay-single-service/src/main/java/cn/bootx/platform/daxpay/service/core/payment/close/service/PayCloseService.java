@@ -60,7 +60,7 @@ public class PayCloseService {
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderQueryService.findByBusinessNo(param.getBusinessNo())
+            payOrder = payOrderQueryService.findByOutOrderNo(param.getBusinessNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId(),10000, 50);

@@ -6,7 +6,6 @@ import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletService;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletDto;
 import cn.bootx.platform.daxpay.service.dto.channel.wallet.WalletRecordDto;

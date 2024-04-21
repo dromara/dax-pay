@@ -11,10 +11,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
- * 支付单响应参数
+ * 支付单茶香返回参数
  * @author xxm
  * @since 2024/1/16
  */
@@ -24,13 +23,13 @@ import java.util.List;
 @Schema(title = "支付单响应参数")
 public class PayOrderResult extends CommonResult {
 
-    /** 支付ID */
-    @Schema(description = "支付ID")
-    private Long paymentId;
+    /** 支付订单号 */
+    @Schema(description = "支付订单号")
+    private String orderNo;
 
-    /** 业务号 */
+    /** 业务系统订单号 */
     @Schema(description = "业务号")
-    private String businessNo;
+    private String bizOrderNo;
 
     /** 标题 */
     @Schema(description = "标题")
@@ -40,20 +39,18 @@ public class PayOrderResult extends CommonResult {
     @Schema(description = "描述")
     private String description;
 
-    /** 是否是异步支付 */
-    @Schema(description = "是否是异步支付")
-    private boolean asyncPay;
-
-    /** 是否是组合支付 */
-    @Schema(description = "是否是组合支付")
-    private boolean combinationPay;
-
     /**
-     * 异步支付通道
-     * @see PayChannelEnum#ASYNC_TYPE_CODE
+     * 支付通道
+     * @see PayChannelEnum
      */
     @Schema(description = "异步支付通道")
-    private String asyncChannel;
+    private String channel;
+
+    /**
+     * 支付方式
+     */
+    @Schema(description = "支付方式")
+    private String method;
 
     /** 金额 */
     @Schema(description = "金额")
@@ -80,6 +77,10 @@ public class PayOrderResult extends CommonResult {
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime expiredTime;
 
-    @Schema(description = "支付通道列表")
-    private List<PayChannelOrderResult> channels;
+    /** 关闭时间 */
+    @Schema(description = "过期时间")
+    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
+    private LocalDateTime closeTime;
+
+
 }

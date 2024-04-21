@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.refund;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsRefundRepairStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

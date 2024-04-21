@@ -1,8 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.channel.union.service;
 
-import cn.bootx.platform.daxpay.code.PayWayEnum;
+import cn.bootx.platform.daxpay.code.PayMethodEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.channel.UnionPayParam;
+import cn.bootx.platform.daxpay.param.payment.pay.PayParam;
 import cn.bootx.platform.daxpay.service.code.UnionPayCode;
 import cn.bootx.platform.daxpay.service.code.UnionPayWay;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
@@ -40,55 +41,59 @@ public class UnionPayService {
     /**
      * 支付前检查支付方式是否可用
      */
-    public void validation(PayChannelParam payChannelParam, UnionPayConfig unionPayConfig) {
+    public void validation(PayParam payParam, UnionPayConfig unionPayConfig) {
 
         if (CollUtil.isEmpty(unionPayConfig.getPayWays())){
             throw new PayFailureException("云闪付未配置可用的支付方式");
         }
         // 发起的支付类型是否在支持的范围内
-        PayWayEnum payWayEnum = Optional.ofNullable(UnionPayWay.findByCode(payChannelParam.getWay()))
+        PayMethodEnum payMethodEnum = Optional.ofNullable(UnionPayWay.findByCode(payParam.getMethod()))
                 .orElseThrow(() -> new PayFailureException("非法的云闪付支付类型"));
-        if (!unionPayConfig.getPayWays().contains(payWayEnum.getCode())) {
+        if (!unionPayConfig.getPayWays().contains(payMethodEnum.getCode())) {
             throw new PayFailureException("该云闪付支付方式不可用");
         }
         // 支付金额是否超限
-        if (payChannelParam.getAmount() > unionPayConfig.getSingleLimit()) {
+        if (payParam.getAmount() > unionPayConfig.getSingleLimit()) {
             throw new PayFailureException("云闪付支付金额超限");
+        }
+        // 分账
+        if (payParam.isAllocation()) {
+            throw new PayFailureException("云闪付不支持分账");
         }
     }
 
     /**
      * 支付接口
      */
-    public void pay(PayOrder payOrder, PayChannelParam payChannelParam, UnionPayParam unionPayParam, UnionPayKit unionPayKit){
-        Integer amount = payChannelParam.getAmount();
+    public void pay(PayOrder payOrder, UnionPayParam unionPayParam, UnionPayKit unionPayKit){
+        Integer amount = payOrder.getAmount();
         BigDecimal totalFee = BigDecimal.valueOf(amount * 0.01);
         PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
         String payBody = null;
-        PayWayEnum payWayEnum = PayWayEnum.findByCode(payChannelParam.getWay());
+        PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
         // 二维码支付
-        if (payWayEnum == PayWayEnum.QRCODE) {
+        if (payMethodEnum == PayMethodEnum.QRCODE) {
             payBody = this.qrCodePay(totalFee, payOrder, unionPayKit);
         }
         // 付款码支付
-        else if (payWayEnum == PayWayEnum.BARCODE) {
+        else if (payMethodEnum == PayMethodEnum.BARCODE) {
             this.barCodePay(totalFee, payOrder, unionPayParam.getAuthCode(), unionPayKit);
         }
         // APP支付
-        else if (payWayEnum == PayWayEnum.APP) {
+        else if (payMethodEnum == PayMethodEnum.APP) {
             payBody = this.appPay(totalFee, payOrder, unionPayParam, unionPayKit);
         }
         // web支付
-        else if (payWayEnum == PayWayEnum.WEB) {
+        else if (payMethodEnum == PayMethodEnum.WEB) {
             payBody = this.formPay(totalFee, payOrder, unionPayKit, UnionTransactionType.WEB);
         }
         // wap支付
-        else if (payWayEnum == PayWayEnum.WAP) {
+        else if (payMethodEnum == PayMethodEnum.WAP) {
             payBody = this.formPay(totalFee, payOrder, unionPayKit, UnionTransactionType.WAP );
         }
         // b2b支付 TODO 未完成
-        else if (payWayEnum == PayWayEnum.B2B) {
+        else if (payMethodEnum == PayMethodEnum.B2B) {
             payBody = this.b2bPay(totalFee, payOrder, unionPayKit);
         }
 

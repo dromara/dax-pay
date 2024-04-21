@@ -27,19 +27,19 @@ public class RefundParam extends PaymentCommonParam {
      */
     @Schema(description = "商户退款号")
     @NotBlank(message = "商户退款号不可为空")
-    private String outRefundNo;
+    private String bizRefundNo;
 
     /**
-     * 支付操作是返回的订单号，与商户订单号至少要传输一个，同时传输以订单号为准
+     * 支付订单号，与商户订单号至少要传输一个，同时传输以订单号为准
      */
     @Schema(description = "订单号")
     private String orderNo;
 
     /**
-     * 支付操作时传入的的商户订单号，与订单号至少要传输一个，同时传输以订单号为准
+     * 商户支付订单号，与订单号至少要传输一个，同时传输以订单号为准
      */
     @Schema(description = "商户订单号")
-    private String outTradeNo;
+    private String bizOrderNo;
 
     @Schema(description = "退款金额")
     @Min(value = 1,message = "退款金额至少为0.01元")
@@ -52,7 +52,7 @@ public class RefundParam extends PaymentCommonParam {
      * @see WalletPayParam
      */
     @Schema(description = "退款扩展参数")
-    private Map<String, Object> channelParam;
+    private Map<String, Object> extraParam;
 
     @Schema(description = "退款原因")
     private String reason;

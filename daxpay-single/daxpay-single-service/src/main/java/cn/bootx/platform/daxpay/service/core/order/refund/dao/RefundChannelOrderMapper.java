@@ -10,5 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2024/1/17
  */
 @Mapper
+@Deprecated
 public interface RefundChannelOrderMapper extends BaseMapper<RefundChannelOrder> {
 }

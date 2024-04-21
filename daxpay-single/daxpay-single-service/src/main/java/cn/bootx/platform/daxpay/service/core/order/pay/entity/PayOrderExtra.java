@@ -3,6 +3,9 @@ package cn.bootx.platform.daxpay.service.core.order.pay.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.param.channel.AliPayParam;
+import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
+import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderExtraDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -28,35 +31,29 @@ import java.time.LocalDateTime;
 @TableName("pay_order_extra")
 public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<PayOrderExtraDto> {
 
-    /** 描述 */
-    @DbColumn(comment = "描述")
-    private String description;
-
     /** 同步跳转地址, 以最后一次为准 */
     @DbColumn(comment = "同步跳转地址")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String returnUrl;
 
-    /** 回调通知时是否需要进行签名, 以最后一次为准 */
-    @DbColumn(comment = "回调通知时是否需要进行签名")
-    private boolean noticeSign;
-
-    /** 异步通知地址 以最后一次为准 */
-    @DbColumn(comment = "异步通知地址，以最后一次为准")
+    /** 异步通知地址,以最后一次为准 */
+    @DbColumn(comment = "异步通知地址")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
-    /** 商户扩展参数,回调时会原样返回 */
+    /**
+     * 附加参数 以最后一次为准
+     * @see AliPayParam
+     * @see WeChatPayParam
+     * @see WalletPayParam
+     */
+    @DbColumn(comment = "附加参数")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String extraParam;
+
+    /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
     @DbColumn(comment = "商户扩展参数")
     private String attach;
-
-    /** 请求签名类型 */
-    @DbColumn(comment = "签名类型")
-    private String reqSignType;
-
-    /** 请求签名值，以最后一次为准 */
-    @DbColumn(comment = "签名")
-    private String reqSign;
 
     /** 请求时间，时间戳转时间, 以最后一次为准 */
     @DbColumn(comment = "请求时间，传输时间戳，以最后一次为准")
@@ -65,20 +62,6 @@ public class PayOrderExtra extends MpBaseEntity implements EntityBaseFunction<Pa
     /** 支付终端ip 以最后一次为准 */
     @DbColumn(comment = "支付终端ip")
     private String clientIp;
-
-    /** 请求链路ID 以最后一次为准 */
-    @DbColumn(comment = "请求链路ID")
-    private String reqId;
-
-    /** 错误码 */
-    @DbColumn(comment = "错误码")
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String errorCode;
-
-    /** 错误信息 */
-    @DbColumn(comment = "错误信息")
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String errorMsg;
 
     /**
      * 转换

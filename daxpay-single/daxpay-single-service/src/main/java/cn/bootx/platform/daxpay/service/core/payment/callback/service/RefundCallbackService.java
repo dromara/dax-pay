@@ -60,7 +60,7 @@ public class RefundCallbackService {
             }
 
             // 退款成功还是失败
-            if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
+            if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), callbackInfo.getOutStatus())) {
                 PaymentContextLocal.get().getRepairInfo().setFinishTime(callbackInfo.getFinishTime());
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_SUCCESS);
                 callbackInfo.setPayRepairNo(repair.getRepairNo());

@@ -11,7 +11,6 @@ import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.WalletConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
@@ -42,11 +41,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
 
     private final WalletQueryService walletQueryService;
 
-    private final WalletRecordService walletRecordService;
-
     private Wallet wallet;
-
-    private WalletConfig walletConfig;
 
     @Override
     public PayChannelEnum getChannel() {
@@ -61,7 +56,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         WalletPayParam walletPayParam = new WalletPayParam();
         try {
             // 钱包参数验证
-            Map<String, Object> channelParam = this.getPayChannelParam().getChannelParam();
+            Map<String, Object> channelParam = this.getPayParam().getExtraParam();
             if (CollUtil.isNotEmpty(channelParam)) {
                 walletPayParam = BeanUtil.toBean(channelParam, WalletPayParam.class);
             }
@@ -69,7 +64,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
             throw new PayFailureException("支付参数错误");
         }
 
-        this.walletConfig = walletConfigService.getAndCheckConfig();
+        WalletConfig walletConfig = walletConfigService.getAndCheckConfig();
 
         // 获取钱包
         this.wallet = walletQueryService.getWallet(walletPayParam);
@@ -81,13 +76,16 @@ public class WalletPayStrategy extends AbsPayStrategy {
             throw new WalletBannedException();
         }
         // 判断是否超过限额
-        if (getPayChannelParam().getAmount() > this.walletConfig.getSingleLimit()){
+        if (this.getPayParam().getAmount() > walletConfig.getSingleLimit()){
             throw new PayFailureException("钱包支付金额超过限额");
         }
-
         // 判断余额
-        if (this.wallet.getBalance() < getPayChannelParam().getAmount()) {
+        if (this.wallet.getBalance() < this.getPayParam().getAmount()) {
             throw new WalletLackOfBalanceException();
+        }
+        // 分账
+        if (this.getPayParam().isAllocation()){
+            throw new PayFailureException("钱包支付不支持分账");
         }
     }
 
@@ -96,7 +94,6 @@ public class WalletPayStrategy extends AbsPayStrategy {
      */
     @Override
     public void doPayHandler() {
-        walletPayService.pay(getPayChannelParam().getAmount(), this.wallet);
-        walletRecordService.pay(this.getChannelOrder(), this.getOrder().getTitle(),this.wallet);
+        walletPayService.pay(this.getPayParam().getAmount(), this.wallet);
     }
 }

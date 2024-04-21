@@ -23,20 +23,20 @@ public class CallbackLocal {
     /** 回调参数内容 */
     private Map<String, String> callbackParam = new HashMap<>();
 
-    /** 本地订单ID */
-    private Long orderId;
+    /** 订单号, 支付/退款 */
+    private String orderNo;
 
     /**
      * 第三方支付平台订单号
      */
-    private String gatewayOrderNo;
+    private String outOrderNo;
 
     /**
-     * 网关返回状态
+     * 三方支付系统返回状态
      * @see PayStatusEnum 支付状态
      * @see RefundStatusEnum 退款状态
      */
-    private String gatewayStatus;
+    private String outStatus;
 
     /** 金额(元) */
     private String amount;

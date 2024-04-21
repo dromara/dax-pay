@@ -3008,7 +3008,7 @@ CREATE TABLE `pay_platform_config`  (
 -- ----------------------------
 -- Records of pay_platform_config
 -- ----------------------------
-INSERT INTO `pay_platform_config` VALUES (0, 'http://127.0.0.1', 'HMAC_SHA256', '123456', 'http://127.0.0.1/h5/#/result/success', 'http://127.0.0.1/h5/#/result/success', 30, 0, '2024-01-02 20:23:19', 1757299137932677120, '2024-02-13 15:08:51', 3, b'0', NULL);
+INSERT INTO `pay_platform_config` VALUES (0, 'http://127.0.0.1', 'HMAC_SHA256', '123456', 'http://127.0.0.1/h5/#/result/success', 'http://127.0.0.1/h5/#/result/success', 30, 0, '2024-01-02 20:23:19', 1757299137932677120, '2024-02-13 15:08:51', 3, b'0', 2000);
 
 -- ----------------------------
 -- Table structure for pay_reconcile_detail

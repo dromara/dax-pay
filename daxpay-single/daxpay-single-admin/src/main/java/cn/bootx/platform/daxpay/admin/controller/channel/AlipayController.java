@@ -4,7 +4,6 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayRecordService;
 import cn.bootx.platform.daxpay.service.dto.channel.alipay.AliPayRecordDto;
 import cn.bootx.platform.daxpay.service.param.channel.alipay.AliPayRecordQuery;
 import io.swagger.v3.oas.annotations.Operation;

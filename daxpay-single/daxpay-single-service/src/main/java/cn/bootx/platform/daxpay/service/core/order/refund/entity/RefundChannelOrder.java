@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 @Data
 @DbTable(comment = "支付退款通道订单")
 @Accessors(chain = true)
+@Deprecated
 @TableName("pay_refund_channel_order")
 public class RefundChannelOrder extends MpCreateEntity implements EntityBaseFunction<RefundChannelOrderDto> {
 

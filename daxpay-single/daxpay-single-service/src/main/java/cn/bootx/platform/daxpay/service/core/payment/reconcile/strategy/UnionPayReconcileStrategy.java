@@ -4,9 +4,7 @@ import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.sequence.func.Sequence;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.union.convert.UnionPayConvert;
-import cn.bootx.platform.daxpay.service.core.channel.union.dao.UnionPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
-import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayRecord;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
@@ -44,8 +42,6 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
     private final UnionPayConfigService configService;
 
     private final UnionPayReconcileService reconcileService;
-
-    private final UnionPayRecordManager recordManager;
 
     private final DaxPaySequenceHandler daxPaySequenceHandler;
 

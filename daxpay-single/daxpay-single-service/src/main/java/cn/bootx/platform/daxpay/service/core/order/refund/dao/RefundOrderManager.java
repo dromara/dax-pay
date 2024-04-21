@@ -43,6 +43,14 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         return findByField(RefundOrder::getRefundNo, refundNo);
     }
 
+
+    /**
+     * 根据商户退款号查询
+     */
+    public Optional<RefundOrder> findByBizRefundNo(String bizRefundNo) {
+        return findByField(RefundOrder::getBizRefundNo, bizRefundNo);
+    }
+
     /**
      * 查询支付号是否重复
      */

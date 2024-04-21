@@ -74,9 +74,9 @@ public class RefundOrderController {
 
     @Operation(summary = "退款同步")
     @PostMapping("/syncById")
-    public ResResult<SyncResult> syncById(Long id){
+    public ResResult<SyncResult> syncById(String refundNo){
         RefundSyncParam refundSyncParam = new RefundSyncParam();
-        refundSyncParam.setRefundId(id);
+        refundSyncParam.setRefundNo(refundNo);
         return Res.ok(refundSyncService.sync(refundSyncParam));
     }
 }

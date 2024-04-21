@@ -10,7 +10,6 @@ import cn.bootx.platform.daxpay.param.payment.pay.PaySyncParam;
 import cn.bootx.platform.daxpay.param.payment.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayChannelOrderService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderExtraService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.service.AllocationService;

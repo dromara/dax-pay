@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.channel.wechat.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
-import cn.bootx.platform.daxpay.service.code.WechatPayRecordTypeEnum;
+import cn.bootx.platform.daxpay.service.code.TradeFlowRecordTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.convert.WeChatConvert;
 import cn.bootx.platform.daxpay.service.dto.channel.wechat.WeChatPayRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -36,7 +36,7 @@ public class WeChatPayRecord extends MpCreateEntity implements EntityBaseFunctio
 
     /**
      * 业务类型
-     * @see WechatPayRecordTypeEnum
+     * @see TradeFlowRecordTypeEnum
      */
     @DbColumn(comment = "业务类型")
     private String type;

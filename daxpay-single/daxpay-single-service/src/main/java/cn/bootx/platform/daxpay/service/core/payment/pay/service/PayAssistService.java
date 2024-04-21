@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.pay.service;
 
+import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
@@ -10,17 +11,15 @@ import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
-import cn.bootx.platform.daxpay.service.func.AbsPayStrategy;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static cn.bootx.platform.daxpay.code.PayStatusEnum.*;
 
@@ -52,14 +50,12 @@ public class PayAssistService {
 
     private final PayOrderExtraManager payOrderExtraManager;
 
-    private final PayChannelOrderManager payChannelOrderManager;
-
     /**
      * 初始化支付相关上下文
      */
-    public void initPayContext(PayOrder order, PayParam payParam){
+    public void initPayContext(PayOrder order, PayParam payParam) {
         // 初始化支付订单超时时间
-        this.initExpiredTime(order,payParam);
+        this.initExpiredTime(order, payParam);
         // 初始化通知相关上下文
         this.initNotice(payParam);
     }
@@ -70,20 +66,23 @@ public class PayAssistService {
      * 1. 如果支付记录为空, 超时时间读取顺序 PayParam -> 平台设置
      * 2. 如果支付记录不为空, 超时时间通过支付记录进行反推
      */
-    public void initExpiredTime(PayOrder order, PayParam payParam){
-        // 不是异步支付，没有超时时间
-        if (PayUtil.isNotSync(payParam.getPayChannels())){
+    public void initExpiredTime(PayOrder order, PayParam payParam) {
+        // 钱包没有超时时间
+        if (PayChannelEnum.WALLET.getCode()
+                .equals(payParam.getChannel())) {
             return;
         }
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
-        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
+        PayLocal asyncPayInfo = PaymentContextLocal.get()
+                .getPayInfo();
+        PlatformLocal platform = PaymentContextLocal.get()
+                .getPlatformInfo();
         // 支付订单是非为空
-        if (Objects.nonNull(order)){
+        if (Objects.nonNull(order)) {
             asyncPayInfo.setExpiredTime(order.getExpiredTime());
             return;
         }
         // 支付参数传入
-        if (Objects.nonNull(payParam.getExpiredTime())){
+        if (Objects.nonNull(payParam.getExpiredTime())) {
             asyncPayInfo.setExpiredTime(payParam.getExpiredTime());
             return;
         }
@@ -94,104 +93,101 @@ public class PayAssistService {
 
     /**
      * 初始化通知相关上下文
+     * 1. 异步通知参数: 读取参数配置 -> 读取接口配置 -> 读取平台参数
+     * 2. 同步跳转参数: 读取参数配置 -> 读取平台参数
+     * 3. 中途退出地址: 读取参数配置
      */
-    private void initNotice(PayParam payParam){
-        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
-        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
-        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
+    private void initNotice(PayParam payParam) {
+        NoticeLocal noticeInfo = PaymentContextLocal.get()
+                .getNoticeInfo();
+        ApiInfoLocal apiInfo = PaymentContextLocal.get()
+                .getApiInfo();
+        PlatformLocal platform = PaymentContextLocal.get()
+                .getPlatformInfo();
         // 异步回调为开启状态
-        if (!payParam.isNotNotify() && apiInfo.isNotice()){
+        if (!payParam.isNotNotify() && apiInfo.isNotice()) {
             // 首先读取请求参数
             noticeInfo.setNotifyUrl(payParam.getNotifyUrl());
             // 读取接口配置
-            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
+            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())) {
                 noticeInfo.setNotifyUrl(apiInfo.getNoticeUrl());
             }
             // 读取平台配置
-            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
+            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())) {
                 noticeInfo.setNotifyUrl(platform.getNotifyUrl());
             }
         }
         // 同步回调
         noticeInfo.setReturnUrl(payParam.getReturnUrl());
-        if (StrUtil.isBlank(noticeInfo.getReturnUrl())){
+        if (StrUtil.isBlank(noticeInfo.getReturnUrl())) {
             noticeInfo.setReturnUrl(platform.getNotifyUrl());
         }
         // 退出回调地址
         noticeInfo.setQuitUrl(payParam.getQuitUrl());
     }
 
-    /**
-     * 获取异步支付参数
-     */
-    public PayChannelParam getAsyncPayParam(PayParam payParam, PayOrder payOrder) {
-        // 查询异步支付方式
-        return payParam.getPayChannels()
-                .stream()
-                .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getChannel()))
-                .findFirst()
-                .orElseThrow(() -> new PayFailureException("支付参数异常, 不存在异步支付方式"));
-    }
-
-    /**
-     * 切换异步支付参数
-     */
-    public PayChannelParam switchAsyncPayParam(PayParam payParam, PayOrder payOrder) {
-        // 查询之前的异步支付方式
-        PayChannelOrder payChannelOrder = payChannelOrderManager.findByAsyncChannel(payOrder.getId())
-                .orElseThrow(() -> new PayFailureException("支付订单数据异常, 不存在异步支付方式"));
-
-        // 新的异步支付方式
-        PayChannelParam payChannelParam = payParam.getPayChannels()
-                .stream()
-                .filter(payMode -> PayChannelEnum.ASYNC_TYPE_CODE.contains(payMode.getChannel()))
-                .findFirst()
-                .orElseThrow(() -> new PayFailureException("支付参数异常, 不存在异步支付方式"));
-        // 新传入的金额是否一致
-        if (!Objects.equals(payChannelOrder.getAmount(), payChannelParam.getAmount())){
-            throw new PayFailureException("传入的支付金额非法！与订单金额不一致");
-        }
-        return payChannelParam;
-    }
 
     /**
      * 创建支付订单并保存, 返回支付订单
      */
     @Transactional(rollbackFor = Exception.class)
     public PayOrder createPayOrder(PayParam payParam) {
-        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
+        PayLocal payInfo = PaymentContextLocal.get()
+                .getPayInfo();
         // 构建支付订单并保存
         PayOrder order = PayBuilder.buildPayOrder(payParam);
         payOrderService.save(order);
         // 构建支付订单扩展表并保存
         PayOrderExtra payOrderExtra = PayBuilder.buildPayOrderExtra(payParam, order.getId());
         payOrderExtraManager.save(payOrderExtra);
-        payInfo.setPayOrder(order).setPayOrderExtra(payOrderExtra);
+        payInfo.setPayOrder(order)
+                .setPayOrderExtra(payOrderExtra);
         return order;
     }
 
     /**
-     * 创建并保存通道支付订单
+     * 根据新传入的支付订单更新订单和扩展信息
      */
-    public void savePayChannelOrder(List<AbsPayStrategy> payStrategies) {
-        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
-        List<PayChannelOrder> channelOrders = payStrategies.stream()
-                .map(AbsPayStrategy::getChannelOrder)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        payChannelOrderManager.saveAll(channelOrders);
-        payInfo.getPayChannelOrders().addAll(channelOrders);
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePayOrder(PayParam payParam,PayOrder order, PayOrderExtra payOrderExtra) {
+        PayLocal payInfo = PaymentContextLocal.get()
+                .getPayInfo();
+        // 订单信息
+        order.setAllocation(payParam.isAllocation())
+                .setChannel(payParam.getChannel())
+                .setMethod(payParam.getMethod());
+        if (!order.isAllocation()) {
+            order.setAllocationStatus(null);
+        }
+
+        // 扩展信息
+        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
+        payOrderExtra.setClientIp(payParam.getClientIp())
+                .setNotifyUrl(noticeInfo.getNotifyUrl())
+                .setReturnUrl(noticeInfo.getReturnUrl())
+                .setAttach(payParam.getAttach())
+                .setClientIp(payParam.getClientIp())
+                .setReqTime(payParam.getReqTime());
+        if (CollUtil.isNotEmpty(payParam.getExtraParam())){
+            payOrderExtra.setExtraParam(JSONUtil.toJsonStr(payParam.getExtraParam()));
+        } else {
+            payOrderExtra.setExtraParam(null);
+        }
+
+        payOrderService.updateById(order);
+        payOrderExtraManager.updateById(payOrderExtra);
     }
 
     /**
      * 校验支付状态，支付成功则返回，支付失败则抛出对应的异常
      */
-    public PayOrder getOrderAndCheck(String businessNo) {
+    public PayOrder getOrderAndCheck(String bizOrderNo) {
         // 根据订单查询支付记录
-        PayOrder payOrder = payOrderQueryService.findByBusinessNo(businessNo).orElse(null);
+        PayOrder payOrder = payOrderQueryService.findByOutOrderNo(bizOrderNo)
+                .orElse(null);
         if (Objects.nonNull(payOrder)) {
             // 待支付
-            if (Objects.equals(payOrder.getStatus(), PROGRESS.getCode())){
+            if (Objects.equals(payOrder.getStatus(), PROGRESS.getCode())) {
                 // 如果支付超时, 触发订单同步操作, 同时抛出异常
                 if (Objects.nonNull(payOrder.getExpiredTime()) && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
                     paySyncService.syncPayOrder(payOrder);
@@ -200,7 +196,8 @@ public class PayAssistService {
                 return payOrder;
             }
             // 已经支付状态
-            if (SUCCESS.getCode().equals(payOrder.getStatus())) {
+            if (SUCCESS.getCode()
+                    .equals(payOrder.getStatus())) {
                 throw new PayFailureException("已经支付成功，请勿重新支付");
             }
             // 支付失败类型状态
@@ -224,12 +221,9 @@ public class PayAssistService {
      */
     public void validationLimitAmount(PayParam payParam) {
         // 总额校验
-        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
-        Integer amount = payParam.getPayChannels()
-                .stream()
-                .map(PayChannelParam::getAmount)
-                .reduce(0, Integer::sum);
-        if (amount > platformInfo.getLimitAmount()) {
+        PlatformLocal platformInfo = PaymentContextLocal.get()
+                .getPlatformInfo();
+        if (payParam.getAmount() > platformInfo.getLimitAmount()) {
             throw new PayFailureException("支付金额超过限额");
         }
     }

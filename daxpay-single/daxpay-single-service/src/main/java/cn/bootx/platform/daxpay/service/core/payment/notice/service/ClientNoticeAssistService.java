@@ -3,13 +3,11 @@ package cn.bootx.platform.daxpay.service.core.payment.notice.service;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.daxpay.code.PaySignTypeEnum;
 import cn.bootx.platform.daxpay.service.code.ClientNoticeTypeEnum;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
-import cn.bootx.platform.daxpay.service.core.payment.notice.result.PayChannelResult;
 import cn.bootx.platform.daxpay.service.core.payment.notice.result.PayNoticeResult;
 import cn.bootx.platform.daxpay.service.core.payment.notice.result.RefundChannelResult;
 import cn.bootx.platform.daxpay.service.core.payment.notice.result.RefundNoticeResult;
@@ -41,37 +39,31 @@ public class ClientNoticeAssistService {
     /**
      * 构建出支付通知任务对象
      */
-    public ClientNoticeTask buildPayTask(PayOrder order, PayOrderExtra orderExtra, List<PayChannelOrder> channelOrders){
-        // 组装内容
-        List<PayChannelResult> channels = channelOrders.stream()
-                .map(o->new PayChannelResult().setChannel(o.getChannel()).setWay(o.getPayWay()).setAmount(o.getAmount()))
-                .collect(Collectors.toList());
+    public ClientNoticeTask buildPayTask(PayOrder order, PayOrderExtra orderExtra){
 
         PayNoticeResult payNoticeResult = new PayNoticeResult()
-                .setPaymentId(order.getId())
-                .setAsyncPay(order.isAsyncPay())
-                .setBusinessNo(order.getBusinessNo())
+                .setOrderNo(order.getOrderNo())
+                .setBizOrderNo(order.getBizOrderNo())
+                .setTitle(order.getTitle())
+                .setChannel(order.getChannel())
+                .setMethod(order.getMethod())
                 .setAmount(order.getAmount())
                 .setPayTime(order.getPayTime())
                 .setCloseTime(order.getCloseTime())
                 .setCreateTime(order.getCreateTime())
                 .setStatus(order.getStatus())
-                .setAttach(orderExtra.getAttach())
-                .setPayChannels(channels);
+                .setAttach(orderExtra.getAttach());
 
         PlatformConfig config = configService.getConfig();
-        // 是否需要签名
-        if (orderExtra.isNoticeSign()){
-            // 签名
-            if (Objects.equals(config.getSignType(), PaySignTypeEnum.MD5.getCode())){
-                payNoticeResult.setSign(PaySignUtil.md5Sign(payNoticeResult,config.getSignSecret()));
-            } else {
-                payNoticeResult.setSign(PaySignUtil.hmacSha256Sign(payNoticeResult,config.getSignSecret()));
-            }
+        // 签名
+        if (Objects.equals(config.getSignType(), PaySignTypeEnum.MD5.getCode())){
+            payNoticeResult.setSign(PaySignUtil.md5Sign(payNoticeResult,config.getSignSecret()));
+        } else {
+            payNoticeResult.setSign(PaySignUtil.hmacSha256Sign(payNoticeResult,config.getSignSecret()));
         }
         return new ClientNoticeTask()
                 .setUrl(orderExtra.getNotifyUrl())
-                // 时间序列化进行了重写
+                // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
                 .setContent(JacksonUtil.toJson(payNoticeResult))
                 .setNoticeType(ClientNoticeTypeEnum.PAY.getType())
                 .setSendCount(0)

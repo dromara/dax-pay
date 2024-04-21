@@ -57,10 +57,10 @@ public class PayCallbackService {
                 return;
             }
             // 设置订单关联网关订单号
-            payOrder.setGatewayOrderNo(callbackInfo.getGatewayOrderNo());
+            payOrder.setGatewayOrderNo(callbackInfo.getOutOrderNo());
 
             // 成功状态
-            if (Objects.equals(PayCallbackStatusEnum.SUCCESS.getCode(), callbackInfo.getGatewayStatus())) {
+            if (Objects.equals(PayCallbackStatusEnum.SUCCESS.getCode(), callbackInfo.getOutStatus())) {
                 // 支付成功处理
                 this.success(payOrder);
             } else {

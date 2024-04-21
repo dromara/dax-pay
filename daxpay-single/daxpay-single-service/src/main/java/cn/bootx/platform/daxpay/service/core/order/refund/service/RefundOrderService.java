@@ -56,7 +56,6 @@ public class RefundOrderService {
 
     private final PayApiConfigManager apiConfigManager;
     private final RefundOrderManager refundOrderManager;
-    private final RefundChannelOrderManager refundOrderChannelManager;
 
     /**
      * 分页查询
@@ -98,14 +97,14 @@ public class RefundOrderService {
      */
     public RefundOrderResult queryRefundOrder(QueryRefundParam param) {
         // 校验参数
-        if (StrUtil.isBlank(param.getRefundNo()) && Objects.isNull(param.getRefundId())){
+        if (StrUtil.isBlank(param.getRefundNo()) && Objects.isNull(param.getBizRefundNo())){
             throw new ValidationFailedException("退款号或退款ID不能都为空");
         }
 
         // 查询退款单
         RefundOrder refundOrder = null;
-        if (Objects.nonNull(param.getRefundId())){
-            refundOrder = refundOrderManager.findById(param.getRefundId())
+        if (Objects.nonNull(param.getRefundNo())){
+            refundOrder = refundOrderManager.findById(param.getRefundNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         }
         if (Objects.isNull(refundOrder)){
@@ -135,7 +134,6 @@ public class RefundOrderService {
 
         RefundParam refundParam = new RefundParam();
         refundParam.setPaymentId(param.getPaymentId());
-        refundParam.setRefundChannels(param.getRefundChannels());
         refundParam.setReason(param.getReason());
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);

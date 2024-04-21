@@ -32,42 +32,44 @@ import java.time.LocalDateTime;
 @TableName(value = "pay_order",autoResultMap = true)
 public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrderDto> {
 
-    /** 关联的业务id */
-    @DbMySqlIndex(comment = "业务业务号索引",type = MySqlIndexType.UNIQUE)
-    @DbColumn(comment = "关联的业务号")
-    private String businessNo;
+    /** 商户订单号 */
+    @DbMySqlIndex(comment = "商户订单号索引",type = MySqlIndexType.UNIQUE)
+    @DbColumn(comment = "商户订单号")
+    private String bizOrderNo;
 
-    @DbColumn(comment = "支付订单编号")
+    @DbColumn(comment = "支付订单号")
     private String orderNo;
+
+    /**
+     *  三方系统交易号
+     */
+    @DbColumn(comment = "三方系统交易号")
+    private String outOrderNo;
 
     /** 标题 */
     @DbColumn(comment = "标题")
     private String title;
 
-    /** 是否是组合支付 */
-    @DbColumn(comment = "是否是组合支付")
-    private boolean combinationPay;
-
-    /** 是否是异步支付 */
-    @DbColumn(comment = "是否是异步支付")
-    private boolean asyncPay;
+    /** 描述 */
+    @DbColumn(comment = "描述")
+    private String description;
 
     /** 是否支持分账 */
     @DbColumn(comment = "是否需要分账")
     private boolean allocation;
 
     /**
-     * 异步支付通道
-     * @see PayChannelEnum#ASYNC_TYPE_CODE
+     * 支付通道
+     * @see PayChannelEnum
      */
     @DbColumn(comment = "异步支付通道")
-    private String asyncChannel;
+    private String channel;
 
     /**
-     *  如果有异步支付的情况下, 保存关联网关订单号
+     * 支付方式
      */
-    @DbColumn(comment = "网关订单号")
-    private String gatewayOrderNo;
+    @DbColumn(comment = "支付方式")
+    private String method;
 
     /** 金额 */
     @DbColumn(comment = "金额")
@@ -104,6 +106,16 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     /** 过期时间 */
     @DbColumn(comment = "过期时间")
     private LocalDateTime expiredTime;
+
+    /** 错误码 */
+    @DbColumn(comment = "错误码")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String errorCode;
+
+    /** 错误信息 */
+    @DbColumn(comment = "错误信息")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String errorMsg;
 
     /**
      * 转换

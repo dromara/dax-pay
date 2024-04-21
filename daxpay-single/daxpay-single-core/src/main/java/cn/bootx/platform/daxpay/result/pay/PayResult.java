@@ -1,7 +1,5 @@
 package cn.bootx.platform.daxpay.result.pay;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.result.CommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -19,27 +17,16 @@ import lombok.experimental.Accessors;
 @Schema(title = "统一下单响应参数")
 public class PayResult extends CommonResult {
 
-    @Schema(description = "支付ID")
-    private Long paymentId;
+    @Schema(description = "商户订单号")
+    private String bizOrderNo;
 
-    @Schema(description = "是否是异步支付")
-    private boolean asyncPay;
+    @Schema(description = "订单号")
+    private String orderNo;
 
-    /**
-     * @see PayChannelEnum#ASYNC_TYPE_CODE
-     */
-    @Schema(description = "异步支付通道")
-    private String asyncChannel;
-
-
-    /** 支付参数体(通常用于发起异步支付的参数) */
-    @Schema(description = "支付参数体")
-    private String payBody;
-
-    /**
-     * @see PayStatusEnum
-     */
     @Schema(description = "支付状态")
     private String status;
 
+    /** 支付参数体(通常用于发起支付的参数) */
+    @Schema(description = "支付参数体")
+    private String payBody;
 }

@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.param.payment.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayWayEnum;
+import cn.bootx.platform.daxpay.code.PayMethodEnum;
 import cn.bootx.platform.daxpay.param.PaymentCommonParam;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
@@ -31,7 +31,7 @@ public class PayParam extends PaymentCommonParam {
 
     @Schema(description = "商户订单号")
     @NotBlank(message = "商户订单号不可为空")
-    private String outTradeNo;
+    private String bizOrderNo;
 
     @Schema(description = "支付标题")
     @NotBlank(message = "支付标题不可为空")
@@ -55,11 +55,11 @@ public class PayParam extends PaymentCommonParam {
     private String channel;
 
     /**
-     * @see PayWayEnum#getCode()
+     * @see PayMethodEnum#getCode()
      */
     @Schema(description = "支付方式编码")
-    @NotBlank(message = "支付方式编码不可为空")
-    private String way;
+    @NotBlank(message = "支付方式不可为空")
+    private String method;
 
     @Schema(description = "支付金额")
     @NotNull(message = "支付金额不可为空")
@@ -67,12 +67,13 @@ public class PayParam extends PaymentCommonParam {
     private Integer amount;
 
     /**
+     * 支付扩展参数
      * @see AliPayParam
      * @see WeChatPayParam
      * @see WalletPayParam
      */
-    @Schema(description = "通道附加支付参数")
-    private Map<String, Object> channelParam;
+    @Schema(description = "支付扩展参数")
+    private Map<String, Object> extraParam;
 
     /** 商户扩展参数,回调时会原样返回 */
     @Schema(description = "商户扩展参数,回调时会原样返回")

@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.entity.Wallet;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletPayService;
 import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletQueryService;
-import cn.bootx.platform.daxpay.service.core.channel.wallet.service.WalletRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class WalletPayCloseStrategy extends AbsPayCloseStrategy {
     private final WalletPayService walletPayService;
     private final WalletQueryService walletQueryService;
-    private final WalletRecordService walletRecordService;
 
     private Wallet wallet;
 
@@ -53,7 +51,6 @@ public class WalletPayCloseStrategy extends AbsPayCloseStrategy {
      */
     @Override
     public void doCloseHandler() {
-        walletPayService.close(this.getChannelOrder(),this.wallet);
-        walletRecordService.payClose(this.getChannelOrder(), this.getOrder().getTitle(), this.wallet);
+        walletPayService.close(this.getOrder(),this.wallet);
     }
 }

@@ -89,12 +89,12 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
         // 网关订单号
-        callback.setGatewayOrderNo(callbackParam.get(TRADE_NO));
+        callback.setOutOrderNo(callbackParam.get(TRADE_NO));
         // 支付订单ID
-        callback.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
+        callback.setOrderNo(callbackParam.get(OUT_TRADE_NO));
         // 支付状态
         PayStatusEnum payStatus = Objects.equals(callbackParam.get(TRADE_STATUS), NOTIFY_TRADE_SUCCESS) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
-        callback.setGatewayStatus(payStatus.getCode());
+        callback.setOutStatus(payStatus.getCode());
         // 支付金额
         callback.setAmount(callbackParam.get(TOTAL_AMOUNT));
 
@@ -117,9 +117,9 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
         // 退款订单Id
-        callback.setOrderId(Long.valueOf(callbackParam.get(OUT_BIZ_NO)));
+        callback.setOrderNo(callbackParam.get(OUT_BIZ_NO));
         // 退款状态
-        callback.setGatewayStatus(callbackParam.get(TRADE_STATUS));
+        callback.setOutStatus(callbackParam.get(TRADE_STATUS));
         // 退款金额
         callback.setAmount(callbackParam.get(REFUND_FEE));
 

@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
  * @since 2024/2/22
  */
 @Data
+@Deprecated
 @Accessors(chain = true)
 @Schema(title = "退款通道信息")
 public class RefundChannelResult {
