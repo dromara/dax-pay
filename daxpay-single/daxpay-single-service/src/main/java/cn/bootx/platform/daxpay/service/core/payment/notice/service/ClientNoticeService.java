@@ -1,17 +1,13 @@
 package cn.bootx.platform.daxpay.service.core.payment.notice.service;
 
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
-import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.daxpay.service.code.ClientNoticeSendTypeEnum;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderExtraManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
 import cn.bootx.platform.daxpay.service.core.task.notice.dao.ClientNoticeTaskManager;
@@ -44,10 +40,6 @@ import java.util.*;
 public class ClientNoticeService {
 
     private final PayOrderExtraManager payOrderExtraManager;
-
-    private final PayChannelOrderManager payChannelOrderManager;
-
-    private final RefundChannelOrderManager refundChannelOrderManager;
 
     private final RefundOrderExtraManager refundOrderExtraManager;
 
@@ -126,10 +118,9 @@ public class ClientNoticeService {
      * 注册退款消息通知任务
      * @param order 退款订单
      * @param orderExtra 退款订单扩展信息
-     * @param channelOrders 退款通道订单
      */
     @Async("bigExecutor")
-    public void registerRefundNotice(RefundOrder order, RefundOrderExtra orderExtra, List<RefundChannelOrder> channelOrders) {
+    public void registerRefundNotice(RefundOrder order, RefundOrderExtra orderExtra) {
         // 退款订单扩展信息为空则进行查询
         if (Objects.isNull(orderExtra)){
             Optional<RefundOrderExtra> extraOpt =  refundOrderExtraManager.findById(order.getId());
@@ -145,12 +136,8 @@ public class ClientNoticeService {
             return;
         }
 
-        // 通道退款订单为空则进行查询
-        if (CollUtil.isEmpty(channelOrders)){
-            channelOrders = refundChannelOrderManager.findAllByRefundId(order.getId());
-        }
         // 创建通知任务并保存
-        ClientNoticeTask task = clientNoticeAssistService.buildRefundTask(order, orderExtra, channelOrders);
+        ClientNoticeTask task = clientNoticeAssistService.buildRefundTask(order, orderExtra);
         try {
             taskManager.save(task);
         } catch (Exception e) {

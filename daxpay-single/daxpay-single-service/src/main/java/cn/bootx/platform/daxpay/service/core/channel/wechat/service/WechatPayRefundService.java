@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
@@ -37,9 +36,9 @@ public class WechatPayRefundService {
      * 退款方法
      * 微信需要同时传输订单金额或退款金额
      */
-    public void refund(RefundOrder refundOrder, int amount, PayChannelOrder orderChannel, WeChatPayConfig weChatPayConfig) {
+    public void refund(RefundOrder refundOrder, int amount, WeChatPayConfig weChatPayConfig) {
         String refundFee = String.valueOf(amount);
-        String totalFee = String.valueOf(orderChannel.getAmount());
+        String totalFee = String.valueOf(refundOrder.getAmount());
         // 设置退款信息
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         Map<String, String> params = RefundModel.builder()
@@ -68,7 +67,7 @@ public class WechatPayRefundService {
         this.verifyErrorMsg(result);
         // 微信退款是否成功需要查询状态或者回调, 所以设置为退款中状态
         refundInfo.setStatus(RefundStatusEnum.PROGRESS)
-                .setGatewayOrderNo(result.get(CALLBACK_REFUND_ID));
+                .setOutRefundNo(result.get(CALLBACK_REFUND_ID));
     }
 
     /**

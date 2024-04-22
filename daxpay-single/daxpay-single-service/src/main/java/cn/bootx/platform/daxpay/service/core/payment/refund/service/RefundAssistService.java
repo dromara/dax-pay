@@ -82,7 +82,7 @@ public class RefundAssistService {
     public RefundOrder getRefundOrder(RefundParam param){
         // 查询退款单
         RefundOrder refundOrder = null;
-        if (Objects.nonNull(param.getRefundNo())){
+        if (Objects.nonNull(param.getrefun())){
             refundOrder = refundOrderManager.findById(param.getRefundNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         }
@@ -103,7 +103,7 @@ public class RefundAssistService {
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderQueryService.findByOutOrderNo(param.getBizOrderNo())
+            payOrder = payOrderQueryService.findByBizOrderNo(param.getBizOrderNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         return payOrder;
@@ -150,6 +150,7 @@ public class RefundAssistService {
                 .setTitle(payOrder.getTitle())
                 .setReason(refundParam.getReason());
         refundOrderManager.save(refundOrder);
+        // 生成退款扩展订单
         NoticeLocal notice = PaymentContextLocal.get().getNoticeInfo();
         RefundOrderExtra orderExtra = new RefundOrderExtra()
                 .setClientIp(refundParam.getClientIp())
@@ -166,10 +167,10 @@ public class RefundAssistService {
      * 更新退款成功信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updateOrder(RefundOrder refundOrder, RefundOrderExtra orderExtra){
+    public void updateOrder(RefundOrder refundOrder){
         RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
         refundOrder.setStatus(asyncRefundInfo.getStatus().getCode())
-                .setGatewayOrderNo(asyncRefundInfo.getGatewayOrderNo());
+                .setRefundNo(asyncRefundInfo.getOutRefundNo());
         // 退款成功更新退款时间
         if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
             refundOrder.setRefundTime(LocalDateTime.now());

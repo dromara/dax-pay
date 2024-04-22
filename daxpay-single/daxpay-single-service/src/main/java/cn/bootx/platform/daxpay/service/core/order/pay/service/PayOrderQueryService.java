@@ -54,17 +54,17 @@ public class PayOrderQueryService {
     }
 
     /**
-     * 根据商户订单号查询
+     * 根据订单号查询
      */
-    public Optional<PayOrder> findByOrderNo(String businessNo) {
-        return payOrderManager.findByOrderNo(businessNo);
+    public Optional<PayOrder> findByOrderNo(String orderNo) {
+        return payOrderManager.findByOrderNo(orderNo);
     }
 
     /**
-     * 根据订单号查询
+     * 根据商户订单号查询
      */
-    public Optional<PayOrder> findByOutOrderNo(String businessNo) {
-        return payOrderManager.findByBizOrderNo(businessNo);
+    public Optional<PayOrder> findByBizOrderNo(String bizOrderNo) {
+        return payOrderManager.findByBizOrderNo(bizOrderNo);
     }
 
     /**

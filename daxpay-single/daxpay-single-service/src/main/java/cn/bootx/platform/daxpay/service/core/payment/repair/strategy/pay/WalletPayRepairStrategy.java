@@ -30,8 +30,6 @@ public class WalletPayRepairStrategy extends AbsPayRepairStrategy {
 
     private final WalletQueryService walletQueryService;
 
-    private final WalletRecordService walletRecordService;
-
     private Wallet wallet;
 
 
@@ -59,8 +57,7 @@ public class WalletPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doCloseLocalHandler() {
-        walletPayService.close(this.getChannelOrder(),this.wallet);
-        walletRecordService.payClose(this.getChannelOrder(), this.getOrder().getTitle(), this.wallet);
+        walletPayService.close(this.getOrder(),this.wallet);
         this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
     }
 }

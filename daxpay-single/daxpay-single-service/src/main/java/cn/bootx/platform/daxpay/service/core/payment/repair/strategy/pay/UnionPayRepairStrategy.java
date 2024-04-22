@@ -24,8 +24,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class UnionPayRepairStrategy extends AbsPayRepairStrategy {
 
-    private final UnionPayRecordService unionPayRecordService;
-
     /**
      * 策略标识
      */
@@ -44,7 +42,6 @@ public class UnionPayRepairStrategy extends AbsPayRepairStrategy {
                 .getFinishTime();
         this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode())
                 .setPayTime(payTime);
-        unionPayRecordService.pay(this.getOrder(), this.getChannelOrder());
     }
 
     /**

@@ -203,7 +203,7 @@ public class RefundSyncService {
                 .setOrderId(refundOrder.getId())
                 .setOrderNo(refundOrder.getRefundNo())
                 .setSyncType(PaymentTypeEnum.REFUND.getCode())
-                .setAsyncChannel(refundOrder.getAsyncChannel())
+                .setChannel(refundOrder.getAsyncChannel())
                 .setGatewayOrderNo(syncResult.getGatewayOrderNo())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())

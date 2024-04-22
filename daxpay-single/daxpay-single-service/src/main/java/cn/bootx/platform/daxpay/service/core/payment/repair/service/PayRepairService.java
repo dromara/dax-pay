@@ -61,38 +61,29 @@ public class PayRepairService {
             return new PayRepairResult();
         }
 
-        // 1. 获取支付单管理的通道支付订单
-        Map<String, PayChannelOrder> channelOrderMap = channelOrderManager.findAllByPaymentId(order.getOrderNo())
-                .stream()
-                .collect(Collectors.toMap(PayChannelOrder::getChannel, Function.identity(), CollectorsFunction::retainLatest));
-        List<String> channels = new ArrayList<>(channelOrderMap.keySet());
-
         // 2.1 初始化修复参数
-        List<AbsPayRepairStrategy> repairStrategies = PayRepairStrategyFactory.createAsyncLast(channels);
-        for (AbsPayRepairStrategy repairStrategy : repairStrategies) {
-            repairStrategy.initRepairParam(order,channelOrderMap.get(repairStrategy.getChannel().getCode()));
-        }
-
+        AbsPayRepairStrategy repairStrategy = PayRepairStrategyFactory.create(order.getChannel());
+        repairStrategy.setOrder(order);
         // 2.2 执行前置处理
-        repairStrategies.forEach(AbsPayRepairStrategy::doBeforeHandler);
+        repairStrategy.doBeforeHandler();
 
         // 3. 根据不同的类型执行对应的修复逻辑
         PayRepairResult repairResult = new PayRepairResult().setBeforeStatus(PayStatusEnum.findByCode(order.getStatus()));
         switch (repairType) {
             case PAY_SUCCESS:
-                this.success(order, repairStrategies);
+                this.success(order, repairstrategies);
                 repairResult.setAfterPayStatus(PayStatusEnum.SUCCESS);
                 break;
             case CLOSE_LOCAL:
-                this.closeLocal(order, repairStrategies);
+                this.closeLocal(order, repairstrategies);
                 repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
             case PROGRESS:
-                this.waitPay(order, repairStrategies);
+                this.waitPay(order, repairstrategies);
                 repairResult.setAfterPayStatus(PayStatusEnum.PROGRESS);
                 break;
             case CLOSE_GATEWAY:
-                this.closeGateway(order, repairStrategies);
+                this.closeGateway(order, repairstrategies);
                 repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
             default:
@@ -103,7 +94,7 @@ public class PayRepairService {
         repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
 
         // 发送通知
-        List<PayChannelOrder> channelOrders = repairStrategies.stream()
+        List<PayChannelOrder> channelOrders = repairstrategies.stream()
                 .map(AbsPayRepairStrategy::getChannelOrder)
                 .collect(Collectors.toList());
         // 更新通道订单

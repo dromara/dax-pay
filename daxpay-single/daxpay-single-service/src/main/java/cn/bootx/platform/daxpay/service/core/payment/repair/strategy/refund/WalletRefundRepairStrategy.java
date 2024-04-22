@@ -33,8 +33,6 @@ public class WalletRefundRepairStrategy extends AbsRefundRepairStrategy {
 
     private final WalletPayService walletPayService;
 
-    private final WalletRecordService walletRecordService;
-
     private final WalletQueryService walletQueryService;
 
     private Wallet wallet;
@@ -76,6 +74,5 @@ public class WalletRefundRepairStrategy extends AbsRefundRepairStrategy {
         refundChannelOrder.setStatus(RefundStatusEnum.SUCCESS.getCode());
         // 退款真正执行和保存
         walletPayService.refund(this.wallet, this.getRefundChannelOrder().getAmount());
-        walletRecordService.refund(this.getRefundChannelOrder(), this.getPayOrder().getTitle(), this.wallet);
     }
 }

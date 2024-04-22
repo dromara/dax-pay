@@ -18,7 +18,7 @@ public class PaySyncParam extends PaymentCommonParam {
     @Schema(description = "订单号")
     private String orderNo;
 
-    @Schema(description = "业务号")
-    private String outTradeNo;
+    @Schema(description = "商户业务号")
+    private String bizOrderNo;
 
 }

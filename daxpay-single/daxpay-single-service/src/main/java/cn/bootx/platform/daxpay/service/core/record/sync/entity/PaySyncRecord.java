@@ -29,11 +29,11 @@ import lombok.experimental.Accessors;
 @TableName("pay_sync_record")
 public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<PaySyncRecordDto> {
 
-    /** 本地订单ID */
+    /** 本地订单IDb标识 */
     @DbColumn(comment = "本地订单ID")
     private Long orderId;
 
-    /** 本地业务号 */
+    /** 本地订单号 */
     @DbColumn(comment = "本地业务号")
     private String orderNo;
 
@@ -53,7 +53,7 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
      * @see PayChannelEnum#getCode()
      */
     @DbColumn(comment = "同步的异步通道")
-    private String asyncChannel;
+    private String channel;
 
     /** 网关返回的同步消息 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)

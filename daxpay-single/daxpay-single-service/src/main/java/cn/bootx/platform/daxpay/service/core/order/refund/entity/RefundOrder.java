@@ -55,7 +55,7 @@ public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<Refu
 
     /** 三方支付系统退款交易号 */
     @DbColumn(comment = "三方支付系统退款交易号")
-    private String outOrderNo;
+    private String outRefundNo;
 
     /**
      * 退款通道

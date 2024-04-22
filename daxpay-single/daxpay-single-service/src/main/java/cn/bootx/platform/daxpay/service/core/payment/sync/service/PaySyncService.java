@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.sync.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
@@ -64,16 +65,16 @@ public class PaySyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public SyncResult sync(PaySyncParam param) {
         PayOrder payOrder = null;
-        if (Objects.nonNull(param.getPaymentId())){
-            payOrder = payOrderQueryService.findById(param.getPaymentId())
+        if (Objects.nonNull(param.getOrderNo())){
+            payOrder = payOrderQueryService.findByOrderNo(param.getOrderNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderQueryService.findByOutOrderNo(param.getBusinessNo())
+            payOrder = payOrderQueryService.findByBizOrderNo(param.getBizOrderNo())
                     .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         }
-        // 如果不是异步支付, 直接返回返回
-        if (!payOrder.isAsyncPay()){
+        // 钱包支付直接返回结果
+        if (PayChannelEnum.WALLET.getCode().equals(payOrder.getChannel())){
             throw new PayFailureException("订单没有异步支付方式，不需要同步");
         }
         // 执行订单同步逻辑
@@ -95,7 +96,7 @@ public class PaySyncService {
 
         try {
             // 获取支付同步策略类
-            AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getAsyncChannel());
+            AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getChannel());
             syncPayStrategy.initPayParam(payOrder);
             // 执行操作, 获取支付网关同步的结果
             PayGatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
@@ -106,8 +107,8 @@ public class PaySyncService {
                 throw new PayFailureException(syncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (!Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getGatewayOrderNo())){
-                payOrder.setGatewayOrderNo(syncResult.getGatewayOrderNo());
+            if (!Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getOutOrderNo())){
+                payOrder.setOutOrderNo(syncResult.getGatewayOrderNo());
                 payOrderService.updateById(payOrder);
             }
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
@@ -247,9 +248,9 @@ public class PaySyncService {
     private void saveRecord(PayOrder payOrder, PayGatewaySyncResult syncResult, boolean repair, String repairOrderNo, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setOrderId(payOrder.getId())
-                .setOrderNo(payOrder.getBusinessNo())
+                .setOrderNo(payOrder.getOrderNo())
                 .setSyncType(PaymentTypeEnum.PAY.getCode())
-                .setAsyncChannel(payOrder.getAsyncChannel())
+                .setChannel(payOrder.getChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setGatewayStatus(syncResult.getSyncStatus().getCode())
                 .setRepairOrder(repair)

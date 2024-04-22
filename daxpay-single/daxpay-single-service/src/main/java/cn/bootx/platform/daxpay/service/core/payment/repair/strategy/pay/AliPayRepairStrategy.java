@@ -30,8 +30,6 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
 
     private final AliPayConfigService aliPayConfigService;
 
-    private final AliPayRecordService aliRecordService;
-
     /**
      * 策略标识
      */
@@ -59,8 +57,6 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
                 .getFinishTime();
         this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode())
                 .setPayTime(payTime);
-        // 支付完成, 保存记录
-        aliRecordService.pay(this.getOrder(), this.getChannelOrder());
     }
 
     /**

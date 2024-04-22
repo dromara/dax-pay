@@ -30,8 +30,6 @@ public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
 
-    private final WeChatPayRecordService weChatPayRecordService;
-
     private WeChatPayConfig weChatPayConfig;
 
     /**
@@ -68,8 +66,6 @@ public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
                 .getFinishTime();
         this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode())
                 .setPayTime(payTime);
-        // 保存流水记录
-        weChatPayRecordService.pay(this.getOrder(), this.getChannelOrder());
     }
 
     /**

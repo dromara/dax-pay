@@ -74,11 +74,7 @@ public class ClientNoticeAssistService {
     /**
      * 构建出退款通知任务对象
      */
-    public ClientNoticeTask buildRefundTask(RefundOrder order, RefundOrderExtra orderExtra, List<RefundChannelOrder> channelOrders){
-        // 组装内容
-        List<RefundChannelResult> channels = channelOrders.stream()
-                .map(o->new RefundChannelResult().setChannel(o.getChannel()).setAmount(o.getAmount()))
-                .collect(Collectors.toList());
+    public ClientNoticeTask buildRefundTask(RefundOrder order, RefundOrderExtra orderExtra){
 
         RefundNoticeResult payNoticeResult = new RefundNoticeResult()
                 .setRefundId(order.getId())

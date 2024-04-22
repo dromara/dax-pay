@@ -183,7 +183,7 @@ public class PayAssistService {
      */
     public PayOrder getOrderAndCheck(String bizOrderNo) {
         // 根据订单查询支付记录
-        PayOrder payOrder = payOrderQueryService.findByOutOrderNo(bizOrderNo)
+        PayOrder payOrder = payOrderQueryService.findByBizOrderNo(bizOrderNo)
                 .orElse(null);
         if (Objects.nonNull(payOrder)) {
             // 待支付

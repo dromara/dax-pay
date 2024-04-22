@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,17 +17,6 @@ public abstract class AbsPayRepairStrategy implements PayStrategy{
 
     /** 支付订单 */
     private PayOrder order = null;
-
-    /** 通道支付订单 */
-    private PayChannelOrder channelOrder = null;
-
-    /**
-     * 初始化修复参数
-     */
-    public void initRepairParam(PayOrder order, PayChannelOrder channelOrder){
-        this.order = order;
-        this.channelOrder = channelOrder;
-    }
 
     /**
      * 修复前处理

@@ -54,8 +54,6 @@ public class RefundRepairService {
 
     private final RefundOrderManager refundOrderManager;
 
-    private final RefundChannelOrderManager refundChannelOrderManager;
-
     private final PayRepairRecordService recordService;
 
     private final LockTemplate lockTemplate;
