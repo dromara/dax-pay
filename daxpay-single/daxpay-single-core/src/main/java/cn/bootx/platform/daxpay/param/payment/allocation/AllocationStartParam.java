@@ -15,14 +15,14 @@ import lombok.EqualsAndHashCode;
 @Schema(title = "开始分账请求参数")
 public class AllocationStartParam extends PaymentCommonParam {
 
-    @Schema(description = "支付单ID")
-    private Long paymentId;
+    @Schema(description = "商户分账单号")
+    private String bizAllocationNo;
 
-    @Schema(description = "业务号")
-    private String businessNo;
+    @Schema(description = "支付订单号")
+    private String orderNo;
 
-    @Schema(description = "分账单号(保证唯一)")
-    private String allocationNo;
+    @Schema(description = "商户订单号")
+    private String bizOrderNo;
 
     @Schema(description = "分账描述")
     private String description;

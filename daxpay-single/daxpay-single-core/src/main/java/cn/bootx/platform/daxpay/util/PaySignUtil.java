@@ -40,7 +40,7 @@ public class PaySignUtil {
     }
 
     /**
-     * 将参数转换为map对象. 使用ChatGPT生成, 仅局限于对请求支付相关参数进行签名
+     * 将参数转换为map对象. 使用ChatGPT生成, 仅局限于对支付相关参数和返回值进行签名
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     @SneakyThrows

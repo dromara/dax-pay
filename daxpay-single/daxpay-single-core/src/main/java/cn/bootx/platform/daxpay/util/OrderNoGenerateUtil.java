@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 订单号审查工具类
+ * 各类型订单号审查工具类
  * @author yxc
  * @since 2024/4/15
  */
@@ -24,7 +24,7 @@ public class OrderNoGenerateUtil {
     /**
      * 生成支付订单号
      */
-    public static String trade() {
+    public static String pay() {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();

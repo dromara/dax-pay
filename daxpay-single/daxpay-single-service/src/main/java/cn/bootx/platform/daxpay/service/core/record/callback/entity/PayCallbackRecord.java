@@ -29,13 +29,13 @@ import lombok.experimental.Accessors;
 @TableName("pay_callback_record")
 public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunction<PayCallbackRecordDto> {
 
-    /** 本地订单id */
-    @DbColumn(comment = "本地订单id")
-    private Long orderId;
+    /** 本地交易号 */
+    @DbColumn(comment = "本地交易号")
+    private String tradeNo;
 
-    /** 支付网关订单号 */
+    /** 三方支付交易号 */
     @DbColumn(comment = "支付网关订单号")
-    private String gatewayOrderNo;
+    private String outOrderNo;
 
     /**
      * 支付通道
@@ -63,8 +63,13 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     private String status;
 
 
+    /** 修复号 */
     @Schema(description = "修复号")
     private String repairOrderNo;
+
+    /** 错误码 */
+    @DbColumn(comment = "错误码")
+    private String errorCode;
 
     /** 提示信息 */
     @DbColumn(comment = "提示信息")

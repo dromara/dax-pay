@@ -29,13 +29,13 @@ public class AliPayRefundService {
     /**
      * 退款, 调用支付宝退款
      */
-    public void refund(RefundOrder refundOrder, int amount) {
+    public void refund(RefundOrder refundOrder) {
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();
         refundModel.setOutTradeNo(String.valueOf(refundOrder.getOrderNo()));
         refundModel.setOutRequestNo(String.valueOf(refundOrder.getRefundNo()));
         // 金额转换
-        String refundAmount = String.valueOf(amount*0.01);
+        String refundAmount = String.valueOf(refundOrder.getAmount()*0.01);
         refundModel.setRefundAmount(refundAmount);
 
         // 设置退款信息

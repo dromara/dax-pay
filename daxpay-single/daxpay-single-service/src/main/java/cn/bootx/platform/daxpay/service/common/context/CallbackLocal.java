@@ -23,13 +23,13 @@ public class CallbackLocal {
     /** 回调参数内容 */
     private Map<String, String> callbackParam = new HashMap<>();
 
-    /** 订单号, 支付/退款 */
-    private String orderNo;
+    /** 交易号 */
+    private String tradeNo;
 
     /**
-     * 第三方支付平台订单号
+     * 第三方支付平台交易号
      */
-    private String outOrderNo;
+    private String outTradeNo;
 
     /**
      * 三方支付系统返回状态
@@ -45,7 +45,7 @@ public class CallbackLocal {
     private LocalDateTime finishTime;
 
     /** 修复号 */
-    private String payRepairNo;
+    private String repairNo;
 
     /** 回调类型 */
     private PaymentTypeEnum callbackType;

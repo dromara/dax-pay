@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.param.payment.pay.PayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.pay.builder.PayBuilder;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
@@ -132,7 +131,7 @@ public class PayService {
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
             clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra());
         }
-        return PayBuilder.buildResultByPayOrder(payOrder);
+        return payAssistService.buildResult(payOrder);
     }
 
     /**
@@ -185,6 +184,6 @@ public class PayService {
             // 查询通道订单
             clientNoticeService.registerPayNotice(payOrder, payOrderExtra);
         }
-        return PayBuilder.buildResultByPayOrder(payOrder);
+        return payAssistService.buildResult(payOrder);
     }
 }

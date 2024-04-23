@@ -22,9 +22,9 @@ import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupReceiverRe
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.AllocationOrderQuery;
+import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -96,12 +96,6 @@ public class AllocationOrderService {
     public OrderAndDetail createAndUpdate(AllocationStartParam param, PayOrder payOrder, int orderAmount, List<AllocationGroupReceiverResult> receiversByGroups){
         long orderId = IdUtil.getSnowflakeNextId();
 
-        // 请求号不存在使用订单ID
-        String allocationNo = param.getAllocationNo();
-        if (StrUtil.isBlank(allocationNo)){
-            allocationNo = String.valueOf(orderId);
-        }
-
         // 订单明细
         List<AllocationOrderDetail> details = receiversByGroups.stream()
                 .map(o -> {
@@ -126,12 +120,14 @@ public class AllocationOrderService {
                 .reduce(0, Integer::sum);
         // 分账订单
         AllocationOrder allocationOrder = new AllocationOrder()
-                .setPaymentId(payOrder.getId())
+                .setOrderId(payOrder.getId())
+                .setOrderNo(payOrder.getOrderNo())
+                .setBizOrderNo(payOrder.getBizOrderNo())
+                .setOutOrderNo(payOrder.getOutOrderNo())
                 .setTitle(payOrder.getTitle())
-                .setAllocationNo(allocationNo)
-                .setChannel(payOrder.getAsyncChannel())
-                .setGatewayPayOrderNo(payOrder.getGatewayOrderNo())
-                .setOrderNo(String.valueOf(orderId))
+                .setAllocationNo(OrderNoGenerateUtil.allocation())
+                .setBizAllocationNo(param.getBizAllocationNo())
+                .setChannel(payOrder.getChannel())
                 .setDescription(param.getDescription())
                 .setStatus(AllocationOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
                 .setAmount(sumAmount);

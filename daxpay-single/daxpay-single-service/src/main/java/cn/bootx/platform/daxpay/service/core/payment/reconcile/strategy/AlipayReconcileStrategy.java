@@ -3,10 +3,7 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.sequence.func.Sequence;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.convert.AlipayConvert;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
-import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayRecord;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
@@ -23,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -39,8 +35,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class AlipayReconcileStrategy extends AbsReconcileStrategy {
 
     private final AliPayReconcileService reconcileService;
-
-    private final AliPayRecordManager recordManager;
 
     private final AliPayConfigService configService;
 
@@ -108,7 +102,6 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
         LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(this.getRecordOrder().getDate());
         LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);
         LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
-        List<AliPayRecord> records = recordManager.findByDate(start, end);
-        return records.stream().map(AlipayConvert.CONVERT::convertReconcileRecord).collect(Collectors.toList());
+        return null;
     }
 }

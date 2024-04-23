@@ -28,10 +28,10 @@ public class UnionPayRefundService {
     /**
      * 退款方法
      */
-    public void refund(RefundOrder refundOrder, PayOrder payOrder, int amount, UnionPayKit unionPayKit) {
+    public void refund(RefundOrder refundOrder, PayOrder payOrder,UnionPayKit unionPayKit) {
 
         // 金额转换
-        BigDecimal refundAmount = BigDecimal.valueOf(amount * 0.01);
+        BigDecimal refundAmount = BigDecimal.valueOf(refundOrder.getAmount() * 0.01);
         BigDecimal orderAmount = BigDecimal.valueOf(payOrder.getAmount() * 0.01);
 
         UnionRefundOrder unionRefundOrder = new UnionRefundOrder();

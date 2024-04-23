@@ -82,5 +82,4 @@ public class PayOrderResult extends CommonResult {
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime closeTime;
 
-
 }

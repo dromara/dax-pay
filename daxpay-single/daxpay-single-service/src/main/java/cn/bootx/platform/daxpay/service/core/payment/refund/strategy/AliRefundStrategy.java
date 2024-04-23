@@ -48,6 +48,6 @@ public class AliRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        aliRefundService.refund(this.getRefundOrder(), this.getRefundParam().getAmount());
+        aliRefundService.refund(this.getRefundOrder());
     }
 }

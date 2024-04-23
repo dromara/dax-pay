@@ -32,6 +32,13 @@ public class AllocationOrderManager extends BaseManager<AllocationOrderMapper, A
     }
 
     /**
+     * 根据商户分账号查询
+     */
+    public Optional<AllocationOrder> findByBizAllocationNo(String bizAllocationNo){
+        return findByField(AllocationOrder::getBizAllocationNo, bizAllocationNo);
+    }
+
+    /**
      * 分页
      */
     public Page<AllocationOrder> page(PageParam pageParam, AllocationOrderQuery param){

@@ -2,7 +2,6 @@ package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
-import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
@@ -11,11 +10,10 @@ import cn.bootx.platform.daxpay.param.payment.refund.RefundParam;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.factory.RefundStrategyFactory;
@@ -28,9 +26,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 支付退款服务
@@ -49,6 +48,8 @@ public class RefundService {
     private final ClientNoticeService clientNoticeService;
 
     private final RefundOrderManager refundOrderManager;
+
+    private final PayOrderQueryService payOrderQueryService;
 
     private final LockTemplate lockTemplate;
 
@@ -70,7 +71,7 @@ public class RefundService {
             // 判断是否是首次发起退款
             Optional<RefundOrder> refund = refundOrderManager.findByBizRefundNo(param.getBizRefundNo());
             if (refund.isPresent()){
-                return this.repeatRefund(param,refund.get());
+                return this.repeatRefund(refund.get());
             } else {
                 return this.firstRefund(param);
             }
@@ -85,7 +86,8 @@ public class RefundService {
     public RefundResult firstRefund(RefundParam param){
 
         // 获取支付订单
-        PayOrder payOrder = refundAssistService.getPayOrder(param);
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
+                .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         // 检查退款参数
         refundAssistService.checkAndParam(param, payOrder);
 
@@ -97,10 +99,8 @@ public class RefundService {
         refundStrategy.setPayOrder(payOrder);
         // 进行退款前预处理
         refundStrategy.doBeforeRefundHandler();
-
         // 退款操作的预处理, 使用独立的新事物进行发起, 返回创建成功的退款订单, 成功后才可以进行下一阶段的操作
         RefundOrder refundOrder = SpringUtil.getBean(this.getClass()).preRefundMethod(param, payOrder);
-
         try {
             // 3.2 执行退款策略
             refundStrategy.doRefundHandler();
@@ -112,9 +112,7 @@ public class RefundService {
             refundAssistService.updateOrderByError(refundOrder);
         }
         SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder);
-        return new RefundResult()
-                .setBizRefundNo(refundOrder.getBizRefundNo())
-                .setRefundNo(refundOrder.getRefundNo());
+        return refundAssistService.buildResult(refundOrder);
     }
 
     /**
@@ -137,37 +135,33 @@ public class RefundService {
      * 1. 查出相关退款订单
      * 2. 构建退款策略, 发起退款
      */
-    public RefundResult repeatRefund(RefundParam param, RefundOrder refundOrder){
+    public RefundResult repeatRefund(RefundOrder refundOrder){
         // 退款失败才可以重新发起退款, 重新发起退款
         if (!Objects.equals(refundOrder.getStatus(), RefundStatusEnum.FAIL.getCode())){
             throw new PayFailureException("只有失败状态的才可以重新发起退款");
         }
 
+        // 获取支付订单
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(refundOrder.getOrderNo(), refundOrder.getBizOrderNo())
+                .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         AbsRefundStrategy refundStrategy = RefundStrategyFactory.create(refundOrder.getRefundNo());
-
         // 设置退款订单对象
         refundStrategy.setRefundOrder(refundOrder);
-
+        // 退款前准备操作
+        refundStrategy.doBeforeRefundHandler();
         try {
-            // 3.1 退款前准备操作
-            refundStrategy.forEach(AbsRefundStrategy::doBeforeRefundHandler);
-            // 3.2 执行退款策略
-            refundStrategy.forEach(AbsRefundStrategy::doRefundHandler);
-            // 3.3 执行退款发起成功后操作
-            refundStrategy.forEach(AbsRefundStrategy::doSuccessHandler);
-
-            // 4.进行成功处理, 分别处理退款订单, 通道退款订单, 支付订单
-            List<RefundChannelOrder> refundChannelOrders = refundStrategy.stream()
-                    .map(AbsRefundStrategy::getRefundChannelOrder)
-                    .collect(Collectors.toList());
-            this.successHandler(refundOrder, refundChannelOrders, payOrder);
+            // 执行退款策略
+            refundStrategy.doRefundHandler();
         }
         catch (Exception e) {
-            // 5. 失败处理, 所有记录都会回滚, 可以调用退款重试
+            // 失败处理, 所有记录都会回滚, 可以调用退款重试
             PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             // 记录退款失败的记录
             refundAssistService.updateOrderByError(refundOrder);
         }
+        // 退款发起成功处理
+        SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder);
+        return refundAssistService.buildResult(refundOrder);
     }
 
     /**

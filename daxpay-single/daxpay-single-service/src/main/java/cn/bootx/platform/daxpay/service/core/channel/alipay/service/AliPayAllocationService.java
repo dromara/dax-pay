@@ -65,7 +65,7 @@ public class AliPayAllocationService {
         AlipayTradeOrderSettleResponse response = AliPayApi.tradeOrderSettleToResponse(model);
         // 需要写入到分账订单中
         String settleNo = response.getSettleNo();
-        PaymentContextLocal.get().getAllocationInfo().setGatewayNo(settleNo);
+        PaymentContextLocal.get().getAllocationInfo().setOutAllocationNo(settleNo);
         this.verifyErrorMsg(response);
     }
 

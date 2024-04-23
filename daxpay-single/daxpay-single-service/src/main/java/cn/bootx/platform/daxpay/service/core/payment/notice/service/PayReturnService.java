@@ -36,8 +36,8 @@ public class PayReturnService {
      */
     public String alipay(AliPayReturnParam param){
         PayOrderExtra payOrderExtra = payOrderExtraManager.findById(param.getOut_trade_no()).orElse(null);
-        PayOrder prOrder = payOrderQueryService.findById(param.getOut_trade_no()).orElse(null);
-        if (Objects.isNull(payOrderExtra) || Objects.isNull(prOrder)){
+        PayOrder payOrder = payOrderQueryService.findById(param.getOut_trade_no()).orElse(null);
+        if (Objects.isNull(payOrderExtra) || Objects.isNull(payOrder)){
             return StrUtil.format("{}/result/error?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付订单有问题，请排查"));
         }
 
@@ -47,7 +47,7 @@ public class PayReturnService {
             returnUrl = platformConfigService.getConfig().getReturnUrl();
         }
         if (StrUtil.isNotBlank(returnUrl)){
-            return StrUtil.format("{}?paymentId={}&businessNo={}", payOrderExtra.getReturnUrl(),prOrder.getId(),prOrder.getBusinessNo());
+            return StrUtil.format("{}?orderNo={}&bizOrderNo={}", payOrderExtra.getReturnUrl(),payOrder.getOrderNo(),payOrder.getBizOrderNo());
         }
         // 跳转到默认页
         return StrUtil.format("{}/result/success?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付成功..."));
@@ -72,7 +72,7 @@ public class PayReturnService {
             returnUrl = platformConfigService.getConfig().getReturnUrl();
         }
         if (StrUtil.isNotBlank(returnUrl)){
-            return StrUtil.format("{}?paymentId={}&businessNo={}", payOrderExtra.getReturnUrl(),prOrder.getId(),prOrder.getBusinessNo());
+            return StrUtil.format("{}?orderNo={}&bizOrderNo={}", payOrderExtra.getReturnUrl(),prOrder.getOrderNo(), prOrder.getBizOrderNo());
         }
         // 跳转到默认页
         return StrUtil.format("{}/result/success?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付成功..."));

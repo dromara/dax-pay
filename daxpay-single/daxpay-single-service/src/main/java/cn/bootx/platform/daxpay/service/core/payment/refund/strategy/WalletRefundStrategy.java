@@ -56,6 +56,6 @@ public class WalletRefundStrategy extends AbsRefundStrategy {
     @Override
     public void doRefundHandler() {
         // 不包含异步支付, 则只在支付订单中进行扣减, 等待异步退款完成, 再进行退款
-        walletPayService.refund(this.wallet, this.getRefundParam().getAmount());
+        walletPayService.refund(this.wallet, this.getRefundOrder().getAmount());
     }
 }

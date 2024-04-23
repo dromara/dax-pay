@@ -3,7 +3,6 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.sequence.func.Sequence;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.core.channel.union.convert.UnionPayConvert;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayReconcileService;
@@ -24,7 +23,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -99,8 +97,7 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
         LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(this.getRecordOrder().getDate());
         LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);
         LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
-        List<UnionPayRecord> records = recordManager.findByDate(start, end);
-        return records.stream().map(UnionPayConvert.CONVERT::convertReconcileRecord).collect(Collectors.toList());
+        return null;
     }
 
     /**

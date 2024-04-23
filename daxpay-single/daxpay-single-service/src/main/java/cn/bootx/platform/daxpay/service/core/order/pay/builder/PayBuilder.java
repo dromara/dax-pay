@@ -3,15 +3,12 @@ package cn.bootx.platform.daxpay.service.core.order.pay.builder;
 import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.payment.pay.PayParam;
-import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
-import cn.bootx.platform.daxpay.service.common.context.PayLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.experimental.UtilityClass;
 
@@ -37,7 +34,7 @@ public class PayBuilder {
         // 构建支付订单对象
         PayOrder payOrder = new PayOrder()
                 .setBizOrderNo(payParam.getBizOrderNo())
-                .setOrderNo(OrderNoGenerateUtil.trade())
+                .setOrderNo(OrderNoGenerateUtil.pay())
                 .setTitle(payParam.getTitle())
                 .setDescription(payParam.getDescription())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
@@ -76,24 +73,4 @@ public class PayBuilder {
         return payOrderExtra;
     }
 
-
-    /**
-     * 根据支付订单构建支付结果
-     * @param payOrder 支付订单
-     * @return PayResult 支付结果
-     */
-    public PayResult buildResultByPayOrder(PayOrder payOrder) {
-        PayResult payResult;
-        payResult = new PayResult();
-        payResult.setBizOrderNo(payOrder.getBizOrderNo());
-        payResult.setOrderNo(payOrder.getOrderNo());
-        payResult.setStatus(payOrder.getStatus());
-
-        // 设置支付参数
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
-        if (StrUtil.isNotBlank(asyncPayInfo.getPayBody())) {
-            payResult.setPayBody(asyncPayInfo.getPayBody());
-        }
-        return payResult;
-    }
 }

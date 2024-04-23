@@ -23,7 +23,4 @@ public class RequestLocal {
     /** 请求时间，时间戳转时间 */
     private LocalDateTime reqTime;
 
-    /** 请求链路id */
-    private String reqId;
-
 }

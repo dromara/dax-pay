@@ -9,8 +9,6 @@ import cn.bootx.platform.daxpay.service.core.order.allocation.convert.Allocation
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
-import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import cn.bootx.table.modify.mysql.constants.MySqlIndexType;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -18,6 +16,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * 分账订单
@@ -32,24 +32,44 @@ import lombok.experimental.Accessors;
 public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<AllocationOrderDto> {
 
     /**
-     * 分账订单号(传输给三方支付系统做关联)
-     */
-    @DbColumn(comment = "分账订单号")
-    private String orderNo;
-
-    /**
      * 分账单号
      */
-    @DbMySqlIndex(comment = "分账单号索引", type = MySqlIndexType.UNIQUE)
     @DbColumn(comment = "分账单号")
     private String allocationNo;
 
+    /**
+     * 商户分账单号
+     */
+    @DbColumn(comment = "商户分账单号")
+    private String bizAllocationNo;
 
     /**
-     * 支付订单ID
+     * 三方系统分账单号
      */
+    @DbColumn(comment = "网关分账单号")
+    private String outAllocationNo;
+
+    /** 支付订单ID */
     @DbColumn(comment = "支付订单ID")
-    private Long paymentId;
+    private Long orderId;
+
+    /**
+     * 支付订单号
+     */
+    @DbColumn(comment = "支付订单号")
+    private String orderNo;
+
+    /**
+     * 商户支付订单号
+     */
+    @DbColumn(comment = "商户支付订单号")
+    private String bizOrderNo;
+
+    /**
+     * 三方系统支付订单号
+     */
+    @DbColumn(comment = "网关支付订单号")
+    private String outOrderNo;
 
     /**
      * 支付订单标题
@@ -57,17 +77,6 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     @Schema(description = "支付订单标题")
     private String title;
 
-    /**
-     * 网关支付订单号
-     */
-    @DbColumn(comment = "网关支付订单号")
-    private String gatewayPayOrderNo;
-
-    /**
-     * 网关分账单号
-     */
-    @DbColumn(comment = "网关分账单号")
-    private String gatewayAllocationNo;
 
     /**
      * 所属通道
@@ -103,11 +112,22 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     private String result;
 
     /**
-     * 错误原因
+     * 错误码
+     */
+    @DbColumn(comment = "错误码")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String errorCode;
+
+    /**
+     * 错误信息
      */
     @DbColumn(comment = "错误原因")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
+
+    /** 分账完成时间 */
+    @DbColumn(comment = "分账完成时间")
+    private LocalDateTime finishTime;
 
     /**
      * 转换

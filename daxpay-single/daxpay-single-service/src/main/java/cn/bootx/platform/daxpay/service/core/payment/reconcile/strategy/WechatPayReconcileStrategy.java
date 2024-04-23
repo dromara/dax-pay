@@ -106,8 +106,7 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
         LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(this.getRecordOrder().getDate());
         LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);
         LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
-        List<WeChatPayRecord> records = recordManager.findByDate(start, end);
-        return records.stream().map(WeChatConvert.CONVERT::convertReconcileRecord).collect(Collectors.toList());
+        return null;
     }
 
 }

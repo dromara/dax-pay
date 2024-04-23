@@ -5,11 +5,9 @@ import cn.bootx.platform.daxpay.code.PaySignTypeEnum;
 import cn.bootx.platform.daxpay.service.code.ClientNoticeTypeEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
 import cn.bootx.platform.daxpay.service.core.payment.notice.result.PayNoticeResult;
-import cn.bootx.platform.daxpay.service.core.payment.notice.result.RefundChannelResult;
 import cn.bootx.platform.daxpay.service.core.payment.notice.result.RefundNoticeResult;
 import cn.bootx.platform.daxpay.service.core.system.config.entity.PlatformConfig;
 import cn.bootx.platform.daxpay.service.core.system.config.service.PlatformConfigService;
@@ -19,9 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 客户系统消息通知任务支撑服务
@@ -76,27 +72,23 @@ public class ClientNoticeAssistService {
      */
     public ClientNoticeTask buildRefundTask(RefundOrder order, RefundOrderExtra orderExtra){
 
+        // 创建退款通知内容
         RefundNoticeResult payNoticeResult = new RefundNoticeResult()
-                .setRefundId(order.getId())
-                .setAsyncPay(order.isAsyncPay())
-                .setAsyncChannel(order.getAsyncChannel())
                 .setRefundNo(order.getRefundNo())
+                .setChannel(order.getChannel())
                 .setAmount(order.getAmount())
                 .setRefundTime(order.getRefundTime())
                 .setCreateTime(order.getCreateTime())
                 .setStatus(order.getStatus())
-                .setAttach(orderExtra.getAttach())
-                .setRefundChannels(channels);
+                .setAttach(orderExtra.getAttach());
 
         PlatformConfig config = configService.getConfig();
-        // 是否需要签名
-        if (orderExtra.isNoticeSign()){
-            // 签名
-            if (Objects.equals(config.getSignType(), PaySignTypeEnum.MD5.getCode())){
-                payNoticeResult.setSign(PaySignUtil.md5Sign(payNoticeResult,config.getSignSecret()));
-            } else {
-                payNoticeResult.setSign(PaySignUtil.hmacSha256Sign(payNoticeResult,config.getSignSecret()));
-            }
+        // 签名
+        if (Objects.equals(config.getSignType(), PaySignTypeEnum.MD5.getCode())){
+            payNoticeResult.setSign(PaySignUtil.md5Sign(payNoticeResult,config.getSignSecret()));
+        } else if (Objects.equals(config.getSignType(), PaySignTypeEnum.HMAC_SHA256.getCode())) {
+            payNoticeResult.setSign(PaySignUtil.hmacSha256Sign(payNoticeResult,config.getSignSecret()));
+        } else {
         }
         return new ClientNoticeTask()
                 .setUrl(orderExtra.getNotifyUrl())

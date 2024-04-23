@@ -39,15 +39,15 @@ public class RefundCallbackService {
 
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 加锁
-        LockInfo lock = lockTemplate.lock("callback:refund:" + callbackInfo.getOrderId(),10000, 200);
+        LockInfo lock = lockTemplate.lock("callback:refund:" + callbackInfo.getTradeNo(),10000, 200);
         if (Objects.isNull(lock)){
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("回调正在处理中，忽略本次回调请求");
-            log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getOrderId());
+            log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getTradeNo());
             return;
         }
         try {
             // 获取退款单
-            RefundOrder refundOrder = refundOrderManager.findById(callbackInfo.getOrderId()).orElse(null);
+            RefundOrder refundOrder = refundOrderManager.findByRefundNo(callbackInfo.getTradeNo()).orElse(null);
             // 退款单不存在,记录回调记录
             if (Objects.isNull(refundOrder)) {
                 callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND).setMsg("退款单不存在,记录回调记录");
@@ -63,10 +63,10 @@ public class RefundCallbackService {
             if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), callbackInfo.getOutStatus())) {
                 PaymentContextLocal.get().getRepairInfo().setFinishTime(callbackInfo.getFinishTime());
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_SUCCESS);
-                callbackInfo.setPayRepairNo(repair.getRepairNo());
+                callbackInfo.setRepairNo(repair.getRepairNo());
             }  else {
                 RefundRepairResult repair = reflectionService.repair(refundOrder, RefundRepairWayEnum.REFUND_FAIL);
-                callbackInfo.setPayRepairNo(repair.getRepairNo());
+                callbackInfo.setRepairNo(repair.getRepairNo());
             }
 
         } finally {

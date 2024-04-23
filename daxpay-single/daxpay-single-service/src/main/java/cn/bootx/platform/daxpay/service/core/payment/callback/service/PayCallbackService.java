@@ -42,22 +42,22 @@ public class PayCallbackService {
     public void payCallback() {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 加锁
-        LockInfo lock = lockTemplate.lock("callback:payment:" + callbackInfo.getOrderId(),10000, 200);
+        LockInfo lock = lockTemplate.lock("callback:payment:" + callbackInfo.getTradeNo(),10000, 200);
         if (Objects.isNull(lock)){
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("回调正在处理中，忽略本次回调请求");
-            log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getOrderId());
+            log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getTradeNo());
             return;
         }
         try {
             // 获取支付单
-            PayOrder payOrder = payOrderQueryService.findById(callbackInfo.getOrderId()).orElse(null);
+            PayOrder payOrder = payOrderQueryService.findByOrderNo(callbackInfo.getTradeNo()).orElse(null);
             // 本地支付单不存在,记录回调记录, TODO 需要补单或进行退款
             if (Objects.isNull(payOrder)) {
                 callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND).setMsg("支付单不存在,记录回调记录");
                 return;
             }
             // 设置订单关联网关订单号
-            payOrder.setGatewayOrderNo(callbackInfo.getOutOrderNo());
+            payOrder.setOutOrderNo(callbackInfo.getOutTradeNo());
 
             // 成功状态
             if (Objects.equals(PayCallbackStatusEnum.SUCCESS.getCode(), callbackInfo.getOutStatus())) {
@@ -97,7 +97,7 @@ public class PayCallbackService {
         PaymentContextLocal.get().getRepairInfo().setFinishTime(callbackInfo.getFinishTime());
         // 执行支付完成修复逻辑
         PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.PAY_SUCCESS);
-        callbackInfo.setPayRepairNo(repair.getRepairNo());
+        callbackInfo.setRepairNo(repair.getRepairNo());
     }
 
     /**
@@ -117,7 +117,7 @@ public class PayCallbackService {
         }
         // 执行支付关闭修复逻辑
         PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.CLOSE_LOCAL);
-        callbackInfo.setPayRepairNo(repair.getRepairNo());
+        callbackInfo.setRepairNo(repair.getRepairNo());
     }
 
 }

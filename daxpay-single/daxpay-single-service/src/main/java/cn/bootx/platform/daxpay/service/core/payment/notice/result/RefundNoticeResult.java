@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  *
@@ -21,26 +20,20 @@ import java.util.List;
 @Schema(title = "退款通知消息")
 public class RefundNoticeResult {
 
-    @Schema(description = "退款ID")
-    private Long refundId;
-
     @Schema(description = "退款号")
     private String refundNo;
 
-    @Schema(description = "是否含有异步通道")
-    private boolean asyncPay;
+    @Schema(description = "商户退款号")
+    private String bizRefundNo;
 
     /**
-     * @see PayChannelEnum#ASYNC_TYPE_CODE
+     * @see PayChannelEnum
      */
     @Schema(description = "异步通道")
-    private String asyncChannel;
+    private String channel;
 
     @Schema(description = "退款金额")
     private Integer amount;
-
-    @Schema(description = "退款通道信息")
-    private List<RefundChannelResult> refundChannels;
 
     /**
      * @see RefundStatusEnum

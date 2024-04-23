@@ -9,20 +9,15 @@ import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.daxpay.code.PaymentApiCode;
 import cn.bootx.platform.daxpay.param.payment.refund.QueryRefundParam;
 import cn.bootx.platform.daxpay.param.payment.refund.RefundParam;
-import cn.bootx.platform.daxpay.result.order.RefundChannelOrderResult;
 import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
-import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderChannelConvert;
 import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderConvert;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.common.service.PaymentAssistService;
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.RefundService;
 import cn.bootx.platform.daxpay.service.core.system.config.dao.PayApiConfigManager;
 import cn.bootx.platform.daxpay.service.core.system.config.entity.PayApiConfig;
 import cn.bootx.platform.daxpay.service.core.system.config.service.PayApiConfigService;
-import cn.bootx.platform.daxpay.service.dto.order.refund.RefundChannelOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderRefundParam;
 import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
@@ -34,10 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 退款
@@ -74,25 +67,6 @@ public class RefundOrderService {
     }
 
     /**
-     * 通道退款订单列表查询
-     */
-    public List<RefundChannelOrderDto> listByChannel(Long refundId){
-        List<RefundChannelOrder> refundOrderChannels = refundOrderChannelManager.findAllByRefundId(refundId);
-        return refundOrderChannels.stream()
-                .map(RefundOrderChannelConvert.CONVERT::convert)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 查询通道退款订单详情
-     */
-    public RefundChannelOrderDto findChannelById(Long id) {
-        return refundOrderChannelManager.findById(id)
-                .map(RefundChannelOrder::toDto)
-                .orElseThrow(() -> new DataNotExistException("通道退款订单不存在"));
-    }
-
-    /**
      * 查询退款订单
      */
     public RefundOrderResult queryRefundOrder(QueryRefundParam param) {
@@ -111,16 +85,8 @@ public class RefundOrderService {
             refundOrder = refundOrderManager.findByRefundNo(param.getRefundNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         }
-        // 查询退款明细
-        List<RefundChannelOrder> refundOrderChannels = refundOrderChannelManager.findAllByRefundId(refundOrder.getId());
-        List<RefundChannelOrderResult> channels = refundOrderChannels.stream()
-                .map(RefundOrderChannelConvert.CONVERT::convertResult)
-                .collect(Collectors.toList());
 
-        RefundOrderResult refundOrderResult = RefundOrderConvert.CONVERT.convertResult(refundOrder);
-        refundOrderResult.setRefundId(refundOrder.getId());
-        refundOrderResult.setChannels(channels);
-        return refundOrderResult;
+        return RefundOrderConvert.CONVERT.convertResult(refundOrder);
     }
 
     /**
@@ -133,11 +99,10 @@ public class RefundOrderService {
                 .orElse("未知");
 
         RefundParam refundParam = new RefundParam();
-        refundParam.setPaymentId(param.getPaymentId());
+        refundParam.setOrderNo(param.getOrderNo());
         refundParam.setReason(param.getReason());
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
-        refundParam.setRefundAll(true);
         // 手动初始化上下文
         paymentAssistService.initContext(refundParam);
         // 初始化接口信息为统一退款

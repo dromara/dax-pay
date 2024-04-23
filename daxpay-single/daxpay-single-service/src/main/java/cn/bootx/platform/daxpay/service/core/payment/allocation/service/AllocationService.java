@@ -18,10 +18,9 @@ import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationO
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrderDetail;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.OrderAndDetail;
 import cn.bootx.platform.daxpay.service.core.order.allocation.service.AllocationOrderService;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.dao.AllocationGroupManager;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationGroup;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.factory.AllocationFactory;
@@ -50,8 +49,6 @@ public class AllocationService {
 
     private final PayOrderManager payOrderManager;
 
-    private final PayChannelOrderManager payChannelOrderManager;
-
     private final AllocationGroupManager groupManager;
 
     private final AllocationOrderManager allocationOrderManager;
@@ -61,33 +58,28 @@ public class AllocationService {
     private final AllocationOrderService allocationOrderService;
 
     private final AllocationOrderDetailManager allocationOrderDetailManager;
+    private final PayOrderQueryService payOrderQueryService;
 
     /**
      * 开启分账, 使用分账组进行分账
      */
     public AllocationResult allocation(AllocationStartParam param) {
-
         PayOrder payOrder = this.getAndCheckPayOrder(param);
-
-        // 查询待分账的通道支付订单
-        PayChannelOrder channelOrder = payChannelOrderManager.findByAsyncChannel(payOrder.getId())
-                .orElseThrow(() -> new DataNotExistException("未查询到支付通道订单"));
-
         // 查询分账组 未传输使用默认该通道默认分账组
         AllocationGroup allocationGroup;
         if (Objects.nonNull(param.getAllocationGroupId())) {
             allocationGroup = groupManager.findById(param.getAllocationGroupId()).orElseThrow(() -> new DataNotExistException("未查询到分账组"));
         } else {
-            allocationGroup = groupManager.findDefaultGroup(payOrder.getAsyncChannel()).orElseThrow(() -> new DataNotExistException("未查询到默认分账组"));
+            allocationGroup = groupManager.findDefaultGroup(payOrder.getChannel()).orElseThrow(() -> new DataNotExistException("未查询到默认分账组"));
         }
 
         List<AllocationGroupReceiverResult> receiversByGroups = allocationGroupService.findReceiversByGroups(allocationGroup.getId());
 
         // 创建分账单和明细并保存, 同时更新支付订单状态 使用事务
-        OrderAndDetail orderAndDetail = allocationOrderService.createAndUpdate(param ,payOrder, channelOrder.getAmount(), receiversByGroups);
+        OrderAndDetail orderAndDetail = allocationOrderService.createAndUpdate(param ,payOrder, payOrder.getAmount(), receiversByGroups);
 
         // 创建分账策略并初始化
-        AbsAllocationStrategy allocationStrategy = AllocationFactory.create(payOrder.getAsyncChannel());
+        AbsAllocationStrategy allocationStrategy = AllocationFactory.create(payOrder.getChannel());
         AllocationOrder order = orderAndDetail.getOrder();
         List<AllocationOrderDetail> details = orderAndDetail.getDetails();
         allocationStrategy.initParam(order, details);
@@ -108,8 +100,8 @@ public class AllocationService {
         // 网关分账号
         String gatewayNo = PaymentContextLocal.get()
                 .getAllocationInfo()
-                .getGatewayNo();
-        order.setGatewayAllocationNo(gatewayNo);
+                .getOutAllocationNo();
+        order.setOutAllocationNo(gatewayNo);
         allocationOrderManager.updateById(order);
 
         return new AllocationResult().setOrderId(order.getId())
@@ -204,8 +196,8 @@ public class AllocationService {
     public void sync(AllocationSyncParam param) {
         // 获取分账订单
         AllocationOrder allocationOrder = null;
-        if (Objects.nonNull(param.getAllocationId())){
-            allocationOrder = allocationOrderManager.findById(param.getAllocationId())
+        if (Objects.nonNull(param.getAllocationNo())){
+            allocationOrder = allocationOrderManager.findById(param.getBizAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("分账单不存在"));
         }
         if (Objects.isNull(allocationOrder)){
@@ -273,15 +265,8 @@ public class AllocationService {
      */
     private PayOrder getAndCheckPayOrder(AllocationStartParam param) {
         // 查询支付单
-        PayOrder payOrder = null;
-        if (Objects.nonNull(param.getPaymentId())){
-            payOrder = payOrderManager.findById(param.getPaymentId())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
-        if (StrUtil.isNotBlank(param.getBusinessNo())){
-            payOrder = payOrderManager.findByBusinessNo(param.getBusinessNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
+                .orElseThrow(() -> new DataNotExistException("支付单不存在"));
         // 判断订单是否可以分账
         if (!payOrder.isAllocation()){
             throw new PayFailureException("该订单不允许分账");

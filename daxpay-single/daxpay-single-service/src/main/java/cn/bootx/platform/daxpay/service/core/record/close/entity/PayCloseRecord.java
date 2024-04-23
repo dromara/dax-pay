@@ -24,20 +24,20 @@ import lombok.experimental.Accessors;
 @TableName("pay_close_record")
 public class PayCloseRecord extends MpCreateEntity implements EntityBaseFunction<PayCloseRecordDto> {
 
-    /** 支付记录id */
-    @DbColumn(comment = "支付记录id")
-    private Long paymentId;
+    /** 订单号 */
+    @DbColumn(comment = "订单号")
+    private String orderNo;
 
-    /** 业务号 */
-    @DbColumn(comment = "业务号")
-    private String businessNo;
+    /** 商户订单号 */
+    @DbColumn(comment = "商户订单号")
+    private String bizOrderNo;
 
     /**
-     * 关闭的异步支付通道, 可以为空
-     * @see PayChannelEnum#getCode()
+     * 关闭的支付通道
+     * @see PayChannelEnum
      */
     @DbColumn(comment = "关闭的异步支付通道")
-    private String asyncChannel;
+    private String channel;
 
     /**
      * 是否关闭成功
@@ -45,16 +45,15 @@ public class PayCloseRecord extends MpCreateEntity implements EntityBaseFunction
     @DbColumn(comment = "是否关闭成功")
     private boolean closed;
 
+    @DbColumn(comment = "错误码")
+    private String code;
+
     @DbColumn(comment = "错误消息")
     private String errorMsg;
 
     /** 客户端IP */
     @DbColumn(comment = "客户端IP")
     private String clientIp;
-
-    /** 请求链路ID */
-    @DbColumn(comment = "请求链路ID")
-    private String reqId;
 
     /**
      * 转换

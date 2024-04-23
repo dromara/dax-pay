@@ -1,10 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.convert;
 
-import cn.bootx.platform.daxpay.result.order.PayChannelOrderResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
-import cn.bootx.platform.daxpay.service.dto.order.pay.PayChannelOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderExtraDto;
 import org.mapstruct.Mapper;
@@ -23,7 +20,4 @@ public interface PayOrderConvert {
 
     PayOrderDto convert(PayOrder in);
 
-    PayChannelOrderDto convert(PayChannelOrder in);
-
-    PayChannelOrderResult convertResult(PayChannelOrder in);
 }

@@ -8,5 +8,4 @@ import java.util.List;
 public class PayOrderDetailDto {
     private PayOrderDto payOrder;
     private PayOrderExtraDto payOrderExtra;
-    private List<PayChannelOrderDto> payChannelOrder;
 }

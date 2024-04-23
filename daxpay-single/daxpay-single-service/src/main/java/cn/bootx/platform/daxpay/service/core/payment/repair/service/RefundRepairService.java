@@ -7,14 +7,10 @@ import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
-import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
 import cn.bootx.platform.daxpay.service.core.payment.repair.factory.RefundRepairStrategyFactory;
@@ -49,8 +45,6 @@ public class RefundRepairService {
     private final PayOrderQueryService payOrderQueryService;
 
     private final ClientNoticeService clientNoticeService;
-
-    private final PayChannelOrderManager payChannelOrderManager;
 
     private final RefundOrderManager refundOrderManager;
 

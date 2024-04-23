@@ -8,7 +8,6 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.payment.pay.QueryPayParam;
 import cn.bootx.platform.daxpay.result.order.PayOrderResult;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -36,7 +35,6 @@ import java.util.Optional;
 public class PayOrderQueryService {
     private final PayOrderManager payOrderManager;
     private final PayOrderExtraManager payOrderExtraManager;
-    private final PayChannelOrderManager payChannelOrderManager;
 
     /**
      * 分页
@@ -66,6 +64,21 @@ public class PayOrderQueryService {
     public Optional<PayOrder> findByBizOrderNo(String bizOrderNo) {
         return payOrderManager.findByBizOrderNo(bizOrderNo);
     }
+
+    /**
+     * 根据订单号或商户订单号查询
+     */
+    public Optional<PayOrder> findByBizOrOrderNo(String orderNo, String bizOrderNo) {
+        if (Objects.nonNull(orderNo)){
+            return this.findByOrderNo(orderNo);
+        }
+        if (Objects.nonNull(bizOrderNo)){
+            return this.findByBizOrderNo(bizOrderNo);
+        }
+        return Optional.empty();
+    }
+
+
 
     /**
      * 查询支付记录

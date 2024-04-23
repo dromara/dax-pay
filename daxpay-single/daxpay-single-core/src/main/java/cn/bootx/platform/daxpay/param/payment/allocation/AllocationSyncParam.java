@@ -16,5 +16,5 @@ public class AllocationSyncParam {
     private String allocationNo;
 
     @Schema(description = "商户分账号")
-    private String outAllocationNo;
+    private String bizAllocationNo;
 }

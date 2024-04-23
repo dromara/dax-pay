@@ -22,13 +22,13 @@ public class CommonResult {
     private String sign;
 
     @Schema(description = "错误码")
-    private String code;
+    private String code = "0";
 
     @Schema(description = "错误信息")
     private String msg;
 
     @Schema(description = "响应时间")
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
-    private LocalDateTime resTime;
+    private LocalDateTime resTime = LocalDateTime.now();
 
 }

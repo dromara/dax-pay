@@ -1,13 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.payment.repair.service;
 
-import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayChannelOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayChannelOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNoticeService;
@@ -26,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -42,8 +38,6 @@ public class PayRepairService {
     private final PayOrderService payOrderService;
 
     private final ClientNoticeService clientNoticeService;
-
-    private final PayChannelOrderManager channelOrderManager;
 
     private final PayRepairRecordService recordService;
 

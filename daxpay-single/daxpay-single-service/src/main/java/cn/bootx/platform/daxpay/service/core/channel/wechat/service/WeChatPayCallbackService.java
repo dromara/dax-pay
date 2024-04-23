@@ -84,10 +84,10 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callbackInfo.getCallbackParam();
 
-        // 网关订单号
-        callbackInfo.setOutOrderNo(callbackParam.get(TRANSACTION_ID));
-        // 支付订单ID
-        callbackInfo.setOrderId(Long.valueOf(callbackParam.get(OUT_TRADE_NO)));
+        // 网关支付号
+        callbackInfo.setOutTradeNo(callbackParam.get(TRANSACTION_ID));
+        // 支付号
+        callbackInfo.setTradeNo(callbackParam.get(OUT_TRADE_NO));
         // 支付状态
         PayStatusEnum payStatus = WxPayKit.codeIsOk(callbackParam.get(RESULT_CODE)) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
         callbackInfo.setOutStatus(payStatus.getCode());
@@ -119,9 +119,9 @@ public class WeChatPayCallbackService extends AbsCallbackStrategy {
         callbackParam = WxPayKit.xmlToMap(decryptData);
         callbackInfo.setCallbackParam(callbackParam);
         // 网关订单号
-        callbackInfo.setOutOrderNo(callbackParam.get(CALLBACK_REFUND_ID));
+        callbackInfo.setOutTradeNo(callbackParam.get(CALLBACK_REFUND_ID));
         // 退款订单Id
-        callbackInfo.setOrderId(Long.valueOf(callbackParam.get(CALLBACK_OUT_REFUND_NO)));
+        callbackInfo.setTradeNo(callbackParam.get(CALLBACK_OUT_REFUND_NO));
         // 退款金额
         callbackInfo.setAmount(callbackParam.get(CALLBACK_REFUND_FEE));
 

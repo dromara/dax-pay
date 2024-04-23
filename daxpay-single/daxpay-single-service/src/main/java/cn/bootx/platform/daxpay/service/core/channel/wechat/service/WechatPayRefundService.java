@@ -36,8 +36,8 @@ public class WechatPayRefundService {
      * 退款方法
      * 微信需要同时传输订单金额或退款金额
      */
-    public void refund(RefundOrder refundOrder, int amount, WeChatPayConfig weChatPayConfig) {
-        String refundFee = String.valueOf(amount);
+    public void refund(RefundOrder refundOrder, WeChatPayConfig weChatPayConfig) {
+        String refundFee = String.valueOf(refundOrder.getRefundNo());
         String totalFee = String.valueOf(refundOrder.getAmount());
         // 设置退款信息
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();

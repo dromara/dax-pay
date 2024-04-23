@@ -1,22 +1,23 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 
-import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.daxpay.code.PaySignTypeEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.payment.refund.RefundParam;
+import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.bootx.platform.daxpay.service.common.context.ApiInfoLocal;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.context.RefundLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
 import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
+import cn.bootx.platform.daxpay.util.PaySignUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +41,6 @@ import static cn.bootx.platform.daxpay.code.RefundStatusEnum.SUCCESS;
 @Service
 @RequiredArgsConstructor
 public class RefundAssistService {
-    private final PayOrderQueryService payOrderQueryService;
-
     private final RefundOrderManager refundOrderManager;
 
     private final RefundOrderExtraManager refundOrderExtraManager;
@@ -55,7 +54,7 @@ public class RefundAssistService {
     }
 
     /**
-     * 初始化通知相关上下文
+     * 初始化退款通知相关上下文
      */
     private void initNotice(RefundParam param) {
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
@@ -74,39 +73,6 @@ public class RefundAssistService {
                 noticeInfo.setNotifyUrl(platform.getNotifyUrl());
             }
         }
-    }
-
-    /**
-     * 根据退款参数获取退款订单
-     */
-    public RefundOrder getRefundOrder(RefundParam param){
-        // 查询退款单
-        RefundOrder refundOrder = null;
-        if (Objects.nonNull(param.getrefun())){
-            refundOrder = refundOrderManager.findById(param.getRefundNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
-        if (Objects.isNull(refundOrder)){
-            refundOrder = refundOrderManager.findByRefundNo(param.getRefundNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
-        return refundOrder;
-    }
-
-    /**
-     * 根据退款参数获取支付订单
-     */
-    public PayOrder getPayOrder(RefundParam param){
-        PayOrder payOrder = null;
-        if (Objects.nonNull(param.getOrderNo())){
-            payOrder = payOrderQueryService.findByOrderNo(param.getOrderNo())
-                    .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
-        }
-        if (Objects.isNull(payOrder)){
-            payOrder = payOrderQueryService.findByBizOrderNo(param.getBizOrderNo())
-                    .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
-        }
-        return payOrder;
     }
 
     /**
@@ -173,6 +139,7 @@ public class RefundAssistService {
                 .setRefundNo(asyncRefundInfo.getOutRefundNo());
         // 退款成功更新退款时间
         if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
+            // TODO 读取网关返回的退款时间
             refundOrder.setRefundTime(LocalDateTime.now());
         }
         refundOrderManager.updateById(refundOrder);
@@ -186,9 +153,33 @@ public class RefundAssistService {
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         refundOrder.setErrorCode(refundInfo.getErrorCode());
         refundOrder.setErrorMsg(refundInfo.getErrorMsg());
-        // 退款失败不保存剩余可退余额, 否则数据看起开会产生困惑
-        refundOrder.setRefundableBalance(null);
         refundOrderManager.updateById(refundOrder);
+    }
+
+    /**
+     * 根据退款订单信息构建出返回结果
+     */
+    public RefundResult buildResult(RefundOrder refundOrder){
+        PlatformLocal platformInfo = PaymentContextLocal.get()
+                .getPlatformInfo();
+
+        RefundResult refundResult = new RefundResult();
+        refundResult.setRefundNo(refundOrder.getRefundNo())
+                .setBizRefundNo(refundOrder.getBizRefundNo());
+        refundResult.setCode(refundOrder.getStatus())
+                .setMsg(refundOrder.getErrorMsg())
+                .setCode(refundOrder.getErrorCode());
+
+        // 进行签名
+        String signType = platformInfo.getSignType();
+        if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
+            refundResult.setSign(PaySignUtil.hmacSha256Sign(refundOrder, platformInfo.getSignSecret()));
+        } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
+            refundResult.setSign(PaySignUtil.md5Sign(refundOrder, platformInfo.getSignSecret()));
+        } else {
+            throw new PayFailureException("未获取到签名方式，请检查");
+        }
+        return refundResult;
     }
 
 }

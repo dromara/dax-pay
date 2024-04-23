@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.func;
 
-import cn.bootx.platform.daxpay.param.payment.refund.RefundParam;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import lombok.Getter;
@@ -21,9 +20,6 @@ public abstract class AbsRefundStrategy implements PayStrategy{
 
     /** 退款订单 */
     private RefundOrder refundOrder = null;
-
-    /** 退款参数 */
-    private RefundParam refundParam;
 
 
     /**

@@ -17,7 +17,7 @@ public class PayOrderRefundParam {
 
     /** 支付订单号 */
     @Schema(description = "支付订单号")
-    private Long orderNo;
+    private String orderNo;
 
     /**
      * 支付通道
