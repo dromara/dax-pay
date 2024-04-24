@@ -103,12 +103,11 @@ public abstract class AbsCallbackStrategy implements PayStrategy {
      */
     public void saveCallbackRecord() {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-
         PayCallbackRecord payNotifyRecord = new PayCallbackRecord()
+                .setTradeNo(callbackInfo.getTradeNo())
+                .setOutTradeNo(callbackInfo.getOutTradeNo())
                 .setChannel(this.getChannel().getCode())
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackParam()))
-                .setOrderId(callbackInfo.getTradeNo())
-                .setGatewayOrderNo(callbackInfo.getOutTradeNo())
                 .setCallbackType(callbackInfo.getCallbackType().getCode())
                 .setRepairOrderNo(callbackInfo.getRepairNo())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())

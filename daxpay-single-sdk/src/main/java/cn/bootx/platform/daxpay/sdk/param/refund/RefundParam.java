@@ -2,12 +2,16 @@ package cn.bootx.platform.daxpay.sdk.param.refund;
 
 import cn.bootx.platform.daxpay.sdk.model.refund.RefundModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayRequest;
+import cn.bootx.platform.daxpay.sdk.param.ChannelParam;
+import cn.bootx.platform.daxpay.sdk.param.channel.AliPayParam;
+import cn.bootx.platform.daxpay.sdk.param.channel.WalletPayParam;
+import cn.bootx.platform.daxpay.sdk.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.JSONUtil;
-import lombok.*;
-
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 退款参数，适用于组合支付的订单退款操作中，
@@ -19,27 +23,32 @@ import java.util.List;
 @ToString
 public class RefundParam extends DaxPayRequest<RefundModel> {
 
-    /** 支付单ID */
-    private Long paymentId;
-
-    /** 业务号 */
-    private String businessNo;
 
     /**
-     * 是否全部退款, 传false时为部分退款, 通道退款参数不可为空
+     * 商户退款号，不可以为空，同样的商户退款号多次请求，同一退款单号多次请求只退一笔
      */
-    private boolean refundAll;
+    private String bizRefundNo;
 
     /**
-     * 退款号可以为空, 但不可以重复, 如果退款号为空, 则系统会自动生成退款号, 与退款ID一致
+     * 支付订单号，与商户订单号至少要传输一个，同时传输以订单号为准
      */
-    private String refundNo;
+    private String orderNo;
 
     /**
-     * 通道退款参数
-     * 部分退款时必传
+     * 商户支付订单号，与订单号至少要传输一个，同时传输以订单号为准
      */
-    private List<RefundChannelParam> refundChannels;
+    private String bizOrderNo;
+
+    /** 退款金额 */
+    private Integer amount;
+
+    /**
+     * 预留的退款扩展参数
+     * @see AliPayParam
+     * @see WeChatPayParam
+     * @see WalletPayParam
+     */
+    private ChannelParam extraParam;
 
     /** 退款原因 */
     private String reason;
@@ -48,7 +57,7 @@ public class RefundParam extends DaxPayRequest<RefundModel> {
     private String attach;
 
     /** 是否不启用异步通知 */
-    private boolean notNotify;
+    private Boolean notNotify;
 
     /** 异步通知地址 */
     private String notifyUrl;

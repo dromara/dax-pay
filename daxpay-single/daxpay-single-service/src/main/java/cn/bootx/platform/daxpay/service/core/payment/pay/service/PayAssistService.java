@@ -108,7 +108,7 @@ public class PayAssistService {
         PlatformLocal platform = PaymentContextLocal.get()
                 .getPlatformInfo();
         // 异步回调为开启状态
-        if (!payParam.isNotNotify() && apiInfo.isNotice()) {
+        if (!payParam.getNotNotify() && apiInfo.isNotice()) {
             // 首先读取请求参数
             noticeInfo.setNotifyUrl(payParam.getNotifyUrl());
             // 读取接口配置
@@ -156,10 +156,10 @@ public class PayAssistService {
         PayLocal payInfo = PaymentContextLocal.get()
                 .getPayInfo();
         // 订单信息
-        order.setAllocation(payParam.isAllocation())
+        order.setAllocation(payParam.getAllocation())
                 .setChannel(payParam.getChannel())
                 .setMethod(payParam.getMethod());
-        if (!order.isAllocation()) {
+        if (!order.getAllocation()) {
             order.setAllocationStatus(null);
         }
 

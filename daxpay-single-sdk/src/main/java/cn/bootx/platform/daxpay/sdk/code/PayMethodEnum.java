@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 @Getter
 @AllArgsConstructor
-public enum PayWayEnum {
+public enum PayMethodEnum {
 
     NORMAL("normal", "常规支付"),
     WAP("wap", "wap支付"),
@@ -31,7 +31,7 @@ public enum PayWayEnum {
     /**
      * 根据编码获取枚举
      */
-    public static PayWayEnum findByCode(String code){
+    public static PayMethodEnum findByCode(String code){
         return Arrays.stream(values())
                 .filter(o -> Objects.equals(o.getCode(), code))
                 .findFirst()

@@ -29,17 +29,27 @@ import lombok.experimental.Accessors;
 @TableName("pay_sync_record")
 public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<PaySyncRecordDto> {
 
-    /** 本地订单IDb标识 */
+    /** 本地交易号 */
     @DbColumn(comment = "本地订单ID")
-    private Long orderId;
+    private String tradeNo;
 
-    /** 本地订单号 */
-    @DbColumn(comment = "本地业务号")
-    private String orderNo;
+    /** 商户交易号 */
+    @DbColumn(comment = "商户交易号")
+    private String bizTradeNo;
 
-    /** 网关订单号 */
-    @DbColumn(comment = "网关订单号")
-    private String gatewayOrderNo;
+    /** 三方支付交易号 */
+    @DbColumn(comment = "三方支付交易号")
+    private String outTradeNo;
+
+
+    /**
+     * 三方支付返回状态
+     * @see PaySyncStatusEnum
+     * @see RefundSyncStatusEnum
+     */
+    @DbColumn(comment = "网关返回状态")
+    private String outTradeStatus;
+
 
     /**
      * 同步类型 支付/退款
@@ -61,21 +71,16 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     private String syncInfo;
 
     /**
-     * 网关返回状态
-     * @see PaySyncStatusEnum
-     * @see RefundSyncStatusEnum
-     */
-    @DbColumn(comment = "网关返回状态")
-    private String gatewayStatus;
-
-    /**
      * 支付单如果状态不一致, 是否进行修复
      */
     @DbColumn(comment = "是否进行修复")
-    private boolean repairOrder;
+    private boolean repair;
 
     @DbColumn(comment = "修复单号")
-    private String repairOrderNo;
+    private String repairNo;
+
+    @DbColumn(comment = "错误码")
+    private String errorCode;
 
     @DbColumn(comment = "错误消息")
     private String errorMsg;
@@ -83,10 +88,6 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     /** 客户端IP */
     @DbColumn(comment = "客户端IP")
     private String clientIp;
-
-    /** 请求链路ID */
-    @DbColumn(comment = "请求链路ID")
-    private String reqId;
 
     /**
      * 转换

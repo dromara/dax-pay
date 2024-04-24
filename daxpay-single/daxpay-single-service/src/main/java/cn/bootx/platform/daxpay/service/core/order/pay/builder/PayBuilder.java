@@ -38,14 +38,14 @@ public class PayBuilder {
                 .setTitle(payParam.getTitle())
                 .setDescription(payParam.getDescription())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
-                .setAllocation(payParam.isAllocation())
+                .setAllocation(payParam.getAllocation())
                 .setAmount(payParam.getAmount())
                 .setChannel(payParam.getChannel())
                 .setMethod(payParam.getMethod())
                 .setExpiredTime(expiredTime)
                 .setRefundableBalance(payParam.getAmount());
         // 如果支持分账, 设置分账状态为代分账
-        if (payOrder.isAllocation()) {
+        if (payOrder.getAllocation()) {
             payOrder.setAllocationStatus(PayOrderAllocationStatusEnum.WAITING.getCode());
         }
         return payOrder;

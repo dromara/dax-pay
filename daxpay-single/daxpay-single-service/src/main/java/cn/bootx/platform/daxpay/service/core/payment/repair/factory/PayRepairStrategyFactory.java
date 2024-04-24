@@ -4,7 +4,6 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayUnsupportedMethodException;
 import cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay.AliPayRepairStrategy;
 import cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay.UnionPayRepairStrategy;
-import cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay.WalletPayRepairStrategy;
 import cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay.WeChatPayRepairStrategy;
 import cn.bootx.platform.daxpay.service.func.AbsPayRepairStrategy;
 import cn.hutool.extra.spring.SpringUtil;
@@ -33,9 +32,6 @@ public class PayRepairStrategyFactory {
                 break;
             case UNION_PAY:
                 strategy = SpringUtil.getBean(UnionPayRepairStrategy.class);
-                break;
-            case WALLET:
-                strategy = SpringUtil.getBean(WalletPayRepairStrategy.class);
                 break;
             default:
                 throw new PayUnsupportedMethodException();

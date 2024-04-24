@@ -62,7 +62,7 @@ public class AliPayService {
             throw new PayFailureException("支付宝支付金额超过限额");
         }
         // 支付参数开启分账, 配置未开启分账
-        if(payParam.isAllocation() && !Objects.equals(alipayConfig.getAllocation(),true)){
+        if(payParam.getAllocation() && !Objects.equals(alipayConfig.getAllocation(),true)){
             throw new PayFailureException("未开启分账配置");
         }
     }
@@ -114,7 +114,7 @@ public class AliPayService {
         // 中途退出地址
         model.setQuitUrl(noticeInfo.getQuitUrl());
         // 是否分账
-        if (payOrder.isAllocation()){
+        if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
             extendParams.setRoyaltyFreeze("true");
             model.setExtendParams(extendParams);
@@ -151,7 +151,7 @@ public class AliPayService {
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(String.valueOf(amount*0.01));
         // 是否分账
-        if (payOrder.isAllocation()){
+        if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
             extendParams.setRoyaltyFreeze("true");
             model.setExtendParams(extendParams);
@@ -183,7 +183,7 @@ public class AliPayService {
         model.setProductCode(AliPayCode.FAST_INSTANT_TRADE_PAY);
 
         // 是否分账
-        if (payOrder.isAllocation()){
+        if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
             extendParams.setRoyaltyFreeze("true");
             model.setExtendParams(extendParams);
@@ -215,7 +215,7 @@ public class AliPayService {
         model.setOutTradeNo(payOrder.getOrderNo());
         model.setTotalAmount(String.valueOf(amount*0.01));
         // 是否分账
-        if (payOrder.isAllocation()){
+        if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
             extendParams.setRoyaltyFreeze("true");
             model.setExtendParams(extendParams);
@@ -246,7 +246,7 @@ public class AliPayService {
         model.setScene(AliPayCode.BAR_CODE);
         model.setAuthCode(aliPayParam.getAuthCode());
         // 是否分账
-        if (payOrder.isAllocation()){
+        if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
             extendParams.setRoyaltyFreeze("true");
             model.setExtendParams(extendParams);

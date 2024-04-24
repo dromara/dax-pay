@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 支付修复服务
@@ -65,19 +64,19 @@ public class PayRepairService {
         PayRepairResult repairResult = new PayRepairResult().setBeforeStatus(PayStatusEnum.findByCode(order.getStatus()));
         switch (repairType) {
             case PAY_SUCCESS:
-                this.success(order, repairstrategies);
+                this.success(order);
                 repairResult.setAfterPayStatus(PayStatusEnum.SUCCESS);
                 break;
             case CLOSE_LOCAL:
-                this.closeLocal(order, repairstrategies);
+                this.closeLocal(order);
                 repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
             case PROGRESS:
-                this.waitPay(order, repairstrategies);
+                this.waitPay(order);
                 repairResult.setAfterPayStatus(PayStatusEnum.PROGRESS);
                 break;
             case CLOSE_GATEWAY:
-                this.closeGateway(order, repairstrategies);
+                this.closeRemote(order, repairStrategy);
                 repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
             default:
@@ -86,15 +85,8 @@ public class PayRepairService {
         }
         // 设置修复iD
         repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
-
         // 发送通知
-        List<PayChannelOrder> channelOrders = repairstrategies.stream()
-                .map(AbsPayRepairStrategy::getChannelOrder)
-                .collect(Collectors.toList());
-        // 更新通道订单
-        channelOrderManager.updateAllById(channelOrders);
-        // 发送通知
-        clientNoticeService.registerPayNotice(order, null, channelOrders);
+        clientNoticeService.registerPayNotice(order, null);
         this.saveRecord(order, repairType, repairResult);
         return repairResult;
     }
@@ -103,9 +95,7 @@ public class PayRepairService {
      * 变更未待支付
      * TODO 后期保存为异常订单
      */
-    private void waitPay(PayOrder order, List<AbsPayRepairStrategy> repairStrategies) {
-        // 待支付批量处理
-        repairStrategies.forEach(AbsPayRepairStrategy::doWaitPayHandler);
+    private void waitPay(PayOrder order) {
         // 修改订单支付状态为待支付
         order.setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setPayTime(null)
@@ -118,12 +108,10 @@ public class PayRepairService {
      * 同步: 将异步支付状态修改为成功
      * 回调: 将异步支付状态修改为成功
      */
-    private void success(PayOrder order, List<AbsPayRepairStrategy> strategies) {
+    private void success(PayOrder order) {
         LocalDateTime payTime = PaymentContextLocal.get()
                 .getRepairInfo()
                 .getFinishTime();
-        // 执行个通道的成功处理方法
-        strategies.forEach(AbsPayRepairStrategy::doPaySuccessHandler);
         // 修改订单支付状态为成功
         order.setStatus(PayStatusEnum.SUCCESS.getCode());
         // 读取支付网关中的时间
@@ -135,9 +123,8 @@ public class PayRepairService {
      * 关闭支付
      * 同步/对账: 执行支付单所有的支付通道关闭支付逻辑, 不需要调用网关关闭,
      */
-    private void closeLocal(PayOrder order, List<AbsPayRepairStrategy> absPayStrategies) {
+    private void closeLocal(PayOrder order) {
         // 执行策略的关闭方法
-        absPayStrategies.forEach(AbsPayRepairStrategy::doCloseLocalHandler);
         order.setStatus(PayStatusEnum.CLOSE.getCode())
                 // TODO 尝试是否可以使用网关返回的时间
                 .setCloseTime(LocalDateTime.now());
@@ -147,11 +134,11 @@ public class PayRepairService {
      * 关闭网关交易, 同时也会关闭本地支付
      * 回调: 执行所有的支付通道关闭支付逻辑
      */
-    private void closeGateway(PayOrder payOrder, List<AbsPayRepairStrategy> absPayStrategies) {
+    private void closeRemote(PayOrder payOrder, AbsPayRepairStrategy strategy) {
         // 执行策略的关闭方法
-        absPayStrategies.forEach(AbsPayRepairStrategy::doCloseGatewayHandler);
+        strategy.doCloseRemoteHandler();
         payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
-                // TODO 尝试是否可以使用网关返回的
+                // TODO 尝试是否可以使用网关返回的时间
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);
     }
@@ -168,9 +155,9 @@ public class PayRepairService {
                 .getSource().getCode();
         PayRepairRecord payRepairRecord = new PayRepairRecord()
                 .setRepairNo(repairResult.getRepairNo())
-                .setOrderId(order.getId())
-                .setAsyncChannel(order.getAsyncChannel())
-                .setOrderNo(order.getBusinessNo())
+                .setTradeId(order.getId())
+                .setChannel(order.getChannel())
+                .setTradeNo(order.getOrderNo())
                 .setBeforeStatus(repairResult.getBeforeStatus().getCode())
                 .setAfterStatus(afterStatus)
                 .setRepairType(PaymentTypeEnum.PAY.getCode())

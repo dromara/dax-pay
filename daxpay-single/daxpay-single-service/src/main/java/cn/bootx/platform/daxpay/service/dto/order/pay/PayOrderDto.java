@@ -43,7 +43,7 @@ public class PayOrderDto extends BaseDto {
 
     /** 是否需要分账 */
     @Schema(description = "是否需要分账")
-    private boolean allocation;
+    private Boolean allocation;
 
     /**
      * 异步支付通道

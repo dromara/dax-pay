@@ -6,8 +6,8 @@ import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.PaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundSyncResult;
 import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
@@ -43,8 +43,8 @@ public class AliPaySyncService {
      * 4 查询不到
      * 5 查询失败
      */
-    public PayGatewaySyncResult syncPayStatus(PayOrder payOrder) {
-        PayGatewaySyncResult syncResult = new PayGatewaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
+    public PaySyncResult syncPayStatus(PayOrder payOrder) {
+        PaySyncResult syncResult = new PaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
         // 查询
         try {
             AlipayTradeQueryModel queryModel = new AlipayTradeQueryModel();
@@ -53,7 +53,7 @@ public class AliPaySyncService {
             String tradeStatus = response.getTradeStatus();
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
             // 设置网关订单号
-            syncResult.setGatewayOrderNo(response.getTradeNo());
+            syncResult.setOutTradeNo(response.getTradeNo());
             // 支付完成 TODO 部分退款也在这个地方, 但无法进行区分, 需要借助对账进行处理
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_FINISHED)) {
                 // 支付完成时间
@@ -96,8 +96,8 @@ public class AliPaySyncService {
      * 退款同步查询
      * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
-    public RefundGatewaySyncResult syncRefundStatus(RefundOrder refundOrder) {
-        RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
+    public RefundSyncResult syncRefundStatus(RefundOrder refundOrder) {
+        RefundSyncResult syncResult = new RefundSyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
         try {
             AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();
             // 退款请求号

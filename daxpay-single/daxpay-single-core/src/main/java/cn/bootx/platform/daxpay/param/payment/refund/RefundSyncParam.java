@@ -15,9 +15,11 @@ import lombok.EqualsAndHashCode;
 @Schema(title = "退款状态同步参数")
 public class RefundSyncParam extends PaymentCommonParam {
 
+    /** 退款号 */
     @Schema(description = "退款号")
     private String refundNo;
 
+    /** 商户退款号 */
     @Schema(description = "商户退款号")
     private String bizRefundNo;
 

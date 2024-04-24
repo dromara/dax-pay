@@ -37,13 +37,13 @@ public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunctio
 
     /** 支付ID/退款ID */
     @DbColumn(comment = "本地订单ID")
-    private Long orderId;
+    private Long tradeId;
 
     /**
-     * 本地业务号, 支付业务号/退款号
+     * 本地交易号, 支付号/退款号
      */
     @DbColumn(comment = "本地业务号")
-    private String orderNo;
+    private String tradeNo;
 
     /**
      * 修复类型 支付修复/退款修复
@@ -69,7 +69,7 @@ public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunctio
 
     /** 修复的异步通道 */
     @DbColumn(comment = "修复的异步通道")
-    private String asyncChannel;
+    private String channel;
 
     /**
      * 修复前状态

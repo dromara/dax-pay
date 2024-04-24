@@ -75,7 +75,7 @@ public class WeChatPayService {
             throw new PayFailureException("微信支付金额超限");
         }
         // 是否支持分账
-        if (payParam.isAllocation() && !weChatPayConfig.getAllocation()) {
+        if (payParam.getAllocation() && !weChatPayConfig.getAllocation()) {
             throw new PayFailureException("未开启分账配置");
         }
     }
@@ -187,7 +187,7 @@ public class WeChatPayService {
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
-                .profit_sharing(payOrder.isAllocation()?"Y":"N")
+                .profit_sharing(payOrder.getAllocation()?"Y":"N")
                 .body(payOrder.getTitle())
                 .auth_code(authCode)
                 .out_trade_no(String.valueOf(payOrder.getId()))
@@ -245,7 +245,7 @@ public class WeChatPayService {
                 // 反正v2版本的超时时间无效
                 .time_expire(PayUtil.getWxExpiredTime(payOrder.getExpiredTime()))
                 .body(payOrder.getTitle())
-                .profit_sharing(payOrder.isAllocation()?"Y":"N")
+                .profit_sharing(payOrder.getAllocation()?"Y":"N")
                 .out_trade_no(payOrder.getOrderNo())
                 .total_fee(amount)
                 .spbill_create_ip(NetUtil.getLocalhostStr())

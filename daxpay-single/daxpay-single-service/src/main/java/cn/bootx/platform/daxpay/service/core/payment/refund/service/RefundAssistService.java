@@ -61,7 +61,7 @@ public class RefundAssistService {
         ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         // 异步回调为开启状态
-        if (!param.isNotNotify() && apiInfo.isNotice()){
+        if (!param.getNotNotify() && apiInfo.isNotice()){
             // 首先读取请求参数
             noticeInfo.setNotifyUrl(param.getNotifyUrl());
             // 读取接口配置
@@ -139,7 +139,7 @@ public class RefundAssistService {
                 .setRefundNo(asyncRefundInfo.getOutRefundNo());
         // 退款成功更新退款时间
         if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
-            // TODO 读取网关返回的退款时间
+            // TODO 读取网关返回的退款时间和完成时间
             refundOrder.setRefundTime(LocalDateTime.now());
         }
         refundOrderManager.updateById(refundOrder);

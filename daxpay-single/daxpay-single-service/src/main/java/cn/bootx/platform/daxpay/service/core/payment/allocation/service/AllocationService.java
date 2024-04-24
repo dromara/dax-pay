@@ -268,7 +268,7 @@ public class AllocationService {
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
                 .orElseThrow(() -> new DataNotExistException("支付单不存在"));
         // 判断订单是否可以分账
-        if (!payOrder.isAllocation()){
+        if (!payOrder.getAllocation()){
             throw new PayFailureException("该订单不允许分账");
         }
         // 判断分账状态

@@ -1,10 +1,10 @@
 package cn.bootx.platform.daxpay.sdk.query;
 
 import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
-import cn.bootx.platform.daxpay.sdk.model.refund.QueryRefundOrderModel;
+import cn.bootx.platform.daxpay.sdk.model.refund.RefundOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.refund.QueryRefundOrderParam;
+import cn.bootx.platform.daxpay.sdk.param.refund.QueryRefundParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +29,11 @@ public class QueryRefundOrderTest {
 
     @Test
     public void testPay() {
-        QueryRefundOrderParam param = new QueryRefundOrderParam();
+        QueryRefundParam param = new QueryRefundParam();
 
-        param.setRefundId(1755263825769361408L);
+        param.setBizRefundNo("1755263825769361408");
 
-        DaxPayResult<QueryRefundOrderModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<RefundOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
         System.out.println(execute.getData());
     }

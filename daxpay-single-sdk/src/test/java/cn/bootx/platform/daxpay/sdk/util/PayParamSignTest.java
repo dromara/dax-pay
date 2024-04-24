@@ -1,15 +1,10 @@
 package cn.bootx.platform.daxpay.sdk.util;
 
-import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
 import cn.bootx.platform.daxpay.sdk.param.channel.WeChatPayParam;
-import cn.bootx.platform.daxpay.sdk.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.sdk.param.pay.PayParam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,15 +25,8 @@ public class PayParamSignTest {
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
 
-        param.setBusinessNo("P0001");
+        param.setBizOrderNo("P0001");
         param.setTitle("测试接口支付");
-        PayChannelParam payChannelParam = new PayChannelParam();
-        payChannelParam.setChannel(PayChannelEnum.WECHAT.getCode());
-        payChannelParam.setWay(PayWayEnum.QRCODE.getCode());
-        payChannelParam.setAmount(1);
-
-        List<PayChannelParam> payChannels = Collections.singletonList(payChannelParam);
-        param.setPayChannels(payChannels);
 
         Map<String, String> map = PaySignUtil.toMap(param);
         log.info("转换为有序MAP后的内容: {}",map);
@@ -61,19 +49,12 @@ public class PayParamSignTest {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
 
-        param.setBusinessNo("P0002");
+        param.setBizOrderNo("P0002");
         param.setTitle("测试接口支付");
-        PayChannelParam payChannelParam = new PayChannelParam();
-        payChannelParam.setChannel(PayChannelEnum.WECHAT.getCode());
-        payChannelParam.setWay(PayWayEnum.QRCODE.getCode());
-        payChannelParam.setAmount(1);
         WeChatPayParam weChatPayParam = new WeChatPayParam();
         weChatPayParam.setOpenId("6688812");
         weChatPayParam.setAuthCode("123456");
-        payChannelParam.setChannelParam(weChatPayParam);
-
-        List<PayChannelParam> payChannels = Collections.singletonList(payChannelParam);
-        param.setPayChannels(payChannels);
+        param.setExtraParam(weChatPayParam);
 
         Map<String, String> map = PaySignUtil.toMap(param);
         log.info("转换为有序MAP后的内容: {}",map);

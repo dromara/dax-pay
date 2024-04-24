@@ -50,7 +50,6 @@ public class UniPayController {
     private final AllocationService allocationService;
 
 
-    @CountTime
     @PaymentApi(PaymentApiCode.PAY)
     @Operation(summary = "统一支付接口")
     @PostMapping("/pay")
@@ -58,7 +57,6 @@ public class UniPayController {
         return DaxRes.ok(payService.pay(payParam));
     }
 
-    @CountTime
     @PaymentApi(PaymentApiCode.CLOSE)
     @Operation(summary = "支付关闭接口")
     @PostMapping("/close")
@@ -67,7 +65,6 @@ public class UniPayController {
         return DaxRes.ok();
     }
 
-    @CountTime
     @PaymentApi(PaymentApiCode.REFUND)
     @Operation(summary = "统一退款接口")
     @PostMapping("/refund")
@@ -75,7 +72,6 @@ public class UniPayController {
         return DaxRes.ok(refundService.refund(param));
     }
 
-    @CountTime
     @PaymentApi(PaymentApiCode.SYNC_PAY)
     @Operation(summary = "支付同步接口")
     @PostMapping("/syncPay")
@@ -83,7 +79,6 @@ public class UniPayController {
         return DaxRes.ok(paySyncService.sync(param));
     }
 
-    @CountTime
     @PaymentApi(PaymentApiCode.SYNC_REFUND)
     @Operation(summary = "退款同步接口")
     @PostMapping("/syncRefund")
@@ -91,7 +86,6 @@ public class UniPayController {
         return DaxRes.ok(refundSyncService.sync(param));
     }
 
-    @CountTime
     @PaymentApi(PaymentApiCode.ALLOCATION)
     @Operation(summary = "开启分账接口")
     @PostMapping("/allocation")
@@ -99,7 +93,6 @@ public class UniPayController {
         return DaxRes.ok(allocationService.allocation(param));
     }
 
-    @CountTime
     @PaymentApi(PaymentApiCode.ALLOCATION_FINISH)
     @Operation(summary = "分账完结接口")
     @PostMapping("/allocationFinish")

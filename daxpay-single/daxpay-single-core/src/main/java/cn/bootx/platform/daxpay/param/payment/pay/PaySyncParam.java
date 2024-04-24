@@ -15,10 +15,12 @@ import lombok.EqualsAndHashCode;
 @Schema(title = "支付状态同步参数")
 public class PaySyncParam extends PaymentCommonParam {
 
+    /** 订单号 */
     @Schema(description = "订单号")
     private String orderNo;
 
-    @Schema(description = "商户业务号")
+    /** 商户订单号 */
+    @Schema(description = "商户订单号")
     private String bizOrderNo;
 
 }

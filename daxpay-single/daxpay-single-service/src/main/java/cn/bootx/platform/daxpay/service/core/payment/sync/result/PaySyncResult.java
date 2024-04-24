@@ -16,7 +16,7 @@ import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.FAIL;
  */
 @Data
 @Accessors(chain = true)
-public class PayGatewaySyncResult {
+public class PaySyncResult {
 
     /**
      * 支付网关订单状态
@@ -25,9 +25,9 @@ public class PayGatewaySyncResult {
     private PaySyncStatusEnum syncStatus = FAIL;
 
     /**
-     * 第三方支付网关生成的订单号, 用与将记录关联起来
+     * 第三方支付网关, 用与将记录关联起来
      */
-    private String gatewayOrderNo;
+    private String outTradeNo;
 
     /** 支付完成时间(通常用于接收异步支付返回的时间) */
     private LocalDateTime payTime;

@@ -17,11 +17,12 @@ import lombok.Setter;
 @Setter
 public class PaySyncParam extends DaxPayRequest<PaySyncModel> {
 
-    /** 支付ID */
-    private Long paymentId;
 
-    /** 业务号 */
-    private String businessNo;
+    /** 订单号 */
+    private String orderNo;
+
+    /** 商户订单号 */
+    private String bizOrderNo;
 
     /**
      * 方法请求路径

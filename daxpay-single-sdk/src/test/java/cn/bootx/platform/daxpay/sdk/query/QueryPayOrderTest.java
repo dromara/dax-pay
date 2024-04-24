@@ -1,10 +1,10 @@
 package cn.bootx.platform.daxpay.sdk.query;
 
 import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
-import cn.bootx.platform.daxpay.sdk.model.pay.QueryPayOrderModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayOrderParam;
+import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +29,11 @@ public class QueryPayOrderTest {
 
     @Test
     public void testPay() {
-        QueryPayOrderParam param = new QueryPayOrderParam();
+        QueryPayParam param = new QueryPayParam();
 
-        param.setBusinessNo("2");
+        param.setBizOrderNoeNo("2");
 
-        DaxPayResult<QueryPayOrderModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
         System.out.println(execute.getData());
     }

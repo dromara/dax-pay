@@ -85,7 +85,7 @@ public class PayOrderQueryService {
      */
     public PayOrderResult queryPayOrder(QueryPayParam param) {
         // 校验参数
-        if (StrUtil.isBlank(param.getBizOrderNo()) && Objects.isNull(param.getOrderNo())){
+        if (StrUtil.isBlank(param.getBizOrderNoeNo()) && Objects.isNull(param.getOrderNo())){
             throw new ValidationFailedException("业务号或支付单ID不能都为空");
         }
 
@@ -96,7 +96,7 @@ public class PayOrderQueryService {
                     .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         }
         if (Objects.isNull(payOrder)){
-            payOrder = payOrderManager.findByBizOrderNo(param.getBizOrderNo())
+            payOrder = payOrderManager.findByBizOrderNo(param.getBizOrderNoeNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         }
 

@@ -41,6 +41,7 @@ public class RefundParam extends PaymentCommonParam {
     @Schema(description = "商户订单号")
     private String bizOrderNo;
 
+    /** 退款金额 */
     @Schema(description = "退款金额")
     @Min(value = 1,message = "退款金额至少为0.01元")
     private Integer amount;
@@ -54,6 +55,7 @@ public class RefundParam extends PaymentCommonParam {
     @Schema(description = "退款扩展参数")
     private Map<String, Object> extraParam;
 
+    /** 退款原因 */
     @Schema(description = "退款原因")
     private String reason;
 
@@ -63,7 +65,7 @@ public class RefundParam extends PaymentCommonParam {
 
     /** 是否不启用异步通知 */
     @Schema(description = "是否不启用异步通知")
-    private boolean notNotify;
+    private Boolean notNotify;
 
     /** 异步通知地址 */
     @Schema(description = "异步通知地址")

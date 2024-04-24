@@ -47,7 +47,7 @@ public class AliPayAllocationService {
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
-        model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
+        model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
 
         // 分账子参数 根据Id排序
@@ -77,7 +77,7 @@ public class AliPayAllocationService {
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
-        model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
+        model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
         // 分账完结参数
         SettleExtendParams extendParams = new SettleExtendParams();
@@ -105,7 +105,7 @@ public class AliPayAllocationService {
     @SneakyThrows
     public void sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails){
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
-        model.setTradeNo(allocationOrder.getGatewayPayOrderNo());
+        model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setOutRequestNo(allocationOrder.getOrderNo());
         AlipayTradeOrderSettleQueryRequest request = new AlipayTradeOrderSettleQueryRequest();
         request.setBizModel(model);

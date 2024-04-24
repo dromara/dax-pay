@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPaySyncService;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundSyncResult;
 import cn.bootx.platform.daxpay.service.func.AbsRefundSyncStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -41,7 +41,7 @@ public class AliRefundSyncStrategy extends AbsRefundSyncStrategy {
      * @see PaySyncStatusEnum
      */
     @Override
-    public RefundGatewaySyncResult doSyncStatus() {
+    public RefundSyncResult doSyncStatus() {
         AliPayConfig config = alipayConfigService.getConfig();
         alipayConfigService.initConfig(config);
         return aliPaySyncService.syncRefundStatus(this.getRefundOrder());

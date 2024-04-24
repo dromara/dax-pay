@@ -206,8 +206,10 @@ public class ReconcileService {
      * 3. 远程有, 本地有, 但状态不一致
      *
      */
-    private List<ReconcileDiffRecord> generateDiffRecord(ReconcileOrder reconcileOrder, List<GeneralReconcileRecord> gatewayRecords, List<ReconcileDetail> localDetails){
-        if (CollUtil.isEmpty(localDetails)){
+    private List<ReconcileDiffRecord> generateDiffRecord(ReconcileOrder reconcileOrder,
+                                                         List<GeneralReconcileRecord> reconcileRecords,
+                                                         List<ReconcileDetail> localDetails){
+        if (CollUtil.isEmpty(localDetails) || CollUtil.isEmpty(reconcileRecords)){
             return new ArrayList<>();
         }
         Map<String, ReconcileDetail> detailMap = localDetails.stream()
@@ -215,7 +217,7 @@ public class ReconcileService {
 
         // 差异内容
         List<ReconcileDiffRecord> diffRecords = new ArrayList<>();
-        Map<Long, GeneralReconcileRecord> recordMap = gatewayRecords.stream()
+        Map<Long, GeneralReconcileRecord> recordMap = reconcileRecords.stream()
                 .collect(Collectors.toMap(GeneralReconcileRecord::getOrderId, Function.identity(), CollectorsFunction::retainLatest));
         // 对账与流水比对
         for (ReconcileDetail detail : localDetails) {
@@ -254,7 +256,7 @@ public class ReconcileService {
             }
         }
         // 流水与对账单比对, 找出本地有, 远程没有的记录
-        for (GeneralReconcileRecord gateway : gatewayRecords) {
+        for (GeneralReconcileRecord gateway : reconcileRecords) {
             ReconcileDetail detail = detailMap.get(String.valueOf(gateway.getOrderId()));
             if (Objects.isNull(detail)){
                 ReconcileDiffRecord diffRecord = new ReconcileDiffRecord()

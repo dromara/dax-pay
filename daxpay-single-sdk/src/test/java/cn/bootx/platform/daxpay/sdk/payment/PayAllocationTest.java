@@ -1,14 +1,10 @@
 package cn.bootx.platform.daxpay.sdk.payment;
 
-import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
 import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
 import cn.bootx.platform.daxpay.sdk.model.allocation.AllocationModel;
-import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
 import cn.bootx.platform.daxpay.sdk.param.allocation.AllocationParam;
-import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.util.RandomUtil;
 import org.junit.Before;
@@ -32,27 +28,6 @@ public class PayAllocationTest {
         DaxPayKit.initConfig(config);
     }
 
-    /**
-     * 创建用于分账的订单
-     */
-    @Test
-    public void simplePay() {
-        // 简单支付参数
-        SimplePayParam param = new SimplePayParam();
-        param.setBusinessNo("P"+ RandomUtil.randomNumbers(5));
-        param.setAmount(10);
-        param.setTitle("测试分账支付");
-        param.setChannel(PayChannelEnum.WECHAT.getCode());
-        param.setPayWay(PayWayEnum.QRCODE.getCode());
-        param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
-        param.setAllocation(true);
-
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        PayOrderModel data = execute.getData();
-        System.out.println(data);
-    }
     /**
      * 开启分账
      */

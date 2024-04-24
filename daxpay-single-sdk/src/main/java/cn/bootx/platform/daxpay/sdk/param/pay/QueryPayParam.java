@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.sdk.param.pay;
 
-import cn.bootx.platform.daxpay.sdk.model.pay.QueryPayOrderModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayRequest;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.lang.TypeReference;
@@ -15,13 +15,13 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class QueryPayOrderParam extends DaxPayRequest<QueryPayOrderModel> {
+public class QueryPayParam extends DaxPayRequest<PayOrderModel> {
 
-    /** 支付ID */
-    private Long paymentId;
+    /** 订单号 */
+    private String orderNo;
 
-    /** 业务号 */
-    private String businessNo;
+    /** 商户订单号 */
+    private String bizOrderNoeNo;
 
     /**
      * 方法请求路径
@@ -35,7 +35,7 @@ public class QueryPayOrderParam extends DaxPayRequest<QueryPayOrderModel> {
      * 将请求返回结果反序列化为实体类
      */
     @Override
-    public DaxPayResult<QueryPayOrderModel> toModel(String json) {
-        return JSONUtil.toBean(json, new TypeReference<DaxPayResult<QueryPayOrderModel>>() {}, false);
+    public DaxPayResult<PayOrderModel> toModel(String json) {
+        return JSONUtil.toBean(json, new TypeReference<DaxPayResult<PayOrderModel>>() {}, false);
     }
 }

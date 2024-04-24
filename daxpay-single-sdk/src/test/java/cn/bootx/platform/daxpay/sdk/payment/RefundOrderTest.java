@@ -5,13 +5,12 @@ import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
 import cn.bootx.platform.daxpay.sdk.model.refund.RefundModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.refund.RefundChannelParam;
 import cn.bootx.platform.daxpay.sdk.param.refund.RefundParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
+import cn.hutool.core.util.RandomUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,41 +35,16 @@ public class RefundOrderTest {
     }
 
     /**
-     * 全部退款
+     * 退款
      */
     @Test
-    public void refundAllOrder(){
-        RefundParam param = new RefundParam();
-        param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
-
-        param.setBusinessNo("P0001");
-        param.setRefundAll(true);
-        param.setRefundNo("R0001");
-
-        DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
-    }
-
-    /**
-     * 部分退款(单通道)
-     */
-    @Test
-    public void refundPartOrder(){
+    public void refund(){
         RefundParam param = new RefundParam();
         param.setClientIp("127.0.0.1");
 
-        param.setBusinessNo("P0001");
-        param.setRefundAll(false);
-        param.setRefundNo("R0001");
-
+        param.setBizRefundNo("R" + RandomUtil.randomNumbers(5));
         // 设置具体的退款参数
-        RefundChannelParam refundChannelParam = new RefundChannelParam();
-        refundChannelParam.setChannel(PayChannelEnum.ALI.getCode());
-        refundChannelParam.setAmount(12);
-        List<RefundChannelParam> refundChannels = Collections.singletonList(refundChannelParam);
-        param.setRefundChannels(refundChannels);
+        param.setAmount(19);
 
         DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);

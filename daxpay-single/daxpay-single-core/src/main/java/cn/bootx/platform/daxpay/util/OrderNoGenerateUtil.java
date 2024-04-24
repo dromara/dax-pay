@@ -75,4 +75,15 @@ public class OrderNoGenerateUtil {
         orderNo.append("C").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
+
+    /**
+     * 生成修复单号
+     */
+    public static String repair() {
+        StringBuilder orderNo = new StringBuilder();
+        String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
+        long id = ATOMIC_LONG.incrementAndGet();
+        orderNo.append("X").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        return orderNo.toString();
+    }
 }

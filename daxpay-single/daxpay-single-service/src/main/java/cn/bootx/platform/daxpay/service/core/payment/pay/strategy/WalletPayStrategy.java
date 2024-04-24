@@ -84,7 +84,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
             throw new WalletLackOfBalanceException();
         }
         // 分账
-        if (this.getPayParam().isAllocation()){
+        if (Objects.equals(this.getPayParam().getAllocation(),true)){
             throw new PayFailureException("钱包支付不支持分账");
         }
     }

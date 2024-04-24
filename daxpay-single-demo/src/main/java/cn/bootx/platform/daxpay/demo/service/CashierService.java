@@ -2,24 +2,24 @@ package cn.bootx.platform.daxpay.demo.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
+import cn.bootx.platform.daxpay.demo.code.AggregatePayEnum;
 import cn.bootx.platform.daxpay.demo.configuration.DaxPayDemoProperties;
 import cn.bootx.platform.daxpay.demo.param.CashierSimplePayParam;
 import cn.bootx.platform.daxpay.demo.result.PayOrderResult;
-import cn.bootx.platform.daxpay.sdk.code.AggregatePayEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.sdk.code.PayMethodEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
 import cn.bootx.platform.daxpay.sdk.model.assist.WxAccessTokenModel;
 import cn.bootx.platform.daxpay.sdk.model.assist.WxAuthUrlModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.PayModel;
 import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
-import cn.bootx.platform.daxpay.sdk.model.pay.QueryPayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
 import cn.bootx.platform.daxpay.sdk.param.assist.WxAccessTokenParam;
 import cn.bootx.platform.daxpay.sdk.param.assist.WxAuthUrlParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.WeChatPayParam;
-import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayOrderParam;
-import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
+import cn.bootx.platform.daxpay.sdk.param.pay.PayParam;
+import cn.bootx.platform.daxpay.sdk.param.pay.QueryPayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
@@ -50,38 +50,38 @@ public class CashierService {
      */
     public PayOrderResult simplePayCashier(CashierSimplePayParam param){
         // 将参数转换为简单支付参数
-        SimplePayParam simplePayParam = new SimplePayParam();
-        simplePayParam.setBusinessNo(param.getBusinessNo());
-        simplePayParam.setAllocation(param.isAllocation());
+        PayParam simplePayParam = new PayParam();
+        simplePayParam.setBizOrderNo(param.getChannel());
+        simplePayParam.setAllocation(param.getAllocation());
         int amount = param.getAmount()
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();
         simplePayParam.setTitle(param.getTitle());
         simplePayParam.setAmount(amount);
         simplePayParam.setChannel(param.getChannel());
-        simplePayParam.setPayWay(param.getPayWay());
+        simplePayParam.setMethod(param.getPayWay());
 
         // 支付宝通道
         if (Objects.equals(PayChannelEnum.ALI.getCode(), param.getChannel())){
             // 付款码支付
-            if (Objects.equals(PayWayEnum.BARCODE.getCode(), param.getPayWay())){
+            if (Objects.equals(PayMethodEnum.BARCODE.getCode(), param.getPayWay())){
                 AliPayParam aliPayParam = new AliPayParam();
                 aliPayParam.setAuthCode(param.getAuthCode());
-                simplePayParam.setChannelParam(aliPayParam);
+                simplePayParam.setExtraParam(aliPayParam);
             }
         }
         // 微信通道
         if (Objects.equals(PayChannelEnum.WECHAT.getCode(), param.getChannel())){
             WeChatPayParam wechatPayParam = new WeChatPayParam();
             // 付款码支付
-            if (Objects.equals(PayWayEnum.BARCODE.getCode(), param.getPayWay())){
+            if (Objects.equals(PayMethodEnum.BARCODE.getCode(), param.getPayWay())){
                 wechatPayParam.setAuthCode(param.getAuthCode());
-                simplePayParam.setChannelParam(wechatPayParam);
+                simplePayParam.setExtraParam(wechatPayParam);
             }
             // 微信jsapi 方式支付
-            if (Objects.equals(PayWayEnum.JSAPI.getCode(), param.getPayWay())){
+            if (Objects.equals(PayMethodEnum.JSAPI.getCode(), param.getPayWay())){
                 wechatPayParam.setOpenId(param.getOpenId());
-                simplePayParam.setChannelParam(wechatPayParam);
+                simplePayParam.setExtraParam(wechatPayParam);
             }
         }
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
@@ -92,19 +92,19 @@ public class CashierService {
         simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
 
         // 发起支付
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(simplePayParam);
         // 判断是否支付成功
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());
         }
         // 判断是否发起支付成功
-        PayOrderModel payOrderModel = execute.getData();
+        PayModel payModel = execute.getData();
 
         // 状态 支付中或支付完成返回
         List<String> list = Arrays.asList(PayStatusEnum.PROGRESS.getCode(), PayStatusEnum.SUCCESS.getCode());
-        if (list.contains(payOrderModel.getStatus())){
+        if (list.contains(payModel.getStatus())){
             PayOrderResult payOrderResult = new PayOrderResult();
-            BeanUtil.copyProperties(payOrderModel, payOrderResult);
+            BeanUtil.copyProperties(payModel, payOrderResult);
             return payOrderResult;
         } else {
             throw new BizException("订单状态异常，无法进行支付");
@@ -115,9 +115,9 @@ public class CashierService {
      * 查询订单是否支付成功
      */
     public boolean queryPayOrderSuccess(String businessNo){
-        QueryPayOrderParam queryPayOrderParam = new QueryPayOrderParam();
-        queryPayOrderParam.setBusinessNo(businessNo);
-        DaxPayResult<QueryPayOrderModel> execute = DaxPayKit.execute(queryPayOrderParam);
+        QueryPayParam queryPayOrderParam = new QueryPayParam();
+        queryPayOrderParam.setBizOrderNoeNo(businessNo);
+        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(queryPayOrderParam);
         // 未查询到订单
         if (execute.getCode() == 10010){
             return false;
@@ -126,7 +126,7 @@ public class CashierService {
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());
         }
-        QueryPayOrderModel data = execute.getData();
+        PayOrderModel data = execute.getData();
         String status = data.getStatus();
         if (Objects.equals(status, PayStatusEnum.PROGRESS.getCode())){
             return false;

@@ -17,12 +17,15 @@ import lombok.experimental.Accessors;
 @Schema(title = "统一下单响应参数")
 public class PayResult extends CommonResult {
 
+    /** 商户订单号 */
     @Schema(description = "商户订单号")
     private String bizOrderNo;
 
+    /** 订单号 */
     @Schema(description = "订单号")
     private String orderNo;
 
+    /** 支付状态 */
     @Schema(description = "支付状态")
     private String status;
 

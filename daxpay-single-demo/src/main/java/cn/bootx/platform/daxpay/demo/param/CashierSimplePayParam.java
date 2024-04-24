@@ -20,10 +20,10 @@ public class CashierSimplePayParam {
 
     @Schema(description = "业务号")
     @NotNull
-    private String businessNo;
+    private String bizOrderNo;
 
     @Schema(description = "是否分账")
-    private boolean allocation;
+    private Boolean allocation;
 
     @Schema(description = "标题")
     @NotNull
@@ -36,7 +36,7 @@ public class CashierSimplePayParam {
     @Schema(description = "openId(微信支付时使用)")
     private String openId;
 
-    @Schema(description = "支付渠道")
+    @Schema(description = "支付通道")
     @NotNull
     private String channel;
 

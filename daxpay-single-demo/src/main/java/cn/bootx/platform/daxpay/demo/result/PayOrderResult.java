@@ -13,6 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PayOrderResult {
+
     /** 支付ID */
     private Long paymentId;
 

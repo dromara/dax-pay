@@ -31,7 +31,7 @@ public class PayCloseOrderTest {
     @Test
     public void close(){
         PayCloseParam param = new PayCloseParam();
-        param.setBusinessNo("P0001");
+        param.setBizTradeNo("P0001");
         DaxPayResult<PayCloseModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
     }

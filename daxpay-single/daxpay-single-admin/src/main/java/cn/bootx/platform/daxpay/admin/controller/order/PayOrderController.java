@@ -5,9 +5,9 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.daxpay.param.payment.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.param.payment.pay.PayCloseParam;
 import cn.bootx.platform.daxpay.param.payment.pay.PaySyncParam;
-import cn.bootx.platform.daxpay.param.payment.allocation.AllocationStartParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderExtraService;
@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 支付订单控制器
@@ -97,9 +95,9 @@ public class PayOrderController {
 
     @Operation(summary = "发起分账")
     @PostMapping("/allocation")
-    public ResResult<Void> allocation(Long id){
+    public ResResult<Void> allocation(String orderNo){
         AllocationStartParam param = new AllocationStartParam();
-        param.setPaymentId(id);
+        param.setOrderNo(orderNo);
         allocationService.allocation(param);
         return Res.ok();
     }

@@ -7,8 +7,8 @@ import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.PaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.RefundSyncResult;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -41,8 +41,8 @@ public class WeChatPaySyncService {
     /**
      * 支付信息查询
      */
-    public PayGatewaySyncResult syncPayStatus(PayOrder order, WeChatPayConfig weChatPayConfig) {
-        PayGatewaySyncResult syncResult = new PayGatewaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
+    public PaySyncResult syncPayStatus(PayOrder order, WeChatPayConfig weChatPayConfig) {
+        PaySyncResult syncResult = new PaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
         Map<String, String> params = OrderQueryModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
@@ -67,7 +67,7 @@ public class WeChatPaySyncService {
             }
 
             // 设置微信支付网关订单号
-            syncResult.setGatewayOrderNo(result.get(TRANSACTION_ID));
+            syncResult.setOutTradeNo(result.get(TRANSACTION_ID));
             // 查询到订单的状态
             String tradeStatus = result.get(WeChatPayCode.TRADE_STATE);
             // 支付完成
@@ -103,8 +103,8 @@ public class WeChatPaySyncService {
     /**
      * 退款信息查询
      */
-    public RefundGatewaySyncResult syncRefundStatus(RefundOrder refundOrder, WeChatPayConfig weChatPayConfig){
-        RefundGatewaySyncResult syncResult = new RefundGatewaySyncResult();
+    public RefundSyncResult syncRefundStatus(RefundOrder refundOrder, WeChatPayConfig weChatPayConfig){
+        RefundSyncResult syncResult = new RefundSyncResult();
         Map<String, String> params = RefundQueryModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
@@ -120,7 +120,7 @@ public class WeChatPaySyncService {
             syncResult.setSyncInfo(JSONUtil.toJsonStr(result));
 
             // 设置微信支付网关订单号
-            syncResult.setGatewayOrderNo(result.get(WeChatPayCode.REFUND_ID));
+            syncResult.setOutRefundNo(result.get(WeChatPayCode.REFUND_ID));
             // 状态
             String tradeStatus = result.get(WeChatPayCode.REFUND_STATUS);
             // 退款成功

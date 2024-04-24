@@ -15,9 +15,11 @@ import lombok.EqualsAndHashCode;
 @Schema(title = "支付关闭参数")
 public class PayCloseParam extends PaymentCommonParam {
 
+    /** 订单号 */
     @Schema(description = "订单号")
     private String orderNo;
 
+    /** 商户订单号 */
     @Schema(description = "商户订单号")
     private String bizTradeNo;
 }

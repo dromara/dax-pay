@@ -17,22 +17,11 @@ import lombok.EqualsAndHashCode;
 @Data
 public class PayCloseParam extends DaxPayRequest<PayCloseModel> {
 
-    /** 支付ID */
-    private Long paymentId;
+    /** 订单号 */
+    private String orderNo;
 
-    /** 业务号 */
-    private String businessNo;
-
-    /** 商户扩展参数,回调时会原样返回 */
-    private String attach;
-
-    /** 是否不启用异步通知 */
-    private boolean notNotify;
-
-    /** 异步通知地址 */
-    private String notifyUrl;
-
-    /**
+    /** 商户订单号 */
+    private String bizTradeNo;    /**
      * 方法请求路径
      */
     @Override

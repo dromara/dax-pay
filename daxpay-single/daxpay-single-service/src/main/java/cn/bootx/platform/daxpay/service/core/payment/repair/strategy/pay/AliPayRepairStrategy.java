@@ -1,8 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.repair.strategy.pay;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayCloseService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
@@ -11,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -47,41 +43,12 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
         aliPayConfigService.initConfig(config);
     }
 
-    /**
-     * 支付成功处理
-     */
-    @Override
-    public void doPaySuccessHandler() {
-        LocalDateTime payTime = PaymentContextLocal.get()
-                .getRepairInfo()
-                .getFinishTime();
-        this.getChannelOrder().setStatus(PayStatusEnum.SUCCESS.getCode())
-                .setPayTime(payTime);
-    }
-
-    /**
-     * 等待支付处理
-     */
-    @Override
-    public void doWaitPayHandler(){
-        this.getChannelOrder().setPayTime(null).setStatus(PayStatusEnum.PROGRESS.getCode());
-    }
-
-    /**
-     * 取消支付
-     */
-    @Override
-    public void doCloseLocalHandler() {
-        this.getChannelOrder().setStatus(PayStatusEnum.CLOSE.getCode());
-    }
-
 
     /**
      * 关闭本地支付和网关支付
      */
     @Override
-    public void doCloseGatewayHandler() {
+    public void doCloseRemoteHandler() {
         closeService.close(this.getOrder());
-        this.doCloseLocalHandler();
     }
 }

@@ -1,19 +1,14 @@
 package cn.bootx.platform.daxpay.sdk.payment;
 
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
 import cn.bootx.platform.daxpay.sdk.code.SignTypeEnum;
-import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.PayModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.pay.PayChannelParam;
 import cn.bootx.platform.daxpay.sdk.param.pay.PayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * 通用支付接口
@@ -42,16 +37,11 @@ public class PayOrderTest {
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
 
-        param.setBusinessNo("P0004");
+        param.setBizOrderNo("P0004");
         param.setTitle("测试接口支付");
-        PayChannelParam payChannelParam = new PayChannelParam();
-        payChannelParam.setChannel(PayChannelEnum.UNION_PAY.getCode());
-        payChannelParam.setWay(PayWayEnum.QRCODE.getCode());
-        payChannelParam.setAmount(1);
+        param.setChannel(PayChannelEnum.ALI.getCode());
 
-        List<PayChannelParam> payChannels = Collections.singletonList(payChannelParam);
-        param.setPayChannels(payChannels);
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
         System.out.println(execute.getData());
     }

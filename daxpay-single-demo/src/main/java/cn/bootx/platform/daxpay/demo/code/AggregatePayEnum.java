@@ -1,4 +1,4 @@
-package cn.bootx.platform.daxpay.sdk.code;
+package cn.bootx.platform.daxpay.demo.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

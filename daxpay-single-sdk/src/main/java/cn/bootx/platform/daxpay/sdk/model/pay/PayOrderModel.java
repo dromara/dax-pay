@@ -8,34 +8,56 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 发起支付后响应对象
+ * 支付订单查询响应参数
  * @author xxm
- * @since 2024/2/2
+ * @since 2024/1/16
  */
 @Getter
 @Setter
 @ToString
 public class PayOrderModel extends DaxPayResponseModel {
 
-    /** 支付ID */
-    private Long paymentId;
+    /** 支付订单号 */
+    private String orderNo;
 
-    /** 是否是异步支付 */
-    private boolean asyncPay;
+    /** 业务系统订单号 */
+    private String bizOrderNo;
+
+    /** 标题 */
+    private String title;
+
+    /** 描述 */
+    private String description;
 
     /**
-     * 异步支付通道
+     * 支付通道
      * @see PayChannelEnum
      */
-    private String asyncChannel;
+    private String channel;
 
+    /**
+     * 支付方式
+     */
+    private String method;
 
-    /** 支付参数体(通常用于发起异步支付的参数) */
-    private String payBody;
+    /** 金额 */
+    private Integer amount;
+
+    /** 可退款余额 */
+    private Integer refundableBalance;
 
     /**
      * 支付状态
      * @see PayStatusEnum
      */
     private String status;
+
+    /** 支付时间 */
+    private Long payTime;
+
+    /** 过期时间 */
+    private Long expiredTime;
+
+    /** 关闭时间 */
+    private Long closeTime;
 }

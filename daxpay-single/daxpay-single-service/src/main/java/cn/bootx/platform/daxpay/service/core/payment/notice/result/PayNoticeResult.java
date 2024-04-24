@@ -50,7 +50,6 @@ public class PayNoticeResult {
     @Schema(description = "支付状态")
     private String status;
 
-
     @Schema(description = "支付成功时间")
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime payTime;

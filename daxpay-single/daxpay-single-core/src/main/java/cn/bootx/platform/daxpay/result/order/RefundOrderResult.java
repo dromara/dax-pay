@@ -23,7 +23,7 @@ public class RefundOrderResult {
     @Schema(description = "退款号")
     private String refundNo;
 
-    @Schema(description = "商户退款订单号")
+    @Schema(description = "商户退款号")
     private String bizRefundNo;
 
     @Schema(description = "标题")
@@ -32,6 +32,10 @@ public class RefundOrderResult {
     @Schema(description = "退款金额")
     private BigDecimal amount;
 
+    /** 退款发起时间 */
+    @Schema(description = "退款发起时间")
+    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
+    private LocalDateTime refundTime;
 
     @Schema(description = "退款完成时间")
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)

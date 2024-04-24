@@ -26,27 +26,8 @@ public abstract class AbsPayRepairStrategy implements PayStrategy{
     }
 
     /**
-     * 支付成功处理
+     * 关闭三方系统的支付
      */
-    public void doPaySuccessHandler(){
-
-    }
-
-    /**
-     * 等待支付处理
-     */
-    public void doWaitPayHandler(){}
-
-    /**
-     * 关闭本地支付
-     */
-    public abstract void doCloseLocalHandler();
-
-    /**
-     * 关闭本地支付和网关支付, 默认为关闭本地支付
-     */
-    public void doCloseGatewayHandler() {
-        this.doCloseLocalHandler();
-    }
+    public abstract void doCloseRemoteHandler();
 
 }

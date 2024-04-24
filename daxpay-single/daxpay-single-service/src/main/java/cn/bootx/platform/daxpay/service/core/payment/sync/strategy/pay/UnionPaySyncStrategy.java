@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPaySyncService;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class UnionPaySyncStrategy extends AbsPaySyncStrategy {
      * @see PaySyncStatusEnum
      */
     @Override
-    public PayGatewaySyncResult doSyncStatus() {
+    public PaySyncResult doSyncStatus() {
         UnionPayConfig config = unionPayConfigService.getConfig();
         UnionPayKit unionPayKit = unionPayConfigService.initPayService(config);
         return unionPaySyncService.syncPayStatus(this.getOrder(),unionPayKit);

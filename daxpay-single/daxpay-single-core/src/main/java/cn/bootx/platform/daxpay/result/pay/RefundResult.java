@@ -17,12 +17,15 @@ import lombok.experimental.Accessors;
 @Schema(title = "退款响应参数")
 public class RefundResult extends CommonResult {
 
-    @Schema(description = "商户退款订单号")
-    private String bizRefundNo;
-
-    @Schema(description = "退款订单号")
+    /** 退款号 */
+    @Schema(description = "退款号")
     private String refundNo;
 
+    /** 商户退款号 */
+    @Schema(description = "商户退款号")
+    private String bizRefundNo;
+
+    /** 退款状态 */
     @Schema(description = "退款状态")
     private String status;
 }

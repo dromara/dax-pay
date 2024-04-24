@@ -20,7 +20,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.repair.result.PayRepairResult;
 import cn.bootx.platform.daxpay.service.core.payment.repair.service.PayRepairService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.factory.PaySyncStrategyFactory;
-import cn.bootx.platform.daxpay.service.core.payment.sync.result.PayGatewaySyncResult;
+import cn.bootx.platform.daxpay.service.core.payment.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
@@ -99,7 +99,7 @@ public class PaySyncService {
             AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getChannel());
             syncPayStrategy.initPayParam(payOrder);
             // 执行操作, 获取支付网关同步的结果
-            PayGatewaySyncResult syncResult = syncPayStrategy.doSyncStatus();
+            PaySyncResult syncResult = syncPayStrategy.doSyncStatus();
             // 判断是否同步成功
             if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
@@ -107,8 +107,8 @@ public class PaySyncService {
                 throw new PayFailureException(syncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (!Objects.equals(syncResult.getGatewayOrderNo(), payOrder.getOutOrderNo())){
-                payOrder.setOutOrderNo(syncResult.getGatewayOrderNo());
+            if (!Objects.equals(syncResult.getOutTradeNo(), payOrder.getOutOrderNo())){
+                payOrder.setOutOrderNo(syncResult.getOutTradeNo());
                 payOrderService.updateById(payOrder);
             }
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
@@ -147,7 +147,7 @@ public class PaySyncService {
     /**
      * 判断支付单和网关状态是否一致, 同时待支付状态下, 支付单支付超时进行状态的更改
      */
-    private boolean checkAndAdjustSyncStatus(PayGatewaySyncResult syncResult, PayOrder order){
+    private boolean checkAndAdjustSyncStatus(PaySyncResult syncResult, PayOrder order){
         PaySyncStatusEnum syncStatus = syncResult.getSyncStatus();
         String orderStatus = order.getStatus();
         // 本地支付成功/网关支付成功
@@ -194,7 +194,7 @@ public class PaySyncService {
     /**
      * 根据同步的结果对支付单进行修复处理
      */
-    private PayRepairResult repairHandler(PayGatewaySyncResult syncResult, PayOrder payOrder){
+    private PayRepairResult repairHandler(PaySyncResult syncResult, PayOrder payOrder){
         PaySyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
         PayRepairResult repair = new PayRepairResult();
         // 对支付网关同步的结果进行处理
@@ -245,19 +245,19 @@ public class PaySyncService {
      * @param repairOrderNo 修复号
      * @param errorMsg 错误信息
      */
-    private void saveRecord(PayOrder payOrder, PayGatewaySyncResult syncResult, boolean repair, String repairOrderNo, String errorMsg){
+    private void saveRecord(PayOrder payOrder, PaySyncResult syncResult, boolean repair, String repairOrderNo, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
-                .setOrderId(payOrder.getId())
-                .setOrderNo(payOrder.getOrderNo())
+                .setBizTradeNo(payOrder.getBizOrderNo())
+                .setTradeNo(payOrder.getOrderNo())
+                .setOutTradeNo(payOrder.getOutOrderNo())
+                .setOutTradeStatus(syncResult.getSyncStatus().getCode())
                 .setSyncType(PaymentTypeEnum.PAY.getCode())
                 .setChannel(payOrder.getChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
-                .setGatewayStatus(syncResult.getSyncStatus().getCode())
-                .setRepairOrder(repair)
-                .setRepairOrderNo(repairOrderNo)
+                .setRepair(repair)
+                .setRepairNo(repairOrderNo)
                 .setErrorMsg(errorMsg)
-                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp())
-                .setReqId(PaymentContextLocal.get().getRequestInfo().getReqId());
+                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
 }

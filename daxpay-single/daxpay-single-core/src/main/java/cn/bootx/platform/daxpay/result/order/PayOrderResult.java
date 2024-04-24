@@ -78,7 +78,7 @@ public class PayOrderResult extends CommonResult {
     private LocalDateTime expiredTime;
 
     /** 关闭时间 */
-    @Schema(description = "过期时间")
+    @Schema(description = "关闭时间")
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime closeTime;
 

@@ -16,15 +16,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RefundSyncParam extends DaxPayRequest<RefundSyncModel> {
-    /**
-     * 退款ID，refundId和refundNo 必传一个, 同时传输时，以 refundId 为准
-     */
-    private Long refundId;
 
-    /**
-     * 退款号，refundId和refundNo 必传一个，同时传输时，以 refundId 为准
-     */
+    /** 退款号 */
     private String refundNo;
+
+    /** 商户退款号 */
+    private String bizRefundNo;
 
     /**
      * 方法请求路径

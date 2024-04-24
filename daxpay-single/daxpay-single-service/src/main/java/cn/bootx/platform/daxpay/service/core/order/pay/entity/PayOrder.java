@@ -56,7 +56,7 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
 
     /** 是否支持分账 */
     @DbColumn(comment = "是否需要分账")
-    private boolean allocation;
+    private Boolean allocation;
 
     /**
      * 支付通道

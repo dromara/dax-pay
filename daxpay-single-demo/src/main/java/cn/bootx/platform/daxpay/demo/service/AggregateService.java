@@ -3,23 +3,23 @@ package cn.bootx.platform.daxpay.demo.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.redis.RedisClient;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
+import cn.bootx.platform.daxpay.demo.code.AggregatePayEnum;
 import cn.bootx.platform.daxpay.demo.configuration.DaxPayDemoProperties;
 import cn.bootx.platform.daxpay.demo.domain.AggregatePayInfo;
 import cn.bootx.platform.daxpay.demo.param.AggregateSimplePayParam;
 import cn.bootx.platform.daxpay.demo.result.PayOrderResult;
 import cn.bootx.platform.daxpay.demo.result.WxJsapiSignResult;
-import cn.bootx.platform.daxpay.sdk.code.AggregatePayEnum;
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
+import cn.bootx.platform.daxpay.sdk.code.PayMethodEnum;
 import cn.bootx.platform.daxpay.sdk.model.assist.WxAccessTokenModel;
 import cn.bootx.platform.daxpay.sdk.model.assist.WxAuthUrlModel;
-import cn.bootx.platform.daxpay.sdk.model.pay.PayOrderModel;
+import cn.bootx.platform.daxpay.sdk.model.pay.PayModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
 import cn.bootx.platform.daxpay.sdk.param.assist.WxAccessTokenParam;
 import cn.bootx.platform.daxpay.sdk.param.assist.WxAuthUrlParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.BarCodePayParam;
 import cn.bootx.platform.daxpay.sdk.param.channel.WeChatPayParam;
-import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
+import cn.bootx.platform.daxpay.sdk.param.pay.PayParam;
 import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.net.URLEncodeUtil;
@@ -58,7 +58,7 @@ public class AggregateService {
         AggregatePayInfo aggregatePayInfo = new AggregatePayInfo()
                 .setTitle(param.getTitle())
                 .setBusinessNo(param.getBusinessNo())
-                .setAllocation(param.isAllocation())
+                .setAllocation(param.getAllocation())
                 .setAmount(amount);
         String code = IdUtil.getSnowflakeNextIdStr();
         String serverUrl = daxPayDemoProperties.getServerUrl();
@@ -143,17 +143,17 @@ public class AggregateService {
     public WxJsapiSignResult wxJsapiPrePay(String aggregateCode, String openId) {
         AggregatePayInfo aggregatePayInfo = getInfo(aggregateCode);
         // 拼装支付发起参数
-        SimplePayParam simplePayParam = new SimplePayParam();
-        simplePayParam.setBusinessNo(aggregatePayInfo.getBusinessNo());
+        PayParam simplePayParam = new PayParam();
+        simplePayParam.setBizOrderNo(aggregatePayInfo.getBusinessNo());
         simplePayParam.setTitle(aggregatePayInfo.getTitle());
         simplePayParam.setAmount(aggregatePayInfo.getAmount());
         simplePayParam.setChannel(PayChannelEnum.WECHAT.getCode());
-        simplePayParam.setPayWay(PayWayEnum.JSAPI.getCode());
+        simplePayParam.setMethod(PayMethodEnum.JSAPI.getCode());
 
         // 设置微信专属请求参数
         WeChatPayParam weChatPayParam = new WeChatPayParam();
         weChatPayParam.setOpenId(openId);
-        simplePayParam.setChannelParam(weChatPayParam);
+        simplePayParam.setExtraParam(weChatPayParam);
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
                 .map(ServletUtil::getClientIP)
@@ -164,7 +164,7 @@ public class AggregateService {
         // 同步回调地址 无效
         simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
 
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(simplePayParam);
         // 判断是否支付成功
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());
@@ -177,25 +177,25 @@ public class AggregateService {
      */
     public PayOrderResult aliH5Pay(String code) {
         AggregatePayInfo aggregatePayInfo = getInfo(code);
-        SimplePayParam simplePayParam = new SimplePayParam();
-        simplePayParam.setBusinessNo(aggregatePayInfo.getBusinessNo());
-        simplePayParam.setTitle(aggregatePayInfo.getTitle());
-        simplePayParam.setAmount(aggregatePayInfo.getAmount());
-        simplePayParam.setChannel(PayChannelEnum.ALI.getCode());
-        simplePayParam.setPayWay(PayWayEnum.WAP.getCode());
+        PayParam payParam = new PayParam();
+        payParam.setBizOrderNo(aggregatePayInfo.getBusinessNo());
+        payParam.setTitle(aggregatePayInfo.getTitle());
+        payParam.setAmount(aggregatePayInfo.getAmount());
+        payParam.setChannel(PayChannelEnum.ALI.getCode());
+        payParam.setMethod(PayMethodEnum.WAP.getCode());
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
                 .map(ServletUtil::getClientIP)
                 .orElse("127.0.0.1");
-        simplePayParam.setClientIp(ip);
+        payParam.setClientIp(ip);
         // 异步回调地址
-        simplePayParam.setNotNotify(true);
+        payParam.setNotNotify(true);
         // 支付成功同步回调地址
-        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
+        payParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
         // 中途退出 目前经测试不生效
-        simplePayParam.setQuitUrl(StrUtil.format("{}/result/error", daxPayDemoProperties.getFrontH5Url()));
+        payParam.setQuitUrl(StrUtil.format("{}/result/error", daxPayDemoProperties.getFrontH5Url()));
 
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(payParam);
 
         // 判断是否支付成功
         if (execute.getCode() != 0){
@@ -217,23 +217,23 @@ public class AggregateService {
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();
 
-        SimplePayParam simplePayParam = new SimplePayParam();
-        simplePayParam.setBusinessNo(param.getBusinessNo());
-        simplePayParam.setAllocation(param.isAllocation());
+        PayParam simplePayParam = new PayParam();
+        simplePayParam.setBizOrderNo(param.getBusinessNo());
+        simplePayParam.setAllocation(param.getAllocation());
         simplePayParam.setTitle(param.getTitle());
         simplePayParam.setAmount(amount);
         simplePayParam.setChannel(payChannel.getCode());
-        simplePayParam.setPayWay(PayWayEnum.BARCODE.getCode());
+        simplePayParam.setMethod(PayMethodEnum.BARCODE.getCode());
         BarCodePayParam barCodePayParam = new BarCodePayParam();
         barCodePayParam.setAuthCode(param.getAuthCode());
-        simplePayParam.setChannelParam(barCodePayParam);
+        simplePayParam.setExtraParam(barCodePayParam);
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
                 .map(ServletUtil::getClientIP)
                 .orElse("127.0.0.1");
         simplePayParam.setClientIp(ip);
 
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(simplePayParam);
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(simplePayParam);
 
         // 判断是否支付成功
         if (execute.getCode() != 0){

@@ -32,7 +32,7 @@ public class PayOrderSyncTest {
     public void testPay() {
         PaySyncParam param = new PaySyncParam();
 
-        param.setBusinessNo("P0001");
+        param.setBizOrderNo("P0001");
 
         DaxPayResult<PaySyncModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);

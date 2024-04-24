@@ -15,7 +15,7 @@ import static cn.bootx.platform.daxpay.code.RefundSyncStatusEnum.PROGRESS;
  */
 @Data
 @Accessors(chain = true)
-public class RefundGatewaySyncResult {
+public class RefundSyncResult {
 
     /**
      * 支付网关订单状态, 默认为退款中
@@ -27,9 +27,9 @@ public class RefundGatewaySyncResult {
     private String syncInfo;
 
     /**
-     * 第三方支付网关生成的订单号, 用与将记录关联起来
+     * 第三方支付网关生成的退款交易, 用与将记录关联起来
      */
-    private String gatewayOrderNo;
+    private String outRefundNo;
 
     /** 退款完成时间(通常用于接收网关返回的时间) */
     private LocalDateTime refundTime;

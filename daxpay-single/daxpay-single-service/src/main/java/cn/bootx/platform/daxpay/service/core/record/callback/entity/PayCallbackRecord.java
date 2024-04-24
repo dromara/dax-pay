@@ -35,7 +35,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
 
     /** 三方支付交易号 */
     @DbColumn(comment = "支付网关订单号")
-    private String outOrderNo;
+    private String outTradeNo;
 
     /**
      * 支付通道

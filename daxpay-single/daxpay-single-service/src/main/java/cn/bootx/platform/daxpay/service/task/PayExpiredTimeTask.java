@@ -36,8 +36,8 @@ public class PayExpiredTimeTask implements Job {
     public void execute(JobExecutionContext context) {
         // 获取超时的任务Key
         Set<String> expiredKeys = repository.getExpiredKeys(LocalDateTime.now());
-        for (String expiredKey : expiredKeys) {
-            LockInfo lock = lockTemplate.lock("payment:expired:" + expiredKey,10000,200);
+        for (String orderNo : expiredKeys) {
+            LockInfo lock = lockTemplate.lock("payment:expired:" + orderNo,10000,200);
             if (Objects.isNull(lock)){
                 log.warn("支付同步处理中，执行下一个");
                 continue;
@@ -46,14 +46,13 @@ public class PayExpiredTimeTask implements Job {
                 // 设置补偿来源为定时任务
                 PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.TASK);
                 // 执行同步操作, 网关同步时会对支付的进行状态的处理
-                Long paymentId = Long.parseLong(expiredKey);
                 PaySyncParam paySyncParam = new PaySyncParam();
-                paySyncParam.setPaymentId(paymentId);
+                paySyncParam.setOrderNo(orderNo);
                 paySyncService.sync(paySyncParam);
             } catch (Exception e) {
                 // 如果是未查询到取消支付订单, 则删除这个任务
                 if (Objects.equals("未查询到支付订单", e.getMessage())){
-                    repository.removeKeys(expiredKey);
+                    repository.removeKeys(orderNo);
                 }
                 log.error("超时取消任务 异常", e);
             } finally {

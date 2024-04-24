@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 /**
  * 退款通知消息
  * @author xxm
@@ -35,9 +33,6 @@ public class RefundNoticeModel {
 
     /** 退款金额 */
     private Integer amount;
-
-    /** 退款通道信息 */
-    private List<RefundChannelModel> refundChannels;
 
     /**
      * 退款状态

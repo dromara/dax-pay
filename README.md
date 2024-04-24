@@ -13,7 +13,7 @@
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
 </p>
 
-# Dromara Dax-Pay(开源支付系统)
+# Dromara Dax-Pay(开源支付系统-单商户版)
 ## ❗使用须知
 
 `DaxPay`是一款基于`Apache License 2.0`协议分发的开源软件，受中华人民共和国相关法律法规的保护和限制，可以在符合[《用户授权使用协议》](用户授权使用协议.txt)和
@@ -24,15 +24,14 @@
 
 ## 🍈项目介绍
 
-> DaxPay是一套基于Bootx-Platform脚手架构建的开源支付网关系统，已经对接支付宝、微信支付相关的接口，以及扩展了钱包支付、储值卡支付、现金支付等新的支付方式。
-> 可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响
+> DaxPay是一套开源支付网关系统，已经对接支付宝、微信支付相关的接口。可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响
 
 gateway为开发分支，本地运行请使用master分支进行测试，当前正在进行整个系统的优化重构工作，**请勿在生产环境中使用，请等待生产可用的版本发布**，
 
 
 ## 🧭 特色功能
 - 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
-- 已对接`微信支付`、`支付宝`和云闪付相关的接口，后续版本将支持`V3`版本的接口
+- 已对接`微信支付`、`支付宝`和`云闪付`相关的接口，后续版本将支持`V3`版本的接口
 - 支持支付、退款、对账、分账等支付相关的能力
 - 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
 - 接口请求和响应数据支持启用签名机制，可根据实际需要进行开关，保证交易安全可靠
@@ -112,7 +111,7 @@ gateway为开发分支，本地运行请使用master分支进行测试，当前�
 package cn.bootx.platform.daxpay.sdk;
 
 import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.sdk.code.PayWayEnum;
+import cn.bootx.platform.daxpay.sdk.code.PayMethodEnum;
 import cn.bootx.platform.daxpay.sdk.model.PayOrderModel;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
 import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
@@ -174,11 +173,6 @@ public class SimplePayOrderTest {
 
 [**历史更新记录**](/_doc/ChangeLog.md)
 
-##  🥂 Bootx 项目合集
-- Bootx-Platform：单体版脚手架 [Gitee地址](https://gitee.com/bootx/bootx-platform)
-- Bootx-Cloud：微服务版脚手架 [Gitee地址](https://gitee.com/bootx/bootx-cloud)
-- dax-pay：开源支付系统 [Gitee地址](https://gitee.com/bootx/daxpay)
-- mybatis-table-modify：数据表结构管理 [Gitee地址](https://gitee.com/bootx/mybatis-table-modify)
 
 ##  🥪 关于我们
 

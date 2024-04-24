@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.core.util;
 
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
-import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
 import cn.bootx.platform.daxpay.param.payment.pay.PayParam;
 import cn.bootx.platform.daxpay.util.PaySignUtil;
 import cn.hutool.core.bean.BeanUtil;
@@ -9,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +21,7 @@ class PayParamSignTest {
     @Test
     void toMap() {
         PayParam payParam = new PayParam();
-        payParam.setBusinessNo("123");
+        payParam.setBizOrderNo("123");
         payParam.setClientIp("127.0.0.1");
         payParam.setNotNotify(true);
         payParam.setNotifyUrl("http://127.0.0.1:8080/pay/notify");
@@ -32,24 +29,10 @@ class PayParamSignTest {
         // 传入的话需要传输时间戳
         payParam.setReqTime(LocalDateTime.now());
 
-        PayChannelParam p1 = new PayChannelParam();
-        p1.setAmount(100);
-        p1.setChannel("wechat");
-        p1.setWay("wx_app");
         AliPayParam aliPayParam = new AliPayParam();
         aliPayParam.setAuthCode("6688");
-        p1.setChannelParam(BeanUtil.beanToMap(aliPayParam,false,true));
 
-        PayChannelParam p2 = new PayChannelParam();
-        p2.setAmount(100);
-        p2.setChannel("wechat");
-        p2.setWay("wx_app");
-        WeChatPayParam weChatPayParam = new WeChatPayParam();
-        weChatPayParam.setOpenId("w2qsz2xawe3gbhyyff28fs01fd");
-        weChatPayParam.setAuthCode("8866");
-        p2.setChannelParam(BeanUtil.beanToMap(aliPayParam,false,true));
-        List<PayChannelParam> payWays = Arrays.asList(p1, p2);
-        payParam.setPayChannels(payWays);
+        payParam.setExtraParam(BeanUtil.beanToMap(aliPayParam,false,true));
 
 
         Map<String, String> map = PaySignUtil.toMap(payParam);

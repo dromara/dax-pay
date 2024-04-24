@@ -16,9 +16,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 退款记录
- * 主键作为退款的请求号
- *
+ * 退款订单
  * @author xxm
  * @since 2022/3/2
  */
@@ -76,9 +74,12 @@ public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<Refu
     @DbColumn(comment = "退款原因")
     private String reason;
 
-    /** 退款完成时间 */
-    @DbColumn(comment = "退款完成时间")
+    /** 退款发起时间 */
+    @DbColumn(comment = "退款发起时间")
     private LocalDateTime refundTime;
+
+    @DbColumn(comment = "退款结束时间")
+    private LocalDateTime finishTime;
 
     /**
      * 退款状态

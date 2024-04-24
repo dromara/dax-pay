@@ -71,9 +71,9 @@ public class AllocationOrderController {
 
     @Operation(summary = "同步分账结果")
     @PostMapping("/sync")
-    public ResResult<Void> sync(Long id){
+    public ResResult<Void> sync(String allocationNo){
         AllocationSyncParam param = new AllocationSyncParam();
-        param.setAllocationId(id);
+        param.setAllocationNo(allocationNo);
         allocationService.sync(param);
         return Res.ok();
     }
