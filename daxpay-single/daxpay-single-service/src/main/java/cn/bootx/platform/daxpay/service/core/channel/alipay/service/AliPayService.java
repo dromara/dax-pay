@@ -62,7 +62,7 @@ public class AliPayService {
             throw new PayFailureException("支付宝支付金额超过限额");
         }
         // 支付参数开启分账, 配置未开启分账
-        if(payParam.getAllocation() && !Objects.equals(alipayConfig.getAllocation(),true)){
+        if(Objects.equals(payParam.getAllocation(),true) && !Objects.equals(alipayConfig.getAllocation(),true)){
             throw new PayFailureException("未开启分账配置");
         }
     }

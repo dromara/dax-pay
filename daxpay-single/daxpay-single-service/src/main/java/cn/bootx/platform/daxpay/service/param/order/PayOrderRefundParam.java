@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.service.param.order;
 
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,15 +18,8 @@ public class PayOrderRefundParam {
     @Schema(description = "支付订单号")
     private String orderNo;
 
-    /**
-     * 支付通道
-     * @see PayChannelEnum#getCode()
-     */
-    private String channel;
-
-    /**
-     * 退款金额
-     */
+    /** 退款金额 */
+    @Schema(description = "退款金额")
     private Integer amount;
 
     /** 原因 */

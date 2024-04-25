@@ -23,8 +23,8 @@ public class DaxPayProperties {
     /** 前端地址(web) */
     private String frontWebUrl;
 
-    /** 机器码, 御用控制生成流水号 */
-    private String machineNo;
+    /** 机器码, 用于区分不同机器生成的流水号 */
+    private String machineNo = "56";
 
     public void setMachineNo(String machineNo) {
         this.machineNo = machineNo;

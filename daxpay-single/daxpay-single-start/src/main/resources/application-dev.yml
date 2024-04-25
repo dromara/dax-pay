@@ -162,6 +162,8 @@ dax-pay:
   front-h5-url: http://pay1.bootx.cn/h5/#
   # 前端web地址
   front-web-url: http://localhost:9000/#
+  # 机器号码
+  machine-no: 63
   # 演示模块
   demo:
     # 网关地址

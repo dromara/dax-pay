@@ -18,31 +18,32 @@ import java.math.BigDecimal;
 @Schema(title = "结算台简单支付参数(单通道支付)")
 public class CashierSimplePayParam {
 
-    @Schema(description = "业务号")
-    @NotNull
+    @Schema(description = "商户订单号")
+    @NotNull(message = "商户订单号不能为空")
     private String bizOrderNo;
 
     @Schema(description = "是否分账")
+    @NotNull(message = "分账是否启用必输")
     private Boolean allocation;
 
     @Schema(description = "标题")
-    @NotNull
+    @NotNull(message = "标题不能为空")
     private String title;
 
     @Schema(description = "金额")
-    @NotNull
+    @NotNull(message = "金额不能为空")
     private BigDecimal amount;
 
     @Schema(description = "openId(微信支付时使用)")
     private String openId;
 
     @Schema(description = "支付通道")
-    @NotNull
+    @NotNull(message = "支付通道不能为空")
     private String channel;
 
     @Schema(description = "支付方式")
-    @NotNull
-    private String payWay;
+    @NotNull(message = "支付方式不能为空")
+    private String method;
 
     @Schema(description = "付款码")
     private String authCode;

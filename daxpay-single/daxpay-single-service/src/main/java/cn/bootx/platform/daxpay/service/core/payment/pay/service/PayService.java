@@ -77,6 +77,7 @@ public class PayService {
                 return this.repeatPay(payParam,payOrder);
             }
         } catch (Exception e) {
+            log.error("支付异常",e);
             payResult.setMsg(e.getMessage());
             return payResult;
         } finally {

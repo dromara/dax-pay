@@ -57,7 +57,7 @@ public class UnionPayService {
             throw new PayFailureException("云闪付支付金额超限");
         }
         // 分账
-        if (payParam.getAllocation()) {
+        if (Objects.equals(payParam.getAllocation(),true)) {
             throw new PayFailureException("云闪付不支持分账");
         }
     }

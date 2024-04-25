@@ -50,49 +50,49 @@ public class CashierService {
      */
     public PayOrderResult simplePayCashier(CashierSimplePayParam param){
         // 将参数转换为简单支付参数
-        PayParam simplePayParam = new PayParam();
-        simplePayParam.setBizOrderNo(param.getChannel());
-        simplePayParam.setAllocation(param.getAllocation());
+        PayParam payParam = new PayParam();
+        payParam.setBizOrderNo(param.getBizOrderNo());
+        payParam.setAllocation(param.getAllocation());
         int amount = param.getAmount()
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();
-        simplePayParam.setTitle(param.getTitle());
-        simplePayParam.setAmount(amount);
-        simplePayParam.setChannel(param.getChannel());
-        simplePayParam.setMethod(param.getPayWay());
+        payParam.setTitle(param.getTitle());
+        payParam.setAmount(amount);
+        payParam.setChannel(param.getChannel());
+        payParam.setMethod(param.getMethod());
 
         // 支付宝通道
         if (Objects.equals(PayChannelEnum.ALI.getCode(), param.getChannel())){
             // 付款码支付
-            if (Objects.equals(PayMethodEnum.BARCODE.getCode(), param.getPayWay())){
+            if (Objects.equals(PayMethodEnum.BARCODE.getCode(), param.getMethod())){
                 AliPayParam aliPayParam = new AliPayParam();
                 aliPayParam.setAuthCode(param.getAuthCode());
-                simplePayParam.setExtraParam(aliPayParam);
+                payParam.setExtraParam(aliPayParam);
             }
         }
         // 微信通道
         if (Objects.equals(PayChannelEnum.WECHAT.getCode(), param.getChannel())){
             WeChatPayParam wechatPayParam = new WeChatPayParam();
             // 付款码支付
-            if (Objects.equals(PayMethodEnum.BARCODE.getCode(), param.getPayWay())){
+            if (Objects.equals(PayMethodEnum.BARCODE.getCode(), param.getMethod())){
                 wechatPayParam.setAuthCode(param.getAuthCode());
-                simplePayParam.setExtraParam(wechatPayParam);
+                payParam.setExtraParam(wechatPayParam);
             }
             // 微信jsapi 方式支付
-            if (Objects.equals(PayMethodEnum.JSAPI.getCode(), param.getPayWay())){
+            if (Objects.equals(PayMethodEnum.JSAPI.getCode(), param.getMethod())){
                 wechatPayParam.setOpenId(param.getOpenId());
-                simplePayParam.setExtraParam(wechatPayParam);
+                payParam.setExtraParam(wechatPayParam);
             }
         }
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
                 .map(ServletUtil::getClientIP)
                 .orElse("127.0.0.1");
-        simplePayParam.setClientIp(ip);
+        payParam.setClientIp(ip);
         // 同步回调地址
-        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
+        payParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
 
         // 发起支付
-        DaxPayResult<PayModel> execute = DaxPayKit.execute(simplePayParam);
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(payParam);
         // 判断是否支付成功
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());
