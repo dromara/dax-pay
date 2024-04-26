@@ -22,6 +22,7 @@ public class ReconcileOrderQuery {
     private String batchNo;
 
     @Schema(description = "日期")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     @Schema(description = "通道")
