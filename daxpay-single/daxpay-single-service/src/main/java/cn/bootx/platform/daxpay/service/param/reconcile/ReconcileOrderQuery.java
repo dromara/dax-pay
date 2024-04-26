@@ -1,9 +1,11 @@
 package cn.bootx.platform.daxpay.service.param.reconcile;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
+import cn.hutool.core.date.DatePattern;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -22,7 +24,7 @@ public class ReconcileOrderQuery {
     private String batchNo;
 
     @Schema(description = "日期")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = DatePattern.NORM_DATE_PATTERN)
     private LocalDate date;
 
     @Schema(description = "通道")

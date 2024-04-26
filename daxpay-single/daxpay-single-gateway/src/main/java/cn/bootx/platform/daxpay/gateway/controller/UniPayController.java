@@ -1,6 +1,5 @@
 package cn.bootx.platform.daxpay.gateway.controller;
 
-import cn.bootx.platform.common.core.annotation.CountTime;
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.bootx.platform.daxpay.code.PaymentApiCode;
 import cn.bootx.platform.daxpay.param.payment.allocation.AllocationFinishParam;
@@ -12,6 +11,7 @@ import cn.bootx.platform.daxpay.param.payment.refund.RefundParam;
 import cn.bootx.platform.daxpay.param.payment.refund.RefundSyncParam;
 import cn.bootx.platform.daxpay.result.DaxResult;
 import cn.bootx.platform.daxpay.result.allocation.AllocationResult;
+import cn.bootx.platform.daxpay.result.pay.PayCloseResult;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.result.pay.RefundResult;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
@@ -60,9 +60,8 @@ public class UniPayController {
     @PaymentApi(PaymentApiCode.CLOSE)
     @Operation(summary = "支付关闭接口")
     @PostMapping("/close")
-    public DaxResult<Void> close(@RequestBody PayCloseParam param){
-        payCloseService.close(param);
-        return DaxRes.ok();
+    public DaxResult<PayCloseResult> close(@RequestBody PayCloseParam param){
+        return DaxRes.ok(payCloseService.close(param));
     }
 
     @PaymentApi(PaymentApiCode.REFUND)

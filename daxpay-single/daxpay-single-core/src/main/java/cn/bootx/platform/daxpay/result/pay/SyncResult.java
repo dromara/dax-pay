@@ -32,9 +32,9 @@ public class SyncResult extends CommonResult {
     private String gatewayStatus = FAIL.getCode();
 
     @Schema(description = "是否进行了修复")
-    private boolean repair;
+    private Boolean repair;
 
     @Schema(description = "修复号")
-    private String repairOrderNo;
+    private String repairNo;
 
 }

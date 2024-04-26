@@ -41,7 +41,7 @@ public class RefundOrderDto extends BaseDto {
 
     /**
      * 异步通道
-     * @see PayChannelEnum#ASYNC_TYPE_CODE
+     * @see PayChannelEnum
      */
     @Schema(description = "异步通道")
     private String asyncChannel;

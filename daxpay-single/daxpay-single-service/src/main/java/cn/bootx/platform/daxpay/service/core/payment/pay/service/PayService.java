@@ -86,7 +86,7 @@ public class PayService {
     }
 
     /**
-     * 首次支付
+     * 首次支付 无事务
      * 拆分为多阶段，1. 保存订单记录信息 2 调起支付 3. 支付成功后操作
      */
     public PayResult firstPay(PayParam payParam){
@@ -104,6 +104,7 @@ public class PayService {
             payStrategy.doPayHandler();
         } catch (Exception e) {
             payOrder.setErrorMsg(e.getMessage());
+            // 这个方法没有事务, 所以可以正常更新
             payOrderService.updateById(payOrder);
             throw e;
         }
@@ -182,7 +183,6 @@ public class PayService {
         payOrderService.updateById(payOrder);
         // 如果支付完成 发送通知
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
-            // 查询通道订单
             clientNoticeService.registerPayNotice(payOrder, payOrderExtra);
         }
         return payAssistService.buildResult(payOrder);

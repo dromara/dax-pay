@@ -47,7 +47,7 @@ public class PayOrderDto extends BaseDto {
 
     /**
      * 异步支付通道
-     * @see PayChannelEnum#ASYNC_TYPE_CODE
+     * @see PayChannelEnum
      */
     @Schema(description = "异步支付通道")
     private String asyncChannel;

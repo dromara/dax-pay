@@ -4,11 +4,15 @@ import cn.bootx.platform.common.core.util.CertUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayCallbackStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
-import cn.bootx.platform.daxpay.service.func.AbsCallbackStrategy;
+import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
+import cn.bootx.platform.daxpay.service.core.payment.callback.service.RefundCallbackService;
+import cn.bootx.platform.daxpay.service.core.record.callback.service.PayCallbackRecordService;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
@@ -16,11 +20,11 @@ import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayConstants;
 import com.alipay.api.internal.util.AlipaySignature;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
@@ -35,25 +39,65 @@ import static cn.bootx.platform.daxpay.service.code.AliPayCode.*;
  */
 @Slf4j
 @Service
-public class AliPayCallbackService extends AbsCallbackStrategy {
+@RequiredArgsConstructor
+public class AliPayCallbackService {
 
-    @Resource
-    private AliPayConfigService aliasConfigService;
+    private final AliPayConfigService aliPayConfigService;
+
+    private final PayCallbackRecordService callbackService;
+
+    private final PayCallbackService payCallbackService;
+
+    private final RefundCallbackService refundCallbackService;
 
 
     /**
-     * 策略标识
+     * 回调处理入口
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+    public String callback(Map<String, String> params){
+        CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+        try {
+            // 将参数写入到上下文中
+            callbackInfo.getCallbackParam().putAll(params);
+
+            // 判断并保存回调类型
+            PaymentTypeEnum callbackType = this.getCallbackType();
+            callbackInfo.setCallbackType(callbackType)
+                    .setChannel(PayChannelEnum.ALI.getCode());
+
+            // 验证消息
+            if (!this.verifyNotify()) {
+                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("验证信息格式不通过");
+                // 消息有问题, 保存记录并返回
+                callbackService.saveCallbackRecord();
+                return null;
+            }
+            // 提前设置订单修复的来源
+            PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
+
+            if (callbackType == PaymentTypeEnum.PAY){
+                // 解析支付数据并放处理
+                this.resolvePayData();
+                payCallbackService.payCallback();
+            } else {
+                // 解析退款数据并放处理
+                this.resolveRefundData();
+                refundCallbackService.refundCallback();
+            }
+            callbackService.saveCallbackRecord();
+            return this.getReturnMsg();
+        } catch (Exception e) {
+            log.error("回调处理失败", e);
+            callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("回调处理失败: "+e.getMessage());
+            callbackService.saveCallbackRecord();
+            throw e;
+        }
     }
 
     /**
      * 验证信息格式是否合法
      */
     @SneakyThrows
-    @Override
     public boolean verifyNotify() {
         Map<String, String> params =PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         String callReq = JSONUtil.toJsonStr(params);
@@ -63,7 +107,7 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
             log.error("支付宝回调报文appId为空");
             return false;
         }
-        AliPayConfig alipayConfig = aliasConfigService.getConfig();
+        AliPayConfig alipayConfig = aliPayConfigService.getConfig();
         if (Objects.isNull(alipayConfig)) {
             log.error("支付宝支付配置不存在");
             return false;
@@ -84,7 +128,6 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
     /**
      * 解析支付数据并放到上下文中
      */
-    @Override
     public void resolvePayData() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
@@ -112,7 +155,6 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
      * 解析退款回调数据并放到上下文中
      * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
-    @Override
     public void resolveRefundData() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
@@ -138,7 +180,6 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
      *
      * @see PaymentTypeEnum
      */
-    @Override
     public PaymentTypeEnum getCallbackType() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
@@ -152,9 +193,8 @@ public class AliPayCallbackService extends AbsCallbackStrategy {
     }
 
     /**
-     * 返回响应结果
+     * 返回值
      */
-    @Override
     public String getReturnMsg() {
         return "success";
     }

@@ -121,7 +121,7 @@ public class RefundSyncService {
             return new SyncResult()
                     .setGatewayStatus(syncResult.getSyncStatus().getCode())
                     .setRepair(!statusSync)
-                    .setRepairOrderNo(repairResult.getRepairNo());
+                    .setRepairNo(repairResult.getRepairNo());
         } finally {
             lockTemplate.releaseLock(lock);
         }

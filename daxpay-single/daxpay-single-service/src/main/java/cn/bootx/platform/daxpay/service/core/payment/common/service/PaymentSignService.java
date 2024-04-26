@@ -26,7 +26,7 @@ public class PaymentSignService {
     private final PaymentAssistService paymentAssistService;;
 
     /**
-     * 签名
+     * 入参签名校验
      */
     public void verifySign(PaymentCommonParam param) {
         // 先触发上下文的初始化

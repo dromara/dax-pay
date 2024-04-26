@@ -32,6 +32,11 @@ public class CallbackLocal {
     private String outTradeNo;
 
     /**
+     * 通道
+     */
+    private String channel;
+
+    /**
      * 三方支付系统返回状态
      * @see PayStatusEnum 支付状态
      * @see RefundStatusEnum 退款状态

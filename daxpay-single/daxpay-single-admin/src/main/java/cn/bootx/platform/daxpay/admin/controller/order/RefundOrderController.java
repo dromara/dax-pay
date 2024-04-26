@@ -11,6 +11,7 @@ import cn.bootx.platform.daxpay.service.core.order.refund.service.RefundOrderSer
 import cn.bootx.platform.daxpay.service.core.payment.refund.service.RefundService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.RefundSyncService;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
+import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderExtraDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderRefundParam;
 import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +32,6 @@ public class RefundOrderController {
     private final RefundOrderService refundOrderService;
     private final RefundOrderQueryService refundOrderQueryService;
     private final RefundSyncService refundSyncService;
-    private final RefundService refundService;
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
@@ -45,18 +45,16 @@ public class RefundOrderController {
         return Res.ok(refundOrderQueryService.findById(id));
     }
 
+    @Operation(summary = "查询扩展信息")
+    @GetMapping("/findExtraById")
+    public ResResult<RefundOrderExtraDto> findExtraById(Long id){
+        return Res.ok(refundOrderQueryService.findExtraById(id));
+    }
 
     @Operation(summary = "手动发起退款")
     @PostMapping("/refund")
     public ResResult<Void> refund(@RequestBody PayOrderRefundParam param){
         refundOrderService.refund(param);
-        return Res.ok();
-    }
-
-    @Operation(summary = "重新发起退款")
-    @PostMapping("/resetRefund")
-    public ResResult<Void> resetRefund(String bizRefundNo){
-        PayOrderRefundParam param = new PayOrderRefundParam();
         return Res.ok();
     }
 

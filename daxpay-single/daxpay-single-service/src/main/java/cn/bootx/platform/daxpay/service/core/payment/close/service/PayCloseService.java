@@ -6,6 +6,7 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.payment.pay.PayCloseParam;
 import cn.bootx.platform.daxpay.result.pay.PayCloseResult;
+import cn.bootx.platform.daxpay.result.pay.PayResult;
 import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -65,12 +66,12 @@ public class PayCloseService {
      * 关闭支付记录
      */
     private PayCloseResult close(PayOrder payOrder) {
+        PayCloseResult result = new PayCloseResult();
         try {
             // 状态检查, 只有支付中可以进行取消支付
             if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
                 throw new PayFailureException("订单不是支付中, 无法进行关闭订单");
             }
-
             AbsPayCloseStrategy strategy = PayCloseStrategyFactory.create(payOrder.getChannel());
             // 设置支付订单
             strategy.setOrder(payOrder);
@@ -78,15 +79,18 @@ public class PayCloseService {
             strategy.doBeforeCloseHandler();
             // 执行关闭策略
             strategy.doCloseHandler();
+            // 成功处理
             this.successHandler(payOrder);
+            // 签名
+            this.sign(result);
             // 返回结果
-            return  this.sign(new PayCloseResult());
+            return result;
         } catch (Exception e) {
             // 记录关闭失败的记录
             this.saveRecord(payOrder, false, e.getMessage());
-            PayCloseResult payCloseResult = new PayCloseResult();
-            payCloseResult.setCode("1").setMsg(e.getMessage());
-            return this.sign(payCloseResult);
+            result.setCode("1").setMsg(e.getMessage());
+            this.sign(result);
+            return result;
         }
     }
 
@@ -123,7 +127,7 @@ public class PayCloseService {
     /**
      * 对返回结果进行签名
      */
-    private PayCloseResult sign(PayCloseResult result){
+    private void sign(PayCloseResult result){
         PlatformLocal platformInfo = PaymentContextLocal.get()
                 .getPlatformInfo();
         String signType = platformInfo.getSignType();
@@ -134,6 +138,5 @@ public class PayCloseService {
         } else {
             throw new PayFailureException("未获取到签名方式，请检查");
         }
-        return result;
     }
 }

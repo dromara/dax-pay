@@ -8,9 +8,12 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.daxpay.param.payment.refund.QueryRefundParam;
 import cn.bootx.platform.daxpay.result.order.RefundOrderResult;
 import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderConvert;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
+import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderExtraDto;
 import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -31,7 +34,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RefundOrderQueryService {
     private final RefundOrderManager refundOrderManager;
-
+    private final RefundOrderExtraManager refundOrderExtraManager;
 
     /**
      * 分页查询
@@ -47,6 +50,14 @@ public class RefundOrderQueryService {
     public RefundOrderDto findById(Long id) {
         return refundOrderManager.findById(id).map(RefundOrder::toDto)
                 .orElseThrow(() -> new DataNotExistException("退款订单不存在"));
+    }
+
+    /**
+     * 根据id查询扩展信息
+     */
+    public RefundOrderExtraDto findExtraById(Long id) {
+        return refundOrderExtraManager.findById(id).map(RefundOrderExtra::toDto)
+                .orElseThrow(() -> new DataNotExistException("退款订单扩展信息不存在"));
     }
 
     /**

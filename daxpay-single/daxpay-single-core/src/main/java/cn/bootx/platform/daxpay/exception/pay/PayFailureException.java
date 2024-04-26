@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.daxpay.code.DaxPayErrorCode;
 
 /**
- * 付款错误
+ * 支付错误
  *
  * @author xxm
  * @since 2020/12/8

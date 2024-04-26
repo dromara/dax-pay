@@ -47,7 +47,7 @@ public class PayOrderQuery extends QueryOrder {
 
     /**
      * 异步支付通道
-     * @see PayChannelEnum#ASYNC_TYPE_CODE
+     * @see PayChannelEnum
      */
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "异步支付通道")

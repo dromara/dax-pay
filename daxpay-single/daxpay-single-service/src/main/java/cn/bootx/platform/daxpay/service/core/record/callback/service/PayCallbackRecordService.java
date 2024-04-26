@@ -4,10 +4,13 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.daxpay.service.common.context.CallbackLocal;
+import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.record.callback.dao.PayCallbackRecordManager;
 import cn.bootx.platform.daxpay.service.core.record.callback.entity.PayCallbackRecord;
 import cn.bootx.platform.daxpay.service.dto.record.callback.PayCallbackRecordDto;
 import cn.bootx.platform.daxpay.service.param.record.PayCallbackRecordQuery;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,7 +46,17 @@ public class PayCallbackRecordService {
      * 保存回调记录
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void save(PayCallbackRecord record) {
-        callbackRecordManager.save(record);
+    public void saveCallbackRecord() {
+        CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+        PayCallbackRecord payNotifyRecord = new PayCallbackRecord()
+                .setTradeNo(callbackInfo.getTradeNo())
+                .setOutTradeNo(callbackInfo.getOutTradeNo())
+                .setChannel(callbackInfo.getChannel())
+                .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackParam()))
+                .setCallbackType(callbackInfo.getCallbackType().getCode())
+                .setRepairOrderNo(callbackInfo.getRepairNo())
+                .setStatus(callbackInfo.getCallbackStatus().getCode())
+                .setMsg(callbackInfo.getMsg());
+        callbackRecordManager.save(payNotifyRecord);
     }
 }

@@ -1,9 +1,12 @@
 package cn.bootx.platform.daxpay.service.core.order.refund.entity;
 
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.param.channel.AliPayParam;
 import cn.bootx.platform.daxpay.param.channel.WalletPayParam;
 import cn.bootx.platform.daxpay.param.channel.WeChatPayParam;
+import cn.bootx.platform.daxpay.service.core.order.refund.convert.RefundOrderConvert;
+import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderExtraDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -25,7 +28,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @TableName("pay_refund_order_extra")
 @DbTable(comment = "退款订单扩展信息")
-public class RefundOrderExtra extends MpBaseEntity {
+public class RefundOrderExtra extends MpBaseEntity implements EntityBaseFunction<RefundOrderExtraDto> {
 
     /** 异步通知地址 */
     @DbColumn(comment = "异步通知地址")
@@ -54,4 +57,8 @@ public class RefundOrderExtra extends MpBaseEntity {
     @DbColumn(comment = "支付终端ip")
     private String clientIp;
 
+    @Override
+    public RefundOrderExtraDto toDto() {
+        return RefundOrderConvert.CONVERT.convert(this);
+    }
 }

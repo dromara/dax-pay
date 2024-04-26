@@ -245,11 +245,19 @@ public class PayAssistService {
         payResult.setStatus(payOrder.getStatus());
 
         // 设置支付参数
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
+        PayLocal asyncPayInfo = PaymentContextLocal.get()
+                .getPayInfo();
         if (StrUtil.isNotBlank(asyncPayInfo.getPayBody())) {
             payResult.setPayBody(asyncPayInfo.getPayBody());
         }
-
+        // 签名
+        this.sign(payResult);
+        return payResult;
+    }
+    /**
+     * 对返回
+     */
+    public void sign(PayResult payResult) {
         // 进行签名
         PlatformLocal platformInfo = PaymentContextLocal.get()
                 .getPlatformInfo();
@@ -261,6 +269,5 @@ public class PayAssistService {
         } else {
             throw new PayFailureException("未获取到签名方式，请检查");
         }
-        return payResult;
     }
 }
