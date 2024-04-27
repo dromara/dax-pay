@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付通用返回参数")
-public class CommonResult {
+public class PaymentCommonResult {
 
     @Schema(description = "响应数据签名值")
     private String sign;

@@ -45,17 +45,17 @@ public class TradeFlowRecord extends MpCreateEntity {
 
     /** 本地交易号 */
     @DbColumn(comment = "本地订单号")
-    private String identifyNo;
+    private String tradeNo;
 
     /** 商户交易号 */
     @DbColumn(comment = "商户交易号")
-    private String bizIdentifyNo;
+    private String bizTradeNo;
 
     /** 三方系统交易号 */
     @DbColumn(comment = "三方系统交易号")
-    private String outIdentifyNo;
+    private String outTradeNo;
 
     /** 网关完成时间 */
     @DbColumn(comment = "网关完成时间")
-    private LocalDateTime gatewayTime;
+    private LocalDateTime finishTime;
 }

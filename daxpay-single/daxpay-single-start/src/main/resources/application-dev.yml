@@ -164,6 +164,8 @@ dax-pay:
   front-web-url: http://localhost:9000/#
   # 机器号码
   machine-no: 63
+  # 当前环境，会影响订单号的生成
+  env: DEV
   # 演示模块
   demo:
     # 网关地址

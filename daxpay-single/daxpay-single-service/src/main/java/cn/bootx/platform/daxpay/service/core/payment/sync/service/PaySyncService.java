@@ -4,17 +4,14 @@ import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PaySignTypeEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.payment.pay.PaySyncParam;
-import cn.bootx.platform.daxpay.result.CommonResult;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
-import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.context.RepairLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
@@ -27,7 +24,6 @@ import cn.bootx.platform.daxpay.service.core.payment.sync.result.PaySyncResult;
 import cn.bootx.platform.daxpay.service.core.record.sync.entity.PaySyncRecord;
 import cn.bootx.platform.daxpay.service.core.record.sync.service.PaySyncRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPaySyncStrategy;
-import cn.bootx.platform.daxpay.util.PaySignUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -68,16 +64,14 @@ public class PaySyncService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public SyncResult sync(PaySyncParam param) {
-        SyncResult syncResult = new SyncResult();
-        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getBizOrderNo(), param.getOrderNo())
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
                 .orElseThrow(() -> new BizException("支付订单不存在"));
-        // 钱包支付直接返回结果
+        // 钱包支付钱包不需要
         if (PayChannelEnum.WALLET.getCode().equals(payOrder.getChannel())){
             throw new PayFailureException("订单没有异步支付方式，不需要同步");
         }
         // 执行订单同步逻辑
-        syncResult = this.syncPayOrder(payOrder);
-        return syncResult;
+        return this.syncPayOrder(payOrder);
     }
     /**
      * 同步支付状态, 开启一个新的事务, 不受外部抛出异常的影响
@@ -106,8 +100,8 @@ public class PaySyncService {
                 throw new PayFailureException(syncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (!Objects.equals(syncResult.getOutTradeNo(), payOrder.getOutOrderNo())){
-                payOrder.setOutOrderNo(syncResult.getOutTradeNo());
+            if (!Objects.equals(syncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
+                payOrder.setOutOrderNo(syncResult.getOutOrderNo());
                 payOrderService.updateById(payOrder);
             }
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
@@ -258,21 +252,5 @@ public class PaySyncService {
                 .setErrorMsg(errorMsg)
                 .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
-    }
-
-    /**
-     * 签名
-     */
-    private void sign(CommonResult result){
-        PlatformLocal platformInfo = PaymentContextLocal.get()
-                .getPlatformInfo();
-        String signType = platformInfo.getSignType();
-        if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
-            result.setSign(PaySignUtil.hmacSha256Sign(result, platformInfo.getSignSecret()));
-        } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
-            result.setSign(PaySignUtil.md5Sign(result, platformInfo.getSignSecret()));
-        } else {
-            throw new PayFailureException("未获取到签名方式，请检查");
-        }
     }
 }

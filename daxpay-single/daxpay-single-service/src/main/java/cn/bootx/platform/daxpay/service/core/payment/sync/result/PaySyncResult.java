@@ -25,9 +25,9 @@ public class PaySyncResult {
     private PaySyncStatusEnum syncStatus = FAIL;
 
     /**
-     * 第三方支付网关, 用与将记录关联起来
+     * 外部第三方支付系统的交易号, 用与和本地记录关联起来
      */
-    private String outTradeNo;
+    private String outOrderNo;
 
     /** 支付完成时间(通常用于接收异步支付返回的时间) */
     private LocalDateTime payTime;

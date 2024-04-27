@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.result.pay;
 
-import cn.bootx.platform.daxpay.result.CommonResult;
+import cn.bootx.platform.daxpay.result.PaymentCommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "统一下单响应参数")
-public class PayResult extends CommonResult {
+public class PayResult extends PaymentCommonResult {
 
     /** 商户订单号 */
     @Schema(description = "商户订单号")

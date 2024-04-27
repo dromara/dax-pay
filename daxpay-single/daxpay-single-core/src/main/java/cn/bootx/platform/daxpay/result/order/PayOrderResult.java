@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.result.order;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.result.CommonResult;
+import cn.bootx.platform.daxpay.result.PaymentCommonResult;
 import cn.bootx.platform.daxpay.serializer.LocalDateTimeToTimestampSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付单响应参数")
-public class PayOrderResult extends CommonResult {
+public class PayOrderResult extends PaymentCommonResult {
 
     /** 支付订单号 */
     @Schema(description = "支付订单号")

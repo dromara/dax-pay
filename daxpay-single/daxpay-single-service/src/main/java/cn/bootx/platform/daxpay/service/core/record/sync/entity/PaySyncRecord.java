@@ -37,8 +37,8 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "商户交易号")
     private String bizTradeNo;
 
-    /** 三方支付交易号 */
-    @DbColumn(comment = "三方支付交易号")
+    /** 三方交易号 */
+    @DbColumn(comment = "三方交易号")
     private String outTradeNo;
 
 

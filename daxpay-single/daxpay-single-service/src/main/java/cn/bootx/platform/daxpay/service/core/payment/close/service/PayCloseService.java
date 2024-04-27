@@ -1,13 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.payment.close.service;
 
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
-import cn.bootx.platform.daxpay.code.PaySignTypeEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.payment.pay.PayCloseParam;
 import cn.bootx.platform.daxpay.result.pay.PayCloseResult;
-import cn.bootx.platform.daxpay.result.pay.PayResult;
-import cn.bootx.platform.daxpay.service.common.context.PlatformLocal;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
@@ -17,7 +14,6 @@ import cn.bootx.platform.daxpay.service.core.payment.notice.service.ClientNotice
 import cn.bootx.platform.daxpay.service.core.record.close.entity.PayCloseRecord;
 import cn.bootx.platform.daxpay.service.core.record.close.service.PayCloseRecordService;
 import cn.bootx.platform.daxpay.service.func.AbsPayCloseStrategy;
-import cn.bootx.platform.daxpay.util.PaySignUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -81,15 +77,12 @@ public class PayCloseService {
             strategy.doCloseHandler();
             // 成功处理
             this.successHandler(payOrder);
-            // 签名
-            this.sign(result);
             // 返回结果
             return result;
         } catch (Exception e) {
             // 记录关闭失败的记录
             this.saveRecord(payOrder, false, e.getMessage());
             result.setCode("1").setMsg(e.getMessage());
-            this.sign(result);
             return result;
         }
     }
@@ -122,21 +115,5 @@ public class PayCloseService {
                 .setErrorMsg(errMsg)
                 .setClientIp(clientIp);
         payCloseRecordService.saveRecord(record);
-    }
-
-    /**
-     * 对返回结果进行签名
-     */
-    private void sign(PayCloseResult result){
-        PlatformLocal platformInfo = PaymentContextLocal.get()
-                .getPlatformInfo();
-        String signType = platformInfo.getSignType();
-        if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
-            result.setSign(PaySignUtil.hmacSha256Sign(result, platformInfo.getSignSecret()));
-        } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
-            result.setSign(PaySignUtil.md5Sign(result, platformInfo.getSignSecret()));
-        } else {
-            throw new PayFailureException("未获取到签名方式，请检查");
-        }
     }
 }

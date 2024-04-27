@@ -1,7 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.payment.refund.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
@@ -107,6 +106,7 @@ public class RefundService {
         refundStrategy.doBeforeRefundHandler();
         // 退款操作的预处理, 对支付订单进行预扣款, 返回创建成功的退款订单, 成功后才可以进行下一阶段的操作
         RefundOrder refundOrder = SpringUtil.getBean(this.getClass()).preRefundMethod(param, payOrder);
+        refundStrategy.setRefundOrder(refundOrder);
         try {
             // 执行退款策略
             refundStrategy.doRefundHandler();

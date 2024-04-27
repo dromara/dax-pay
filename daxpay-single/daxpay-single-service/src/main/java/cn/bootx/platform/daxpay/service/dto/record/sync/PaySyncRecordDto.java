@@ -24,7 +24,7 @@ public class PaySyncRecordDto extends BaseDto {
 
     /** 本地订单ID */
     @Schema(description = "本地订单ID")
-    private Long orderId;
+    private String orderId;
 
     /** 本地业务号 */
     @Schema(description = "本地业务号")

@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,12 +41,5 @@ public enum PayChannelEnum {
             .findFirst()
             .orElseThrow(() -> new PayFailureException("不存在的支付通道"));
     }
-
-    /** 异步支付通道 */
-    @Deprecated
-    public static final List<PayChannelEnum> ASYNC_TYPE = Collections.unmodifiableList(Arrays.asList(ALI, WECHAT, UNION_PAY));
-    /** 异步支付通道的编码 */
-    @Deprecated
-    public static final List<String> ASYNC_TYPE_CODE = Collections.unmodifiableList(Arrays.asList(ALI.code, WECHAT.code, UNION_PAY.code));
 
 }

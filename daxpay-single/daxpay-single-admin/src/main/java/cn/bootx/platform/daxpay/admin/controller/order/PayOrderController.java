@@ -39,8 +39,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class PayOrderController {
     private final PayOrderQueryService queryService;
     private final PayOrderExtraService payOrderExtraService;
+    private final PayCloseService payCloseService;
 
-    private final PayCloseService PayCloseService;
+
     private final PaySyncService paySyncService;
     private final AllocationService allocationService;
 
@@ -89,7 +90,7 @@ public class PayOrderController {
     public ResResult<Void> close(String orderNo){
         PayCloseParam param = new PayCloseParam();
         param.setOrderNo(orderNo);
-        PayCloseService.close(param);
+        payCloseService.close(param);
         return Res.ok();
     }
 

@@ -3,7 +3,6 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.CollUtil;
-import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayRecordTypeEnum;
@@ -57,12 +56,6 @@ public class ReconcileService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileOrder create(LocalDate date, String channel) {
 
-        // 获取通道枚举
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(channel);
-        // 判断是否为为异步通道
-        if (!PayChannelEnum.ASYNC_TYPE.contains(channelEnum)){
-            throw new PayFailureException("不支持对账的通道, 请检查");
-        }
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(channel);
 
@@ -173,12 +166,6 @@ public class ReconcileService {
 
         // 查询对账单
         List<ReconcileDetail> reconcileDetails = reconcileDetailManager.findAllByOrderId(reconcileOrder.getId());
-        // 获取通道枚举
-        if (!PayChannelEnum.ASYNC_TYPE_CODE.contains(reconcileOrder.getChannel())){
-            log.error("不支持对账的通道, 请检查, 对账订单ID: {}", reconcileOrder.getId());
-            throw new PayFailureException("不支持对账的通道, 请检查");
-        }
-        // 判断是否为为异步通道
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
         // 初始化参数

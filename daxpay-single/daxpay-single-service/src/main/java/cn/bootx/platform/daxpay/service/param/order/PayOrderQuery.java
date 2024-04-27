@@ -3,6 +3,7 @@ package cn.bootx.platform.daxpay.service.param.order;
 import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.common.core.rest.param.QueryOrder;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -21,44 +22,64 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付订单查询参数")
 public class PayOrderQuery extends QueryOrder {
 
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "支付订单id")
-    private Long id;
+    /** 商户订单号 */
+    @Schema(description = "商户订单号")
+    private String bizOrderNo;
 
-    /** 关联的业务号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "关联的业务号")
-    private String businessNo;
+    @Schema(description = "支付订单号")
+    private String orderNo;
+
+    /**
+     *  外部系统交易号
+     */
+    @Schema(description = "外部支付订单号")
+    private String outOrderNo;
 
     /** 标题 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     @Schema(description = "标题")
     private String title;
 
-    /** 是否是异步支付 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "是否是异步支付")
-    private Boolean asyncPay;
-
-    /** 是否是组合支付 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "是否是组合支付")
-    private Boolean combinationPay;
+    /** 是否支持分账 */
+    @Schema(description = "是否需要分账")
+    private Boolean allocation;
 
     /**
-     * 异步支付通道
+     * 支付通道
      * @see PayChannelEnum
      */
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "异步支付通道")
-    private String asyncChannel;
+    private String channel;
+
+    /**
+     * 支付方式
+     */
+    @Schema(description = "支付方式")
+    private String method;
+
+    /** 金额 */
+    @Schema(description = "金额")
+    private Integer amount;
 
     /**
      * 支付状态
      * @see PayStatusEnum
      */
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付状态")
     private String status;
+
+    /**
+     * 分账状态
+     * @see PayOrderAllocationStatusEnum
+     */
+    @Schema(description = "分账状态")
+    private String allocationStatus;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误信息 */
+    @Schema(description = "错误信息")
+    private String errorMsg;
 
 }

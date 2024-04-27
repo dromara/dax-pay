@@ -3,7 +3,6 @@ package cn.bootx.platform.daxpay.service.core.payment.pay.service;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PaySignTypeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.payment.pay.PayParam;
 import cn.bootx.platform.daxpay.result.pay.PayResult;
@@ -19,7 +18,6 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.pay.service.PayOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.PaySyncService;
-import cn.bootx.platform.daxpay.util.PaySignUtil;
 import cn.bootx.platform.daxpay.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -251,23 +249,6 @@ public class PayAssistService {
             payResult.setPayBody(asyncPayInfo.getPayBody());
         }
         // 签名
-        this.sign(payResult);
         return payResult;
-    }
-    /**
-     * 对返回
-     */
-    public void sign(PayResult payResult) {
-        // 进行签名
-        PlatformLocal platformInfo = PaymentContextLocal.get()
-                .getPlatformInfo();
-        String signType = platformInfo.getSignType();
-        if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
-            payResult.setSign(PaySignUtil.hmacSha256Sign(payResult, platformInfo.getSignSecret()));
-        } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
-            payResult.setSign(PaySignUtil.md5Sign(payResult, platformInfo.getSignSecret()));
-        } else {
-            throw new PayFailureException("未获取到签名方式，请检查");
-        }
     }
 }

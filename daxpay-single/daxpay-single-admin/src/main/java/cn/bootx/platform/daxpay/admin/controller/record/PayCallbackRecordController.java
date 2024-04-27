@@ -34,8 +34,8 @@ public class PayCallbackRecordController {
 
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
-    public ResResult<PayCallbackRecordDto> findById(Long paymentId){
-        return Res.ok(service.findById(paymentId));
+    public ResResult<PayCallbackRecordDto> findById(Long id){
+        return Res.ok(service.findById(id));
     }
 
 }

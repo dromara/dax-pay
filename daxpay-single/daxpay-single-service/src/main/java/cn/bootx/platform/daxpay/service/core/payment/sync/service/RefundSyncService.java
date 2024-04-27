@@ -91,9 +91,9 @@ public class RefundSyncService {
                 this.saveRecord(refundOrder, syncResult, false, null, syncResult.getErrorMsg());
                 throw new PayFailureException(syncResult.getErrorMsg());
             }
-            // 支付订单的网关订单号是否一致, 不一致进行更新
+            // 订单的外部交易号是否一致, 不一致进行更新
             if (Objects.nonNull(syncResult.getOutRefundNo()) && !Objects.equals(syncResult.getOutRefundNo(), refundOrder.getOutRefundNo())){
-                refundOrder.setRefundNo(syncResult.getOutRefundNo());
+                refundOrder.setOutRefundNo(syncResult.getOutRefundNo());
                 refundOrderManager.updateById(refundOrder);
             }
             // 判断网关状态是否和支付单一致

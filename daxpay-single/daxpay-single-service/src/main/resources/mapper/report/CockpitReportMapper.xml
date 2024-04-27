@@ -53,7 +53,7 @@
             count(*) as count,
             sum(amount) as sum
         FROM
-            pay_channel_order
+            pay_order
         WHERE
             create_time BETWEEN #{startTime} AND #{endTime}
           AND STATUS IN ( 'success', 'refunding', 'partial_refund', 'refunded' )
@@ -68,33 +68,11 @@
             count(*) as count,
             sum(amount) as sum
         FROM
-            pay_refund_channel_order
+            pay_refund_order
         WHERE
             create_time BETWEEN #{startTime} AND #{endTime}
           AND STATUS = 'success'
         GROUP BY
             channel
     </select>
-
-    <!-- 支付通道占比饼图 -->
-    <select id="getPayChannelPie" resultType="cn.bootx.platform.daxpay.service.core.report.entity.ChannelProportionPie">
-        SELECT
-            channel,
-            name,
-            count(*) as count,
-            sum(amount) as sum
-        FROM
-            pay_channel_order
-        WHERE
-            create_time BETWEEN #{startTime} AND #{endTime}
-          AND STATUS IN ( 'success', 'refunding', 'partial_refund', 'refunded' )
-        GROUP BY
-            channel
-    </select>
-
-    <!--  -->
-    <select id="getRefundChannelPie" resultType="cn.bootx.platform.daxpay.service.core.report.entity.ChannelProportionPie">
-    </select>
-
-
 </mapper>

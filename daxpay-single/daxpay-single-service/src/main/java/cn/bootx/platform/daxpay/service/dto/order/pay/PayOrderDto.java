@@ -2,8 +2,8 @@ package cn.bootx.platform.daxpay.service.dto.order.pay;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
-import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,42 +21,43 @@ import java.time.LocalDateTime;
 @Schema(title = "具体支付日志基类")
 public class PayOrderDto extends BaseDto {
 
-    /** 关联的业务号 */
-    @Schema(description = "关联的业务号")
-    private String businessNo;
+    /** 商户订单号 */
+    @Schema(description = "商户订单号")
+    private String bizOrderNo;
 
-    /** 支付网关订单号 */
-    @Schema(description = "支付网关订单号")
+    @Schema(description = "支付订单号")
     private String orderNo;
+
+    /**
+     *  外部系统交易号
+     */
+    @Schema(description = "外部支付订单号")
+    private String outOrderNo;
 
     /** 标题 */
     @Schema(description = "标题")
     private String title;
 
-    /** 是否是异步支付 */
-    @Schema(description = "是否是异步支付")
-    private boolean asyncPay;
+    /** 描述 */
+    @Schema(description = "描述")
+    private String description;
 
-    /** 是否是组合支付 */
-    @Schema(description = "是否是组合支付")
-    private boolean combinationPay;
-
-    /** 是否需要分账 */
+    /** 是否支持分账 */
     @Schema(description = "是否需要分账")
     private Boolean allocation;
 
     /**
-     * 异步支付通道
+     * 支付通道
      * @see PayChannelEnum
      */
     @Schema(description = "异步支付通道")
-    private String asyncChannel;
+    private String channel;
 
     /**
-     * 如果有异步支付的情况下, 用与将记录关联起来
+     * 支付方式
      */
-    @Schema(description = "关联网关支付号")
-    private String gatewayOrderNo;
+    @Schema(description = "支付方式")
+    private String method;
 
     /** 金额 */
     @Schema(description = "金额")
@@ -75,7 +76,7 @@ public class PayOrderDto extends BaseDto {
 
     /**
      * 分账状态
-     * @see AllocationOrderStatusEnum
+     * @see PayOrderAllocationStatusEnum
      */
     @Schema(description = "分账状态")
     private String allocationStatus;
@@ -91,5 +92,14 @@ public class PayOrderDto extends BaseDto {
     /** 过期时间 */
     @Schema(description = "过期时间")
     private LocalDateTime expiredTime;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误信息 */
+    @Schema(description = "错误信息")
+    private String errorMsg;
+
 
 }

@@ -53,7 +53,7 @@ public class AliPaySyncService {
             String tradeStatus = response.getTradeStatus();
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
             // 设置网关订单号
-            syncResult.setOutTradeNo(response.getTradeNo());
+            syncResult.setOutOrderNo(response.getTradeNo());
             // 支付完成 TODO 部分退款也在这个地方, 但无法进行区分, 需要借助对账进行处理
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_FINISHED)) {
                 // 支付完成时间
@@ -101,9 +101,9 @@ public class AliPaySyncService {
         try {
             AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();
             // 退款请求号
-            queryModel.setOutRequestNo(String.valueOf(refundOrder.getId()));
+            queryModel.setOutRequestNo(String.valueOf(refundOrder.getRefundNo()));
             // 商户订单号
-            queryModel.setOutTradeNo(String.valueOf(refundOrder.getRefundNo()));
+            queryModel.setOutTradeNo(String.valueOf(refundOrder.getOrderNo()));
             // 设置返回退款完成时间
             queryModel.setQueryOptions(Collections.singletonList(GMT_REFUND_PAY));
             AlipayTradeFastpayRefundQueryResponse response = AliPayApi.tradeRefundQueryToResponse(queryModel);
@@ -121,7 +121,7 @@ public class AliPaySyncService {
                 LocalDateTime localDateTime = LocalDateTimeUtil.of(response.getGmtRefundPay());
                 return syncResult.setRefundTime(localDateTime).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
             } else {
-                return syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL).setErrorMsg("支付宝网关反正退款未成功");
+                return syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL).setErrorMsg("支付宝网关退款未成功");
             }
         } catch (AlipayApiException e) {
             log.error("退款订单同步失败:", e);

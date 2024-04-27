@@ -74,11 +74,8 @@ public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<Refu
     @DbColumn(comment = "退款原因")
     private String reason;
 
-    /** 退款发起时间 */
-    @DbColumn(comment = "退款发起时间")
-    private LocalDateTime refundTime;
-
-    @DbColumn(comment = "退款结束时间")
+    /** 退款完成时间 */
+    @DbColumn(comment = "退款完成时间")
     private LocalDateTime finishTime;
 
     /**

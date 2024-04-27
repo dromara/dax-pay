@@ -20,5 +20,5 @@ public class PayCancelParam extends PaymentCommonParam {
     private String orderNo;
 
     @Schema(description = "商户订单号")
-    private String outTradeNo;
+    private String bizOrderNo;
 }

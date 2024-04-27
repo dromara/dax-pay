@@ -190,7 +190,7 @@ public class WeChatPayService {
                 .profit_sharing(payOrder.getAllocation()?"Y":"N")
                 .body(payOrder.getTitle())
                 .auth_code(authCode)
-                .out_trade_no(String.valueOf(payOrder.getId()))
+                .out_trade_no(String.valueOf(payOrder.getOrderNo()))
                 .total_fee(amount)
                 .spbill_create_ip(NetUtil.getLocalhostStr())
                 .build()

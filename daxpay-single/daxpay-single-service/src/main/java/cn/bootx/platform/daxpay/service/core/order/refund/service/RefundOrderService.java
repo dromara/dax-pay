@@ -36,7 +36,8 @@ public class RefundOrderService {
     private final PayApiConfigManager apiConfigManager;
 
     /**
-     *  手动发起退款
+     * 手动发起退款
+     * 退款涉及到回调通知, 索所以需要手动初始化一下上下文
      */
     public void refund(PayOrderRefundParam param) {
 
@@ -46,6 +47,8 @@ public class RefundOrderService {
 
         RefundParam refundParam = new RefundParam();
         refundParam.setOrderNo(param.getOrderNo());
+        refundParam.setBizRefundNo(param.getOrderNo()+"R");
+        refundParam.setAmount(param.getAmount());
         refundParam.setReason(param.getReason());
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);

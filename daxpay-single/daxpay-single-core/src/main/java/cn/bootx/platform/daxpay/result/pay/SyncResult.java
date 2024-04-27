@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.result.pay;
 import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
 import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
-import cn.bootx.platform.daxpay.result.CommonResult;
+import cn.bootx.platform.daxpay.result.PaymentCommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +20,7 @@ import static cn.bootx.platform.daxpay.code.PaySyncStatusEnum.FAIL;
 @Data
 @Accessors(chain = true)
 @Schema(title = "同步结果")
-public class SyncResult extends CommonResult {
+public class SyncResult extends PaymentCommonResult {
 
     /**
      * 支付网关同步状态

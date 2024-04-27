@@ -110,6 +110,7 @@ public class RefundAssistService {
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setRefundNo(OrderNoGenerateUtil.refund())
                 .setBizRefundNo(refundParam.getBizRefundNo())
+                .setChannel(payOrder.getChannel())
                 .setStatus(RefundStatusEnum.PROGRESS.getCode())
                 .setOrderAmount(payOrder.getAmount())
                 .setAmount(refundParam.getAmount())
@@ -140,7 +141,7 @@ public class RefundAssistService {
         // 退款成功更新退款时间
         if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
             // TODO 读取网关返回的退款时间和完成时间
-            refundOrder.setRefundTime(LocalDateTime.now());
+            refundOrder.setFinishTime(LocalDateTime.now());
         }
         refundOrderManager.updateById(refundOrder);
     }
@@ -153,6 +154,7 @@ public class RefundAssistService {
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         refundOrder.setErrorCode(refundInfo.getErrorCode());
         refundOrder.setErrorMsg(refundInfo.getErrorMsg());
+        refundOrder.setStatus(refundInfo.getStatus().getCode());
         refundOrderManager.updateById(refundOrder);
     }
 

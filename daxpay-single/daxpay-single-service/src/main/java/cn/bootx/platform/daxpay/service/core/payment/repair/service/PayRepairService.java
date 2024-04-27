@@ -109,13 +109,14 @@ public class PayRepairService {
      * 回调: 将异步支付状态修改为成功
      */
     private void success(PayOrder order) {
+        // 读取支付网关中的完成时间
         LocalDateTime payTime = PaymentContextLocal.get()
                 .getRepairInfo()
                 .getFinishTime();
         // 修改订单支付状态为成功
-        order.setStatus(PayStatusEnum.SUCCESS.getCode());
-        // 读取支付网关中的时间
-        order.setPayTime(payTime);
+        order.setStatus(PayStatusEnum.SUCCESS.getCode())
+                .setPayTime(payTime)
+                .setCloseTime(null);
         payOrderService.updateById(order);
     }
 

@@ -20,11 +20,11 @@ import lombok.experimental.Accessors;
 @Schema(title = "回调记录")
 public class PayCallbackRecordDto extends BaseDto {
 
-    @Schema(description = "本地订单ID")
-    private Long orderId;
+    @Schema(description = "交易号")
+    private String tradeNo;
 
-    @Schema(description = "支付网关订单号")
-    private String gatewayOrderNo;
+    @Schema(description = "外部交易号")
+    private String outTradeNo;
     /**
      * 支付通道
      * @see PayChannelEnum#getCode()
@@ -51,7 +51,7 @@ public class PayCallbackRecordDto extends BaseDto {
     private String status;
 
     @Schema(description = "修复号")
-    private String repairOrderNo;
+    private String repairNo;
 
     /** 提示信息 */
     @Schema(description = "提示信息")

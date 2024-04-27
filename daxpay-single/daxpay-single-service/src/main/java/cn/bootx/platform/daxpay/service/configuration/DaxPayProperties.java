@@ -26,8 +26,16 @@ public class DaxPayProperties {
     /** 机器码, 用于区分不同机器生成的流水号 */
     private String machineNo = "56";
 
+    /** 当前环境，会影响订单号的生成 */
+    private String env = "";
+
     public void setMachineNo(String machineNo) {
         this.machineNo = machineNo;
         OrderNoGenerateUtil.setMachineNo(machineNo);
+    }
+
+    public void setEnv(String env) {
+        this.env = env;
+        OrderNoGenerateUtil.setEnv(env);
     }
 }

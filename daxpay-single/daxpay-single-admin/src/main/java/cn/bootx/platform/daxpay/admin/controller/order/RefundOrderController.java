@@ -8,7 +8,6 @@ import cn.bootx.platform.daxpay.param.payment.refund.RefundSyncParam;
 import cn.bootx.platform.daxpay.result.pay.SyncResult;
 import cn.bootx.platform.daxpay.service.core.order.refund.service.RefundOrderQueryService;
 import cn.bootx.platform.daxpay.service.core.order.refund.service.RefundOrderService;
-import cn.bootx.platform.daxpay.service.core.payment.refund.service.RefundService;
 import cn.bootx.platform.daxpay.service.core.payment.sync.service.RefundSyncService;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderExtraDto;
@@ -59,8 +58,8 @@ public class RefundOrderController {
     }
 
     @Operation(summary = "退款同步")
-    @PostMapping("/syncById")
-    public ResResult<SyncResult> syncById(String refundNo){
+    @PostMapping("/syncByRefundNo")
+    public ResResult<SyncResult> syncByRefundNo(String refundNo){
         RefundSyncParam refundSyncParam = new RefundSyncParam();
         refundSyncParam.setRefundNo(refundNo);
         return Res.ok(refundSyncService.sync(refundSyncParam));

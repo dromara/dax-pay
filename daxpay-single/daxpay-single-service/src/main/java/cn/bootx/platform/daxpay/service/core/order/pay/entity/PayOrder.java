@@ -41,9 +41,9 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     private String orderNo;
 
     /**
-     *  三方系统交易号
+     *  外部系统交易号
      */
-    @DbColumn(comment = "三方系统交易号")
+    @DbColumn(comment = "外部支付订单号")
     private String outOrderNo;
 
     /** 标题 */

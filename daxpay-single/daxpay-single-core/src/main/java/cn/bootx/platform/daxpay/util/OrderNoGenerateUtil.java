@@ -20,6 +20,9 @@ public class OrderNoGenerateUtil {
     /** 机器号 */
     @Setter
     private static String machineNo;
+    /** 环境前缀 */
+    @Setter
+    private static String env;
 
     /**
      * 生成支付订单号
@@ -28,7 +31,7 @@ public class OrderNoGenerateUtil {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();
-        orderNo.append("P").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        orderNo.append(env).append("P").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
 
@@ -39,7 +42,7 @@ public class OrderNoGenerateUtil {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();
-        orderNo.append("R").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        orderNo.append(env).append("R").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
 
@@ -50,7 +53,7 @@ public class OrderNoGenerateUtil {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();
-        orderNo.append("T").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        orderNo.append(env).append("T").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
 
@@ -61,7 +64,7 @@ public class OrderNoGenerateUtil {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();
-        orderNo.append("A").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        orderNo.append(env).append("A").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
 
@@ -72,7 +75,7 @@ public class OrderNoGenerateUtil {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();
-        orderNo.append("C").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        orderNo.append(env).append("C").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
 
@@ -83,7 +86,7 @@ public class OrderNoGenerateUtil {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
         long id = ATOMIC_LONG.incrementAndGet();
-        orderNo.append("X").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
+        orderNo.append(env).append("X").append(dateStr).append(machineNo).append(String.format("%06d", Math.abs(id) % ORDER_MAX_LIMIT));
         return orderNo.toString();
     }
 }

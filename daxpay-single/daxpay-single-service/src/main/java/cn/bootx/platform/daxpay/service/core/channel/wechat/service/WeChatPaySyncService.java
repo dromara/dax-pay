@@ -47,7 +47,7 @@ public class WeChatPaySyncService {
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
-                .out_trade_no(String.valueOf(order.getId()))
+                .out_trade_no(String.valueOf(order.getOrderNo()))
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         try {
@@ -67,7 +67,7 @@ public class WeChatPaySyncService {
             }
 
             // 设置微信支付网关订单号
-            syncResult.setOutTradeNo(result.get(TRANSACTION_ID));
+            syncResult.setOutOrderNo(result.get(TRANSACTION_ID));
             // 查询到订单的状态
             String tradeStatus = result.get(WeChatPayCode.TRADE_STATE);
             // 支付完成
@@ -109,8 +109,8 @@ public class WeChatPaySyncService {
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
-                // 使用退款单号查询, 只返回当前这条, 如果使用支付订单号查询,
-                .out_refund_no(String.valueOf(refundOrder.getId()))
+                // 使用退款单号查询, 只返回当前这条, 如果使用支付订单号查询,返回所有相关的
+                .out_refund_no(String.valueOf(refundOrder.getRefundNo()))
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
