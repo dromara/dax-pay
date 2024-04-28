@@ -59,6 +59,7 @@ public class PayOrderController {
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         return Res.ok(order);
     }
+
     @Operation(summary = "查询订单详情")
     @GetMapping("/findByOrderNo")
     public ResResult<PayOrderDetailDto> findByOrderNo(String orderNo){
@@ -67,14 +68,14 @@ public class PayOrderController {
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         PayOrderDetailDto detailDto=new PayOrderDetailDto();
         detailDto.setPayOrder(order);
-        detailDto.setPayOrderExtra(payOrderExtraService.findById(order.getId()).toDto());
+        detailDto.setPayOrderExtra(payOrderExtraService.findById(order.getId()));
         return Res.ok(detailDto);
     }
 
     @Operation(summary = "查询支付订单扩展信息")
     @GetMapping("/getExtraById")
     public ResResult<PayOrderExtraDto> getExtraById(Long id){
-        return Res.ok(payOrderExtraService.findById(id).toDto());
+        return Res.ok(payOrderExtraService.findById(id));
     }
 
     @Operation(summary = "同步支付状态")

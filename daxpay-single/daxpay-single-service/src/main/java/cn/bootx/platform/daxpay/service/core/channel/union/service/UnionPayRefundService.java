@@ -28,22 +28,22 @@ public class UnionPayRefundService {
     /**
      * 退款方法
      */
-    public void refund(RefundOrder refundOrder, PayOrder payOrder,UnionPayKit unionPayKit) {
+    public void refund(RefundOrder refundOrder, UnionPayKit unionPayKit) {
 
         // 金额转换
         BigDecimal refundAmount = BigDecimal.valueOf(refundOrder.getAmount() * 0.01);
-        BigDecimal orderAmount = BigDecimal.valueOf(payOrder.getAmount() * 0.01);
+        BigDecimal orderAmount = BigDecimal.valueOf(refundOrder.getOrderAmount() * 0.01);
 
         UnionRefundOrder unionRefundOrder = new UnionRefundOrder();
         unionRefundOrder.setRefundNo(refundOrder.getRefundNo());
-        unionRefundOrder.setTradeNo(String.valueOf(payOrder.getOrderNo()));
+        unionRefundOrder.setTradeNo(refundOrder.getOutOrderNo());
         unionRefundOrder.setRefundAmount(refundAmount);
         unionRefundOrder.setTotalAmount(orderAmount);
         UnionRefundResult refund = unionPayKit.refund(unionRefundOrder);
 
-        String gatewayNo = (String) refund.getAttr(UnionPayCode.QUERY_ID);
+        String outRefundNo = (String) refund.getAttr(UnionPayCode.QUERY_ID);
         // 云闪付退款是否成功需要查询状态, 所以设置为退款中状态
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-        refundInfo.setStatus(RefundStatusEnum.PROGRESS).setOutRefundNo(gatewayNo);
+        refundInfo.setStatus(RefundStatusEnum.PROGRESS).setOutRefundNo(outRefundNo);
     }
 }

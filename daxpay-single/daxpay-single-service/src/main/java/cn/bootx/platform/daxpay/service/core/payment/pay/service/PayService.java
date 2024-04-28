@@ -155,7 +155,7 @@ public class PayService {
             // 支付操作
             payStrategy.doPayHandler();
         } catch (Exception e) {
-            // 记录错误原因
+            // 记录错误原因, 此处没有事务, 所以可以正常更新
             payOrder.setErrorMsg(e.getMessage());
             payOrderService.updateById(payOrder);
             throw e;

@@ -47,7 +47,7 @@ public class WeChatPaySyncService {
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
-                .out_trade_no(String.valueOf(order.getOrderNo()))
+                .out_trade_no(order.getOrderNo())
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
         try {
@@ -110,7 +110,7 @@ public class WeChatPaySyncService {
                 .mch_id(weChatPayConfig.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
                 // 使用退款单号查询, 只返回当前这条, 如果使用支付订单号查询,返回所有相关的
-                .out_refund_no(String.valueOf(refundOrder.getRefundNo()))
+                .out_refund_no(refundOrder.getRefundNo())
                 .build()
                 .createSign(weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
 
@@ -127,7 +127,7 @@ public class WeChatPaySyncService {
             if (Objects.equals(tradeStatus, WeChatPayCode.REFUND_SUCCESS)) {
                 String timeEnd = result.get(WeChatPayCode.REFUND_SUCCESS_TIME);
                 LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.NORM_DATETIME_PATTERN);
-                return syncResult.setRefundTime(time).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
+                return syncResult.setFinishTime(time).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
             }
             // 退款中
             if (Objects.equals(tradeStatus, WeChatPayCode.REFUND_PROCESSING)) {

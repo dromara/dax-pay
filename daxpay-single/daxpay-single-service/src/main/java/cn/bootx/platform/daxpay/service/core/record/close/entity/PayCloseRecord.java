@@ -45,9 +45,11 @@ public class PayCloseRecord extends MpCreateEntity implements EntityBaseFunction
     @DbColumn(comment = "是否关闭成功")
     private boolean closed;
 
+    /** 错误码 */
     @DbColumn(comment = "错误码")
     private String code;
 
+    /** 错误消息 */
     @DbColumn(comment = "错误消息")
     private String errorMsg;
 

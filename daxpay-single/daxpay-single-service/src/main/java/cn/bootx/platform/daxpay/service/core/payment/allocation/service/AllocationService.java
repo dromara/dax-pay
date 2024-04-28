@@ -93,6 +93,7 @@ public class AllocationService {
             order.setStatus(AllocationOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
                     .setErrorMsg(null);
         } catch (Exception e) {
+            log.error("分账出现错误:", e);
             // 失败
             order.setStatus(AllocationOrderStatusEnum.ALLOCATION_FAILED.getCode())
                     .setErrorMsg(e.getMessage());
@@ -144,6 +145,7 @@ public class AllocationService {
                     .setErrorMsg(null);
 
         } catch (Exception e) {
+            log.error("重新分账出现错误:", e);
             // 失败
             allocationOrder.setStatus(AllocationOrderStatusEnum.ALLOCATION_FAILED.getCode())
                     .setErrorMsg(e.getMessage());
@@ -182,6 +184,7 @@ public class AllocationService {
             allocationOrder.setStatus(AllocationOrderStatusEnum.FINISH.getCode())
                     .setErrorMsg(null);
         } catch (Exception e) {
+            log.error("分账完结错误:", e);
             // 失败
             allocationOrder.setStatus(AllocationOrderStatusEnum.FINISH_FAILED.getCode())
                     .setErrorMsg(e.getMessage());

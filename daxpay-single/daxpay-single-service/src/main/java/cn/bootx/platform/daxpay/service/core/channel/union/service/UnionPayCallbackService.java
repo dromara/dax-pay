@@ -62,7 +62,7 @@ public class UnionPayCallbackService {
             // 判断并保存回调类型
             PaymentTypeEnum callbackType = this.getCallbackType();
             callbackInfo.setCallbackType(callbackType)
-                    .setChannel(PayChannelEnum.ALI.getCode());
+                    .setChannel(PayChannelEnum.UNION_PAY.getCode());
 
             // 验证消息
             if (!this.verifyNotify()) {

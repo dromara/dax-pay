@@ -4,7 +4,9 @@ import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,21 +25,25 @@ public class PayRepairRecordDto extends BaseDto {
 
     /**
      * 修复号
-     * 如果一次修复产生的修复记录只有一条, 则该字段为与ID一致
-     * 如果一次修复产生的修复记录有多个, 则使用这个ID作为关联
+     * 如果一次修复产生的修复记录有多个记录, 使用这个作为关联
      */
     @Schema(description = "修复号")
     private String repairNo;
 
     /** 支付ID/退款ID */
-    @Schema(description = "业务ID")
-    private Long orderId;
+    @Schema(description = "本地订单ID")
+    private Long tradeId;
 
-    /** 支付业务号/退款号 业务号 */
-    @Schema(description = "业务号")
-    private String orderNo;
+    /**
+     * 本地交易号, 支付号/退款号
+     */
+    @Schema(description = "本地业务号")
+    private String tradeNo;
 
-    /** 类型  支付修复/退款修复 */
+    /**
+     * 修复类型 支付修复/退款修复
+     * @see PaymentTypeEnum
+     */
     @Schema(description = "修复类型")
     private String repairType;
 
@@ -49,32 +55,28 @@ public class PayRepairRecordDto extends BaseDto {
     private String repairSource;
 
     /**
-     * 修复类型
+     * 修复方式
      * @see PayRepairWayEnum
      * @see RefundRepairWayEnum
      */
-    @Schema(description = "修复类型")
+    @Schema(description = "修复方式")
     private String repairWay;
 
     /** 修复的异步通道 */
     @Schema(description = "修复的异步通道")
-    private String asyncChannel;
+    private String channel;
 
     /**
      * 修复前状态
      * @see PayStatusEnum
      */
-    @Schema(description = "修复前订单状态")
+    @Schema(description = "修复前状态")
     private String beforeStatus;
 
     /**
      * 修复后状态
      * @see PayStatusEnum
      */
-    @Schema(description = "修复后订单状态")
+    @Schema(description = "修复后状态")
     private String afterStatus;
-
-    /** 金额变动 */
-    @Schema(description = "金额变动")
-    private Integer amount;
 }

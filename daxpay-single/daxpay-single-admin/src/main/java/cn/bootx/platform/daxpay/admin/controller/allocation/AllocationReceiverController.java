@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 对账接收方控制器
+ * 分账接收方控制器
  * @author xxm
  * @since 2024/3/28
  */

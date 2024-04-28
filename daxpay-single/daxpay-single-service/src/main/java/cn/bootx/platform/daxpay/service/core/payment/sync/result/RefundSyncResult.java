@@ -32,7 +32,7 @@ public class RefundSyncResult {
     private String outRefundNo;
 
     /** 退款完成时间(通常用于接收网关返回的时间) */
-    private LocalDateTime refundTime;
+    private LocalDateTime finishTime;
 
     /** 错误提示码 */
     private String errorCode;

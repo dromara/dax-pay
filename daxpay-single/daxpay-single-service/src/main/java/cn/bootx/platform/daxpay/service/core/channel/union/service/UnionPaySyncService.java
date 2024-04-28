@@ -43,7 +43,7 @@ public class UnionPaySyncService {
         PaySyncResult syncResult = new PaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
 
         AssistOrder query = new AssistOrder();
-        query.setOutTradeNo(String.valueOf(order.getId()));
+        query.setOutTradeNo(order.getOrderNo());
 
         Map<String, Object> result = unionPayKit.query(query);
         syncResult.setSyncInfo(JSONUtil.toJsonStr(result));
@@ -132,7 +132,7 @@ public class UnionPaySyncService {
             String queryId = MapUtil.getStr(result, QUERY_ID);
             String timeEnd = MapUtil.getStr(result, TXN_TIME);
             LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
-            return syncResult.setOutRefundNo(queryId).setRefundTime(time).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
+            return syncResult.setOutRefundNo(queryId).setFinishTime(time).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
         }
 
         // 退款中

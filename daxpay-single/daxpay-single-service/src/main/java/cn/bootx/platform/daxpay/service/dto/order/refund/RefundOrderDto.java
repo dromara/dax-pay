@@ -68,10 +68,6 @@ public class RefundOrderDto extends BaseDto {
     @Schema(description = "退款原因")
     private String reason;
 
-    /** 退款发起时间 */
-    @Schema(description = "退款发起时间")
-    private LocalDateTime refundTime;
-
     @Schema(description = "退款结束时间")
     private LocalDateTime finishTime;
 

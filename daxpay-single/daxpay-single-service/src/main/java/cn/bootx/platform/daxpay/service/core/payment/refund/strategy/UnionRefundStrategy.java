@@ -53,6 +53,6 @@ public class UnionRefundStrategy extends AbsRefundStrategy {
     @Override
     public void doRefundHandler() {
         UnionPayKit unionPayKit = unionPayConfigService.initPayService(unionPayConfig);
-        unionPayRefundService.refund(this.getRefundOrder(), this.getPayOrder(), unionPayKit);
+        unionPayRefundService.refund(this.getRefundOrder(), unionPayKit);
     }
 }

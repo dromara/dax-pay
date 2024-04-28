@@ -1,17 +1,12 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.common.sequence.func.Sequence;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.convert.WeChatConvert;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayRecord;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
-import cn.bootx.platform.daxpay.service.handler.sequence.DaxPaySequenceHandler;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,10 +15,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -42,8 +35,6 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
 
-    private final DaxPaySequenceHandler daxPaySequenceHandler;
-
     private WeChatPayConfig config;
 
     /**
@@ -54,21 +45,6 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
     @Override
     public PayChannelEnum getChannel() {
         return PayChannelEnum.WECHAT;
-    }
-
-    /**
-     * 生成对账序列号
-     * 生成批次号
-     * 规则：通道简称 + yyyyMMdd + 两位流水号
-     * 例子：wx2024012001、ali2024012002
-     */
-    @Override
-    public String generateSequence(LocalDate date) {
-        String prefix = getChannel().getReconcilePrefix();
-        String dateStr = LocalDateTimeUtil.format(date, DatePattern.PURE_DATE_PATTERN);
-        Sequence sequence = daxPaySequenceHandler.wechatReconcileSequence(dateStr);
-        String key = String.format("%02d", sequence.next());
-        return prefix + dateStr + key;
     }
 
     /**

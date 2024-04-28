@@ -19,6 +19,7 @@ import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralRec
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.factory.ReconcileStrategyFactory;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
+import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,15 +56,8 @@ public class ReconcileService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileOrder create(LocalDate date, String channel) {
-
-        // 构建对账策略
-        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(channel);
-
-        // 生成批次号
-        String seqNo = reconcileStrategy.generateSequence(date);
-
         ReconcileOrder order = new ReconcileOrder()
-                .setBatchNo(seqNo)
+                .setBatchNo(OrderNoGenerateUtil.reconciliation())
                 .setChannel(channel)
                 .setDate(date);
         reconcileOrderManager.save(order);

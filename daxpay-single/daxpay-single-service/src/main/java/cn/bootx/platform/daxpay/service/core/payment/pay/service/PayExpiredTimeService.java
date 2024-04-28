@@ -41,7 +41,7 @@ public class PayExpiredTimeService {
                 repository.store(payOrder.getId(), expiredTime);
             }
             catch (Exception e) {
-                log.error("注册支付单超时关闭失败");
+                log.error("注册支付单超时关闭失败",e);
                 throw new RetryableException();
             }
         }

@@ -63,7 +63,7 @@ public class RefundRepairService {
         }
         try {
             // 获取关联支付单
-            PayOrder payOrder = payOrderQueryService.findById(refundOrder.getId())
+            PayOrder payOrder = payOrderQueryService.findById(refundOrder.getOrderId())
                     .orElseThrow(() -> new RuntimeException("支付单不存在"));
 
             // 根据不同的类型执行对应的修复逻辑

@@ -108,6 +108,7 @@ public class RefundAssistService {
                 .setOrderId(payOrder.getId())
                 .setOrderNo(payOrder.getOrderNo())
                 .setBizOrderNo(payOrder.getBizOrderNo())
+                .setOutOrderNo(payOrder.getOutOrderNo())
                 .setRefundNo(OrderNoGenerateUtil.refund())
                 .setBizRefundNo(refundParam.getBizRefundNo())
                 .setChannel(payOrder.getChannel())
@@ -137,7 +138,7 @@ public class RefundAssistService {
     public void updateOrder(RefundOrder refundOrder){
         RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
         refundOrder.setStatus(asyncRefundInfo.getStatus().getCode())
-                .setRefundNo(asyncRefundInfo.getOutRefundNo());
+                .setOutRefundNo(asyncRefundInfo.getOutRefundNo());
         // 退款成功更新退款时间
         if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
             // TODO 读取网关返回的退款时间和完成时间

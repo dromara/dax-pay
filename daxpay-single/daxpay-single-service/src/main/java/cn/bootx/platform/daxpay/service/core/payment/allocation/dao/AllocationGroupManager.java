@@ -43,7 +43,7 @@ public class AllocationGroupManager extends BaseManager<AllocationGroupMapper,Al
     /**
      * 获取默认分账组
      */
-    public Optional<AllocationGroup> findDefaultGroup(String asyncChannel) {
-       return findByField(AllocationGroup::getChannel,asyncChannel);
+    public Optional<AllocationGroup> findDefaultGroup(String channel) {
+       return findByField(AllocationGroup::getChannel,channel);
     }
 }

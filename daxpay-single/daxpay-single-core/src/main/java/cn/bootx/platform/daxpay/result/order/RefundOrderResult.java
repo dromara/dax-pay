@@ -32,11 +32,6 @@ public class RefundOrderResult {
     @Schema(description = "退款金额")
     private BigDecimal amount;
 
-    /** 退款发起时间 */
-    @Schema(description = "退款发起时间")
-    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
-    private LocalDateTime refundTime;
-
     @Schema(description = "退款完成时间")
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime finishTime;

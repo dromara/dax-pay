@@ -1,14 +1,12 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.common.sequence.func.Sequence;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayReconcileService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
-import cn.bootx.platform.daxpay.service.handler.sequence.DaxPaySequenceHandler;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -17,7 +15,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,9 +35,6 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
 
     private final AliPayConfigService configService;
 
-    private final DaxPaySequenceHandler daxPaySequenceHandler;
-
-
     /**
      * 策略标识
      *
@@ -49,21 +43,6 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
     @Override
     public PayChannelEnum getChannel() {
         return PayChannelEnum.ALI;
-    }
-
-    /**
-     * 生成对账序列号
-     * 规则：通道简称 + yyyyMMdd + 两位流水号
-     * 例子：wx2024012001、ali2024012002
-     */
-    @Override
-    public String generateSequence(LocalDate date) {
-
-        String prefix = getChannel().getReconcilePrefix();
-        String dateStr = LocalDateTimeUtil.format(date, DatePattern.PURE_DATE_PATTERN);
-        Sequence sequence = daxPaySequenceHandler.alipayReconcileSequence(dateStr);
-        String key = String.format("%02d", sequence.next());
-        return prefix + dateStr + key;
     }
 
     /**

@@ -61,6 +61,15 @@ public class RefundOrderQueryService {
     }
 
     /**
+     * 根据退款号查询
+     */
+    public RefundOrderDto findByRefundNo(String refundNo){
+        return refundOrderManager.findByRefundNo(refundNo).map(RefundOrder::toDto)
+                .orElseThrow(() -> new DataNotExistException("退款订单扩展信息不存在"));
+
+    }
+
+    /**
      * 根据退款号和商户退款号查询
      */
     public Optional<RefundOrder> findByBizOrRefundNo(String refundNo, String bizRefundNo) {

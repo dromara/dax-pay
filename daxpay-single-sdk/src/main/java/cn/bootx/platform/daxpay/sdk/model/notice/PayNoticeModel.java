@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 /**
  * 支付异步通知类
  * @author xxm
@@ -16,20 +18,23 @@ import lombok.ToString;
 @ToString
 public class PayNoticeModel {
 
-    /** 支付ID */
-    private Long paymentId;
+    /** 订单号 */
+    private String orderNo;
 
-    /** 业务号 */
-    private String businessNo;
+    /** 商户订单号 */
+    private String bizOrderNo;
 
-    /** 是否是异步支付 */
-    private boolean asyncPay;
+    /** 标题 */
+    private String title;
 
     /**
-     * 异步支付通道
+     * 支付通道
      * @see PayChannelEnum
      */
-    private String asyncChannel;
+    private String channel;
+
+    /** 支付方式 */
+    private String method;
 
     /** 支付金额 */
     private Integer amount;
@@ -40,14 +45,14 @@ public class PayNoticeModel {
      */
     private String status;
 
-    /** 支付创建时间 */
-    private Long createTime;
-
     /** 支付成功时间 */
     private Long payTime;
 
     /** 支付关闭时间 */
     private Long closeTime;
+
+    /** 支付创建时间 */
+    private Long createTime;
 
     /** 商户扩展参数,回调时会原样返回 */
     private String attach;

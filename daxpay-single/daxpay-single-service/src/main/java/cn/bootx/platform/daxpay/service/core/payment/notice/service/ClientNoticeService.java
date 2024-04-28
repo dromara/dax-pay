@@ -108,6 +108,7 @@ public class ClientNoticeService {
             taskManager.save(task);
         } catch (Exception e) {
             log.error("注册支付消息通知任务失败，数据错误，订单ID：{}",order.getId());
+            log.error("错误内容",e);
             throw new RuntimeException(e);
         }
         // 同时触发一次通知, 如果成功发送, 任务结束

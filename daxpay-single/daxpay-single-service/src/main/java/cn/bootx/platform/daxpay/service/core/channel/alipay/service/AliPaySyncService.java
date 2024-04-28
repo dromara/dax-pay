@@ -119,7 +119,7 @@ public class AliPaySyncService {
             // 成功
             if (Objects.equals(tradeStatus, AliPayCode.REFUND_SUCCESS)){
                 LocalDateTime localDateTime = LocalDateTimeUtil.of(response.getGmtRefundPay());
-                return syncResult.setRefundTime(localDateTime).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
+                return syncResult.setFinishTime(localDateTime).setSyncStatus(RefundSyncStatusEnum.SUCCESS);
             } else {
                 return syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL).setErrorMsg("支付宝网关退款未成功");
             }

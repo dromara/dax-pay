@@ -25,12 +25,6 @@ public abstract class AbsReconcileStrategy implements PayStrategy {
     /** 对账订单明细 */
     private List<ReconcileDetail> reconcileDetails;
 
-
-    /**
-     * 生成对账序列号
-     */
-    public abstract String generateSequence(LocalDate date);
-
     /**
      * 对账前处理, 主要是初始化支付SDK配置
      */

@@ -107,7 +107,7 @@ public class RefundSyncService {
                     if (Objects.isNull(repairInfo.getSource())){
                         repairInfo.setSource(PayRepairSourceEnum.SYNC);
                     }
-                    repairInfo.setFinishTime(syncResult.getRefundTime());
+                    repairInfo.setFinishTime(syncResult.getFinishTime());
                     repairResult = this.repairHandler(syncResult, refundOrder);
                 }
             } catch (PayFailureException e) {

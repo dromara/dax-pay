@@ -4,6 +4,8 @@ import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
+import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,19 +24,32 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付同步订单")
 public class PaySyncRecordDto extends BaseDto {
 
-    /** 本地订单ID */
+    /** 本地交易号 */
     @Schema(description = "本地订单ID")
-    private String orderId;
+    private String tradeNo;
 
-    /** 本地业务号 */
-    @Schema(description = "本地业务号")
-    private String orderNo;
+    /** 商户交易号 */
+    @Schema(description = "商户交易号")
+    private String bizTradeNo;
 
-    /** 网关订单号 */
-    @Schema(description = "网关订单号")
-    private String gatewayOrderNo;
+    /** 三方交易号 */
+    @Schema(description = "三方交易号")
+    private String outTradeNo;
 
-    /** 同步类型 */
+
+    /**
+     * 三方支付返回状态
+     * @see PaySyncStatusEnum
+     * @see RefundSyncStatusEnum
+     */
+    @Schema(description = "网关返回状态")
+    private String outTradeStatus;
+
+
+    /**
+     * 同步类型 支付/退款
+     * @see PaymentTypeEnum
+     */
     @Schema(description = "同步类型")
     private String syncType;
 
@@ -43,38 +58,32 @@ public class PaySyncRecordDto extends BaseDto {
      * @see PayChannelEnum#getCode()
      */
     @Schema(description = "同步的异步通道")
-    private String asyncChannel;
+    private String channel;
 
-    /** 通知消息 */
+    /** 网关返回的同步消息 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @Schema(description = "通知消息")
+    @Schema(description = "同步消息")
     private String syncInfo;
-
-    /**
-     * 网关返回状态
-     * @see PaySyncStatusEnum
-     * @see RefundSyncStatusEnum
-     */
-    @Schema(description = "网关返回状态")
-    private String gatewayStatus;
 
     /**
      * 支付单如果状态不一致, 是否进行修复
      */
     @Schema(description = "是否进行修复")
-    private boolean repairOrder;
+    private boolean repair;
 
+    /** 修复单号 */
     @Schema(description = "修复单号")
-    private String repairOrderNo;
+    private String repairNo;
 
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误消息 */
     @Schema(description = "错误消息")
     private String errorMsg;
 
     /** 客户端IP */
     @Schema(description = "客户端IP")
     private String clientIp;
-
-    /** 请求链路ID */
-    @Schema(description = "请求链路ID")
-    private String reqId;
 }

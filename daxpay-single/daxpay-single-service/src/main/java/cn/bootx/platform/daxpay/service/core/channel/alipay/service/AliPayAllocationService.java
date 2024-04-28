@@ -46,7 +46,7 @@ public class AliPayAllocationService {
     public void allocation(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
+        model.setOutRequestNo(allocationOrder.getOrderNo());
         model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
 

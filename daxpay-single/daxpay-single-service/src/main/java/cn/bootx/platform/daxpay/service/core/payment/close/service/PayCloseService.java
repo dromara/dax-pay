@@ -80,6 +80,8 @@ public class PayCloseService {
             // 返回结果
             return result;
         } catch (Exception e) {
+            log.error("关闭订单失败, id: {}:", payOrder.getId());
+            log.error("关闭订单失败:", e);
             // 记录关闭失败的记录
             this.saveRecord(payOrder, false, e.getMessage());
             result.setCode("1").setMsg(e.getMessage());

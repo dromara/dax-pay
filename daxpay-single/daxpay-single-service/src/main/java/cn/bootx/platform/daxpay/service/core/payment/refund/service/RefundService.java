@@ -100,8 +100,6 @@ public class RefundService {
         refundAssistService.checkAndParam(param, payOrder);
         // 通过退款参数获取退款策略
         AbsRefundStrategy refundStrategy = RefundStrategyFactory.create(payOrder.getChannel());
-        // 设置支付订单数据
-        refundStrategy.setPayOrder(payOrder);
         // 进行退款前预处理
         refundStrategy.doBeforeRefundHandler();
         // 退款操作的预处理, 对支付订单进行预扣款, 返回创建成功的退款订单, 成功后才可以进行下一阶段的操作
@@ -110,8 +108,8 @@ public class RefundService {
         try {
             // 执行退款策略
             refundStrategy.doRefundHandler();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
+            log.error("退款出现错误", e);
             // 记录处理失败状态
             PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             // 更新退款失败的记录
@@ -153,7 +151,7 @@ public class RefundService {
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         RefundOrderExtra refundOrderExtra = refundOrderExtraManager.findById(refundOrder.getId())
                 .orElseThrow(() -> new DataNotExistException("退款订单扩展信息不存在"));
-        AbsRefundStrategy refundStrategy = RefundStrategyFactory.create(refundOrder.getRefundNo());
+        AbsRefundStrategy refundStrategy = RefundStrategyFactory.create(refundOrder.getChannel());
         // 设置退款订单对象
         refundStrategy.setRefundOrder(refundOrder);
         // 退款前准备操作
@@ -165,6 +163,7 @@ public class RefundService {
             refundStrategy.doRefundHandler();
         }
         catch (Exception e) {
+            log.error("重新退款失败:", e);
             // 记录处理失败状态
             PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             // 记录退款失败的记录

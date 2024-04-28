@@ -15,9 +15,6 @@ import lombok.Setter;
 @Setter
 public abstract class AbsRefundStrategy implements PayStrategy{
 
-    /** 支付订单 */
-    private PayOrder payOrder = null;
-
     /** 退款订单 */
     private RefundOrder refundOrder = null;
 

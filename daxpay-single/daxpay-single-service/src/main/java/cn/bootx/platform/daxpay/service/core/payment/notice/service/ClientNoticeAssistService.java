@@ -77,7 +77,7 @@ public class ClientNoticeAssistService {
                 .setRefundNo(order.getRefundNo())
                 .setChannel(order.getChannel())
                 .setAmount(order.getAmount())
-                .setRefundTime(order.getFinishTime())
+                .setFinishTime(order.getFinishTime())
                 .setCreateTime(order.getCreateTime())
                 .setStatus(order.getStatus())
                 .setAttach(orderExtra.getAttach());
