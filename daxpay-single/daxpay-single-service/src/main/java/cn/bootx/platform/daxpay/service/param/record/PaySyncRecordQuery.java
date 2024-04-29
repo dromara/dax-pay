@@ -3,7 +3,10 @@ package cn.bootx.platform.daxpay.service.param.record;
 import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PaySyncStatusEnum;
-import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.platform.daxpay.code.RefundSyncStatusEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
+import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,43 +22,64 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付同步记录查询参数")
 public class PaySyncRecordQuery {
 
-    /** 本地订单id */
-    @Schema(description = "本地订单id")
-    private Long orderId;
+    /** 本地交易号 */
+    @Schema(description = "本地订单ID")
+    private String tradeNo;
 
-    @Schema(description = "本地订单号")
-    private String orderNo;
+    /** 商户交易号 */
+    @Schema(description = "商户交易号")
+    private String bizTradeNo;
 
-    /** 网关订单号 */
-    @Schema(description = "网关订单号")
-    private String gatewayOrderNo;
+    /** 三方交易号 */
+    @Schema(description = "三方交易号")
+    private String outTradeNo;
 
-    /** 同步类型 */
+
+    /**
+     * 三方支付返回状态
+     * @see PaySyncStatusEnum
+     * @see RefundSyncStatusEnum
+     */
+    @Schema(description = "网关返回状态")
+    private String outTradeStatus;
+
+
+    /**
+     * 同步类型 支付/退款
+     * @see PaymentTypeEnum
+     */
     @Schema(description = "同步类型")
     private String syncType;
 
     /**
-     * 支付通道
+     * 同步的异步通道
      * @see PayChannelEnum#getCode()
      */
-    @Schema(description = "支付通道")
-    private String asyncChannel;
+    @Schema(description = "同步的异步通道")
+    private String channel;
 
-    @Schema(description = "请求链路ID")
-    private String reqId;
-
-    /**
-     * 同步状态
-     * @see PaySyncStatusEnum
-     */
-    @Schema(description = "同步状态")
-    private String gatewayStatus;
+    /** 网关返回的同步消息 */
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    @Schema(description = "同步消息")
+    private String syncInfo;
 
     /**
-     * 支付单如果状态不一致, 是否修复成功
+     * 支付单如果状态不一致, 是否进行修复
      */
-    @DbColumn(comment = "是否进行修复")
-    private Boolean repairOrder;
+    @Schema(description = "是否进行修复")
+    private boolean repair;
+
+    /** 修复单号 */
+    @Schema(description = "修复单号")
+    private String repairNo;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误消息 */
+    @Schema(description = "错误消息")
+    private String errorMsg;
 
     /** 客户端IP */
     @Schema(description = "客户端IP")

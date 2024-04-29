@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.param.record;
 
 import cn.bootx.platform.common.core.rest.param.QueryOrder;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,19 +19,36 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付关闭记录")
 public class PayCloseRecordQuery extends QueryOrder {
 
-    @Schema(description = "支付记录id")
-    private Long paymentId;
+    /** 订单号 */
+    @DbColumn(comment = "订单号")
+    private String orderNo;
 
-    @Schema(description = "业务号")
-    private String businessNo;
+    /** 商户订单号 */
+    @DbColumn(comment = "商户订单号")
+    private String bizOrderNo;
 
     /**
-     * 关闭的异步支付通道, 可以为空
-     * @see PayChannelEnum#getCode()
+     * 关闭的支付通道
+     * @see PayChannelEnum
      */
-    @Schema(description = "关闭的异步支付通道")
-    private String asyncChannel;
+    @DbColumn(comment = "关闭的异步支付通道")
+    private String channel;
 
-    @Schema(description = "请求链路ID")
-    private String reqId;
+    /**
+     * 是否关闭成功
+     */
+    @DbColumn(comment = "是否关闭成功")
+    private boolean closed;
+
+    /** 错误码 */
+    @DbColumn(comment = "错误码")
+    private String errorCode;
+
+    /** 错误消息 */
+    @DbColumn(comment = "错误消息")
+    private String errorMsg;
+
+    /** 客户端IP */
+    @DbColumn(comment = "客户端IP")
+    private String clientIp;
 }

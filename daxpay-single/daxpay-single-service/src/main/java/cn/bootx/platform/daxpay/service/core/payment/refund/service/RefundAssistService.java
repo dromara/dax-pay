@@ -136,9 +136,9 @@ public class RefundAssistService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void updateOrder(RefundOrder refundOrder){
-        RefundLocal asyncRefundInfo = PaymentContextLocal.get().getRefundInfo();
-        refundOrder.setStatus(asyncRefundInfo.getStatus().getCode())
-                .setOutRefundNo(asyncRefundInfo.getOutRefundNo());
+        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        refundOrder.setStatus(refundInfo.getStatus().getCode())
+                .setOutRefundNo(refundInfo.getOutRefundNo());
         // 退款成功更新退款时间
         if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
             // TODO 读取网关返回的退款时间和完成时间

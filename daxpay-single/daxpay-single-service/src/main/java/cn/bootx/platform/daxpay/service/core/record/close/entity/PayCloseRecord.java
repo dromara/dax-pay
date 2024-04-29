@@ -36,7 +36,7 @@ public class PayCloseRecord extends MpCreateEntity implements EntityBaseFunction
      * 关闭的支付通道
      * @see PayChannelEnum
      */
-    @DbColumn(comment = "关闭的异步支付通道")
+    @DbColumn(comment = "关闭的支付通道")
     private String channel;
 
     /**
@@ -47,7 +47,7 @@ public class PayCloseRecord extends MpCreateEntity implements EntityBaseFunction
 
     /** 错误码 */
     @DbColumn(comment = "错误码")
-    private String code;
+    private String errorCode;
 
     /** 错误消息 */
     @DbColumn(comment = "错误消息")

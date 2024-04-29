@@ -5,6 +5,7 @@ import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairSourceEnum;
 import cn.bootx.platform.daxpay.service.code.PayRepairWayEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
+import cn.bootx.platform.daxpay.service.code.RefundRepairWayEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -20,23 +21,31 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付修复记录查询参数")
 public class PayRepairRecordQuery {
 
-    /** 本地订单ID */
-    @Schema(description = "本地订单ID")
-    private Long orderId;
-
-    /** 本地订单号 */
-    @Schema(description = "本地订单号")
-    private String orderNo;
-
-    @Schema(description = "修复单号")
-    private String repairNo;
 
     /**
-     * 修复类型
+     * 修复号
+     * 如果一次修复产生的修复记录有多个记录, 使用这个作为关联
+     */
+    @Schema(description = "修复号")
+    private String repairNo;
+
+    /** 支付ID/退款ID */
+    @Schema(description = "本地订单ID")
+    private Long tradeId;
+
+    /**
+     * 本地交易号, 支付号/退款号
+     */
+    @Schema(description = "本地业务号")
+    private String tradeNo;
+
+    /**
+     * 修复类型 支付修复/退款修复
      * @see PaymentTypeEnum
      */
     @Schema(description = "修复类型")
     private String repairType;
+
     /**
      * 修复来源
      * @see PayRepairSourceEnum
@@ -47,13 +56,14 @@ public class PayRepairRecordQuery {
     /**
      * 修复方式
      * @see PayRepairWayEnum
+     * @see RefundRepairWayEnum
      */
     @Schema(description = "修复方式")
     private String repairWay;
 
     /** 修复的异步通道 */
     @Schema(description = "修复的异步通道")
-    private String asyncChannel;
+    private String channel;
 
     /**
      * 修复前状态
@@ -68,7 +78,4 @@ public class PayRepairRecordQuery {
      */
     @Schema(description = "修复后状态")
     private String afterStatus;
-
-    @Schema(description = "请求链路ID")
-    private String reqId;
 }

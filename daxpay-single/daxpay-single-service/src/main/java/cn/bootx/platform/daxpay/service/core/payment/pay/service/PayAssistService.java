@@ -73,23 +73,23 @@ public class PayAssistService {
                 .equals(payParam.getChannel())) {
             return;
         }
-        PayLocal asyncPayInfo = PaymentContextLocal.get()
+        PayLocal payInfo = PaymentContextLocal.get()
                 .getPayInfo();
         PlatformLocal platform = PaymentContextLocal.get()
                 .getPlatformInfo();
         // 支付订单是非为空
         if (Objects.nonNull(order)) {
-            asyncPayInfo.setExpiredTime(order.getExpiredTime());
+            payInfo.setExpiredTime(order.getExpiredTime());
             return;
         }
         // 支付参数传入
         if (Objects.nonNull(payParam.getExpiredTime())) {
-            asyncPayInfo.setExpiredTime(payParam.getExpiredTime());
+            payInfo.setExpiredTime(payParam.getExpiredTime());
             return;
         }
         // 读取本地时间
         LocalDateTime paymentExpiredTime = PayUtil.getPaymentExpiredTime(platform.getOrderTimeout());
-        asyncPayInfo.setExpiredTime(paymentExpiredTime);
+        payInfo.setExpiredTime(paymentExpiredTime);
     }
 
     /**
@@ -243,10 +243,10 @@ public class PayAssistService {
         payResult.setStatus(payOrder.getStatus());
 
         // 设置支付参数
-        PayLocal asyncPayInfo = PaymentContextLocal.get()
+        PayLocal payInfo = PaymentContextLocal.get()
                 .getPayInfo();
-        if (StrUtil.isNotBlank(asyncPayInfo.getPayBody())) {
-            payResult.setPayBody(asyncPayInfo.getPayBody());
+        if (StrUtil.isNotBlank(payInfo.getPayBody())) {
+            payResult.setPayBody(payInfo.getPayBody());
         }
         // 签名
         return payResult;

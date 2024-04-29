@@ -42,7 +42,7 @@ public class PayCloseRecordDto extends BaseDto {
 
     /** 错误码 */
     @DbColumn(comment = "错误码")
-    private String code;
+    private String errorCode;
 
     /** 错误消息 */
     @DbColumn(comment = "错误消息")

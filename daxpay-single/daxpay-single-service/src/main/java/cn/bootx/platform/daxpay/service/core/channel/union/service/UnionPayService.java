@@ -68,7 +68,7 @@ public class UnionPayService {
     public void pay(PayOrder payOrder, UnionPayParam unionPayParam, UnionPayKit unionPayKit){
         Integer amount = payOrder.getAmount();
         BigDecimal totalFee = BigDecimal.valueOf(amount * 0.01);
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();;
         String payBody = null;
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
@@ -97,7 +97,7 @@ public class UnionPayService {
             payBody = this.b2bPay(totalFee, payOrder, unionPayKit);
         }
 
-        asyncPayInfo.setPayBody(payBody);
+        payInfo.setPayBody(payBody);
     }
 
     /**

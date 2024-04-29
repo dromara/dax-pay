@@ -87,7 +87,7 @@ public class WeChatPayService {
 
         Integer amount = payOrder.getAmount();
         String totalFee = String.valueOf(amount);
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();;
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();;
         String payBody = null;
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
@@ -111,7 +111,7 @@ public class WeChatPayService {
         else if (payMethodEnum == PayMethodEnum.BARCODE) {
             this.barCodePay(totalFee, payOrder, weChatPayParam.getAuthCode(), weChatPayConfig);
         }
-        asyncPayInfo.setPayBody(payBody);
+        payInfo.setPayBody(payBody);
     }
 
     /**
@@ -181,7 +181,7 @@ public class WeChatPayService {
      * 付款码支付
      */
     private void barCodePay(String amount, PayOrder payOrder, String authCode, WeChatPayConfig weChatPayConfig) {
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
 
         Map<String, String> params = BarPayModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
@@ -210,14 +210,14 @@ public class WeChatPayService {
         String errCode = result.get(WeChatPayCode.ERR_CODE);
         // 支付成功处理,
         if (Objects.equals(resultCode, WeChatPayCode.PAY_SUCCESS)) {
-            asyncPayInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID)).setComplete(true);
+            payInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID)).setComplete(true);
             return;
         }
         // 支付中, 发起轮训同步
         if (Objects.equals(resultCode, WeChatPayCode.PAY_FAIL)
                 && Objects.equals(errCode, WeChatPayCode.PAY_USERPAYING)) {
             SpringUtil.getBean(this.getClass()).rotationSync(payOrder);
-            asyncPayInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID));
+            payInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID));
             return;
         }
         // 支付撤销

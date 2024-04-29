@@ -74,7 +74,7 @@ public class AliPayService {
         Integer amount = payOrder.getAmount();
         String payBody = null;
         // 异步线程存储
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         // wap支付
         if (Objects.equals(payOrder.getMethod(), PayMethodEnum.WAP.getCode())) {
             payBody = this.wapPay(amount, payOrder, alipayConfig);
@@ -96,7 +96,7 @@ public class AliPayService {
             this.barCode(amount, payOrder, aliPayParam, alipayConfig);
         }
         // 通常是发起支付的参数
-        asyncPayInfo.setPayBody(payBody);
+        payInfo.setPayBody(payBody);
     }
 
     /**
@@ -238,7 +238,7 @@ public class AliPayService {
      * 付款码支付
      */
     public void barCode(int amount, PayOrder payOrder, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
-        PayLocal asyncPayInfo = PaymentContextLocal.get().getPayInfo();
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
 
         AlipayTradePayModel model = new AlipayTradePayModel();
         model.setSubject(payOrder.getTitle());
@@ -259,7 +259,7 @@ public class AliPayService {
 
             // 支付成功处理 金额2000以下免密支付, 记录支付完成相关信息
             if (Objects.equals(response.getCode(), AliPayCode.SUCCESS)) {
-                asyncPayInfo.setOutOrderNo(response.getTradeNo())
+                payInfo.setOutOrderNo(response.getTradeNo())
                         .setComplete(true);
             }
             // 非支付中响应码, 进行错误处理

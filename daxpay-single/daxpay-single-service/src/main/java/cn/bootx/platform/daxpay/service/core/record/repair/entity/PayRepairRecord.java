@@ -67,8 +67,8 @@ public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "修复方式")
     private String repairWay;
 
-    /** 修复的异步通道 */
-    @DbColumn(comment = "修复的异步通道")
+    /** 修复的通道 */
+    @DbColumn(comment = "修复的通道")
     private String channel;
 
     /**

@@ -14,8 +14,6 @@ public enum PayApiCallBackTypeEnum {
 
     /** 支持所有回调类型 */
     ALL("all"),
-    /** 支持异步回调通知 */
-    ASYNC_NOTICE("async_notice"),
     /** 不支持退掉通知 */
     NONE("none");
 

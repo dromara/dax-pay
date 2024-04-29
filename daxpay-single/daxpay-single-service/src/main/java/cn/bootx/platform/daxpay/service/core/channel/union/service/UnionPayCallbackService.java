@@ -14,7 +14,6 @@ import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig
 import cn.bootx.platform.daxpay.service.core.payment.callback.service.PayCallbackService;
 import cn.bootx.platform.daxpay.service.core.payment.callback.service.RefundCallbackService;
 import cn.bootx.platform.daxpay.service.core.record.callback.service.PayCallbackRecordService;
-import cn.bootx.platform.daxpay.service.func.AbsCallbackStrategy;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.thread.ThreadUtil;
@@ -25,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
