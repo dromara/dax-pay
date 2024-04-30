@@ -19,7 +19,7 @@ import java.io.Serializable;
 @ToString
 @Accessors(chain = true)
 @Schema(title = "kv键值对象")
-public class KeyValue implements Serializable {
+public class KeyValue {
 
     @Schema(description = "键")
     private String key;

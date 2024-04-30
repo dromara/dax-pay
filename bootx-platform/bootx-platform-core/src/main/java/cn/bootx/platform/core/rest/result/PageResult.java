@@ -1,4 +1,4 @@
-package cn.bootx.platform.core.rest;
+package cn.bootx.platform.core.rest.result;
 
 import lombok.Getter;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @since 2020/4/21 14:37
  */
 @Getter
-public class PageResult<T> implements Serializable {
+public class PageResult<T> {
 
 
     /**

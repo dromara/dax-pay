@@ -1,5 +1,8 @@
 package cn.bootx.platform.core.rest;
 
+import cn.bootx.platform.core.rest.result.ErrorResult;
+import cn.bootx.platform.core.rest.result.Result;
+
 import static cn.bootx.platform.core.code.CommonCode.FAIL_CODE;
 import static cn.bootx.platform.core.code.CommonCode.SUCCESS_CODE;
 

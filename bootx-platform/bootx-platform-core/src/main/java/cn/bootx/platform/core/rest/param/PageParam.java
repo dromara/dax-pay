@@ -1,4 +1,4 @@
-package cn.bootx.platform.core.rest;
+package cn.bootx.platform.core.rest.param;
 
 import cn.hutool.core.util.PageUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Schema(title = "分页查询参数")
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageParam implements Serializable {
+public class PageParam {
 
     /**
      * 当前页

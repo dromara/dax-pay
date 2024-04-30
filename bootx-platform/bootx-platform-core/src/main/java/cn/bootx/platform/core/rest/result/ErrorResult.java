@@ -1,4 +1,4 @@
-package cn.bootx.platform.core.rest;
+package cn.bootx.platform.core.rest.result;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

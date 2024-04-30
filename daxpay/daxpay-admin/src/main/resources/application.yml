@@ -3,3 +3,17 @@ server:
 spring:
   application:
     name: dax-pay-admin
+  profiles:
+    active: dev
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://127.0.0.1:5432/dax-pay-multi
+          username: postgres
+          password: 123456
+mybatis-plus:
+  global-config:
+    banner: false

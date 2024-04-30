@@ -10,6 +10,21 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>bootx-platform-commons</artifactId>
+    <artifactId>bootx-platform-common</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>common-swagger</module>
+        <module>common-mybatis-plus</module>
+    </modules>
+
+    <dependencies>
+        <!-- 核心包 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>bootx-platform-core</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

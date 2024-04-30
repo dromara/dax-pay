@@ -10,12 +10,26 @@
     </parent>
 
     <artifactId>service-baseapi</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
+        <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <!-- 数据持久层框架 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-mybatis-plus</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 数据库驱动 -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>

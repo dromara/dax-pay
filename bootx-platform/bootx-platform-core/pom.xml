@@ -11,6 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bootx-platform-core</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- lombok -->
@@ -25,10 +26,16 @@
             <artifactId>springdoc-openapi-common</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
-        <!-- hutool工具类 -->
+        <!-- hutool工具类 核心包 -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- hutool工具类 json包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-json</artifactId>
             <version>${hutool.version}</version>
         </dependency>
     </dependencies>
