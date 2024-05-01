@@ -13,6 +13,7 @@
     <groupId>cn.bootx.platform</groupId>
     <artifactId>bootx-platform</artifactId>
     <packaging>pom</packaging>
+    <description>基础脚手架服务</description>
 
     <modules>
         <module>bootx-platform-core</module>

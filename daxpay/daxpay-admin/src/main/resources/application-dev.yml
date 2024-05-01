@@ -1,2 +1,16 @@
-server:
-  port: 9000
+spring:
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://postgresql:5432/dax-pay-multi?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+          username: bootx
+          password: bootx123
+# 开发时显示debug日志
+logging:
+  level:
+    cn.bootx.**: debug
+    org.springframework.data.mongodb.core: debug
+    org.springframework.jdbc.core: debug

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @FieldNameConstants(innerTypeName = "RealDel")
 public abstract class MpRealDelEntity extends MpCreateEntity {
 
-    /** 最后修者ID */
+    /** 最后修改ID */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long lastModifier;
 
@@ -28,7 +28,7 @@ public abstract class MpRealDelEntity extends MpCreateEntity {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastModifiedTime;
 
-    /** 乐观锁 */
+    /** 版本号, 使用乐观锁 */
     @Version
     private Integer version = 0;
 
