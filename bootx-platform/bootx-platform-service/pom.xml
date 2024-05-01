@@ -28,12 +28,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
         <!-- 框架核心包 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>bootx-platform-core</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+
         <!-- lombok 配合 mapstruct -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -62,6 +64,13 @@
             <groupId>com.alibaba</groupId>
             <artifactId>transmittable-thread-local</artifactId>
             <version>${ttl.version}</version>
+        </dependency>
+
+        <!-- Spring 扩展 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-extra</artifactId>
+            <version>${hutool.version}</version>
         </dependency>
 
     </dependencies>

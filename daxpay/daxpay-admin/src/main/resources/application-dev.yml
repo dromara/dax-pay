@@ -12,5 +12,30 @@ spring:
 logging:
   level:
     cn.bootx.**: debug
-    org.springframework.data.mongodb.core: debug
+    cn.daxpay.**: debug
     org.springframework.jdbc.core: debug
+# 接口文档配置
+springdoc:
+  # 默认展开对象类型的属性, 主要用在get类型的参数中
+  default-flat-param-object: true
+# 接口文档增强配置
+knife4j:
+  enable: true
+  production: true
+# 基础脚手架配置
+bootx-platform:
+  common:
+    # swagger相关配置
+    swagger:
+      author: DaxPay
+      title: 开源支付平台-多商户版
+      description: 开源支付平台-单商户版
+      version: 0.0.1
+      base-packages:
+        "[BootxPlatform接口]":
+          - cn.bootx.platform.common
+          - cn.bootx.platform.starter
+          - cn.bootx.platform.iam
+          - cn.bootx.platform.baseapi
+          - cn.bootx.platform.notice
+

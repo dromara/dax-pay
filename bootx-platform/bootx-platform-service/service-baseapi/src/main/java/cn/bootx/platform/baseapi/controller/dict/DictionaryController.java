@@ -12,6 +12,7 @@ import cn.bootx.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,7 +66,7 @@ public class DictionaryController {
 
     @Operation(summary = "分页")
     @GetMapping("/page")
-    public Result<PageResult<DictionaryResult>> page(PageParam pageParam, DictionaryParam param) {
+    public Result<PageResult<DictionaryResult>> page(@ParameterObject PageParam pageParam, DictionaryParam param) {
         return Res.ok(dictionaryService.page(pageParam, param));
     }
 

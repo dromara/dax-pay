@@ -23,7 +23,7 @@
         <!-- swagger 依赖 -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-common</artifactId>
+            <artifactId>springdoc-openapi-starter-common</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
         <!-- hutool工具类 核心包 -->

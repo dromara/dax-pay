@@ -58,13 +58,13 @@ public class DictionaryItemController {
 
     @Operation(summary = "查询指定字典ID下的所有字典项")
     @GetMapping("/findByDictionaryId")
-    public Result<List<DictionaryItemResult>> findByDictionaryId(@Parameter(description = "字典ID") Long dictionaryId) {
-        return Res.ok(dictionaryItemService.findByDictionaryId(dictionaryId));
+    public Result<List<DictionaryItemResult>> findByDictionaryId(@Parameter(description = "字典ID") Long dictId) {
+        return Res.ok(dictionaryItemService.findByDictionaryId(dictId));
     }
 
     @Operation(summary = "分页查询指定字典下的字典项")
     @GetMapping("/pageByDictionaryId")
-    public Result<PageResult<DictionaryItemResult>> pageByDictionaryId(PageParam pageParam, Long dictId) {
+    public Result<PageResult<DictionaryItemResult>> pageByDictionaryId(PageParam pageParam, @Parameter(description = "字典ID") Long dictId) {
         return Res.ok(dictionaryItemService.pageByDictionaryId(dictId, pageParam));
     }
 
@@ -82,13 +82,15 @@ public class DictionaryItemController {
 
     @Operation(summary = "编码是否被使用")
     @GetMapping("/existsByCode")
-    public Result<Boolean> existsByCode(String code, Long dictId) {
+    public Result<Boolean> existsByCode(@Parameter(description = "编码") String code,@Parameter(description = "字典ID") Long dictId) {
         return Res.ok(dictionaryItemService.existsByCode(code, dictId));
     }
 
     @Operation(summary = "编码是否被使用(不包含自己)")
     @GetMapping("/existsByCodeNotId")
-    public Result<Boolean> existsByCode(String code, Long dictId, Long id) {
+    public Result<Boolean> existsByCode(@Parameter(description = "编码") String code,
+                                        @Parameter(description = "字典ID") Long dictId,
+                                        @Parameter(description = "字典项ID") Long id) {
         return Res.ok(dictionaryItemService.existsByCode(code, dictId, id));
     }
 

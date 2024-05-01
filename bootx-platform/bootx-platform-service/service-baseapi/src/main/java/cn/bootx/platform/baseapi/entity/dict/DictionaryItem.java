@@ -34,7 +34,7 @@ public class DictionaryItem extends MpBaseEntity implements ToResult<DictionaryI
     private String name;
 
     /** 字典项排序 */
-    private Double sortNo;
+    private Integer sortNo;
 
     /** 是否启用 */
     private Boolean enable;

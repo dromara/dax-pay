@@ -9,8 +9,7 @@ import io.swagger.v3.oas.models.info.License;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.springdoc.core.GroupedOpenApi;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -39,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class SwaggerAutoConfiguration implements BeanDefinitionRegistryPostProcessor, EnvironmentAware {
 
-    private final String swaggerPropertiesPrefix = "bootx.common.swagger";
+    private final String swaggerPropertiesPrefix = "bootx-platform.common.swagger";
 
     private SwaggerProperties swaggerProperties;
 
@@ -56,23 +55,23 @@ public class SwaggerAutoConfiguration implements BeanDefinitionRegistryPostProce
      * 空白分组(防止knife4j报错)
      */
     @Bean
-    @ConditionalOnProperty(prefix = "bootx.common.swagger", value = "enabled", havingValue = "true",
+    @ConditionalOnProperty(prefix = "bootx-platform.common.swagger", value = "enabled", havingValue = "true",
             matchIfMissing = true)
     public GroupedOpenApi blankApi() {
         return this.createApi(" 空白页", "null.null");
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "bootx.common.swagger", value = "enabled", havingValue = "true",
+    @ConditionalOnProperty(prefix = "bootx-platform.common.swagger", value = "enabled", havingValue = "true",
             matchIfMissing = true)
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-            .info(new Info().title(swaggerProperties.getTitle())
-                .description(swaggerProperties.getDescription())
-                .version(swaggerProperties.getVersion())
-                .contact(new Contact().name(swaggerProperties.getAuthor()))
-                .license(new License().name(swaggerProperties.getLicenseName()).url(swaggerProperties.getLicenseUrl())))
-            .externalDocs(new ExternalDocumentation().url(swaggerProperties.getTermsOfServiceUrl()));
+                .info(new Info().title(swaggerProperties.getTitle())
+                        .description(swaggerProperties.getDescription())
+                        .version(swaggerProperties.getVersion())
+                        .contact(new Contact().name(swaggerProperties.getAuthor()))
+                        .license(new License().name(swaggerProperties.getLicenseName()).url(swaggerProperties.getLicenseUrl())))
+                .externalDocs(new ExternalDocumentation().url(swaggerProperties.getTermsOfServiceUrl()));
     }
 
     /**
@@ -80,15 +79,13 @@ public class SwaggerAutoConfiguration implements BeanDefinitionRegistryPostProce
      */
     @Override
     public void postProcessBeanDefinitionRegistry(@NotNull BeanDefinitionRegistry registry) throws BeansException {
-        if (swaggerProperties.isEnabled()) {
-            val basePackages = this.swaggerProperties.getBasePackages();
-            AtomicInteger atomicInteger = new AtomicInteger(96);
-            basePackages.forEach((name, basePackage) -> {
-                val packages = ArrayUtil.toArray(basePackage, String.class);
-                val bean = new RootBeanDefinition(GroupedOpenApi.class, () -> this.createApi(name, packages));
-                registry.registerBeanDefinition((char) atomicInteger.incrementAndGet() + "ModelAPi", bean);
-            });
-        }
+        var basePackages = this.swaggerProperties.getBasePackages();
+        AtomicInteger atomicInteger = new AtomicInteger(96);
+        basePackages.forEach((name, basePackage) -> {
+            var packages = ArrayUtil.toArray(basePackage, String.class);
+            var bean = new RootBeanDefinition(GroupedOpenApi.class, () -> this.createApi(name, packages));
+            registry.registerBeanDefinition((char) atomicInteger.incrementAndGet() + "ModelAPi", bean);
+        });
     }
 
     @Override
@@ -102,8 +99,8 @@ public class SwaggerAutoConfiguration implements BeanDefinitionRegistryPostProce
     @Override
     public void setEnvironment(@NotNull Environment environment) {
         BindResult<SwaggerProperties> bind = Binder.get(environment)
-            .bind(swaggerPropertiesPrefix, SwaggerProperties.class);
-        this.swaggerProperties = bind.get();
+                .bind(swaggerPropertiesPrefix, SwaggerProperties.class);
+        this.swaggerProperties = bind.orElse(new SwaggerProperties());
     }
 
 }

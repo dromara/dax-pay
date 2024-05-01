@@ -14,23 +14,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>${springdoc.version}</version>
-            <exclusions>
-                <!-- 排除自带的swagger-ui组件 -->
-                <exclusion>
-                    <groupId>org.webjars</groupId>
-                    <artifactId>swagger-ui</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.webjars</groupId>
-                    <artifactId>webjars-locator-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- knife4j -->
-        <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
