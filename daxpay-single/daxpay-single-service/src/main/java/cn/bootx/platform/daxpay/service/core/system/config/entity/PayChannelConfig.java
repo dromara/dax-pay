@@ -4,7 +4,6 @@ import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.service.core.system.config.convert.PayChannelConfigConvert;
 import cn.bootx.platform.daxpay.service.dto.system.config.PayChannelConfigDto;
-import cn.bootx.platform.daxpay.service.param.system.payinfo.PayChannelInfoParam;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -52,10 +51,6 @@ public class PayChannelConfig extends MpBaseEntity implements EntityBaseFunction
     /** 备注 */
     @DbColumn(comment = "备注")
     private String remark;
-
-    public static PayChannelConfig init(PayChannelInfoParam in){
-        return PayChannelConfigConvert.CONVERT.convert(in);
-    }
 
     /**
      * 转换

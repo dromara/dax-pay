@@ -134,6 +134,9 @@ public interface WeChatPayCode {
     /** 退款处理中 */
     String REFUND_PROCESSING = "PROCESSING";
 
+    /** 退款处理中 */
+    String REFUND_NOTEXIST = "REFUNDNOTEXIST";
+
     /** 支付失败(刷卡支付) */
     String TRADE_PAYERROR = "PAYERROR";
 

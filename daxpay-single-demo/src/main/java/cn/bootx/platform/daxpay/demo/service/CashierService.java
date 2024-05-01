@@ -107,7 +107,7 @@ public class CashierService {
             BeanUtil.copyProperties(payModel, payOrderResult);
             return payOrderResult;
         } else {
-            throw new BizException("订单状态异常，无法进行支付");
+            throw new BizException(payModel.getMsg());
         }
     }
 

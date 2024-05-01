@@ -111,7 +111,7 @@ public class PayCloseService {
                 .getClientIp();
         PayCloseRecord record = new PayCloseRecord()
                 .setOrderNo(payOrder.getOrderNo())
-                .setBizOrderNo(payOrder.getOutOrderNo())
+                .setBizOrderNo(payOrder.getBizOrderNo())
                 .setChannel(payOrder.getChannel())
                 .setClosed(closed)
                 .setErrorMsg(errMsg)

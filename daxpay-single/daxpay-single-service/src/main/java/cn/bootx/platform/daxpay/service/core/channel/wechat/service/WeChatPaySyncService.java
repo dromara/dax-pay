@@ -121,6 +121,13 @@ public class WeChatPaySyncService {
 
             // 设置微信支付网关订单号
             syncResult.setOutRefundNo(result.get(WeChatPayCode.REFUND_ID));
+            // 返回码
+            String errCode = result.get(WeChatPayCode.ERR_CODE);
+
+            // 退款单不存在
+            if (Objects.equals(errCode, WeChatPayCode.REFUND_NOTEXIST)) {
+                return syncResult.setSyncStatus(RefundSyncStatusEnum.NOT_FOUND);
+            }
             // 状态
             String tradeStatus = result.get(WeChatPayCode.REFUND_STATUS);
             // 退款成功

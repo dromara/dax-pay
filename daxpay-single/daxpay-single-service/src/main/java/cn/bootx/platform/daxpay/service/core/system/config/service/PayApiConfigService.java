@@ -58,7 +58,6 @@ public class PayApiConfigService {
         ApiInfoLocal apiInfoLocal = PaymentContextLocal.get().getApiInfo();
         apiInfoLocal.setApiCode(api.getCode())
                 .setReqSign(api.isReqSign())
-                .setResSign(api.isResSign())
                 .setNotice(api.isNotice())
                 .setNoticeUrl(api.getNoticeUrl());
     }

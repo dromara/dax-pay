@@ -23,7 +23,4 @@ public class ApiInfoLocal {
 
     /** 请求参数是否签名 */
     private boolean reqSign;
-
-    /** 响应参数是否签名 */
-    private boolean resSign;
 }

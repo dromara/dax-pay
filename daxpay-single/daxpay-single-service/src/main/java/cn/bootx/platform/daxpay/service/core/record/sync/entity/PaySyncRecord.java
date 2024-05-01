@@ -50,7 +50,6 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     @DbColumn(comment = "网关返回状态")
     private String outTradeStatus;
 
-
     /**
      * 同步类型 支付/退款
      * @see PaymentTypeEnum

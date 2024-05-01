@@ -2,8 +2,8 @@ package cn.bootx.platform.daxpay.service.core.system.payinfo.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
-import cn.bootx.platform.daxpay.service.core.system.payinfo.dao.PayWayInfoManager;
-import cn.bootx.platform.daxpay.service.core.system.payinfo.entity.PayWayInfo;
+import cn.bootx.platform.daxpay.service.core.system.payinfo.dao.PayMethodInfoManager;
+import cn.bootx.platform.daxpay.service.core.system.payinfo.entity.PayMethodInfo;
 import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayMethodInfoDto;
 import cn.bootx.platform.daxpay.service.param.system.payinfo.PayWayInfoParam;
 import cn.hutool.core.bean.BeanUtil;
@@ -23,15 +23,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayWayInfoService {
-    private final PayWayInfoManager manager;
+public class PayMethodInfoService {
+    private final PayMethodInfoManager manager;
 
     /**
      * 列表
      */
     public List<PayMethodInfoDto> findAll(){
         return manager.findAll().stream()
-                .map(PayWayInfo::toDto)
+                .map(PayMethodInfo::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -46,7 +46,7 @@ public class PayWayInfoService {
      * 更新
      */
     public void update(PayWayInfoParam param){
-        PayWayInfo info = manager.findById(param.getId()).orElseThrow(DataNotExistException::new);
+        PayMethodInfo info = manager.findById(param.getId()).orElseThrow(DataNotExistException::new);
         BeanUtil.copyProperties(param,info, CopyOptions.create().ignoreNullValue());
         manager.updateById(info);
     }
