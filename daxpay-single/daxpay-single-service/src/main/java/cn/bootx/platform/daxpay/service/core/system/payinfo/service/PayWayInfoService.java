@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.daxpay.service.core.system.payinfo.dao.PayWayInfoManager;
 import cn.bootx.platform.daxpay.service.core.system.payinfo.entity.PayWayInfo;
-import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayWayInfoDto;
+import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayMethodInfoDto;
 import cn.bootx.platform.daxpay.service.param.system.payinfo.PayWayInfoParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -29,7 +29,7 @@ public class PayWayInfoService {
     /**
      * 列表
      */
-    public List<PayWayInfoDto> findAll(){
+    public List<PayMethodInfoDto> findAll(){
         return manager.findAll().stream()
                 .map(PayWayInfo::toDto)
                 .collect(Collectors.toList());
@@ -38,7 +38,7 @@ public class PayWayInfoService {
     /**
      * 单条
      */
-    public PayWayInfoDto findById(Long id){
+    public PayMethodInfoDto findById(Long id){
         return ResultConvertUtil.dtoConvert(manager.findById(id));
     }
 

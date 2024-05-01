@@ -26,10 +26,4 @@ public class ApiInfoLocal {
 
     /** 响应参数是否签名 */
     private boolean resSign;
-
-    /** 回调信息是否签名 */
-    private boolean noticeSign;
-
-    /** 是否记录请求的信息 */
-    private boolean record;
 }

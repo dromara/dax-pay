@@ -30,9 +30,13 @@ import java.time.LocalDateTime;
 @TableName("pay_client_notice_task")
 public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction<ClientNoticeTaskDto> {
 
-    /** 本地订单ID */
-    @DbColumn(comment = "本地订单ID")
-    private Long orderId;
+    /** 本地交易ID */
+    @DbColumn(comment = "本地交易ID")
+    private Long tradeId;
+
+    /** 本地订单号 */
+    @DbColumn(comment = "本地订单号")
+    private String tradeNo;
 
     /**
      * 消息类型

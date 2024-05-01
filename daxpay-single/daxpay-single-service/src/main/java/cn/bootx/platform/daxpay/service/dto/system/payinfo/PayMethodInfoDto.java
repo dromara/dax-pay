@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付方式信息")
-public class PayWayInfoDto extends BaseDto {
+public class PayMethodInfoDto extends BaseDto {
 
     /** 需要与系统中配置的枚举一致 */
     @Schema(description = "代码")

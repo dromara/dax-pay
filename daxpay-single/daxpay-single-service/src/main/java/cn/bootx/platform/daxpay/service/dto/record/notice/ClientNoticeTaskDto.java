@@ -20,9 +20,13 @@ import java.time.LocalDateTime;
 @Schema(title = "消息通知任务")
 public class ClientNoticeTaskDto extends BaseDto {
 
-    /** 本地订单ID */
-    @Schema(description = "本地订单ID")
-    private Long orderId;
+    /** 本地交易ID */
+    @Schema(description = "本地交易ID")
+    private Long tradeId;
+
+    /** 本地订单号 */
+    @Schema(description = "本地订单号")
+    private String tradeNo;
 
     /**
      * 回调类型

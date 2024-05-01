@@ -61,12 +61,6 @@ public class PayApiConfig extends MpBaseEntity implements EntityBaseFunction<Pay
     @DbColumn(comment = "响应参数是否签名")
     private boolean resSign;
 
-    @DbColumn(comment = "回调信息是否签名")
-    private boolean noticeSign;
-
-    @DbColumn(comment = "是否记录请求的信息")
-    private boolean record;
-
     @DbColumn(comment = "备注")
     private String remark;
 

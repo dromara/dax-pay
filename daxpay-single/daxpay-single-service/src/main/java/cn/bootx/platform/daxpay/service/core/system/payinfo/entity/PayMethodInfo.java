@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.core.system.payinfo.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.service.core.system.payinfo.convert.PayWayInfoConvert;
-import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayWayInfoDto;
+import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayMethodInfoDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -23,8 +23,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @DbTable(comment = "支付方式")
-@TableName("pay_way_info")
-public class PayWayInfo extends MpBaseEntity implements EntityBaseFunction<PayWayInfoDto> {
+@TableName("pay_method_info")
+public class PayMethodInfo extends MpBaseEntity implements EntityBaseFunction<PayMethodInfoDto> {
 
     /** 需要与系统中配置的枚举一致 */
     @DbColumn(comment = "代码")
@@ -40,7 +40,7 @@ public class PayWayInfo extends MpBaseEntity implements EntityBaseFunction<PayWa
     @DbColumn(comment = "备注")
     private String remark;
 
-    public static PayWayInfoDto convert(PayWayInfo in) {
+    public static PayMethodInfoDto convert(PayMethodInfo in) {
         return PayWayInfoConvert.CONVERT.convert(in);
     }
 
@@ -48,7 +48,7 @@ public class PayWayInfo extends MpBaseEntity implements EntityBaseFunction<PayWa
      * 转换
      */
     @Override
-    public PayWayInfoDto toDto() {
+    public PayMethodInfoDto toDto() {
         return PayWayInfoConvert.CONVERT.convert(this);
     }
 }

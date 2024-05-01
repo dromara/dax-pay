@@ -53,6 +53,10 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
+# swagger openapi 接口文档配置
+springdoc:
+  # 自动展开参数
+  default-flat-param-object: true
 # 开发时显示debug日志
 logging:
   level:

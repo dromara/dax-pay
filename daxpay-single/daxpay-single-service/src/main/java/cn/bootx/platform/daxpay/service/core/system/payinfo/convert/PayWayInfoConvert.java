@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.system.payinfo.convert;
 
-import cn.bootx.platform.daxpay.service.core.system.payinfo.entity.PayWayInfo;
-import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayWayInfoDto;
+import cn.bootx.platform.daxpay.service.core.system.payinfo.entity.PayMethodInfo;
+import cn.bootx.platform.daxpay.service.dto.system.payinfo.PayMethodInfoDto;
 import cn.bootx.platform.daxpay.service.param.system.payinfo.PayWayInfoParam;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -15,7 +15,7 @@ import org.mapstruct.factory.Mappers;
 public interface PayWayInfoConvert {
     PayWayInfoConvert CONVERT = Mappers.getMapper(PayWayInfoConvert.class);
 
-    PayWayInfo convert(PayWayInfoParam in);
+    PayMethodInfo convert(PayWayInfoParam in);
 
-    PayWayInfoDto convert(PayWayInfo in);
+    PayMethodInfoDto convert(PayMethodInfo in);
 }

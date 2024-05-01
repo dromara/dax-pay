@@ -91,14 +91,14 @@ public class ClientNoticeService {
         if (Objects.isNull(orderExtra)){
             Optional<PayOrderExtra> extraOpt =  payOrderExtraManager.findById(order.getId());
             if (!extraOpt.isPresent()){
-                log.error("未找到支付扩展信息，数据错误，订单ID：{}",order.getId());
+                log.error("未找到支付扩展信息，数据错误，订单号：{}",order.getOrderNo());
                 return;
             }
             orderExtra = extraOpt.get();
         }
         // 判断是否需要进行通知
         if (StrUtil.isBlank(orderExtra.getNotifyUrl())){
-            log.info("支付订单无需通知，订单ID：{}",order.getId());
+            log.info("支付订单无需通知，订单号：{}",order.getOrderNo());
             return;
         }
 
@@ -211,7 +211,7 @@ public class ClientNoticeService {
                     .execute();
             body = execute.body();
         } catch (Exception e) {
-            log.error("发送通知失败，数据错误，任务ID：{}",task.getOrderId());
+            log.error("发送通知失败，数据错误，任务ID：{}",task.getTradeId());
             log.error("错误内容",e);
             record.setErrorMsg(e.getMessage());
         }
@@ -248,7 +248,7 @@ public class ClientNoticeService {
                     .execute();
             body = execute.body();
         } catch (Exception e) {
-            log.error("发送通知失败，数据错误，任务ID：{}",task.getOrderId());
+            log.error("发送通知失败，数据错误，任务ID：{}",task.getTradeId());
             log.error("错误内容",e);
             record.setErrorMsg(e.getMessage());
         }

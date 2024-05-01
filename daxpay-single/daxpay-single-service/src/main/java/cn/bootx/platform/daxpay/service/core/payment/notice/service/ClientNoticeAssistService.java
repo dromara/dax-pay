@@ -7,6 +7,7 @@ import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrderExtra;
+import cn.bootx.platform.daxpay.service.core.payment.common.service.PaymentSignService;
 import cn.bootx.platform.daxpay.service.core.payment.notice.result.PayNoticeResult;
 import cn.bootx.platform.daxpay.service.core.payment.notice.result.RefundNoticeResult;
 import cn.bootx.platform.daxpay.service.core.system.config.entity.PlatformConfig;
@@ -30,6 +31,7 @@ import java.util.Objects;
 public class ClientNoticeAssistService {
 
     private final PlatformConfigService configService;
+    private final PaymentSignService paymentSignService;
 
 
     /**
@@ -63,7 +65,8 @@ public class ClientNoticeAssistService {
                 .setContent(JacksonUtil.toJson(payNoticeResult))
                 .setNoticeType(ClientNoticeTypeEnum.PAY.getType())
                 .setSendCount(0)
-                .setOrderId(order.getId())
+                .setTradeId(order.getId())
+                .setTradeNo(order.getOrderNo())
                 .setOrderStatus(order.getStatus());
     }
 
@@ -71,7 +74,6 @@ public class ClientNoticeAssistService {
      * 构建出退款通知任务对象
      */
     public ClientNoticeTask buildRefundTask(RefundOrder order, RefundOrderExtra orderExtra){
-
         // 创建退款通知内容
         RefundNoticeResult payNoticeResult = new RefundNoticeResult()
                 .setRefundNo(order.getRefundNo())
@@ -82,21 +84,16 @@ public class ClientNoticeAssistService {
                 .setStatus(order.getStatus())
                 .setAttach(orderExtra.getAttach());
 
-        PlatformConfig config = configService.getConfig();
         // 签名
-        if (Objects.equals(config.getSignType(), PaySignTypeEnum.MD5.getCode())){
-            payNoticeResult.setSign(PaySignUtil.md5Sign(payNoticeResult,config.getSignSecret()));
-        } else if (Objects.equals(config.getSignType(), PaySignTypeEnum.HMAC_SHA256.getCode())) {
-            payNoticeResult.setSign(PaySignUtil.hmacSha256Sign(payNoticeResult,config.getSignSecret()));
-        } else {
-        }
+        paymentSignService.sign(payNoticeResult);
         return new ClientNoticeTask()
                 .setUrl(orderExtra.getNotifyUrl())
                 // 时间序列化进行了重写
                 .setContent(JacksonUtil.toJson(payNoticeResult))
                 .setNoticeType(ClientNoticeTypeEnum.REFUND.getType())
                 .setSendCount(0)
-                .setOrderId(order.getId())
+                .setTradeId(order.getId())
+                .setTradeNo(order.getRefundNo())
                 .setOrderStatus(order.getStatus());
     }
 

@@ -2,10 +2,12 @@ package cn.bootx.platform.daxpay.service.core.payment.notice.result;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
+import cn.bootx.platform.daxpay.result.PaymentCommonResult;
 import cn.bootx.platform.daxpay.serializer.LocalDateTimeToTimestampSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
@@ -15,10 +17,11 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/2/22
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "退款通知消息")
-public class RefundNoticeResult {
+public class RefundNoticeResult extends PaymentCommonResult {
 
     /** 退款号 */
     @Schema(description = "退款号")
@@ -59,8 +62,4 @@ public class RefundNoticeResult {
     /** 商户扩展参数,回调时会原样返回 */
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;
-
-    /** 签名 */
-    @Schema(description = "签名")
-    private String sign;
 }

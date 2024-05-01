@@ -32,9 +32,6 @@ public class PayApiConfigParam {
     @Schema(description = "响应参数是否签名")
     private boolean resSign;
 
-    @Schema(description = "回调信息是否签名")
-    private boolean noticeSign;
-
     @Schema(description = "是否记录请求的信息")
     private boolean record;
 
