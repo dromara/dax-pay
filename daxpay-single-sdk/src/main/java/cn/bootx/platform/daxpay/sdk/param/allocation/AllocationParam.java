@@ -17,14 +17,14 @@ import lombok.Setter;
 @Setter
 public class AllocationParam extends DaxPayRequest<AllocationModel> {
 
-    /** 支付单ID */
-    private Long paymentId;
+    /** 支付订单号 */
+    private String orderNo;
 
-    /** 业务号 */
-    private String businessNo;
+    /** 商户订单号 */
+    private String bizOrderNo;
 
-    /** 分账单号(保证唯一) */
-    private String allocationNo;
+    /** 商户分账单号(保证唯一) */
+    private String bizAllocationNo;
 
     /** 分账描述 */
     private String description;

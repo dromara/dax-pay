@@ -6,7 +6,6 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.ReconcileCon
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
-import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -30,12 +29,9 @@ public class ReconcileOrder extends MpCreateEntity implements EntityBaseFunction
 
     /**
      * 批次号
-     * 规则：通道简称 + yyyyMMdd + 两位流水号
-     * 例子：wx2024012001、ali2024012002
      */
-    @DbMySqlIndex(name="批次号索引")
-    @DbColumn(comment = "批次号")
-    private String batchNo;
+    @DbColumn(comment = "对账号")
+    private String reconcileNo;
 
     /** 日期 */
     @DbColumn(comment = "日期")
@@ -46,12 +42,21 @@ public class ReconcileOrder extends MpCreateEntity implements EntityBaseFunction
     private String channel;
 
     /** 是否下载成功 */
-    @DbColumn(comment = "是否下载成功")
-    private boolean down;
+    @DbColumn(comment = "是否下载或上传")
+    private boolean downOrUpload;
 
     /** 是否比对完成 */
     @DbColumn(comment = "是否比对完成")
     private boolean compare;
+
+    /** 比对结果 */
+    @DbColumn(comment = "比对结果")
+    private String result;
+
+    /** 错误码 */
+    @DbColumn(comment = "错误码")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String errorCode;
 
     /** 错误信息 */
     @DbColumn(comment = "错误信息")

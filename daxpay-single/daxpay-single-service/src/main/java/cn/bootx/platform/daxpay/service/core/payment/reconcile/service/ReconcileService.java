@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
-import cn.bootx.platform.daxpay.service.code.AliPayRecordTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileDiffTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileDetailManager;
@@ -15,7 +15,7 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDif
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileDiffService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileOrderService;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.factory.ReconcileStrategyFactory;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
@@ -57,7 +57,7 @@ public class ReconcileService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileOrder create(LocalDate date, String channel) {
         ReconcileOrder order = new ReconcileOrder()
-                .setBatchNo(OrderNoGenerateUtil.reconciliation())
+                .setReconcileNo(OrderNoGenerateUtil.reconciliation())
                 .setChannel(channel)
                 .setDate(date);
         reconcileOrderManager.save(order);
@@ -88,7 +88,7 @@ public class ReconcileService {
         reconcileStrategy.doBeforeHandler();
         try {
             reconcileStrategy.upload(file);
-            reconcileOrder.setDown(true)
+            reconcileOrder.setDownOrUpload(true)
                     .setErrorMsg(null);
             reconcileOrderService.update(reconcileOrder);
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class ReconcileService {
      */
     public void downAndSave(ReconcileOrder reconcileOrder) {
         // 如果对账单已经存在
-        if (reconcileOrder.isDown()){
+        if (reconcileOrder.isDownOrUpload()){
             throw new PayFailureException("对账单文件已经下载或上传");
         }
         // 将对账订单写入到上下文中
@@ -120,12 +120,13 @@ public class ReconcileService {
         reconcileStrategy.doBeforeHandler();
         try {
             reconcileStrategy.downAndSave();
-            reconcileOrder.setDown(true)
+            reconcileOrder.setDownOrUpload(true)
                     .setErrorMsg(null);
             reconcileOrderService.update(reconcileOrder);
         } catch (Exception e) {
             log.error("下载对账单异常", e);
             reconcileOrder.setErrorMsg("原因: " + e.getMessage());
+            // 本方法无事务, 更新信息不会被回滚
             reconcileOrderService.update(reconcileOrder);
             throw new RuntimeException(e);
         }
@@ -150,7 +151,7 @@ public class ReconcileService {
      */
     public void compare(ReconcileOrder reconcileOrder){
         // 判断是否已经下载了对账单明细
-        if (!reconcileOrder.isDown()){
+        if (!reconcileOrder.isDownOrUpload()){
             throw new PayFailureException("请先下载对账单");
         }
         // 是否对比完成
@@ -159,7 +160,7 @@ public class ReconcileService {
         }
 
         // 查询对账单
-        List<ReconcileDetail> reconcileDetails = reconcileDetailManager.findAllByOrderId(reconcileOrder.getId());
+        List<ReconcileDetail> reconcileDetails = reconcileDetailManager.findAllByReconcileId(reconcileOrder.getId());
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
         // 初始化参数
@@ -167,8 +168,8 @@ public class ReconcileService {
         reconcileStrategy.setReconcileDetails(reconcileDetails);
         try {
             // 执行比对任务, 获取对账差异记录并保存
-            List<GeneralReconcileRecord> generalReconcileRecord = reconcileStrategy.getGeneralReconcileRecord();
-            List<ReconcileDiffRecord> diffRecords = this.generateDiffRecord(reconcileOrder,generalReconcileRecord,reconcileDetails);
+            List<GeneralTradeInfo> generalTradeInfo = reconcileStrategy.getGeneralReconcileRecord();
+            List<ReconcileDiffRecord> diffRecords = this.generateDiffRecord(reconcileOrder, generalTradeInfo,reconcileDetails);
             reconcileOrder.setCompare(true);
             reconcileOrderService.update(reconcileOrder);
             reconcileDiffService.saveAll(diffRecords);
@@ -186,72 +187,77 @@ public class ReconcileService {
      * 2. 远程无, 本地有
      * 3. 远程有, 本地有, 但状态不一致
      *
+     * @param reconcileOrder 对账单
+     * @param localTrades 本地交易订单
+     * @param outDetails 远程对账明细
      */
     private List<ReconcileDiffRecord> generateDiffRecord(ReconcileOrder reconcileOrder,
-                                                         List<GeneralReconcileRecord> reconcileRecords,
-                                                         List<ReconcileDetail> localDetails){
-        if (CollUtil.isEmpty(localDetails) || CollUtil.isEmpty(reconcileRecords)){
+                                                         List<GeneralTradeInfo> localTrades,
+                                                         List<ReconcileDetail> outDetails){
+        if (CollUtil.isEmpty(outDetails) || CollUtil.isEmpty(localTrades)){
             return new ArrayList<>();
         }
-        Map<String, ReconcileDetail> detailMap = localDetails.stream()
-                .collect(Collectors.toMap(ReconcileDetail::getOrderId, Function.identity(), CollectorsFunction::retainLatest));
-
         // 差异内容
         List<ReconcileDiffRecord> diffRecords = new ArrayList<>();
-        Map<Long, GeneralReconcileRecord> recordMap = reconcileRecords.stream()
-                .collect(Collectors.toMap(GeneralReconcileRecord::getOrderId, Function.identity(), CollectorsFunction::retainLatest));
-        // 对账与流水比对
-        for (ReconcileDetail detail : localDetails) {
-            // 判断本地流水有没有记录, 流水没有记录查询本地订单
-            GeneralReconcileRecord record = recordMap.get(Long.valueOf(detail.getOrderId()));
-            if (Objects.isNull(record)){
-                log.info("本地订单不存在: {}", detail.getOrderId());
+
+        // 三方对账订单
+        Map<String, ReconcileDetail> outDetailMap = outDetails.stream()
+                .collect(Collectors.toMap(ReconcileDetail::getTradeNo, Function.identity(), CollectorsFunction::retainLatest));
+        // 本地订单记录
+        Map<String, GeneralTradeInfo> localTradeMap = localTrades.stream()
+                .collect(Collectors.toMap(GeneralTradeInfo::getTradeNo, Function.identity(), CollectorsFunction::retainLatest));
+        // 对账与比对
+        for (ReconcileDetail outDetail : outDetails) {
+            // 判断本地有没有记录, 流水没有记录查询本地订单
+            GeneralTradeInfo localTrade = localTradeMap.get(outDetail.getTradeNo());
+            if (Objects.isNull(localTrade)){
+                log.info("本地订单不存在: {}", outDetail.getTradeNo());
                 ReconcileDiffRecord diffRecord = new ReconcileDiffRecord()
                         .setDiffType(ReconcileDiffTypeEnum.LOCAL_NOT_EXISTS.getCode())
-                        .setOrderId(Long.valueOf(detail.getOrderId()))
-                        .setDetailId(detail.getId())
-                        .setRecordId(reconcileOrder.getId())
-                        .setTitle(detail.getTitle())
-                        .setOrderType(detail.getType())
-                        .setGatewayOrderNo(detail.getGatewayOrderNo())
-                        .setAmount(detail.getAmount())
-                        .setOrderTime(detail.getOrderTime());
+                        .setTradeNo(outDetail.getTradeNo())
+                        .setDetailId(outDetail.getId())
+                        .setReconcileId(reconcileOrder.getId())
+                        .setTitle(outDetail.getTitle())
+                        .setOrderType(outDetail.getType())
+                        .setOutOrderNo(outDetail.getOutTradeNo())
+                        .setAmount(outDetail.getAmount())
+                        .setTradeTime(outDetail.getTradeTime());
                 diffRecords.add(diffRecord);
                 continue;
             }
             // 如果远程和本地都存在, 比对差异
-            List<ReconcileDiff> reconcileDiffs = this.reconcileDiff(detail, record);
+            List<ReconcileDiff> reconcileDiffs = this.reconcileDiff(outDetail, localTrade);
             if (CollUtil.isNotEmpty(reconcileDiffs)) {
                 ReconcileDiffRecord diffRecord = new ReconcileDiffRecord()
+                        .setReconcileId(reconcileOrder.getId())
+                        .setDetailId(outDetail.getId())
                         .setDiffType(ReconcileDiffTypeEnum.NOT_MATCH.getCode())
-                        .setOrderId(Long.valueOf(detail.getOrderId()))
-                        .setDetailId(detail.getId())
-                        .setRecordId(reconcileOrder.getId())
-                        .setTitle(detail.getTitle())
-                        .setOrderType(detail.getType())
-                        .setGatewayOrderNo(detail.getGatewayOrderNo())
-                        .setAmount(detail.getAmount())
+                        .setTradeNo(outDetail.getTradeNo())
+                        .setTitle(outDetail.getTitle())
+                        .setOrderType(outDetail.getType())
+                        .setOutOrderNo(outDetail.getOutTradeNo())
+                        .setAmount(outDetail.getAmount())
                         .setDiffs(reconcileDiffs)
-                        .setOrderTime(detail.getOrderTime());
+                        .setTradeTime(outDetail.getTradeTime());
                 diffRecords.add(diffRecord);
             }
         }
-        // 流水与对账单比对, 找出本地有, 远程没有的记录
-        for (GeneralReconcileRecord gateway : reconcileRecords) {
-            ReconcileDetail detail = detailMap.get(String.valueOf(gateway.getOrderId()));
-            if (Objects.isNull(detail)){
+        // 本地与对账单比对, 找出本地有, 远程没有的记录
+        for (GeneralTradeInfo localTrade : localTrades) {
+            ReconcileDetail outDetail = outDetailMap.get(localTrade.getTradeNo());
+            if (Objects.isNull(outDetail)){
                 ReconcileDiffRecord diffRecord = new ReconcileDiffRecord()
                         .setDiffType(ReconcileDiffTypeEnum.LOCAL_NOT_EXISTS.getCode())
-                        .setOrderId(gateway.getOrderId())
-                        .setRecordId(reconcileOrder.getId())
+                        .setTradeNo(localTrade.getTradeNo())
+                        .setReconcileId(reconcileOrder.getId())
                         .setDetailId(null)
-                        .setTitle(gateway.getTitle())
-                        .setOrderType(gateway.getType())
-                        .setGatewayOrderNo(gateway.getGatewayOrderNo())
-                        .setAmount(gateway.getAmount())
-                        .setOrderTime(gateway.getGatewayTime());
+                        .setTitle(localTrade.getTitle())
+                        .setOrderType(localTrade.getType())
+                        .setOutOrderNo(localTrade.getOutTradeNo())
+                        .setAmount(localTrade.getAmount())
+                        .setTradeTime(localTrade.getFinishTime());
                 diffRecords.add(diffRecord);
-                log.info("远程订单不存在: {}", gateway.getOrderId());
+                log.info("远程订单不存在: {}", localTrade.getTradeNo());
                 continue;
             }
         }
@@ -260,34 +266,36 @@ public class ReconcileService {
 
     /**
      * 判断订单之间存在哪些差异
+     * @param outDetail 下载的对账订单
+     * @param localTrade 本地交易订单
      */
-    public List<ReconcileDiff> reconcileDiff(ReconcileDetail detail, GeneralReconcileRecord record){
+    public List<ReconcileDiff> reconcileDiff(ReconcileDetail outDetail, GeneralTradeInfo localTrade){
         List<ReconcileDiff> diffs = new ArrayList<>();
 
         // 判断类型是否相同
-        if (Objects.equals(detail.getType(), ReconcileTradeEnum.PAY.getCode())
-                && !Objects.equals(record.getType(), AliPayRecordTypeEnum.PAY.getCode())){
-            log.warn("订单类型不一致: {},{}", detail.getType(), record.getType());
-            diffs.add(new ReconcileDiff().setFieldName("订单类型").setLocalValue(detail.getType()).setGatewayValue(record.getType()));
+        if (Objects.equals(outDetail.getType(), ReconcileTradeEnum.PAY.getCode())
+                && !Objects.equals(localTrade.getType(), PaymentTypeEnum.PAY.getCode())){
+            log.warn("订单类型不一致: {},{}", outDetail.getType(), localTrade.getType());
+            diffs.add(new ReconcileDiff().setFieldName("订单类型").setLocalValue(outDetail.getType()).setOutValue(localTrade.getType()));
         }
-        if (Objects.equals(detail.getType(), ReconcileTradeEnum.REFUND.getCode())
-                && !Objects.equals(record.getType(), AliPayRecordTypeEnum.REFUND.getCode())){
-            log.warn("订单类型不一致: {},{}", detail.getType(), record.getType());
-            diffs.add(new ReconcileDiff().setFieldName("订单类型").setLocalValue(detail.getType()).setGatewayValue(record.getType()));
+        if (Objects.equals(outDetail.getType(), ReconcileTradeEnum.REFUND.getCode())
+                && !Objects.equals(localTrade.getType(), PaymentTypeEnum.REFUND.getCode())){
+            log.warn("订单类型不一致: {},{}", outDetail.getType(), localTrade.getType());
+            diffs.add(new ReconcileDiff().setFieldName("订单类型").setLocalValue(outDetail.getType()).setOutValue(localTrade.getType()));
         }
 
         // 判断名称是否一致
-        if (!Objects.equals(detail.getTitle(), record.getTitle())){
-            log.warn("订单名称不一致: {},{}", detail.getTitle(), record.getTitle());
-            diffs.add(new ReconcileDiff().setFieldName("订单名称").setLocalValue(detail.getTitle()).setGatewayValue(record.getTitle()));
+        if (!Objects.equals(outDetail.getTitle(), localTrade.getTitle())){
+            log.warn("订单名称不一致: {},{}", outDetail.getTitle(), localTrade.getTitle());
+            diffs.add(new ReconcileDiff().setFieldName("订单名称").setLocalValue(outDetail.getTitle()).setOutValue(localTrade.getTitle()));
         }
 
         // 判断金额是否一致
-        if (!Objects.equals(detail.getAmount(), record.getAmount())){
-            log.warn("订单金额不一致: {},{}", detail.getAmount(), record.getAmount());
+        if (!Objects.equals(outDetail.getAmount(), localTrade.getAmount())){
+            log.warn("订单金额不一致: {},{}", outDetail.getAmount(), localTrade.getAmount());
             diffs.add(new ReconcileDiff().setFieldName("订单金额")
-                    .setLocalValue(String.valueOf(detail.getAmount()))
-                    .setGatewayValue(String.valueOf(record.getAmount())));
+                    .setLocalValue(String.valueOf(outDetail.getAmount()))
+                    .setOutValue(String.valueOf(localTrade.getAmount())));
         }
         return diffs;
     }

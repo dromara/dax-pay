@@ -21,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -47,8 +49,8 @@ public class PayOrderQueryService {
     /**
      * 根据id查询
      */
-    public Optional<PayOrder> findById(Long paymentId) {
-        return payOrderManager.findById(paymentId);
+    public Optional<PayOrder> findById(Long orderId) {
+        return payOrderManager.findById(orderId);
     }
 
     /**
@@ -88,26 +90,14 @@ public class PayOrderQueryService {
         if (StrUtil.isBlank(param.getBizOrderNoeNo()) && Objects.isNull(param.getOrderNo())){
             throw new ValidationFailedException("业务号或支付单ID不能都为空");
         }
-
         // 查询支付单
-        PayOrder payOrder = null;
-        if (Objects.nonNull(param.getOrderNo())){
-            payOrder = payOrderManager.findByOrderNo(param.getOrderNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
-        if (Objects.isNull(payOrder)){
-            payOrder = payOrderManager.findByBizOrderNo(param.getBizOrderNoeNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
-
+        PayOrder payOrder = this.findByBizOrOrderNo(param.getBizOrderNoeNo(), param.getOrderNo())
+                .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         // 查询扩展数据
         PayOrderExtra payOrderExtra = payOrderExtraManager.findById(payOrder.getId())
                 .orElseThrow(() -> new PayFailureException("支付订单不完整"));
-
-
         PayOrderResult payOrderResult = new PayOrderResult();
         BeanUtil.copyProperties(payOrder, payOrderResult);
-
         return payOrderResult;
     }
 }

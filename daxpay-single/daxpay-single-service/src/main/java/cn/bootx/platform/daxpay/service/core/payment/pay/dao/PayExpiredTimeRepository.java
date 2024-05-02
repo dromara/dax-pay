@@ -27,9 +27,9 @@ public class PayExpiredTimeRepository {
     /**
      * 根据 token 存储对应的 ExpiredTokenKey
      */
-    public void store(Long paymentId, LocalDateTime expiredTime) {
+    public void store(Long payOderId, LocalDateTime expiredTime) {
         long time = LocalDateTimeUtil.timestamp(expiredTime);
-        redisClient.zadd(KEY, String.valueOf(paymentId), time);
+        redisClient.zadd(KEY, String.valueOf(payOderId), time);
     }
 
     /**

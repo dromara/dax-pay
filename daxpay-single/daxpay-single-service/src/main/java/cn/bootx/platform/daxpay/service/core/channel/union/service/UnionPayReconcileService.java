@@ -163,11 +163,11 @@ public class UnionPayReconcileService {
         // 默认为支付对账记录
         ReconcileDetail reconcileDetail = new ReconcileDetail()
                 .setTitle("未知")
-                .setRecordOrderId(billDetail.getRecordOrderId())
-                .setOrderId(billDetail.getOrderId())
+                .setReconcileId(billDetail.getReconcileId())
+                .setTradeNo(billDetail.getOrderId())
                 .setType(ReconcileTradeEnum.PAY.getCode())
                 .setAmount(amount)
-                .setGatewayOrderNo(billDetail.getQueryId());
+                .setOutTradeNo(billDetail.getQueryId());
 
         // 时间, 从对账订单获取年份
         LocalDate date = reconcileOrder.getDate();
@@ -176,7 +176,7 @@ public class UnionPayReconcileService {
         String txnTime = year + billDetail.getTxnTime();
         if (StrUtil.isNotBlank(txnTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(txnTime, DatePattern.PURE_DATETIME_PATTERN);
-            reconcileDetail.setOrderTime(time);
+            reconcileDetail.setTradeTime(time);
         }
 
         // 退款覆盖更新对应的字段
@@ -191,7 +191,7 @@ public class UnionPayReconcileService {
      */
     private void save(List<UnionReconcileBillDetail> billDetails){
         Long recordOrderId = PaymentContextLocal.get().getReconcileInfo().getReconcileOrder().getId();
-        billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
+        billDetails.forEach(o->o.setReconcileId(recordOrderId));
         unionReconcileBillDetailManager.saveAll(billDetails);
     }
 }

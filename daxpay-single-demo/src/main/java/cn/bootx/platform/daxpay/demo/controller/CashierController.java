@@ -36,8 +36,8 @@ public class CashierController {
 
     @Operation(summary = "查询支付订单")
     @GetMapping("/queryPayOrderSuccess")
-    public ResResult<Boolean> queryPayOrder(String businessNo){
-        return Res.ok(cashierService.queryPayOrderSuccess(businessNo));
+    public ResResult<Boolean> queryPayOrder(String bizOrderNoeNo){
+        return Res.ok(cashierService.queryPayOrderSuccess(bizOrderNoeNo));
     }
 
     @Operation(summary = "获取支付环境")

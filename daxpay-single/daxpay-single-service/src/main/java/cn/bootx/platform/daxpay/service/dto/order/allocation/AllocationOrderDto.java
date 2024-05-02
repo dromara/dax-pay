@@ -23,13 +23,31 @@ public class AllocationOrderDto extends BaseDto {
      * 分账订单号
      */
     @Schema(description = "分账订单号")
-    private String orderNo;
+    private String allocationNo;
 
     /**
      * 支付订单ID
      */
     @Schema(description = "支付订单ID")
-    private Long paymentId;
+    private Long orderId;
+
+    /**
+     * 支付订单号
+     */
+    @Schema(description = "支付订单号")
+    private String orderNo;
+
+    /**
+     * 商户支付订单号
+     */
+    @Schema(description = "商户支付订单号")
+    private String bizOrderNo;
+
+    /**
+     * 外部订单号
+     */
+    @Schema(description = "外部订单号")
+    private String outOrderNo;
 
     /**
      * 支付订单标题
@@ -38,22 +56,10 @@ public class AllocationOrderDto extends BaseDto {
     private String title;
 
     /**
-     * 网关支付订单号
+     * 外部分账单号
      */
-    @Schema(description = "网关支付订单号")
-    private String gatewayPayOrderNo;
-
-    /**
-     * 网关分账单号
-     */
-    @Schema(description = "网关分账单号")
-    private String gatewayAllocationNo;
-
-    /**
-     * 分账单号
-     */
-    @Schema(description = "分账单号")
-    private String allocationNo;
+    @Schema(description = "外部分账单号")
+    private String outAllocationNo;
 
     /**
      * 所属通道
@@ -86,6 +92,13 @@ public class AllocationOrderDto extends BaseDto {
      */
     @Schema(description = "分账处理结果")
     private String result;
+
+    /**
+     * 错误码
+     */
+    @Schema(description = "错误码")
+    private String errorCode;
+
     /**
      * 错误原因
      */

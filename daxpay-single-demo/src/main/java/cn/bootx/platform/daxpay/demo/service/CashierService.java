@@ -114,9 +114,9 @@ public class CashierService {
     /**
      * 查询订单是否支付成功
      */
-    public boolean queryPayOrderSuccess(String businessNo){
+    public boolean queryPayOrderSuccess(String bizOrderNoeNo){
         QueryPayParam queryPayOrderParam = new QueryPayParam();
-        queryPayOrderParam.setBizOrderNoeNo(businessNo);
+        queryPayOrderParam.setBizOrderNoeNo(bizOrderNoeNo);
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(queryPayOrderParam);
         // 未查询到订单
         if (execute.getCode() == 10010){

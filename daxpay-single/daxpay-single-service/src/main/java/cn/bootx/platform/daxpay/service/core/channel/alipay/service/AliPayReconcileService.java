@@ -129,7 +129,7 @@ public class AliPayReconcileService {
      */
     private void saveBillDetail(List<AliReconcileBillDetail> billDetails){
         Long recordOrderId = PaymentContextLocal.get().getReconcileInfo().getReconcileOrder().getId();
-        billDetails.forEach(o->o.setRecordOrderId(recordOrderId));
+        billDetails.forEach(o->o.setReconcileId(recordOrderId));
         reconcileBillDetailManager.saveAll(billDetails);
     }
 
@@ -165,23 +165,23 @@ public class AliPayReconcileService {
 
         // 默认为支付对账记录
         ReconcileDetail reconcileDetail = new ReconcileDetail()
-                .setRecordOrderId(billDetail.getRecordOrderId())
-                .setOrderId(billDetail.getOutTradeNo())
+                .setReconcileId(billDetail.getReconcileId())
+                .setTradeNo(billDetail.getOutTradeNo())
                 .setType(ReconcileTradeEnum.PAY.getCode())
                 .setAmount(amount)
                 .setTitle(billDetail.getSubject())
-                .setGatewayOrderNo(billDetail.getTradeNo());
+                .setOutTradeNo(billDetail.getTradeNo());
 
         // 时间
         String endTime = billDetail.getEndTime();
         if (StrUtil.isNotBlank(endTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(endTime, DatePattern.NORM_DATETIME_PATTERN);
-            reconcileDetail.setOrderTime(time);
+            reconcileDetail.setTradeTime(time);
         }
 
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
-            reconcileDetail.setOrderId(billDetail.getBatchNo())
+            reconcileDetail.setTradeNo(billDetail.getBatchNo())
                     .setType(ReconcileTradeEnum.REFUND.getCode());
         }
         return reconcileDetail;

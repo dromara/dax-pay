@@ -34,8 +34,8 @@ public class PayCloseRecordController {
 
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
-    public ResResult<PayCloseRecordDto> findById(Long paymentId){
-        return Res.ok(service.findById(paymentId));
+    public ResResult<PayCloseRecordDto> findById(Long id){
+        return Res.ok(service.findById(id));
     }
 
 }

@@ -6,8 +6,6 @@ import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.experimental.UtilityClass;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,14 +16,6 @@ import java.util.Objects;
  */
 @UtilityClass
 public class ReconcileStrategyFactory {
-
-    /**
-     * 根据传入的支付类型批量创建策略
-     */
-    public List<AbsReconcileStrategy> create() {
-        Map<String, AbsReconcileStrategy> beansOfType = SpringUtil.getBeansOfType(AbsReconcileStrategy.class);
-        return new ArrayList<>(beansOfType.values());
-    }
 
     /**
      * 根据传入的支付类型批量创建策略

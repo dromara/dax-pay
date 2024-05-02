@@ -2,12 +2,11 @@ package cn.bootx.platform.daxpay.service.func;
 
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -44,6 +43,6 @@ public abstract class AbsReconcileStrategy implements PayStrategy {
     /**
      * 获取通用对账对象, 将流水记录转换为对账对象
      */
-    public abstract List<GeneralReconcileRecord> getGeneralReconcileRecord();
+    public abstract List<GeneralTradeInfo> getGeneralReconcileRecord();
 
 }

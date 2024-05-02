@@ -28,8 +28,8 @@ public class ReconcileDetailManager extends BaseManager<ReconcileDetailMapper, R
     /**
      * 根据订单id查询
      */
-    public List<ReconcileDetail> findAllByOrderId(Long orderId){
-        return this.findAllByField(ReconcileDetail::getRecordOrderId, orderId);
+    public List<ReconcileDetail> findAllByReconcileId(Long reconcileId){
+        return this.findAllByField(ReconcileDetail::getReconcileId, reconcileId);
     }
 
     /**

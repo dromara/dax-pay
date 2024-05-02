@@ -19,7 +19,7 @@ public class UnionReconcileBillDetail {
 
     /** 关联对账订单ID */
     @DbColumn(comment = "关联对账订单ID")
-    private Long recordOrderId;
+    private Long reconcileId;
     /** 交易代码 */
     @DbColumn(comment = "交易代码")
     private String tradeType;

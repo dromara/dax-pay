@@ -35,15 +35,23 @@ public class ReconcileDiffRecord extends MpBaseEntity implements EntityBaseFunct
 
     /** 对账单ID */
     @DbColumn(comment = "对账单ID")
-    private Long recordId;
+    private Long ReconcileId;
 
     /** 对账单明细ID */
     @DbColumn(comment = "对账单明细ID")
     private Long detailId;
 
-    /** 本地订单id */
-    @DbColumn(comment = "本地订单id")
-    private Long orderId;
+    /** 本地交易号 */
+    @DbColumn(comment = "本地交易号")
+    private String tradeNo;
+
+    /** 外部交易号 */
+    @DbColumn(comment = "外部交易号")
+    private String outOrderNo;
+
+    /** 交易时间 */
+    @DbColumn(comment = "交易时间")
+    private LocalDateTime tradeTime;
 
     /** 订单标题 */
     @DbColumn(comment = "订单标题")
@@ -73,17 +81,10 @@ public class ReconcileDiffRecord extends MpBaseEntity implements EntityBaseFunct
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private List<ReconcileDiff> diffs;
 
-    /** 网关订单号 */
-    @DbColumn(comment = "网关订单号")
-    private String gatewayOrderNo;
-
     /** 交易金额 */
     @DbColumn(comment = "交易金额")
     private Integer amount;
 
-    /** 订单时间 */
-    @DbColumn(comment = "订单时间")
-    private LocalDateTime orderTime;
 
     @Override
     public ReconcileDiffRecordDto toDto() {

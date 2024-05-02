@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 public class AliReconcileBillDetail extends MpIdEntity {
     /** 关联对账订单ID */
     @DbColumn(comment = "关联对账订单ID")
-    private Long recordOrderId;
+    private Long reconcileId;
     @Alias("支付宝交易号")
     @DbColumn(comment = "支付宝交易号")
     private String tradeNo;

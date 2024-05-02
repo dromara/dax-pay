@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayReconcileService;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.date.DateUtil;
@@ -74,7 +74,7 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
      * 获取通用对账对象, 将流水记录转换为对账对象
      */
     @Override
-    public List<GeneralReconcileRecord> getGeneralReconcileRecord() {
+    public List<GeneralTradeInfo> getGeneralReconcileRecord() {
         // 查询流水
         LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(this.getRecordOrder().getDate());
         LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);

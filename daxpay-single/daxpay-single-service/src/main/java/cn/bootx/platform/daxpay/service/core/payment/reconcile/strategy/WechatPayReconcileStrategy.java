@@ -2,10 +2,13 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatPayReconcileService;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,8 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
     private final WechatPayReconcileService reconcileService;
 
     private final WeChatPayConfigService weChatPayConfigService;
+
+    private final PayOrderManager payOrderManager;
 
     private WeChatPayConfig config;
 
@@ -77,11 +82,18 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
      * 获取通用对账对象, 将流水记录转换为对账对象
      */
     @Override
-    public List<GeneralReconcileRecord> getGeneralReconcileRecord() {
+    public List<GeneralTradeInfo> getGeneralReconcileRecord() {
         // 查询流水
         LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(this.getRecordOrder().getDate());
         LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);
         LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
+
+        // 下载支付订单
+        List<PayOrder> payOrders = payOrderManager.findReconcile(start, end, PayStatusEnum.SUCCESS, PayStatusEnum.PARTIAL_REFUND, PayStatusEnum.REFUNDING, PayStatusEnum.REFUNDED);
+
+        // 下载退款订单
+
+
         return null;
     }
 

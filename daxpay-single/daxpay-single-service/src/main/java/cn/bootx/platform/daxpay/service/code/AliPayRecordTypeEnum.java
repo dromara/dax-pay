@@ -10,6 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
+@Deprecated
 public enum AliPayRecordTypeEnum {
 
     /** 支付 */

@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
-import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.ReconcileConvert;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDetailDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 通用支付对账记录
+ * 通用支付对账记录, 从三方系统下载的交易记录
  * @author xxm
  * @since 2024/1/18
  */
@@ -28,7 +28,7 @@ public class ReconcileDetail extends MpCreateEntity implements EntityBaseFunctio
 
     /** 关联对账订单ID */
     @DbColumn(comment = "关联对账订单ID")
-    private Long recordOrderId;
+    private Long reconcileId;
 
     /** 商品名称 */
     @DbColumn(comment = "商品名称")
@@ -40,22 +40,22 @@ public class ReconcileDetail extends MpCreateEntity implements EntityBaseFunctio
 
     /**
      * 交易类型
-     * @see ReconcileTradeEnum
+     * @see PaymentTypeEnum
      */
     @DbColumn(comment = "交易类型")
     private String type;
 
-    /** 本地订单ID */
+    /** 本地交易号 */
     @DbColumn(comment = "本地订单ID")
-    private String orderId;
+    private String tradeNo;
 
-    /** 网关订单号 - 支付宝/微信的订单号 */
-    @DbColumn(comment = "网关订单号")
-    private String gatewayOrderNo;
+    /** 外部交易号 - 支付宝/微信的订单号 */
+    @DbColumn(comment = "外部交易号")
+    private String outTradeNo;
 
-    /** 订单时间 */
-    @DbColumn(comment = "订单时间")
-    private LocalDateTime orderTime;
+    /** 交易时间 */
+    @DbColumn(comment = "交易时间")
+    private LocalDateTime tradeTime;
 
 
     @Override

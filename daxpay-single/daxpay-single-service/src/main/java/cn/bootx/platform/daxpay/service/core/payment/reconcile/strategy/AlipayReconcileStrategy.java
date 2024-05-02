@@ -5,7 +5,7 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayReconcileService;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralReconcileRecord;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +76,7 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
      * 获取通用对账对象, 将流水记录转换为对账对象
      */
     @Override
-    public List<GeneralReconcileRecord> getGeneralReconcileRecord() {
+    public List<GeneralTradeInfo> getGeneralReconcileRecord() {
         // 查询流水
         LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(this.getRecordOrder().getDate());
         LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);

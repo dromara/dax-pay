@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,7 +13,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 支付订单
@@ -50,10 +55,16 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     }
 
     /**
-     * 强制更新 (忽略版本号)
+     * 查询对账用订单记录(指定时间和状态的订单)
      */
-    public void updateForceById(PayOrder payOrder) {
-        payOrder.setVersion(null);
-        this.updateById(payOrder);
+    public List<PayOrder> findReconcile(LocalDateTime startTime, LocalDateTime endTime, PayStatusEnum...statusEnum) {
+        List<String> status = Arrays.stream(statusEnum)
+                .map(PayStatusEnum::getCode)
+                .collect(Collectors.toList());
+        return this.lambdaQuery()
+                .between(PayOrder::getPayTime, startTime, endTime)
+                .in(PayOrder::getStatus, status)
+                .list();
     }
+
 }

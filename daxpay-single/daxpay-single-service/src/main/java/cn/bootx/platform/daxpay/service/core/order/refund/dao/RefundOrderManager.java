@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
@@ -14,8 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 支付退款订单管理
@@ -66,6 +69,20 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         return lambdaQuery()
                 .le(RefundOrder::getCreateTime,now)
                 .eq(RefundOrder::getStatus, RefundStatusEnum.PROGRESS.getCode())
+                .list();
+    }
+
+
+    /**
+     * 查询对账用订单记录(指定时间和状态的订单)
+     */
+    public List<RefundOrder> findReconcile(LocalDateTime startTime, LocalDateTime endTime, PayStatusEnum...statusEnum) {
+        List<String> status = Arrays.stream(statusEnum)
+                .map(PayStatusEnum::getCode)
+                .collect(Collectors.toList());
+        return this.lambdaQuery()
+                .between(RefundOrder::getFinishTime, startTime, endTime)
+                .in(RefundOrder::getStatus, status)
                 .list();
     }
 }

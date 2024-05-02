@@ -54,8 +54,6 @@ public class WechatPayReconcileService{
     private final WxReconcileBillTotalManger reconcileBillTotalManger;
     private final WxReconcileBillDetailManager reconcileBillDetailManager;
 
-    private final WeChatPayRecordManager recordManager;
-
     /**
      * 下载对账单并保存
      * @param date 对账日期 yyyyMMdd 格式
@@ -165,15 +163,15 @@ public class WechatPayReconcileService{
     public ReconcileDetail convert(WxReconcileBillDetail billDetail){
         // 默认为支付对账记录
         ReconcileDetail reconcileDetail = new ReconcileDetail()
-                .setRecordOrderId(billDetail.getRecordOrderId())
-                .setOrderId(billDetail.getMchOrderNo())
+                .setReconcileId(billDetail.getRecordOrderId())
+                .setTradeNo(billDetail.getMchOrderNo())
                 .setTitle(billDetail.getSubject())
-                .setGatewayOrderNo(billDetail.getWeiXinOrderNo());
+                .setOutTradeNo(billDetail.getWeiXinOrderNo());
         // 交易时间
         String transactionTime = billDetail.getTransactionTime();
         if (StrUtil.isNotBlank(transactionTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(transactionTime, DatePattern.NORM_DATETIME_PATTERN);
-            reconcileDetail.setOrderTime(time);
+            reconcileDetail.setTradeTime(time);
         }
 
         // 支付
@@ -193,7 +191,7 @@ public class WechatPayReconcileService{
             int amount = Math.abs(((int) v));
             reconcileDetail.setType(ReconcileTradeEnum.REFUND.getCode())
                     .setAmount(amount)
-                    .setOrderId(billDetail.getMchRefundNo());
+                    .setTradeNo(billDetail.getMchRefundNo());
         }
         // TODO 已撤销, 暂时未处理
         if (Objects.equals(billDetail.getStatus(), "REVOKED")){

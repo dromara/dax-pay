@@ -1,17 +1,17 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.domain;
 
-import cn.bootx.platform.daxpay.service.code.AliPayRecordTypeEnum;
+import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 /**
- * 通用对账记录对象，用于与网关进行对账
+ * 通用交易对象对象，用于与网关进行对账
  * @author xxm
  * @since 2024/3/1
  */
 @Data
-public class GeneralReconcileRecord {
+public class GeneralTradeInfo {
     /** 标题 */
     private String title;
 
@@ -20,18 +20,16 @@ public class GeneralReconcileRecord {
 
     /**
      * 业务类型
-     * @see AliPayRecordTypeEnum
+     * @see PaymentTypeEnum
      */
     private String type;
 
-    /** 本地订单号 */
-    private Long orderId;
+    /** 本地交易号 */
+    private String tradeNo;
 
-    /** 网关订单号 */
-    private String gatewayOrderNo;
+    /** 网关交易号 */
+    private String outTradeNo;
 
     /** 网关完成时间 */
-    private LocalDateTime gatewayTime;
-
-
+    private LocalDateTime finishTime;
 }

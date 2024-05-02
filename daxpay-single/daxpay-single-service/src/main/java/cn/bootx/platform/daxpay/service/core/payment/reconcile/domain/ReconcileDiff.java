@@ -18,6 +18,6 @@ public class ReconcileDiff {
     /** 本地订单字段值 */
     private String localValue;
 
-    /** 网关订单字段值 */
-    private String gatewayValue;
+    /** 对账单订单字段值 */
+    private String outValue;
 }

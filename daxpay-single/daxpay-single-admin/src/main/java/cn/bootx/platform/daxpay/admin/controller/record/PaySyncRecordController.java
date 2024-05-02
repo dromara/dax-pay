@@ -34,8 +34,8 @@ public class PaySyncRecordController {
 
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
-    public ResResult<PaySyncRecordDto> findById(Long paymentId){
-        return Res.ok(service.findById(paymentId));
+    public ResResult<PaySyncRecordDto> findById(Long id){
+        return Res.ok(service.findById(id));
     }
 
 }

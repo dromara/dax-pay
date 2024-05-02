@@ -35,11 +35,11 @@ public class PayAllocationTest {
     public void allocation() {
         // 分账参数
         AllocationParam param = new AllocationParam();
-        param.setAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
         param.setDescription("测试分账");
         param.setAllocationGroupId(1L);
         param.setClientIp("127.0.0.1");
-        param.setPaymentId(1L);
+        param.setBizOrderNo("112324");
 
         DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
