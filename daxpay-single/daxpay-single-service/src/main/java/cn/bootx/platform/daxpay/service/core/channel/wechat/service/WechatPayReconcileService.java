@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
-import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WeChatPayRecordManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillTotalManger;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
