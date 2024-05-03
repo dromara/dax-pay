@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.service.dto.allocation;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
-import cn.bootx.platform.daxpay.code.AllocationRelationTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocRelationTypeEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,7 +35,7 @@ public class AllocationReceiverDto extends BaseDto {
 
     /**
      * 分账接收方类型 个人/商户
-     * @see AllocationReceiverTypeEnum
+     * @see AllocReceiverTypeEnum
      */
     @Schema(description = "分账接收方类型")
     private String receiverType;
@@ -52,7 +52,7 @@ public class AllocationReceiverDto extends BaseDto {
 
     /**
      * 分账关系类型
-     * @see AllocationRelationTypeEnum
+     * @see AllocRelationTypeEnum
      */
     @Schema(description = "分账关系类型")
     private String relationType;

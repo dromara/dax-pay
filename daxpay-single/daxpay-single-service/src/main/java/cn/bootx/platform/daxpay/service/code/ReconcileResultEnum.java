@@ -4,19 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付宝流水记录类型
+ * 对账结果
  * @author xxm
- * @since 2024/2/20
+ * @since 2024/5/3
  */
 @Getter
 @AllArgsConstructor
-@Deprecated
-public enum AliPayRecordTypeEnum {
+public enum ReconcileResultEnum {
 
-    /** 支付 */
-    PAY("pay", "支付"),
-    /** 退款 */
-    REFUND("refund", "退款");
+    /** 一致 */
+    CONSISTENT("consistent","一致"),
+
+    /** 不一致 */
+    INCONSISTENT("inconsistent","不一致");
 
     private final String code;
     private final String name;

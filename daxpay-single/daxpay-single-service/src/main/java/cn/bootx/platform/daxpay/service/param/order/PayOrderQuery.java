@@ -3,7 +3,7 @@ package cn.bootx.platform.daxpay.service.param.order;
 import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.common.core.rest.param.QueryOrder;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.PayOrderAllocStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -70,7 +70,7 @@ public class PayOrderQuery extends QueryOrder {
 
     /**
      * 分账状态
-     * @see PayOrderAllocationStatusEnum
+     * @see PayOrderAllocStatusEnum
      */
     @Schema(description = "分账状态")
     private String allocationStatus;

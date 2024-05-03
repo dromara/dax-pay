@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
-import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum.WX_MERCHANT;
+import static cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum.WX_MERCHANT;
 
 /**
  *
@@ -45,7 +45,7 @@ public class WeChatPayAllocationReceiverService {
      * 绑定
      */
     public void bind(AllocationReceiver allocationReceiver, WeChatPayConfig weChatPayConfig){
-        AllocationReceiverTypeEnum receiverTypeEnum = AllocationReceiverTypeEnum.findByCode(allocationReceiver.getReceiverType());
+        AllocReceiverTypeEnum receiverTypeEnum = AllocReceiverTypeEnum.findByCode(allocationReceiver.getReceiverType());
         // 接收者参数
         ReceiverModel receiver = ReceiverModel.builder()
                 .type(receiverTypeEnum.getOutCode())
@@ -72,7 +72,7 @@ public class WeChatPayAllocationReceiverService {
      * 解除绑定
      */
     public void unbind(AllocationReceiver allocationReceiver, WeChatPayConfig weChatPayConfig){
-        AllocationReceiverTypeEnum receiverTypeEnum = AllocationReceiverTypeEnum.findByCode(allocationReceiver.getReceiverType());
+        AllocReceiverTypeEnum receiverTypeEnum = AllocReceiverTypeEnum.findByCode(allocationReceiver.getReceiverType());
         // 原始参数
         ReceiverModel receiver = ReceiverModel.builder()
                 .type(receiverTypeEnum.getOutCode())

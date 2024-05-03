@@ -57,11 +57,12 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     /**
      * 查询对账用订单记录(指定时间和状态的订单)
      */
-    public List<PayOrder> findReconcile(LocalDateTime startTime, LocalDateTime endTime, PayStatusEnum...statusEnum) {
+    public List<PayOrder> findReconcile(String channel, LocalDateTime startTime, LocalDateTime endTime, PayStatusEnum...statusEnum) {
         List<String> status = Arrays.stream(statusEnum)
                 .map(PayStatusEnum::getCode)
                 .collect(Collectors.toList());
         return this.lambdaQuery()
+                .eq(PayOrder::getChannel, channel)
                 .between(PayOrder::getPayTime, startTime, endTime)
                 .in(PayOrder::getStatus, status)
                 .list();

@@ -33,6 +33,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
         </dependency>
+        <!-- 文件上传 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-starter-file</artifactId>
+        </dependency>
         <!-- 自动建表 -->
         <dependency>
             <groupId>cn.bootx</groupId>

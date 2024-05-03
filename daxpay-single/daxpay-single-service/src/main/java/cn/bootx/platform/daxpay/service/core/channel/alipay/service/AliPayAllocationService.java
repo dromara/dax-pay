@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
-import cn.bootx.platform.daxpay.code.AllocationDetailResultEnum;
+import cn.bootx.platform.daxpay.code.AllocDetailResultEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
@@ -123,7 +123,7 @@ public class AliPayAllocationService {
                 detail.setErrorCode(receiver.getErrorCode());
                 detail.setErrorMsg(receiver.getErrorDesc());
                 // 如果是完成, 更新时间
-                if (AllocationDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){
+                if (AllocDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){
                     LocalDateTime finishTime = LocalDateTimeUtil.of(receiver.getExecuteDt());
                     detail.setFinishTime(finishTime);
                 }
@@ -148,16 +148,16 @@ public class AliPayAllocationService {
     /**
      * 转换支付宝分账类型到系统中统一的
      */
-    private AllocationDetailResultEnum getDetailResultEnum (String result){
+    private AllocDetailResultEnum getDetailResultEnum (String result){
         // 进行中
         if(Objects.equals(AliPayCode.ALLOC_PROCESSING, result)){
-            return AllocationDetailResultEnum.PENDING;
+            return AllocDetailResultEnum.PENDING;
         }
         // 成功
         if(Objects.equals(AliPayCode.ALLOC_SUCCESS, result)){
-            return AllocationDetailResultEnum.SUCCESS;
+            return AllocDetailResultEnum.SUCCESS;
         }
         // 失败
-        return AllocationDetailResultEnum.FAIL;
+        return AllocDetailResultEnum.FAIL;
     }
 }

@@ -2,7 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.pay.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.PayOrderAllocStatusEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.convert.PayOrderConvert;
@@ -88,7 +88,7 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
 
     /**
      * 分账状态
-     * @see PayOrderAllocationStatusEnum
+     * @see PayOrderAllocStatusEnum
      */
     @DbColumn(comment = "分账状态")
     private String allocationStatus;

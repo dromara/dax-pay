@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 支付单同步结果
+ * 支付订单同步结果
  * @author xxm
  * @since 2023/12/27
  */
@@ -17,10 +17,10 @@ import lombok.ToString;
 public class PaySyncModel extends DaxPayResponseModel {
 
     /**
-     * 支付网关同步结果
+     * 支付订单同步结果
      * @see PaySyncStatusEnum
      */
-    private String gatewayStatus;
+    private String status;
 
     /** 是否进行了修复 */
     private boolean repair;

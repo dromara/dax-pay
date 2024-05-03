@@ -35,7 +35,7 @@ public class ReconcileDiffRecord extends MpBaseEntity implements EntityBaseFunct
 
     /** 对账单ID */
     @DbColumn(comment = "对账单ID")
-    private Long ReconcileId;
+    private Long reconcileId;
 
     /** 对账单明细ID */
     @DbColumn(comment = "对账单明细ID")
@@ -56,6 +56,15 @@ public class ReconcileDiffRecord extends MpBaseEntity implements EntityBaseFunct
     /** 订单标题 */
     @DbColumn(comment = "订单标题")
     private String title;
+
+    /** 本地交易金额 */
+    @DbColumn(comment = "本地交易金额")
+    private Integer amount;
+
+
+    /** 外部交易金额 */
+    @DbColumn(comment = "外部交易金额")
+    private Integer outAmount;
 
     /**
      * 订单类型
@@ -80,11 +89,6 @@ public class ReconcileDiffRecord extends MpBaseEntity implements EntityBaseFunct
     @TableField(typeHandler = ReconcileDiffTypeHandler.class)
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private List<ReconcileDiff> diffs;
-
-    /** 交易金额 */
-    @DbColumn(comment = "交易金额")
-    private Integer amount;
-
 
     @Override
     public ReconcileDiffRecordDto toDto() {

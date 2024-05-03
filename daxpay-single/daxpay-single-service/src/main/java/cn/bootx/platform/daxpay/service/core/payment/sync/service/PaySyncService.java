@@ -129,7 +129,7 @@ public class PaySyncService {
             // 同步成功记录日志
             this.saveRecord( payOrder, syncResult, !statusSync, repairResult.getRepairNo(), null);
             return new SyncResult()
-                    .setGatewayStatus(syncResult.getSyncStatus().getCode())
+                    .setStatus(syncResult.getSyncStatus().getCode())
                     .setRepair(!statusSync)
                     .setRepairNo(repairResult.getRepairNo());
         } finally {

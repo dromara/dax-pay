@@ -3,8 +3,8 @@ package cn.bootx.platform.daxpay.service.core.order.allocation.entity;
 import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.bootx.platform.daxpay.code.AllocationDetailResultEnum;
-import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocDetailResultEnum;
+import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
 import cn.bootx.platform.daxpay.service.core.order.allocation.convert.AllocationConvert;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -46,7 +46,7 @@ public class AllocationOrderDetail extends MpBaseEntity implements EntityBaseFun
 
     /**
      * 分账接收方类型
-     * @see AllocationReceiverTypeEnum
+     * @see AllocReceiverTypeEnum
      */
     @DbColumn(comment = "分账接收方类型")
     private String receiverType;
@@ -62,7 +62,7 @@ public class AllocationOrderDetail extends MpBaseEntity implements EntityBaseFun
 
     /**
      * 分账结果
-     * @see AllocationDetailResultEnum
+     * @see AllocDetailResultEnum
      */
     @DbColumn(comment = "分账结果")
     private String result;

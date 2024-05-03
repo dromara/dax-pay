@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.service.dto.order.allocation;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.AllocationOrderResultEnum;
-import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
+import cn.bootx.platform.daxpay.code.AllocOrderResultEnum;
+import cn.bootx.platform.daxpay.code.AllocOrderStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -81,14 +81,14 @@ public class AllocationOrderDto extends BaseDto {
 
     /**
      * 状态
-     * @see AllocationOrderStatusEnum
+     * @see AllocOrderStatusEnum
      */
     @Schema(description = "状态")
     private String status;
 
     /**
      * 分账处理结果
-     * @see AllocationOrderResultEnum
+     * @see AllocOrderResultEnum
      */
     @Schema(description = "分账处理结果")
     private String result;

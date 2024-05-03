@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.dto.channel.wechat;
 
-import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
 import cn.hutool.core.annotation.Alias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class WeChatPayAllocationReceiver {
 
     /**
      * 分账接收方类型
-     * @see AllocationReceiverTypeEnum
+     * @see AllocReceiverTypeEnum
      */
     private String type;
 

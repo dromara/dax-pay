@@ -30,15 +30,15 @@ import lombok.experimental.Accessors;
 public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<PaySyncRecordDto> {
 
     /** 本地交易号 */
-    @DbColumn(comment = "本地订单ID")
+    @DbColumn(comment = "本地交易号")
     private String tradeNo;
 
     /** 商户交易号 */
     @DbColumn(comment = "商户交易号")
     private String bizTradeNo;
 
-    /** 三方交易号 */
-    @DbColumn(comment = "三方交易号")
+    /** 外部交易号 */
+    @DbColumn(comment = "外部交易号")
     private String outTradeNo;
 
 

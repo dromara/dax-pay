@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AllocationRelationTypeEnum {
+public enum AllocRelationTypeEnum {
     SERVICE_PROVIDER("SERVICE_PROVIDER","服务商"),
     STORE("STORE","门店"),
     STAFF("STAFF","员工"),

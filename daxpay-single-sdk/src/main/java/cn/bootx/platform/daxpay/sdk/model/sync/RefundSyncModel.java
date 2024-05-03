@@ -19,8 +19,9 @@ public class RefundSyncModel extends DaxPayResponseModel {
     /**
      * 支付网关同步结果
      * @see RefundSyncStatusEnum
+     *
      */
-    private String gatewayStatus;
+    private String status;
 
     /** 是否进行了修复 */
     private boolean repair;

@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
-import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.AllocationReceiver;
@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum.*;
+import static cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum.*;
 
 /**
  * 支付宝分账
@@ -52,7 +52,7 @@ public class AliPayAllocationReceiverService {
         model.setOutRequestNo(String.valueOf(allocationReceiver.getId()));
 
         RoyaltyEntity entity = new RoyaltyEntity();
-        AllocationReceiverTypeEnum receiverTypeEnum = AllocationReceiverTypeEnum.findByCode(allocationReceiver.getReceiverType());
+        AllocReceiverTypeEnum receiverTypeEnum = AllocReceiverTypeEnum.findByCode(allocationReceiver.getReceiverType());
         entity.setType(receiverTypeEnum.getOutCode());
         entity.setAccount(allocationReceiver.getReceiverAccount());
         entity.setName(allocationReceiver.getReceiverName());
@@ -73,7 +73,7 @@ public class AliPayAllocationReceiverService {
         model.setOutRequestNo(String.valueOf(allocationReceiver.getId()));
 
         RoyaltyEntity entity = new RoyaltyEntity();
-        AllocationReceiverTypeEnum receiverTypeEnum = findByCode(allocationReceiver.getReceiverType());
+        AllocReceiverTypeEnum receiverTypeEnum = findByCode(allocationReceiver.getReceiverType());
         entity.setType(receiverTypeEnum.getOutCode());
         entity.setAccount(allocationReceiver.getReceiverAccount());
 

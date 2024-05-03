@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.param.allocation.group;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
-import cn.bootx.platform.daxpay.code.AllocationRelationTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocRelationTypeEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -43,7 +43,7 @@ public class AllocationReceiverQuery {
 
     /**
      * 分账关系类型
-     * @see AllocationRelationTypeEnum
+     * @see AllocRelationTypeEnum
      */
     @Schema(description = "分账关系类型")
     private String relationType;

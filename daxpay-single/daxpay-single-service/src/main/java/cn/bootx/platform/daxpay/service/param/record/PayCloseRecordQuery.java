@@ -31,7 +31,7 @@ public class PayCloseRecordQuery extends QueryOrder {
      * 关闭的支付通道
      * @see PayChannelEnum
      */
-    @DbColumn(comment = "关闭的异步支付通道")
+    @DbColumn(comment = "关闭的支付通道")
     private String channel;
 
     /**

@@ -13,11 +13,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付订单查询参数")
-public class QueryAllocationOrderParam extends PaymentCommonParam {
-
-    @Schema(description = "分账订单ID")
-    private Long orderId;
+public class QueryAllocOrderParam extends PaymentCommonParam {
 
     @Schema(description = "分账单号")
     private String allocationNo;
+
+    @Schema(description = "商户分账单号")
+    private String bizAllocationNo;
 }

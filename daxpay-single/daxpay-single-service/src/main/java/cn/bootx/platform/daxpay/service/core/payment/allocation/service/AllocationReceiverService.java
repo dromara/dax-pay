@@ -6,7 +6,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.convert.AllocationReceiverConvert;
@@ -71,11 +71,11 @@ public class AllocationReceiverService {
      */
     public List<LabelValue> findReceiverTypeByChannel(String channel){
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(channel);
-        List<AllocationReceiverTypeEnum> list;
+        List<AllocReceiverTypeEnum> list;
         if (channelEnum == PayChannelEnum.ALI){
-            list = AllocationReceiverTypeEnum.ALI_LIST;
+            list = AllocReceiverTypeEnum.ALI_LIST;
         } else if (channelEnum == PayChannelEnum.WECHAT){
-            list = AllocationReceiverTypeEnum.WECHAT_LIST;
+            list = AllocReceiverTypeEnum.WECHAT_LIST;
         } else {
             throw new BizException("非法的分账通道类型");
         }

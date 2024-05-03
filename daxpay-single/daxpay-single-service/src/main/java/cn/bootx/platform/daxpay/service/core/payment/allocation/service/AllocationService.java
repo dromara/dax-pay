@@ -1,10 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.daxpay.code.AllocationDetailResultEnum;
-import cn.bootx.platform.daxpay.code.AllocationOrderResultEnum;
-import cn.bootx.platform.daxpay.code.AllocationOrderStatusEnum;
-import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.AllocDetailResultEnum;
+import cn.bootx.platform.daxpay.code.AllocOrderResultEnum;
+import cn.bootx.platform.daxpay.code.AllocOrderStatusEnum;
+import cn.bootx.platform.daxpay.code.PayOrderAllocStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.param.payment.allocation.AllocationSyncParam;
 import cn.bootx.platform.daxpay.param.payment.allocation.AllocationFinishParam;
@@ -26,7 +26,6 @@ import cn.bootx.platform.daxpay.service.core.payment.allocation.entity.Allocatio
 import cn.bootx.platform.daxpay.service.core.payment.allocation.factory.AllocationFactory;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationGroupReceiverResult;
 import cn.bootx.platform.daxpay.service.func.AbsAllocationStrategy;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -90,12 +89,12 @@ public class AllocationService {
             // 分账处理
             allocationStrategy.allocation();
             // 执行中
-            order.setStatus(AllocationOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
+            order.setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
                     .setErrorMsg(null);
         } catch (Exception e) {
             log.error("分账出现错误:", e);
             // 失败
-            order.setStatus(AllocationOrderStatusEnum.ALLOCATION_FAILED.getCode())
+            order.setStatus(AllocOrderStatusEnum.ALLOCATION_FAILED.getCode())
                     .setErrorMsg(e.getMessage());
         }
         // 网关分账号
@@ -123,9 +122,9 @@ public class AllocationService {
                     .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
         }
         // 需要是分账中分账中或者完成状态才能重新分账
-        List<String> list = Arrays.asList(AllocationOrderStatusEnum.ALLOCATION_END.getCode(),
-                AllocationOrderStatusEnum.ALLOCATION_FAILED.getCode(),
-                AllocationOrderStatusEnum.ALLOCATION_PROCESSING.getCode());
+        List<String> list = Arrays.asList(AllocOrderStatusEnum.ALLOCATION_END.getCode(),
+                AllocOrderStatusEnum.ALLOCATION_FAILED.getCode(),
+                AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode());
         if (!list.contains(allocationOrder.getStatus())){
             throw new PayFailureException("分账单状态错误");
         }
@@ -141,13 +140,13 @@ public class AllocationService {
         try {
             // 重复分账处理
             allocationStrategy.allocation();
-            allocationOrder.setStatus(AllocationOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
+            allocationOrder.setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
                     .setErrorMsg(null);
 
         } catch (Exception e) {
             log.error("重新分账出现错误:", e);
             // 失败
-            allocationOrder.setStatus(AllocationOrderStatusEnum.ALLOCATION_FAILED.getCode())
+            allocationOrder.setStatus(AllocOrderStatusEnum.ALLOCATION_FAILED.getCode())
                     .setErrorMsg(e.getMessage());
         }
         allocationOrderManager.updateById(allocationOrder);
@@ -166,7 +165,7 @@ public class AllocationService {
                     .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
         }
         // 只有分账结束后才可以完结
-        if (!AllocationOrderStatusEnum.ALLOCATION_END.getCode().equals(allocationOrder.getStatus())){
+        if (!AllocOrderStatusEnum.ALLOCATION_END.getCode().equals(allocationOrder.getStatus())){
             throw new PayFailureException("分账单状态错误");
         }
 
@@ -181,12 +180,12 @@ public class AllocationService {
             // 完结处理
             allocationStrategy.finish();
             // 完结状态
-            allocationOrder.setStatus(AllocationOrderStatusEnum.FINISH.getCode())
+            allocationOrder.setStatus(AllocOrderStatusEnum.FINISH.getCode())
                     .setErrorMsg(null);
         } catch (Exception e) {
             log.error("分账完结错误:", e);
             // 失败
-            allocationOrder.setStatus(AllocationOrderStatusEnum.FINISH_FAILED.getCode())
+            allocationOrder.setStatus(AllocOrderStatusEnum.FINISH_FAILED.getCode())
                     .setErrorMsg(e.getMessage());
         }
         allocationOrderManager.updateById(allocationOrder);
@@ -231,35 +230,35 @@ public class AllocationService {
         // 判断明细状态. 获取成功和失败的
         long successCount = details.stream()
                 .map(AllocationOrderDetail::getResult)
-                .filter(AllocationDetailResultEnum.SUCCESS.getCode()::equals)
+                .filter(AllocDetailResultEnum.SUCCESS.getCode()::equals)
                 .count();
         long failCount = details.stream()
                 .map(AllocationOrderDetail::getResult)
-                .filter(AllocationDetailResultEnum.FAIL.getCode()::equals)
+                .filter(AllocDetailResultEnum.FAIL.getCode()::equals)
                 .count();
 
         // 成功和失败都为0 进行中
         if (successCount == 0 && failCount == 0){
-            allocationOrder.setStatus(AllocationOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
-                    .setResult(AllocationOrderResultEnum.ALL_PENDING.getCode());
+            allocationOrder.setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
+                    .setResult(AllocOrderResultEnum.ALL_PENDING.getCode());
         } else if (failCount == details.size()){
             // 全部失败
-            allocationOrder.setStatus(AllocationOrderStatusEnum.ALLOCATION_END.getCode())
-                    .setResult(AllocationOrderResultEnum.ALL_FAILED.getCode());
+            allocationOrder.setStatus(AllocOrderStatusEnum.ALLOCATION_END.getCode())
+                    .setResult(AllocOrderResultEnum.ALL_FAILED.getCode());
         } else if (successCount == details.size()){
             // 全部成功
-            allocationOrder.setStatus(AllocationOrderStatusEnum.ALLOCATION_END.getCode())
-                    .setResult(AllocationOrderResultEnum.ALL_SUCCESS.getCode());
+            allocationOrder.setStatus(AllocOrderStatusEnum.ALLOCATION_END.getCode())
+                    .setResult(AllocOrderResultEnum.ALL_SUCCESS.getCode());
         } else {
             // 部分成功
-            allocationOrder.setStatus(AllocationOrderStatusEnum.ALLOCATION_END.getCode())
-                    .setResult(AllocationOrderResultEnum.PART_SUCCESS.getCode());
+            allocationOrder.setStatus(AllocOrderStatusEnum.ALLOCATION_END.getCode())
+                    .setResult(AllocOrderResultEnum.PART_SUCCESS.getCode());
         }
         // 如果是分账结束或失败, 状态复原
-        List<String> list = Arrays.asList(AllocationOrderStatusEnum.FINISH.getCode(), AllocationOrderStatusEnum.FINISH_FAILED.getCode());
+        List<String> list = Arrays.asList(AllocOrderStatusEnum.FINISH.getCode(), AllocOrderStatusEnum.FINISH_FAILED.getCode());
         if (list.contains(status)){
-            allocationOrder.setStatus(AllocationOrderStatusEnum.FINISH.getCode())
-                    .setResult(AllocationOrderResultEnum.ALL_SUCCESS.getCode());
+            allocationOrder.setStatus(AllocOrderStatusEnum.FINISH.getCode())
+                    .setResult(AllocOrderResultEnum.ALL_SUCCESS.getCode());
         }
     }
 
@@ -275,7 +274,7 @@ public class AllocationService {
             throw new PayFailureException("该订单不允许分账");
         }
         // 判断分账状态
-        if (Objects.equals(PayOrderAllocationStatusEnum.ALLOCATION.getCode(), payOrder.getAllocationStatus())){
+        if (Objects.equals(PayOrderAllocStatusEnum.ALLOCATION.getCode(), payOrder.getAllocationStatus())){
             throw new PayFailureException("该订单已分账完成");
         }
         return payOrder;

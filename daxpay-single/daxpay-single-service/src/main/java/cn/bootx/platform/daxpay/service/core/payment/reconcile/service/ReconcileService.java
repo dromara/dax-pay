@@ -3,11 +3,17 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.CollUtil;
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileDiffTypeEnum;
+import cn.bootx.platform.daxpay.service.code.ReconcileResultEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
@@ -15,6 +21,8 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDif
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileDiffService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileOrderService;
+import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
+import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.factory.ReconcileStrategyFactory;
@@ -28,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +58,12 @@ public class ReconcileService {
     private final ReconcileDiffService reconcileDiffService;
 
     private final ReconcileOrderManager reconcileOrderManager;
+
     private final ReconcileDetailManager reconcileDetailManager;
+
+    private final PayOrderManager payOrderManager;
+
+    private final RefundOrderManager refundOrderManager;
 
     /**
      * 创建对账订单
@@ -71,37 +85,6 @@ public class ReconcileService {
         ReconcileOrder reconcileOrder = reconcileOrderService.findById(reconcileOrderId)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
         this.downAndSave(reconcileOrder);
-    }
-
-    /**
-     * 手动传输对账单
-     * @param id 对账单ID
-     * @param file 文件
-     */
-    public void upload(Long id, MultipartFile file) {
-        ReconcileOrder reconcileOrder = reconcileOrderService.findById(id)
-                .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
-        // 将对账订单写入到上下文中
-        PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
-        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
-        reconcileStrategy.setRecordOrder(reconcileOrder);
-        reconcileStrategy.doBeforeHandler();
-        try {
-            reconcileStrategy.upload(file);
-            reconcileOrder.setDownOrUpload(true)
-                    .setErrorMsg(null);
-            reconcileOrderService.update(reconcileOrder);
-        } catch (Exception e) {
-            log.error("上传对账单异常", e);
-            reconcileOrder.setErrorMsg("原因: " + e.getMessage());
-            reconcileOrderService.update(reconcileOrder);
-            throw new RuntimeException(e);
-        }
-        // 保存转换后的通用结构对账单
-        List<ReconcileDetail> reconcileDetails = PaymentContextLocal.get()
-                .getReconcileInfo()
-                .getReconcileDetails();
-        reconcileDetailManager.saveAll(reconcileDetails);
     }
 
     /**
@@ -138,8 +121,39 @@ public class ReconcileService {
     }
 
     /**
+     * 手动传输对账单
+     * @param id 对账单ID
+     * @param file 文件
+     */
+    public void upload(Long id, MultipartFile file) {
+        ReconcileOrder reconcileOrder = reconcileOrderService.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
+        // 将对账订单写入到上下文中
+        PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
+        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
+        reconcileStrategy.setRecordOrder(reconcileOrder);
+        reconcileStrategy.doBeforeHandler();
+        try {
+            reconcileStrategy.upload(file);
+            reconcileOrder.setDownOrUpload(true)
+                    .setErrorMsg(null);
+            reconcileOrderService.update(reconcileOrder);
+        } catch (Exception e) {
+            log.error("上传对账单异常", e);
+            reconcileOrder.setErrorMsg("原因: " + e.getMessage());
+            reconcileOrderService.update(reconcileOrder);
+            throw new RuntimeException(e);
+        }
+        // 保存转换后的通用结构对账单
+        List<ReconcileDetail> reconcileDetails = PaymentContextLocal.get()
+                .getReconcileInfo()
+                .getReconcileDetails();
+        reconcileDetailManager.saveAll(reconcileDetails);
+    }
+    /**
      * 对账单比对
      */
+    @Transactional(rollbackFor = Exception.class)
     public void compare(Long reconcileOrderId){
         ReconcileOrder reconcileOrder = reconcileOrderService.findById(reconcileOrderId)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
@@ -158,27 +172,81 @@ public class ReconcileService {
         if (reconcileOrder.isCompare()){
             throw new PayFailureException("对账单比对已经完成");
         }
-
         // 查询对账单
         List<ReconcileDetail> reconcileDetails = reconcileDetailManager.findAllByReconcileId(reconcileOrder.getId());
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
         // 初始化参数
         reconcileStrategy.setRecordOrder(reconcileOrder);
-        reconcileStrategy.setReconcileDetails(reconcileDetails);
+
         try {
             // 执行比对任务, 获取对账差异记录并保存
-            List<GeneralTradeInfo> generalTradeInfo = reconcileStrategy.getGeneralReconcileRecord();
+            List<GeneralTradeInfo> generalTradeInfo = this.getGeneralTradeInfoList(reconcileOrder);
             List<ReconcileDiffRecord> diffRecords = this.generateDiffRecord(reconcileOrder, generalTradeInfo,reconcileDetails);
+            // 判断是否有差异
+            if (CollUtil.isNotEmpty(diffRecords)){
+                reconcileOrder.setResult(ReconcileResultEnum.INCONSISTENT.getCode());
+            }else {
+                reconcileOrder.setResult(ReconcileResultEnum.CONSISTENT.getCode());
+            }
             reconcileOrder.setCompare(true);
             reconcileOrderService.update(reconcileOrder);
             reconcileDiffService.saveAll(diffRecords);
         } catch (Exception e) {
             log.error("比对对账单异常", e);
-            reconcileOrder.setErrorMsg("原因: " + e.getMessage());
-            reconcileOrderService.update(reconcileOrder);
-            throw new RuntimeException(e);
+            throw e;
         }
+    }
+
+    /**
+     * 下载原始对账单文件
+     */
+    public void downOriginal(Long id){
+
+    }
+
+    /**
+     * 下载基于原始对账单数据转换的对账单文件, 例如csv, json方式
+     */
+    public void downTransfer(Long id){
+        ReconcileOrder reconcileOrderOriginal = reconcileOrderService.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
+        // 获取
+    }
+
+    /**
+     * 获取通用对账对象, 将支付/退款订单转换为对账对象
+     */
+    private List<GeneralTradeInfo> getGeneralTradeInfoList(ReconcileOrder reconcileOrder){
+        List<GeneralTradeInfo> generalTradeInfoList = new ArrayList<>();
+        // 查询流水
+        LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(reconcileOrder.getDate());
+        LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);
+        LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
+
+        // 下载支付订单
+        List<PayOrder> payOrders = payOrderManager.findReconcile(reconcileOrder.getChannel(), start, end, PayStatusEnum.SUCCESS, PayStatusEnum.PARTIAL_REFUND, PayStatusEnum.REFUNDING, PayStatusEnum.REFUNDED);
+        List<RefundOrder> refundOrders = refundOrderManager.findReconcile(reconcileOrder.getChannel(), start, end, RefundStatusEnum.SUCCESS);
+        for (PayOrder payOrder : payOrders) {
+            generalTradeInfoList.add(new GeneralTradeInfo()
+                    .setTitle(payOrder.getTitle())
+                    .setTradeNo(payOrder.getOrderNo())
+                    .setOutTradeNo(payOrder.getOutOrderNo())
+                    .setFinishTime(payOrder.getPayTime())
+                    .setType(PaymentTypeEnum.PAY.getCode())
+                    .setAmount(payOrder.getAmount())
+            );
+        }
+        for (RefundOrder refundOrder : refundOrders) {
+            generalTradeInfoList.add(new GeneralTradeInfo()
+                    .setTitle(refundOrder.getTitle())
+                    .setTradeNo(refundOrder.getOrderNo())
+                    .setOutTradeNo(refundOrder.getOutOrderNo())
+                    .setFinishTime(refundOrder.getFinishTime())
+                    .setType(PaymentTypeEnum.REFUND.getCode())
+                    .setAmount(refundOrder.getAmount()));
+        }
+        return generalTradeInfoList;
     }
 
     /**
@@ -220,7 +288,7 @@ public class ReconcileService {
                         .setTitle(outDetail.getTitle())
                         .setOrderType(outDetail.getType())
                         .setOutOrderNo(outDetail.getOutTradeNo())
-                        .setAmount(outDetail.getAmount())
+                        .setOutAmount(outDetail.getAmount())
                         .setTradeTime(outDetail.getTradeTime());
                 diffRecords.add(diffRecord);
                 continue;
@@ -236,7 +304,8 @@ public class ReconcileService {
                         .setTitle(outDetail.getTitle())
                         .setOrderType(outDetail.getType())
                         .setOutOrderNo(outDetail.getOutTradeNo())
-                        .setAmount(outDetail.getAmount())
+                        .setOutAmount(outDetail.getAmount())
+                        .setAmount(localTrade.getAmount())
                         .setDiffs(reconcileDiffs)
                         .setTradeTime(outDetail.getTradeTime());
                 diffRecords.add(diffRecord);
@@ -269,7 +338,7 @@ public class ReconcileService {
      * @param outDetail 下载的对账订单
      * @param localTrade 本地交易订单
      */
-    public List<ReconcileDiff> reconcileDiff(ReconcileDetail outDetail, GeneralTradeInfo localTrade){
+    private List<ReconcileDiff> reconcileDiff(ReconcileDetail outDetail, GeneralTradeInfo localTrade){
         List<ReconcileDiff> diffs = new ArrayList<>();
 
         // 判断类型是否相同

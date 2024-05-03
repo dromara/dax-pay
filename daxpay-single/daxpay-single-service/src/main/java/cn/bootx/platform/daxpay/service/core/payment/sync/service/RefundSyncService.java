@@ -119,7 +119,7 @@ public class RefundSyncService {
             // 同步成功记录日志
             this.saveRecord(refundOrder, syncResult, !statusSync, repairResult.getRepairNo(), null);
             return new SyncResult()
-                    .setGatewayStatus(syncResult.getSyncStatus().getCode())
+                    .setStatus(syncResult.getSyncStatus().getCode())
                     .setRepair(!statusSync)
                     .setRepairNo(repairResult.getRepairNo());
         } finally {
@@ -184,7 +184,7 @@ public class RefundSyncService {
     }
 
     /**
-     * 保存同步记录
+     * 保存同步记录, 使用新事务进行保存
      * @param refundOrder 支付单
      * @param syncResult 同步结果
      * @param repair 是否修复

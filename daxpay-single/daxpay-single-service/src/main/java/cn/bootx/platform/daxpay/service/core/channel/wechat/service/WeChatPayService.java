@@ -277,7 +277,7 @@ public class WeChatPayService {
     public void rotationSync(PayOrder payOrder) {
         SyncResult syncResult = paySyncService.syncPayOrder(payOrder);
         // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
-        if (Objects.equals(PROGRESS.getCode(), syncResult.getGatewayStatus())) {
+        if (Objects.equals(PROGRESS.getCode(), syncResult.getStatus())) {
             throw new RetryableException();
         }
     }

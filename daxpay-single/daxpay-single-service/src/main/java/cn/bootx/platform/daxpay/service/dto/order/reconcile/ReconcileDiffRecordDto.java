@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileDiffTypeEnum;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff;
+import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,25 +26,41 @@ public class ReconcileDiffRecordDto extends BaseDto {
 
     /** 对账单ID */
     @Schema(description = "对账单ID")
-    private Long recordId;
+    private Long ReconcileId;
 
     /** 对账单明细ID */
     @Schema(description = "对账单明细ID")
     private Long detailId;
 
-    /** 本地订单id */
-    @Schema(description = "本地订单id")
-    private Long orderId;
+    /** 本地交易号 */
+    @Schema(description = "本地交易号")
+    private String tradeNo;
+
+    /** 外部交易号 */
+    @Schema(description = "外部交易号")
+    private String outOrderNo;
+
+    /** 交易时间 */
+    @Schema(description = "交易时间")
+    private LocalDateTime tradeTime;
 
     /** 订单标题 */
     @Schema(description = "订单标题")
     private String title;
 
+    /** 交易金额 */
+    @Schema(description = "交易金额")
+    private Integer amount;
+
+    /** 外部交易金额 */
+    @DbColumn(comment = "外部交易金额")
+    private Integer outAmount;
+
     /**
-     * 对账订单类型
+     * 订单类型
      * @see ReconcileTradeEnum
      */
-    @Schema(description = "对账订单类型")
+    @Schema(description = "订单类型")
     private String orderType;
 
     /**
@@ -60,17 +77,4 @@ public class ReconcileDiffRecordDto extends BaseDto {
      */
     @Schema(description = "差异内容")
     private List<ReconcileDiff> diffs;
-
-
-    /** 网关订单号 */
-    @Schema(description = "网关订单号")
-    private String gatewayOrderNo;
-
-    /** 交易金额 */
-    @Schema(description = "交易金额")
-    private Integer amount;
-
-    /** 订单时间 */
-    @Schema(description = "订单时间")
-    private LocalDateTime orderTime;
 }

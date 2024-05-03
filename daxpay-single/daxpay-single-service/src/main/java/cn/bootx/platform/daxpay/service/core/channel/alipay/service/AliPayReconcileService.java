@@ -4,12 +4,16 @@ import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
+import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBillTotalManager;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillTotal;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
@@ -25,6 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.dromara.x.file.storage.core.FileInfo;
+import org.dromara.x.file.storage.core.FileStorageService;
+import org.dromara.x.file.storage.core.UploadPretreatment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,14 +58,20 @@ public class AliPayReconcileService {
 
     private final AliReconcileBillTotalManager reconcileBillTotalManager;
 
+    private final ReconcileFileManager reconcileFileManager;
+
+    private final FileStorageService fileStorageService;
+
+
     /**
      * 下载对账单, 并进行解析进行保存
      *
-     * @param date 对账日期 yyyy-MM-dd 格式
+     * @param date        对账日期 yyyy-MM-dd 格式
+     * @param recordOrder 对账单对象
      */
     @SneakyThrows
     @Transactional(rollbackFor = Exception.class)
-    public void downAndSave(String date){
+    public void downAndSave(String date, ReconcileOrder recordOrder){
 
         try {
             AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
@@ -93,6 +106,8 @@ public class AliPayReconcileService {
             }
             // 保存原始对账记录
             this.save(billDetails, billTotals);
+            // 保存文件
+            this.saveOriginalFile(recordOrder, bytes);
 
             // 将原始交易明细对账记录转换通用结构并保存到上下文中
             this.convertAndSave(billDetails);
@@ -217,6 +232,24 @@ public class AliPayReconcileService {
         billTotal = billTotal.replaceAll("\t", "");
         CsvReader reader = CsvUtil.getReader();
         return reader.read(billTotal, AliReconcileBillTotal.class);
+    }
+
+    /**
+     * 保存下载的原始对账文件
+     */
+    private void saveOriginalFile(ReconcileOrder reconcileOrder, byte[] bytes) {
+        // 将原始文件进行保存
+        String fileName = "";
+        UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
+        if (StrUtil.isNotBlank(fileName)) {
+            uploadPretreatment.setOriginalFilename(fileName);
+        }
+        FileInfo upload = uploadPretreatment.upload();
+        String fileId = upload.getId();
+        ReconcileFile reconcileFile = new ReconcileFile().setFileId(Long.valueOf(fileId))
+                .setReconcileId(reconcileOrder.getId())
+                .setType(ReconcileFileTypeEnum.ZIP.getCode());
+        reconcileFileManager.save(reconcileFile);
     }
 
 }

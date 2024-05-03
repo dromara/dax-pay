@@ -32,8 +32,8 @@ public class PaySyncRecordDto extends BaseDto {
     @Schema(description = "商户交易号")
     private String bizTradeNo;
 
-    /** 三方交易号 */
-    @Schema(description = "三方交易号")
+    /** 外部交易号 */
+    @Schema(description = "外部交易号")
     private String outTradeNo;
 
 

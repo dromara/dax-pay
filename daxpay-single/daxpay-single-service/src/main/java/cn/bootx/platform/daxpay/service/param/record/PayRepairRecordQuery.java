@@ -29,10 +29,6 @@ public class PayRepairRecordQuery {
     @Schema(description = "修复号")
     private String repairNo;
 
-    /** 支付ID/退款ID */
-    @Schema(description = "本地订单ID")
-    private Long tradeId;
-
     /**
      * 本地交易号, 支付号/退款号
      */
@@ -62,7 +58,7 @@ public class PayRepairRecordQuery {
     private String repairWay;
 
     /** 修复的异步通道 */
-    @Schema(description = "修复的异步通道")
+    @Schema(description = "修复的通道")
     private String channel;
 
     /**

@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.dto.order.reconcile;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.service.code.ReconcileResultEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,21 +20,38 @@ import java.time.LocalDate;
 @Schema(title = "对账订单")
 public class ReconcileOrderDto extends BaseDto {
 
+    /** 对账号 */
+    @Schema(description = "对账号")
+    private String reconcileNo;
+
+    /** 日期 */
     @Schema(description = "日期")
     private LocalDate date;
 
-    @Schema(description = "批次号")
-    private String batchNo;
-
+    /** 通道 */
     @Schema(description = "通道")
     private String channel;
 
-    @Schema(description = "是否下载成功")
-    private boolean down;
+    /** 是否下载成功 */
+    @Schema(description = "是否下载或上传")
+    private boolean downOrUpload;
 
+    /** 是否比对完成 */
     @Schema(description = "是否比对完成")
     private boolean compare;
 
+    /**
+     * 对账结果
+     * @see ReconcileResultEnum
+     */
+    @Schema(description = "对账结果")
+    private String result;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误信息 */
     @Schema(description = "错误信息")
     private String errorMsg;
 }

@@ -5,7 +5,6 @@ import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayReconcileService;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -69,18 +65,6 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
     @Override
     public void downAndSave() {
         String date = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.NORM_DATE_PATTERN);
-        reconcileService.downAndSave(date);
-    }
-
-    /**
-     * 获取通用对账对象, 将流水记录转换为对账对象
-     */
-    @Override
-    public List<GeneralTradeInfo> getGeneralReconcileRecord() {
-        // 查询流水
-        LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(this.getRecordOrder().getDate());
-        LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);
-        LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
-        return null;
+        reconcileService.downAndSave(date,this.getRecordOrder());
     }
 }

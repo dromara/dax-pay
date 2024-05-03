@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.daxpay.service.code.ReconcileResultEnum;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.ReconcileConvert;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -24,12 +25,10 @@ import java.time.LocalDate;
 @Data
 @Accessors(chain = true)
 @DbTable(comment = "支付对账单订单")
-@TableName("pay_reconcile_order")
+@TableName(value = "pay_reconcile_order")
 public class ReconcileOrder extends MpCreateEntity implements EntityBaseFunction<ReconcileOrderDto> {
 
-    /**
-     * 批次号
-     */
+    /** 对账号 */
     @DbColumn(comment = "对账号")
     private String reconcileNo;
 
@@ -49,8 +48,11 @@ public class ReconcileOrder extends MpCreateEntity implements EntityBaseFunction
     @DbColumn(comment = "是否比对完成")
     private boolean compare;
 
-    /** 比对结果 */
-    @DbColumn(comment = "比对结果")
+    /**
+     * 对账结果
+     * @see ReconcileResultEnum
+     */
+    @DbColumn(comment = "对账结果")
     private String result;
 
     /** 错误码 */

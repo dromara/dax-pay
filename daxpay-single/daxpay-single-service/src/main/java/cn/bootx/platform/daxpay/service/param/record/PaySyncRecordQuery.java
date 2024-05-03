@@ -23,24 +23,24 @@ import lombok.experimental.Accessors;
 public class PaySyncRecordQuery {
 
     /** 本地交易号 */
-    @Schema(description = "本地订单ID")
+    @Schema(description = "本地交易号")
     private String tradeNo;
 
     /** 商户交易号 */
     @Schema(description = "商户交易号")
     private String bizTradeNo;
 
-    /** 三方交易号 */
-    @Schema(description = "三方交易号")
+    /** 外部交易号 */
+    @Schema(description = "外部交易号")
     private String outTradeNo;
 
 
     /**
-     * 三方支付返回状态
+     * 同步结果
      * @see PaySyncStatusEnum
      * @see RefundSyncStatusEnum
      */
-    @Schema(description = "网关返回状态")
+    @Schema(description = "同步结果")
     private String outTradeStatus;
 
 
@@ -58,9 +58,9 @@ public class PaySyncRecordQuery {
     @Schema(description = "同步的异步通道")
     private String channel;
 
-    /** 网关返回的同步消息 */
+    /** 三方支付返回的消息内容 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @Schema(description = "同步消息")
+    @Schema(description = "消息内容")
     private String syncInfo;
 
     /**

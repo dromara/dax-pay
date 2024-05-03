@@ -1,6 +1,6 @@
 package cn.bootx.platform.daxpay.service.core.order.pay.builder;
 
-import cn.bootx.platform.daxpay.code.PayOrderAllocationStatusEnum;
+import cn.bootx.platform.daxpay.code.PayOrderAllocStatusEnum;
 import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.param.payment.pay.PayParam;
 import cn.bootx.platform.daxpay.service.common.context.NoticeLocal;
@@ -46,7 +46,7 @@ public class PayBuilder {
                 .setRefundableBalance(payParam.getAmount());
         // 如果支持分账, 设置分账状态为代分账
         if (payOrder.getAllocation()) {
-            payOrder.setAllocationStatus(PayOrderAllocationStatusEnum.WAITING.getCode());
+            payOrder.setAllocationStatus(PayOrderAllocStatusEnum.WAITING.getCode());
         }
         return payOrder;
     }

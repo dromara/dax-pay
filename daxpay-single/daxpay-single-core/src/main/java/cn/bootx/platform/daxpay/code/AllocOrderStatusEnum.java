@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AllocationOrderStatusEnum {
+public enum AllocOrderStatusEnum {
 
     ALLOCATION_PROCESSING("allocation_processing", "分账处理中"),
     ALLOCATION_END("allocation_end", "分账完成"),

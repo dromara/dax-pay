@@ -1,8 +1,8 @@
 package cn.bootx.platform.daxpay.service.dto.order.allocation;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.platform.daxpay.code.AllocationDetailResultEnum;
-import cn.bootx.platform.daxpay.code.AllocationReceiverTypeEnum;
+import cn.bootx.platform.daxpay.code.AllocDetailResultEnum;
+import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -41,7 +41,7 @@ public class AllocationOrderDetailDto extends BaseDto {
 
     /**
      * 分账接收方类型
-     * @see AllocationReceiverTypeEnum
+     * @see AllocReceiverTypeEnum
      */
     @Schema(description = "分账接收方类型")
     private String receiverType;
@@ -57,7 +57,7 @@ public class AllocationOrderDetailDto extends BaseDto {
 
     /**
      * 分账结果
-     * @see AllocationDetailResultEnum
+     * @see AllocDetailResultEnum
      */
     @Schema(description = "分账结果")
     private String result;

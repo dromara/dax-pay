@@ -1,11 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 
-import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayReconcileService;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.date.DateUtil;
@@ -16,9 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -38,6 +34,14 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
     private final UnionPayReconcileService reconcileService;
 
     private UnionPayKit unionPayKit;
+
+    /**
+     * 策略标识
+     */
+    @Override
+    public PayChannelEnum getChannel() {
+        return PayChannelEnum.UNION_PAY;
+    }
 
     /**
      * 对账前处理, 主要是初始化支付SDK配置
@@ -70,23 +74,5 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
         reconcileService.downAndSave(date, this.unionPayKit);
     }
 
-    /**
-     * 获取通用对账对象, 将流水记录转换为对账对象
-     */
-    @Override
-    public List<GeneralTradeInfo> getGeneralReconcileRecord() {
-        // 查询流水
-        LocalDateTime localDateTime = LocalDateTimeUtil.date2DateTime(this.getRecordOrder().getDate());
-        LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);
-        LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
-        return null;
-    }
 
-    /**
-     * 策略标识
-     */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.UNION_PAY;
-    }
 }

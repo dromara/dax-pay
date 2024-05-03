@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.domain;
 
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
  * @since 2024/3/1
  */
 @Data
+@Accessors(chain = true)
 public class GeneralTradeInfo {
     /** 标题 */
     private String title;

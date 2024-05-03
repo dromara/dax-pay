@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Getter
 @AllArgsConstructor
-public enum AllocationReceiverTypeEnum {
+public enum AllocReceiverTypeEnum {
     /** 个人 */
     WX_PERSONAL("wx_personal","PERSONAL_OPENID", "个人"),
     /** 商户 */
@@ -37,16 +37,16 @@ public enum AllocationReceiverTypeEnum {
     /**
      * 根据编码查找
      */
-    public static AllocationReceiverTypeEnum findByCode(String code) {
-        return Arrays.stream(AllocationReceiverTypeEnum.values())
+    public static AllocReceiverTypeEnum findByCode(String code) {
+        return Arrays.stream(AllocReceiverTypeEnum.values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("未找到对应的分账接收方类型"));
     }
 
     /** 微信支持类型 */
-    public static final List<AllocationReceiverTypeEnum> WECHAT_LIST = Collections.unmodifiableList(Arrays.asList(WX_PERSONAL, WX_MERCHANT));
+    public static final List<AllocReceiverTypeEnum> WECHAT_LIST = Collections.unmodifiableList(Arrays.asList(WX_PERSONAL, WX_MERCHANT));
     /** 支付宝支持类型 */
-    public static final List<AllocationReceiverTypeEnum> ALI_LIST = Collections.unmodifiableList(Arrays.asList(ALI_OPEN_ID, ALI_USER_ID, ALI_LOGIN_NAME));
+    public static final List<AllocReceiverTypeEnum> ALI_LIST = Collections.unmodifiableList(Arrays.asList(ALI_OPEN_ID, ALI_USER_ID, ALI_LOGIN_NAME));
 
 }

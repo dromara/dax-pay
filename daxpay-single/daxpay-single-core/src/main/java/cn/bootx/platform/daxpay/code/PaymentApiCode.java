@@ -9,11 +9,7 @@ public interface PaymentApiCode {
 
     String PAY = "pay";
 
-    String SIMPLE_PAY = "simplePay";
-
     String REFUND = "refund";
-
-    String SIMPLE_REFUND = "simpleRefund";
 
     String CLOSE = "close";
 
