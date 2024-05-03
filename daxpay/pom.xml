@@ -4,17 +4,30 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cn.daxpay.multi</groupId>
-        <artifactId>daxpay-multi-server</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>cn.daxpay.multi</groupId>
     <artifactId>daxpay</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>daxpay-service</module>
         <module>daxpay-admin</module>
     </modules>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <bootx-platform.version>0.0.1-SNAPSHOT</bootx-platform.version>
+        <daxpay.version>0.0.1-SNAPSHOT</daxpay.version>
+    </properties>
 
 
 </project>

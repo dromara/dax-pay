@@ -5,13 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>cn.daxpay.multi</groupId>
-        <artifactId>daxpay-multi-server</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>cn.bootx.platform</groupId>
     <artifactId>bootx-platform</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>基础脚手架服务</description>
 
@@ -23,6 +25,7 @@
     </modules>
 
     <properties>
+        <bootx-platform.version>0.0.1-SNAPSHOT</bootx-platform.version>
         <springdoc.version>2.5.0</springdoc.version>
         <hutool.version>5.8.27</hutool.version>
         <knife4j.version>4.4.0</knife4j.version>

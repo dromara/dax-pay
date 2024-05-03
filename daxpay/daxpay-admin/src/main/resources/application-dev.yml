@@ -18,10 +18,6 @@ logging:
 springdoc:
   # 默认展开对象类型的属性, 主要用在get类型的参数中
   default-flat-param-object: true
-# 接口文档增强配置
-knife4j:
-  enable: true
-  production: true
 # 基础脚手架配置
 bootx-platform:
   common:
