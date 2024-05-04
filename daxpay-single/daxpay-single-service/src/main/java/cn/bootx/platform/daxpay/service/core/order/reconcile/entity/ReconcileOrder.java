@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDate;
 
 /**
- * 支付对账单订单
+ * 支付对账单订单(交易对账单, 不包括资金对账)
  * @author xxm
  * @since 2024/1/18
  */
@@ -44,24 +44,16 @@ public class ReconcileOrder extends MpCreateEntity implements EntityBaseFunction
     @DbColumn(comment = "通道")
     private String channel;
 
-    /** 明细对账文件是否下载成功 */
+    /** 交易对账文件是否下载成功 */
     @DbColumn(comment = "明细对账单下载")
-    private boolean detailDown;
+    private boolean downOrUpload;
 
-    /** 明细是否比对完成 */
+    /** 交易对账文件是否比对完成 */
     @DbColumn(comment = "明细对账单比对")
-    private boolean detailCompare;
-
-    /** 汇总对账文件是否下载成功 */
-    @DbColumn(comment = "汇总对账单下载")
-    private boolean totalDown;
-
-    /** 汇总是否比对完成 */
-    @DbColumn(comment = "汇总对账单比对")
-    private boolean totalCompare;
+    private boolean compare;
 
     /**
-     * 对账结果
+     * 交易对账结果
      * @see ReconcileResultEnum
      */
     @DbColumn(comment = "对账结果")

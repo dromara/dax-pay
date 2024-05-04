@@ -1,10 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.order.reconcile.conver;
 
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDiffRecord;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDiff;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
-import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDetailDto;
-import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDiffRecordDto;
+import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileTradeDetailDto;
+import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDiffDto;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileOrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -18,9 +18,9 @@ import org.mapstruct.factory.Mappers;
 public interface ReconcileConvert {
     ReconcileConvert CONVERT = Mappers.getMapper(ReconcileConvert.class);
 
-    ReconcileDetailDto convert(ReconcileDetail in);
+    ReconcileTradeDetailDto convert(ReconcileTradeDetail in);
 
-    ReconcileDiffRecordDto convert(ReconcileDiffRecord in);
+    ReconcileDiffDto convert(ReconcileDiff in);
 
     ReconcileOrderDto convert(ReconcileOrder in);
 }

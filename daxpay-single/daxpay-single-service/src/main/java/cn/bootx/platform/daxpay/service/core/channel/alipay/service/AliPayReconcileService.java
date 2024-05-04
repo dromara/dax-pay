@@ -12,7 +12,7 @@ import cn.bootx.platform.daxpay.service.core.channel.alipay.dao.AliReconcileBill
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.hutool.core.date.DatePattern;
@@ -87,14 +87,15 @@ public class AliPayReconcileService {
 
             // 获取对账单下载地址并下载
             String url = response.getBillDownloadUrl();
-            byte[] bytes = HttpUtil.downloadBytes(url);
+            byte[] zipBytes = HttpUtil.downloadBytes(url);
             // 使用 Apache commons-compress 包装流, 读取返回的对账CSV文件
-            ZipArchiveInputStream zipArchiveInputStream = new ZipArchiveInputStream(new ByteArrayInputStream(bytes),"GBK");
+            ZipArchiveInputStream zipArchiveInputStream = new ZipArchiveInputStream(new ByteArrayInputStream(zipBytes),"GBK");
             ZipArchiveEntry entry;
             List<AliReconcileBillDetail> billDetails = new ArrayList<>();
             List<AliReconcileBillTotal> billTotals = new ArrayList<>();
             while ((entry= zipArchiveInputStream.getNextZipEntry()) != null){
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zipArchiveInputStream,"GBK"));
+                byte[] bytes = IoUtil.readBytes(zipArchiveInputStream);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes),"GBK"));
                 List<String> strings = IoUtil.readLines(bufferedReader, new ArrayList<>());
                 String name = entry.getName();
                 if (StrUtil.endWith(name,"_业务明细(汇总).csv")){
@@ -104,12 +105,11 @@ public class AliPayReconcileService {
                     // 明细
                     billDetails = this.parseDetail(strings);
                 }
+                // 保存原始对账文件
+                this.saveOriginalFile(recordOrder, bytes);
             }
-            // 保存原始对账文件
-            this.saveOriginalFile(recordOrder, bytes);
             // 保存原始对账记录
             this.save(billDetails, billTotals);
-
             // 将原始交易明细对账记录转换通用结构并保存到上下文中
             this.convertAndSave(billDetails);
 
@@ -162,25 +162,24 @@ public class AliPayReconcileService {
      * 转换为通用对账记录对象
      */
     private void convertAndSave(List<AliReconcileBillDetail> billDetails){
-        List<ReconcileDetail> collect = billDetails.stream()
+        List<ReconcileTradeDetail> collect = billDetails.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
         // 写入到上下文中
-        PaymentContextLocal.get().getReconcileInfo().setReconcileDetails(collect);
+        PaymentContextLocal.get().getReconcileInfo().setReconcileTradeDetails(collect);
     }
 
     /**
      * 转换为通用对账记录对象
      */
-    private ReconcileDetail convert(AliReconcileBillDetail billDetail){
+    private ReconcileTradeDetail convert(AliReconcileBillDetail billDetail){
         // 金额
         String orderAmount = billDetail.getOrderAmount();
         double v = Double.parseDouble(orderAmount) * 100;
         int amount = Math.abs(((int) v));
 
-
         // 默认为支付对账记录
-        ReconcileDetail reconcileDetail = new ReconcileDetail()
+        ReconcileTradeDetail reconcileTradeDetail = new ReconcileTradeDetail()
                 .setReconcileId(billDetail.getReconcileId())
                 .setTradeNo(billDetail.getOutTradeNo())
                 .setType(ReconcileTradeEnum.PAY.getCode())
@@ -192,15 +191,15 @@ public class AliPayReconcileService {
         String endTime = billDetail.getEndTime();
         if (StrUtil.isNotBlank(endTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(endTime, DatePattern.NORM_DATETIME_PATTERN);
-            reconcileDetail.setTradeTime(time);
+            reconcileTradeDetail.setTradeTime(time);
         }
 
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
-            reconcileDetail.setTradeNo(billDetail.getBatchNo())
+            reconcileTradeDetail.setTradeNo(billDetail.getBatchNo())
                     .setType(ReconcileTradeEnum.REFUND.getCode());
         }
-        return reconcileDetail;
+        return reconcileTradeDetail;
     }
 
 
@@ -243,7 +242,7 @@ public class AliPayReconcileService {
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
-        String fileName = StrUtil.format("{}-{}.zip", channelEnum.getName(),date);
+        String fileName = StrUtil.format("交易对账单-{}-{}.csv", channelEnum.getName(),date);
         UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {
             uploadPretreatment.setOriginalFilename(fileName);
@@ -252,7 +251,7 @@ public class AliPayReconcileService {
         String fileId = upload.getId();
         ReconcileFile reconcileFile = new ReconcileFile().setFileId(Long.valueOf(fileId))
                 .setReconcileId(reconcileOrder.getId())
-                .setType(ReconcileFileTypeEnum.ZIP.getCode());
+                .setType(ReconcileFileTypeEnum.TRADE.getCode());
         reconcileFileManager.save(reconcileFile);
     }
 

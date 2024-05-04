@@ -2,10 +2,10 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.service.WechatPayReconcileService;
-import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +32,6 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
 
-    private final PayOrderManager payOrderManager;
-
     private WeChatPayConfig config;
 
     /**
@@ -59,7 +57,7 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
      */
     @SneakyThrows
     @Override
-    public void upload(MultipartFile file) {
+    public void upload(MultipartFile file, ReconcileFileTypeEnum fileType) {
         reconcileService.uploadBill(file.getBytes(),this.config);
     }
 
@@ -68,8 +66,8 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
      */
     @Override
     public void downAndSave() {
-        String format = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.PURE_DATE_PATTERN);
-        reconcileService.downAndSave(format, this.config);
+        String date = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.PURE_DATE_PATTERN);
+        reconcileService.downAndSave(this.getRecordOrder(), date, this.config);
     }
 
 }

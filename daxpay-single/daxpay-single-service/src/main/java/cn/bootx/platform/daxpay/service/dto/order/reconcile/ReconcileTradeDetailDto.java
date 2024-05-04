@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "对账订单详情")
-public class ReconcileDetailDto extends BaseDto {
+public class ReconcileTradeDetailDto extends BaseDto {
 
     /** 关联对账订单ID */
     @Schema(description = "关联对账订单ID")

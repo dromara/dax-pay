@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.entity.AliPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.service.AliPayReconcileService;
@@ -55,7 +56,7 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
      */
     @SneakyThrows
     @Override
-    public void upload(MultipartFile file) {
+    public void upload(MultipartFile file, ReconcileFileTypeEnum fileType) {
         reconcileService.upload(file.getBytes());
     }
 

@@ -5,6 +5,8 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFil
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -13,4 +15,11 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @Repository
 public class ReconcileFileManager extends BaseManager<ReconcileFileMapper, ReconcileFile> {
+
+    /**
+     * 根据对账单ID查询对账单文件
+     */
+    public List<ReconcileFile> findAllByReconcileId(Long reconcileId) {
+        return findAllByField(ReconcileFile::getReconcileId, reconcileId);
+    }
 }

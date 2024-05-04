@@ -22,15 +22,23 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @Schema(title = "对账差异单")
-public class ReconcileDiffRecordDto extends BaseDto {
+public class ReconcileDiffDto extends BaseDto {
 
     /** 对账单ID */
     @Schema(description = "对账单ID")
-    private Long ReconcileId;
+    private Long reconcileId;
+
+    /** 对账号 */
+    @Schema(description = "对账号")
+    private String reconcileNo;
 
     /** 对账单明细ID */
     @Schema(description = "对账单明细ID")
     private Long detailId;
+
+    /** 对账日期 */
+    @Schema(description = "对账日期")
+    private LocalDateTime reconcileDate;
 
     /** 本地交易号 */
     @Schema(description = "本地交易号")
@@ -61,7 +69,7 @@ public class ReconcileDiffRecordDto extends BaseDto {
      * @see ReconcileTradeEnum
      */
     @Schema(description = "订单类型")
-    private String orderType;
+    private String tradeType;
 
     /**
      * 差异类型

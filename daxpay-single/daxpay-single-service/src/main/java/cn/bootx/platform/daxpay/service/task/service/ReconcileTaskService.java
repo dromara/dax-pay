@@ -30,7 +30,7 @@ public class ReconcileTaskService {
         // 2. 执行对账任务, 下载对账单并解析, 分别存储为原始数据和通用对账数据
         reconcileService.downAndSave(reconcileOrder);
 
-        // 3. 执行账单比对, 生成差异单
+        // 3. 执行账单明细比对, 生成差异单
         reconcileService.compare(reconcileOrder);
     }
 

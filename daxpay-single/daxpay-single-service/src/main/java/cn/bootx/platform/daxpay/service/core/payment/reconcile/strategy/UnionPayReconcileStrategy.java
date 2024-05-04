@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.strategy;
 
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionPayConfig;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayConfigService;
 import cn.bootx.platform.daxpay.service.core.channel.union.service.UnionPayReconcileService;
@@ -61,7 +62,7 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
      */
     @SneakyThrows
     @Override
-    public void upload(MultipartFile file) {
+    public void upload(MultipartFile file, ReconcileFileTypeEnum fileType) {
         reconcileService.upload(file.getBytes());
     }
 
@@ -71,6 +72,6 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
     @Override
     public void downAndSave() {
         Date date = DateUtil.date(this.getRecordOrder().getDate());
-        reconcileService.downAndSave(this.getRecordOrder(),date, this.unionPayKit);
+        reconcileService.downAndSave(this.getRecordOrder(), date, this.unionPayKit);
     }
 }

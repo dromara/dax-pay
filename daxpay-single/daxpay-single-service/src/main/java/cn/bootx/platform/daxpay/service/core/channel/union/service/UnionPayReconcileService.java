@@ -11,7 +11,7 @@ import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.union.dao.UnionReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
@@ -81,17 +81,18 @@ public class UnionPayReconcileService {
             ZipArchiveEntry entry;
             List<UnionReconcileBillDetail> billDetails = new ArrayList<>();
             while ((entry= zipArchiveInputStream.getNextZipEntry()) != null){
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zipArchiveInputStream,"GBK"));
                 if (StrUtil.startWith(entry.getName(), RECONCILE_FILE_PREFIX)){
+                    byte[] bytes = IoUtil.readBytes(zipArchiveInputStream);
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes),"GBK"));
                     // 明细解析
                     List<String> strings = IoUtil.readLines(bufferedReader, new ArrayList<>());
                     billDetails = this.parseDetail(strings);
+                    // 保存原始对账记录文件
+                    this.saveOriginalFile(reconcileOrder,bytes);
                 } else {
                     // 汇总目前不进行处理
                 }
             }
-            // 保存原始对账记录文件
-            this.saveOriginalFile(reconcileOrder,zipBytes);
             // 保存原始对账记录
             this.save(billDetails);
             // 转换为通用对账记录对象
@@ -151,19 +152,19 @@ public class UnionPayReconcileService {
      * 转换为通用对账记录对象
      */
     private void convertAndSave(List<UnionReconcileBillDetail> billDetails){
-        List<ReconcileDetail> collect = billDetails.stream()
+        List<ReconcileTradeDetail> collect = billDetails.stream()
                 .map(this::convert)
                 // 只处理支付和退款的对账记录
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         // 写入到上下文中
-        PaymentContextLocal.get().getReconcileInfo().setReconcileDetails(collect);
+        PaymentContextLocal.get().getReconcileInfo().setReconcileTradeDetails(collect);
     }
 
     /**
      * 转换为通用对账记录对象
      */
-    private ReconcileDetail convert(UnionReconcileBillDetail billDetail){
+    private ReconcileTradeDetail convert(UnionReconcileBillDetail billDetail){
         ReconcileOrder reconcileOrder = PaymentContextLocal.get()
                 .getReconcileInfo()
                 .getReconcileOrder();
@@ -172,7 +173,7 @@ public class UnionPayReconcileService {
         int amount = Integer.parseInt(orderAmount);
 
         // 默认为支付对账记录
-        ReconcileDetail reconcileDetail = new ReconcileDetail()
+        ReconcileTradeDetail reconcileTradeDetail = new ReconcileTradeDetail()
                 .setTitle("未知")
                 .setReconcileId(billDetail.getReconcileId())
                 .setTradeNo(billDetail.getOrderId())
@@ -187,14 +188,14 @@ public class UnionPayReconcileService {
         String txnTime = year + billDetail.getTxnTime();
         if (StrUtil.isNotBlank(txnTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(txnTime, DatePattern.PURE_DATETIME_PATTERN);
-            reconcileDetail.setTradeTime(time);
+            reconcileTradeDetail.setTradeTime(time);
         }
 
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), UnionPayCode.RECONCILE_TYPE_REFUND)){
-            reconcileDetail.setType(ReconcileTradeEnum.REFUND.getCode());
+            reconcileTradeDetail.setType(ReconcileTradeEnum.REFUND.getCode());
         }
-        return reconcileDetail;
+        return reconcileTradeDetail;
     }
 
     /**
@@ -213,7 +214,7 @@ public class UnionPayReconcileService {
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
-        String fileName = StrUtil.format("{}-{}.zip", channelEnum.getName(),date);
+        String fileName = StrUtil.format("交易对账单-{}-{}.txt", channelEnum.getName(),date);
         UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {
             uploadPretreatment.setOriginalFilename(fileName);
@@ -222,7 +223,7 @@ public class UnionPayReconcileService {
         String fileId = upload.getId();
         ReconcileFile reconcileFile = new ReconcileFile().setFileId(Long.valueOf(fileId))
                 .setReconcileId(reconcileOrder.getId())
-                .setType(ReconcileFileTypeEnum.ZIP.getCode());
+                .setType(ReconcileFileTypeEnum.TRADE.getCode());
         reconcileFileManager.save(reconcileFile);
     }
 }

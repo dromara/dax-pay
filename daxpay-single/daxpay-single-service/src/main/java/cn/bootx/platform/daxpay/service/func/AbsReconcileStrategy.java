@@ -1,5 +1,6 @@
 package cn.bootx.platform.daxpay.service.func;
 
+import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public abstract class AbsReconcileStrategy implements PayStrategy {
     /**
      * 上传对账单解析并保存
      */
-    public abstract void upload(MultipartFile file);
+    public abstract void upload(MultipartFile file, ReconcileFileTypeEnum fileType);
 
     /**
      * 下载对账单到本地进行保存

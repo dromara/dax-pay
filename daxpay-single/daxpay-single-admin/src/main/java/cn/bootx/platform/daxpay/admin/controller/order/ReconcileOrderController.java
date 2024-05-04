@@ -8,16 +8,14 @@ import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileDiffService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileQueryService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.service.ReconcileService;
-import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDetailDto;
-import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDiffRecordDto;
+import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileTradeDetailDto;
+import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDiffDto;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileOrderDto;
-import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileDetailQuery;
-import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileDiffQuery;
-import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileOrderCreate;
-import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileOrderQuery;
+import cn.bootx.platform.daxpay.service.param.reconcile.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,27 +48,34 @@ public class ReconcileOrderController {
         return Res.ok();
     }
 
-    @Operation(summary = "手动上传对账单文件")
+    @Operation(summary = "手动上传交易对账单文件")
     @PostMapping("/upload")
-    public ResResult<Void> upload(Long id, MultipartFile file){
-        reconcileService.upload(id,file);
+    public ResResult<Void> upload(ReconcileUploadParam param, MultipartFile file){
+        ValidationUtil.validateParam(param);
+        reconcileService.upload(param,file);
         return Res.ok();
     }
 
-    @Operation(summary = "手动触发对账单比对")
+    @Operation(summary = "手动触发交易对账单比对")
     @PostMapping("/compare")
     public ResResult<Void> compare(Long id){
         reconcileService.compare(id);
         return Res.ok();
     }
 
-    @Operation(summary = "订单分页")
+    @Operation(summary = "下载原始交易对账单文件")
+    @GetMapping("/downOriginal")
+    public ResponseEntity<byte[]> downOriginal(Long id){
+        return reconcileService.downOriginal(id);
+    }
+
+    @Operation(summary = "对账单分页")
     @GetMapping("/page")
     public ResResult<PageResult<ReconcileOrderDto>> page(PageParam pageParam, ReconcileOrderQuery query){
         return Res.ok(reconcileQueryService.page(pageParam, query));
     }
 
-    @Operation(summary = "订单详情")
+    @Operation(summary = "对账单详情")
     @GetMapping("/findById")
     public ResResult<ReconcileOrderDto> findById(Long id){
         return Res.ok(reconcileQueryService.findById(id));
@@ -78,25 +83,25 @@ public class ReconcileOrderController {
 
     @Operation(summary = "对账明细分页")
     @GetMapping("/detail/page")
-    public ResResult<PageResult<ReconcileDetailDto>> pageDetail(PageParam pageParam, ReconcileDetailQuery query){
+    public ResResult<PageResult<ReconcileTradeDetailDto>> pageDetail(PageParam pageParam, ReconcileDetailQuery query){
         return Res.ok(reconcileQueryService.pageDetail(pageParam, query));
     }
 
     @Operation(summary = "对账明细详情")
     @GetMapping("/detail/findById")
-    public ResResult<ReconcileDetailDto> findDetailById(Long id){
+    public ResResult<ReconcileTradeDetailDto> findDetailById(Long id){
         return Res.ok(reconcileQueryService.findDetailById(id));
     }
 
     @Operation(summary = "对账差异分页")
     @GetMapping("/diff/page")
-    public ResResult<PageResult<ReconcileDiffRecordDto>> pageDiff(PageParam pageParam, ReconcileDiffQuery query){
+    public ResResult<PageResult<ReconcileDiffDto>> pageDiff(PageParam pageParam, ReconcileDiffQuery query){
         return Res.ok(reconcileDiffService.page(pageParam, query));
     }
 
     @Operation(summary = "对账差异详情")
     @GetMapping("/diff/findById")
-    public ResResult<ReconcileDiffRecordDto> findDiffById(Long id){
+    public ResResult<ReconcileDiffDto> findDiffById(Long id){
         return Res.ok(reconcileDiffService.findById(id));
     }
 }

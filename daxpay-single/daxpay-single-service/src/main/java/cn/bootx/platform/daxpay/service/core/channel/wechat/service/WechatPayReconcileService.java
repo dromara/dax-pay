@@ -14,7 +14,7 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBi
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.hutool.core.codec.Base64;
@@ -66,23 +66,24 @@ public class WechatPayReconcileService{
 
     /**
      * 下载对账单并保存
-     * @param date 对账日期 yyyyMMdd 格式
+     *
+     * @param recordOrder 对账订单
+     * @param date        对账日期 yyyyMMdd 格式
      */
     @Transactional(rollbackFor = Exception.class)
-    public void downAndSave(String date, WeChatPayConfig config) {
-        // TODO 修改为现将对账单全部下载下来, 然后再进行保存和解析
-
-        this.downBill(date, config);
+    public void downAndSave(ReconcileOrder recordOrder, String date, WeChatPayConfig config) {
+        this.downBill(recordOrder, date, config);
         // 资金对账单先不启用
-        this.downFundFlow(date, config);
+//        this.downFundFlow(date, config);
     }
 
     /**
      * 下载交易账单
      *
-     * @param date          对账日期 yyyyMMdd 格式
+     * @param recordOrder 对账订单
+     * @param date        对账日期 yyyyMMdd 格式
      */
-    public void downBill(String date, WeChatPayConfig config){
+    public void downBill(ReconcileOrder recordOrder, String date, WeChatPayConfig config){
         // 下载交易账单
         Map<String, String> params = DownloadBillModel.builder()
                 .mch_id(config.getWxMchId())
@@ -93,6 +94,9 @@ public class WechatPayReconcileService{
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
         String result = WxPayApi.downloadBill(config.isSandbox(), params);
+
+        // 保存原始对账单文件
+        this.saveOriginalFile(recordOrder, result);
 
         // 验证返回数据是否成功
         this.verifyBillMsg(result);
@@ -153,30 +157,30 @@ public class WechatPayReconcileService{
                 .collect(Collectors.toList());
 
         billDetails.forEach(o->o.setRecordOrderId(reconcileOrder.getId()));
-        // 保存原始对账单明细
-        reconcileBillDetailManager.saveAll(billDetails);
 
         // 将原始交易明细对账记录转换通用结构并保存到上下文中
         this.convertAndSave(billDetails);
+        // 保存原始对账单明细
+        reconcileBillDetailManager.saveAll(billDetails);
     }
 
     /**
      * 转换为通用对账记录对象
      */
     public void convertAndSave(List<WxReconcileBillDetail> billDetails){
-        List<ReconcileDetail> collect = billDetails.stream()
+        List<ReconcileTradeDetail> collect = billDetails.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
         // 写入到上下文中
-        PaymentContextLocal.get().getReconcileInfo().setReconcileDetails(collect);
+        PaymentContextLocal.get().getReconcileInfo().setReconcileTradeDetails(collect);
     }
 
     /**
      * 转换为通用对账记录对象
      */
-    public ReconcileDetail convert(WxReconcileBillDetail billDetail){
+    public ReconcileTradeDetail convert(WxReconcileBillDetail billDetail){
         // 默认为支付对账记录
-        ReconcileDetail reconcileDetail = new ReconcileDetail()
+        ReconcileTradeDetail reconcileTradeDetail = new ReconcileTradeDetail()
                 .setReconcileId(billDetail.getRecordOrderId())
                 .setTradeNo(billDetail.getMchOrderNo())
                 .setTitle(billDetail.getSubject())
@@ -185,7 +189,7 @@ public class WechatPayReconcileService{
         String transactionTime = billDetail.getTransactionTime();
         if (StrUtil.isNotBlank(transactionTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(transactionTime, DatePattern.NORM_DATETIME_PATTERN);
-            reconcileDetail.setTradeTime(time);
+            reconcileTradeDetail.setTradeTime(time);
         }
 
         // 支付
@@ -194,7 +198,7 @@ public class WechatPayReconcileService{
             String orderAmount = billDetail.getOrderAmount();
             double v = Double.parseDouble(orderAmount) * 100;
             int amount = Math.abs(((int) v));
-            reconcileDetail.setType(ReconcileTradeEnum.PAY.getCode())
+            reconcileTradeDetail.setType(ReconcileTradeEnum.PAY.getCode())
                     .setAmount(amount);
         }
         // 退款
@@ -203,7 +207,7 @@ public class WechatPayReconcileService{
             String refundAmount = billDetail.getApplyRefundAmount();
             double v = Double.parseDouble(refundAmount) * 100;
             int amount = Math.abs(((int) v));
-            reconcileDetail.setType(ReconcileTradeEnum.REFUND.getCode())
+            reconcileTradeDetail.setType(ReconcileTradeEnum.REFUND.getCode())
                     .setAmount(amount)
                     .setTradeNo(billDetail.getMchRefundNo());
         }
@@ -211,7 +215,7 @@ public class WechatPayReconcileService{
         if (Objects.equals(billDetail.getStatus(), "REVOKED")){
             log.warn("对账出现已撤销记录, 后续进行处理");
         }
-        return reconcileDetail;
+        return reconcileTradeDetail;
     }
 
 
@@ -314,12 +318,12 @@ public class WechatPayReconcileService{
     /**
      * 保存下载的原始对账文件
      */
-    private void saveOriginalFile(ReconcileOrder reconcileOrder,String text, ReconcileFileTypeEnum fileType) {
+    private void saveOriginalFile(ReconcileOrder reconcileOrder, String text) {
         // 微信接收结果转换为 byte[]
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
-        String fileName = StrUtil.format("{}-{}-{}.text", channelEnum.getName(),date,fileType.getName());
+        String fileName = StrUtil.format("交易对账单-{}-{}.txt", channelEnum.getName(),date);
         byte[] bytes = StrUtil.bytes(text, CharsetUtil.CHARSET_UTF_8);
         UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {
@@ -329,7 +333,7 @@ public class WechatPayReconcileService{
         String fileId = upload.getId();
         ReconcileFile reconcileFile = new ReconcileFile().setFileId(Long.valueOf(fileId))
                 .setReconcileId(reconcileOrder.getId())
-                .setType(fileType.getCode());
+                .setType(ReconcileFileTypeEnum.TRADE.getCode());
         reconcileFileManager.save(reconcileFile);
     }
 }
