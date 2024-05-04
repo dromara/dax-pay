@@ -71,8 +71,6 @@ public class UnionPayReconcileStrategy extends AbsReconcileStrategy {
     @Override
     public void downAndSave() {
         Date date = DateUtil.date(this.getRecordOrder().getDate());
-        reconcileService.downAndSave(date, this.unionPayKit);
+        reconcileService.downAndSave(this.getRecordOrder(),date, this.unionPayKit);
     }
-
-
 }

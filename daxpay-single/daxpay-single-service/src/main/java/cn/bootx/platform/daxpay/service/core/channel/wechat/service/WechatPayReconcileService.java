@@ -1,8 +1,10 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.dao.WxReconcileBillDetailManager;
@@ -11,13 +13,16 @@ import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WeChatPayConf
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillDetail;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileBillTotal;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.WxPayKit;
@@ -27,6 +32,9 @@ import com.ijpay.wxpay.model.DownloadFundFlowModel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.x.file.storage.core.FileInfo;
+import org.dromara.x.file.storage.core.FileStorageService;
+import org.dromara.x.file.storage.core.UploadPretreatment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,16 +61,20 @@ import static cn.bootx.platform.daxpay.service.code.WeChatPayCode.ACCOUNT_TYPE_B
 public class WechatPayReconcileService{
     private final WxReconcileBillTotalManger reconcileBillTotalManger;
     private final WxReconcileBillDetailManager reconcileBillDetailManager;
+    private final FileStorageService fileStorageService;
+    private final ReconcileFileManager reconcileFileManager;
 
     /**
      * 下载对账单并保存
      * @param date 对账日期 yyyyMMdd 格式
      */
     @Transactional(rollbackFor = Exception.class)
-    public void downAndSave(String date,  WeChatPayConfig config) {
+    public void downAndSave(String date, WeChatPayConfig config) {
+        // TODO 修改为现将对账单全部下载下来, 然后再进行保存和解析
+
         this.downBill(date, config);
         // 资金对账单先不启用
-//        this.downFundFlow(date, recordOrderId, config);
+        this.downFundFlow(date, config);
     }
 
     /**
@@ -111,7 +123,8 @@ public class WechatPayReconcileService{
     }
 
     /**
-     * 上传对账单
+     * 上传对账单明细
+     * todo 增加校验, 增加类型识别
      */
     @SneakyThrows
     public void uploadBill(byte[] bytes, WeChatPayConfig config){
@@ -140,6 +153,7 @@ public class WechatPayReconcileService{
                 .collect(Collectors.toList());
 
         billDetails.forEach(o->o.setRecordOrderId(reconcileOrder.getId()));
+        // 保存原始对账单明细
         reconcileBillDetailManager.saveAll(billDetails);
 
         // 将原始交易明细对账记录转换通用结构并保存到上下文中
@@ -207,9 +221,8 @@ public class WechatPayReconcileService{
      * 更换一下最新的JDK即可, 例如 corretto Jdk
      *
      * @param date          对账日期 yyyyMMdd 格式
-     * @param recordOrderId 对账订单ID
      */
-    public void downFundFlow(String date, Long recordOrderId, WeChatPayConfig config){
+    public void downFundFlow(String date, WeChatPayConfig config){
         if (StrUtil.isBlank(config.getP12())){
             return;
         }
@@ -297,4 +310,26 @@ public class WechatPayReconcileService{
         throw new PayFailureException("微信资金对账失败: " + errorMsg);
     }
 
+
+    /**
+     * 保存下载的原始对账文件
+     */
+    private void saveOriginalFile(ReconcileOrder reconcileOrder,String text, ReconcileFileTypeEnum fileType) {
+        // 微信接收结果转换为 byte[]
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
+        String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
+        // 将原始文件进行保存 通道-日期
+        String fileName = StrUtil.format("{}-{}-{}.text", channelEnum.getName(),date,fileType.getName());
+        byte[] bytes = StrUtil.bytes(text, CharsetUtil.CHARSET_UTF_8);
+        UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
+        if (StrUtil.isNotBlank(fileName)) {
+            uploadPretreatment.setOriginalFilename(fileName);
+        }
+        FileInfo upload = uploadPretreatment.upload();
+        String fileId = upload.getId();
+        ReconcileFile reconcileFile = new ReconcileFile().setFileId(Long.valueOf(fileId))
+                .setReconcileId(reconcileOrder.getId())
+                .setType(fileType.getCode());
+        reconcileFileManager.save(reconcileFile);
+    }
 }

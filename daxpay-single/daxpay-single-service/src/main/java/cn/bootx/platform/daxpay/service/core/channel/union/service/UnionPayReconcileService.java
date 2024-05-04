@@ -1,14 +1,18 @@
 package cn.bootx.platform.daxpay.service.core.channel.union.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
+import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.code.UnionPayCode;
 import cn.bootx.platform.daxpay.service.code.UnionReconcileFieldEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.channel.union.dao.UnionReconcileBillDetailManager;
 import cn.bootx.platform.daxpay.service.core.channel.union.entity.UnionReconcileBillDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.bootx.platform.daxpay.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
@@ -23,6 +27,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.dromara.x.file.storage.core.FileInfo;
+import org.dromara.x.file.storage.core.FileStorageService;
+import org.dromara.x.file.storage.core.UploadPretreatment;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -44,11 +51,13 @@ import static cn.bootx.platform.daxpay.service.code.UnionPayCode.*;
 public class UnionPayReconcileService {
 
     private final UnionReconcileBillDetailManager unionReconcileBillDetailManager;
+    private final FileStorageService fileStorageService;
+    private final ReconcileFileManager reconcileFileManager;
 
     /**
      * 下载对账单
      */
-    public void downAndSave(Date date, UnionPayKit unionPayKit){
+    public void downAndSave(ReconcileOrder reconcileOrder, Date date, UnionPayKit unionPayKit){
         // 下载对账单
         Map<String, Object> map = unionPayKit.downloadBill(date, RECONCILE_BILL_TYPE);
         String fileContent = map.get(FILE_CONTENT).toString();
@@ -81,6 +90,8 @@ public class UnionPayReconcileService {
                     // 汇总目前不进行处理
                 }
             }
+            // 保存原始对账记录文件
+            this.saveOriginalFile(reconcileOrder,zipBytes);
             // 保存原始对账记录
             this.save(billDetails);
             // 转换为通用对账记录对象
@@ -193,5 +204,25 @@ public class UnionPayReconcileService {
         Long recordOrderId = PaymentContextLocal.get().getReconcileInfo().getReconcileOrder().getId();
         billDetails.forEach(o->o.setReconcileId(recordOrderId));
         unionReconcileBillDetailManager.saveAll(billDetails);
+    }
+
+    /**
+     * 保存下载的原始对账文件
+     */
+    private void saveOriginalFile(ReconcileOrder reconcileOrder, byte[] bytes) {
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
+        String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
+        // 将原始文件进行保存 通道-日期
+        String fileName = StrUtil.format("{}-{}.zip", channelEnum.getName(),date);
+        UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
+        if (StrUtil.isNotBlank(fileName)) {
+            uploadPretreatment.setOriginalFilename(fileName);
+        }
+        FileInfo upload = uploadPretreatment.upload();
+        String fileId = upload.getId();
+        ReconcileFile reconcileFile = new ReconcileFile().setFileId(Long.valueOf(fileId))
+                .setReconcileId(reconcileOrder.getId())
+                .setType(ReconcileFileTypeEnum.ZIP.getCode());
+        reconcileFileManager.save(reconcileFile);
     }
 }

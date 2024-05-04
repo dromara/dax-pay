@@ -92,7 +92,7 @@ public class ReconcileService {
      */
     public void downAndSave(ReconcileOrder reconcileOrder) {
         // 如果对账单已经存在
-        if (reconcileOrder.isDownOrUpload()){
+        if (reconcileOrder.isDetailDown() && reconcileOrder.isTotalDown()){
             throw new PayFailureException("对账单文件已经下载或上传");
         }
         // 将对账订单写入到上下文中
@@ -103,7 +103,8 @@ public class ReconcileService {
         reconcileStrategy.doBeforeHandler();
         try {
             reconcileStrategy.downAndSave();
-            reconcileOrder.setDownOrUpload(true)
+            reconcileOrder.setDetailDown(true)
+                    .setTotalDown(true)
                     .setErrorMsg(null);
             reconcileOrderService.update(reconcileOrder);
         } catch (Exception e) {
@@ -154,16 +155,16 @@ public class ReconcileService {
      * 对账单比对
      */
     @Transactional(rollbackFor = Exception.class)
-    public void compare(Long reconcileOrderId){
+    public void compareDetail(Long reconcileOrderId){
         ReconcileOrder reconcileOrder = reconcileOrderService.findById(reconcileOrderId)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
-        this.compare(reconcileOrder);
+        this.compareDetail(reconcileOrder);
     }
 
     /**
      * 对账单比对
      */
-    public void compare(ReconcileOrder reconcileOrder){
+    public void compareDetail(ReconcileOrder reconcileOrder){
         // 判断是否已经下载了对账单明细
         if (!reconcileOrder.isDownOrUpload()){
             throw new PayFailureException("请先下载对账单");

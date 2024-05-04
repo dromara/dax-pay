@@ -17,10 +17,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public enum PayChannelEnum {
 
-    ALI("ali_pay", "支付宝", "ali"),
-    WECHAT("wechat_pay", "微信支付", "wx"),
-    UNION_PAY("union_pay", "云闪付", "uni"),
-    WALLET("wallet_pay", "钱包支付",null),
+    ALI("ali_pay", "支付宝"),
+    WECHAT("wechat_pay", "微信支付"),
+    UNION_PAY("union_pay", "云闪付"),
+    WALLET("wallet_pay", "钱包支付"),
     ;
 
     /** 支付通道编码 */
@@ -28,9 +28,6 @@ public enum PayChannelEnum {
 
     /** 支付通道名称 */
     private final String name;
-
-    /** 对账前缀 */
-    private final String reconcilePrefix;
 
     /**
      * 根据字符编码获取

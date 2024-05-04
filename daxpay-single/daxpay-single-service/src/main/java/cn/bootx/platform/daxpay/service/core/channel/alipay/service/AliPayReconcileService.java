@@ -1,6 +1,7 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
@@ -104,10 +105,10 @@ public class AliPayReconcileService {
                     billDetails = this.parseDetail(strings);
                 }
             }
+            // 保存原始对账文件
+            this.saveOriginalFile(recordOrder, bytes);
             // 保存原始对账记录
             this.save(billDetails, billTotals);
-            // 保存文件
-            this.saveOriginalFile(recordOrder, bytes);
 
             // 将原始交易明细对账记录转换通用结构并保存到上下文中
             this.convertAndSave(billDetails);
@@ -239,7 +240,10 @@ public class AliPayReconcileService {
      */
     private void saveOriginalFile(ReconcileOrder reconcileOrder, byte[] bytes) {
         // 将原始文件进行保存
-        String fileName = "";
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
+        String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
+        // 将原始文件进行保存 通道-日期
+        String fileName = StrUtil.format("{}-{}.zip", channelEnum.getName(),date);
         UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {
             uploadPretreatment.setOriginalFilename(fileName);

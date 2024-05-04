@@ -2,6 +2,7 @@ package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileResultEnum;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.ReconcileConvert;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileOrderDto;
@@ -36,17 +37,28 @@ public class ReconcileOrder extends MpCreateEntity implements EntityBaseFunction
     @DbColumn(comment = "日期")
     private LocalDate date;
 
-    /** 通道 */
+    /**
+     * 通道
+     * @see PayChannelEnum
+     */
     @DbColumn(comment = "通道")
     private String channel;
 
-    /** 是否下载成功 */
-    @DbColumn(comment = "是否下载或上传")
-    private boolean downOrUpload;
+    /** 明细对账文件是否下载成功 */
+    @DbColumn(comment = "明细对账单下载")
+    private boolean detailDown;
 
-    /** 是否比对完成 */
-    @DbColumn(comment = "是否比对完成")
-    private boolean compare;
+    /** 明细是否比对完成 */
+    @DbColumn(comment = "明细对账单比对")
+    private boolean detailCompare;
+
+    /** 汇总对账文件是否下载成功 */
+    @DbColumn(comment = "汇总对账单下载")
+    private boolean totalDown;
+
+    /** 汇总是否比对完成 */
+    @DbColumn(comment = "汇总对账单比对")
+    private boolean totalCompare;
 
     /**
      * 对账结果
