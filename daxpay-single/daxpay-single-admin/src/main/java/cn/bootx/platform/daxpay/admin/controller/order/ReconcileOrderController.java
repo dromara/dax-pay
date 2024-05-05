@@ -70,7 +70,7 @@ public class ReconcileOrderController {
     }
 
     @Operation(summary = "下载原始交易对账单记录(CSV格式)")
-    @GetMapping("/downOriginal")
+    @GetMapping("/downOriginal2Csv")
     public ResponseEntity<byte[]> downOriginal2Csv(Long id){
         return reconcileService.downOriginal2Csv(id);
     }
