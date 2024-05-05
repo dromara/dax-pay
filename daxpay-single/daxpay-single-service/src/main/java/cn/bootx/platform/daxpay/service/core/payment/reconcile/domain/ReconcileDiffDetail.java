@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class ReconcileDiff {
+public class ReconcileDiffDetail {
 
     /** 字段名 */
     private String fieldName;

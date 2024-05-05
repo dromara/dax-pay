@@ -7,12 +7,12 @@ import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileResultEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileTradeDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileOrderManager;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileTradeDetailManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDiff;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileDiffService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
@@ -223,19 +223,24 @@ public class ReconcileService {
     /**
      * 下载基于原始交易对账单数据转换的对账单文件, 例如csv, json方式
      */
-    public void downOriginal2Csv(Long id){
+    @SneakyThrows
+    public ResponseEntity<byte[]> downOriginal2Csv(Long id){
         ReconcileOrder reconcileOrder = reconcileOrderService.findById(id)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
         // 查询对账-第三方交易明细
         List<ReconcileTradeDetail> reconcileTradeDetails = reconcileTradeDetailManager.findAllByReconcileId(reconcileOrder.getId());
 
         // 转换为csv文件
+
+        return null;
     }
 
     /**
      * 下载对账单(本系统中的订单)
      */
-    public void downLocal(Long id){
+    @SneakyThrows
+    public ResponseEntity<byte[]> downLocal(Long id){
+        return null;
     }
 
 }

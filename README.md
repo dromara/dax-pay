@@ -1,4 +1,3 @@
-
 <p align="center">
 	<img src="_doc/images/dax-pay.svg" width="45%">
 </p>
@@ -26,15 +25,12 @@
 
 > DaxPay是一套开源支付网关系统，已经对接支付宝、微信支付相关的接口。可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响
 
-gateway为开发分支，本地运行请使用master分支进行测试，当前正在进行整个系统的优化重构工作，**请勿在生产环境中使用，请等待生产可用的版本发布**，
-
-
 ## 🧭 特色功能
 - 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
 - 已对接`微信支付`、`支付宝`和`云闪付`相关的接口，后续版本将支持`V3`版本的接口
 - 支持支付、退款、对账、分账等支付相关的能力
 - 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
-- 接口请求和响应数据支持启用签名机制，可根据实际需要进行开关，保证交易安全可靠
+- 接口请求和响应数据支持启用签名机制，保证交易安全可靠
 - 提供管理平台，方便运营人员进行管理和操作，不需要懂IT技术也可以轻松使用
 - 提供`聚合支付`、`电脑收银台`和`手机收银台`的演示模块，供开发者参考其实现支付功能的逻辑
 
@@ -108,51 +104,40 @@ gateway为开发分支，本地运行请使用master分支进行测试，当前�
 > 此处以简单支付接口为例，演示业务系统如何调用支付网关进行支付，其他接口的调用方式类似，具体请参考[支付对接](https://bootx.gitee.io/daxpay/gateway/overview/接口清单.html)。
 
 ```java
-package cn.bootx.platform.daxpay.sdk;
-
-import cn.bootx.platform.daxpay.sdk.code.PayChannelEnum;
-import cn.bootx.platform.daxpay.sdk.code.PayMethodEnum;
-import cn.bootx.platform.daxpay.sdk.model.PayOrderModel;
-import cn.bootx.platform.daxpay.sdk.net.DaxPayConfig;
-import cn.bootx.platform.daxpay.sdk.net.DaxPayKit;
-import cn.bootx.platform.daxpay.sdk.param.pay.SimplePayParam;
-import cn.bootx.platform.daxpay.sdk.response.DaxPayResult;
-import org.junit.Before;
-import org.junit.Test;
-
 /**
- * 简单支付
+ * 统一支付接口
  * @author xxm
- * @since 2024/2/2
+ * @since 2024/2/5
  */
-public class SimplePayOrderTest {
+public class PayOrderTest {
 
     @Before
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
                 .serviceUrl("http://127.0.0.1:9000")
-                // 需要跟网关中配置一致
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .build();
         DaxPayKit.initConfig(config);
     }
 
+    /**
+     * 支付
+     */
     @Test
-    public void simplePay() {
-        // 简单支付参数
-        SimplePayParam param = new SimplePayParam();
-        param.setBusinessNo("P0001");
-        param.setAmount(1);
-        param.setTitle("测试支付宝支付");
-        param.setChannel(PayChannelEnum.ALI.getCode());
-        param.setPayWay(PayWayEnum.QRCODE.getCode());
+    public void pay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setNotNotify(true);
 
-        DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param, true);
+        param.setBizOrderNo("P0004");
+        param.setTitle("测试接口支付");
+        param.setChannel(PayChannelEnum.ALI.getCode());
+
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
-        PayOrderModel data = execute.getData();
-        System.out.println(data);
+        System.out.println(execute.getData());
     }
 }
 ```
@@ -167,12 +152,13 @@ public class SimplePayOrderTest {
 ### 支付通道配置
 ![微信截图_20240326142208](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
 ## 🛣️ 路线图
-> 当前处于功能开发阶段，部分功能可能会有调整，`V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容
+> gateway为开发分支，本地运行请使用master分支进行测试，当前正在进行整个系统的优化重构工作，各种功能都会有可能调整，
+`V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容。
+**请勿在生产环境中使用，请等待生产可用的版本发布。如在使用，需要自己来保证应用的安全**
 
 [**当前开发进度和任务池**](/_doc/Task.md)
 
 [**历史更新记录**](/_doc/ChangeLog.md)
-
 
 ##  🥪 关于我们
 
@@ -217,232 +203,3 @@ public class SimplePayOrderTest {
 ## 🍷License
 
 Apache License Version 2.0
-
-## 📚 Dromara 成员项目
-<a href="https://gitee.com/dromara/TLog" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/tlog.png"
-								msg="一个轻量级的分布式日志标记追踪神器，10分钟即可接入，自动对日志打标签完成微服务的链路追踪">
-						</a>
-						<a href="https://gitee.com/dromara/liteFlow" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/liteflow.png"
-								msg="轻量，快速，稳定，可编排的组件式流程引擎">
-						</a>
-						<a href="https://hutool.cn/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/hutool.jpg"
-								msg="小而全的Java工具类库，使Java拥有函数式语言般的优雅，让Java语言也可以“甜甜的”。">
-						</a>
-						<a href="https://sa-token.cc/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/sa-token.png"
-								msg="一个轻量级 java 权限认证框架，让鉴权变得简单、优雅！">
-						</a>
-						<a href="https://gitee.com/dromara/hmily" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/hmily.png"
-								msg="高性能一站式分布式事务解决方案。">
-						</a>
-						<a href="https://gitee.com/dromara/Raincat" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/raincat.png"
-								msg="强一致性分布式事务解决方案。">
-						</a>
-						<a href="https://gitee.com/dromara/myth" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/myth.png"
-								msg="可靠消息分布式事务解决方案。">
-						</a>
-						<a href="https://cubic.jiagoujishu.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/cubic.png"
-								msg="一站式问题定位平台，以agent的方式无侵入接入应用，完整集成arthas功能模块，致力于应用级监控，帮助开发人员快速定位问题">
-						</a>
-						<a href="https://maxkey.top/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/maxkey.png"
-								msg="业界领先的身份管理和认证产品">
-						</a>
-						<a href="http://forest.dtflyx.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/forest-logo.png"
-								msg="Forest能够帮助您使用更简单的方式编写Java的HTTP客户端" nf>
-						</a>
-						<a href="https://jpom.top/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/jpom.png"
-								msg="一款简而轻的低侵入式在线构建、自动部署、日常运维、项目监控软件">
-						</a>
-						<a href="https://su.usthe.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/sureness.png"
-								msg="面向 REST API 的高性能认证鉴权框架">
-						</a>
-						<a href="https://easy-es.cn/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/easy-es2.png"
-								msg="傻瓜级ElasticSearch搜索引擎ORM框架">
-						</a>
-						<a href="https://gitee.com/dromara/northstar" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/northstar_logo.png"
-								msg="Northstar盈富量化交易平台">
-						</a>
-						<a href="https://dromara.gitee.io/fast-request/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/fast-request.gif"
-								msg="Idea 版 Postman，为简化调试API而生">
-						</a>
-						<a href="https://www.jeesuite.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/mendmix.png"
-								msg="开源分布式云原生架构一站式解决方案">
-						</a>
-						<a href="https://gitee.com/dromara/koalas-rpc" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/koalas-rpc2.png"
-								msg="企业生产级百亿日PV高可用可拓展的RPC框架。">
-						</a>
-						<a href="https://async.sizegang.cn/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/gobrs-async.png"
-								msg="配置极简功能强大的异步任务动态编排框架">
-						</a>
-						<a href="https://dynamictp.cn/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/dynamic-tp.png"
-								msg="基于配置中心的轻量级动态可监控线程池">
-						</a>
-						<a href="https://www.x-easypdf.cn" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/x-easypdf.png"
-								msg="一个用搭积木的方式构建pdf的框架（基于pdfbox）">
-						</a>
-						<a href="http://dromara.gitee.io/image-combiner" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/image-combiner.png"
-								msg="一个专门用于图片合成的工具，没有很复杂的功能，简单实用，却不失强大">
-						</a>
-						<a href="https://www.herodotus.cn/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/dante-cloud2.png"
-								msg="Dante-Cloud 是一款企业级微服务架构和服务能力开发平台。">
-						</a>
-						<a href="http://www.mtruning.club" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/go-view.png"
-								msg="低代码数据可视化开发平台">
-						</a>
-						<a href="https://tangyh.top/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/lamp-cloud.png"
-								msg="微服务中后台快速开发平台，支持租户(SaaS)模式、非租户模式">
-						</a>
-						<a href="https://www.redisfront.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/redis-front.png"
-								msg="RedisFront 是一款开源免费的跨平台 Redis 桌面客户端工具, 支持单机模式, 集群模式, 哨兵模式以及 SSH 隧道连接, 可轻松管理Redis缓存数据.">
-						</a>
-						<a href="https://www.yuque.com/u34495/mivcfg" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/electron-egg.png"
-								msg="一个入门简单、跨平台、企业级桌面软件开发框架">
-						</a>
-						<a href="https://gitee.com/dromara/open-capacity-platform" target="_blank">
-							<img class="lazy"
-								data-original="https://oss.dev33.cn/sa-token/link/open-capacity-platform.jpg"
-								msg="简称ocp是基于Spring Cloud的企业级微服务框架(用户权限管理，配置中心管理，应用管理，....)">
-						</a>
-						<a href="http://easy-trans.fhs-opensource.top/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/easy_trans.png"
-								msg="Easy-Trans 一个注解搞定数据翻译,减少30%SQL代码量">
-						</a>
-						<a href="https://gitee.com/dromara/neutrino-proxy" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/neutrino-proxy.svg"
-								msg="一款基于 Netty 的、开源的内网穿透神器。">
-						</a>
-						<a href="https://chatgpt.cn.obiscr.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/chatgpt.png"
-								msg="一个支持在 JetBrains 系列 IDE 上运行的 ChatGPT 的插件。">
-						</a>
-						<a href="https://gitee.com/dromara/zyplayer-doc" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/zyplayer-doc.png"
-								msg="zyplayer-doc是一款适合团队和个人使用的WIKI文档管理工具，同时还包含数据库文档、Api接口文档。">
-						</a>
-						<a href="https://gitee.com/dromara/payment-spring-boot" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/payment-spring-boot.png"
-								msg="最全最好用的微信支付V3 Spring Boot 组件。">
-						</a>
-						<a href="https://www.j2eefast.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/j2eefast.png"
-								msg="J2eeFAST 是一个致力于中小企业 Java EE 企业级快速开发平台,我们永久开源!">
-						</a>
-						<a href="https://gitee.com/dromara/data-compare" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/dataCompare.png"
-								msg="数据库比对工具：hive 表数据比对，mysql、Doris 数据比对，实现自动化配置进行数据比对，避免频繁写sql 进行处理，低代码(Low-Code) 平台">
-						</a>
-						<a href="https://gitee.com/dromara/open-giteye-api" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/open-giteye-api.svg"
-								msg="giteye.net 是专为开源作者设计的数据图表服务工具类站点，提供了包括 Star 趋势图、贡献者列表、Gitee指数等数据图表服务。">
-						</a>
-						<a href="https://gitee.com/dromara/RuoYi-Vue-Plus" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/RuoYi-Vue-Plus.png"
-								msg="后台管理系统 重写 RuoYi-Vue 所有功能 集成 Sa-Token + Mybatis-Plus + Jackson + Xxl-Job + SpringDoc + Hutool + OSS 定期同步">
-						</a>
-						<a href="https://gitee.com/dromara/RuoYi-Cloud-Plus" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/RuoYi-Cloud-Plus.png"
-								msg="微服务管理系统 重写RuoYi-Cloud所有功能 整合 SpringCloudAlibaba Dubbo3.0 Sa-Token Mybatis-Plus MQ OSS ES Xxl-Job Docker 全方位升级 定期同步">
-						</a>
-						<a href="https://gitee.com/dromara/stream-query" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/stream-query.png"
-								msg="允许完全摆脱 Mapper 的 mybatis-plus 体验！封装 stream 和 lambda 操作进行数据返回处理。">
-						</a>
-						<a href="https://wind.kim/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/sms4j.png"
-								msg="短信聚合工具，让发送短信变的更简单。">
-						</a>
-						<a href="https://cloudeon.top/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/cloudeon.png"
-								msg="简化kubernetes上大数据集群的运维管理">
-						</a>
-						<a href="https://github.com/dromara/hodor" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/hodor.png"
-								msg="Hodor是一个专注于任务编排和高可用性的分布式任务调度系统。">
-						</a>
-						<a href="http://nsrule.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/test-hub.png"
-								msg="流程编排，插件驱动，测试无限可能">
-						</a>
-						<a href="https://gitee.com/dromara/disjob" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/disjob-2.png"
-								msg="Disjob是一个分布式的任务调度框架">
-						</a>
-						<a href="https://gitee.com/dromara/binlog4j" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/Binlog4j.png"
-								msg="轻量级 Mysql Binlog 客户端, 提供宕机续读, 高可用集群等特性">
-						</a>
-						<a href="https://gitee.com/dromara/yft-design" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/yft-design.png"
-								msg="基于 Canvas 的开源版 创客贴 支持导出json，svg, image文件。">
-						</a>
-						<a href="https://gitee.com/dromara/spring-file-storage" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/file4j.png"
-								msg="在 SpringBoot 中通过简单的方式将文件存储到 本地、阿里云 OSS、腾讯云 COS、七牛云 Kodo等">
-						</a>
-						<a href="https://wemq.nicholasld.cn/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/wemq.png"
-								msg="开源、高性能、安全、功能强大的物联网调试和管理解决方案。">
-						</a>
-						<a href="https://gitee.com/dromara/mayfly-go" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/mayfly-go.png"
-								msg="web 版 linux(终端[终端回放] 文件 脚本 进程 计划任务)、数据库（mysql postgres）、redis(单机 哨兵 集群)、mongo 统一管理操作平台">
-						</a>
-						<a href="https://akali.yomahub.com/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/akali.png"
-								msg="Akali(阿卡丽)，轻量级本地化热点检测/降级框架，10秒钟即可接入使用！大流量下的神器">
-						</a>
-						<a href="https://gitee.com/dromara/dbswitch" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/dbswitch.png"
-								msg="异构数据库迁移同步(搬家)工具。">
-						</a>
-						<a href="https://gitee.com/dromara/easyAi" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/easyAI.png"
-								msg="Java 傻瓜式 AI 框架。">
-						</a>
-						<a href="https://gitee.com/dromara/mybatis-plus-ext" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/mybatis-plus-ext.png"
-								msg="mybatis-plus 框架的增强拓展包。">
-						</a>
-						<a href="https://gitee.com/dromara/dax-pay" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/dax-pay.png"
-								msg="免费开源的支付网关。">
-						</a>
-						<a href="https://gitee.com/dromara/sayOrder" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/sayorder.png"
-								msg="基于easyAi引擎的JAVA高性能，低成本，轻量级智能客服。">
-						</a>
-						<a href="https://gitee.com/dromara/mybatis-jpa-extra" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/mybatis-jpa-extra.png"
-								msg="扩展MyBatis JPA支持，简化CUID操作，增强SELECT分页查询">
-						</a>
-						<a href="https://dromara.org/zh/projects/" target="_blank">
-							<img class="lazy" data-original="https://oss.dev33.cn/sa-token/link/dromara.png"
-								msg="让每一位开源爱好者，体会到开源的快乐。">
-						</a>
-</p>
-

@@ -1,15 +1,17 @@
 package cn.bootx.platform.daxpay.service.dto.order.reconcile;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileDiffTypeEnum;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiffDetail;
 import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class ReconcileDiffDto extends BaseDto {
 
     /** 对账日期 */
     @Schema(description = "对账日期")
-    private LocalDateTime reconcileDate;
+    private LocalDate reconcileDate;
 
     /** 本地交易号 */
     @Schema(description = "本地交易号")
@@ -46,7 +48,7 @@ public class ReconcileDiffDto extends BaseDto {
 
     /** 外部交易号 */
     @Schema(description = "外部交易号")
-    private String outOrderNo;
+    private String outTradeNo;
 
     /** 交易时间 */
     @Schema(description = "交易时间")
@@ -55,6 +57,13 @@ public class ReconcileDiffDto extends BaseDto {
     /** 订单标题 */
     @Schema(description = "订单标题")
     private String title;
+
+    /**
+     * 通道
+     * @see PayChannelEnum
+     */
+    @Schema(description = "通道")
+    private String channel;
 
     /** 交易金额 */
     @Schema(description = "交易金额")
@@ -81,8 +90,8 @@ public class ReconcileDiffDto extends BaseDto {
     /**
      * 差异内容, 存储json字符串, 格式为
      * {属性: '标题', 本地字段值:'标题1', 网关字段值: '标题2'}
-     * @see ReconcileDiff
+     * @see ReconcileDiffDetail
      */
     @Schema(description = "差异内容")
-    private List<ReconcileDiff> diffs;
+    private List<ReconcileDiffDetail> diffs;
 }

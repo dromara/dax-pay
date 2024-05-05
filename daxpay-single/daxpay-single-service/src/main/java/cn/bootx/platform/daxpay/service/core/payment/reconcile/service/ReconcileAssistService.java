@@ -16,6 +16,7 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrd
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiffDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -91,9 +92,6 @@ public class ReconcileAssistService {
     public List<ReconcileDiff> generateDiffRecord(ReconcileOrder reconcileOrder,
                                                   List<GeneralTradeInfo> localTrades,
                                                   List<ReconcileTradeDetail> outDetails){
-        if (CollUtil.isEmpty(outDetails) || CollUtil.isEmpty(localTrades)){
-            return new ArrayList<>();
-        }
         // 差异内容
         List<ReconcileDiff> diffRecords = new ArrayList<>();
 
@@ -114,28 +112,34 @@ public class ReconcileAssistService {
                         .setTradeNo(outDetail.getTradeNo())
                         .setDetailId(outDetail.getId())
                         .setReconcileId(reconcileOrder.getId())
+                        .setReconcileNo(reconcileOrder.getReconcileNo())
+                        .setReconcileDate(reconcileOrder.getDate())
                         .setTitle(outDetail.getTitle())
-                        .setOrderType(outDetail.getType())
-                        .setOutOrderNo(outDetail.getOutTradeNo())
+                        .setTradeType(outDetail.getType())
+                        .setOutTradeNo(outDetail.getOutTradeNo())
                         .setOutAmount(outDetail.getAmount())
+                        .setChannel(reconcileOrder.getChannel())
                         .setTradeTime(outDetail.getTradeTime());
                 diffRecords.add(diffRecord);
                 continue;
             }
             // 如果远程和本地都存在, 比对差异
-            List<cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff> reconcileDiffs = this.reconcileDiff(outDetail, localTrade);
-            if (CollUtil.isNotEmpty(reconcileDiffs)) {
+            List<ReconcileDiffDetail> reconcileDiffDetails = this.reconcileDiff(outDetail, localTrade);
+            if (CollUtil.isNotEmpty(reconcileDiffDetails)) {
                 ReconcileDiff diffRecord = new ReconcileDiff()
                         .setReconcileId(reconcileOrder.getId())
+                        .setReconcileNo(reconcileOrder.getReconcileNo())
+                        .setReconcileDate(reconcileOrder.getDate())
                         .setDetailId(outDetail.getId())
                         .setDiffType(ReconcileDiffTypeEnum.NOT_MATCH.getCode())
                         .setTradeNo(outDetail.getTradeNo())
                         .setTitle(outDetail.getTitle())
-                        .setOrderType(outDetail.getType())
-                        .setOutOrderNo(outDetail.getOutTradeNo())
+                        .setTradeType(outDetail.getType())
+                        .setOutTradeNo(outDetail.getOutTradeNo())
                         .setOutAmount(outDetail.getAmount())
                         .setAmount(localTrade.getAmount())
-                        .setDiffs(reconcileDiffs)
+                        .setChannel(reconcileOrder.getChannel())
+                        .setDiffs(reconcileDiffDetails)
                         .setTradeTime(outDetail.getTradeTime());
                 diffRecords.add(diffRecord);
             }
@@ -148,11 +152,13 @@ public class ReconcileAssistService {
                         .setDiffType(ReconcileDiffTypeEnum.LOCAL_NOT_EXISTS.getCode())
                         .setTradeNo(localTrade.getTradeNo())
                         .setReconcileId(reconcileOrder.getId())
-                        .setDetailId(null)
+                        .setReconcileNo(reconcileOrder.getReconcileNo())
+                        .setReconcileDate(reconcileOrder.getDate())
                         .setTitle(localTrade.getTitle())
-                        .setOrderType(localTrade.getType())
-                        .setOutOrderNo(localTrade.getOutTradeNo())
+                        .setTradeType(localTrade.getType())
+                        .setOutTradeNo(localTrade.getOutTradeNo())
                         .setAmount(localTrade.getAmount())
+                        .setChannel(reconcileOrder.getChannel())
                         .setTradeTime(localTrade.getFinishTime());
                 diffRecords.add(diffRecord);
                 log.info("远程订单不存在: {}", localTrade.getTradeNo());
@@ -167,35 +173,34 @@ public class ReconcileAssistService {
      * @param outDetail 下载的对账订单
      * @param localTrade 本地交易订单
      */
-    private List<cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff> reconcileDiff(ReconcileTradeDetail outDetail, GeneralTradeInfo localTrade){
-        List<cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff> diffs = new ArrayList<>();
+    private List<ReconcileDiffDetail> reconcileDiff(ReconcileTradeDetail outDetail, GeneralTradeInfo localTrade){
+        List<ReconcileDiffDetail> diffs = new ArrayList<>();
 
         // 判断类型是否相同
         if (Objects.equals(outDetail.getType(), ReconcileTradeEnum.PAY.getCode())
                 && !Objects.equals(localTrade.getType(), PaymentTypeEnum.PAY.getCode())){
             log.warn("订单类型不一致: {},{}", outDetail.getType(), localTrade.getType());
-            diffs.add(new cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff().setFieldName("订单类型").setLocalValue(outDetail.getType()).setOutValue(localTrade.getType()));
+            diffs.add(new ReconcileDiffDetail().setFieldName("订单类型").setLocalValue(outDetail.getType()).setOutValue(localTrade.getType()));
         }
         if (Objects.equals(outDetail.getType(), ReconcileTradeEnum.REFUND.getCode())
                 && !Objects.equals(localTrade.getType(), PaymentTypeEnum.REFUND.getCode())){
             log.warn("订单类型不一致: {},{}", outDetail.getType(), localTrade.getType());
-            diffs.add(new cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff().setFieldName("订单类型").setLocalValue(outDetail.getType()).setOutValue(localTrade.getType()));
+            diffs.add(new ReconcileDiffDetail().setFieldName("订单类型").setLocalValue(outDetail.getType()).setOutValue(localTrade.getType()));
         }
 
         // 判断名称是否一致
         if (!Objects.equals(outDetail.getTitle(), localTrade.getTitle())){
             log.warn("订单名称不一致: {},{}", outDetail.getTitle(), localTrade.getTitle());
-            diffs.add(new cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff().setFieldName("订单名称").setLocalValue(outDetail.getTitle()).setOutValue(localTrade.getTitle()));
+            diffs.add(new ReconcileDiffDetail().setFieldName("订单名称").setLocalValue(outDetail.getTitle()).setOutValue(localTrade.getTitle()));
         }
 
         // 判断金额是否一致
         if (!Objects.equals(outDetail.getAmount(), localTrade.getAmount())){
             log.warn("订单金额不一致: {},{}", outDetail.getAmount(), localTrade.getAmount());
-            diffs.add(new cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff().setFieldName("订单金额")
+            diffs.add(new ReconcileDiffDetail().setFieldName("订单金额")
                     .setLocalValue(String.valueOf(outDetail.getAmount()))
                     .setOutValue(String.valueOf(localTrade.getAmount())));
         }
         return diffs;
     }
-
 }

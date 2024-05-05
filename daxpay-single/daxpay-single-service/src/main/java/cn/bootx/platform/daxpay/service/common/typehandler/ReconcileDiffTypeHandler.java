@@ -1,7 +1,7 @@
 package cn.bootx.platform.daxpay.service.common.typehandler;
 
 import cn.bootx.platform.common.mybatisplus.handler.JacksonTypeReferenceHandler;
-import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiffDetail;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.List;
@@ -11,12 +11,12 @@ import java.util.List;
  * @author xxm
  * @since 2024/3/4
  */
-public class ReconcileDiffTypeHandler extends JacksonTypeReferenceHandler<List<ReconcileDiff>> {
+public class ReconcileDiffTypeHandler extends JacksonTypeReferenceHandler<List<ReconcileDiffDetail>> {
     /**
      * 返回要反序列化的类型对象
      */
     @Override
-    public TypeReference<List<ReconcileDiff>> getTypeReference() {
-        return new TypeReference<List<ReconcileDiff>>() {};
+    public TypeReference<List<ReconcileDiffDetail>> getTypeReference() {
+        return new TypeReference<List<ReconcileDiffDetail>>() {};
     }
 }

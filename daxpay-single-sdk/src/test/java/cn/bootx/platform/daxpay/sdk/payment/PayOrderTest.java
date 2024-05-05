@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 通用支付接口
+ * 统一支付接口
  * @author xxm
  * @since 2024/2/5
  */
@@ -29,10 +29,10 @@ public class PayOrderTest {
     }
 
     /**
-     * 单通道支付
+     * 支付
      */
     @Test
-    public void onePay() {
+    public void pay() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
@@ -45,5 +45,4 @@ public class PayOrderTest {
         System.out.println(execute);
         System.out.println(execute.getData());
     }
-
 }

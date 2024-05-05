@@ -2,10 +2,12 @@ package cn.bootx.platform.daxpay.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileDiffTypeEnum;
 import cn.bootx.platform.daxpay.service.common.typehandler.ReconcileDiffTypeHandler;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.conver.ReconcileConvert;
+import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiffDetail;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDiffDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
@@ -17,6 +19,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,7 +49,7 @@ public class ReconcileDiff extends MpBaseEntity implements EntityBaseFunction<Re
 
     /** 对账日期 */
     @DbColumn(comment = "对账日期")
-    private LocalDateTime reconcileDate;
+    private LocalDate reconcileDate;
 
     /** 本地交易号 */
     @DbColumn(comment = "本地交易号")
@@ -54,7 +57,7 @@ public class ReconcileDiff extends MpBaseEntity implements EntityBaseFunction<Re
 
     /** 外部交易号 */
     @DbColumn(comment = "外部交易号")
-    private String outOrderNo;
+    private String outTradeNo;
 
     /** 交易时间 */
     @DbColumn(comment = "交易时间")
@@ -63,6 +66,13 @@ public class ReconcileDiff extends MpBaseEntity implements EntityBaseFunction<Re
     /** 订单标题 */
     @DbColumn(comment = "订单标题")
     private String title;
+
+    /**
+     * 通道
+     * @see PayChannelEnum
+     */
+    @DbColumn(comment = "通道")
+    private String channel;
 
     /** 本地交易金额 */
     @DbColumn(comment = "本地交易金额")
@@ -90,12 +100,12 @@ public class ReconcileDiff extends MpBaseEntity implements EntityBaseFunction<Re
     /**
      * 差异内容, 存储json字符串, 格式为
      * {属性: '标题', 本地字段值:'标题1', 网关字段值: '标题2'}
-     * @see cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff
+     * @see ReconcileDiffDetail
      */
     @DbColumn(comment = "差异内容")
     @TableField(typeHandler = ReconcileDiffTypeHandler.class)
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    private List<cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiff> diffs;
+    private List<ReconcileDiffDetail> diffs;
 
     @Override
     public ReconcileDiffDto toDto() {
