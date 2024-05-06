@@ -1,16 +1,12 @@
 package cn.bootx.platform.daxpay.service.dto.order.reconcile;
 
-import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.handler.excel.AmountConverter;
 import cn.bootx.platform.daxpay.service.handler.excel.PaymentTypeConvert;
-import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -19,17 +15,10 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/1/22
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-@Accessors(chain = true)
 @Schema(title = "对账订单详情")
 @ExcelIgnoreUnannotated
-public class ReconcileTradeDetailDto extends BaseDto {
-
-    /** 关联对账订单ID */
-    @Schema(description = "关联对账订单ID")
-    @ExcelIgnore
-    private Long reconcileId;
+public class ReconcileTradeDetailExcel {
 
     /** 商品名称 */
     @Schema(description = "商品名称")

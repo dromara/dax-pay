@@ -1,7 +1,11 @@
 package cn.bootx.platform.daxpay.service.code;
 
+import cn.bootx.platform.common.core.exception.DataNotExistException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 对账差异类型
@@ -21,4 +25,13 @@ public enum ReconcileDiffTypeEnum {
 
     final String code;
     final String name;
+
+
+    public static ReconcileDiffTypeEnum findByCode(String code){
+        return Arrays.stream(values())
+                .filter(value -> Objects.equals(value.getCode(), code))
+                .findFirst()
+                .orElseThrow(() -> new DataNotExistException("未找到对应的支付类型"));
+
+    }
 }

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -29,5 +31,12 @@ public class ReconcileDiffManager extends BaseManager<ReconcileDiffMapper, Recon
         Page<ReconcileDiff> mpPage = MpUtil.getMpPage(pageParam, ReconcileDiff.class);
         QueryWrapper<ReconcileDiff> generator = QueryGenerator.generator(query);
         return this.page(mpPage,generator);
+    }
+
+    /**
+     * 查询对账单对应的差异明细
+     */
+    public List<ReconcileDiff> findAllByReconcileId(Long reconcileId) {
+        return this.findAllByField(ReconcileDiff::getReconcileId,reconcileId);
     }
 }

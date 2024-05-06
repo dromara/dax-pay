@@ -1,7 +1,11 @@
 package cn.bootx.platform.daxpay.code;
 
+import cn.bootx.platform.common.core.exception.DataNotExistException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 对账交易类型
@@ -18,4 +22,11 @@ public enum ReconcileTradeEnum {
 
     private final String code;
     private final String name;
+
+    public static ReconcileTradeEnum findByCode(String code) {
+        return Arrays.stream(values())
+                .filter(value -> Objects.equals(value.getCode(), code))
+                .findFirst()
+                .orElseThrow(() -> new DataNotExistException("未找到对应的交易类型"));
+    }
 }

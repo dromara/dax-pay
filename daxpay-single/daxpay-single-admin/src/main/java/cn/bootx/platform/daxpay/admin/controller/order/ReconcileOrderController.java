@@ -75,6 +75,18 @@ public class ReconcileOrderController {
         return reconcileService.downOriginal2Csv(id);
     }
 
+    @Operation(summary = "下载系统对账单(CSV格式)")
+    @GetMapping("/downLocalCsv")
+    public ResponseEntity<byte[]> downLocalCsv(Long id){
+        return reconcileService.downLocalCsv(id);
+    }
+
+    @Operation(summary = "下载对账差异单(CSV格式)")
+    @GetMapping("/downDiffCsv")
+    public ResponseEntity<byte[]> downDiffCsv(Long id){
+        return reconcileService.downDiffCsv(id);
+    }
+
     @Operation(summary = "对账单分页")
     @GetMapping("/page")
     public ResResult<PageResult<ReconcileOrderDto>> page(PageParam pageParam, ReconcileOrderQuery query){

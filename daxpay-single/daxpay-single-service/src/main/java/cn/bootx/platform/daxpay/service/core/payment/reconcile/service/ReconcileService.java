@@ -2,10 +2,13 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.CollUtil;
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.exception.pay.PayFailureException;
 import cn.bootx.platform.daxpay.service.code.ReconcileFileTypeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileResultEnum;
 import cn.bootx.platform.daxpay.service.common.local.PaymentContextLocal;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileDiffManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.dao.ReconcileTradeDetailManager;
@@ -13,14 +16,20 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDif
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileFile;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileDiffService;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.service.ReconcileOrderService;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.factory.ReconcileStrategyFactory;
+import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileDiffExcel;
+import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileTradeDetailExcel;
 import cn.bootx.platform.daxpay.service.func.AbsReconcileStrategy;
 import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileUploadParam;
 import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +44,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 对账服务,
@@ -50,7 +61,7 @@ import java.util.List;
 public class ReconcileService {
     private final ReconcileOrderService reconcileOrderService;
 
-    private final ReconcileDiffService reconcileDiffService;
+    private final ReconcileDiffManager reconcileDiffManager;
 
     private final ReconcileOrderManager reconcileOrderManager;
 
@@ -188,7 +199,7 @@ public class ReconcileService {
             }
             reconcileOrder.setCompare(true);
             reconcileOrderService.update(reconcileOrder);
-            reconcileDiffService.saveAll(diffRecords);
+            reconcileDiffManager.saveAll(diffRecords);
         } catch (Exception e) {
             log.error("比对对账单异常", e);
             throw e;
@@ -228,19 +239,90 @@ public class ReconcileService {
         ReconcileOrder reconcileOrder = reconcileOrderService.findById(id)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
         // 查询对账-第三方交易明细
-        List<ReconcileTradeDetail> reconcileTradeDetails = reconcileTradeDetailManager.findAllByReconcileId(reconcileOrder.getId());
+        List<ReconcileTradeDetailExcel> reconcileTradeDetails = reconcileTradeDetailManager.findAllByReconcileId(reconcileOrder.getId())
+                .stream()
+                .map(o->{
+                    ReconcileTradeDetailExcel excel = new ReconcileTradeDetailExcel();
+                    BeanUtil.copyProperties(o,excel);
+                    return excel;
+                }).collect(Collectors.toList());
 
         // 转换为csv文件
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        EasyExcel.write(byteArrayOutputStream, ReconcileTradeDetailExcel.class)
+                .excelType(ExcelTypeEnum.CSV)
+                .sheet("对账单明细")
+                .doWrite(() -> reconcileTradeDetails);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        // 设置header信息
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
-        return null;
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
+        String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
+        // 将原始文件进行保存 通道-日期
+        String fileName = StrUtil.format("外部对账单-{}-{}.csv", channelEnum.getName(),date);
+        headers.setContentDispositionFormData("attachment", URLEncoder.encode(fileName, CharsetUtil.UTF_8));
+        return new ResponseEntity<>(bytes,headers, HttpStatus.OK);
     }
 
     /**
      * 下载对账单(本系统中的订单)
      */
     @SneakyThrows
-    public ResponseEntity<byte[]> downLocal(Long id){
-        return null;
+    public ResponseEntity<byte[]> downLocalCsv(Long id){
+        ReconcileOrder reconcileOrder = reconcileOrderService.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
+        List<GeneralTradeInfo> generalTradeInfoList = reconcileAssistService.getGeneralTradeInfoList(reconcileOrder);
+
+        // 转换为csv文件
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        EasyExcel.write(byteArrayOutputStream, GeneralTradeInfo.class)
+                .excelType(ExcelTypeEnum.CSV)
+                .sheet("对账单明细")
+                .doWrite(() -> generalTradeInfoList);
+        byte[] bytes = byteArrayOutputStream.toByteArray();// 设置header信息
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
+        String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
+        // 将原始文件进行保存 通道-日期
+        String fileName = StrUtil.format("系统对账单-{}-{}.csv", channelEnum.getName(),date);
+        headers.setContentDispositionFormData("attachment", URLEncoder.encode(fileName, CharsetUtil.UTF_8));
+        return new ResponseEntity<>(bytes,headers, HttpStatus.OK);
+    }
+
+    /**
+     * 下载对账差异单
+     */
+    @SneakyThrows
+    public ResponseEntity<byte[]> downDiffCsv(Long id){
+        ReconcileOrder reconcileOrder = reconcileOrderService.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
+        List<ReconcileDiffExcel> reconcileDiffs = reconcileDiffManager.findAllByReconcileId(reconcileOrder.getId()).stream()
+                .map(o->{
+                    ReconcileDiffExcel excel = new ReconcileDiffExcel();
+                    BeanUtil.copyProperties(o,excel);
+                    return excel;
+                }).collect(Collectors.toList());
+
+        // 转换为csv文件
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        EasyExcel.write(byteArrayOutputStream, ReconcileDiffExcel.class)
+                .excelType(ExcelTypeEnum.CSV)
+                .sheet("对账单明细")
+                .doWrite(() -> reconcileDiffs);
+        byte[] bytes = byteArrayOutputStream.toByteArray();// 设置header信息
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
+        String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
+        // 将原始文件进行保存 通道-日期
+        String fileName = StrUtil.format("对账差异单-{}-{}.csv", channelEnum.getName(),date);
+        headers.setContentDispositionFormData("attachment", URLEncoder.encode(fileName, CharsetUtil.UTF_8));
+        return new ResponseEntity<>(bytes,headers, HttpStatus.OK);
     }
 
 }

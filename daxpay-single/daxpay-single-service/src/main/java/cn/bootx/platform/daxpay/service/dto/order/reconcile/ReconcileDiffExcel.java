@@ -1,63 +1,69 @@
 package cn.bootx.platform.daxpay.service.dto.order.reconcile;
 
-import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileDiffTypeEnum;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.ReconcileDiffDetail;
+import cn.bootx.platform.daxpay.service.handler.excel.*;
 import cn.bootx.table.modify.annotation.DbColumn;
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 对账差异单
+ * 对账差异单导出对象
  * @author xxm
  * @since 2024/3/3
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-@Accessors(chain = true)
 @Schema(title = "对账差异单")
 @ExcelIgnoreUnannotated
-public class ReconcileDiffDto extends BaseDto {
+public class ReconcileDiffExcel {
 
     /** 对账单ID */
     @Schema(description = "对账单ID")
+    @ExcelIgnore
     private Long reconcileId;
 
     /** 对账单号 */
     @Schema(description = "对账单号")
+    @ExcelProperty("对账单号")
     private String reconcileNo;
 
     /** 对账单明细ID */
     @Schema(description = "对账单明细ID")
+    @ExcelIgnore
     private Long detailId;
 
     /** 对账日期 */
     @Schema(description = "对账日期")
+    @ExcelProperty("对账日期")
     private LocalDate reconcileDate;
 
     /** 本地交易号 */
     @Schema(description = "本地交易号")
+    @ExcelProperty("本地交易号")
     private String tradeNo;
 
     /** 外部交易号 */
     @Schema(description = "外部交易号")
+    @ExcelProperty("外部交易号")
     private String outTradeNo;
 
     /** 交易时间 */
     @Schema(description = "交易时间")
+    @ExcelProperty("网关完成时间")
     private LocalDateTime tradeTime;
 
     /** 订单标题 */
     @Schema(description = "订单标题")
+    @ExcelProperty("商品名称")
     private String title;
 
     /**
@@ -65,21 +71,25 @@ public class ReconcileDiffDto extends BaseDto {
      * @see PayChannelEnum
      */
     @Schema(description = "通道")
+    @ExcelProperty(value = "通道", converter = PayChannelConvert.class)
     private String channel;
 
     /** 交易金额 */
     @Schema(description = "交易金额")
+    @ExcelProperty(value = "交易金额(元)", converter = AmountConverter.class)
     private Integer amount;
 
     /** 外部交易金额 */
     @DbColumn(comment = "外部交易金额")
+    @ExcelProperty(value = "外部交易金额(元)", converter = AmountConverter.class)
     private Integer outAmount;
 
     /**
-     * 订单类型
+     * 交易类型
      * @see ReconcileTradeEnum
      */
-    @Schema(description = "订单类型")
+    @Schema(description = "交易类型")
+    @ExcelProperty(value = "交易类型", converter = ReconcileTradeConvert.class)
     private String tradeType;
 
     /**
@@ -87,6 +97,7 @@ public class ReconcileDiffDto extends BaseDto {
      * @see ReconcileDiffTypeEnum
      */
     @Schema(description = "差异类型")
+    @ExcelProperty(value = "差异类型", converter = ReconcileDiffTypeConvert.class)
     private String diffType;
 
     /**
@@ -95,5 +106,6 @@ public class ReconcileDiffDto extends BaseDto {
      * @see ReconcileDiffDetail
      */
     @Schema(description = "差异内容")
+    @ExcelProperty(value = "差异内容", converter = ReconcileDiffDetailConvert.class)
     private List<ReconcileDiffDetail> diffs;
 }

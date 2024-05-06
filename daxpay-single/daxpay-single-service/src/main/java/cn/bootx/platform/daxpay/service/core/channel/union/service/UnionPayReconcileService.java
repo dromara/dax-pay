@@ -174,7 +174,6 @@ public class UnionPayReconcileService {
 
         // 默认为支付对账记录
         ReconcileTradeDetail reconcileTradeDetail = new ReconcileTradeDetail()
-                .setTitle("未知")
                 .setReconcileId(billDetail.getReconcileId())
                 .setTradeNo(billDetail.getOrderId())
                 .setType(ReconcileTradeEnum.PAY.getCode())

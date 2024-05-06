@@ -1,6 +1,9 @@
 package cn.bootx.platform.daxpay.service.core.payment.reconcile.domain;
 
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
+import cn.bootx.platform.daxpay.service.handler.excel.AmountConverter;
+import cn.bootx.platform.daxpay.service.handler.excel.PaymentTypeConvert;
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -15,23 +18,29 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class GeneralTradeInfo {
     /** 标题 */
+    @ExcelProperty("标题")
     private String title;
 
     /** 金额 */
+    @ExcelProperty(value = "金额(元)", converter = AmountConverter.class)
     private Integer amount;
 
     /**
      * 业务类型
      * @see PaymentTypeEnum
      */
+    @ExcelProperty(value = "业务类型", converter = PaymentTypeConvert.class)
     private String type;
 
     /** 本地交易号 */
+    @ExcelProperty("本地交易号")
     private String tradeNo;
 
-    /** 网关交易号 */
+    /** 外部交易号 */
+    @ExcelProperty("外部交易号")
     private String outTradeNo;
 
     /** 网关完成时间 */
+    @ExcelProperty("网关完成时间")
     private LocalDateTime finishTime;
 }
