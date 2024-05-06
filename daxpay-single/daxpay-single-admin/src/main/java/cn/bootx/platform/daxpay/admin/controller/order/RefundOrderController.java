@@ -12,6 +12,7 @@ import cn.bootx.platform.daxpay.service.core.payment.sync.service.RefundSyncServ
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDetailDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.refund.RefundOrderExtraDto;
+import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderRefundParam;
 import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,36 +31,36 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RefundOrderController {
     private final RefundOrderService refundOrderService;
-    private final RefundOrderQueryService refundOrderQueryService;
+    private final RefundOrderQueryService queryService;
     private final RefundSyncService refundSyncService;
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public ResResult<PageResult<RefundOrderDto>> page(PageParam pageParam, RefundOrderQuery query){
-        return Res.ok(refundOrderQueryService.page(pageParam, query));
+        return Res.ok(queryService.page(pageParam, query));
     }
 
 
     @Operation(summary = "查询退款订单详情")
     @GetMapping("/findByOrderNo")
     public ResResult<RefundOrderDetailDto> findByRefundNo(String refundNo){
-        RefundOrderDto order = refundOrderQueryService.findByRefundNo(refundNo);
+        RefundOrderDto order = queryService.findByRefundNo(refundNo);
         RefundOrderDetailDto detailDto = new RefundOrderDetailDto();
         detailDto.setRefundOrder(order);
-        detailDto.setRefundOrderExtra(refundOrderQueryService.findExtraById(order.getId()));
+        detailDto.setRefundOrderExtra(queryService.findExtraById(order.getId()));
         return Res.ok(detailDto);
     }
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
     public ResResult<RefundOrderDto> findById(Long id){
-        return Res.ok(refundOrderQueryService.findById(id));
+        return Res.ok(queryService.findById(id));
     }
 
 
     @Operation(summary = "查询扩展信息")
     @GetMapping("/findExtraById")
     public ResResult<RefundOrderExtraDto> findExtraById(Long id){
-        return Res.ok(refundOrderQueryService.findExtraById(id));
+        return Res.ok(queryService.findExtraById(id));
     }
 
     @Operation(summary = "手动发起退款")
@@ -82,5 +83,11 @@ public class RefundOrderController {
         RefundSyncParam refundSyncParam = new RefundSyncParam();
         refundSyncParam.setRefundNo(refundNo);
         return Res.ok(refundSyncService.sync(refundSyncParam));
+    }
+
+    @Operation(summary = "查询金额汇总")
+    @GetMapping("/getTotalAmount")
+    public ResResult<Integer> getTotalAmount(PayOrderQuery param){
+        return Res.ok(queryService.getTotalAmount(param));
     }
 }

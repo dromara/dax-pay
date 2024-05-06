@@ -55,8 +55,8 @@ public class ReconcileDiff extends MpBaseEntity implements EntityBaseFunction<Re
     @DbColumn(comment = "本地交易号")
     private String tradeNo;
 
-    /** 外部交易号 */
-    @DbColumn(comment = "外部交易号")
+    /** 通道交易号 */
+    @DbColumn(comment = "通道交易号")
     private String outTradeNo;
 
     /** 交易时间 */
@@ -79,8 +79,8 @@ public class ReconcileDiff extends MpBaseEntity implements EntityBaseFunction<Re
     private Integer amount;
 
 
-    /** 外部交易金额 */
-    @DbColumn(comment = "外部交易金额")
+    /** 通道交易金额 */
+    @DbColumn(comment = "通道交易金额")
     private Integer outAmount;
 
     /**

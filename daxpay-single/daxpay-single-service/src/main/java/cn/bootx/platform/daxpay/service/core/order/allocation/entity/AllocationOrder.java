@@ -44,9 +44,9 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     private String bizAllocationNo;
 
     /**
-     * 外部分账号
+     * 通道分账号
      */
-    @DbColumn(comment = "外部分账号")
+    @DbColumn(comment = "通道分账号")
     private String outAllocationNo;
 
     /** 支付订单ID */
@@ -66,9 +66,9 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     private String bizOrderNo;
 
     /**
-     * 外部系统支付订单号
+     * 通道系统支付订单号
      */
-    @DbColumn(comment = "外部支付订单号")
+    @DbColumn(comment = "通道支付订单号")
     private String outOrderNo;
 
     /**

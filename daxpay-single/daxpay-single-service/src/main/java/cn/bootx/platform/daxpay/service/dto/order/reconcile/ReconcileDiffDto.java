@@ -48,8 +48,8 @@ public class ReconcileDiffDto extends BaseDto {
     @Schema(description = "本地交易号")
     private String tradeNo;
 
-    /** 外部交易号 */
-    @Schema(description = "外部交易号")
+    /** 通道交易号 */
+    @Schema(description = "通道交易号")
     private String outTradeNo;
 
     /** 交易时间 */
@@ -71,8 +71,8 @@ public class ReconcileDiffDto extends BaseDto {
     @Schema(description = "交易金额")
     private Integer amount;
 
-    /** 外部交易金额 */
-    @DbColumn(comment = "外部交易金额")
+    /** 通道交易金额 */
+    @DbColumn(comment = "通道交易金额")
     private Integer outAmount;
 
     /**

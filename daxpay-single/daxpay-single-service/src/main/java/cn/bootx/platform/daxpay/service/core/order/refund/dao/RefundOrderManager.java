@@ -4,8 +4,10 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
+import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
 import cn.bootx.platform.daxpay.service.param.order.RefundOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -84,5 +86,14 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
                 .between(RefundOrder::getFinishTime, startTime, endTime)
                 .in(RefundOrder::getStatus, status)
                 .list();
+    }
+
+    /**
+     * 查询汇总金额
+     */
+    public Integer getTalAmount(PayOrderQuery query){
+        QueryWrapper<RefundOrder> generator = QueryGenerator.generator(query);
+        generator.eq(MpUtil.getColumnName(RefundOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
+        return baseMapper.getTalAmount(generator);
     }
 }

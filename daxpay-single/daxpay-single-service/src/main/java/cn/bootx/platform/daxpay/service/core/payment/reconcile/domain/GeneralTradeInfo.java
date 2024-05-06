@@ -36,8 +36,8 @@ public class GeneralTradeInfo {
     @ExcelProperty("本地交易号")
     private String tradeNo;
 
-    /** 外部交易号 */
-    @ExcelProperty("外部交易号")
+    /** 通道交易号 */
+    @ExcelProperty("通道交易号")
     private String outTradeNo;
 
     /** 网关完成时间 */

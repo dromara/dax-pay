@@ -29,9 +29,9 @@ public class PayOrderDto extends BaseDto {
     private String orderNo;
 
     /**
-     *  外部系统交易号
+     *  通道系统交易号
      */
-    @Schema(description = "外部支付订单号")
+    @Schema(description = "通道支付订单号")
     private String outOrderNo;
 
     /** 标题 */

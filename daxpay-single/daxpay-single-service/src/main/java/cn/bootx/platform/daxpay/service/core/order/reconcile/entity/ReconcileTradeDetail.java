@@ -49,8 +49,8 @@ public class ReconcileTradeDetail extends MpCreateEntity implements EntityBaseFu
     @DbColumn(comment = "本地交易号")
     private String tradeNo;
 
-    /** 外部交易号 - 支付宝/微信的订单号 */
-    @DbColumn(comment = "外部交易号")
+    /** 通道交易号 - 支付宝/微信的订单号 */
+    @DbColumn(comment = "通道交易号")
     private String outTradeNo;
 
     /** 交易时间 */

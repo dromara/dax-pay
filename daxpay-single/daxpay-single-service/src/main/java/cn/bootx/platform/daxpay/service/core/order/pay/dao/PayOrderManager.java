@@ -68,4 +68,13 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
                 .list();
     }
 
+    /**
+     * 查询汇总金额
+     */
+    public Integer getTalAmount(PayOrderQuery query){
+        QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
+        generator.eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
+        return baseMapper.getTalAmount(generator);
+    }
+
 }

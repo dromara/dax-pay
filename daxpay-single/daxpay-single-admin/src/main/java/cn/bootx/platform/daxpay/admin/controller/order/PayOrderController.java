@@ -103,4 +103,10 @@ public class PayOrderController {
         allocationService.allocation(param);
         return Res.ok();
     }
+
+    @Operation(summary = "查询金额汇总")
+    @GetMapping("/getTotalAmount")
+    public ResResult<Integer> getTotalAmount(PayOrderQuery param){
+        return Res.ok(queryService.getTotalAmount(param));
+    }
 }

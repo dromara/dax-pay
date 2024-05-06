@@ -36,10 +36,10 @@
 
 ## 📃 文档和源码地址
 ### 文档地址
-在 [Bootx开源文档站](https://bootx.gitee.io/) 下的支付网关(DaxPay)模块下可以进行查阅相关文档，具体链接地址如下：
-[快速指南](https://bootx.gitee.io/daxpay/guides/overview/项目介绍.html)、
-[支付对接](https://bootx.gitee.io/daxpay/gateway/overview/接口清单.html)、
-[操作手册](https://bootx.gitee.io/daxpay/admin/config/平台配置.html)
+在 [Bootx开源文档站](https://doc.bootx.cn/) 下的支付网关(DaxPay)模块下可以进行查阅相关文档，具体链接地址如下：
+[快速指南](https://doc.bootx.cn/daxpay/guides/overview/项目介绍.html)、
+[支付对接](https://doc.bootx.cn/daxpay/gateway/overview/接口清单.html)、
+[操作手册](https://doc.bootx.cn/daxpay/admin/config/平台配置.html)
 
 ### 项目地址
 
@@ -90,7 +90,7 @@
 不会对原业务系统的架构产生影响。如果是Java项目，可以使用SDK简化接入流程， 其他语言可以参照中的说明使用HTTP接口方式接入。
 
 ### Java客户端SDK
-> SDK版本号与支付网关的版本保持一致，如果需要使用，请在pom.xml中添加如下依赖。SDK使用方式参考[SDK使用说明](https://bootx.gitee.io/daxpay/gateway/overview/SDK使用说明.html)。
+> SDK版本号与支付网关的版本保持一致，如果需要使用，请在pom.xml中添加如下依赖。SDK使用方式参考[SDK使用说明](https://doc.bootx.cn/daxpay/gateway/overview/SDK使用说明.html)。
 
 ```xml
  <!-- 支付SDK -->
@@ -101,7 +101,7 @@
 </dependency>
 ```
 ### SDK调用示例
-> 此处以简单支付接口为例，演示业务系统如何调用支付网关进行支付，其他接口的调用方式类似，具体请参考[支付对接](https://bootx.gitee.io/daxpay/gateway/overview/接口清单.html)。
+> 此处以简单支付接口为例，演示业务系统如何调用支付网关进行支付，其他接口的调用方式类似，具体请参考[支付对接](https://doc.bootx.cn/daxpay/gateway/overview/接口清单.html)。
 
 ```java
 /**

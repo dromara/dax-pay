@@ -29,8 +29,8 @@ public class ReconcileDiffQuery extends QueryOrder {
     @Schema(description = "本地交易号")
     private String tradeNo;
 
-    /** 外部交易号 */
-    @Schema(description = "外部交易号")
+    /** 通道交易号 */
+    @Schema(description = "通道交易号")
     private String outTradeNo;
 
     /** 订单标题 */

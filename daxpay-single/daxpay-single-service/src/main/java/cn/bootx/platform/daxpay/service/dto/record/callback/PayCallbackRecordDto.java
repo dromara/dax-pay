@@ -23,7 +23,7 @@ public class PayCallbackRecordDto extends BaseDto {
     @Schema(description = "交易号")
     private String tradeNo;
 
-    @Schema(description = "外部交易号")
+    @Schema(description = "通道交易号")
     private String outTradeNo;
     /**
      * 支付通道

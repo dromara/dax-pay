@@ -43,9 +43,9 @@ public class ReconcileTradeDetailExcel {
     @ExcelProperty("本地交易号")
     private String tradeNo;
 
-    /** 外部交易号 - 支付宝/微信的订单号 */
-    @Schema(description = "外部交易号")
-    @ExcelProperty("外部交易号")
+    /** 通道交易号 - 支付宝/微信的订单号 */
+    @Schema(description = "通道交易号")
+    @ExcelProperty("通道交易号")
     private String outTradeNo;
 
     /** 交易时间 */

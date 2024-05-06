@@ -41,7 +41,7 @@ public interface AliPayCode {
     /** 对交易或商品的描述(在没有公用回传参数的时候, 这个作为公用回传参数) */
     String BODY = "body";
 
-    /** 外部支付订单号 - 商户订单号 */
+    /** 通道支付订单号 - 商户订单号 */
     String OUT_TRADE_NO = "out_trade_no";
 
     /** 支付流水号 */

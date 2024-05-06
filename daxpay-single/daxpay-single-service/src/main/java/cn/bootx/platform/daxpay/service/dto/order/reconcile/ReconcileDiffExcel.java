@@ -51,9 +51,9 @@ public class ReconcileDiffExcel {
     @ExcelProperty("本地交易号")
     private String tradeNo;
 
-    /** 外部交易号 */
-    @Schema(description = "外部交易号")
-    @ExcelProperty("外部交易号")
+    /** 通道交易号 */
+    @Schema(description = "通道交易号")
+    @ExcelProperty("通道交易号")
     private String outTradeNo;
 
     /** 交易时间 */
@@ -79,9 +79,9 @@ public class ReconcileDiffExcel {
     @ExcelProperty(value = "交易金额(元)", converter = AmountConverter.class)
     private Integer amount;
 
-    /** 外部交易金额 */
-    @DbColumn(comment = "外部交易金额")
-    @ExcelProperty(value = "外部交易金额(元)", converter = AmountConverter.class)
+    /** 通道交易金额 */
+    @DbColumn(comment = "通道交易金额")
+    @ExcelProperty(value = "通道交易金额(元)", converter = AmountConverter.class)
     private Integer outAmount;
 
     /**

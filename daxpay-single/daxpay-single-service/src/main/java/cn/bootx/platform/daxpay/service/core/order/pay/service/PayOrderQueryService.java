@@ -11,7 +11,6 @@ import cn.bootx.platform.daxpay.result.order.PayOrderResult;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrderExtra;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
 import cn.hutool.core.bean.BeanUtil;
@@ -21,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -80,8 +77,6 @@ public class PayOrderQueryService {
         return Optional.empty();
     }
 
-
-
     /**
      * 查询支付记录
      */
@@ -94,10 +89,17 @@ public class PayOrderQueryService {
         PayOrder payOrder = this.findByBizOrOrderNo(param.getBizOrderNoeNo(), param.getOrderNo())
                 .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         // 查询扩展数据
-        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(payOrder.getId())
+        payOrderExtraManager.findById(payOrder.getId())
                 .orElseThrow(() -> new PayFailureException("支付订单不完整"));
         PayOrderResult payOrderResult = new PayOrderResult();
         BeanUtil.copyProperties(payOrder, payOrderResult);
         return payOrderResult;
+    }
+
+    /**
+     * 查询支付总金额
+     */
+    public Integer getTotalAmount(PayOrderQuery param) {
+        return payOrderManager.getTalAmount(param);
     }
 }
