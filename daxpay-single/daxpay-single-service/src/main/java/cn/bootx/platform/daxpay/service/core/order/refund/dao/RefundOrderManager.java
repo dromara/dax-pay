@@ -16,10 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 支付退款订单管理
@@ -77,14 +75,11 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     /**
      * 查询对账用订单记录(指定时间和状态的订单)
      */
-    public List<RefundOrder> findReconcile(String channel, LocalDateTime startTime, LocalDateTime endTime, RefundStatusEnum...statusEnum) {
-        List<String> status = Arrays.stream(statusEnum)
-                .map(RefundStatusEnum::getCode)
-                .collect(Collectors.toList());
+    public List<RefundOrder> findReconcile(String channel, LocalDateTime startTime, LocalDateTime endTime) {
         return this.lambdaQuery()
                 .eq(RefundOrder::getChannel, channel)
                 .between(RefundOrder::getFinishTime, startTime, endTime)
-                .in(RefundOrder::getStatus, status)
+                .eq(RefundOrder::getStatus, RefundStatusEnum.SUCCESS)
                 .list();
     }
 

@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
+import cn.bootx.platform.daxpay.code.AllocOrderStatusEnum;
 import cn.bootx.platform.daxpay.service.core.order.allocation.entity.AllocationOrder;
 import cn.bootx.platform.daxpay.service.param.order.AllocationOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,5 +48,15 @@ public class AllocationOrderManager extends BaseManager<AllocationOrderMapper, A
             Page<AllocationOrder> mpPage = MpUtil.getMpPage(pageParam, AllocationOrder.class);
             QueryWrapper<AllocationOrder> generator = QueryGenerator.generator(param);
             return this.page(mpPage, generator);
+    }
+
+    /**
+     * 查询待同步的分账单
+     */
+    public List<AllocationOrder> findSyncOrder(){
+        List<String> statusList = Arrays.asList(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode(), AllocOrderStatusEnum.ALLOCATION_END.getCode());
+        return lambdaQuery()
+                .in(AllocationOrder::getStatus, statusList)
+                .list();
     }
 }

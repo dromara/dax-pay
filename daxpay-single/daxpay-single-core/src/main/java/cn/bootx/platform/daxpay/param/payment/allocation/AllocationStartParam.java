@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 开始分账请求参数
  * @author xxm
@@ -16,6 +18,7 @@ import lombok.EqualsAndHashCode;
 public class AllocationStartParam extends PaymentCommonParam {
 
     @Schema(description = "商户分账单号")
+    @NotBlank(message = "商户分账单号不可为空")
     private String bizAllocationNo;
 
     @Schema(description = "支付订单号")

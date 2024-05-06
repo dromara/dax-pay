@@ -3,16 +3,14 @@ package cn.bootx.platform.daxpay.service.core.payment.reconcile.service;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.bootx.platform.daxpay.code.PayStatusEnum;
 import cn.bootx.platform.daxpay.code.ReconcileTradeEnum;
-import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.code.PaymentTypeEnum;
 import cn.bootx.platform.daxpay.service.code.ReconcileDiffTypeEnum;
 import cn.bootx.platform.daxpay.service.core.order.pay.dao.PayOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.pay.entity.PayOrder;
-import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileDiff;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.bootx.platform.daxpay.service.core.order.refund.dao.RefundOrderManager;
 import cn.bootx.platform.daxpay.service.core.order.refund.entity.RefundOrder;
 import cn.bootx.platform.daxpay.service.core.payment.reconcile.domain.GeneralTradeInfo;
@@ -55,8 +53,8 @@ public class ReconcileAssistService {
         LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
 
         // 下载支付订单
-        List<PayOrder> payOrders = payOrderManager.findReconcile(reconcileOrder.getChannel(), start, end, PayStatusEnum.SUCCESS, PayStatusEnum.PARTIAL_REFUND, PayStatusEnum.REFUNDING, PayStatusEnum.REFUNDED);
-        List<RefundOrder> refundOrders = refundOrderManager.findReconcile(reconcileOrder.getChannel(), start, end, RefundStatusEnum.SUCCESS);
+        List<PayOrder> payOrders = payOrderManager.findReconcile(reconcileOrder.getChannel(), start, end);
+        List<RefundOrder> refundOrders = refundOrderManager.findReconcile(reconcileOrder.getChannel(), start, end);
         for (PayOrder payOrder : payOrders) {
             generalTradeInfoList.add(new GeneralTradeInfo()
                     .setTitle(payOrder.getTitle())

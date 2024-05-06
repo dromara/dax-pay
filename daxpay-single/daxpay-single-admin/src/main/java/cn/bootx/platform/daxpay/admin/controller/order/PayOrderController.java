@@ -19,6 +19,7 @@ import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDetailDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.pay.PayOrderExtraDto;
 import cn.bootx.platform.daxpay.service.param.order.PayOrderQuery;
+import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -100,6 +101,7 @@ public class PayOrderController {
     public ResResult<Void> allocation(String orderNo){
         AllocationStartParam param = new AllocationStartParam();
         param.setOrderNo(orderNo);
+        param.setBizAllocationNo(OrderNoGenerateUtil.allocation());
         allocationService.allocation(param);
         return Res.ok();
     }
