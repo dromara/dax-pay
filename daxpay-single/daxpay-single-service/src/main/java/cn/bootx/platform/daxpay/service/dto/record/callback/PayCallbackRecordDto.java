@@ -55,6 +55,6 @@ public class PayCallbackRecordDto extends BaseDto {
 
     /** 提示信息 */
     @Schema(description = "提示信息")
-    private String msg;
+    private String errorMsg;
 
 }

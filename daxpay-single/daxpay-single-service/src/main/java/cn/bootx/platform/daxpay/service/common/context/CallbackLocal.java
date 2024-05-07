@@ -62,5 +62,5 @@ public class CallbackLocal {
     private PayCallbackStatusEnum callbackStatus = PayCallbackStatusEnum.SUCCESS;
 
     /** 提示信息 */
-    private String msg;
+    private String errorMsg;
 }

@@ -64,7 +64,7 @@ public class UnionPayCallbackService {
 
             // 验证消息
             if (!this.verifyNotify()) {
-                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("验证信息格式不通过");
+                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setErrorMsg("验证信息格式不通过");
                 // 消息有问题, 保存记录并返回
                 callbackService.saveCallbackRecord();
                 return null;
@@ -85,7 +85,7 @@ public class UnionPayCallbackService {
             return this.getReturnMsg();
         } catch (Exception e) {
             log.error("回调处理失败", e);
-            callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setMsg("回调处理失败: "+e.getMessage());
+            callbackInfo.setCallbackStatus(PayCallbackStatusEnum.FAIL).setErrorMsg("回调处理失败: "+e.getMessage());
             callbackService.saveCallbackRecord();
             throw e;
         }

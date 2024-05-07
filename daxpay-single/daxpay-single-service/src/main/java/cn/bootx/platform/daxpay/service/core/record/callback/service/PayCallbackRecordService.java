@@ -56,7 +56,7 @@ public class PayCallbackRecordService {
                 .setCallbackType(callbackInfo.getCallbackType().getCode())
                 .setRepairOrderNo(callbackInfo.getRepairNo())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())
-                .setMsg(callbackInfo.getMsg());
+                .setErrorMsg(callbackInfo.getErrorMsg());
         callbackRecordManager.save(payNotifyRecord);
     }
 }

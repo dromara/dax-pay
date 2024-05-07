@@ -41,7 +41,7 @@ public class RefundCallbackService {
         // 加锁
         LockInfo lock = lockTemplate.lock("callback:refund:" + callbackInfo.getTradeNo(),10000, 200);
         if (Objects.isNull(lock)){
-            callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("回调正在处理中，忽略本次回调请求");
+            callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setErrorMsg("回调正在处理中，忽略本次回调请求");
             log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getTradeNo());
             return;
         }
@@ -50,12 +50,12 @@ public class RefundCallbackService {
             RefundOrder refundOrder = refundOrderManager.findByRefundNo(callbackInfo.getTradeNo()).orElse(null);
             // 退款单不存在,记录回调记录
             if (Objects.isNull(refundOrder)) {
-                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND).setMsg("退款单不存在,记录回调记录");
+                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.NOT_FOUND).setErrorMsg("退款单不存在,记录回调记录");
                 return;
             }
             // 退款单已经被处理, 记录回调记录
             if (!Objects.equals(RefundStatusEnum.PROGRESS.getCode(), refundOrder.getStatus())) {
-                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setMsg("退款单状态已处理,记录回调记录");
+                callbackInfo.setCallbackStatus(PayCallbackStatusEnum.IGNORE).setErrorMsg("退款单状态已处理,记录回调记录");
                 return;
             }
 

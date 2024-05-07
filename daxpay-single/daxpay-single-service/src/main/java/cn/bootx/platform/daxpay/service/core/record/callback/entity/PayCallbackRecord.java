@@ -73,7 +73,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
 
     /** 提示信息 */
     @DbColumn(comment = "提示信息")
-    private String msg;
+    private String errorMsg;
 
     /**
      * 转换
