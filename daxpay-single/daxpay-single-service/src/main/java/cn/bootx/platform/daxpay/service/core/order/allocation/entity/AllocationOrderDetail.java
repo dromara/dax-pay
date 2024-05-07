@@ -1,14 +1,15 @@
 package cn.bootx.platform.daxpay.service.core.order.allocation.entity;
 
-import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.AllocDetailResultEnum;
 import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
+import cn.bootx.platform.daxpay.service.common.typehandler.DecryptTypeHandler;
 import cn.bootx.platform.daxpay.service.core.order.allocation.convert.AllocationConvert;
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @DbTable(comment = "分账订单明细")
-@TableName("pay_allocation_order_detail")
+@TableName(value = "pay_allocation_order_detail",autoResultMap = true)
 public class AllocationOrderDetail extends MpBaseEntity implements EntityBaseFunction<AllocationOrderDetailDto> {
 
     /** 分账订单ID */
@@ -53,7 +54,7 @@ public class AllocationOrderDetail extends MpBaseEntity implements EntityBaseFun
 
     /** 接收方账号 */
     @DbColumn(comment = "接收方账号")
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     private String receiverAccount;
 
     /** 接收方姓名 */

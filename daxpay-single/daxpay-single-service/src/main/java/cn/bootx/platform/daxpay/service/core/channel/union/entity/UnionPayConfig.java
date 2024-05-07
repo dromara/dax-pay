@@ -1,11 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.channel.union.entity;
 
 import cn.bootx.platform.common.core.annotation.BigField;
-import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.StringListTypeHandler;
 import cn.bootx.platform.daxpay.service.code.UnionPaySignTypeEnum;
+import cn.bootx.platform.daxpay.service.common.typehandler.DecryptTypeHandler;
 import cn.bootx.platform.daxpay.service.core.channel.union.convert.UnionPayConvert;
 import cn.bootx.platform.daxpay.service.dto.channel.union.UnionPayConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -69,14 +69,14 @@ public class UnionPayConfig extends MpBaseEntity implements EntityBaseFunction<U
      */
     @DbColumn(comment = "应用私钥证书")
     @BigField
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private String keyPrivateCert;
     /**
      * 私钥证书对应的密码
      */
     @DbColumn(comment = "私钥证书对应的密码")
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     private String keyPrivateCertPwd;
 
     /**
@@ -84,16 +84,15 @@ public class UnionPayConfig extends MpBaseEntity implements EntityBaseFunction<U
      */
     @DbColumn(comment = "中级证书")
     @BigField
-    @EncryptionField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    @TableField(typeHandler = DecryptTypeHandler.class)
     private String acpMiddleCert;
     /**
      * 根证书
      */
     @DbColumn(comment = "根证书")
-    @BigField
-    @EncryptionField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    @TableField(typeHandler = DecryptTypeHandler.class)
     private String acpRootCert;
 
     /** 是否沙箱环境 */

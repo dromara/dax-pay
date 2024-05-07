@@ -24,6 +24,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AllocationGroupManager extends BaseManager<AllocationGroupMapper,AllocationGroup> {
 
+    /**
+     * 分页
+     */
     public Page<AllocationGroup> page(PageParam pageParam, AllocationGroupParam query) {
         Page<AllocationGroup> mpPage = MpUtil.getMpPage(pageParam, AllocationGroup.class);
         QueryWrapper<AllocationGroup> generator = QueryGenerator.generator(query);
@@ -44,6 +47,9 @@ public class AllocationGroupManager extends BaseManager<AllocationGroupMapper,Al
      * 获取默认分账组
      */
     public Optional<AllocationGroup> findDefaultGroup(String channel) {
-       return findByField(AllocationGroup::getChannel,channel);
+       return this.lambdaQuery()
+               .eq(AllocationGroup::getChannel,channel)
+               .eq(AllocationGroup::isDefaultGroup,true)
+               .oneOpt();
     }
 }

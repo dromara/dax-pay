@@ -1,11 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.channel.wechat.entity;
 
 import cn.bootx.platform.common.core.annotation.BigField;
-import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.StringListTypeHandler;
 import cn.bootx.platform.daxpay.service.code.WeChatPayCode;
+import cn.bootx.platform.daxpay.service.common.typehandler.DecryptTypeHandler;
 import cn.bootx.platform.daxpay.service.core.channel.wechat.convert.WeChatConvert;
 import cn.bootx.platform.daxpay.service.dto.channel.wechat.WeChatPayConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -80,29 +80,25 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     private String apiVersion;
 
     /** 商户平台「API安全」中的 APIv2 密钥 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS,typeHandler = DecryptTypeHandler.class)
     @BigField
-    @EncryptionField
     @DbColumn(comment = "APIv2 密钥")
     private String apiKeyV2;
 
     /** 商户平台「API安全」中的 APIv3 密钥 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS,typeHandler = DecryptTypeHandler.class)
     @BigField
-    @EncryptionField
     @DbColumn(comment = "APIv3 密钥")
     private String apiKeyV3;
 
     /** APPID对应的接口密码，用于获取微信公众号jsapi支付时使用 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    @EncryptionField
+    @TableField(updateStrategy = FieldStrategy.ALWAYS,typeHandler = DecryptTypeHandler.class)
     @DbColumn(comment = "APPID对应的接口密码")
     private String appSecret;
 
     /** API证书中p12证书Base64 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS,typeHandler = DecryptTypeHandler.class)
     @BigField
-    @EncryptionField
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "API证书中p12证书Base64")
     private String p12;

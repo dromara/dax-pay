@@ -125,7 +125,9 @@ public class AliPayAllocationService {
                 // 如果是完成, 更新时间
                 if (AllocDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){
                     LocalDateTime finishTime = LocalDateTimeUtil.of(receiver.getExecuteDt());
-                    detail.setFinishTime(finishTime);
+                    detail.setFinishTime(finishTime)
+                            .setErrorMsg(null)
+                            .setErrorCode(null);
                 }
             }
         }

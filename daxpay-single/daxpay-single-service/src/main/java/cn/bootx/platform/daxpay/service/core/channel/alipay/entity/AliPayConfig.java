@@ -1,11 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.channel.alipay.entity;
 
 import cn.bootx.platform.common.core.annotation.BigField;
-import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.StringListTypeHandler;
 import cn.bootx.platform.daxpay.service.code.AliPayCode;
+import cn.bootx.platform.daxpay.service.common.typehandler.DecryptTypeHandler;
 import cn.bootx.platform.daxpay.service.core.channel.alipay.convert.AlipayConvert;
 import cn.bootx.platform.daxpay.service.dto.channel.alipay.AliPayConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -85,41 +85,41 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     /**
      * 是商家与支付宝签约后，商家获得的支付宝商家唯一识别码，以 2088 开头的 16 位数字组成，在开放平台中账户中心获取
      */
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     @DbColumn(comment = "合作者身份ID")
     private String alipayUserId;
 
     /** 支付宝公钥 */
     @BigField
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "支付宝公钥")
     public String alipayPublicKey;
 
     /** 私钥 */
     @BigField
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "私钥")
     private String privateKey;
 
     /** 应用公钥证书 */
     @BigField
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "应用公钥证书")
     private String appCert;
 
     /** 支付宝公钥证书 */
     @BigField
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     @DbColumn(comment = "支付宝公钥证书")
     private String alipayCert;
 
     /** 支付宝CA根证书 */
     @BigField
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     @DbColumn(comment = "支付宝CA根证书")
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private String alipayRootCert;

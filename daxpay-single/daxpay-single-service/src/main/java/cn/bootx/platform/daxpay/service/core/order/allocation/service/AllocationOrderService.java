@@ -23,7 +23,6 @@ import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDeta
 import cn.bootx.platform.daxpay.service.dto.order.allocation.AllocationOrderDto;
 import cn.bootx.platform.daxpay.service.param.order.AllocationOrderQuery;
 import cn.bootx.platform.daxpay.util.OrderNoGenerateUtil;
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -136,16 +135,9 @@ public class AllocationOrderService {
         payOrder.setAllocationStatus(PayOrderAllocStatusEnum.ALLOCATION.getCode());
         payOrderManager.updateById(payOrder);
         // 因为加密后字段值会发生变更, 所以在保存前备份一下
-        List<AllocationOrderDetail> detailsBack = details.stream()
-                .map(o -> {
-                    AllocationOrderDetail allocationOrderDetail = new AllocationOrderDetail();
-                    BeanUtil.copyProperties(o, allocationOrderDetail);
-                    return allocationOrderDetail;
-                })
-                .collect(Collectors.toList());
         allocationOrderDetailManager.saveAll(details);
         allocationOrderManager.save(allocationOrder);
-        return new OrderAndDetail().setOrder(allocationOrder).setDetails(detailsBack);
+        return new OrderAndDetail().setOrder(allocationOrder).setDetails(details);
     }
 
 }

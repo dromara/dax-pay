@@ -86,7 +86,7 @@ public class PayOrderQueryService {
             throw new ValidationFailedException("业务号或支付单ID不能都为空");
         }
         // 查询支付单
-        PayOrder payOrder = this.findByBizOrOrderNo(param.getBizOrderNoeNo(), param.getOrderNo())
+        PayOrder payOrder = this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo())
                 .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
         // 查询扩展数据
         payOrderExtraManager.findById(payOrder.getId())

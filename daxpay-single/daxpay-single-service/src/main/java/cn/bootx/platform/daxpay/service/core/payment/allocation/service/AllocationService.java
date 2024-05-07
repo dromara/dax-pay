@@ -230,11 +230,11 @@ public class AllocationService {
         // 获取分账订单
         AllocationOrder allocationOrder = null;
         if (Objects.nonNull(param.getAllocationNo())){
-            allocationOrder = allocationOrderManager.findById(param.getBizAllocationNo())
+            allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("分账单不存在"));
         }
         if (Objects.isNull(allocationOrder)){
-            allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
+            allocationOrder = allocationOrderManager.findByAllocationNo(param.getBizAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("分账单不存在"));
         }
         this.sync(allocationOrder);

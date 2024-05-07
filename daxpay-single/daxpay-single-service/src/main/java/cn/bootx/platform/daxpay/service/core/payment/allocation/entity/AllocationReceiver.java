@@ -1,11 +1,11 @@
 package cn.bootx.platform.daxpay.service.core.payment.allocation.entity;
 
-import cn.bootx.platform.common.core.annotation.EncryptionField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.daxpay.code.AllocReceiverTypeEnum;
 import cn.bootx.platform.daxpay.code.AllocRelationTypeEnum;
 import cn.bootx.platform.daxpay.code.PayChannelEnum;
+import cn.bootx.platform.daxpay.service.common.typehandler.DecryptTypeHandler;
 import cn.bootx.platform.daxpay.service.core.payment.allocation.convert.AllocationReceiverConvert;
 import cn.bootx.platform.daxpay.service.dto.allocation.AllocationReceiverDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @DbTable(comment = "分账接收方")
-@TableName("pay_allocation_receiver")
+@TableName(value = "pay_allocation_receiver",autoResultMap = true)
 public class AllocationReceiver extends MpBaseEntity implements EntityBaseFunction<AllocationReceiverDto> {
 
     @DbColumn(comment = "账号别名")
@@ -48,7 +48,7 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
 
 
     @DbColumn(comment = "接收方账号")
-    @EncryptionField
+    @TableField(typeHandler = DecryptTypeHandler.class)
     private String receiverAccount;
 
     /** 接收方姓名 */
