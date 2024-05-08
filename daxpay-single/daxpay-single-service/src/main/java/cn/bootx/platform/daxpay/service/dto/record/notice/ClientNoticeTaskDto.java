@@ -1,6 +1,8 @@
 package cn.bootx.platform.daxpay.service.dto.record.notice;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.daxpay.code.PayStatusEnum;
+import cn.bootx.platform.daxpay.code.RefundStatusEnum;
 import cn.bootx.platform.daxpay.service.code.ClientNoticeTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -24,8 +26,8 @@ public class ClientNoticeTaskDto extends BaseDto {
     @Schema(description = "本地交易ID")
     private Long tradeId;
 
-    /** 本地订单号 */
-    @Schema(description = "本地订单号")
+    /** 本地交易号 */
+    @Schema(description = "本地交易号")
     private String tradeNo;
 
     /**
@@ -36,10 +38,12 @@ public class ClientNoticeTaskDto extends BaseDto {
     private String noticeType;
 
     /**
-     * 订单状态
+     * 交易状态
+     * @see PayStatusEnum
+     * @see RefundStatusEnum
      */
     @Schema(description = "订单状态")
-    private String orderStatus;
+    private String tradeStatus;
 
     /** 消息内容 */
     @Schema(description = "消息内容")

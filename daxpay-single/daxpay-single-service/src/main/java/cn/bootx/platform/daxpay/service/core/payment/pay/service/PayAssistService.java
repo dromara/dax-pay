@@ -106,7 +106,7 @@ public class PayAssistService {
         PlatformLocal platform = PaymentContextLocal.get()
                 .getPlatformInfo();
         // 异步回调为开启状态
-        if (Objects.equals(payParam.getNotNotify(), true) && apiInfo.isNotice()) {
+        if (!Objects.equals(payParam.getNotNotify(), false) && apiInfo.isNotice()) {
             // 首先读取请求参数
             noticeInfo.setNotifyUrl(payParam.getNotifyUrl());
             // 读取接口配置

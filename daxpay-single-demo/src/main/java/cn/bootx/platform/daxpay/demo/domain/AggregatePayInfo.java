@@ -24,6 +24,9 @@ public class AggregatePayInfo {
     @Schema(description = "是否分账")
     private Boolean allocation;
 
+    @Schema(description = "自动分账")
+    private Boolean autoAllocation;
+
     /** 支付金额 */
     @Schema(description = "支付金额")
     private Integer amount;

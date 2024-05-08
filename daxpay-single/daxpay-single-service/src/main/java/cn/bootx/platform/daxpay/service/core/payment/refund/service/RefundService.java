@@ -54,8 +54,10 @@ public class RefundService {
 
     private final PayOrderQueryService payOrderQueryService;
 
-    private final LockTemplate lockTemplate;
     private final RefundOrderExtraManager refundOrderExtraManager;
+
+    private final LockTemplate lockTemplate;
+
 
     /**
      * 分支付通道进行退款
@@ -78,6 +80,8 @@ public class RefundService {
         try {
             // 判断是否是首次发起退款
             Optional<RefundOrder> refund = refundOrderManager.findByBizRefundNo(param.getBizRefundNo());
+            // 初始化退款通知上下文
+            refundAssistService.initRefundContext(param);
             if (refund.isPresent()){
                 return this.repeatRefund(refund.get(),param);
             } else {

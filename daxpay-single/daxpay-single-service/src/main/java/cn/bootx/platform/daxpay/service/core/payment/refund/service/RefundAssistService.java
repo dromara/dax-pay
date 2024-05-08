@@ -61,7 +61,7 @@ public class RefundAssistService {
         ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         // 异步回调为开启状态
-        if (!param.getNotNotify() && apiInfo.isNotice()){
+        if (!Objects.equals(param.getNotNotify(), false) && apiInfo.isNotice()){
             // 首先读取请求参数
             noticeInfo.setNotifyUrl(param.getNotifyUrl());
             // 读取接口配置

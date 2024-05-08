@@ -43,6 +43,10 @@ public class ClientNoticeRecord extends MpCreateEntity implements EntityBaseFunc
     @DbColumn(comment = "发送类型")
     private String sendType;
 
+    /** 错误编码 */
+    @DbColumn(comment = "错误编码")
+    private String errorCode;
+
     /** 错误信息 */
     @DbColumn(comment = "错误信息")
     private String errorMsg;

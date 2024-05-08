@@ -44,6 +44,9 @@ public class PayOrderQuery extends QueryOrder {
     @Schema(description = "是否需要分账")
     private Boolean allocation;
 
+    @Schema(description = "是否开启自动分账")
+    private Boolean autoAllocation;
+
     /**
      * 支付通道
      * @see PayChannelEnum

@@ -23,6 +23,9 @@ public class AggregateSimplePayParam {
     @Schema(description = "是否分账")
     private Boolean allocation;
 
+    @Schema(description = "自动分账")
+    private Boolean autoAllocation;
+
     @Schema(description = "标题")
     @NotNull
     private String title;

@@ -47,7 +47,7 @@ public class AllocationReceiverDto extends BaseDto {
 
     /** 接收方姓名 */
     @Schema(description = "接收方姓名")
-    @SensitiveInfo
+    @SensitiveInfo(SensitiveInfo.SensitiveType.CHINESE_NAME)
     private String receiverName;
 
     /**

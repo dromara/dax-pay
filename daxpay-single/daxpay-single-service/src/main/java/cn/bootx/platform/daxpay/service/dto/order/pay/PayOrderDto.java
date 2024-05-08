@@ -46,6 +46,10 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "是否需要分账")
     private Boolean allocation;
 
+    /** 是否开启自动分账, 不传输为不开启 */
+    @Schema(description = "是否开启自动分账")
+    private Boolean autoAllocation;
+
     /**
      * 支付通道
      * @see PayChannelEnum

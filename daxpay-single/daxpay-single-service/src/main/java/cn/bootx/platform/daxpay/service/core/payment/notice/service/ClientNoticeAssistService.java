@@ -67,7 +67,7 @@ public class ClientNoticeAssistService {
                 .setSendCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getOrderNo())
-                .setOrderStatus(order.getStatus());
+                .setTradeStatus(order.getStatus());
     }
 
     /**
@@ -77,6 +77,7 @@ public class ClientNoticeAssistService {
         // 创建退款通知内容
         RefundNoticeResult payNoticeResult = new RefundNoticeResult()
                 .setRefundNo(order.getRefundNo())
+                .setBizRefundNo(order.getBizRefundNo())
                 .setChannel(order.getChannel())
                 .setAmount(order.getAmount())
                 .setFinishTime(order.getFinishTime())
@@ -94,7 +95,7 @@ public class ClientNoticeAssistService {
                 .setSendCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getRefundNo())
-                .setOrderStatus(order.getStatus());
+                .setTradeStatus(order.getStatus());
     }
 
 }

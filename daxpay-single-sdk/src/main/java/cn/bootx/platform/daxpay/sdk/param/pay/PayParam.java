@@ -39,6 +39,9 @@ public class PayParam extends DaxPayRequest<PayModel> {
     /** 是否开启分账, 不传输为不开启 */
     private Boolean allocation;
 
+    /** 是否开启自动分账, 不传输为不开启 */
+    private Boolean autoAllocation;
+
     /** 过期时间 */
     private LocalDateTime expiredTime;
 

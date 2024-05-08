@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "对账详情查询")
-public class ReconcileDetailQuery {
+public class ReconcileTradeDetailQuery {
 
     @Schema(description = "关联对账订单ID")
     private Long recordOrderId;

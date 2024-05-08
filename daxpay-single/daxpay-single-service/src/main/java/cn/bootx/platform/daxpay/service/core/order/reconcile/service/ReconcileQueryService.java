@@ -10,7 +10,7 @@ import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileOrd
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileOrderDto;
 import cn.bootx.platform.daxpay.service.dto.order.reconcile.ReconcileTradeDetailDto;
-import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileDetailQuery;
+import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileTradeDetailQuery;
 import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileOrderQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class ReconcileQueryService {
     /**
      * 明细分页
      */
-    public PageResult<ReconcileTradeDetailDto> pageDetail(PageParam pageParam, ReconcileDetailQuery query){
+    public PageResult<ReconcileTradeDetailDto> pageDetail(PageParam pageParam, ReconcileTradeDetailQuery query){
         return MpUtil.convert2DtoPageResult(detailManager.page(pageParam, query));
     }
 

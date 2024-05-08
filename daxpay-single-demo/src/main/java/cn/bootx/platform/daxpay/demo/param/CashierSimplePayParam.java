@@ -26,6 +26,7 @@ public class CashierSimplePayParam {
     @NotNull(message = "分账是否启用必输")
     private Boolean allocation;
 
+
     @Schema(description = "标题")
     @NotNull(message = "标题不能为空")
     private String title;

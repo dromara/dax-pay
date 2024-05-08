@@ -37,6 +37,10 @@ public class ClientNoticeRecordDto extends BaseDto {
     @Schema(description = "发送是否成功")
     private boolean success;
 
+    /** 错误编码 */
+    @Schema(description = "错误编码")
+    private String errorCode;
+
     /** 错误信息 */
     @Schema(description = "错误信息")
     private String errorMsg;

@@ -101,7 +101,7 @@ public class ReconcileOrderController {
 
     @Operation(summary = "对账明细分页")
     @GetMapping("/detail/page")
-    public ResResult<PageResult<ReconcileTradeDetailDto>> pageDetail(PageParam pageParam, ReconcileDetailQuery query){
+    public ResResult<PageResult<ReconcileTradeDetailDto>> pageDetail(PageParam pageParam, ReconcileTradeDetailQuery query){
         return Res.ok(reconcileQueryService.pageDetail(pageParam, query));
     }
 

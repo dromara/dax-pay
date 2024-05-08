@@ -45,8 +45,11 @@ public class PayParam extends PaymentCommonParam {
 
     /** 是否开启分账 */
     @Schema(description = "是否开启分账")
-    @NotNull(message = "分账是否开启不可为空")
     private Boolean allocation;
+
+    @Schema(description = "自动分账")
+    private Boolean autoAllocation;
+
 
     /** 过期时间 */
     @Schema(description = "过期时间")

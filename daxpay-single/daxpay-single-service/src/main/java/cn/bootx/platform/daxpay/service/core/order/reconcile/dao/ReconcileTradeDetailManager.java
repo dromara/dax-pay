@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
 import cn.bootx.platform.daxpay.service.core.order.reconcile.entity.ReconcileTradeDetail;
-import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileDetailQuery;
+import cn.bootx.platform.daxpay.service.param.reconcile.ReconcileTradeDetailQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class ReconcileTradeDetailManager extends BaseManager<ReconcileTradeDetai
     /**
      * 分页
      */
-    public Page<ReconcileTradeDetail> page(PageParam pageParam, ReconcileDetailQuery query){
+    public Page<ReconcileTradeDetail> page(PageParam pageParam, ReconcileTradeDetailQuery query){
         Page<ReconcileTradeDetail> mpPage = MpUtil.getMpPage(pageParam, ReconcileTradeDetail.class);
         QueryWrapper<ReconcileTradeDetail> generator = QueryGenerator.generator(query);
         return this.page(mpPage,generator);

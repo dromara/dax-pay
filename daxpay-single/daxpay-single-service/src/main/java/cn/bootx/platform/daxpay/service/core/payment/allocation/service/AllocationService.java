@@ -136,11 +136,11 @@ public class AllocationService {
             allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
         }
+
         LockInfo lock = lockTemplate.lock("payment:allocation:" + allocationOrder.getOrderId(),10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("分账发起处理中，请勿重复操作");
         }
-
         try {
             // 需要是分账中分账中或者完成状态才能重新分账
             List<String> list = Arrays.asList(AllocOrderStatusEnum.ALLOCATION_END.getCode(),
@@ -172,7 +172,7 @@ public class AllocationService {
             }
             allocationOrderManager.updateById(allocationOrder);
         } finally {
-
+            lockTemplate.releaseLock(lock);
         }
     }
 

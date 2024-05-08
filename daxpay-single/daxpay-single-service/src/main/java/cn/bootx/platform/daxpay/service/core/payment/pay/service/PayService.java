@@ -68,7 +68,7 @@ public class PayService {
         try {
             // 查询并检查订单
             PayOrder payOrder = payAssistService.getOrderAndCheck(payParam.getBizOrderNo());
-            // 初始化上下文
+            // 初始化支付上下文
             payAssistService.initPayContext(payOrder, payParam);
             // 走首次下单逻辑还是重复下档逻辑
             if (Objects.isNull(payOrder)){

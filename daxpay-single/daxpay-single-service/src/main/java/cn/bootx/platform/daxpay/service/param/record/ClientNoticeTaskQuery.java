@@ -20,30 +20,14 @@ import lombok.experimental.Accessors;
 @Schema(title = "发送通知任务查询")
 public class ClientNoticeTaskQuery extends QueryOrder {
 
-    /** 本地订单ID */
-    @Schema(description = "本地订单ID")
-    private Long orderId;
+    /** 本地交易号 */
+    @Schema(description = "本地交易号")
+    private String tradeNo;
 
     /**
-     * 通知类型
+     * 回调类型
      * @see ClientNoticeTypeEnum
      */
-    @Schema(description = "通知类型")
-    private String type;
-
-    /** 消息内容 */
-    @Schema(description = "消息内容")
-    private String content;
-
-    /** 是否发送成功 */
-    @Schema(description = "是否发送成功")
-    private Boolean success;
-
-    /** 发送次数 */
-    @Schema(description = "发送次数")
-    private Integer sendCount;
-
-    /** 发送地址 */
-    @Schema(description = "发送地址")
-    private String url;
+    @Schema(description = "回调类型")
+    private String noticeType;
 }

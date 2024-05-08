@@ -58,6 +58,9 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @DbColumn(comment = "是否需要分账")
     private Boolean allocation;
 
+    @DbColumn(comment = "自动分账")
+    private Boolean autoAllocation;
+
     /**
      * 支付通道
      * @see PayChannelEnum

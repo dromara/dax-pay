@@ -43,6 +43,7 @@ public class AllocationGroupReceiverResult {
 
     /** 接收方姓名 */
     @Schema(description = "接收方姓名")
+    @SensitiveInfo(SensitiveInfo.SensitiveType.CHINESE_NAME)
     private String receiverName;
 
     /**

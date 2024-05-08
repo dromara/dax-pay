@@ -34,8 +34,8 @@ public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction
     @DbColumn(comment = "本地交易ID")
     private Long tradeId;
 
-    /** 本地订单号 */
-    @DbColumn(comment = "本地订单号")
+    /** 本地交易号 */
+    @DbColumn(comment = "本地交易号")
     private String tradeNo;
 
     /**
@@ -46,12 +46,12 @@ public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction
     private String noticeType;
 
     /**
-     * 订单状态
+     * 交易状态
      * @see PayStatusEnum
      * @see RefundStatusEnum
      */
-    @DbColumn(comment = "订单状态")
-    private String orderStatus;
+    @DbColumn(comment = "交易状态")
+    private String tradeStatus;
 
     /** 消息内容 */
     @DbColumn(comment = "消息内容")

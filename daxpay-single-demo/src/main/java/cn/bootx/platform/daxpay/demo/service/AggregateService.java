@@ -160,8 +160,8 @@ public class AggregateService {
                 .orElse("127.0.0.1");
         simplePayParam.setClientIp(ip);
         // 异步回调地址
-        simplePayParam.setNotNotify(true);
-        // 同步回调地址 无效
+        simplePayParam.setNotifyUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
+        // 同步回调地址
         simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
 
         DaxPayResult<PayModel> execute = DaxPayKit.execute(simplePayParam);
@@ -189,7 +189,7 @@ public class AggregateService {
                 .orElse("127.0.0.1");
         payParam.setClientIp(ip);
         // 异步回调地址
-        payParam.setNotNotify(true);
+        payParam.setNotNotify(false);
         // 支付成功同步回调地址
         payParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
         // 中途退出 目前经测试不生效
