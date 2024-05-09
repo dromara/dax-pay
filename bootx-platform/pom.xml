@@ -265,13 +265,6 @@
                 <artifactId>common-log</artifactId>
                 <version>${bootx-platform.version}</version>
             </dependency>
-            <!-- mongo配置 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-mongo</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- mongo配置 -->
             <!-- 缓存 -->
             <dependency>
                 <groupId>cn.bootx.platform</groupId>
@@ -302,12 +295,6 @@
             <dependency>
                 <groupId>cn.bootx.platform</groupId>
                 <artifactId>common-starter-audit-log</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 代码生成模块 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-code-gen</artifactId>
                 <version>${bootx-platform.version}</version>
             </dependency>
             <!-- 数据权限 -->

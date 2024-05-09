@@ -5,12 +5,10 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
-import cn.hutool.extra.spring.SpringUtil;
 import lombok.Setter;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
-import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -26,7 +24,6 @@ public class DecryptTypeHandler extends BaseTypeHandler<String> {
 
     @Setter
     private static DataPermProperties dataPermProperties;
-
 
     /**
      * 加密

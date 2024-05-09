@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>cn.bootx.platform</groupId>
+    <groupId>cn.daxpay.single</groupId>
     <artifactId>daxpay-single</artifactId>
     <packaging>pom</packaging>
     <version>2.0.6</version>
