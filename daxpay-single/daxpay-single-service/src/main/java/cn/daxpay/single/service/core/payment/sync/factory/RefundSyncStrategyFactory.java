@@ -1,0 +1,43 @@
+package cn.daxpay.single.service.core.payment.sync.factory;
+
+import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.exception.pay.PayUnsupportedMethodException;
+import cn.daxpay.single.service.core.payment.sync.strategy.Refund.AliRefundSyncStrategy;
+import cn.daxpay.single.service.core.payment.sync.strategy.Refund.UnionRefundSyncStrategy;
+import cn.daxpay.single.service.core.payment.sync.strategy.Refund.WeChatRefundSyncStrategy;
+import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
+import cn.hutool.extra.spring.SpringUtil;
+import lombok.experimental.UtilityClass;
+
+/**
+ * 支付退款同步策略工厂
+ * @author xxm
+ * @since 2024/1/29
+ */
+@UtilityClass
+public class RefundSyncStrategyFactory {
+    /**
+     * 获取支付同步策略, 只有异步支付方式才需要这个功能
+     * @param channelCode 支付通道编码
+     * @return 支付同步策略类
+     */
+    public static AbsRefundSyncStrategy create(String channelCode) {
+        AbsRefundSyncStrategy strategy;
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(channelCode);
+        switch (channelEnum) {
+            case ALI:
+                strategy = SpringUtil.getBean(AliRefundSyncStrategy.class);
+                break;
+            case UNION_PAY:
+                strategy = SpringUtil.getBean(UnionRefundSyncStrategy.class);
+                break;
+            case WECHAT:
+                strategy = SpringUtil.getBean(WeChatRefundSyncStrategy.class);
+                break;
+            default:
+                throw new PayUnsupportedMethodException();
+        }
+        // noinspection ConstantConditions
+        return strategy;
+    }
+}

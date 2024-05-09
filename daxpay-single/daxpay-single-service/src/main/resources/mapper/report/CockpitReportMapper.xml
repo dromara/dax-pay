@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.bootx.platform.daxpay.service.core.report.dao.CockpitReportMapper">
+<mapper namespace="cn.daxpay.single.service.core.report.dao.CockpitReportMapper">
 
     <!-- 查询支付金额 -->
     <select id="getPayAmount" resultType="java.lang.Integer">
@@ -47,7 +47,7 @@
     </select>
 
     <!-- 支付通道折线图 -->
-    <select id="getPayChannelInfo" resultType="cn.bootx.platform.daxpay.service.core.report.entity.ChannelOrderLine">
+    <select id="getPayChannelInfo" resultType="cn.daxpay.single.service.core.report.entity.ChannelOrderLine">
         SELECT
             channel,
             count(*) as count,
@@ -62,7 +62,7 @@
     </select>
 
     <!-- 退款通道折线图 -->
-    <select id="getRefundChannelInfo" resultType="cn.bootx.platform.daxpay.service.core.report.entity.ChannelOrderLine">
+    <select id="getRefundChannelInfo" resultType="cn.daxpay.single.service.core.report.entity.ChannelOrderLine">
         SELECT
             channel,
             count(*) as count,
