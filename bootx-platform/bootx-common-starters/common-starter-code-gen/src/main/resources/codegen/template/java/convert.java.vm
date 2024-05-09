@@ -1,0 +1,22 @@
+package ${corePack}.convert;
+
+import ${corePack}.entity.${entityUpName};
+import ${dtoPack}.${entityUpName}Dto;
+import ${paramPack}.${entityUpName}Param;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+/**
+ * ${comments}
+ * @author ${author}
+ * @since ${datetime}
+ */
+@Mapper
+public interface ${entityUpName}Convert {
+    ${entityUpName}Convert CONVERT = Mappers.getMapper(${entityUpName}Convert.class);
+
+    ${entityUpName} convert(${entityUpName}Param in);
+
+    ${entityUpName}Dto convert(${entityUpName} in);
+
+}

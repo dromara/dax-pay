@@ -1,0 +1,46 @@
+package ${corePack}.entity;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
+import cn.bootx.platform.common.mybatisplus.base.${baseClass};
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import ${dtoPack}.${entityUpName}Dto;
+import ${paramPack}.${entityUpName}Param;
+import ${corePack}.convert.${entityUpName}Convert;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+/**
+* ${comments}
+* @author ${author}
+* @since ${datetime}
+*/
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
+@TableName("${tableName}")
+public class ${entityUpName} extends ${baseClass} implements EntityBaseFunction<${entityUpName}Dto>{
+
+#foreach ($column in $columns)
+    /** $column.comments */
+    private $column.javaType $column.name;
+#end
+
+    /** 创建对象 */
+    public static ${entityUpName} init(${entityUpName}Param in) {
+            return ${entityUpName}Convert.CONVERT.convert(in);
+    }
+
+    /** 转换成dto */
+    @Override
+    public ${entityUpName}Dto toDto() {
+        return ${entityUpName}Convert.CONVERT.convert(this);
+    }
+}

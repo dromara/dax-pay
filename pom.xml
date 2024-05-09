@@ -7,12 +7,13 @@
     <groupId>cn.bootx.platform</groupId>
     <artifactId>dax-pay</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.5</version>
+    <version>2.0.6</version>
 
     <modules>
         <module>daxpay-single</module>
         <module>daxpay-single-sdk</module>
         <module>daxpay-single-demo</module>
         <module>daxpay-single-start</module>
+        <module>bootx-platform</module>
     </modules>
 </project>
