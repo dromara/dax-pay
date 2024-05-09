@@ -4,16 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.daxpay.multi</groupId>
-    <artifactId>daxpay-multi-server</artifactId>
+    <artifactId>dax-pay</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>daxpay-multi-server</name>
+    <name>dax-pay-multi</name>
     <description>DaxPay多商户版支付系统</description>
 
     <modules>
         <module>bootx-platform</module>
-        <module>daxpay</module>
+        <module>daxpay-multi</module>
     </modules>
 
 </project>

@@ -11,13 +11,13 @@
     </parent>
 
     <groupId>cn.daxpay.multi</groupId>
-    <artifactId>daxpay</artifactId>
+    <artifactId>daxpay-multi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>daxpay-service</module>
-        <module>daxpay-admin</module>
+        <module>daxpay-multi-service</module>
+        <module>daxpay-multi-admin</module>
     </modules>
 
     <properties>
