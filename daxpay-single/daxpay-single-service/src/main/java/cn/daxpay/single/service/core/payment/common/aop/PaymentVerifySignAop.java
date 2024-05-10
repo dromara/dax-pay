@@ -1,6 +1,5 @@
 package cn.daxpay.single.service.core.payment.common.aop;
 
-import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.exception.pay.PayFailureException;
@@ -8,6 +7,7 @@ import cn.daxpay.single.param.PaymentCommonParam;
 import cn.daxpay.single.result.PaymentCommonResult;
 import cn.daxpay.single.service.annotation.PaymentApi;
 import cn.daxpay.single.service.core.payment.common.service.PaymentSignService;
+import cn.daxpay.single.util.DaxRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -49,9 +49,11 @@ public class PaymentVerifySignAop {
         } catch (PayFailureException ex) {
             // 如果抛出支付异常, 包裹异常信息, 进行返回
             PaymentCommonResult commonResult = new PaymentCommonResult();
+            // todo 后期错误码统一管理后, 进行更改
+            commonResult.setCode(1);
             commonResult.setMsg(ex.getMessage());
             paymentSignService.sign(commonResult);
-            return Res.ok(commonResult);
+            return DaxRes.ok(commonResult);
         }
         // 对返回值进行签名
         if (proceed instanceof ResResult){

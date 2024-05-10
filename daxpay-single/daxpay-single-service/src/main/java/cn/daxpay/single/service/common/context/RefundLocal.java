@@ -6,6 +6,8 @@ import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * 异步退款信息
  * @author xxm
@@ -33,6 +35,9 @@ public class RefundLocal {
 
     /** 退款订单 */
     private RefundOrder refundOrder;
+
+    /** 退款完成时间 */
+    private LocalDateTime finishTime;
 
     /** 退款订单扩展 */
     private RefundOrderExtra runOrderExtra;

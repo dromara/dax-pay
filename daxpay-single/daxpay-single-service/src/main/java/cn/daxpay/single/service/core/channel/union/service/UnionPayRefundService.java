@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 云闪付退款操作
@@ -44,5 +45,7 @@ public class UnionPayRefundService {
         // 云闪付退款是否成功需要查询状态, 所以设置为退款中状态
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         refundInfo.setStatus(RefundStatusEnum.PROGRESS).setOutRefundNo(outRefundNo);
+        // 设置退款时间
+        refundInfo.setFinishTime(LocalDateTime.now());
     }
 }

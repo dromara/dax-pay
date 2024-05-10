@@ -19,7 +19,6 @@ import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -43,7 +42,6 @@ public class PayCloseService {
     /**
      * 关闭支付
      */
-    @Transactional(rollbackFor = Exception.class)
     public PayCloseResult close(PayCloseParam param){
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizTradeNo())
                 .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
@@ -63,11 +61,11 @@ public class PayCloseService {
      */
     private PayCloseResult close(PayOrder payOrder) {
         PayCloseResult result = new PayCloseResult();
+        // 状态检查, 只有支付中可以进行取消支付
+        if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
+            throw new PayFailureException("订单不是支付中, 无法进行关闭订单");
+        }
         try {
-            // 状态检查, 只有支付中可以进行取消支付
-            if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
-                throw new PayFailureException("订单不是支付中, 无法进行关闭订单");
-            }
             AbsPayCloseStrategy strategy = PayCloseStrategyFactory.create(payOrder.getChannel());
             // 设置支付订单
             strategy.setOrder(payOrder);
@@ -84,8 +82,8 @@ public class PayCloseService {
             log.error("关闭订单失败:", e);
             // 记录关闭失败的记录
             this.saveRecord(payOrder, false, e.getMessage());
-            result.setCode("1").setMsg(e.getMessage());
-            return result;
+            throw new PayFailureException("关闭订单失败");
+
         }
     }
 

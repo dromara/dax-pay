@@ -32,7 +32,7 @@ public class PaymentAssistService {
     /**
      * 初始化平台配置上下文
      */
-    private void initPlatform(){
+    public void initPlatform(){
         PlatformConfig config = platformConfigService.getConfig();
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         platform.setSignType(config.getSignType());

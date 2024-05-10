@@ -2,10 +2,12 @@ package cn.daxpay.single.service.core.payment.notice.result;
 
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.result.PaymentCommonResult;
 import cn.daxpay.single.serializer.LocalDateTimeToTimestampSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
@@ -15,10 +17,11 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/1/7
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付异步通知类")
-public class PayNoticeResult {
+public class PayNoticeResult extends PaymentCommonResult {
 
     /** 订单号 */
     @Schema(description = "订单号")
@@ -72,9 +75,5 @@ public class PayNoticeResult {
     /** 商户扩展参数,回调时会原样返回 */
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;
-
-    /** 签名 */
-    @Schema(description = "签名")
-    private String sign;
 
 }

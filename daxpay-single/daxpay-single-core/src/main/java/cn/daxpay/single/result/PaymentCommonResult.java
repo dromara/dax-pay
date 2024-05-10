@@ -18,11 +18,8 @@ import java.time.LocalDateTime;
 @Schema(title = "支付通用返回参数")
 public class PaymentCommonResult {
 
-    @Schema(description = "响应数据签名值")
-    private String sign;
-
-    @Schema(description = "错误码")
-    private String code = "0";
+    @Schema(description = "状态码")
+    private Integer code = 0;
 
     @Schema(description = "错误信息")
     private String msg;
@@ -30,5 +27,8 @@ public class PaymentCommonResult {
     @Schema(description = "响应时间")
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime resTime = LocalDateTime.now();
+
+    @Schema(description = "响应数据签名值")
+    private String sign;
 
 }

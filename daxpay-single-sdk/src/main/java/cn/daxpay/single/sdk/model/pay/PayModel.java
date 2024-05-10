@@ -14,6 +14,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PayModel extends DaxPayResponseModel {
+
     /** 商户订单号 */
     private String bizOrderNo;
 

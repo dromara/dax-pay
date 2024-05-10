@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -89,12 +88,17 @@ public class RefundAssistService {
                 PayStatusEnum.FAIL.getCode());
         if (tradesStatus.contains(payOrder.getStatus())) {
             PayStatusEnum statusEnum = PayStatusEnum.findByCode(payOrder.getStatus());
-            throw new PayFailureException("当前订单状态["+statusEnum.getName()+"]不允许发起退款操作");
+            throw new PayFailureException("当前支付单订状态["+statusEnum.getName()+"]不允许发起退款操作");
         }
 
         // 退款号唯一校验
         if (StrUtil.isNotBlank(param.getBizRefundNo()) && refundOrderManager.existsByRefundNo(param.getBizRefundNo())){
             throw new PayFailureException("退款单号已存在");
+        }
+
+        // 金额判断
+        if (param.getAmount() > payOrder.getRefundableBalance()){
+            throw new PayFailureException("退款金额不能大于支付金额");
         }
     }
 
@@ -141,8 +145,8 @@ public class RefundAssistService {
                 .setOutRefundNo(refundInfo.getOutRefundNo());
         // 退款成功更新退款时间
         if (Objects.equals(refundOrder.getStatus(), SUCCESS.getCode())){
-            // TODO 读取网关返回的退款时间和完成时间
-            refundOrder.setFinishTime(LocalDateTime.now());
+            // 读取网关返回的退款时间和完成时间
+            refundOrder.setFinishTime(refundInfo.getFinishTime());
         }
         refundOrderManager.updateById(refundOrder);
     }
@@ -169,9 +173,7 @@ public class RefundAssistService {
         RefundResult refundResult = new RefundResult();
         refundResult.setRefundNo(refundOrder.getRefundNo())
                 .setBizRefundNo(refundOrder.getBizRefundNo());
-        refundResult.setCode(refundOrder.getStatus())
-                .setMsg(refundOrder.getErrorMsg())
-                .setCode(refundOrder.getErrorCode());
+        refundResult.setMsg(refundOrder.getErrorMsg());
 
         // 进行签名
         String signType = platformInfo.getSignType();

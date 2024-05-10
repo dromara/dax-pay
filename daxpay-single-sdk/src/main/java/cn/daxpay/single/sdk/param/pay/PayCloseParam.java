@@ -21,7 +21,9 @@ public class PayCloseParam extends DaxPayRequest<PayCloseModel> {
     private String orderNo;
 
     /** 商户订单号 */
-    private String bizTradeNo;    /**
+    private String bizTradeNo;
+
+    /**
      * 方法请求路径
      */
     @Override

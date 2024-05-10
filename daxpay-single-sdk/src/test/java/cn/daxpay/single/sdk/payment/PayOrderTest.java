@@ -1,6 +1,7 @@
 package cn.daxpay.single.sdk.payment;
 
 import cn.daxpay.single.sdk.code.PayChannelEnum;
+import cn.daxpay.single.sdk.code.PayMethodEnum;
 import cn.daxpay.single.sdk.code.SignTypeEnum;
 import cn.daxpay.single.sdk.model.pay.PayModel;
 import cn.daxpay.single.sdk.net.DaxPayConfig;
@@ -37,9 +38,16 @@ public class PayOrderTest {
         param.setClientIp("127.0.0.1");
         param.setNotNotify(true);
 
-        param.setBizOrderNo("P0004");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试接口支付");
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setDescription("这是支付备注");
+        param.setAmount(1001111);
+        param.setChannel(PayChannelEnum.UNION_PAY.getCode());
+        param.setMethod(PayMethodEnum.QRCODE.getCode());
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("https://abc.com/callback");
 
         DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);

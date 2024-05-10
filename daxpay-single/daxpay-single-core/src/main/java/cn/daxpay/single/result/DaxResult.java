@@ -19,9 +19,6 @@ import org.slf4j.MDC;
 @EqualsAndHashCode(callSuper = true)
 public class DaxResult<T> extends ResResult<T> {
 
-    /** 数据签名 */
-    private String sign;
-
     /** 追踪ID */
     private String traceId = MDC.get(CommonCode.TRACE_ID);
 

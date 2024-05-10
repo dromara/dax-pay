@@ -60,8 +60,7 @@ public class PaymentSignService {
      * 对对象进行签名
      */
     public void sign(PaymentCommonResult result) {
-        PlatformLocal platformInfo = PaymentContextLocal.get()
-                .getPlatformInfo();
+        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
         String signType = platformInfo.getSignType();
         if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
             result.setSign(PaySignUtil.hmacSha256Sign(result, platformInfo.getSignSecret()));

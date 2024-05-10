@@ -42,6 +42,10 @@ public class RefundParam extends DaxPayRequest<RefundModel> {
     /** 退款金额 */
     private Integer amount;
 
+
+    /** 退款原因 */
+    private String reason;
+
     /**
      * 预留的退款扩展参数
      * @see AliPayParam
@@ -49,9 +53,6 @@ public class RefundParam extends DaxPayRequest<RefundModel> {
      * @see WalletPayParam
      */
     private ChannelParam extraParam;
-
-    /** 退款原因 */
-    private String reason;
 
     /** 商户扩展参数,回调时会原样返回 */
     private String attach;

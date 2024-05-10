@@ -14,7 +14,6 @@ import lombok.Setter;
 @Setter
 public abstract class DaxPayRequest<T extends DaxPayResponseModel> {
 
-
     /** 客户端ip */
     private String clientIp;
 

@@ -6,6 +6,7 @@ import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
 import cn.daxpay.single.sdk.param.refund.RefundParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
+import cn.daxpay.single.sdk.util.PaySignUtil;
 import cn.hutool.core.util.RandomUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,15 +37,17 @@ public class RefundOrderTest {
     @Test
     public void refund(){
         RefundParam param = new RefundParam();
-        param.setClientIp("127.0.0.1");
-
         param.setBizRefundNo("R" + RandomUtil.randomNumbers(5));
-        // 设置具体的退款参数
-        param.setAmount(19);
+        param.setBizOrderNo("SDK_1715341621498");
+        param.setAmount(1);
+        param.setAttach("{回调参数}");
+        param.setNotifyUrl("https://abc.com/callback");
+        param.setClientIp("127.0.0.1");
 
         DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
         System.out.println(execute.getData());
+        System.out.println(PaySignUtil.verifyHmacSha256Sign(execute.getData(), "123456", execute.getData().getSign()));
     }
 
 }
