@@ -18,10 +18,5 @@
             <artifactId>oshi-core</artifactId>
             <version>${oshi.version}</version>
         </dependency>
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-mongo</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 </project>

@@ -168,12 +168,6 @@
             <artifactId>common-exception-handler</artifactId>
         </dependency>
 
-        <!-- mongo -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-mongo</artifactId>
-            <optional>true</optional>
-        </dependency>
 
         <!-- 发号器 -->
         <dependency>

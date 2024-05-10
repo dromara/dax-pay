@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>cn.bootx.platform</groupId>
+    <groupId>cn.daxpay.single</groupId>
     <artifactId>daxpay-single-start</artifactId>
     <version>${daxpay.version}</version>
 
@@ -29,13 +29,13 @@
         </dependency>
         <!-- 支付网关 -->
         <dependency>
-            <groupId>cn.bootx.platform</groupId>
+            <groupId>cn.daxpay.single</groupId>
             <artifactId>daxpay-single-gateway</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
         <!-- 管理平台 -->
         <dependency>
-            <groupId>cn.bootx.platform</groupId>
+            <groupId>cn.daxpay.single</groupId>
             <artifactId>daxpay-single-admin</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
@@ -43,12 +43,6 @@
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-starter-quartz</artifactId>
-            <version>${bootx-platform.version}</version>
-        </dependency>
-        <!-- 代码生成模块 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-starter-code-gen</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
         <!-- 系统监控 -->
@@ -59,7 +53,7 @@
         </dependency>
         <!-- 支付演示模块 -->
         <dependency>
-            <groupId>cn.bootx.platform</groupId>
+            <groupId>cn.daxpay.single</groupId>
             <artifactId>daxpay-single-demo</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
