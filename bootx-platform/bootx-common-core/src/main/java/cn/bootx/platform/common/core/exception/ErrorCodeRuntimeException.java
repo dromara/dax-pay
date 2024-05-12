@@ -1,10 +1,13 @@
 package cn.bootx.platform.common.core.exception;
 
+import lombok.Getter;
+
 import java.io.Serializable;
 
 /**
  * 错误码异常基类
  */
+@Getter
 public abstract class ErrorCodeRuntimeException extends RuntimeException implements Serializable {
 
     private static final long serialVersionUID = 1724988277326336635L;
@@ -18,10 +21,6 @@ public abstract class ErrorCodeRuntimeException extends RuntimeException impleme
 
     public ErrorCodeRuntimeException() {
         super();
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public void setCode(int code) {

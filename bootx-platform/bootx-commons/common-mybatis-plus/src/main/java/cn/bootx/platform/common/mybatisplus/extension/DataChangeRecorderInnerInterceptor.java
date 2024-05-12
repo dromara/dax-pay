@@ -86,7 +86,7 @@ public class DataChangeRecorderInnerInterceptor implements InnerInterceptor {
             long startTs = System.currentTimeMillis();
             DataVersionLog dataVersion;
             try {
-                Statement statement = null;
+                Statement statement;
                 try {
                     statement = CCJSqlParserUtil.parse(mpBs.sql());
                 } catch (JSQLParserException e) {

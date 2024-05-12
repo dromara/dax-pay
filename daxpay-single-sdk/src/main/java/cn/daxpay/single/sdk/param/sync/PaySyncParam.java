@@ -1,6 +1,6 @@
 package cn.daxpay.single.sdk.param.sync;
 
-import cn.daxpay.single.sdk.model.sync.PaySyncModel;
+import cn.daxpay.single.sdk.model.sync.SyncModel;
 import cn.daxpay.single.sdk.net.DaxPayRequest;
 import cn.daxpay.single.sdk.response.DaxPayResult;
 import cn.hutool.core.lang.TypeReference;
@@ -15,8 +15,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class PaySyncParam extends DaxPayRequest<PaySyncModel> {
-
+public class PaySyncParam extends DaxPayRequest<SyncModel> {
 
     /** 订单号 */
     private String orderNo;
@@ -36,7 +35,7 @@ public class PaySyncParam extends DaxPayRequest<PaySyncModel> {
      * 将请求返回结果反序列化为实体类
      */
     @Override
-    public DaxPayResult<PaySyncModel> toModel(String json) {
-        return JSONUtil.toBean(json, new TypeReference<DaxPayResult<PaySyncModel>>() {}, false);
+    public DaxPayResult<SyncModel> toModel(String json) {
+        return JSONUtil.toBean(json, new TypeReference<DaxPayResult<SyncModel>>() {}, false);
     }
 }

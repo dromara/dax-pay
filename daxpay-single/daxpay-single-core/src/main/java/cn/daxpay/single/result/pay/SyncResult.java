@@ -31,10 +31,4 @@ public class SyncResult extends PaymentCommonResult {
     @Schema(description = "支付网关同步状态")
     private String status = FAIL.getCode();
 
-    @Schema(description = "是否进行了修复")
-    private Boolean repair;
-
-    @Schema(description = "修复号")
-    private String repairNo;
-
 }

@@ -1,6 +1,5 @@
 package cn.daxpay.single.service.core.payment.sync.service;
 
-import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.code.PayChannelEnum;
@@ -65,7 +64,7 @@ public class PaySyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public SyncResult sync(PaySyncParam param) {
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
-                .orElseThrow(() -> new BizException("支付订单不存在"));
+                .orElseThrow(() -> new PayFailureException("支付订单不存在"));
         // 钱包支付钱包不需要
         if (PayChannelEnum.WALLET.getCode().equals(payOrder.getChannel())){
             throw new PayFailureException("订单没有异步支付方式，不需要同步");
@@ -92,20 +91,20 @@ public class PaySyncService {
             AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getChannel());
             syncPayStrategy.initPayParam(payOrder);
             // 执行操作, 获取支付网关同步的结果
-            PaySyncResult syncResult = syncPayStrategy.doSyncStatus();
+            PaySyncResult paySyncResult = syncPayStrategy.doSyncStatus();
             // 判断是否同步成功
-            if (Objects.equals(syncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
+            if (Objects.equals(paySyncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(payOrder, syncResult, false, null, syncResult.getErrorMsg());
-                throw new PayFailureException(syncResult.getErrorMsg());
+                this.saveRecord(payOrder, paySyncResult, false, null, paySyncResult.getErrorMsg());
+                throw new PayFailureException(paySyncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (!Objects.equals(syncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
-                payOrder.setOutOrderNo(syncResult.getOutOrderNo());
+            if (!Objects.equals(paySyncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
+                payOrder.setOutOrderNo(paySyncResult.getOutOrderNo());
                 payOrderService.updateById(payOrder);
             }
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
-            boolean statusSync = this.checkAndAdjustSyncStatus(syncResult,payOrder);
+            boolean statusSync = this.checkAndAdjustSyncStatus(paySyncResult,payOrder);
             PayRepairResult repairResult = new PayRepairResult();
             try {
                 // 状态不一致，执行支付单修复逻辑
@@ -116,22 +115,19 @@ public class PaySyncService {
                         repairInfo.setSource(PayRepairSourceEnum.SYNC);
                     }
                     // 设置支付单完成时间
-                    repairInfo.setFinishTime(syncResult.getPayTime());
-                    repairResult = this.repairHandler(syncResult, payOrder);
+                    repairInfo.setFinishTime(paySyncResult.getPayTime());
+                    repairResult = this.repairHandler(paySyncResult, payOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
-                this.saveRecord(payOrder, syncResult, false, null, e.getMessage());
+                paySyncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
+                this.saveRecord(payOrder, paySyncResult, false, null, e.getMessage());
                 throw e;
             }
 
             // 同步成功记录日志
-            this.saveRecord( payOrder, syncResult, !statusSync, repairResult.getRepairNo(), null);
-            return new SyncResult()
-                    .setStatus(syncResult.getSyncStatus().getCode())
-                    .setRepair(!statusSync)
-                    .setRepairNo(repairResult.getRepairNo());
+            this.saveRecord( payOrder, paySyncResult, !statusSync, repairResult.getRepairNo(), null);
+            return new SyncResult().setStatus(paySyncResult.getSyncStatus().getCode());
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -223,7 +219,7 @@ public class PaySyncService {
                 break;
             }
             default: {
-                throw new BizException("代码有问题");
+                throw new PayFailureException("代码有问题");
             }
         }
         return repair;

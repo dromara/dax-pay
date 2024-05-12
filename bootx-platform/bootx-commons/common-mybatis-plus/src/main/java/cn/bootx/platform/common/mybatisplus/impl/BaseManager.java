@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.extension.kotlin.KtQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.kotlin.KtUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import lombok.Getter;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -45,13 +46,10 @@ public class BaseManager<M extends BaseMapper<T>, T> {
 
     protected Log log = LogFactory.getLog(getClass());
 
+    @Getter
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     protected M baseMapper;
-
-    public M getBaseMapper() {
-        return baseMapper;
-    }
 
     public Class<T> getEntityClass() {
         return currentModelClass();

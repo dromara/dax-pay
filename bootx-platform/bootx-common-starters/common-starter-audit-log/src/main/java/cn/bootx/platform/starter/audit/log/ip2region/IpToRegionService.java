@@ -125,7 +125,7 @@ public class IpToRegionService {
                 searcher.close();
             } catch (IOException e) {
                 // 这句不会执行, finally中try无效
-                throw new BizException("IP查询器关闭失败");
+                log.error("关闭Ip地址库失败");
             }
         }
     }

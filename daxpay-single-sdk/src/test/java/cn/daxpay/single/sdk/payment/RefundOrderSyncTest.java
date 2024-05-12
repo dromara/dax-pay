@@ -1,7 +1,7 @@
 package cn.daxpay.single.sdk.payment;
 
 import cn.daxpay.single.sdk.code.SignTypeEnum;
-import cn.daxpay.single.sdk.model.sync.RefundSyncModel;
+import cn.daxpay.single.sdk.model.sync.SyncModel;
 import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
 import cn.daxpay.single.sdk.param.sync.RefundSyncParam;
@@ -34,7 +34,7 @@ public class RefundOrderSyncTest {
 
         param.setRefundNo("R0001");
 
-        DaxPayResult<RefundSyncModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<SyncModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
         System.out.println(execute.getData());
     }

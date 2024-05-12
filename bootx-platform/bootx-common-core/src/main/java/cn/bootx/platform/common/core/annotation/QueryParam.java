@@ -68,7 +68,7 @@ public @interface QueryParam {
         IS_NULL,
 
         /** 排序 */
-        SORT;
+        SORT
     }
 
     /**
@@ -81,7 +81,7 @@ public @interface QueryParam {
         /** 转换为下划线 */
         UNDER_LINE,
         /** 不进行处理 */
-        NONE;
+        NONE
 
     }
 

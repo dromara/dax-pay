@@ -43,7 +43,7 @@ public @interface Translate {
         /** 字典 */
         DICT,
         /** 数据表 暂未实现 */
-        TABLE;
+        TABLE
 
     }
 

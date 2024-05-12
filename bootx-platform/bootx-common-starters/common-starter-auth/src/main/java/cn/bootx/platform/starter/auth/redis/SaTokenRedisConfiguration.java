@@ -57,7 +57,7 @@ public class SaTokenRedisConfiguration {
         // 获取自定义Redis对象
         RedisProperties aloneRedis = saTokenDaoRedisProperties.getAloneRedis();
         if (alone) {
-            RedisConfiguration redisConfig = new RedisStandaloneConfiguration();
+            RedisConfiguration redisConfig;
             // 单机模式/集群模式
             if (aloneRedis.getCluster() == null || CollUtil.isEmpty(aloneRedis.getCluster().getNodes())) {
 

@@ -83,21 +83,21 @@ public class RefundSyncService {
             // 同步前处理, 主要预防请求过于迅速
             syncPayStrategy.doBeforeHandler();
             // 执行操作, 获取支付网关同步的结果
-            RefundSyncResult syncResult = syncPayStrategy.doSyncStatus();
+            RefundSyncResult refundSyncResult = syncPayStrategy.doSyncStatus();
 
             // 判断是否同步成功
-            if (Objects.equals(syncResult.getSyncStatus(), RefundSyncStatusEnum.FAIL)) {
+            if (Objects.equals(refundSyncResult.getSyncStatus(), RefundSyncStatusEnum.FAIL)) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(refundOrder, syncResult, false, null, syncResult.getErrorMsg());
-                throw new PayFailureException(syncResult.getErrorMsg());
+                this.saveRecord(refundOrder, refundSyncResult, false, null, refundSyncResult.getErrorMsg());
+                throw new PayFailureException(refundSyncResult.getErrorMsg());
             }
             // 订单的通道交易号是否一致, 不一致进行更新
-            if (Objects.nonNull(syncResult.getOutRefundNo()) && !Objects.equals(syncResult.getOutRefundNo(), refundOrder.getOutRefundNo())){
-                refundOrder.setOutRefundNo(syncResult.getOutRefundNo());
+            if (Objects.nonNull(refundSyncResult.getOutRefundNo()) && !Objects.equals(refundSyncResult.getOutRefundNo(), refundOrder.getOutRefundNo())){
+                refundOrder.setOutRefundNo(refundSyncResult.getOutRefundNo());
                 refundOrderManager.updateById(refundOrder);
             }
             // 判断网关状态是否和支付单一致
-            boolean statusSync = this.checkSyncStatus(syncResult, refundOrder);
+            boolean statusSync = this.checkSyncStatus(refundSyncResult, refundOrder);
             RefundRepairResult repairResult = new RefundRepairResult();
             try {
                 // 状态不一致，执行退款单修复逻辑
@@ -107,21 +107,18 @@ public class RefundSyncService {
                     if (Objects.isNull(repairInfo.getSource())){
                         repairInfo.setSource(PayRepairSourceEnum.SYNC);
                     }
-                    repairInfo.setFinishTime(syncResult.getFinishTime());
-                    repairResult = this.repairHandler(syncResult, refundOrder);
+                    repairInfo.setFinishTime(refundSyncResult.getFinishTime());
+                    repairResult = this.repairHandler(refundSyncResult, refundOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResult.setSyncStatus(RefundSyncStatusEnum.FAIL);
-                this.saveRecord(refundOrder, syncResult, false, null, e.getMessage());
+                refundSyncResult.setSyncStatus(RefundSyncStatusEnum.FAIL);
+                this.saveRecord(refundOrder, refundSyncResult, false, null, e.getMessage());
                 throw e;
             }
             // 同步成功记录日志
-            this.saveRecord(refundOrder, syncResult, !statusSync, repairResult.getRepairNo(), null);
-            return new SyncResult()
-                    .setStatus(syncResult.getSyncStatus().getCode())
-                    .setRepair(!statusSync)
-                    .setRepairNo(repairResult.getRepairNo());
+            this.saveRecord(refundOrder, refundSyncResult, !statusSync, repairResult.getRepairNo(), null);
+            return new SyncResult().setStatus(refundSyncResult.getSyncStatus().getCode());
         } finally {
             lockTemplate.releaseLock(lock);
         }

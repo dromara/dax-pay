@@ -8,6 +8,7 @@ import cn.bootx.platform.iam.core.third.entity.UserThird;
 import cn.bootx.platform.iam.core.third.entity.UserThirdInfo;
 import cn.bootx.platform.iam.core.user.dao.UserInfoManager;
 import cn.bootx.platform.iam.core.user.entity.UserInfo;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +74,7 @@ public class UserTiredOperateService {
             .setNickname(authUser.getNickname())
             .setAvatar(authUser.getAvatar())
             .setThirdUserId(authUser.getUuid());
-        this.bindOpenInfo(userThirdInfo);
+        SpringUtil.getBean(this.getClass()).bindOpenInfo(userThirdInfo);
     }
 
     /**

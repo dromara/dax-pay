@@ -176,7 +176,7 @@ public class ClientNoticeService {
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }
         // 查询任务, 进行发送
-        ClientNoticeTask task = null;
+        ClientNoticeTask task;
         try {
             task = taskManager.findById(taskId).orElse(null);
             // 不存在任务直接跳过

@@ -366,11 +366,11 @@ public class UnionPayKit extends UnionPayService {
             X509CertSelector selector = new X509CertSelector();
             selector.setCertificate(cert);
 
-            Set<TrustAnchor> trustAnchors = new HashSet<TrustAnchor>();
+            Set<TrustAnchor> trustAnchors = new HashSet<>();
             trustAnchors.add(new TrustAnchor(rootCert, null));
             PKIXBuilderParameters pkixParams = new PKIXBuilderParameters(trustAnchors, selector);
 
-            Set<X509Certificate> intermediateCerts = new HashSet<X509Certificate>();
+            Set<X509Certificate> intermediateCerts = new HashSet<>();
             intermediateCerts.add(rootCert);
             intermediateCerts.add(middleCert);
             intermediateCerts.add(cert);
@@ -388,9 +388,6 @@ public class UnionPayKit extends UnionPayService {
         }
         catch (java.security.cert.CertPathBuilderException e) {
             LOG.error("verify certificate chain fail.", e);
-        }
-        catch (CertificateExpiredException e) {
-            LOG.error("", e);
         }
         catch (GeneralSecurityException e) {
             LOG.error("", e);
@@ -516,9 +513,13 @@ public class UnionPayKit extends UnionPayService {
     @Override
     public String buildRequest(Map<String, Object> orderInfo, MethodType method) {
         StringBuffer sf = new StringBuffer();
-        sf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + payConfigStorage.getInputCharset() + "\"/></head><body>");
-        sf.append("<form id = \"pay_form\" action=\"" + getFrontTransUrl() + "\" method=\"post\">");
-        if (null != orderInfo && 0 != orderInfo.size()) {
+        sf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=")
+                .append(payConfigStorage.getInputCharset())
+                .append("\"/></head><body>");
+        sf.append("<form id = \"pay_form\" action=\"")
+                .append(getFrontTransUrl())
+                .append("\" method=\"post\">");
+        if (null != orderInfo && !orderInfo.isEmpty()) {
             for (Map.Entry<String, Object> entry : orderInfo.entrySet()) {
                 String key = entry.getKey();
                 Object value = entry.getValue();

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * 认证支撑服务
  *
@@ -36,7 +38,7 @@ public class AuthAssistService {
         // 判断用户是否存在
         UserInfo userInfo = userInfoManager.findByPhone(phone).orElseThrow(UserInfoNotExistsException::new);
 
-        if (userInfo.getStatus() != UserStatusCode.NORMAL) {
+        if (!Objects.equals(userInfo.getStatus(), UserStatusCode.NORMAL)) {
             throw new BizException("用户状态异常");
         }
         // 有效期5分钟
