@@ -100,7 +100,7 @@
 </dependency>
 ```
 ### SDK调用示例
-> 此处以简单支付接口为例，演示业务系统如何调用支付网关进行支付，其他接口的调用方式类似，具体请参考[支付对接](https://doc.bootx.cn/daxpay/gateway/overview/接口清单.html)。
+> 此处以支付接口为例，演示业务系统如何调用支付网关进行支付，其他接口的调用方式类似，具体请参考[支付对接](https://doc.bootx.cn/daxpay/gateway/overview/接口清单.html)。
 
 ```java
 /**
@@ -153,6 +153,11 @@ public class PayOrderTest {
 `V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容。
 **请勿在生产环境中使用，请等待生产可用的版本发布。如在使用，需要自己来保证应用的安全**
 
+- 支持支付宝和微信V3版本接口
+- 支持撤销、转账等更多支付接口
+- 增加微信通知、钉钉通知、飞书通知能力
+- 支持服务商模式，以及一些间连通道，如通联支付、易宝支付等，更好适应小微收单场景
+
 [**当前开发进度和任务池**](/_doc/Task.md)
 
 [**历史更新记录**](/_doc/ChangeLog.md)
@@ -175,12 +180,10 @@ public class PayOrderTest {
 <img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/png-(1).7egk526qnp.webp" width = "400" height = "400"/>
 </p>
 
-
 扫码加入飞书交流群
 <p>
 <img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240415124136.231noivcuz.webp" width = "390" height = "500"/>
 </p>
-
 
 微信扫码加小助手拉群
 <p>
