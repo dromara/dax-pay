@@ -94,6 +94,10 @@ public class FileUploadService {
     @SneakyThrows
     public void preview(Long id, HttpServletResponse response) {
         FileInfo info = fileStorageService.getFileInfoByUrl(String.valueOf(id));
+        if (info == null){
+            log.warn("文件不存在");
+            return;
+        }
         byte[] bytes = fileStorageService.download(info).bytes();
         val is = new ByteArrayInputStream(bytes);
         // 获取响应输出流

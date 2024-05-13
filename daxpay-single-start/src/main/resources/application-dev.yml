@@ -127,7 +127,7 @@ bootx:
       store: jdbc
       # ip归属地
       ip2region:
-        # 数据文件路径
+        # 数据文件路径, 下载地址 https://gitee.com/lionsoul/ip2region/blob/master/data/ip2region.xdb
         file-path: /data/ip2region/ip2region.xdb
         # 查询方式
         search-type: cache

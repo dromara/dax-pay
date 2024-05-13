@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *
+ * 响应参数接收类
  * @author xxm
  * @since 2024/2/2
  */

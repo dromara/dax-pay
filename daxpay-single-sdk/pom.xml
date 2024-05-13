@@ -6,13 +6,13 @@
 
     <groupId>cn.daxpay.single</groupId>
     <artifactId>daxpay-single-sdk</artifactId>
-    <version>2.0.5</version>
+    <version>2.0.6</version>
     <packaging>jar</packaging>
 
     <!-- 项目信息 -->
     <name>daxpay-single-sdk</name>
     <description>daxpay-single-sdk 是 daxpay单商户版的JavaSDK，用于业务系统快速接入到支付网关中</description>
-    <url>https://gitee.com/single/daxpay</url>
+    <url>https://gitee.com/dromara/dax-pay</url>
 
     <!-- 许可证 -->
     <licenses>
@@ -36,7 +36,7 @@
     <scm>
         <connection>scm:git:git@gitee.com:dromara/daxpay.git</connection>
         <developerConnection>scm:git:git@gitee.com:dromara/daxpay.git</developerConnection>
-        <url>https://gitee.com/dromara/daxpay</url>
+        <url>https://gitee.com/dromara/dax-pay</url>
     </scm>
 
     <properties>

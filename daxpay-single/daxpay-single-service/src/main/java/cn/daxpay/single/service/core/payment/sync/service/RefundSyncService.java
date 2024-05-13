@@ -59,9 +59,9 @@ public class RefundSyncService {
         // 先获取退款单
         RefundOrder refundOrder = refundOrderQueryService.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())
                 .orElseThrow(() -> new PayFailureException("未查询到退款订单"));
-        // 如果订单已经关闭, 直接返回失败
+        // 如果订单已经关闭, 直接返回退款关闭
         if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.CLOSE.getCode())){
-            throw new PayFailureException("订单已经关闭，不需要同步");
+            return new SyncResult().setStatus(RefundStatusEnum.CLOSE.getCode());
         }
         return this.syncRefundOrder(refundOrder);
     }

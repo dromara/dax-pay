@@ -31,9 +31,8 @@ public class RefundOrderSyncTest {
     @Test
     public void testPay() {
         RefundSyncParam param = new RefundSyncParam();
-
-        param.setRefundNo("R0001");
-
+        param.setRefundNo("DEVR24051020530263000002");
+        param.setClientIp("127.0.0.1");
         DaxPayResult<SyncModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);
         System.out.println(execute.getData());

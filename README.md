@@ -94,7 +94,7 @@
 ```xml
  <!-- 支付SDK -->
 <dependency>
-    <groupId>cn.bootx.platform</groupId>
+    <groupId>cn.daxpay.single</groupId>
     <artifactId>daxpay-single-sdk</artifactId>
     <version>${latest.version}</version>
 </dependency>
@@ -128,8 +128,6 @@ public class PayOrderTest {
     public void pay() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
-
         param.setBizOrderNo("P0004");
         param.setTitle("测试接口支付");
         param.setChannel(PayChannelEnum.ALI.getCode());
@@ -143,7 +141,7 @@ public class PayOrderTest {
 
 ## 🍎 系统截图
 ### 收银台演示
-![微信截图_20240326141126](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326141126.es9yupxd3.webp)
+![微信截图_20240326141126](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
 ### 驾驶舱
 ![QQ截图20240326141912](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
 ### H5收银台演示
@@ -162,10 +160,15 @@ public class PayOrderTest {
 ##  🥪 关于我们
 
 扫码加入QQ交流群
+
+交流一群
 <p>
 <img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412132238.3rb0hgrf2z.webp" width = "330" height = "500"/>
 </p>
-
+交流二群
+<p>
+<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240513180310.2yy68aykip.webp" width = "330" height = "500"/>
+</p>
 
 扫码加入钉钉交流群
 <p>
