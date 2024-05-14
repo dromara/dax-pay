@@ -77,7 +77,6 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     @Schema(description = "支付订单标题")
     private String title;
 
-
     /**
      * 所属通道
      * @see PayChannelEnum
@@ -105,10 +104,10 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     private String status;
 
     /**
-     * 分账处理结果
+     * 处理结果
      * @see AllocOrderResultEnum
      */
-    @DbColumn(comment = "分账处理结果")
+    @DbColumn(comment = "处理结果")
     private String result;
 
     /**
