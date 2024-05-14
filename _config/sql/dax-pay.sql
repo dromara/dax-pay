@@ -2470,10 +2470,10 @@ CREATE TABLE `pay_channel_config`  (
 -- ----------------------------
 -- Records of pay_channel_config
 -- ----------------------------
-INSERT INTO `pay_channel_config` VALUES (1, 'ali_pay', '支付宝', NULL, NULL, b'1', '', 0, '2024-01-08 16:47:07', 1757299137932677120, '2024-05-13 19:46:19', 12, b'0');
-INSERT INTO `pay_channel_config` VALUES (2, 'wechat_pay', '微信支付', NULL, NULL, b'1', '', 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-02-13 15:38:24', 7, b'0');
-INSERT INTO `pay_channel_config` VALUES (3, 'union_pay', '云闪付', NULL, NULL, b'1', NULL, 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-03-10 15:04:36', 2, b'0');
-INSERT INTO `pay_channel_config` VALUES (5, 'wallet_pay', '钱包支付', NULL, NULL, b'1', NULL, 0, '2024-01-08 16:47:07', 0, '2024-01-08 16:47:11', 0, b'0');
+INSERT INTO `pay_channel_config` VALUES (1, 'ali_pay', '支付宝', NULL, NULL, b'0', '', 0, '2024-01-08 16:47:07', 1757299137932677120, '2024-05-13 19:46:19', 12, b'0');
+INSERT INTO `pay_channel_config` VALUES (2, 'wechat_pay', '微信支付', NULL, NULL, b'0', '', 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-02-13 15:38:24', 7, b'0');
+INSERT INTO `pay_channel_config` VALUES (3, 'union_pay', '云闪付', NULL, NULL, b'0', NULL, 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-03-10 15:04:36', 2, b'0');
+INSERT INTO `pay_channel_config` VALUES (5, 'wallet_pay', '钱包支付', NULL, NULL, b'0', NULL, 0, '2024-01-08 16:47:07', 0, '2024-01-08 16:47:11', 0, b'0');
 
 -- ----------------------------
 -- Table structure for pay_client_notice_record
