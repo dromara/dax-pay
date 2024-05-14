@@ -42,8 +42,8 @@ public class PayOrderService {
      */
     public void save(PayOrder payOrder){
         payOrderManager.save(payOrder);
-        // TODO 钱包支付不需要注册超时任务
-        if (Objects.equals(payOrder.getChannel(), PayChannelEnum.WALLET.getCode())){
+        // 钱包支付不需要注册超时任务
+        if (!Objects.equals(payOrder.getChannel(), PayChannelEnum.WALLET.getCode())){
             expiredTimeService.registerExpiredTime(payOrder);
         }
     }
