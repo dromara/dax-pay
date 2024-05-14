@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class AggregateSimplePayParam {
     @Schema(description = "业务号")
     @NotNull
-    private String businessNo;
+    private String bizOrderNo;
 
     @Schema(description = "是否分账")
     private Boolean allocation;

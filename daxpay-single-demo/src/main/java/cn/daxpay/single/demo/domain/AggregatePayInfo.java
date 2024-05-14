@@ -19,7 +19,7 @@ public class AggregatePayInfo {
 
     /** 订单业务号 */
     @Schema(description = "订单业务号")
-    private String businessNo;
+    private String bizOrderNo;
 
     @Schema(description = "是否分账")
     private Boolean allocation;

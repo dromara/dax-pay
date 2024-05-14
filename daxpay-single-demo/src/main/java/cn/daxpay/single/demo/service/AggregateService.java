@@ -57,7 +57,7 @@ public class AggregateService {
                 .intValue();
         AggregatePayInfo aggregatePayInfo = new AggregatePayInfo()
                 .setTitle(param.getTitle())
-                .setBusinessNo(param.getBusinessNo())
+                .setBizOrderNo(param.getBizOrderNo())
                 .setAllocation(param.getAllocation())
                 .setAmount(amount);
         String code = IdUtil.getSnowflakeNextIdStr();
@@ -144,7 +144,7 @@ public class AggregateService {
         AggregatePayInfo aggregatePayInfo = getInfo(aggregateCode);
         // 拼装支付发起参数
         PayParam simplePayParam = new PayParam();
-        simplePayParam.setBizOrderNo(aggregatePayInfo.getBusinessNo());
+        simplePayParam.setBizOrderNo(aggregatePayInfo.getBizOrderNo());
         simplePayParam.setTitle(aggregatePayInfo.getTitle());
         simplePayParam.setAmount(aggregatePayInfo.getAmount());
         simplePayParam.setChannel(PayChannelEnum.WECHAT.getCode());
@@ -178,7 +178,7 @@ public class AggregateService {
     public PayOrderResult aliH5Pay(String code) {
         AggregatePayInfo aggregatePayInfo = getInfo(code);
         PayParam payParam = new PayParam();
-        payParam.setBizOrderNo(aggregatePayInfo.getBusinessNo());
+        payParam.setBizOrderNo(aggregatePayInfo.getBizOrderNo());
         payParam.setTitle(aggregatePayInfo.getTitle());
         payParam.setAmount(aggregatePayInfo.getAmount());
         payParam.setChannel(PayChannelEnum.ALI.getCode());
@@ -218,7 +218,7 @@ public class AggregateService {
                 .intValue();
 
         PayParam simplePayParam = new PayParam();
-        simplePayParam.setBizOrderNo(param.getBusinessNo());
+        simplePayParam.setBizOrderNo(param.getBizOrderNo());
         simplePayParam.setAllocation(param.getAllocation());
         simplePayParam.setTitle(param.getTitle());
         simplePayParam.setAmount(amount);

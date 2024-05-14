@@ -75,7 +75,7 @@ public class WeChatPayService {
             throw new PayFailureException("微信支付金额超限");
         }
         // 是否支持分账
-        if (payParam.getAllocation() && !weChatPayConfig.getAllocation()) {
+        if (Objects.equals(payParam.getAllocation(),true) && !Objects.equals(weChatPayConfig.getAllocation(),true)) {
             throw new PayFailureException("未开启分账配置");
         }
     }

@@ -1,10 +1,12 @@
 package cn.daxpay.single.result.order;
 
 import cn.daxpay.single.code.RefundStatusEnum;
+import cn.daxpay.single.result.PaymentCommonResult;
 import cn.daxpay.single.serializer.LocalDateTimeToTimestampSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
@@ -15,10 +17,11 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/1/16
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "退款订单数据")
-public class RefundOrderResult {
+public class RefundOrderResult extends PaymentCommonResult {
 
     @Schema(description = "退款号")
     private String refundNo;
