@@ -23,7 +23,6 @@ public class CashierSimplePayParam {
     private String bizOrderNo;
 
     @Schema(description = "是否分账")
-    @NotNull(message = "分账是否启用必输")
     private Boolean allocation;
 
 

@@ -59,6 +59,7 @@ public class AggregateService {
                 .setTitle(param.getTitle())
                 .setBizOrderNo(param.getBizOrderNo())
                 .setAllocation(param.getAllocation())
+                .setAutoAllocation(param.getAutoAllocation())
                 .setAmount(amount);
         String code = IdUtil.getSnowflakeNextIdStr();
         String serverUrl = daxPayDemoProperties.getServerUrl();

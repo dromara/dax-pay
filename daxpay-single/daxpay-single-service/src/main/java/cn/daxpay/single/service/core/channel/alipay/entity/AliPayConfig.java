@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 支付宝支付配置
@@ -137,6 +138,14 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     /** 备注 */
     @DbColumn(comment = "备注")
     private String remark;
+
+    public Boolean getAllocation() {
+        return Objects.equals(allocation,true);
+    }
+
+    public Boolean getEnable() {
+        return Objects.equals(enable,true);
+    }
 
     @Override
     public AliPayConfigDto toDto() {
