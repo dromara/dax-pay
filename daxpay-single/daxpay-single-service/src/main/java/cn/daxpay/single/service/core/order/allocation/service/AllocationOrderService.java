@@ -1,0 +1,143 @@
+package cn.daxpay.single.service.core.order.allocation.service;
+
+import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.rest.PageResult;
+import cn.bootx.platform.common.core.rest.dto.LabelValue;
+import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.core.util.ResultConvertUtil;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.single.code.AllocDetailResultEnum;
+import cn.daxpay.single.code.AllocOrderStatusEnum;
+import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
+import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
+import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.entity.OrderAndDetail;
+import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
+import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
+import cn.daxpay.single.service.dto.allocation.AllocationGroupReceiverResult;
+import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
+import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDto;
+import cn.daxpay.single.service.param.order.AllocationOrderQuery;
+import cn.daxpay.single.util.OrderNoGenerateUtil;
+import cn.hutool.core.util.IdUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * 分账订单服务
+ * @author xxm
+ * @since 2024/4/7
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class AllocationOrderService {
+    private final AllocationOrderManager allocationOrderManager;
+    private final AllocationOrderDetailManager allocationOrderDetailManager;
+
+    private final PayOrderManager payOrderManager;
+
+
+    /**
+     * 获取可以分账的通道
+     */
+    public List<LabelValue> findChannels(){
+        return Arrays.asList(
+                new LabelValue(PayChannelEnum.ALI.getName(),PayChannelEnum.ALI.getCode()),
+                new LabelValue(PayChannelEnum.WECHAT.getName(),PayChannelEnum.WECHAT.getCode())
+        );
+    }
+
+    /**
+     * 分页查询
+     */
+    public PageResult<AllocationOrderDto> page(PageParam pageParam, AllocationOrderQuery param){
+        return MpUtil.convert2DtoPageResult(allocationOrderManager.page(pageParam, param));
+    }
+
+
+    /**
+     * 查询详情
+     */
+    public AllocationOrderDto findById(Long id) {
+        return allocationOrderManager.findById(id).map(AllocationOrder::toDto).orElseThrow(() -> new DataNotExistException("分账订单不存在"));
+    }
+
+    /**
+     * 查询订单明细列表
+     */
+    public List<AllocationOrderDetailDto> findDetailsByOrderId(Long orderId){
+        return ResultConvertUtil.dtoListConvert(allocationOrderDetailManager.findAllByOrderId(orderId));
+    }
+
+    /**
+     * 查询订单明细详情
+     */
+    public AllocationOrderDetailDto findDetailById(Long id){
+        return allocationOrderDetailManager.findById(id).map(AllocationOrderDetail::toDto).orElseThrow(() -> new DataNotExistException("分账订单明细不存在"));
+    }
+
+
+    /**
+     * 生成分账订单
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public OrderAndDetail createAndUpdate(AllocationStartParam param, PayOrder payOrder, int orderAmount, List<AllocationGroupReceiverResult> receiversByGroups){
+        long orderId = IdUtil.getSnowflakeNextId();
+
+        // 订单明细
+        List<AllocationOrderDetail> details = receiversByGroups.stream()
+                .map(o -> {
+                    // 计算分账金额, 小数不分直接舍弃, 防止分账金额超过上限
+                    Integer rate = o.getRate();
+                    Integer amount = orderAmount * rate / 10000;
+                    AllocationOrderDetail detail = new AllocationOrderDetail();
+                    detail.setAllocationId(orderId)
+                            .setReceiverId(o.getId())
+                            .setAmount(amount)
+                            .setResult(AllocDetailResultEnum.PENDING.getCode())
+                            .setRate(rate)
+                            .setReceiverType(o.getReceiverType())
+                            .setReceiverName(o.getReceiverName())
+                            .setReceiverAccount(o.getReceiverAccount());
+                    return detail;
+                })
+                .collect(Collectors.toList());
+        // 求分账的总额
+        Integer sumAmount = details.stream()
+                .map(AllocationOrderDetail::getAmount)
+                .reduce(0, Integer::sum);
+        // 分账订单
+        AllocationOrder allocationOrder = new AllocationOrder()
+                .setOrderId(payOrder.getId())
+                .setOrderNo(payOrder.getOrderNo())
+                .setBizOrderNo(payOrder.getBizOrderNo())
+                .setOutOrderNo(payOrder.getOutOrderNo())
+                .setTitle(payOrder.getTitle())
+                .setAllocationNo(OrderNoGenerateUtil.allocation())
+                .setBizAllocationNo(param.getBizAllocationNo())
+                .setChannel(payOrder.getChannel())
+                .setDescription(param.getDescription())
+                .setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
+                .setAmount(sumAmount);
+        allocationOrder.setId(orderId);
+        // 更新支付订单分账状态
+        payOrder.setAllocationStatus(PayOrderAllocStatusEnum.ALLOCATION.getCode());
+        payOrderManager.updateById(payOrder);
+        // 因为加密后字段值会发生变更, 所以在保存前备份一下
+        allocationOrderDetailManager.saveAll(details);
+        allocationOrderManager.save(allocationOrder);
+        return new OrderAndDetail().setOrder(allocationOrder).setDetails(details);
+    }
+
+}
