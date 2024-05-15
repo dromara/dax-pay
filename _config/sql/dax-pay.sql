@@ -19,11 +19,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `base_area`;
 CREATE TABLE `base_area`  (
-  `code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '区域名称',
-  `city_code` char(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '城市编码',
-  PRIMARY KEY (`code`) USING BTREE,
-  INDEX `inx_city_code`(`city_code`) USING BTREE COMMENT '城市'
+                              `code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                              `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '区域名称',
+                              `city_code` char(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '城市编码',
+                              PRIMARY KEY (`code`) USING BTREE,
+                              INDEX `inx_city_code`(`city_code`) USING BTREE COMMENT '城市'
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '县区表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -35,18 +35,18 @@ CREATE TABLE `base_area`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_china_word`;
 CREATE TABLE `base_china_word`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `word` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '敏感词',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '分类',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '描述',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `white` bit(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `word` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '敏感词',
+                                    `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '分类',
+                                    `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '描述',
+                                    `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                    `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                    `version` int(11) NOT NULL COMMENT '乐观锁',
+                                    `white` bit(1) NULL DEFAULT NULL,
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '敏感词' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -58,10 +58,10 @@ CREATE TABLE `base_china_word`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_city`;
 CREATE TABLE `base_city`  (
-  `code` char(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '城市编码',
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '城市名称',
-  `province_code` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '省份编码',
-  PRIMARY KEY (`code`) USING BTREE
+                              `code` char(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '城市编码',
+                              `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '城市名称',
+                              `province_code` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '省份编码',
+                              PRIMARY KEY (`code`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '城市表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -73,20 +73,20 @@ CREATE TABLE `base_city`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_data_result_sql`;
 CREATE TABLE `base_data_result_sql`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `database_id` bigint(20) NULL DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `is_list` bit(1) NULL DEFAULT NULL,
-  `sql` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
-  `fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `database_id` bigint(20) NULL DEFAULT NULL,
+                                         `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+                                         `is_list` bit(1) NULL DEFAULT NULL,
+                                         `sql` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+                                         `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
+                                         `fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '数据集SQL语句' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -98,19 +98,19 @@ CREATE TABLE `base_data_result_sql`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_dict`;
 CREATE TABLE `base_dict`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '编码',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
-  `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
-  `group_tag` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类标签',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NULL DEFAULT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                              `id` bigint(20) NOT NULL,
+                              `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '编码',
+                              `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+                              `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
+                              `group_tag` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类标签',
+                              `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                              `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                              `version` int(8) NULL DEFAULT NULL COMMENT '版本',
+                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -173,22 +173,22 @@ INSERT INTO `base_dict` VALUES (1786399552686465024, 'ReconcileResult', '对账�
 -- ----------------------------
 DROP TABLE IF EXISTS `base_dict_item`;
 CREATE TABLE `base_dict_item`  (
-  `id` bigint(20) NOT NULL,
-  `dict_id` bigint(20) NOT NULL COMMENT '字典id',
-  `dict_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典code',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典项code',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典项名称',
-  `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
-  `sort_no` double(8, 2) NOT NULL COMMENT '排序',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_dictionary_id`(`dict_id`) USING BTREE
+                                   `id` bigint(20) NOT NULL,
+                                   `dict_id` bigint(20) NOT NULL COMMENT '字典id',
+                                   `dict_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典code',
+                                   `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典项code',
+                                   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典项名称',
+                                   `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
+                                   `sort_no` double(8, 2) NOT NULL COMMENT '排序',
+                                   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                                   `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                   `version` int(8) NOT NULL COMMENT '版本',
+                                   PRIMARY KEY (`id`) USING BTREE,
+                                   INDEX `idx_dictionary_id`(`dict_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典项' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -409,24 +409,24 @@ INSERT INTO `base_dict_item` VALUES (1786399681275437056, 1786399552686465024, '
 -- ----------------------------
 DROP TABLE IF EXISTS `base_dynamic_data_source`;
 CREATE TABLE `base_dynamic_data_source`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据源编码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据源名称',
-  `database_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库类型',
-  `auto_load` bit(1) NULL DEFAULT NULL COMMENT '是否启动自动加载',
-  `db_driver` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '驱动类',
-  `db_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库地址',
-  `db_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库名称',
-  `db_username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
-  `db_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '密码',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                             `id` bigint(20) NOT NULL,
+                                             `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据源编码',
+                                             `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据源名称',
+                                             `database_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库类型',
+                                             `auto_load` bit(1) NULL DEFAULT NULL COMMENT '是否启动自动加载',
+                                             `db_driver` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '驱动类',
+                                             `db_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库地址',
+                                             `db_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库名称',
+                                             `db_username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
+                                             `db_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '密码',
+                                             `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+                                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                             `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                             `version` int(11) NOT NULL COMMENT '版本',
+                                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '动态数据源管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -438,16 +438,16 @@ CREATE TABLE `base_dynamic_data_source`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_key_value`;
 CREATE TABLE `base_key_value`  (
-  `id` bigint(20) NOT NULL,
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数键名',
-  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数值',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` bigint(20) NOT NULL,
+                                   `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数键名',
+                                   `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数值',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                                   `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                   `version` int(8) NOT NULL COMMENT '版本',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'kv存储' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -459,21 +459,21 @@ CREATE TABLE `base_key_value`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_param`;
 CREATE TABLE `base_param`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数名称',
-  `param_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数键名',
-  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数值',
-  `type` int(4) NULL DEFAULT NULL COMMENT '参数类型',
-  `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
-  `internal` bit(1) NOT NULL COMMENT '内置参数',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` bigint(20) NOT NULL,
+                               `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数名称',
+                               `param_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数键名',
+                               `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数值',
+                               `type` int(4) NULL DEFAULT NULL COMMENT '参数类型',
+                               `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
+                               `internal` bit(1) NOT NULL COMMENT '内置参数',
+                               `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                               `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+                               `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                               `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                               `version` int(8) NOT NULL COMMENT '版本',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统参数配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -488,9 +488,9 @@ INSERT INTO `base_param` VALUES (1545765299880448000, '服务器地址', 'Server
 -- ----------------------------
 DROP TABLE IF EXISTS `base_province`;
 CREATE TABLE `base_province`  (
-  `code` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省份编码',
-  `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '省份名称',
-  PRIMARY KEY (`code`) USING BTREE
+                                  `code` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省份编码',
+                                  `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '省份名称',
+                                  PRIMARY KEY (`code`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '省份表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -502,11 +502,11 @@ CREATE TABLE `base_province`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_street`;
 CREATE TABLE `base_street`  (
-  `code` char(9) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '编码',
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '街道名称',
-  `area_code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '县区编码',
-  PRIMARY KEY (`code`) USING BTREE,
-  INDEX `inx_area_code`(`area_code`) USING BTREE COMMENT '县区'
+                                `code` char(9) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '编码',
+                                `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '街道名称',
+                                `area_code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '县区编码',
+                                PRIMARY KEY (`code`) USING BTREE,
+                                INDEX `inx_area_code`(`area_code`) USING BTREE COMMENT '县区'
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '街道表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -518,11 +518,11 @@ CREATE TABLE `base_street`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_village`;
 CREATE TABLE `base_village`  (
-  `code` char(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '编码',
-  `name` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '名称',
-  `street_code` char(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '社区/乡镇编码',
-  PRIMARY KEY (`code`) USING BTREE,
-  INDEX `inx_street_code`(`street_code`) USING BTREE COMMENT '所属街道索引'
+                                 `code` char(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '编码',
+                                 `name` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '名称',
+                                 `street_code` char(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '社区/乡镇编码',
+                                 PRIMARY KEY (`code`) USING BTREE,
+                                 INDEX `inx_street_code`(`street_code`) USING BTREE COMMENT '所属街道索引'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '村庄/社区' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -534,16 +534,16 @@ CREATE TABLE `base_village`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `common_sequence_range`;
 CREATE TABLE `common_sequence_range`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `range_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '区间key',
-  `range_value` bigint(20) NOT NULL COMMENT '区间开始值',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                          `id` bigint(20) NOT NULL COMMENT '主键',
+                                          `range_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '区间key',
+                                          `range_value` bigint(20) NOT NULL COMMENT '区间开始值',
+                                          `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                          `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                          `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                          `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                          `version` int(11) NOT NULL COMMENT '版本',
+                                          `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '序列生成器队列区间管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -555,10 +555,10 @@ CREATE TABLE `common_sequence_range`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `ddl_history`;
 CREATE TABLE `ddl_history`  (
-  `script` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '脚本',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
-  `version` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本',
-  PRIMARY KEY (`script`) USING BTREE
+                                `script` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '脚本',
+                                `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
+                                `version` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本',
+                                PRIMARY KEY (`script`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'DDL 版本' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -570,21 +570,21 @@ CREATE TABLE `ddl_history`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_client`;
 CREATE TABLE `iam_client`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `internal` bit(1) NOT NULL COMMENT '是否系统内置',
-  `enable` bit(1) NOT NULL COMMENT '是否可用',
-  `default_endow` bit(1) NULL DEFAULT NULL COMMENT '新注册的用户是否默认赋予该终端',
-  `login_type_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '关联登录方式\r\n',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` bigint(20) NOT NULL COMMENT '主键',
+                               `code` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
+                               `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                               `internal` bit(1) NOT NULL COMMENT '是否系统内置',
+                               `enable` bit(1) NOT NULL COMMENT '是否可用',
+                               `default_endow` bit(1) NULL DEFAULT NULL COMMENT '新注册的用户是否默认赋予该终端',
+                               `login_type_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '关联登录方式\r\n',
+                               `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                               `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                               `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                               `version` int(11) NOT NULL COMMENT '乐观锁',
+                               `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '认证终端' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -597,18 +597,18 @@ INSERT INTO `iam_client` VALUES (1580487061605175296, 'dax-pay', '支付网关',
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_data_role`;
 CREATE TABLE `iam_data_role`  (
-  `id` bigint(20) NOT NULL COMMENT '角色ID',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编码',
-  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
-  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '说明',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL COMMENT '角色ID',
+                                  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编码',
+                                  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
+                                  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
+                                  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '说明',
+                                  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                  `version` int(11) NOT NULL COMMENT '版本',
+                                  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据范围权限' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -620,10 +620,10 @@ CREATE TABLE `iam_data_role`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_data_role_dept`;
 CREATE TABLE `iam_data_role_dept`  (
-  `id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL COMMENT '数据角色id',
-  `dept_id` bigint(20) NOT NULL COMMENT '部门id',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL,
+                                       `role_id` bigint(20) NOT NULL COMMENT '数据角色id',
+                                       `dept_id` bigint(20) NOT NULL COMMENT '部门id',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '数据范围部门关联配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -635,10 +635,10 @@ CREATE TABLE `iam_data_role_dept`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_data_role_user`;
 CREATE TABLE `iam_data_role_user`  (
-  `id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL COMMENT '数据角色id',
-  `user_id` bigint(20) NOT NULL COMMENT '用户id',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL,
+                                       `role_id` bigint(20) NOT NULL COMMENT '数据角色id',
+                                       `user_id` bigint(20) NOT NULL COMMENT '用户id',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '数据范围用户关联配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -650,23 +650,23 @@ CREATE TABLE `iam_data_role_user`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_dept`;
 CREATE TABLE `iam_dept`  (
-  `id` bigint(20) NOT NULL COMMENT 'ID',
-  `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父机构ID',
-  `dept_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构/部门名称',
-  `sort_no` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
-  `org_category` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '机构类别 1公司 2部门 3岗位',
-  `org_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构编码',
-  `mobile` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
-  `fax` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '传真',
-  `address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地址',
-  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` bigint(20) NOT NULL COMMENT 'ID',
+                             `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父机构ID',
+                             `dept_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构/部门名称',
+                             `sort_no` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
+                             `org_category` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '机构类别 1公司 2部门 3岗位',
+                             `org_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构编码',
+                             `mobile` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+                             `fax` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '传真',
+                             `address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地址',
+                             `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                             `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                             `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                             `version` int(11) NOT NULL COMMENT '版本',
+                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门组织机构表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -678,20 +678,20 @@ CREATE TABLE `iam_dept`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_login_security_config`;
 CREATE TABLE `iam_login_security_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `client_id` bigint(20) NULL DEFAULT NULL COMMENT '关联终端ID',
-  `require_login_change_pwd` bit(1) NULL DEFAULT NULL COMMENT '修改密码是否需要重新登录',
-  `captcha_enable` bit(1) NULL DEFAULT NULL COMMENT '默认启用验证码',
-  `max_captcha_error_count` int(11) NULL DEFAULT NULL COMMENT '出现验证码的错误次数',
-  `allow_multi_login` bit(1) NULL DEFAULT NULL COMMENT '同端是否允许同时登录',
-  `allow_multi_terminal_login` bit(1) NULL DEFAULT NULL COMMENT '多终端是否允许同时登录',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL COMMENT '主键',
+                                              `client_id` bigint(20) NULL DEFAULT NULL COMMENT '关联终端ID',
+                                              `require_login_change_pwd` bit(1) NULL DEFAULT NULL COMMENT '修改密码是否需要重新登录',
+                                              `captcha_enable` bit(1) NULL DEFAULT NULL COMMENT '默认启用验证码',
+                                              `max_captcha_error_count` int(11) NULL DEFAULT NULL COMMENT '出现验证码的错误次数',
+                                              `allow_multi_login` bit(1) NULL DEFAULT NULL COMMENT '同端是否允许同时登录',
+                                              `allow_multi_terminal_login` bit(1) NULL DEFAULT NULL COMMENT '多终端是否允许同时登录',
+                                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                              `version` int(11) NOT NULL COMMENT '乐观锁',
+                                              `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '登录安全策略' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -703,23 +703,23 @@ CREATE TABLE `iam_login_security_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_login_type`;
 CREATE TABLE `iam_login_type`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `internal` bit(1) NOT NULL COMMENT '是否系统内置',
-  `timeout` bigint(11) NULL DEFAULT NULL COMMENT '在线时长(秒)',
-  `captcha_type` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '验证码类型',
-  `captcha` bit(1) NOT NULL COMMENT '启用验证码',
-  `enable` bit(1) NOT NULL COMMENT '是否可用',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` bigint(20) NOT NULL COMMENT '主键',
+                                   `code` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
+                                   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                   `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
+                                   `internal` bit(1) NOT NULL COMMENT '是否系统内置',
+                                   `timeout` bigint(11) NULL DEFAULT NULL COMMENT '在线时长(秒)',
+                                   `captcha_type` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '验证码类型',
+                                   `captcha` bit(1) NOT NULL COMMENT '启用验证码',
+                                   `enable` bit(1) NOT NULL COMMENT '是否可用',
+                                   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                   `version` int(11) NOT NULL COMMENT '乐观锁',
+                                   `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录方式' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -736,12 +736,12 @@ INSERT INTO `iam_login_type` VALUES (1543126042909016064, 'weChat', '微信登�
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_password_change_history`;
 CREATE TABLE `iam_password_change_history`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户Id',
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '密码',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                                `id` bigint(20) NOT NULL COMMENT '主键',
+                                                `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户Id',
+                                                `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '密码',
+                                                `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '密码更改历史' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -753,17 +753,17 @@ CREATE TABLE `iam_password_change_history`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_password_login_fail_record`;
 CREATE TABLE `iam_password_login_fail_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
-  `fail_count` int(11) NULL DEFAULT NULL COMMENT '登录失败次数',
-  `fail_time` datetime NULL DEFAULT NULL COMMENT '登录失败时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                                   `id` bigint(20) NOT NULL COMMENT '主键',
+                                                   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
+                                                   `fail_count` int(11) NULL DEFAULT NULL COMMENT '登录失败次数',
+                                                   `fail_time` datetime NULL DEFAULT NULL COMMENT '登录失败时间',
+                                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                                   `version` int(11) NOT NULL COMMENT '乐观锁',
+                                                   `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '密码登录失败记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -775,21 +775,21 @@ CREATE TABLE `iam_password_login_fail_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_password_security_config`;
 CREATE TABLE `iam_password_security_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `max_pwd_error_count` int(11) NULL DEFAULT NULL COMMENT '最大密码错误数',
-  `error_lock_time` int(11) NULL DEFAULT NULL COMMENT '密码错误锁定时间(分钟)',
-  `require_change_pwd` bit(1) NULL DEFAULT NULL COMMENT '强制修改初始密码',
-  `update_frequency` int(11) NULL DEFAULT NULL COMMENT '更新频率',
-  `expire_remind` int(11) NULL DEFAULT NULL COMMENT '到期提醒(天数)',
-  `same_as_login_name` bit(1) NULL DEFAULT NULL COMMENT '与登录名相同',
-  `recent_password` int(11) NULL DEFAULT NULL COMMENT '不能与近期多少次密码相同',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                                 `id` bigint(20) NOT NULL COMMENT '主键',
+                                                 `max_pwd_error_count` int(11) NULL DEFAULT NULL COMMENT '最大密码错误数',
+                                                 `error_lock_time` int(11) NULL DEFAULT NULL COMMENT '密码错误锁定时间(分钟)',
+                                                 `require_change_pwd` bit(1) NULL DEFAULT NULL COMMENT '强制修改初始密码',
+                                                 `update_frequency` int(11) NULL DEFAULT NULL COMMENT '更新频率',
+                                                 `expire_remind` int(11) NULL DEFAULT NULL COMMENT '到期提醒(天数)',
+                                                 `same_as_login_name` bit(1) NULL DEFAULT NULL COMMENT '与登录名相同',
+                                                 `recent_password` int(11) NULL DEFAULT NULL COMMENT '不能与近期多少次密码相同',
+                                                 `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                 `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                 `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                                 `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                                 `version` int(11) NOT NULL COMMENT '乐观锁',
+                                                 `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '密码安全策略' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -802,35 +802,35 @@ INSERT INTO `iam_password_security_config` VALUES (1714844168393515008, 9999999,
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_perm_menu`;
 CREATE TABLE `iam_perm_menu`  (
-  `id` bigint(20) NOT NULL,
-  `client_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '终端code',
-  `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父id',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单名称',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路由名称',
-  `perm_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单权限编码',
-  `effect` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
-  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
-  `hidden` bit(1) NOT NULL COMMENT '是否隐藏',
-  `hide_children_in_menu` bit(1) NOT NULL COMMENT '是否隐藏子菜单',
-  `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件',
-  `component_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件名字',
-  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路径',
-  `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单跳转地址(重定向)',
-  `sort_no` double NOT NULL COMMENT '菜单排序',
-  `menu_type` int(5) NOT NULL COMMENT '类型（0：一级菜单；1：子菜单 ；2：按钮权限）',
-  `leaf` bit(1) NULL DEFAULT NULL COMMENT '是否叶子节点',
-  `keep_alive` bit(1) NULL DEFAULT NULL COMMENT '是否缓存页面',
-  `target_outside` bit(1) NULL DEFAULT NULL COMMENT '是否外部打开方式',
-  `hidden_header_content` bit(1) NULL DEFAULT NULL COMMENT '隐藏的标题内容',
-  `admin` bit(1) NOT NULL COMMENT '系统菜单',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `client_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '终端code',
+                                  `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父id',
+                                  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单名称',
+                                  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路由名称',
+                                  `perm_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单权限编码',
+                                  `effect` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+                                  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+                                  `hidden` bit(1) NOT NULL COMMENT '是否隐藏',
+                                  `hide_children_in_menu` bit(1) NOT NULL COMMENT '是否隐藏子菜单',
+                                  `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件',
+                                  `component_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件名字',
+                                  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路径',
+                                  `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单跳转地址(重定向)',
+                                  `sort_no` double NOT NULL COMMENT '菜单排序',
+                                  `menu_type` int(5) NOT NULL COMMENT '类型（0：一级菜单；1：子菜单 ；2：按钮权限）',
+                                  `leaf` bit(1) NULL DEFAULT NULL COMMENT '是否叶子节点',
+                                  `keep_alive` bit(1) NULL DEFAULT NULL COMMENT '是否缓存页面',
+                                  `target_outside` bit(1) NULL DEFAULT NULL COMMENT '是否外部打开方式',
+                                  `hidden_header_content` bit(1) NULL DEFAULT NULL COMMENT '隐藏的标题内容',
+                                  `admin` bit(1) NOT NULL COMMENT '系统菜单',
+                                  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                                  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                  `version` int(11) NOT NULL COMMENT '版本',
+                                  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '权限_菜单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -917,22 +917,22 @@ INSERT INTO `iam_perm_menu` VALUES (1786811341285052416, 'dax-pay', 178680818882
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_perm_path`;
 CREATE TABLE `iam_perm_path`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '权限标识',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限名称',
-  `request_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求类型',
-  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求路径',
-  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组名称',
-  `enable` bit(1) NOT NULL COMMENT '启用状态',
-  `generate` bit(1) NOT NULL COMMENT '是否通过系统生成的权限',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `creator` bigint(20) NULL DEFAULT NULL,
-  `create_time` datetime(6) NULL DEFAULT NULL,
-  `last_modifier` bigint(20) NULL DEFAULT NULL,
-  `last_modified_time` datetime(6) NULL DEFAULT NULL,
-  `deleted` bit(1) NOT NULL,
-  `version` int(11) NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '权限标识',
+                                  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限名称',
+                                  `request_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求类型',
+                                  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求路径',
+                                  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组名称',
+                                  `enable` bit(1) NOT NULL COMMENT '启用状态',
+                                  `generate` bit(1) NOT NULL COMMENT '是否通过系统生成的权限',
+                                  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                                  `creator` bigint(20) NULL DEFAULT NULL,
+                                  `create_time` datetime(6) NULL DEFAULT NULL,
+                                  `last_modifier` bigint(20) NULL DEFAULT NULL,
+                                  `last_modified_time` datetime(6) NULL DEFAULT NULL,
+                                  `deleted` bit(1) NOT NULL,
+                                  `version` int(11) NOT NULL,
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '权限_请求' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1393,19 +1393,19 @@ INSERT INTO `iam_perm_path` VALUES (1789978117570945314, 'CashierController#getW
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_role`;
 CREATE TABLE `iam_role`  (
-  `id` bigint(20) NOT NULL COMMENT '角色ID',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编码',
-  `pid` bigint(20) NULL DEFAULT NULL COMMENT '父ID',
-  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
-  `internal` bit(1) NOT NULL COMMENT '是否系统内置',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '说明',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` bigint(20) NOT NULL COMMENT '角色ID',
+                             `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编码',
+                             `pid` bigint(20) NULL DEFAULT NULL COMMENT '父ID',
+                             `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
+                             `internal` bit(1) NOT NULL COMMENT '是否系统内置',
+                             `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '说明',
+                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                             `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                             `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                             `version` int(11) NOT NULL COMMENT '版本',
+                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1419,11 +1419,11 @@ INSERT INTO `iam_role` VALUES (1757298887092326400, 'daxpayDemo', 17572970231184
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_role_menu`;
 CREATE TABLE `iam_role_menu`  (
-  `id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL COMMENT '角色id',
-  `client_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '终端code',
-  `permission_id` bigint(20) NOT NULL COMMENT '菜单权限id',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `role_id` bigint(20) NOT NULL COMMENT '角色id',
+                                  `client_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '终端code',
+                                  `permission_id` bigint(20) NOT NULL COMMENT '菜单权限id',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1527,10 +1527,10 @@ INSERT INTO `iam_role_menu` VALUES (1789979742314291202, 1757298887092326400, 'd
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_role_path`;
 CREATE TABLE `iam_role_path`  (
-  `id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL COMMENT '角色id',
-  `permission_id` bigint(20) NOT NULL COMMENT '请求权限id',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `role_id` bigint(20) NOT NULL COMMENT '角色id',
+                                  `permission_id` bigint(20) NOT NULL COMMENT '请求权限id',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色请求权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1777,10 +1777,10 @@ INSERT INTO `iam_role_path` VALUES (1790355320102621188, 1757298887092326400, 17
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_data_role`;
 CREATE TABLE `iam_user_data_role`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `role_id` bigint(20) NOT NULL COMMENT '数据角色ID',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+                                       `role_id` bigint(20) NOT NULL COMMENT '数据角色ID',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户数据范围关系\r\n' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1792,10 +1792,10 @@ CREATE TABLE `iam_user_data_role`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_dept`;
 CREATE TABLE `iam_user_dept`  (
-  `id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL COMMENT '用户id',
-  `dept_id` bigint(20) NOT NULL COMMENT '部门id',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+                                  `dept_id` bigint(20) NOT NULL COMMENT '部门id',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户部门关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1807,23 +1807,23 @@ CREATE TABLE `iam_user_dept`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_expand_info`;
 CREATE TABLE `iam_user_expand_info`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `sex` int(4) NULL DEFAULT NULL COMMENT '性别',
-  `birthday` date NULL DEFAULT NULL COMMENT '生日',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '头像',
-  `last_login_time` datetime NULL DEFAULT NULL COMMENT '上次登录时间',
-  `current_login_time` datetime NULL DEFAULT NULL COMMENT '本次登录时间',
-  `initial_password` bit(1) NOT NULL COMMENT '是否初始密码',
-  `expire_password` bit(1) NOT NULL COMMENT '密码是否过期',
-  `last_change_password_time` datetime NULL DEFAULT NULL COMMENT '上次修改密码时间',
-  `register_time` datetime NOT NULL COMMENT '注册时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `sex` int(4) NULL DEFAULT NULL COMMENT '性别',
+                                         `birthday` date NULL DEFAULT NULL COMMENT '生日',
+                                         `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '头像',
+                                         `last_login_time` datetime NULL DEFAULT NULL COMMENT '上次登录时间',
+                                         `current_login_time` datetime NULL DEFAULT NULL COMMENT '本次登录时间',
+                                         `initial_password` bit(1) NOT NULL COMMENT '是否初始密码',
+                                         `expire_password` bit(1) NOT NULL COMMENT '密码是否过期',
+                                         `last_change_password_time` datetime NULL DEFAULT NULL COMMENT '上次修改密码时间',
+                                         `register_time` datetime NOT NULL COMMENT '注册时间',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户扩展信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1838,22 +1838,22 @@ INSERT INTO `iam_user_expand_info` VALUES (1757317255899869184, NULL, NULL, NULL
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_info`;
 CREATE TABLE `iam_user_info`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
-  `phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '手机号',
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `client_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '关联终端ds',
-  `administrator` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否超级管理员',
-  `status` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号状态',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+                                  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
+                                  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
+                                  `phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '手机号',
+                                  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱',
+                                  `client_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '关联终端ds',
+                                  `administrator` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否超级管理员',
+                                  `status` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号状态',
+                                  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                  `version` int(11) NOT NULL COMMENT '版本',
+                                  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1868,10 +1868,10 @@ INSERT INTO `iam_user_info` VALUES (1757317255899869184, 'DaxPay管理员', 'dax
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_role`;
 CREATE TABLE `iam_user_role`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL COMMENT '主键',
+                                  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+                                  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户角色关系\r\n' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1885,23 +1885,23 @@ INSERT INTO `iam_user_role` VALUES (1757317495407210496, 1757317255899869184, 17
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_third`;
 CREATE TABLE `iam_user_third`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
-  `we_chat_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信openId',
-  `we_chat_open_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信开放平台id',
-  `qq_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'qqId',
-  `weibo_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微博Id',
-  `gitee_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '码云唯一标识',
-  `ding_talk_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉唯一标识',
-  `we_com_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '企业微信唯一标识',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `pk_user_index`(`user_id`) USING BTREE COMMENT '用户id索引'
+                                   `id` bigint(20) NOT NULL COMMENT '主键',
+                                   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
+                                   `we_chat_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信openId',
+                                   `we_chat_open_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信开放平台id',
+                                   `qq_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'qqId',
+                                   `weibo_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微博Id',
+                                   `gitee_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '码云唯一标识',
+                                   `ding_talk_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉唯一标识',
+                                   `we_com_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '企业微信唯一标识',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                   `version` int(11) NOT NULL COMMENT '版本',
+                                   `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                   PRIMARY KEY (`id`) USING BTREE,
+                                   INDEX `pk_user_index`(`user_id`) USING BTREE COMMENT '用户id索引'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户三方登录绑定' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1913,20 +1913,20 @@ CREATE TABLE `iam_user_third`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_third_info`;
 CREATE TABLE `iam_user_third_info`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NOT NULL COMMENT '用户id',
-  `client_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '第三方终端类型',
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
-  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户昵称',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户头像',
-  `third_user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '关联第三方平台的用户id',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `pk_user_client`(`user_id`, `client_code`) USING BTREE COMMENT '用户id和终端code'
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `user_id` bigint(20) NOT NULL COMMENT '用户id',
+                                        `client_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '第三方终端类型',
+                                        `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
+                                        `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户昵称',
+                                        `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户头像',
+                                        `third_user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '关联第三方平台的用户id',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '版本',
+                                        PRIMARY KEY (`id`) USING BTREE,
+                                        INDEX `pk_user_client`(`user_id`, `client_code`) USING BTREE COMMENT '用户id和终端code'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户三方登录绑定详情' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1938,24 +1938,24 @@ CREATE TABLE `iam_user_third_info`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_mail_config`;
 CREATE TABLE `notice_mail_config`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编号',
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
-  `host` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器host',
-  `port` int(5) NOT NULL COMMENT '邮箱服务器 port',
-  `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器 username',
-  `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器 password',
-  `sender` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱服务器 sender',
-  `from_` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱服务器 from',
-  `activity` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
-  `security_type` int(2) NULL DEFAULT NULL COMMENT '安全传输方式 1:plain 2:tls 3:ssl',
-  `creator` bigint(18) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(18) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NULL DEFAULT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL,
+                                       `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编号',
+                                       `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
+                                       `host` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器host',
+                                       `port` int(5) NOT NULL COMMENT '邮箱服务器 port',
+                                       `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器 username',
+                                       `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器 password',
+                                       `sender` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱服务器 sender',
+                                       `from_` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱服务器 from',
+                                       `activity` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
+                                       `security_type` int(2) NULL DEFAULT NULL COMMENT '安全传输方式 1:plain 2:tls 3:ssl',
+                                       `creator` bigint(18) NULL DEFAULT NULL COMMENT '创建人',
+                                       `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                       `last_modifier` bigint(18) NULL DEFAULT NULL COMMENT '最后修改人',
+                                       `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                       `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                       `version` int(8) NULL DEFAULT NULL COMMENT '版本',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '邮件配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1967,19 +1967,19 @@ CREATE TABLE `notice_mail_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_message_template`;
 CREATE TABLE `notice_message_template`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '模板数据',
-  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板类型',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                            `id` bigint(20) NOT NULL,
+                                            `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
+                                            `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                            `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '模板数据',
+                                            `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板类型',
+                                            `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                            `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                            `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                            `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                            `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                            `version` int(11) NOT NULL COMMENT '版本',
+                                            `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息模板' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1992,23 +1992,23 @@ INSERT INTO `notice_message_template` VALUES (1424936204932169730, 'cs', '测试
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_site_message`;
 CREATE TABLE `notice_site_message`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息标题',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
-  `sender_id` bigint(20) NULL DEFAULT NULL COMMENT '发送者id',
-  `sender_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送者姓名',
-  `sender_time` datetime NULL DEFAULT NULL COMMENT '发送时间',
-  `receive_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息类型',
-  `send_state` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发布状态',
-  `efficient_time` datetime NULL DEFAULT NULL COMMENT '截至有效期',
-  `cancel_time` datetime NULL DEFAULT NULL COMMENT '撤回时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息标题',
+                                        `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
+                                        `sender_id` bigint(20) NULL DEFAULT NULL COMMENT '发送者id',
+                                        `sender_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送者姓名',
+                                        `sender_time` datetime NULL DEFAULT NULL COMMENT '发送时间',
+                                        `receive_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息类型',
+                                        `send_state` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发布状态',
+                                        `efficient_time` datetime NULL DEFAULT NULL COMMENT '截至有效期',
+                                        `cancel_time` datetime NULL DEFAULT NULL COMMENT '撤回时间',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '版本',
+                                        `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '站内信' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2020,17 +2020,17 @@ CREATE TABLE `notice_site_message`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_site_message_user`;
 CREATE TABLE `notice_site_message_user`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `message_id` bigint(20) NOT NULL COMMENT '消息id',
-  `receive_id` bigint(20) NOT NULL COMMENT '接收者id',
-  `have_read` bit(1) NOT NULL COMMENT '已读/未读',
-  `read_time` datetime NULL DEFAULT NULL COMMENT '已读时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uni_receive_message`(`receive_id`, `message_id`) USING BTREE COMMENT '接收人和消息联合索引',
-  INDEX `inx_message`(`message_id`) USING BTREE COMMENT '消息索引'
+                                             `id` bigint(20) NOT NULL COMMENT '主键',
+                                             `message_id` bigint(20) NOT NULL COMMENT '消息id',
+                                             `receive_id` bigint(20) NOT NULL COMMENT '接收者id',
+                                             `have_read` bit(1) NOT NULL COMMENT '已读/未读',
+                                             `read_time` datetime NULL DEFAULT NULL COMMENT '已读时间',
+                                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                             PRIMARY KEY (`id`) USING BTREE,
+                                             UNIQUE INDEX `uni_receive_message`(`receive_id`, `message_id`) USING BTREE COMMENT '接收人和消息联合索引',
+                                             INDEX `inx_message`(`message_id`) USING BTREE COMMENT '消息索引'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '消息用户关联' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2042,23 +2042,23 @@ CREATE TABLE `notice_site_message_user`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_sms_channel_config`;
 CREATE TABLE `notice_sms_channel_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '渠道类型编码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '渠道类型名称',
-  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
-  `access_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessKey',
-  `config` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '配置字符串',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `access_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessSecret',
-  `image` bigint(20) NULL DEFAULT NULL COMMENT '图片',
-  `sort_no` double(10, 0) NULL DEFAULT NULL COMMENT '排序',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL COMMENT '主键',
+                                              `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '渠道类型编码',
+                                              `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '渠道类型名称',
+                                              `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
+                                              `access_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessKey',
+                                              `config` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '配置字符串',
+                                              `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                              `access_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessSecret',
+                                              `image` bigint(20) NULL DEFAULT NULL COMMENT '图片',
+                                              `sort_no` double(10, 0) NULL DEFAULT NULL COMMENT '排序',
+                                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                              `version` int(11) NOT NULL COMMENT '乐观锁',
+                                              `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '短信渠道配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2080,25 +2080,25 @@ INSERT INTO `notice_sms_channel_config` VALUES (1688788904481603584, 'jd_cloud',
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_sms_config`;
 CREATE TABLE `notice_sms_config`  (
-  `id` bigint(18) NOT NULL,
-  `tid` bigint(18) NOT NULL COMMENT '租户id',
-  `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `account_sid` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `path_sid` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发送号码的唯一标识(基于twillio的命名风格)',
-  `auth_token` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `from_num` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_default` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
-  `creator` bigint(18) NULL DEFAULT NULL,
-  `create_time` datetime NULL DEFAULT NULL,
-  `last_modifier` bigint(18) NULL DEFAULT NULL,
-  `last_modified_time` datetime NULL DEFAULT NULL,
-  `version` int(10) NULL DEFAULT NULL,
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `secret` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `isp` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `reply_msg` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(18) NOT NULL,
+                                      `tid` bigint(18) NOT NULL COMMENT '租户id',
+                                      `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                      `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                      `account_sid` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                      `path_sid` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发送号码的唯一标识(基于twillio的命名风格)',
+                                      `auth_token` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                      `from_num` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                      `is_default` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
+                                      `creator` bigint(18) NULL DEFAULT NULL,
+                                      `create_time` datetime NULL DEFAULT NULL,
+                                      `last_modifier` bigint(18) NULL DEFAULT NULL,
+                                      `last_modified_time` datetime NULL DEFAULT NULL,
+                                      `version` int(10) NULL DEFAULT NULL,
+                                      `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                      `secret` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                      `isp` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                      `reply_msg` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '短信配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2110,18 +2110,18 @@ CREATE TABLE `notice_sms_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_sms_template`;
 CREATE TABLE `notice_sms_template`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `supplier_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信渠道商类型',
-  `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信渠道商类型',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信模板名称',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信模板内容',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `supplier_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信渠道商类型',
+                                        `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信渠道商类型',
+                                        `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信模板名称',
+                                        `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信模板内容',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '乐观锁',
+                                        `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '短信模板配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2133,20 +2133,20 @@ CREATE TABLE `notice_sms_template`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_wechat_config`;
 CREATE TABLE `notice_wechat_config`  (
-  `id` bigint(18) NOT NULL,
-  `tid` bigint(18) NOT NULL COMMENT '租户id',
-  `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `corp_id` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `corp_secret` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_default` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
-  `creator` bigint(18) NULL DEFAULT NULL,
-  `create_time` datetime NULL DEFAULT NULL,
-  `last_modifier` bigint(18) NULL DEFAULT NULL,
-  `last_modified_time` datetime NULL DEFAULT NULL,
-  `version` int(10) NULL DEFAULT NULL,
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(18) NOT NULL,
+                                         `tid` bigint(18) NOT NULL COMMENT '租户id',
+                                         `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                         `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                         `corp_id` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                         `corp_secret` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                         `is_default` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
+                                         `creator` bigint(18) NULL DEFAULT NULL,
+                                         `create_time` datetime NULL DEFAULT NULL,
+                                         `last_modifier` bigint(18) NULL DEFAULT NULL,
+                                         `last_modified_time` datetime NULL DEFAULT NULL,
+                                         `version` int(10) NULL DEFAULT NULL,
+                                         `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '微信消息配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2158,32 +2158,32 @@ CREATE TABLE `notice_wechat_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_alipay_config`;
 CREATE TABLE `pay_alipay_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝商户appId',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知页面路径',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知页面路径',
-  `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关地址',
-  `auth_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '认证类型',
-  `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型 RSA2',
-  `alipay_public_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝公钥',
-  `private_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '私钥',
-  `app_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '应用公钥证书',
-  `alipay_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝公钥证书',
-  `alipay_root_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝CA根证书',
-  `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
-  `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否支付分账',
-  `alipay_user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '合作者身份ID',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝商户appId',
+                                      `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                      `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知页面路径',
+                                      `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知页面路径',
+                                      `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关地址',
+                                      `auth_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '认证类型',
+                                      `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型 RSA2',
+                                      `alipay_public_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝公钥',
+                                      `private_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '私钥',
+                                      `app_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '应用公钥证书',
+                                      `alipay_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝公钥证书',
+                                      `alipay_root_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝CA根证书',
+                                      `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
+                                      `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
+                                      `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
+                                      `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否支付分账',
+                                      `alipay_user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '合作者身份ID',
+                                      `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                      `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                      `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                      `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                      `version` int(11) NOT NULL COMMENT '乐观锁',
+                                      `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付宝支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2196,34 +2196,34 @@ INSERT INTO `pay_alipay_config` VALUES (0, NULL, NULL, NULL, NULL, NULL, NULL, N
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_alipay_reconcile_bill_detail`;
 CREATE TABLE `pay_alipay_reconcile_bill_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝交易号',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
-  `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `create_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间',
-  `end_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '完成时间',
-  `store_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店编号',
-  `store_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店名称',
-  `operator` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作员',
-  `terminal_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端号',
-  `other_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对方账户',
-  `order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额（元）',
-  `real_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家实收（元）',
-  `alipay_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝红包（元）',
-  `jfb_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '集分宝（元）',
-  `alipay_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝优惠（元）',
-  `discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家优惠（元）',
-  `coupon_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '券核销金额（元）',
-  `coupon_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '券名称',
-  `coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家红包消费金额（元）',
-  `card_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡消费金额（元）',
-  `batch_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款批次号/请求号',
-  `service_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务费（元）',
-  `split_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分润（元）',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  PRIMARY KEY (`id`) USING BTREE
+                                                     `id` bigint(20) NOT NULL COMMENT '主键',
+                                                     `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝交易号',
+                                                     `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                                                     `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                                     `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                                     `create_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+                                                     `end_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '完成时间',
+                                                     `store_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店编号',
+                                                     `store_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店名称',
+                                                     `operator` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作员',
+                                                     `terminal_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端号',
+                                                     `other_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对方账户',
+                                                     `order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额（元）',
+                                                     `real_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家实收（元）',
+                                                     `alipay_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝红包（元）',
+                                                     `jfb_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '集分宝（元）',
+                                                     `alipay_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝优惠（元）',
+                                                     `discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家优惠（元）',
+                                                     `coupon_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '券核销金额（元）',
+                                                     `coupon_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '券名称',
+                                                     `coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家红包消费金额（元）',
+                                                     `card_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡消费金额（元）',
+                                                     `batch_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款批次号/请求号',
+                                                     `service_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务费（元）',
+                                                     `split_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分润（元）',
+                                                     `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                                     `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付宝业务明细对账单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2235,21 +2235,21 @@ CREATE TABLE `pay_alipay_reconcile_bill_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_alipay_reconcile_bill_total`;
 CREATE TABLE `pay_alipay_reconcile_bill_total`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `store_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店编号',
-  `store_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店名称',
-  `total_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单总笔数',
-  `total_refund_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款订单总笔数',
-  `total_order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额（元）',
-  `total_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家实收（元）',
-  `total_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝优惠（元）',
-  `total_coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家优惠（元）',
-  `total_consume_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡消费金额（元）',
-  `total_service_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务费（元）',
-  `total_share_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分润（元）',
-  `total_net_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '实收净额（元）',
-  PRIMARY KEY (`id`) USING BTREE
+                                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                                    `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                                    `store_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店编号',
+                                                    `store_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店名称',
+                                                    `total_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单总笔数',
+                                                    `total_refund_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款订单总笔数',
+                                                    `total_order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额（元）',
+                                                    `total_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家实收（元）',
+                                                    `total_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝优惠（元）',
+                                                    `total_coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家优惠（元）',
+                                                    `total_consume_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡消费金额（元）',
+                                                    `total_service_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务费（元）',
+                                                    `total_share_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分润（元）',
+                                                    `total_net_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '实收净额（元）',
+                                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付宝业务汇总对账单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2261,19 +2261,19 @@ CREATE TABLE `pay_alipay_reconcile_bill_total`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_group`;
 CREATE TABLE `pay_allocation_group`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
-  `total_rate` int(11) NULL DEFAULT NULL COMMENT '总分账比例(万分之多少)',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `default_group` bit(1) NULL DEFAULT NULL COMMENT '默认分账组',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                         `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
+                                         `total_rate` int(11) NULL DEFAULT NULL COMMENT '总分账比例(万分之多少)',
+                                         `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         `default_group` bit(1) NULL DEFAULT NULL COMMENT '默认分账组',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账组' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2285,13 +2285,13 @@ CREATE TABLE `pay_allocation_group`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_group_receiver`;
 CREATE TABLE `pay_allocation_group_receiver`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `group_id` bigint(20) NULL DEFAULT NULL COMMENT '分账组ID',
-  `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者ID',
-  `rate` int(11) NULL DEFAULT NULL COMMENT '分账比例(万分之多少)',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                                  `id` bigint(20) NOT NULL COMMENT '主键',
+                                                  `group_id` bigint(20) NULL DEFAULT NULL COMMENT '分账组ID',
+                                                  `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者ID',
+                                                  `rate` int(11) NULL DEFAULT NULL COMMENT '分账比例(万分之多少)',
+                                                  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账接收组关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2303,30 +2303,30 @@ CREATE TABLE `pay_allocation_group_receiver`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_order`;
 CREATE TABLE `pay_allocation_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账单号',
-  `biz_allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户分账单号',
-  `out_allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道分账号',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '支付订单ID',
-  `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
-  `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
-  `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道支付订单号',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属通道',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '总分账金额',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账描述',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
-  `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账处理结果',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误原因',
-  `finish_time` datetime NULL DEFAULT NULL COMMENT '分账完成时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账单号',
+                                         `biz_allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户分账单号',
+                                         `out_allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道分账号',
+                                         `order_id` bigint(20) NULL DEFAULT NULL COMMENT '支付订单ID',
+                                         `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
+                                         `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
+                                         `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道支付订单号',
+                                         `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                         `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属通道',
+                                         `amount` int(11) NULL DEFAULT NULL COMMENT '总分账金额',
+                                         `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账描述',
+                                         `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
+                                         `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账处理结果',
+                                         `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                         `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误原因',
+                                         `finish_time` datetime NULL DEFAULT NULL COMMENT '分账完成时间',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2338,25 +2338,25 @@ CREATE TABLE `pay_allocation_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_order_detail`;
 CREATE TABLE `pay_allocation_order_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `allocation_id` bigint(20) NULL DEFAULT NULL COMMENT '分账订单ID',
-  `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者ID',
-  `rate` int(11) NULL DEFAULT NULL COMMENT '分账比例(万分之多少)',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '分账金额',
-  `receiver_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账接收方类型',
-  `receiver_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方账号',
-  `receiver_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方姓名',
-  `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账结果',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误代码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误原因',
-  `finish_time` datetime NULL DEFAULT NULL COMMENT '分账完成时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                                `id` bigint(20) NOT NULL COMMENT '主键',
+                                                `allocation_id` bigint(20) NULL DEFAULT NULL COMMENT '分账订单ID',
+                                                `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者ID',
+                                                `rate` int(11) NULL DEFAULT NULL COMMENT '分账比例(万分之多少)',
+                                                `amount` int(11) NULL DEFAULT NULL COMMENT '分账金额',
+                                                `receiver_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账接收方类型',
+                                                `receiver_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方账号',
+                                                `receiver_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方姓名',
+                                                `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账结果',
+                                                `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误代码',
+                                                `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误原因',
+                                                `finish_time` datetime NULL DEFAULT NULL COMMENT '分账完成时间',
+                                                `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                                `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                                `version` int(11) NOT NULL COMMENT '乐观锁',
+                                                `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                                PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账订单明细' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2368,23 +2368,23 @@ CREATE TABLE `pay_allocation_order_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_receiver`;
 CREATE TABLE `pay_allocation_receiver`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '账号别名',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属通道',
-  `receiver_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账接收方类型',
-  `receiver_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方账号',
-  `receiver_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方姓名',
-  `relation_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账关系类型',
-  `relation_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关系名称',
-  `sync` bit(1) NULL DEFAULT NULL COMMENT '是否已经同步到网关',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                            `id` bigint(20) NOT NULL COMMENT '主键',
+                                            `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '账号别名',
+                                            `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属通道',
+                                            `receiver_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账接收方类型',
+                                            `receiver_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方账号',
+                                            `receiver_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方姓名',
+                                            `relation_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账关系类型',
+                                            `relation_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关系名称',
+                                            `sync` bit(1) NULL DEFAULT NULL COMMENT '是否已经同步到网关',
+                                            `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                            `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                            `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                            `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                            `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                            `version` int(11) NOT NULL COMMENT '乐观锁',
+                                            `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账接收方' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2396,26 +2396,26 @@ CREATE TABLE `pay_allocation_receiver`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_api_config`;
 CREATE TABLE `pay_api_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
-  `api` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口地址',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `notice_support` bit(1) NULL DEFAULT NULL COMMENT '支持回调通知',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `notice` bit(1) NULL DEFAULT NULL COMMENT '是否开启回调通知',
-  `notice_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认通知地址',
-  `req_sign` bit(1) NULL DEFAULT NULL COMMENT '请求参数是否签名',
-  `res_sign` bit(1) NULL DEFAULT NULL COMMENT '响应参数是否签名',
-  `notice_sign` bit(1) NULL DEFAULT NULL COMMENT '回调信息是否签名',
-  `record` bit(1) NULL DEFAULT NULL COMMENT '是否记录请求的信息',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` bigint(20) NOT NULL COMMENT '主键',
+                                   `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
+                                   `api` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口地址',
+                                   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                   `notice_support` bit(1) NULL DEFAULT NULL COMMENT '支持回调通知',
+                                   `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                   `notice` bit(1) NULL DEFAULT NULL COMMENT '是否开启回调通知',
+                                   `notice_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认通知地址',
+                                   `req_sign` bit(1) NULL DEFAULT NULL COMMENT '请求参数是否签名',
+                                   `res_sign` bit(1) NULL DEFAULT NULL COMMENT '响应参数是否签名',
+                                   `notice_sign` bit(1) NULL DEFAULT NULL COMMENT '回调信息是否签名',
+                                   `record` bit(1) NULL DEFAULT NULL COMMENT '是否记录请求的信息',
+                                   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                   `version` int(11) NOT NULL COMMENT '乐观锁',
+                                   `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付接口配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2438,19 +2438,19 @@ INSERT INTO `pay_api_config` VALUES (13, 'getWxAccessToken', '/unipay/assist/get
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_callback_record`;
 CREATE TABLE `pay_callback_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通道',
-  `callback_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '回调类型',
-  `notify_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '通知消息',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '回调处理状态',
-  `repair_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示信息',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                        `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+                                        `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通道',
+                                        `callback_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '回调类型',
+                                        `notify_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '通知消息',
+                                        `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '回调处理状态',
+                                        `repair_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示信息',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '网关回调通知' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2462,20 +2462,20 @@ CREATE TABLE `pay_callback_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_channel_config`;
 CREATE TABLE `pay_channel_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `icon_id` bigint(20) NULL DEFAULT NULL COMMENT 'ICON图片',
-  `bg_color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡牌背景色',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码',
+                                       `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                       `icon_id` bigint(20) NULL DEFAULT NULL COMMENT 'ICON图片',
+                                       `bg_color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡牌背景色',
+                                       `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                       `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                       `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                       `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                       `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                       `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                       `version` int(11) NOT NULL COMMENT '乐观锁',
+                                       `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付通道配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2491,16 +2491,16 @@ INSERT INTO `pay_channel_config` VALUES (5, 'wallet_pay', '钱包支付', NULL, 
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_client_notice_record`;
 CREATE TABLE `pay_client_notice_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `task_id` bigint(20) NULL DEFAULT NULL COMMENT '任务ID',
-  `req_count` int(11) NULL DEFAULT NULL COMMENT '请求次数',
-  `success` bit(1) NULL DEFAULT NULL COMMENT '发送是否成功',
-  `send_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送类型',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误编码',
-  PRIMARY KEY (`id`) USING BTREE
+                                             `id` bigint(20) NOT NULL COMMENT '主键',
+                                             `task_id` bigint(20) NULL DEFAULT NULL COMMENT '任务ID',
+                                             `req_count` int(11) NULL DEFAULT NULL COMMENT '请求次数',
+                                             `success` bit(1) NULL DEFAULT NULL COMMENT '发送是否成功',
+                                             `send_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送类型',
+                                             `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误编码',
+                                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息通知任务记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2512,23 +2512,23 @@ CREATE TABLE `pay_client_notice_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_client_notice_task`;
 CREATE TABLE `pay_client_notice_task`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
-  `success` bit(1) NULL DEFAULT NULL COMMENT '是否发送成功',
-  `send_count` int(11) NULL DEFAULT NULL COMMENT '发送次数',
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送地址',
-  `latest_time` datetime NULL DEFAULT NULL COMMENT '最后发送时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `notice_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息类型',
-  `trade_id` bigint(20) NULL DEFAULT NULL COMMENT '本地交易ID',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
-  `trade_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易状态',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` bigint(20) NOT NULL COMMENT '主键',
+                                           `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
+                                           `success` bit(1) NULL DEFAULT NULL COMMENT '是否发送成功',
+                                           `send_count` int(11) NULL DEFAULT NULL COMMENT '发送次数',
+                                           `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送地址',
+                                           `latest_time` datetime NULL DEFAULT NULL COMMENT '最后发送时间',
+                                           `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                           `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                           `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                           `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                           `version` int(11) NOT NULL COMMENT '乐观锁',
+                                           `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                           `notice_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息类型',
+                                           `trade_id` bigint(20) NULL DEFAULT NULL COMMENT '本地交易ID',
+                                           `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                           `trade_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易状态',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息通知任务' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2540,17 +2540,17 @@ CREATE TABLE `pay_client_notice_task`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_close_record`;
 CREATE TABLE `pay_close_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单号',
-  `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关闭的支付通道',
-  `closed` bit(1) NULL DEFAULT NULL COMMENT '是否关闭成功',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误消息',
-  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                     `id` bigint(20) NOT NULL COMMENT '主键',
+                                     `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单号',
+                                     `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                                     `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关闭的支付通道',
+                                     `closed` bit(1) NULL DEFAULT NULL COMMENT '是否关闭成功',
+                                     `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                     `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误消息',
+                                     `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
+                                     `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                     `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付关闭记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2562,17 +2562,17 @@ CREATE TABLE `pay_close_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_method_info`;
 CREATE TABLE `pay_method_info`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码',
+                                    `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                    `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                    `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                    `version` int(11) NOT NULL COMMENT '乐观锁',
+                                    `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付方式' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2590,33 +2590,33 @@ INSERT INTO `pay_method_info` VALUES (7, 'jsapi', '公众号/小程序支付', '
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_order`;
 CREATE TABLE `pay_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
-  `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
-  `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道支付订单号',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否需要分账',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步支付通道',
-  `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付方式',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `refundable_balance` int(11) NULL DEFAULT NULL COMMENT '可退款余额',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付状态',
-  `allocation_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账状态',
-  `pay_time` datetime NULL DEFAULT NULL COMMENT '支付时间',
-  `close_time` datetime NULL DEFAULT NULL COMMENT '关闭时间',
-  `expired_time` datetime NULL DEFAULT NULL COMMENT '过期时间',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `auto_allocation` bit(1) NULL DEFAULT NULL COMMENT '自动分账',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `biz_order_no`(`biz_order_no`) USING BTREE COMMENT '商户订单号索引'
+                              `id` bigint(20) NOT NULL COMMENT '主键',
+                              `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                              `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
+                              `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道支付订单号',
+                              `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
+                              `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                              `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否需要分账',
+                              `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步支付通道',
+                              `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付方式',
+                              `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
+                              `refundable_balance` int(11) NULL DEFAULT NULL COMMENT '可退款余额',
+                              `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付状态',
+                              `allocation_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账状态',
+                              `pay_time` datetime NULL DEFAULT NULL COMMENT '支付时间',
+                              `close_time` datetime NULL DEFAULT NULL COMMENT '关闭时间',
+                              `expired_time` datetime NULL DEFAULT NULL COMMENT '过期时间',
+                              `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                              `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                              `version` int(11) NOT NULL COMMENT '乐观锁',
+                              `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                              `auto_allocation` bit(1) NULL DEFAULT NULL COMMENT '自动分账',
+                              PRIMARY KEY (`id`) USING BTREE,
+                              UNIQUE INDEX `biz_order_no`(`biz_order_no`) USING BTREE COMMENT '商户订单号索引'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2628,20 +2628,20 @@ CREATE TABLE `pay_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_order_extra`;
 CREATE TABLE `pay_order_extra`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步跳转地址',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知地址',
-  `extra_param` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '附加参数',
-  `attach` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户扩展参数',
-  `req_time` datetime NULL DEFAULT NULL COMMENT '请求时间，传输时间戳，以最后一次为准',
-  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步跳转地址',
+                                    `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知地址',
+                                    `extra_param` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '附加参数',
+                                    `attach` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户扩展参数',
+                                    `req_time` datetime NULL DEFAULT NULL COMMENT '请求时间，传输时间戳，以最后一次为准',
+                                    `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                    `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                    `version` int(11) NOT NULL COMMENT '乐观锁',
+                                    `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付订单扩展信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2653,21 +2653,21 @@ CREATE TABLE `pay_order_extra`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_platform_config`;
 CREATE TABLE `pay_platform_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `website_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网站地址',
-  `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名方式',
-  `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名秘钥',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通知地址',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步支付跳转地址',
-  `order_timeout` int(11) NULL DEFAULT NULL COMMENT '订单默认超时时间(分钟)',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `limit_amount` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `website_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网站地址',
+                                        `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名方式',
+                                        `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名秘钥',
+                                        `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通知地址',
+                                        `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步支付跳转地址',
+                                        `order_timeout` int(11) NULL DEFAULT NULL COMMENT '订单默认超时时间(分钟)',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '乐观锁',
+                                        `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                        `limit_amount` int(11) NULL DEFAULT NULL COMMENT '支付限额',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付平台配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2680,17 +2680,17 @@ INSERT INTO `pay_platform_config` VALUES (0, 'http://localhost/', 'HMAC_SHA256',
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_reconcile_detail`;
 CREATE TABLE `pay_reconcile_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '交易金额',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '外部交易号',
-  `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                         `amount` int(11) NULL DEFAULT NULL COMMENT '交易金额',
+                                         `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                         `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                         `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '外部交易号',
+                                         `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付对账记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2702,28 +2702,28 @@ CREATE TABLE `pay_reconcile_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_reconcile_diff_record`;
 CREATE TABLE `pay_reconcile_diff_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `detail_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单明细ID',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单标题',
-  `diff_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '差异类型',
-  `diffs` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '差异内容',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '本地交易金额',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单ID',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
-  `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
-  `out_amount` int(11) NULL DEFAULT NULL COMMENT '通道交易金额',
-  `reconcile_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账号',
-  `reconcile_date` date NULL DEFAULT NULL COMMENT '对账日期',
-  `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL COMMENT '主键',
+                                              `detail_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单明细ID',
+                                              `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单标题',
+                                              `diff_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '差异类型',
+                                              `diffs` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '差异内容',
+                                              `amount` int(11) NULL DEFAULT NULL COMMENT '本地交易金额',
+                                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                              `version` int(11) NOT NULL COMMENT '乐观锁',
+                                              `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                              `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单ID',
+                                              `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                              `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
+                                              `out_amount` int(11) NULL DEFAULT NULL COMMENT '通道交易金额',
+                                              `reconcile_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账号',
+                                              `reconcile_date` date NULL DEFAULT NULL COMMENT '对账日期',
+                                              `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
+                                              `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
+                                              `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '对账差异单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2735,11 +2735,11 @@ CREATE TABLE `pay_reconcile_diff_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_reconcile_file`;
 CREATE TABLE `pay_reconcile_file`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单ID',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `file_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单文件',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单ID',
+                                       `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
+                                       `file_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单文件',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '原始对账单文件,' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2751,18 +2751,18 @@ CREATE TABLE `pay_reconcile_file`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_reconcile_order`;
 CREATE TABLE `pay_reconcile_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `date` date NULL DEFAULT NULL COMMENT '日期',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
-  `compare` bit(1) NULL DEFAULT NULL COMMENT '明细对账单比对',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `reconcile_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账号',
-  `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账结果',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `down_or_upload` bit(1) NULL DEFAULT NULL COMMENT '明细对账单下载',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `date` date NULL DEFAULT NULL COMMENT '日期',
+                                        `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
+                                        `compare` bit(1) NULL DEFAULT NULL COMMENT '明细对账单比对',
+                                        `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `reconcile_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账号',
+                                        `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账结果',
+                                        `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                        `down_or_upload` bit(1) NULL DEFAULT NULL COMMENT '明细对账单下载',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付对账单订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2774,17 +2774,17 @@ CREATE TABLE `pay_reconcile_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_reconcile_trade_detail`;
 CREATE TABLE `pay_reconcile_trade_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '交易金额',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
-  `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                               `id` bigint(20) NOT NULL COMMENT '主键',
+                                               `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                               `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                               `amount` int(11) NULL DEFAULT NULL COMMENT '交易金额',
+                                               `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
+                                               `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                               `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+                                               `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
+                                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '对账-第三方交易明细' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2796,30 +2796,30 @@ CREATE TABLE `pay_reconcile_trade_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_refund_order`;
 CREATE TABLE `pay_refund_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '支付订单ID',
-  `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
-  `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付标题',
-  `refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款号',
-  `biz_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户退款号',
-  `out_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '三方支付系统退款交易号',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通道',
-  `order_amount` int(11) NULL DEFAULT NULL COMMENT '订单金额',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '退款金额',
-  `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款原因',
-  `finish_time` datetime NULL DEFAULT NULL COMMENT '退款完成时间',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
-  PRIMARY KEY (`id`) USING BTREE
+                                     `id` bigint(20) NOT NULL COMMENT '主键',
+                                     `order_id` bigint(20) NULL DEFAULT NULL COMMENT '支付订单ID',
+                                     `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
+                                     `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
+                                     `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付标题',
+                                     `refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款号',
+                                     `biz_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户退款号',
+                                     `out_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '三方支付系统退款交易号',
+                                     `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通道',
+                                     `order_amount` int(11) NULL DEFAULT NULL COMMENT '订单金额',
+                                     `amount` int(11) NULL DEFAULT NULL COMMENT '退款金额',
+                                     `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款原因',
+                                     `finish_time` datetime NULL DEFAULT NULL COMMENT '退款完成时间',
+                                     `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
+                                     `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                     `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                                     `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                     `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                     `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                     `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                     `version` int(11) NOT NULL COMMENT '乐观锁',
+                                     `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                     `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
+                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '退款订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2831,19 +2831,19 @@ CREATE TABLE `pay_refund_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_refund_order_extra`;
 CREATE TABLE `pay_refund_order_extra`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知地址',
-  `attach` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户扩展参数',
-  `extra_param` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '附加参数',
-  `req_time` datetime NULL DEFAULT NULL COMMENT '请求时间，传输时间戳',
-  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` bigint(20) NOT NULL COMMENT '主键',
+                                           `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知地址',
+                                           `attach` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户扩展参数',
+                                           `extra_param` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '附加参数',
+                                           `req_time` datetime NULL DEFAULT NULL COMMENT '请求时间，传输时间戳',
+                                           `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
+                                           `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                           `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                           `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                           `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                           `version` int(11) NOT NULL COMMENT '乐观锁',
+                                           `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '退款订单扩展信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2855,19 +2855,19 @@ CREATE TABLE `pay_refund_order_extra`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_repair_record`;
 CREATE TABLE `pay_repair_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `repair_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复号',
-  `trade_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单ID',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地业务号',
-  `repair_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复类型',
-  `repair_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复来源',
-  `repair_way` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复方式',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复的通道',
-  `before_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复前状态',
-  `after_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复后状态',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `repair_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复号',
+                                      `trade_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单ID',
+                                      `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地业务号',
+                                      `repair_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复类型',
+                                      `repair_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复来源',
+                                      `repair_way` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复方式',
+                                      `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复的通道',
+                                      `before_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复前状态',
+                                      `after_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复后状态',
+                                      `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付修复记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2879,22 +2879,22 @@ CREATE TABLE `pay_repair_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_sync_record`;
 CREATE TABLE `pay_sync_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
-  `biz_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户交易号',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
-  `out_trade_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关返回状态',
-  `sync_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步类型',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步的异步通道',
-  `sync_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '同步消息',
-  `repair` bit(1) NULL DEFAULT NULL COMMENT '是否进行修复',
-  `repair_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复单号',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误消息',
-  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                    `biz_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户交易号',
+                                    `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+                                    `out_trade_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关返回状态',
+                                    `sync_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步类型',
+                                    `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步的异步通道',
+                                    `sync_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '同步消息',
+                                    `repair` bit(1) NULL DEFAULT NULL COMMENT '是否进行修复',
+                                    `repair_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复单号',
+                                    `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                    `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误消息',
+                                    `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付同步订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2906,21 +2906,21 @@ CREATE TABLE `pay_sync_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_transfer_order`;
 CREATE TABLE `pay_transfer_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `amount` int(11) NULL DEFAULT NULL,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `payer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `payee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `success_time` datetime NULL DEFAULT NULL,
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `amount` int(11) NULL DEFAULT NULL,
+                                       `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `payer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `payee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `success_time` datetime NULL DEFAULT NULL,
+                                       `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                       `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                       `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                       `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                       `version` int(11) NOT NULL COMMENT '乐观锁',
+                                       `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '转账订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2932,30 +2932,30 @@ CREATE TABLE `pay_transfer_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_union_pay_config`;
 CREATE TABLE `pay_union_pay_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `mach_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户号',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关地址',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知路径',
-  `pay_ways` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '可用支付方式',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `seller` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户收款账号',
-  `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型',
-  `cert_sign` bit(1) NULL DEFAULT NULL COMMENT '是否为证书签名',
-  `key_private_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '应用私钥证书',
-  `key_private_cert_pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '私钥证书对应的密码',
-  `acp_middle_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '中级证书',
-  `acp_root_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '根证书',
-  `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知页面路径',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `mach_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户号',
+                                         `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                         `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关地址',
+                                         `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知路径',
+                                         `pay_ways` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '可用支付方式',
+                                         `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
+                                         `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                         `seller` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户收款账号',
+                                         `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型',
+                                         `cert_sign` bit(1) NULL DEFAULT NULL COMMENT '是否为证书签名',
+                                         `key_private_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '应用私钥证书',
+                                         `key_private_cert_pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '私钥证书对应的密码',
+                                         `acp_middle_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '中级证书',
+                                         `acp_root_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '根证书',
+                                         `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
+                                         `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知页面路径',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '云闪付支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2968,12 +2968,12 @@ INSERT INTO `pay_union_pay_config` VALUES (0, NULL, NULL, NULL, NULL, 'wap,web,q
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_union_reconcile_bill_detail`;
 CREATE TABLE `pay_union_reconcile_bill_detail`  (
-  `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易代码',
-  `txn_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易传输时间',
-  `txn_amt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易金额',
-  `query_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询流水号',
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
-  `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID'
+                                                    `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易代码',
+                                                    `txn_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易传输时间',
+                                                    `txn_amt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易金额',
+                                                    `query_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询流水号',
+                                                    `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                                                    `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID'
 ) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '云闪付业务明细对账单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2985,19 +2985,19 @@ CREATE TABLE `pay_union_reconcile_bill_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wallet`;
 CREATE TABLE `pay_wallet`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联用户id',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钱包名称',
-  `balance` int(11) NULL DEFAULT NULL COMMENT '余额',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `用户ID索引`(`user_id`) USING BTREE
+                               `id` bigint(20) NOT NULL COMMENT '主键',
+                               `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联用户id',
+                               `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钱包名称',
+                               `balance` int(11) NULL DEFAULT NULL COMMENT '余额',
+                               `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
+                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                               `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                               `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                               `version` int(11) NOT NULL COMMENT '乐观锁',
+                               `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                               PRIMARY KEY (`id`) USING BTREE,
+                               INDEX `用户ID索引`(`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钱包' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3009,18 +3009,18 @@ CREATE TABLE `pay_wallet`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wallet_config`;
 CREATE TABLE `pay_wallet_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '单次支付最多多少金额 ',
-  `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                      `single_limit` int(11) NULL DEFAULT NULL COMMENT '单次支付最多多少金额 ',
+                                      `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
+                                      `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                      `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                      `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                      `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                      `version` int(11) NOT NULL COMMENT '乐观锁',
+                                      `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钱包配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3033,20 +3033,20 @@ INSERT INTO `pay_wallet_config` VALUES (0, b'0', 2000, 'normal', NULL, 0, '2024-
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wallet_record`;
 CREATE TABLE `pay_wallet_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `wallet_id` bigint(20) NULL DEFAULT NULL COMMENT '钱包id',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `old_amount` int(11) NULL DEFAULT NULL COMMENT '变动之前的金额',
-  `new_amount` int(11) NULL DEFAULT NULL COMMENT '变动之后的金额',
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单号',
-  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端ip',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `wallet_id`(`wallet_id`) USING BTREE COMMENT '钱包ID'
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `wallet_id` bigint(20) NULL DEFAULT NULL COMMENT '钱包id',
+                                      `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
+                                      `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                      `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
+                                      `old_amount` int(11) NULL DEFAULT NULL COMMENT '变动之前的金额',
+                                      `new_amount` int(11) NULL DEFAULT NULL COMMENT '变动之后的金额',
+                                      `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单号',
+                                      `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端ip',
+                                      `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                      `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                      PRIMARY KEY (`id`) USING BTREE,
+                                      INDEX `wallet_id`(`wallet_id`) USING BTREE COMMENT '钱包ID'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钱包记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3058,23 +3058,23 @@ CREATE TABLE `pay_wallet_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_notice_config`;
 CREATE TABLE `pay_wechat_notice_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用id',
-  `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用秘钥',
-  `qr_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公众号二维码',
-  `oauth2_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'OAuth2地址',
-  `verify_file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信校验文件名称',
-  `verify_file_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信校验文件内容',
-  `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息Id',
-  `template_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息内容',
-  `template_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                             `id` bigint(20) NOT NULL COMMENT '主键',
+                                             `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用id',
+                                             `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用秘钥',
+                                             `qr_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公众号二维码',
+                                             `oauth2_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'OAuth2地址',
+                                             `verify_file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信校验文件名称',
+                                             `verify_file_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信校验文件内容',
+                                             `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息Id',
+                                             `template_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息内容',
+                                             `template_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息备注',
+                                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                             `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                             `version` int(11) NOT NULL COMMENT '乐观锁',
+                                             `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信消息通知相关配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3086,29 +3086,29 @@ CREATE TABLE `pay_wechat_notice_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_pay_config`;
 CREATE TABLE `pay_wechat_pay_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `wx_mch_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信商户号',
-  `wx_app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信应用appId',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知路径',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知路径',
-  `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否支付分账',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  `api_version` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口版本',
-  `api_key_v2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APIv2 密钥',
-  `api_key_v3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APIv3 密钥',
-  `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APPID对应的接口密码',
-  `p12` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'API证书中p12证书Base64',
-  `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
-  `pay_ways` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '可用支付方式',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                          `id` bigint(20) NOT NULL COMMENT '主键',
+                                          `wx_mch_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信商户号',
+                                          `wx_app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信应用appId',
+                                          `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                          `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知路径',
+                                          `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知路径',
+                                          `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否支付分账',
+                                          `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
+                                          `api_version` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口版本',
+                                          `api_key_v2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APIv2 密钥',
+                                          `api_key_v3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APIv3 密钥',
+                                          `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APPID对应的接口密码',
+                                          `p12` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'API证书中p12证书Base64',
+                                          `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
+                                          `pay_ways` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '可用支付方式',
+                                          `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                          `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                          `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                          `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                          `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                          `version` int(11) NOT NULL COMMENT '乐观锁',
+                                          `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3121,16 +3121,16 @@ INSERT INTO `pay_wechat_pay_config` VALUES (0, NULL, NULL, NULL, NULL, NULL, NUL
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_pay_record`;
 CREATE TABLE `pay_wechat_pay_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单号',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `gateway_time` datetime NULL DEFAULT NULL COMMENT '网关完成时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                          `id` bigint(20) NOT NULL COMMENT '主键',
+                                          `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
+                                          `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
+                                          `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                          `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单号',
+                                          `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
+                                          `gateway_time` datetime NULL DEFAULT NULL COMMENT '网关完成时间',
+                                          `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                          `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信支付记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3142,36 +3142,36 @@ CREATE TABLE `pay_wechat_pay_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_reconcile_bill_detail`;
 CREATE TABLE `pay_wechat_reconcile_bill_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `transaction_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易时间',
-  `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公众账号ID',
-  `merchant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户号',
-  `sub_merchant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '特约商户号',
-  `wei_xin_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信订单号',
-  `mch_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
-  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户标识',
-  `device_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备号',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易状态',
-  `bank` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '付款银行',
-  `currency` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货币种类',
-  `amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应结订单金额',
-  `envelope_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代金券金额',
-  `wx_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信退款单号',
-  `mch_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户退款单号',
-  `refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款金额',
-  `coupon_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '充值券退款金额',
-  `refund_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款类型',
-  `refund_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
-  `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `mch_data_packet` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户数据包',
-  `premium` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手续费',
-  `rates` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费率',
-  `order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额',
-  `apply_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请退款金额',
-  `rates_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费率备注',
-  PRIMARY KEY (`id`) USING BTREE
+                                                     `id` bigint(20) NOT NULL COMMENT '主键',
+                                                     `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                                     `transaction_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易时间',
+                                                     `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公众账号ID',
+                                                     `merchant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户号',
+                                                     `sub_merchant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '特约商户号',
+                                                     `wei_xin_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信订单号',
+                                                     `mch_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                                                     `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户标识',
+                                                     `device_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备号',
+                                                     `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
+                                                     `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易状态',
+                                                     `bank` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '付款银行',
+                                                     `currency` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货币种类',
+                                                     `amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应结订单金额',
+                                                     `envelope_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代金券金额',
+                                                     `wx_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信退款单号',
+                                                     `mch_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户退款单号',
+                                                     `refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款金额',
+                                                     `coupon_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '充值券退款金额',
+                                                     `refund_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款类型',
+                                                     `refund_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
+                                                     `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                                     `mch_data_packet` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户数据包',
+                                                     `premium` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手续费',
+                                                     `rates` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费率',
+                                                     `order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额',
+                                                     `apply_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请退款金额',
+                                                     `rates_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费率备注',
+                                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信对账单明细' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3183,16 +3183,16 @@ CREATE TABLE `pay_wechat_reconcile_bill_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_reconcile_bill_total`;
 CREATE TABLE `pay_wechat_reconcile_bill_total`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `total_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '总交易单数',
-  `total_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应结订单总金额',
-  `total_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款总金额',
-  `total_refund_coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '充值券退款总金额',
-  `total_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手续费总金额',
-  `total_order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单总金额',
-  `apply_total_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请退款总金额',
-  PRIMARY KEY (`id`) USING BTREE
+                                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                                    `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                                    `total_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '总交易单数',
+                                                    `total_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应结订单总金额',
+                                                    `total_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款总金额',
+                                                    `total_refund_coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '充值券退款总金额',
+                                                    `total_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手续费总金额',
+                                                    `total_order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单总金额',
+                                                    `apply_total_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请退款总金额',
+                                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信对账单汇总' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3204,13 +3204,13 @@ CREATE TABLE `pay_wechat_reconcile_bill_total`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_blob_triggers`;
 CREATE TABLE `qrtz_blob_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `BLOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `SCHED_NAME`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                       `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `BLOB_DATA` blob NULL,
+                                       PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                       INDEX `SCHED_NAME`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                       CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3222,10 +3222,10 @@ CREATE TABLE `qrtz_blob_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_calendars`;
 CREATE TABLE `qrtz_calendars`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `CALENDAR_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `CALENDAR` blob NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE
+                                   `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                   `CALENDAR_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                   `CALENDAR` blob NOT NULL,
+                                   PRIMARY KEY (`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3237,13 +3237,13 @@ CREATE TABLE `qrtz_calendars`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_cron_triggers`;
 CREATE TABLE `qrtz_cron_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `CRON_EXPRESSION` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TIME_ZONE_ID` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                       `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `CRON_EXPRESSION` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TIME_ZONE_ID` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                       CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3255,26 +3255,26 @@ CREATE TABLE `qrtz_cron_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_fired_triggers`;
 CREATE TABLE `qrtz_fired_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `ENTRY_ID` varchar(95) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `INSTANCE_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `FIRED_TIME` bigint(13) NOT NULL,
-  `SCHED_TIME` bigint(13) NOT NULL,
-  `PRIORITY` int(11) NOT NULL,
-  `STATE` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `ENTRY_ID`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_T_G`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_TRIG_INST_NAME`(`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_J_G`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_INST_JOB_REQ_RCVRY`(`SCHED_NAME`, `INSTANCE_NAME`, `REQUESTS_RECOVERY`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_TG`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE
+                                        `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `ENTRY_ID` varchar(95) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `INSTANCE_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `FIRED_TIME` bigint(13) NOT NULL,
+                                        `SCHED_TIME` bigint(13) NOT NULL,
+                                        `PRIORITY` int(11) NOT NULL,
+                                        `STATE` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        PRIMARY KEY (`SCHED_NAME`, `ENTRY_ID`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_T_G`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_TRIG_INST_NAME`(`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_J_G`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_INST_JOB_REQ_RCVRY`(`SCHED_NAME`, `INSTANCE_NAME`, `REQUESTS_RECOVERY`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_TG`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3286,19 +3286,19 @@ CREATE TABLE `qrtz_fired_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_job_details`;
 CREATE TABLE `qrtz_job_details`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `DESCRIPTION` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `JOB_CLASS_NAME` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `IS_DURABLE` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `IS_UPDATE_DATA` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_J_GRP`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_J_REQ_RECOVERY`(`SCHED_NAME`, `REQUESTS_RECOVERY`) USING BTREE
+                                     `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `DESCRIPTION` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                     `JOB_CLASS_NAME` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `IS_DURABLE` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `IS_UPDATE_DATA` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `JOB_DATA` blob NULL,
+                                     PRIMARY KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
+                                     INDEX `IDX_QRTZ_J_GRP`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
+                                     INDEX `IDX_QRTZ_J_REQ_RECOVERY`(`SCHED_NAME`, `REQUESTS_RECOVERY`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3310,9 +3310,9 @@ CREATE TABLE `qrtz_job_details`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_locks`;
 CREATE TABLE `qrtz_locks`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `LOCK_NAME` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `LOCK_NAME`) USING BTREE
+                               `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                               `LOCK_NAME` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                               PRIMARY KEY (`SCHED_NAME`, `LOCK_NAME`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3325,9 +3325,9 @@ INSERT INTO `qrtz_locks` VALUES ('quartzScheduler', 'TRIGGER_ACCESS');
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_paused_trigger_grps`;
 CREATE TABLE `qrtz_paused_trigger_grps`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE
+                                             `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                             `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                             PRIMARY KEY (`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3339,11 +3339,11 @@ CREATE TABLE `qrtz_paused_trigger_grps`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_scheduler_state`;
 CREATE TABLE `qrtz_scheduler_state`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `INSTANCE_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
-  `CHECKIN_INTERVAL` bigint(13) NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE
+                                         `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `INSTANCE_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
+                                         `CHECKIN_INTERVAL` bigint(13) NOT NULL,
+                                         PRIMARY KEY (`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3355,14 +3355,14 @@ CREATE TABLE `qrtz_scheduler_state`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_simple_triggers`;
 CREATE TABLE `qrtz_simple_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `REPEAT_COUNT` bigint(7) NOT NULL,
-  `REPEAT_INTERVAL` bigint(12) NOT NULL,
-  `TIMES_TRIGGERED` bigint(10) NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                         `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `REPEAT_COUNT` bigint(7) NOT NULL,
+                                         `REPEAT_INTERVAL` bigint(12) NOT NULL,
+                                         `TIMES_TRIGGERED` bigint(10) NOT NULL,
+                                         PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                         CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3374,22 +3374,22 @@ CREATE TABLE `qrtz_simple_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_simprop_triggers`;
 CREATE TABLE `qrtz_simprop_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `STR_PROP_1` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `STR_PROP_2` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `STR_PROP_3` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `INT_PROP_1` int(11) NULL DEFAULT NULL,
-  `INT_PROP_2` int(11) NULL DEFAULT NULL,
-  `LONG_PROP_1` bigint(20) NULL DEFAULT NULL,
-  `LONG_PROP_2` bigint(20) NULL DEFAULT NULL,
-  `DEC_PROP_1` decimal(13, 4) NULL DEFAULT NULL,
-  `DEC_PROP_2` decimal(13, 4) NULL DEFAULT NULL,
-  `BOOL_PROP_1` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `BOOL_PROP_2` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                          `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                          `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                          `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                          `STR_PROP_1` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          `STR_PROP_2` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          `STR_PROP_3` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          `INT_PROP_1` int(11) NULL DEFAULT NULL,
+                                          `INT_PROP_2` int(11) NULL DEFAULT NULL,
+                                          `LONG_PROP_1` bigint(20) NULL DEFAULT NULL,
+                                          `LONG_PROP_2` bigint(20) NULL DEFAULT NULL,
+                                          `DEC_PROP_1` decimal(13, 4) NULL DEFAULT NULL,
+                                          `DEC_PROP_2` decimal(13, 4) NULL DEFAULT NULL,
+                                          `BOOL_PROP_1` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          `BOOL_PROP_2` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                          CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3401,36 +3401,36 @@ CREATE TABLE `qrtz_simprop_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_triggers`;
 CREATE TABLE `qrtz_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `DESCRIPTION` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `NEXT_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
-  `PREV_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
-  `PRIORITY` int(11) NULL DEFAULT NULL,
-  `TRIGGER_STATE` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_TYPE` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `START_TIME` bigint(13) NOT NULL,
-  `END_TIME` bigint(13) NULL DEFAULT NULL,
-  `CALENDAR_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `MISFIRE_INSTR` smallint(2) NULL DEFAULT NULL,
-  `JOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST`(`SCHED_NAME`, `TRIGGER_STATE`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_N_STATE`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NEXT_FIRE_TIME`(`SCHED_NAME`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_C`(`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_G`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_J`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_N_G_STATE`(`SCHED_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_STATE`(`SCHED_NAME`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `DESCRIPTION` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                  `NEXT_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
+                                  `PREV_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
+                                  `PRIORITY` int(11) NULL DEFAULT NULL,
+                                  `TRIGGER_STATE` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `TRIGGER_TYPE` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `START_TIME` bigint(13) NOT NULL,
+                                  `END_TIME` bigint(13) NULL DEFAULT NULL,
+                                  `CALENDAR_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                  `MISFIRE_INSTR` smallint(2) NULL DEFAULT NULL,
+                                  `JOB_DATA` blob NULL,
+                                  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NFT_ST`(`SCHED_NAME`, `TRIGGER_STATE`, `NEXT_FIRE_TIME`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_N_STATE`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NEXT_FIRE_TIME`(`SCHED_NAME`, `NEXT_FIRE_TIME`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_C`(`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_STATE`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_G`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_J`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_N_G_STATE`(`SCHED_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NFT_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_STATE`(`SCHED_NAME`, `TRIGGER_STATE`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
+                                  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3442,16 +3442,16 @@ CREATE TABLE `qrtz_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_audit_data_version`;
 CREATE TABLE `starter_audit_data_version`  (
-  `id` bigint(20) NOT NULL,
-  `table_name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据表名称',
-  `data_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据名称',
-  `data_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据主键',
-  `data_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '数据内容',
-  `change_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '数据更新内容',
-  `version` int(10) NOT NULL COMMENT '版本',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                               `id` bigint(20) NOT NULL,
+                                               `table_name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据表名称',
+                                               `data_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据名称',
+                                               `data_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据主键',
+                                               `data_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '数据内容',
+                                               `change_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '数据更新内容',
+                                               `version` int(10) NOT NULL COMMENT '版本',
+                                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据版本日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3463,19 +3463,19 @@ CREATE TABLE `starter_audit_data_version`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_audit_login_log`;
 CREATE TABLE `starter_audit_login_log`  (
-  `id` bigint(20) NOT NULL,
-  `user_id` bigint(11) NULL DEFAULT NULL COMMENT '用户id',
-  `account` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名称',
-  `login` bit(1) NULL DEFAULT NULL COMMENT '登录成功状态',
-  `client` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端',
-  `login_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录方式',
-  `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录IP地址',
-  `login_location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录地点',
-  `os` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
-  `browser` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器类型',
-  `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示消息',
-  `login_time` datetime NULL DEFAULT NULL COMMENT '访问时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                            `id` bigint(20) NOT NULL,
+                                            `user_id` bigint(11) NULL DEFAULT NULL COMMENT '用户id',
+                                            `account` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名称',
+                                            `login` bit(1) NULL DEFAULT NULL COMMENT '登录成功状态',
+                                            `client` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端',
+                                            `login_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录方式',
+                                            `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录IP地址',
+                                            `login_location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录地点',
+                                            `os` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
+                                            `browser` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器类型',
+                                            `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示消息',
+                                            `login_time` datetime NULL DEFAULT NULL COMMENT '访问时间',
+                                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登陆日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3493,22 +3493,22 @@ INSERT INTO `starter_audit_login_log` VALUES (1789986131078144000, 1757299137932
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_audit_operate_log`;
 CREATE TABLE `starter_audit_operate_log`  (
-  `id` bigint(20) NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作模块',
-  `operate_id` bigint(20) NULL DEFAULT NULL COMMENT '操作人员id',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作人员账号',
-  `business_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `method` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方法',
-  `request_method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方式',
-  `operate_url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求url',
-  `operate_ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作ip',
-  `operate_location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作地点',
-  `operate_param` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
-  `operate_return` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回参数',
-  `success` bit(1) NULL DEFAULT NULL COMMENT '是否成功',
-  `error_msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '错误提示',
-  `operate_time` datetime NULL DEFAULT NULL COMMENT '操作时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL,
+                                              `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作模块',
+                                              `operate_id` bigint(20) NULL DEFAULT NULL COMMENT '操作人员id',
+                                              `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作人员账号',
+                                              `business_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                              `method` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方法',
+                                              `request_method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方式',
+                                              `operate_url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求url',
+                                              `operate_ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作ip',
+                                              `operate_location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作地点',
+                                              `operate_param` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
+                                              `operate_return` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回参数',
+                                              `success` bit(1) NULL DEFAULT NULL COMMENT '是否成功',
+                                              `error_msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '错误提示',
+                                              `operate_time` datetime NULL DEFAULT NULL COMMENT '操作时间',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3532,12 +3532,12 @@ INSERT INTO `starter_audit_operate_log` VALUES (1789978119609376768, '同步系�
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_ding_media_md5`;
 CREATE TABLE `starter_ding_media_md5`  (
-  `id` bigint(20) NOT NULL,
-  `media_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '媒体id',
-  `md5` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'md5值',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` bigint(20) NOT NULL,
+                                           `media_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '媒体id',
+                                           `md5` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'md5值',
+                                           `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                           `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钉钉媒体文件MD5值关联关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3549,20 +3549,20 @@ CREATE TABLE `starter_ding_media_md5`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_ding_robot_config`;
 CREATE TABLE `starter_ding_robot_config`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
-  `access_token` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉机器人访问token',
-  `enable_signature_check` bit(1) NOT NULL COMMENT '是否开启验签',
-  `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉机器人私钥',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(6) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` bit(1) NOT NULL COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL,
+                                              `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                              `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
+                                              `access_token` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉机器人访问token',
+                                              `enable_signature_check` bit(1) NOT NULL COMMENT '是否开启验签',
+                                              `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉机器人私钥',
+                                              `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                              `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                              `last_modified_time` datetime(6) NULL DEFAULT NULL COMMENT '最后修改时间',
+                                              `version` int(11) NOT NULL COMMENT '版本',
+                                              `deleted` bit(1) NOT NULL COMMENT '0:未删除。1:已删除',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钉钉机器人配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3574,10 +3574,10 @@ CREATE TABLE `starter_ding_robot_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_file_data`;
 CREATE TABLE `starter_file_data`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `base64` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT 'base64方式存储',
-  `data` longblob NULL COMMENT '数据方式存储',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `base64` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT 'base64方式存储',
+                                      `data` longblob NULL COMMENT '数据方式存储',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '上传文件数据' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3589,31 +3589,31 @@ CREATE TABLE `starter_file_data`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_file_upload_info`;
 CREATE TABLE `starter_file_upload_info`  (
-  `id` bigint(20) NOT NULL COMMENT '文件id',
-  `url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件访问地址',
-  `size` bigint(20) NULL DEFAULT NULL COMMENT '文件大小，单位字节',
-  `filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件名称',
-  `original_filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '原始文件名',
-  `base_path` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '基础存储路径',
-  `path` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储路径',
-  `ext` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件扩展名',
-  `content_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'MIME类型',
-  `platform` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储平台',
-  `th_url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图访问路径',
-  `th_filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图名称',
-  `th_size` bigint(20) NULL DEFAULT NULL COMMENT '缩略图大小，单位字节',
-  `th_content_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图MIME类型',
-  `object_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件所属对象id',
-  `object_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件所属对象类型，例如用户头像，评价图片',
-  `metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文件元数据',
-  `user_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文件用户元数据',
-  `th_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缩略图元数据',
-  `th_user_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缩略图用户元数据',
-  `attr` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '附加属性',
-  `file_acl` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件ACL',
-  `th_file_acl` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图文件ACL',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                             `id` bigint(20) NOT NULL COMMENT '文件id',
+                                             `url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件访问地址',
+                                             `size` bigint(20) NULL DEFAULT NULL COMMENT '文件大小，单位字节',
+                                             `filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件名称',
+                                             `original_filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '原始文件名',
+                                             `base_path` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '基础存储路径',
+                                             `path` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储路径',
+                                             `ext` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件扩展名',
+                                             `content_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'MIME类型',
+                                             `platform` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储平台',
+                                             `th_url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图访问路径',
+                                             `th_filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图名称',
+                                             `th_size` bigint(20) NULL DEFAULT NULL COMMENT '缩略图大小，单位字节',
+                                             `th_content_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图MIME类型',
+                                             `object_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件所属对象id',
+                                             `object_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件所属对象类型，例如用户头像，评价图片',
+                                             `metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文件元数据',
+                                             `user_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文件用户元数据',
+                                             `th_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缩略图元数据',
+                                             `th_user_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缩略图用户元数据',
+                                             `attr` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '附加属性',
+                                             `file_acl` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件ACL',
+                                             `th_file_acl` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图文件ACL',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '文件记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3625,20 +3625,20 @@ CREATE TABLE `starter_file_upload_info`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_quartz_job`;
 CREATE TABLE `starter_quartz_job`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务名称',
-  `job_class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务类名',
-  `cron` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'cron表达式',
-  `parameter` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '参数',
-  `state` int(4) NULL DEFAULT NULL COMMENT '状态',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务名称',
+                                       `job_class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务类名',
+                                       `cron` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'cron表达式',
+                                       `parameter` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '参数',
+                                       `state` int(4) NULL DEFAULT NULL COMMENT '状态',
+                                       `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                       `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                       `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                       `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                       `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                       `version` int(11) NOT NULL COMMENT '版本',
+                                       `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3658,16 +3658,16 @@ INSERT INTO `starter_quartz_job` VALUES (1787470450809954304, '自动分账信�
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_quartz_job_log`;
 CREATE TABLE `starter_quartz_job_log`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `handler_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理器名称',
-  `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理器全限定名',
-  `success` bit(1) NOT NULL COMMENT '是否执行成功',
-  `error_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `start_time` datetime NULL DEFAULT NULL COMMENT '开始时间',
-  `end_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
-  `duration` bigint(255) NULL DEFAULT NULL COMMENT '执行时长',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` bigint(20) NOT NULL COMMENT '主键',
+                                           `handler_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理器名称',
+                                           `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理器全限定名',
+                                           `success` bit(1) NOT NULL COMMENT '是否执行成功',
+                                           `error_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                                           `start_time` datetime NULL DEFAULT NULL COMMENT '开始时间',
+                                           `end_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
+                                           `duration` bigint(255) NULL DEFAULT NULL COMMENT '执行时长',
+                                           `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '任务执行日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3679,18 +3679,18 @@ CREATE TABLE `starter_quartz_job_log`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_wecom_robot_config`;
 CREATE TABLE `starter_wecom_robot_config`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
-  `webhook_key` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'webhook地址的key值',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(6) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` bit(1) NOT NULL COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                               `id` bigint(20) NOT NULL,
+                                               `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
+                                               `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
+                                               `webhook_key` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'webhook地址的key值',
+                                               `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                               `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                               `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                               `last_modified_time` datetime(6) NULL DEFAULT NULL COMMENT '最后修改时间',
+                                               `version` int(11) NOT NULL COMMENT '版本',
+                                               `deleted` bit(1) NOT NULL COMMENT '0:未删除。1:已删除',
+                                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '企业微信机器人配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3702,19 +3702,19 @@ CREATE TABLE `starter_wecom_robot_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_wx_fans`;
 CREATE TABLE `starter_wx_fans`  (
-  `id` bigint(20) NOT NULL,
-  `openid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联OpenId',
-  `subscribe_status` bit(1) NULL DEFAULT NULL COMMENT '订阅状态',
-  `subscribe_time` datetime NULL DEFAULT NULL COMMENT '订阅时间',
-  `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '昵称',
-  `sex` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '性别',
-  `language` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '语言',
-  `country` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '国家',
-  `province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '省份',
-  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市',
-  `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像地址',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL,
+                                    `openid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联OpenId',
+                                    `subscribe_status` bit(1) NULL DEFAULT NULL COMMENT '订阅状态',
+                                    `subscribe_time` datetime NULL DEFAULT NULL COMMENT '订阅时间',
+                                    `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '昵称',
+                                    `sex` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '性别',
+                                    `language` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '语言',
+                                    `country` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '国家',
+                                    `province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '省份',
+                                    `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市',
+                                    `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像地址',
+                                    `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信公众号粉丝' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3726,18 +3726,18 @@ CREATE TABLE `starter_wx_fans`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_wx_menu`;
 CREATE TABLE `starter_wx_menu`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名称',
-  `menu_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '菜单信息',
-  `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
-  `publish` bit(1) NOT NULL COMMENT '是否发布',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(11) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名称',
+                                    `menu_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '菜单信息',
+                                    `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+                                    `publish` bit(1) NOT NULL COMMENT '是否发布',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                    `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                    `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                    `version` int(11) NOT NULL COMMENT '版本',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '微信自定义菜单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3749,23 +3749,23 @@ CREATE TABLE `starter_wx_menu`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_wx_template`;
 CREATE TABLE `starter_wx_template`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
-  `enable` bit(1) NOT NULL COMMENT '是否启用',
-  `template_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模板ID',
-  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板标题',
-  `primary_industry` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板所属行业的一级行业',
-  `deputy_industry` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板所属行业的二级行业',
-  `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板内容',
-  `example` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '示例',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `inx_`(`template_id`) USING BTREE COMMENT '模板id'
+                                        `id` bigint(20) NOT NULL,
+                                        `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                        `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
+                                        `enable` bit(1) NOT NULL COMMENT '是否启用',
+                                        `template_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模板ID',
+                                        `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板标题',
+                                        `primary_industry` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板所属行业的一级行业',
+                                        `deputy_industry` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板所属行业的二级行业',
+                                        `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板内容',
+                                        `example` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '示例',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '版本',
+                                        PRIMARY KEY (`id`) USING BTREE,
+                                        UNIQUE INDEX `inx_`(`template_id`) USING BTREE COMMENT '模板id'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信消息模板' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
