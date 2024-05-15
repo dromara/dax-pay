@@ -2,13 +2,13 @@
  Navicat Premium Data Transfer
 
  Source Server Type    : MySQL
- Source Server Version : 50743
+ Source Server Version : 50743 (5.7.43-log)
 
  Target Server Type    : MySQL
- Target Server Version : 50743
+ Target Server Version : 50743 (5.7.43-log)
  File Encoding         : 65001
 
- Date: 18/04/2024 11:05:44
+ Date: 13/05/2024 19:50:06
 */
 
 SET NAMES utf8mb4;
@@ -19,11 +19,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `base_area`;
 CREATE TABLE `base_area`  (
-  `code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '区域名称',
-  `city_code` char(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '城市编码',
-  PRIMARY KEY (`code`) USING BTREE,
-  INDEX `inx_city_code`(`city_code`) USING BTREE COMMENT '城市'
+                              `code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                              `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '区域名称',
+                              `city_code` char(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '城市编码',
+                              PRIMARY KEY (`code`) USING BTREE,
+                              INDEX `inx_city_code`(`city_code`) USING BTREE COMMENT '城市'
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '县区表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -35,18 +35,18 @@ CREATE TABLE `base_area`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_china_word`;
 CREATE TABLE `base_china_word`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `word` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '敏感词',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '分类',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '描述',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `white` bit(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `word` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '敏感词',
+                                    `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '分类',
+                                    `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '描述',
+                                    `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                    `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                    `version` int(11) NOT NULL COMMENT '乐观锁',
+                                    `white` bit(1) NULL DEFAULT NULL,
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '敏感词' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -58,10 +58,10 @@ CREATE TABLE `base_china_word`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_city`;
 CREATE TABLE `base_city`  (
-  `code` char(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '城市编码',
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '城市名称',
-  `province_code` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '省份编码',
-  PRIMARY KEY (`code`) USING BTREE
+                              `code` char(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '城市编码',
+                              `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '城市名称',
+                              `province_code` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '省份编码',
+                              PRIMARY KEY (`code`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '城市表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -73,20 +73,20 @@ CREATE TABLE `base_city`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_data_result_sql`;
 CREATE TABLE `base_data_result_sql`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `database_id` bigint(20) NULL DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `is_list` bit(1) NULL DEFAULT NULL,
-  `sql` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
-  `fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `database_id` bigint(20) NULL DEFAULT NULL,
+                                         `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+                                         `is_list` bit(1) NULL DEFAULT NULL,
+                                         `sql` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+                                         `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
+                                         `fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '数据集SQL语句' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -98,19 +98,19 @@ CREATE TABLE `base_data_result_sql`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_dict`;
 CREATE TABLE `base_dict`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '编码',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
-  `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
-  `group_tag` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类标签',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NULL DEFAULT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                              `id` bigint(20) NOT NULL,
+                              `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '编码',
+                              `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+                              `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
+                              `group_tag` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类标签',
+                              `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                              `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                              `version` int(8) NULL DEFAULT NULL COMMENT '版本',
+                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -137,7 +137,7 @@ INSERT INTO `base_dict` VALUES (1690338545284378624, 'GeneralTemplateState', '�
 INSERT INTO `base_dict` VALUES (1744996611615039488, 'AsyncPayChannel', '异步支付通道', b'1', '支付', '', 1399985191002447872, '2024-01-10 16:16:27', 1399985191002447872, '2024-01-10 16:16:27', 0, 0);
 INSERT INTO `base_dict` VALUES (1744996845355212800, 'PayChannel', '支付通道', b'1', '支付', '', 1399985191002447872, '2024-01-10 16:17:23', 1399985191002447872, '2024-01-10 16:17:23', 0, 0);
 INSERT INTO `base_dict` VALUES (1744996913667842048, 'PayStatus', '支付状态', b'1', '支付', '', 1399985191002447872, '2024-01-10 16:17:39', 1399985191002447872, '2024-01-10 16:17:39', 0, 0);
-INSERT INTO `base_dict` VALUES (1745086859116224512, 'PayWay', '支付方式', b'1', '支付', '', 1399985191002447872, '2024-01-10 22:15:04', 1399985191002447872, '2024-01-10 22:15:04', 0, 0);
+INSERT INTO `base_dict` VALUES (1745086859116224512, 'PayMethod', '支付方式', b'1', '支付', '', 1399985191002447872, '2024-01-10 22:15:04', 1399985191002447872, '2024-05-02 12:38:01', 0, 1);
 INSERT INTO `base_dict` VALUES (1745109350333173760, 'PayCallbackStatus', '支付回调处理状态', b'1', '支付', '', 1399985191002447872, '2024-01-10 23:44:26', 1399985191002447872, '2024-01-10 23:44:26', 0, 0);
 INSERT INTO `base_dict` VALUES (1745128986382667776, 'PayRepairSource', '支付修复来源', b'1', '支付', '', 1399985191002447872, '2024-01-11 01:02:28', 1399985191002447872, '2024-01-11 01:02:28', 0, 0);
 INSERT INTO `base_dict` VALUES (1745134438772346880, 'PayRepairWay', '支付修复方式', b'1', '支付', '', 1399985191002447872, '2024-01-11 01:24:08', 1399985191002447872, '2024-01-11 01:24:08', 0, 0);
@@ -160,39 +160,41 @@ INSERT INTO `base_dict` VALUES (1761588314480300032, 'WechatPayRecordType', '微
 INSERT INTO `base_dict` VALUES (1763588034467713024, 'ReconcileDiffType', '对账差异类型', b'1', '支付', '', 1399985191002447872, '2024-03-01 23:32:08', 1399985191002447872, '2024-03-01 23:32:08', 0, 0);
 INSERT INTO `base_dict` VALUES (1766713545981153280, 'UnionPaySignType', '云闪付签名类型', b'1', '支付', '', 1399985191002447872, '2024-03-10 14:31:48', 1399985191002447872, '2024-03-10 14:31:48', 0, 0);
 INSERT INTO `base_dict` VALUES (1768206399071809536, 'UnionPayRecordType', '云闪付流水类型', b'1', '支付', '', 1399985191002447872, '2024-03-14 17:23:52', 1399985191002447872, '2024-03-14 17:23:52', 0, 0);
-INSERT INTO `base_dict` VALUES (1775112798259302400, 'AllocationReceiverType', '分账接收方类型', b'1', '支付', '', 1399985191002447872, '2024-04-02 18:47:26', 1399985191002447872, '2024-04-02 18:47:26', 0, 0);
-INSERT INTO `base_dict` VALUES (1775122632706805760, 'AllocationRelationType', '分账关系类型', b'1', '支付', '', 1399985191002447872, '2024-04-02 19:26:30', 1399985191002447872, '2024-04-02 19:26:30', 0, 0);
-INSERT INTO `base_dict` VALUES (1777697358802530304, 'AllocationOrderStatus', '分账状态', b'1', '支付', '', 1399985191002447872, '2024-04-09 21:57:33', 1399985191002447872, '2024-04-16 19:09:18', 0, 1);
-INSERT INTO `base_dict` VALUES (1780163691808391168, 'AllocationDetailResult', '支付分账明细处理结果', b'1', '支付', '', 1399985191002447872, '2024-04-16 17:17:53', 1399985191002447872, '2024-04-16 17:23:37', 0, 2);
-INSERT INTO `base_dict` VALUES (1780165499633106944, 'AllocationOrderResult', '支付分账订单处理结果', b'1', '支付', '', 1399985191002447872, '2024-04-16 17:25:04', 1399985191002447872, '2024-04-16 17:25:04', 0, 0);
+INSERT INTO `base_dict` VALUES (1775112798259302400, 'AllocReceiverType', '分账接收方类型', b'1', '支付', '', 1399985191002447872, '2024-04-02 18:47:26', 1399985191002447872, '2024-05-14 16:40:14', 0, 1);
+INSERT INTO `base_dict` VALUES (1775122632706805760, 'AllocRelationType', '分账关系类型', b'1', '支付', '', 1399985191002447872, '2024-04-02 19:26:30', 1399985191002447872, '2024-05-14 16:40:09', 0, 1);
+INSERT INTO `base_dict` VALUES (1777697358802530304, 'AllocOrderStatus', '分账状态', b'1', '支付', '', 1399985191002447872, '2024-04-09 21:57:33', 1399985191002447872, '2024-05-14 16:40:04', 0, 2);
+INSERT INTO `base_dict` VALUES (1780163691808391168, 'AllocDetailResult', '支付分账明细处理结果', b'1', '支付', '', 1399985191002447872, '2024-04-16 17:17:53', 1399985191002447872, '2024-05-14 16:39:57', 0, 3);
+INSERT INTO `base_dict` VALUES (1780165499633106944, 'AllocOrderResult', '支付分账订单处理结果', b'1', '支付', '', 1399985191002447872, '2024-04-16 17:25:04', 1399985191002447872, '2024-05-14 16:39:36', 0, 1);
 INSERT INTO `base_dict` VALUES (1780165929528295424, 'PayOrderAllocationStatus', '支付订单分账状态', b'1', '支付', '', 1399985191002447872, '2024-04-16 17:26:46', 1399985191002447872, '2024-04-16 17:26:46', 0, 0);
+INSERT INTO `base_dict` VALUES (1786399552686465024, 'ReconcileResult', '对账结果', b'1', '支付', '', 1399985191002447872, '2024-05-03 22:16:58', 1399985191002447872, '2024-05-03 22:16:58', 0, 0);
 
 -- ----------------------------
 -- Table structure for base_dict_item
 -- ----------------------------
 DROP TABLE IF EXISTS `base_dict_item`;
 CREATE TABLE `base_dict_item`  (
-  `id` bigint(20) NOT NULL,
-  `dict_id` bigint(20) NOT NULL COMMENT '字典id',
-  `dict_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典code',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典项code',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典项名称',
-  `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
-  `sort_no` double(8, 2) NOT NULL COMMENT '排序',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_dictionary_id`(`dict_id`) USING BTREE
+                                   `id` bigint(20) NOT NULL,
+                                   `dict_id` bigint(20) NOT NULL COMMENT '字典id',
+                                   `dict_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典code',
+                                   `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典项code',
+                                   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典项名称',
+                                   `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
+                                   `sort_no` double(8, 2) NOT NULL COMMENT '排序',
+                                   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                                   `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                   `version` int(8) NOT NULL COMMENT '版本',
+                                   PRIMARY KEY (`id`) USING BTREE,
+                                   INDEX `idx_dictionary_id`(`dict_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典项' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of base_dict_item
 -- ----------------------------
+
 INSERT INTO `base_dict_item` VALUES (1422931375807242241, 1422929378374828033, 'Sex', '1', '男', b'1', 0.00, '男性', 0, '2021-08-04 22:44:11', 0, '2021-08-04 22:44:11', 0, 2);
 INSERT INTO `base_dict_item` VALUES (1425729455402401794, 1422929378374828033, 'Sex', '2', '女', b'1', 0.00, '女性', 0, '2021-08-12 16:02:46', 0, '2021-08-12 16:02:46', 0, 1);
 INSERT INTO `base_dict_item` VALUES (1425744258544136194, 1425744045414772737, 'MenuType', '0', '顶级菜单', b'1', 0.00, '顶级菜单', 0, '2021-08-12 17:01:35', 0, '2021-08-12 17:01:35', 0, 0);
@@ -271,9 +273,9 @@ INSERT INTO `base_dict_item` VALUES (1729519341702086656, 1589527951317389312, '
 INSERT INTO `base_dict_item` VALUES (1744997130102317056, 1744996845355212800, 'PayChannel', 'ali_pay', '支付宝', b'1', 1.00, '', 1399985191002447872, '2024-01-10 16:18:31', 1399985191002447872, '2024-01-10 16:18:31', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1744997169239367680, 1744996845355212800, 'PayChannel', 'wechat_pay', '微信支付', b'1', 2.00, '', 1399985191002447872, '2024-01-10 16:18:40', 1399985191002447872, '2024-01-10 16:18:40', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1744997213623492608, 1744996845355212800, 'PayChannel', 'union_pay', '云闪付', b'1', 3.00, '', 1399985191002447872, '2024-01-10 16:18:51', 1399985191002447872, '2024-01-10 16:18:51', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1744997258951335936, 1744996845355212800, 'PayChannel', 'cash_pay', '现金支付', b'1', 4.00, '', 1399985191002447872, '2024-01-10 16:19:02', 1399985191002447872, '2024-01-10 16:19:02', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1744997258951335936, 1744996845355212800, 'PayChannel', 'cash_pay', '现金支付', b'1', 4.00, '', 1399985191002447872, '2024-01-10 16:19:02', 1399985191002447872, '2024-05-02 12:39:33', 1, 0);
 INSERT INTO `base_dict_item` VALUES (1744997315557662720, 1744996845355212800, 'PayChannel', 'wallet_pay', '钱包支付', b'1', 5.00, '', 1399985191002447872, '2024-01-10 16:19:15', 1399985191002447872, '2024-01-10 16:19:15', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1744997364404527104, 1744996845355212800, 'PayChannel', 'voucher_pay', '储值卡支付', b'1', 6.00, '', 1399985191002447872, '2024-01-10 16:19:27', 1399985191002447872, '2024-01-10 16:19:27', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1744997364404527104, 1744996845355212800, 'PayChannel', 'voucher_pay', '储值卡支付', b'1', 6.00, '', 1399985191002447872, '2024-01-10 16:19:27', 1399985191002447872, '2024-05-02 12:39:29', 1, 0);
 INSERT INTO `base_dict_item` VALUES (1744997501033979904, 1744996913667842048, 'PayStatus', 'progress', '支付中', b'1', 1.00, '', 1399985191002447872, '2024-01-10 16:19:59', 1399985191002447872, '2024-01-10 16:19:59', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1744997541811003392, 1744996913667842048, 'PayStatus', 'success', '成功', b'1', 2.00, '', 1399985191002447872, '2024-01-10 16:20:09', 1399985191002447872, '2024-01-10 16:20:09', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1744997578863484928, 1744996913667842048, 'PayStatus', 'close', '支付关闭', b'1', 3.00, '', 1399985191002447872, '2024-01-10 16:20:18', 1399985191002447872, '2024-01-10 16:20:18', 0, 0);
@@ -283,13 +285,13 @@ INSERT INTO `base_dict_item` VALUES (1744997746321072128, 1744996913667842048, '
 INSERT INTO `base_dict_item` VALUES (1745085949967278080, 1744996611615039488, 'AsyncPayChannel', 'ali_pay', '支付宝', b'1', 1.00, '', 1399985191002447872, '2024-01-10 22:11:27', 1399985191002447872, '2024-01-10 22:11:27', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1745085991767711744, 1744996611615039488, 'AsyncPayChannel', 'wechat_pay', '微信支付', b'1', 2.00, '', 1399985191002447872, '2024-01-10 22:11:37', 1399985191002447872, '2024-01-10 22:11:37', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1745086048852189184, 1744996611615039488, 'AsyncPayChannel', 'union_pay', '云闪付', b'1', 3.00, '', 1399985191002447872, '2024-01-10 22:11:51', 1399985191002447872, '2024-01-11 00:13:03', 0, 1);
-INSERT INTO `base_dict_item` VALUES (1745086902929924096, 1745086859116224512, 'PayWay', 'normal', '常规支付', b'1', 1.00, '', 1399985191002447872, '2024-01-10 22:15:14', 1399985191002447872, '2024-01-10 22:15:26', 0, 1);
-INSERT INTO `base_dict_item` VALUES (1745086940036931584, 1745086859116224512, 'PayWay', 'wap', 'wap支付', b'1', 2.00, '', 1399985191002447872, '2024-01-10 22:15:23', 1399985191002447872, '2024-01-10 22:15:23', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1745087004062982144, 1745086859116224512, 'PayWay', 'app', '应用支付', b'1', 3.00, '', 1399985191002447872, '2024-01-10 22:15:39', 1399985191002447872, '2024-01-10 22:15:39', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1745087058194669568, 1745086859116224512, 'PayWay', 'web', 'web支付', b'1', 4.00, '', 1399985191002447872, '2024-01-10 22:15:51', 1399985191002447872, '2024-01-10 22:15:51', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1745087104050995200, 1745086859116224512, 'PayWay', 'qrcode', '扫码支付', b'1', 5.00, '', 1399985191002447872, '2024-01-10 22:16:02', 1399985191002447872, '2024-01-10 22:16:02', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1745087163324899328, 1745086859116224512, 'PayWay', 'barcode', '付款码', b'1', 6.00, '', 1399985191002447872, '2024-01-10 22:16:17', 1399985191002447872, '2024-01-10 22:16:17', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1745087221629919232, 1745086859116224512, 'PayWay', 'jsapi', '公众号/小程序支付', b'1', 7.00, '', 1399985191002447872, '2024-01-10 22:16:30', 1399985191002447872, '2024-01-10 22:16:37', 0, 1);
+INSERT INTO `base_dict_item` VALUES (1745086902929924096, 1745086859116224512, 'PayMethod', 'normal', '常规支付', b'1', 1.00, '', 1399985191002447872, '2024-01-10 22:15:14', 1399985191002447872, '2024-01-10 22:15:26', 0, 1);
+INSERT INTO `base_dict_item` VALUES (1745086940036931584, 1745086859116224512, 'PayMethod', 'wap', 'wap支付', b'1', 2.00, '', 1399985191002447872, '2024-01-10 22:15:23', 1399985191002447872, '2024-01-10 22:15:23', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1745087004062982144, 1745086859116224512, 'PayMethod', 'app', '应用支付', b'1', 3.00, '', 1399985191002447872, '2024-01-10 22:15:39', 1399985191002447872, '2024-01-10 22:15:39', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1745087058194669568, 1745086859116224512, 'PayMethod', 'web', 'web支付', b'1', 4.00, '', 1399985191002447872, '2024-01-10 22:15:51', 1399985191002447872, '2024-01-10 22:15:51', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1745087104050995200, 1745086859116224512, 'PayMethod', 'qrcode', '扫码支付', b'1', 5.00, '', 1399985191002447872, '2024-01-10 22:16:02', 1399985191002447872, '2024-01-10 22:16:02', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1745087163324899328, 1745086859116224512, 'PayMethod', 'barcode', '付款码', b'1', 6.00, '', 1399985191002447872, '2024-01-10 22:16:17', 1399985191002447872, '2024-01-10 22:16:17', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1745087221629919232, 1745086859116224512, 'PayMethod', 'jsapi', '公众号/小程序支付', b'1', 7.00, '', 1399985191002447872, '2024-01-10 22:16:30', 1399985191002447872, '2024-01-10 22:16:37', 0, 1);
 INSERT INTO `base_dict_item` VALUES (1745109413893656576, 1745109350333173760, 'PayCallbackStatus', 'success', '成功', b'1', 1.00, '', 1399985191002447872, '2024-01-10 23:44:41', 1399985191002447872, '2024-01-10 23:44:41', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1745109449050312704, 1745109350333173760, 'PayCallbackStatus', 'fail', '失败', b'1', 2.00, '', 1399985191002447872, '2024-01-10 23:44:50', 1399985191002447872, '2024-01-10 23:44:50', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1745109487289782272, 1745109350333173760, 'PayCallbackStatus', 'ignore', '忽略', b'1', 3.00, '', 1399985191002447872, '2024-01-10 23:44:59', 1399985191002447872, '2024-01-10 23:44:59', 0, 0);
@@ -366,63 +368,65 @@ INSERT INTO `base_dict_item` VALUES (1763588174695878656, 1763588034467713024, '
 INSERT INTO `base_dict_item` VALUES (1766713657021157376, 1766713545981153280, 'UnionPaySignType', 'RSA2', 'RSA2', b'1', 0.00, '', 1399985191002447872, '2024-03-10 14:32:14', 1399985191002447872, '2024-03-10 14:32:14', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1768206502721449984, 1768206399071809536, 'UnionPayRecordType', 'pay', '支付', b'1', 1.00, '', 1399985191002447872, '2024-03-14 17:24:17', 1399985191002447872, '2024-03-14 17:24:17', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1768206547285929984, 1768206399071809536, 'UnionPayRecordType', 'refund', '退款', b'1', 0.00, '', 1399985191002447872, '2024-03-14 17:24:27', 1399985191002447872, '2024-03-14 17:24:27', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122126567559168, 1775112798259302400, 'AllocationReceiverType', 'wx_personal', '个人', b'1', 1.00, '', 1399985191002447872, '2024-04-02 19:24:30', 1399985191002447872, '2024-04-02 19:24:30', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122171861848064, 1775112798259302400, 'AllocationReceiverType', 'wx_merchant', '商户', b'1', 2.00, '', 1399985191002447872, '2024-04-02 19:24:41', 1399985191002447872, '2024-04-02 19:24:41', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122227956469760, 1775112798259302400, 'AllocationReceiverType', 'ali_user_id', '用户ID', b'1', 3.00, '', 1399985191002447872, '2024-04-02 19:24:54', 1399985191002447872, '2024-04-02 19:25:53', 0, 1);
-INSERT INTO `base_dict_item` VALUES (1775122278170677248, 1775112798259302400, 'AllocationReceiverType', 'ali_open_id', '登录号', b'1', 4.00, '', 1399985191002447872, '2024-04-02 19:25:06', 1399985191002447872, '2024-04-02 19:25:06', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122427802472448, 1775112798259302400, 'AllocationReceiverType', 'ali_login_name', '账号', b'1', 5.00, '', 1399985191002447872, '2024-04-02 19:25:42', 1399985191002447872, '2024-04-02 19:25:42', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122672623996928, 1775122632706805760, 'AllocationRelationType', 'SERVICE_PROVIDER', '服务商', b'1', 1.00, '', 1399985191002447872, '2024-04-02 19:26:40', 1399985191002447872, '2024-04-02 19:26:40', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122710884438016, 1775122632706805760, 'AllocationRelationType', 'STORE', '门店', b'1', 2.00, '', 1399985191002447872, '2024-04-02 19:26:49', 1399985191002447872, '2024-04-02 19:26:49', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122750612885504, 1775122632706805760, 'AllocationRelationType', 'STAFF', '员工', b'1', 3.00, '', 1399985191002447872, '2024-04-02 19:26:59', 1399985191002447872, '2024-04-02 19:26:59', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122847035740160, 1775122632706805760, 'AllocationRelationType', 'STORE_OWNER', '店主', b'1', 4.00, '', 1399985191002447872, '2024-04-02 19:27:22', 1399985191002447872, '2024-04-02 19:27:22', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122892464246784, 1775122632706805760, 'AllocationRelationType', 'PARTNER', '合作伙伴', b'1', 5.00, '', 1399985191002447872, '2024-04-02 19:27:32', 1399985191002447872, '2024-04-02 19:27:32', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775122934138851328, 1775122632706805760, 'AllocationRelationType', 'HEADQUARTER', '总部', b'1', 6.00, '', 1399985191002447872, '2024-04-02 19:27:42', 1399985191002447872, '2024-04-02 19:27:42', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775123560512016384, 1775122632706805760, 'AllocationRelationType', 'DISTRIBUTOR', '分销商', b'1', 7.00, '', 1399985191002447872, '2024-04-02 19:30:12', 1399985191002447872, '2024-04-02 19:30:12', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775123607781822464, 1775122632706805760, 'AllocationRelationType', 'USER', '用户', b'1', 8.00, '', 1399985191002447872, '2024-04-02 19:30:23', 1399985191002447872, '2024-04-02 19:30:23', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775123654527340544, 1775122632706805760, 'AllocationRelationType', 'SUPPLIER', '供应商', b'1', 9.00, '', 1399985191002447872, '2024-04-02 19:30:34', 1399985191002447872, '2024-04-02 19:30:34', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1775123705886593024, 1775122632706805760, 'AllocationRelationType', 'CUSTOM', '自定义', b'1', 10.00, '', 1399985191002447872, '2024-04-02 19:30:46', 1399985191002447872, '2024-04-02 19:30:46', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1777700713809522688, 1777697358802530304, 'AllocationOrderStatus', 'waiting', '待分账', b'1', 1.00, '', 1399985191002447872, '2024-04-09 22:10:53', 1399985191002447872, '2024-04-09 22:10:53', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1777700750744563712, 1777697358802530304, 'AllocationOrderStatus', 'allocation_processing', '分账处理中', b'1', 2.00, '', 1399985191002447872, '2024-04-09 22:11:02', 1399985191002447872, '2024-04-16 17:14:53', 0, 1);
-INSERT INTO `base_dict_item` VALUES (1777700787453112320, 1777697358802530304, 'AllocationOrderStatus', 'allocation_end', '分账完成', b'1', 3.00, '', 1399985191002447872, '2024-04-09 22:11:10', 1399985191002447872, '2024-04-16 17:36:25', 0, 2);
-INSERT INTO `base_dict_item` VALUES (1777700835826020352, 1777697358802530304, 'AllocationOrderStatus', 'allocation_failed', '分账失败', b'1', 4.00, '', 1399985191002447872, '2024-04-09 22:11:22', 1399985191002447872, '2024-04-16 17:16:34', 0, 2);
-INSERT INTO `base_dict_item` VALUES (1777700870613577728, 1777697358802530304, 'AllocationOrderStatus', 'finish', '分账完结', b'1', 5.00, '', 1399985191002447872, '2024-04-09 22:11:30', 1399985191002447872, '2024-04-16 17:17:06', 0, 1);
+INSERT INTO `base_dict_item` VALUES (1775122126567559168, 1775112798259302400, 'AllocReceiverType', 'wx_personal', '个人', b'1', 1.00, '', 1399985191002447872, '2024-04-02 19:24:30', 1399985191002447872, '2024-04-02 19:24:30', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122171861848064, 1775112798259302400, 'AllocReceiverType', 'wx_merchant', '商户', b'1', 2.00, '', 1399985191002447872, '2024-04-02 19:24:41', 1399985191002447872, '2024-04-02 19:24:41', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122227956469760, 1775112798259302400, 'AllocReceiverType', 'ali_user_id', '用户ID', b'1', 3.00, '', 1399985191002447872, '2024-04-02 19:24:54', 1399985191002447872, '2024-04-02 19:25:53', 0, 1);
+INSERT INTO `base_dict_item` VALUES (1775122278170677248, 1775112798259302400, 'AllocReceiverType', 'ali_open_id', '登录号', b'1', 4.00, '', 1399985191002447872, '2024-04-02 19:25:06', 1399985191002447872, '2024-04-02 19:25:06', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122427802472448, 1775112798259302400, 'AllocReceiverType', 'ali_login_name', '账号', b'1', 5.00, '', 1399985191002447872, '2024-04-02 19:25:42', 1399985191002447872, '2024-04-02 19:25:42', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122672623996928, 1775122632706805760, 'AllocRelationType', 'SERVICE_PROVIDER', '服务商', b'1', 1.00, '', 1399985191002447872, '2024-04-02 19:26:40', 1399985191002447872, '2024-04-02 19:26:40', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122710884438016, 1775122632706805760, 'AllocRelationType', 'STORE', '门店', b'1', 2.00, '', 1399985191002447872, '2024-04-02 19:26:49', 1399985191002447872, '2024-04-02 19:26:49', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122750612885504, 1775122632706805760, 'AllocRelationType', 'STAFF', '员工', b'1', 3.00, '', 1399985191002447872, '2024-04-02 19:26:59', 1399985191002447872, '2024-04-02 19:26:59', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122847035740160, 1775122632706805760, 'AllocRelationType', 'STORE_OWNER', '店主', b'1', 4.00, '', 1399985191002447872, '2024-04-02 19:27:22', 1399985191002447872, '2024-04-02 19:27:22', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122892464246784, 1775122632706805760, 'AllocRelationType', 'PARTNER', '合作伙伴', b'1', 5.00, '', 1399985191002447872, '2024-04-02 19:27:32', 1399985191002447872, '2024-04-02 19:27:32', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775122934138851328, 1775122632706805760, 'AllocRelationType', 'HEADQUARTER', '总部', b'1', 6.00, '', 1399985191002447872, '2024-04-02 19:27:42', 1399985191002447872, '2024-04-02 19:27:42', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775123560512016384, 1775122632706805760, 'AllocRelationType', 'DISTRIBUTOR', '分销商', b'1', 7.00, '', 1399985191002447872, '2024-04-02 19:30:12', 1399985191002447872, '2024-04-02 19:30:12', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775123607781822464, 1775122632706805760, 'AllocRelationType', 'USER', '用户', b'1', 8.00, '', 1399985191002447872, '2024-04-02 19:30:23', 1399985191002447872, '2024-04-02 19:30:23', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775123654527340544, 1775122632706805760, 'AllocRelationType', 'SUPPLIER', '供应商', b'1', 9.00, '', 1399985191002447872, '2024-04-02 19:30:34', 1399985191002447872, '2024-04-02 19:30:34', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1775123705886593024, 1775122632706805760, 'AllocRelationType', 'CUSTOM', '自定义', b'1', 10.00, '', 1399985191002447872, '2024-04-02 19:30:46', 1399985191002447872, '2024-04-02 19:30:46', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1777700713809522688, 1777697358802530304, 'AllocOrderStatus', 'waiting', '待分账', b'1', 1.00, '', 1399985191002447872, '2024-04-09 22:10:53', 1399985191002447872, '2024-04-09 22:10:53', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1777700750744563712, 1777697358802530304, 'AllocOrderStatus', 'allocation_processing', '分账处理中', b'1', 2.00, '', 1399985191002447872, '2024-04-09 22:11:02', 1399985191002447872, '2024-04-16 17:14:53', 0, 1);
+INSERT INTO `base_dict_item` VALUES (1777700787453112320, 1777697358802530304, 'AllocOrderStatus', 'allocation_end', '分账完成', b'1', 3.00, '', 1399985191002447872, '2024-04-09 22:11:10', 1399985191002447872, '2024-04-16 17:36:25', 0, 2);
+INSERT INTO `base_dict_item` VALUES (1777700835826020352, 1777697358802530304, 'AllocOrderStatus', 'allocation_failed', '分账失败', b'1', 4.00, '', 1399985191002447872, '2024-04-09 22:11:22', 1399985191002447872, '2024-04-16 17:16:34', 0, 2);
+INSERT INTO `base_dict_item` VALUES (1777700870613577728, 1777697358802530304, 'AllocOrderStatus', 'finish', '分账完结', b'1', 5.00, '', 1399985191002447872, '2024-04-09 22:11:30', 1399985191002447872, '2024-04-16 17:17:06', 0, 1);
 INSERT INTO `base_dict_item` VALUES (1777700915450687488, 1777697358802530304, 'AllocationStatus', 'partial_failed', '部分分账失败', b'1', 6.00, '', 1399985191002447872, '2024-04-09 22:11:41', 1399985191002447872, '2024-04-16 17:16:49', 1, 1);
-INSERT INTO `base_dict_item` VALUES (1777700964087836672, 1777697358802530304, 'AllocationOrderStatus', 'finish_failed', '分账完结失败', b'1', 6.00, '', 1399985191002447872, '2024-04-09 22:11:53', 1399985191002447872, '2024-04-16 17:17:25', 0, 1);
+INSERT INTO `base_dict_item` VALUES (1777700964087836672, 1777697358802530304, 'AllocOrderStatus', 'finish_failed', '分账完结失败', b'1', 6.00, '', 1399985191002447872, '2024-04-09 22:11:53', 1399985191002447872, '2024-04-16 17:17:25', 0, 1);
 INSERT INTO `base_dict_item` VALUES (1777701030081015808, 1777697358802530304, 'AllocationStatus', 'closed', '分账关闭', b'1', 8.00, '', 1399985191002447872, '2024-04-09 22:12:08', 1399985191002447872, '2024-04-16 17:16:19', 1, 0);
 INSERT INTO `base_dict_item` VALUES (1777701090676125696, 1777697358802530304, 'AllocationStatus', 'unknown', '分账状态未知', b'1', 9.00, '', 1399985191002447872, '2024-04-09 22:12:23', 1399985191002447872, '2024-04-16 17:16:16', 1, 0);
-INSERT INTO `base_dict_item` VALUES (1780164864510623744, 1780163691808391168, 'AllocationDetailResult', 'pending', '待分账', b'1', 1.00, '', 1399985191002447872, '2024-04-16 17:22:32', 1399985191002447872, '2024-04-16 17:22:32', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1780164903886749696, 1780163691808391168, 'AllocationDetailResult', 'success', '分账成功', b'1', 2.00, '', 1399985191002447872, '2024-04-16 17:22:42', 1399985191002447872, '2024-04-16 17:22:42', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1780164940712738816, 1780163691808391168, 'AllocationDetailResult', 'fail', '分账失败', b'1', 0.00, '', 1399985191002447872, '2024-04-16 17:22:50', 1399985191002447872, '2024-04-16 17:22:50', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1780165545665593344, 1780165499633106944, 'AllocationOrderResult', 'all_pending', '全部成功', b'1', 0.00, '', 1399985191002447872, '2024-04-16 17:25:15', 1399985191002447872, '2024-04-16 17:25:15', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1780165581623361536, 1780165499633106944, 'AllocationOrderResult', 'all_success', '全部成功', b'1', 1.00, '', 1399985191002447872, '2024-04-16 17:25:23', 1399985191002447872, '2024-04-16 17:25:23', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1780165617413357568, 1780165499633106944, 'AllocationOrderResult', 'part_success', '部分成功', b'1', 2.00, '', 1399985191002447872, '2024-04-16 17:25:32', 1399985191002447872, '2024-04-16 17:25:32', 0, 0);
-INSERT INTO `base_dict_item` VALUES (1780165653350154240, 1780165499633106944, 'AllocationOrderResult', 'all_failed', '全部失败', b'1', 3.00, '', 1399985191002447872, '2024-04-16 17:25:40', 1399985191002447872, '2024-04-16 17:25:40', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1780164864510623744, 1780163691808391168, 'AllocDetailResult', 'pending', '待分账', b'1', 1.00, '', 1399985191002447872, '2024-04-16 17:22:32', 1399985191002447872, '2024-04-16 17:22:32', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1780164903886749696, 1780163691808391168, 'AllocDetailResult', 'success', '分账成功', b'1', 2.00, '', 1399985191002447872, '2024-04-16 17:22:42', 1399985191002447872, '2024-04-16 17:22:42', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1780164940712738816, 1780163691808391168, 'AllocDetailResult', 'fail', '分账失败', b'1', 0.00, '', 1399985191002447872, '2024-04-16 17:22:50', 1399985191002447872, '2024-04-16 17:22:50', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1780165545665593344, 1780165499633106944, 'AllocOrderResult', 'all_pending', '全部处理中', b'1', 0.00, '', 1399985191002447872, '2024-04-16 17:25:15', 1399985191002447872, '2024-05-14 16:40:30', 0, 1);
+INSERT INTO `base_dict_item` VALUES (1780165581623361536, 1780165499633106944, 'AllocOrderResult', 'all_success', '全部成功', b'1', 1.00, '', 1399985191002447872, '2024-04-16 17:25:23', 1399985191002447872, '2024-04-16 17:25:23', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1780165617413357568, 1780165499633106944, 'AllocOrderResult', 'part_success', '部分成功', b'1', 2.00, '', 1399985191002447872, '2024-04-16 17:25:32', 1399985191002447872, '2024-04-16 17:25:32', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1780165653350154240, 1780165499633106944, 'AllocOrderResult', 'all_failed', '全部失败', b'1', 3.00, '', 1399985191002447872, '2024-04-16 17:25:40', 1399985191002447872, '2024-04-16 17:25:40', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1780165986231091200, 1780165929528295424, 'PayOrderAllocationStatus', 'waiting', '待分账', b'1', 1.00, '', 1399985191002447872, '2024-04-16 17:27:00', 1399985191002447872, '2024-04-16 17:27:00', 0, 0);
 INSERT INTO `base_dict_item` VALUES (1780166037149941760, 1780165929528295424, 'PayOrderAllocationStatus', 'allocation', '已分账', b'1', 2.00, '', 1399985191002447872, '2024-04-16 17:27:12', 1399985191002447872, '2024-04-16 17:27:12', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1786399594956660736, 1786399552686465024, 'ReconcileResult', 'consistent', '一致', b'1', 0.00, '', 1399985191002447872, '2024-05-03 22:17:08', 1399985191002447872, '2024-05-03 22:17:08', 0, 0);
+INSERT INTO `base_dict_item` VALUES (1786399681275437056, 1786399552686465024, 'ReconcileResult', 'inconsistent', '不一致', b'1', 1.00, '', 1399985191002447872, '2024-05-03 22:17:28', 1399985191002447872, '2024-05-03 22:17:28', 0, 0);
 
 -- ----------------------------
 -- Table structure for base_dynamic_data_source
 -- ----------------------------
 DROP TABLE IF EXISTS `base_dynamic_data_source`;
 CREATE TABLE `base_dynamic_data_source`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据源编码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据源名称',
-  `database_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库类型',
-  `auto_load` bit(1) NULL DEFAULT NULL COMMENT '是否启动自动加载',
-  `db_driver` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '驱动类',
-  `db_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库地址',
-  `db_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库名称',
-  `db_username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
-  `db_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '密码',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                             `id` bigint(20) NOT NULL,
+                                             `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据源编码',
+                                             `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据源名称',
+                                             `database_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库类型',
+                                             `auto_load` bit(1) NULL DEFAULT NULL COMMENT '是否启动自动加载',
+                                             `db_driver` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '驱动类',
+                                             `db_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库地址',
+                                             `db_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '数据库名称',
+                                             `db_username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
+                                             `db_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '密码',
+                                             `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+                                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                             `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                             `version` int(11) NOT NULL COMMENT '版本',
+                                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '动态数据源管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -430,70 +434,20 @@ CREATE TABLE `base_dynamic_data_source`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for base_dynamic_form
--- ----------------------------
-DROP TABLE IF EXISTS `base_dynamic_form`;
-CREATE TABLE `base_dynamic_form`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '表单名称',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '表单键名',
-  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '表单内容',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '动态表单' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of base_dynamic_form
--- ----------------------------
-
--- ----------------------------
--- Table structure for base_general_template
--- ----------------------------
-DROP TABLE IF EXISTS `base_general_template`;
-CREATE TABLE `base_general_template`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '模板名称',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '模板代码',
-  `use_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '使用类型(导入/导出)',
-  `file_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '模板类型',
-  `file_suffix` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '模板后缀名',
-  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '状态',
-  `file_id` bigint(20) NULL DEFAULT NULL COMMENT '文件ID',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '通用模板管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of base_general_template
--- ----------------------------
-
--- ----------------------------
 -- Table structure for base_key_value
 -- ----------------------------
 DROP TABLE IF EXISTS `base_key_value`;
 CREATE TABLE `base_key_value`  (
-  `id` bigint(20) NOT NULL,
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数键名',
-  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数值',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` bigint(20) NOT NULL,
+                                   `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数键名',
+                                   `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数值',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                                   `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                   `version` int(8) NOT NULL COMMENT '版本',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'kv存储' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -505,38 +459,38 @@ CREATE TABLE `base_key_value`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_param`;
 CREATE TABLE `base_param`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数名称',
-  `param_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数键名',
-  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数值',
-  `type` int(4) NULL DEFAULT NULL COMMENT '参数类型',
-  `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
-  `internal` bit(1) NOT NULL COMMENT '内置参数',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` bigint(20) NOT NULL,
+                               `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数名称',
+                               `param_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数键名',
+                               `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数值',
+                               `type` int(4) NULL DEFAULT NULL COMMENT '参数类型',
+                               `enable` bit(1) NOT NULL DEFAULT b'1' COMMENT '启用状态',
+                               `internal` bit(1) NOT NULL COMMENT '内置参数',
+                               `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                               `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+                               `last_modified_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                               `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                               `version` int(8) NOT NULL COMMENT '版本',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统参数配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of base_param
 -- ----------------------------
 INSERT INTO `base_param` VALUES (1452842684284891136, '测试', 'test.v1', '123', 1, b'1', b'0', NULL, 1399985191002447872, '2021-10-26 11:41:03', 1399985191002447872, '2024-01-07 23:31:08', 1, 0);
-INSERT INTO `base_param` VALUES (1529281530059161600, 'websocket服务器地址', 'WebsocketServerUrl', 'ws://127.0.0.1:9000', 1, b'1', b'1', '', 1399985191002447872, '2022-05-25 10:01:44', 1399985191002447872, '2024-01-07 23:31:29', 0, 3);
-INSERT INTO `base_param` VALUES (1545765299880448000, '服务器地址', 'ServerUrl', 'http://127.0.0.1:9000', 1, b'1', b'1', '优先级高于配置文件内进行的配置', 1399985191002447872, '2022-07-09 21:42:21', 1399985191002447872, '2024-01-07 23:31:20', 0, 2);
+INSERT INTO `base_param` VALUES (1529281530059161600, 'websocket服务器地址', 'WebsocketServerUrl', 'ws://127.0.0.1:9000', 1, b'1', b'1', '', 1399985191002447872, '2022-05-25 10:01:44', 1399985191002447872, '2024-02-27 13:10:12', 0, 4);
+INSERT INTO `base_param` VALUES (1545765299880448000, '服务器地址', 'ServerUrl', 'https://localhost', 1, b'1', b'1', '优先级高于配置文件内进行的配置', 1399985191002447872, '2022-07-09 21:42:21', 1399985191002447872, '2024-01-07 23:31:20', 0, 2);
 
 -- ----------------------------
 -- Table structure for base_province
 -- ----------------------------
 DROP TABLE IF EXISTS `base_province`;
 CREATE TABLE `base_province`  (
-  `code` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省份编码',
-  `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '省份名称',
-  PRIMARY KEY (`code`) USING BTREE
+                                  `code` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省份编码',
+                                  `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '省份名称',
+                                  PRIMARY KEY (`code`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '省份表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -544,40 +498,15 @@ CREATE TABLE `base_province`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for base_query_sql
--- ----------------------------
-DROP TABLE IF EXISTS `base_query_sql`;
-CREATE TABLE `base_query_sql`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `database_id` bigint(20) NULL DEFAULT NULL COMMENT '数据源ID',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名称',
-  `is_list` bit(1) NULL DEFAULT NULL COMMENT '是否集合',
-  `sql` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT 'sql语句',
-  `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SQL查询参数',
-  `fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SQL查询结果字段',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'SQL查询语句' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of base_query_sql
--- ----------------------------
-
--- ----------------------------
 -- Table structure for base_street
 -- ----------------------------
 DROP TABLE IF EXISTS `base_street`;
 CREATE TABLE `base_street`  (
-  `code` char(9) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '编码',
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '街道名称',
-  `area_code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '县区编码',
-  PRIMARY KEY (`code`) USING BTREE,
-  INDEX `inx_area_code`(`area_code`) USING BTREE COMMENT '县区'
+                                `code` char(9) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '编码',
+                                `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '街道名称',
+                                `area_code` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '县区编码',
+                                PRIMARY KEY (`code`) USING BTREE,
+                                INDEX `inx_area_code`(`area_code`) USING BTREE COMMENT '县区'
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '街道表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -589,11 +518,11 @@ CREATE TABLE `base_street`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `base_village`;
 CREATE TABLE `base_village`  (
-  `code` char(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '编码',
-  `name` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '名称',
-  `street_code` char(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '社区/乡镇编码',
-  PRIMARY KEY (`code`) USING BTREE,
-  INDEX `inx_street_code`(`street_code`) USING BTREE COMMENT '所属街道索引'
+                                 `code` char(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '编码',
+                                 `name` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '名称',
+                                 `street_code` char(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '社区/乡镇编码',
+                                 PRIMARY KEY (`code`) USING BTREE,
+                                 INDEX `inx_street_code`(`street_code`) USING BTREE COMMENT '所属街道索引'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '村庄/社区' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -601,41 +530,20 @@ CREATE TABLE `base_village`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for cash_record
--- ----------------------------
-DROP TABLE IF EXISTS `cash_record`;
-CREATE TABLE `cash_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单号',
-  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端ip',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '现金记录' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of cash_record
--- ----------------------------
-
--- ----------------------------
 -- Table structure for common_sequence_range
 -- ----------------------------
 DROP TABLE IF EXISTS `common_sequence_range`;
 CREATE TABLE `common_sequence_range`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `range_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '区间key',
-  `range_value` bigint(20) NOT NULL COMMENT '区间开始值',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                          `id` bigint(20) NOT NULL COMMENT '主键',
+                                          `range_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '区间key',
+                                          `range_value` bigint(20) NOT NULL COMMENT '区间开始值',
+                                          `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                          `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                          `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                          `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                          `version` int(11) NOT NULL COMMENT '版本',
+                                          `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '序列生成器队列区间管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -647,10 +555,10 @@ CREATE TABLE `common_sequence_range`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `ddl_history`;
 CREATE TABLE `ddl_history`  (
-  `script` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '脚本',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
-  `version` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本',
-  PRIMARY KEY (`script`) USING BTREE
+                                `script` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '脚本',
+                                `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
+                                `version` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本',
+                                PRIMARY KEY (`script`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'DDL 版本' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -662,21 +570,21 @@ CREATE TABLE `ddl_history`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_client`;
 CREATE TABLE `iam_client`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `internal` bit(1) NOT NULL COMMENT '是否系统内置',
-  `enable` bit(1) NOT NULL COMMENT '是否可用',
-  `default_endow` bit(1) NULL DEFAULT NULL COMMENT '新注册的用户是否默认赋予该终端',
-  `login_type_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '关联登录方式\r\n',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` bigint(20) NOT NULL COMMENT '主键',
+                               `code` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
+                               `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                               `internal` bit(1) NOT NULL COMMENT '是否系统内置',
+                               `enable` bit(1) NOT NULL COMMENT '是否可用',
+                               `default_endow` bit(1) NULL DEFAULT NULL COMMENT '新注册的用户是否默认赋予该终端',
+                               `login_type_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '关联登录方式\r\n',
+                               `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                               `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                               `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                               `version` int(11) NOT NULL COMMENT '乐观锁',
+                               `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '认证终端' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -689,18 +597,18 @@ INSERT INTO `iam_client` VALUES (1580487061605175296, 'dax-pay', '支付网关',
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_data_role`;
 CREATE TABLE `iam_data_role`  (
-  `id` bigint(20) NOT NULL COMMENT '角色ID',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编码',
-  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
-  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '说明',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL COMMENT '角色ID',
+                                  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编码',
+                                  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
+                                  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
+                                  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '说明',
+                                  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                  `version` int(11) NOT NULL COMMENT '版本',
+                                  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据范围权限' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -712,10 +620,10 @@ CREATE TABLE `iam_data_role`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_data_role_dept`;
 CREATE TABLE `iam_data_role_dept`  (
-  `id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL COMMENT '数据角色id',
-  `dept_id` bigint(20) NOT NULL COMMENT '部门id',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL,
+                                       `role_id` bigint(20) NOT NULL COMMENT '数据角色id',
+                                       `dept_id` bigint(20) NOT NULL COMMENT '部门id',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '数据范围部门关联配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -727,10 +635,10 @@ CREATE TABLE `iam_data_role_dept`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_data_role_user`;
 CREATE TABLE `iam_data_role_user`  (
-  `id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL COMMENT '数据角色id',
-  `user_id` bigint(20) NOT NULL COMMENT '用户id',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL,
+                                       `role_id` bigint(20) NOT NULL COMMENT '数据角色id',
+                                       `user_id` bigint(20) NOT NULL COMMENT '用户id',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '数据范围用户关联配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -742,23 +650,23 @@ CREATE TABLE `iam_data_role_user`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_dept`;
 CREATE TABLE `iam_dept`  (
-  `id` bigint(20) NOT NULL COMMENT 'ID',
-  `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父机构ID',
-  `dept_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构/部门名称',
-  `sort_no` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
-  `org_category` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '机构类别 1公司 2部门 3岗位',
-  `org_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构编码',
-  `mobile` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
-  `fax` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '传真',
-  `address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地址',
-  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` bigint(20) NOT NULL COMMENT 'ID',
+                             `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父机构ID',
+                             `dept_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构/部门名称',
+                             `sort_no` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
+                             `org_category` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '机构类别 1公司 2部门 3岗位',
+                             `org_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '机构编码',
+                             `mobile` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+                             `fax` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '传真',
+                             `address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地址',
+                             `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                             `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                             `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                             `version` int(11) NOT NULL COMMENT '版本',
+                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门组织机构表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -770,20 +678,20 @@ CREATE TABLE `iam_dept`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_login_security_config`;
 CREATE TABLE `iam_login_security_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `client_id` bigint(20) NULL DEFAULT NULL COMMENT '关联终端ID',
-  `require_login_change_pwd` bit(1) NULL DEFAULT NULL COMMENT '修改密码是否需要重新登录',
-  `captcha_enable` bit(1) NULL DEFAULT NULL COMMENT '默认启用验证码',
-  `max_captcha_error_count` int(11) NULL DEFAULT NULL COMMENT '出现验证码的错误次数',
-  `allow_multi_login` bit(1) NULL DEFAULT NULL COMMENT '同端是否允许同时登录',
-  `allow_multi_terminal_login` bit(1) NULL DEFAULT NULL COMMENT '多终端是否允许同时登录',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL COMMENT '主键',
+                                              `client_id` bigint(20) NULL DEFAULT NULL COMMENT '关联终端ID',
+                                              `require_login_change_pwd` bit(1) NULL DEFAULT NULL COMMENT '修改密码是否需要重新登录',
+                                              `captcha_enable` bit(1) NULL DEFAULT NULL COMMENT '默认启用验证码',
+                                              `max_captcha_error_count` int(11) NULL DEFAULT NULL COMMENT '出现验证码的错误次数',
+                                              `allow_multi_login` bit(1) NULL DEFAULT NULL COMMENT '同端是否允许同时登录',
+                                              `allow_multi_terminal_login` bit(1) NULL DEFAULT NULL COMMENT '多终端是否允许同时登录',
+                                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                              `version` int(11) NOT NULL COMMENT '乐观锁',
+                                              `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '登录安全策略' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -795,23 +703,23 @@ CREATE TABLE `iam_login_security_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_login_type`;
 CREATE TABLE `iam_login_type`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `internal` bit(1) NOT NULL COMMENT '是否系统内置',
-  `timeout` bigint(11) NULL DEFAULT NULL COMMENT '在线时长(秒)',
-  `captcha_type` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '验证码类型',
-  `captcha` bit(1) NOT NULL COMMENT '启用验证码',
-  `enable` bit(1) NOT NULL COMMENT '是否可用',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` bigint(20) NOT NULL COMMENT '主键',
+                                   `code` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
+                                   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                   `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
+                                   `internal` bit(1) NOT NULL COMMENT '是否系统内置',
+                                   `timeout` bigint(11) NULL DEFAULT NULL COMMENT '在线时长(秒)',
+                                   `captcha_type` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '验证码类型',
+                                   `captcha` bit(1) NOT NULL COMMENT '启用验证码',
+                                   `enable` bit(1) NOT NULL COMMENT '是否可用',
+                                   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                   `version` int(11) NOT NULL COMMENT '乐观锁',
+                                   `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录方式' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -828,36 +736,34 @@ INSERT INTO `iam_login_type` VALUES (1543126042909016064, 'weChat', '微信登�
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_password_change_history`;
 CREATE TABLE `iam_password_change_history`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户Id',
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '密码',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                                `id` bigint(20) NOT NULL COMMENT '主键',
+                                                `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户Id',
+                                                `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '密码',
+                                                `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '密码更改历史' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of iam_password_change_history
 -- ----------------------------
-INSERT INTO `iam_password_change_history` VALUES (1757299138075283456, 1757299137932677120, 'f52020dca765fd3943ed40a615dc2c5c', 1399985191002447872, '2024-02-13 15:02:18');
-INSERT INTO `iam_password_change_history` VALUES (1757317256038281216, 1757317255899869184, '1e9e3c3deaa4a06d08326e82a49d1b63', 1399985191002447872, '2024-02-13 16:14:18');
 
 -- ----------------------------
 -- Table structure for iam_password_login_fail_record
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_password_login_fail_record`;
 CREATE TABLE `iam_password_login_fail_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
-  `fail_count` int(11) NULL DEFAULT NULL COMMENT '登录失败次数',
-  `fail_time` datetime(0) NULL DEFAULT NULL COMMENT '登录失败时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                                   `id` bigint(20) NOT NULL COMMENT '主键',
+                                                   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
+                                                   `fail_count` int(11) NULL DEFAULT NULL COMMENT '登录失败次数',
+                                                   `fail_time` datetime NULL DEFAULT NULL COMMENT '登录失败时间',
+                                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                                   `version` int(11) NOT NULL COMMENT '乐观锁',
+                                                   `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '密码登录失败记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -869,21 +775,21 @@ CREATE TABLE `iam_password_login_fail_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_password_security_config`;
 CREATE TABLE `iam_password_security_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `max_pwd_error_count` int(11) NULL DEFAULT NULL COMMENT '最大密码错误数',
-  `error_lock_time` int(11) NULL DEFAULT NULL COMMENT '密码错误锁定时间(分钟)',
-  `require_change_pwd` bit(1) NULL DEFAULT NULL COMMENT '强制修改初始密码',
-  `update_frequency` int(11) NULL DEFAULT NULL COMMENT '更新频率',
-  `expire_remind` int(11) NULL DEFAULT NULL COMMENT '到期提醒(天数)',
-  `same_as_login_name` bit(1) NULL DEFAULT NULL COMMENT '与登录名相同',
-  `recent_password` int(11) NULL DEFAULT NULL COMMENT '不能与近期多少次密码相同',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                                 `id` bigint(20) NOT NULL COMMENT '主键',
+                                                 `max_pwd_error_count` int(11) NULL DEFAULT NULL COMMENT '最大密码错误数',
+                                                 `error_lock_time` int(11) NULL DEFAULT NULL COMMENT '密码错误锁定时间(分钟)',
+                                                 `require_change_pwd` bit(1) NULL DEFAULT NULL COMMENT '强制修改初始密码',
+                                                 `update_frequency` int(11) NULL DEFAULT NULL COMMENT '更新频率',
+                                                 `expire_remind` int(11) NULL DEFAULT NULL COMMENT '到期提醒(天数)',
+                                                 `same_as_login_name` bit(1) NULL DEFAULT NULL COMMENT '与登录名相同',
+                                                 `recent_password` int(11) NULL DEFAULT NULL COMMENT '不能与近期多少次密码相同',
+                                                 `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                 `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                 `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                                 `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                                 `version` int(11) NOT NULL COMMENT '乐观锁',
+                                                 `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '密码安全策略' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -896,35 +802,35 @@ INSERT INTO `iam_password_security_config` VALUES (1714844168393515008, 9999999,
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_perm_menu`;
 CREATE TABLE `iam_perm_menu`  (
-  `id` bigint(20) NOT NULL,
-  `client_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '终端code',
-  `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父id',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单名称',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路由名称',
-  `perm_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单权限编码',
-  `effect` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
-  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
-  `hidden` bit(1) NOT NULL COMMENT '是否隐藏',
-  `hide_children_in_menu` bit(1) NOT NULL COMMENT '是否隐藏子菜单',
-  `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件',
-  `component_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件名字',
-  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路径',
-  `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单跳转地址(重定向)',
-  `sort_no` double NOT NULL COMMENT '菜单排序',
-  `menu_type` int(5) NOT NULL COMMENT '类型（0：一级菜单；1：子菜单 ；2：按钮权限）',
-  `leaf` bit(1) NULL DEFAULT NULL COMMENT '是否叶子节点',
-  `keep_alive` bit(1) NULL DEFAULT NULL COMMENT '是否缓存页面',
-  `target_outside` bit(1) NULL DEFAULT NULL COMMENT '是否外部打开方式',
-  `hidden_header_content` bit(1) NULL DEFAULT NULL COMMENT '隐藏的标题内容',
-  `admin` bit(1) NOT NULL COMMENT '系统菜单',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `client_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '终端code',
+                                  `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父id',
+                                  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单名称',
+                                  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路由名称',
+                                  `perm_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单权限编码',
+                                  `effect` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+                                  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+                                  `hidden` bit(1) NOT NULL COMMENT '是否隐藏',
+                                  `hide_children_in_menu` bit(1) NOT NULL COMMENT '是否隐藏子菜单',
+                                  `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件',
+                                  `component_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件名字',
+                                  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路径',
+                                  `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单跳转地址(重定向)',
+                                  `sort_no` double NOT NULL COMMENT '菜单排序',
+                                  `menu_type` int(5) NOT NULL COMMENT '类型（0：一级菜单；1：子菜单 ；2：按钮权限）',
+                                  `leaf` bit(1) NULL DEFAULT NULL COMMENT '是否叶子节点',
+                                  `keep_alive` bit(1) NULL DEFAULT NULL COMMENT '是否缓存页面',
+                                  `target_outside` bit(1) NULL DEFAULT NULL COMMENT '是否外部打开方式',
+                                  `hidden_header_content` bit(1) NULL DEFAULT NULL COMMENT '隐藏的标题内容',
+                                  `admin` bit(1) NOT NULL COMMENT '系统菜单',
+                                  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                                  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                  `version` int(11) NOT NULL COMMENT '版本',
+                                  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '权限_菜单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -951,9 +857,6 @@ INSERT INTO `iam_perm_menu` VALUES (1582303143110340608, 'dax-pay', 158225315290
 INSERT INTO `iam_perm_menu` VALUES (1582303290070364160, 'dax-pay', 1582253152903843840, '定时任务', 'QuartzJobList', NULL, b'0', '', b'0', b'0', '/modules/baseapi/quartz/QuartzJobList.vue', NULL, '/system/config/quartz', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-18 17:31:17', 1414143554414059520, '2023-08-09 15:50:46', 2, 0);
 INSERT INTO `iam_perm_menu` VALUES (1582303447428067328, 'dax-pay', 1582253152903843840, '系统参数', 'SystemParamList', NULL, b'0', '', b'0', b'0', '/modules/system/param/SystemParamList.vue', NULL, '/system/config/param', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-18 17:31:54', 1414143554414059520, '2022-10-19 23:14:16', 1, 0);
 INSERT INTO `iam_perm_menu` VALUES (1582632873244172288, 'dax-pay', 1582276341792985088, '文件管理', 'FileUploadList', NULL, b'0', '', b'0', b'0', '/modules/develop/file/FileUploadList.vue', NULL, '/develop/file', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-19 15:20:56', 1414143554414059520, '2022-10-19 15:20:56', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1582633196587261952, 'dax-pay', 1582276341792985088, '代码生成', 'CodeGenList', NULL, b'0', '', b'0', b'0', '/modules/develop/codegen/CodeGenList.vue', NULL, '/develop/codegen', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-19 15:22:13', 1414143554414059520, '2022-10-19 15:23:17', 1, 0);
-INSERT INTO `iam_perm_menu` VALUES (1582633307786649600, 'dax-pay', 1582276341792985088, '动态表单', 'DynamicFormList', NULL, b'0', '', b'0', b'0', '/modules/develop/dynamicform/DynamicFormList.vue', NULL, '/develop/form', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-19 15:22:39', 1414143554414059520, '2022-10-19 15:22:39', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1582633620321017856, 'dax-pay', 1582276341792985088, '动态数据源', 'DynamicDataSourceList', NULL, b'0', '', b'0', b'0', '/modules/develop/dynamicsource/DynamicDataSourceList.vue', NULL, '/develop/source', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-19 15:23:54', 1414143554414059520, '2022-10-19 15:23:54', 0, 0);
 INSERT INTO `iam_perm_menu` VALUES (1583074308040925184, 'dax-pay', 1582275875424129024, '接口文档', 'ApiSwagger', NULL, b'0', '', b'0', b'0', '', NULL, 'http://127.0.0.1:9999/doc.html', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-20 20:35:02', 1414143554414059520, '2022-11-23 13:59:09', 2, 0);
 INSERT INTO `iam_perm_menu` VALUES (1583075229563068416, 'dax-pay', 1582275875424129024, '审计日志', 'AuditLog', NULL, b'0', '', b'0', b'0', 'Layout', NULL, '/monitor/log', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-20 20:38:42', 1414143554414059520, '2022-10-20 20:41:38', 2, 0);
 INSERT INTO `iam_perm_menu` VALUES (1583076217481043968, 'dax-pay', 1583075229563068416, '登录日志', 'LoginLogList', NULL, b'0', '', b'0', b'0', '/modules/monitor/login/LoginLogList.vue', NULL, '/monitor/log/login', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-20 20:42:37', 1414143554414059520, '2022-10-20 20:43:36', 1, 0);
@@ -976,24 +879,19 @@ INSERT INTO `iam_perm_menu` VALUES (1584381134950834176, 'dax-pay', 158437970412
 INSERT INTO `iam_perm_menu` VALUES (1584381322184564736, 'dax-pay', 1584380087805091840, '钉钉机器人', 'DingRobotConfigList', NULL, b'0', '', b'0', b'0', '/modules/third/dingtalk/robot/DingRobotConfigList.vue', NULL, '/third/dingTalk/robot', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-10-24 11:08:38', 1414143554414059520, '2022-11-12 20:58:37', 6, 0);
 INSERT INTO `iam_perm_menu` VALUES (1599337250200440832, 'dax-pay', NULL, '关于', '', NULL, b'0', 'ant-design:info-circle-outlined', b'0', b'0', '', NULL, '/about/index', '', 99, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2022-12-04 17:38:09', 1399985191002447872, '2024-01-14 23:09:56', 6, 0);
 INSERT INTO `iam_perm_menu` VALUES (1623494586215579648, 'dax-pay', 1552207982510706688, '行政区划', 'ChinaRegion', NULL, b'0', '', b'1', b'0', 'develop/region/ChinaRegionList', NULL, '/develop/region', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2023-02-09 09:30:47', 1399985191002447872, '2023-02-09 17:50:05', 1, 0);
-INSERT INTO `iam_perm_menu` VALUES (1629039360928075776, 'dax-pay', 1582276341792985088, '可视化大屏', 'ProjectInfoList', NULL, b'0', '', b'0', b'0', '/modules/develop/report/ProjectInfoList', NULL, '/develop/report', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2023-02-24 16:43:44', 1414143554414059520, '2023-02-24 16:44:17', 1, 0);
 INSERT INTO `iam_perm_menu` VALUES (1631946120891707392, 'dax-pay', 1552207982510706688, '可视化大屏', 'ProjectInfoList', NULL, b'0', '', b'0', b'0', 'develop/report/ProjectInfoList', NULL, '/develop/report', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2023-03-04 17:14:10', 1399985191002447872, '2023-03-04 17:14:10', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1635274568758435840, 'dax-pay', 1582276341792985088, '数据集管理', 'DataResultSqlList', NULL, b'0', '', b'0', b'0', '/modules/develop/dataresult/DataResultSqlList', NULL, '/develop/dataresult', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2023-03-13 21:40:14', 1414143554414059520, '2023-09-18 14:26:51', 3, 0);
 INSERT INTO `iam_perm_menu` VALUES (1687369862646558720, 'dax-pay', 1582275984849326080, '短信管理', 'Sms', NULL, b'0', '', b'0', b'0', 'Layout', NULL, '/notice/sms', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2023-08-04 15:48:20', 1414143554414059520, '2023-08-04 15:48:32', 1, 0);
 INSERT INTO `iam_perm_menu` VALUES (1687370142234669056, 'dax-pay', 1687369862646558720, '短信配置', 'SmsChannelConfigList', NULL, b'0', '', b'0', b'0', '/modules/notice/sms/config/SmsChannelConfigList', NULL, '/notice/sms/config', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2023-08-04 15:49:26', 1414143554414059520, '2023-08-04 15:49:26', 0, 0);
 INSERT INTO `iam_perm_menu` VALUES (1687370277496778752, 'dax-pay', 1687369862646558720, '短信模板', 'SmsTemplateList', NULL, b'0', '', b'0', b'0', '/modules/notice/sms/template/SmsTemplateList', NULL, '/notice/sms/template', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2023-08-04 15:49:59', 1414143554414059520, '2023-08-04 15:50:38', 1, 0);
-INSERT INTO `iam_perm_menu` VALUES (1689181991598997504, 'dax-pay', 1582253152903843840, '敏感词管理', 'ChinaWord', NULL, b'0', '', b'0', b'0', '/modules/baseapi/chianword/ChinaWordList.vue', NULL, '/system/config/chinaword', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2023-08-09 15:49:05', 1414143554414059520, '2023-08-09 15:49:05', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1690324070514782208, 'dax-pay', 1582276341792985088, '通用模板', 'GeneralTemplateList', NULL, b'0', '', b'0', b'0', '/modules/develop/template/GeneralTemplateList', NULL, '/develop/template', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2023-08-12 19:27:18', 1414143554414059520, '2023-08-12 19:31:26', 3, 0);
-INSERT INTO `iam_perm_menu` VALUES (1703665090038800384, 'dax-pay', 1582276341792985088, '在线SQL', 'SqlQueryInfo', NULL, b'0', '', b'0', b'0', '/modules/develop/query/SqlQueryInfo', NULL, '/develop/sqlquery', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1414143554414059520, '2023-09-18 14:59:45', 1414143554414059520, '2023-09-18 14:59:45', 0, 0);
 INSERT INTO `iam_perm_menu` VALUES (1713931084759293952, 'dax-pay', 1582253306356649984, '密码安全', 'PassowrdSecurity', NULL, b'0', '', b'0', b'0', '/modules/system/security/password/PasswordSecurityConfig.vue', NULL, '/system/config/passowrd', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2023-10-16 22:53:09', 1399985191002447872, '2023-10-16 22:58:59', 2, 0);
 INSERT INTO `iam_perm_menu` VALUES (1733829906427682816, 'dax-pay', 1582275875424129024, '在线用户', 'OnlineUserList', NULL, b'0', '', b'0', b'0', '/modules/monitor/user/online/OnlineUserList', NULL, '/monitor/user/online', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2023-12-10 20:43:57', 1399985191002447872, '2023-12-10 20:43:57', 0, 0);
 INSERT INTO `iam_perm_menu` VALUES (1744271715476684800, 'dax-pay', NULL, '支付配置', 'PayConfig', NULL, b'0', 'ant-design:setting-filled', b'0', b'0', 'Layout', NULL, '/pay/config', '', 0, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-08 16:15:59', 1399985191002447872, '2024-01-09 15:38:06', 1, 0);
 INSERT INTO `iam_perm_menu` VALUES (1744276101384880128, 'dax-pay', 1744271715476684800, '支付通道', 'PayChannelConfigList', NULL, b'0', '', b'0', b'0', 'payment/system/channel/PayChannelConfigList', NULL, '/pay/config/channel', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-08 16:33:24', 1399985191002447872, '2024-01-18 14:49:15', 3, 0);
-INSERT INTO `iam_perm_menu` VALUES (1744372631231995904, 'dax-pay', 1744271715476684800, '支付方式', 'PayWayInfoList', NULL, b'0', '', b'0', b'0', 'payment/system/way/PayWayInfoList', NULL, '/pay/config/way', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-08 22:56:59', 1399985191002447872, '2024-01-18 14:50:55', 2, 0);
+INSERT INTO `iam_perm_menu` VALUES (1744372631231995904, 'dax-pay', 1744271715476684800, '支付方式', 'PayMethodInfoList', NULL, b'0', '', b'0', b'0', 'payment/system/method/PayMethodInfoList', NULL, '/pay/config/method', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-08 22:56:59', 1399985191002447872, '2024-05-01 22:53:13', 3, 0);
 INSERT INTO `iam_perm_menu` VALUES (1744624886658318336, 'dax-pay', 1744271715476684800, '支付接口', 'PayApiConfigList', NULL, b'0', '', b'0', b'0', 'payment/system/api/PayApiConfigList', NULL, '/pay/config/api', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-09 15:39:21', 1399985191002447872, '2024-01-10 11:52:20', 2, 0);
 INSERT INTO `iam_perm_menu` VALUES (1744642856348520448, 'dax-pay', NULL, '订单管理', 'PayOrder', NULL, b'0', 'ant-design:wallet-outlined', b'0', b'0', 'Layout', NULL, '/pay/order', '', 0, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-09 16:50:46', 1399985191002447872, '2024-01-09 16:53:35', 3, 0);
 INSERT INTO `iam_perm_menu` VALUES (1744643265142165504, 'dax-pay', NULL, '数据记录', 'PayRecord', NULL, b'0', 'ant-design:profile-outlined', b'0', b'0', 'Layout', NULL, '/pay/record', '', 0, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-09 16:52:23', 1399985191002447872, '2024-01-09 16:53:50', 1, 0);
-INSERT INTO `iam_perm_menu` VALUES (1744930046228017152, 'dax-pay', 1744643265142165504, '回调记录', 'PayCallbackRecordList', NULL, b'0', '', b'0', b'0', 'payment/record/callback/PayCallbackRecordList', NULL, '/pay/record/callback', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-10 11:51:57', 1399985191002447872, '2024-01-10 11:59:07', 10, 0);
+INSERT INTO `iam_perm_menu` VALUES (1744930046228017152, 'dax-pay', 1744643265142165504, '回调记录', 'PayCallbackRecordList', NULL, b'0', '', b'0', b'0', 'payment/record/callback/PayCallbackRecordList', NULL, '/pay/record/callback', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-10 11:51:57', 1399985191002447872, '2024-05-01 23:15:23', 10, 0);
 INSERT INTO `iam_perm_menu` VALUES (1745126072389963776, 'dax-pay', 1744643265142165504, '关闭记录', 'PayCloseRecordList', NULL, b'0', '', b'0', b'0', 'payment/record/close/PayCloseRecordList', NULL, '/pay/record/close', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-11 00:50:53', 1399985191002447872, '2024-01-11 00:50:53', 0, 0);
 INSERT INTO `iam_perm_menu` VALUES (1745136155962347520, 'dax-pay', 1744643265142165504, '修复记录', 'PayRepairRecordList', NULL, b'0', '', b'0', b'0', 'payment/record/repair/PayRepairRecordList', NULL, '/pay/record/repair', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-11 01:30:57', 1399985191002447872, '2024-01-11 01:30:57', 0, 0);
 INSERT INTO `iam_perm_menu` VALUES (1745143528663781376, 'dax-pay', 1744643265142165504, '同步记录', 'PaySyncRecordList', NULL, b'0', '', b'0', b'0', 'payment/record/sync/PaySyncRecordList', NULL, '/pay/record/sync', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-11 02:00:15', 1399985191002447872, '2024-01-11 02:00:33', 1, 0);
@@ -1001,621 +899,513 @@ INSERT INTO `iam_perm_menu` VALUES (1745457623493496832, 'dax-pay', 174464285634
 INSERT INTO `iam_perm_menu` VALUES (1745457746529210368, 'dax-pay', 1744642856348520448, '退款订单', 'RefundOrderList', NULL, b'0', '', b'0', b'0', 'payment/order/refund/RefundOrderList.vue', NULL, '/pay/order/refund', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-11 22:48:50', 1399985191002447872, '2024-01-21 22:50:29', 2, 0);
 INSERT INTO `iam_perm_menu` VALUES (1745822093382230016, 'dax-pay', 1744271715476684800, '通道配置', 'ChannelPayConfigList', NULL, b'0', '', b'0', b'0', 'payment/channel/config/ChannelPayConfigList', NULL, '/pay/config/channelpay', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-12 22:56:38', 1399985191002447872, '2024-02-06 14:32:08', 2, 0);
 INSERT INTO `iam_perm_menu` VALUES (1746194891925561344, 'dax-pay', 1744271715476684800, '平台配置', 'PayPlatformConfig', NULL, b'0', '', b'0', b'0', 'payment/system/platform/PayPlatformConfig', NULL, '/pay/config/platform', '', -1, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-13 23:38:00', 1399985191002447872, '2024-01-13 23:38:00', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1749262518385082368, 'dax-pay', 1744642856348520448, '对账订单', 'ReconcileOrderList', NULL, b'0', '', b'0', b'0', 'payment/order/reconcile/order/ReconcileOrderList.vue', NULL, '/pay/order/reconcile/list', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-22 10:47:39', 1399985191002447872, '2024-04-16 19:11:56', 5, 0);
-INSERT INTO `iam_perm_menu` VALUES (1758860876272861184, 'dax-pay', NULL, '支付通道', 'PayChannel', NULL, b'0', 'ant-design:align-left-outlined', b'0', b'0', 'Layout', NULL, '/pay/channel', '', 0, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-17 22:28:06', 1399985191002447872, '2024-02-17 22:28:06', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1758861129311027200, 'dax-pay', 1758860876272861184, '钱包管理', 'WalletList', NULL, b'0', '', b'0', b'0', 'payment/channel/wallet/manager/WalletList', NULL, '/pay/channel/wallet', '', -1, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-17 22:29:06', 1399985191002447872, '2024-03-05 22:09:12', 2, 0);
-INSERT INTO `iam_perm_menu` VALUES (1759192238594949120, 'dax-pay', 1758860876272861184, '储值卡管理', 'VoucherList', NULL, b'0', '', b'0', b'0', 'payment/channel/voucher/manager/VoucherList', NULL, '/pay/channel/voucher', '', -1, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-18 20:24:49', 1399985191002447872, '2024-03-05 22:09:30', 2, 0);
-INSERT INTO `iam_perm_menu` VALUES (1759192520611561472, 'dax-pay', 1758860876272861184, '现金流水', 'CashRecordList', NULL, b'0', '', b'0', b'0', 'payment/channel/cash/record/CashRecordList', NULL, '/pay/channel/cash', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-18 20:25:56', 1399985191002447872, '2024-02-18 23:35:22', 1, 0);
+INSERT INTO `iam_perm_menu` VALUES (1749262518385082368, 'dax-pay', 1786808188825194496, '对账单', 'ReconcileOrderList', NULL, b'0', '', b'0', b'0', 'payment/reconcile/order/ReconcileOrderList.vue', NULL, '/pay/reconcile/order', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-01-22 10:47:39', 1399985191002447872, '2024-05-05 17:09:14', 9, 0);
 INSERT INTO `iam_perm_menu` VALUES (1759768820429352960, 'dax-pay', NULL, '演示模块', '', NULL, b'0', 'ant-design:crown-outlined', b'0', b'0', 'Layout', NULL, '/pay/demo', '', 9, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-20 10:35:56', 1399985191002447872, '2024-02-20 10:35:56', 0, 0);
 INSERT INTO `iam_perm_menu` VALUES (1759769092698402816, 'dax-pay', 1759768820429352960, '收银台演示', '', NULL, b'0', '', b'0', b'0', '', NULL, 'outside:///cashier', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-20 10:37:01', 1399985191002447872, '2024-02-20 10:37:01', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1759861648606097408, 'dax-pay', 1758860876272861184, '支付宝流水', 'AlipayRecordList', NULL, b'0', '', b'0', b'0', 'payment/channel/alipay/record/AlipayRecordList', NULL, '/pay/channel/alipay', '', -1, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-20 16:44:48', 1399985191002447872, '2024-02-20 16:44:48', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1759865163772485632, 'dax-pay', 1758860876272861184, '微信流水', 'WechatPayRecordList', NULL, b'0', '', b'0', b'0', 'payment/channel/wechat/record/WechatPayRecordList', NULL, '/pay/channel/wecha', '', -1, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-20 16:58:46', 1399985191002447872, '2024-02-20 17:00:08', 1, 0);
-INSERT INTO `iam_perm_menu` VALUES (1761429304959528960, 'dax-pay', NULL, '任务记录', 'PayTask', NULL, b'0', 'ant-design:clock-circle-outlined', b'0', b'0', 'Layout', NULL, '/pay/task', '', 0, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-25 00:34:07', 1399985191002447872, '2024-02-25 00:34:30', 1, 0);
-INSERT INTO `iam_perm_menu` VALUES (1761429682618855424, 'dax-pay', 1761429304959528960, '消息通知', 'ClientNoticeTaskList', NULL, b'0', '', b'0', b'0', 'payment/task/notice/ClientNoticeTaskList', NULL, '/pay/task/notice', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-25 00:35:37', 1399985191002447872, '2024-02-25 00:35:37', 0, 0);
-INSERT INTO `iam_perm_menu` VALUES (1764638353289027584, 'dax-pay', 1749262518385082368, '对账单', 'ReconcileOrderList', NULL, b'0', '', b'0', b'0', 'payment/order/reconcile/order/ReconcileOrderList.vue', NULL, '/pay/order/reconcile/list', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-03-04 21:05:43', 1399985191002447872, '2024-04-16 19:12:02', 1, 1);
-INSERT INTO `iam_perm_menu` VALUES (1764638678821543936, 'dax-pay', 1749262518385082368, '差异单', 'ReconcileDiffList', NULL, b'0', '', b'1', b'0', 'payment/order/reconcile/diff/ReconcileDiffList.vue', NULL, '/pay/order/reconcile/diff', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-03-04 21:07:01', 1399985191002447872, '2024-04-16 19:12:06', 2, 1);
-INSERT INTO `iam_perm_menu` VALUES (1768203432981655552, 'dax-pay', 1758860876272861184, '云闪付流水', 'UnionPayRecordList', NULL, b'0', '', b'0', b'0', 'payment/channel/union/record/UnionPayRecordList', NULL, '/pay/channel/union', '', -1, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-03-14 17:12:05', 1399985191002447872, '2024-03-14 17:12:05', 0, 0);
+INSERT INTO `iam_perm_menu` VALUES (1761429304959528960, 'dax-pay', NULL, '支付通知', 'PayNotic', NULL, b'0', 'ant-design:clock-circle-outlined', b'0', b'0', 'Layout', NULL, '/pay/notice', '', 0, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-25 00:34:07', 1399985191002447872, '2024-05-08 15:31:04', 3, 0);
+INSERT INTO `iam_perm_menu` VALUES (1761429682618855424, 'dax-pay', 1761429304959528960, '通知记录', 'ClientNoticeTaskList', NULL, b'0', '', b'0', b'0', 'payment/task/notice/ClientNoticeTaskList', NULL, '/pay/notice/record', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-02-25 00:35:37', 1399985191002447872, '2024-05-08 15:30:56', 1, 0);
 INSERT INTO `iam_perm_menu` VALUES (1775089099078553600, 'dax-pay', NULL, '分账管理', 'Allocation', NULL, b'0', 'ant-design:sliders-twotone', b'0', b'0', 'Layout', NULL, '/pay/allocation', '', 0, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-04-02 17:13:15', 1399985191002447872, '2024-04-02 17:13:15', 0, 0);
 INSERT INTO `iam_perm_menu` VALUES (1775089820368818176, 'dax-pay', 1775089099078553600, '分账接收者', 'AllocationReceiverList', NULL, b'0', '', b'0', b'0', 'payment/allocation/receiver/AllocationReceiverList', NULL, '/pay/allocation/receiver', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-04-02 17:16:07', 1399985191002447872, '2024-04-02 17:23:13', 2, 0);
 INSERT INTO `iam_perm_menu` VALUES (1775091561835450368, 'dax-pay', 1775089099078553600, '分账组', 'AllocationGroupList', NULL, b'0', '', b'0', b'0', 'payment/allocation/group/AllocationGroupList', NULL, '/pay/allocation/group', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-04-02 17:23:03', 1399985191002447872, '2024-04-02 17:23:27', 1, 0);
-INSERT INTO `iam_perm_menu` VALUES (1777688382748700672, 'dax-pay', 1744642856348520448, '分账订单', 'AllocationOrderList', NULL, b'0', '', b'0', b'0', 'payment/order/allocation/AllocationOrderList', NULL, '/pay/order/allocation', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-04-09 21:21:53', 1399985191002447872, '2024-04-09 21:21:53', 0, 0);
+INSERT INTO `iam_perm_menu` VALUES (1777688382748700672, 'dax-pay', 1775089099078553600, '分账订单', 'AllocationOrderList', NULL, b'0', '', b'0', b'0', 'payment/allocation/order/AllocationOrderList', NULL, '/pay/allocation/order', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-04-09 21:21:53', 1399985191002447872, '2024-05-05 17:06:17', 3, 0);
+INSERT INTO `iam_perm_menu` VALUES (1786808188825194496, 'dax-pay', NULL, '对账管理', 'Reconcile', NULL, b'0', 'ant-design:arrows-alt-outlined', b'0', b'0', 'Layout', NULL, '/pay/reconcile', '', 0, 0, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-05-05 01:20:44', 1399985191002447872, '2024-05-05 01:20:54', 1, 0);
+INSERT INTO `iam_perm_menu` VALUES (1786810890951020544, 'dax-pay', 1786808188825194496, '对账差异', 'ReconcileDiffList', NULL, b'0', '', b'0', b'0', 'payment/reconcile/diff/ReconcileDiffList.vue', NULL, '/pay/reconcile/diff', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-05-05 01:31:28', 1399985191002447872, '2024-05-05 17:08:38', 1, 0);
+INSERT INTO `iam_perm_menu` VALUES (1786811341285052416, 'dax-pay', 1786808188825194496, '外部交易明细', 'ReconcileDetailList', NULL, b'0', '', b'1', b'0', 'payment/reconcile/detail/ReconcileDetailList.vue', NULL, '/pay/reconcile/detail', '', 0, 1, NULL, b'1', b'0', b'0', b'0', NULL, 1399985191002447872, '2024-05-05 01:33:16', 1399985191002447872, '2024-05-05 20:24:24', 2, 0);
 
 -- ----------------------------
 -- Table structure for iam_perm_path
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_perm_path`;
 CREATE TABLE `iam_perm_path`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '权限标识',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限名称',
-  `request_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求类型',
-  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求路径',
-  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组名称',
-  `enable` bit(1) NOT NULL COMMENT '启用状态',
-  `generate` bit(1) NOT NULL COMMENT '是否通过系统生成的权限',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `creator` bigint(20) NULL DEFAULT NULL,
-  `create_time` datetime(6) NULL DEFAULT NULL,
-  `last_modifier` bigint(20) NULL DEFAULT NULL,
-  `last_modified_time` datetime(6) NULL DEFAULT NULL,
-  `deleted` bit(1) NOT NULL,
-  `version` int(11) NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '权限标识',
+                                  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限名称',
+                                  `request_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求类型',
+                                  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求路径',
+                                  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组名称',
+                                  `enable` bit(1) NOT NULL COMMENT '启用状态',
+                                  `generate` bit(1) NOT NULL COMMENT '是否通过系统生成的权限',
+                                  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                                  `creator` bigint(20) NULL DEFAULT NULL,
+                                  `create_time` datetime(6) NULL DEFAULT NULL,
+                                  `last_modifier` bigint(20) NULL DEFAULT NULL,
+                                  `last_modified_time` datetime(6) NULL DEFAULT NULL,
+                                  `deleted` bit(1) NOT NULL,
+                                  `version` int(11) NOT NULL,
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '权限_请求' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of iam_perm_path
 -- ----------------------------
-INSERT INTO `iam_perm_path` VALUES (1757297527147974656, 'DynamicDataSourceController#existsByCode', '编码是否被使用', 'GET', '/dynamic/source/existsByCode', '动态数据源管理', b'1', b'1', '动态数据源管理 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974658, 'QuartzJobController#stop', '停止', 'POST', '/quartz/stop', '定时任务', b'1', b'1', '定时任务 停止', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974659, 'RoleController#page', '分页查询角色', 'GET', '/role/page', '角色管理', b'1', b'1', '角色管理 分页查询角色', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974660, 'DictionaryItemController#delete', '删除字典项', 'DELETE', '/dict/item/delete', '字典项', b'1', b'1', '字典项 删除字典项', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974661, 'UserAssistController#validatePhoneChangeCaptcha', '验证改/绑定手机验证码', 'GET', '/user/validatePhoneChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证改/绑定手机验证码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974662, 'PayRefundOrderController#refund', '手动发起退款', 'POST', '/order/refund/refund', '支付退款控制器', b'1', b'1', '支付退款控制器 手动发起退款', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974663, 'UserDataRoleController#findDataRoleByUser', '根据用户ID获取到数据角色列表', 'GET', '/user/data/role/findDataRoleByUser', '用户数据角色配置', b'1', b'1', '用户数据角色配置 根据用户ID获取到数据角色列表', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974664, 'FIleUpLoadController#preview', '预览文件(流量会经过后端)', 'GET', '/file/preview/{id}', '文件上传', b'1', b'1', '文件上传 预览文件(流量会经过后端)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974665, 'UserAssistController#sendPhoneForgetCaptcha', '发送找回密码手机验证码', 'POST', '/user/sendPhoneForgetCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 发送找回密码手机验证码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974666, 'DynamicDataSourceController#findById', '通过ID查询', 'GET', '/dynamic/source/findById', '动态数据源管理', b'1', b'1', '动态数据源管理 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974667, 'GeneralTemplateController#findByCode', '通过Code查询', 'GET', '/general/template/findByCode', '通用模板管理', b'1', b'1', '通用模板管理 通过Code查询', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974668, 'AlipayConfigController#update', '更新', 'POST', '/alipay/config/update', '支付宝配置', b'1', b'1', '支付宝配置 更新', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974669, 'UniPayController#refund', '统一退款', 'POST', '/unipay/refund', '统一支付接口', b'1', b'1', '统一支付接口 统一退款', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974670, 'DynamicFormController#existsByCode', '编码是否被使用', 'GET', '/dynamic/form/existsByCode', '动态表单', b'1', b'1', '动态表单 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974671, 'TestController#wxcs', '微信回调测试', 'GET', '/test/wxcs/', '测试', b'1', b'1', '测试 微信回调测试', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-04-16 20:47:44.531000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974672, 'TestController#wxcs', '微信回调测试', 'GET', '/test/wxcs', '测试', b'1', b'1', '测试 微信回调测试', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-04-16 20:47:44.526000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974673, 'MessageTemplateController#page', '分页', 'GET', '/message/template/page', '消息模板', b'1', b'1', '消息模板 分页', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974674, 'GeneralTemplateController#findAll', '查询所有', 'GET', '/general/template/findAll', '通用模板管理', b'1', b'1', '通用模板管理 查询所有', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974675, 'QuartzJobLogController#findById', '单条', 'GET', '/quartz/log/findById', '定时任务执行日志', b'1', b'1', '定时任务执行日志 单条', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974676, 'UserAdminController#ban', '封禁用户', 'POST', '/user/admin/ban', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 封禁用户', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974677, 'ChinaWordController#findAll', '查询所有', 'GET', '/chinaword/findAll', '敏感词管理', b'1', b'1', '敏感词管理 查询所有', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974678, 'DeptController#deleteAndChildren', '强制级联删除', 'DELETE', '/dept/deleteAndChildren', '部门管理', b'1', b'1', '部门管理 强制级联删除', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974679, 'ChinaWordController#local', '批量导入', 'POST', '/chinaword/importBatch', '敏感词管理', b'1', b'1', '敏感词管理 批量导入', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974680, 'TokenEndpoint#logout', '退出', 'POST', '/token/logout', '认证相关', b'1', b'1', '认证相关 退出', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974681, 'UserThirdController#findById', '获取详情', 'POST', '/user/third/findById', '用户三方登录管理', b'1', b'1', '用户三方登录管理 获取详情', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974682, 'MailConfigController#existsByCode', '编码是否被使用', 'GET', '/mail/config/existsByCode', '邮箱配置', b'1', b'1', '邮箱配置 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974683, 'GeneralTemplateController#add', '添加', 'POST', '/general/template/add', '通用模板管理', b'1', b'1', '通用模板管理 添加', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974684, 'SystemParamController#delete', '删除', 'DELETE', '/system/param/delete', '系统参数', b'1', b'1', '系统参数 删除', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974685, 'QuartzJobController#add', '添加', 'POST', '/quartz/add', '定时任务', b'1', b'1', '定时任务 添加', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974686, 'PermPathController#deleteBatch', '批量删除', 'DELETE', '/perm/path/deleteBatch', '请求权限管理', b'1', b'1', '请求权限管理 批量删除', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974687, 'DictionaryItemController#findAllByEnable', '获取启用的字典项列表', 'GET', '/dict/item/findAllByEnable', '字典项', b'1', b'1', '字典项 获取启用的字典项列表', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974688, 'UserInfoController#updatePhone', '修改手机号', 'POST', '/user/updatePhone', '用户管理', b'1', b'1', '用户管理 修改手机号', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974689, 'DynamicFormController#delete', '删除', 'DELETE', '/dynamic/form/delete', '动态表单', b'1', b'1', '动态表单 删除', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974690, 'TestController#lock2', '锁测试2', 'GET', '/test/lock2', '测试', b'1', b'1', '测试 锁测试2', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974691, 'PayCloseRecordController#findById', '查询单条', 'GET', '/record/close/findById', '支付订单关闭记录', b'1', b'1', '支付订单关闭记录 查询单条', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974692, 'WeChatPayConfigController#update', '更新', 'POST', '/wechat/pay/config/update', '微信支付配置', b'1', b'1', '微信支付配置 更新', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974693, 'UserRoleController#findRolesByUser', '根据用户ID获取到角色集合', 'GET', '/user/role/findRolesByUser', '用户角色管理', b'1', b'1', '用户角色管理 根据用户ID获取到角色集合', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974694, 'WechatNoticeConfigController#update', '更新微信消息通知配置', 'POST', '/wx/notice/update', '微信消息通知配置', b'1', b'1', '微信消息通知配置 更新微信消息通知配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974695, 'WecomRobotConfigController#add', '新增机器人配置', 'POST', '/wecom/robot/config/add', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 新增机器人配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974696, 'PermMenuController#menuTree', '获取菜单树', 'GET', '/perm/menu/menuTree', '菜单和权限码', b'1', b'1', '菜单和权限码 获取菜单树', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974697, 'DataResultController#add', '新建', 'POST', '/data/result/add', 'SQL查询', b'1', b'1', 'SQL查询 新建', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974698, 'UserAdminController#unlock', '解锁用户', 'POST', '/user/admin/unlock', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 解锁用户', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974699, 'DynamicFormController#page', '分页查询', 'GET', '/dynamic/form/page', '动态表单', b'1', b'1', '动态表单 分页查询', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974700, 'UniPayController#simpleRefund', '简单退款', 'POST', '/unipay/simpleRefund', '统一支付接口', b'1', b'1', '统一支付接口 简单退款', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974701, 'DynamicDataSourceController#testConnection', '测试连接(根据参数)', 'POST', '/dynamic/source/testConnection', '动态数据源管理', b'1', b'1', '动态数据源管理 测试连接(根据参数)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974702, 'SystemParamController#update', '更新', 'POST', '/system/param/update', '系统参数', b'1', b'1', '系统参数 更新', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974703, 'ForwardH5Controller#toH5', 'toH5', 'GET', '/h5/', 'ForwardH5Controller', b'1', b'1', 'ForwardH5Controller toH5', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974704, 'OpenApiWebMvcResource#openapiYaml', 'openapiYaml', 'GET', '/v3/api-docs.yaml', 'OpenApiWebMvcResource', b'1', b'1', 'OpenApiWebMvcResource openapiYaml', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974705, 'SmsChannelConfigController#add', '添加', 'POST', '/sms/config/add', '短信渠道配置', b'1', b'1', '短信渠道配置 添加', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974706, 'DataVersionLogController#findById', '获取', 'GET', '/log/dataVersion/findById', '数据版本日志', b'1', b'1', '数据版本日志 获取', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974707, 'MailConfigController#add', '增加新邮箱配置', 'POST', '/mail/config/add', '邮箱配置', b'1', b'1', '邮箱配置 增加新邮箱配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974708, 'UserInfoController#updateBaseInfo', '修改用户基础信息', 'POST', '/user/updateBaseInfo', '用户管理', b'1', b'1', '用户管理 修改用户基础信息', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974709, 'UserInfoController#bindPhone', '绑定手机', 'POST', '/user/bindPhone', '用户管理', b'1', b'1', '用户管理 绑定手机', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974710, 'NcDemoController#sendImageNotice', '企微图片消息测试', 'POST', '/nc/test/sendImageNotice', 'nc测试', b'1', b'1', 'nc测试 企微图片消息测试', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974711, 'PermPathController#batchUpdateEnable', '批量更新状态', 'POST', '/perm/path/batchUpdateEnable', '请求权限管理', b'1', b'1', '请求权限管理 批量更新状态', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974713, 'WeChatPortalController#post', 'post', 'POST', '/wechat/portal', '微信接入入口', b'1', b'1', '微信接入入口 post', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974714, 'UniPayController#simplePay', '简单下单', 'POST', '/unipay/simplePay', '统一支付接口', b'1', b'1', '统一支付接口 简单下单', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974715, 'SmsTemplateController#findAll', '查询所有', 'GET', '/sms/template/findAll', '短信模板配置', b'1', b'1', '短信模板配置 查询所有', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974716, 'MessageTemplateController#existsByCode', '编码是否被使用', 'GET', '/message/template/existsByCode', '消息模板', b'1', b'1', '消息模板 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974717, 'MailConfigController#updateMailConfig', '更新邮箱配置', 'POST', '/mail/config/update', '邮箱配置', b'1', b'1', '邮箱配置 更新邮箱配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974718, 'UserInfoController#updatePassword', '修改密码', 'POST', '/user/updatePassword', '用户管理', b'1', b'1', '用户管理 修改密码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974719, 'DictionaryItemController#existsByCode', '编码是否被使用', 'GET', '/dict/item/existsByCode', '字典项', b'1', b'1', '字典项 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974720, 'SmsChannelConfigController#update', '修改', 'POST', '/sms/config/update', '短信渠道配置', b'1', b'1', '短信渠道配置 修改', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974721, 'DataRoleController#existsByName', '名称是否被使用(不包含自己)', 'GET', '/data/role/existsByNameNotId', '数据角色配置', b'1', b'1', '数据角色配置 名称是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974722, 'DeptController#add', '添加', 'POST', '/dept/add', '部门管理', b'1', b'1', '部门管理 添加', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974723, 'FIleUpLoadController#local', '上传', 'POST', '/file/upload', '文件上传', b'1', b'1', '文件上传 上传', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974724, 'PermPathController#findById', '获取详情', 'GET', '/perm/path/findById', '请求权限管理', b'1', b'1', '请求权限管理 获取详情', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974725, 'DeptController#delete', '普通删除', 'DELETE', '/dept/delete', '部门管理', b'1', b'1', '部门管理 普通删除', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974726, 'CashierController#wxAuthCallback', '微信授权回调页面', 'GET', '/demo/cashier/wxAuthCallback', '结算台演示', b'1', b'1', '结算台演示 微信授权回调页面', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974727, 'DataResultController#update', '修改', 'POST', '/data/result/update', 'SQL查询', b'1', b'1', 'SQL查询 修改', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974728, 'UserAdminController#getByEmail', '根据邮箱查询用户', 'GET', '/user/admin/getByEmail', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 根据邮箱查询用户', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974729, 'LoginTypeController#findAll', '查询所有的登录方式', 'GET', '/loginType/findAll', '登录方式管理', b'1', b'1', '登录方式管理 查询所有的登录方式', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974730, 'PayRepairRecordController#findById', '查询单条', 'GET', '/record/repair/findById', '支付修复记录', b'1', b'1', '支付修复记录 查询单条', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974731, 'UserAdminController#restartPasswordBatch', '批量重置密码', 'POST', '/user/admin/restartPasswordBatch', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 批量重置密码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974732, 'UserInfoController#findUsernameByPhoneCaptcha', '根据手机验证码查询账号', 'GET', '/user/findUsernameByPhoneCaptcha', '用户管理', b'1', b'1', '用户管理 根据手机验证码查询账号', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974733, 'DynamicFormController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/dynamic/form/existsByCodeNotId', '动态表单', b'1', b'1', '动态表单 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974734, 'ChinaWordController#add', '添加', 'POST', '/chinaword/add', '敏感词管理', b'1', b'1', '敏感词管理 添加', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974735, 'LoginTypeController#delete', '删除登录方式', 'DELETE', '/loginType/delete', '登录方式管理', b'1', b'1', '登录方式管理 删除登录方式', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974736, 'DataVersionLogController#page', '分页', 'GET', '/log/dataVersion/page', '数据版本日志', b'1', b'1', '数据版本日志 分页', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974737, 'AggregateController#createUrl', '创建聚合支付码', 'POST', '/demo/aggregate/createUrl', '聚合支付', b'1', b'1', '聚合支付 创建聚合支付码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974738, 'MailConfigController#findById', '通过 id 获取指定邮箱配置', 'GET', '/mail/config/findById', '邮箱配置', b'1', b'1', '邮箱配置 通过 id 获取指定邮箱配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974739, 'UserAssistController#validateCurrentChangeEmailCaptcha', '验证当前用户发送更改邮箱验证码', 'GET', '/user/validateCurrentChangeEmailCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证当前用户发送更改邮箱验证码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974740, 'ClientController#existsByCode', '编码是否被使用', 'GET', '/client/existsByCode', '认证终端', b'1', b'1', '认证终端 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974741, 'UserAdminController#findById', '根据用户id查询用户', 'GET', '/user/admin/findById', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 根据用户id查询用户', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974742, 'PayRefundOrderController#page', '分页查询', 'GET', '/order/refund/page', '支付退款控制器', b'1', b'1', '支付退款控制器 分页查询', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974743, 'RoleMenuController#findTreeByRole', '获取当前角色下可见的菜单和权限码树(分配时用)', 'GET', '/role/menu/findTreeByRole', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 获取当前角色下可见的菜单和权限码树(分配时用)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974744, 'WeChatPayConfigController#findPayWays', '微信支持支付方式', 'GET', '/wechat/pay/config/findPayWays', '微信支付配置', b'1', b'1', '微信支付配置 微信支持支付方式', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974745, 'AuthAssistController#sendSmsCaptcha', '发送短信验证码', 'POST', '/auth/sendSmsCaptcha', '认证支撑接口', b'1', b'1', '认证支撑接口 发送短信验证码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974746, 'WeChatPayConfigController#toBase64', '将文件转换成base64', 'POST', '/wechat/pay/config/toBase64', '微信支付配置', b'1', b'1', '微信支付配置 将文件转换成base64', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974747, 'MailConfigController#setUpActivity', '设置启用的邮箱配置', 'POST', '/mail/config/setUpActivity', '邮箱配置', b'1', b'1', '邮箱配置 设置启用的邮箱配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974748, 'UserDeptController#findIdsByUser', '根据用户ID获取到部门id集合', 'GET', '/user/dept/findIdsByUser', '用户部门关联关系', b'1', b'1', '用户部门关联关系 根据用户ID获取到部门id集合', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974749, 'OperateLogController#findById', '获取', 'GET', '/log/operate/findById', '操作日志', b'1', b'1', '操作日志 获取', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974750, 'UserAdminController#getByPhone', '根据手机号查询用户', 'GET', '/user/admin/getByPhone', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 根据手机号查询用户', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974751, 'UserThirdController#getThirdBindInfo', '获取绑定详情', 'GET', '/user/third/getThirdBindInfo', '用户三方登录管理', b'1', b'1', '用户三方登录管理 获取绑定详情', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974752, 'DynamicDataSourceController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/dynamic/source/existsByCodeNotId', '动态数据源管理', b'1', b'1', '动态数据源管理 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974753, 'SmsTemplateController#update', '修改', 'POST', '/sms/template/update', '短信模板配置', b'1', b'1', '短信模板配置 修改', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974754, 'RoleController#add', '添加角色（返回角色对象）', 'POST', '/role/add', '角色管理', b'1', b'1', '角色管理 添加角色（返回角色对象）', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974755, 'WechatNoticeConfigController#getConfig', '获取微信消息通知配置', 'GET', '/wx/notice/getConfig', '微信消息通知配置', b'1', b'1', '微信消息通知配置 获取微信消息通知配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974756, 'LoginLogController#findById', '获取', 'GET', '/log/login/findById', '登录日志', b'1', b'1', '登录日志 获取', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974757, 'UserRoleController#saveAssign', '给用户分配角色', 'POST', '/user/role/saveAssign', '用户角色管理', b'1', b'1', '用户角色管理 给用户分配角色', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974758, 'DictionaryController#findById', '根据id获取', 'GET', '/dict/findById', '字典', b'1', b'1', '字典 根据id获取', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974759, 'PermPathController#findAll', '权限列表', 'GET', '/perm/path/findAll', '请求权限管理', b'1', b'1', '请求权限管理 权限列表', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974760, 'DingRobotConfigController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/ding/robot/config/existsByCodeNotId', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974761, 'GeneralTemplateController#deleteBatch', '批量删除', 'DELETE', '/general/template/deleteBatch', '通用模板管理', b'1', b'1', '通用模板管理 批量删除', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974762, 'UserInfoController#forgetPasswordByEmail', '通过邮箱重置密码', 'POST', '/user/forgetPasswordByEmail', '用户管理', b'1', b'1', '用户管理 通过邮箱重置密码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974763, 'GeneralTemplateController#update', '修改', 'POST', '/general/template/update', '通用模板管理', b'1', b'1', '通用模板管理 修改', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974764, 'DictionaryItemController#update', '修改字典项（返回字典项对象）', 'POST', '/dict/item/update', '字典项', b'1', b'1', '字典项 修改字典项（返回字典项对象）', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974765, 'SystemParamController#add', '添加', 'POST', '/system/param/add', '系统参数', b'1', b'1', '系统参数 添加', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974766, 'BaseApiController#authEcho', '回声测试(必须要进行登录)', 'GET', '/auth/echo', '系统基础接口', b'1', b'1', '系统基础接口 回声测试(必须要进行登录)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974767, 'DatabaseTableController#findColumnByTableName', '获取数据表行信息', 'GET', '/gen/table/findColumnByTableName', '数据库表信息', b'1', b'1', '数据库表信息 获取数据表行信息', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974768, 'DictionaryItemController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/dict/item/existsByCodeNotId', '字典项', b'1', b'1', '字典项 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974769, 'PayApiConfigController#findAll', '获取全部', 'GET', '/pay/api/config/findAll', '支付接口配置', b'1', b'1', '支付接口配置 获取全部', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974770, 'ChinaWordController#verify', '测试敏感词效果', 'POST', '/chinaword/verify', '敏感词管理', b'1', b'1', '敏感词管理 测试敏感词效果', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974771, 'DataRoleController#page', '分页', 'GET', '/data/role/page', '数据角色配置', b'1', b'1', '数据角色配置 分页', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974772, 'UserInfoController#getUserSecurityInfo', '查询用户安全信息', 'GET', '/user/getUserSecurityInfo', '用户管理', b'1', b'1', '用户管理 查询用户安全信息', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974773, 'ChinaRegionController#findAllProvinceAndCityAndArea', ' 获取省市区县三级联动列表', 'GET', '/china/region/findAllProvinceAndCityAndArea', '中国行政区划', b'1', b'1', '中国行政区划  获取省市区县三级联动列表', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974774, 'DictionaryItemController#pageByDictionaryId', '分页查询指定字典下的字典项', 'GET', '/dict/item/pageByDictionaryId', '字典项', b'1', b'1', '字典项 分页查询指定字典下的字典项', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974775, 'WeChatMediaController#pageNews', '图文素材分页', 'GET', '/wechat/media/pageNews', '微信素材管理', b'1', b'1', '微信素材管理 图文素材分页', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974776, 'PermMenuController#resourceList', '资源(权限码)列表', 'GET', '/perm/menu/resourceList', '菜单和权限码', b'1', b'1', '菜单和权限码 资源(权限码)列表', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974777, 'WeChatPayConfigController#getConfig', '获取配置', 'GET', '/wechat/pay/config/getConfig', '微信支付配置', b'1', b'1', '微信支付配置 获取配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974778, 'AlipayConfigController#findPayWays', '支付宝支持支付方式', 'GET', '/alipay/config/findPayWays', '支付宝配置', b'1', b'1', '支付宝配置 支付宝支持支付方式', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974779, 'PayRefundOrderController#findChannelById', '查询通道退款订单详情', 'GET', '/order/refund/findChannelById', '支付退款控制器', b'1', b'1', '支付退款控制器 查询通道退款订单详情', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974780, 'UserInfoController#forgetPasswordByPhone', '通过手机号重置密码', 'POST', '/user/forgetPasswordByPhone', '用户管理', b'1', b'1', '用户管理 通过手机号重置密码', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974781, 'DataRoleController#saveDeptAssign', '保存关联部门', 'POST', '/data/role/saveDeptAssign', '数据角色配置', b'1', b'1', '数据角色配置 保存关联部门', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974782, 'PayOrderController#getExtraById', '查询支付订单扩展信息', 'GET', '/order/pay/getExtraById', '支付订单控制器', b'1', b'1', '支付订单控制器 查询支付订单扩展信息', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974783, 'UserInfoController#existsPhone', '手机号是否被使用(不包含自己)', 'GET', '/user/existsPhoneNotId', '用户管理', b'1', b'1', '用户管理 手机号是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974784, 'LoginTypeController#add', '添加登录方式', 'POST', '/loginType/add', '登录方式管理', b'1', b'1', '登录方式管理 添加登录方式', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974785, 'PermMenuController#delete', '删除', 'DELETE', '/perm/menu/delete', '菜单和权限码', b'1', b'1', '菜单和权限码 删除', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974786, 'RoleController#findAll', '查询所有的角色', 'GET', '/role/findAll', '角色管理', b'1', b'1', '角色管理 查询所有的角色', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974787, 'MessageTemplateController#findById', '获取详情', 'GET', '/message/template/findById', '消息模板', b'1', b'1', '消息模板 获取详情', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974788, 'DataResultController#page', '分页查询', 'GET', '/data/result/page', 'SQL查询', b'1', b'1', 'SQL查询 分页查询', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974789, 'NcDemoController#sendWeComMsg', '企微消息测试', 'POST', '/nc/test/sendWeComMsg', 'nc测试', b'1', b'1', 'nc测试 企微消息测试', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974790, 'DictionaryController#existsByCode', '编码是否被使用', 'GET', '/dict/existsByCode', '字典', b'1', b'1', '字典 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974791, 'UserInfoController#getLoginAfterUserInfo', '登录后获取用户信息', 'GET', '/user/getLoginAfterUserInfo', '用户管理', b'1', b'1', '用户管理 登录后获取用户信息', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974792, 'UserInfoController#bindEmail', '绑定邮箱', 'POST', '/user/bindEmail', '用户管理', b'1', b'1', '用户管理 绑定邮箱', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974793, 'OnlineUserController#pageByLogin', '登录用户分页', 'GET', '/online/user/pageByLogin', '在线用户', b'1', b'1', '在线用户 登录用户分页', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974794, 'PasswordSecurityConfigController#addOrUpdate', '新增或添加密码安全配置', 'POST', '/security/password/addOrUpdate', '密码安全策略', b'1', b'1', '密码安全策略 新增或添加密码安全配置', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974795, 'UserInfoController#getUserBaseInfo', '查询用户基础信息', 'GET', '/user/getUserBaseInfo', '用户管理', b'1', b'1', '用户管理 查询用户基础信息', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974796, 'DataRoleController#findUsersByDataRoleId', '获取关联的用户列表', 'GET', '/data/role/findUsersByDataRoleId', '数据角色配置', b'1', b'1', '数据角色配置 获取关联的用户列表', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.138000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527147974797, 'SiteMessageController#findById', '消息详情', 'GET', '/site/message/findById', '站内信', b'1', b'1', '站内信 消息详情', 1399985191002447872, '2024-02-13 14:55:54.138000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168960, 'RolePathController#findPathsByRole', '获取当前用户角色下可见的请求权限列表(分配时用)', 'GET', '/role/path/findPathsByRole', '角色请求权限消息关系', b'1', b'1', '角色请求权限消息关系 获取当前用户角色下可见的请求权限列表(分配时用)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168961, 'UserAssistController#sendPhoneChangeCaptcha', '发送更改/绑定手机号验证码', 'POST', '/user/sendPhoneChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 发送更改/绑定手机号验证码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168962, 'WeChatMenuController#findAll', '查询所有', 'GET', '/wechat/menu/findAll', '微信菜单管理', b'1', b'1', '微信菜单管理 查询所有', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168963, 'DictionaryItemController#findByDictionaryId', '查询指定字典ID下的所有字典项', 'GET', '/dict/item/findByDictionaryId', '字典项', b'1', b'1', '字典项 查询指定字典ID下的所有字典项', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168964, 'SystemParamController#existsByKeyNotId', '判断编码是否存在(不包含自己)', 'GET', '/system/param/existsByKeyNotId', '系统参数', b'1', b'1', '系统参数 判断编码是否存在(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168965, 'MessageTemplateController#delete', '删除', 'DELETE', '/message/template/delete', '消息模板', b'1', b'1', '消息模板 删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168966, 'WeChatMenuController#update', '修改', 'POST', '/wechat/menu/update', '微信菜单管理', b'1', b'1', '微信菜单管理 修改', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168967, 'ChinaWordController#getTemplate', '获取模板', 'GET', '/chinaword/getTemplate', '敏感词管理', b'1', b'1', '敏感词管理 获取模板', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168968, 'DynamicFormController#findById', '通过ID查询', 'GET', '/dynamic/form/findById', '动态表单', b'1', b'1', '动态表单 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168969, 'SmsChannelConfigController#findByCode', '通过Code查询', 'GET', '/sms/config/findByCode', '短信渠道配置', b'1', b'1', '短信渠道配置 通过Code查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168970, 'UserInfoController#existsPhone', '手机号是否被使用', 'GET', '/user/existsPhone', '用户管理', b'1', b'1', '用户管理 手机号是否被使用', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168971, 'DataRoleController#getDeptIds', '获取关联部门id', 'GET', '/data/role/getDeptIds', '数据角色配置', b'1', b'1', '数据角色配置 获取关联部门id', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168972, 'PasswordSecurityConfigController#getDefault', '获取配置', 'GET', '/security/password/getDefault', '密码安全策略', b'1', b'1', '密码安全策略 获取配置', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168973, 'ClientController#update', '修改', 'POST', '/client/update', '认证终端', b'1', b'1', '认证终端 修改', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168974, 'AggregateController#wxAuthCallback', '微信授权回调页面', 'GET', '/demo/aggregate/wxAuthCallback', '聚合支付', b'1', b'1', '聚合支付 微信授权回调页面', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168975, 'LoginTypeController#findById', '通过ID查询登录方式', 'GET', '/loginType/findById', '登录方式管理', b'1', b'1', '登录方式管理 通过ID查询登录方式', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168976, 'DingRobotConfigController#findById', '获取详情', 'GET', '/ding/robot/config/findById', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 获取详情', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168977, 'SiteMessageController#pageBySender', '发送消息分页', 'GET', '/site/message/pageBySender', '站内信', b'1', b'1', '站内信 发送消息分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168978, 'ThirdLoginController#toLoginUrl', '跳转到登陆页', 'GET', '/auth/third/toLoginUrl/{loginType}', '三方登录', b'1', b'1', '三方登录 跳转到登陆页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168979, 'RoleMenuController#save', '保存请求权限关系', 'POST', '/role/menu/save', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 保存请求权限关系', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168980, 'PayWayInfoController#findById', '根据ID获取', 'GET', '/pay/way/info/findById', '支付方式管理', b'1', b'1', '支付方式管理 根据ID获取', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168981, 'UserInfoController#register', '注册账号', 'POST', '/user/register', '用户管理', b'1', b'1', '用户管理 注册账号', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168982, 'LoginTypeController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/loginType/existsByCodeNotId', '登录方式管理', b'1', b'1', '登录方式管理 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168983, 'ChinaWordController#page', '分页查询', 'GET', '/chinaword/page', '敏感词管理', b'1', b'1', '敏感词管理 分页查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168984, 'DatabaseTableController#findAll', '表列表', 'GET', '/gen/table/findAll', '数据库表信息', b'1', b'1', '数据库表信息 表列表', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168985, 'UniPayAssistController#getWxAccessToken', '获取微信AccessToken数据', 'POST', '/unipay/assist/getWxAccessToken', '支付支撑接口', b'1', b'1', '支付支撑接口 获取微信AccessToken数据', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168986, 'WeChatTemplateController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/wechat/template/existsByCodeNotId', '微信模板消息', b'1', b'1', '微信模板消息 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168987, 'DynamicDataSourceController#addDynamicDataSourceById', '根据id进行添加到连接池中', 'POST', '/dynamic/source/addDynamicDataSourceById', '动态数据源管理', b'1', b'1', '动态数据源管理 根据id进行添加到连接池中', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168988, 'LoginLogController#deleteByDay', '清除指定天数之前的日志', 'DELETE', '/log/login/deleteByDay', '登录日志', b'1', b'1', '登录日志 清除指定天数之前的日志', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168989, 'ClientController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/client/existsByCodeNotId', '认证终端', b'1', b'1', '认证终端 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168990, 'UniQueryController#queryRefundOrder', '查询退款订单', 'POST', '/uni/query/refundOrder', '统一查询接口', b'1', b'1', '统一查询接口 查询退款订单', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168991, 'SiteMessageController#listByReceiveNotRead', '小程序获取未读的接收消息标题列表', 'GET', '/site/message/listByReceiveNotRead', '站内信', b'1', b'1', '站内信 小程序获取未读的接收消息标题列表', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168992, 'WeChatMenuController#add', '添加', 'POST', '/wechat/menu/add', '微信菜单管理', b'1', b'1', '微信菜单管理 添加', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168993, 'PasswordSecurityConfigController#check', '登录后检查密码相关的情况', 'GET', '/security/password/check', '密码安全策略', b'1', b'1', '密码安全策略 登录后检查密码相关的情况', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168994, 'PayOrderController#syncById', '同步支付状态', 'POST', '/order/pay/syncById', '支付订单控制器', b'1', b'1', '支付订单控制器 同步支付状态', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168995, 'GeneralTemplateController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/general/template/existsByCodeNotId', '通用模板管理', b'1', b'1', '通用模板管理 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168996, 'LoginTypeController#page', '分页查询登录方式', 'GET', '/loginType/page', '登录方式管理', b'1', b'1', '登录方式管理 分页查询登录方式', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168997, 'AggregateController#aliH5Pay', '支付宝通过聚合支付码发起支付', 'POST', '/demo/aggregate/aliH5Pay', '聚合支付', b'1', b'1', '聚合支付 支付宝通过聚合支付码发起支付', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168998, 'QuartzJobLogController#page', '分页', 'GET', '/quartz/log/page', '定时任务执行日志', b'1', b'1', '定时任务执行日志 分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152168999, 'PayOrderController#close', '关闭支付记录', 'POST', '/order/pay/close', '支付订单控制器', b'1', b'1', '支付订单控制器 关闭支付记录', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169000, 'DataRoleController#saveUserAssign', '保存数据角色关联用户权限', 'POST', '/data/role/saveUserAssign', '数据角色配置', b'1', b'1', '数据角色配置 保存数据角色关联用户权限', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169001, 'DictionaryItemController#add', '添加字典项（返回字典项对象）', 'POST', '/dict/item/add', '字典项', b'1', b'1', '字典项 添加字典项（返回字典项对象）', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169002, 'QuartzJobController#update', '更新', 'POST', '/quartz/update', '定时任务', b'1', b'1', '定时任务 更新', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169003, 'MailConfigController#delete', '删除', 'DELETE', '/mail/config/delete', '邮箱配置', b'1', b'1', '邮箱配置 删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169004, 'UserAdminController#banBatch', '批量封禁用户', 'POST', '/user/admin/banBatch', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 批量封禁用户', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169005, 'FIleUpLoadController#getFilePreviewUrl', '获取文件预览地址(流量会经过后端)', 'GET', '/file/getFilePreviewUrl', '文件上传', b'1', b'1', '文件上传 获取文件预览地址(流量会经过后端)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169006, 'DictionaryController#delete', '根据id删除', 'DELETE', '/dict/delete', '字典', b'1', b'1', '字典 根据id删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169007, 'WeChatQrLoginController#getStatus', '获取扫码状态', 'GET', '/token/wechat/qr/getStatus', '微信扫码登录', b'1', b'1', '微信扫码登录 获取扫码状态', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169008, 'PermPathController#add', '添加权限', 'POST', '/perm/path/add', '请求权限管理', b'1', b'1', '请求权限管理 添加权限', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169009, 'ChinaWordController#refresh', '刷新缓存', 'POST', '/chinaword/refresh', '敏感词管理', b'1', b'1', '敏感词管理 刷新缓存', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169010, 'AlipayConfigController#getConfig', '获取配置', 'GET', '/alipay/config/getConfig', '支付宝配置', b'1', b'1', '支付宝配置 获取配置', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169011, 'PayCallbackController#wechatPayNotify', '微信支付信息回调', 'POST', '/callback/pay/wechat', '支付通道信息回调', b'1', b'1', '支付通道信息回调 微信支付信息回调', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169012, 'DataResultController#test', '测试SQL解析和执行', 'POST', '/data/result/test', 'SQL查询', b'1', b'1', 'SQL查询 测试SQL解析和执行', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169013, 'SiteMessageController#delete', '删除消息', 'DELETE', '/site/message/delete', '站内信', b'1', b'1', '站内信 删除消息', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169014, 'LoginTypeController#findByCode', '通过code查询登录方式', 'GET', '/loginType/findByCode', '登录方式管理', b'1', b'1', '登录方式管理 通过code查询登录方式', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169015, 'GeneralTemplateController#delete', '删除', 'DELETE', '/general/template/delete', '通用模板管理', b'1', b'1', '通用模板管理 删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169016, 'PayReconcileOrderController#findById', '订单详情', 'GET', '/order/reconcile/findById', '对账控制器', b'1', b'1', '对账控制器 订单详情', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169017, 'DynamicDataSourceController#testConnectionById', '测试连接(根据主键ID)', 'GET', '/dynamic/source/testConnectionById', '动态数据源管理', b'1', b'1', '动态数据源管理 测试连接(根据主键ID)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169018, 'SiteMessageController#send', '发送站内信', 'POST', '/site/message/send', '站内信', b'1', b'1', '站内信 发送站内信', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169019, 'SiteMessageController#pageByReceive', '接收消息分页', 'GET', '/site/message/pageByReceive', '站内信', b'1', b'1', '站内信 接收消息分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169020, 'NcDemoController#sendDingFileMsg', '钉钉文件消息测试', 'POST', '/nc/test/sendDingFileMsg', 'nc测试', b'1', b'1', 'nc测试 钉钉文件消息测试', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169021, 'MultipleOpenApiWebMvcResource#openapiYaml', 'openapiYaml', 'GET', '/v3/api-docs.yaml/{group}', 'MultipleOpenApiWebMvcResource', b'1', b'1', 'MultipleOpenApiWebMvcResource openapiYaml', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169022, 'RolePathController#save', '保存角色请求权限关联关系', 'POST', '/role/path/save', '角色请求权限消息关系', b'1', b'1', '角色请求权限消息关系 保存角色请求权限关联关系', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169023, 'WeChatMenuController#importMenu', '导入微信自定义菜单到系统中', 'POST', '/wechat/menu/importMenu', '微信菜单管理', b'1', b'1', '微信菜单管理 导入微信自定义菜单到系统中', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169024, 'ChinaWordController#findById', '通过ID查询', 'GET', '/chinaword/findById', '敏感词管理', b'1', b'1', '敏感词管理 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169025, 'RoleMenuController#findPermissionIdsByRole', '获取当前角色下关联权限id集合(包含权限码和菜单)', 'GET', '/role/menu/findPermissionIdsByRole', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 获取当前角色下关联权限id集合(包含权限码和菜单)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169026, 'DictionaryItemController#findById', '根据字典项ID查询', 'GET', '/dict/item/findById', '字典项', b'1', b'1', '字典项 根据字典项ID查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169027, 'UserRoleController#saveAssignBatch', '给用户分配角色(批量)', 'POST', '/user/role/saveAssignBatch', '用户角色管理', b'1', b'1', '用户角色管理 给用户分配角色(批量)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169028, 'SmsTemplateController#page', '分页查询', 'GET', '/sms/template/page', '短信模板配置', b'1', b'1', '短信模板配置 分页查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169029, 'DataResultController#querySql', '执行SQL查询语句', 'POST', '/data/result/querySql', 'SQL查询', b'1', b'1', 'SQL查询 执行SQL查询语句', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169030, 'PayRefundOrderController#findById', '查询单条', 'GET', '/order/refund/findById', '支付退款控制器', b'1', b'1', '支付退款控制器 查询单条', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169031, 'UserAssistController#sendCurrentEmailChangeCaptcha', '给当前用户发送更改邮箱验证码', 'POST', '/user/sendCurrentEmailChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 给当前用户发送更改邮箱验证码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169032, 'PayCallbackRecordController#page', '分页查询', 'GET', '/record/callback/page', '支付回调信息记录', b'1', b'1', '支付回调信息记录 分页查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169033, 'FIleUpLoadController#getFilePreviewUrlPrefix', '获取文件预览地址前缀', 'GET', '/file/getFilePreviewUrlPrefix', '文件上传', b'1', b'1', '文件上传 获取文件预览地址前缀', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169034, 'AlipayConfigController#readPem', '读取证书文件内容', 'POST', '/alipay/config/readPem', '支付宝配置', b'1', b'1', '支付宝配置 读取证书文件内容', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169035, 'DynamicFormController#findAll', '查询所有', 'GET', '/dynamic/form/findAll', '动态表单', b'1', b'1', '动态表单 查询所有', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169036, 'PermMenuController#existsByPermCode', '编码是否被使用(不包含自己)', 'GET', '/perm/menu/existsByPermCodeNotId', '菜单和权限码', b'1', b'1', '菜单和权限码 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169037, 'DataRoleController#update', '更新', 'POST', '/data/role/update', '数据角色配置', b'1', b'1', '数据角色配置 更新', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169038, 'CashierController#getPayEnv', '获取支付环境', 'GET', '/demo/cashier/getPayEnv', '结算台演示', b'1', b'1', '结算台演示 获取支付环境', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169039, 'PermPathController#delete', '删除权限', 'DELETE', '/perm/path/delete', '请求权限管理', b'1', b'1', '请求权限管理 删除权限', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169040, 'AggregateController#getWxJsapiPay', '获取微信支付调起Jsapi支付的信息', 'POST', '/demo/aggregate/getWxJsapiPay', '聚合支付', b'1', b'1', '聚合支付 获取微信支付调起Jsapi支付的信息', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169041, 'PayReconcileOrderController#downAndSave', '手动触发对账文件下载', 'POST', '/order/reconcile/downAndSave', '对账控制器', b'1', b'1', '对账控制器 手动触发对账文件下载', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169042, 'QuartzJobController#start', '启动', 'POST', '/quartz/start', '定时任务', b'1', b'1', '定时任务 启动', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169043, 'UserAssistController#validateEmailCaptcha', '验证更改/绑定邮箱验证码', 'GET', '/user/validateEmailChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证更改/绑定邮箱验证码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169044, 'DynamicDataSourceController#delete', '删除', 'DELETE', '/dynamic/source/delete', '动态数据源管理', b'1', b'1', '动态数据源管理 删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169045, 'SystemParamController#findById', '获取单条', 'GET', '/system/param/findById', '系统参数', b'1', b'1', '系统参数 获取单条', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169046, 'WeChatMenuController#publish', '发布菜单', 'POST', '/wechat/menu/publish', '微信菜单管理', b'1', b'1', '微信菜单管理 发布菜单', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169047, 'PayCallbackController#aliPayNotify', '支付宝信息回调', 'POST', '/callback/pay/alipay', '支付通道信息回调', b'1', b'1', '支付通道信息回调 支付宝信息回调', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169048, 'DynamicDataSourceController#removeDataSourceByKey', '从数据源列表中删除指定数据源', 'DELETE', '/dynamic/source/removeDataSourceByKey', '动态数据源管理', b'1', b'1', '动态数据源管理 从数据源列表中删除指定数据源', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169049, 'QuartzJobController#execute', '立即执行', 'POST', '/quartz/execute', '定时任务', b'1', b'1', '定时任务 立即执行', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169050, 'DynamicDataSourceController#page', '分页查询', 'GET', '/dynamic/source/page', '动态数据源管理', b'1', b'1', '动态数据源管理 分页查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169051, 'DictionaryController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/dict/existsByCodeNotId', '字典', b'1', b'1', '字典 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169052, 'PayRepairRecordController#page', '分页查询', 'GET', '/record/repair/page', '支付修复记录', b'1', b'1', '支付修复记录 分页查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169053, 'UserDeptController#saveAssignBatch', '给用户分配部门(批量)', 'POST', '/user/dept/saveAssignBatch', '用户部门关联关系', b'1', b'1', '用户部门关联关系 给用户分配部门(批量)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169054, 'PayReconcileOrderController#create', '手动创建对账订单', 'POST', '/order/reconcile/create', '对账控制器', b'1', b'1', '对账控制器 手动创建支付订单', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169055, 'UserAdminController#restartPassword', '重置密码', 'POST', '/user/admin/restartPassword', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 重置密码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169056, 'CodeGeneratorController#codeGenPreview', '预览生成代码', 'POST', '/gen/code/codeGenPreview', '代码生成', b'1', b'1', '代码生成 预览生成代码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169057, 'NcDemoController#sendDingImageMsg', '钉钉图片消息测试', 'POST', '/nc/test/sendDingImageMsg', 'nc测试', b'1', b'1', 'nc测试 钉钉图片消息测试', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169058, 'TestController#lock1', '锁测试1', 'GET', '/test/lock1', '测试', b'1', b'1', '测试 锁测试1', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169059, 'ForwardFrontController#toH5', 'toH5', 'GET', '/front/', 'ForwardFrontController', b'1', b'1', 'ForwardFrontController toH5', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169060, 'FIleUpLoadController#delete', '删除', 'DELETE', '/file/delete', '文件上传', b'1', b'1', '文件上传 删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169061, 'OperateLogController#deleteByDay', '清除指定天数的日志', 'DELETE', '/log/operate/deleteByDay', '操作日志', b'1', b'1', '操作日志 清除指定天数的日志', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169062, 'AggregateController#barCodePay', '通过付款码发起支付', 'POST', '/demo/aggregate/barCodePay', '聚合支付', b'1', b'1', '聚合支付 通过付款码发起支付', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169063, 'SmsChannelConfigController#findAll', '查询所有', 'GET', '/sms/config/findAll', '短信渠道配置', b'1', b'1', '短信渠道配置 查询所有', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169064, 'MessageTemplateController#update', '更新', 'POST', '/message/template/update', '消息模板', b'1', b'1', '消息模板 更新', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169065, 'DingRobotConfigController#page', '分页', 'GET', '/ding/robot/config/page', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169066, 'RoleController#findById', '通过ID查询角色', 'GET', '/role/findById', '角色管理', b'1', b'1', '角色管理 通过ID查询角色', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169067, 'FIleUpLoadController#download', '下载文件(流量会经过后端)', 'GET', '/file/download/{id}', '文件上传', b'1', b'1', '文件上传 下载文件(流量会经过后端)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169068, 'RoleController#tree', '角色树', 'GET', '/role/tree', '角色管理', b'1', b'1', '角色管理 角色树', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169069, 'RoleController#dropdown', '角色下拉框', 'GET', '/role/dropdown', '角色管理', b'1', b'1', '角色管理 角色下拉框', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169070, 'WeChatPortalController#auth', 'auth', 'GET', '/wechat/portal', '微信接入入口', b'1', b'1', '微信接入入口 auth', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169071, 'UserAssistController#sendEmailForgetCaptcha', '发送找回密码邮箱验证码', 'POST', '/user/sendEmailForgetCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 发送找回密码邮箱验证码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169072, 'DeptController#tree', '树状展示', 'GET', '/dept/tree', '部门管理', b'1', b'1', '部门管理 树状展示', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169073, 'QuartzJobController#judgeJobClass', '判断是否是定时任务类', 'GET', '/quartz/judgeJobClass', '定时任务', b'1', b'1', '定时任务 判断是否是定时任务类', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169075, 'WeChatArticleController#page', '分页', 'GET', '/wechat/article/page', '微信文章管理', b'1', b'1', '微信文章管理 分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169076, 'AggregateController#qrPayPage', '聚合支付扫码跳转中间页', 'GET', '/demo/aggregate/qrPayPage/{code}', '聚合支付', b'1', b'1', '聚合支付 聚合支付扫码跳转中间页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169077, 'UniQueryController#queryPayOrder', '查询支付订单', 'POST', '/uni/query/payOrder', '统一查询接口', b'1', b'1', '统一查询接口 查询支付订单', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169078, 'ChinaRegionController#findAllProvinceAndCity', '获取省市二级联动列表', 'GET', '/china/region/findAllProvinceAndCity', '中国行政区划', b'1', b'1', '中国行政区划 获取省市二级联动列表', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169079, 'WeChatMediaController#deleteFile', '删除素材', 'DELETE', '/wechat/media/deleteFile', '微信素材管理', b'1', b'1', '微信素材管理 删除素材', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169080, 'DataRoleController#delete', '删除', 'DELETE', '/data/role/delete', '数据角色配置', b'1', b'1', '数据角色配置 删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169081, 'UserDeptController#findAllByUser', '根据用户ID获取到部门集合', 'GET', '/user/dept/findAllByUser', '用户部门关联关系', b'1', b'1', '用户部门关联关系 根据用户ID获取到部门集合', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169082, 'SystemParamController#page', '分页', 'GET', '/system/param/page', '系统参数', b'1', b'1', '系统参数 分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169083, 'DynamicDataSourceController#findAllDataSource', '查询当前数据源列表', 'GET', '/dynamic/source/findAllDataSource', '动态数据源管理', b'1', b'1', '动态数据源管理 查询当前数据源列表', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169084, 'PayChannelConfigController#findById', '根据ID获取', 'GET', '/pay/channel/config/findById', '支付通道信息', b'1', b'1', '支付通道信息 根据ID获取', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169085, 'RoleController#delete', '删除角色', 'DELETE', '/role/delete', '角色管理', b'1', b'1', '角色管理 删除角色', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169086, 'PayOrderController#listByChannel', '查询支付订单关联支付通道订单', 'GET', '/order/pay/listByChannel', '支付订单控制器', b'1', b'1', '支付订单控制器 查询支付订单关联支付通道订单', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169087, 'UserDataRoleController#saveAssignBatch', '给用户分配权限(批量)', 'POST', '/user/data/role/saveAssignBatch', '用户数据角色配置', b'1', b'1', '用户数据角色配置 给用户分配权限(批量)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169088, 'DeptController#findById', '获取', 'GET', '/dept/findById', '部门管理', b'1', b'1', '部门管理 获取', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169089, 'CashierController#getUniCashierUrl', '获取手机收银台链接', 'GET', '/demo/cashier/getUniCashierUrl', '结算台演示', b'1', b'1', '结算台演示 获取手机收银台链接', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169090, 'QuartzJobController#delete', '删除', 'DELETE', '/quartz/delete', '定时任务', b'1', b'1', '定时任务 删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169091, 'PermMenuController#update', '修改菜单权限', 'POST', '/perm/menu/update', '菜单和权限码', b'1', b'1', '菜单和权限码 修改菜单权限', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169092, 'PaySyncRecordController#findById', '查询单条', 'GET', '/record/sync/findById', '支付同步记录控制器', b'1', b'1', '支付同步记录控制器 查询单条', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169093, 'ChinaWordController#delete', '删除', 'DELETE', '/chinaword/delete', '敏感词管理', b'1', b'1', '敏感词管理 删除', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169094, 'WeChatMenuController#clearMenu', '清空微信自定义菜单', 'POST', '/wechat/menu/clearMenu', '微信菜单管理', b'1', b'1', '微信菜单管理 清空微信自定义菜单', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169095, 'UserDataRoleController#findDataRoleIdByUser', '根据用户ID获取到数据角色Id', 'GET', '/user/data/role/findDataRoleIdByUser', '用户数据角色配置', b'1', b'1', '用户数据角色配置 根据用户ID获取到数据角色Id', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169096, 'UserAssistController#sendEmailChangeCaptcha', '发送更改/绑定邮箱验证码', 'POST', '/user/sendEmailChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 发送更改/绑定邮箱验证码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169097, 'DataRoleController#deleteUserAssigns', '批量删除数据角色关联用户', 'DELETE', '/data/role/deleteUserAssigns', '数据角色配置', b'1', b'1', '数据角色配置 批量删除数据角色关联用户', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169098, 'PayReconcileOrderController#page', '订单分页', 'GET', '/order/reconcile/page', '对账控制器', b'1', b'1', '对账控制器 订单分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169099, 'UniPayController#syncRefund', '退款状态同步', 'POST', '/unipay/syncRefund', '统一支付接口', b'1', b'1', '统一支付接口 退款状态同步', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169100, 'WeChatMediaController#pageFile', '非图文素材分页', 'GET', '/wechat/media/pageFile', '微信素材管理', b'1', b'1', '微信素材管理 非图文素材分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169101, 'SystemParamController#findByParamKey', '根据键名获取键值', 'GET', '/system/param/findByParamKey', '系统参数', b'1', b'1', '系统参数 根据键名获取键值', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169102, 'DynamicDataSourceController#existsByDataSourceKey', '是否已经添加到连接池中', 'GET', '/dynamic/source/existsByDataSourceKey', '动态数据源管理', b'1', b'1', '动态数据源管理 是否已经添加到连接池中', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169103, 'MessageTemplateController#add', '添加', 'POST', '/message/template/add', '消息模板', b'1', b'1', '消息模板 添加', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169104, 'DataRoleController#existsByCode', '编码是否被使用', 'GET', '/data/role/existsByCode', '数据角色配置', b'1', b'1', '数据角色配置 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169105, 'DynamicDataSourceController#update', '修改', 'POST', '/dynamic/source/update', '动态数据源管理', b'1', b'1', '动态数据源管理 修改', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169106, 'OperateLogController#page', '分页', 'GET', '/log/operate/page', '操作日志', b'1', b'1', '操作日志 分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169107, 'NcDemoController#p1', '企微机器人图片发送', 'POST', '/nc/test/p1', 'nc测试', b'1', b'1', 'nc测试 企微机器人图片发送', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169108, 'PayOrderController#findById', '查询订单详情', 'GET', '/order/pay/findById', '支付订单控制器', b'1', b'1', '支付订单控制器 查询订单详情', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169109, 'OnlineUserController#page', '分页', 'GET', '/online/user/page', '在线用户', b'1', b'1', '在线用户 分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169110, 'RoleController#existsByName', '名称是否被使用(不包含自己)', 'GET', '/role/existsByNameNotId', '角色管理', b'1', b'1', '角色管理 名称是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169111, 'WecomRobotConfigController#page', '分页', 'GET', '/wecom/robot/config/page', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169112, 'DataRoleController#findById', '获取', 'GET', '/data/role/findById', '数据角色配置', b'1', b'1', '数据角色配置 获取', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169113, 'DataRoleController#findAll', '查询全部', 'GET', '/data/role/findAll', '数据角色配置', b'1', b'1', '数据角色配置 查询全部', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169114, 'OpenApiWebMvcResource#openapiJson', 'openapiJson', 'GET', '/v3/api-docs', 'OpenApiWebMvcResource', b'1', b'1', 'OpenApiWebMvcResource openapiJson', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169115, 'CaptchaController#imgCaptcha', '获取图片验证码', 'POST', '/captcha/imgCaptcha', '验证码服务', b'1', b'1', '验证码服务 获取图片验证码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169116, 'WecomRobotConfigController#update', '修改机器人配置', 'POST', '/wecom/robot/config/update', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 修改机器人配置', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169117, 'PlatformConfigController#update', '更新平台配置项', 'POST', '/platform/config/update', '支付平台配置控制器', b'1', b'1', '支付平台配置控制器 更新平台配置项', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169118, 'ClientController#add', '添加', 'POST', '/client/add', '认证终端', b'1', b'1', '认证终端 添加', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169119, 'DatabaseTableController#findByTableName', '获取表信息', 'GET', '/gen/table/findByTableName', '数据库表信息', b'1', b'1', '数据库表信息 获取表信息', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169120, 'OnlineUserController#kickOut', '踢出用户', 'GET', '/online/user/kickOut', '在线用户', b'1', b'1', '在线用户 踢出用户', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169121, 'UserAdminController#getUserInfoWhole', '查询用户详情', 'GET', '/user/admin/getUserInfoWhole', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 查询用户详情', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169122, 'WeChatTemplateController#update', '修改', 'POST', '/wechat/template/update', '微信模板消息', b'1', b'1', '微信模板消息 修改', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169123, 'ChinaRegionController#findAllProvince', '获取一级行政区', 'GET', '/china/region/findAllProvince', '中国行政区划', b'1', b'1', '中国行政区划 获取一级行政区', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169124, 'WeChatMenuController#page', '分页查询', 'GET', '/wechat/menu/page', '微信菜单管理', b'1', b'1', '微信菜单管理 分页查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169125, 'DictionaryController#update', '更新', 'POST', '/dict/update', '字典', b'1', b'1', '字典 更新', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169126, 'PayChannelConfigController#findAll', '查询全部', 'GET', '/pay/channel/config/findAll', '支付通道信息', b'1', b'1', '支付通道信息 查询全部', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169127, 'UserAssistController#validateEmailForgetCaptcha', '验证找回密码邮箱验证码', 'GET', '/user/validateEmailForgetCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证找回密码邮箱验证码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169128, 'ClientController#findById', '通过ID查询', 'GET', '/client/findById', '认证终端', b'1', b'1', '认证终端 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169129, 'PermMenuController#menuAndPermCodeTree', '获取菜单和权限码树', 'GET', '/perm/menu/menuAndPermCodeTree', '菜单和权限码', b'1', b'1', '菜单和权限码 获取菜单和权限码树', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169130, 'QuartzJobController#syncJobStatus', '同步定时任务状态', 'POST', '/quartz/syncJobStatus', '定时任务', b'1', b'1', '定时任务 同步定时任务状态', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169131, 'PermMenuController#add', '添加菜单权限', 'POST', '/perm/menu/add', '菜单和权限码', b'1', b'1', '菜单和权限码 添加菜单权限', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169132, 'ClientController#page', '分页查询', 'GET', '/client/page', '认证终端', b'1', b'1', '认证终端 分页查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169133, 'FIleUpLoadController#findById', '获取单条详情', 'GET', '/file/findById', '文件上传', b'1', b'1', '文件上传 获取单条详情', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169134, 'WeChatQrLoginController#applyQrCode', '申请登录用QR码', 'POST', '/token/wechat/qr/applyQrCode', '微信扫码登录', b'1', b'1', '微信扫码登录 申请登录用QR码', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169135, 'SiteMessageController#cancel', '撤回消息', 'POST', '/site/message/cancel', '站内信', b'1', b'1', '站内信 撤回消息', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169136, 'DataRoleController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/data/role/existsByCodeNotId', '数据角色配置', b'1', b'1', '数据角色配置 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169138, 'DynamicFormController#add', '添加', 'POST', '/dynamic/form/add', '动态表单', b'1', b'1', '动态表单 添加', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169139, 'ChinaRegionController#findAllRegionByParentCode', '根据编码获取下一级行政区划的列表', 'GET', '/china/region/findAllRegionByParentCode', '中国行政区划', b'1', b'1', '中国行政区划 根据编码获取下一级行政区划的列表', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169140, 'DatabaseTableController#getTableGenParam', '获取表相关的代码生成参数信息', 'GET', '/gen/table/getTableGenParam', '数据库表信息', b'1', b'1', '数据库表信息 获取表相关的代码生成参数信息', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169141, 'UniPayController#close', '订单关闭', 'POST', '/unipay/close', '统一支付接口', b'1', b'1', '统一支付接口 订单关闭', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169142, 'LoginTypeController#superPage', '超级查询', 'POST', '/loginType/superPage', '登录方式管理', b'1', b'1', '登录方式管理 超级查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169143, 'DictionaryController#page', '分页', 'GET', '/dict/page', '字典', b'1', b'1', '字典 分页', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169144, 'DingRobotConfigController#update', '修改机器人配置', 'POST', '/ding/robot/config/update', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 修改机器人配置', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169145, 'PayCloseRecordController#page', '分页查询', 'GET', '/record/close/page', '支付订单关闭记录', b'1', b'1', '支付订单关闭记录 分页查询', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169146, 'PayCallbackRecordController#findById', '查询单条', 'GET', '/record/callback/findById', '支付回调信息记录', b'1', b'1', '支付回调信息记录 查询单条', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.139000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527152169147, 'MessageTemplateController#rendering', '渲染模板', 'POST', '/message/template/rendering', '消息模板', b'1', b'1', '消息模板 渲染模板', 1399985191002447872, '2024-02-13 14:55:54.139000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363264, 'NcDemoController#p2', '企微机器人文件发送', 'POST', '/nc/test/p2', 'nc测试', b'1', b'1', 'nc测试 企微机器人文件发送', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363265, 'UserDataRoleController#saveAssign', '给用户分配数据角色', 'POST', '/user/data/role/saveAssign', '用户数据角色配置', b'1', b'1', '用户数据角色配置 给用户分配数据角色', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363266, 'MultipleOpenApiWebMvcResource#openapiJson', 'openapiJson', 'GET', '/v3/api-docs/{group}', 'MultipleOpenApiWebMvcResource', b'1', b'1', 'MultipleOpenApiWebMvcResource openapiJson', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363267, 'DynamicDataSourceController#add', '添加', 'POST', '/dynamic/source/add', '动态数据源管理', b'1', b'1', '动态数据源管理 添加', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363268, 'RoleController#update', '修改角色（返回角色对象）', 'POST', '/role/update', '角色管理', b'1', b'1', '角色管理 修改角色（返回角色对象）', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363269, 'DataResultController#exportQueryResult', '导出SQL查询的结果', 'POST', '/data/result/exportQueryResult', 'SQL查询', b'1', b'1', 'SQL查询 导出SQL查询的结果', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363270, 'DataRoleController#existsByName', '名称是否被使用', 'GET', '/data/role/existsByName', '数据角色配置', b'1', b'1', '数据角色配置 名称是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363271, 'ClientController#delete', '删除', 'DELETE', '/client/delete', '认证终端', b'1', b'1', '认证终端 删除', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363272, 'UserDeptController#saveAssign', '给用户分配部门', 'POST', '/user/dept/saveAssign', '用户部门关联关系', b'1', b'1', '用户部门关联关系 给用户分配部门', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363273, 'UserAdminController#update', '修改用户', 'POST', '/user/admin/update', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 修改用户', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363274, 'WecomRobotConfigController#findAll', '查询全部', 'GET', '/wecom/robot/config/findAll', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 查询全部', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363275, 'SiteMessageController#countByReceiveNotRead', '获取未读的接收消息条数', 'GET', '/site/message/countByReceiveNotRead', '站内信', b'1', b'1', '站内信 获取未读的接收消息条数', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363276, 'QuartzJobController#findById', '单条', 'GET', '/quartz/findById', '定时任务', b'1', b'1', '定时任务 单条', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363277, 'SmsTemplateController#findById', '通过ID查询', 'GET', '/sms/template/findById', '短信模板配置', b'1', b'1', '短信模板配置 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363278, 'GeneralTemplateController#existsByCode', '编码是否被使用', 'GET', '/general/template/existsByCode', '通用模板管理', b'1', b'1', '通用模板管理 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363279, 'ChinaWordController#update', '修改', 'POST', '/chinaword/update', '敏感词管理', b'1', b'1', '敏感词管理 修改', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363280, 'ThirdLoginController#callback', '扫码后回调', 'GET', '/auth/third/callback/{loginType}', '三方登录', b'1', b'1', '三方登录 扫码后回调', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363281, 'UserThirdController#unbind', '解绑第三方账号', 'POST', '/user/third/unbind', '用户三方登录管理', b'1', b'1', '用户三方登录管理 解绑第三方账号', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363282, 'SmsChannelConfigController#findById', '通过ID查询', 'GET', '/sms/config/findById', '短信渠道配置', b'1', b'1', '短信渠道配置 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363283, 'WeChatMenuController#delete', '删除', 'DELETE', '/wechat/menu/delete', '微信菜单管理', b'1', b'1', '微信菜单管理 删除', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363284, 'UserInfoController#existsEmail', '邮箱是否被使用', 'GET', '/user/existsEmail', '用户管理', b'1', b'1', '用户管理 邮箱是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363285, 'AggregateController#getInfo', '获取聚合支付信息', 'GET', '/demo/aggregate/getInfo', '聚合支付', b'1', b'1', '聚合支付 获取聚合支付信息', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363286, 'DingRobotConfigController#add', '新增机器人配置', 'POST', '/ding/robot/config/add', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 新增机器人配置', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363287, 'FIleUpLoadController#page', '分页', 'GET', '/file/page', '文件上传', b'1', b'1', '文件上传 分页', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363288, 'MailConfigController#page', '分页', 'GET', '/mail/config/page', '邮箱配置', b'1', b'1', '邮箱配置 分页', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363289, 'PayOrderController#getChannel', '查询支付通道订单详情', 'GET', '/order/pay/getChannel', '支付订单控制器', b'1', b'1', '支付订单控制器 查询支付通道订单详情', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363290, 'DynamicFormController#update', '修改', 'POST', '/dynamic/form/update', '动态表单', b'1', b'1', '动态表单 修改', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363291, 'UserInfoController#updateEmail', '修改邮箱', 'POST', '/user/updateEmail', '用户管理', b'1', b'1', '用户管理 修改邮箱', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363292, 'WecomRobotConfigController#findById', '获取详情', 'GET', '/wecom/robot/config/findById', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 获取详情', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363293, 'RoleMenuController#findMenuIds', '获取权限菜单id列表,不包含资源权限', 'GET', '/role/menu/findMenuIds', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 获取权限菜单id列表,不包含资源权限', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363294, 'SiteMessageController#saveOrUpdate', '保存站内信草稿', 'POST', '/site/message/saveOrUpdate', '站内信', b'1', b'1', '站内信 保存站内信草稿', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363295, 'PermPathController#page', '权限分页', 'GET', '/perm/path/page', '请求权限管理', b'1', b'1', '请求权限管理 权限分页', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363296, 'PermPathController#syncSystem', '同步系统请求资源', 'POST', '/perm/path/syncSystem', '请求权限管理', b'1', b'1', '请求权限管理 同步系统请求资源', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363297, 'PayRefundOrderController#syncById', '退款同步', 'POST', '/order/refund/syncById', '支付退款控制器', b'1', b'1', '支付退款控制器 退款同步', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363298, 'OnlineUserController#getSessionByUserId', '获取用户链接信息', 'GET', '/online/user/getSessionByUserId', '在线用户', b'1', b'1', '在线用户 获取用户链接信息', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363299, 'NcDemoController#sendDingMsg', '钉钉消息测试', 'POST', '/nc/test/sendDingMsg', 'nc测试', b'1', b'1', 'nc测试 钉钉消息测试', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363300, 'UserInfoController#existsUsername', '账号是否被使用(不包含自己)', 'GET', '/user/existsUsernameNotId', '用户管理', b'1', b'1', '用户管理 账号是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363301, 'LoginTypeController#existsByCode', '编码是否被使用', 'GET', '/loginType/existsByCode', '登录方式管理', b'1', b'1', '登录方式管理 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363302, 'UniPayAssistController#getWxAuthUrl', '获取微信oauth2授权的url', 'POST', '/unipay/assist/getWxAuthUrl', '支付支撑接口', b'1', b'1', '支付支撑接口 获取微信oauth2授权的url', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363303, 'RoleController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/role/existsByCodeNotId', '角色管理', b'1', b'1', '角色管理 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363304, 'CashierController#queryPayOrder', '查询支付订单', 'GET', '/demo/cashier/queryPayOrderSuccess', '结算台演示', b'1', b'1', '结算台演示 查询支付订单', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363305, 'ClientController#findAll', '查询所有', 'GET', '/client/findAll', '认证终端', b'1', b'1', '认证终端 查询所有', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363306, 'PayWayInfoController#update', '更新', 'POST', '/pay/way/info/update', '支付方式管理', b'1', b'1', '支付方式管理 更新', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363307, 'LoginLogController#page', '分页', 'GET', '/log/login/page', '登录日志', b'1', b'1', '登录日志 分页', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363308, 'PasswordSecurityConfigController#isRecentlyUsed', '查看要修改的密码是否重复', 'GET', '/security/password/isRecentlyUsed', '密码安全策略', b'1', b'1', '密码安全策略 查看要修改的密码是否重复', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363309, 'FIleUpLoadController#getFileDownloadUrl', '获取文件下载地址(流量会经过后端)', 'GET', '/file/getFileDownloadUrl', '文件上传', b'1', b'1', '文件上传 获取文件下载地址(流量会经过后端)', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363310, 'TokenEndpoint#login', '普通登录', 'POST', '/token/login', '认证相关', b'1', b'1', '认证相关 普通登录', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363311, 'UserRoleController#findRoleIdsByUser', '根据用户ID获取到角色id集合', 'GET', '/user/role/findRoleIdsByUser', '用户角色管理', b'1', b'1', '用户角色管理 根据用户ID获取到角色id集合', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363312, 'PayApiConfigController#findById', '根据ID获取', 'GET', '/pay/api/config/findById', '支付接口配置', b'1', b'1', '支付接口配置 根据ID获取', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363313, 'RoleController#existsByName', '名称是否被使用', 'GET', '/role/existsByName', '角色管理', b'1', b'1', '角色管理 名称是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363314, 'GeneralTemplateController#page', '分页查询', 'GET', '/general/template/page', '通用模板管理', b'1', b'1', '通用模板管理 分页查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363315, 'RolePathController#findIdsByRole', '根据角色id获取关联权限id', 'GET', '/role/path/findIdsByRole', '角色请求权限消息关系', b'1', b'1', '角色请求权限消息关系 根据角色id获取关联权限id', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363316, 'DingRobotConfigController#delete', '删除', 'DELETE', '/ding/robot/config/delete', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 删除', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363317, 'PermMenuController#findById', '根据id查询', 'GET', '/perm/menu/findById', '菜单和权限码', b'1', b'1', '菜单和权限码 根据id查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363318, 'DingRobotConfigController#findAll', '查询全部', 'GET', '/ding/robot/config/findAll', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 查询全部', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363319, 'RoleMenuController#getPermissions', '获取菜单和权限码(根据用户进行筛选)', 'GET', '/role/menu/getPermissions', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 获取菜单和权限码(根据用户进行筛选)', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363320, 'SmsTemplateController#delete', '删除', 'DELETE', '/sms/template/delete', '短信模板配置', b'1', b'1', '短信模板配置 删除', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363321, 'UserThirdController#bind', '绑定第三方账号', 'POST', '/user/third/bind', '用户三方登录管理', b'1', b'1', '用户三方登录管理 绑定第三方账号', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363322, 'RoleController#existsByCode', '编码是否被使用', 'GET', '/role/existsByCode', '角色管理', b'1', b'1', '角色管理 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363323, 'QuartzJobController#page', '分页', 'GET', '/quartz/page', '定时任务', b'1', b'1', '定时任务 分页', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363324, 'DataRoleController#add', '添加', 'POST', '/data/role/add', '数据角色配置', b'1', b'1', '数据角色配置 添加', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363325, 'SiteMessageController#read', '标为已读', 'POST', '/site/message/read', '站内信', b'1', b'1', '站内信 标为已读', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363326, 'MessageTemplateController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/message/template/existsByCodeNotId', '消息模板', b'1', b'1', '消息模板 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363327, 'UserAssistController#validateCurrentPhoneChangeCaptcha', '验证当前用户发送更改手机号验证码', 'GET', '/user/validateCurrentPhoneChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证当前用户发送更改手机号验证码', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363328, 'NcDemoController#recallNotice', '企微消息撤回', 'POST', '/nc/test/recallNotice', 'nc测试', b'1', b'1', 'nc测试 企微消息撤回', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363329, 'WeChatMenuController#findById', '通过ID查询', 'GET', '/wechat/menu/findById', '微信菜单管理', b'1', b'1', '微信菜单管理 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363330, 'UserAdminController#add', '添加用户', 'POST', '/user/admin/add', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 添加用户', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363331, 'UniPayController#syncPay', '支付状态同步', 'POST', '/unipay/syncPay', '统一支付接口', b'1', b'1', '统一支付接口 支付状态同步', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363332, 'MailConfigController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/mail/config/existsByCodeNotId', '邮箱配置', b'1', b'1', '邮箱配置 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363333, 'PayWayInfoController#findAll', '获取全部', 'GET', '/pay/way/info/findAll', '支付方式管理', b'1', b'1', '支付方式管理 获取全部', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363334, 'SwaggerWelcomeWebMvc#redirectToUi', 'redirectToUi', 'GET', '/swagger-ui.html', 'SwaggerWelcomeWebMvc', b'1', b'1', 'SwaggerWelcomeWebMvc redirectToUi', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363335, 'WecomRobotConfigController#existsByCode', '编码是否被使用', 'GET', '/wecom/robot/config/existsByCode', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363336, 'UserInfoController#existsEmail', '邮箱是否被使用(不包含自己)', 'GET', '/user/existsEmailNotId', '用户管理', b'1', b'1', '用户管理 邮箱是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363337, 'WeChatTemplateController#findById', '通过ID查询', 'GET', '/wechat/template/findById', '微信模板消息', b'1', b'1', '微信模板消息 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363338, 'DatabaseTableController#page', '表列表分页', 'GET', '/gen/table/page', '数据库表信息', b'1', b'1', '数据库表信息 表列表分页', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363339, 'PermMenuController#existsByPermCode', '编码是否被使用', 'GET', '/perm/menu/existsByPermCode', '菜单和权限码', b'1', b'1', '菜单和权限码 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363340, 'PlatformConfigController#getConfig', '获取平台配置', 'GET', '/platform/config/getConfig', '支付平台配置控制器', b'1', b'1', '支付平台配置控制器 获取平台配置', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363341, 'SmsTemplateController#add', '添加', 'POST', '/sms/template/add', '短信模板配置', b'1', b'1', '短信模板配置 添加', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363342, 'DingRobotConfigController#existsByCode', '编码是否被使用', 'GET', '/ding/robot/config/existsByCode', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 编码是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363343, 'DeptController#update', '更新', 'POST', '/dept/update', '部门管理', b'1', b'1', '部门管理 更新', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363344, 'UserThirdController#page', '分页', 'GET', '/user/third/page', '用户三方登录管理', b'1', b'1', '用户三方登录管理 分页', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363345, 'WecomRobotConfigController#delete', '删除', 'DELETE', '/wecom/robot/config/delete', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 删除', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363346, 'WecomRobotConfigController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/wecom/robot/config/existsByCodeNotId', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 编码是否被使用(不包含自己)', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363347, 'WeChatTemplateController#sync', '同步消息模板数据', 'POST', '/wechat/template/sync', '微信模板消息', b'1', b'1', '微信模板消息 同步消息模板数据', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363348, 'CashierController#simplePayCashier', '创建支付订单并发起', 'POST', '/demo/cashier/simplePayCashier', '结算台演示', b'1', b'1', '结算台演示 创建支付订单并发起', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363349, 'LoginTypeController#update', '修改登录方式（返回登录方式对象）', 'POST', '/loginType/update', '登录方式管理', b'1', b'1', '登录方式管理 修改登录方式（返回登录方式对象）', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363350, 'PayApiConfigController#update', '更新', 'POST', '/pay/api/config/update', '支付接口配置', b'1', b'1', '支付接口配置 更新', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363351, 'UniPayController#pay', '统一下单', 'POST', '/unipay/pay', '统一支付接口', b'1', b'1', '统一支付接口 统一下单', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363352, 'UserInfoController#existsUsername', '账号是否被使用', 'GET', '/user/existsUsername', '用户管理', b'1', b'1', '用户管理 账号是否被使用', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363353, 'UserAssistController#validatePhoneForgetCaptcha', '验证找回密码手机验证码', 'GET', '/user/validatePhoneForgetCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证找回密码手机验证码', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363354, 'CodeGeneratorController#genCodeZip', '下载生成代码', 'POST', '/gen/code/genCodeZip', '代码生成', b'1', b'1', '代码生成 下载生成代码', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363355, 'PermPathController#update', '更新权限', 'POST', '/perm/path/update', '请求权限管理', b'1', b'1', '请求权限管理 更新权限', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363356, 'UserAdminController#unlockBatch', '批量解锁用户', 'POST', '/user/admin/unlockBatch', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 批量解锁用户', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363357, 'BaseApiController#echo', '回声测试', 'GET', '/echo', '系统基础接口', b'1', b'1', '系统基础接口 回声测试', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363358, 'WeChatMediaController#uploadFile', '上传素材', 'POST', '/wechat/media/uploadFile', '微信素材管理', b'1', b'1', '微信素材管理 上传素材', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363359, 'UserAssistController#sendCurrentPhoneChangeCaptcha', '给当前用户发送更改手机号验证码', 'POST', '/user/sendCurrentPhoneChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 给当前用户发送更改手机号验证码', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363360, 'SystemParamController#existsByKey', '判断编码是否存在', 'GET', '/system/param/existsByKey', '系统参数', b'1', b'1', '系统参数 判断编码是否存在', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363361, 'PayOrderController#page', '分页查询', 'GET', '/order/pay/page', '支付订单控制器', b'1', b'1', '支付订单控制器 分页查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363362, 'GeneralTemplateController#findById', '通过ID查询', 'GET', '/general/template/findById', '通用模板管理', b'1', b'1', '通用模板管理 通过ID查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363363, 'CashierController#getWxAuthUrl', '获取微信授权链接', 'GET', '/demo/cashier/getWxAuthUrl', '结算台演示', b'1', b'1', '结算台演示 获取微信授权链接', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363364, 'DictionaryController#findAll', '查询全部', 'GET', '/dict/findAll', '字典', b'1', b'1', '字典 查询全部', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363365, 'NcDemoController#sendMsg', '邮件消息测试', 'POST', '/nc/test/sendMsg', 'nc测试', b'1', b'1', 'nc测试 邮件消息测试', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363366, 'DictionaryItemController#findAll', '获取全部字典项', 'GET', '/dict/item/findAll', '字典项', b'1', b'1', '字典项 获取全部字典项', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363367, 'PayChannelConfigController#update', '更新', 'POST', '/pay/channel/config/update', '支付通道信息', b'1', b'1', '支付通道信息 更新', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363368, 'PayRefundOrderController#listByChannel', '通道退款订单列表查询', 'GET', '/order/refund/listByChannel', '支付退款控制器', b'1', b'1', '支付退款控制器 通道退款订单列表查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363369, 'DynamicDataSourceController#findAll', '查询所有', 'GET', '/dynamic/source/findAll', '动态数据源管理', b'1', b'1', '动态数据源管理 查询所有', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363370, 'WeChatTemplateController#page', '分页查询', 'GET', '/wechat/template/page', '微信模板消息', b'1', b'1', '微信模板消息 分页查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363371, 'DictionaryController#add', '添加', 'POST', '/dict/add', '字典', b'1', b'1', '字典 添加', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363372, 'UserAdminController#page', '分页', 'GET', '/user/admin/page', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 分页', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363373, 'SwaggerConfigResource#openapiJson', 'openapiJson', 'GET', '/v3/api-docs/swagger-config', 'SwaggerConfigResource', b'1', b'1', 'SwaggerConfigResource openapiJson', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1757297527156363374, 'PaySyncRecordController#page', '分页查询', 'GET', '/record/sync/page', '支付同步记录控制器', b'1', b'1', '支付同步记录控制器 分页查询', 1399985191002447872, '2024-02-13 14:55:54.140000', 1399985191002447872, '2024-02-13 14:55:54.140000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206464, 'VoucherController#findById', '查询储值卡详情', 'GET', '/voucher/findById', '储值卡管理', b'1', b'1', '储值卡管理 查询储值卡详情', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206465, 'WalletConfigController#update', '更新', 'POST', '/wallet/config/update', '钱包配置', b'1', b'1', '钱包配置 更新', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206466, 'ClientNoticeTaskController#recordPage', '分页查询', 'GET', '/task/notice/record/page', '客户系统通知任务', b'1', b'1', '客户系统通知任务 分页查询', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206467, 'WalletConfigController#findPayWays', '支付宝支持支付方式', 'GET', '/wallet/config/findPayWays', '钱包配置', b'1', b'1', '钱包配置 支付宝支持支付方式', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206468, 'VoucherController#voucherImport', '导入储值卡', 'POST', '/voucher/import', '储值卡管理', b'1', b'1', '储值卡管理 导入储值卡', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206469, 'VoucherController#recordFindById', '查询记录详情', 'GET', '/voucher/record/findById', '储值卡管理', b'1', b'1', '储值卡管理 查询记录详情', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206470, 'CashController#recordPage', '记录分页', 'GET', '/cash/record/page', '现金控制器', b'1', b'1', '现金控制器 记录分页', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206471, 'AlipayController#recordPage', '记录分页', 'GET', '/alipay/record/page', '支付宝控制器', b'1', b'1', '支付宝控制器 记录分页', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206472, 'CashConfigController#getConfig', '获取配置', 'GET', '/cash/config/getConfig', '现金支付配置', b'1', b'1', '现金支付配置 获取配置', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206473, 'ClientNoticeReceiveController#pay', '支付消息(对象接收)', 'POST', '/demo/callback/payObject', '回调测试', b'1', b'1', '回调测试 支付消息(对象接收)', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206474, 'VoucherConfigController#findPayWays', '支付宝支持支付方式', 'GET', '/voucher/config/findPayWays', '储值卡支付配置', b'1', b'1', '储值卡支付配置 支付宝支持支付方式', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206475, 'ClientNoticeReceiveController#refund', '退款消息(对象)', 'POST', '/demo/callback/refundObject', '回调测试', b'1', b'1', '回调测试 退款消息(对象)', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351862206476, 'WalletController#recharge', '充值', 'POST', '/wallet/recharge', '钱包管理', b'1', b'1', '钱包管理 充值', 1399985191002447872, '2024-02-26 21:48:17.805000', 1399985191002447872, '2024-02-26 21:48:17.805000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400768, 'VoucherController#page', '储值卡分页', 'GET', '/voucher/page', '储值卡管理', b'1', b'1', '储值卡管理 储值卡分页', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400769, 'PayReturnController#wechat', '微信同步通知', 'GET', '/return/pay/wechat', '支付同步通知', b'1', b'1', '支付同步通知 微信同步通知', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400770, 'WalletController#findRecordById', '查询记录详情', 'GET', '/wallet/record/findById', '钱包管理', b'1', b'1', '钱包管理 查询记录详情', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400771, 'WalletConfigController#getConfig', '获取配置', 'GET', '/wallet/config/getConfig', '钱包配置', b'1', b'1', '钱包配置 获取配置', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400772, 'WalletController#recordPage', '记录分页', 'GET', '/wallet/record/page', '钱包管理', b'1', b'1', '钱包管理 记录分页', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400773, 'VoucherController#existsByCardNo', '判断卡号是否存在', 'GET', '/voucher/existsByCardNo', '储值卡管理', b'1', b'1', '储值卡管理 判断卡号是否存在', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400774, 'WalletController#page', '钱包分页', 'GET', '/wallet/page', '钱包管理', b'1', b'1', '钱包管理 钱包分页', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400775, 'ClientNoticeTaskController#findById', '查询单条', 'GET', '/task/notice/findById', '客户系统通知任务', b'1', b'1', '客户系统通知任务 查询单条', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400776, 'CashController#findById', '查询记录详情', 'GET', '/cash/record/findById', '现金控制器', b'1', b'1', '现金控制器 查询记录详情', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400777, 'WeChatPayController#findById', '查询记录详情', 'GET', '/wechat/pay/record/findById', '微信支付控制器', b'1', b'1', '微信支付控制器 查询记录详情', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400778, 'ClientNoticeReceiveController#pay', '支付消息(map接收)', 'POST', '/demo/callback/pay', '回调测试', b'1', b'1', '回调测试 支付消息(map接收)', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400779, 'VoucherConfigController#getConfig', '获取配置', 'GET', '/voucher/config/getConfig', '储值卡支付配置', b'1', b'1', '储值卡支付配置 获取配置', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400780, 'WalletController#create', '创建钱包', 'POST', '/wallet/create', '钱包管理', b'1', b'1', '钱包管理 创建钱包', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400781, 'ClientNoticeTaskController#findRecordById', '查询单条', 'GET', '/task/notice/record/findById', '客户系统通知任务', b'1', b'1', '客户系统通知任务 查询单条', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400782, 'CashConfigController#update', '更新', 'POST', '/cash/config/update', '现金支付配置', b'1', b'1', '现金支付配置 更新', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400783, 'ClientNoticeReceiveController#refund', '退款消息', 'POST', '/demo/callback/refund', '回调测试', b'1', b'1', '回调测试 退款消息', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400784, 'WeChatPayController#recordPage', '记录分页', 'GET', '/wechat/pay/record/page', '微信支付控制器', b'1', b'1', '微信支付控制器 记录分页', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400785, 'PayReturnController#alipay', '支付宝同步跳转连接', 'GET', '/return/pay/alipay', '支付同步通知', b'1', b'1', '支付同步通知 支付宝同步跳转连接', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400786, 'WalletController#findById', '查询钱包详情', 'GET', '/wallet/findById', '钱包管理', b'1', b'1', '钱包管理 查询钱包详情', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400787, 'CashConfigController#findPayWays', '支付宝支持支付方式', 'GET', '/cash/config/findPayWays', '现金支付配置', b'1', b'1', '现金支付配置 支付宝支持支付方式', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400788, 'AlipayController#findById', '查询记录详情', 'GET', '/alipay/record/findById', '支付宝控制器', b'1', b'1', '支付宝控制器 查询记录详情', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400789, 'VoucherConfigController#update', '更新', 'POST', '/voucher/config/update', '储值卡支付配置', b'1', b'1', '储值卡支付配置 更新', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400790, 'ClientNoticeTaskController#page', '分页查询', 'GET', '/task/notice/page', '客户系统通知任务', b'1', b'1', '客户系统通知任务 分页查询', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400791, 'VoucherController#recordPage', '记录分页', 'GET', '/voucher/record/page', '储值卡管理', b'1', b'1', '储值卡管理 记录分页', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400792, 'ClientNoticeTaskController#resetSend', '重新发送消息通知', 'POST', '/task/notice/resetSend', '客户系统通知任务', b'1', b'1', '客户系统通知任务 重新发送消息通知', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400793, 'WalletController#deduct', '扣减', 'POST', '/wallet/deduct', '钱包管理', b'1', b'1', '钱包管理 扣减', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1762112351866400794, 'WalletController#existsByUserId', '判断用户是否开通了钱包', 'GET', '/wallet/existsByUserId', '钱包管理', b'1', b'1', '钱包管理 判断用户是否开通了钱包', 1399985191002447872, '2024-02-26 21:48:17.806000', 1399985191002447872, '2024-02-26 21:48:17.806000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1764663810424303616, 'ReconcileOrderController#pageDiff', '对账差异分页', 'GET', '/order/reconcile/diff/page', '对账控制器', b'1', b'1', '对账控制器 对账差异分页', 1399985191002447872, '2024-03-04 22:46:52.930000', 1399985191002447872, '2024-03-04 22:46:52.930000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1764663810424303617, 'ReconcileOrderController#findDiffById', '对账差异详情', 'GET', '/order/reconcile/diff/findById', '对账控制器', b'1', b'1', '对账控制器 对账差异详情', 1399985191002447872, '2024-03-04 22:46:52.930000', 1399985191002447872, '2024-03-04 22:46:52.930000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1764663810424303618, 'ReconcileOrderController#findDetailById', '对账明细详情', 'GET', '/order/reconcile/detail/findById', '对账控制器', b'1', b'1', '对账控制器 对账明细详情', 1399985191002447872, '2024-03-04 22:46:52.930000', 1399985191002447872, '2024-03-04 22:46:52.930000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1764663810424303619, 'ReconcileOrderController#compare', '手动触发对账单比对', 'POST', '/order/reconcile/compare', '对账控制器', b'1', b'1', '对账控制器 手动触发对账单比对', 1399985191002447872, '2024-03-04 22:46:52.930000', 1399985191002447872, '2024-03-04 22:46:52.930000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1764663810424303620, 'ReconcileOrderController#pageDetail', '对账明细分页', 'GET', '/order/reconcile/detail/page', '对账控制器', b'1', b'1', '对账控制器 对账明细分页', 1399985191002447872, '2024-03-04 22:46:52.930000', 1399985191002447872, '2024-03-04 22:46:52.930000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994971140096, 'RefundOrderController#resetRefund', '重新发起退款', 'POST', '/order/refund/resetRefund', '支付退款控制器', b'1', b'1', '支付退款控制器 重新发起退款', 1399985191002447872, '2024-03-14 18:17:53.396000', 1399985191002447872, '2024-03-14 18:17:53.397000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994979528704, 'UnionPayConfigController#getConfig', '获取配置', 'GET', '/union/pay/config/getConfig', '云闪付配置', b'1', b'1', '云闪付配置 获取配置', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994979528705, 'UnionPayController#findById', '查询记录详情', 'GET', '/union/pay/record/findById', '云闪付控制器', b'1', b'1', '云闪付控制器 查询记录详情', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994979528706, 'UnionPayController#recordPage', '记录分页', 'GET', '/union/pay/record/page', '云闪付控制器', b'1', b'1', '云闪付控制器 记录分页', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994979528707, 'UnionPayConfigController#update', '更新', 'POST', '/union/pay/config/update', '云闪付配置', b'1', b'1', '云闪付配置 更新', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994979528708, 'PayReturnController#union', '云闪付同步通知', 'POST', '/return/pay/union', '支付同步通知', b'1', b'1', '支付同步通知 云闪付同步通知', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994979528709, 'PayCallbackController#unionPayNotify', '云闪付支付信息回调', 'POST', '/callback/pay/union', '支付通道信息回调', b'1', b'1', '支付通道信息回调 云闪付支付信息回调', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994979528710, 'UnionPayConfigController#toBase64', '读取证书文件内容', 'POST', '/union/pay/config/toBase64', '云闪付配置', b'1', b'1', '云闪付配置 读取证书文件内容', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1768219994979528711, 'UnionPayConfigController#findPayWays', '支持的支付方式', 'GET', '/union/pay/config/findPayWays', '云闪付配置', b'1', b'1', '云闪付配置 支持的支付方式', 1399985191002447872, '2024-03-14 18:17:53.398000', 1399985191002447872, '2024-03-14 18:17:53.398000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460544, 'CockpitReportController#getRefundChannelInfo', '显示通道退款订单金额和订单数', 'GET', '/report/cockpit/getRefundChannelInfo', '驾驶舱接口', b'1', b'1', '驾驶舱接口 显示通道退款订单金额和订单数', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460545, 'CockpitReportController#getRefundAmount', '退款金额(分)', 'GET', '/report/cockpit/getRefundAmount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 退款金额(分)', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460546, 'CockpitReportController#getRefundOrderCount', '退款订单数量', 'GET', '/report/cockpit/getRefundOrderCount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 退款订单数量', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460547, 'CockpitReportController#getPayChannelInfo', '显示通道支付订单金额和订单数', 'GET', '/report/cockpit/getPayChannelInfo', '驾驶舱接口', b'1', b'1', '驾驶舱接口 显示通道支付订单金额和订单数', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460548, 'ReconcileOrderController#upload', '手动上传对账单文件', 'POST', '/order/reconcile/upload', '对账控制器', b'1', b'1', '对账控制器 手动上传对账单文件', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460549, 'CockpitReportController#getPayAmount', '支付金额(分)', 'GET', '/report/cockpit/getPayAmount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 支付金额(分)', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1772446740356460550, 'CockpitReportController#getPayOrderCount', '支付订单数量', 'GET', '/report/cockpit/getPayOrderCount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 支付订单数量', 1399985191002447872, '2024-03-26 10:13:28.025000', 1399985191002447872, '2024-03-26 10:13:28.025000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138432, 'AllocationOrderController#sync', '同步分账结果', 'POST', '/order/allocation/sync', '对账订单控制器', b'1', b'1', '对账订单控制器 同步分账结果', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.850000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138433, 'AllocationGroupController#findReceiversByGroups', '查询分账接收方信息', 'GET', '/allocation/group/findReceiversByGroups', '分账组', b'1', b'1', '分账组 查询分账接收方信息', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138434, 'AllocationGroupController#unbindReceiver', '取消绑定接收者', 'POST', '/allocation/group/unbindReceiver', '分账组', b'1', b'1', '分账组 取消绑定接收者', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138435, 'PayOrderController#allocation', '发起分账', 'POST', '/order/pay/allocation', '支付订单控制器', b'1', b'1', '支付订单控制器 发起分账', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138436, 'AllocationReceiverController#registerByGateway', '同步到三方支付系统中', 'POST', '/allocation/receiver/registerByGateway', '对账接收方控制器', b'1', b'1', '对账接收方控制器 同步到三方支付系统中', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.850000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138437, 'AllocationGroupController#unbindReceivers', '批量取消绑定接收者', 'POST', '/allocation/group/unbindReceivers', '分账组', b'1', b'1', '分账组 批量取消绑定接收者', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138438, 'AllocationOrderController#findDetailById', '查询明细详情', 'GET', '/order/allocation/detail/findById', '对账订单控制器', b'1', b'1', '对账订单控制器 查询明细详情', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.849000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138439, 'AllocationOrderController#findChannels', '获取可以分账的通道', 'GET', '/order/allocation/findChannels', '对账订单控制器', b'1', b'1', '对账订单控制器 获取可以分账的通道', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.849000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138440, 'SystemMonitorController#getSystemInfo', '获取系统消息', 'GET', '/monitor/system/getSystemInfo', '系统信息监控', b'1', b'1', '系统信息监控 获取系统消息', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138441, 'AllocationReceiverController#page', '分页', 'GET', '/allocation/receiver/page', '对账接收方控制器', b'1', b'1', '对账接收方控制器 分页', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.849000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138442, 'AllocationGroupController#clearDefault', '清除默认分账组', 'POST', '/allocation/group/clearDefault', '分账组', b'1', b'1', '分账组 清除默认分账组', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138443, 'AllocationGroupController#create', '创建', 'POST', '/allocation/group/create', '分账组', b'1', b'1', '分账组 创建', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138444, 'AllocationOrderController#finish', '分账完结', 'POST', '/order/allocation/finish', '对账订单控制器', b'1', b'1', '对账订单控制器 分账完结', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.848000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138445, 'UniPayController#allocationFinish', '分账完结接口', 'POST', '/unipay/allocationFinish', '统一支付接口', b'1', b'1', '统一支付接口 分账完结接口', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138446, 'AllocationOrderController#findById', '查询详情', 'GET', '/order/allocation/findById', '对账订单控制器', b'1', b'1', '对账订单控制器 查询详情', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.848000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138447, 'SystemMonitorController#getRedisInfo', '获取Redis信息', 'GET', '/monitor/system/getRedisInfo', '系统信息监控', b'1', b'1', '系统信息监控 获取Redis信息', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138448, 'AllocationReceiverController#removeByGateway', '从三方支付系统中删除', 'POST', '/allocation/receiver/removeByGateway', '对账接收方控制器', b'1', b'1', '对账接收方控制器 从三方支付系统中删除', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.848000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138449, 'AllocationReceiverController#findReceiverTypeByChannel', '根据通道获取分账接收方类型', 'GET', '/allocation/receiver/findReceiverTypeByChannel', '对账接收方控制器', b'1', b'1', '对账接收方控制器 根据通道获取分账接收方类型', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.847000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138450, 'AllocationGroupController#delete', '删除', 'POST', '/allocation/group/delete', '分账组', b'1', b'1', '分账组 删除', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138451, 'AllocationGroupController#update', '修改', 'POST', '/allocation/group/update', '分账组', b'1', b'1', '分账组 修改', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138452, 'AllocationReceiverController#add', '新增', 'POST', '/allocation/receiver/add', '对账接收方控制器', b'1', b'1', '对账接收方控制器 新增', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.847000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138453, 'AllocationGroupController#setDefault', '设置默认分账组', 'POST', '/allocation/group/setDefault', '分账组', b'1', b'1', '分账组 设置默认分账组', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138454, 'AllocationGroupController#findById', '查询详情', 'GET', '/allocation/group/findById', '分账组', b'1', b'1', '分账组 查询详情', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138455, 'AllocationReceiverController#update', '修改', 'POST', '/allocation/receiver/update', '对账接收方控制器', b'1', b'1', '对账接收方控制器 修改', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.847000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138456, 'AllocationReceiverController#delete', '删除', 'POST', '/allocation/receiver/delete', '对账接收方控制器', b'1', b'1', '对账接收方控制器 删除', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.846000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138457, 'AllocationReceiverController#findChannels', '获取可以分账的通道', 'GET', '/allocation/receiver/findChannels', '对账接收方控制器', b'1', b'1', '对账接收方控制器 获取可以分账的通道', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.846000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138458, 'AllocationReceiverController#findById', '查询详情', 'GET', '/allocation/receiver/findById', '对账接收方控制器', b'1', b'1', '对账接收方控制器 查询详情', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.846000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138459, 'AllocationGroupController#page', '分页', 'GET', '/allocation/group/page', '分账组', b'1', b'1', '分账组 分页', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138460, 'AllocationGroupController#bindReceivers', '批量绑定接收者', 'POST', '/allocation/group/bindReceivers', '分账组', b'1', b'1', '分账组 批量绑定接收者', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138461, 'AllocationGroupController#updateRate', '修改分账比例', 'POST', '/allocation/group/updateRate', '分账组', b'1', b'1', '分账组 修改分账比例', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138462, 'UniPayController#allocation', '开启分账接口', 'POST', '/unipay/allocation', '统一支付接口', b'1', b'1', '统一支付接口 开启分账接口', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-16 20:47:44.424000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138463, 'AllocationOrderController#findDetailsByOrderId', '分账明细列表', 'GET', '/order/allocation/detail/findAll', '对账订单控制器', b'1', b'1', '对账订单控制器 分账明细列表', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.846000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138464, 'AllocationOrderController#retryAllocation', '分账重试', 'POST', '/order/allocation/retry', '对账订单控制器', b'1', b'1', '对账订单控制器 分账重试', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.845000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780216505637138465, 'AllocationOrderController#page', '分页', 'GET', '/order/allocation/page', '对账订单控制器', b'1', b'1', '对账订单控制器 分页', 1399985191002447872, '2024-04-16 20:47:44.424000', 1399985191002447872, '2024-04-17 10:09:40.839000', b'1', 0);
-INSERT INTO `iam_perm_path` VALUES (1780417658844966912, 'PayGatewayNoticeController#wechatPayNotice', '微信消息通知', 'POST', '/gateway/notice/wechat', '三方支付网关消息通知', b'1', b'1', '三方支付网关消息通知 微信消息通知', 1399985191002447872, '2024-04-17 10:07:03.086000', 1399985191002447872, '2024-04-17 10:07:03.086000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780417658844966913, 'PayGatewayNoticeController#aliPayNotice', '支付宝消息通知', 'POST', '/gateway/notice/alipay', '三方支付网关消息通知', b'1', b'1', '三方支付网关消息通知 支付宝消息通知', 1399985191002447872, '2024-04-17 10:07:03.086000', 1399985191002447872, '2024-04-17 10:07:03.086000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063232, 'AllocationReceiverController#page', '分页', 'GET', '/allocation/receiver/page', '分账接收方控制器', b'1', b'1', '分账接收方控制器 分页', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063233, 'AllocationOrderController#finish', '分账完结', 'POST', '/order/allocation/finish', '分账订单控制器', b'1', b'1', '分账订单控制器 分账完结', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063234, 'AllocationReceiverController#delete', '删除', 'POST', '/allocation/receiver/delete', '分账接收方控制器', b'1', b'1', '分账接收方控制器 删除', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063235, 'AllocationReceiverController#add', '新增', 'POST', '/allocation/receiver/add', '分账接收方控制器', b'1', b'1', '分账接收方控制器 新增', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063236, 'AllocationReceiverController#findById', '查询详情', 'GET', '/allocation/receiver/findById', '分账接收方控制器', b'1', b'1', '分账接收方控制器 查询详情', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063237, 'AllocationOrderController#sync', '同步分账结果', 'POST', '/order/allocation/sync', '分账订单控制器', b'1', b'1', '分账订单控制器 同步分账结果', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063238, 'AllocationReceiverController#findReceiverTypeByChannel', '根据通道获取分账接收方类型', 'GET', '/allocation/receiver/findReceiverTypeByChannel', '分账接收方控制器', b'1', b'1', '分账接收方控制器 根据通道获取分账接收方类型', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063239, 'AllocationReceiverController#removeByGateway', '从三方支付系统中删除', 'POST', '/allocation/receiver/removeByGateway', '分账接收方控制器', b'1', b'1', '分账接收方控制器 从三方支付系统中删除', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063240, 'AllocationOrderController#page', '分页', 'GET', '/order/allocation/page', '分账订单控制器', b'1', b'1', '分账订单控制器 分页', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063241, 'AllocationOrderController#findChannels', '获取可以分账的通道', 'GET', '/order/allocation/findChannels', '分账订单控制器', b'1', b'1', '分账订单控制器 获取可以分账的通道', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063242, 'AllocationOrderController#findDetailsByOrderId', '分账明细列表', 'GET', '/order/allocation/detail/findAll', '分账订单控制器', b'1', b'1', '分账订单控制器 分账明细列表', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063243, 'AllocationReceiverController#registerByGateway', '同步到三方支付系统中', 'POST', '/allocation/receiver/registerByGateway', '分账接收方控制器', b'1', b'1', '分账接收方控制器 同步到三方支付系统中', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063244, 'AllocationReceiverController#findChannels', '获取可以分账的通道', 'GET', '/allocation/receiver/findChannels', '分账接收方控制器', b'1', b'1', '分账接收方控制器 获取可以分账的通道', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063245, 'AllocationOrderController#findById', '查询详情', 'GET', '/order/allocation/findById', '分账订单控制器', b'1', b'1', '分账订单控制器 查询详情', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063246, 'AllocationOrderController#findDetailById', '查询明细详情', 'GET', '/order/allocation/detail/findById', '分账订单控制器', b'1', b'1', '分账订单控制器 查询明细详情', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063247, 'AllocationReceiverController#update', '修改', 'POST', '/allocation/receiver/update', '分账接收方控制器', b'1', b'1', '分账接收方控制器 修改', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
-INSERT INTO `iam_perm_path` VALUES (1780418342852063248, 'AllocationOrderController#retryAllocation', '分账重试', 'POST', '/order/allocation/retry', '分账订单控制器', b'1', b'1', '分账订单控制器 分账重试', 1399985191002447872, '2024-04-17 10:09:46.166000', 1399985191002447872, '2024-04-17 10:09:46.166000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556416, 'UserInfoController#existsUsername', '账号是否被使用', 'GET', '/user/existsUsername', '用户管理', b'1', b'1', '用户管理 账号是否被使用', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556417, 'FIleUpLoadController#page', '分页', 'GET', '/file/page', '文件上传', b'1', b'1', '文件上传 分页', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556418, 'AllocationOrderController#retryAllocation', '分账重试', 'POST', '/order/allocation/retry', '分账订单控制器', b'1', b'1', '分账订单控制器 分账重试', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556419, 'WeChatPayConfigController#toBase64', '将文件转换成base64', 'POST', '/wechat/pay/config/toBase64', '微信支付配置', b'1', b'1', '微信支付配置 将文件转换成base64', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556420, 'AllocationReceiverController#removeByGateway', '从三方支付系统中删除', 'POST', '/allocation/receiver/removeByGateway', '分账接收方控制器', b'1', b'1', '分账接收方控制器 从三方支付系统中删除', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556421, 'UserThirdController#unbind', '解绑第三方账号', 'POST', '/user/third/unbind', '用户三方登录管理', b'1', b'1', '用户三方登录管理 解绑第三方账号', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556422, 'ChinaRegionController#findAllProvince', '获取一级行政区', 'GET', '/china/region/findAllProvince', '中国行政区划', b'1', b'1', '中国行政区划 获取一级行政区', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556423, 'AllocationGroupController#unbindReceivers', '批量取消绑定接收者', 'POST', '/allocation/group/unbindReceivers', '分账组', b'1', b'1', '分账组 批量取消绑定接收者', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556424, 'DataRoleController#findUsersByDataRoleId', '获取关联的用户列表', 'GET', '/data/role/findUsersByDataRoleId', '数据角色配置', b'1', b'1', '数据角色配置 获取关联的用户列表', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556425, 'AggregateController#getInfo', '获取聚合支付信息', 'GET', '/demo/aggregate/getInfo', '聚合支付', b'1', b'1', '聚合支付 获取聚合支付信息', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556426, 'UniQueryController#queryRefundOrder', '退款订单查询接口', 'POST', '/uni/query/refundOrder', '统一查询接口', b'1', b'1', '统一查询接口 退款订单查询接口', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556427, 'SmsTemplateController#update', '修改', 'POST', '/sms/template/update', '短信模板配置', b'1', b'1', '短信模板配置 修改', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556428, 'AllocationReceiverController#findById', '查询详情', 'GET', '/allocation/receiver/findById', '分账接收方控制器', b'1', b'1', '分账接收方控制器 查询详情', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556429, 'PayMethodInfoController#update', '更新', 'POST', '/pay/method/info/update', '支付方式管理', b'1', b'1', '支付方式管理 更新', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556430, 'CashierController#getUniCashierUrl', '获取手机收银台链接', 'GET', '/demo/cashier/getUniCashierUrl', '结算台演示', b'1', b'1', '结算台演示 获取手机收银台链接', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556431, 'ReconcileOrderController#pageDiff', '对账差异分页', 'GET', '/order/reconcile/diff/page', '对账控制器', b'1', b'1', '对账控制器 对账差异分页', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556432, 'OnlineUserController#page', '分页', 'GET', '/online/user/page', '在线用户', b'1', b'1', '在线用户 分页', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556433, 'UserInfoController#existsPhone', '手机号是否被使用(不包含自己)', 'GET', '/user/existsPhoneNotId', '用户管理', b'1', b'1', '用户管理 手机号是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556434, 'DataRoleController#add', '添加', 'POST', '/data/role/add', '数据角色配置', b'1', b'1', '数据角色配置 添加', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556435, 'PlatformConfigController#getConfig', '获取平台配置', 'GET', '/platform/config/getConfig', '支付平台配置控制器', b'1', b'1', '支付平台配置控制器 获取平台配置', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556436, 'SmsTemplateController#delete', '删除', 'DELETE', '/sms/template/delete', '短信模板配置', b'1', b'1', '短信模板配置 删除', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556437, 'DataRoleController#findById', '获取', 'GET', '/data/role/findById', '数据角色配置', b'1', b'1', '数据角色配置 获取', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556438, 'DingRobotConfigController#delete', '删除', 'DELETE', '/ding/robot/config/delete', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 删除', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556439, 'UserDataRoleController#saveAssign', '给用户分配数据角色', 'POST', '/user/data/role/saveAssign', '用户数据角色配置', b'1', b'1', '用户数据角色配置 给用户分配数据角色', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556440, 'SiteMessageController#read', '标为已读', 'POST', '/site/message/read', '站内信', b'1', b'1', '站内信 标为已读', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556441, 'SystemParamController#findByParamKey', '根据键名获取键值', 'GET', '/system/param/findByParamKey', '系统参数', b'1', b'1', '系统参数 根据键名获取键值', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556442, 'UserInfoController#bindEmail', '绑定邮箱', 'POST', '/user/bindEmail', '用户管理', b'1', b'1', '用户管理 绑定邮箱', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556443, 'RoleMenuController#save', '保存请求权限关系', 'POST', '/role/menu/save', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 保存请求权限关系', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556444, 'RoleController#findAll', '查询所有的角色', 'GET', '/role/findAll', '角色管理', b'1', b'1', '角色管理 查询所有的角色', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556445, 'SmsChannelConfigController#findById', '通过ID查询', 'GET', '/sms/config/findById', '短信渠道配置', b'1', b'1', '短信渠道配置 通过ID查询', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556446, 'PermPathController#add', '添加权限', 'POST', '/perm/path/add', '请求权限管理', b'1', b'1', '请求权限管理 添加权限', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556447, 'AuthAssistController#sendSmsCaptcha', '发送短信验证码', 'POST', '/auth/sendSmsCaptcha', '认证支撑接口', b'1', b'1', '认证支撑接口 发送短信验证码', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556448, 'CockpitReportController#getRefundAmount', '退款金额(分)', 'GET', '/report/cockpit/getRefundAmount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 退款金额(分)', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556449, 'PermMenuController#existsByPermCode', '编码是否被使用', 'GET', '/perm/menu/existsByPermCode', '菜单和权限码', b'1', b'1', '菜单和权限码 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556450, 'WeChatTemplateController#findById', '通过ID查询', 'GET', '/wechat/template/findById', '微信模板消息', b'1', b'1', '微信模板消息 通过ID查询', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556451, 'UserInfoController#updateEmail', '修改邮箱', 'POST', '/user/updateEmail', '用户管理', b'1', b'1', '用户管理 修改邮箱', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556452, 'AggregateController#createUrl', '创建聚合支付码', 'POST', '/demo/aggregate/createUrl', '聚合支付', b'1', b'1', '聚合支付 创建聚合支付码', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556453, 'MessageTemplateController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/message/template/existsByCodeNotId', '消息模板', b'1', b'1', '消息模板 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556454, 'DingRobotConfigController#update', '修改机器人配置', 'POST', '/ding/robot/config/update', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 修改机器人配置', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556455, 'WeChatPortalController#auth', 'auth', 'GET', '/wechat/portal', '微信接入入口', b'1', b'1', '微信接入入口 auth', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556456, 'SystemParamController#add', '添加', 'POST', '/system/param/add', '系统参数', b'1', b'1', '系统参数 添加', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556457, 'DingRobotConfigController#page', '分页', 'GET', '/ding/robot/config/page', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 分页', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556458, 'QuartzJobController#findById', '单条', 'GET', '/quartz/findById', '定时任务', b'1', b'1', '定时任务 单条', 1399985191002447872, '2024-05-13 19:16:54.069000', 1399985191002447872, '2024-05-13 19:16:54.069000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117562556459, 'RoleController#existsByName', '名称是否被使用', 'GET', '/role/existsByName', '角色管理', b'1', b'1', '角色管理 名称是否被使用', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750720, 'WeChatMenuController#findById', '通过ID查询', 'GET', '/wechat/menu/findById', '微信菜单管理', b'1', b'1', '微信菜单管理 通过ID查询', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750721, 'UserInfoController#existsEmail', '邮箱是否被使用(不包含自己)', 'GET', '/user/existsEmailNotId', '用户管理', b'1', b'1', '用户管理 邮箱是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750722, 'UniPayController#syncPay', '支付同步接口', 'POST', '/unipay/syncPay', '统一支付接口', b'1', b'1', '统一支付接口 支付同步接口', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750723, 'PermPathController#page', '权限分页', 'GET', '/perm/path/page', '请求权限管理', b'1', b'1', '请求权限管理 权限分页', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750724, 'WeChatPortalController#post', 'post', 'POST', '/wechat/portal', '微信接入入口', b'1', b'1', '微信接入入口 post', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750725, 'DeptController#findById', '获取', 'GET', '/dept/findById', '部门管理', b'1', b'1', '部门管理 获取', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750726, 'PayOrderController#allocation', '发起分账', 'POST', '/order/pay/allocation', '支付订单控制器', b'1', b'1', '支付订单控制器 发起分账', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750727, 'DictionaryController#add', '添加', 'POST', '/dict/add', '字典', b'1', b'1', '字典 添加', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750728, 'RefundOrderController#getTotalAmount', '查询金额汇总', 'GET', '/order/refund/getTotalAmount', '支付退款控制器', b'1', b'1', '支付退款控制器 查询金额汇总', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750729, 'UserInfoController#getUserBaseInfo', '查询用户基础信息', 'GET', '/user/getUserBaseInfo', '用户管理', b'1', b'1', '用户管理 查询用户基础信息', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750730, 'CockpitReportController#getRefundOrderCount', '退款订单数量', 'GET', '/report/cockpit/getRefundOrderCount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 退款订单数量', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750731, 'UserAdminController#update', '修改用户', 'POST', '/user/admin/update', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 修改用户', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750732, 'WeChatMenuController#importMenu', '导入微信自定义菜单到系统中', 'POST', '/wechat/menu/importMenu', '微信菜单管理', b'1', b'1', '微信菜单管理 导入微信自定义菜单到系统中', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750733, 'WalletConfigController#update', '更新', 'POST', '/wallet/config/update', '钱包配置', b'1', b'1', '钱包配置 更新', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750734, 'DeptController#deleteAndChildren', '强制级联删除', 'DELETE', '/dept/deleteAndChildren', '部门管理', b'1', b'1', '部门管理 强制级联删除', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750735, 'PermPathController#deleteBatch', '批量删除', 'DELETE', '/perm/path/deleteBatch', '请求权限管理', b'1', b'1', '请求权限管理 批量删除', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750736, 'PayGatewayNoticeController#wechatPayNotice', '微信消息通知', 'POST', '/gateway/notice/wechat', '三方支付网关消息通知', b'1', b'1', '三方支付网关消息通知 微信消息通知', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750737, 'DataRoleController#saveDeptAssign', '保存关联部门', 'POST', '/data/role/saveDeptAssign', '数据角色配置', b'1', b'1', '数据角色配置 保存关联部门', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750738, 'PayCallbackController#wechatPayNotify', '微信支付信息回调', 'POST', '/callback/pay/wechat', '支付通道信息回调', b'1', b'1', '支付通道信息回调 微信支付信息回调', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750739, 'WeChatMediaController#uploadFile', '上传素材', 'POST', '/wechat/media/uploadFile', '微信素材管理', b'1', b'1', '微信素材管理 上传素材', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750740, 'AllocationReceiverController#registerByGateway', '同步到三方支付系统中', 'POST', '/allocation/receiver/registerByGateway', '分账接收方控制器', b'1', b'1', '分账接收方控制器 同步到三方支付系统中', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750741, 'WalletController#recharge', '充值', 'POST', '/wallet/recharge', '钱包管理', b'1', b'1', '钱包管理 充值', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750742, 'UniPayAssistController#getWxAccessToken', '获取微信AccessToken', 'POST', '/unipay/assist/getWxAccessToken', '支付支撑接口', b'1', b'1', '支付支撑接口 获取微信AccessToken', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750743, 'FIleUpLoadController#getFileDownloadUrl', '获取文件下载地址(流量会经过后端)', 'GET', '/file/getFileDownloadUrl', '文件上传', b'1', b'1', '文件上传 获取文件下载地址(流量会经过后端)', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750744, 'AllocationGroupController#clearDefault', '清除默认分账组', 'POST', '/allocation/group/clearDefault', '分账组', b'1', b'1', '分账组 清除默认分账组', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750745, 'DictionaryController#findById', '根据id获取', 'GET', '/dict/findById', '字典', b'1', b'1', '字典 根据id获取', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750746, 'ReconcileOrderController#compare', '手动触发交易对账单比对', 'POST', '/order/reconcile/compare', '对账控制器', b'1', b'1', '对账控制器 手动触发交易对账单比对', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750747, 'TestController#lock1', '锁测试1', 'GET', '/test/lock1', '测试', b'1', b'1', '测试 锁测试1', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750748, 'UserInfoController#updatePhone', '修改手机号', 'POST', '/user/updatePhone', '用户管理', b'1', b'1', '用户管理 修改手机号', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750749, 'UserInfoController#getLoginAfterUserInfo', '登录后获取用户信息', 'GET', '/user/getLoginAfterUserInfo', '用户管理', b'1', b'1', '用户管理 登录后获取用户信息', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750750, 'ClientController#delete', '删除', 'DELETE', '/client/delete', '认证终端', b'1', b'1', '认证终端 删除', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750751, 'PayChannelConfigController#findAll', '查询全部', 'GET', '/pay/channel/config/findAll', '支付通道信息', b'1', b'1', '支付通道信息 查询全部', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750752, 'SmsChannelConfigController#add', '添加', 'POST', '/sms/config/add', '短信渠道配置', b'1', b'1', '短信渠道配置 添加', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750753, 'PayCloseRecordController#page', '分页查询', 'GET', '/record/close/page', '支付订单关闭记录', b'1', b'1', '支付订单关闭记录 分页查询', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750754, 'UserInfoController#bindPhone', '绑定手机', 'POST', '/user/bindPhone', '用户管理', b'1', b'1', '用户管理 绑定手机', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750755, 'DictionaryItemController#update', '修改字典项（返回字典项对象）', 'POST', '/dict/item/update', '字典项', b'1', b'1', '字典项 修改字典项（返回字典项对象）', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750756, 'WeChatMediaController#pageFile', '非图文素材分页', 'GET', '/wechat/media/pageFile', '微信素材管理', b'1', b'1', '微信素材管理 非图文素材分页', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750757, 'ChinaRegionController#findAllProvinceAndCityAndArea', ' 获取省市区县三级联动列表', 'GET', '/china/region/findAllProvinceAndCityAndArea', '中国行政区划', b'1', b'1', '中国行政区划  获取省市区县三级联动列表', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750758, 'WalletConfigController#findPayWays', '支付宝支持支付方式', 'GET', '/wallet/config/findPayWays', '钱包配置', b'1', b'1', '钱包配置 支付宝支持支付方式', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750759, 'AllocationGroupController#bindReceivers', '批量绑定接收者', 'POST', '/allocation/group/bindReceivers', '分账组', b'1', b'1', '分账组 批量绑定接收者', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750760, 'ReconcileOrderController#upload', '手动上传交易对账单文件', 'POST', '/order/reconcile/upload', '对账控制器', b'1', b'1', '对账控制器 手动上传交易对账单文件', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750761, 'SystemParamController#update', '更新', 'POST', '/system/param/update', '系统参数', b'1', b'1', '系统参数 更新', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750762, 'PayCallbackRecordController#page', '分页查询', 'GET', '/record/callback/page', '支付回调信息记录', b'1', b'1', '支付回调信息记录 分页查询', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750763, 'RefundOrderController#findByRefundNo', '查询退款订单详情', 'GET', '/order/refund/findByOrderNo', '支付退款控制器', b'1', b'1', '支付退款控制器 查询退款订单详情', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750764, 'ClientController#page', '分页查询', 'GET', '/client/page', '认证终端', b'1', b'1', '认证终端 分页查询', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750765, 'UserAssistController#sendPhoneForgetCaptcha', '发送找回密码手机验证码', 'POST', '/user/sendPhoneForgetCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 发送找回密码手机验证码', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750766, 'CashierController#wxAuthCallback', '微信授权回调页面', 'GET', '/demo/cashier/wxAuthCallback', '结算台演示', b'1', b'1', '结算台演示 微信授权回调页面', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750767, 'UserInfoController#getUserSecurityInfo', '查询用户安全信息', 'GET', '/user/getUserSecurityInfo', '用户管理', b'1', b'1', '用户管理 查询用户安全信息', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750768, 'PaySyncRecordController#findById', '查询单条', 'GET', '/record/sync/findById', '支付同步记录控制器', b'1', b'1', '支付同步记录控制器 查询单条', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750769, 'DataRoleController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/data/role/existsByCodeNotId', '数据角色配置', b'1', b'1', '数据角色配置 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750770, 'DataRoleController#existsByName', '名称是否被使用(不包含自己)', 'GET', '/data/role/existsByNameNotId', '数据角色配置', b'1', b'1', '数据角色配置 名称是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750771, 'UniQueryController#queryPayOrder', '支付订单查询接口', 'POST', '/uni/query/payOrder', '统一查询接口', b'1', b'1', '统一查询接口 支付订单查询接口', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750772, 'QuartzJobController#delete', '删除', 'DELETE', '/quartz/delete', '定时任务', b'1', b'1', '定时任务 删除', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750773, 'PermMenuController#add', '添加菜单权限', 'POST', '/perm/menu/add', '菜单和权限码', b'1', b'1', '菜单和权限码 添加菜单权限', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750774, 'ChinaRegionController#findAllProvinceAndCity', '获取省市二级联动列表', 'GET', '/china/region/findAllProvinceAndCity', '中国行政区划', b'1', b'1', '中国行政区划 获取省市二级联动列表', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750775, 'WeChatMenuController#page', '分页查询', 'GET', '/wechat/menu/page', '微信菜单管理', b'1', b'1', '微信菜单管理 分页查询', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750776, 'PermPathController#findById', '获取详情', 'GET', '/perm/path/findById', '请求权限管理', b'1', b'1', '请求权限管理 获取详情', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750777, 'QuartzJobController#stop', '停止', 'POST', '/quartz/stop', '定时任务', b'1', b'1', '定时任务 停止', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750778, 'UserAssistController#sendEmailChangeCaptcha', '发送更改/绑定邮箱验证码', 'POST', '/user/sendEmailChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 发送更改/绑定邮箱验证码', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750779, 'DictionaryController#page', '分页', 'GET', '/dict/page', '字典', b'1', b'1', '字典 分页', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750780, 'OnlineUserController#kickOut', '踢出用户', 'GET', '/online/user/kickOut', '在线用户', b'1', b'1', '在线用户 踢出用户', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750781, 'UniPayController#refund', '统一退款接口', 'POST', '/unipay/refund', '统一支付接口', b'1', b'1', '统一支付接口 统一退款接口', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750782, 'PayCallbackController#unionPayNotify', '云闪付支付信息回调', 'POST', '/callback/pay/union', '支付通道信息回调', b'1', b'1', '支付通道信息回调 云闪付支付信息回调', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750783, 'ReconcileOrderController#downLocalCsv', '下载系统对账单(CSV格式)', 'GET', '/order/reconcile/downLocalCsv', '对账控制器', b'1', b'1', '对账控制器 下载系统对账单(CSV格式)', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750784, 'DataRoleController#delete', '删除', 'DELETE', '/data/role/delete', '数据角色配置', b'1', b'1', '数据角色配置 删除', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750785, 'DataRoleController#deleteUserAssigns', '批量删除数据角色关联用户', 'DELETE', '/data/role/deleteUserAssigns', '数据角色配置', b'1', b'1', '数据角色配置 批量删除数据角色关联用户', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750786, 'ClientController#findById', '通过ID查询', 'GET', '/client/findById', '认证终端', b'1', b'1', '认证终端 通过ID查询', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750787, 'ClientController#existsByCode', '编码是否被使用', 'GET', '/client/existsByCode', '认证终端', b'1', b'1', '认证终端 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750788, 'FIleUpLoadController#local', '上传', 'POST', '/file/upload', '文件上传', b'1', b'1', '文件上传 上传', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750789, 'AllocationGroupController#findById', '查询详情', 'GET', '/allocation/group/findById', '分账组', b'1', b'1', '分账组 查询详情', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750790, 'PermMenuController#menuAndPermCodeTree', '获取菜单和权限码树', 'GET', '/perm/menu/menuAndPermCodeTree', '菜单和权限码', b'1', b'1', '菜单和权限码 获取菜单和权限码树', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750791, 'WeChatArticleController#page', '分页', 'GET', '/wechat/article/page', '微信文章管理', b'1', b'1', '微信文章管理 分页', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750792, 'UserInfoController#updatePassword', '修改密码', 'POST', '/user/updatePassword', '用户管理', b'1', b'1', '用户管理 修改密码', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750793, 'MessageTemplateController#existsByCode', '编码是否被使用', 'GET', '/message/template/existsByCode', '消息模板', b'1', b'1', '消息模板 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750794, 'LoginTypeController#superPage', '超级查询', 'POST', '/loginType/superPage', '登录方式管理', b'1', b'1', '登录方式管理 超级查询', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750795, 'WalletController#page', '钱包分页', 'GET', '/wallet/page', '钱包管理', b'1', b'1', '钱包管理 钱包分页', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750796, 'UserAdminController#getUserInfoWhole', '查询用户详情', 'GET', '/user/admin/getUserInfoWhole', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 查询用户详情', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750797, 'AlipayConfigController#update', '更新', 'POST', '/alipay/config/update', '支付宝配置', b'1', b'1', '支付宝配置 更新', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750798, 'UniPayController#syncRefund', '退款同步接口', 'POST', '/unipay/syncRefund', '统一支付接口', b'1', b'1', '统一支付接口 退款同步接口', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750799, 'QuartzJobController#add', '添加', 'POST', '/quartz/add', '定时任务', b'1', b'1', '定时任务 添加', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750800, 'OperateLogController#page', '分页', 'GET', '/log/operate/page', '操作日志', b'1', b'1', '操作日志 分页', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750801, 'ClientNoticeTaskController#findRecordById', '查询单条', 'GET', '/task/notice/record/findById', '客户系统通知任务', b'1', b'1', '客户系统通知任务 查询单条', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750802, 'OpenApiWebMvcResource#openapiYaml', 'openapiYaml', 'GET', '/v3/api-docs.yaml', 'OpenApiWebMvcResource', b'1', b'1', 'OpenApiWebMvcResource openapiYaml', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750803, 'PayOrderController#findById', '查询订单详情', 'GET', '/order/pay/findById', '支付订单控制器', b'1', b'1', '支付订单控制器 查询订单详情', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750804, 'WeChatQrLoginController#getStatus', '获取扫码状态', 'GET', '/token/wechat/qr/getStatus', '微信扫码登录', b'1', b'1', '微信扫码登录 获取扫码状态', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750805, 'DeptController#tree', '树状展示', 'GET', '/dept/tree', '部门管理', b'1', b'1', '部门管理 树状展示', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750806, 'WeChatMenuController#publish', '发布菜单', 'POST', '/wechat/menu/publish', '微信菜单管理', b'1', b'1', '微信菜单管理 发布菜单', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750807, 'AllocationGroupController#findReceiversByGroups', '查询分账接收方信息', 'GET', '/allocation/group/findReceiversByGroups', '分账组', b'1', b'1', '分账组 查询分账接收方信息', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750808, 'LoginLogController#deleteByDay', '清除指定天数之前的日志', 'DELETE', '/log/login/deleteByDay', '登录日志', b'1', b'1', '登录日志 清除指定天数之前的日志', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750809, 'PayOrderController#syncById', '同步支付状态', 'POST', '/order/pay/syncByOrderNo', '支付订单控制器', b'1', b'1', '支付订单控制器 同步支付状态', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750810, 'WeChatTemplateController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/wechat/template/existsByCodeNotId', '微信模板消息', b'1', b'1', '微信模板消息 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750811, 'WeChatMenuController#add', '添加', 'POST', '/wechat/menu/add', '微信菜单管理', b'1', b'1', '微信菜单管理 添加', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750812, 'WeChatMenuController#clearMenu', '清空微信自定义菜单', 'POST', '/wechat/menu/clearMenu', '微信菜单管理', b'1', b'1', '微信菜单管理 清空微信自定义菜单', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750813, 'QuartzJobLogController#page', '分页', 'GET', '/quartz/log/page', '定时任务执行日志', b'1', b'1', '定时任务执行日志 分页', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750814, 'UserInfoController#updateBaseInfo', '修改用户基础信息', 'POST', '/user/updateBaseInfo', '用户管理', b'1', b'1', '用户管理 修改用户基础信息', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750815, 'PayCallbackController#aliPayNotify', '支付宝信息回调', 'POST', '/callback/pay/alipay', '支付通道信息回调', b'1', b'1', '支付通道信息回调 支付宝信息回调', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750816, 'DataRoleController#existsByCode', '编码是否被使用', 'GET', '/data/role/existsByCode', '数据角色配置', b'1', b'1', '数据角色配置 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750817, 'MessageTemplateController#delete', '删除', 'DELETE', '/message/template/delete', '消息模板', b'1', b'1', '消息模板 删除', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750818, 'LoginTypeController#findById', '通过ID查询登录方式', 'GET', '/loginType/findById', '登录方式管理', b'1', b'1', '登录方式管理 通过ID查询登录方式', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750819, 'ReconcileOrderController#page', '对账单分页', 'GET', '/order/reconcile/page', '对账控制器', b'1', b'1', '对账控制器 对账单分页', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750820, 'UnionPayConfigController#findPayWays', '支持的支付方式', 'GET', '/union/pay/config/findPayWays', '云闪付配置', b'1', b'1', '云闪付配置 支持的支付方式', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750821, 'DataRoleController#getDeptIds', '获取关联部门id', 'GET', '/data/role/getDeptIds', '数据角色配置', b'1', b'1', '数据角色配置 获取关联部门id', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750822, 'PayOrderController#close', '关闭支付记录', 'POST', '/order/pay/close', '支付订单控制器', b'1', b'1', '支付订单控制器 关闭支付记录', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750823, 'DingRobotConfigController#findById', '获取详情', 'GET', '/ding/robot/config/findById', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 获取详情', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750824, 'MessageTemplateController#update', '更新', 'POST', '/message/template/update', '消息模板', b'1', b'1', '消息模板 更新', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750825, 'CaptchaController#imgCaptcha', '获取图片验证码', 'POST', '/captcha/imgCaptcha', '验证码服务', b'1', b'1', '验证码服务 获取图片验证码', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750826, 'SystemParamController#delete', '删除', 'DELETE', '/system/param/delete', '系统参数', b'1', b'1', '系统参数 删除', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750827, 'UserInfoController#register', '注册账号', 'POST', '/user/register', '用户管理', b'1', b'1', '用户管理 注册账号', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750828, 'DictionaryItemController#add', '添加字典项（返回字典项对象）', 'POST', '/dict/item/add', '字典项', b'1', b'1', '字典项 添加字典项（返回字典项对象）', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750829, 'UserAdminController#restartPassword', '重置密码', 'POST', '/user/admin/restartPassword', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 重置密码', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750830, 'ClientController#update', '修改', 'POST', '/client/update', '认证终端', b'1', b'1', '认证终端 修改', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750831, 'SmsTemplateController#page', '分页查询', 'GET', '/sms/template/page', '短信模板配置', b'1', b'1', '短信模板配置 分页查询', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750832, 'MailConfigController#updateMailConfig', '更新邮箱配置', 'POST', '/mail/config/update', '邮箱配置', b'1', b'1', '邮箱配置 更新邮箱配置', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117566750833, 'UniPayController#allocation', '开启分账接口', 'POST', '/unipay/allocation', '统一支付接口', b'1', b'1', '统一支付接口 开启分账接口', 1399985191002447872, '2024-05-13 19:16:54.070000', 1399985191002447872, '2024-05-13 19:16:54.070000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945024, 'ReconcileOrderController#downAndSave', '手动触发对账文件下载', 'POST', '/order/reconcile/downAndSave', '对账控制器', b'1', b'1', '对账控制器 手动触发对账文件下载', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945025, 'ForwardFrontController#toH5', 'toH5', 'GET', '/front/', 'ForwardFrontController', b'1', b'1', 'ForwardFrontController toH5', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945026, 'RoleController#page', '分页查询角色', 'GET', '/role/page', '角色管理', b'1', b'1', '角色管理 分页查询角色', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945027, 'TokenEndpoint#logout', '退出', 'POST', '/token/logout', '认证相关', b'1', b'1', '认证相关 退出', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945028, 'PayChannelConfigController#findById', '根据ID获取', 'GET', '/pay/channel/config/findById', '支付通道信息', b'1', b'1', '支付通道信息 根据ID获取', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945029, 'ReconcileOrderController#pageDetail', '对账明细分页', 'GET', '/order/reconcile/detail/page', '对账控制器', b'1', b'1', '对账控制器 对账明细分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945030, 'PasswordSecurityConfigController#getDefault', '获取配置', 'GET', '/security/password/getDefault', '密码安全策略', b'1', b'1', '密码安全策略 获取配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945031, 'DictionaryItemController#findById', '根据字典项ID查询', 'GET', '/dict/item/findById', '字典项', b'1', b'1', '字典项 根据字典项ID查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945032, 'DictionaryItemController#findByDictionaryId', '查询指定字典ID下的所有字典项', 'GET', '/dict/item/findByDictionaryId', '字典项', b'1', b'1', '字典项 查询指定字典ID下的所有字典项', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945033, 'ForwardH5Controller#toH5', 'toH5', 'GET', '/h5/', 'ForwardH5Controller', b'1', b'1', 'ForwardH5Controller toH5', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945034, 'SiteMessageController#findById', '消息详情', 'GET', '/site/message/findById', '站内信', b'1', b'1', '站内信 消息详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945035, 'DictionaryController#update', '更新', 'POST', '/dict/update', '字典', b'1', b'1', '字典 更新', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945036, 'FIleUpLoadController#download', '下载文件(流量会经过后端)', 'GET', '/file/download/{id}', '文件上传', b'1', b'1', '文件上传 下载文件(流量会经过后端)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945037, 'SiteMessageController#pageBySender', '发送消息分页', 'GET', '/site/message/pageBySender', '站内信', b'1', b'1', '站内信 发送消息分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945038, 'AllocationGroupController#unbindReceiver', '取消绑定接收者', 'POST', '/allocation/group/unbindReceiver', '分账组', b'1', b'1', '分账组 取消绑定接收者', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945039, 'AlipayConfigController#readPem', '读取证书文件内容', 'POST', '/alipay/config/readPem', '支付宝配置', b'1', b'1', '支付宝配置 读取证书文件内容', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945040, 'ClientNoticeReceiveController#refund', '退款消息(对象)', 'POST', '/demo/callback/refundObject', '回调测试', b'1', b'1', '回调测试 退款消息(对象)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945041, 'PermMenuController#update', '修改菜单权限', 'POST', '/perm/menu/update', '菜单和权限码', b'1', b'1', '菜单和权限码 修改菜单权限', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945042, 'QuartzJobController#update', '更新', 'POST', '/quartz/update', '定时任务', b'1', b'1', '定时任务 更新', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945043, 'RoleController#dropdown', '角色下拉框', 'GET', '/role/dropdown', '角色管理', b'1', b'1', '角色管理 角色下拉框', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945044, 'AggregateController#aliH5Pay', '支付宝通过聚合支付码发起支付', 'POST', '/demo/aggregate/aliH5Pay', '聚合支付', b'1', b'1', '聚合支付 支付宝通过聚合支付码发起支付', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945045, 'UserRoleController#findRolesByUser', '根据用户ID获取到角色集合', 'GET', '/user/role/findRolesByUser', '用户角色管理', b'1', b'1', '用户角色管理 根据用户ID获取到角色集合', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945046, 'UserInfoController#existsPhone', '手机号是否被使用', 'GET', '/user/existsPhone', '用户管理', b'1', b'1', '用户管理 手机号是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945047, 'ClientNoticeReceiveController#pay', '支付消息(对象接收)', 'POST', '/demo/callback/payObject', '回调测试', b'1', b'1', '回调测试 支付消息(对象接收)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945048, 'PayMethodInfoController#findAll', '获取全部', 'GET', '/pay/method/info/findAll', '支付方式管理', b'1', b'1', '支付方式管理 获取全部', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945049, 'LoginTypeController#page', '分页查询登录方式', 'GET', '/loginType/page', '登录方式管理', b'1', b'1', '登录方式管理 分页查询登录方式', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945050, 'DictionaryItemController#findAllByEnable', '获取启用的字典项列表', 'GET', '/dict/item/findAllByEnable', '字典项', b'1', b'1', '字典项 获取启用的字典项列表', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945051, 'RolePathController#save', '保存角色请求权限关联关系', 'POST', '/role/path/save', '角色请求权限消息关系', b'1', b'1', '角色请求权限消息关系 保存角色请求权限关联关系', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945052, 'WalletController#findById', '查询钱包详情', 'GET', '/wallet/findById', '钱包管理', b'1', b'1', '钱包管理 查询钱包详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945053, 'OnlineUserController#pageByLogin', '登录用户分页', 'GET', '/online/user/pageByLogin', '在线用户', b'1', b'1', '在线用户 登录用户分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945054, 'MailConfigController#delete', '删除', 'DELETE', '/mail/config/delete', '邮箱配置', b'1', b'1', '邮箱配置 删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945055, 'DictionaryController#delete', '根据id删除', 'DELETE', '/dict/delete', '字典', b'1', b'1', '字典 根据id删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945056, 'PayOrderController#getExtraById', '查询支付订单扩展信息', 'GET', '/order/pay/getExtraById', '支付订单控制器', b'1', b'1', '支付订单控制器 查询支付订单扩展信息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945057, 'SiteMessageController#send', '发送站内信', 'POST', '/site/message/send', '站内信', b'1', b'1', '站内信 发送站内信', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945058, 'SiteMessageController#delete', '删除消息', 'DELETE', '/site/message/delete', '站内信', b'1', b'1', '站内信 删除消息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945059, 'AlipayConfigController#findPayWays', '支付宝支持支付方式', 'GET', '/alipay/config/findPayWays', '支付宝配置', b'1', b'1', '支付宝配置 支付宝支持支付方式', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945060, 'SiteMessageController#listByReceiveNotRead', '小程序获取未读的接收消息标题列表', 'GET', '/site/message/listByReceiveNotRead', '站内信', b'1', b'1', '站内信 小程序获取未读的接收消息标题列表', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945061, 'ClientNoticeReceiveController#refund', '退款消息', 'POST', '/demo/callback/refund', '回调测试', b'1', b'1', '回调测试 退款消息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945062, 'CashierController#getPayEnv', '获取支付环境', 'GET', '/demo/cashier/getPayEnv', '结算台演示', b'1', b'1', '结算台演示 获取支付环境', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945063, 'UserAdminController#banBatch', '批量封禁用户', 'POST', '/user/admin/banBatch', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 批量封禁用户', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945064, 'PayReturnController#wechat', '微信同步通知', 'GET', '/return/pay/wechat', '支付同步通知', b'1', b'1', '支付同步通知 微信同步通知', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945065, 'DictionaryItemController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/dict/item/existsByCodeNotId', '字典项', b'1', b'1', '字典项 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945066, 'DictionaryItemController#pageByDictionaryId', '分页查询指定字典下的字典项', 'GET', '/dict/item/pageByDictionaryId', '字典项', b'1', b'1', '字典项 分页查询指定字典下的字典项', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945067, 'AggregateController#wxAuthCallback', '微信授权回调页面', 'GET', '/demo/aggregate/wxAuthCallback', '聚合支付', b'1', b'1', '聚合支付 微信授权回调页面', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945068, 'LoginTypeController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/loginType/existsByCodeNotId', '登录方式管理', b'1', b'1', '登录方式管理 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945069, 'MessageTemplateController#page', '分页', 'GET', '/message/template/page', '消息模板', b'1', b'1', '消息模板 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945070, 'FIleUpLoadController#getFilePreviewUrl', '获取文件预览地址(流量会经过后端)', 'GET', '/file/getFilePreviewUrl', '文件上传', b'1', b'1', '文件上传 获取文件预览地址(流量会经过后端)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945071, 'LoginTypeController#findByCode', '通过code查询登录方式', 'GET', '/loginType/findByCode', '登录方式管理', b'1', b'1', '登录方式管理 通过code查询登录方式', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945072, 'PayReturnController#alipay', '支付宝同步跳转连接', 'GET', '/return/pay/alipay', '支付同步通知', b'1', b'1', '支付同步通知 支付宝同步跳转连接', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945073, 'PayOrderController#findByOrderNo', '查询订单详情', 'GET', '/order/pay/findByOrderNo', '支付订单控制器', b'1', b'1', '支付订单控制器 查询订单详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945074, 'ReconcileOrderController#findById', '对账单详情', 'GET', '/order/reconcile/findById', '对账控制器', b'1', b'1', '对账控制器 对账单详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945075, 'UserAssistController#sendPhoneChangeCaptcha', '发送更改/绑定手机号验证码', 'POST', '/user/sendPhoneChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 发送更改/绑定手机号验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945076, 'MultipleOpenApiWebMvcResource#openapiYaml', 'openapiYaml', 'GET', '/v3/api-docs.yaml/{group}', 'MultipleOpenApiWebMvcResource', b'1', b'1', 'MultipleOpenApiWebMvcResource openapiYaml', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945077, 'PermMenuController#delete', '删除', 'DELETE', '/perm/menu/delete', '菜单和权限码', b'1', b'1', '菜单和权限码 删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945078, 'AggregateController#barCodePay', '通过付款码发起支付', 'POST', '/demo/aggregate/barCodePay', '聚合支付', b'1', b'1', '聚合支付 通过付款码发起支付', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945079, 'SiteMessageController#pageByReceive', '接收消息分页', 'GET', '/site/message/pageByReceive', '站内信', b'1', b'1', '站内信 接收消息分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945080, 'ReconcileOrderController#downDiffCsv', '下载对账差异单(CSV格式)', 'GET', '/order/reconcile/downDiffCsv', '对账控制器', b'1', b'1', '对账控制器 下载对账差异单(CSV格式)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945081, 'WechatNoticeConfigController#update', '更新微信消息通知配置', 'POST', '/wx/notice/update', '微信消息通知配置', b'1', b'1', '微信消息通知配置 更新微信消息通知配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945082, 'AllocationReceiverController#page', '分页', 'GET', '/allocation/receiver/page', '分账接收方控制器', b'1', b'1', '分账接收方控制器 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945083, 'ThirdLoginController#toLoginUrl', '跳转到登陆页', 'GET', '/auth/third/toLoginUrl/{loginType}', '三方登录', b'1', b'1', '三方登录 跳转到登陆页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945084, 'AlipayConfigController#getConfig', '获取配置', 'GET', '/alipay/config/getConfig', '支付宝配置', b'1', b'1', '支付宝配置 获取配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945085, 'AllocationOrderController#findChannels', '获取可以分账的通道', 'GET', '/order/allocation/findChannels', '分账订单控制器', b'1', b'1', '分账订单控制器 获取可以分账的通道', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945086, 'MailConfigController#page', '分页', 'GET', '/mail/config/page', '邮箱配置', b'1', b'1', '邮箱配置 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945087, 'CashierController#simplePayCashier', '创建支付订单并发起', 'POST', '/demo/cashier/simplePayCashier', '结算台演示', b'1', b'1', '结算台演示 创建支付订单并发起', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945088, 'ClientController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/client/existsByCodeNotId', '认证终端', b'1', b'1', '认证终端 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945089, 'UserInfoController#existsEmail', '邮箱是否被使用', 'GET', '/user/existsEmail', '用户管理', b'1', b'1', '用户管理 邮箱是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945090, 'WecomRobotConfigController#existsByCode', '编码是否被使用', 'GET', '/wecom/robot/config/existsByCode', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945091, 'ClientNoticeReceiveController#pay', '支付消息(map接收)', 'POST', '/demo/callback/pay', '回调测试', b'1', b'1', '回调测试 支付消息(map接收)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945092, 'RoleMenuController#findTreeByRole', '获取当前角色下可见的菜单和权限码树(分配时用)', 'GET', '/role/menu/findTreeByRole', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 获取当前角色下可见的菜单和权限码树(分配时用)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945093, 'MessageTemplateController#add', '添加', 'POST', '/message/template/add', '消息模板', b'1', b'1', '消息模板 添加', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945094, 'WalletConfigController#getConfig', '获取配置', 'GET', '/wallet/config/getConfig', '钱包配置', b'1', b'1', '钱包配置 获取配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945095, 'WechatNoticeConfigController#getConfig', '获取微信消息通知配置', 'GET', '/wx/notice/getConfig', '微信消息通知配置', b'1', b'1', '微信消息通知配置 获取微信消息通知配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945096, 'DictionaryController#existsByCode', '编码是否被使用', 'GET', '/dict/existsByCode', '字典', b'1', b'1', '字典 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945097, 'RoleMenuController#findMenuIds', '获取权限菜单id列表,不包含资源权限', 'GET', '/role/menu/findMenuIds', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 获取权限菜单id列表,不包含资源权限', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945098, 'PayRepairRecordController#findById', '查询单条', 'GET', '/record/repair/findById', '支付修复记录', b'1', b'1', '支付修复记录 查询单条', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945099, 'RoleController#delete', '删除角色', 'DELETE', '/role/delete', '角色管理', b'1', b'1', '角色管理 删除角色', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945100, 'AllocationGroupController#page', '分页', 'GET', '/allocation/group/page', '分账组', b'1', b'1', '分账组 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945101, 'UserDeptController#findIdsByUser', '根据用户ID获取到部门id集合', 'GET', '/user/dept/findIdsByUser', '用户部门关联关系', b'1', b'1', '用户部门关联关系 根据用户ID获取到部门id集合', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945102, 'SwaggerWelcomeWebMvc#redirectToUi', 'redirectToUi', 'GET', '/swagger-ui.html', 'SwaggerWelcomeWebMvc', b'1', b'1', 'SwaggerWelcomeWebMvc redirectToUi', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945103, 'RoleController#update', '修改角色（返回角色对象）', 'POST', '/role/update', '角色管理', b'1', b'1', '角色管理 修改角色（返回角色对象）', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945104, 'UniPayAssistController#getWxAuthUrl', '获取微信OAuth2授权链接', 'POST', '/unipay/assist/getWxAuthUrl', '支付支撑接口', b'1', b'1', '支付支撑接口 获取微信OAuth2授权链接', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945105, 'PermMenuController#resourceList', '资源(权限码)列表', 'GET', '/perm/menu/resourceList', '菜单和权限码', b'1', b'1', '菜单和权限码 资源(权限码)列表', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945106, 'PasswordSecurityConfigController#addOrUpdate', '新增或添加密码安全配置', 'POST', '/security/password/addOrUpdate', '密码安全策略', b'1', b'1', '密码安全策略 新增或添加密码安全配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945107, 'PayGatewayNoticeController#aliPayNotice', '支付宝消息通知', 'POST', '/gateway/notice/alipay', '三方支付网关消息通知', b'1', b'1', '三方支付网关消息通知 支付宝消息通知', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945108, 'SmsTemplateController#findAll', '查询所有', 'GET', '/sms/template/findAll', '短信模板配置', b'1', b'1', '短信模板配置 查询所有', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945109, 'PasswordSecurityConfigController#check', '登录后检查密码相关的情况', 'GET', '/security/password/check', '密码安全策略', b'1', b'1', '密码安全策略 登录后检查密码相关的情况', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945110, 'SystemMonitorController#getRedisInfo', '获取Redis信息', 'GET', '/monitor/system/getRedisInfo', '系统信息监控', b'1', b'1', '系统信息监控 获取Redis信息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945111, 'AllocationGroupController#delete', '删除', 'POST', '/allocation/group/delete', '分账组', b'1', b'1', '分账组 删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945112, 'SystemMonitorController#getSystemInfo', '获取系统消息', 'GET', '/monitor/system/getSystemInfo', '系统信息监控', b'1', b'1', '系统信息监控 获取系统消息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945113, 'MailConfigController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/mail/config/existsByCodeNotId', '邮箱配置', b'1', b'1', '邮箱配置 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945114, 'AllocationReceiverController#add', '新增', 'POST', '/allocation/receiver/add', '分账接收方控制器', b'1', b'1', '分账接收方控制器 新增', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945115, 'AllocationOrderController#findById', '查询详情', 'GET', '/order/allocation/findById', '分账订单控制器', b'1', b'1', '分账订单控制器 查询详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945116, 'AllocationOrderController#findDetailById', '查询明细详情', 'GET', '/order/allocation/detail/findById', '分账订单控制器', b'1', b'1', '分账订单控制器 查询明细详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945117, 'SystemParamController#existsByKeyNotId', '判断编码是否存在(不包含自己)', 'GET', '/system/param/existsByKeyNotId', '系统参数', b'1', b'1', '系统参数 判断编码是否存在(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945118, 'WeChatMediaController#pageNews', '图文素材分页', 'GET', '/wechat/media/pageNews', '微信素材管理', b'1', b'1', '微信素材管理 图文素材分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945119, 'RoleController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/role/existsByCodeNotId', '角色管理', b'1', b'1', '角色管理 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945120, 'DataRoleController#page', '分页', 'GET', '/data/role/page', '数据角色配置', b'1', b'1', '数据角色配置 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945121, 'OperateLogController#deleteByDay', '清除指定天数的日志', 'DELETE', '/log/operate/deleteByDay', '操作日志', b'1', b'1', '操作日志 清除指定天数的日志', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945122, 'OnlineUserController#getSessionByUserId', '获取用户链接信息', 'GET', '/online/user/getSessionByUserId', '在线用户', b'1', b'1', '在线用户 获取用户链接信息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945123, 'LoginTypeController#add', '添加登录方式', 'POST', '/loginType/add', '登录方式管理', b'1', b'1', '登录方式管理 添加登录方式', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945124, 'UnionPayConfigController#getConfig', '获取配置', 'GET', '/union/pay/config/getConfig', '云闪付配置', b'1', b'1', '云闪付配置 获取配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945125, 'WeChatMenuController#delete', '删除', 'DELETE', '/wechat/menu/delete', '微信菜单管理', b'1', b'1', '微信菜单管理 删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945126, 'BaseApiController#authEcho', '回声测试(必须要进行登录)', 'GET', '/auth/echo', '系统基础接口', b'1', b'1', '系统基础接口 回声测试(必须要进行登录)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945127, 'WeChatQrLoginController#applyQrCode', '申请登录用QR码', 'POST', '/token/wechat/qr/applyQrCode', '微信扫码登录', b'1', b'1', '微信扫码登录 申请登录用QR码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945128, 'FIleUpLoadController#delete', '删除', 'DELETE', '/file/delete', '文件上传', b'1', b'1', '文件上传 删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945129, 'CockpitReportController#getRefundChannelInfo', '显示通道退款订单金额和订单数', 'GET', '/report/cockpit/getRefundChannelInfo', '驾驶舱接口', b'1', b'1', '驾驶舱接口 显示通道退款订单金额和订单数', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945130, 'RoleController#add', '添加角色（返回角色对象）', 'POST', '/role/add', '角色管理', b'1', b'1', '角色管理 添加角色（返回角色对象）', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945131, 'ClientController#add', '添加', 'POST', '/client/add', '认证终端', b'1', b'1', '认证终端 添加', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945132, 'UserInfoController#forgetPasswordByPhone', '通过手机号重置密码', 'POST', '/user/forgetPasswordByPhone', '用户管理', b'1', b'1', '用户管理 通过手机号重置密码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945133, 'RolePathController#findPathsByRole', '获取当前用户角色下可见的请求权限列表(分配时用)', 'GET', '/role/path/findPathsByRole', '角色请求权限消息关系', b'1', b'1', '角色请求权限消息关系 获取当前用户角色下可见的请求权限列表(分配时用)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945134, 'WeChatMenuController#findAll', '查询所有', 'GET', '/wechat/menu/findAll', '微信菜单管理', b'1', b'1', '微信菜单管理 查询所有', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945135, 'ClientController#findAll', '查询所有', 'GET', '/client/findAll', '认证终端', b'1', b'1', '认证终端 查询所有', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945136, 'RefundOrderController#findExtraById', '查询扩展信息', 'GET', '/order/refund/findExtraById', '支付退款控制器', b'1', b'1', '支付退款控制器 查询扩展信息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945137, 'UserDataRoleController#saveAssignBatch', '给用户分配权限(批量)', 'POST', '/user/data/role/saveAssignBatch', '用户数据角色配置', b'1', b'1', '用户数据角色配置 给用户分配权限(批量)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945138, 'LoginLogController#page', '分页', 'GET', '/log/login/page', '登录日志', b'1', b'1', '登录日志 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945139, 'FIleUpLoadController#findById', '获取单条详情', 'GET', '/file/findById', '文件上传', b'1', b'1', '文件上传 获取单条详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945140, 'MessageTemplateController#findById', '获取详情', 'GET', '/message/template/findById', '消息模板', b'1', b'1', '消息模板 获取详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945141, 'DataRoleController#saveUserAssign', '保存数据角色关联用户权限', 'POST', '/data/role/saveUserAssign', '数据角色配置', b'1', b'1', '数据角色配置 保存数据角色关联用户权限', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945142, 'ThirdLoginController#callback', '扫码后回调', 'GET', '/auth/third/callback/{loginType}', '三方登录', b'1', b'1', '三方登录 扫码后回调', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945143, 'SmsChannelConfigController#findByCode', '通过Code查询', 'GET', '/sms/config/findByCode', '短信渠道配置', b'1', b'1', '短信渠道配置 通过Code查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945144, 'PayApiConfigController#findById', '根据ID获取', 'GET', '/pay/api/config/findById', '支付接口配置', b'1', b'1', '支付接口配置 根据ID获取', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945145, 'DataVersionLogController#findById', '获取', 'GET', '/log/dataVersion/findById', '数据版本日志', b'1', b'1', '数据版本日志 获取', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945146, 'PermPathController#update', '更新权限', 'POST', '/perm/path/update', '请求权限管理', b'1', b'1', '请求权限管理 更新权限', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945147, 'MailConfigController#setUpActivity', '设置启用的邮箱配置', 'POST', '/mail/config/setUpActivity', '邮箱配置', b'1', b'1', '邮箱配置 设置启用的邮箱配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945148, 'SmsTemplateController#findById', '通过ID查询', 'GET', '/sms/template/findById', '短信模板配置', b'1', b'1', '短信模板配置 通过ID查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945149, 'DingRobotConfigController#add', '新增机器人配置', 'POST', '/ding/robot/config/add', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 新增机器人配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945150, 'PayCloseRecordController#findById', '查询单条', 'GET', '/record/close/findById', '支付订单关闭记录', b'1', b'1', '支付订单关闭记录 查询单条', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945151, 'DataVersionLogController#page', '分页', 'GET', '/log/dataVersion/page', '数据版本日志', b'1', b'1', '数据版本日志 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945152, 'OpenApiWebMvcResource#openapiJson', 'openapiJson', 'GET', '/v3/api-docs', 'OpenApiWebMvcResource', b'1', b'1', 'OpenApiWebMvcResource openapiJson', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945153, 'PermPathController#findAll', '权限列表', 'GET', '/perm/path/findAll', '请求权限管理', b'1', b'1', '请求权限管理 权限列表', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945154, 'UserAdminController#add', '添加用户', 'POST', '/user/admin/add', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 添加用户', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945155, 'PayCallbackRecordController#findById', '查询单条', 'GET', '/record/callback/findById', '支付回调信息记录', b'1', b'1', '支付回调信息记录 查询单条', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945156, 'WecomRobotConfigController#page', '分页', 'GET', '/wecom/robot/config/page', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945157, 'WeChatMenuController#update', '修改', 'POST', '/wechat/menu/update', '微信菜单管理', b'1', b'1', '微信菜单管理 修改', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945158, 'TestController#lock2', '锁测试2', 'GET', '/test/lock2', '测试', b'1', b'1', '测试 锁测试2', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945159, 'DataRoleController#findAll', '查询全部', 'GET', '/data/role/findAll', '数据角色配置', b'1', b'1', '数据角色配置 查询全部', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945160, 'UserInfoController#forgetPasswordByEmail', '通过邮箱重置密码', 'POST', '/user/forgetPasswordByEmail', '用户管理', b'1', b'1', '用户管理 通过邮箱重置密码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945161, 'RefundOrderController#page', '分页查询', 'GET', '/order/refund/page', '支付退款控制器', b'1', b'1', '支付退款控制器 分页查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945162, 'AllocationOrderController#finish', '分账完结', 'POST', '/order/allocation/finish', '分账订单控制器', b'1', b'1', '分账订单控制器 分账完结', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945163, 'PayApiConfigController#findAll', '获取全部', 'GET', '/pay/api/config/findAll', '支付接口配置', b'1', b'1', '支付接口配置 获取全部', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945164, 'ClientNoticeTaskController#resetSend', '重新发送消息通知', 'POST', '/task/notice/resetSend', '客户系统通知任务', b'1', b'1', '客户系统通知任务 重新发送消息通知', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945165, 'PlatformConfigController#update', '更新平台配置项', 'POST', '/platform/config/update', '支付平台配置控制器', b'1', b'1', '支付平台配置控制器 更新平台配置项', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945166, 'UserRoleController#saveAssign', '给用户分配角色', 'POST', '/user/role/saveAssign', '用户角色管理', b'1', b'1', '用户角色管理 给用户分配角色', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945167, 'UniPayController#close', '支付关闭接口', 'POST', '/unipay/close', '统一支付接口', b'1', b'1', '统一支付接口 支付关闭接口', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945168, 'UserDataRoleController#findDataRoleIdByUser', '根据用户ID获取到数据角色Id', 'GET', '/user/data/role/findDataRoleIdByUser', '用户数据角色配置', b'1', b'1', '用户数据角色配置 根据用户ID获取到数据角色Id', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945169, 'MailConfigController#existsByCode', '编码是否被使用', 'GET', '/mail/config/existsByCode', '邮箱配置', b'1', b'1', '邮箱配置 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945170, 'AllocationGroupController#updateRate', '修改分账比例', 'POST', '/allocation/group/updateRate', '分账组', b'1', b'1', '分账组 修改分账比例', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945171, 'WeChatPayConfigController#getConfig', '获取配置', 'GET', '/wechat/pay/config/getConfig', '微信支付配置', b'1', b'1', '微信支付配置 获取配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945172, 'AllocationReceiverController#findChannels', '获取可以分账的通道', 'GET', '/allocation/receiver/findChannels', '分账接收方控制器', b'1', b'1', '分账接收方控制器 获取可以分账的通道', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945173, 'UserAssistController#validateCurrentChangeEmailCaptcha', '验证当前用户发送更改邮箱验证码', 'GET', '/user/validateCurrentChangeEmailCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证当前用户发送更改邮箱验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945174, 'UserRoleController#saveAssignBatch', '给用户分配角色(批量)', 'POST', '/user/role/saveAssignBatch', '用户角色管理', b'1', b'1', '用户角色管理 给用户分配角色(批量)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945175, 'ClientNoticeTaskController#page', '分页查询', 'GET', '/task/notice/page', '客户系统通知任务', b'1', b'1', '客户系统通知任务 分页查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945176, 'UserAdminController#getByEmail', '根据邮箱查询用户', 'GET', '/user/admin/getByEmail', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 根据邮箱查询用户', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945177, 'RefundOrderController#syncByRefundNo', '退款同步', 'POST', '/order/refund/syncByRefundNo', '支付退款控制器', b'1', b'1', '支付退款控制器 退款同步', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945178, 'DeptController#delete', '普通删除', 'DELETE', '/dept/delete', '部门管理', b'1', b'1', '部门管理 普通删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945179, 'SystemParamController#page', '分页', 'GET', '/system/param/page', '系统参数', b'1', b'1', '系统参数 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945180, 'DingRobotConfigController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/ding/robot/config/existsByCodeNotId', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945181, 'AllocationReceiverController#update', '修改', 'POST', '/allocation/receiver/update', '分账接收方控制器', b'1', b'1', '分账接收方控制器 修改', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945182, 'AggregateController#qrPayPage', '聚合支付扫码跳转中间页', 'GET', '/demo/aggregate/qrPayPage/{code}', '聚合支付', b'1', b'1', '聚合支付 聚合支付扫码跳转中间页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945183, 'UserAdminController#getByPhone', '根据手机号查询用户', 'GET', '/user/admin/getByPhone', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 根据手机号查询用户', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945184, 'AllocationOrderController#findDetailsByOrderId', '分账明细列表', 'GET', '/order/allocation/detail/findAll', '分账订单控制器', b'1', b'1', '分账订单控制器 分账明细列表', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945185, 'LoginLogController#findById', '获取', 'GET', '/log/login/findById', '登录日志', b'1', b'1', '登录日志 获取', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945186, 'WalletController#existsByUserId', '判断用户是否开通了钱包', 'GET', '/wallet/existsByUserId', '钱包管理', b'1', b'1', '钱包管理 判断用户是否开通了钱包', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945187, 'MailConfigController#add', '增加新邮箱配置', 'POST', '/mail/config/add', '邮箱配置', b'1', b'1', '邮箱配置 增加新邮箱配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945188, 'RoleController#existsByName', '名称是否被使用(不包含自己)', 'GET', '/role/existsByNameNotId', '角色管理', b'1', b'1', '角色管理 名称是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945189, 'PayMethodInfoController#findById', '根据ID获取', 'GET', '/pay/method/info/findById', '支付方式管理', b'1', b'1', '支付方式管理 根据ID获取', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945190, 'UserAdminController#restartPasswordBatch', '批量重置密码', 'POST', '/user/admin/restartPasswordBatch', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 批量重置密码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945191, 'DictionaryItemController#existsByCode', '编码是否被使用', 'GET', '/dict/item/existsByCode', '字典项', b'1', b'1', '字典项 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945192, 'AllocationReceiverController#delete', '删除', 'POST', '/allocation/receiver/delete', '分账接收方控制器', b'1', b'1', '分账接收方控制器 删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945193, 'UserDeptController#findAllByUser', '根据用户ID获取到部门集合', 'GET', '/user/dept/findAllByUser', '用户部门关联关系', b'1', b'1', '用户部门关联关系 根据用户ID获取到部门集合', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945194, 'ClientNoticeTaskController#findById', '查询单条', 'GET', '/task/notice/findById', '客户系统通知任务', b'1', b'1', '客户系统通知任务 查询单条', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945195, 'UserThirdController#getThirdBindInfo', '获取绑定详情', 'GET', '/user/third/getThirdBindInfo', '用户三方登录管理', b'1', b'1', '用户三方登录管理 获取绑定详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945196, 'OperateLogController#findById', '获取', 'GET', '/log/operate/findById', '操作日志', b'1', b'1', '操作日志 获取', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945197, 'MailConfigController#findById', '通过 id 获取指定邮箱配置', 'GET', '/mail/config/findById', '邮箱配置', b'1', b'1', '邮箱配置 通过 id 获取指定邮箱配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945198, 'AggregateController#getWxJsapiPay', '获取微信支付调起Jsapi支付的信息', 'POST', '/demo/aggregate/getWxJsapiPay', '聚合支付', b'1', b'1', '聚合支付 获取微信支付调起Jsapi支付的信息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945199, 'PermPathController#delete', '删除权限', 'DELETE', '/perm/path/delete', '请求权限管理', b'1', b'1', '请求权限管理 删除权限', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945200, 'WeChatPayConfigController#findPayWays', '微信支持支付方式', 'GET', '/wechat/pay/config/findPayWays', '微信支付配置', b'1', b'1', '微信支付配置 微信支持支付方式', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945201, 'UserAssistController#validatePhoneChangeCaptcha', '验证改/绑定手机验证码', 'GET', '/user/validatePhoneChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证改/绑定手机验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945202, 'UserAssistController#validateEmailForgetCaptcha', '验证找回密码邮箱验证码', 'GET', '/user/validateEmailForgetCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证找回密码邮箱验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945203, 'ReconcileOrderController#downOriginal', '下载原始交易对账单文件', 'GET', '/order/reconcile/downOriginal', '对账控制器', b'1', b'1', '对账控制器 下载原始交易对账单文件', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945204, 'SmsChannelConfigController#update', '修改', 'POST', '/sms/config/update', '短信渠道配置', b'1', b'1', '短信渠道配置 修改', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945205, 'LoginTypeController#delete', '删除登录方式', 'DELETE', '/loginType/delete', '登录方式管理', b'1', b'1', '登录方式管理 删除登录方式', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945206, 'DeptController#update', '更新', 'POST', '/dept/update', '部门管理', b'1', b'1', '部门管理 更新', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945207, 'WeChatTemplateController#sync', '同步消息模板数据', 'POST', '/wechat/template/sync', '微信模板消息', b'1', b'1', '微信模板消息 同步消息模板数据', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945208, 'UserDeptController#saveAssignBatch', '给用户分配部门(批量)', 'POST', '/user/dept/saveAssignBatch', '用户部门关联关系', b'1', b'1', '用户部门关联关系 给用户分配部门(批量)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945209, 'UserAdminController#unlockBatch', '批量解锁用户', 'POST', '/user/admin/unlockBatch', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 批量解锁用户', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945210, 'WecomRobotConfigController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/wecom/robot/config/existsByCodeNotId', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945211, 'WeChatPayConfigController#update', '更新', 'POST', '/wechat/pay/config/update', '微信支付配置', b'1', b'1', '微信支付配置 更新', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945212, 'UserThirdController#findById', '获取详情', 'POST', '/user/third/findById', '用户三方登录管理', b'1', b'1', '用户三方登录管理 获取详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945213, 'RefundOrderController#resetRefund', '重新发起退款', 'POST', '/order/refund/resetRefund', '支付退款控制器', b'1', b'1', '支付退款控制器 重新发起退款', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945214, 'LoginTypeController#update', '修改登录方式（返回登录方式对象）', 'POST', '/loginType/update', '登录方式管理', b'1', b'1', '登录方式管理 修改登录方式（返回登录方式对象）', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945215, 'ReconcileOrderController#findDetailById', '对账明细详情', 'GET', '/order/reconcile/detail/findById', '对账控制器', b'1', b'1', '对账控制器 对账明细详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945216, 'QuartzJobController#execute', '立即执行', 'POST', '/quartz/execute', '定时任务', b'1', b'1', '定时任务 立即执行', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945217, 'QuartzJobController#start', '启动', 'POST', '/quartz/start', '定时任务', b'1', b'1', '定时任务 启动', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945218, 'DictionaryController#findAll', '查询全部', 'GET', '/dict/findAll', '字典', b'1', b'1', '字典 查询全部', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945219, 'WeChatMediaController#deleteFile', '删除素材', 'DELETE', '/wechat/media/deleteFile', '微信素材管理', b'1', b'1', '微信素材管理 删除素材', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945220, 'UniPayController#allocationFinish', '分账完结接口', 'POST', '/unipay/allocationFinish', '统一支付接口', b'1', b'1', '统一支付接口 分账完结接口', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945221, 'DataRoleController#update', '更新', 'POST', '/data/role/update', '数据角色配置', b'1', b'1', '数据角色配置 更新', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945222, 'UnionPayConfigController#toBase64', '读取证书文件内容', 'POST', '/union/pay/config/toBase64', '云闪付配置', b'1', b'1', '云闪付配置 读取证书文件内容', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945223, 'LoginTypeController#findAll', '查询所有的登录方式', 'GET', '/loginType/findAll', '登录方式管理', b'1', b'1', '登录方式管理 查询所有的登录方式', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945224, 'UserInfoController#findUsernameByPhoneCaptcha', '根据手机验证码查询账号', 'GET', '/user/findUsernameByPhoneCaptcha', '用户管理', b'1', b'1', '用户管理 根据手机验证码查询账号', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945225, 'UserAssistController#sendCurrentPhoneChangeCaptcha', '给当前用户发送更改手机号验证码', 'POST', '/user/sendCurrentPhoneChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 给当前用户发送更改手机号验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945226, 'DeptController#add', '添加', 'POST', '/dept/add', '部门管理', b'1', b'1', '部门管理 添加', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945227, 'SystemParamController#findById', '获取单条', 'GET', '/system/param/findById', '系统参数', b'1', b'1', '系统参数 获取单条', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945228, 'QuartzJobLogController#findById', '单条', 'GET', '/quartz/log/findById', '定时任务执行日志', b'1', b'1', '定时任务执行日志 单条', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945229, 'RoleController#existsByCode', '编码是否被使用', 'GET', '/role/existsByCode', '角色管理', b'1', b'1', '角色管理 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945230, 'CockpitReportController#getPayChannelInfo', '显示通道支付订单金额和订单数', 'GET', '/report/cockpit/getPayChannelInfo', '驾驶舱接口', b'1', b'1', '驾驶舱接口 显示通道支付订单金额和订单数', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945231, 'AllocationReceiverController#findReceiverTypeByChannel', '根据通道获取分账接收方类型', 'GET', '/allocation/receiver/findReceiverTypeByChannel', '分账接收方控制器', b'1', b'1', '分账接收方控制器 根据通道获取分账接收方类型', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945232, 'UserAdminController#unlock', '解锁用户', 'POST', '/user/admin/unlock', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 解锁用户', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945233, 'WecomRobotConfigController#add', '新增机器人配置', 'POST', '/wecom/robot/config/add', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 新增机器人配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945234, 'AllocationGroupController#setDefault', '设置默认分账组', 'POST', '/allocation/group/setDefault', '分账组', b'1', b'1', '分账组 设置默认分账组', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945235, 'UserAdminController#findById', '根据用户id查询用户', 'GET', '/user/admin/findById', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 根据用户id查询用户', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945236, 'PayRepairRecordController#page', '分页查询', 'GET', '/record/repair/page', '支付修复记录', b'1', b'1', '支付修复记录 分页查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945237, 'AllocationOrderController#page', '分页', 'GET', '/order/allocation/page', '分账订单控制器', b'1', b'1', '分账订单控制器 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945238, 'PasswordSecurityConfigController#isRecentlyUsed', '查看要修改的密码是否重复', 'GET', '/security/password/isRecentlyUsed', '密码安全策略', b'1', b'1', '密码安全策略 查看要修改的密码是否重复', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945239, 'WalletController#deduct', '扣减', 'POST', '/wallet/deduct', '钱包管理', b'1', b'1', '钱包管理 扣减', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945240, 'FIleUpLoadController#getFilePreviewUrlPrefix', '获取文件预览地址前缀', 'GET', '/file/getFilePreviewUrlPrefix', '文件上传', b'1', b'1', '文件上传 获取文件预览地址前缀', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945241, 'PermMenuController#existsByPermCode', '编码是否被使用(不包含自己)', 'GET', '/perm/menu/existsByPermCodeNotId', '菜单和权限码', b'1', b'1', '菜单和权限码 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945242, 'WeChatTemplateController#update', '修改', 'POST', '/wechat/template/update', '微信模板消息', b'1', b'1', '微信模板消息 修改', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945243, 'CashierController#queryPayOrder', '查询支付订单', 'GET', '/demo/cashier/queryPayOrderSuccess', '结算台演示', b'1', b'1', '结算台演示 查询支付订单', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945244, 'ReconcileOrderController#downOriginal2Csv', '下载原始交易对账单记录(CSV格式)', 'GET', '/order/reconcile/downOriginal2Csv', '对账控制器', b'1', b'1', '对账控制器 下载原始交易对账单记录(CSV格式)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945245, 'SmsChannelConfigController#findAll', '查询所有', 'GET', '/sms/config/findAll', '短信渠道配置', b'1', b'1', '短信渠道配置 查询所有', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945246, 'RoleMenuController#getPermissions', '获取菜单和权限码(根据用户进行筛选)', 'GET', '/role/menu/getPermissions', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 获取菜单和权限码(根据用户进行筛选)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945247, 'UserRoleController#findRoleIdsByUser', '根据用户ID获取到角色id集合', 'GET', '/user/role/findRoleIdsByUser', '用户角色管理', b'1', b'1', '用户角色管理 根据用户ID获取到角色id集合', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945248, 'AllocationGroupController#update', '修改', 'POST', '/allocation/group/update', '分账组', b'1', b'1', '分账组 修改', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945249, 'FIleUpLoadController#preview', '预览文件(流量会经过后端)', 'GET', '/file/preview/{id}', '文件上传', b'1', b'1', '文件上传 预览文件(流量会经过后端)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945250, 'QuartzJobController#judgeJobClass', '判断是否是定时任务类', 'GET', '/quartz/judgeJobClass', '定时任务', b'1', b'1', '定时任务 判断是否是定时任务类', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945251, 'PayOrderController#getTotalAmount', '查询金额汇总', 'GET', '/order/pay/getTotalAmount', '支付订单控制器', b'1', b'1', '支付订单控制器 查询金额汇总', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945252, 'UserAssistController#sendCurrentEmailChangeCaptcha', '给当前用户发送更改邮箱验证码', 'POST', '/user/sendCurrentEmailChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 给当前用户发送更改邮箱验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945253, 'WecomRobotConfigController#update', '修改机器人配置', 'POST', '/wecom/robot/config/update', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 修改机器人配置', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945254, 'UserThirdController#bind', '绑定第三方账号', 'POST', '/user/third/bind', '用户三方登录管理', b'1', b'1', '用户三方登录管理 绑定第三方账号', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945255, 'RoleController#tree', '角色树', 'GET', '/role/tree', '角色管理', b'1', b'1', '角色管理 角色树', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945256, 'UniPayController#pay', '统一支付接口', 'POST', '/unipay/pay', '统一支付接口', b'1', b'1', '统一支付接口 统一支付接口', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945257, 'LoginTypeController#existsByCode', '编码是否被使用', 'GET', '/loginType/existsByCode', '登录方式管理', b'1', b'1', '登录方式管理 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945258, 'AllocationOrderController#sync', '同步分账结果', 'POST', '/order/allocation/sync', '分账订单控制器', b'1', b'1', '分账订单控制器 同步分账结果', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945259, 'UserAdminController#page', '分页', 'GET', '/user/admin/page', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945260, 'RolePathController#findIdsByRole', '根据角色id获取关联权限id', 'GET', '/role/path/findIdsByRole', '角色请求权限消息关系', b'1', b'1', '角色请求权限消息关系 根据角色id获取关联权限id', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945261, 'MultipleOpenApiWebMvcResource#openapiJson', 'openapiJson', 'GET', '/v3/api-docs/{group}', 'MultipleOpenApiWebMvcResource', b'1', b'1', 'MultipleOpenApiWebMvcResource openapiJson', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945262, 'UserThirdController#page', '分页', 'GET', '/user/third/page', '用户三方登录管理', b'1', b'1', '用户三方登录管理 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945263, 'RoleController#findById', '通过ID查询角色', 'GET', '/role/findById', '角色管理', b'1', b'1', '角色管理 通过ID查询角色', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945264, 'ReconcileOrderController#create', '手动创建对账订单', 'POST', '/order/reconcile/create', '对账控制器', b'1', b'1', '对账控制器 手动创建对账订单', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945265, 'PayApiConfigController#update', '更新', 'POST', '/pay/api/config/update', '支付接口配置', b'1', b'1', '支付接口配置 更新', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945266, 'PayOrderController#page', '分页查询', 'GET', '/order/pay/page', '支付订单控制器', b'1', b'1', '支付订单控制器 分页查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945267, 'UserInfoController#existsUsername', '账号是否被使用(不包含自己)', 'GET', '/user/existsUsernameNotId', '用户管理', b'1', b'1', '用户管理 账号是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945268, 'UserDeptController#saveAssign', '给用户分配部门', 'POST', '/user/dept/saveAssign', '用户部门关联关系', b'1', b'1', '用户部门关联关系 给用户分配部门', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945269, 'CockpitReportController#getPayOrderCount', '支付订单数量', 'GET', '/report/cockpit/getPayOrderCount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 支付订单数量', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945270, 'UserAssistController#sendEmailForgetCaptcha', '发送找回密码邮箱验证码', 'POST', '/user/sendEmailForgetCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 发送找回密码邮箱验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945271, 'WecomRobotConfigController#findById', '获取详情', 'GET', '/wecom/robot/config/findById', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 获取详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945272, 'ClientNoticeTaskController#recordPage', '分页查询', 'GET', '/task/notice/record/page', '客户系统通知任务', b'1', b'1', '客户系统通知任务 分页查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945273, 'RefundOrderController#findById', '查询单条', 'GET', '/order/refund/findById', '支付退款控制器', b'1', b'1', '支付退款控制器 查询单条', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945274, 'UserDataRoleController#findDataRoleByUser', '根据用户ID获取到数据角色列表', 'GET', '/user/data/role/findDataRoleByUser', '用户数据角色配置', b'1', b'1', '用户数据角色配置 根据用户ID获取到数据角色列表', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945275, 'ChinaRegionController#findAllRegionByParentCode', '根据编码获取下一级行政区划的列表', 'GET', '/china/region/findAllRegionByParentCode', '中国行政区划', b'1', b'1', '中国行政区划 根据编码获取下一级行政区划的列表', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945276, 'DataRoleController#existsByName', '名称是否被使用', 'GET', '/data/role/existsByName', '数据角色配置', b'1', b'1', '数据角色配置 名称是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945277, 'AllocationGroupController#create', '创建', 'POST', '/allocation/group/create', '分账组', b'1', b'1', '分账组 创建', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945278, 'UserAssistController#validatePhoneForgetCaptcha', '验证找回密码手机验证码', 'GET', '/user/validatePhoneForgetCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证找回密码手机验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945279, 'PayChannelConfigController#update', '更新', 'POST', '/pay/channel/config/update', '支付通道信息', b'1', b'1', '支付通道信息 更新', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945280, 'DictionaryController#existsByCode', '编码是否被使用(不包含自己)', 'GET', '/dict/existsByCodeNotId', '字典', b'1', b'1', '字典 编码是否被使用(不包含自己)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945281, 'PermMenuController#menuTree', '获取菜单树', 'GET', '/perm/menu/menuTree', '菜单和权限码', b'1', b'1', '菜单和权限码 获取菜单树', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945282, 'DictionaryItemController#delete', '删除字典项', 'DELETE', '/dict/item/delete', '字典项', b'1', b'1', '字典项 删除字典项', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945283, 'DingRobotConfigController#existsByCode', '编码是否被使用', 'GET', '/ding/robot/config/existsByCode', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 编码是否被使用', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945284, 'SiteMessageController#countByReceiveNotRead', '获取未读的接收消息条数', 'GET', '/site/message/countByReceiveNotRead', '站内信', b'1', b'1', '站内信 获取未读的接收消息条数', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945285, 'WecomRobotConfigController#findAll', '查询全部', 'GET', '/wecom/robot/config/findAll', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 查询全部', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945286, 'PayReturnController#union', '云闪付同步通知', 'POST', '/return/pay/union', '支付同步通知', b'1', b'1', '支付同步通知 云闪付同步通知', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945287, 'UserAssistController#validateCurrentPhoneChangeCaptcha', '验证当前用户发送更改手机号验证码', 'GET', '/user/validateCurrentPhoneChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证当前用户发送更改手机号验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945288, 'WeChatTemplateController#page', '分页查询', 'GET', '/wechat/template/page', '微信模板消息', b'1', b'1', '微信模板消息 分页查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945289, 'SmsTemplateController#add', '添加', 'POST', '/sms/template/add', '短信模板配置', b'1', b'1', '短信模板配置 添加', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945290, 'PermPathController#batchUpdateEnable', '批量更新状态', 'POST', '/perm/path/batchUpdateEnable', '请求权限管理', b'1', b'1', '请求权限管理 批量更新状态', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945291, 'DingRobotConfigController#findAll', '查询全部', 'GET', '/ding/robot/config/findAll', '钉钉机器人配置', b'1', b'1', '钉钉机器人配置 查询全部', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945292, 'QuartzJobController#syncJobStatus', '同步定时任务状态', 'POST', '/quartz/syncJobStatus', '定时任务', b'1', b'1', '定时任务 同步定时任务状态', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945293, 'SiteMessageController#cancel', '撤回消息', 'POST', '/site/message/cancel', '站内信', b'1', b'1', '站内信 撤回消息', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945294, 'DictionaryItemController#findAll', '获取全部字典项', 'GET', '/dict/item/findAll', '字典项', b'1', b'1', '字典项 获取全部字典项', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945295, 'UserAssistController#validateEmailCaptcha', '验证更改/绑定邮箱验证码', 'GET', '/user/validateEmailChangeCaptcha', '用户操作支撑服务', b'1', b'1', '用户操作支撑服务 验证更改/绑定邮箱验证码', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945296, 'PermMenuController#findById', '根据id查询', 'GET', '/perm/menu/findById', '菜单和权限码', b'1', b'1', '菜单和权限码 根据id查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945297, 'RoleMenuController#findPermissionIdsByRole', '获取当前角色下关联权限id集合(包含权限码和菜单)', 'GET', '/role/menu/findPermissionIdsByRole', '角色菜单权限关系', b'1', b'1', '角色菜单权限关系 获取当前角色下关联权限id集合(包含权限码和菜单)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945298, 'SwaggerConfigResource#openapiJson', 'openapiJson', 'GET', '/v3/api-docs/swagger-config', 'SwaggerConfigResource', b'1', b'1', 'SwaggerConfigResource openapiJson', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945299, 'UnionPayConfigController#update', '更新', 'POST', '/union/pay/config/update', '云闪付配置', b'1', b'1', '云闪付配置 更新', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945300, 'WecomRobotConfigController#delete', '删除', 'DELETE', '/wecom/robot/config/delete', '企业微信机器人配置', b'1', b'1', '企业微信机器人配置 删除', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945301, 'TokenEndpoint#login', '普通登录', 'POST', '/token/login', '认证相关', b'1', b'1', '认证相关 普通登录', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945302, 'RefundOrderController#refund', '手动发起退款', 'POST', '/order/refund/refund', '支付退款控制器', b'1', b'1', '支付退款控制器 手动发起退款', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945303, 'QuartzJobController#page', '分页', 'GET', '/quartz/page', '定时任务', b'1', b'1', '定时任务 分页', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945304, 'CockpitReportController#getPayAmount', '支付金额(分)', 'GET', '/report/cockpit/getPayAmount', '驾驶舱接口', b'1', b'1', '驾驶舱接口 支付金额(分)', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945305, 'SiteMessageController#saveOrUpdate', '保存站内信草稿', 'POST', '/site/message/saveOrUpdate', '站内信', b'1', b'1', '站内信 保存站内信草稿', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945306, 'UserAdminController#ban', '封禁用户', 'POST', '/user/admin/ban', '管理用户(管理员级别)', b'1', b'1', '管理用户(管理员级别) 封禁用户', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945307, 'MessageTemplateController#rendering', '渲染模板', 'POST', '/message/template/rendering', '消息模板', b'1', b'1', '消息模板 渲染模板', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945308, 'WalletController#create', '创建钱包', 'POST', '/wallet/create', '钱包管理', b'1', b'1', '钱包管理 创建钱包', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945309, 'PermPathController#syncSystem', '同步系统请求资源', 'POST', '/perm/path/syncSystem', '请求权限管理', b'1', b'1', '请求权限管理 同步系统请求资源', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945310, 'SystemParamController#existsByKey', '判断编码是否存在', 'GET', '/system/param/existsByKey', '系统参数', b'1', b'1', '系统参数 判断编码是否存在', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945311, 'BaseApiController#echo', '回声测试', 'GET', '/echo', '系统基础接口', b'1', b'1', '系统基础接口 回声测试', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945312, 'ReconcileOrderController#findDiffById', '对账差异详情', 'GET', '/order/reconcile/diff/findById', '对账控制器', b'1', b'1', '对账控制器 对账差异详情', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945313, 'PaySyncRecordController#page', '分页查询', 'GET', '/record/sync/page', '支付同步记录控制器', b'1', b'1', '支付同步记录控制器 分页查询', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
+INSERT INTO `iam_perm_path` VALUES (1789978117570945314, 'CashierController#getWxAuthUrl', '获取微信授权链接', 'GET', '/demo/cashier/getWxAuthUrl', '结算台演示', b'1', b'1', '结算台演示 获取微信授权链接', 1399985191002447872, '2024-05-13 19:16:54.071000', 1399985191002447872, '2024-05-13 19:16:54.071000', b'0', 0);
 
 -- ----------------------------
 -- Table structure for iam_role
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_role`;
 CREATE TABLE `iam_role`  (
-  `id` bigint(20) NOT NULL COMMENT '角色ID',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编码',
-  `pid` bigint(20) NULL DEFAULT NULL COMMENT '父ID',
-  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
-  `internal` bit(1) NOT NULL COMMENT '是否系统内置',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '说明',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` bigint(20) NOT NULL COMMENT '角色ID',
+                             `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编码',
+                             `pid` bigint(20) NULL DEFAULT NULL COMMENT '父ID',
+                             `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
+                             `internal` bit(1) NOT NULL COMMENT '是否系统内置',
+                             `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '说明',
+                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                             `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                             `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                             `version` int(11) NOT NULL COMMENT '版本',
+                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1629,11 +1419,11 @@ INSERT INTO `iam_role` VALUES (1757298887092326400, 'daxpayDemo', 17572970231184
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_role_menu`;
 CREATE TABLE `iam_role_menu`  (
-  `id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL COMMENT '角色id',
-  `client_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '终端code',
-  `permission_id` bigint(20) NOT NULL COMMENT '菜单权限id',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `role_id` bigint(20) NOT NULL COMMENT '角色id',
+                                  `client_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '终端code',
+                                  `permission_id` bigint(20) NOT NULL COMMENT '菜单权限id',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1644,7 +1434,6 @@ INSERT INTO `iam_role_menu` VALUES (1757298674730520577, 1757297023118462976, 'd
 INSERT INTO `iam_role_menu` VALUES (1757298674730520578, 1757297023118462976, 'dax-pay', 1745457623493496832);
 INSERT INTO `iam_role_menu` VALUES (1757298674730520579, 1757297023118462976, 'dax-pay', 1745457746529210368);
 INSERT INTO `iam_role_menu` VALUES (1757298674730520580, 1757297023118462976, 'dax-pay', 1749262518385082368);
-INSERT INTO `iam_role_menu` VALUES (1757298674730520581, 1757297023118462976, 'dax-pay', 1744930046228017152);
 INSERT INTO `iam_role_menu` VALUES (1757298674730520582, 1757297023118462976, 'dax-pay', 1744643265142165504);
 INSERT INTO `iam_role_menu` VALUES (1757298674730520583, 1757297023118462976, 'dax-pay', 1745126072389963776);
 INSERT INTO `iam_role_menu` VALUES (1757298674730520584, 1757297023118462976, 'dax-pay', 1745136155962347520);
@@ -1665,7 +1454,6 @@ INSERT INTO `iam_role_menu` VALUES (1757298924107059207, 1757298887092326400, 'd
 INSERT INTO `iam_role_menu` VALUES (1757298924107059208, 1757298887092326400, 'dax-pay', 1745457746529210368);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059209, 1757298887092326400, 'dax-pay', 1749262518385082368);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059210, 1757298887092326400, 'dax-pay', 1744643265142165504);
-INSERT INTO `iam_role_menu` VALUES (1757298924107059211, 1757298887092326400, 'dax-pay', 1744930046228017152);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059212, 1757298887092326400, 'dax-pay', 1745126072389963776);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059213, 1757298887092326400, 'dax-pay', 1745136155962347520);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059214, 1757298887092326400, 'dax-pay', 1745143528663781376);
@@ -1680,7 +1468,6 @@ INSERT INTO `iam_role_menu` VALUES (1757298924107059222, 1757298887092326400, 'd
 INSERT INTO `iam_role_menu` VALUES (1757298924107059223, 1757298887092326400, 'dax-pay', 1745457746529210368);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059224, 1757298887092326400, 'dax-pay', 1749262518385082368);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059225, 1757298887092326400, 'dax-pay', 1744643265142165504);
-INSERT INTO `iam_role_menu` VALUES (1757298924107059226, 1757298887092326400, 'dax-pay', 1744930046228017152);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059227, 1757298887092326400, 'dax-pay', 1745126072389963776);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059228, 1757298887092326400, 'dax-pay', 1745136155962347520);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059229, 1757298887092326400, 'dax-pay', 1745143528663781376);
@@ -1695,7 +1482,6 @@ INSERT INTO `iam_role_menu` VALUES (1757298924107059237, 1757298887092326400, 'd
 INSERT INTO `iam_role_menu` VALUES (1757298924107059238, 1757298887092326400, 'dax-pay', 1745457746529210368);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059239, 1757298887092326400, 'dax-pay', 1749262518385082368);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059240, 1757298887092326400, 'dax-pay', 1744643265142165504);
-INSERT INTO `iam_role_menu` VALUES (1757298924107059241, 1757298887092326400, 'dax-pay', 1744930046228017152);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059242, 1757298887092326400, 'dax-pay', 1745126072389963776);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059243, 1757298887092326400, 'dax-pay', 1745136155962347520);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059244, 1757298887092326400, 'dax-pay', 1745143528663781376);
@@ -1710,32 +1496,17 @@ INSERT INTO `iam_role_menu` VALUES (1757298924107059252, 1757298887092326400, 'd
 INSERT INTO `iam_role_menu` VALUES (1757298924107059253, 1757298887092326400, 'dax-pay', 1745457746529210368);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059254, 1757298887092326400, 'dax-pay', 1749262518385082368);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059255, 1757298887092326400, 'dax-pay', 1744643265142165504);
-INSERT INTO `iam_role_menu` VALUES (1757298924107059256, 1757298887092326400, 'dax-pay', 1744930046228017152);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059257, 1757298887092326400, 'dax-pay', 1745126072389963776);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059258, 1757298887092326400, 'dax-pay', 1745136155962347520);
 INSERT INTO `iam_role_menu` VALUES (1757298924107059259, 1757298887092326400, 'dax-pay', 1745143528663781376);
-INSERT INTO `iam_role_menu` VALUES (1762112282006073344, 1757297023118462976, 'dax-pay', 1758860876272861184);
-INSERT INTO `iam_role_menu` VALUES (1762112282006073345, 1757297023118462976, 'dax-pay', 1759861648606097408);
-INSERT INTO `iam_role_menu` VALUES (1762112282006073346, 1757297023118462976, 'dax-pay', 1759865163772485632);
-INSERT INTO `iam_role_menu` VALUES (1762112282006073347, 1757297023118462976, 'dax-pay', 1758861129311027200);
-INSERT INTO `iam_role_menu` VALUES (1762112282006073348, 1757297023118462976, 'dax-pay', 1759192238594949120);
-INSERT INTO `iam_role_menu` VALUES (1762112282006073349, 1757297023118462976, 'dax-pay', 1759192520611561472);
 INSERT INTO `iam_role_menu` VALUES (1762112282006073350, 1757297023118462976, 'dax-pay', 1761429304959528960);
 INSERT INTO `iam_role_menu` VALUES (1762112282006073351, 1757297023118462976, 'dax-pay', 1761429682618855424);
 INSERT INTO `iam_role_menu` VALUES (1762112282006073352, 1757297023118462976, 'dax-pay', 1759768820429352960);
 INSERT INTO `iam_role_menu` VALUES (1762112282006073353, 1757297023118462976, 'dax-pay', 1759769092698402816);
-INSERT INTO `iam_role_menu` VALUES (1762112282232565760, 1757298887092326400, 'dax-pay', 1758860876272861184);
-INSERT INTO `iam_role_menu` VALUES (1762112282232565761, 1757298887092326400, 'dax-pay', 1759861648606097408);
-INSERT INTO `iam_role_menu` VALUES (1762112282232565762, 1757298887092326400, 'dax-pay', 1759865163772485632);
-INSERT INTO `iam_role_menu` VALUES (1762112282232565763, 1757298887092326400, 'dax-pay', 1758861129311027200);
-INSERT INTO `iam_role_menu` VALUES (1762112282232565764, 1757298887092326400, 'dax-pay', 1759192238594949120);
-INSERT INTO `iam_role_menu` VALUES (1762112282232565765, 1757298887092326400, 'dax-pay', 1759192520611561472);
 INSERT INTO `iam_role_menu` VALUES (1762112282232565766, 1757298887092326400, 'dax-pay', 1761429304959528960);
 INSERT INTO `iam_role_menu` VALUES (1762112282232565767, 1757298887092326400, 'dax-pay', 1761429682618855424);
 INSERT INTO `iam_role_menu` VALUES (1762112282232565768, 1757298887092326400, 'dax-pay', 1759768820429352960);
 INSERT INTO `iam_role_menu` VALUES (1762112282232565769, 1757298887092326400, 'dax-pay', 1759769092698402816);
-INSERT INTO `iam_role_menu` VALUES (1768220067952029696, 1757297023118462976, 'dax-pay', 1768203432981655552);
-INSERT INTO `iam_role_menu` VALUES (1768220068631506944, 1757298887092326400, 'dax-pay', 1768203432981655552);
 INSERT INTO `iam_role_menu` VALUES (1780416732268605440, 1757297023118462976, 'dax-pay', 1775089099078553600);
 INSERT INTO `iam_role_menu` VALUES (1780416732268605441, 1757297023118462976, 'dax-pay', 1775089820368818176);
 INSERT INTO `iam_role_menu` VALUES (1780416732268605442, 1757297023118462976, 'dax-pay', 1775091561835450368);
@@ -1744,270 +1515,272 @@ INSERT INTO `iam_role_menu` VALUES (1780416732574789632, 1757298887092326400, 'd
 INSERT INTO `iam_role_menu` VALUES (1780416732574789633, 1757298887092326400, 'dax-pay', 1775089820368818176);
 INSERT INTO `iam_role_menu` VALUES (1780416732574789634, 1757298887092326400, 'dax-pay', 1775091561835450368);
 INSERT INTO `iam_role_menu` VALUES (1780416732574789635, 1757298887092326400, 'dax-pay', 1777688382748700672);
+INSERT INTO `iam_role_menu` VALUES (1789979742020689920, 1757297023118462976, 'dax-pay', 1786808188825194496);
+INSERT INTO `iam_role_menu` VALUES (1789979742020689921, 1757297023118462976, 'dax-pay', 1786810890951020544);
+INSERT INTO `iam_role_menu` VALUES (1789979742020689922, 1757297023118462976, 'dax-pay', 1744930046228017152);
+INSERT INTO `iam_role_menu` VALUES (1789979742314291200, 1757298887092326400, 'dax-pay', 1786808188825194496);
+INSERT INTO `iam_role_menu` VALUES (1789979742314291201, 1757298887092326400, 'dax-pay', 1786810890951020544);
+INSERT INTO `iam_role_menu` VALUES (1789979742314291202, 1757298887092326400, 'dax-pay', 1744930046228017152);
 
 -- ----------------------------
 -- Table structure for iam_role_path
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_role_path`;
 CREATE TABLE `iam_role_path`  (
-  `id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL COMMENT '角色id',
-  `permission_id` bigint(20) NOT NULL COMMENT '请求权限id',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `role_id` bigint(20) NOT NULL COMMENT '角色id',
+                                  `permission_id` bigint(20) NOT NULL COMMENT '请求权限id',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色请求权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of iam_role_path
 -- ----------------------------
-INSERT INTO `iam_role_path` VALUES (1757299898544541696, 1757297023118462976, 1757297527147974745);
-INSERT INTO `iam_role_path` VALUES (1757299898544541697, 1757297023118462976, 1757297527147974777);
-INSERT INTO `iam_role_path` VALUES (1757299898544541698, 1757297023118462976, 1757297527147974746);
-INSERT INTO `iam_role_path` VALUES (1757299898544541699, 1757297023118462976, 1757297527147974744);
-INSERT INTO `iam_role_path` VALUES (1757299898544541700, 1757297023118462976, 1757297527147974692);
-INSERT INTO `iam_role_path` VALUES (1757299898544541701, 1757297023118462976, 1757297527152169034);
-INSERT INTO `iam_role_path` VALUES (1757299898544541702, 1757297023118462976, 1757297527152169010);
-INSERT INTO `iam_role_path` VALUES (1757299898544541703, 1757297023118462976, 1757297527147974778);
-INSERT INTO `iam_role_path` VALUES (1757299898544541704, 1757297023118462976, 1757297527147974668);
-INSERT INTO `iam_role_path` VALUES (1757299898544541705, 1757297023118462976, 1757297527152169052);
-INSERT INTO `iam_role_path` VALUES (1757299898544541706, 1757297023118462976, 1757297527147974730);
-INSERT INTO `iam_role_path` VALUES (1757299898544541709, 1757297023118462976, 1757297527152169077);
-INSERT INTO `iam_role_path` VALUES (1757299898544541710, 1757297023118462976, 1757297527152168990);
-INSERT INTO `iam_role_path` VALUES (1757299898544541711, 1757297023118462976, 1757297527152169098);
-INSERT INTO `iam_role_path` VALUES (1757299898544541712, 1757297023118462976, 1757297527152169054);
-INSERT INTO `iam_role_path` VALUES (1757299898544541713, 1757297023118462976, 1757297527152169041);
-INSERT INTO `iam_role_path` VALUES (1757299898544541714, 1757297023118462976, 1757297527152169016);
-INSERT INTO `iam_role_path` VALUES (1757299898544541717, 1757297023118462976, 1757297527156363367);
-INSERT INTO `iam_role_path` VALUES (1757299898544541718, 1757297023118462976, 1757297527152169126);
-INSERT INTO `iam_role_path` VALUES (1757299898544541719, 1757297023118462976, 1757297527152169084);
-INSERT INTO `iam_role_path` VALUES (1757299898544541720, 1757297023118462976, 1757297527156363350);
-INSERT INTO `iam_role_path` VALUES (1757299898544541721, 1757297023118462976, 1757297527156363312);
-INSERT INTO `iam_role_path` VALUES (1757299898544541722, 1757297023118462976, 1757297527147974769);
-INSERT INTO `iam_role_path` VALUES (1757299898544541723, 1757297023118462976, 1757297527152169146);
-INSERT INTO `iam_role_path` VALUES (1757299898544541724, 1757297023118462976, 1757297527152169032);
-INSERT INTO `iam_role_path` VALUES (1757299898544541725, 1757297023118462976, 1757297527152169145);
-INSERT INTO `iam_role_path` VALUES (1757299898544541726, 1757297023118462976, 1757297527147974691);
-INSERT INTO `iam_role_path` VALUES (1757299898825560064, 1757298887092326400, 1757297527147974745);
-INSERT INTO `iam_role_path` VALUES (1757299898825560065, 1757298887092326400, 1757297527147974777);
-INSERT INTO `iam_role_path` VALUES (1757299898825560067, 1757298887092326400, 1757297527147974744);
-INSERT INTO `iam_role_path` VALUES (1757299898825560069, 1757298887092326400, 1757297527152169034);
-INSERT INTO `iam_role_path` VALUES (1757299898825560070, 1757298887092326400, 1757297527152169010);
-INSERT INTO `iam_role_path` VALUES (1757299898825560071, 1757298887092326400, 1757297527147974778);
-INSERT INTO `iam_role_path` VALUES (1757299898825560073, 1757298887092326400, 1757297527152169052);
-INSERT INTO `iam_role_path` VALUES (1757299898825560074, 1757298887092326400, 1757297527147974730);
-INSERT INTO `iam_role_path` VALUES (1757299898825560077, 1757298887092326400, 1757297527152169077);
-INSERT INTO `iam_role_path` VALUES (1757299898825560078, 1757298887092326400, 1757297527152168990);
-INSERT INTO `iam_role_path` VALUES (1757299898825560079, 1757298887092326400, 1757297527152169098);
-INSERT INTO `iam_role_path` VALUES (1757299898825560080, 1757298887092326400, 1757297527152169054);
-INSERT INTO `iam_role_path` VALUES (1757299898825560081, 1757298887092326400, 1757297527152169041);
-INSERT INTO `iam_role_path` VALUES (1757299898825560082, 1757298887092326400, 1757297527152169016);
-INSERT INTO `iam_role_path` VALUES (1757299898825560086, 1757298887092326400, 1757297527152169126);
-INSERT INTO `iam_role_path` VALUES (1757299898825560087, 1757298887092326400, 1757297527152169084);
-INSERT INTO `iam_role_path` VALUES (1757299898825560089, 1757298887092326400, 1757297527156363312);
-INSERT INTO `iam_role_path` VALUES (1757299898825560090, 1757298887092326400, 1757297527147974769);
-INSERT INTO `iam_role_path` VALUES (1757299898825560091, 1757298887092326400, 1757297527152169146);
-INSERT INTO `iam_role_path` VALUES (1757299898825560092, 1757298887092326400, 1757297527152169032);
-INSERT INTO `iam_role_path` VALUES (1757299898825560093, 1757298887092326400, 1757297527152169145);
-INSERT INTO `iam_role_path` VALUES (1757299898825560094, 1757298887092326400, 1757297527147974691);
-INSERT INTO `iam_role_path` VALUES (1757300046846742528, 1757297023118462976, 1757297527156363340);
-INSERT INTO `iam_role_path` VALUES (1757300046846742529, 1757297023118462976, 1757297527152169117);
-INSERT INTO `iam_role_path` VALUES (1757300047022903296, 1757298887092326400, 1757297527156363340);
-INSERT INTO `iam_role_path` VALUES (1757301364139216896, 1757297023118462976, 1757297527156363333);
-INSERT INTO `iam_role_path` VALUES (1757301364139216897, 1757297023118462976, 1757297527156363306);
-INSERT INTO `iam_role_path` VALUES (1757301364139216898, 1757297023118462976, 1757297527152168980);
-INSERT INTO `iam_role_path` VALUES (1757301364311183360, 1757298887092326400, 1757297527156363333);
-INSERT INTO `iam_role_path` VALUES (1757301364311183362, 1757298887092326400, 1757297527152168980);
-INSERT INTO `iam_role_path` VALUES (1757301683791319040, 1757297023118462976, 1757297527156363361);
-INSERT INTO `iam_role_path` VALUES (1757301683791319041, 1757297023118462976, 1757297527156363289);
-INSERT INTO `iam_role_path` VALUES (1757301683791319042, 1757297023118462976, 1757297527152169108);
-INSERT INTO `iam_role_path` VALUES (1757301683791319043, 1757297023118462976, 1757297527152169086);
-INSERT INTO `iam_role_path` VALUES (1757301683791319044, 1757297023118462976, 1757297527152168999);
-INSERT INTO `iam_role_path` VALUES (1757301683791319045, 1757297023118462976, 1757297527152168994);
-INSERT INTO `iam_role_path` VALUES (1757301683791319046, 1757297023118462976, 1757297527147974782);
-INSERT INTO `iam_role_path` VALUES (1757301683791319047, 1757297023118462976, 1757297527156363368);
-INSERT INTO `iam_role_path` VALUES (1757301683791319048, 1757297023118462976, 1757297527156363297);
-INSERT INTO `iam_role_path` VALUES (1757301683791319049, 1757297023118462976, 1757297527152169030);
-INSERT INTO `iam_role_path` VALUES (1757301683791319050, 1757297023118462976, 1757297527147974779);
-INSERT INTO `iam_role_path` VALUES (1757301683791319051, 1757297023118462976, 1757297527147974742);
-INSERT INTO `iam_role_path` VALUES (1757301683791319052, 1757297023118462976, 1757297527147974662);
-INSERT INTO `iam_role_path` VALUES (1757301684013617152, 1757298887092326400, 1757297527156363361);
-INSERT INTO `iam_role_path` VALUES (1757301684013617153, 1757298887092326400, 1757297527156363289);
-INSERT INTO `iam_role_path` VALUES (1757301684013617154, 1757298887092326400, 1757297527152169108);
-INSERT INTO `iam_role_path` VALUES (1757301684013617155, 1757298887092326400, 1757297527152169086);
-INSERT INTO `iam_role_path` VALUES (1757301684013617156, 1757298887092326400, 1757297527152168999);
-INSERT INTO `iam_role_path` VALUES (1757301684013617157, 1757298887092326400, 1757297527152168994);
-INSERT INTO `iam_role_path` VALUES (1757301684013617158, 1757298887092326400, 1757297527147974782);
-INSERT INTO `iam_role_path` VALUES (1757301684013617159, 1757298887092326400, 1757297527156363368);
-INSERT INTO `iam_role_path` VALUES (1757301684013617160, 1757298887092326400, 1757297527156363297);
-INSERT INTO `iam_role_path` VALUES (1757301684013617161, 1757298887092326400, 1757297527152169030);
-INSERT INTO `iam_role_path` VALUES (1757301684013617162, 1757298887092326400, 1757297527147974779);
-INSERT INTO `iam_role_path` VALUES (1757301684013617163, 1757298887092326400, 1757297527147974742);
-INSERT INTO `iam_role_path` VALUES (1757301684013617164, 1757298887092326400, 1757297527147974662);
-INSERT INTO `iam_role_path` VALUES (1757305163645964288, 1757297023118462976, 1757297527156363374);
-INSERT INTO `iam_role_path` VALUES (1757305163645964289, 1757297023118462976, 1757297527152169092);
-INSERT INTO `iam_role_path` VALUES (1757305194193080320, 1757298887092326400, 1757297527156363374);
-INSERT INTO `iam_role_path` VALUES (1757305194193080321, 1757298887092326400, 1757297527152169092);
-INSERT INTO `iam_role_path` VALUES (1762112867598020608, 1757297023118462976, 1762112351866400794);
-INSERT INTO `iam_role_path` VALUES (1762112867598020609, 1757297023118462976, 1762112351866400793);
-INSERT INTO `iam_role_path` VALUES (1762112867598020610, 1757297023118462976, 1762112351866400786);
-INSERT INTO `iam_role_path` VALUES (1762112867598020611, 1757297023118462976, 1762112351866400780);
-INSERT INTO `iam_role_path` VALUES (1762112867598020612, 1757297023118462976, 1762112351866400774);
-INSERT INTO `iam_role_path` VALUES (1762112867598020613, 1757297023118462976, 1762112351866400772);
-INSERT INTO `iam_role_path` VALUES (1762112867598020614, 1757297023118462976, 1762112351866400770);
-INSERT INTO `iam_role_path` VALUES (1762112867598020615, 1757297023118462976, 1762112351862206476);
-INSERT INTO `iam_role_path` VALUES (1762112867598020616, 1757297023118462976, 1762112351866400787);
-INSERT INTO `iam_role_path` VALUES (1762112867598020617, 1757297023118462976, 1762112351866400782);
-INSERT INTO `iam_role_path` VALUES (1762112867598020618, 1757297023118462976, 1762112351862206472);
-INSERT INTO `iam_role_path` VALUES (1762112867598020619, 1757297023118462976, 1762112351866400788);
-INSERT INTO `iam_role_path` VALUES (1762112867598020620, 1757297023118462976, 1762112351862206471);
-INSERT INTO `iam_role_path` VALUES (1762112867598020621, 1757297023118462976, 1762112351866400789);
-INSERT INTO `iam_role_path` VALUES (1762112867598020622, 1757297023118462976, 1762112351866400779);
-INSERT INTO `iam_role_path` VALUES (1762112867598020623, 1757297023118462976, 1762112351862206474);
-INSERT INTO `iam_role_path` VALUES (1762112867598020624, 1757297023118462976, 1762112351866400791);
-INSERT INTO `iam_role_path` VALUES (1762112867598020625, 1757297023118462976, 1762112351866400773);
-INSERT INTO `iam_role_path` VALUES (1762112867598020626, 1757297023118462976, 1762112351866400768);
-INSERT INTO `iam_role_path` VALUES (1762112867598020627, 1757297023118462976, 1762112351862206469);
-INSERT INTO `iam_role_path` VALUES (1762112867598020628, 1757297023118462976, 1762112351862206468);
-INSERT INTO `iam_role_path` VALUES (1762112867598020629, 1757297023118462976, 1762112351862206464);
-INSERT INTO `iam_role_path` VALUES (1762112867598020630, 1757297023118462976, 1762112351866400792);
-INSERT INTO `iam_role_path` VALUES (1762112867598020631, 1757297023118462976, 1762112351866400790);
-INSERT INTO `iam_role_path` VALUES (1762112867598020632, 1757297023118462976, 1762112351866400781);
-INSERT INTO `iam_role_path` VALUES (1762112867598020633, 1757297023118462976, 1762112351866400775);
-INSERT INTO `iam_role_path` VALUES (1762112867598020634, 1757297023118462976, 1762112351862206466);
-INSERT INTO `iam_role_path` VALUES (1762112867598020635, 1757297023118462976, 1762112351866400776);
-INSERT INTO `iam_role_path` VALUES (1762112867598020636, 1757297023118462976, 1762112351862206470);
-INSERT INTO `iam_role_path` VALUES (1762112867598020637, 1757297023118462976, 1762112351866400784);
-INSERT INTO `iam_role_path` VALUES (1762112867598020638, 1757297023118462976, 1762112351866400777);
-INSERT INTO `iam_role_path` VALUES (1762112867598020639, 1757297023118462976, 1762112351866400771);
-INSERT INTO `iam_role_path` VALUES (1762112867598020640, 1757297023118462976, 1762112351862206467);
-INSERT INTO `iam_role_path` VALUES (1762112867598020641, 1757297023118462976, 1762112351862206465);
-INSERT INTO `iam_role_path` VALUES (1762112867837095936, 1757298887092326400, 1762112351866400794);
-INSERT INTO `iam_role_path` VALUES (1762112867837095937, 1757298887092326400, 1762112351866400793);
-INSERT INTO `iam_role_path` VALUES (1762112867837095938, 1757298887092326400, 1762112351866400786);
-INSERT INTO `iam_role_path` VALUES (1762112867837095939, 1757298887092326400, 1762112351866400780);
-INSERT INTO `iam_role_path` VALUES (1762112867837095940, 1757298887092326400, 1762112351866400774);
-INSERT INTO `iam_role_path` VALUES (1762112867837095941, 1757298887092326400, 1762112351866400772);
-INSERT INTO `iam_role_path` VALUES (1762112867837095942, 1757298887092326400, 1762112351866400770);
-INSERT INTO `iam_role_path` VALUES (1762112867837095943, 1757298887092326400, 1762112351862206476);
-INSERT INTO `iam_role_path` VALUES (1762112867837095944, 1757298887092326400, 1762112351866400787);
-INSERT INTO `iam_role_path` VALUES (1762112867837095945, 1757298887092326400, 1762112351866400782);
-INSERT INTO `iam_role_path` VALUES (1762112867837095946, 1757298887092326400, 1762112351862206472);
-INSERT INTO `iam_role_path` VALUES (1762112867837095947, 1757298887092326400, 1762112351866400788);
-INSERT INTO `iam_role_path` VALUES (1762112867837095948, 1757298887092326400, 1762112351862206471);
-INSERT INTO `iam_role_path` VALUES (1762112867837095949, 1757298887092326400, 1762112351866400789);
-INSERT INTO `iam_role_path` VALUES (1762112867837095950, 1757298887092326400, 1762112351866400779);
-INSERT INTO `iam_role_path` VALUES (1762112867837095951, 1757298887092326400, 1762112351862206474);
-INSERT INTO `iam_role_path` VALUES (1762112867837095952, 1757298887092326400, 1762112351866400791);
-INSERT INTO `iam_role_path` VALUES (1762112867837095953, 1757298887092326400, 1762112351866400773);
-INSERT INTO `iam_role_path` VALUES (1762112867837095954, 1757298887092326400, 1762112351866400768);
-INSERT INTO `iam_role_path` VALUES (1762112867837095955, 1757298887092326400, 1762112351862206469);
-INSERT INTO `iam_role_path` VALUES (1762112867837095956, 1757298887092326400, 1762112351862206468);
-INSERT INTO `iam_role_path` VALUES (1762112867837095957, 1757298887092326400, 1762112351862206464);
-INSERT INTO `iam_role_path` VALUES (1762112867837095958, 1757298887092326400, 1762112351866400792);
-INSERT INTO `iam_role_path` VALUES (1762112867837095959, 1757298887092326400, 1762112351866400790);
-INSERT INTO `iam_role_path` VALUES (1762112867837095960, 1757298887092326400, 1762112351866400781);
-INSERT INTO `iam_role_path` VALUES (1762112867837095961, 1757298887092326400, 1762112351866400775);
-INSERT INTO `iam_role_path` VALUES (1762112867837095962, 1757298887092326400, 1762112351862206466);
-INSERT INTO `iam_role_path` VALUES (1762112867837095963, 1757298887092326400, 1762112351866400776);
-INSERT INTO `iam_role_path` VALUES (1762112867837095964, 1757298887092326400, 1762112351862206470);
-INSERT INTO `iam_role_path` VALUES (1762112867837095965, 1757298887092326400, 1762112351866400784);
-INSERT INTO `iam_role_path` VALUES (1762112867837095966, 1757298887092326400, 1762112351866400777);
-INSERT INTO `iam_role_path` VALUES (1762112867837095967, 1757298887092326400, 1762112351866400771);
-INSERT INTO `iam_role_path` VALUES (1762112867837095968, 1757298887092326400, 1762112351862206467);
-INSERT INTO `iam_role_path` VALUES (1762112867837095969, 1757298887092326400, 1762112351862206465);
-INSERT INTO `iam_role_path` VALUES (1764931648924622848, 1757297023118462976, 1764663810424303620);
-INSERT INTO `iam_role_path` VALUES (1764931648924622849, 1757297023118462976, 1764663810424303619);
-INSERT INTO `iam_role_path` VALUES (1764931648924622850, 1757297023118462976, 1764663810424303618);
-INSERT INTO `iam_role_path` VALUES (1764931648924622851, 1757297023118462976, 1764663810424303617);
-INSERT INTO `iam_role_path` VALUES (1764931648924622852, 1757297023118462976, 1764663810424303616);
-INSERT INTO `iam_role_path` VALUES (1768220144112201728, 1757297023118462976, 1768219994971140096);
-INSERT INTO `iam_role_path` VALUES (1768220144112201729, 1757297023118462976, 1768219994979528705);
-INSERT INTO `iam_role_path` VALUES (1768220144112201730, 1757297023118462976, 1768219994979528706);
-INSERT INTO `iam_role_path` VALUES (1768220144611323904, 1757298887092326400, 1768219994971140096);
-INSERT INTO `iam_role_path` VALUES (1768220144611323905, 1757298887092326400, 1768219994979528705);
-INSERT INTO `iam_role_path` VALUES (1768220144611323906, 1757298887092326400, 1768219994979528706);
-INSERT INTO `iam_role_path` VALUES (1772446949400571904, 1757297023118462976, 1772446740356460550);
-INSERT INTO `iam_role_path` VALUES (1772446949400571905, 1757297023118462976, 1772446740356460549);
-INSERT INTO `iam_role_path` VALUES (1772446949400571906, 1757297023118462976, 1772446740356460547);
-INSERT INTO `iam_role_path` VALUES (1772446949400571907, 1757297023118462976, 1772446740356460546);
-INSERT INTO `iam_role_path` VALUES (1772446949400571908, 1757297023118462976, 1772446740356460545);
-INSERT INTO `iam_role_path` VALUES (1772446949400571909, 1757297023118462976, 1772446740356460544);
-INSERT INTO `iam_role_path` VALUES (1772446949400571910, 1757297023118462976, 1772446740356460548);
-INSERT INTO `iam_role_path` VALUES (1772446949400571911, 1757297023118462976, 1768219994979528711);
-INSERT INTO `iam_role_path` VALUES (1772446949400571912, 1757297023118462976, 1768219994979528710);
-INSERT INTO `iam_role_path` VALUES (1772446949400571913, 1757297023118462976, 1768219994979528704);
-INSERT INTO `iam_role_path` VALUES (1772446949400571914, 1757297023118462976, 1768219994979528707);
-INSERT INTO `iam_role_path` VALUES (1772446952005234688, 1757298887092326400, 1772446740356460550);
-INSERT INTO `iam_role_path` VALUES (1772446952005234689, 1757298887092326400, 1772446740356460549);
-INSERT INTO `iam_role_path` VALUES (1772446952005234690, 1757298887092326400, 1772446740356460547);
-INSERT INTO `iam_role_path` VALUES (1772446952005234691, 1757298887092326400, 1772446740356460546);
-INSERT INTO `iam_role_path` VALUES (1772446952005234692, 1757298887092326400, 1772446740356460545);
-INSERT INTO `iam_role_path` VALUES (1772446952005234693, 1757298887092326400, 1772446740356460544);
-INSERT INTO `iam_role_path` VALUES (1772446952005234694, 1757298887092326400, 1772446740356460548);
-INSERT INTO `iam_role_path` VALUES (1772446952005234695, 1757298887092326400, 1768219994979528711);
-INSERT INTO `iam_role_path` VALUES (1772446952005234696, 1757298887092326400, 1768219994979528710);
-INSERT INTO `iam_role_path` VALUES (1772446952005234697, 1757298887092326400, 1768219994979528704);
-INSERT INTO `iam_role_path` VALUES (1772447125519396864, 1757298887092326400, 1764663810424303620);
-INSERT INTO `iam_role_path` VALUES (1772447125519396865, 1757298887092326400, 1764663810424303619);
-INSERT INTO `iam_role_path` VALUES (1772447125519396866, 1757298887092326400, 1764663810424303618);
-INSERT INTO `iam_role_path` VALUES (1772447125519396867, 1757298887092326400, 1764663810424303617);
-INSERT INTO `iam_role_path` VALUES (1772447125519396868, 1757298887092326400, 1764663810424303616);
-INSERT INTO `iam_role_path` VALUES (1780464836388855808, 1757297023118462976, 1780216505637138435);
-INSERT INTO `iam_role_path` VALUES (1780464836388855809, 1757297023118462976, 1780418342852063247);
-INSERT INTO `iam_role_path` VALUES (1780464836388855810, 1757297023118462976, 1780418342852063244);
-INSERT INTO `iam_role_path` VALUES (1780464836388855811, 1757297023118462976, 1780418342852063238);
-INSERT INTO `iam_role_path` VALUES (1780464836388855812, 1757297023118462976, 1780418342852063236);
-INSERT INTO `iam_role_path` VALUES (1780464836388855813, 1757297023118462976, 1780418342852063235);
-INSERT INTO `iam_role_path` VALUES (1780464836388855814, 1757297023118462976, 1780418342852063234);
-INSERT INTO `iam_role_path` VALUES (1780464836388855815, 1757297023118462976, 1780418342852063232);
-INSERT INTO `iam_role_path` VALUES (1780464836388855816, 1757297023118462976, 1780418342852063239);
-INSERT INTO `iam_role_path` VALUES (1780464836388855817, 1757297023118462976, 1780418342852063243);
-INSERT INTO `iam_role_path` VALUES (1780464836388855818, 1757297023118462976, 1780418342852063248);
-INSERT INTO `iam_role_path` VALUES (1780464836388855819, 1757297023118462976, 1780418342852063246);
-INSERT INTO `iam_role_path` VALUES (1780464836388855820, 1757297023118462976, 1780418342852063245);
-INSERT INTO `iam_role_path` VALUES (1780464836388855821, 1757297023118462976, 1780418342852063242);
-INSERT INTO `iam_role_path` VALUES (1780464836388855822, 1757297023118462976, 1780418342852063241);
-INSERT INTO `iam_role_path` VALUES (1780464836388855823, 1757297023118462976, 1780418342852063240);
-INSERT INTO `iam_role_path` VALUES (1780464836388855824, 1757297023118462976, 1780418342852063237);
-INSERT INTO `iam_role_path` VALUES (1780464836388855825, 1757297023118462976, 1780418342852063233);
-INSERT INTO `iam_role_path` VALUES (1780464836741177344, 1757298887092326400, 1780216505637138435);
-INSERT INTO `iam_role_path` VALUES (1780464836741177346, 1757298887092326400, 1780418342852063244);
-INSERT INTO `iam_role_path` VALUES (1780464836741177347, 1757298887092326400, 1780418342852063238);
-INSERT INTO `iam_role_path` VALUES (1780464836741177348, 1757298887092326400, 1780418342852063236);
-INSERT INTO `iam_role_path` VALUES (1780464836741177349, 1757298887092326400, 1780418342852063235);
-INSERT INTO `iam_role_path` VALUES (1780464836741177351, 1757298887092326400, 1780418342852063232);
-INSERT INTO `iam_role_path` VALUES (1780464836741177354, 1757298887092326400, 1780418342852063248);
-INSERT INTO `iam_role_path` VALUES (1780464836741177355, 1757298887092326400, 1780418342852063246);
-INSERT INTO `iam_role_path` VALUES (1780464836741177356, 1757298887092326400, 1780418342852063245);
-INSERT INTO `iam_role_path` VALUES (1780464836741177357, 1757298887092326400, 1780418342852063242);
-INSERT INTO `iam_role_path` VALUES (1780464836741177358, 1757298887092326400, 1780418342852063241);
-INSERT INTO `iam_role_path` VALUES (1780464836741177359, 1757298887092326400, 1780418342852063240);
-INSERT INTO `iam_role_path` VALUES (1780464836741177360, 1757298887092326400, 1780418342852063237);
-INSERT INTO `iam_role_path` VALUES (1780464836741177361, 1757298887092326400, 1780418342852063233);
-INSERT INTO `iam_role_path` VALUES (1780466020646395904, 1757297023118462976, 1780216505637138461);
-INSERT INTO `iam_role_path` VALUES (1780466020646395905, 1757297023118462976, 1780216505637138460);
-INSERT INTO `iam_role_path` VALUES (1780466020646395906, 1757297023118462976, 1780216505637138459);
-INSERT INTO `iam_role_path` VALUES (1780466020646395907, 1757297023118462976, 1780216505637138454);
-INSERT INTO `iam_role_path` VALUES (1780466020646395908, 1757297023118462976, 1780216505637138453);
-INSERT INTO `iam_role_path` VALUES (1780466020646395909, 1757297023118462976, 1780216505637138451);
-INSERT INTO `iam_role_path` VALUES (1780466020646395910, 1757297023118462976, 1780216505637138450);
-INSERT INTO `iam_role_path` VALUES (1780466020646395911, 1757297023118462976, 1780216505637138443);
-INSERT INTO `iam_role_path` VALUES (1780466020646395912, 1757297023118462976, 1780216505637138442);
-INSERT INTO `iam_role_path` VALUES (1780466020646395913, 1757297023118462976, 1780216505637138437);
-INSERT INTO `iam_role_path` VALUES (1780466020646395914, 1757297023118462976, 1780216505637138434);
-INSERT INTO `iam_role_path` VALUES (1780466020646395915, 1757297023118462976, 1780216505637138433);
-INSERT INTO `iam_role_path` VALUES (1780466020956774402, 1757298887092326400, 1780216505637138459);
-INSERT INTO `iam_role_path` VALUES (1780466020956774403, 1757298887092326400, 1780216505637138454);
-INSERT INTO `iam_role_path` VALUES (1780466020956774411, 1757298887092326400, 1780216505637138433);
+INSERT INTO `iam_role_path` VALUES (1789979321814343680, 1757297023118462976, 1789978117570945313);
+INSERT INTO `iam_role_path` VALUES (1789979321814343681, 1757297023118462976, 1789978117566750768);
+INSERT INTO `iam_role_path` VALUES (1789979321814343682, 1757297023118462976, 1789978117570945312);
+INSERT INTO `iam_role_path` VALUES (1789979321814343683, 1757297023118462976, 1789978117570945264);
+INSERT INTO `iam_role_path` VALUES (1789979321814343684, 1757297023118462976, 1789978117570945244);
+INSERT INTO `iam_role_path` VALUES (1789979321814343685, 1757297023118462976, 1789978117570945215);
+INSERT INTO `iam_role_path` VALUES (1789979321814343686, 1757297023118462976, 1789978117570945203);
+INSERT INTO `iam_role_path` VALUES (1789979321814343687, 1757297023118462976, 1789978117570945080);
+INSERT INTO `iam_role_path` VALUES (1789979321814343688, 1757297023118462976, 1789978117570945074);
+INSERT INTO `iam_role_path` VALUES (1789979321814343689, 1757297023118462976, 1789978117570945029);
+INSERT INTO `iam_role_path` VALUES (1789979321814343690, 1757297023118462976, 1789978117570945024);
+INSERT INTO `iam_role_path` VALUES (1789979321814343691, 1757297023118462976, 1789978117566750819);
+INSERT INTO `iam_role_path` VALUES (1789979321814343692, 1757297023118462976, 1789978117566750783);
+INSERT INTO `iam_role_path` VALUES (1789979321814343693, 1757297023118462976, 1789978117566750760);
+INSERT INTO `iam_role_path` VALUES (1789979321814343694, 1757297023118462976, 1789978117566750746);
+INSERT INTO `iam_role_path` VALUES (1789979321814343695, 1757297023118462976, 1789978117562556431);
+INSERT INTO `iam_role_path` VALUES (1789979321814343696, 1757297023118462976, 1789978117570945311);
+INSERT INTO `iam_role_path` VALUES (1789979321814343697, 1757297023118462976, 1789978117570945126);
+INSERT INTO `iam_role_path` VALUES (1789979321814343698, 1757297023118462976, 1789978117570945304);
+INSERT INTO `iam_role_path` VALUES (1789979321814343699, 1757297023118462976, 1789978117570945269);
+INSERT INTO `iam_role_path` VALUES (1789979321814343700, 1757297023118462976, 1789978117570945230);
+INSERT INTO `iam_role_path` VALUES (1789979321814343701, 1757297023118462976, 1789978117570945129);
+INSERT INTO `iam_role_path` VALUES (1789979321814343702, 1757297023118462976, 1789978117566750730);
+INSERT INTO `iam_role_path` VALUES (1789979321814343703, 1757297023118462976, 1789978117562556448);
+INSERT INTO `iam_role_path` VALUES (1789979321814343704, 1757297023118462976, 1789978117570945302);
+INSERT INTO `iam_role_path` VALUES (1789979321814343705, 1757297023118462976, 1789978117570945273);
+INSERT INTO `iam_role_path` VALUES (1789979321814343706, 1757297023118462976, 1789978117570945213);
+INSERT INTO `iam_role_path` VALUES (1789979321814343707, 1757297023118462976, 1789978117570945177);
+INSERT INTO `iam_role_path` VALUES (1789979321814343708, 1757297023118462976, 1789978117570945161);
+INSERT INTO `iam_role_path` VALUES (1789979321814343709, 1757297023118462976, 1789978117570945136);
+INSERT INTO `iam_role_path` VALUES (1789979321814343710, 1757297023118462976, 1789978117566750763);
+INSERT INTO `iam_role_path` VALUES (1789979321814343711, 1757297023118462976, 1789978117566750728);
+INSERT INTO `iam_role_path` VALUES (1789979321814343712, 1757297023118462976, 1789978117570945299);
+INSERT INTO `iam_role_path` VALUES (1789979321814343713, 1757297023118462976, 1789978117570945222);
+INSERT INTO `iam_role_path` VALUES (1789979321814343714, 1757297023118462976, 1789978117570945124);
+INSERT INTO `iam_role_path` VALUES (1789979321814343715, 1757297023118462976, 1789978117566750820);
+INSERT INTO `iam_role_path` VALUES (1789979321814343716, 1757297023118462976, 1789978117570945286);
+INSERT INTO `iam_role_path` VALUES (1789979321814343717, 1757297023118462976, 1789978117570945072);
+INSERT INTO `iam_role_path` VALUES (1789979321814343718, 1757297023118462976, 1789978117570945064);
+INSERT INTO `iam_role_path` VALUES (1789979321814343719, 1757297023118462976, 1789978117570945279);
+INSERT INTO `iam_role_path` VALUES (1789979321814343720, 1757297023118462976, 1789978117570945028);
+INSERT INTO `iam_role_path` VALUES (1789979321814343721, 1757297023118462976, 1789978117566750751);
+INSERT INTO `iam_role_path` VALUES (1789979321814343722, 1757297023118462976, 1789978117570945277);
+INSERT INTO `iam_role_path` VALUES (1789979321814343723, 1757297023118462976, 1789978117570945248);
+INSERT INTO `iam_role_path` VALUES (1789979321814343724, 1757297023118462976, 1789978117570945234);
+INSERT INTO `iam_role_path` VALUES (1789979321814343725, 1757297023118462976, 1789978117570945170);
+INSERT INTO `iam_role_path` VALUES (1789979321814343726, 1757297023118462976, 1789978117570945111);
+INSERT INTO `iam_role_path` VALUES (1789979321814343727, 1757297023118462976, 1789978117570945100);
+INSERT INTO `iam_role_path` VALUES (1789979321814343728, 1757297023118462976, 1789978117570945038);
+INSERT INTO `iam_role_path` VALUES (1789979321814343729, 1757297023118462976, 1789978117566750807);
+INSERT INTO `iam_role_path` VALUES (1789979321814343730, 1757297023118462976, 1789978117566750789);
+INSERT INTO `iam_role_path` VALUES (1789979321814343731, 1757297023118462976, 1789978117566750759);
+INSERT INTO `iam_role_path` VALUES (1789979321814343732, 1757297023118462976, 1789978117566750744);
+INSERT INTO `iam_role_path` VALUES (1789979321814343733, 1757297023118462976, 1789978117562556423);
+INSERT INTO `iam_role_path` VALUES (1789979321814343734, 1757297023118462976, 1789978117570945266);
+INSERT INTO `iam_role_path` VALUES (1789979321814343735, 1757297023118462976, 1789978117570945251);
+INSERT INTO `iam_role_path` VALUES (1789979321814343736, 1757297023118462976, 1789978117570945073);
+INSERT INTO `iam_role_path` VALUES (1789979321814343737, 1757297023118462976, 1789978117570945056);
+INSERT INTO `iam_role_path` VALUES (1789979321814343738, 1757297023118462976, 1789978117566750822);
+INSERT INTO `iam_role_path` VALUES (1789979321814343739, 1757297023118462976, 1789978117566750809);
+INSERT INTO `iam_role_path` VALUES (1789979321814343740, 1757297023118462976, 1789978117566750803);
+INSERT INTO `iam_role_path` VALUES (1789979321814343741, 1757297023118462976, 1789978117566750726);
+INSERT INTO `iam_role_path` VALUES (1789979321814343742, 1757297023118462976, 1789978117570945265);
+INSERT INTO `iam_role_path` VALUES (1789979321814343743, 1757297023118462976, 1789978117570945163);
+INSERT INTO `iam_role_path` VALUES (1789979321814343744, 1757297023118462976, 1789978117570945144);
+INSERT INTO `iam_role_path` VALUES (1789979321814343745, 1757297023118462976, 1789978117570945258);
+INSERT INTO `iam_role_path` VALUES (1789979321814343746, 1757297023118462976, 1789978117570945237);
+INSERT INTO `iam_role_path` VALUES (1789979321814343747, 1757297023118462976, 1789978117570945184);
+INSERT INTO `iam_role_path` VALUES (1789979321814343748, 1757297023118462976, 1789978117570945162);
+INSERT INTO `iam_role_path` VALUES (1789979321814343749, 1757297023118462976, 1789978117570945116);
+INSERT INTO `iam_role_path` VALUES (1789979321814343750, 1757297023118462976, 1789978117570945115);
+INSERT INTO `iam_role_path` VALUES (1789979321814343751, 1757297023118462976, 1789978117570945085);
+INSERT INTO `iam_role_path` VALUES (1789979321814343752, 1757297023118462976, 1789978117562556418);
+INSERT INTO `iam_role_path` VALUES (1789979321814343753, 1757297023118462976, 1789978117570945236);
+INSERT INTO `iam_role_path` VALUES (1789979321814343754, 1757297023118462976, 1789978117570945098);
+INSERT INTO `iam_role_path` VALUES (1789979321814343755, 1757297023118462976, 1789978117570945231);
+INSERT INTO `iam_role_path` VALUES (1789979321814343756, 1757297023118462976, 1789978117570945192);
+INSERT INTO `iam_role_path` VALUES (1789979321814343757, 1757297023118462976, 1789978117570945181);
+INSERT INTO `iam_role_path` VALUES (1789979321814343758, 1757297023118462976, 1789978117570945172);
+INSERT INTO `iam_role_path` VALUES (1789979321814343759, 1757297023118462976, 1789978117570945114);
+INSERT INTO `iam_role_path` VALUES (1789979321814343760, 1757297023118462976, 1789978117570945082);
+INSERT INTO `iam_role_path` VALUES (1789979321814343761, 1757297023118462976, 1789978117566750740);
+INSERT INTO `iam_role_path` VALUES (1789979321814343762, 1757297023118462976, 1789978117562556428);
+INSERT INTO `iam_role_path` VALUES (1789979321814343763, 1757297023118462976, 1789978117562556420);
+INSERT INTO `iam_role_path` VALUES (1789979321814343764, 1757297023118462976, 1789978117570945198);
+INSERT INTO `iam_role_path` VALUES (1789979321814343765, 1757297023118462976, 1789978117570945182);
+INSERT INTO `iam_role_path` VALUES (1789979321814343766, 1757297023118462976, 1789978117570945078);
+INSERT INTO `iam_role_path` VALUES (1789979321814343767, 1757297023118462976, 1789978117570945067);
+INSERT INTO `iam_role_path` VALUES (1789979321814343768, 1757297023118462976, 1789978117570945044);
+INSERT INTO `iam_role_path` VALUES (1789979321814343769, 1757297023118462976, 1789978117562556452);
+INSERT INTO `iam_role_path` VALUES (1789979321814343770, 1757297023118462976, 1789978117562556425);
+INSERT INTO `iam_role_path` VALUES (1789979321814343771, 1757297023118462976, 1789978117570945211);
+INSERT INTO `iam_role_path` VALUES (1789979321814343772, 1757297023118462976, 1789978117570945200);
+INSERT INTO `iam_role_path` VALUES (1789979321814343773, 1757297023118462976, 1789978117570945171);
+INSERT INTO `iam_role_path` VALUES (1789979321814343774, 1757297023118462976, 1789978117562556419);
+INSERT INTO `iam_role_path` VALUES (1789979321814343775, 1757297023118462976, 1789978117570945189);
+INSERT INTO `iam_role_path` VALUES (1789979321814343776, 1757297023118462976, 1789978117570945048);
+INSERT INTO `iam_role_path` VALUES (1789979321814343777, 1757297023118462976, 1789978117562556429);
+INSERT INTO `iam_role_path` VALUES (1789979321814343778, 1757297023118462976, 1789978117570945165);
+INSERT INTO `iam_role_path` VALUES (1789979321814343779, 1757297023118462976, 1789978117562556435);
+INSERT INTO `iam_role_path` VALUES (1789979321814343780, 1757297023118462976, 1789978117570945155);
+INSERT INTO `iam_role_path` VALUES (1789979321814343781, 1757297023118462976, 1789978117566750762);
+INSERT INTO `iam_role_path` VALUES (1789979321814343782, 1757297023118462976, 1789978117570945150);
+INSERT INTO `iam_role_path` VALUES (1789979321814343783, 1757297023118462976, 1789978117566750753);
+INSERT INTO `iam_role_path` VALUES (1789979321814343784, 1757297023118462976, 1789978117570945107);
+INSERT INTO `iam_role_path` VALUES (1789979321814343785, 1757297023118462976, 1789978117566750736);
+INSERT INTO `iam_role_path` VALUES (1789979321814343786, 1757297023118462976, 1789978117570945104);
+INSERT INTO `iam_role_path` VALUES (1789979321814343787, 1757297023118462976, 1789978117566750742);
+INSERT INTO `iam_role_path` VALUES (1789979322187636736, 1757298887092326400, 1789978117570945313);
+INSERT INTO `iam_role_path` VALUES (1789979322187636737, 1757298887092326400, 1789978117566750768);
+INSERT INTO `iam_role_path` VALUES (1789979322187636738, 1757298887092326400, 1789978117570945312);
+INSERT INTO `iam_role_path` VALUES (1789979322187636739, 1757298887092326400, 1789978117570945264);
+INSERT INTO `iam_role_path` VALUES (1789979322187636740, 1757298887092326400, 1789978117570945244);
+INSERT INTO `iam_role_path` VALUES (1789979322187636741, 1757298887092326400, 1789978117570945215);
+INSERT INTO `iam_role_path` VALUES (1789979322187636742, 1757298887092326400, 1789978117570945203);
+INSERT INTO `iam_role_path` VALUES (1789979322187636743, 1757298887092326400, 1789978117570945080);
+INSERT INTO `iam_role_path` VALUES (1789979322187636744, 1757298887092326400, 1789978117570945074);
+INSERT INTO `iam_role_path` VALUES (1789979322187636745, 1757298887092326400, 1789978117570945029);
+INSERT INTO `iam_role_path` VALUES (1789979322187636746, 1757298887092326400, 1789978117570945024);
+INSERT INTO `iam_role_path` VALUES (1789979322187636747, 1757298887092326400, 1789978117566750819);
+INSERT INTO `iam_role_path` VALUES (1789979322187636748, 1757298887092326400, 1789978117566750783);
+INSERT INTO `iam_role_path` VALUES (1789979322187636749, 1757298887092326400, 1789978117566750760);
+INSERT INTO `iam_role_path` VALUES (1789979322187636750, 1757298887092326400, 1789978117566750746);
+INSERT INTO `iam_role_path` VALUES (1789979322187636751, 1757298887092326400, 1789978117562556431);
+INSERT INTO `iam_role_path` VALUES (1789979322187636752, 1757298887092326400, 1789978117570945311);
+INSERT INTO `iam_role_path` VALUES (1789979322187636753, 1757298887092326400, 1789978117570945126);
+INSERT INTO `iam_role_path` VALUES (1789979322187636754, 1757298887092326400, 1789978117570945304);
+INSERT INTO `iam_role_path` VALUES (1789979322187636755, 1757298887092326400, 1789978117570945269);
+INSERT INTO `iam_role_path` VALUES (1789979322187636756, 1757298887092326400, 1789978117570945230);
+INSERT INTO `iam_role_path` VALUES (1789979322187636757, 1757298887092326400, 1789978117570945129);
+INSERT INTO `iam_role_path` VALUES (1789979322187636758, 1757298887092326400, 1789978117566750730);
+INSERT INTO `iam_role_path` VALUES (1789979322187636759, 1757298887092326400, 1789978117562556448);
+INSERT INTO `iam_role_path` VALUES (1789979322187636760, 1757298887092326400, 1789978117570945302);
+INSERT INTO `iam_role_path` VALUES (1789979322187636761, 1757298887092326400, 1789978117570945273);
+INSERT INTO `iam_role_path` VALUES (1789979322187636762, 1757298887092326400, 1789978117570945213);
+INSERT INTO `iam_role_path` VALUES (1789979322187636763, 1757298887092326400, 1789978117570945177);
+INSERT INTO `iam_role_path` VALUES (1789979322187636764, 1757298887092326400, 1789978117570945161);
+INSERT INTO `iam_role_path` VALUES (1789979322187636765, 1757298887092326400, 1789978117570945136);
+INSERT INTO `iam_role_path` VALUES (1789979322187636766, 1757298887092326400, 1789978117566750763);
+INSERT INTO `iam_role_path` VALUES (1789979322187636767, 1757298887092326400, 1789978117566750728);
+INSERT INTO `iam_role_path` VALUES (1789979322187636769, 1757298887092326400, 1789978117570945222);
+INSERT INTO `iam_role_path` VALUES (1789979322187636771, 1757298887092326400, 1789978117566750820);
+INSERT INTO `iam_role_path` VALUES (1789979322187636772, 1757298887092326400, 1789978117570945286);
+INSERT INTO `iam_role_path` VALUES (1789979322187636773, 1757298887092326400, 1789978117570945072);
+INSERT INTO `iam_role_path` VALUES (1789979322187636774, 1757298887092326400, 1789978117570945064);
+INSERT INTO `iam_role_path` VALUES (1789979322187636775, 1757298887092326400, 1789978117570945279);
+INSERT INTO `iam_role_path` VALUES (1789979322187636776, 1757298887092326400, 1789978117570945028);
+INSERT INTO `iam_role_path` VALUES (1789979322187636777, 1757298887092326400, 1789978117566750751);
+INSERT INTO `iam_role_path` VALUES (1789979322187636778, 1757298887092326400, 1789978117570945277);
+INSERT INTO `iam_role_path` VALUES (1789979322187636783, 1757298887092326400, 1789978117570945100);
+INSERT INTO `iam_role_path` VALUES (1789979322187636786, 1757298887092326400, 1789978117566750789);
+INSERT INTO `iam_role_path` VALUES (1789979322187636790, 1757298887092326400, 1789978117570945266);
+INSERT INTO `iam_role_path` VALUES (1789979322187636791, 1757298887092326400, 1789978117570945251);
+INSERT INTO `iam_role_path` VALUES (1789979322187636792, 1757298887092326400, 1789978117570945073);
+INSERT INTO `iam_role_path` VALUES (1789979322187636793, 1757298887092326400, 1789978117570945056);
+INSERT INTO `iam_role_path` VALUES (1789979322187636794, 1757298887092326400, 1789978117566750822);
+INSERT INTO `iam_role_path` VALUES (1789979322187636795, 1757298887092326400, 1789978117566750809);
+INSERT INTO `iam_role_path` VALUES (1789979322187636796, 1757298887092326400, 1789978117566750803);
+INSERT INTO `iam_role_path` VALUES (1789979322187636797, 1757298887092326400, 1789978117566750726);
+INSERT INTO `iam_role_path` VALUES (1789979322187636799, 1757298887092326400, 1789978117570945163);
+INSERT INTO `iam_role_path` VALUES (1789979322187636800, 1757298887092326400, 1789978117570945144);
+INSERT INTO `iam_role_path` VALUES (1789979322187636801, 1757298887092326400, 1789978117570945258);
+INSERT INTO `iam_role_path` VALUES (1789979322187636802, 1757298887092326400, 1789978117570945237);
+INSERT INTO `iam_role_path` VALUES (1789979322187636803, 1757298887092326400, 1789978117570945184);
+INSERT INTO `iam_role_path` VALUES (1789979322187636804, 1757298887092326400, 1789978117570945162);
+INSERT INTO `iam_role_path` VALUES (1789979322187636805, 1757298887092326400, 1789978117570945116);
+INSERT INTO `iam_role_path` VALUES (1789979322187636806, 1757298887092326400, 1789978117570945115);
+INSERT INTO `iam_role_path` VALUES (1789979322187636807, 1757298887092326400, 1789978117570945085);
+INSERT INTO `iam_role_path` VALUES (1789979322187636808, 1757298887092326400, 1789978117562556418);
+INSERT INTO `iam_role_path` VALUES (1789979322187636809, 1757298887092326400, 1789978117570945236);
+INSERT INTO `iam_role_path` VALUES (1789979322187636810, 1757298887092326400, 1789978117570945098);
+INSERT INTO `iam_role_path` VALUES (1789979322187636811, 1757298887092326400, 1789978117570945231);
+INSERT INTO `iam_role_path` VALUES (1789979322187636812, 1757298887092326400, 1789978117570945192);
+INSERT INTO `iam_role_path` VALUES (1789979322187636813, 1757298887092326400, 1789978117570945181);
+INSERT INTO `iam_role_path` VALUES (1789979322187636814, 1757298887092326400, 1789978117570945172);
+INSERT INTO `iam_role_path` VALUES (1789979322187636815, 1757298887092326400, 1789978117570945114);
+INSERT INTO `iam_role_path` VALUES (1789979322187636816, 1757298887092326400, 1789978117570945082);
+INSERT INTO `iam_role_path` VALUES (1789979322187636817, 1757298887092326400, 1789978117566750740);
+INSERT INTO `iam_role_path` VALUES (1789979322187636818, 1757298887092326400, 1789978117562556428);
+INSERT INTO `iam_role_path` VALUES (1789979322187636819, 1757298887092326400, 1789978117562556420);
+INSERT INTO `iam_role_path` VALUES (1789979322187636820, 1757298887092326400, 1789978117570945198);
+INSERT INTO `iam_role_path` VALUES (1789979322187636821, 1757298887092326400, 1789978117570945182);
+INSERT INTO `iam_role_path` VALUES (1789979322187636822, 1757298887092326400, 1789978117570945078);
+INSERT INTO `iam_role_path` VALUES (1789979322187636823, 1757298887092326400, 1789978117570945067);
+INSERT INTO `iam_role_path` VALUES (1789979322187636824, 1757298887092326400, 1789978117570945044);
+INSERT INTO `iam_role_path` VALUES (1789979322187636825, 1757298887092326400, 1789978117562556452);
+INSERT INTO `iam_role_path` VALUES (1789979322187636826, 1757298887092326400, 1789978117562556425);
+INSERT INTO `iam_role_path` VALUES (1789979322187636828, 1757298887092326400, 1789978117570945200);
+INSERT INTO `iam_role_path` VALUES (1789979322187636829, 1757298887092326400, 1789978117570945171);
+INSERT INTO `iam_role_path` VALUES (1789979322187636830, 1757298887092326400, 1789978117562556419);
+INSERT INTO `iam_role_path` VALUES (1789979322187636831, 1757298887092326400, 1789978117570945189);
+INSERT INTO `iam_role_path` VALUES (1789979322187636832, 1757298887092326400, 1789978117570945048);
+INSERT INTO `iam_role_path` VALUES (1789979322187636835, 1757298887092326400, 1789978117562556435);
+INSERT INTO `iam_role_path` VALUES (1789979322187636836, 1757298887092326400, 1789978117570945155);
+INSERT INTO `iam_role_path` VALUES (1789979322187636837, 1757298887092326400, 1789978117566750762);
+INSERT INTO `iam_role_path` VALUES (1789979322187636838, 1757298887092326400, 1789978117570945150);
+INSERT INTO `iam_role_path` VALUES (1789979322187636839, 1757298887092326400, 1789978117566750753);
+INSERT INTO `iam_role_path` VALUES (1789979322187636840, 1757298887092326400, 1789978117570945107);
+INSERT INTO `iam_role_path` VALUES (1789979322187636841, 1757298887092326400, 1789978117566750736);
+INSERT INTO `iam_role_path` VALUES (1789979322187636842, 1757298887092326400, 1789978117570945104);
+INSERT INTO `iam_role_path` VALUES (1789979322187636843, 1757298887092326400, 1789978117566750742);
+INSERT INTO `iam_role_path` VALUES (1789979908043825152, 1757297023118462976, 1789978117570945084);
+INSERT INTO `iam_role_path` VALUES (1789979908043825153, 1757297023118462976, 1789978117570945059);
+INSERT INTO `iam_role_path` VALUES (1789979908043825154, 1757297023118462976, 1789978117570945039);
+INSERT INTO `iam_role_path` VALUES (1789979908043825155, 1757297023118462976, 1789978117566750797);
+INSERT INTO `iam_role_path` VALUES (1789979908324843520, 1757298887092326400, 1789978117570945084);
+INSERT INTO `iam_role_path` VALUES (1789979908324843521, 1757298887092326400, 1789978117570945059);
+INSERT INTO `iam_role_path` VALUES (1789979908324843522, 1757298887092326400, 1789978117570945039);
+INSERT INTO `iam_role_path` VALUES (1789982023252303872, 1757297023118462976, 1789978117570945308);
+INSERT INTO `iam_role_path` VALUES (1789982023252303873, 1757297023118462976, 1789978117570945239);
+INSERT INTO `iam_role_path` VALUES (1789982023252303874, 1757297023118462976, 1789978117570945186);
+INSERT INTO `iam_role_path` VALUES (1789982023252303875, 1757297023118462976, 1789978117570945052);
+INSERT INTO `iam_role_path` VALUES (1789982023252303876, 1757297023118462976, 1789978117566750795);
+INSERT INTO `iam_role_path` VALUES (1789982023252303877, 1757297023118462976, 1789978117566750741);
+INSERT INTO `iam_role_path` VALUES (1789982023252303878, 1757297023118462976, 1789978117570945094);
+INSERT INTO `iam_role_path` VALUES (1789982023252303879, 1757297023118462976, 1789978117566750758);
+INSERT INTO `iam_role_path` VALUES (1789982023252303880, 1757297023118462976, 1789978117566750733);
+INSERT INTO `iam_role_path` VALUES (1789982023529127937, 1757298887092326400, 1789978117570945239);
+INSERT INTO `iam_role_path` VALUES (1789982023529127938, 1757298887092326400, 1789978117570945186);
+INSERT INTO `iam_role_path` VALUES (1789982023529127939, 1757298887092326400, 1789978117570945052);
+INSERT INTO `iam_role_path` VALUES (1789982023529127940, 1757298887092326400, 1789978117566750795);
+INSERT INTO `iam_role_path` VALUES (1789982023529127941, 1757298887092326400, 1789978117566750741);
+INSERT INTO `iam_role_path` VALUES (1789982023529127942, 1757298887092326400, 1789978117570945094);
+INSERT INTO `iam_role_path` VALUES (1789982023529127943, 1757298887092326400, 1789978117566750758);
+INSERT INTO `iam_role_path` VALUES (1789986071959429120, 1757298887092326400, 1789978117570945124);
+INSERT INTO `iam_role_path` VALUES (1790355320001957888, 1757297023118462976, 1789978117570945272);
+INSERT INTO `iam_role_path` VALUES (1790355320001957889, 1757297023118462976, 1789978117570945194);
+INSERT INTO `iam_role_path` VALUES (1790355320001957890, 1757297023118462976, 1789978117570945175);
+INSERT INTO `iam_role_path` VALUES (1790355320001957891, 1757297023118462976, 1789978117570945164);
+INSERT INTO `iam_role_path` VALUES (1790355320001957892, 1757297023118462976, 1789978117566750801);
+INSERT INTO `iam_role_path` VALUES (1790355320102621184, 1757298887092326400, 1789978117570945272);
+INSERT INTO `iam_role_path` VALUES (1790355320102621185, 1757298887092326400, 1789978117570945194);
+INSERT INTO `iam_role_path` VALUES (1790355320102621186, 1757298887092326400, 1789978117570945175);
+INSERT INTO `iam_role_path` VALUES (1790355320102621187, 1757298887092326400, 1789978117570945164);
+INSERT INTO `iam_role_path` VALUES (1790355320102621188, 1757298887092326400, 1789978117566750801);
 
 -- ----------------------------
 -- Table structure for iam_user_data_role
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_data_role`;
 CREATE TABLE `iam_user_data_role`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `role_id` bigint(20) NOT NULL COMMENT '数据角色ID',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+                                       `role_id` bigint(20) NOT NULL COMMENT '数据角色ID',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户数据范围关系\r\n' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2019,10 +1792,10 @@ CREATE TABLE `iam_user_data_role`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_dept`;
 CREATE TABLE `iam_user_dept`  (
-  `id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL COMMENT '用户id',
-  `dept_id` bigint(20) NOT NULL COMMENT '部门id',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+                                  `dept_id` bigint(20) NOT NULL COMMENT '部门id',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户部门关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2034,59 +1807,59 @@ CREATE TABLE `iam_user_dept`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_expand_info`;
 CREATE TABLE `iam_user_expand_info`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `sex` int(4) NULL DEFAULT NULL COMMENT '性别',
-  `birthday` date NULL DEFAULT NULL COMMENT '生日',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '头像',
-  `last_login_time` datetime(0) NULL DEFAULT NULL COMMENT '上次登录时间',
-  `current_login_time` datetime(0) NULL DEFAULT NULL COMMENT '本次登录时间',
-  `initial_password` bit(1) NOT NULL COMMENT '是否初始密码',
-  `expire_password` bit(1) NOT NULL COMMENT '密码是否过期',
-  `last_change_password_time` datetime(0) NULL DEFAULT NULL COMMENT '上次修改密码时间',
-  `register_time` datetime(0) NOT NULL COMMENT '注册时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `sex` int(4) NULL DEFAULT NULL COMMENT '性别',
+                                         `birthday` date NULL DEFAULT NULL COMMENT '生日',
+                                         `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '头像',
+                                         `last_login_time` datetime NULL DEFAULT NULL COMMENT '上次登录时间',
+                                         `current_login_time` datetime NULL DEFAULT NULL COMMENT '本次登录时间',
+                                         `initial_password` bit(1) NOT NULL COMMENT '是否初始密码',
+                                         `expire_password` bit(1) NOT NULL COMMENT '密码是否过期',
+                                         `last_change_password_time` datetime NULL DEFAULT NULL COMMENT '上次修改密码时间',
+                                         `register_time` datetime NOT NULL COMMENT '注册时间',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户扩展信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of iam_user_expand_info
 -- ----------------------------
-INSERT INTO `iam_user_expand_info` VALUES (1399985191002447872, 1, '1996-12-01', NULL, '2024-02-13 14:51:40', '2024-02-13 16:13:07', b'0', b'0', '2023-10-19 14:14:08', '2021-08-01 18:52:37', 1, '2021-06-02 15:04:15', 0, '2024-02-13 16:13:07', 419, b'0');
-INSERT INTO `iam_user_expand_info` VALUES (1757299137932677120, 1, '2024-02-13', NULL, '2024-02-13 15:03:21', '2024-02-13 16:09:27', b'0', b'0', NULL, '2024-02-13 15:02:18', 1399985191002447872, '2024-02-13 15:02:18', 1757299137932677120, '2024-02-13 16:09:44', 3, b'0');
-INSERT INTO `iam_user_expand_info` VALUES (1757317255899869184, NULL, NULL, NULL, NULL, '2024-02-13 16:17:59', b'0', b'0', NULL, '2024-02-13 16:14:18', 1399985191002447872, '2024-02-13 16:14:18', 0, '2024-02-13 16:17:59', 1, b'0');
+INSERT INTO `iam_user_expand_info` VALUES (1399985191002447872, 1, '1996-12-01', NULL, '2024-05-13 19:48:06', '2024-05-13 19:48:37', b'0', b'0', '2023-10-19 14:14:08', '2021-08-01 18:52:37', 1, '2021-06-02 15:04:15', 0, '2024-05-13 19:48:37', 453, b'0');
+INSERT INTO `iam_user_expand_info` VALUES (1757299137932677120, 1, '2024-02-13', NULL, '2024-05-13 19:32:55', '2024-05-13 19:48:45', b'0', b'0', NULL, '2024-02-13 15:02:18', 1399985191002447872, '2024-02-13 15:02:18', 0, '2024-05-13 19:48:45', 6, b'0');
+INSERT INTO `iam_user_expand_info` VALUES (1757317255899869184, NULL, NULL, NULL, '2024-04-25 22:10:31', '2024-04-26 09:22:54', b'0', b'0', NULL, '2024-02-13 16:14:18', 1399985191002447872, '2024-02-13 16:14:18', 0, '2024-04-26 09:22:54', 9, b'0');
 
 -- ----------------------------
 -- Table structure for iam_user_info
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_info`;
 CREATE TABLE `iam_user_info`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
-  `phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '手机号',
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `client_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '关联终端ds',
-  `administrator` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否超级管理员',
-  `status` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号状态',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL,
+                                  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+                                  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
+                                  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
+                                  `phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '手机号',
+                                  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱',
+                                  `client_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '关联终端ds',
+                                  `administrator` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否超级管理员',
+                                  `status` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号状态',
+                                  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                  `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                  `version` int(11) NOT NULL COMMENT '版本',
+                                  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of iam_user_info
 -- ----------------------------
-INSERT INTO `iam_user_info` VALUES (1399985191002447872, 'Bootx', 'bootx', 'f52020dca765fd3943ed40a615dc2c5c', '13333333333', 'bootx@bootx.cn', '1430430071299207168,1430430071299207169,1626840094767714304,1580487061605175296', b'1', 'normal', 1, '2021-06-02 15:04:15', 1399985191002447872, '2024-01-16 09:26:44', 64, 0);
+INSERT INTO `iam_user_info` VALUES (1399985191002447872, 'Bootx', 'bootx', 'f52020dca765fd3943ed40a615dc2c5c', '13333333333', 'bootx@bootx.cn', '1430430071299207168,1430430071299207169,1626840094767714304,1580487061605175296', b'1', 'normal', 1, '2021-06-02 15:04:15', 1399985191002447872, '2024-04-11 18:55:34', 65, 0);
 INSERT INTO `iam_user_info` VALUES (1757299137932677120, 'DaxPay演示', 'daxpay', 'f52020dca765fd3943ed40a615dc2c5c', '14443332251', 'daxpay@qq.com', '1580487061605175296', b'0', 'normal', 1399985191002447872, '2024-02-13 15:02:18', 1757299137932677120, '2024-02-13 16:09:44', 2, 0);
 INSERT INTO `iam_user_info` VALUES (1757317255899869184, 'DaxPay管理员', 'daxpayadmin', '1e9e3c3deaa4a06d08326e82a49d1b63', '12222333223', 'daxpayadmin@qq.com', '1580487061605175296', b'0', 'normal', 1399985191002447872, '2024-02-13 16:14:18', 1399985191002447872, '2024-02-13 16:14:18', 0, 0);
 
@@ -2095,10 +1868,10 @@ INSERT INTO `iam_user_info` VALUES (1757317255899869184, 'DaxPay管理员', 'dax
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_role`;
 CREATE TABLE `iam_user_role`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` bigint(20) NOT NULL COMMENT '主键',
+                                  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+                                  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户角色关系\r\n' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2112,23 +1885,23 @@ INSERT INTO `iam_user_role` VALUES (1757317495407210496, 1757317255899869184, 17
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_third`;
 CREATE TABLE `iam_user_third`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
-  `we_chat_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信openId',
-  `we_chat_open_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信开放平台id',
-  `qq_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'qqId',
-  `weibo_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微博Id',
-  `gitee_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '码云唯一标识',
-  `ding_talk_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉唯一标识',
-  `we_com_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '企业微信唯一标识',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `pk_user_index`(`user_id`) USING BTREE COMMENT '用户id索引'
+                                   `id` bigint(20) NOT NULL COMMENT '主键',
+                                   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
+                                   `we_chat_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信openId',
+                                   `we_chat_open_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信开放平台id',
+                                   `qq_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'qqId',
+                                   `weibo_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微博Id',
+                                   `gitee_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '码云唯一标识',
+                                   `ding_talk_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉唯一标识',
+                                   `we_com_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '企业微信唯一标识',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                   `version` int(11) NOT NULL COMMENT '版本',
+                                   `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                   PRIMARY KEY (`id`) USING BTREE,
+                                   INDEX `pk_user_index`(`user_id`) USING BTREE COMMENT '用户id索引'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户三方登录绑定' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2140,20 +1913,20 @@ CREATE TABLE `iam_user_third`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `iam_user_third_info`;
 CREATE TABLE `iam_user_third_info`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` bigint(20) NOT NULL COMMENT '用户id',
-  `client_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '第三方终端类型',
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
-  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户昵称',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户头像',
-  `third_user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '关联第三方平台的用户id',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `pk_user_client`(`user_id`, `client_code`) USING BTREE COMMENT '用户id和终端code'
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `user_id` bigint(20) NOT NULL COMMENT '用户id',
+                                        `client_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '第三方终端类型',
+                                        `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
+                                        `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户昵称',
+                                        `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户头像',
+                                        `third_user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '关联第三方平台的用户id',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '版本',
+                                        PRIMARY KEY (`id`) USING BTREE,
+                                        INDEX `pk_user_client`(`user_id`, `client_code`) USING BTREE COMMENT '用户id和终端code'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户三方登录绑定详情' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2161,95 +1934,28 @@ CREATE TABLE `iam_user_third_info`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for miniapp_feedback_info
--- ----------------------------
-DROP TABLE IF EXISTS `miniapp_feedback_info`;
-CREATE TABLE `miniapp_feedback_info`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `classify` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '问题分类',
-  `time` datetime(0) NULL DEFAULT NULL COMMENT '时间',
-  `contact` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '联系方式',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '姓名',
-  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '反馈用户ID',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '内容',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户反馈信息' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of miniapp_feedback_info
--- ----------------------------
-
--- ----------------------------
--- Table structure for miniapp_user_protocol
--- ----------------------------
-DROP TABLE IF EXISTS `miniapp_user_protocol`;
-CREATE TABLE `miniapp_user_protocol`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '编码',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '内容',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户协议' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of miniapp_user_protocol
--- ----------------------------
-
--- ----------------------------
--- Table structure for mtm_table
--- ----------------------------
-DROP TABLE IF EXISTS `mtm_table`;
-CREATE TABLE `mtm_table`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `h1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `date` date NULL DEFAULT NULL,
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = 'actable测试' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of mtm_table
--- ----------------------------
-
--- ----------------------------
 -- Table structure for notice_mail_config
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_mail_config`;
 CREATE TABLE `notice_mail_config`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编号',
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
-  `host` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器host',
-  `port` int(5) NOT NULL COMMENT '邮箱服务器 port',
-  `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器 username',
-  `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器 password',
-  `sender` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱服务器 sender',
-  `from_` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱服务器 from',
-  `activity` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
-  `security_type` int(2) NULL DEFAULT NULL COMMENT '安全传输方式 1:plain 2:tls 3:ssl',
-  `creator` bigint(18) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(18) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(8) NULL DEFAULT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL,
+                                       `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编号',
+                                       `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名称',
+                                       `host` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器host',
+                                       `port` int(5) NOT NULL COMMENT '邮箱服务器 port',
+                                       `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器 username',
+                                       `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邮箱服务器 password',
+                                       `sender` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱服务器 sender',
+                                       `from_` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱服务器 from',
+                                       `activity` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
+                                       `security_type` int(2) NULL DEFAULT NULL COMMENT '安全传输方式 1:plain 2:tls 3:ssl',
+                                       `creator` bigint(18) NULL DEFAULT NULL COMMENT '创建人',
+                                       `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                       `last_modifier` bigint(18) NULL DEFAULT NULL COMMENT '最后修改人',
+                                       `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                       `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                       `version` int(8) NULL DEFAULT NULL COMMENT '版本',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '邮件配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2261,19 +1967,19 @@ CREATE TABLE `notice_mail_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_message_template`;
 CREATE TABLE `notice_message_template`  (
-  `id` bigint(20) NOT NULL,
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '模板数据',
-  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板类型',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                            `id` bigint(20) NOT NULL,
+                                            `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
+                                            `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                            `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '模板数据',
+                                            `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板类型',
+                                            `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                            `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                            `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                            `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                            `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                            `version` int(11) NOT NULL COMMENT '版本',
+                                            `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息模板' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2286,23 +1992,23 @@ INSERT INTO `notice_message_template` VALUES (1424936204932169730, 'cs', '测试
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_site_message`;
 CREATE TABLE `notice_site_message`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息标题',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
-  `sender_id` bigint(20) NULL DEFAULT NULL COMMENT '发送者id',
-  `sender_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送者姓名',
-  `sender_time` datetime(0) NULL DEFAULT NULL COMMENT '发送时间',
-  `receive_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息类型',
-  `send_state` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发布状态',
-  `efficient_time` datetime(0) NULL DEFAULT NULL COMMENT '截至有效期',
-  `cancel_time` datetime(0) NULL DEFAULT NULL COMMENT '撤回时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息标题',
+                                        `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
+                                        `sender_id` bigint(20) NULL DEFAULT NULL COMMENT '发送者id',
+                                        `sender_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送者姓名',
+                                        `sender_time` datetime NULL DEFAULT NULL COMMENT '发送时间',
+                                        `receive_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息类型',
+                                        `send_state` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发布状态',
+                                        `efficient_time` datetime NULL DEFAULT NULL COMMENT '截至有效期',
+                                        `cancel_time` datetime NULL DEFAULT NULL COMMENT '撤回时间',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '版本',
+                                        `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '站内信' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2314,17 +2020,17 @@ CREATE TABLE `notice_site_message`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_site_message_user`;
 CREATE TABLE `notice_site_message_user`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `message_id` bigint(20) NOT NULL COMMENT '消息id',
-  `receive_id` bigint(20) NOT NULL COMMENT '接收者id',
-  `have_read` bit(1) NOT NULL COMMENT '已读/未读',
-  `read_time` datetime(0) NULL DEFAULT NULL COMMENT '已读时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uni_receive_message`(`receive_id`, `message_id`) USING BTREE COMMENT '接收人和消息联合索引',
-  INDEX `inx_message`(`message_id`) USING BTREE COMMENT '消息索引'
+                                             `id` bigint(20) NOT NULL COMMENT '主键',
+                                             `message_id` bigint(20) NOT NULL COMMENT '消息id',
+                                             `receive_id` bigint(20) NOT NULL COMMENT '接收者id',
+                                             `have_read` bit(1) NOT NULL COMMENT '已读/未读',
+                                             `read_time` datetime NULL DEFAULT NULL COMMENT '已读时间',
+                                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                             PRIMARY KEY (`id`) USING BTREE,
+                                             UNIQUE INDEX `uni_receive_message`(`receive_id`, `message_id`) USING BTREE COMMENT '接收人和消息联合索引',
+                                             INDEX `inx_message`(`message_id`) USING BTREE COMMENT '消息索引'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '消息用户关联' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2336,23 +2042,23 @@ CREATE TABLE `notice_site_message_user`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_sms_channel_config`;
 CREATE TABLE `notice_sms_channel_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '渠道类型编码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '渠道类型名称',
-  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
-  `access_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessKey',
-  `config` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '配置字符串',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `access_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessSecret',
-  `image` bigint(20) NULL DEFAULT NULL COMMENT '图片',
-  `sort_no` double(10, 0) NULL DEFAULT NULL COMMENT '排序',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL COMMENT '主键',
+                                              `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '渠道类型编码',
+                                              `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '渠道类型名称',
+                                              `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
+                                              `access_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessKey',
+                                              `config` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '配置字符串',
+                                              `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                              `access_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessSecret',
+                                              `image` bigint(20) NULL DEFAULT NULL COMMENT '图片',
+                                              `sort_no` double(10, 0) NULL DEFAULT NULL COMMENT '排序',
+                                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                              `version` int(11) NOT NULL COMMENT '乐观锁',
+                                              `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '短信渠道配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2374,25 +2080,25 @@ INSERT INTO `notice_sms_channel_config` VALUES (1688788904481603584, 'jd_cloud',
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_sms_config`;
 CREATE TABLE `notice_sms_config`  (
-  `id` bigint(18) NOT NULL,
-  `tid` bigint(18) NOT NULL COMMENT '租户id',
-  `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `account_sid` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `path_sid` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发送号码的唯一标识(基于twillio的命名风格)',
-  `auth_token` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `from_num` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_default` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
-  `creator` bigint(18) NULL DEFAULT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `last_modifier` bigint(18) NULL DEFAULT NULL,
-  `last_modified_time` datetime(0) NULL DEFAULT NULL,
-  `version` int(10) NULL DEFAULT NULL,
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `secret` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `isp` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `reply_msg` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(18) NOT NULL,
+                                      `tid` bigint(18) NOT NULL COMMENT '租户id',
+                                      `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                      `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                      `account_sid` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                      `path_sid` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发送号码的唯一标识(基于twillio的命名风格)',
+                                      `auth_token` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                      `from_num` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                      `is_default` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
+                                      `creator` bigint(18) NULL DEFAULT NULL,
+                                      `create_time` datetime NULL DEFAULT NULL,
+                                      `last_modifier` bigint(18) NULL DEFAULT NULL,
+                                      `last_modified_time` datetime NULL DEFAULT NULL,
+                                      `version` int(10) NULL DEFAULT NULL,
+                                      `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                      `secret` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                      `isp` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                      `reply_msg` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '短信配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2404,18 +2110,18 @@ CREATE TABLE `notice_sms_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_sms_template`;
 CREATE TABLE `notice_sms_template`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `supplier_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信渠道商类型',
-  `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信渠道商类型',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信模板名称',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信模板内容',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `supplier_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信渠道商类型',
+                                        `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信渠道商类型',
+                                        `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信模板名称',
+                                        `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '短信模板内容',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '乐观锁',
+                                        `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '短信模板配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2427,20 +2133,20 @@ CREATE TABLE `notice_sms_template`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `notice_wechat_config`;
 CREATE TABLE `notice_wechat_config`  (
-  `id` bigint(18) NOT NULL,
-  `tid` bigint(18) NOT NULL COMMENT '租户id',
-  `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `corp_id` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `corp_secret` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_default` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
-  `creator` bigint(18) NULL DEFAULT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `last_modifier` bigint(18) NULL DEFAULT NULL,
-  `last_modified_time` datetime(0) NULL DEFAULT NULL,
-  `version` int(10) NULL DEFAULT NULL,
-  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(18) NOT NULL,
+                                         `tid` bigint(18) NOT NULL COMMENT '租户id',
+                                         `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                         `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+                                         `corp_id` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                         `corp_secret` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                                         `is_default` tinyint(1) NULL DEFAULT 0 COMMENT '是否默认配置，0:否。1:是',
+                                         `creator` bigint(18) NULL DEFAULT NULL,
+                                         `create_time` datetime NULL DEFAULT NULL,
+                                         `last_modifier` bigint(18) NULL DEFAULT NULL,
+                                         `last_modified_time` datetime NULL DEFAULT NULL,
+                                         `version` int(10) NULL DEFAULT NULL,
+                                         `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '微信消息配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2452,72 +2158,72 @@ CREATE TABLE `notice_wechat_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_alipay_config`;
 CREATE TABLE `pay_alipay_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝商户appId',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知页面路径',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知页面路径',
-  `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关地址',
-  `auth_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '认证类型',
-  `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型 RSA2',
-  `alipay_public_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝公钥',
-  `private_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '私钥',
-  `app_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '应用公钥证书',
-  `alipay_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝公钥证书',
-  `alipay_root_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝CA根证书',
-  `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
-  `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
-  `alipay_user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '合作者身份ID',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否支付分账',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝商户appId',
+                                      `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                      `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知页面路径',
+                                      `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知页面路径',
+                                      `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关地址',
+                                      `auth_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '认证类型',
+                                      `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型 RSA2',
+                                      `alipay_public_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝公钥',
+                                      `private_key` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '私钥',
+                                      `app_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '应用公钥证书',
+                                      `alipay_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝公钥证书',
+                                      `alipay_root_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支付宝CA根证书',
+                                      `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
+                                      `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
+                                      `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
+                                      `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否支付分账',
+                                      `alipay_user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '合作者身份ID',
+                                      `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                      `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                      `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                      `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                      `version` int(11) NOT NULL COMMENT '乐观锁',
+                                      `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付宝支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_alipay_config
 -- ----------------------------
-INSERT INTO `pay_alipay_config` VALUES (0, '123456', b'1', 'ServerUrl/callback/pay/alipay', 'ServerUrl/return/pay/alipay', 'https://openapi.alipay.com/gateway.do', 'key', 'RSA2', 'ImfODRp7hnJ3DUk9fCes0Q==', 'ImfODRp7hnJ3DUk9fCes0Q==', NULL, NULL, NULL, b'0', 'wap,app,web,qrcode,barcode', NULL, 2000, '支付宝支付', 0, '2024-01-02 21:17:58', 1399985191002447872, '2024-02-13 15:43:51', 23, b'0', b'1');
+INSERT INTO `pay_alipay_config` VALUES (0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'wap,web,qrcode,app,barcode', NULL, NULL, NULL, 0, '2024-01-02 21:17:58', 1399985191002447872, '2024-05-07 19:06:38', 32, b'0');
 
 -- ----------------------------
 -- Table structure for pay_alipay_reconcile_bill_detail
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_alipay_reconcile_bill_detail`;
 CREATE TABLE `pay_alipay_reconcile_bill_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝交易号',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
-  `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `create_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间',
-  `end_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '完成时间',
-  `store_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店编号',
-  `store_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店名称',
-  `operator` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作员',
-  `terminal_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端号',
-  `other_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对方账户',
-  `order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额（元）',
-  `real_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家实收（元）',
-  `alipay_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝红包（元）',
-  `jfb_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '集分宝（元）',
-  `alipay_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝优惠（元）',
-  `discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家优惠（元）',
-  `coupon_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '券核销金额（元）',
-  `coupon_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '券名称',
-  `coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家红包消费金额（元）',
-  `card_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡消费金额（元）',
-  `batch_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款批次号/请求号',
-  `service_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务费（元）',
-  `split_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分润（元）',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
+                                                     `id` bigint(20) NOT NULL COMMENT '主键',
+                                                     `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝交易号',
+                                                     `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                                                     `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                                     `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                                     `create_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+                                                     `end_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '完成时间',
+                                                     `store_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店编号',
+                                                     `store_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店名称',
+                                                     `operator` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作员',
+                                                     `terminal_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端号',
+                                                     `other_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对方账户',
+                                                     `order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额（元）',
+                                                     `real_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家实收（元）',
+                                                     `alipay_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝红包（元）',
+                                                     `jfb_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '集分宝（元）',
+                                                     `alipay_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝优惠（元）',
+                                                     `discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家优惠（元）',
+                                                     `coupon_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '券核销金额（元）',
+                                                     `coupon_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '券名称',
+                                                     `coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家红包消费金额（元）',
+                                                     `card_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡消费金额（元）',
+                                                     `batch_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款批次号/请求号',
+                                                     `service_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务费（元）',
+                                                     `split_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分润（元）',
+                                                     `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                                     `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付宝业务明细对账单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2529,21 +2235,21 @@ CREATE TABLE `pay_alipay_reconcile_bill_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_alipay_reconcile_bill_total`;
 CREATE TABLE `pay_alipay_reconcile_bill_total`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `store_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店编号',
-  `store_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店名称',
-  `total_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单总笔数',
-  `total_refund_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款订单总笔数',
-  `total_order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额（元）',
-  `total_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家实收（元）',
-  `total_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝优惠（元）',
-  `total_coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家优惠（元）',
-  `total_consume_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡消费金额（元）',
-  `total_service_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务费（元）',
-  `total_share_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分润（元）',
-  `total_net_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '实收净额（元）',
-  PRIMARY KEY (`id`) USING BTREE
+                                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                                    `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                                    `store_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店编号',
+                                                    `store_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店名称',
+                                                    `total_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单总笔数',
+                                                    `total_refund_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款订单总笔数',
+                                                    `total_order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额（元）',
+                                                    `total_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家实收（元）',
+                                                    `total_discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付宝优惠（元）',
+                                                    `total_coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家优惠（元）',
+                                                    `total_consume_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡消费金额（元）',
+                                                    `total_service_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务费（元）',
+                                                    `total_share_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分润（元）',
+                                                    `total_net_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '实收净额（元）',
+                                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付宝业务汇总对账单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2551,44 +2257,23 @@ CREATE TABLE `pay_alipay_reconcile_bill_total`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for pay_alipay_record
--- ----------------------------
-DROP TABLE IF EXISTS `pay_alipay_record`;
-CREATE TABLE `pay_alipay_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单号',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `gateway_time` datetime(0) NULL DEFAULT NULL COMMENT '网关完成时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付宝流水记录' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_alipay_record
--- ----------------------------
-
--- ----------------------------
 -- Table structure for pay_allocation_group
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_group`;
 CREATE TABLE `pay_allocation_group`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
-  `total_rate` int(11) NULL DEFAULT NULL COMMENT '总分账比例(万分之多少)',
-  `default_group` bit(1) NULL DEFAULT NULL COMMENT '默认分账组',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                         `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
+                                         `total_rate` int(11) NULL DEFAULT NULL COMMENT '总分账比例(万分之多少)',
+                                         `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         `default_group` bit(1) NULL DEFAULT NULL COMMENT '默认分账组',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账组' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2600,13 +2285,13 @@ CREATE TABLE `pay_allocation_group`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_group_receiver`;
 CREATE TABLE `pay_allocation_group_receiver`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `group_id` bigint(20) NULL DEFAULT NULL COMMENT '分账组ID',
-  `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者ID',
-  `rate` int(11) NULL DEFAULT NULL COMMENT '分账比例(万分之多少)',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                                  `id` bigint(20) NOT NULL COMMENT '主键',
+                                                  `group_id` bigint(20) NULL DEFAULT NULL COMMENT '分账组ID',
+                                                  `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者ID',
+                                                  `rate` int(11) NULL DEFAULT NULL COMMENT '分账比例(万分之多少)',
+                                                  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账接收组关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2618,27 +2303,30 @@ CREATE TABLE `pay_allocation_group_receiver`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_order`;
 CREATE TABLE `pay_allocation_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账订单号',
-  `allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账单号',
-  `payment_id` bigint(20) NULL DEFAULT NULL COMMENT '支付订单ID',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `gateway_pay_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关支付订单号',
-  `gateway_allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关分账单号',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属通道',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '总分账金额',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账描述',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
-  `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账处理结果',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误原因',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `allocation_no`(`allocation_no`) USING BTREE COMMENT '分账单号索引'
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账单号',
+                                         `biz_allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户分账单号',
+                                         `out_allocation_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道分账号',
+                                         `order_id` bigint(20) NULL DEFAULT NULL COMMENT '支付订单ID',
+                                         `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
+                                         `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
+                                         `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道支付订单号',
+                                         `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                         `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属通道',
+                                         `amount` int(11) NULL DEFAULT NULL COMMENT '总分账金额',
+                                         `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账描述',
+                                         `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
+                                         `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账处理结果',
+                                         `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                         `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误原因',
+                                         `finish_time` datetime NULL DEFAULT NULL COMMENT '分账完成时间',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2650,25 +2338,25 @@ CREATE TABLE `pay_allocation_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_order_detail`;
 CREATE TABLE `pay_allocation_order_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `allocation_id` bigint(20) NULL DEFAULT NULL COMMENT '分账订单ID',
-  `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者ID',
-  `rate` int(11) NULL DEFAULT NULL COMMENT '分账比例(万分之多少)',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '分账金额',
-  `receiver_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账接收方类型',
-  `receiver_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方账号',
-  `receiver_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方姓名',
-  `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账结果',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误代码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误原因',
-  `finish_time` datetime(0) NULL DEFAULT NULL COMMENT '分账完成时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                                `id` bigint(20) NOT NULL COMMENT '主键',
+                                                `allocation_id` bigint(20) NULL DEFAULT NULL COMMENT '分账订单ID',
+                                                `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者ID',
+                                                `rate` int(11) NULL DEFAULT NULL COMMENT '分账比例(万分之多少)',
+                                                `amount` int(11) NULL DEFAULT NULL COMMENT '分账金额',
+                                                `receiver_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账接收方类型',
+                                                `receiver_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方账号',
+                                                `receiver_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方姓名',
+                                                `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账结果',
+                                                `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误代码',
+                                                `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误原因',
+                                                `finish_time` datetime NULL DEFAULT NULL COMMENT '分账完成时间',
+                                                `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                                `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                                `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                                `version` int(11) NOT NULL COMMENT '乐观锁',
+                                                `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                                PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账订单明细' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2680,23 +2368,23 @@ CREATE TABLE `pay_allocation_order_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_allocation_receiver`;
 CREATE TABLE `pay_allocation_receiver`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '账号别名',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属通道',
-  `receiver_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账接收方类型',
-  `receiver_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方账号',
-  `receiver_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方姓名',
-  `relation_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账关系类型',
-  `relation_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关系名称',
-  `sync` bit(1) NULL DEFAULT NULL COMMENT '是否已经同步到网关',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                            `id` bigint(20) NOT NULL COMMENT '主键',
+                                            `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '账号别名',
+                                            `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属通道',
+                                            `receiver_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账接收方类型',
+                                            `receiver_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方账号',
+                                            `receiver_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收方姓名',
+                                            `relation_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账关系类型',
+                                            `relation_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关系名称',
+                                            `sync` bit(1) NULL DEFAULT NULL COMMENT '是否已经同步到网关',
+                                            `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                            `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                            `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                            `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                            `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                            `version` int(11) NOT NULL COMMENT '乐观锁',
+                                            `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分账接收方' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2708,62 +2396,61 @@ CREATE TABLE `pay_allocation_receiver`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_api_config`;
 CREATE TABLE `pay_api_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
-  `api` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口地址',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `notice_support` bit(1) NULL DEFAULT NULL COMMENT '支持回调通知',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `notice` bit(1) NULL DEFAULT NULL COMMENT '是否开启回调通知',
-  `notice_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认通知地址',
-  `req_sign` bit(1) NULL DEFAULT NULL COMMENT '请求参数是否签名',
-  `res_sign` bit(1) NULL DEFAULT NULL COMMENT '响应参数是否签名',
-  `notice_sign` bit(1) NULL DEFAULT NULL COMMENT '回调信息是否签名',
-  `record` bit(1) NULL DEFAULT NULL COMMENT '是否记录请求的信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` bigint(20) NOT NULL COMMENT '主键',
+                                   `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
+                                   `api` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口地址',
+                                   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                   `notice_support` bit(1) NULL DEFAULT NULL COMMENT '支持回调通知',
+                                   `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                   `notice` bit(1) NULL DEFAULT NULL COMMENT '是否开启回调通知',
+                                   `notice_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认通知地址',
+                                   `req_sign` bit(1) NULL DEFAULT NULL COMMENT '请求参数是否签名',
+                                   `res_sign` bit(1) NULL DEFAULT NULL COMMENT '响应参数是否签名',
+                                   `notice_sign` bit(1) NULL DEFAULT NULL COMMENT '回调信息是否签名',
+                                   `record` bit(1) NULL DEFAULT NULL COMMENT '是否记录请求的信息',
+                                   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                   `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                   `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                   `version` int(11) NOT NULL COMMENT '乐观锁',
+                                   `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付接口配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_api_config
 -- ----------------------------
-INSERT INTO `pay_api_config` VALUES (1, 'pay', '/uniPay/pay', '统一支付接口	', b'1', b'1', b'1', 'http://127.0.0.1:9000/demo/callback/payObject', b'1', b'0', b'1', b'0', 0, '2024-01-03 14:25:48', 1399985191002447872, '2024-02-25 15:20:41', 7, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (2, 'simplePay', '/uniPay/simplePay', '简单支付接口', b'1', b'1', b'1', 'http://127.0.0.1:9000/demo/callback/payObject', b'1', b'0', b'1', b'0', 0, '2024-01-03 14:25:48', 1399985191002447872, '2024-02-25 15:20:44', 11, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (3, 'close', '/uniPay/close', '支付关闭接口', b'0', b'1', b'1', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (4, 'refund', '/uniPay/refund', '统一退款接口', b'1', b'1', b'1', 'http://127.0.0.1:9000/demo/callback/refundObject', b'1', b'0', b'1', b'0', 0, '2024-01-03 14:25:48', 1399985191002447872, '2024-02-25 15:20:33', 4, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (5, 'simpleRefund', '/uniPay/simpleRefund', '简单退款接口', b'1', b'1', b'1', 'http://127.0.0.1:9000/demo/callback/refundObject', b'1', b'0', b'1', b'0', 0, '2024-01-03 14:25:48', 1399985191002447872, '2024-02-25 15:20:38', 4, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (6, 'syncPay', '/uniPay/syncPay', '支付同步接口', b'0', b'1', b'1', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (7, 'syncRefund', '/uniPay/syncRefund', '退款同步接口', b'0', b'1', b'1', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (8, 'transfer', '/uniPay/transfer', '统一转账接口', b'1', b'1', b'1', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (9, 'allocation', '/uniPay/allocation', '统一分账接口', b'1', b'1', b'1', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (10, 'queryPayOrder', '/uniPay/queryPayOrder', '支付订单查询接口', b'0', b'1', b'0', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (11, 'queryRefundOrder', '/uniPay/queryRefundOrder', '退款订单查询接口', b'0', b'1', b'0', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (12, 'getWxAuthUrl', '/unipay/assist/getWxAuthUrl', '获取微信OAuth2授权链接', b'0', b'1', b'0', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
-INSERT INTO `pay_api_config` VALUES (13, 'getWxAccessToken', '/unipay/assist/getWxAccessToken', '获取微信AccessToken', b'0', b'1', b'0', NULL, b'1', b'0', b'0', b'0', 0, '2024-01-03 14:25:48', 0, '2024-01-03 14:25:53', 0, b'0', NULL);
+INSERT INTO `pay_api_config` VALUES (1, 'pay', '/uniPay/pay', '统一支付接口	', b'1', b'1', b'1', 'https://daxpay.demo.bootx.cn/server/demo/callback/payObject', b'1', b'0', b'1', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (3, 'close', '/uniPay/close', '支付关闭接口', b'0', b'1', b'1', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (4, 'refund', '/uniPay/refund', '统一退款接口', b'1', b'1', b'1', 'https://daxpay.demo.bootx.cn/server/demo/callback/refundObject', b'1', b'0', b'1', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (6, 'syncPay', '/uniPay/syncPay', '支付同步接口', b'0', b'1', b'1', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (7, 'syncRefund', '/uniPay/syncRefund', '退款同步接口', b'0', b'1', b'1', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (8, 'transfer', '/uniPay/transfer', '统一转账接口', b'1', b'1', b'1', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (9, 'allocation', '/uniPay/allocation', '统一分账接口', b'1', b'1', b'1', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (10, 'queryPayOrder', '/uniPay/queryPayOrder', '支付订单查询接口', b'0', b'1', b'0', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (11, 'queryRefundOrder', '/uniPay/queryRefundOrder', '退款订单查询接口', b'0', b'1', b'0', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (12, 'getWxAuthUrl', '/unipay/assist/getWxAuthUrl', '获取微信OAuth2授权链接', b'0', b'1', b'0', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
+INSERT INTO `pay_api_config` VALUES (13, 'getWxAccessToken', '/unipay/assist/getWxAccessToken', '获取微信AccessToken', b'0', b'1', b'0', NULL, b'1', b'0', b'0', b'0', NULL, 0, '2024-01-03 14:25:53', 0, '2024-01-03 14:25:53', 0, b'0');
 
 -- ----------------------------
 -- Table structure for pay_callback_record
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_callback_record`;
 CREATE TABLE `pay_callback_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单id',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关订单号',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通道',
-  `callback_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '回调类型',
-  `notify_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '通知消息',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '回调处理状态',
-  `repair_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                        `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+                                        `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通道',
+                                        `callback_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '回调类型',
+                                        `notify_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '通知消息',
+                                        `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '回调处理状态',
+                                        `repair_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示信息',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '网关回调通知' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2771,98 +2458,49 @@ CREATE TABLE `pay_callback_record`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for pay_cash_config
--- ----------------------------
-DROP TABLE IF EXISTS `pay_cash_config`;
-CREATE TABLE `pay_cash_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '单次支付最多多少金额 ',
-  `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '现金支付配置' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_cash_config
--- ----------------------------
-INSERT INTO `pay_cash_config` VALUES (0, b'1', 2000, 'normal', NULL, 0, '2024-02-17 14:36:28', 1399985191002447872, '2024-02-17 14:40:45', 4, b'0');
-
--- ----------------------------
 -- Table structure for pay_channel_config
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_channel_config`;
 CREATE TABLE `pay_channel_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `icon_id` bigint(20) NULL DEFAULT NULL COMMENT 'ICON图片',
-  `bg_color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡牌背景色',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码',
+                                       `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                       `icon_id` bigint(20) NULL DEFAULT NULL COMMENT 'ICON图片',
+                                       `bg_color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡牌背景色',
+                                       `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                       `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                       `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                       `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                       `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                       `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                       `version` int(11) NOT NULL COMMENT '乐观锁',
+                                       `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付通道配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_channel_config
 -- ----------------------------
-INSERT INTO `pay_channel_config` VALUES (1, 'ali_pay', '支付宝', NULL, NULL, b'1', '', 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-02-13 15:38:21', 10, b'0');
-INSERT INTO `pay_channel_config` VALUES (2, 'wechat_pay', '微信支付', NULL, NULL, b'1', '', 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-02-13 15:38:24', 7, b'0');
-INSERT INTO `pay_channel_config` VALUES (3, 'union_pay', '云闪付', NULL, NULL, b'1', NULL, 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-03-10 15:04:36', 2, b'0');
-INSERT INTO `pay_channel_config` VALUES (4, 'cash_pay', '现金支付', NULL, NULL, b'1', NULL, 0, '2024-01-08 16:47:07', 0, '2024-01-08 16:47:11', 0, b'0');
-INSERT INTO `pay_channel_config` VALUES (5, 'wallet_pay', '钱包支付', NULL, NULL, b'1', NULL, 0, '2024-01-08 16:47:07', 0, '2024-01-08 16:47:11', 0, b'0');
-INSERT INTO `pay_channel_config` VALUES (6, 'voucher_pay', '储值卡支付', NULL, NULL, b'1', NULL, 0, '2024-01-08 16:47:07', 0, '2024-01-08 16:47:11', 0, b'0');
-
--- ----------------------------
--- Table structure for pay_channel_order
--- ----------------------------
-DROP TABLE IF EXISTS `pay_channel_order`;
-CREATE TABLE `pay_channel_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `payment_id` bigint(20) NULL DEFAULT NULL COMMENT '支付id',
-  `async` bit(1) NULL DEFAULT NULL COMMENT '异步支付方式',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
-  `pay_way` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付方式',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `refundable_balance` int(11) NULL DEFAULT NULL COMMENT '可退款金额',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付状态',
-  `pay_time` datetime(0) NULL DEFAULT NULL COMMENT '支付完成时间',
-  `channel_extra` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '附加支付参数',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付订单关联支付时通道信息' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_channel_order
--- ----------------------------
+INSERT INTO `pay_channel_config` VALUES (1, 'ali_pay', '支付宝', NULL, NULL, b'0', '', 0, '2024-01-08 16:47:07', 1757299137932677120, '2024-05-13 19:46:19', 12, b'0');
+INSERT INTO `pay_channel_config` VALUES (2, 'wechat_pay', '微信支付', NULL, NULL, b'0', '', 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-02-13 15:38:24', 7, b'0');
+INSERT INTO `pay_channel_config` VALUES (3, 'union_pay', '云闪付', NULL, NULL, b'0', NULL, 0, '2024-01-08 16:47:07', 1399985191002447872, '2024-03-10 15:04:36', 2, b'0');
+INSERT INTO `pay_channel_config` VALUES (5, 'wallet_pay', '钱包支付', NULL, NULL, b'0', NULL, 0, '2024-01-08 16:47:07', 0, '2024-01-08 16:47:11', 0, b'0');
 
 -- ----------------------------
 -- Table structure for pay_client_notice_record
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_client_notice_record`;
 CREATE TABLE `pay_client_notice_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `task_id` bigint(20) NULL DEFAULT NULL COMMENT '任务ID',
-  `req_count` int(11) NULL DEFAULT NULL COMMENT '请求次数',
-  `success` bit(1) NULL DEFAULT NULL COMMENT '发送是否成功',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `send_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送类型',
-  PRIMARY KEY (`id`) USING BTREE
+                                             `id` bigint(20) NOT NULL COMMENT '主键',
+                                             `task_id` bigint(20) NULL DEFAULT NULL COMMENT '任务ID',
+                                             `req_count` int(11) NULL DEFAULT NULL COMMENT '请求次数',
+                                             `success` bit(1) NULL DEFAULT NULL COMMENT '发送是否成功',
+                                             `send_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送类型',
+                                             `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误编码',
+                                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息通知任务记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2874,22 +2512,23 @@ CREATE TABLE `pay_client_notice_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_client_notice_task`;
 CREATE TABLE `pay_client_notice_task`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单ID',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
-  `success` bit(1) NULL DEFAULT NULL COMMENT '是否发送成功',
-  `send_count` int(11) NULL DEFAULT NULL COMMENT '发送次数',
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送地址',
-  `latest_time` datetime(0) NULL DEFAULT NULL COMMENT '最后发送时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `notice_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息类型',
-  `order_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单状态',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` bigint(20) NOT NULL COMMENT '主键',
+                                           `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
+                                           `success` bit(1) NULL DEFAULT NULL COMMENT '是否发送成功',
+                                           `send_count` int(11) NULL DEFAULT NULL COMMENT '发送次数',
+                                           `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送地址',
+                                           `latest_time` datetime NULL DEFAULT NULL COMMENT '最后发送时间',
+                                           `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                           `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                           `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                           `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                           `version` int(11) NOT NULL COMMENT '乐观锁',
+                                           `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                           `notice_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息类型',
+                                           `trade_id` bigint(20) NULL DEFAULT NULL COMMENT '本地交易ID',
+                                           `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                           `trade_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易状态',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息通知任务' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2901,17 +2540,17 @@ CREATE TABLE `pay_client_notice_task`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_close_record`;
 CREATE TABLE `pay_close_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `payment_id` bigint(20) NULL DEFAULT NULL COMMENT '支付记录id',
-  `business_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务号',
-  `async_channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关闭的异步支付通道',
-  `closed` bit(1) NULL DEFAULT NULL COMMENT '是否关闭成功',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误消息',
-  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
-  `req_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求链路ID',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                     `id` bigint(20) NOT NULL COMMENT '主键',
+                                     `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单号',
+                                     `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                                     `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关闭的支付通道',
+                                     `closed` bit(1) NULL DEFAULT NULL COMMENT '是否关闭成功',
+                                     `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                     `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误消息',
+                                     `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
+                                     `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                     `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付关闭记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2919,33 +2558,65 @@ CREATE TABLE `pay_close_record`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for pay_method_info
+-- ----------------------------
+DROP TABLE IF EXISTS `pay_method_info`;
+CREATE TABLE `pay_method_info`  (
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码',
+                                    `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                    `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                    `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                    `version` int(11) NOT NULL COMMENT '乐观锁',
+                                    `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付方式' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of pay_method_info
+-- ----------------------------
+INSERT INTO `pay_method_info` VALUES (1, 'normal', '常规支付', '同步支付使用这个', 0, '2024-01-09 10:01:21', 1399985191002447872, '2024-02-13 15:39:16', 1, b'0');
+INSERT INTO `pay_method_info` VALUES (2, 'wap', 'wap支付', NULL, 0, '2024-01-09 10:01:21', 0, '2024-01-09 10:01:25', 0, b'0');
+INSERT INTO `pay_method_info` VALUES (3, 'app', '应用支付', NULL, 0, '2024-01-09 10:01:21', 0, '2024-01-09 10:01:25', 0, b'0');
+INSERT INTO `pay_method_info` VALUES (4, 'web', 'web支付', NULL, 0, '2024-01-09 10:01:21', 0, '2024-01-09 10:01:25', 0, b'0');
+INSERT INTO `pay_method_info` VALUES (6, 'barcode', '付款码', NULL, 0, '2024-01-09 10:01:21', 0, '2024-01-09 10:01:25', 0, b'0');
+INSERT INTO `pay_method_info` VALUES (7, 'jsapi', '公众号/小程序支付', '主要是微信使用', 0, '2024-01-09 10:01:21', 1399985191002447872, '2024-02-13 15:38:57', 1, b'0');
+
+-- ----------------------------
 -- Table structure for pay_order
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_order`;
 CREATE TABLE `pay_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `business_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联的业务号',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `combination_pay` bit(1) NULL DEFAULT NULL COMMENT '是否是组合支付',
-  `async_pay` bit(1) NULL DEFAULT NULL COMMENT '是否是异步支付',
-  `async_channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步支付通道',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `refundable_balance` int(11) NULL DEFAULT NULL COMMENT '可退款余额',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付状态',
-  `pay_time` datetime(0) NULL DEFAULT NULL COMMENT '支付时间',
-  `close_time` datetime(0) NULL DEFAULT NULL COMMENT '关闭时间',
-  `expired_time` datetime(0) NULL DEFAULT NULL COMMENT '过期时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否需要分账',
-  `allocation_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账状态',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `business_no`(`business_no`) USING BTREE COMMENT '业务业务号索引'
+                              `id` bigint(20) NOT NULL COMMENT '主键',
+                              `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                              `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
+                              `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道支付订单号',
+                              `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
+                              `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+                              `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否需要分账',
+                              `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步支付通道',
+                              `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付方式',
+                              `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
+                              `refundable_balance` int(11) NULL DEFAULT NULL COMMENT '可退款余额',
+                              `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付状态',
+                              `allocation_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分账状态',
+                              `pay_time` datetime NULL DEFAULT NULL COMMENT '支付时间',
+                              `close_time` datetime NULL DEFAULT NULL COMMENT '关闭时间',
+                              `expired_time` datetime NULL DEFAULT NULL COMMENT '过期时间',
+                              `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                              `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                              `version` int(11) NOT NULL COMMENT '乐观锁',
+                              `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                              `auto_allocation` bit(1) NULL DEFAULT NULL COMMENT '自动分账',
+                              PRIMARY KEY (`id`) USING BTREE,
+                              UNIQUE INDEX `biz_order_no`(`biz_order_no`) USING BTREE COMMENT '商户订单号索引'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2957,26 +2628,20 @@ CREATE TABLE `pay_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_order_extra`;
 CREATE TABLE `pay_order_extra`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步跳转地址',
-  `req_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求链路ID',
-  `notice_sign` bit(1) NULL DEFAULT NULL COMMENT '回调通知时是否需要进行签名',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知地址，以最后一次为准',
-  `attach` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户扩展参数',
-  `req_sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型',
-  `req_sign` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名',
-  `req_time` datetime(0) NULL DEFAULT NULL COMMENT '请求时间，传输时间戳，以最后一次为准',
-  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步跳转地址',
+                                    `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知地址',
+                                    `extra_param` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '附加参数',
+                                    `attach` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户扩展参数',
+                                    `req_time` datetime NULL DEFAULT NULL COMMENT '请求时间，传输时间戳，以最后一次为准',
+                                    `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                    `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                    `version` int(11) NOT NULL COMMENT '乐观锁',
+                                    `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付订单扩展信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2988,44 +2653,44 @@ CREATE TABLE `pay_order_extra`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_platform_config`;
 CREATE TABLE `pay_platform_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `website_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网站地址',
-  `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名方式',
-  `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名秘钥',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通知地址',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步支付跳转地址',
-  `order_timeout` int(11) NULL DEFAULT NULL COMMENT '订单默认超时时间(分钟)',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `limit_amount` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `website_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网站地址',
+                                        `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名方式',
+                                        `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名秘钥',
+                                        `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通知地址',
+                                        `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步支付跳转地址',
+                                        `order_timeout` int(11) NULL DEFAULT NULL COMMENT '订单默认超时时间(分钟)',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '乐观锁',
+                                        `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                        `limit_amount` int(11) NULL DEFAULT NULL COMMENT '支付限额',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付平台配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_platform_config
 -- ----------------------------
-INSERT INTO `pay_platform_config` VALUES (0, 'http://127.0.0.1', 'HMAC_SHA256', '123456', 'http://127.0.0.1/h5/#/result/success', 'http://127.0.0.1/h5/#/result/success', 30, 0, '2024-01-02 20:23:19', 1757299137932677120, '2024-02-13 15:08:51', 3, b'0', 2000);
+INSERT INTO `pay_platform_config` VALUES (0, 'http://localhost/', 'HMAC_SHA256', '123456', 'http://localhost/h5/#/result/success', 'http://localhost/h5/#/result/success', 30, 0, '2024-01-02 20:23:19', 1399985191002447872, '2024-03-24 11:34:20', 13, b'0', 20000);
 
 -- ----------------------------
 -- Table structure for pay_reconcile_detail
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_reconcile_detail`;
 CREATE TABLE `pay_reconcile_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '交易金额',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地订单ID',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `order_time` datetime(0) NULL DEFAULT NULL COMMENT '订单时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                         `amount` int(11) NULL DEFAULT NULL COMMENT '交易金额',
+                                         `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                         `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                         `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '外部交易号',
+                                         `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付对账记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3037,24 +2702,28 @@ CREATE TABLE `pay_reconcile_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_reconcile_diff_record`;
 CREATE TABLE `pay_reconcile_diff_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单ID',
-  `detail_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单明细ID',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单id',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单标题',
-  `order_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单类型',
-  `diff_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '差异类型',
-  `diffs` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '差异内容',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '交易金额',
-  `order_time` datetime(0) NULL DEFAULT NULL COMMENT '订单时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL COMMENT '主键',
+                                              `detail_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单明细ID',
+                                              `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单标题',
+                                              `diff_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '差异类型',
+                                              `diffs` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '差异内容',
+                                              `amount` int(11) NULL DEFAULT NULL COMMENT '本地交易金额',
+                                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                              `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                              `version` int(11) NOT NULL COMMENT '乐观锁',
+                                              `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                              `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单ID',
+                                              `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                              `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
+                                              `out_amount` int(11) NULL DEFAULT NULL COMMENT '通道交易金额',
+                                              `reconcile_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账号',
+                                              `reconcile_date` date NULL DEFAULT NULL COMMENT '对账日期',
+                                              `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
+                                              `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
+                                              `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '对账差异单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3062,21 +2731,38 @@ CREATE TABLE `pay_reconcile_diff_record`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for pay_reconcile_file
+-- ----------------------------
+DROP TABLE IF EXISTS `pay_reconcile_file`;
+CREATE TABLE `pay_reconcile_file`  (
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单ID',
+                                       `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
+                                       `file_id` bigint(20) NULL DEFAULT NULL COMMENT '对账单文件',
+                                       PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '原始对账单文件,' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of pay_reconcile_file
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for pay_reconcile_order
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_reconcile_order`;
 CREATE TABLE `pay_reconcile_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `batch_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '批次号',
-  `date` date NULL DEFAULT NULL COMMENT '日期',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
-  `down` bit(1) NULL DEFAULT NULL COMMENT '是否下载成功',
-  `compare` bit(1) NULL DEFAULT NULL COMMENT '是否比对完成',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `批次号索引`(`batch_no`) USING BTREE
+                                        `id` bigint(20) NOT NULL COMMENT '主键',
+                                        `date` date NULL DEFAULT NULL COMMENT '日期',
+                                        `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
+                                        `compare` bit(1) NULL DEFAULT NULL COMMENT '明细对账单比对',
+                                        `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `reconcile_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账号',
+                                        `result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '对账结果',
+                                        `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                        `down_or_upload` bit(1) NULL DEFAULT NULL COMMENT '明细对账单下载',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付对账单订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3084,27 +2770,25 @@ CREATE TABLE `pay_reconcile_order`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for pay_refund_channel_order
+-- Table structure for pay_reconcile_trade_detail
 -- ----------------------------
-DROP TABLE IF EXISTS `pay_refund_channel_order`;
-CREATE TABLE `pay_refund_channel_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `refund_id` bigint(20) NULL DEFAULT NULL COMMENT '关联退款id',
-  `pay_channel_id` bigint(20) NULL DEFAULT NULL COMMENT '通道支付单id',
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道',
-  `async` bit(1) NULL DEFAULT NULL COMMENT '异步支付方式',
-  `order_amount` int(11) NULL DEFAULT NULL COMMENT '订单金额',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '退款金额',
-  `refundable_amount` int(11) NULL DEFAULT NULL COMMENT '剩余可退余额',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
-  `refund_time` datetime(0) NULL DEFAULT NULL COMMENT '退款完成时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付退款通道订单' ROW_FORMAT = DYNAMIC;
+DROP TABLE IF EXISTS `pay_reconcile_trade_detail`;
+CREATE TABLE `pay_reconcile_trade_detail`  (
+                                               `id` bigint(20) NOT NULL COMMENT '主键',
+                                               `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                               `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                               `amount` int(11) NULL DEFAULT NULL COMMENT '交易金额',
+                                               `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
+                                               `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                               `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+                                               `trade_time` datetime NULL DEFAULT NULL COMMENT '交易时间',
+                                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                               PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '对账-第三方交易明细' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of pay_refund_channel_order
+-- Records of pay_reconcile_trade_detail
 -- ----------------------------
 
 -- ----------------------------
@@ -3112,29 +2796,30 @@ CREATE TABLE `pay_refund_channel_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_refund_order`;
 CREATE TABLE `pay_refund_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `payment_id` bigint(20) NULL DEFAULT NULL COMMENT '原支付id',
-  `business_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '原支付业务号',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '原支付标题',
-  `refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款号',
-  `async_pay` bit(1) NULL DEFAULT NULL COMMENT '是否含有异步通道',
-  `async_channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通道',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `order_amount` int(11) NULL DEFAULT NULL COMMENT '订单金额',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '退款金额',
-  `refundable_balance` int(11) NULL DEFAULT NULL COMMENT '剩余可退',
-  `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款原因',
-  `refund_time` datetime(0) NULL DEFAULT NULL COMMENT '退款完成时间',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
-  `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                     `id` bigint(20) NOT NULL COMMENT '主键',
+                                     `order_id` bigint(20) NULL DEFAULT NULL COMMENT '支付订单ID',
+                                     `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付订单号',
+                                     `biz_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
+                                     `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付标题',
+                                     `refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款号',
+                                     `biz_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户退款号',
+                                     `out_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '三方支付系统退款交易号',
+                                     `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付通道',
+                                     `order_amount` int(11) NULL DEFAULT NULL COMMENT '订单金额',
+                                     `amount` int(11) NULL DEFAULT NULL COMMENT '退款金额',
+                                     `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款原因',
+                                     `finish_time` datetime NULL DEFAULT NULL COMMENT '退款完成时间',
+                                     `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
+                                     `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                     `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                                     `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                     `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                     `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                     `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                     `version` int(11) NOT NULL COMMENT '乐观锁',
+                                     `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                     `out_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户支付订单号',
+                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '退款订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3146,22 +2831,19 @@ CREATE TABLE `pay_refund_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_refund_order_extra`;
 CREATE TABLE `pay_refund_order_extra`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `notice_sign` bit(1) NULL DEFAULT NULL COMMENT '回调通知时是否需要进行签名',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知地址',
-  `attach` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户扩展参数',
-  `req_sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求签名值',
-  `req_sign` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求签名值',
-  `req_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求链路ID',
-  `req_time` datetime(0) NULL DEFAULT NULL COMMENT '请求时间，传输时间戳',
-  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` bigint(20) NOT NULL COMMENT '主键',
+                                           `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知地址',
+                                           `attach` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户扩展参数',
+                                           `extra_param` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '附加参数',
+                                           `req_time` datetime NULL DEFAULT NULL COMMENT '请求时间，传输时间戳',
+                                           `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
+                                           `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                           `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                           `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                           `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                           `version` int(11) NOT NULL COMMENT '乐观锁',
+                                           `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '退款订单扩展信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3173,19 +2855,19 @@ CREATE TABLE `pay_refund_order_extra`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_repair_record`;
 CREATE TABLE `pay_repair_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `repair_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复号',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单ID',
-  `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地业务号',
-  `repair_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复类型',
-  `repair_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复来源',
-  `repair_way` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复方式',
-  `async_channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复的异步通道',
-  `before_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复前状态',
-  `after_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复后状态',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `repair_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复号',
+                                      `trade_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单ID',
+                                      `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地业务号',
+                                      `repair_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复类型',
+                                      `repair_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复来源',
+                                      `repair_way` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复方式',
+                                      `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复的通道',
+                                      `before_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复前状态',
+                                      `after_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复后状态',
+                                      `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付修复记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3197,22 +2879,22 @@ CREATE TABLE `pay_repair_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_sync_record`;
 CREATE TABLE `pay_sync_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单ID',
-  `order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地业务号',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `sync_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步类型',
-  `async_channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步的异步通道',
-  `sync_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '同步消息',
-  `gateway_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关返回状态',
-  `repair_order` bit(1) NULL DEFAULT NULL COMMENT '是否进行修复',
-  `repair_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复单号',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误消息',
-  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
-  `req_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求链路ID',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '本地交易号',
+                                    `biz_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户交易号',
+                                    `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+                                    `out_trade_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关返回状态',
+                                    `sync_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步类型',
+                                    `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步的异步通道',
+                                    `sync_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '同步消息',
+                                    `repair` bit(1) NULL DEFAULT NULL COMMENT '是否进行修复',
+                                    `repair_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修复单号',
+                                    `error_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+                                    `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误消息',
+                                    `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付同步订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3224,21 +2906,21 @@ CREATE TABLE `pay_sync_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_transfer_order`;
 CREATE TABLE `pay_transfer_order`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `amount` int(11) NULL DEFAULT NULL,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `payer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `payee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `success_time` datetime(0) NULL DEFAULT NULL,
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `out_trade_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `channel` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `amount` int(11) NULL DEFAULT NULL,
+                                       `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `payer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `payee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       `success_time` datetime NULL DEFAULT NULL,
+                                       `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                       `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                       `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                       `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                       `version` int(11) NOT NULL COMMENT '乐观锁',
+                                       `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '转账订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3250,149 +2932,52 @@ CREATE TABLE `pay_transfer_order`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_union_pay_config`;
 CREATE TABLE `pay_union_pay_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `mach_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户号',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关地址',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知路径',
-  `pay_ways` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '可用支付方式',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `seller` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户收款账号',
-  `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型',
-  `cert_sign` bit(1) NULL DEFAULT NULL COMMENT '是否为证书签名',
-  `key_private_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '应用私钥证书',
-  `key_private_cert_pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '私钥证书对应的密码',
-  `acp_middle_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '中级证书',
-  `acp_root_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '根证书',
-  `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知页面路径',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  PRIMARY KEY (`id`) USING BTREE
+                                         `id` bigint(20) NOT NULL COMMENT '主键',
+                                         `mach_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户号',
+                                         `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                         `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付网关地址',
+                                         `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知路径',
+                                         `pay_ways` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '可用支付方式',
+                                         `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
+                                         `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                         `seller` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户收款账号',
+                                         `sign_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '签名类型',
+                                         `cert_sign` bit(1) NULL DEFAULT NULL COMMENT '是否为证书签名',
+                                         `key_private_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '应用私钥证书',
+                                         `key_private_cert_pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '私钥证书对应的密码',
+                                         `acp_middle_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '中级证书',
+                                         `acp_root_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '根证书',
+                                         `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
+                                         `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知页面路径',
+                                         `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                         `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                         `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                         `version` int(11) NOT NULL COMMENT '乐观锁',
+                                         `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '云闪付支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_union_pay_config
 -- ----------------------------
-INSERT INTO `pay_union_pay_config` VALUES (0, '123456', b'1', 'https://qra.95516.com/pay/gateway', 'ServerUrl/callback/pay/union', 'wap,app,web,qrcode,barcode,jsapi,b2b', NULL, NULL, 'RSA2', b'0', NULL, NULL, NULL, NULL, b'1', 'ServerUrl/return/pay/union', 0, '2024-03-06 22:56:22', 1399985191002447872, '2024-03-12 23:30:18', 11, b'0', 2000);
-
--- ----------------------------
--- Table structure for pay_union_pay_record
--- ----------------------------
-DROP TABLE IF EXISTS `pay_union_pay_record`;
-CREATE TABLE `pay_union_pay_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单号',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `gateway_time` datetime(0) NULL DEFAULT NULL COMMENT '网关完成时间',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '云闪付流水记录' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_union_pay_record
--- ----------------------------
+INSERT INTO `pay_union_pay_config` VALUES (0, NULL, NULL, NULL, NULL, 'wap,web,qrcode,app,barcode', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-03-06 22:56:22', 1399985191002447872, '2024-03-23 23:15:20', 12, b'0');
 
 -- ----------------------------
 -- Table structure for pay_union_reconcile_bill_detail
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_union_reconcile_bill_detail`;
 CREATE TABLE `pay_union_reconcile_bill_detail`  (
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易代码',
-  `txn_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易传输时间',
-  `txn_amt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易金额',
-  `query_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询流水号',
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号'
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '云闪付业务明细对账单' ROW_FORMAT = DYNAMIC;
+                                                    `trade_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易代码',
+                                                    `txn_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易传输时间',
+                                                    `txn_amt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易金额',
+                                                    `query_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询流水号',
+                                                    `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                                                    `reconcile_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID'
+) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '云闪付业务明细对账单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_union_reconcile_bill_detail
--- ----------------------------
-
--- ----------------------------
--- Table structure for pay_voucher
--- ----------------------------
-DROP TABLE IF EXISTS `pay_voucher`;
-CREATE TABLE `pay_voucher`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `card_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卡号',
-  `face_value` int(11) NULL DEFAULT NULL COMMENT '面值',
-  `balance` int(11) NULL DEFAULT NULL COMMENT '余额',
-  `enduring` bit(1) NULL DEFAULT NULL COMMENT '是否长期有效',
-  `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
-  `end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束时间',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `card_no`(`card_no`) USING BTREE COMMENT '卡号索引'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '储值卡' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_voucher
--- ----------------------------
-
--- ----------------------------
--- Table structure for pay_voucher_config
--- ----------------------------
-DROP TABLE IF EXISTS `pay_voucher_config`;
-CREATE TABLE `pay_voucher_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '单次支付最多多少金额 ',
-  `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '储值卡配置' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_voucher_config
--- ----------------------------
-INSERT INTO `pay_voucher_config` VALUES (0, b'1', 2000, 'normal', NULL, 0, '2024-02-17 14:36:28', 1399985191002447872, '2024-02-17 17:01:25', 7, b'0');
-
--- ----------------------------
--- Table structure for pay_voucher_record
--- ----------------------------
-DROP TABLE IF EXISTS `pay_voucher_record`;
-CREATE TABLE `pay_voucher_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `voucher_id` bigint(20) NULL DEFAULT NULL COMMENT '储值卡id',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `old_amount` int(11) NULL DEFAULT NULL COMMENT '变动之前的金额',
-  `new_amount` int(11) NULL DEFAULT NULL COMMENT '变动之后的金额',
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单号',
-  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端ip',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `voucher_id`(`voucher_id`) USING BTREE COMMENT '储值卡ID'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '储值卡记录' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_voucher_record
 -- ----------------------------
 
 -- ----------------------------
@@ -3400,19 +2985,19 @@ CREATE TABLE `pay_voucher_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wallet`;
 CREATE TABLE `pay_wallet`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联用户id',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钱包名称',
-  `balance` int(11) NULL DEFAULT NULL COMMENT '余额',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `用户ID索引`(`user_id`) USING BTREE
+                               `id` bigint(20) NOT NULL COMMENT '主键',
+                               `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联用户id',
+                               `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钱包名称',
+                               `balance` int(11) NULL DEFAULT NULL COMMENT '余额',
+                               `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
+                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                               `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                               `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                               `version` int(11) NOT NULL COMMENT '乐观锁',
+                               `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                               PRIMARY KEY (`id`) USING BTREE,
+                               INDEX `用户ID索引`(`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钱包' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3424,44 +3009,44 @@ CREATE TABLE `pay_wallet`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wallet_config`;
 CREATE TABLE `pay_wallet_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '单次支付最多多少金额 ',
-  `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                      `single_limit` int(11) NULL DEFAULT NULL COMMENT '单次支付最多多少金额 ',
+                                      `pay_ways` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '可用支付方式',
+                                      `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                      `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                      `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                      `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                      `version` int(11) NOT NULL COMMENT '乐观锁',
+                                      `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钱包配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_wallet_config
 -- ----------------------------
-INSERT INTO `pay_wallet_config` VALUES (0, b'1', 2000, 'normal', NULL, 0, '2024-02-17 14:36:28', 1399985191002447872, '2024-02-17 14:40:45', 4, b'0');
+INSERT INTO `pay_wallet_config` VALUES (0, b'0', 2000, 'normal', NULL, 0, '2024-02-17 14:36:28', 1399985191002447872, '2024-02-17 14:40:45', 4, b'0');
 
 -- ----------------------------
 -- Table structure for pay_wallet_record
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wallet_record`;
 CREATE TABLE `pay_wallet_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `wallet_id` bigint(20) NULL DEFAULT NULL COMMENT '钱包id',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `old_amount` int(11) NULL DEFAULT NULL COMMENT '变动之前的金额',
-  `new_amount` int(11) NULL DEFAULT NULL COMMENT '变动之后的金额',
-  `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单号',
-  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端ip',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `wallet_id`(`wallet_id`) USING BTREE COMMENT '钱包ID'
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `wallet_id` bigint(20) NULL DEFAULT NULL COMMENT '钱包id',
+                                      `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
+                                      `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                      `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
+                                      `old_amount` int(11) NULL DEFAULT NULL COMMENT '变动之前的金额',
+                                      `new_amount` int(11) NULL DEFAULT NULL COMMENT '变动之后的金额',
+                                      `order_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易订单号',
+                                      `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端ip',
+                                      `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                      `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                      PRIMARY KEY (`id`) USING BTREE,
+                                      INDEX `wallet_id`(`wallet_id`) USING BTREE COMMENT '钱包ID'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钱包记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3469,55 +3054,27 @@ CREATE TABLE `pay_wallet_record`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for pay_way_info
--- ----------------------------
-DROP TABLE IF EXISTS `pay_way_info`;
-CREATE TABLE `pay_way_info`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付方式' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pay_way_info
--- ----------------------------
-INSERT INTO `pay_way_info` VALUES (1, 'normal', '常规支付', '同步支付使用这个', 0, '2024-01-09 10:01:21', 1399985191002447872, '2024-02-13 15:39:16', 1, b'0');
-INSERT INTO `pay_way_info` VALUES (2, 'wap', 'wap支付', NULL, 0, '2024-01-09 10:01:21', 0, '2024-01-09 10:01:25', 0, b'0');
-INSERT INTO `pay_way_info` VALUES (3, 'app', '应用支付', NULL, 0, '2024-01-09 10:01:21', 0, '2024-01-09 10:01:25', 0, b'0');
-INSERT INTO `pay_way_info` VALUES (4, 'web', 'web支付', NULL, 0, '2024-01-09 10:01:21', 0, '2024-01-09 10:01:25', 0, b'0');
-INSERT INTO `pay_way_info` VALUES (6, 'barcode', '付款码', NULL, 0, '2024-01-09 10:01:21', 0, '2024-01-09 10:01:25', 0, b'0');
-INSERT INTO `pay_way_info` VALUES (7, 'jsapi', '公众号/小程序支付', '主要是微信使用', 0, '2024-01-09 10:01:21', 1399985191002447872, '2024-02-13 15:38:57', 1, b'0');
-
--- ----------------------------
 -- Table structure for pay_wechat_notice_config
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_notice_config`;
 CREATE TABLE `pay_wechat_notice_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用id',
-  `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用秘钥',
-  `qr_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公众号二维码',
-  `oauth2_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'OAuth2地址',
-  `verify_file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信校验文件名称',
-  `verify_file_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信校验文件内容',
-  `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息Id',
-  `template_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息内容',
-  `template_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  PRIMARY KEY (`id`) USING BTREE
+                                             `id` bigint(20) NOT NULL COMMENT '主键',
+                                             `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用id',
+                                             `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用秘钥',
+                                             `qr_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公众号二维码',
+                                             `oauth2_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'OAuth2地址',
+                                             `verify_file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信校验文件名称',
+                                             `verify_file_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信校验文件内容',
+                                             `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息Id',
+                                             `template_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息内容',
+                                             `template_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板消息备注',
+                                             `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                             `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                             `version` int(11) NOT NULL COMMENT '乐观锁',
+                                             `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信消息通知相关配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3529,51 +3086,51 @@ CREATE TABLE `pay_wechat_notice_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_pay_config`;
 CREATE TABLE `pay_wechat_pay_config`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `wx_mch_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信商户号',
-  `wx_app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信应用appId',
-  `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
-  `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知路径',
-  `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知路径',
-  `api_version` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口版本',
-  `api_key_v2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APIv2 密钥',
-  `api_key_v3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APIv3 密钥',
-  `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APPID对应的接口密码',
-  `p12` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'API证书中p12证书Base64',
-  `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
-  `pay_ways` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '可用支付方式',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '乐观锁',
-  `deleted` bit(1) NOT NULL COMMENT '删除标志',
-  `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
-  `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否支付分账',
-  PRIMARY KEY (`id`) USING BTREE
+                                          `id` bigint(20) NOT NULL COMMENT '主键',
+                                          `wx_mch_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信商户号',
+                                          `wx_app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信应用appId',
+                                          `enable` bit(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                          `notify_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异步通知路径',
+                                          `return_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '同步通知路径',
+                                          `allocation` bit(1) NULL DEFAULT NULL COMMENT '是否支付分账',
+                                          `single_limit` int(11) NULL DEFAULT NULL COMMENT '支付限额',
+                                          `api_version` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口版本',
+                                          `api_key_v2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APIv2 密钥',
+                                          `api_key_v3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APIv3 密钥',
+                                          `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'APPID对应的接口密码',
+                                          `p12` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'API证书中p12证书Base64',
+                                          `sandbox` bit(1) NULL DEFAULT NULL COMMENT '是否沙箱环境',
+                                          `pay_ways` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '可用支付方式',
+                                          `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                          `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                          `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                          `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修者ID',
+                                          `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                          `version` int(11) NOT NULL COMMENT '乐观锁',
+                                          `deleted` bit(1) NOT NULL COMMENT '删除标志',
+                                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信支付配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pay_wechat_pay_config
 -- ----------------------------
-INSERT INTO `pay_wechat_pay_config` VALUES (0, '123', '123', b'1', 'ServerUrl/callback/pay/wechat', 'ServerUrl/pay/wechat', 'apiV2', 'E0jIzPNngkpkZYL19H3vFQ==', 'E0jIzPNngkpkZYL19H3vFQ==', 'E0jIzPNngkpkZYL19H3vFQ==', 'E0jIzPNngkpkZYL19H3vFQ==', b'0', 'wap,app,jsapi,qrcode,barcode', NULL, 0, '2024-04-18 09:15:47', 1399985191002447872, '2024-04-18 09:16:22', 2025, b'0', 2000, b'1');
+INSERT INTO `pay_wechat_pay_config` VALUES (0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'wap,app,jsapi,qrcode,barcode', NULL, 0, '2024-01-03 23:13:11', 1399985191002447872, '2024-04-02 17:07:37', 23, b'0');
 
 -- ----------------------------
 -- Table structure for pay_wechat_pay_record
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_pay_record`;
 CREATE TABLE `pay_wechat_pay_record`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单号',
-  `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `gateway_time` datetime(0) NULL DEFAULT NULL COMMENT '网关完成时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                          `id` bigint(20) NOT NULL COMMENT '主键',
+                                          `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
+                                          `amount` int(11) NULL DEFAULT NULL COMMENT '金额',
+                                          `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                          `order_id` bigint(20) NULL DEFAULT NULL COMMENT '本地订单号',
+                                          `gateway_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关订单号',
+                                          `gateway_time` datetime NULL DEFAULT NULL COMMENT '网关完成时间',
+                                          `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+                                          `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信支付记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3585,36 +3142,36 @@ CREATE TABLE `pay_wechat_pay_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_reconcile_bill_detail`;
 CREATE TABLE `pay_wechat_reconcile_bill_detail`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `transaction_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易时间',
-  `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公众账号ID',
-  `merchant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户号',
-  `sub_merchant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '特约商户号',
-  `wei_xin_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信订单号',
-  `mch_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
-  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户标识',
-  `device_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备号',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易状态',
-  `bank` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '付款银行',
-  `currency` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货币种类',
-  `amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应结订单金额',
-  `envelope_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代金券金额',
-  `wx_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信退款单号',
-  `mch_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户退款单号',
-  `refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款金额',
-  `coupon_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '充值券退款金额',
-  `refund_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款类型',
-  `refund_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
-  `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `mch_data_packet` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户数据包',
-  `premium` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手续费',
-  `rates` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费率',
-  `order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额',
-  `apply_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请退款金额',
-  `rates_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费率备注',
-  PRIMARY KEY (`id`) USING BTREE
+                                                     `id` bigint(20) NOT NULL COMMENT '主键',
+                                                     `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                                     `transaction_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易时间',
+                                                     `app_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公众账号ID',
+                                                     `merchant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户号',
+                                                     `sub_merchant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '特约商户号',
+                                                     `wei_xin_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信订单号',
+                                                     `mch_order_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户订单号',
+                                                     `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户标识',
+                                                     `device_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备号',
+                                                     `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易类型',
+                                                     `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易状态',
+                                                     `bank` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '付款银行',
+                                                     `currency` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货币种类',
+                                                     `amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应结订单金额',
+                                                     `envelope_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代金券金额',
+                                                     `wx_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '微信退款单号',
+                                                     `mch_refund_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户退款单号',
+                                                     `refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款金额',
+                                                     `coupon_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '充值券退款金额',
+                                                     `refund_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款类型',
+                                                     `refund_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款状态',
+                                                     `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                                     `mch_data_packet` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商户数据包',
+                                                     `premium` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手续费',
+                                                     `rates` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费率',
+                                                     `order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单金额',
+                                                     `apply_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请退款金额',
+                                                     `rates_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费率备注',
+                                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信对账单明细' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3626,16 +3183,16 @@ CREATE TABLE `pay_wechat_reconcile_bill_detail`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_wechat_reconcile_bill_total`;
 CREATE TABLE `pay_wechat_reconcile_bill_total`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
-  `total_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '总交易单数',
-  `total_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应结订单总金额',
-  `total_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款总金额',
-  `total_refund_coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '充值券退款总金额',
-  `total_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手续费总金额',
-  `total_order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单总金额',
-  `apply_total_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请退款总金额',
-  PRIMARY KEY (`id`) USING BTREE
+                                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                                    `record_order_id` bigint(20) NULL DEFAULT NULL COMMENT '关联对账订单ID',
+                                                    `total_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '总交易单数',
+                                                    `total_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应结订单总金额',
+                                                    `total_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '退款总金额',
+                                                    `total_refund_coupon_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '充值券退款总金额',
+                                                    `total_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手续费总金额',
+                                                    `total_order_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单总金额',
+                                                    `apply_total_refund_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请退款总金额',
+                                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信对账单汇总' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3647,13 +3204,13 @@ CREATE TABLE `pay_wechat_reconcile_bill_total`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_blob_triggers`;
 CREATE TABLE `qrtz_blob_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `BLOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `SCHED_NAME`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                       `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `BLOB_DATA` blob NULL,
+                                       PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                       INDEX `SCHED_NAME`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                       CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3665,10 +3222,10 @@ CREATE TABLE `qrtz_blob_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_calendars`;
 CREATE TABLE `qrtz_calendars`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `CALENDAR_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `CALENDAR` blob NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE
+                                   `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                   `CALENDAR_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                   `CALENDAR` blob NOT NULL,
+                                   PRIMARY KEY (`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3680,85 +3237,82 @@ CREATE TABLE `qrtz_calendars`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_cron_triggers`;
 CREATE TABLE `qrtz_cron_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `CRON_EXPRESSION` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TIME_ZONE_ID` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                       `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `CRON_EXPRESSION` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                       `TIME_ZONE_ID` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                       PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                       CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of qrtz_cron_triggers
 -- ----------------------------
-INSERT INTO `qrtz_cron_triggers` VALUES ('quartzScheduler', '1546857070483939328', 'DEFAULT', '0/5 * * * * ? *', 'Asia/Shanghai');
 
 -- ----------------------------
 -- Table structure for qrtz_fired_triggers
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_fired_triggers`;
 CREATE TABLE `qrtz_fired_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `ENTRY_ID` varchar(95) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `INSTANCE_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `FIRED_TIME` bigint(13) NOT NULL,
-  `SCHED_TIME` bigint(13) NOT NULL,
-  `PRIORITY` int(11) NOT NULL,
-  `STATE` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `ENTRY_ID`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_T_G`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_TRIG_INST_NAME`(`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_J_G`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_INST_JOB_REQ_RCVRY`(`SCHED_NAME`, `INSTANCE_NAME`, `REQUESTS_RECOVERY`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_TG`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE
+                                        `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `ENTRY_ID` varchar(95) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `INSTANCE_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `FIRED_TIME` bigint(13) NOT NULL,
+                                        `SCHED_TIME` bigint(13) NOT NULL,
+                                        `PRIORITY` int(11) NOT NULL,
+                                        `STATE` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                        `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                        PRIMARY KEY (`SCHED_NAME`, `ENTRY_ID`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_T_G`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_TRIG_INST_NAME`(`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_J_G`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_INST_JOB_REQ_RCVRY`(`SCHED_NAME`, `INSTANCE_NAME`, `REQUESTS_RECOVERY`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_TG`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                        INDEX `IDX_QRTZ_FT_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of qrtz_fired_triggers
 -- ----------------------------
-INSERT INTO `qrtz_fired_triggers` VALUES ('quartzScheduler', 'NON_CLUSTERED1711420949184', '1546857070483939328', 'DEFAULT', 'NON_CLUSTERED', 1711421986284, 1711421990000, 5, 'ACQUIRED', NULL, NULL, '0', '0');
 
 -- ----------------------------
 -- Table structure for qrtz_job_details
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_job_details`;
 CREATE TABLE `qrtz_job_details`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `DESCRIPTION` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `JOB_CLASS_NAME` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `IS_DURABLE` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `IS_UPDATE_DATA` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_J_GRP`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_J_REQ_RECOVERY`(`SCHED_NAME`, `REQUESTS_RECOVERY`) USING BTREE
+                                     `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `DESCRIPTION` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                     `JOB_CLASS_NAME` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `IS_DURABLE` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `IS_UPDATE_DATA` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                     `JOB_DATA` blob NULL,
+                                     PRIMARY KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
+                                     INDEX `IDX_QRTZ_J_GRP`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
+                                     INDEX `IDX_QRTZ_J_REQ_RECOVERY`(`SCHED_NAME`, `REQUESTS_RECOVERY`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of qrtz_job_details
 -- ----------------------------
-INSERT INTO `qrtz_job_details` VALUES ('quartzScheduler', '1546857070483939328', 'DEFAULT', NULL, 'cn.bootx.platform.daxpay.service.task.PayExpiredTimeTask', '0', '0', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C77080000001000000001740009706172616D65746572707800);
 
 -- ----------------------------
 -- Table structure for qrtz_locks
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_locks`;
 CREATE TABLE `qrtz_locks`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `LOCK_NAME` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `LOCK_NAME`) USING BTREE
+                               `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                               `LOCK_NAME` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                               PRIMARY KEY (`SCHED_NAME`, `LOCK_NAME`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3771,9 +3325,9 @@ INSERT INTO `qrtz_locks` VALUES ('quartzScheduler', 'TRIGGER_ACCESS');
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_paused_trigger_grps`;
 CREATE TABLE `qrtz_paused_trigger_grps`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE
+                                             `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                             `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                             PRIMARY KEY (`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3785,11 +3339,11 @@ CREATE TABLE `qrtz_paused_trigger_grps`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_scheduler_state`;
 CREATE TABLE `qrtz_scheduler_state`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `INSTANCE_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
-  `CHECKIN_INTERVAL` bigint(13) NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE
+                                         `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `INSTANCE_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
+                                         `CHECKIN_INTERVAL` bigint(13) NOT NULL,
+                                         PRIMARY KEY (`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3801,14 +3355,14 @@ CREATE TABLE `qrtz_scheduler_state`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_simple_triggers`;
 CREATE TABLE `qrtz_simple_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `REPEAT_COUNT` bigint(7) NOT NULL,
-  `REPEAT_INTERVAL` bigint(12) NOT NULL,
-  `TIMES_TRIGGERED` bigint(10) NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                         `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                         `REPEAT_COUNT` bigint(7) NOT NULL,
+                                         `REPEAT_INTERVAL` bigint(12) NOT NULL,
+                                         `TIMES_TRIGGERED` bigint(10) NOT NULL,
+                                         PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                         CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3820,22 +3374,22 @@ CREATE TABLE `qrtz_simple_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_simprop_triggers`;
 CREATE TABLE `qrtz_simprop_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `STR_PROP_1` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `STR_PROP_2` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `STR_PROP_3` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `INT_PROP_1` int(11) NULL DEFAULT NULL,
-  `INT_PROP_2` int(11) NULL DEFAULT NULL,
-  `LONG_PROP_1` bigint(20) NULL DEFAULT NULL,
-  `LONG_PROP_2` bigint(20) NULL DEFAULT NULL,
-  `DEC_PROP_1` decimal(13, 4) NULL DEFAULT NULL,
-  `DEC_PROP_2` decimal(13, 4) NULL DEFAULT NULL,
-  `BOOL_PROP_1` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `BOOL_PROP_2` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                          `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                          `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                          `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                          `STR_PROP_1` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          `STR_PROP_2` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          `STR_PROP_3` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          `INT_PROP_1` int(11) NULL DEFAULT NULL,
+                                          `INT_PROP_2` int(11) NULL DEFAULT NULL,
+                                          `LONG_PROP_1` bigint(20) NULL DEFAULT NULL,
+                                          `LONG_PROP_2` bigint(20) NULL DEFAULT NULL,
+                                          `DEC_PROP_1` decimal(13, 4) NULL DEFAULT NULL,
+                                          `DEC_PROP_2` decimal(13, 4) NULL DEFAULT NULL,
+                                          `BOOL_PROP_1` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          `BOOL_PROP_2` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                          PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                          CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3847,58 +3401,57 @@ CREATE TABLE `qrtz_simprop_triggers`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_triggers`;
 CREATE TABLE `qrtz_triggers`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `DESCRIPTION` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `NEXT_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
-  `PREV_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
-  `PRIORITY` int(11) NULL DEFAULT NULL,
-  `TRIGGER_STATE` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `TRIGGER_TYPE` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `START_TIME` bigint(13) NOT NULL,
-  `END_TIME` bigint(13) NULL DEFAULT NULL,
-  `CALENDAR_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `MISFIRE_INSTR` smallint(2) NULL DEFAULT NULL,
-  `JOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST`(`SCHED_NAME`, `TRIGGER_STATE`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_N_STATE`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NEXT_FIRE_TIME`(`SCHED_NAME`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_C`(`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_G`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_J`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_N_G_STATE`(`SCHED_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_STATE`(`SCHED_NAME`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                  `SCHED_NAME` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `TRIGGER_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `TRIGGER_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `JOB_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `JOB_GROUP` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `DESCRIPTION` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                  `NEXT_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
+                                  `PREV_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
+                                  `PRIORITY` int(11) NULL DEFAULT NULL,
+                                  `TRIGGER_STATE` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `TRIGGER_TYPE` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `START_TIME` bigint(13) NOT NULL,
+                                  `END_TIME` bigint(13) NULL DEFAULT NULL,
+                                  `CALENDAR_NAME` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                                  `MISFIRE_INSTR` smallint(2) NULL DEFAULT NULL,
+                                  `JOB_DATA` blob NULL,
+                                  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NFT_ST`(`SCHED_NAME`, `TRIGGER_STATE`, `NEXT_FIRE_TIME`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_N_STATE`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NEXT_FIRE_TIME`(`SCHED_NAME`, `NEXT_FIRE_TIME`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_C`(`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_STATE`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_G`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_J`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_N_G_STATE`(`SCHED_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NFT_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_STATE`(`SCHED_NAME`, `TRIGGER_STATE`) USING BTREE,
+                                  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
+                                  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of qrtz_triggers
 -- ----------------------------
-INSERT INTO `qrtz_triggers` VALUES ('quartzScheduler', '1546857070483939328', 'DEFAULT', '1546857070483939328', 'DEFAULT', NULL, 1711421995000, 1711421990000, 5, 'ACQUIRED', 'CRON', 1708844216000, 0, NULL, 0, '');
 
 -- ----------------------------
 -- Table structure for starter_audit_data_version
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_audit_data_version`;
 CREATE TABLE `starter_audit_data_version`  (
-  `id` bigint(20) NOT NULL,
-  `table_name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据表名称',
-  `data_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据名称',
-  `data_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据主键',
-  `data_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '数据内容',
-  `change_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '数据更新内容',
-  `version` int(10) NOT NULL COMMENT '版本',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                               `id` bigint(20) NOT NULL,
+                                               `table_name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据表名称',
+                                               `data_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据名称',
+                                               `data_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据主键',
+                                               `data_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '数据内容',
+                                               `change_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '数据更新内容',
+                                               `version` int(10) NOT NULL COMMENT '版本',
+                                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                               `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据版本日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3910,63 +3463,81 @@ CREATE TABLE `starter_audit_data_version`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_audit_login_log`;
 CREATE TABLE `starter_audit_login_log`  (
-  `id` bigint(20) NOT NULL,
-  `user_id` bigint(11) NULL DEFAULT NULL COMMENT '用户id',
-  `account` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名称',
-  `login` bit(1) NULL DEFAULT NULL COMMENT '登录成功状态',
-  `client` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端',
-  `login_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录方式',
-  `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录IP地址',
-  `login_location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录地点',
-  `os` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
-  `browser` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器类型',
-  `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示消息',
-  `login_time` datetime(0) NULL DEFAULT NULL COMMENT '访问时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                            `id` bigint(20) NOT NULL,
+                                            `user_id` bigint(11) NULL DEFAULT NULL COMMENT '用户id',
+                                            `account` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名称',
+                                            `login` bit(1) NULL DEFAULT NULL COMMENT '登录成功状态',
+                                            `client` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端',
+                                            `login_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录方式',
+                                            `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录IP地址',
+                                            `login_location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录地点',
+                                            `os` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
+                                            `browser` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器类型',
+                                            `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示消息',
+                                            `login_time` datetime NULL DEFAULT NULL COMMENT '访问时间',
+                                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登陆日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of starter_audit_login_log
 -- ----------------------------
+INSERT INTO `starter_audit_login_log` VALUES (1789981400523988992, 1757299137932677120, 'daxpay', b'1', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'Windows 10 or Windows Server 2016', 'Chrome 122.0.6261.95', NULL, '2024-05-13 19:29:57');
+INSERT INTO `starter_audit_login_log` VALUES (1789981854330904576, 1399985191002447872, 'bootx', b'1', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'Windows 10 or Windows Server 2016', 'Chrome 122.0.6261.95', NULL, '2024-05-13 19:31:45');
+INSERT INTO `starter_audit_login_log` VALUES (1789982145977638912, 1757299137932677120, 'daxpay', b'1', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'Windows 10 or Windows Server 2016', 'Chrome 122.0.6261.95', NULL, '2024-05-13 19:32:55');
+INSERT INTO `starter_audit_login_log` VALUES (1789985967902941184, 1399985191002447872, 'bootx', b'1', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'Windows 10 or Windows Server 2016', 'Chrome 122.0.6261.95', NULL, '2024-05-13 19:48:06');
+INSERT INTO `starter_audit_login_log` VALUES (1789986099583115264, 1399985191002447872, 'bootx', b'1', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'Windows 10 or Windows Server 2016', 'Chrome 122.0.6261.95', NULL, '2024-05-13 19:48:37');
+INSERT INTO `starter_audit_login_log` VALUES (1789986131078144000, 1757299137932677120, 'daxpay', b'1', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'Windows 10 or Windows Server 2016', 'Chrome 122.0.6261.95', NULL, '2024-05-13 19:48:45');
 
 -- ----------------------------
 -- Table structure for starter_audit_operate_log
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_audit_operate_log`;
 CREATE TABLE `starter_audit_operate_log`  (
-  `id` bigint(20) NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作模块',
-  `operate_id` bigint(20) NULL DEFAULT NULL COMMENT '操作人员id',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作人员账号',
-  `business_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
-  `method` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方法',
-  `request_method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方式',
-  `operate_url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求url',
-  `operate_ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作ip',
-  `operate_location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作地点',
-  `operate_param` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
-  `operate_return` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回参数',
-  `success` bit(1) NULL DEFAULT NULL COMMENT '是否成功',
-  `error_msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '错误提示',
-  `operate_time` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL,
+                                              `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作模块',
+                                              `operate_id` bigint(20) NULL DEFAULT NULL COMMENT '操作人员id',
+                                              `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作人员账号',
+                                              `business_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
+                                              `method` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方法',
+                                              `request_method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方式',
+                                              `operate_url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求url',
+                                              `operate_ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作ip',
+                                              `operate_location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作地点',
+                                              `operate_param` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
+                                              `operate_return` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回参数',
+                                              `success` bit(1) NULL DEFAULT NULL COMMENT '是否成功',
+                                              `error_msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '错误提示',
+                                              `operate_time` datetime NULL DEFAULT NULL COMMENT '操作时间',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of starter_audit_operate_log
 -- ----------------------------
+INSERT INTO `starter_audit_operate_log` VALUES (1764663811019894784, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-03-04 22:46:53');
+INSERT INTO `starter_audit_operate_log` VALUES (1764932301155672064, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-03-05 16:33:46');
+INSERT INTO `starter_audit_operate_log` VALUES (1764932527790702592, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-03-05 16:34:39');
+INSERT INTO `starter_audit_operate_log` VALUES (1764933649263722496, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-03-05 16:39:06');
+INSERT INTO `starter_audit_operate_log` VALUES (1768219996095213568, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-03-14 18:17:54');
+INSERT INTO `starter_audit_operate_log` VALUES (1772446742462001152, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-03-26 10:13:29');
+INSERT INTO `starter_audit_operate_log` VALUES (1780216506568273920, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-04-16 20:47:45');
+INSERT INTO `starter_audit_operate_log` VALUES (1780417659281174528, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-04-17 10:07:03');
+INSERT INTO `starter_audit_operate_log` VALUES (1780417857529147392, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-04-17 10:07:50');
+INSERT INTO `starter_audit_operate_log` VALUES (1780418146982260736, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-04-17 10:08:59');
+INSERT INTO `starter_audit_operate_log` VALUES (1780418343170830336, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-04-17 10:09:46');
+INSERT INTO `starter_audit_operate_log` VALUES (1789978119609376768, '同步系统请求资源', 1399985191002447872, 'bootx', 'other', 'cn.bootx.platform.iam.core.permission.service.PermPathService#syncSystem', 'POST', '/perm/path/syncSystem', '未知', '未知', NULL, NULL, b'1', NULL, '2024-05-13 19:16:55');
 
 -- ----------------------------
 -- Table structure for starter_ding_media_md5
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_ding_media_md5`;
 CREATE TABLE `starter_ding_media_md5`  (
-  `id` bigint(20) NOT NULL,
-  `media_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '媒体id',
-  `md5` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'md5值',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` bigint(20) NOT NULL,
+                                           `media_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '媒体id',
+                                           `md5` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'md5值',
+                                           `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                           `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钉钉媒体文件MD5值关联关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -3978,20 +3549,20 @@ CREATE TABLE `starter_ding_media_md5`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_ding_robot_config`;
 CREATE TABLE `starter_ding_robot_config`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
-  `access_token` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉机器人访问token',
-  `enable_signature_check` bit(1) NOT NULL COMMENT '是否开启验签',
-  `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉机器人私钥',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(6) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` bit(1) NOT NULL COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                              `id` bigint(20) NOT NULL,
+                                              `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                              `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
+                                              `access_token` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉机器人访问token',
+                                              `enable_signature_check` bit(1) NOT NULL COMMENT '是否开启验签',
+                                              `sign_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '钉钉机器人私钥',
+                                              `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                              `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                              `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                              `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                              `last_modified_time` datetime(6) NULL DEFAULT NULL COMMENT '最后修改时间',
+                                              `version` int(11) NOT NULL COMMENT '版本',
+                                              `deleted` bit(1) NOT NULL COMMENT '0:未删除。1:已删除',
+                                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '钉钉机器人配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -4003,10 +3574,10 @@ CREATE TABLE `starter_ding_robot_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_file_data`;
 CREATE TABLE `starter_file_data`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `base64` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT 'base64方式存储',
-  `data` longblob NULL COMMENT '数据方式存储',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` bigint(20) NOT NULL COMMENT '主键',
+                                      `base64` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT 'base64方式存储',
+                                      `data` longblob NULL COMMENT '数据方式存储',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '上传文件数据' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -4018,31 +3589,31 @@ CREATE TABLE `starter_file_data`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_file_upload_info`;
 CREATE TABLE `starter_file_upload_info`  (
-  `id` bigint(20) NOT NULL COMMENT '文件id',
-  `url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件访问地址',
-  `size` bigint(20) NULL DEFAULT NULL COMMENT '文件大小，单位字节',
-  `filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件名称',
-  `original_filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '原始文件名',
-  `base_path` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '基础存储路径',
-  `path` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储路径',
-  `ext` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件扩展名',
-  `content_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'MIME类型',
-  `platform` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储平台',
-  `th_url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图访问路径',
-  `th_filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图名称',
-  `th_size` bigint(20) NULL DEFAULT NULL COMMENT '缩略图大小，单位字节',
-  `th_content_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图MIME类型',
-  `object_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件所属对象id',
-  `object_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件所属对象类型，例如用户头像，评价图片',
-  `metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文件元数据',
-  `user_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文件用户元数据',
-  `th_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缩略图元数据',
-  `th_user_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缩略图用户元数据',
-  `attr` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '附加属性',
-  `file_acl` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件ACL',
-  `th_file_acl` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图文件ACL',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                             `id` bigint(20) NOT NULL COMMENT '文件id',
+                                             `url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件访问地址',
+                                             `size` bigint(20) NULL DEFAULT NULL COMMENT '文件大小，单位字节',
+                                             `filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件名称',
+                                             `original_filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '原始文件名',
+                                             `base_path` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '基础存储路径',
+                                             `path` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储路径',
+                                             `ext` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件扩展名',
+                                             `content_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'MIME类型',
+                                             `platform` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储平台',
+                                             `th_url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图访问路径',
+                                             `th_filename` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图名称',
+                                             `th_size` bigint(20) NULL DEFAULT NULL COMMENT '缩略图大小，单位字节',
+                                             `th_content_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图MIME类型',
+                                             `object_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件所属对象id',
+                                             `object_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件所属对象类型，例如用户头像，评价图片',
+                                             `metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文件元数据',
+                                             `user_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文件用户元数据',
+                                             `th_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缩略图元数据',
+                                             `th_user_metadata` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缩略图用户元数据',
+                                             `attr` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '附加属性',
+                                             `file_acl` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件ACL',
+                                             `th_file_acl` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '缩略图文件ACL',
+                                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '文件记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -4054,47 +3625,49 @@ CREATE TABLE `starter_file_upload_info`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_quartz_job`;
 CREATE TABLE `starter_quartz_job`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务名称',
-  `job_class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务类名',
-  `cron` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'cron表达式',
-  `parameter` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '参数',
-  `state` int(4) NULL DEFAULT NULL COMMENT '状态',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                       `id` bigint(20) NOT NULL COMMENT '主键',
+                                       `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务名称',
+                                       `job_class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务类名',
+                                       `cron` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'cron表达式',
+                                       `parameter` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '参数',
+                                       `state` int(4) NULL DEFAULT NULL COMMENT '状态',
+                                       `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                       `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                       `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                       `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                       `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                       `version` int(11) NOT NULL COMMENT '版本',
+                                       `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                       PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of starter_quartz_job
 -- ----------------------------
 INSERT INTO `starter_quartz_job` VALUES (1456579473573867520, '测试任务', 'cn.bootx.platform.starter.quartz.task.TestTask', '0/3 0 * * * ? *', '{\"aaa\":\"5255\"}', 0, '测试任务', 1399985191002447872, '2021-11-05 19:09:43', 1399985191002447872, '2024-02-24 23:57:57', 29, 0);
-INSERT INTO `starter_quartz_job` VALUES (1546857070483939328, '支付单超时检测', 'cn.bootx.platform.daxpay.service.task.PayExpiredTimeTask', '0/5 * * * * ? *', NULL, 1, '检测超时的支付单, 超时后调用同步事件状态修复', 1399985191002447872, '2022-07-12 22:00:39', 1399985191002447872, '2024-02-25 14:56:56', 4, 0);
-INSERT INTO `starter_quartz_job` VALUES (1761419490908958720, '客户系统通知重发任务', 'cn.bootx.platform.daxpay.service.task.ClientNoticeSendTask', '0/1 * * * * ? *', '', 1, '每秒调用一下当前需要进行通知的任务', 1399985191002447872, '2024-02-24 23:55:07', 1399985191002447872, '2024-03-05 23:05:09', 2, 0);
-INSERT INTO `starter_quartz_job` VALUES (1764664552203743232, '支付宝定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '0 0 11 * * ? *', '{\"channel\":\"ali_pay\",\"n\":1}', 1, '', 1399985191002447872, '2024-03-04 22:49:50', 1399985191002447872, '2024-03-10 11:19:17', 3, 0);
-INSERT INTO `starter_quartz_job` VALUES (1764667388106887168, '微信支付定时对账', 'cn.bootx.platform.daxpay.service.task.ReconcileTask', '0 0 11 * * ? *', '{\"channel\":\"wechat_pay\",\"n\":1}', 1, '', 1399985191002447872, '2024-03-04 23:01:06', 1399985191002447872, '2024-03-10 11:19:14', 3, 0);
-INSERT INTO `starter_quartz_job` VALUES (1767553847839141888, '退款订单定时同步', 'cn.bootx.platform.daxpay.service.task.RefundSyncTask', '0 * * * * ? *', '', 1, '', 1399985191002447872, '2024-03-12 22:10:52', 1399985191002447872, '2024-03-12 22:10:59', 1, 0);
+INSERT INTO `starter_quartz_job` VALUES (1546857070483939328, '支付单超时检测', 'cn.daxpay.single.service.task.PayExpiredTimeTask', '0/5 * * * * ? *', NULL, 0, '检测超时的支付单, 超时后调用同步事件状态修复', 1399985191002447872, '2022-07-12 22:00:39', 1399985191002447872, '2024-05-09 17:13:10', 7, 0);
+INSERT INTO `starter_quartz_job` VALUES (1761419490908958720, '客户系统通知重发任务', 'cn.daxpay.single.service.task.ClientNoticeSendTask', '0/1 * * * * ? *', '', 0, '每秒调用一下当前需要进行通知的任务', 1399985191002447872, '2024-02-24 23:55:07', 1399985191002447872, '2024-05-09 17:13:10', 5, 0);
+INSERT INTO `starter_quartz_job` VALUES (1764664552203743232, '支付宝定时对账', 'cn.daxpay.single.service.task.ReconcileTask', '0 0 11 * * ? *', '{\"channel\":\"ali_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 22:49:50', 1399985191002447872, '2024-05-09 17:13:10', 6, 0);
+INSERT INTO `starter_quartz_job` VALUES (1764667388106887168, '微信支付定时对账', 'cn.daxpay.single.service.task.ReconcileTask', '0 0 11 * * ? *', '{\"channel\":\"wechat_pay\",\"n\":1}', 0, '', 1399985191002447872, '2024-03-04 23:01:06', 1399985191002447872, '2024-05-09 17:13:10', 6, 0);
+INSERT INTO `starter_quartz_job` VALUES (1767553847839141888, '退款订单定时同步', 'cn.daxpay.single.service.task.RefundSyncTask', '0 * * * * ? *', '', 0, '', 1399985191002447872, '2024-03-12 22:10:52', 1399985191002447872, '2024-05-09 17:13:10', 4, 0);
+INSERT INTO `starter_quartz_job` VALUES (1787464504578744320, '自动分账定时任务', 'cn.daxpay.single.service.task.AllocationAutoStartTask', '0/10 * * * * ? *', '', 0, '', 1399985191002447872, '2024-05-06 20:48:42', 1399985191002447872, '2024-05-09 17:13:10', 2, 0);
+INSERT INTO `starter_quartz_job` VALUES (1787470450809954304, '自动分账信息同步和完结接口', 'cn.daxpay.single.service.task.AllocationSyncTask', '0/10 * * * * ? *', '', 0, '', 1399985191002447872, '2024-05-06 21:12:20', 1399985191002447872, '2024-05-09 17:13:10', 2, 0);
 
 -- ----------------------------
 -- Table structure for starter_quartz_job_log
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_quartz_job_log`;
 CREATE TABLE `starter_quartz_job_log`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `handler_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理器名称',
-  `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理器全限定名',
-  `success` bit(1) NOT NULL COMMENT '是否执行成功',
-  `error_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
-  `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
-  `end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束时间',
-  `duration` bigint(255) NULL DEFAULT NULL COMMENT '执行时长',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` bigint(20) NOT NULL COMMENT '主键',
+                                           `handler_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理器名称',
+                                           `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理器全限定名',
+                                           `success` bit(1) NOT NULL COMMENT '是否执行成功',
+                                           `error_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+                                           `start_time` datetime NULL DEFAULT NULL COMMENT '开始时间',
+                                           `end_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
+                                           `duration` bigint(255) NULL DEFAULT NULL COMMENT '执行时长',
+                                           `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '任务执行日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -4106,18 +3679,18 @@ CREATE TABLE `starter_quartz_job_log`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_wecom_robot_config`;
 CREATE TABLE `starter_wecom_robot_config`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
-  `webhook_key` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'webhook地址的key值',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(6) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `deleted` bit(1) NOT NULL COMMENT '0:未删除。1:已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                               `id` bigint(20) NOT NULL,
+                                               `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
+                                               `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
+                                               `webhook_key` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'webhook地址的key值',
+                                               `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                               `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                               `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                               `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                               `last_modified_time` datetime(6) NULL DEFAULT NULL COMMENT '最后修改时间',
+                                               `version` int(11) NOT NULL COMMENT '版本',
+                                               `deleted` bit(1) NOT NULL COMMENT '0:未删除。1:已删除',
+                                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '企业微信机器人配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -4129,19 +3702,19 @@ CREATE TABLE `starter_wecom_robot_config`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_wx_fans`;
 CREATE TABLE `starter_wx_fans`  (
-  `id` bigint(20) NOT NULL,
-  `openid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联OpenId',
-  `subscribe_status` bit(1) NULL DEFAULT NULL COMMENT '订阅状态',
-  `subscribe_time` datetime(0) NULL DEFAULT NULL COMMENT '订阅时间',
-  `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '昵称',
-  `sex` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '性别',
-  `language` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '语言',
-  `country` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '国家',
-  `province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '省份',
-  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市',
-  `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像地址',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL,
+                                    `openid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联OpenId',
+                                    `subscribe_status` bit(1) NULL DEFAULT NULL COMMENT '订阅状态',
+                                    `subscribe_time` datetime NULL DEFAULT NULL COMMENT '订阅时间',
+                                    `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '昵称',
+                                    `sex` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '性别',
+                                    `language` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '语言',
+                                    `country` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '国家',
+                                    `province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '省份',
+                                    `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市',
+                                    `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像地址',
+                                    `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信公众号粉丝' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -4153,18 +3726,18 @@ CREATE TABLE `starter_wx_fans`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_wx_menu`;
 CREATE TABLE `starter_wx_menu`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名称',
-  `menu_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '菜单信息',
-  `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
-  `publish` bit(1) NOT NULL COMMENT '是否发布',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
-  `version` int(11) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` bigint(20) NOT NULL COMMENT '主键',
+                                    `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名称',
+                                    `menu_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '菜单信息',
+                                    `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+                                    `publish` bit(1) NOT NULL COMMENT '是否发布',
+                                    `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                    `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                    `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                    `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:未删除。1:已删除',
+                                    `version` int(11) NOT NULL COMMENT '版本',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '微信自定义菜单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -4176,23 +3749,23 @@ CREATE TABLE `starter_wx_menu`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `starter_wx_template`;
 CREATE TABLE `starter_wx_template`  (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
-  `enable` bit(1) NOT NULL COMMENT '是否启用',
-  `template_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模板ID',
-  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板标题',
-  `primary_industry` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板所属行业的一级行业',
-  `deputy_industry` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板所属行业的二级行业',
-  `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板内容',
-  `example` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '示例',
-  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
-  `last_modified_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `version` int(11) NOT NULL COMMENT '版本',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `inx_`(`template_id`) USING BTREE COMMENT '模板id'
+                                        `id` bigint(20) NOT NULL,
+                                        `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                        `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
+                                        `enable` bit(1) NOT NULL COMMENT '是否启用',
+                                        `template_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模板ID',
+                                        `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板标题',
+                                        `primary_industry` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板所属行业的一级行业',
+                                        `deputy_industry` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板所属行业的二级行业',
+                                        `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板内容',
+                                        `example` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '示例',
+                                        `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                        `last_modifier` bigint(20) NULL DEFAULT NULL COMMENT '最后修改人',
+                                        `last_modified_time` datetime NULL DEFAULT NULL COMMENT '最后修改时间',
+                                        `version` int(11) NOT NULL COMMENT '版本',
+                                        PRIMARY KEY (`id`) USING BTREE,
+                                        UNIQUE INDEX `inx_`(`template_id`) USING BTREE COMMENT '模板id'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信消息模板' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
