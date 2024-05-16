@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.payment.notice.result;
 
 import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.result.PaymentCommonResult;
 import cn.daxpay.single.serializer.LocalDateTimeToTimestampSerializer;
@@ -23,32 +24,53 @@ import java.time.LocalDateTime;
 @Schema(title = "支付异步通知类")
 public class PayNoticeResult extends PaymentCommonResult {
 
-    /** 订单号 */
-    @Schema(description = "订单号")
-    private String orderNo;
-
     /** 商户订单号 */
     @Schema(description = "商户订单号")
     private String bizOrderNo;
+
+    @Schema(description = "支付订单号")
+    private String orderNo;
+
+    /** 通道系统交易号 */
+    @Schema(description = "通道支付订单号")
+    private String outOrderNo;
 
     /** 标题 */
     @Schema(description = "标题")
     private String title;
 
+    /** 描述 */
+    @Schema(description = "描述")
+    private String description;
+
+    /** 是否支持分账 */
+    @Schema(description = "是否需要分账")
+    private Boolean allocation;
+
+    /** 是否开启自动分账, 不传输为不开启 */
+    @Schema(description = "是否开启自动分账")
+    private Boolean autoAllocation;
+
     /**
      * 支付通道
      * @see PayChannelEnum
      */
-    @Schema(description = "支付通道")
+    @Schema(description = "异步支付通道")
     private String channel;
 
-    /** 支付方式 */
+    /**
+     * 支付方式
+     */
     @Schema(description = "支付方式")
     private String method;
 
-    /** 支付金额 */
-    @Schema(description = "支付金额")
+    /** 金额 */
+    @Schema(description = "金额")
     private Integer amount;
+
+    /** 可退款余额 */
+    @Schema(description = "可退款余额")
+    private Integer refundableBalance;
 
     /**
      * 支付状态
@@ -57,23 +79,38 @@ public class PayNoticeResult extends PaymentCommonResult {
     @Schema(description = "支付状态")
     private String status;
 
-    /** 支付成功时间 */
-    @Schema(description = "支付成功时间")
+    /**
+     * 分账状态
+     * @see PayOrderAllocStatusEnum
+     */
+    @Schema(description = "分账状态")
+    private String allocationStatus;
+
+    /** 支付时间 */
+    @Schema(description = "支付时间")
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime payTime;
 
-    /** 支付关闭时间 */
-    @Schema(description = "支付关闭时间")
+    /** 过期时间 */
+    @Schema(description = "过期时间")
+    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
+    private LocalDateTime expiredTime;
+
+    /** 关闭时间 */
+    @Schema(description = "关闭时间")
     @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
     private LocalDateTime closeTime;
-
-    /** 支付创建时间 */
-    @Schema(description = "支付创建时间")
-    @JsonSerialize(using = LocalDateTimeToTimestampSerializer.class)
-    private LocalDateTime createTime;
 
     /** 商户扩展参数,回调时会原样返回 */
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误原因 */
+    @Schema(description = "错误原因")
+    private String errorMsg;
 
 }

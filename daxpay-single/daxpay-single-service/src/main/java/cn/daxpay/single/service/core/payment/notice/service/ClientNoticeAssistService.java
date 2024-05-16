@@ -2,8 +2,10 @@ package cn.daxpay.single.service.core.payment.notice.service;
 
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.daxpay.single.service.code.ClientNoticeTypeEnum;
+import cn.daxpay.single.service.core.order.pay.convert.PayOrderConvert;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
+import cn.daxpay.single.service.core.order.refund.convert.RefundOrderConvert;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.daxpay.single.service.core.payment.common.service.PaymentAssistService;
@@ -35,19 +37,8 @@ public class ClientNoticeAssistService {
     public ClientNoticeTask buildPayTask(PayOrder order, PayOrderExtra orderExtra){
         // 获取系统签名
         paymentAssistService.initPlatform();
-        PayNoticeResult payNoticeResult = new PayNoticeResult()
-                .setOrderNo(order.getOrderNo())
-                .setBizOrderNo(order.getBizOrderNo())
-                .setTitle(order.getTitle())
-                .setChannel(order.getChannel())
-                .setMethod(order.getMethod())
-                .setAmount(order.getAmount())
-                .setPayTime(order.getPayTime())
-                .setCloseTime(order.getCloseTime())
-                .setCreateTime(order.getCreateTime())
-                .setStatus(order.getStatus())
-                .setAttach(orderExtra.getAttach());
-
+        PayNoticeResult payNoticeResult = PayOrderConvert.CONVERT.convertNotice(order);
+        payNoticeResult.setAttach(orderExtra.getAttach());
         paymentSignService.sign(payNoticeResult);
         return new ClientNoticeTask()
                 .setUrl(orderExtra.getNotifyUrl())
@@ -67,22 +58,15 @@ public class ClientNoticeAssistService {
         // 获取系统签名
         paymentAssistService.initPlatform();
         // 创建退款通知内容
-        RefundNoticeResult payNoticeResult = new RefundNoticeResult()
-                .setRefundNo(order.getRefundNo())
-                .setBizRefundNo(order.getBizRefundNo())
-                .setChannel(order.getChannel())
-                .setAmount(order.getAmount())
-                .setFinishTime(order.getFinishTime())
-                .setCreateTime(order.getCreateTime())
-                .setStatus(order.getStatus())
-                .setAttach(orderExtra.getAttach());
+        RefundNoticeResult refundNoticeResult = RefundOrderConvert.CONVERT.convertNotice(order);
+        refundNoticeResult.setAttach(orderExtra.getAttach());
 
         // 签名
-        paymentSignService.sign(payNoticeResult);
+        paymentSignService.sign(refundNoticeResult);
         return new ClientNoticeTask()
                 .setUrl(orderExtra.getNotifyUrl())
                 // 时间序列化进行了重写
-                .setContent(JacksonUtil.toJson(payNoticeResult))
+                .setContent(JacksonUtil.toJson(refundNoticeResult))
                 .setNoticeType(ClientNoticeTypeEnum.REFUND.getType())
                 .setSendCount(0)
                 .setTradeId(order.getId())

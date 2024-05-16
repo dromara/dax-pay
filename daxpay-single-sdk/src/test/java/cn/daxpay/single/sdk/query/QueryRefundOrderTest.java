@@ -28,10 +28,11 @@ public class QueryRefundOrderTest {
     }
 
     @Test
-    public void testPay() {
+    public void testRefund() {
         QueryRefundParam param = new QueryRefundParam();
 
-        param.setBizRefundNo("1755263825769361408");
+        param.setRefundNo("DEVR24051020531763000014");
+        param.setClientIp("127.0.0.1");
 
         DaxPayResult<RefundOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);

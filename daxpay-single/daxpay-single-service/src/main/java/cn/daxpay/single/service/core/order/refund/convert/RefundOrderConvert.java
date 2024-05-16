@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.order.refund.convert;
 import cn.daxpay.single.result.order.RefundOrderResult;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
+import cn.daxpay.single.service.core.payment.notice.result.RefundNoticeResult;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderDto;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderExtraDto;
 import org.mapstruct.Mapper;
@@ -23,5 +24,5 @@ public interface RefundOrderConvert {
 
     RefundOrderResult convertResult(RefundOrder in);
 
-
+    RefundNoticeResult convertNotice(RefundOrder order);
 }

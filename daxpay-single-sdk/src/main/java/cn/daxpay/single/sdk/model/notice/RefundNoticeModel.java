@@ -2,6 +2,7 @@ package cn.daxpay.single.sdk.model.notice;
 
 import cn.daxpay.single.sdk.code.PayChannelEnum;
 import cn.daxpay.single.sdk.code.RefundStatusEnum;
+import cn.daxpay.single.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class RefundNoticeModel {
+public class RefundNoticeModel extends DaxPayResponseModel {
 
     /** 退款号 */
     private String refundNo;
@@ -46,6 +47,9 @@ public class RefundNoticeModel {
     /** 商户扩展参数,回调时会原样返回 */
     private String attach;
 
-    /** 签名 */
-    private String sign;
+    /** 错误码 */
+    private String errorCode;
+
+    /** 错误原因 */
+    private String errorMsg;
 }

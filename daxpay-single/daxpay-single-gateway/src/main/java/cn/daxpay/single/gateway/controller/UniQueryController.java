@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @IgnoreAuth
 @Tag(name = "统一查询接口")
 @RestController
-@RequestMapping("/uni/query")
+@RequestMapping("/unipay/query")
 @RequiredArgsConstructor
 public class UniQueryController {
 

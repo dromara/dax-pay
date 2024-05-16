@@ -31,7 +31,8 @@ public class QueryPayOrderTest {
     public void testPay() {
         QueryPayParam param = new QueryPayParam();
 
-        param.setBizOrderNoeNo("2");
+        param.setBizOrderNoeNo("P17141882417921");
+        param.setClientIp("127.0.0.1");
 
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);

@@ -1,6 +1,7 @@
 package cn.daxpay.single.sdk.model.pay;
 
 import cn.daxpay.single.sdk.code.PayChannelEnum;
+import cn.daxpay.single.sdk.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.sdk.code.PayStatusEnum;
 import cn.daxpay.single.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
@@ -17,17 +18,29 @@ import lombok.ToString;
 @ToString
 public class PayOrderModel extends DaxPayResponseModel {
 
-    /** 支付订单号 */
+
+    /** 订单号 */
     private String orderNo;
 
-    /** 业务系统订单号 */
+    /** 商户订单号 */
     private String bizOrderNo;
+
+    /** 通道系统交易号 */
+    private String outOrderNo;
 
     /** 标题 */
     private String title;
 
     /** 描述 */
     private String description;
+
+
+    /** 是否支持分账 */
+    private Boolean allocation;
+
+    /** 是否开启自动分账, 不传输为不开启 */
+    private Boolean autoAllocation;
+
 
     /**
      * 支付通道
@@ -52,6 +65,13 @@ public class PayOrderModel extends DaxPayResponseModel {
      */
     private String status;
 
+    /**
+     * 分账状态
+     * @see PayOrderAllocStatusEnum
+     */
+    private String allocationStatus;
+
+
     /** 支付时间 */
     private Long payTime;
 
@@ -60,4 +80,10 @@ public class PayOrderModel extends DaxPayResponseModel {
 
     /** 关闭时间 */
     private Long closeTime;
+
+    /** 错误码 */
+    private String errorCode;
+
+    /** 错误信息 */
+    private String errorMsg;
 }

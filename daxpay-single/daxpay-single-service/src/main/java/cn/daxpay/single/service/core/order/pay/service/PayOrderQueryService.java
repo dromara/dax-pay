@@ -1,19 +1,17 @@
 package cn.daxpay.single.service.core.order.pay.service;
 
-import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.pay.QueryPayParam;
 import cn.daxpay.single.result.order.PayOrderResult;
+import cn.daxpay.single.service.core.order.pay.convert.PayOrderConvert;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.dto.order.pay.PayOrderDto;
 import cn.daxpay.single.service.param.order.PayOrderQuery;
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -83,17 +81,15 @@ public class PayOrderQueryService {
     public PayOrderResult queryPayOrder(QueryPayParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getBizOrderNoeNo()) && Objects.isNull(param.getOrderNo())){
-            throw new ValidationFailedException("业务号或支付单ID不能都为空");
+            throw new PayFailureException("业务号或支付单ID不能都为空");
         }
         // 查询支付单
         PayOrder payOrder = this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo())
-                .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
+                .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
         // 查询扩展数据
         payOrderExtraManager.findById(payOrder.getId())
                 .orElseThrow(() -> new PayFailureException("支付订单不完整"));
-        PayOrderResult payOrderResult = new PayOrderResult();
-        BeanUtil.copyProperties(payOrder, payOrderResult);
-        return payOrderResult;
+        return PayOrderConvert.CONVERT.convertResult(payOrder);
     }
 
     /**
