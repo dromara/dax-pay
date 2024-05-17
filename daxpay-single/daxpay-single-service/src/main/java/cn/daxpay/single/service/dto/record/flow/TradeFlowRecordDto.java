@@ -1,27 +1,21 @@
-package cn.daxpay.single.service.core.record.flow.entity;
+package cn.daxpay.single.service.dto.record.flow;
 
-import cn.bootx.platform.common.core.function.EntityBaseFunction;
-import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.code.TradeFlowRecordTypeEnum;
-import cn.daxpay.single.service.core.record.flow.convert.TradeFlowRecordConvert;
-import cn.daxpay.single.service.dto.record.flow.TradeFlowRecordDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * 资金流水记录
  * @author xxm
- * @since 2024/4/21
+ * @since 2024/5/17
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "资金流水记录")
-public class TradeFlowRecord extends MpCreateEntity implements EntityBaseFunction<TradeFlowRecordDto> {
+public class TradeFlowRecordDto {
 
     /** 订单标题 */
     @DbColumn(comment = "标题")
@@ -56,9 +50,4 @@ public class TradeFlowRecord extends MpCreateEntity implements EntityBaseFunctio
     /** 三方系统交易号 */
     @DbColumn(comment = "三方系统交易号")
     private String outTradeNo;
-
-    @Override
-    public TradeFlowRecordDto toDto() {
-        return TradeFlowRecordConvert.CONVERT.convert(this);
-    }
 }

@@ -22,7 +22,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/gateway/notice")
 @RequiredArgsConstructor
-public class PayGatewayNoticeController {
+public class PayNoticeReceiverController {
 
     @Operation(summary = "支付宝消息通知")
     @PostMapping("/alipay")
@@ -35,4 +35,5 @@ public class PayGatewayNoticeController {
     public Map<String, Objects> wechatPayNotice() {
         return new HashMap<>();
     }
+
 }

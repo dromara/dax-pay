@@ -11,6 +11,7 @@ import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.payment.pay.factory.PayStrategyFactory;
+import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.func.AbsPayStrategy;
 import cn.daxpay.single.util.PayUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -44,6 +45,8 @@ public class PayService {
     private final ClientNoticeService clientNoticeService;
 
     private final PayOrderExtraManager payOrderExtraManager;
+
+    private final TradeFlowRecordService tradeFlowRecordService;
 
     private final LockTemplate lockTemplate;
 
@@ -129,8 +132,9 @@ public class PayService {
         payOrder.setErrorCode(null);
         payOrder.setErrorMsg(null);
         payOrderService.updateById(payOrder);
-        // 如果支付完成 发送通知
+        // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
+            tradeFlowRecordService.savePay(payOrder);
             clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra());
         }
         return payAssistService.buildResult(payOrder);
@@ -181,8 +185,9 @@ public class PayService {
         payOrder.setErrorMsg(null);
         payOrder.setErrorCode(null);
         payOrderService.updateById(payOrder);
-        // 如果支付完成 发送通知
+        // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
+            tradeFlowRecordService.savePay(payOrder);
             clientNoticeService.registerPayNotice(payOrder, payOrderExtra);
         }
         return payAssistService.buildResult(payOrder);

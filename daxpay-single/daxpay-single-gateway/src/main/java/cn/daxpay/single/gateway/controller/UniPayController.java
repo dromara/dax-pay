@@ -2,21 +2,17 @@ package cn.daxpay.single.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.code.PaymentApiCode;
-import cn.daxpay.single.param.payment.allocation.AllocationFinishParam;
-import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
 import cn.daxpay.single.param.payment.pay.PayCloseParam;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.param.payment.refund.RefundParam;
 import cn.daxpay.single.param.payment.refund.RefundSyncParam;
 import cn.daxpay.single.result.DaxResult;
-import cn.daxpay.single.result.allocation.AllocationResult;
 import cn.daxpay.single.result.pay.PayCloseResult;
 import cn.daxpay.single.result.pay.PayResult;
 import cn.daxpay.single.result.pay.RefundResult;
 import cn.daxpay.single.result.pay.SyncResult;
 import cn.daxpay.single.service.annotation.PaymentApi;
-import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
 import cn.daxpay.single.service.core.payment.pay.service.PayService;
 import cn.daxpay.single.service.core.payment.refund.service.RefundService;
@@ -47,7 +43,6 @@ public class UniPayController {
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
     private final RefundSyncService refundSyncService;
-    private final AllocationService allocationService;
 
 
     @PaymentApi(PaymentApiCode.PAY)
@@ -84,22 +79,5 @@ public class UniPayController {
     public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){
         return DaxRes.ok(refundSyncService.sync(param));
     }
-
-    @PaymentApi(PaymentApiCode.ALLOCATION)
-    @Operation(summary = "开启分账接口")
-    @PostMapping("/allocation")
-    public DaxResult<AllocationResult> allocation(@RequestBody AllocationStartParam param){
-        return DaxRes.ok(allocationService.allocation(param));
-    }
-
-    @PaymentApi(PaymentApiCode.ALLOCATION_FINISH)
-    @Operation(summary = "分账完结接口")
-    @PostMapping("/allocationFinish")
-    public DaxResult<Void> allocationFinish(@RequestBody AllocationFinishParam param){
-        allocationService.finish(param);
-        return DaxRes.ok();
-    }
-
-
 
 }

@@ -74,9 +74,9 @@ bootx:
       description: 开源支付平台-单商户版
       # 多模块扫码
       base-packages:
-        "[支付网关API]": cn.bootx.platform.daxpay.gateway
-        "[支付管理接口]": cn.bootx.platform.daxpay.admin
-        "[支付演示模块]": cn.bootx.platform.daxpay.demo
+        "[支付网关API]": cn.daxpay.single.gateway
+        "[支付管理接口]": cn.daxpay.single.admin
+        "[支付演示模块]": cn.daxpay.single.demo
         "[BootxPlatform接口]":
           - cn.bootx.platform.common
           - cn.bootx.platform.starter

@@ -9,21 +9,25 @@ import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.springframework.stereotype.Service;
+import org.quartz.PersistJobDataAfterExecution;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
 /**
- * 支付超时处理
+ * 支付超时处理(手动注册)
  * @author xxm
  * @since 2024/1/2
  */
 @Slf4j
-@Service
+@Component
+@DisallowConcurrentExecution
+@PersistJobDataAfterExecution
 @RequiredArgsConstructor
 public class PayExpiredTimeTask implements Job {
     private final PayExpiredTimeRepository repository;

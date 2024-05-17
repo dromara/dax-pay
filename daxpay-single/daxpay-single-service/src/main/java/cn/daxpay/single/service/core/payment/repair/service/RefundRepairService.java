@@ -13,6 +13,7 @@ import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.payment.repair.result.RefundRepairResult;
+import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.core.record.repair.entity.PayRepairRecord;
 import cn.daxpay.single.service.core.record.repair.service.PayRepairRecordService;
 import cn.daxpay.single.util.OrderNoGenerateUtil;
@@ -49,6 +50,7 @@ public class RefundRepairService {
     private final PayRepairRecordService recordService;
 
     private final LockTemplate lockTemplate;
+    private final TradeFlowRecordService tradeFlowRecordService;
 
     /**
      * 修复退款单
@@ -113,10 +115,12 @@ public class RefundRepairService {
                 .setFinishTime(repairInfo.getFinishTime());
         payOrder.setStatus(afterPayRefundStatus.getCode());
 
-
         // 更新订单和退款相关订单
         payOrderService.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
+
+        // 记录流水
+        tradeFlowRecordService.saveRefund(refundOrder);
 
         // 发送通知
         List<String> list = Arrays.asList(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());

@@ -6,28 +6,37 @@ package cn.daxpay.single.code;
  * @since 2024/2/25
  */
 public interface PaymentApiCode {
-
+    /** 支付 */
     String PAY = "pay";
-
+    /** 退款 */
     String REFUND = "refund";
-
+    /** 关闭订单 */
     String CLOSE = "close";
-
+    /** 分账 */
     String ALLOCATION = "allocation";
-
+    /** 分账完结 */
     String ALLOCATION_FINISH = "allocationFinish";
-
+    /** 支付同步 */
     String SYNC_PAY = "syncPay";
-
+    /** 退款同步 */
     String SYNC_REFUND = "syncRefund";
-
+    /** 查询支付订单 */
     String QUERY_PAY_ORDER = "queryPayOrder";
-
+    /** 查询退款订单 */
     String QUERY_REFUND_ORDER = "queryRefundOrder";
-
+    /** 查询分账订单 */
+    String QUERY_ALLOCATION_ORDER = "queryAllocationOrder";
+    /** 获取微信授权链接 */
     String GET_WX_AUTH_URL = "getWxAuthUrl";
-
+    /** 获取微信AccessToken */
     String GET_WX_ACCESS_TOKEN = "getWxAccessToken";
+    /** 添加分账方接口 */
+    String ALLOCATION_RECEIVER_ADD = "allocationReceiverAdd";
+    /** 删除分账方 */
+    String ALLOCATION_RECEIVER_REMOVE = "allocationReceiverRemove";
+    /** 查询分账方 */
+    String ALLOCATION_RECEIVER_QUERY = "allocationReceiverQuery";
+
 
 
 

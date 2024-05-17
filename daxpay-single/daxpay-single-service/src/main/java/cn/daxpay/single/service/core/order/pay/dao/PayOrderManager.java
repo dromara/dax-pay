@@ -99,4 +99,13 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
         return baseMapper.getTalAmount(generator);
     }
 
+    /**
+     * 查询当前超时的未支付订单
+     */
+    public List<PayOrder> queryExpiredOrder() {
+        return lambdaQuery()
+                .eq(PayOrder::getStatus, PayStatusEnum.REFUNDING.getCode())
+                .lt(PayOrder::getExpiredTime, LocalDateTime.now())
+                .list();
+    }
 }
