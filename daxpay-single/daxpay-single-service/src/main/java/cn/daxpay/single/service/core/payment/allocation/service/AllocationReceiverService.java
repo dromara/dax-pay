@@ -66,6 +66,7 @@ public class AllocationReceiverService {
         );
     }
 
+
     /**
      * 根据通道获取分账接收方类型
      */
@@ -172,5 +173,27 @@ public class AllocationReceiverService {
         receiver.setSync(false);
         manager.updateById(receiver);
     }
+
+    /**
+     * 接口添加
+     */
+    public void add(){
+
+    }
+
+    /**
+     * 接口删除
+     */
+    public void remove(){
+
+    }
+
+    /**
+     * 接口查询
+     */
+    public void find(){
+
+    }
+
 
 }

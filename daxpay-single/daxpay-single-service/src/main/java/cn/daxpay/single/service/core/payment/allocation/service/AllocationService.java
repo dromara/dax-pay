@@ -8,7 +8,6 @@ import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.allocation.AllocationFinishParam;
-import cn.daxpay.single.param.payment.allocation.AllocationResetParam;
 import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
 import cn.daxpay.single.param.payment.allocation.AllocationSyncParam;
 import cn.daxpay.single.result.allocation.AllocationResult;
@@ -57,7 +56,9 @@ public class AllocationService {
     private final AllocationOrderService allocationOrderService;
 
     private final AllocationOrderDetailManager allocationOrderDetailManager;
+
     private final PayOrderQueryService payOrderQueryService;
+
     private final LockTemplate lockTemplate;
 
 
@@ -65,14 +66,24 @@ public class AllocationService {
      * 开启分账, 使用分账组进行分账
      */
     public AllocationResult allocation(AllocationStartParam param) {
-        PayOrder payOrder = this.getAndCheckPayOrder(param);
-        return this.allocation(payOrder, param);
+        // 判断是否已经有分账订单
+        AllocationOrder allocationOrder = allocationOrderManager.findByBizAllocationNo(param.getBizAllocationNo())
+                .orElse(null);
+        if (Objects.nonNull(allocationOrder)){
+            // 重复分账
+            return this.retryAllocation(allocationOrder);
+
+        } else {
+            // 开启分账
+            PayOrder payOrder = this.getAndCheckPayOrder(param);
+            return this.allocation(param, payOrder);
+        }
     }
 
     /**
-     * 开启分账, 未传输默认分账组, 则使用默认该通道默认分账组
+     * 开启分账, 未传输分账组号, 则使用默认该通道默认分账组
      */
-    public AllocationResult allocation(PayOrder payOrder, AllocationStartParam param) {
+    public AllocationResult allocation(AllocationStartParam param,PayOrder payOrder) {
         LockInfo lock = lockTemplate.lock("payment:allocation:" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("分账发起处理中，请勿重复操作");
@@ -115,8 +126,7 @@ public class AllocationService {
                     .getOutAllocationNo();
             order.setOutAllocationNo(gatewayNo);
             allocationOrderManager.updateById(order);
-
-            return new AllocationResult().setOrderId(order.getId())
+            return new AllocationResult()
                     .setAllocationNo(order.getAllocationNo())
                     .setStatus(order.getStatus());
         } finally {
@@ -127,17 +137,8 @@ public class AllocationService {
     /**
      * 重新分账
      */
-    public void retryAllocation(AllocationResetParam param){
-        AllocationOrder allocationOrder;
-        if (Objects.nonNull(param.getOrderId())){
-            allocationOrder = allocationOrderManager.findById(param.getOrderId())
-                    .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
-        } else {
-            allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
-        }
-
-        LockInfo lock = lockTemplate.lock("payment:allocation:" + allocationOrder.getOrderId(),10000,200);
+    private AllocationResult retryAllocation(AllocationOrder order){
+        LockInfo lock = lockTemplate.lock("payment:allocation:" + order.getOrderId(),10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("分账发起处理中，请勿重复操作");
         }
@@ -146,31 +147,34 @@ public class AllocationService {
             List<String> list = Arrays.asList(AllocOrderStatusEnum.ALLOCATION_END.getCode(),
                     AllocOrderStatusEnum.ALLOCATION_FAILED.getCode(),
                     AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode());
-            if (!list.contains(allocationOrder.getStatus())){
+            if (!list.contains(order.getStatus())){
                 throw new PayFailureException("分账单状态错误");
             }
 
-            List<AllocationOrderDetail> details = allocationOrderDetailManager.findAllByOrderId(allocationOrder.getId());
+            List<AllocationOrderDetail> details = allocationOrderDetailManager.findAllByOrderId(order.getId());
 
             // 创建分账策略并初始化
-            AbsAllocationStrategy allocationStrategy = AllocationFactory.create(allocationOrder.getChannel());
-            allocationStrategy.initParam(allocationOrder, details);
+            AbsAllocationStrategy allocationStrategy = AllocationFactory.create(order.getChannel());
+            allocationStrategy.initParam(order, details);
 
             // 分账预处理
             allocationStrategy.doBeforeHandler();
             try {
                 // 重复分账处理
                 allocationStrategy.allocation();
-                allocationOrder.setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
+                order.setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
                         .setErrorMsg(null);
 
             } catch (Exception e) {
                 log.error("重新分账出现错误:", e);
                 // 失败
-                allocationOrder.setStatus(AllocOrderStatusEnum.ALLOCATION_FAILED.getCode())
+                order.setStatus(AllocOrderStatusEnum.ALLOCATION_FAILED.getCode())
                         .setErrorMsg(e.getMessage());
             }
-            allocationOrderManager.updateById(allocationOrder);
+            allocationOrderManager.updateById(order);
+            return new AllocationResult()
+                    .setAllocationNo(order.getAllocationNo())
+                    .setStatus(order.getStatus());
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -181,11 +185,11 @@ public class AllocationService {
      */
     public void finish(AllocationFinishParam param) {
         AllocationOrder allocationOrder;
-        if (Objects.nonNull(param.getOrderId())){
-            allocationOrder = allocationOrderManager.findById(param.getOrderId())
+        if (Objects.nonNull(param.getAllocationNo())){
+            allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
         } else {
-            allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
+            allocationOrder = allocationOrderManager.findByBizAllocationNo(param.getBizAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
         }
         this.finish(allocationOrder);

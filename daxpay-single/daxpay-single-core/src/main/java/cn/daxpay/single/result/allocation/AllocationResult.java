@@ -17,10 +17,7 @@ import lombok.experimental.Accessors;
 @Schema(title = "分账请求结果")
 public class AllocationResult extends PaymentCommonResult {
 
-    @Schema(description = "分账订单ID")
-    private Long orderId;
-
-    @Schema(description = "分账订单号, 如果请求时未传, 则默认使用分账订单ID")
+    @Schema(description = "分账订单号")
     private String allocationNo;
 
     @Schema(description = "分账状态")

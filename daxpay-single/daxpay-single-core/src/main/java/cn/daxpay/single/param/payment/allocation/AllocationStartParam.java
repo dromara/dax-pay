@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 @Schema(title = "开始分账请求参数")
 public class AllocationStartParam extends PaymentCommonParam {
 
+    /** 商户分账单号 */
     @Schema(description = "商户分账单号")
     @NotBlank(message = "商户分账单号不可为空")
     private String bizAllocationNo;

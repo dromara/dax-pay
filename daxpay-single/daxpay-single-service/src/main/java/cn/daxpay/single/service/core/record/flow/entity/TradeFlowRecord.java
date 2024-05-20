@@ -3,11 +3,12 @@ package cn.daxpay.single.service.core.record.flow.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.code.TradeFlowRecordTypeEnum;
 import cn.daxpay.single.service.core.record.flow.convert.TradeFlowRecordConvert;
 import cn.daxpay.single.service.dto.record.flow.TradeFlowRecordDto;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,7 +21,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "资金流水记录")
+@TableName("pay_trade_flow_record")
+@DbTable(comment = "资金流水记录")
 public class TradeFlowRecord extends MpCreateEntity implements EntityBaseFunction<TradeFlowRecordDto> {
 
     /** 订单标题 */

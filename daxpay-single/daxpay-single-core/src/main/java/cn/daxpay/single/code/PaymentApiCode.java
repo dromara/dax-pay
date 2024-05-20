@@ -20,6 +20,8 @@ public interface PaymentApiCode {
     String SYNC_PAY = "syncPay";
     /** 退款同步 */
     String SYNC_REFUND = "syncRefund";
+    /** 分账同步 */
+    String SYNC_ALLOCATION = "syncAllocation";
     /** 查询支付订单 */
     String QUERY_PAY_ORDER = "queryPayOrder";
     /** 查询退款订单 */

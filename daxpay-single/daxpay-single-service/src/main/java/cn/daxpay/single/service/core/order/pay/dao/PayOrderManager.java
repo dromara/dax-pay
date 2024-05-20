@@ -70,15 +70,16 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     }
 
     /**
-     * 查询自动分账用订单记录(指定时间和状态的订单)
+     * 查询自动分账的订单记录(指定时间和状态的订单)
      */
-    public List<PayOrder> findAllocation() {
+    public List<PayOrder> findAutoAllocation() {
         List<String> status = Arrays.asList(PayStatusEnum.SUCCESS.getCode(),
                 PayStatusEnum.PARTIAL_REFUND.getCode(),
                 PayStatusEnum.REFUNDING.getCode(),
                 PayStatusEnum.REFUNDED.getCode());
         return this.lambdaQuery()
                 .eq(PayOrder::getAllocation, true)
+                .eq(PayOrder::getAutoAllocation, true)
                 .eq(PayOrder::getAllocationStatus, PayOrderAllocStatusEnum.WAITING.getCode())
                 .in(PayOrder::getStatus, status)
                 .list();

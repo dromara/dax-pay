@@ -26,11 +26,11 @@ public class AllocationAutoStartTask implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        for (PayOrder payOrder : payOrderManager.findAllocation()) {
+        for (PayOrder payOrder : payOrderManager.findAutoAllocation()) {
             AllocationStartParam param = new AllocationStartParam();
             param.setBizAllocationNo(OrderNoGenerateUtil.allocation());
             try {
-                allocationService.allocation(payOrder, param);
+                allocationService.allocation(param, payOrder);
             } catch (Exception e) {
                 log.warn("自动分账失败, 支付订单号: {}", payOrder.getOrderNo());
                 log.warn("自动分账失败:{}", e.getMessage());

@@ -5,9 +5,9 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
 import cn.daxpay.single.param.payment.allocation.AllocationSyncParam;
 import cn.daxpay.single.param.payment.allocation.AllocationFinishParam;
-import cn.daxpay.single.param.payment.allocation.AllocationResetParam;
 import cn.daxpay.single.service.core.order.allocation.service.AllocationOrderService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
@@ -80,19 +80,19 @@ public class AllocationOrderController {
 
     @Operation(summary = "分账完结")
     @PostMapping("/finish")
-    public ResResult<Void> finish(Long id){
+    public ResResult<Void> finish(String allocationNo){
         AllocationFinishParam param = new AllocationFinishParam();
-        param.setOrderId(id);
+        param.setAllocationNo(allocationNo);
         allocationService.finish(param);
         return Res.ok();
     }
 
-    @Operation(summary = "分账重试")
+    @Operation(summary = "重新发起分账")
     @PostMapping("/retry")
-    public ResResult<Void> retryAllocation(Long id){
-        AllocationResetParam param = new AllocationResetParam();
-        param.setOrderId(id);
-        allocationService.retryAllocation(param);
+    public ResResult<Void> retryAllocation(String bizAllocationNo){
+        AllocationStartParam param = new AllocationStartParam();
+        param.setBizAllocationNo(bizAllocationNo);
+        allocationService.allocation(param);
         return Res.ok();
     }
 }
