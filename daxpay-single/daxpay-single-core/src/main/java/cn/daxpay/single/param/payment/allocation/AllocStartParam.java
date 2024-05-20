@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "开始分账请求参数")
-public class AllocationStartParam extends PaymentCommonParam {
+public class AllocStartParam extends PaymentCommonParam {
 
     /** 商户分账单号 */
     @Schema(description = "商户分账单号")

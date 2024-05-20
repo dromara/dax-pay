@@ -7,10 +7,11 @@ import cn.daxpay.single.code.AllocOrderResultEnum;
 import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.payment.allocation.AllocationFinishParam;
-import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
-import cn.daxpay.single.param.payment.allocation.AllocationSyncParam;
+import cn.daxpay.single.param.payment.allocation.AllocFinishParam;
+import cn.daxpay.single.param.payment.allocation.AllocStartParam;
+import cn.daxpay.single.param.payment.allocation.AllocSyncParam;
 import cn.daxpay.single.result.allocation.AllocationResult;
+import cn.daxpay.single.result.allocation.AllocationSyncResult;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
@@ -65,7 +66,7 @@ public class AllocationService {
     /**
      * 开启分账, 使用分账组进行分账
      */
-    public AllocationResult allocation(AllocationStartParam param) {
+    public AllocationResult allocation(AllocStartParam param) {
         // 判断是否已经有分账订单
         AllocationOrder allocationOrder = allocationOrderManager.findByBizAllocationNo(param.getBizAllocationNo())
                 .orElse(null);
@@ -83,7 +84,7 @@ public class AllocationService {
     /**
      * 开启分账, 未传输分账组号, 则使用默认该通道默认分账组
      */
-    public AllocationResult allocation(AllocationStartParam param,PayOrder payOrder) {
+    public AllocationResult allocation(AllocStartParam param, PayOrder payOrder) {
         LockInfo lock = lockTemplate.lock("payment:allocation:" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("分账发起处理中，请勿重复操作");
@@ -183,7 +184,7 @@ public class AllocationService {
     /**
      * 分账完结
      */
-    public void finish(AllocationFinishParam param) {
+    public AllocationResult finish(AllocFinishParam param) {
         AllocationOrder allocationOrder;
         if (Objects.nonNull(param.getAllocationNo())){
             allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
@@ -192,13 +193,13 @@ public class AllocationService {
             allocationOrder = allocationOrderManager.findByBizAllocationNo(param.getBizAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
         }
-        this.finish(allocationOrder);
+        return this.finish(allocationOrder);
     }
 
     /**
      * 分账完结
      */
-    public void finish(AllocationOrder allocationOrder) {
+    public AllocationResult finish(AllocationOrder allocationOrder) {
         // 只有分账结束后才可以完结
         if (!AllocOrderStatusEnum.ALLOCATION_END.getCode().equals(allocationOrder.getStatus())){
             throw new PayFailureException("分账单状态错误");
@@ -224,13 +225,16 @@ public class AllocationService {
                     .setErrorMsg(e.getMessage());
         }
         allocationOrderManager.updateById(allocationOrder);
+        return new AllocationResult()
+                .setAllocationNo(allocationOrder.getAllocationNo())
+                .setStatus(allocationOrder.getStatus());
     }
 
     /**
      * 分账同步, 开启一个新的事务, 不受外部抛出异常的影响
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void sync(AllocationSyncParam param) {
+    public AllocationSyncResult sync(AllocSyncParam param) {
         // 获取分账订单
         AllocationOrder allocationOrder = null;
         if (Objects.nonNull(param.getAllocationNo())){
@@ -242,6 +246,7 @@ public class AllocationService {
                     .orElseThrow(() -> new DataNotExistException("分账单不存在"));
         }
         this.sync(allocationOrder);
+        return new AllocationSyncResult();
     }
 
     /**
@@ -315,7 +320,7 @@ public class AllocationService {
     /**
      * 获取并检查支付订单
      */
-    private PayOrder getAndCheckPayOrder(AllocationStartParam param) {
+    private PayOrder getAndCheckPayOrder(AllocStartParam param) {
         // 查询支付单
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
                 .orElseThrow(() -> new DataNotExistException("支付单不存在"));
@@ -328,5 +333,14 @@ public class AllocationService {
             throw new PayFailureException("该订单已分账完成");
         }
         return payOrder;
+    }
+
+    /**
+     * 查询分账结果
+     */
+    public void query(AllocFinishParam param) {
+        // 查询分账单
+
+        // 查询分账单明细
     }
 }

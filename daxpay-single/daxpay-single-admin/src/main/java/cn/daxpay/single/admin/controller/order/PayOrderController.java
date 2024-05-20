@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
+import cn.daxpay.single.param.payment.allocation.AllocStartParam;
 import cn.daxpay.single.param.payment.pay.PayCloseParam;
 import cn.daxpay.single.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.result.pay.SyncResult;
@@ -99,7 +99,7 @@ public class PayOrderController {
     @Operation(summary = "发起分账")
     @PostMapping("/allocation")
     public ResResult<Void> allocation(String orderNo){
-        AllocationStartParam param = new AllocationStartParam();
+        AllocStartParam param = new AllocStartParam();
         param.setOrderNo(orderNo);
         param.setBizAllocationNo(OrderNoGenerateUtil.allocation());
         allocationService.allocation(param);

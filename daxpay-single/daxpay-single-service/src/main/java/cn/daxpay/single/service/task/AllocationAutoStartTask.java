@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.task;
 
-import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
+import cn.daxpay.single.param.payment.allocation.AllocStartParam;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
@@ -27,7 +27,7 @@ public class AllocationAutoStartTask implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         for (PayOrder payOrder : payOrderManager.findAutoAllocation()) {
-            AllocationStartParam param = new AllocationStartParam();
+            AllocStartParam param = new AllocStartParam();
             param.setBizAllocationNo(OrderNoGenerateUtil.allocation());
             try {
                 allocationService.allocation(param, payOrder);

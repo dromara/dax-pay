@@ -5,9 +5,9 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
-import cn.daxpay.single.param.payment.allocation.AllocationSyncParam;
-import cn.daxpay.single.param.payment.allocation.AllocationFinishParam;
+import cn.daxpay.single.param.payment.allocation.AllocStartParam;
+import cn.daxpay.single.param.payment.allocation.AllocSyncParam;
+import cn.daxpay.single.param.payment.allocation.AllocFinishParam;
 import cn.daxpay.single.service.core.order.allocation.service.AllocationOrderService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
@@ -72,7 +72,7 @@ public class AllocationOrderController {
     @Operation(summary = "同步分账结果")
     @PostMapping("/sync")
     public ResResult<Void> sync(String allocationNo){
-        AllocationSyncParam param = new AllocationSyncParam();
+        AllocSyncParam param = new AllocSyncParam();
         param.setAllocationNo(allocationNo);
         allocationService.sync(param);
         return Res.ok();
@@ -81,7 +81,7 @@ public class AllocationOrderController {
     @Operation(summary = "分账完结")
     @PostMapping("/finish")
     public ResResult<Void> finish(String allocationNo){
-        AllocationFinishParam param = new AllocationFinishParam();
+        AllocFinishParam param = new AllocFinishParam();
         param.setAllocationNo(allocationNo);
         allocationService.finish(param);
         return Res.ok();
@@ -90,7 +90,7 @@ public class AllocationOrderController {
     @Operation(summary = "重新发起分账")
     @PostMapping("/retry")
     public ResResult<Void> retryAllocation(String bizAllocationNo){
-        AllocationStartParam param = new AllocationStartParam();
+        AllocStartParam param = new AllocStartParam();
         param.setBizAllocationNo(bizAllocationNo);
         allocationService.allocation(param);
         return Res.ok();

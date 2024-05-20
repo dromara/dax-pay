@@ -1,30 +1,34 @@
-package cn.daxpay.single.service.param.allocation.group;
+package cn.daxpay.single.param.payment.allocation;
 
 import cn.daxpay.single.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.code.AllocRelationTypeEnum;
 import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 分账接收方参数
+ * 分账接收者添加参数
  * @author xxm
- * @since 2024/3/28
+ * @since 2024/5/20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "分账接收方参数")
-public class AllocationReceiverParam {
+@Schema(title = "分账接收者添加参数")
+public class AllocReceiverAddParam extends PaymentCommonParam {
 
+    @Schema(description = "接收者编号, 需要保证唯一")
+    private String receiverNo;
 
-    @Schema(description = "主键")
-    private Long id;
-
+    /** 账号别名 */
     @Schema(description = "账号别名")
     private String name;
 
     /**
+     * 所属通道
      * @see PayChannelEnum
      */
     @Schema(description = "所属通道")
@@ -37,7 +41,7 @@ public class AllocationReceiverParam {
     @Schema(description = "分账接收方类型")
     private String receiverType;
 
-
+    /** 接收方账号 */
     @Schema(description = "接收方账号")
     private String receiverAccount;
 
@@ -52,13 +56,7 @@ public class AllocationReceiverParam {
     @Schema(description = "分账关系类型")
     private String relationType;
 
+    /** 关系名称 关系类型为自定义是填写 */
     @Schema(description = "关系名称")
     private String relationName;
-
-    @Schema(description = "是否已经同步到网关")
-    private Boolean sync;
-
-    @Schema(description = "备注")
-    private String remark;
-
 }

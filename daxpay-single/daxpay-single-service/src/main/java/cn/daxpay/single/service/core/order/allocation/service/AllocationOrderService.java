@@ -10,7 +10,7 @@ import cn.daxpay.single.code.AllocDetailResultEnum;
 import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
-import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
+import cn.daxpay.single.param.payment.allocation.AllocStartParam;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
@@ -92,7 +92,7 @@ public class AllocationOrderService {
      * 生成分账订单
      */
     @Transactional(rollbackFor = Exception.class)
-    public OrderAndDetail createAndUpdate(AllocationStartParam param, PayOrder payOrder, int orderAmount, List<AllocationGroupReceiverResult> receiversByGroups){
+    public OrderAndDetail createAndUpdate(AllocStartParam param, PayOrder payOrder, int orderAmount, List<AllocationGroupReceiverResult> receiversByGroups){
         long orderId = IdUtil.getSnowflakeNextId();
 
         // 订单明细

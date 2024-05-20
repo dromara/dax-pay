@@ -9,6 +9,7 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.single.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
 import cn.daxpay.single.service.core.payment.allocation.convert.AllocationReceiverConvert;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationGroupReceiverManager;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationReceiverManager;
@@ -16,9 +17,11 @@ import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceive
 import cn.daxpay.single.service.core.payment.allocation.factory.AllocationReceiverFactory;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
 import cn.daxpay.single.service.func.AbsAllocationReceiverStrategy;
-import cn.daxpay.single.service.param.allocation.group.AllocationReceiverParam;
-import cn.daxpay.single.service.param.allocation.group.AllocationReceiverQuery;
+import cn.daxpay.single.service.param.allocation.receiver.AllocationReceiverParam;
+import cn.daxpay.single.service.param.allocation.receiver.AllocationReceiverQuery;
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,8 @@ public class AllocationReceiverService {
     private final AllocationReceiverManager manager;
 
     private final AllocationGroupReceiverManager groupReceiverManager;
+
+    private final LockTemplate lockTemplate;
 
     /**
      * 分页
@@ -175,10 +180,29 @@ public class AllocationReceiverService {
     }
 
     /**
-     * 接口添加
+     * 添加分账接收方并同步到三方支付系统中
      */
-    public void add(){
+    public void addAndSync(AllocReceiverAddParam param){
+        // 判断是否已经添加
+        AllocationReceiver receiver = AllocationReceiverConvert.CONVERT.convert(param);
 
+        // 获取策略
+        PayChannelEnum channelEnum = PayChannelEnum.findByCode(param.getChannel());
+        AbsAllocationReceiverStrategy receiverStrategy = AllocationReceiverFactory.create(channelEnum);
+        // 校验
+        receiverStrategy.setAllocationReceiver(receiver);
+        if (!receiverStrategy.validation()){
+            throw new PayFailureException("接收方信息校验失败");
+        }
+        LockInfo lock = lockTemplate.lock("payment:receiver:" + param.getReceiverNo(),10000,200);
+        try {
+            // 先添加到三方支付系统中, 然后保存到本地
+            receiverStrategy.doBeforeHandler();
+            receiverStrategy.bind();
+            manager.save(receiver);
+        } finally {
+            lockTemplate.releaseLock(lock);
+        }
     }
 
     /**

@@ -38,4 +38,9 @@ public class AllocationGroupReceiverManager extends BaseManager<AllocationGroupR
     public void deleteByGroupId(Long groupId){
         deleteByField(AllocationGroupReceiver::getGroupId, groupId);
     }
+
+    /**
+     * 判断是否存在分账接收者
+     */
+
 }

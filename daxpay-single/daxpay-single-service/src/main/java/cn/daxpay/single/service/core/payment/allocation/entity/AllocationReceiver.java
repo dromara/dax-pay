@@ -29,6 +29,10 @@ import lombok.experimental.Accessors;
 @TableName(value = "pay_allocation_receiver",autoResultMap = true)
 public class AllocationReceiver extends MpBaseEntity implements EntityBaseFunction<AllocationReceiverDto> {
 
+    /** 分账接收方编号, 需要保证唯一 */
+    @DbColumn(comment = "分账接收方编号")
+    private String receiverNo;
+
     @DbColumn(comment = "账号别名")
     private String name;
 

@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Schema(title = "分账同步请求参数")
-public class AllocationSyncParam {
+public class AllocSyncParam {
 
     @Schema(description = "分账号")
     private String allocationNo;
