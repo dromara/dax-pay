@@ -26,19 +26,28 @@ import lombok.experimental.Accessors;
 @TableName("pay_allocation_group")
 public class AllocationGroup extends MpBaseEntity implements EntityBaseFunction<AllocationGroupDto> {
 
+    /** 分账组编码 */
+    @DbColumn(comment = "分账组编码")
+    private String groupNo;
+
+    /** 名称 */
     @DbComment("名称")
     private String name;
 
+    /** 通道 */
     @DbColumn(comment = "通道")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channel;
 
+    /** 是否为默认分账组 */
     @DbColumn(comment = "默认分账组")
     private boolean defaultGroup;
 
+    /** 总分账比例(万分之多少) */
     @DbColumn(comment = "总分账比例(万分之多少)")
     private Integer totalRate;
 
+    /** 备注 */
     @DbColumn(comment = "备注")
     private String remark;
 

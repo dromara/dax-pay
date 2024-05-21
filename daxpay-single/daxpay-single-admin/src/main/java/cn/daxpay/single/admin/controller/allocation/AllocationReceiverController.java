@@ -5,9 +5,10 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
+import cn.daxpay.single.param.payment.allocation.AllocReceiverRemoveParam;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
-import cn.daxpay.single.service.param.allocation.receiver.AllocationReceiverParam;
 import cn.daxpay.single.service.param.allocation.receiver.AllocationReceiverQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,39 +54,17 @@ public class AllocationReceiverController {
         return Res.ok(receiverService.findReceiverTypeByChannel(channel));
     }
 
-    @Operation(summary = "新增")
+    @Operation(summary = "添加")
     @PostMapping("add")
-    public ResResult<Void> add(@RequestBody AllocationReceiverParam param){
-        receiverService.add(param);
-        return Res.ok();
-    }
-
-    @Operation(summary = "修改")
-    @PostMapping("update")
-    public ResResult<Void> update(@RequestBody AllocationReceiverParam param){
-        receiverService.update(param);
+    public ResResult<Void> add(@RequestBody AllocReceiverAddParam param){
+        receiverService.addAndSync(param);
         return Res.ok();
     }
 
     @Operation(summary = "删除")
     @PostMapping("delete")
-    public ResResult<Void> delete(Long id){
-        receiverService.remove(id);
+    public ResResult<Void> delete(@RequestBody AllocReceiverRemoveParam param){
+        receiverService.remove(param);
         return Res.ok();
     }
-
-    @Operation(summary = "同步到三方支付系统中")
-    @PostMapping("registerByGateway")
-    public ResResult<Void> registerByGateway(Long id){
-        receiverService.registerByGateway(id);
-        return Res.ok();
-    }
-
-    @Operation(summary = "从三方支付系统中删除")
-    @PostMapping("removeByGateway")
-    public ResResult<Void> removeByGateway(Long id){
-        receiverService.removeByGateway(id);
-        return Res.ok();
-    }
-
 }

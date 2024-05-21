@@ -151,6 +151,14 @@ public class ClientNoticeService {
     }
 
     /**
+     * 注册分账消息通知任务
+     */
+    @Async("bigExecutor")
+    public void registerAllocNotice() {
+        // 创建通知任务并保存
+    }
+
+    /**
      * 从redis中执行任务, 通过定时任务触发
      */
     @Async("asyncExecutor")

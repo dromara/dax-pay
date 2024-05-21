@@ -75,17 +75,18 @@ public class AllocationGroupService {
         // 组装信息
         return groupReceivers.stream()
                 .map(o -> {
-                    AllocationReceiver allocationReceiver = receiverMap.get(o.getReceiverId());
+                    AllocationReceiver receiver = receiverMap.get(o.getReceiverId());
                     return new AllocationGroupReceiverResult()
                             .setId(o.getId())
-                            .setName(allocationReceiver.getName())
-                            .setReceiverId(allocationReceiver.getId())
-                            .setReceiverAccount(allocationReceiver.getReceiverAccount())
-                            .setReceiverName(allocationReceiver.getReceiverName())
+                            .setName(receiver.getName())
+                            .setReceiverId(receiver.getId())
+                            .setReceiverNo(receiver.getReceiverNo())
+                            .setReceiverAccount(receiver.getReceiverAccount())
+                            .setReceiverName(receiver.getReceiverName())
                             .setRate(o.getRate())
-                            .setReceiverType(allocationReceiver.getReceiverType())
-                            .setRelationName(allocationReceiver.getRelationName())
-                            .setRelationType(allocationReceiver.getRelationType());
+                            .setReceiverType(receiver.getReceiverType())
+                            .setRelationName(receiver.getRelationName())
+                            .setRelationType(receiver.getRelationType());
                 })
                 .collect(Collectors.toList());
     }
@@ -161,13 +162,6 @@ public class AllocationGroupService {
         if (receivers.size() != receiverIds.size()){
             throw new DataNotExistException("传入的分账接收房数量与查询到的不一致");
         }
-        // 接收方需要已经同步到三方系统中
-        receivers.stream()
-                .filter(receiver -> Objects.equals(receiver.getSync(), Boolean.FALSE))
-                .findAny()
-                .ifPresent(receiver -> {
-                    throw new BizException("接收方未同步到三方值系统中");
-                });
         // 接收方只能为一个支付通道
         long count = receivers.stream()
                 .map(AllocationReceiver::getChannel)

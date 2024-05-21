@@ -23,6 +23,9 @@ public class AllocationGroupReceiverResult {
     @Schema(description = "接收方ID")
     private Long receiverId;
 
+    @Schema(description = "接收方编号")
+    private String receiverNo;
+
     @Schema(description = "接收方账号别名")
     private String name;
 

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * 开始分账请求参数
@@ -22,19 +23,26 @@ public class AllocStartParam extends PaymentCommonParam {
     @NotBlank(message = "商户分账单号不可为空")
     private String bizAllocationNo;
 
+    /** 支付订单号 */
     @Schema(description = "支付订单号")
     private String orderNo;
 
+    /** 商户订单号 */
     @Schema(description = "商户订单号")
     private String bizOrderNo;
 
+    /** 分账描述 */
     @Schema(description = "分账描述")
     private String description;
 
     /**
-     * 不传输分账组使用默认分账组进行分账
+     * 优先级 分账接收方列表 > 分账组编号 > 默认分账组
      */
-    @Schema(description = "分账组ID")
-    private Long allocationGroupId;
+    @Schema(description = "分账组编号")
+    private String groupNo;
+
+    /** 分账接收方列表 */
+    @Schema(description = "分账接收方列表")
+    private List<AllocReceiverParam> receivers;
 
 }

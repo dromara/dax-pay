@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
  * @since 2024/3/28
  */
 @Data
+@Deprecated
 @Accessors(chain = true)
 @Schema(title = "分账接收方参数")
 public class AllocationReceiverParam {

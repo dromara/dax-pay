@@ -74,4 +74,11 @@ public class ClientNoticeAssistService {
                 .setTradeStatus(order.getStatus());
     }
 
+    /**
+     * 构建分账通知
+     */
+    public ClientNoticeTask buildDivideTask(String tradeNo, String tradeStatus){
+        return null;
+    }
+
 }

@@ -28,6 +28,8 @@ public interface PaymentApiCode {
     String QUERY_REFUND_ORDER = "queryRefundOrder";
     /** 查询分账订单 */
     String QUERY_ALLOCATION_ORDER = "queryAllocationOrder";
+    /** 查询分账接收方 */
+    String QUERY_ALLOCATION_RECEIVER = "QueryAllocationReceiver";
     /** 获取微信授权链接 */
     String GET_WX_AUTH_URL = "getWxAuthUrl";
     /** 获取微信AccessToken */
@@ -36,8 +38,6 @@ public interface PaymentApiCode {
     String ALLOCATION_RECEIVER_ADD = "allocationReceiverAdd";
     /** 删除分账方 */
     String ALLOCATION_RECEIVER_REMOVE = "allocationReceiverRemove";
-    /** 查询分账方 */
-    String ALLOCATION_RECEIVER_QUERY = "allocationReceiverQuery";
 
 
 

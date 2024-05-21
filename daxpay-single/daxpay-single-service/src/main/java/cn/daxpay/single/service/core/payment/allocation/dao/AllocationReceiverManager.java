@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * 分账接收方
  * @author xxm
@@ -31,4 +34,24 @@ public class AllocationReceiverManager extends BaseManager<AllocationReceiverMap
         return this.page(mpPage, generator);
     }
 
+    /**
+     * 根据接收方编号查询
+     */
+    public Optional<AllocationReceiver> findByReceiverNo(String receiverNo) {
+        return findByField(AllocationReceiver::getReceiverNo, receiverNo);
+    }
+
+    /**
+     * 根据分账方编号查询列表
+     */
+    public List<AllocationReceiver> findAllByReceiverNos(List<String> receiverNos) {
+        return findAllByFields(AllocationReceiver::getReceiverNo, receiverNos);
+    }
+
+    /**
+     * 根据所属通道查询
+     */
+    public List<AllocationReceiver> findAllByChannel(String channel) {
+        return findAllByField(AllocationReceiver::getChannel, channel);
+    }
 }

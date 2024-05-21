@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 对账-第三方交易明细, 从三方系统下载的交易记录
+ * 对账-通道交易明细, 从三方系统下载的交易记录
  * @author xxm
  * @since 2024/1/18
  */

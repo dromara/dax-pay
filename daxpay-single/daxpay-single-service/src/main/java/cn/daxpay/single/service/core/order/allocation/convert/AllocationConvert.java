@@ -1,5 +1,7 @@
 package cn.daxpay.single.service.core.order.allocation.convert;
 
+import cn.daxpay.single.result.allocation.AllocOrderDetailResult;
+import cn.daxpay.single.result.allocation.AllocOrderResult;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
@@ -18,6 +20,10 @@ public interface AllocationConvert {
 
 
     AllocationOrderDto convert(AllocationOrder in);
+
+    AllocOrderResult toResult(AllocationOrder in);
+
+    AllocOrderDetailResult toResult(AllocationOrderDetail in);
 
     AllocationOrderDetailDto convert(AllocationOrderDetail in);
 

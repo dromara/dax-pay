@@ -16,4 +16,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Schema(title = "查询分账接收者参数")
 public class QueryAllocReceiverParam extends PaymentCommonParam {
+
+    /** 所属通道 */
+    @Schema(description = "所属通道")
+    private String channel;
 }

@@ -2,13 +2,13 @@ package cn.daxpay.single.service.core.order.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.daxpay.single.code.AllocDetailResultEnum;
 import cn.daxpay.single.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.service.common.typehandler.DecryptTypeHandler;
 import cn.daxpay.single.service.core.order.allocation.convert.AllocationConvert;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
-import cn.bootx.table.modify.annotation.DbColumn;
-import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -36,6 +36,10 @@ public class AllocationOrderDetail extends MpBaseEntity implements EntityBaseFun
     /** 接收者ID */
     @DbColumn(comment = "接收者ID")
     private Long receiverId;
+
+    /** 分账接收方编号 */
+    @DbColumn(comment = "分账接收方编号")
+    private String receiverNo;
 
     /** 分账比例 */
     @DbColumn(comment = "分账比例(万分之多少)")

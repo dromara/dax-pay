@@ -59,10 +59,4 @@ public class AllocationReceiverDto extends BaseDto {
 
     @Schema(description = "关系名称")
     private String relationName;
-
-    @Schema(description = "是否已经同步到网关")
-    private Boolean sync;
-
-    @Schema(description = "备注")
-    private String remark;
 }

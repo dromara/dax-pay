@@ -2,14 +2,20 @@ package cn.daxpay.single.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.code.PaymentApiCode;
+import cn.daxpay.single.param.payment.allocation.QueryAllocOrderParam;
+import cn.daxpay.single.param.payment.allocation.QueryAllocReceiverParam;
 import cn.daxpay.single.param.payment.pay.QueryPayParam;
 import cn.daxpay.single.param.payment.refund.QueryRefundParam;
 import cn.daxpay.single.result.DaxResult;
+import cn.daxpay.single.result.allocation.AllocOrderResult;
+import cn.daxpay.single.result.allocation.AllocReceiversResult;
 import cn.daxpay.single.result.order.PayOrderResult;
 import cn.daxpay.single.result.order.RefundOrderResult;
 import cn.daxpay.single.service.annotation.PaymentApi;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
+import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
+import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +39,8 @@ public class UniQueryController {
 
     private final PayOrderQueryService payOrderQueryService;
     private final RefundOrderQueryService refundOrderQueryService;
+    private final AllocationReceiverService allocationReceiverService;
+    private final AllocationService allocationService;
 
     @PaymentApi(PaymentApiCode.QUERY_PAY_ORDER)
     @Operation(summary = "支付订单查询接口")
@@ -47,4 +55,20 @@ public class UniQueryController {
      public DaxResult<RefundOrderResult> queryRefundOrder(@RequestBody QueryRefundParam param){
         return DaxRes.ok(refundOrderQueryService.queryRefundOrder(param));
     }
+
+    @PaymentApi(PaymentApiCode.QUERY_ALLOCATION_ORDER)
+    @Operation(summary = "分账订单查询接口")
+    @PostMapping("/allocationOrder")
+    public DaxResult<AllocOrderResult> queryAllocationOrder(@RequestBody QueryAllocOrderParam param){
+        return DaxRes.ok(allocationService.queryAllocationOrder(param));
+    }
+
+    @PaymentApi(PaymentApiCode.QUERY_ALLOCATION_RECEIVER)
+    @Operation(summary = "分账接收方查询接口")
+    @PostMapping("/allocReceiver")
+    public DaxResult<AllocReceiversResult> queryAllocReceive(@RequestBody QueryAllocReceiverParam param){
+        return DaxRes.ok(allocationReceiverService.queryAllocReceive(param));
+    }
+
+
 }

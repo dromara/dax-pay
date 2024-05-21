@@ -68,8 +68,8 @@ public class ReconcileAssistService {
         for (RefundOrder refundOrder : refundOrders) {
             generalTradeInfoList.add(new GeneralTradeInfo()
                     .setTitle(refundOrder.getTitle())
-                    .setTradeNo(refundOrder.getOrderNo())
-                    .setOutTradeNo(refundOrder.getOutOrderNo())
+                    .setTradeNo(refundOrder.getRefundNo())
+                    .setOutTradeNo(refundOrder.getOutRefundNo())
                     .setFinishTime(refundOrder.getFinishTime())
                     .setType(PaymentTypeEnum.REFUND.getCode())
                     .setAmount(refundOrder.getAmount()));
@@ -78,7 +78,7 @@ public class ReconcileAssistService {
     }
 
     /**
-     * 比对生成对账差异单
+     * 比对生成对账差异单, 通道对账单
      * 1. 远程有, 本地无
      * 2. 远程无, 本地有
      * 3. 远程有, 本地有, 但状态不一致
