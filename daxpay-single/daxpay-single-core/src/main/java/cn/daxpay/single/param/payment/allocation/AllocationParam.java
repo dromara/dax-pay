@@ -15,8 +15,8 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Schema(title = "开始分账请求参数")
-public class AllocStartParam extends PaymentCommonParam {
+@Schema(title = "分账请求参数")
+public class AllocationParam extends PaymentCommonParam {
 
     /** 商户分账单号 */
     @Schema(description = "商户分账单号")
@@ -44,5 +44,13 @@ public class AllocStartParam extends PaymentCommonParam {
     /** 分账接收方列表 */
     @Schema(description = "分账接收方列表")
     private List<AllocReceiverParam> receivers;
+
+    /** 回调通知地址 */
+    @Schema(description = "回调通知地址")
+    private String notifyUrl;
+
+    /** 商户扩展参数,回调时会原样返回 */
+    @Schema(description = "商户扩展参数,回调时会原样返回")
+    private String attach;
 
 }

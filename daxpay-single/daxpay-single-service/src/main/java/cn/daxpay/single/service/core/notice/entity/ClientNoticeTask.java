@@ -1,4 +1,4 @@
-package cn.daxpay.single.service.core.task.notice.entity;
+package cn.daxpay.single.service.core.notice.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
@@ -8,10 +8,11 @@ import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.code.RefundStatusEnum;
+import cn.daxpay.single.result.allocation.AllocOrderResult;
 import cn.daxpay.single.service.code.ClientNoticeTypeEnum;
 import cn.daxpay.single.service.core.payment.notice.result.PayNoticeResult;
 import cn.daxpay.single.service.core.payment.notice.result.RefundNoticeResult;
-import cn.daxpay.single.service.core.task.notice.convert.ClientNoticeConvert;
+import cn.daxpay.single.service.core.notice.convert.ClientNoticeConvert;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeTaskDto;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -59,6 +60,7 @@ public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction
      * 消息内容
      * @see PayNoticeResult
      * @see RefundNoticeResult
+     * @see AllocOrderResult
      */
     @DbColumn(comment = "消息内容")
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)

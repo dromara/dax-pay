@@ -27,7 +27,7 @@ public class RefundSyncTask implements Job {
     private final RefundOrderManager refundOrderManager;
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context) {
         // 查询退款中的退款订单
         List<RefundOrder> list = refundOrderManager.findAllByProgress();
         for (RefundOrder refundOrder : list) {

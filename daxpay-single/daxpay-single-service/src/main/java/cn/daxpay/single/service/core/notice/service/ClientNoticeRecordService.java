@@ -1,7 +1,7 @@
-package cn.daxpay.single.service.core.task.notice.service;
+package cn.daxpay.single.service.core.notice.service;
 
-import cn.daxpay.single.service.core.task.notice.dao.ClientNoticeRecordManager;
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeRecord;
+import cn.daxpay.single.service.core.notice.dao.ClientNoticeRecordManager;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeRecord;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

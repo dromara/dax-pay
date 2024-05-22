@@ -7,7 +7,9 @@ import cn.daxpay.single.result.PaymentCommonResult;
 import cn.daxpay.single.service.common.context.ApiInfoLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
+import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
 import cn.daxpay.single.util.PaySignUtil;
+import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PaymentSignService {
 
-    private final PaymentAssistService paymentAssistService;;
+    private final PaymentAssistService paymentAssistService;
+
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 入参签名校验
@@ -61,6 +65,10 @@ public class PaymentSignService {
      */
     public void sign(PaymentCommonResult result) {
         PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
+        // 如果平台配置所有属性为空, 进行初始化
+        if (BeanUtil.isEmpty(platformInfo)){
+            platformConfigService.initPlatform();
+        }
         String signType = platformInfo.getSignType();
         if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
             result.setSign(PaySignUtil.hmacSha256Sign(result, platformInfo.getSignSecret()));

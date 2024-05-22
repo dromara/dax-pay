@@ -5,9 +5,11 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.daxpay.single.param.payment.allocation.AllocStartParam;
+import cn.daxpay.single.code.PaymentApiCode;
+import cn.daxpay.single.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.param.payment.allocation.AllocSyncParam;
 import cn.daxpay.single.param.payment.allocation.AllocFinishParam;
+import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.core.order.allocation.service.AllocationOrderService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
@@ -69,6 +71,7 @@ public class AllocationOrderController {
         return Res.ok(allocationOrderService.findChannels());
     }
 
+    @PlatformInitContext(PaymentApiCode.SYNC_ALLOCATION)
     @Operation(summary = "同步分账结果")
     @PostMapping("/sync")
     public ResResult<Void> sync(String allocationNo){
@@ -78,6 +81,7 @@ public class AllocationOrderController {
         return Res.ok();
     }
 
+    @PlatformInitContext(PaymentApiCode.SYNC_REFUND)
     @Operation(summary = "分账完结")
     @PostMapping("/finish")
     public ResResult<Void> finish(String allocationNo){
@@ -87,10 +91,11 @@ public class AllocationOrderController {
         return Res.ok();
     }
 
+    @PlatformInitContext(PaymentApiCode.ALLOCATION)
     @Operation(summary = "重新发起分账")
     @PostMapping("/retry")
     public ResResult<Void> retryAllocation(String bizAllocationNo){
-        AllocStartParam param = new AllocStartParam();
+        AllocationParam param = new AllocationParam();
         param.setBizAllocationNo(bizAllocationNo);
         allocationService.allocation(param);
         return Res.ok();

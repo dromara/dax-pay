@@ -2,7 +2,6 @@ package cn.daxpay.single.service.core.order.refund.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
-import cn.daxpay.single.code.PaymentApiCode;
 import cn.daxpay.single.param.payment.refund.RefundParam;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
@@ -10,9 +9,6 @@ import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.daxpay.single.service.core.payment.common.service.PaymentAssistService;
 import cn.daxpay.single.service.core.payment.refund.service.RefundService;
-import cn.daxpay.single.service.core.system.config.dao.PayApiConfigManager;
-import cn.daxpay.single.service.core.system.config.entity.PayApiConfig;
-import cn.daxpay.single.service.core.system.config.service.PayApiConfigService;
 import cn.daxpay.single.service.param.order.PayOrderRefundParam;
 import cn.daxpay.single.util.OrderNoGenerateUtil;
 import cn.hutool.extra.servlet.ServletUtil;
@@ -36,15 +32,11 @@ public class RefundOrderService {
 
     private final RefundService refundService;
 
-    private final PayApiConfigService apiConfigService;
-
     private final PaymentAssistService paymentAssistService;
 
     private final RefundOrderExtraManager refundOrderExtraManager;
 
     private final RefundOrderManager refundOrderManager;
-
-    private final PayApiConfigManager apiConfigManager;
 
     /**
      * 手动发起退款
@@ -64,11 +56,7 @@ public class RefundOrderService {
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
         // 手动初始化上下文
-        paymentAssistService.initContext(refundParam);
-        // 初始化接口信息为统一退款
-        PayApiConfig api = apiConfigManager.findByCode(PaymentApiCode.REFUND).orElseThrow(() -> new DataNotExistException("未找到统一退款接口信息"));
-        // 设置接口信息
-        apiConfigService.initApiInfo(api);
+        paymentAssistService.initRequest(refundParam);
         // 调用统一退款接口
         refundService.refund(refundParam);
     }
@@ -98,13 +86,7 @@ public class RefundOrderService {
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
 
-        // 手动初始化上下文
-        paymentAssistService.initContext(refundParam);
-        // 初始化接口信息为统一退款
-        PayApiConfig api = apiConfigManager.findByCode(PaymentApiCode.REFUND).orElseThrow(() -> new DataNotExistException("未找到统一退款接口信息"));
-        // 设置接口信息
-        apiConfigService.initApiInfo(api);
-        // 调用统一退款接口
-        refundService.refund(refundParam);
+        // 手动初始化请求上下文
+        paymentAssistService.initRequest(refundParam);
     }
 }

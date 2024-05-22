@@ -4,8 +4,10 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.daxpay.single.code.PaymentApiCode;
 import cn.daxpay.single.param.payment.refund.RefundSyncParam;
 import cn.daxpay.single.result.pay.SyncResult;
+import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderService;
 import cn.daxpay.single.service.core.payment.sync.service.RefundSyncService;
@@ -63,6 +65,7 @@ public class RefundOrderController {
         return Res.ok(queryService.findExtraById(id));
     }
 
+    @PlatformInitContext(PaymentApiCode.REFUND)
     @Operation(summary = "手动发起退款")
     @PostMapping("/refund")
     public ResResult<Void> refund(@RequestBody PayOrderRefundParam param){
@@ -70,6 +73,7 @@ public class RefundOrderController {
         return Res.ok();
     }
 
+    @PlatformInitContext(PaymentApiCode.REFUND)
     @Operation(summary = "重新发起退款")
     @PostMapping("/resetRefund")
     public ResResult<Void> resetRefund(Long id){

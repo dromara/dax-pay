@@ -1,14 +1,14 @@
-package cn.daxpay.single.service.core.task.notice.service;
+package cn.daxpay.single.service.core.notice.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeRecord;
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeTask;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeRecord;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
-import cn.daxpay.single.service.core.task.notice.dao.ClientNoticeRecordManager;
-import cn.daxpay.single.service.core.task.notice.dao.ClientNoticeTaskManager;
+import cn.daxpay.single.service.core.notice.dao.ClientNoticeRecordManager;
+import cn.daxpay.single.service.core.notice.dao.ClientNoticeTaskManager;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeRecordDto;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeTaskDto;
 import cn.daxpay.single.service.param.record.ClientNoticeRecordQuery;

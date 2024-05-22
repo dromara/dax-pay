@@ -12,7 +12,7 @@ import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverParam;
-import cn.daxpay.single.param.payment.allocation.AllocStartParam;
+import cn.daxpay.single.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
@@ -102,7 +102,7 @@ public class AllocationOrderService {
      * 生成分账订单, 根据分账组创建
      */
     @Transactional(rollbackFor = Exception.class)
-    public OrderAndDetail createAndUpdate(AllocStartParam param, PayOrder payOrder, List<AllocationGroupReceiverResult> receiversByGroups){
+    public OrderAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder, List<AllocationGroupReceiverResult> receiversByGroups){
         long orderId = IdUtil.getSnowflakeNextId();
 
         // 订单明细
@@ -153,7 +153,7 @@ public class AllocationOrderService {
     /**
      * 生成分账订单, 通过传入的分账方创建
      */
-    public OrderAndDetail createAndUpdate(AllocStartParam param, PayOrder payOrder) {
+    public OrderAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder) {
         List<String> receiverNos = param.getReceivers()
                 .stream()
                 .map(AllocReceiverParam::getReceiverNo)

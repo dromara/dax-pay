@@ -1,10 +1,10 @@
-package cn.daxpay.single.service.core.task.notice.dao;
+package cn.daxpay.single.service.core.notice.dao;
 
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeRecord;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeRecord;
 import cn.daxpay.single.service.param.record.ClientNoticeRecordQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

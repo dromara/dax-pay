@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.PaymentCommonParam;
 import cn.daxpay.single.result.PaymentCommonResult;
-import cn.daxpay.single.service.annotation.PaymentApi;
+import cn.daxpay.single.service.annotation.PaymentSign;
 import cn.daxpay.single.service.core.payment.common.service.PaymentSignService;
 import cn.daxpay.single.util.DaxRes;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,12 +25,13 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Slf4j
 @Component
+@Order()
 @RequiredArgsConstructor
 public class PaymentVerifySignAop {
     private final PaymentSignService paymentSignService;
 
-    @Around("@annotation(paymentApi)")
-    public Object beforeMethod(ProceedingJoinPoint pjp, PaymentApi paymentApi) throws Throwable {
+    @Around("@annotation(paymentSign)")
+    public Object beforeMethod(ProceedingJoinPoint pjp, @SuppressWarnings("unused") PaymentSign paymentSign) throws Throwable {
         Object[] args = pjp.getArgs();
         if (args.length == 0){
             throw new PayFailureException("支付方法至少有一个参数，并且需要签名支付参数需要放在第一位");
@@ -49,7 +51,7 @@ public class PaymentVerifySignAop {
         } catch (PayFailureException ex) {
             // 如果抛出支付异常, 包裹异常信息, 进行返回
             PaymentCommonResult commonResult = new PaymentCommonResult();
-            // todo 后期错误码统一管理后, 进行更改
+            // todo 后期错误码统一管理后进行更改
             commonResult.setCode(1);
             commonResult.setMsg(ex.getMessage());
             paymentSignService.sign(commonResult);

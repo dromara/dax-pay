@@ -1,7 +1,7 @@
-package cn.daxpay.single.service.core.task.notice.convert;
+package cn.daxpay.single.service.core.notice.convert;
 
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeRecord;
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeTask;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeRecord;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeRecordDto;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeTaskDto;
 import org.mapstruct.Mapper;

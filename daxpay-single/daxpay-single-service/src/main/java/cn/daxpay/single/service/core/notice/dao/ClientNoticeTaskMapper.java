@@ -1,6 +1,6 @@
-package cn.daxpay.single.service.core.task.notice.dao;
+package cn.daxpay.single.service.core.notice.dao;
 
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeTask;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

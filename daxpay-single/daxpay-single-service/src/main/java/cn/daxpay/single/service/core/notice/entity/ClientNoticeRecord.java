@@ -1,9 +1,9 @@
-package cn.daxpay.single.service.core.task.notice.entity;
+package cn.daxpay.single.service.core.notice.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.daxpay.single.service.code.ClientNoticeSendTypeEnum;
-import cn.daxpay.single.service.core.task.notice.convert.ClientNoticeConvert;
+import cn.daxpay.single.service.core.notice.convert.ClientNoticeConvert;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
