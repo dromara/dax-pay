@@ -5,4 +5,4 @@
 # 基础环境
 - Java: 21
 - Maven: 3.9.6
-- 
+- 数据库: Postgresql 16
