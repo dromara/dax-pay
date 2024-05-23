@@ -2,6 +2,7 @@ package cn.daxpay.single.service.core.record.sync.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.RefundSyncStatusEnum;
 import cn.daxpay.single.code.PaySyncStatusEnum;
@@ -46,6 +47,7 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
      * 三方支付返回状态
      * @see PaySyncStatusEnum
      * @see RefundSyncStatusEnum
+     * @see AllocOrderStatusEnum
      */
     @DbColumn(comment = "网关返回状态")
     private String outTradeStatus;

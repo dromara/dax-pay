@@ -1,12 +1,12 @@
 package cn.daxpay.single.service.handler.excel;
 
+import cn.daxpay.single.util.PayUtil;
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.metadata.GlobalConfiguration;
 import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
  * 金额分转元
@@ -23,8 +23,7 @@ public class AmountConverter implements Converter<Integer> {
         if (value == null){
             return new WriteCellData<>("");
         }
-        BigDecimal divide = BigDecimal.valueOf(value)
-                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        BigDecimal divide = PayUtil.conversionAmount(value);
         return new WriteCellData<>(divide);
     }
 }

@@ -12,6 +12,7 @@ import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import cn.daxpay.single.service.sdk.union.bean.UnionPayOrder;
+import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
@@ -66,9 +67,8 @@ public class UnionPayService {
      * 支付接口
      */
     public void pay(PayOrder payOrder, UnionPayParam unionPayParam, UnionPayKit unionPayKit){
-        Integer amount = payOrder.getAmount();
-        BigDecimal totalFee = BigDecimal.valueOf(amount * 0.01);
-        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();;
+        BigDecimal totalFee =  PayUtil.conversionAmount(payOrder.getAmount());
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         String payBody = null;
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
@@ -198,6 +198,5 @@ public class UnionPayService {
             String errMsg = MapUtil.getStr(result, UnionPayCode.RESP_MSG);
             throw new PayFailureException(errMsg);
         }
-
     }
 }

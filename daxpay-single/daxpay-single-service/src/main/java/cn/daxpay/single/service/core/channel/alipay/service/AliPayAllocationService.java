@@ -8,6 +8,7 @@ import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alipay.api.AlipayResponse;
@@ -55,7 +56,7 @@ public class AliPayAllocationService {
         List<OpenApiRoyaltyDetailInfoPojo> royaltyParameters = orderDetails.stream()
                 .map(o -> {
                     OpenApiRoyaltyDetailInfoPojo infoPojo = new OpenApiRoyaltyDetailInfoPojo();
-                    infoPojo.setAmount(String.valueOf(o.getAmount() / 100.0));
+                    infoPojo.setAmount(PayUtil.conversionAmount(o.getAmount()).toString());
                     infoPojo.setTransIn(o.getReceiverAccount());
                     return infoPojo;
                 })
@@ -89,7 +90,7 @@ public class AliPayAllocationService {
         List<OpenApiRoyaltyDetailInfoPojo> royaltyParameters = orderDetails.stream()
                 .map(o -> {
                     OpenApiRoyaltyDetailInfoPojo infoPojo = new OpenApiRoyaltyDetailInfoPojo();
-                    infoPojo.setAmount(String.valueOf(o.getAmount() / 100.0));
+                    infoPojo.setAmount(PayUtil.conversionAmount(o.getAmount()).toString());
                     infoPojo.setTransIn(o.getReceiverAccount());
                     return infoPojo;
                 })

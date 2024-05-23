@@ -6,6 +6,8 @@ import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.hutool.core.date.DatePattern;
 import lombok.experimental.UtilityClass;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -16,6 +18,7 @@ import java.time.temporal.ChronoUnit;
  */
 @UtilityClass
 public class PayUtil {
+    private static final BigDecimal HUNDRED = new BigDecimal(100);
 
     /**
      * 校验参数
@@ -61,5 +64,24 @@ public class PayUtil {
      */
     public LocalDateTime getPaymentExpiredTime(Integer minute) {
         return LocalDateTimeUtil.offset(LocalDateTime.now(), minute, ChronoUnit.MINUTES);
+    }
+
+    /**
+     * 元转分
+     * @param amount 元的金额
+     * @return 分的金额
+     */
+    public static int convertCentAmount(BigDecimal amount) {
+        return amount.multiply(HUNDRED).setScale(0, RoundingMode.HALF_UP).intValue();
+    }
+
+    /**
+     * 分转元,保留两位小数
+     *
+     * @param amount 元的金额
+     * @return 元的金额 两位小数
+     */
+    public static BigDecimal conversionAmount(int amount) {
+        return BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
     }
 }

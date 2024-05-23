@@ -6,6 +6,7 @@ import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
+import cn.daxpay.single.util.PayUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.response.AlipayTradeRefundResponse;
@@ -36,7 +37,7 @@ public class AliPayRefundService {
         refundModel.setOutTradeNo(refundOrder.getOrderNo());
         refundModel.setOutRequestNo(refundOrder.getRefundNo());
         // 金额转换
-        String refundAmount = String.valueOf(refundOrder.getAmount()*0.01);
+        String refundAmount = PayUtil.conversionAmount(refundOrder.getAmount()).toString();
         refundModel.setRefundAmount(refundAmount);
 
         // 设置退款信息

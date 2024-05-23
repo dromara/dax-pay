@@ -6,8 +6,8 @@ import cn.daxpay.single.param.channel.AliPayParam;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.AliPayWay;
-import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.context.NoticeLocal;
+import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
@@ -71,7 +71,7 @@ public class AliPayService {
      * 调起支付
      */
     public void pay(PayOrder payOrder, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
-        Integer amount = payOrder.getAmount();
+        String amount = PayUtil.conversionAmount(payOrder.getAmount()).toString();
         String payBody = null;
         // 异步线程存储
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
@@ -102,12 +102,12 @@ public class AliPayService {
     /**
      * wap支付
      */
-    public String wapPay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
+    public String wapPay(String amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
-        model.setTotalAmount(String.valueOf(amount*0.01));
+        model.setTotalAmount(amount);
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setProductCode(AliPayCode.QUICK_WAP_PAY);
@@ -141,7 +141,7 @@ public class AliPayService {
     /**
      * app支付
      */
-    public String appPay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
+    public String appPay(String amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
 
         model.setSubject(payOrder.getTitle());
@@ -149,7 +149,7 @@ public class AliPayService {
         model.setOutTradeNo(payOrder.getOrderNo());
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
-        model.setTotalAmount(String.valueOf(amount*0.01));
+        model.setTotalAmount(amount);
         // 是否分账
         if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
@@ -171,14 +171,14 @@ public class AliPayService {
     /**
      * PC支付
      */
-    public String webPay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
+    public String webPay(String amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         AlipayTradePagePayModel model = new AlipayTradePagePayModel();
 
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
-        model.setTotalAmount(String.valueOf(amount*0.01));
+        model.setTotalAmount(amount);
         // 目前仅支持FAST_INSTANT_TRADE_PAY
         model.setProductCode(AliPayCode.FAST_INSTANT_TRADE_PAY);
 
@@ -209,11 +209,11 @@ public class AliPayService {
     /**
      * 二维码支付(扫码支付)
      */
-    public String qrCodePay(int amount, PayOrder payOrder, AliPayConfig alipayConfig) {
+    public String qrCodePay(String amount, PayOrder payOrder, AliPayConfig alipayConfig) {
         AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
-        model.setTotalAmount(String.valueOf(amount*0.01));
+        model.setTotalAmount(amount);
         // 是否分账
         if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
@@ -237,7 +237,7 @@ public class AliPayService {
     /**
      * 付款码支付
      */
-    public void barCode(int amount, PayOrder payOrder, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
+    public void barCode(String amount, PayOrder payOrder, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
 
         AlipayTradePayModel model = new AlipayTradePayModel();
@@ -253,7 +253,7 @@ public class AliPayService {
         }
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
-        model.setTotalAmount(String.valueOf(amount*0.01));
+        model.setTotalAmount(amount);
         try {
             AlipayTradePayResponse response = AliPayApi.tradePayToResponse(model, alipayConfig.getNotifyUrl());
 
