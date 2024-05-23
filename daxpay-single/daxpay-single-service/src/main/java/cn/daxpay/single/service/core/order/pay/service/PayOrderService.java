@@ -54,12 +54,8 @@ public class PayOrderService {
     public void updateById(PayOrder payOrder){
         // 如果是异步支付且支付订单完成, 需要删除订单超时任务记录
         if (ORDER_FINISH.contains(payOrder.getStatus())){
-            expiredTimeService.cancelExpiredTime(payOrder.getId());
+            expiredTimeService.cancelExpiredTime(payOrder.getOrderNo());
         }
         payOrderManager.updateById(payOrder);
     }
-
-    /**
-     * 关闭
-     */
 }

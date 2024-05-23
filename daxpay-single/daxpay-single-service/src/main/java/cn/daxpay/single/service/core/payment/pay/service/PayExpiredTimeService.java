@@ -38,7 +38,7 @@ public class PayExpiredTimeService {
             try {
                 // 将过期时间添加到redis中, 往后延时一分钟
                 expiredTime = LocalDateTimeUtil.offset(expiredTime, 1, ChronoUnit.MINUTES);
-                repository.store(payOrder.getId(), expiredTime);
+                repository.store(payOrder.getOrderNo(), expiredTime);
             }
             catch (Exception e) {
                 log.error("注册支付单超时关闭失败",e);
@@ -50,8 +50,8 @@ public class PayExpiredTimeService {
     /**
      * 取消支付单超时关闭事件
      */
-    public void cancelExpiredTime(Long paymentId) {
-        repository.removeKeys(String.valueOf(paymentId));
+    public void cancelExpiredTime(String orderNo) {
+        repository.removeKeys(orderNo);
     }
 
 }
