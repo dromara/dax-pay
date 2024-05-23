@@ -12,6 +12,7 @@ import cn.daxpay.single.param.payment.allocation.AllocFinishParam;
 import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.core.order.allocation.service.AllocationOrderService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
+import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDto;
 import cn.daxpay.single.service.param.order.AllocationOrderQuery;
@@ -39,6 +40,8 @@ public class AllocationOrderController {
     private final AllocationOrderService allocationOrderService;
 
     private final AllocationService allocationService;
+
+    private final AllocationSyncService allocationSyncService;
 
     @Operation(summary = "分页")
     @GetMapping("/page")
@@ -77,7 +80,7 @@ public class AllocationOrderController {
     public ResResult<Void> sync(String allocationNo){
         AllocSyncParam param = new AllocSyncParam();
         param.setAllocationNo(allocationNo);
-        allocationService.sync(param);
+        allocationSyncService.sync(param);
         return Res.ok();
     }
 

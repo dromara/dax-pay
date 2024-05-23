@@ -9,6 +9,7 @@ import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.payment.sync.result.AllocSyncResult;
 import cn.daxpay.single.service.dto.channel.wechat.WeChatPayAllocationReceiver;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DatePattern;
@@ -108,7 +109,7 @@ public class WeChatPayAllocationService {
     /**
      * 同步分账状态
      */
-    public void sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails, WeChatPayConfig config){
+    public AllocSyncResult sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails, WeChatPayConfig config){
         // 不要传输AppId参数, 否则会失败
         Map<String, String> params = ProfitSharingModel.builder()
                 .mch_id(config.getWxMchId())
@@ -137,6 +138,7 @@ public class WeChatPayAllocationService {
                 }
             }
         }
+        return new AllocSyncResult().setSyncInfo(JSONUtil.toJsonStr(receivers));
     }
 
 

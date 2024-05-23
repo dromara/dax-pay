@@ -7,12 +7,17 @@ import cn.daxpay.single.code.AllocOrderResultEnum;
 import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.param.payment.allocation.AllocSyncParam;
 import cn.daxpay.single.result.allocation.AllocationSyncResult;
+import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
 import cn.daxpay.single.service.core.payment.allocation.factory.AllocationFactory;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
+import cn.daxpay.single.service.core.payment.sync.result.AllocSyncResult;
+import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
+import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
 import cn.daxpay.single.service.func.AbsAllocationStrategy;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -37,11 +42,14 @@ import java.util.Objects;
 public class AllocationSyncService {
 
     private final ClientNoticeService clientNoticeService;
+
     private final AllocationOrderManager allocationOrderManager;
 
-    private final LockTemplate lockTemplate;
     private final AllocationOrderDetailManager allocationOrderDetailManager;
 
+    private final PaySyncRecordService paySyncRecordService;
+
+    private final LockTemplate lockTemplate;
 
     /**
      * 分账同步, 开启一个新的事务, 不受外部抛出异常的影响
@@ -77,9 +85,9 @@ public class AllocationSyncService {
             allocationStrategy.initParam(allocationOrder, detailList);
             // 分账完结预处理
             allocationStrategy.doBeforeHandler();
-            allocationStrategy.doSync();
-            // TODO 保存分账同步记录
-
+            AllocSyncResult allocSyncResult = allocationStrategy.doSync();
+            // 保存分账同步记录
+            this.saveRecord(allocationOrder, allocSyncResult,null,null);
             // 根据订单明细更新订单的状态和处理结果
             this.updateOrderStatus(allocationOrder, detailList);
         } finally {
@@ -138,4 +146,21 @@ public class AllocationSyncService {
         }
     }
 
+
+    /**
+     * 保存同步记录
+     */
+    private void saveRecord(AllocationOrder order, AllocSyncResult syncResult, String errorCode, String errorMsg){
+        PaySyncRecord paySyncRecord = new PaySyncRecord()
+                .setBizTradeNo(order.getBizAllocationNo())
+                .setTradeNo(order.getAllocationNo())
+                .setOutTradeNo(order.getOutAllocationNo())
+                .setSyncType(PaymentTypeEnum.ALLOCATION.getCode())
+                .setChannel(order.getChannel())
+                .setSyncInfo(syncResult.getSyncInfo())
+                .setErrorCode(errorCode)
+                .setErrorMsg(errorMsg)
+                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
+        paySyncRecordService.saveRecord(paySyncRecord);
+    }
 }

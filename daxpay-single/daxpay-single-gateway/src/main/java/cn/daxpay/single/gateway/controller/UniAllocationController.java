@@ -11,6 +11,7 @@ import cn.daxpay.single.service.annotation.PaymentSign;
 import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
+import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
 import cn.daxpay.single.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniAllocationController {
 
     private final AllocationService allocationService;
+
+    private final AllocationSyncService allocationSyncService;
 
     private final AllocationReceiverService receiverService;
 
@@ -56,7 +59,7 @@ public class UniAllocationController {
     @Operation(summary = "分账同步接口")
     @PostMapping("/sync")
     public DaxResult<AllocationSyncResult> sync(@RequestBody AllocSyncParam param){
-        return DaxRes.ok(allocationService.sync(param));
+        return DaxRes.ok(allocationSyncService.sync(param));
     }
 
     @PaymentSign

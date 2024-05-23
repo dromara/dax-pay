@@ -47,7 +47,6 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
      * 三方支付返回状态
      * @see PaySyncStatusEnum
      * @see RefundSyncStatusEnum
-     * @see AllocOrderStatusEnum
      */
     @DbColumn(comment = "网关返回状态")
     private String outTradeStatus;

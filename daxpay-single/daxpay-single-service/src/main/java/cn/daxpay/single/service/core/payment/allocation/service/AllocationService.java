@@ -133,10 +133,10 @@ public class AllocationService {
                 // TODO 返回异常处理
             }
             // 网关分账号
-            String gatewayNo = PaymentContextLocal.get()
+            String outAllocationNo = PaymentContextLocal.get()
                     .getAllocationInfo()
                     .getOutAllocationNo();
-            order.setOutAllocationNo(gatewayNo);
+            order.setOutAllocationNo(outAllocationNo);
             allocationOrderManager.updateById(order);
             return new AllocationResult()
                     .setAllocationNo(order.getAllocationNo())

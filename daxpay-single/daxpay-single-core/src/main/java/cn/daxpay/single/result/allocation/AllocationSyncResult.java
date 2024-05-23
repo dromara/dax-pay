@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 分账同步接口
+ * 分账同步接口返回类
  * @author xxm
  * @since 2024/5/20
  */
