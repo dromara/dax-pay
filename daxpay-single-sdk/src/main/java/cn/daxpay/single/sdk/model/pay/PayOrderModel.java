@@ -34,13 +34,11 @@ public class PayOrderModel extends DaxPayResponseModel {
     /** 描述 */
     private String description;
 
-
     /** 是否支持分账 */
     private Boolean allocation;
 
     /** 是否开启自动分账, 不传输为不开启 */
     private Boolean autoAllocation;
-
 
     /**
      * 支付通道

@@ -82,6 +82,6 @@ public class PayUtil {
      * @return 元的金额 两位小数
      */
     public static BigDecimal conversionAmount(int amount) {
-        return BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
+        return BigDecimal.valueOf(amount).divide(HUNDRED,2, RoundingMode.HALF_UP);
     }
 }
