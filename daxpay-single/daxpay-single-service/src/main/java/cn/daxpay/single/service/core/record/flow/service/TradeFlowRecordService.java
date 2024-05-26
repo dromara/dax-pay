@@ -54,7 +54,6 @@ public class TradeFlowRecordService {
                 .setType(TradeFlowRecordTypeEnum.PAY.getCode())
                 .setAmount(payOrder.getAmount());
         tradeFlowRecordManager.save(tradeFlowRecord);
-
     }
 
     /**

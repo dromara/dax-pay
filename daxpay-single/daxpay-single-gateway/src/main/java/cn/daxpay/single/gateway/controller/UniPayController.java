@@ -4,16 +4,14 @@ import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.code.PaymentApiCode;
 import cn.daxpay.single.param.payment.pay.PayCloseParam;
 import cn.daxpay.single.param.payment.pay.PayParam;
-import cn.daxpay.single.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.param.payment.refund.RefundParam;
-import cn.daxpay.single.param.payment.refund.RefundSyncParam;
+import cn.daxpay.single.param.payment.transfer.TransferParam;
 import cn.daxpay.single.result.DaxResult;
 import cn.daxpay.single.result.pay.PayCloseResult;
 import cn.daxpay.single.result.pay.PayResult;
 import cn.daxpay.single.result.pay.RefundResult;
-import cn.daxpay.single.result.pay.SyncResult;
-import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.annotation.PaymentSign;
+import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
 import cn.daxpay.single.service.core.payment.pay.service.PayService;
 import cn.daxpay.single.service.core.payment.refund.service.RefundService;
@@ -69,20 +67,14 @@ public class UniPayController {
         return DaxRes.ok(refundService.refund(param));
     }
 
-    @PaymentSign
-    @PlatformInitContext(PaymentApiCode.SYNC_PAY)
-    @Operation(summary = "支付同步接口")
-    @PostMapping("/syncPay")
-    public DaxResult<SyncResult> syncPay(@RequestBody PaySyncParam param){
-        return DaxRes.ok(paySyncService.sync(param));
-    }
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.SYNC_REFUND)
-    @Operation(summary = "退款同步接口")
-    @PostMapping("/syncRefund")
-    public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){
-        return DaxRes.ok(refundSyncService.sync(param));
+    @PlatformInitContext(PaymentApiCode.TRANSFER)
+    @Operation(summary = "统一转账接口")
+    @PostMapping("/transfer")
+    public DaxResult<Void> transfer(@RequestBody TransferParam param){
+        return DaxRes.ok();
     }
+
 
 }

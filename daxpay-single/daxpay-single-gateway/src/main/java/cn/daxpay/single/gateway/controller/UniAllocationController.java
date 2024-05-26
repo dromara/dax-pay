@@ -1,17 +1,18 @@
 package cn.daxpay.single.gateway.controller;
 
 import cn.daxpay.single.code.PaymentApiCode;
-import cn.daxpay.single.param.payment.allocation.*;
+import cn.daxpay.single.param.payment.allocation.AllocFinishParam;
+import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
+import cn.daxpay.single.param.payment.allocation.AllocReceiverRemoveParam;
+import cn.daxpay.single.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.result.DaxResult;
 import cn.daxpay.single.result.allocation.AllocReceiverAddResult;
 import cn.daxpay.single.result.allocation.AllocReceiverRemoveResult;
 import cn.daxpay.single.result.allocation.AllocationResult;
-import cn.daxpay.single.result.allocation.AllocationSyncResult;
 import cn.daxpay.single.service.annotation.PaymentSign;
 import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
-import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
 import cn.daxpay.single.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,8 +35,6 @@ public class UniAllocationController {
 
     private final AllocationService allocationService;
 
-    private final AllocationSyncService allocationSyncService;
-
     private final AllocationReceiverService receiverService;
 
     @PaymentSign
@@ -54,13 +53,6 @@ public class UniAllocationController {
         return DaxRes.ok(allocationService.finish(param));
     }
 
-    @PaymentSign
-    @PlatformInitContext(PaymentApiCode.SYNC_ALLOCATION)
-    @Operation(summary = "分账同步接口")
-    @PostMapping("/sync")
-    public DaxResult<AllocationSyncResult> sync(@RequestBody AllocSyncParam param){
-        return DaxRes.ok(allocationSyncService.sync(param));
-    }
 
     @PaymentSign
     @PlatformInitContext(PaymentApiCode.ALLOCATION_RECEIVER_ADD)

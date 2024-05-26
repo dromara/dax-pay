@@ -35,12 +35,14 @@ public class PayReturnService {
      * 支付宝同步回调
      */
     public String alipay(AliPayReturnParam param){
-        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(param.getOut_trade_no()).orElse(null);
-        PayOrder payOrder = payOrderQueryService.findById(param.getOut_trade_no()).orElse(null);
-        if (Objects.isNull(payOrderExtra) || Objects.isNull(payOrder)){
+        PayOrder payOrder = payOrderQueryService.findByOrderNo(param.getOutTradeNo()).orElse(null);
+        if ( Objects.isNull(payOrder)){
             return StrUtil.format("{}/result/error?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付订单有问题，请排查"));
         }
-
+        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(payOrder.getId()).orElse(null);
+        if ( Objects.isNull(payOrderExtra)){
+            return StrUtil.format("{}/result/error?msg={}", properties.getFrontH5Url(), URLEncodeUtil.encode("支付订单有问题，请排查"));
+        }
         // 如果同步跳转参数为空, 获取系统配置地址, 系统配置如果也为空, 则返回默认地址
         String returnUrl = payOrderExtra.getReturnUrl();
         if (StrUtil.isBlank(returnUrl)){
