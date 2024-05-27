@@ -5,8 +5,9 @@ import cn.daxpay.single.param.payment.allocation.AllocSyncParam;
 import cn.daxpay.single.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.param.payment.refund.RefundSyncParam;
 import cn.daxpay.single.result.DaxResult;
-import cn.daxpay.single.result.allocation.AllocationSyncResult;
-import cn.daxpay.single.result.pay.SyncResult;
+import cn.daxpay.single.result.sync.AllocSyncResult;
+import cn.daxpay.single.result.sync.PaySyncResult;
+import cn.daxpay.single.result.sync.RefundSyncResult;
 import cn.daxpay.single.service.annotation.PaymentSign;
 import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "")
 @RestController
-@RequestMapping("/unipay/sync/")
+@RequestMapping("/unipay/sync")
 @RequiredArgsConstructor
 public class UniPaySyncController {
 
@@ -40,7 +41,7 @@ public class UniPaySyncController {
     @PlatformInitContext(PaymentApiCode.SYNC_PAY)
     @Operation(summary = "支付同步接口")
     @PostMapping("/pay")
-    public DaxResult<SyncResult> syncPay(@RequestBody PaySyncParam param){
+    public DaxResult<PaySyncResult> pay(@RequestBody PaySyncParam param){
         return DaxRes.ok(paySyncService.sync(param));
     }
 
@@ -48,7 +49,7 @@ public class UniPaySyncController {
     @PlatformInitContext(PaymentApiCode.SYNC_REFUND)
     @Operation(summary = "退款同步接口")
     @PostMapping("/refund")
-    public DaxResult<SyncResult> syncRefund(@RequestBody RefundSyncParam param){
+    public DaxResult<RefundSyncResult> refund(@RequestBody RefundSyncParam param){
         return DaxRes.ok(refundSyncService.sync(param));
     }
 
@@ -56,8 +57,17 @@ public class UniPaySyncController {
     @PaymentSign
     @PlatformInitContext(PaymentApiCode.SYNC_ALLOCATION)
     @Operation(summary = "分账同步接口")
-    @PostMapping("/sync")
-    public DaxResult<AllocationSyncResult> sync(@RequestBody AllocSyncParam param){
+    @PostMapping("/allocation")
+    public DaxResult<AllocSyncResult> allocation(@RequestBody AllocSyncParam param){
         return DaxRes.ok(allocationSyncService.sync(param));
+    }
+
+    @PaymentSign
+    @PlatformInitContext(PaymentApiCode.SYNC_TRANSFER)
+    @Operation(summary = "转账同步接口")
+    @PostMapping("/transfer")
+    public DaxResult<Void> transfer(@RequestBody AllocSyncParam param){
+        allocationSyncService.sync(param);
+        return DaxRes.ok();
     }
 }

@@ -27,6 +27,9 @@ public class AllocationReceiverDto extends BaseDto {
     @Schema(description = "账号别名")
     private String name;
 
+    @Schema(description = "接收方编号")
+    private String receiverNo;
+
     /**
      * @see PayChannelEnum
      */

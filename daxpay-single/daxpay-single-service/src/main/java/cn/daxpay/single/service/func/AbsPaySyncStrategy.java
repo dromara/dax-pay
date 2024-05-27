@@ -2,7 +2,7 @@ package cn.daxpay.single.service.func;
 
 import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +30,6 @@ public abstract class AbsPaySyncStrategy implements PayStrategy{
      * 异步支付单与支付网关进行状态比对后的结果
      * @see PaySyncStatusEnum
      */
-    public abstract PaySyncResult doSyncStatus();
+    public abstract PayRemoteSyncResult doSyncStatus();
 
 }

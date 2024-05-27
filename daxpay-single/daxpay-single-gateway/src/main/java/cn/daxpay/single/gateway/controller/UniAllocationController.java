@@ -53,7 +53,6 @@ public class UniAllocationController {
         return DaxRes.ok(allocationService.finish(param));
     }
 
-
     @PaymentSign
     @PlatformInitContext(PaymentApiCode.ALLOCATION_RECEIVER_ADD)
     @Operation(summary = "添加分账接收方接口")
@@ -69,5 +68,6 @@ public class UniAllocationController {
     public DaxResult<AllocReceiverRemoveResult> receiverRemove(@RequestBody AllocReceiverRemoveParam param){
         return DaxRes.ok(receiverService.remove(param));
     }
+
 
 }

@@ -45,7 +45,4 @@ public interface PaymentApiCode {
     /** 删除分账方 */
     String ALLOCATION_RECEIVER_REMOVE = "allocationReceiverRemove";
 
-
-
-
 }

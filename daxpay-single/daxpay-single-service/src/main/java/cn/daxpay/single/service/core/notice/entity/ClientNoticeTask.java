@@ -8,7 +8,7 @@ import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.code.RefundStatusEnum;
-import cn.daxpay.single.result.allocation.AllocOrderResult;
+import cn.daxpay.single.result.order.AllocOrderResult;
 import cn.daxpay.single.service.code.ClientNoticeTypeEnum;
 import cn.daxpay.single.service.core.payment.notice.result.PayNoticeResult;
 import cn.daxpay.single.service.core.payment.notice.result.RefundNoticeResult;

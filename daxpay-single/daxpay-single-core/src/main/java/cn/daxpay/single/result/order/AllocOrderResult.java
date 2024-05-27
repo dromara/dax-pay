@@ -1,4 +1,4 @@
-package cn.daxpay.single.result.allocation;
+package cn.daxpay.single.result.order;
 
 import cn.daxpay.single.code.AllocOrderResultEnum;
 import cn.daxpay.single.code.AllocOrderStatusEnum;

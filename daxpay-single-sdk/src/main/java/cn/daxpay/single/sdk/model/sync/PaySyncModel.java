@@ -1,7 +1,6 @@
 package cn.daxpay.single.sdk.model.sync;
 
 import cn.daxpay.single.sdk.code.PaySyncStatusEnum;
-import cn.daxpay.single.sdk.code.RefundSyncStatusEnum;
 import cn.daxpay.single.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,12 +14,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SyncModel extends DaxPayResponseModel {
+public class PaySyncModel extends DaxPayResponseModel {
 
     /**
      * 同步结果
      * @see PaySyncStatusEnum
-     * @see RefundSyncStatusEnum
      */
     private String status;
 

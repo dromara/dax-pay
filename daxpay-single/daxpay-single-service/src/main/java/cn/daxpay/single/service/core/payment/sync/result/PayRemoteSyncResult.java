@@ -16,7 +16,7 @@ import static cn.daxpay.single.code.PaySyncStatusEnum.FAIL;
  */
 @Data
 @Accessors(chain = true)
-public class PaySyncResult {
+public class PayRemoteSyncResult {
 
     /**
      * 支付网关订单状态

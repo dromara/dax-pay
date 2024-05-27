@@ -4,7 +4,7 @@ import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPaySyncService;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import cn.daxpay.single.service.func.AbsPaySyncStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -40,7 +40,7 @@ public class WeChatPaySyncStrategy extends AbsPaySyncStrategy {
      * 异步支付单与支付网关进行状态比对
      */
     @Override
-    public PaySyncResult doSyncStatus() {
+    public PayRemoteSyncResult doSyncStatus() {
         // 检查并获取微信支付配置
         this.initWeChatPayConfig();
         return weChatPaySyncService.syncPayStatus(this.getOrder(), this.weChatPayConfig);

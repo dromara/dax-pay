@@ -13,10 +13,14 @@ import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverParam;
 import cn.daxpay.single.param.payment.allocation.AllocationParam;
+import cn.daxpay.single.service.common.context.NoticeLocal;
+import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
+import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderExtraManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderExtra;
 import cn.daxpay.single.service.core.order.allocation.entity.OrderAndDetail;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
@@ -56,6 +60,8 @@ public class AllocationOrderService {
     private final AllocationOrderDetailManager allocationOrderDetailManager;
 
     private final PayOrderManager payOrderManager;
+
+    private final AllocationOrderExtraManager allocationOrderExtraManager;
 
 
     /**
@@ -171,7 +177,7 @@ public class AllocationOrderService {
         if (receivers.size() != receiverNos.size()){
             throw new PayFailureException("分账接收方列表存在无效的分账接收方");
         }
-        long orderId = IdUtil.getSnowflakeNextId();
+        long allocId = IdUtil.getSnowflakeNextId();
 
         // 订单明细
         List<AllocationOrderDetail> details = receivers.stream()
@@ -182,7 +188,7 @@ public class AllocationOrderService {
                             .divide(BigDecimal.valueOf(payOrder.getAmount()), 4, RoundingMode.DOWN)
                             .multiply(BigDecimal.valueOf(10000)).intValue();
                     AllocationOrderDetail detail = new AllocationOrderDetail();
-                    detail.setAllocationId(orderId)
+                    detail.setAllocationId(allocId)
                             .setReceiverId(o.getId())
                             .setReceiverNo(o.getReceiverNo())
                             .setAmount(amount)
@@ -211,11 +217,19 @@ public class AllocationOrderService {
                 .setDescription(param.getDescription())
                 .setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
                 .setAmount(sumAmount);
-        allocationOrder.setId(orderId);
+        allocationOrder.setId(allocId);
+        // 分账订单扩展
+        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
+        AllocationOrderExtra extend = new AllocationOrderExtra()
+                .setNotifyUrl(noticeInfo.getNotifyUrl())
+                .setAttach(param.getAttach());
+        extend.setId(allocId);
+
         // 更新支付订单分账状态
         payOrder.setAllocationStatus(PayOrderAllocStatusEnum.ALLOCATION.getCode());
         payOrderManager.updateById(payOrder);
         allocationOrderDetailManager.saveAll(details);
+        allocationOrderExtraManager.save(extend);
         allocationOrderManager.save(allocationOrder);
         return new OrderAndDetail().setOrder(allocationOrder).setDetails(details);
     }

@@ -1,4 +1,4 @@
-package cn.daxpay.single.result.allocation;
+package cn.daxpay.single.result.sync;
 
 import cn.daxpay.single.result.PaymentCommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,5 +15,5 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "分账同步接口")
-public class AllocationSyncResult extends PaymentCommonResult {
+public class AllocSyncResult extends PaymentCommonResult {
 }

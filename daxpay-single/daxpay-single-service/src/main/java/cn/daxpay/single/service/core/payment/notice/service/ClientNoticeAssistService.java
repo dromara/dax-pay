@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.core.payment.notice.service;
 
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
-import cn.daxpay.single.result.allocation.AllocOrderDetailResult;
-import cn.daxpay.single.result.allocation.AllocOrderResult;
+import cn.daxpay.single.result.order.AllocOrderDetailResult;
+import cn.daxpay.single.result.order.AllocOrderResult;
 import cn.daxpay.single.service.code.ClientNoticeTypeEnum;
 import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
 import cn.daxpay.single.service.core.order.allocation.convert.AllocationConvert;

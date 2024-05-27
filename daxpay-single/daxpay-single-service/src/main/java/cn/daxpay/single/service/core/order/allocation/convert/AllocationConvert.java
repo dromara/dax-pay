@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.order.allocation.convert;
 
-import cn.daxpay.single.result.allocation.AllocOrderDetailResult;
-import cn.daxpay.single.result.allocation.AllocOrderResult;
+import cn.daxpay.single.result.order.AllocOrderDetailResult;
+import cn.daxpay.single.result.order.AllocOrderResult;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;

@@ -17,6 +17,9 @@ public class AllocationGroupParam {
     @Schema(description = "主键")
     private Long id;
 
+    @Schema(description = "分账组编号")
+    private String groupNo;
+
     @Schema(description = "分组名称")
     private String name;
 

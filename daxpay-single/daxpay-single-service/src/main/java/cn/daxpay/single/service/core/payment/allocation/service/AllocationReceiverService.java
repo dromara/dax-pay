@@ -69,6 +69,13 @@ public class AllocationReceiverService {
     }
 
     /**
+     * 编码是否存在
+     */
+    public boolean existsByReceiverNo(String receiverNo){
+        return manager.existedByReceiverNo(receiverNo);
+    }
+
+    /**
      * 获取可以分账的通道
      */
     public List<LabelValue> findChannels(){

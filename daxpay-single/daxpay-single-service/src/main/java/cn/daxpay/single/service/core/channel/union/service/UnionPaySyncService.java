@@ -6,8 +6,8 @@ import cn.daxpay.single.code.RefundSyncStatusEnum;
 import cn.daxpay.single.service.code.UnionPayCode;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
-import cn.daxpay.single.service.core.payment.sync.result.RefundSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.map.MapUtil;
@@ -39,8 +39,8 @@ public class UnionPaySyncService {
     /**
      * 支付信息查询
      */
-    public PaySyncResult syncPayStatus(PayOrder order, UnionPayKit unionPayKit) {
-        PaySyncResult syncResult = new PaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
+    public PayRemoteSyncResult syncPayStatus(PayOrder order, UnionPayKit unionPayKit) {
+        PayRemoteSyncResult syncResult = new PayRemoteSyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
 
         AssistOrder query = new AssistOrder();
         query.setOutTradeNo(order.getOrderNo());
@@ -98,8 +98,8 @@ public class UnionPaySyncService {
      * 退款信息查询
      * 云闪付退款和支付查询接口是一个
      */
-    public RefundSyncResult syncRefundStatus(RefundOrder refundOrder, UnionPayKit unionPayKit){
-        RefundSyncResult syncResult = new RefundSyncResult();
+    public RefundRemoteSyncResult syncRefundStatus(RefundOrder refundOrder, UnionPayKit unionPayKit){
+        RefundRemoteSyncResult syncResult = new RefundRemoteSyncResult();
 
         AssistOrder query = new AssistOrder();
         query.setOutTradeNo(String.valueOf(refundOrder.getRefundNo()));

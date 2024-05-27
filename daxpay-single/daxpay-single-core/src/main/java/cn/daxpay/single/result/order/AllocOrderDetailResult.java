@@ -1,4 +1,4 @@
-package cn.daxpay.single.result.allocation;
+package cn.daxpay.single.result.order;
 
 import cn.daxpay.single.code.AllocDetailResultEnum;
 import cn.daxpay.single.code.AllocReceiverTypeEnum;

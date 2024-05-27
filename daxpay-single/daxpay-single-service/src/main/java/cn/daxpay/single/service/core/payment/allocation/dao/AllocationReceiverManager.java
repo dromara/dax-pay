@@ -54,4 +54,8 @@ public class AllocationReceiverManager extends BaseManager<AllocationReceiverMap
     public List<AllocationReceiver> findAllByChannel(String channel) {
         return findAllByField(AllocationReceiver::getChannel, channel);
     }
+
+    public boolean existedByReceiverNo(String receiverNo) {
+        return existedByField(AllocationReceiver::getReceiverNo, receiverNo);
+    }
 }

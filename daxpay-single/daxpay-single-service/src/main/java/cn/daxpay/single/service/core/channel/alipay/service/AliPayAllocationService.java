@@ -8,7 +8,7 @@ import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
-import cn.daxpay.single.service.core.payment.sync.result.AllocSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -106,7 +106,7 @@ public class AliPayAllocationService {
      * 分账状态同步
      */
     @SneakyThrows
-    public AllocSyncResult sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails){
+    public AllocRemoteSyncResult sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails){
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
         model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setOutRequestNo(allocationOrder.getOrderNo());
@@ -134,7 +134,7 @@ public class AliPayAllocationService {
                 }
             }
         }
-        return new AllocSyncResult().setSyncInfo(JSONUtil.toJsonStr(response));
+        return new AllocRemoteSyncResult().setSyncInfo(JSONUtil.toJsonStr(response));
     }
 
     /**

@@ -36,7 +36,6 @@ public class PayOrderTest {
     public void pay() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
 
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试接口支付");

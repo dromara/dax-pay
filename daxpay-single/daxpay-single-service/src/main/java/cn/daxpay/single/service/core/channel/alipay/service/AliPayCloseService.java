@@ -3,7 +3,7 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.code.AliPayCode;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import com.alipay.api.AlipayApiException;
@@ -70,7 +70,7 @@ public class AliPayCloseService {
      * 关闭失败后, 获取支付网关的状态, 如果是关闭返回true, 其他情况抛出异常
      */
     private boolean syncStatus(PayOrder payOrder){
-        PaySyncResult gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder);
+        PayRemoteSyncResult gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder);
         // 已经关闭
         if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncStatusEnum.CLOSED)){
             return true;

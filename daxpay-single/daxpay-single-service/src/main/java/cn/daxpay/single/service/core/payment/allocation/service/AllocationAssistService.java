@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 /**
  * 分账支撑方法
  * @author xxm
@@ -38,7 +40,7 @@ public class AllocationAssistService {
         PlatformLocal platform = PaymentContextLocal.get()
                 .getPlatformInfo();
         // 异步回调为开启状态
-        if (apiInfo.isNotice()) {
+        if (!Objects.equals(allocationParam.getNotNotify(), false) && apiInfo.isNotice()){
             // 首先读取请求参数
             noticeInfo.setNotifyUrl(allocationParam.getNotifyUrl());
             // 读取接口配置
@@ -65,9 +67,5 @@ public class AllocationAssistService {
                 .setReqTime(allocationParam.getReqTime());
 
         allocationOrderExtraManager.updateById(orderExtra);
-
-
     }
-
-
-    }
+}

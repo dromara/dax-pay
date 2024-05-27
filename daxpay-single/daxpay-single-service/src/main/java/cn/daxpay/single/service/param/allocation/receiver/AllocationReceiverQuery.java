@@ -20,6 +20,10 @@ public class AllocationReceiverQuery {
     @Schema(description = "账号别名")
     private String name;
 
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "接收方编号")
+    private String receiverNo;
+
     /**
      * @see PayChannelEnum
      */
@@ -47,7 +51,4 @@ public class AllocationReceiverQuery {
      */
     @Schema(description = "分账关系类型")
     private String relationType;
-
-    @Schema(description = "是否已经同步到网关")
-    private Boolean sync;
 }

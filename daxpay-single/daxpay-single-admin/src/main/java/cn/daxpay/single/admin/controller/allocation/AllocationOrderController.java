@@ -61,11 +61,16 @@ public class AllocationOrderController {
         return Res.ok(allocationOrderService.findById(id));
     }
 
-
     @Operation(summary = "查询明细详情")
     @GetMapping("/detail/findById")
     public ResResult<AllocationOrderDetailDto> findDetailById(Long id){
         return Res.ok(allocationOrderService.findDetailById(id));
+    }
+
+    @Operation(summary = "查询扩展信息")
+    @GetMapping("/extra/findById")
+    public ResResult<AllocationOrderDto> findExtraById(Long id){
+        return Res.ok(allocationOrderService.findExtraById(id));
     }
 
     @Operation(summary = "获取可以分账的通道")

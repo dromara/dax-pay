@@ -2,7 +2,7 @@ package cn.daxpay.single.service.func;
 
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
-import cn.daxpay.single.service.core.payment.sync.result.AllocSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -49,5 +49,5 @@ public abstract class AbsAllocationStrategy implements PayStrategy{
     /**
      * 同步状态
      */
-    public abstract AllocSyncResult doSync();
+    public abstract AllocRemoteSyncResult doSync();
 }

@@ -8,7 +8,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.daxpay.single.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.param.payment.pay.PayCloseParam;
 import cn.daxpay.single.param.payment.pay.PaySyncParam;
-import cn.daxpay.single.result.pay.SyncResult;
+import cn.daxpay.single.result.sync.PaySyncResult;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderExtraService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
@@ -81,7 +81,7 @@ public class PayOrderController {
 
     @Operation(summary = "同步支付状态")
     @PostMapping("/syncByOrderNo")
-    public ResResult<SyncResult> syncById(String orderNo){
+    public ResResult<PaySyncResult> syncById(String orderNo){
         PaySyncParam param = new PaySyncParam();
         param.setOrderNo(orderNo);
         return Res.ok(paySyncService.sync(param));

@@ -15,8 +15,6 @@ import cn.daxpay.single.service.annotation.PlatformInitContext;
 import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
 import cn.daxpay.single.service.core.payment.pay.service.PayService;
 import cn.daxpay.single.service.core.payment.refund.service.RefundService;
-import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
-import cn.daxpay.single.service.core.payment.sync.service.RefundSyncService;
 import cn.daxpay.single.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,9 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniPayController {
     private final PayService payService;
     private final RefundService refundService;
-    private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
-    private final RefundSyncService refundSyncService;
 
     @PaymentSign
     @PlatformInitContext(PaymentApiCode.PAY)
@@ -67,7 +63,6 @@ public class UniPayController {
         return DaxRes.ok(refundService.refund(param));
     }
 
-
     @PaymentSign
     @PlatformInitContext(PaymentApiCode.TRANSFER)
     @Operation(summary = "统一转账接口")
@@ -75,6 +70,5 @@ public class UniPayController {
     public DaxResult<Void> transfer(@RequestBody TransferParam param){
         return DaxRes.ok();
     }
-
 
 }

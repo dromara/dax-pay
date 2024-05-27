@@ -15,7 +15,7 @@ import static cn.daxpay.single.code.RefundSyncStatusEnum.PROGRESS;
  */
 @Data
 @Accessors(chain = true)
-public class RefundSyncResult {
+public class RefundRemoteSyncResult {
 
     /**
      * 支付网关订单状态, 默认为退款中

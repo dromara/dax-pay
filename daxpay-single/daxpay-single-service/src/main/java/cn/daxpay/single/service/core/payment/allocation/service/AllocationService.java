@@ -9,8 +9,8 @@ import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.allocation.AllocFinishParam;
 import cn.daxpay.single.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.param.payment.allocation.QueryAllocOrderParam;
-import cn.daxpay.single.result.allocation.AllocOrderDetailResult;
-import cn.daxpay.single.result.allocation.AllocOrderResult;
+import cn.daxpay.single.result.order.AllocOrderDetailResult;
+import cn.daxpay.single.result.order.AllocOrderResult;
 import cn.daxpay.single.result.allocation.AllocationResult;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.convert.AllocationConvert;
@@ -77,6 +77,7 @@ public class AllocationService {
         // 判断是否已经有分账订单
         AllocationOrder allocationOrder = allocationOrderManager.findByBizAllocationNo(param.getBizAllocationNo())
                 .orElse(null);
+        allocationAssistService.initNotice(param);
         if (Objects.nonNull(allocationOrder)){
             // 重复分账
             return this.retryAllocation(param, allocationOrder);

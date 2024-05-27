@@ -246,4 +246,10 @@ public class AllocationGroupService {
         groupManager.updateById(group);
     }
 
+    /**
+     * 判断分账组编号是否存在
+     */
+    public boolean existsByGroupNo(String groupNo) {
+        return groupManager.existedByGroupNo(groupNo);
+    }
 }

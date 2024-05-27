@@ -42,6 +42,12 @@ public class AllocationReceiverController {
         return Res.ok(receiverService.findById(id));
     }
 
+    @Operation(summary = "编码是否存在")
+    @GetMapping("/existsByReceiverNo")
+    public ResResult<Boolean> existsByReceiverNo(String receiverNo){
+        return Res.ok(receiverService.existsByReceiverNo(receiverNo));
+    }
+
     @Operation(summary = "获取可以分账的通道")
     @GetMapping("/findChannels")
     public ResResult<List<LabelValue>> findChannels(){
