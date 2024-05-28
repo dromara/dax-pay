@@ -15,6 +15,7 @@ import cn.daxpay.single.service.core.payment.allocation.service.AllocationServic
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDto;
+import cn.daxpay.single.service.dto.order.allocation.AllocationOrderExtraDto;
 import cn.daxpay.single.service.param.order.AllocationOrderQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -69,7 +70,7 @@ public class AllocationOrderController {
 
     @Operation(summary = "查询扩展信息")
     @GetMapping("/extra/findById")
-    public ResResult<AllocationOrderDto> findExtraById(Long id){
+    public ResResult<AllocationOrderExtraDto> findExtraById(Long id){
         return Res.ok(allocationOrderService.findExtraById(id));
     }
 

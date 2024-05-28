@@ -29,6 +29,7 @@ import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceive
 import cn.daxpay.single.service.dto.allocation.AllocationGroupReceiverResult;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDto;
+import cn.daxpay.single.service.dto.order.allocation.AllocationOrderExtraDto;
 import cn.daxpay.single.service.param.order.AllocationOrderQuery;
 import cn.daxpay.single.util.OrderNoGenerateUtil;
 import cn.hutool.core.util.IdUtil;
@@ -109,8 +110,6 @@ public class AllocationOrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public OrderAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder, List<AllocationGroupReceiverResult> receiversByGroups){
-        long orderId = IdUtil.getSnowflakeNextId();
-
         // 订单明细
         List<AllocationOrderDetail> details = receiversByGroups.stream()
                 .map(o -> {
@@ -118,8 +117,7 @@ public class AllocationOrderService {
                     Integer rate = o.getRate();
                     Integer amount = payOrder.getAmount() * rate / 10000;
                     AllocationOrderDetail detail = new AllocationOrderDetail();
-                    detail.setAllocationId(orderId)
-                            .setReceiverNo(o.getReceiverNo())
+                    detail.setReceiverNo(o.getReceiverNo())
                             .setReceiverId(o.getId())
                             .setAmount(amount)
                             .setResult(AllocDetailResultEnum.PENDING.getCode())
@@ -130,35 +128,13 @@ public class AllocationOrderService {
                     return detail;
                 })
                 .collect(Collectors.toList());
-        // 求分账的总额
-        Integer sumAmount = details.stream()
-                .map(AllocationOrderDetail::getAmount)
-                .reduce(0, Integer::sum);
-        // 分账订单
-        AllocationOrder allocationOrder = new AllocationOrder()
-                .setOrderId(payOrder.getId())
-                .setOrderNo(payOrder.getOrderNo())
-                .setBizOrderNo(payOrder.getBizOrderNo())
-                .setOutOrderNo(payOrder.getOutOrderNo())
-                .setTitle(payOrder.getTitle())
-                .setAllocationNo(OrderNoGenerateUtil.allocation())
-                .setBizAllocationNo(param.getBizAllocationNo())
-                .setChannel(payOrder.getChannel())
-                .setDescription(param.getDescription())
-                .setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
-                .setAmount(sumAmount);
-        allocationOrder.setId(orderId);
-        // 更新支付订单分账状态
-        payOrder.setAllocationStatus(PayOrderAllocStatusEnum.ALLOCATION.getCode());
-        payOrderManager.updateById(payOrder);
-        allocationOrderDetailManager.saveAll(details);
-        allocationOrderManager.save(allocationOrder);
-        return new OrderAndDetail().setOrder(allocationOrder).setDetails(details);
+        return this.saveAllocOrder(param, payOrder, details);
     }
 
     /**
      * 生成分账订单, 通过传入的分账方创建
      */
+    @Transactional(rollbackFor = Exception.class)
     public OrderAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder) {
         List<String> receiverNos = param.getReceivers()
                 .stream()
@@ -200,6 +176,17 @@ public class AllocationOrderService {
                     return detail;
                 })
                 .collect(Collectors.toList());
+        return this.saveAllocOrder(param, payOrder, details);
+    }
+
+    /**
+     * 保存分账相关订单信息
+     */
+    private OrderAndDetail saveAllocOrder(AllocationParam param, PayOrder payOrder, List<AllocationOrderDetail> details ) {
+        long allocId = IdUtil.getSnowflakeNextId();
+        // 分账明细设置ID
+        details.forEach(o -> o.setAllocationId(allocId));
+
         // 求分账的总额
         Integer sumAmount = details.stream()
                 .map(AllocationOrderDetail::getAmount)
@@ -232,6 +219,14 @@ public class AllocationOrderService {
         allocationOrderExtraManager.save(extend);
         allocationOrderManager.save(allocationOrder);
         return new OrderAndDetail().setOrder(allocationOrder).setDetails(details);
+    }
+
+    /**
+     * 查询扩展订单信息
+     */
+    public AllocationOrderExtraDto findExtraById(Long id) {
+        return allocationOrderExtraManager.findById(id).map(AllocationOrderExtra::toDto)
+                .orElseThrow(() -> new DataNotExistException("未找到"));
     }
 }
 

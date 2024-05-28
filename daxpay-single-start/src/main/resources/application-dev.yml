@@ -60,7 +60,7 @@ springdoc:
 # 开发时显示debug日志
 logging:
   level:
-    cn.bootx.**: debug
+    cn.daxpay.**: debug
     org.springframework.jdbc.core: debug
 # 项目配置
 bootx:

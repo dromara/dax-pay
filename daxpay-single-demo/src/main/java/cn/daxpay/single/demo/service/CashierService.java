@@ -53,6 +53,8 @@ public class CashierService {
         PayParam payParam = new PayParam();
         payParam.setBizOrderNo(param.getBizOrderNo());
         payParam.setAllocation(param.getAllocation());
+        // 如果为分账, 则设置为默认分账
+        payParam.setAutoAllocation(param.getAllocation());
         int amount = param.getAmount()
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();
