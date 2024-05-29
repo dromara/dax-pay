@@ -120,15 +120,16 @@ public class CashierService {
         QueryPayParam queryPayOrderParam = new QueryPayParam();
         queryPayOrderParam.setBizOrderNoeNo(bizOrderNoeNo);
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(queryPayOrderParam);
-        // 未查询到订单
-        if (execute.getCode() == 10010){
-            return false;
-        }
 
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());
         }
         PayOrderModel data = execute.getData();
+
+        // todo 暂时先这样处理聚合支付的查询，后续需要替换为异常码判断响应状态
+        if (Objects.equals(data.getMsg(),"未查询到支付订单")){
+            return false;
+        }
         String status = data.getStatus();
         if (Objects.equals(status, PayStatusEnum.PROGRESS.getCode())){
             return false;
