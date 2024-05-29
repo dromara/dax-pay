@@ -17,10 +17,6 @@ import lombok.Setter;
 public class AllocationReceiverQuery {
 
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "账号别名")
-    private String name;
-
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     @Schema(description = "接收方编号")
     private String receiverNo;
 

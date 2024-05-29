@@ -25,9 +25,6 @@ public class AllocReceiverAddParam extends DaxPayRequest<AllocReceiverAddModel> 
     /** 接收者编号 */
     private String receiverNo;
 
-    /** 账号别名 */
-    private String name;
-
     /**
      * 所属通道
      * @see PayChannelEnum

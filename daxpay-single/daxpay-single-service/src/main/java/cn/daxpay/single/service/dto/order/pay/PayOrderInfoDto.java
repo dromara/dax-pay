@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Schema(title = "支付订单和扩展信息")
-public class PayOrderDetailDto {
+public class PayOrderInfoDto {
     @Schema(description = "支付订单")
     private PayOrderDto payOrder;
     @Schema(description = "支付订单扩展信息")

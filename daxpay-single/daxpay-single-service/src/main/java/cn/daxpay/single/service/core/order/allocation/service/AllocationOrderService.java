@@ -40,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +105,14 @@ public class AllocationOrderService {
         return allocationOrderDetailManager.findById(id).map(AllocationOrderDetail::toDto).orElseThrow(() -> new DataNotExistException("分账订单明细不存在"));
     }
 
+    /**
+     * 查询扩展订单信息
+     */
+    public AllocationOrderExtraDto findExtraById(Long id) {
+        return allocationOrderExtraManager.findById(id).map(AllocationOrderExtra::toDto)
+                .orElseThrow(() -> new DataNotExistException("未找到"));
+    }
+
 
     /**
      * 生成分账订单, 根据分账组创建
@@ -113,11 +122,15 @@ public class AllocationOrderService {
         // 订单明细
         List<AllocationOrderDetail> details = receiversByGroups.stream()
                 .map(o -> {
-                    // 计算分账金额, 小数不分直接舍弃, 防止分账金额超过上限
+                    // 计算分账金额, 小数部分直接舍弃, 防止分账金额超过上限
                     Integer rate = o.getRate();
-                    Integer amount = payOrder.getAmount() * rate / 10000;
-                    AllocationOrderDetail detail = new AllocationOrderDetail();
-                    detail.setReceiverNo(o.getReceiverNo())
+                    // 等同于 payOrder.getAmount() * rate / 10000;
+                    int amount = BigDecimal.valueOf(payOrder.getAmount())
+                            .multiply(BigDecimal.valueOf(rate))
+                            .divide(BigDecimal.valueOf(10000), 0, RoundingMode.DOWN).intValue();
+
+                    AllocationOrderDetail detail = new AllocationOrderDetail()
+                            .setReceiverNo(o.getReceiverNo())
                             .setReceiverId(o.getId())
                             .setAmount(amount)
                             .setResult(AllocDetailResultEnum.PENDING.getCode())
@@ -125,6 +138,12 @@ public class AllocationOrderService {
                             .setReceiverType(o.getReceiverType())
                             .setReceiverName(o.getReceiverName())
                             .setReceiverAccount(o.getReceiverAccount());
+                    // 如果金额为0, 设置为分账失败, 不参与分账
+                    if (amount == 0){
+                        detail.setResult(AllocDetailResultEnum.IGNORE.getCode())
+                                .setErrorMsg("分账比例有误或金额太小, 无法进行分账")
+                                .setFinishTime(LocalDateTime.now());
+                    }
                     return detail;
                 })
                 .collect(Collectors.toList());
@@ -186,7 +205,6 @@ public class AllocationOrderService {
         long allocId = IdUtil.getSnowflakeNextId();
         // 分账明细设置ID
         details.forEach(o -> o.setAllocationId(allocId));
-
         // 求分账的总额
         Integer sumAmount = details.stream()
                 .map(AllocationOrderDetail::getAmount)
@@ -204,6 +222,14 @@ public class AllocationOrderService {
                 .setDescription(param.getDescription())
                 .setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
                 .setAmount(sumAmount);
+        // 如果分账订单金额为0, 设置为忽略状态
+        if (sumAmount == 0){
+            allocationOrder.setStatus(AllocOrderStatusEnum.IGNORE.getCode())
+                    .setFinishTime(LocalDateTime.now())
+                    .setResult(AllocOrderStatusEnum.ALLOCATION_FAILED.getCode())
+                    .setErrorMsg("分账比例有误或金额太小, 无法进行分账");
+        }
+
         allocationOrder.setId(allocId);
         // 分账订单扩展
         NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
@@ -219,14 +245,6 @@ public class AllocationOrderService {
         allocationOrderExtraManager.save(extend);
         allocationOrderManager.save(allocationOrder);
         return new OrderAndDetail().setOrder(allocationOrder).setDetails(details);
-    }
-
-    /**
-     * 查询扩展订单信息
-     */
-    public AllocationOrderExtraDto findExtraById(Long id) {
-        return allocationOrderExtraManager.findById(id).map(AllocationOrderExtra::toDto)
-                .orElseThrow(() -> new DataNotExistException("未找到"));
     }
 }
 

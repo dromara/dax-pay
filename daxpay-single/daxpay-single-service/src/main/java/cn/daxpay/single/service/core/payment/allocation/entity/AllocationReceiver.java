@@ -33,10 +33,6 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
     @DbColumn(comment = "分账接收方编号")
     private String receiverNo;
 
-    /** 账号别名 */
-    @DbColumn(comment = "账号别名")
-    private String name;
-
     /**
      * 所属通道
      * @see PayChannelEnum

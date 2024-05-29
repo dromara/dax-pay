@@ -50,7 +50,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
         this.aliPayConfig = aliPayConfigService.getConfig();
         // 判断是否支持分账
         if (Objects.equals(aliPayConfig.getAllocation(),false)){
-            throw new PayFailureException("微信支付配置不支持分账");
+            throw new PayFailureException("支付宝支付配置不支持分账");
         }
         aliPayConfigService.initConfig(this.aliPayConfig);
     }

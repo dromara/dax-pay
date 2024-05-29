@@ -17,6 +17,8 @@ public enum AllocOrderStatusEnum {
     ALLOCATION_FAILED("allocation_failed", "分账失败"),
     FINISH("finish", "完结"),
     FINISH_FAILED("finish_failed", "完结失败"),
+    /** 忽略, 如果金额为0, 不进行分账 */
+    IGNORE("ignore", "忽略"),
     ;
 
     final String code;

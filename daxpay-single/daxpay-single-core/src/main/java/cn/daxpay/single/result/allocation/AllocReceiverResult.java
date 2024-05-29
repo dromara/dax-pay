@@ -20,9 +20,6 @@ public class AllocReceiverResult {
     /** 分账接收方编号, 需要保证唯一 */
     private String receiverNo;
 
-    /** 账号别名 */
-    private String name;
-
     /**
      * 所属通道
      * @see PayChannelEnum

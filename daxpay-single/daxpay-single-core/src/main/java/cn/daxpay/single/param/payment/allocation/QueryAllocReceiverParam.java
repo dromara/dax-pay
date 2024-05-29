@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * 查询分账接收者参数
  * @author xxm
@@ -19,5 +21,6 @@ public class QueryAllocReceiverParam extends PaymentCommonParam {
 
     /** 所属通道 */
     @Schema(description = "所属通道")
+    @NotEmpty(message = "所属通道必填")
     private String channel;
 }

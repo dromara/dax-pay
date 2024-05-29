@@ -51,6 +51,10 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
         if (Objects.equals(weChatPayConfig.getAllocation(),false)){
             throw new PayFailureException("微信支付配置不支持分账");
         }
+        // 如果分账金额为0, 不发起分账
+        if (getAllocationOrder().getAmount() == 0){
+            throw new PayFailureException("微信订单的分账比例不正确或订单金额太小, 无法进行分账");
+        }
     }
 
     /**

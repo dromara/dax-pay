@@ -58,15 +58,17 @@ public class WeChatPayAllocationService {
         }
         String finalDescription = description;
         orderDetails.sort(Comparator.comparing(MpIdEntity::getId));
-        List<ReceiverModel> list = orderDetails.stream().map(o->{
-            AllocReceiverTypeEnum receiverTypeEnum = AllocReceiverTypeEnum.findByCode(o.getReceiverType());
-            return ReceiverModel.builder()
-                    .type(receiverTypeEnum.getOutCode())
-                    .account(o.getReceiverAccount())
-                    .amount(o.getAmount())
-                    .description(finalDescription)
-                    .build();
-        }).collect(Collectors.toList());
+        List<ReceiverModel> list = orderDetails.stream()
+                .filter(o-> Objects.equals(o.getResult(), AllocDetailResultEnum.PENDING.getCode()))
+                .map(o->{
+                    AllocReceiverTypeEnum receiverTypeEnum = AllocReceiverTypeEnum.findByCode(o.getReceiverType());
+                    return ReceiverModel.builder()
+                            .type(receiverTypeEnum.getOutCode())
+                            .account(o.getReceiverAccount())
+                            .amount(o.getAmount())
+                            .description(finalDescription)
+                            .build();
+                }).collect(Collectors.toList());
 
         Map<String, String> params = ProfitSharingModel.builder()
                 .mch_id(config.getWxMchId())

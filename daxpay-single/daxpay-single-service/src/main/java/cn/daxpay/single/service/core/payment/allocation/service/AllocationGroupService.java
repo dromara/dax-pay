@@ -78,7 +78,6 @@ public class AllocationGroupService {
                     AllocationReceiver receiver = receiverMap.get(o.getReceiverId());
                     return new AllocationGroupReceiverResult()
                             .setId(o.getId())
-                            .setName(receiver.getName())
                             .setReceiverId(receiver.getId())
                             .setReceiverNo(receiver.getReceiverNo())
                             .setReceiverAccount(receiver.getReceiverAccount())

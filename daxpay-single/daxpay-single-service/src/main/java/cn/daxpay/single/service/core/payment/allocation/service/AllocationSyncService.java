@@ -66,6 +66,12 @@ public class AllocationSyncService {
             allocationOrder = allocationOrderManager.findByAllocationNo(param.getBizAllocationNo())
                     .orElseThrow(() -> new DataNotExistException("分账单不存在"));
         }
+        // 如果类型为忽略, 不进行同步处理
+        if (Objects.equals(allocationOrder.getStatus(), AllocOrderStatusEnum.IGNORE.getCode())){
+            return new AllocSyncResult();
+        }
+
+        // 调用同步逻辑
         this.sync(allocationOrder);
         return new AllocSyncResult();
     }
@@ -85,6 +91,7 @@ public class AllocationSyncService {
             allocationStrategy.initParam(allocationOrder, detailList);
             // 分账完结预处理
             allocationStrategy.doBeforeHandler();
+            // 执行同步操作, 分账明细的状态变更会在这个里面
             AllocRemoteSyncResult allocRemoteSyncResult = allocationStrategy.doSync();
             // 保存分账同步记录
             this.saveRecord(allocationOrder, allocRemoteSyncResult,null,null);

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * 分账接收者删除参数
  * @author xxm
@@ -18,6 +20,7 @@ import lombok.experimental.Accessors;
 public class AllocReceiverRemoveParam extends PaymentCommonParam {
 
     @Schema(description = "接收者编号")
+    @NotEmpty(message = "接收者编号必填")
     private String receiverNo;
 
 }

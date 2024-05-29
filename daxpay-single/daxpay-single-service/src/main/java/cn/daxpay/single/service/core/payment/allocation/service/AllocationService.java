@@ -97,30 +97,24 @@ public class AllocationService {
             throw new RepetitiveOperationException("分账发起处理中，请勿重复操作");
         }
         try {
-            // 创建分账单和明细并保存, 同时更新支付订单状态 使用事务
-            OrderAndDetail orderAndDetail;
-            // 判断是否传输了分账接收方列表
-            if (CollUtil.isNotEmpty(param.getReceivers())) {
-                orderAndDetail = allocationOrderService.createAndUpdate(param, payOrder);
-            } else if (Objects.nonNull(param.getGroupNo())){
-                // 指定分账组
-                AllocationGroup allocationGroup = groupManager.findByGroupNo(param.getGroupNo()).orElseThrow(() -> new DataNotExistException("未查询到分账组"));
-                List<AllocationGroupReceiverResult> receiversByGroups = allocationGroupService.findReceiversByGroups(allocationGroup.getId());
-                orderAndDetail = allocationOrderService.createAndUpdate(param ,payOrder, receiversByGroups);
-            } else {
-                // 默认分账组
-                AllocationGroup allocationGroup = groupManager.findDefaultGroup(payOrder.getChannel()).orElseThrow(() -> new PayFailureException("未查询到默认分账组"));
-                List<AllocationGroupReceiverResult> receiversByGroups = allocationGroupService.findReceiversByGroups(allocationGroup.getId());
-                orderAndDetail = allocationOrderService.createAndUpdate(param ,payOrder, receiversByGroups);
-            }
-            // 创建分账策略并初始化
-            AbsAllocationStrategy allocationStrategy = AllocationFactory.create(payOrder.getChannel());
+            // 构建分账订单相关信息
+            OrderAndDetail orderAndDetail = this.createAlloc(param, payOrder);
+            // 检查是否需要进行分账
             AllocationOrder order = orderAndDetail.getOrder();
             List<AllocationOrderDetail> details = orderAndDetail.getDetails();
+            // 无需进行分账,
+            if (Objects.equals(order.getStatus(),AllocOrderStatusEnum.IGNORE.getCode())){
+                return new AllocationResult()
+                        .setAllocationNo(order.getAllocationNo())
+                        .setStatus(order.getStatus());
+            }
+
+            // 创建分账策略并初始化
+            AbsAllocationStrategy allocationStrategy = AllocationFactory.create(payOrder.getChannel());
             allocationStrategy.initParam(order, details);
-            // 分账预处理
-            allocationStrategy.doBeforeHandler();
             try {
+                // 分账预处理
+                allocationStrategy.doBeforeHandler();
                 // 分账处理
                 allocationStrategy.allocation();
                 // 执行中
@@ -275,5 +269,28 @@ public class AllocationService {
                 .collect(Collectors.toList());
         result.setDetails(details);
         return result;
+    }
+
+    /**
+     * 构建分账订单相关信息
+     */
+    private OrderAndDetail createAlloc(AllocationParam param, PayOrder payOrder){
+        // 创建分账单和明细并保存, 同时更新支付订单状态 使用事务
+        OrderAndDetail orderAndDetail;
+        // 判断是否传输了分账接收方列表
+        if (CollUtil.isNotEmpty(param.getReceivers())) {
+            orderAndDetail = allocationOrderService.createAndUpdate(param, payOrder);
+        } else if (Objects.nonNull(param.getGroupNo())){
+            // 指定分账组
+            AllocationGroup allocationGroup = groupManager.findByGroupNo(param.getGroupNo()).orElseThrow(() -> new DataNotExistException("未查询到分账组"));
+            List<AllocationGroupReceiverResult> receiversByGroups = allocationGroupService.findReceiversByGroups(allocationGroup.getId());
+            orderAndDetail = allocationOrderService.createAndUpdate(param ,payOrder, receiversByGroups);
+        } else {
+            // 默认分账组
+            AllocationGroup allocationGroup = groupManager.findDefaultGroup(payOrder.getChannel()).orElseThrow(() -> new PayFailureException("未查询到默认分账组"));
+            List<AllocationGroupReceiverResult> receiversByGroups = allocationGroupService.findReceiversByGroups(allocationGroup.getId());
+            orderAndDetail = allocationOrderService.createAndUpdate(param ,payOrder, receiversByGroups);
+        }
+        return orderAndDetail;
     }
 }

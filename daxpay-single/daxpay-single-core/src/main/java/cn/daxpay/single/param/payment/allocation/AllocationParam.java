@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class AllocationParam extends PaymentCommonParam {
 
     /** 分账接收方列表 */
     @Schema(description = "分账接收方列表")
+    @Valid
     private List<AllocReceiverParam> receivers;
 
     /** 是否不启用异步通知 */

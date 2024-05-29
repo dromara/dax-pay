@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * 分账接收者添加参数
  * @author xxm
@@ -21,17 +23,15 @@ import lombok.experimental.Accessors;
 public class AllocReceiverAddParam extends PaymentCommonParam {
 
     @Schema(description = "接收者编号, 需要保证唯一")
+    @NotEmpty(message = "接收者编号必填")
     private String receiverNo;
-
-    /** 账号别名 */
-    @Schema(description = "账号别名")
-    private String name;
 
     /**
      * 所属通道
      * @see PayChannelEnum
      */
     @Schema(description = "所属通道")
+    @NotEmpty(message = "所属通道必填")
     private String channel;
 
     /**
@@ -39,10 +39,12 @@ public class AllocReceiverAddParam extends PaymentCommonParam {
      * @see AllocReceiverTypeEnum
      */
     @Schema(description = "分账接收方类型")
+    @NotEmpty(message = "分账接收方类型必填")
     private String receiverType;
 
     /** 接收方账号 */
     @Schema(description = "接收方账号")
+    @NotEmpty(message = "接收方账号必填")
     private String receiverAccount;
 
     /** 接收方姓名 */
@@ -54,6 +56,7 @@ public class AllocReceiverAddParam extends PaymentCommonParam {
      * @see AllocRelationTypeEnum
      */
     @Schema(description = "分账关系类型")
+    @NotEmpty(message = "分账关系类型必填")
     private String relationType;
 
     /** 关系名称 关系类型为自定义是填写 */

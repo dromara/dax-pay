@@ -44,7 +44,6 @@ public class AllocationReceiverTest {
         param.setRelationType("user");
         param.setRelationName("测试");
         param.setReceiverNo("123456");
-        param.setName("测试");
         param.setReceiverType("user");
         param.setReceiverAccount("123456");
         DaxPayResult<AllocReceiverAddModel> execute = DaxPayKit.execute(param);
