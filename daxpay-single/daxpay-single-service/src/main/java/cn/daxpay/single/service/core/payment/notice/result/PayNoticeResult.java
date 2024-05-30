@@ -24,12 +24,12 @@ import java.time.LocalDateTime;
 @Schema(title = "支付异步通知类")
 public class PayNoticeResult extends PaymentCommonResult {
 
+    @Schema(description = "支付订单号")
+    private String orderNo;
+
     /** 商户订单号 */
     @Schema(description = "商户订单号")
     private String bizOrderNo;
-
-    @Schema(description = "支付订单号")
-    private String orderNo;
 
     /** 通道系统交易号 */
     @Schema(description = "通道支付订单号")
@@ -47,7 +47,7 @@ public class PayNoticeResult extends PaymentCommonResult {
     @Schema(description = "是否需要分账")
     private Boolean allocation;
 
-    /** 是否开启自动分账, 不传输为不开启 */
+    /** 是否开启自动分账 */
     @Schema(description = "是否开启自动分账")
     private Boolean autoAllocation;
 
@@ -67,10 +67,6 @@ public class PayNoticeResult extends PaymentCommonResult {
     /** 金额 */
     @Schema(description = "金额")
     private Integer amount;
-
-    /** 可退款余额 */
-    @Schema(description = "可退款余额")
-    private Integer refundableBalance;
 
     /**
      * 支付状态

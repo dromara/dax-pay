@@ -13,7 +13,7 @@ import cn.daxpay.single.result.allocation.AllocReceiversResult;
 import cn.daxpay.single.result.order.PayOrderResult;
 import cn.daxpay.single.result.order.RefundOrderResult;
 import cn.daxpay.single.service.annotation.PaymentSign;
-import cn.daxpay.single.service.annotation.PlatformInitContext;
+import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
@@ -45,7 +45,7 @@ public class UniQueryController {
     private final AllocationService allocationService;
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.QUERY_PAY_ORDER)
+    @InitPaymentContext(PaymentApiCode.QUERY_PAY_ORDER)
     @Operation(summary = "支付订单查询接口")
     @PostMapping("/payOrder")
     public DaxResult<PayOrderResult> queryPayOrder(@RequestBody QueryPayParam param){
@@ -53,7 +53,7 @@ public class UniQueryController {
     }
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.QUERY_REFUND_ORDER)
+    @InitPaymentContext(PaymentApiCode.QUERY_REFUND_ORDER)
     @Operation(summary = "退款订单查询接口")
     @PostMapping("/refundOrder")
      public DaxResult<RefundOrderResult> queryRefundOrder(@RequestBody QueryRefundParam param){
@@ -61,7 +61,7 @@ public class UniQueryController {
     }
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.QUERY_ALLOCATION_ORDER)
+    @InitPaymentContext(PaymentApiCode.QUERY_ALLOCATION_ORDER)
     @Operation(summary = "分账订单查询接口")
     @PostMapping("/allocationOrder")
     public DaxResult<AllocOrderResult> queryAllocationOrder(@RequestBody QueryAllocOrderParam param){
@@ -69,7 +69,7 @@ public class UniQueryController {
     }
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.QUERY_TRANSFER_ORDER)
+    @InitPaymentContext(PaymentApiCode.QUERY_TRANSFER_ORDER)
     @Operation(summary = "转账订单查询接口")
     @PostMapping("/transferOrder")
     public DaxResult<Void> transferOrder(@RequestBody QueryTransferParam param){
@@ -77,7 +77,7 @@ public class UniQueryController {
     }
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.QUERY_ALLOCATION_RECEIVER)
+    @InitPaymentContext(PaymentApiCode.QUERY_ALLOCATION_RECEIVER)
     @Operation(summary = "分账接收方查询接口")
     @PostMapping("/allocReceiver")
     public DaxResult<AllocReceiversResult> queryAllocReceive(@RequestBody QueryAllocReceiverParam param){

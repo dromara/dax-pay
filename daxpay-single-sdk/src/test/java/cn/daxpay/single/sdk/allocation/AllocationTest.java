@@ -95,10 +95,9 @@ public class AllocationTest {
         AllocationParam param = new AllocationParam();
         param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
-        param.setBizOrderNo("P1213");
+        param.setBizOrderNo("P1717073355992");
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
-        param.setBizOrderNo("112324");
 
         DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
         System.out.println(execute);

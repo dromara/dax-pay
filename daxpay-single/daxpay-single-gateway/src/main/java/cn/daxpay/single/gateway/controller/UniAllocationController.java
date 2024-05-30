@@ -1,5 +1,6 @@
 package cn.daxpay.single.gateway.controller;
 
+import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.code.PaymentApiCode;
 import cn.daxpay.single.param.payment.allocation.AllocFinishParam;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
@@ -10,7 +11,7 @@ import cn.daxpay.single.result.allocation.AllocReceiverAddResult;
 import cn.daxpay.single.result.allocation.AllocReceiverRemoveResult;
 import cn.daxpay.single.result.allocation.AllocationResult;
 import cn.daxpay.single.service.annotation.PaymentSign;
-import cn.daxpay.single.service.annotation.PlatformInitContext;
+import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.util.DaxRes;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/5/17
  */
+@IgnoreAuth
 @Tag(name = "分账控制器")
 @RestController
 @RequestMapping("/unipay/allocation")
@@ -38,7 +40,7 @@ public class UniAllocationController {
     private final AllocationReceiverService receiverService;
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.ALLOCATION)
+    @InitPaymentContext(PaymentApiCode.ALLOCATION)
     @Operation(summary = "触发分账")
     @PostMapping("/open")
     public DaxResult<AllocationResult> open(@RequestBody AllocationParam param){
@@ -46,7 +48,7 @@ public class UniAllocationController {
     }
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.ALLOCATION_FINISH)
+    @InitPaymentContext(PaymentApiCode.ALLOCATION_FINISH)
     @Operation(summary = "分账完结接口")
     @PostMapping("/finish")
     public DaxResult<AllocationResult> finish(@RequestBody AllocFinishParam param){
@@ -54,7 +56,7 @@ public class UniAllocationController {
     }
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.ALLOCATION_RECEIVER_ADD)
+    @InitPaymentContext(PaymentApiCode.ALLOCATION_RECEIVER_ADD)
     @Operation(summary = "添加分账接收方接口")
     @PostMapping("/receiver/add")
     public DaxResult<AllocReceiverAddResult> receiverAdd(@RequestBody AllocReceiverAddParam param){
@@ -62,7 +64,7 @@ public class UniAllocationController {
     }
 
     @PaymentSign
-    @PlatformInitContext(PaymentApiCode.ALLOCATION_RECEIVER_REMOVE)
+    @InitPaymentContext(PaymentApiCode.ALLOCATION_RECEIVER_REMOVE)
     @Operation(summary = "删除分账接收方接口")
     @PostMapping("/receiver/remove")
     public DaxResult<AllocReceiverRemoveResult> receiverRemove(@RequestBody AllocReceiverRemoveParam param){

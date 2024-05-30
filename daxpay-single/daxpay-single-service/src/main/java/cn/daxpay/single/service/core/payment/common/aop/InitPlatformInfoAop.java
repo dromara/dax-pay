@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.payment.common.aop;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.service.annotation.PlatformInitContext;
+import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.system.config.dao.PayApiConfigManager;
 import cn.daxpay.single.service.core.system.config.entity.PayApiConfig;
 import cn.daxpay.single.service.core.system.config.service.PayApiConfigService;
@@ -36,7 +36,7 @@ public class InitPlatformInfoAop {
      * 拦截注解
      */
     @Around("@annotation(platformContext)")
-    public Object beforeMethod(ProceedingJoinPoint pjp, PlatformInitContext platformContext) throws Throwable {
+    public Object beforeMethod(ProceedingJoinPoint pjp, InitPaymentContext platformContext) throws Throwable {
         String code = platformContext.value();
         // 接口信息
         PayApiConfig api = payApiConfigManager.findByCode(code)

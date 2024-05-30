@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "退款订单信息")
-public class RefundOrderDetailDto {
+public class RefundOrderAndExtraDto {
     @Schema(description = "退款订单")
     RefundOrderDto refundOrder;
     @Schema(description = "退款订单扩展信息")

@@ -1,8 +1,6 @@
 package cn.daxpay.single.service.core.payment.notice.service;
 
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
-import cn.daxpay.single.result.order.AllocOrderDetailResult;
-import cn.daxpay.single.result.order.AllocOrderResult;
 import cn.daxpay.single.service.code.ClientNoticeTypeEnum;
 import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
 import cn.daxpay.single.service.core.order.allocation.convert.AllocationConvert;
@@ -16,6 +14,8 @@ import cn.daxpay.single.service.core.order.refund.convert.RefundOrderConvert;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.daxpay.single.service.core.payment.common.service.PaymentSignService;
+import cn.daxpay.single.service.core.payment.notice.result.AllocDetailNoticeResult;
+import cn.daxpay.single.service.core.payment.notice.result.AllocNoticeResult;
 import cn.daxpay.single.service.core.payment.notice.result.PayNoticeResult;
 import cn.daxpay.single.service.core.payment.notice.result.RefundNoticeResult;
 import lombok.RequiredArgsConstructor;
@@ -80,20 +80,21 @@ public class ClientNoticeAssistService {
      */
     public ClientNoticeTask buildAllocTask(AllocationOrder order, AllocationOrderExtra orderExtra, List<AllocationOrderDetail> list){
         // 分账
-        AllocOrderResult allocOrderResult = AllocationConvert.CONVERT.toResult(order);
+        AllocNoticeResult allocOrderResult = AllocationConvert.CONVERT.toNotice(order);
         // 分账详情
-        List<AllocOrderDetailResult> details = list.stream()
-                .map(AllocationConvert.CONVERT::toResult)
+        List<AllocDetailNoticeResult> details = list.stream()
+                .map(AllocationConvert.CONVERT::toNotice)
                 .collect(Collectors.toList());
-        // 分账扩展
-        allocOrderResult.setAttach(orderExtra.getAttach());
+        // 分账扩展和明细
+        allocOrderResult.setAttach(orderExtra.getAttach())
+                .setDetails(details);
         // 签名
         paymentSignService.sign(allocOrderResult);
         return new ClientNoticeTask()
                 .setUrl(orderExtra.getNotifyUrl())
                 // 时间序列化进行了重写
                 .setContent(JacksonUtil.toJson(allocOrderResult))
-                .setNoticeType(ClientNoticeTypeEnum.REFUND.getType())
+                .setNoticeType(ClientNoticeTypeEnum.ALLOCATION.getType())
                 .setSendCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getAllocationNo())

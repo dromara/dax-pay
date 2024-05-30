@@ -2,6 +2,7 @@ package cn.daxpay.single.demo.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.demo.configuration.DaxPayDemoProperties;
+import cn.daxpay.single.sdk.model.notice.AllocNoticeModel;
 import cn.daxpay.single.sdk.model.notice.PayNoticeModel;
 import cn.daxpay.single.sdk.model.notice.RefundNoticeModel;
 import cn.daxpay.single.sdk.util.PaySignUtil;
@@ -46,7 +47,7 @@ public class ClientNoticeReceiveController {
     @PostMapping("/payObject")
     public String pay(@RequestBody PayNoticeModel model){
         log.info("接收到支付回调消息: {}",model);
-        log.info("验签结果: {}", PaySignUtil.hmacSha256Sign(model, daxPayDemoProperties.getSignSecret()));
+        log.info("验签结果: {}", PaySignUtil.verifyHmacSha256Sign(model, daxPayDemoProperties.getSignSecret(),model.getSign()));
         return "SUCCESS";
     }
 
@@ -64,7 +65,25 @@ public class ClientNoticeReceiveController {
     @PostMapping("/refundObject")
     public String refund(@RequestBody RefundNoticeModel model) {
         log.info("接收到退款回调消息: {}",model);
+        log.info("验签结果: {}", PaySignUtil.verifyHmacSha256Sign(model, daxPayDemoProperties.getSignSecret(),model.getSign()));
+        return "SUCCESS";
+    }
+
+    @Operation(summary = "分账消息")
+    @PostMapping("/allocation")
+    public String allocation(@RequestBody Map<String,Object> map) {
+        log.info("接收到退款分账消息: {}",map);
+        // 转换为对象
+        AllocNoticeModel model = BeanUtil.toBean(map, AllocNoticeModel.class);
         log.info("验签结果: {}", PaySignUtil.hmacSha256Sign(model, daxPayDemoProperties.getSignSecret()));
+        return "SUCCESS";
+    }
+
+    @Operation(summary = "分账消息(对象)")
+    @PostMapping("/allocationObject")
+    public String allocation(@RequestBody AllocNoticeModel model) {
+        log.info("接收到分账回调消息: {}",model);
+        log.info("验签结果: {}", PaySignUtil.verifyHmacSha256Sign(model, daxPayDemoProperties.getSignSecret(),model.getSign()));
         return "SUCCESS";
     }
 

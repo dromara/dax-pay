@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface PlatformInitContext {
+public @interface InitPaymentContext {
 
     /**
      * 接口标识
