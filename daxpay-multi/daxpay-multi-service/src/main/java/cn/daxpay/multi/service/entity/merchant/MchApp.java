@@ -28,4 +28,15 @@ public class MchApp extends MpBaseEntity {
 
     /** 应用名称 */
     private String appName;
+
+    /** 签名方式 */
+    private String signType;
+
+    /** 公钥 */
+    private String publicKey;
+
+    /** 私钥 */
+    private String privateKey;
+
+
 }

@@ -16,4 +16,25 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("pay_channel_config")
 public class ChannelConfig extends MpBaseEntity {
+
+    /** 支付通道 */
+    private String channel;
+
+    /** 商户号 */
+    private String mchNo;
+
+    /** APPID */
+    private String appId;
+
+    /** 通道商户号 */
+    private String outMchNo;
+
+    /** 通道APPID */
+    private String outAppId;
+
+    /** 签名类型 */
+    private String signType;
+
+
+
 }
