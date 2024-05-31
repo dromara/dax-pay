@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.payment.allocation.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.CollUtil;
+import cn.daxpay.single.code.AllocDetailResultEnum;
 import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
@@ -35,10 +36,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static cn.daxpay.single.code.AllocOrderStatusEnum.ALLOCATION_END;
+import static cn.daxpay.single.code.AllocOrderStatusEnum.FINISH_FAILED;
 
 /**
  * 分账服务
@@ -151,13 +156,13 @@ public class AllocationService {
         }
         try {
             // 需要是分账中分账中或者完成状态才能重新分账
-            List<String> list = Arrays.asList(AllocOrderStatusEnum.ALLOCATION_END.getCode(),
+            List<String> list = Arrays.asList(ALLOCATION_END.getCode(),
                     AllocOrderStatusEnum.ALLOCATION_FAILED.getCode(),
                     AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode());
             if (!list.contains(order.getStatus())){
                 throw new PayFailureException("分账单状态错误，无法重试");
             }
-            List<AllocationOrderDetail> details = allocationOrderDetailManager.findAllByOrderId(order.getId());
+            List<AllocationOrderDetail> details = this.getDetails(order.getId());
             // 创建分账策略并初始化
             AbsAllocationStrategy allocationStrategy = AllocationFactory.create(order.getChannel());
             allocationStrategy.initParam(order, details);
@@ -209,10 +214,11 @@ public class AllocationService {
      */
     public AllocationResult finish(AllocationOrder allocationOrder) {
         // 只有分账结束后才可以完结
-        if (!AllocOrderStatusEnum.ALLOCATION_END.getCode().equals(allocationOrder.getStatus())){
+        if (!Arrays.asList(ALLOCATION_END.getCode(),FINISH_FAILED.getCode()).contains(allocationOrder.getStatus())) {
             throw new PayFailureException("分账单状态错误");
         }
-        List<AllocationOrderDetail> details = allocationOrderDetailManager.findAllByOrderId(allocationOrder.getId());
+        List<AllocationOrderDetail> details = this.getDetails(allocationOrder.getId());
+
         // 创建分账策略并初始化
         AbsAllocationStrategy allocationStrategy = AllocationFactory.create(allocationOrder.getChannel());
         allocationStrategy.initParam(allocationOrder, details);
@@ -224,11 +230,12 @@ public class AllocationService {
             allocationStrategy.finish();
             // 完结状态
             allocationOrder.setStatus(AllocOrderStatusEnum.FINISH.getCode())
+                    .setFinishTime(LocalDateTime.now())
                     .setErrorMsg(null);
         } catch (Exception e) {
             log.error("分账完结错误:", e);
             // 失败
-            allocationOrder.setStatus(AllocOrderStatusEnum.FINISH_FAILED.getCode())
+            allocationOrder.setStatus(FINISH_FAILED.getCode())
                     .setErrorMsg(e.getMessage());
         }
         allocationOrderManager.updateById(allocationOrder);
@@ -292,5 +299,16 @@ public class AllocationService {
             orderAndDetail = allocationOrderService.createAndUpdate(param ,payOrder, receiversByGroups);
         }
         return orderAndDetail;
+    }
+
+    /**
+     * 获取发起分账或完结的明细
+     */
+    private List<AllocationOrderDetail> getDetails(Long allocOrderId){
+        List<AllocationOrderDetail> details = allocationOrderDetailManager.findAllByOrderId(allocOrderId);
+        // 过滤掉忽略的条目
+        return details.stream()
+                .filter(detail -> !Objects.equals(detail.getResult(), AllocDetailResultEnum.IGNORE.getCode()))
+                .collect(Collectors.toList());
     }
 }

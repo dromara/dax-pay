@@ -65,7 +65,7 @@ bootx:
     swagger:
       enabled: false
       author: bootx
-      version: 2.0.6
+      version: 2.0.7
       title: 开源支付平台-单商户
       description: 开源支付平台-单商户版
     # 缓存

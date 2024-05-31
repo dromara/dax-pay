@@ -95,7 +95,7 @@ public class AllocationOrderController {
         return Res.ok();
     }
 
-    @InitPaymentContext(PaymentApiCode.SYNC_REFUND)
+    @InitPaymentContext(PaymentApiCode.ALLOCATION_FINISH)
     @Operation(summary = "分账完结")
     @PostMapping("/finish")
     public ResResult<Void> finish(String allocationNo){

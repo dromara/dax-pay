@@ -75,7 +75,7 @@ public class WeChatPayAllocationService {
                 .appid(config.getWxAppId())
                 .nonce_str(WxPayKit.generateStr())
                 .transaction_id(allocationOrder.getOutOrderNo())
-                .out_order_no(allocationOrder.getOrderNo())
+                .out_order_no(allocationOrder.getAllocationNo())
                 .receivers(JSON.toJSONString(list))
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
@@ -96,8 +96,9 @@ public class WeChatPayAllocationService {
                 .appid(config.getWxAppId())
                 .nonce_str(WxPayKit.generateStr())
                 .transaction_id(allocationOrder.getOutOrderNo())
-                .out_order_no(allocationOrder.getOrderNo())
-                .description("分账完成")
+                // 分账要使用单独的的流水号, 不能与分账号相同
+                .out_order_no(allocationOrder.getAllocationNo()+'F')
+                .description("分账已完成")
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
 
@@ -117,7 +118,7 @@ public class WeChatPayAllocationService {
                 .mch_id(config.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
                 .transaction_id(allocationOrder.getOutOrderNo())
-                .out_order_no(allocationOrder.getOrderNo())
+                .out_order_no(allocationOrder.getAllocationNo())
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
         String xmlResult = WxPayApi.profitSharingQuery(params);
