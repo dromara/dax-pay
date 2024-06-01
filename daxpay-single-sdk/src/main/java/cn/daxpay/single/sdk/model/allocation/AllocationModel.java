@@ -12,10 +12,14 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class AllocationModel extends DaxPayResponseModel {
+
     /** 分账订单号 */
     private String allocationNo;
+
+    /** 分账订单号 */
+    private String bizAllocationNo;
 
     /** 分账状态 */
     private String status;

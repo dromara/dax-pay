@@ -111,6 +111,7 @@ public class AllocationService {
             if (Objects.equals(order.getStatus(),AllocOrderStatusEnum.IGNORE.getCode())){
                 return new AllocationResult()
                         .setAllocationNo(order.getAllocationNo())
+                        .setBizAllocationNo(order.getBizAllocationNo())
                         .setStatus(order.getStatus());
             }
 
@@ -140,6 +141,7 @@ public class AllocationService {
             allocationOrderManager.updateById(order);
             return new AllocationResult()
                     .setAllocationNo(order.getAllocationNo())
+                    .setBizAllocationNo(order.getBizAllocationNo())
                     .setStatus(order.getStatus());
         } finally {
             lockTemplate.releaseLock(lock);
@@ -188,6 +190,7 @@ public class AllocationService {
             allocationOrderManager.updateById(order);
             return new AllocationResult()
                     .setAllocationNo(order.getAllocationNo())
+                    .setBizAllocationNo(order.getBizAllocationNo())
                     .setStatus(order.getStatus());
         } finally {
             lockTemplate.releaseLock(lock);
@@ -241,6 +244,7 @@ public class AllocationService {
         allocationOrderManager.updateById(allocationOrder);
         return new AllocationResult()
                 .setAllocationNo(allocationOrder.getAllocationNo())
+                .setBizAllocationNo(allocationOrder.getBizAllocationNo())
                 .setStatus(allocationOrder.getStatus());
     }
 

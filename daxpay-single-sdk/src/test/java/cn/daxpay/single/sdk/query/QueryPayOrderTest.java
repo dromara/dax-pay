@@ -6,6 +6,7 @@ import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
 import cn.daxpay.single.sdk.param.pay.QueryPayParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
+import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +36,7 @@ public class QueryPayOrderTest {
         param.setClientIp("127.0.0.1");
 
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
+        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JSONUtil.toJsonStr(execute.getData()));
     }
 }

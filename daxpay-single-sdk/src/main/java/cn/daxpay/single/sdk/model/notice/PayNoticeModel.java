@@ -15,7 +15,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class PayNoticeModel extends DaxPayResponseModel {
 
     /** 订单号 */

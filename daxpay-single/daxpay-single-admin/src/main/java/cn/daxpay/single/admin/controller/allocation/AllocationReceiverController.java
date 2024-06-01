@@ -5,8 +5,10 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.daxpay.single.code.PaymentApiCode;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverRemoveParam;
+import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
 import cn.daxpay.single.service.param.allocation.receiver.AllocationReceiverQuery;
@@ -60,6 +62,7 @@ public class AllocationReceiverController {
         return Res.ok(receiverService.findReceiverTypeByChannel(channel));
     }
 
+    @InitPaymentContext(value = PaymentApiCode.ALLOCATION_RECEIVER_ADD)
     @Operation(summary = "添加")
     @PostMapping("add")
     public ResResult<Void> add(@RequestBody AllocReceiverAddParam param){
@@ -67,6 +70,7 @@ public class AllocationReceiverController {
         return Res.ok();
     }
 
+    @InitPaymentContext(value = PaymentApiCode.ALLOCATION_RECEIVER_REMOVE)
     @Operation(summary = "删除")
     @PostMapping("delete")
     public ResResult<Void> delete(@RequestBody AllocReceiverRemoveParam param){

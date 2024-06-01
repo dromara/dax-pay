@@ -144,7 +144,7 @@ public class AllocationReceiverService {
         AllocationReceiver receiver = allocationReceiverManager.findByReceiverNo(param.getReceiverNo())
                 .orElseThrow(() -> new PayFailureException("该接收方不存在"));
         if (groupReceiverManager.isUsed(receiver.getId())){
-            throw new PayFailureException("该接收方已被使用删除");
+            throw new PayFailureException("该接收方已被使用，无法被删除");
         }
         // 获取策略
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(receiver.getChannel());

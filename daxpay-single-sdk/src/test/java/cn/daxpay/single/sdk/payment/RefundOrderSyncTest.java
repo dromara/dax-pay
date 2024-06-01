@@ -6,6 +6,7 @@ import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
 import cn.daxpay.single.sdk.param.refund.RefundSyncParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
+import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,8 +35,8 @@ public class RefundOrderSyncTest {
         param.setRefundNo("DEVR24051020530263000002");
         param.setClientIp("127.0.0.1");
         DaxPayResult<RefundSyncModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
+        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JSONUtil.toJsonStr(execute.getData()));
     }
 
 }

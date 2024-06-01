@@ -1,8 +1,7 @@
 package cn.daxpay.single.sdk.model.allocation;
 
 import cn.daxpay.single.sdk.net.DaxPayResponseModel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -10,8 +9,8 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/5/21
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
-@Accessors(chain = true)
+@Getter
+@Setter
+@ToString(callSuper = true)
 public class AllocReceiverAddModel extends DaxPayResponseModel {
 }

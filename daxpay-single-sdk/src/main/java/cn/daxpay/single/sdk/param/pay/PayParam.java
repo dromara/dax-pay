@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class PayParam extends DaxPayRequest<PayModel> {
 
     /** 商户订单号 */

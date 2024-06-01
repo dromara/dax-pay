@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class AllocNoticeModel extends DaxPayResponseModel {
     /**
      * 分账单号

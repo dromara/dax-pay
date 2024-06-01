@@ -1,5 +1,6 @@
 package cn.daxpay.single.sdk.allocation;
 
+import cn.daxpay.single.sdk.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.sdk.code.PayChannelEnum;
 import cn.daxpay.single.sdk.code.SignTypeEnum;
 import cn.daxpay.single.sdk.model.allocation.AllocReceiverAddModel;
@@ -11,6 +12,7 @@ import cn.daxpay.single.sdk.param.allocation.AllocReceiverAddParam;
 import cn.daxpay.single.sdk.param.allocation.AllocReceiverRemoveParam;
 import cn.daxpay.single.sdk.param.allocation.QueryAllocReceiverParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
+import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,11 +46,11 @@ public class AllocationReceiverTest {
         param.setRelationType("user");
         param.setRelationName("测试");
         param.setReceiverNo("123456");
-        param.setReceiverType("user");
+        param.setReceiverType(AllocReceiverTypeEnum.ALI_OPEN_ID.getCode());
         param.setReceiverAccount("123456");
         DaxPayResult<AllocReceiverAddModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
+        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JSONUtil.toJsonStr(execute.getData()));
     }
 
     /**
@@ -58,10 +60,10 @@ public class AllocationReceiverTest {
     public void remove() {
         AllocReceiverRemoveParam param = new AllocReceiverRemoveParam();
         param.setClientIp("127.0.0.1");
-        param.setReceiverNo("123456");
+        param.setReceiverNo("123");
         DaxPayResult<AllocReceiverRemoveModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
+        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JSONUtil.toJsonStr(execute.getData()));
     }
 
     /**
@@ -74,8 +76,8 @@ public class AllocationReceiverTest {
         param.setClientIp("127.0.0.1");
         DaxPayResult<AllocReceiversModel> execute = DaxPayKit.execute(param);
 
-        System.out.println(execute);
-        System.out.println(execute.getData());
+        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JSONUtil.toJsonStr(execute.getData()));
     }
 
 

@@ -6,6 +6,7 @@ import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
 import cn.daxpay.single.sdk.param.pay.PayCloseParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
+import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,6 +35,6 @@ public class PayCloseOrderTest {
         param.setOrderNo("DEVP24051019404463000001");
         param.setClientIp("127.0.0.1");
         DaxPayResult<PayCloseModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
+        System.out.println(JSONUtil.toJsonStr(execute));
     }
 }

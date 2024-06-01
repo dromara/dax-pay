@@ -13,7 +13,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class AllocDetailNoticeModel {
 
     /** 分账接收方编号 */

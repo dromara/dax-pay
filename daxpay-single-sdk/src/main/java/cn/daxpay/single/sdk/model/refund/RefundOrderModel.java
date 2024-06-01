@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class RefundOrderModel extends DaxPayResponseModel {
 
 

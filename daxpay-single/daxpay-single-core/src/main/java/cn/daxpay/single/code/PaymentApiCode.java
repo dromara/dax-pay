@@ -40,7 +40,7 @@ public interface PaymentApiCode {
     String GET_WX_AUTH_URL = "getWxAuthUrl";
     /** 获取微信AccessToken */
     String GET_WX_ACCESS_TOKEN = "getWxAccessToken";
-    /** 添加分账方接口 */
+    /** 添加分账方 */
     String ALLOCATION_RECEIVER_ADD = "allocationReceiverAdd";
     /** 删除分账方 */
     String ALLOCATION_RECEIVER_REMOVE = "allocationReceiverRemove";

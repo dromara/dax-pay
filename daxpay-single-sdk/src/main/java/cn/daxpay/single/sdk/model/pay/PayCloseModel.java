@@ -12,6 +12,6 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class PayCloseModel extends DaxPayResponseModel {
 }

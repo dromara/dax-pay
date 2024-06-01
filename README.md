@@ -133,8 +133,8 @@ public class PayOrderTest {
         param.setChannel(PayChannelEnum.ALI.getCode());
 
         DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
+        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JSONUtil.toJsonStr(execute.getData()));
     }
 }
 ```

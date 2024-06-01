@@ -12,7 +12,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class WxAuthUrlModel extends DaxPayResponseModel {
 
     /** 微信oauth2授权的url连接 */

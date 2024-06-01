@@ -3,16 +3,18 @@ package cn.daxpay.single.sdk.model.allocation;
 import cn.daxpay.single.sdk.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.sdk.code.AllocRelationTypeEnum;
 import cn.daxpay.single.sdk.code.PayChannelEnum;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 分账接收方
  * @author xxm
  * @since 2024/5/21
  */
-@Data
-@Accessors(chain = true)
+@Getter
+@Setter
+@ToString(callSuper = true)
 public class AllocReceiverModel {
 
     /** 分账接收方编号, 需要保证唯一 */

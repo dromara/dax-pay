@@ -79,7 +79,7 @@ public class PermMenuDto extends BaseDto implements Serializable {
     private String remark;
 
     @Schema(description = "系统内置")
-    private boolean admin;
+    private boolean internal;
 
     @Schema(description = "子节点")
     private List<PermMenuDto> children;

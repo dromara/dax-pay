@@ -17,9 +17,15 @@ import lombok.experimental.Accessors;
 @Schema(title = "分账请求结果")
 public class AllocationResult extends PaymentCommonResult {
 
+    /** 分账订单号 */
     @Schema(description = "分账订单号")
     private String allocationNo;
 
+    /** 商户分账订单号 */
+    @Schema(description = "商户分账订单号")
+    private String bizAllocationNo;
+
+    /** 分账状态 */
     @Schema(description = "分账状态")
     private String status;
 }
