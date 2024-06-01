@@ -28,8 +28,8 @@ public class AllocationParam extends PaymentCommonParam {
     @Schema(description = "支付订单号")
     private String orderNo;
 
-    /** 商户订单号 */
-    @Schema(description = "商户订单号")
+    /** 商户支付订单号 */
+    @Schema(description = "商户支付订单号")
     private String bizOrderNo;
 
     /** 分账描述 */

@@ -37,6 +37,6 @@ public class QueryPayOrderTest {
 
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        System.out.println(JSONUtil.toJsonStr(execute.getData()));
+        
     }
 }

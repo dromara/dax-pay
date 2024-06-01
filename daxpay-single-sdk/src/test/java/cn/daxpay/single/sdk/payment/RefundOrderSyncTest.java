@@ -36,7 +36,7 @@ public class RefundOrderSyncTest {
         param.setClientIp("127.0.0.1");
         DaxPayResult<RefundSyncModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        System.out.println(JSONUtil.toJsonStr(execute.getData()));
+        
     }
 
 }

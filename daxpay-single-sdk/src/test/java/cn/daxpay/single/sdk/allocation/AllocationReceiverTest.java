@@ -50,7 +50,7 @@ public class AllocationReceiverTest {
         param.setReceiverAccount("123456");
         DaxPayResult<AllocReceiverAddModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        System.out.println(JSONUtil.toJsonStr(execute.getData()));
+        
     }
 
     /**
@@ -63,7 +63,7 @@ public class AllocationReceiverTest {
         param.setReceiverNo("123");
         DaxPayResult<AllocReceiverRemoveModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        System.out.println(JSONUtil.toJsonStr(execute.getData()));
+        
     }
 
     /**
@@ -77,7 +77,7 @@ public class AllocationReceiverTest {
         DaxPayResult<AllocReceiversModel> execute = DaxPayKit.execute(param);
 
         System.out.println(JSONUtil.toJsonStr(execute));
-        System.out.println(JSONUtil.toJsonStr(execute.getData()));
+        
     }
 
 

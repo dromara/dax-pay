@@ -1,5 +1,6 @@
 package cn.daxpay.single.result.allocation;
 
+import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.result.PaymentCommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -25,7 +26,10 @@ public class AllocationResult extends PaymentCommonResult {
     @Schema(description = "商户分账订单号")
     private String bizAllocationNo;
 
-    /** 分账状态 */
+    /**
+     * 分账状态
+     * @see AllocOrderStatusEnum
+     */
     @Schema(description = "分账状态")
     private String status;
 }

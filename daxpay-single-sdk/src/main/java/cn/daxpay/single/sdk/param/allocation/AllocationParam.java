@@ -54,7 +54,7 @@ public class AllocationParam extends DaxPayRequest<AllocationModel> {
      */
     @Override
     public String path() {
-        return "/unipay/allocation/open";
+        return "/unipay/allocation/start";
     }
 
     /**

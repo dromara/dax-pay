@@ -59,7 +59,7 @@ public class AllocationTest {
 
         DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        System.out.println(JSONUtil.toJsonStr(execute.getData()));
+
     }
 
     /**
@@ -83,7 +83,7 @@ public class AllocationTest {
 
         DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        System.out.println(JSONUtil.toJsonStr(execute.getData()));
+
     }
 
     /**
@@ -95,7 +95,7 @@ public class AllocationTest {
         AllocationParam param = new AllocationParam();
         param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
-        param.setBizOrderNo("SDK_1717233422418");
+        param.setBizOrderNo("SDK_1717264053245");
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
 
@@ -130,10 +130,10 @@ public class AllocationTest {
         AllocationParam param = new AllocationParam();
         param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
-        param.setOrderNo("DEVP24060123574963000003");
+        param.setOrderNo("DEVP24060201473363000001");
         AllocReceiverParam allocReceiverParam = new AllocReceiverParam();
         allocReceiverParam.setReceiverNo("123");
-        allocReceiverParam.setAmount(6000);
+        allocReceiverParam.setAmount(6500);
         param.setReceivers(Collections.singletonList(allocReceiverParam));
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");

@@ -41,9 +41,9 @@ public class UniAllocationController {
 
     @PaymentSign
     @InitPaymentContext(PaymentApiCode.ALLOCATION)
-    @Operation(summary = "触发分账")
-    @PostMapping("/open")
-    public DaxResult<AllocationResult> open(@RequestBody AllocationParam param){
+    @Operation(summary = "发起分账接口")
+    @PostMapping("/start")
+    public DaxResult<AllocationResult> start(@RequestBody AllocationParam param){
         return DaxRes.ok(allocationService.allocation(param));
     }
 
