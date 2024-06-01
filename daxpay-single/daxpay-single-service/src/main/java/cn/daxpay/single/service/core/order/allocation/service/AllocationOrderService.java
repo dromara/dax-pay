@@ -32,6 +32,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -106,12 +107,19 @@ public class AllocationOrderService {
         Map<String, Integer> receiverNoMap = param.getReceivers()
                 .stream()
                 .collect(Collectors.toMap(AllocReceiverParam::getReceiverNo, AllocReceiverParam::getAmount));
-
         // 查询分账接收方信息
         List<AllocationReceiver> receivers = receiverManager.findAllByReceiverNos(receiverNos);
         if (receivers.size() != receiverNos.size()){
-            throw new PayFailureException("分账接收方列表存在无效的分账接收方");
+            throw new PayFailureException("分账接收方列表存在重复或无效的数据");
         }
+        // 判断分账接收方类型是否都与分账订单类型匹配
+        boolean anyMatch = receivers.stream()
+                .anyMatch(o -> !Objects.equals(o.getChannel(), payOrder.getChannel()));
+        if (anyMatch){
+            throw new PayFailureException("分账接收方列表存在非本通道的数据");
+        }
+
+
         long allocId = IdUtil.getSnowflakeNextId();
 
         // 订单明细

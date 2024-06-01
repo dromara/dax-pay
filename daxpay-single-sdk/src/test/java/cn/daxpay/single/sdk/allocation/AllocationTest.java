@@ -9,6 +9,7 @@ import cn.daxpay.single.sdk.model.sync.AllocSyncModel;
 import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
 import cn.daxpay.single.sdk.param.allocation.AllocFinishParam;
+import cn.daxpay.single.sdk.param.allocation.AllocReceiverParam;
 import cn.daxpay.single.sdk.param.allocation.AllocSyncParam;
 import cn.daxpay.single.sdk.param.allocation.AllocationParam;
 import cn.daxpay.single.sdk.param.pay.PayParam;
@@ -17,6 +18,8 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collections;
 
 /**
  * 支付分账测试
@@ -53,8 +56,6 @@ public class AllocationTest {
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(true);
-//        param.setReturnUrl("https://abc.com/returnurl");
-//        param.setNotifyUrl("https://abc.com/callback");
 
         DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
@@ -79,8 +80,6 @@ public class AllocationTest {
         param.setAttach("{回调参数}");
         param.setAllocation(true);
         param.setAutoAllocation(true);
-//        param.setReturnUrl("https://abc.com/returnurl");
-//        param.setNotifyUrl("https://abc.com/callback");
 
         DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
@@ -97,6 +96,45 @@ public class AllocationTest {
         param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
         param.setBizOrderNo("SDK_1717233422418");
+        param.setDescription("测试分账");
+        param.setClientIp("127.0.0.1");
+
+        DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
+        System.out.println(JSONUtil.toJsonStr(execute));
+    }
+
+    /**
+     * 手动发起分账, 使用指定分账组
+     */
+    @Test
+    public void allocationOpenByGroup() {
+        // 分账参数
+        AllocationParam param = new AllocationParam();
+        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setAttach("88899");
+        param.setBizOrderNo("SDK_1717257064753");
+        param.setGroupNo("123");
+        param.setDescription("测试分账");
+        param.setClientIp("127.0.0.1");
+
+        DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
+        System.out.println(JSONUtil.toJsonStr(execute));
+    }
+
+    /**
+     * 手动发起分账, 手动传入接收方
+     */
+    @Test
+    public void allocationOpenByReceivers() {
+        // 分账参数
+        AllocationParam param = new AllocationParam();
+        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setAttach("88899");
+        param.setOrderNo("DEVP24060123574963000003");
+        AllocReceiverParam allocReceiverParam = new AllocReceiverParam();
+        allocReceiverParam.setReceiverNo("123");
+        allocReceiverParam.setAmount(6000);
+        param.setReceivers(Collections.singletonList(allocReceiverParam));
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
 
