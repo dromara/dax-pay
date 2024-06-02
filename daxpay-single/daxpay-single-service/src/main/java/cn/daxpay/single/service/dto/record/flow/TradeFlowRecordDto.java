@@ -1,10 +1,12 @@
 package cn.daxpay.single.service.dto.record.flow;
 
+import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.code.TradeFlowRecordTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -12,10 +14,11 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/5/17
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "资金流水记录")
-public class TradeFlowRecordDto {
+public class TradeFlowRecordDto extends BaseDto {
 
     /** 订单标题 */
     @DbColumn(comment = "标题")
@@ -47,7 +50,7 @@ public class TradeFlowRecordDto {
     @DbColumn(comment = "商户交易号")
     private String bizTradeNo;
 
-    /** 三方系统交易号 */
-    @DbColumn(comment = "三方系统交易号")
+    /** 通道交易号 */
+    @DbColumn(comment = "通道交易号")
     private String outTradeNo;
 }

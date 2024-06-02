@@ -66,7 +66,7 @@ public class TradeFlowRecordService {
                 .setOutTradeNo(refundOrder.getOutRefundNo())
                 .setChannel(refundOrder.getChannel())
                 .setTitle(refundOrder.getTitle())
-                .setType(TradeFlowRecordTypeEnum.PAY.getCode())
+                .setType(TradeFlowRecordTypeEnum.REFUND.getCode())
                 .setAmount(refundOrder.getAmount());
         tradeFlowRecordManager.save(tradeFlowRecord);
     }

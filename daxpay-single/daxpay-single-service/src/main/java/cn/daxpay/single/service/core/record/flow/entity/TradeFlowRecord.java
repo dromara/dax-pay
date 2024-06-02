@@ -48,15 +48,15 @@ public class TradeFlowRecord extends MpCreateEntity implements EntityBaseFunctio
     private String channel;
 
     /** 本地交易号 */
-    @DbColumn(comment = "本地订单号")
+    @DbColumn(comment = "本地交易号")
     private String tradeNo;
 
     /** 商户交易号 */
     @DbColumn(comment = "商户交易号")
     private String bizTradeNo;
 
-    /** 三方系统交易号 */
-    @DbColumn(comment = "三方系统交易号")
+    /** 通道交易号 */
+    @DbColumn(comment = "通道交易号")
     private String outTradeNo;
 
     @Override
