@@ -1,5 +1,6 @@
 package cn.daxpay.single.sdk.model.allocation;
 
+import cn.daxpay.single.sdk.code.AllocOrderStatusEnum;
 import cn.daxpay.single.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,9 @@ public class AllocationModel extends DaxPayResponseModel {
     /** 分账订单号 */
     private String bizAllocationNo;
 
-    /** 分账状态 */
+    /**
+     * 分账状态
+     * @see AllocOrderStatusEnum
+     */
     private String status;
 }

@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@DbTable(comment = "对账-第三方交易明细")
+@DbTable(comment = "对账-通道交易明细")
 @TableName("pay_reconcile_trade_detail")
 public class ReconcileTradeDetail extends MpCreateEntity implements EntityBaseFunction<ReconcileTradeDetailDto> {
 

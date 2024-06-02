@@ -1,7 +1,6 @@
 package cn.daxpay.single.result.sync;
 
 import cn.daxpay.single.code.PaySyncStatusEnum;
-import cn.daxpay.single.code.RefundSyncStatusEnum;
 import cn.daxpay.single.result.PaymentCommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -24,7 +23,6 @@ public class PaySyncResult extends PaymentCommonResult {
     /**
      * 支付网关同步状态
      * @see PaySyncStatusEnum
-     * @see RefundSyncStatusEnum
      */
     @Schema(description = "同步状态")
     private String status = FAIL.getCode();
