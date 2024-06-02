@@ -6,3 +6,4 @@
 - Java: 21
 - Maven: 3.9.6
 - 数据库: Postgresql 16
+- 前端脚手架: SoyBean Admin, Vite5 + Vue3 + Naive UI

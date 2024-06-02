@@ -20,9 +20,6 @@ public class MchApp extends MpBaseEntity {
     /** 商户号 */
     private String mchNo;
 
-    /** 商户ID */
-    private String mchId;
-
     /** 应用号 */
     private String appId;
 

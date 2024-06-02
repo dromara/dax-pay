@@ -16,6 +16,7 @@
     <modules>
         <module>common-swagger</module>
         <module>common-mybatis-plus</module>
+        <module>common-jackson</module>
     </modules>
 
     <dependencies>

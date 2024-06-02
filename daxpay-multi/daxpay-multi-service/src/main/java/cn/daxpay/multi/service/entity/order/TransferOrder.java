@@ -1,19 +1,19 @@
 package cn.daxpay.multi.service.entity.order;
 
-import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 支付订单
+ * 转账订单
  * @author xxm
- * @since 2024/5/27
+ * @since 2024/6/1
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_order")
-public class PayOrder extends MpBaseEntity {
+@TableName("pay_transfer_order")
+public class TransferOrder extends MchEntity {
 }

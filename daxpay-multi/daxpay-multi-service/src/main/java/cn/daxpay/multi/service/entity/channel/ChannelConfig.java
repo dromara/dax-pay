@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.entity.channel;
 
-import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,16 +15,10 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_channel_config")
-public class ChannelConfig extends MpBaseEntity {
+public class ChannelConfig extends MchEntity {
 
     /** 支付通道 */
     private String channel;
-
-    /** 商户号 */
-    private String mchNo;
-
-    /** APPID */
-    private String appId;
 
     /** 通道商户号 */
     private String outMchNo;
