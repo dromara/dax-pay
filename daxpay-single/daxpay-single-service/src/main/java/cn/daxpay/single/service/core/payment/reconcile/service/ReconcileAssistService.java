@@ -8,9 +8,9 @@ import cn.daxpay.single.service.code.PaymentTypeEnum;
 import cn.daxpay.single.service.code.ReconcileDiffTypeEnum;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileDiff;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.payment.reconcile.domain.GeneralTradeInfo;
@@ -89,18 +89,18 @@ public class ReconcileAssistService {
      */
     public List<ReconcileDiff> generateDiffRecord(ReconcileOrder reconcileOrder,
                                                   List<GeneralTradeInfo> localTrades,
-                                                  List<ReconcileTradeDetail> outDetails){
+                                                  List<ReconcileOutTrade> outDetails){
         // 差异内容
         List<ReconcileDiff> diffRecords = new ArrayList<>();
 
         // 三方对账订单
-        Map<String, ReconcileTradeDetail> outDetailMap = outDetails.stream()
-                .collect(Collectors.toMap(ReconcileTradeDetail::getTradeNo, Function.identity(), CollectorsFunction::retainLatest));
+        Map<String, ReconcileOutTrade> outDetailMap = outDetails.stream()
+                .collect(Collectors.toMap(ReconcileOutTrade::getTradeNo, Function.identity(), CollectorsFunction::retainLatest));
         // 本地订单记录
         Map<String, GeneralTradeInfo> localTradeMap = localTrades.stream()
                 .collect(Collectors.toMap(GeneralTradeInfo::getTradeNo, Function.identity(), CollectorsFunction::retainLatest));
         // 对账与比对
-        for (ReconcileTradeDetail outDetail : outDetails) {
+        for (ReconcileOutTrade outDetail : outDetails) {
             // 判断本地有没有记录, 流水没有记录查询本地订单
             GeneralTradeInfo localTrade = localTradeMap.get(outDetail.getTradeNo());
             if (Objects.isNull(localTrade)){
@@ -144,7 +144,7 @@ public class ReconcileAssistService {
         }
         // 本地与对账单比对, 找出本地有, 远程没有的记录
         for (GeneralTradeInfo localTrade : localTrades) {
-            ReconcileTradeDetail outDetail = outDetailMap.get(localTrade.getTradeNo());
+            ReconcileOutTrade outDetail = outDetailMap.get(localTrade.getTradeNo());
             if (Objects.isNull(outDetail)){
                 ReconcileDiff diffRecord = new ReconcileDiff()
                         .setDiffType(ReconcileDiffTypeEnum.LOCAL_NOT_EXISTS.getCode())
@@ -171,7 +171,7 @@ public class ReconcileAssistService {
      * @param outDetail 下载的对账订单
      * @param localTrade 本地交易订单
      */
-    private List<ReconcileDiffDetail> reconcileDiff(ReconcileTradeDetail outDetail, GeneralTradeInfo localTrade){
+    private List<ReconcileDiffDetail> reconcileDiff(ReconcileOutTrade outDetail, GeneralTradeInfo localTrade){
         List<ReconcileDiffDetail> diffs = new ArrayList<>();
 
         // 判断类型是否相同

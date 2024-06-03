@@ -15,16 +15,16 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 对账订单详情
+ * 账通道交易明细
  * @author xxm
  * @since 2024/1/22
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "对账订单详情")
+@Schema(title = "账通道交易明细")
 @ExcelIgnoreUnannotated
-public class ReconcileTradeDetailDto extends BaseDto {
+public class ReconcileOutTradeDto extends BaseDto {
 
     /** 关联对账订单ID */
     @Schema(description = "关联对账订单ID")

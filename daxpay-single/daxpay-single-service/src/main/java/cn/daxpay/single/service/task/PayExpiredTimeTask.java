@@ -54,8 +54,8 @@ public class PayExpiredTimeTask implements Job {
                 paySyncParam.setOrderNo(orderNo);
                 paySyncService.sync(paySyncParam);
             } catch (Exception e) {
-                // 如果是未查询到取消支付订单, 则删除这个任务
-                if (Objects.equals("未查询到支付订单", e.getMessage())){
+                // 如果是未查询到取消支付订单, 则删除这个任务 TODO 后续调整为专用的异常类
+                if (Objects.equals("支付订单不存在", e.getMessage())){
                     repository.removeKeys(orderNo);
                 }
                 log.error("超时取消任务 异常", e);

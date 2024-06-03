@@ -23,21 +23,15 @@ import java.util.List;
 @Schema(title = "分账订单返回结果")
 public class AllocOrderResult extends PaymentCommonResult {
 
-    /**
-     * 分账单号
-     */
+    /** 分账单号 */
     @Schema(description = "分账单号")
     private String allocationNo;
 
-    /**
-     * 商户分账单号
-     */
+    /** 商户分账单号 */
     @Schema(description = "商户分账单号")
     private String bizAllocationNo;
 
-    /**
-     * 通道分账号
-     */
+    /** 通道分账号 */
     @Schema(description = "通道分账号")
     private String outAllocationNo;
 
@@ -47,12 +41,13 @@ public class AllocOrderResult extends PaymentCommonResult {
     @Schema(description = "支付订单号")
     private String orderNo;
 
-    /**
-     * 商户支付订单号
-     */
+    /** 商户支付订单号 */
     @Schema(description = "商户支付订单号")
     private String bizOrderNo;
 
+    /** 通道支付订单号 */
+    @Schema(description = "通道支付订单号")
+    private String outOrderNo;
 
     /**
      * 支付订单标题
@@ -108,11 +103,6 @@ public class AllocOrderResult extends PaymentCommonResult {
     /** 分账订单完成时间 */
     @Schema(description = "分账订单完成时间")
     private LocalDateTime finishTime;
-
-
-    /** 商户扩展参数,回调时会原样返回 */
-    @Schema(description = "商户扩展参数,回调时会原样返回")
-    private String attach;
 
     /** 分账明细 */
     @Schema(description = "分账明细")

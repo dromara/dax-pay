@@ -126,7 +126,7 @@ public class AllocationService {
                 allocationStrategy.allocation();
                 // 执行中
                 order.setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
-                        .setResult(AllocOrderResultEnum.PART_SUCCESS.getCode())
+                        .setResult(AllocOrderResultEnum.ALL_PENDING.getCode())
                         .setErrorMsg(null);
             } catch (Exception e) {
                 log.error("分账出现错误:", e);

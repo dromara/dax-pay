@@ -13,7 +13,7 @@ import lombok.Getter;
 public enum ClientNoticeTypeEnum {
     PAY("pay", "支付通知"),
     REFUND("refund", "退款通知"),
-    ALLOCATION("Allocation", "分账通知"),
+    ALLOCATION("allocation", "分账通知"),
     ;
 
     private final String type;

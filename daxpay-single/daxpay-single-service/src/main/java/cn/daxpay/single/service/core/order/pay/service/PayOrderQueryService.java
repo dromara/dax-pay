@@ -85,7 +85,7 @@ public class PayOrderQueryService {
         }
         // 查询支付单
         PayOrder payOrder = this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo())
-                .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
+                .orElseThrow(() -> new PayFailureException("支付订单不存在"));
         // 查询扩展数据
         payOrderExtraManager.findById(payOrder.getId())
                 .orElseThrow(() -> new PayFailureException("支付订单不完整"));

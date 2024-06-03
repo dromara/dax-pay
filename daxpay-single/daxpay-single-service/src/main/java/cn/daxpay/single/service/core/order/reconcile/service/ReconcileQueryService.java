@@ -5,11 +5,11 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileOrderManager;
-import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileTradeDetailManager;
+import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileOutTradeManager;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileOrderDto;
-import cn.daxpay.single.service.dto.order.reconcile.ReconcileTradeDetailDto;
+import cn.daxpay.single.service.dto.order.reconcile.ReconcileOutTradeDto;
 import cn.daxpay.single.service.param.reconcile.ReconcileTradeDetailQuery;
 import cn.daxpay.single.service.param.reconcile.ReconcileOrderQuery;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReconcileQueryService {
     private final ReconcileOrderManager orderManager;
-    private final ReconcileTradeDetailManager detailManager;
+    private final ReconcileOutTradeManager detailManager;
 
     /**
      * 分页
@@ -44,17 +44,17 @@ public class ReconcileQueryService {
     }
 
     /**
-     * 明细分页
+     * 通道交易明细分页
      */
-    public PageResult<ReconcileTradeDetailDto> pageDetail(PageParam pageParam, ReconcileTradeDetailQuery query){
+    public PageResult<ReconcileOutTradeDto> pageDetail(PageParam pageParam, ReconcileTradeDetailQuery query){
         return MpUtil.convert2DtoPageResult(detailManager.page(pageParam, query));
     }
 
     /**
-     * 明细详情
+     * 通道交易详情
      */
-    public ReconcileTradeDetailDto findDetailById(Long  id){
-        return detailManager.findById(id).map(ReconcileTradeDetail::toDto)
+    public ReconcileOutTradeDto findDetailById(Long  id){
+        return detailManager.findById(id).map(ReconcileOutTrade::toDto)
                 .orElseThrow(()->new DataNotExistException("对账详情不存在"));
     }
 }

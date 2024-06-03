@@ -127,7 +127,7 @@ public class CashierService {
         PayOrderModel data = execute.getData();
 
         // todo 暂时先这样处理聚合支付的查询，后续需要替换为异常码判断响应状态
-        if (Objects.equals(data.getMsg(),"未查询到支付订单")){
+        if (Objects.equals(data.getMsg(),"支付订单不存在")){
             return false;
         }
         String status = data.getStatus();

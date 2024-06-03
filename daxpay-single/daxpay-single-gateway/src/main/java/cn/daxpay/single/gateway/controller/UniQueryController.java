@@ -84,5 +84,4 @@ public class UniQueryController {
         return DaxRes.ok(allocationReceiverService.queryAllocReceive(param));
     }
 
-
 }

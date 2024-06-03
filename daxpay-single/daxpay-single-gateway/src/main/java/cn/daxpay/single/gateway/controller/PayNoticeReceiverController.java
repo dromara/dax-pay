@@ -21,7 +21,7 @@ import java.util.Objects;
  * @since 2024/4/16
  */
 @IgnoreAuth
-@Tag(name = "执法通道网关消息通知")
+@Tag(name = "支付通道网关消息通知")
 @RestController
 @RequestMapping("/callback/notice")
 @RequiredArgsConstructor

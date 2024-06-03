@@ -37,6 +37,4 @@ public class AllocReceiverRemoveParam extends DaxPayRequest<AllocReceiverRemoveM
     public DaxPayResult<AllocReceiverRemoveModel> toModel(String json) {
         return JSONUtil.toBean(json, new TypeReference<DaxPayResult<AllocReceiverRemoveModel>>() {}, false);
     }
-
-
 }

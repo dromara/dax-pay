@@ -8,7 +8,7 @@ import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.service.core.order.reconcile.service.ReconcileDiffService;
 import cn.daxpay.single.service.core.order.reconcile.service.ReconcileQueryService;
 import cn.daxpay.single.service.core.payment.reconcile.service.ReconcileService;
-import cn.daxpay.single.service.dto.order.reconcile.ReconcileTradeDetailDto;
+import cn.daxpay.single.service.dto.order.reconcile.ReconcileOutTradeDto;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileDiffDto;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileOrderDto;
 import cn.daxpay.single.service.param.reconcile.*;
@@ -101,13 +101,13 @@ public class ReconcileOrderController {
 
     @Operation(summary = "对账明细分页")
     @GetMapping("/detail/page")
-    public ResResult<PageResult<ReconcileTradeDetailDto>> pageDetail(PageParam pageParam, ReconcileTradeDetailQuery query){
+    public ResResult<PageResult<ReconcileOutTradeDto>> pageDetail(PageParam pageParam, ReconcileTradeDetailQuery query){
         return Res.ok(reconcileQueryService.pageDetail(pageParam, query));
     }
 
     @Operation(summary = "对账明细详情")
     @GetMapping("/detail/findById")
-    public ResResult<ReconcileTradeDetailDto> findDetailById(Long id){
+    public ResResult<ReconcileOutTradeDto> findDetailById(Long id){
         return Res.ok(reconcileQueryService.findDetailById(id));
     }
 

@@ -34,7 +34,7 @@
         <knife4j.version>4.4.0</knife4j.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <table-modify.version>1.5.4</table-modify.version>
+        <table-modify.version>1.5.5</table-modify.version>
         <wxjava.version>4.6.0</wxjava.version>
         <rocketmq.version>2.2.3</rocketmq.version>
         <lock4j.version>2.2.5</lock4j.version>

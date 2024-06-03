@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.common.context;
 
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileTradeDetail;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -20,6 +20,6 @@ public class ReconcileLocal {
     private ReconcileOrder reconcileOrder;
 
     /** 通用支付对账记录 */
-    private List<ReconcileTradeDetail> reconcileTradeDetails;
+    private List<ReconcileOutTrade> reconcileTradeDetails;
 
 }

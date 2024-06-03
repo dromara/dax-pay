@@ -11,11 +11,11 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileDiffManager;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileOrderManager;
-import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileTradeDetailManager;
+import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileOutTradeManager;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileDiff;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.daxpay.single.service.core.order.reconcile.service.ReconcileOrderService;
 import cn.daxpay.single.service.core.payment.reconcile.domain.GeneralTradeInfo;
 import cn.daxpay.single.service.core.payment.reconcile.factory.ReconcileStrategyFactory;
@@ -65,7 +65,7 @@ public class ReconcileService {
 
     private final ReconcileOrderManager reconcileOrderManager;
 
-    private final ReconcileTradeDetailManager reconcileTradeDetailManager;
+    private final ReconcileOutTradeManager reconcileOutTradeManager;
 
     private final ReconcileAssistService reconcileAssistService;
 
@@ -122,10 +122,10 @@ public class ReconcileService {
             throw new RuntimeException(e);
         }
         // 保存转换后的通用结构对账单
-        List<ReconcileTradeDetail> reconcileTradeDetails = PaymentContextLocal.get()
+        List<ReconcileOutTrade> reconcileTradeDetails = PaymentContextLocal.get()
                 .getReconcileInfo()
                 .getReconcileTradeDetails();
-        reconcileTradeDetailManager.saveAll(reconcileTradeDetails);
+        reconcileOutTradeManager.saveAll(reconcileTradeDetails);
     }
 
     /**
@@ -153,10 +153,10 @@ public class ReconcileService {
             throw new RuntimeException(e);
         }
         // 保存转换后的通用结构对账单
-        List<ReconcileTradeDetail> reconcileTradeDetails = PaymentContextLocal.get()
+        List<ReconcileOutTrade> reconcileTradeDetails = PaymentContextLocal.get()
                 .getReconcileInfo()
                 .getReconcileTradeDetails();
-        reconcileTradeDetailManager.saveAll(reconcileTradeDetails);
+        reconcileOutTradeManager.saveAll(reconcileTradeDetails);
     }
     /**
      * 对账单明细比对
@@ -181,7 +181,7 @@ public class ReconcileService {
             throw new PayFailureException("对账单比对已经完成");
         }
         // 查询对账单
-        List<ReconcileTradeDetail> reconcileTradeDetails = reconcileTradeDetailManager.findAllByReconcileId(reconcileOrder.getId());
+        List<ReconcileOutTrade> reconcileTradeDetails = reconcileOutTradeManager.findAllByReconcileId(reconcileOrder.getId());
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
         // 初始化参数
@@ -239,7 +239,7 @@ public class ReconcileService {
         ReconcileOrder reconcileOrder = reconcileOrderService.findById(id)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
         // 查询对账-第三方交易明细
-        List<ReconcileTradeDetailExcel> reconcileTradeDetails = reconcileTradeDetailManager.findAllByReconcileId(reconcileOrder.getId())
+        List<ReconcileTradeDetailExcel> reconcileTradeDetails = reconcileOutTradeManager.findAllByReconcileId(reconcileOrder.getId())
                 .stream()
                 .map(o->{
                     ReconcileTradeDetailExcel excel = new ReconcileTradeDetailExcel();

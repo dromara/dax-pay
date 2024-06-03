@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- *
+ * 支付单超时检测(数据库)
  * @author xxm
  * @since 2024/5/17
  */
