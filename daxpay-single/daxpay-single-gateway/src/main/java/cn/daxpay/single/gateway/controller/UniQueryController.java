@@ -79,7 +79,7 @@ public class UniQueryController {
     @PaymentSign
     @InitPaymentContext(PaymentApiCode.QUERY_ALLOCATION_RECEIVER)
     @Operation(summary = "分账接收方查询接口")
-    @PostMapping("/allocReceiver")
+    @PostMapping("/allocationReceiver")
     public DaxResult<AllocReceiversResult> queryAllocReceive(@RequestBody QueryAllocReceiverParam param){
         return DaxRes.ok(allocationReceiverService.queryAllocReceive(param));
     }

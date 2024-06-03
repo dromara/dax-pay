@@ -24,7 +24,7 @@ public class QueryAllocReceiverParam extends DaxPayRequest<AllocReceiversModel> 
 
     @Override
     public String path() {
-        return "/unipay/query/allocReceiver";
+        return "/unipay/query/allocationReceiver";
     }
 
     @Override
