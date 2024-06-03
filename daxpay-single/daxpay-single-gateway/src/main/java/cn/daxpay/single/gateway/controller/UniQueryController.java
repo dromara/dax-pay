@@ -2,6 +2,7 @@ package cn.daxpay.single.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.code.PaymentApiCode;
+import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.allocation.QueryAllocOrderParam;
 import cn.daxpay.single.param.payment.allocation.QueryAllocReceiverParam;
 import cn.daxpay.single.param.payment.pay.QueryPayParam;
@@ -19,6 +20,7 @@ import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryServic
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.util.DaxRes;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +83,9 @@ public class UniQueryController {
     @Operation(summary = "分账接收方查询接口")
     @PostMapping("/allocationReceiver")
     public DaxResult<AllocReceiversResult> queryAllocReceive(@RequestBody QueryAllocReceiverParam param){
+        if (StrUtil.isAllBlank(param.getChannel(), param.getReceiverNo())){
+            throw new PayFailureException("所属通道和接收方编号不可同时为空");
+        }
         return DaxRes.ok(allocationReceiverService.queryAllocReceive(param));
     }
 

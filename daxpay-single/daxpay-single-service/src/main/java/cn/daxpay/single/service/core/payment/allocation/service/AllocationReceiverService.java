@@ -24,6 +24,7 @@ import cn.daxpay.single.service.core.payment.allocation.factory.AllocationReceiv
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
 import cn.daxpay.single.service.func.AbsAllocationReceiverStrategy;
 import cn.daxpay.single.service.param.allocation.receiver.AllocationReceiverQuery;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -171,7 +172,10 @@ public class AllocationReceiverService {
      */
     public AllocReceiversResult queryAllocReceive(QueryAllocReceiverParam param){
         // 查询对应通道分账接收方的信息
-        List<AllocationReceiver> list = manager.findAllByChannel(param.getChannel());
+        List<AllocationReceiver> list = manager.lambdaQuery()
+                .eq(StrUtil.isNotBlank(param.getChannel()), AllocationReceiver::getChannel, param.getChannel())
+                .eq(StrUtil.isNotBlank(param.getReceiverNo()), AllocationReceiver::getReceiverNo, param.getReceiverNo())
+                .list();
         List<AllocReceiverResult> receivers = list.stream()
                 .map(AllocationReceiverConvert.CONVERT::toResult)
                 .collect(Collectors.toList());

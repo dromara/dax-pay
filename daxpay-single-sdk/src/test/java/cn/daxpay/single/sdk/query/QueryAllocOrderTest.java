@@ -44,12 +44,13 @@ public class QueryAllocOrderTest {
     }
 
     /**
-     * 分账接收方
+     * 分账接收方查询
      */
     @Test
     public void queryAllocReceiver() {
         QueryAllocReceiverParam param = new QueryAllocReceiverParam();
         param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setReceiverNo("123");
         param.setClientIp("127.0.0.1");
         DaxPayResult<AllocReceiversModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
