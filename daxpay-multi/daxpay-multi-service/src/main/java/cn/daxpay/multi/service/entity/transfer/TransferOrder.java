@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.entity.order;
+package cn.daxpay.multi.service.entity.transfer;
 
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.TableName;

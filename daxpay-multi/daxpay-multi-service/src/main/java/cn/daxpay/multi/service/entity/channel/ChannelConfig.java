@@ -29,6 +29,4 @@ public class ChannelConfig extends MchEntity {
     /** 签名类型 */
     private String signType;
 
-
-
 }
