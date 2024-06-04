@@ -1,11 +1,12 @@
 package cn.daxpay.single.sdk.payment;
 
 import cn.daxpay.single.sdk.code.SignTypeEnum;
-import cn.daxpay.single.sdk.model.sync.SyncModel;
+import cn.daxpay.single.sdk.model.sync.RefundSyncModel;
 import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
-import cn.daxpay.single.sdk.param.sync.RefundSyncParam;
+import cn.daxpay.single.sdk.param.refund.RefundSyncParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
+import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,9 +34,9 @@ public class RefundOrderSyncTest {
         RefundSyncParam param = new RefundSyncParam();
         param.setRefundNo("DEVR24051020530263000002");
         param.setClientIp("127.0.0.1");
-        DaxPayResult<SyncModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
+        DaxPayResult<RefundSyncModel> execute = DaxPayKit.execute(param);
+        System.out.println(JSONUtil.toJsonStr(execute));
+        
     }
 
 }

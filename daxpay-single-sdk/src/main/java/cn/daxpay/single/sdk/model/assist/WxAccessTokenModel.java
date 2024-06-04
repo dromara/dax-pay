@@ -12,7 +12,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class WxAccessTokenModel extends DaxPayResponseModel {
 
     /** 微信AccessToken */

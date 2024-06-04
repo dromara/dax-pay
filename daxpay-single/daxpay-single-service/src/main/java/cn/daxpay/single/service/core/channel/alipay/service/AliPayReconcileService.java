@@ -12,9 +12,10 @@ import cn.daxpay.single.service.core.channel.alipay.dao.AliReconcileBillTotalMan
 import cn.daxpay.single.service.core.channel.alipay.entity.AliReconcileBillDetail;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliReconcileBillTotal;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileTradeDetail;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
+import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
@@ -39,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,7 +164,7 @@ public class AliPayReconcileService {
      * 转换为通用对账记录对象
      */
     private void convertAndSave(List<AliReconcileBillDetail> billDetails){
-        List<ReconcileTradeDetail> collect = billDetails.stream()
+        List<ReconcileOutTrade> collect = billDetails.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
         // 写入到上下文中
@@ -172,14 +174,12 @@ public class AliPayReconcileService {
     /**
      * 转换为通用对账记录对象
      */
-    private ReconcileTradeDetail convert(AliReconcileBillDetail billDetail){
+    private ReconcileOutTrade convert(AliReconcileBillDetail billDetail){
         // 金额
-        String orderAmount = billDetail.getOrderAmount();
-        double v = Double.parseDouble(orderAmount) * 100;
-        int amount = Math.abs(((int) v));
+        int amount = PayUtil.convertCentAmount(new BigDecimal(billDetail.getOrderAmount()));
 
         // 默认为支付对账记录
-        ReconcileTradeDetail reconcileTradeDetail = new ReconcileTradeDetail()
+        ReconcileOutTrade reconcileTradeDetail = new ReconcileOutTrade()
                 .setReconcileId(billDetail.getReconcileId())
                 .setTradeNo(billDetail.getOutTradeNo())
                 .setType(ReconcileTradeEnum.PAY.getCode())

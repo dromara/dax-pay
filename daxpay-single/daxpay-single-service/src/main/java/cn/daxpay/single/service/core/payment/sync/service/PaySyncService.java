@@ -7,7 +7,7 @@ import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.pay.PaySyncParam;
-import cn.daxpay.single.result.pay.SyncResult;
+import cn.daxpay.single.result.sync.PaySyncResult;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
 import cn.daxpay.single.service.code.PayRepairWayEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
@@ -19,7 +19,7 @@ import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.repair.result.PayRepairResult;
 import cn.daxpay.single.service.core.payment.repair.service.PayRepairService;
 import cn.daxpay.single.service.core.payment.sync.factory.PaySyncStrategyFactory;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
 import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
 import cn.daxpay.single.service.func.AbsPaySyncStrategy;
@@ -62,7 +62,7 @@ public class PaySyncService {
      * 支付同步, 开启一个新的事务, 不受外部抛出异常的影响
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public SyncResult sync(PaySyncParam param) {
+    public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
                 .orElseThrow(() -> new PayFailureException("支付订单不存在"));
         // 钱包支付钱包不需要
@@ -79,7 +79,7 @@ public class PaySyncService {
      * 3. 会更新关联网关订单号
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public SyncResult syncPayOrder(PayOrder payOrder) {
+    public PaySyncResult syncPayOrder(PayOrder payOrder) {
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:pay" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){
@@ -91,20 +91,20 @@ public class PaySyncService {
             AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getChannel());
             syncPayStrategy.initPayParam(payOrder);
             // 执行操作, 获取支付网关同步的结果
-            PaySyncResult paySyncResult = syncPayStrategy.doSyncStatus();
+            PayRemoteSyncResult payRemoteSyncResult = syncPayStrategy.doSyncStatus();
             // 判断是否同步成功
-            if (Objects.equals(paySyncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
+            if (Objects.equals(payRemoteSyncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(payOrder, paySyncResult, false, null, paySyncResult.getErrorMsg());
-                throw new PayFailureException(paySyncResult.getErrorMsg());
+                this.saveRecord(payOrder, payRemoteSyncResult, false, null, payRemoteSyncResult.getErrorMsg());
+                throw new PayFailureException(payRemoteSyncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (!Objects.equals(paySyncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
-                payOrder.setOutOrderNo(paySyncResult.getOutOrderNo());
+            if (!Objects.equals(payRemoteSyncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
+                payOrder.setOutOrderNo(payRemoteSyncResult.getOutOrderNo());
                 payOrderService.updateById(payOrder);
             }
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
-            boolean statusSync = this.checkAndAdjustSyncStatus(paySyncResult,payOrder);
+            boolean statusSync = this.checkAndAdjustSyncStatus(payRemoteSyncResult,payOrder);
             PayRepairResult repairResult = new PayRepairResult();
             try {
                 // 状态不一致，执行支付单修复逻辑
@@ -115,19 +115,19 @@ public class PaySyncService {
                         repairInfo.setSource(PayRepairSourceEnum.SYNC);
                     }
                     // 设置支付单完成时间
-                    repairInfo.setFinishTime(paySyncResult.getPayTime());
-                    repairResult = this.repairHandler(paySyncResult, payOrder);
+                    repairInfo.setFinishTime(payRemoteSyncResult.getPayTime());
+                    repairResult = this.repairHandler(payRemoteSyncResult, payOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                paySyncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
-                this.saveRecord(payOrder, paySyncResult, false, null, e.getMessage());
+                payRemoteSyncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
+                this.saveRecord(payOrder, payRemoteSyncResult, false, null, e.getMessage());
                 throw e;
             }
 
             // 同步成功记录日志
-            this.saveRecord( payOrder, paySyncResult, !statusSync, repairResult.getRepairNo(), null);
-            return new SyncResult().setStatus(paySyncResult.getSyncStatus().getCode());
+            this.saveRecord( payOrder, payRemoteSyncResult, !statusSync, repairResult.getRepairNo(), null);
+            return new PaySyncResult().setStatus(payRemoteSyncResult.getSyncStatus().getCode());
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -136,8 +136,8 @@ public class PaySyncService {
     /**
      * 判断支付单和网关状态是否一致, 同时待支付状态下, 支付单支付超时进行状态的更改
      */
-    private boolean checkAndAdjustSyncStatus(PaySyncResult syncResult, PayOrder order){
-        PaySyncStatusEnum syncStatus = syncResult.getSyncStatus();
+    private boolean checkAndAdjustSyncStatus(PayRemoteSyncResult payRemoteSyncResult, PayOrder order){
+        PaySyncStatusEnum syncStatus = payRemoteSyncResult.getSyncStatus();
         String orderStatus = order.getStatus();
         // 本地支付成功/网关支付成功
         if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(SUCCESS)){
@@ -153,7 +153,7 @@ public class PaySyncService {
             // 判断支付单是否支付超时, 如果待支付状态下触发超时
             if (LocalDateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
                 // 将支付单同步状态状态调整为支付超时, 进行订单的关闭
-                syncResult.setSyncStatus(PaySyncStatusEnum.TIMEOUT);
+                payRemoteSyncResult.setSyncStatus(PaySyncStatusEnum.TIMEOUT);
                 return false;
             }
             return true;
@@ -183,8 +183,8 @@ public class PaySyncService {
     /**
      * 根据同步的结果对支付单进行修复处理
      */
-    private PayRepairResult repairHandler(PaySyncResult syncResult, PayOrder payOrder){
-        PaySyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
+    private PayRepairResult repairHandler(PayRemoteSyncResult payRemoteSyncResult, PayOrder payOrder){
+        PaySyncStatusEnum syncStatusEnum = payRemoteSyncResult.getSyncStatus();
         PayRepairResult repair = new PayRepairResult();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
@@ -229,20 +229,20 @@ public class PaySyncService {
     /**
      * 保存同步记录
      * @param payOrder 支付单
-     * @param syncResult 同步结果
+     * @param payRemoteSyncResult 同步结果
      * @param repair 是否修复
      * @param repairOrderNo 修复号
      * @param errorMsg 错误信息
      */
-    private void saveRecord(PayOrder payOrder, PaySyncResult syncResult, boolean repair, String repairOrderNo, String errorMsg){
+    private void saveRecord(PayOrder payOrder, PayRemoteSyncResult payRemoteSyncResult, boolean repair, String repairOrderNo, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
                 .setBizTradeNo(payOrder.getBizOrderNo())
                 .setTradeNo(payOrder.getOrderNo())
                 .setOutTradeNo(payOrder.getOutOrderNo())
-                .setOutTradeStatus(syncResult.getSyncStatus().getCode())
+                .setOutTradeStatus(payRemoteSyncResult.getSyncStatus().getCode())
                 .setSyncType(PaymentTypeEnum.PAY.getCode())
                 .setChannel(payOrder.getChannel())
-                .setSyncInfo(syncResult.getSyncInfo())
+                .setSyncInfo(payRemoteSyncResult.getSyncInfo())
                 .setRepair(repair)
                 .setRepairNo(repairOrderNo)
                 .setErrorMsg(errorMsg)

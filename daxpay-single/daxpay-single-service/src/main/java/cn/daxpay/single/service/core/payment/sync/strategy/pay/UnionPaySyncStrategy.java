@@ -5,7 +5,7 @@ import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayConfigService;
 import cn.daxpay.single.service.core.channel.union.service.UnionPaySyncService;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import cn.daxpay.single.service.func.AbsPaySyncStrategy;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class UnionPaySyncStrategy extends AbsPaySyncStrategy {
      * @see PaySyncStatusEnum
      */
     @Override
-    public PaySyncResult doSyncStatus() {
+    public PayRemoteSyncResult doSyncStatus() {
         UnionPayConfig config = unionPayConfigService.getConfig();
         UnionPayKit unionPayKit = unionPayConfigService.initPayService(config);
         return unionPaySyncService.syncPayStatus(this.getOrder(),unionPayKit);

@@ -18,6 +18,9 @@ import lombok.experimental.Accessors;
 @Schema(title = "分账组")
 public class AllocationGroupDto extends BaseDto {
 
+    @Schema(description = "分账组编号")
+    private String groupNo;
+
     @Schema(description = "名称")
     private String name;
 

@@ -10,6 +10,7 @@ import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.payment.repair.factory.PayRepairStrategyFactory;
 import cn.daxpay.single.service.core.payment.repair.result.PayRepairResult;
+import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.core.record.repair.entity.PayRepairRecord;
 import cn.daxpay.single.service.core.record.repair.service.PayRepairRecordService;
 import cn.daxpay.single.service.func.AbsPayRepairStrategy;
@@ -41,6 +42,7 @@ public class PayRepairService {
     private final PayRepairRecordService recordService;
 
     private final LockTemplate lockTemplate;
+    private final TradeFlowRecordService tradeFlowRecordService;
 
     /**
      * 修复支付单
@@ -117,6 +119,7 @@ public class PayRepairService {
         order.setStatus(PayStatusEnum.SUCCESS.getCode())
                 .setPayTime(payTime)
                 .setCloseTime(null);
+        tradeFlowRecordService.savePay(order);
         payOrderService.updateById(order);
     }
 

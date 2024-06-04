@@ -27,6 +27,9 @@ public class AllocationReceiverDto extends BaseDto {
     @Schema(description = "账号别名")
     private String name;
 
+    @Schema(description = "接收方编号")
+    private String receiverNo;
+
     /**
      * @see PayChannelEnum
      */
@@ -59,10 +62,4 @@ public class AllocationReceiverDto extends BaseDto {
 
     @Schema(description = "关系名称")
     private String relationName;
-
-    @Schema(description = "是否已经同步到网关")
-    private Boolean sync;
-
-    @Schema(description = "备注")
-    private String remark;
 }

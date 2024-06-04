@@ -42,6 +42,13 @@ public class AllocationGroupController {
         return Res.ok(allocationGroupService.findById(id));
     }
 
+
+    @Operation(summary = "编码是否存在")
+    @GetMapping("/existsByGroupNo")
+    public ResResult<Boolean> existsByGroupNo(String groupNo){
+        return Res.ok(allocationGroupService.existsByGroupNo(groupNo));
+    }
+
     @Operation(summary = "查询分账接收方信息")
     @GetMapping("/findReceiversByGroups")
     public ResResult<List<AllocationGroupReceiverResult>> findReceiversByGroups(Long groupId){

@@ -28,7 +28,7 @@ public class QueryPayParam extends DaxPayRequest<PayOrderModel> {
      */
     @Override
     public String path() {
-        return "/uni/query/payOrder";
+        return "/unipay/query/payOrder";
     }
 
     /**

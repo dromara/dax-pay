@@ -1,15 +1,17 @@
 package cn.daxpay.single.service.core.record.flow.entity;
 
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.code.TradeFlowRecordTypeEnum;
-import cn.bootx.table.modify.annotation.DbColumn;
-import io.swagger.v3.oas.annotations.media.Schema;
+import cn.daxpay.single.service.core.record.flow.convert.TradeFlowRecordConvert;
+import cn.daxpay.single.service.dto.record.flow.TradeFlowRecordDto;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * 资金流水记录
@@ -19,9 +21,11 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "资金流水记录")
-public class TradeFlowRecord extends MpCreateEntity {
-    /** 支付订单标题 */
+@TableName("pay_trade_flow_record")
+@DbTable(comment = "资金流水记录")
+public class TradeFlowRecord extends MpCreateEntity implements EntityBaseFunction<TradeFlowRecordDto> {
+
+    /** 订单标题 */
     @DbColumn(comment = "标题")
     private String title;
 
@@ -44,18 +48,19 @@ public class TradeFlowRecord extends MpCreateEntity {
     private String channel;
 
     /** 本地交易号 */
-    @DbColumn(comment = "本地订单号")
+    @DbColumn(comment = "本地交易号")
     private String tradeNo;
 
     /** 商户交易号 */
     @DbColumn(comment = "商户交易号")
     private String bizTradeNo;
 
-    /** 三方系统交易号 */
-    @DbColumn(comment = "三方系统交易号")
+    /** 通道交易号 */
+    @DbColumn(comment = "通道交易号")
     private String outTradeNo;
 
-    /** 网关完成时间 */
-    @DbColumn(comment = "网关完成时间")
-    private LocalDateTime finishTime;
+    @Override
+    public TradeFlowRecordDto toDto() {
+        return TradeFlowRecordConvert.CONVERT.convert(this);
+    }
 }

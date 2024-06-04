@@ -1,8 +1,10 @@
 package cn.daxpay.single.service.core.system.config.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.daxpay.single.service.core.system.config.entity.PlatformConfig;
+import cn.daxpay.single.service.common.context.PlatformLocal;
+import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.system.config.dao.PlatformConfigManager;
+import cn.daxpay.single.service.core.system.config.entity.PlatformConfig;
 import cn.daxpay.single.service.param.system.config.PlatformConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +39,19 @@ public class PlatformConfigService {
         PlatformConfig config = platformConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("平台配置不存在"));
         BeanUtil.copyProperties(param,config);
         platformConfigManager.updateById(config);
+    }
+
+    /**
+     * 初始化平台配置上下文
+     */
+    public void initPlatform(){
+        PlatformConfig config = this.getConfig();
+        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
+        platform.setSignType(config.getSignType());
+        platform.setSignSecret(config.getSignSecret());
+        platform.setNotifyUrl(config.getNotifyUrl());
+        platform.setOrderTimeout(config.getOrderTimeout());
+        platform.setLimitAmount(config.getLimitAmount());
+        platform.setWebsiteUrl(config.getWebsiteUrl());
     }
 }

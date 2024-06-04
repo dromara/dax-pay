@@ -8,6 +8,7 @@ import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
 import cn.daxpay.single.sdk.param.pay.PayParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
+import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +37,6 @@ public class PayOrderTest {
     public void pay() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
 
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试接口支付");
@@ -50,7 +50,7 @@ public class PayOrderTest {
         param.setNotifyUrl("https://abc.com/callback");
 
         DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
-        System.out.println(execute);
-        System.out.println(execute.getData());
+        System.out.println(JSONUtil.toJsonStr(execute));
+        
     }
 }

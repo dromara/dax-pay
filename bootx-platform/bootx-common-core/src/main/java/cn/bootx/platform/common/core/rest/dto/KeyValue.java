@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(callSuper = true)
 @Accessors(chain = true)
 @Schema(title = "kv键值对象")
 public class KeyValue implements Serializable {

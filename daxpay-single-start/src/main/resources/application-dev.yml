@@ -60,7 +60,7 @@ springdoc:
 # 开发时显示debug日志
 logging:
   level:
-    cn.bootx.**: debug
+    cn.daxpay.**: debug
     org.springframework.jdbc.core: debug
 # 项目配置
 bootx:
@@ -69,14 +69,14 @@ bootx:
     swagger:
       enabled: true
       author: bootx
-      version: 2.0.6
+      version: 2.0.7
       title: 开源支付平台-单商户
       description: 开源支付平台-单商户版
       # 多模块扫码
       base-packages:
-        "[支付网关API]": cn.bootx.platform.daxpay.gateway
-        "[支付管理接口]": cn.bootx.platform.daxpay.admin
-        "[支付演示模块]": cn.bootx.platform.daxpay.demo
+        "[支付网关API]": cn.daxpay.single.gateway
+        "[支付管理接口]": cn.daxpay.single.admin
+        "[支付演示模块]": cn.daxpay.single.demo
         "[BootxPlatform接口]":
           - cn.bootx.platform.common
           - cn.bootx.platform.starter
@@ -143,7 +143,7 @@ table-modify:
   update-type: update
   database-type: mysql
   fail-fast: true
-  scan-package: cn.bootx.platform.daxpay
+  scan-package: cn.daxpay.single
 dromara:
   #文件存储配置,
   x-file-storage:

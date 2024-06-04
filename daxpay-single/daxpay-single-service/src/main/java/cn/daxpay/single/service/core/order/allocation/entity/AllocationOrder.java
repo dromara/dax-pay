@@ -2,17 +2,16 @@ package cn.daxpay.single.service.core.order.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.daxpay.single.code.AllocOrderResultEnum;
 import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.core.order.allocation.convert.AllocationConvert;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDto;
-import cn.bootx.table.modify.annotation.DbColumn;
-import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -74,7 +73,7 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     /**
      * 支付订单标题
      */
-    @Schema(description = "支付订单标题")
+    @DbColumn(comment = "支付订单标题")
     private String title;
 
     /**

@@ -6,8 +6,8 @@ import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
-import cn.daxpay.single.service.core.payment.sync.result.RefundSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
@@ -43,8 +43,8 @@ public class AliPaySyncService {
      * 4 查询不到
      * 5 查询失败
      */
-    public PaySyncResult syncPayStatus(PayOrder payOrder) {
-        PaySyncResult syncResult = new PaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
+    public PayRemoteSyncResult syncPayStatus(PayOrder payOrder) {
+        PayRemoteSyncResult syncResult = new PayRemoteSyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
         // 查询
         try {
             AlipayTradeQueryModel queryModel = new AlipayTradeQueryModel();
@@ -96,8 +96,8 @@ public class AliPaySyncService {
      * 退款同步查询
      * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
-    public RefundSyncResult syncRefundStatus(RefundOrder refundOrder) {
-        RefundSyncResult syncResult = new RefundSyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
+    public RefundRemoteSyncResult syncRefundStatus(RefundOrder refundOrder) {
+        RefundRemoteSyncResult syncResult = new RefundRemoteSyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
         try {
             AlipayTradeFastpayRefundQueryModel queryModel = new AlipayTradeFastpayRefundQueryModel();
             // 退款请求号

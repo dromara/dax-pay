@@ -6,7 +6,6 @@ import cn.bootx.platform.iam.code.PermissionCode;
 import cn.bootx.platform.iam.core.permission.convert.PermConvert;
 import cn.bootx.platform.iam.dto.permission.PermMenuDto;
 import cn.bootx.platform.iam.param.permission.PermMenuParam;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +24,6 @@ import lombok.experimental.Accessors;
 public class PermMenu extends MpBaseEntity implements EntityBaseFunction<PermMenuDto> {
 
     /** 父id */
-//    @TableField(updateStrategy = NEVER)
     private Long parentId;
 
     /** 关联终端code */
@@ -86,9 +84,8 @@ public class PermMenu extends MpBaseEntity implements EntityBaseFunction<PermMen
     /** 隐藏的标题内容 */
     private boolean hiddenHeaderContent;
 
-    /** 系统菜单 */
-    @TableField("`admin`")
-    private boolean admin;
+    /** 系统内置 */
+    private boolean internal;
 
     /** 描述 */
     private String remark;

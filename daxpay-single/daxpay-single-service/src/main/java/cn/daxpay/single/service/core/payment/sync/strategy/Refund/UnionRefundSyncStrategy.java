@@ -5,7 +5,7 @@ import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayConfigService;
 import cn.daxpay.single.service.core.channel.union.service.UnionPaySyncService;
-import cn.daxpay.single.service.core.payment.sync.result.RefundSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class UnionRefundSyncStrategy extends AbsRefundSyncStrategy {
      * @see PaySyncStatusEnum
      */
     @Override
-    public RefundSyncResult doSyncStatus() {
+    public RefundRemoteSyncResult doSyncStatus() {
         UnionPayConfig config = unionPayConfigService.getConfig();
         UnionPayKit unionPayKit = unionPayConfigService.initPayService(config);
         return unionPaySyncService.syncRefundStatus(this.getRefundOrder(),unionPayKit);

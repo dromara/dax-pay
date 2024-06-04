@@ -27,8 +27,8 @@ public class RefundOrderQuery extends QueryOrder {
     @Schema(description = "商户退款号")
     private String bizRefundNo;
 
-    /** 三方支付系统退款交易号 */
-    @Schema(description = "三方支付系统退款交易号")
+    /** 通道退款交易号 */
+    @Schema(description = "通道退款交易号")
     private String outRefundNo;
 
     /** 支付订单ID */

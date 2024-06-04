@@ -9,6 +9,7 @@ import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.service.dto.channel.wechat.WeChatPayAllocationReceiver;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DatePattern;
@@ -57,22 +58,24 @@ public class WeChatPayAllocationService {
         }
         String finalDescription = description;
         orderDetails.sort(Comparator.comparing(MpIdEntity::getId));
-        List<ReceiverModel> list = orderDetails.stream().map(o->{
-            AllocReceiverTypeEnum receiverTypeEnum = AllocReceiverTypeEnum.findByCode(o.getReceiverType());
-            return ReceiverModel.builder()
-                    .type(receiverTypeEnum.getOutCode())
-                    .account(o.getReceiverAccount())
-                    .amount(o.getAmount())
-                    .description(finalDescription)
-                    .build();
-        }).collect(Collectors.toList());
+        List<ReceiverModel> list = orderDetails.stream()
+                .filter(o-> Objects.equals(o.getResult(), AllocDetailResultEnum.PENDING.getCode()))
+                .map(o->{
+                    AllocReceiverTypeEnum receiverTypeEnum = AllocReceiverTypeEnum.findByCode(o.getReceiverType());
+                    return ReceiverModel.builder()
+                            .type(receiverTypeEnum.getOutCode())
+                            .account(o.getReceiverAccount())
+                            .amount(o.getAmount())
+                            .description(finalDescription)
+                            .build();
+                }).collect(Collectors.toList());
 
         Map<String, String> params = ProfitSharingModel.builder()
                 .mch_id(config.getWxMchId())
                 .appid(config.getWxAppId())
                 .nonce_str(WxPayKit.generateStr())
                 .transaction_id(allocationOrder.getOutOrderNo())
-                .out_order_no(allocationOrder.getOrderNo())
+                .out_order_no(allocationOrder.getAllocationNo())
                 .receivers(JSON.toJSONString(list))
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
@@ -93,8 +96,9 @@ public class WeChatPayAllocationService {
                 .appid(config.getWxAppId())
                 .nonce_str(WxPayKit.generateStr())
                 .transaction_id(allocationOrder.getOutOrderNo())
-                .out_order_no(allocationOrder.getOrderNo())
-                .description("分账完成")
+                // 分账要使用单独的的流水号, 不能与分账号相同
+                .out_order_no(allocationOrder.getAllocationNo()+'F')
+                .description("分账已完成")
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
 
@@ -108,13 +112,13 @@ public class WeChatPayAllocationService {
     /**
      * 同步分账状态
      */
-    public void sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails, WeChatPayConfig config){
+    public AllocRemoteSyncResult sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails, WeChatPayConfig config){
         // 不要传输AppId参数, 否则会失败
         Map<String, String> params = ProfitSharingModel.builder()
                 .mch_id(config.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
                 .transaction_id(allocationOrder.getOutOrderNo())
-                .out_order_no(allocationOrder.getOrderNo())
+                .out_order_no(allocationOrder.getAllocationNo())
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
         String xmlResult = WxPayApi.profitSharingQuery(params);
@@ -137,6 +141,7 @@ public class WeChatPayAllocationService {
                 }
             }
         }
+        return new AllocRemoteSyncResult().setSyncInfo(JSONUtil.toJsonStr(receivers));
     }
 
 

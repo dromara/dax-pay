@@ -15,7 +15,7 @@ import org.slf4j.MDC;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class DaxResult<T> extends ResResult<T> {
 

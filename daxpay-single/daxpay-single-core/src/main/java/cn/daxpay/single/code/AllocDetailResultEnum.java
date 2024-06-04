@@ -15,6 +15,8 @@ public enum AllocDetailResultEnum {
     PENDING("pending", "待分账"),
     SUCCESS("success", "分账成功"),
     FAIL("fail", "分账失败"),
+    /** 金额为0时不进行分账 */
+    IGNORE("ignore", "忽略分账"),
     ;
 
     private final String code;

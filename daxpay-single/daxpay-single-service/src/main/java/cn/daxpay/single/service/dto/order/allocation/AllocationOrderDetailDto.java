@@ -22,10 +22,13 @@ import java.time.LocalDateTime;
 @Schema(title = "分账订单详情")
 public class AllocationOrderDetailDto extends BaseDto {
 
-
     /** 分账订单ID */
     @Schema(description = "分账订单ID")
     private Long allocationId;
+
+    /** 分账接收方编号 */
+    @Schema(description = "分账接收方编号")
+    private String receiverNo;
 
     /** 接收者ID */
     @Schema(description = "接收者ID")

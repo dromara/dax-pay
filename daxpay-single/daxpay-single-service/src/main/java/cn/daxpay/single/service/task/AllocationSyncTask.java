@@ -4,6 +4,7 @@ import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
+import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -23,6 +24,7 @@ public class AllocationSyncTask implements Job {
 
     private final AllocationOrderManager allocationOrderManager;
 
+    private final AllocationSyncService allocationSyncService;
     private final AllocationService allocationService;
 
     /**
@@ -34,7 +36,7 @@ public class AllocationSyncTask implements Job {
             try {
                 // 分账中走同步逻辑
                 if (allocationOrder.getStatus().equals(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())) {
-                    allocationService.sync(allocationOrder);
+                    allocationSyncService.sync(allocationOrder);
                 }
                 // 如果分账结束, 调用自动完结逻辑
                 if (allocationOrder.getStatus().equals(AllocOrderStatusEnum.ALLOCATION_END.getCode())) {

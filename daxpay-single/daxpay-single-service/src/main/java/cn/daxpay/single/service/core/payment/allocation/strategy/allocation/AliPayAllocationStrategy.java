@@ -5,6 +5,7 @@ import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayAllocationService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
+import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.service.func.AbsAllocationStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +50,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
         this.aliPayConfig = aliPayConfigService.getConfig();
         // 判断是否支持分账
         if (Objects.equals(aliPayConfig.getAllocation(),false)){
-            throw new PayFailureException("微信支付配置不支持分账");
+            throw new PayFailureException("支付宝支付配置不支持分账");
         }
         aliPayConfigService.initConfig(this.aliPayConfig);
     }
@@ -74,8 +75,8 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      * 同步状态
      */
     @Override
-    public void doSync() {
-        aliPayAllocationService.sync(this.getAllocationOrder(), this.getAllocationOrderDetails());
+    public AllocRemoteSyncResult doSync() {
+        return aliPayAllocationService.sync(this.getAllocationOrder(), this.getAllocationOrderDetails());
     }
 
 }

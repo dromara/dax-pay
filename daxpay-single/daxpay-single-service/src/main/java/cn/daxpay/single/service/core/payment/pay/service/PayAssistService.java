@@ -151,8 +151,6 @@ public class PayAssistService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void updatePayOrder(PayParam payParam,PayOrder order, PayOrderExtra payOrderExtra) {
-        PayLocal payInfo = PaymentContextLocal.get()
-                .getPayInfo();
         // 订单信息
         order.setAllocation(payParam.getAllocation())
                 .setChannel(payParam.getChannel())

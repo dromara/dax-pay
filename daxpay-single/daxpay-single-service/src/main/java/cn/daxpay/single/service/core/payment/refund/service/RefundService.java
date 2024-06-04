@@ -19,6 +19,7 @@ import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.payment.refund.factory.RefundStrategyFactory;
+import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.func.AbsRefundStrategy;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
@@ -53,6 +54,8 @@ public class RefundService {
     private final RefundOrderManager refundOrderManager;
 
     private final PayOrderQueryService payOrderQueryService;
+
+    private final TradeFlowRecordService tradeFlowRecordService;
 
     private final RefundOrderExtraManager refundOrderExtraManager;
 
@@ -199,16 +202,23 @@ public class RefundService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void successHandler(RefundOrder refundOrder, PayOrder payOrder) {
-        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        RefundLocal refundInfo = PaymentContextLocal.get()
+                .getRefundInfo();
         // 剩余可退款余额
         int refundableBalance = payOrder.getRefundableBalance();
-        // 设置支付订单状态
+        // 退款状态为退款中
         if (refundInfo.getStatus() == RefundStatusEnum.PROGRESS) {
             payOrder.setStatus(PayStatusEnum.REFUNDING.getCode());
-        } else if (refundableBalance == 0) {
-            payOrder.setStatus(PayStatusEnum.REFUNDED.getCode());
-        } else {
-            payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
+        }
+        // 退款状态为成功
+        else {
+            if (refundableBalance == 0) {
+                payOrder.setStatus(PayStatusEnum.REFUNDED.getCode());
+            } else {
+                payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
+            }
+            // 记录流水
+            tradeFlowRecordService.saveRefund(refundOrder);
         }
         payOrderService.updateById(payOrder);
 

@@ -11,7 +11,7 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.union.dao.UnionReconcileBillDetailManager;
 import cn.daxpay.single.service.core.channel.union.entity.UnionReconcileBillDetail;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileTradeDetail;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
@@ -152,7 +152,7 @@ public class UnionPayReconcileService {
      * 转换为通用对账记录对象
      */
     private void convertAndSave(List<UnionReconcileBillDetail> billDetails){
-        List<ReconcileTradeDetail> collect = billDetails.stream()
+        List<ReconcileOutTrade> collect = billDetails.stream()
                 .map(this::convert)
                 // 只处理支付和退款的对账记录
                 .filter(Objects::nonNull)
@@ -164,7 +164,7 @@ public class UnionPayReconcileService {
     /**
      * 转换为通用对账记录对象
      */
-    private ReconcileTradeDetail convert(UnionReconcileBillDetail billDetail){
+    private ReconcileOutTrade convert(UnionReconcileBillDetail billDetail){
         ReconcileOrder reconcileOrder = PaymentContextLocal.get()
                 .getReconcileInfo()
                 .getReconcileOrder();
@@ -173,7 +173,7 @@ public class UnionPayReconcileService {
         int amount = Integer.parseInt(orderAmount);
 
         // 默认为支付对账记录
-        ReconcileTradeDetail reconcileTradeDetail = new ReconcileTradeDetail()
+        ReconcileOutTrade reconcileTradeDetail = new ReconcileOutTrade()
                 .setReconcileId(billDetail.getReconcileId())
                 .setTradeNo(billDetail.getOrderId())
                 .setType(ReconcileTradeEnum.PAY.getCode())

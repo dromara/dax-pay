@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "具体支付日志基类")
+@Schema(title = "支付订单")
 public class PayOrderDto extends BaseDto {
 
     /** 商户订单号 */

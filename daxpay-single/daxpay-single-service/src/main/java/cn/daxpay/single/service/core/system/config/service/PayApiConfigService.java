@@ -54,7 +54,7 @@ public class PayApiConfigService {
      * 初始化接口上下文信息
      */
     public void initApiInfo(PayApiConfig api){
-        // 记录支付接口信息
+        // 接口信息
         ApiInfoLocal apiInfoLocal = PaymentContextLocal.get().getApiInfo();
         apiInfoLocal.setApiCode(api.getCode())
                 .setReqSign(api.isReqSign())

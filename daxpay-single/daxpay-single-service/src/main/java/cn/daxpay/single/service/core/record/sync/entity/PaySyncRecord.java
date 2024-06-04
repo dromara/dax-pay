@@ -2,6 +2,7 @@ package cn.daxpay.single.service.core.record.sync.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.RefundSyncStatusEnum;
 import cn.daxpay.single.code.PaySyncStatusEnum;

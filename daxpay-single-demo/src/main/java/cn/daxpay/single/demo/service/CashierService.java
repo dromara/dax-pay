@@ -53,6 +53,8 @@ public class CashierService {
         PayParam payParam = new PayParam();
         payParam.setBizOrderNo(param.getBizOrderNo());
         payParam.setAllocation(param.getAllocation());
+        // 如果为分账, 则设置为默认分账
+        payParam.setAutoAllocation(param.getAllocation());
         int amount = param.getAmount()
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();
@@ -118,15 +120,16 @@ public class CashierService {
         QueryPayParam queryPayOrderParam = new QueryPayParam();
         queryPayOrderParam.setBizOrderNoeNo(bizOrderNoeNo);
         DaxPayResult<PayOrderModel> execute = DaxPayKit.execute(queryPayOrderParam);
-        // 未查询到订单
-        if (execute.getCode() == 10010){
-            return false;
-        }
 
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());
         }
         PayOrderModel data = execute.getData();
+
+        // todo 暂时先这样处理聚合支付的查询，后续需要替换为异常码判断响应状态
+        if (Objects.equals(data.getMsg(),"支付订单不存在")){
+            return false;
+        }
         String status = data.getStatus();
         if (Objects.equals(status, PayStatusEnum.PROGRESS.getCode())){
             return false;

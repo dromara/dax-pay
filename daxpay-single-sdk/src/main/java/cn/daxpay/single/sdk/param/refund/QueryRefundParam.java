@@ -29,7 +29,7 @@ public class QueryRefundParam extends DaxPayRequest<RefundOrderModel> {
      */
     @Override
     public String path() {
-        return "/uni/query/refundOrder";
+        return "/unipay/query/refundOrder";
     }
 
     /**

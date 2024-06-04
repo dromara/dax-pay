@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class ResResult<T> implements Serializable {
 
     private static final long serialVersionUID = -3041700282408360384L;

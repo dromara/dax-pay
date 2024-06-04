@@ -1,7 +1,9 @@
 package cn.daxpay.single.sdk.model.notice;
 
 import cn.daxpay.single.sdk.code.PayChannelEnum;
+import cn.daxpay.single.sdk.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.sdk.code.PayStatusEnum;
+import cn.daxpay.single.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,8 +15,8 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
-public class PayNoticeModel {
+@ToString(callSuper = true)
+public class PayNoticeModel extends DaxPayResponseModel {
 
     /** 订单号 */
     private String orderNo;
@@ -22,9 +24,20 @@ public class PayNoticeModel {
     /** 商户订单号 */
     private String bizOrderNo;
 
+    /** 通道系统交易号 */
+    private String outOrderNo;
+
     /** 标题 */
     private String title;
 
+    /** 描述 */
+    private String description;
+
+    /** 是否支持分账 */
+    private Boolean allocation;
+
+    /** 是否开启自动分账,*/
+    private Boolean autoAllocation;
     /**
      * 支付通道
      * @see PayChannelEnum
@@ -43,8 +56,17 @@ public class PayNoticeModel {
      */
     private String status;
 
+    /**
+     * 分账状态
+     * @see PayOrderAllocStatusEnum
+     */
+    private String allocationStatus;
+
     /** 支付成功时间 */
     private Long payTime;
+
+    /** 过期时间 */
+    private Long expiredTime;
 
     /** 支付关闭时间 */
     private Long closeTime;
@@ -55,7 +77,10 @@ public class PayNoticeModel {
     /** 商户扩展参数,回调时会原样返回 */
     private String attach;
 
-    /** 签名 */
-    private String sign;
+    /** 错误码 */
+    private String errorCode;
+
+    /** 错误原因 */
+    private String errorMsg;
 
 }

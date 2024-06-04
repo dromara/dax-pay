@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Setter
 @Getter
-@ToString
+@ToString(callSuper = true)
 public abstract class DaxPayResponseModel {
 
     /** 状态码 */

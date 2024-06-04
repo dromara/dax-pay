@@ -6,7 +6,7 @@ import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPaySyncService;
 import cn.daxpay.single.service.func.AbsPaySyncStrategy;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,7 @@ public class AliPaySyncStrategy extends AbsPaySyncStrategy {
      * 异步支付单与支付网关进行状态比对
      */
     @Override
-    public PaySyncResult doSyncStatus() {
+    public PayRemoteSyncResult doSyncStatus() {
         this.initAlipayConfig();
         return alipaySyncService.syncPayStatus(this.getOrder());
     }

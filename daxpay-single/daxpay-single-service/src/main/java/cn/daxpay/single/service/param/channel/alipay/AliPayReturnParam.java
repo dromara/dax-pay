@@ -27,7 +27,7 @@ public class AliPayReturnParam {
      */
     @Schema(description = "支付订单号")
     @JsonAlias("out_trade_no")
-    private Long out_trade_no;
+    private String outTradeNo;
 
     /**
      * 该交易在支付宝系统中的交易流水号。最长 64 位。
@@ -35,7 +35,7 @@ public class AliPayReturnParam {
      */
     @Schema(description = "网关订单号")
     @JsonAlias("trade_no")
-    private String trade_no;
+    private String tradeNo;
 
     @Schema(description = "接口名称")
     @JsonAlias("method")
@@ -51,7 +51,7 @@ public class AliPayReturnParam {
 
     @Schema(description = "不确定是什么")
     @JsonAlias("auth_app_id")
-    private String auth_app_id;
+    private String authAppId;
 
     /**
      * 支付宝分配给开发者的应用ID。
@@ -59,14 +59,14 @@ public class AliPayReturnParam {
      */
     @Schema(description = "应用ID")
     @JsonAlias("app_id")
-    private String app_id;
+    private String appId;
 
     /**
      * 签名算法类型，目前支持 RSA2 和 RSA，推荐使用RSA2
      */
     @Schema(description = "签名算法类型")
     @JsonAlias("sign_type")
-    private String sign_type;
+    private String signType;
 
     /**
      * 收款支付宝账号对应的支付宝唯一用户号。以 2088 开头的纯 16 位数字。
@@ -74,7 +74,7 @@ public class AliPayReturnParam {
      */
     @Schema(description = "收款支付宝账号对应的支付宝唯一用户号")
     @JsonAlias("seller_id")
-    private String seller_id;
+    private String sellerId;
 
     /**
      * 前台回跳的时间，格式：yyyy-MM-dd HH:mm:ss。

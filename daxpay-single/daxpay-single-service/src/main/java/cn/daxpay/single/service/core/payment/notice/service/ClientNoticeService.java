@@ -4,16 +4,20 @@ import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.redis.RedisClient;
 import cn.daxpay.single.service.code.ClientNoticeSendTypeEnum;
+import cn.daxpay.single.service.core.notice.dao.ClientNoticeTaskManager;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeRecord;
+import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
+import cn.daxpay.single.service.core.notice.service.ClientNoticeRecordService;
+import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderExtraManager;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderExtra;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
-import cn.daxpay.single.service.core.task.notice.dao.ClientNoticeTaskManager;
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeRecord;
-import cn.daxpay.single.service.core.task.notice.entity.ClientNoticeTask;
-import cn.daxpay.single.service.core.task.notice.service.ClientNoticeRecordService;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpResponse;
@@ -48,6 +52,8 @@ public class ClientNoticeService {
     private final ClientNoticeTaskManager taskManager;
 
     private final ClientNoticeRecordService recordService;
+
+    private final AllocationOrderExtraManager allocationOrderExtraManager;
 
     private final RedisClient redisClient;
 
@@ -126,7 +132,7 @@ public class ClientNoticeService {
         if (Objects.isNull(orderExtra)){
             Optional<RefundOrderExtra> extraOpt =  refundOrderExtraManager.findById(order.getId());
             if (!extraOpt.isPresent()){
-                log.error("未找到支付扩展信息，数据错误，订单ID：{}",order.getId());
+                log.error("未找到退款扩展信息，数据错误，订单ID：{}",order.getId());
                 return;
             }
             orderExtra = extraOpt.get();
@@ -143,6 +149,38 @@ public class ClientNoticeService {
             taskManager.save(task);
         } catch (Exception e) {
             log.error("注册退款消息通知任务失败，数据错误，订单ID：{}",order.getId());
+            log.error("错误内容",e);
+            throw new RuntimeException(e);
+        }
+        // 同时触发一次通知, 如果成功发送, 任务结束
+        this.sendData(task, LocalDateTime.now());
+    }
+
+    /**
+     * 注册分账消息通知任务
+     */
+    @Async("bigExecutor")
+    public void registerAllocNotice(AllocationOrder order, AllocationOrderExtra orderExtra, List<AllocationOrderDetail> list) {
+        // 创建通知任务并保存
+        if (Objects.isNull(orderExtra)){
+            Optional<AllocationOrderExtra> extraOpt =  allocationOrderExtraManager.findById(order.getId());
+            if (!extraOpt.isPresent()){
+                log.error("未找到分账扩展信息，数据错误，订单ID：{}",order.getId());
+                return;
+            }
+            orderExtra = extraOpt.get();
+        }
+        // 判断是否需要进行通知
+        if (StrUtil.isBlank(orderExtra.getNotifyUrl())){
+            log.info("分账订单无需通知，订单ID：{}",order.getId());
+            return;
+        }
+        // 创建通知任务并保存
+        ClientNoticeTask task = clientNoticeAssistService.buildAllocTask(order, orderExtra, list);
+        try {
+            taskManager.save(task);
+        } catch (Exception e) {
+            log.error("注册分账消息通知任务失败，数据错误，订单ID：{}",order.getId());
             log.error("错误内容",e);
             throw new RuntimeException(e);
         }
