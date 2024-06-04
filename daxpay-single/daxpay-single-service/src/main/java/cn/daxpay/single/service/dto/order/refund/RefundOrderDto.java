@@ -30,6 +30,10 @@ public class RefundOrderDto extends BaseDto {
     @Schema(description = "支付订单号")
     private String orderNo;
 
+    /** 通道支付订单号 */
+    @Schema(description = "通道支付订单号")
+    private String outOrderNo;
+
     /** 商户支付订单号 */
     @Schema(description = "商户支付订单号")
     private String bizOrderNo;
@@ -42,11 +46,12 @@ public class RefundOrderDto extends BaseDto {
     @Schema(description = "退款号")
     private String refundNo;
 
+    /** 商户退款号 */
     @Schema(description = "商户退款号")
     private String bizRefundNo;
 
-    /** 三方支付系统退款交易号 */
-    @Schema(description = "三方支付系统退款交易号")
+    /** 通道退款交易号 */
+    @Schema(description = "通道退款交易号")
     private String outRefundNo;
 
     /**

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static cn.daxpay.single.code.AllocReceiverTypeEnum.WX_MERCHANT;
+import static cn.daxpay.single.code.AllocReceiverTypeEnum.WX_PERSONAL;
 
 /**
  *
@@ -36,7 +37,7 @@ public class WeChatPayAllocationReceiverService {
      * 校验参数是否合法
      */
     public boolean validation(AllocationReceiver allocationReceiver){
-        List<String> list = Arrays.asList(WX_MERCHANT.getCode(), WX_MERCHANT.getCode());
+        List<String> list = Arrays.asList(WX_PERSONAL.getCode(), WX_MERCHANT.getCode());
         String receiverType = allocationReceiver.getReceiverType();
         return list.contains(receiverType);
     }

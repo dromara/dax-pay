@@ -26,6 +26,17 @@ public class AllocationOrderDto extends BaseDto {
     private String allocationNo;
 
     /**
+     * 商户分账单号
+     */
+    @Schema(description = "商户分账单号")
+    private String bizAllocationNo;
+    /**
+     * 通道分账单号
+     */
+    @Schema(description = "通道分账单号")
+    private String outAllocationNo;
+
+    /**
      * 支付订单ID
      */
     @Schema(description = "支付订单ID")
@@ -54,12 +65,6 @@ public class AllocationOrderDto extends BaseDto {
      */
     @Schema(description = "支付订单标题")
     private String title;
-
-    /**
-     * 通道分账单号
-     */
-    @Schema(description = "通道分账单号")
-    private String outAllocationNo;
 
     /**
      * 所属通道

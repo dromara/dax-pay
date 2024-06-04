@@ -5,17 +5,19 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.daxpay.single.param.payment.allocation.AllocationStartParam;
+import cn.daxpay.single.code.PaymentApiCode;
+import cn.daxpay.single.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.param.payment.pay.PayCloseParam;
 import cn.daxpay.single.param.payment.pay.PaySyncParam;
-import cn.daxpay.single.result.pay.SyncResult;
+import cn.daxpay.single.result.sync.PaySyncResult;
+import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderExtraService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
-import cn.daxpay.single.service.dto.order.pay.PayOrderDetailDto;
+import cn.daxpay.single.service.dto.order.pay.PayOrderAndExtraDto;
 import cn.daxpay.single.service.dto.order.pay.PayOrderDto;
 import cn.daxpay.single.service.dto.order.pay.PayOrderExtraDto;
 import cn.daxpay.single.service.param.order.PayOrderQuery;
@@ -63,11 +65,11 @@ public class PayOrderController {
 
     @Operation(summary = "查询订单详情")
     @GetMapping("/findByOrderNo")
-    public ResResult<PayOrderDetailDto> findByOrderNo(String orderNo){
+    public ResResult<PayOrderAndExtraDto> findByOrderNo(String orderNo){
         PayOrderDto order = queryService.findByOrderNo(orderNo)
                 .map(PayOrder::toDto)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
-        PayOrderDetailDto detailDto=new PayOrderDetailDto();
+        PayOrderAndExtraDto detailDto=new PayOrderAndExtraDto();
         detailDto.setPayOrder(order);
         detailDto.setPayOrderExtra(payOrderExtraService.findById(order.getId()));
         return Res.ok(detailDto);
@@ -81,7 +83,7 @@ public class PayOrderController {
 
     @Operation(summary = "同步支付状态")
     @PostMapping("/syncByOrderNo")
-    public ResResult<SyncResult> syncById(String orderNo){
+    public ResResult<PaySyncResult> syncById(String orderNo){
         PaySyncParam param = new PaySyncParam();
         param.setOrderNo(orderNo);
         return Res.ok(paySyncService.sync(param));
@@ -97,9 +99,10 @@ public class PayOrderController {
     }
 
     @Operation(summary = "发起分账")
+    @InitPaymentContext(PaymentApiCode.ALLOCATION)
     @PostMapping("/allocation")
     public ResResult<Void> allocation(String orderNo){
-        AllocationStartParam param = new AllocationStartParam();
+        AllocationParam param = new AllocationParam();
         param.setOrderNo(orderNo);
         param.setBizAllocationNo(OrderNoGenerateUtil.allocation());
         allocationService.allocation(param);

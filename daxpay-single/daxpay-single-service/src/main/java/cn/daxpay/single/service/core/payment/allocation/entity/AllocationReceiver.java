@@ -29,10 +29,12 @@ import lombok.experimental.Accessors;
 @TableName(value = "pay_allocation_receiver",autoResultMap = true)
 public class AllocationReceiver extends MpBaseEntity implements EntityBaseFunction<AllocationReceiverDto> {
 
-    @DbColumn(comment = "账号别名")
-    private String name;
+    /** 分账接收方编号, 需要保证唯一 */
+    @DbColumn(comment = "分账接收方编号")
+    private String receiverNo;
 
     /**
+     * 所属通道
      * @see PayChannelEnum
      */
     @DbColumn(comment = "所属通道")
@@ -46,7 +48,7 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
     @DbColumn(comment = "分账接收方类型")
     private String receiverType;
 
-
+    /** 接收方账号 */
     @DbColumn(comment = "接收方账号")
     @TableField(typeHandler = DecryptTypeHandler.class)
     private String receiverAccount;
@@ -63,14 +65,9 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
     @DbColumn(comment = "分账关系类型")
     private String relationType;
 
+    /** 关系名称 */
     @DbColumn(comment = "关系名称")
     private String relationName;
-
-    @DbColumn(comment = "是否已经同步到网关")
-    private Boolean sync;
-
-    @DbColumn(comment = "备注")
-    private String remark;
 
     /**
      * 转换

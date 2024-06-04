@@ -4,12 +4,14 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.daxpay.single.code.PaymentApiCode;
 import cn.daxpay.single.param.payment.refund.RefundSyncParam;
-import cn.daxpay.single.result.pay.SyncResult;
+import cn.daxpay.single.result.sync.RefundSyncResult;
+import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderService;
 import cn.daxpay.single.service.core.payment.sync.service.RefundSyncService;
-import cn.daxpay.single.service.dto.order.refund.RefundOrderDetailDto;
+import cn.daxpay.single.service.dto.order.refund.RefundOrderAndExtraDto;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderDto;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderExtraDto;
 import cn.daxpay.single.service.param.order.PayOrderQuery;
@@ -42,10 +44,10 @@ public class RefundOrderController {
 
 
     @Operation(summary = "查询退款订单详情")
-    @GetMapping("/findByOrderNo")
-    public ResResult<RefundOrderDetailDto> findByRefundNo(String refundNo){
+    @GetMapping("/findByRefundNo")
+    public ResResult<RefundOrderAndExtraDto> findByRefundNo(String refundNo){
         RefundOrderDto order = queryService.findByRefundNo(refundNo);
-        RefundOrderDetailDto detailDto = new RefundOrderDetailDto();
+        RefundOrderAndExtraDto detailDto = new RefundOrderAndExtraDto();
         detailDto.setRefundOrder(order);
         detailDto.setRefundOrderExtra(queryService.findExtraById(order.getId()));
         return Res.ok(detailDto);
@@ -63,6 +65,7 @@ public class RefundOrderController {
         return Res.ok(queryService.findExtraById(id));
     }
 
+    @InitPaymentContext(PaymentApiCode.REFUND)
     @Operation(summary = "手动发起退款")
     @PostMapping("/refund")
     public ResResult<Void> refund(@RequestBody PayOrderRefundParam param){
@@ -70,6 +73,7 @@ public class RefundOrderController {
         return Res.ok();
     }
 
+    @InitPaymentContext(PaymentApiCode.REFUND)
     @Operation(summary = "重新发起退款")
     @PostMapping("/resetRefund")
     public ResResult<Void> resetRefund(Long id){
@@ -79,7 +83,7 @@ public class RefundOrderController {
 
     @Operation(summary = "退款同步")
     @PostMapping("/syncByRefundNo")
-    public ResResult<SyncResult> syncByRefundNo(String refundNo){
+    public ResResult<RefundSyncResult> syncByRefundNo(String refundNo){
         RefundSyncParam refundSyncParam = new RefundSyncParam();
         refundSyncParam.setRefundNo(refundNo);
         return Res.ok(refundSyncService.sync(refundSyncParam));

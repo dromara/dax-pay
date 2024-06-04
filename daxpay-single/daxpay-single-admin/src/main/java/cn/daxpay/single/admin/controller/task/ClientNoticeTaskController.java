@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.daxpay.single.service.core.task.notice.service.ClientNoticeTaskService;
+import cn.daxpay.single.service.core.notice.service.ClientNoticeTaskService;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeRecordDto;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeTaskDto;
 import cn.daxpay.single.service.param.record.ClientNoticeRecordQuery;

@@ -44,7 +44,7 @@ public class PayCloseService {
      */
     public PayCloseResult close(PayCloseParam param){
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizTradeNo())
-                .orElseThrow(() -> new PayFailureException("未查询到支付订单"));
+                .orElseThrow(() -> new PayFailureException("支付订单不存在"));
         LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId(),10000, 50);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付订单已在关闭中，请勿重复发起");

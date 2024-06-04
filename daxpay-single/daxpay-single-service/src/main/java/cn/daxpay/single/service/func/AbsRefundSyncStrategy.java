@@ -2,7 +2,7 @@ package cn.daxpay.single.service.func;
 
 import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.payment.sync.result.RefundSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,5 +25,5 @@ public abstract class AbsRefundSyncStrategy implements PayStrategy{
      * 异步支付单与支付网关进行状态比对后的结果
      * @see PaySyncStatusEnum
      */
-    public abstract RefundSyncResult doSyncStatus();
+    public abstract RefundRemoteSyncResult doSyncStatus();
 }

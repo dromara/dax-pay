@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @Accessors(chain = true)
 @NoArgsConstructor
 public class UserDetail {

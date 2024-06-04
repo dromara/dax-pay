@@ -1,10 +1,10 @@
 package cn.daxpay.single.service.core.order.refund.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.refund.QueryRefundParam;
 import cn.daxpay.single.result.order.RefundOrderResult;
 import cn.daxpay.single.service.core.order.refund.convert.RefundOrderConvert;
@@ -89,18 +89,11 @@ public class RefundOrderQueryService {
     public RefundOrderResult queryRefundOrder(QueryRefundParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getRefundNo()) && Objects.isNull(param.getBizRefundNo())){
-            throw new ValidationFailedException("退款号或退款ID不能都为空");
+            throw new PayFailureException("退款号或=商户退款号不能都为空");
         }
         // 查询退款单
-        RefundOrder refundOrder = null;
-        if (Objects.nonNull(param.getRefundNo())){
-            refundOrder = refundOrderManager.findById(param.getRefundNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
-        if (Objects.isNull(refundOrder)){
-            refundOrder = refundOrderManager.findByRefundNo(param.getRefundNo())
-                    .orElseThrow(() -> new DataNotExistException("未查询到支付订单"));
-        }
+        RefundOrder refundOrder = this.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())
+                .orElseThrow(() -> new PayFailureException("退款订单不存在"));
 
         return RefundOrderConvert.CONVERT.convertResult(refundOrder);
     }

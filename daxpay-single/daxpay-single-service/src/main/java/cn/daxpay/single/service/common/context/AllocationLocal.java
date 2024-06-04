@@ -12,6 +12,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AllocationLocal {
 
-    /** 三方系统分账号 */
+    /** 通道分账号 */
     private String outAllocationNo;
 }

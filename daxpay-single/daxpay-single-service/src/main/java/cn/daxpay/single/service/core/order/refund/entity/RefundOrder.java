@@ -40,7 +40,7 @@ public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<Refu
     private String bizOrderNo;
 
     /** 通道支付订单号 */
-    @DbColumn(comment = "商户支付订单号")
+    @DbColumn(comment = "通道支付订单号")
     private String outOrderNo;
 
     /** 支付标题 */
@@ -51,12 +51,12 @@ public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<Refu
     @DbColumn(comment = "退款号")
     private String refundNo;
 
+    /** 商户退款号 */
     @DbColumn(comment = "商户退款号")
     private String bizRefundNo;
 
-
-    /** 三方支付系统退款交易号 */
-    @DbColumn(comment = "三方支付系统退款交易号")
+    /** 通道退款交易号 */
+    @DbColumn(comment = "通道退款交易号")
     private String outRefundNo;
 
     /**

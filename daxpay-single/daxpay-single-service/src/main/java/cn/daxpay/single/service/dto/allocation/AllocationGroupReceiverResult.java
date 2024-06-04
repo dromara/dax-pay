@@ -23,8 +23,8 @@ public class AllocationGroupReceiverResult {
     @Schema(description = "接收方ID")
     private Long receiverId;
 
-    @Schema(description = "接收方账号别名")
-    private String name;
+    @Schema(description = "接收方编号")
+    private String receiverNo;
 
     @Schema(description = "分账比例(万分之多少)")
     private Integer rate;

@@ -9,6 +9,13 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.single.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
+import cn.daxpay.single.param.payment.allocation.AllocReceiverRemoveParam;
+import cn.daxpay.single.param.payment.allocation.QueryAllocReceiverParam;
+import cn.daxpay.single.result.allocation.AllocReceiverAddResult;
+import cn.daxpay.single.result.allocation.AllocReceiverRemoveResult;
+import cn.daxpay.single.result.allocation.AllocReceiverResult;
+import cn.daxpay.single.result.allocation.AllocReceiversResult;
 import cn.daxpay.single.service.core.payment.allocation.convert.AllocationReceiverConvert;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationGroupReceiverManager;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationReceiverManager;
@@ -16,9 +23,10 @@ import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceive
 import cn.daxpay.single.service.core.payment.allocation.factory.AllocationReceiverFactory;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
 import cn.daxpay.single.service.func.AbsAllocationReceiverStrategy;
-import cn.daxpay.single.service.param.allocation.group.AllocationReceiverParam;
-import cn.daxpay.single.service.param.allocation.group.AllocationReceiverQuery;
-import cn.hutool.core.bean.BeanUtil;
+import cn.daxpay.single.service.param.allocation.receiver.AllocationReceiverQuery;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +34,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +51,10 @@ public class AllocationReceiverService {
 
     private final AllocationGroupReceiverManager groupReceiverManager;
 
+    private final AllocationReceiverManager allocationReceiverManager;
+
+    private final LockTemplate lockTemplate;
+
     /**
      * 分页
      */
@@ -54,6 +67,13 @@ public class AllocationReceiverService {
      */
     public AllocationReceiverDto findById(Long id){
         return manager.findById(id).map(AllocationReceiver::toDto).orElseThrow(() -> new DataNotExistException("分账接收方不存在"));
+    }
+
+    /**
+     * 编码是否存在
+     */
+    public boolean existsByReceiverNo(String receiverNo){
+        return manager.existedByReceiverNo(receiverNo);
     }
 
     /**
@@ -85,92 +105,80 @@ public class AllocationReceiverService {
     }
 
     /**
-     * 添加分账接收方
+     * 添加分账接收方并同步到三方支付系统中
      */
-    public void add(AllocationReceiverParam param){
-        // 首先添加网关的分账接收方
-        AllocationReceiver receiver = AllocationReceiverConvert.CONVERT.convert(param);
-
-        // 获取策略
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(param.getChannel());
-        AbsAllocationReceiverStrategy receiverStrategy = AllocationReceiverFactory.create(channelEnum);
-        // 校验
-        receiverStrategy.setAllocationReceiver(receiver);
-        if (!receiverStrategy.validation()){
-            throw new BizException("接收方信息校验失败");
+    public AllocReceiverAddResult addAndSync(AllocReceiverAddParam param){
+        // 判断是否已经添加
+        LockInfo lock = lockTemplate.lock("payment:receiver:" + param.getReceiverNo(),10000,200);
+        if (Objects.isNull(lock)){
+            throw new PayFailureException("分账方处理中，请勿重复操作");
         }
-
-        receiver.setSync(false);
-        manager.save(receiver);
+        try {
+            Optional<AllocationReceiver> receiverOptional = allocationReceiverManager.findByReceiverNo(param.getReceiverNo());
+            if (receiverOptional.isPresent()){
+                throw new PayFailureException("该接收方已存在");
+            }
+            AllocationReceiver receiver = AllocationReceiverConvert.CONVERT.convert(param);
+            // 获取策略
+            PayChannelEnum channelEnum = PayChannelEnum.findByCode(param.getChannel());
+            AbsAllocationReceiverStrategy receiverStrategy = AllocationReceiverFactory.create(channelEnum);
+            // 校验
+            receiverStrategy.setAllocationReceiver(receiver);
+            if (!receiverStrategy.validation()){
+                throw new PayFailureException("接收方信息校验失败");
+            }
+            // 先添加到三方支付系统中, 然后保存到本地
+            receiverStrategy.doBeforeHandler();
+            receiverStrategy.bind();
+            manager.save(receiver);
+        } finally {
+            lockTemplate.releaseLock(lock);
+        }
+        return new AllocReceiverAddResult();
     }
 
     /**
-     * 修改信息
+     * 接口删除
      */
-    public void update(AllocationReceiverParam param){
-        AllocationReceiver receiver = manager.findById(param.getId()).orElseThrow(() -> new PayFailureException("未找到分账接收方"));
-        if (Objects.equals(receiver.getSync(),true)){
-            throw new BizException("该接收方已同步到三方支付系统中,无法修改");
+    public AllocReceiverRemoveResult remove(AllocReceiverRemoveParam param){
+        // 判断是否存在
+        AllocationReceiver receiver = allocationReceiverManager.findByReceiverNo(param.getReceiverNo())
+                .orElseThrow(() -> new PayFailureException("该接收方不存在"));
+        if (groupReceiverManager.isUsed(receiver.getId())){
+            throw new PayFailureException("该接收方已被使用，无法被删除");
         }
-        receiver.setSync(null);
-        BeanUtil.copyProperties(param,receiver);
-        manager.updateById(receiver);
-    }
-
-    /**
-     * 删除分账接收方
-     */
-    public void remove(Long id){
-        // 未同步可以删除
-        AllocationReceiver receiver = manager.findById(id).orElseThrow(() -> new PayFailureException("未找到分账接收方"));
-        if (Objects.equals(receiver.getSync(),true)){
-            throw new BizException("该接收方已同步到三方支付系统中,无法删除");
-        }
-        // 判断是否绑定了分账组
-        if (groupReceiverManager.isUsed(id)){
-            throw new PayFailureException("该接收方已被分账组使用,无法删除");
-        }
-        manager.deleteById(id);
-    }
-
-    /**
-     * 同步到三方支付系统中
-     */
-    public void registerByGateway(Long id){
-        AllocationReceiver receiver = manager.findById(id).orElseThrow(() -> new PayFailureException("未找到分账接收方"));
-
         // 获取策略
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(receiver.getChannel());
         AbsAllocationReceiverStrategy receiverStrategy = AllocationReceiverFactory.create(channelEnum);
-        // 校验
-        receiverStrategy.setAllocationReceiver(receiver);
-        receiverStrategy.validation();
-        receiverStrategy.doBeforeHandler();
-        receiverStrategy.bind();
-        receiver.setSync(true);
-        manager.updateById(receiver);
-
+        LockInfo lock = lockTemplate.lock("payment:receiver:" + param.getReceiverNo(),10000,200);
+        if (Objects.isNull(lock)){
+            throw new PayFailureException("分账方处理中，请勿重复操作");
+        }
+        try {
+            // 校验
+            receiverStrategy.setAllocationReceiver(receiver);
+            receiverStrategy.validation();
+            receiverStrategy.doBeforeHandler();
+            receiverStrategy.unbind();
+            manager.deleteById(receiver.getId());
+        } finally {
+            lockTemplate.releaseLock(lock);
+        }
+        return new AllocReceiverRemoveResult();
     }
 
     /**
-     * 从三方支付系统中删除
+     * 接口查询
      */
-    public void removeByGateway(Long id){
-        if (groupReceiverManager.isUsed(id)){
-            throw new PayFailureException("该接收方已被使用，无法从第三方支付平台中删除");
-        }
-
-        AllocationReceiver receiver = manager.findById(id).orElseThrow(() -> new PayFailureException("未找到分账接收方"));
-        // 获取策略
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(receiver.getChannel());
-        AbsAllocationReceiverStrategy receiverStrategy = AllocationReceiverFactory.create(channelEnum);
-        // 校验
-        receiverStrategy.setAllocationReceiver(receiver);
-        receiverStrategy.validation();
-        receiverStrategy.doBeforeHandler();
-        receiverStrategy.unbind();
-        receiver.setSync(false);
-        manager.updateById(receiver);
+    public AllocReceiversResult queryAllocReceive(QueryAllocReceiverParam param){
+        // 查询对应通道分账接收方的信息
+        List<AllocationReceiver> list = manager.lambdaQuery()
+                .eq(StrUtil.isNotBlank(param.getChannel()), AllocationReceiver::getChannel, param.getChannel())
+                .eq(StrUtil.isNotBlank(param.getReceiverNo()), AllocationReceiver::getReceiverNo, param.getReceiverNo())
+                .list();
+        List<AllocReceiverResult> receivers = list.stream()
+                .map(AllocationReceiverConvert.CONVERT::toResult)
+                .collect(Collectors.toList());
+        return new AllocReceiversResult().setReceivers(receivers);
     }
-
 }

@@ -8,8 +8,10 @@ import cn.hutool.json.JSONUtil;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
- * 分账请求接口(目前未支持)
+ * 分账请求接口
  * @author xxm
  * @since 2024/2/7
  */
@@ -17,29 +19,42 @@ import lombok.Setter;
 @Setter
 public class AllocationParam extends DaxPayRequest<AllocationModel> {
 
+    /** 商户分账单号 */
+    private String bizAllocationNo;
+
     /** 支付订单号 */
     private String orderNo;
 
     /** 商户订单号 */
     private String bizOrderNo;
 
-    /** 商户分账单号(保证唯一) */
-    private String bizAllocationNo;
-
     /** 分账描述 */
     private String description;
 
     /**
-     * 分账组ID, 不传输分账组使用默认分账组进行分账
+     * 优先级 分账接收方列表 > 分账组编号 > 默认分账组
      */
-    private Long allocationGroupId;
+    private String groupNo;
+
+    /** 分账接收方列表 */
+    private List<AllocReceiverParam> receivers;
+
+    /** 是否不启用异步通知 */
+    private Boolean notNotify;
+
+    /** 回调通知地址 */
+    private String notifyUrl;
+
+    /** 商户扩展参数,回调时会原样返回 */
+    private String attach;
+
 
     /**
      * 方法请求路径
      */
     @Override
     public String path() {
-        return "/unipay/allocation";
+        return "/unipay/allocation/start";
     }
 
     /**

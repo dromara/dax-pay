@@ -34,6 +34,15 @@ public class AllocationGroupManager extends BaseManager<AllocationGroupMapper, A
     }
 
     /**
+     * 根据分账组编号查询
+     */
+    public Optional<AllocationGroup> findByGroupNo(String groupNo) {
+        return this.lambdaQuery()
+                .eq(AllocationGroup::getGroupNo,groupNo)
+                .oneOpt();
+    }
+
+    /**
      * 清除默认分账组
      */
     public void clearDefault(String channel) {
@@ -51,5 +60,12 @@ public class AllocationGroupManager extends BaseManager<AllocationGroupMapper, A
                .eq(AllocationGroup::getChannel,channel)
                .eq(AllocationGroup::isDefaultGroup,true)
                .oneOpt();
+    }
+
+    /**
+     * 分账组编号是否存在
+     */
+    public boolean existedByGroupNo(String groupNo) {
+        return existedByField(AllocationGroup::getGroupNo,groupNo);
     }
 }

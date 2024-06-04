@@ -86,7 +86,7 @@
         <lock4j.version>2.2.5</lock4j.version>
         <ip2region.version>2.7.0</ip2region.version>
         <sms4j.version>2.2.0</sms4j.version>
-        <table-modify.version>1.5.4</table-modify.version>
+        <table-modify.version>1.5.5</table-modify.version>
     </properties>
 
     <!-- 项目依赖版本管理 -->

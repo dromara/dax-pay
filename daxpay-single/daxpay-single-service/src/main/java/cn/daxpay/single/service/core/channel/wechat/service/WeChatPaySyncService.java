@@ -7,8 +7,8 @@ import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.payment.sync.result.PaySyncResult;
-import cn.daxpay.single.service.core.payment.sync.result.RefundSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
+import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -41,8 +41,8 @@ public class WeChatPaySyncService {
     /**
      * 支付信息查询
      */
-    public PaySyncResult syncPayStatus(PayOrder order, WeChatPayConfig weChatPayConfig) {
-        PaySyncResult syncResult = new PaySyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
+    public PayRemoteSyncResult syncPayStatus(PayOrder order, WeChatPayConfig weChatPayConfig) {
+        PayRemoteSyncResult syncResult = new PayRemoteSyncResult().setSyncStatus(PaySyncStatusEnum.FAIL);
         Map<String, String> params = OrderQueryModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
@@ -103,8 +103,8 @@ public class WeChatPaySyncService {
     /**
      * 退款信息查询
      */
-    public RefundSyncResult syncRefundStatus(RefundOrder refundOrder, WeChatPayConfig weChatPayConfig){
-        RefundSyncResult syncResult = new RefundSyncResult();
+    public RefundRemoteSyncResult syncRefundStatus(RefundOrder refundOrder, WeChatPayConfig weChatPayConfig){
+        RefundRemoteSyncResult syncResult = new RefundRemoteSyncResult();
         Map<String, String> params = RefundQueryModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())

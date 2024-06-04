@@ -1,5 +1,6 @@
 package cn.daxpay.single.result.allocation;
 
+import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.result.PaymentCommonResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -17,12 +18,18 @@ import lombok.experimental.Accessors;
 @Schema(title = "分账请求结果")
 public class AllocationResult extends PaymentCommonResult {
 
-    @Schema(description = "分账订单ID")
-    private Long orderId;
-
-    @Schema(description = "分账订单号, 如果请求时未传, 则默认使用分账订单ID")
+    /** 分账订单号 */
+    @Schema(description = "分账订单号")
     private String allocationNo;
 
+    /** 商户分账订单号 */
+    @Schema(description = "商户分账订单号")
+    private String bizAllocationNo;
+
+    /**
+     * 分账状态
+     * @see AllocOrderStatusEnum
+     */
     @Schema(description = "分账状态")
     private String status;
 }

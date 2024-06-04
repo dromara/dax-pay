@@ -113,7 +113,7 @@ public interface AliPayCode {
     String ALLOC_FAIL = "FAIL";
 
     /** 异步分账 */
-    String ALLOC_ASYNC = "ASYNC";
+    String ALLOC_ASYNC = "async";
     /** 同步分账 */
-    String ALLOC_SYNC = "SYNC";
+    String ALLOC_SYNC = "sync";
 }

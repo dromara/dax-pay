@@ -144,28 +144,28 @@ public class AggregateService {
     public WxJsapiSignResult wxJsapiPrePay(String aggregateCode, String openId) {
         AggregatePayInfo aggregatePayInfo = getInfo(aggregateCode);
         // 拼装支付发起参数
-        PayParam simplePayParam = new PayParam();
-        simplePayParam.setBizOrderNo(aggregatePayInfo.getBizOrderNo());
-        simplePayParam.setTitle(aggregatePayInfo.getTitle());
-        simplePayParam.setAmount(aggregatePayInfo.getAmount());
-        simplePayParam.setChannel(PayChannelEnum.WECHAT.getCode());
-        simplePayParam.setMethod(PayMethodEnum.JSAPI.getCode());
+        PayParam payParam = new PayParam();
+        payParam.setBizOrderNo(aggregatePayInfo.getBizOrderNo());
+        payParam.setTitle(aggregatePayInfo.getTitle());
+        payParam.setAmount(aggregatePayInfo.getAmount());
+        payParam.setChannel(PayChannelEnum.WECHAT.getCode());
+        payParam.setMethod(PayMethodEnum.JSAPI.getCode());
 
         // 设置微信专属请求参数
         WeChatPayParam weChatPayParam = new WeChatPayParam();
         weChatPayParam.setOpenId(openId);
-        simplePayParam.setExtraParam(weChatPayParam);
+        payParam.setExtraParam(weChatPayParam);
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
                 .map(ServletUtil::getClientIP)
                 .orElse("127.0.0.1");
-        simplePayParam.setClientIp(ip);
+        payParam.setClientIp(ip);
         // 异步回调地址
-        simplePayParam.setNotifyUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
+        payParam.setNotifyUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
         // 同步回调地址
-        simplePayParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
+        payParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
 
-        DaxPayResult<PayModel> execute = DaxPayKit.execute(simplePayParam);
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(payParam);
         // 判断是否支付成功
         if (execute.getCode() != 0){
             throw new BizException(execute.getMsg());
@@ -180,6 +180,9 @@ public class AggregateService {
         AggregatePayInfo aggregatePayInfo = getInfo(code);
         PayParam payParam = new PayParam();
         payParam.setBizOrderNo(aggregatePayInfo.getBizOrderNo());
+        // 如果开启分账默认为自动分账
+        payParam.setAutoAllocation(aggregatePayInfo.getAllocation());
+        payParam.setAllocation(aggregatePayInfo.getAllocation());
         payParam.setTitle(aggregatePayInfo.getTitle());
         payParam.setAmount(aggregatePayInfo.getAmount());
         payParam.setChannel(PayChannelEnum.ALI.getCode());
@@ -218,23 +221,25 @@ public class AggregateService {
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();
 
-        PayParam simplePayParam = new PayParam();
-        simplePayParam.setBizOrderNo(param.getBizOrderNo());
-        simplePayParam.setAllocation(param.getAllocation());
-        simplePayParam.setTitle(param.getTitle());
-        simplePayParam.setAmount(amount);
-        simplePayParam.setChannel(payChannel.getCode());
-        simplePayParam.setMethod(PayMethodEnum.BARCODE.getCode());
+        PayParam payParam = new PayParam();
+        payParam.setBizOrderNo(param.getBizOrderNo());
+        payParam.setAllocation(param.getAllocation());
+        // 如果开启分账默认为自动分账
+        payParam.setAutoAllocation(param.getAllocation());
+        payParam.setTitle(param.getTitle());
+        payParam.setAmount(amount);
+        payParam.setChannel(payChannel.getCode());
+        payParam.setMethod(PayMethodEnum.BARCODE.getCode());
         BarCodePayParam barCodePayParam = new BarCodePayParam();
         barCodePayParam.setAuthCode(param.getAuthCode());
-        simplePayParam.setExtraParam(barCodePayParam);
+        payParam.setExtraParam(barCodePayParam);
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
                 .map(ServletUtil::getClientIP)
                 .orElse("127.0.0.1");
-        simplePayParam.setClientIp(ip);
+        payParam.setClientIp(ip);
 
-        DaxPayResult<PayModel> execute = DaxPayKit.execute(simplePayParam);
+        DaxPayResult<PayModel> execute = DaxPayKit.execute(payParam);
 
         // 判断是否支付成功
         if (execute.getCode() != 0){

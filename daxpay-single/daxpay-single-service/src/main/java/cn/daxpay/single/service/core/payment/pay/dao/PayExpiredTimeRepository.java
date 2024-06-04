@@ -20,16 +20,16 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class PayExpiredTimeRepository {
 
-    private static final String KEY = "payment:pay:expiredtime";
+    private static final String KEY = "payment:pay:overtime";
 
     private final RedisClient redisClient;
 
     /**
      * 根据 token 存储对应的 ExpiredTokenKey
      */
-    public void store(Long payOderId, LocalDateTime expiredTime) {
+    public void store(String orderNo, LocalDateTime expiredTime) {
         long time = LocalDateTimeUtil.timestamp(expiredTime);
-        redisClient.zadd(KEY, String.valueOf(payOderId), time);
+        redisClient.zadd(KEY, orderNo, time);
     }
 
     /**
@@ -38,16 +38,6 @@ public class PayExpiredTimeRepository {
     public Set<String> getExpiredKeys(LocalDateTime expiredTime) {
         long time = LocalDateTimeUtil.timestamp(expiredTime);
         return redisClient.zrangeByScore(KEY, 0L, time);
-    }
-
-    /**
-     * 获取所有未过期的订单ID. (7天内的订单)
-     */
-    public Set<String> getNormalKeysBy30Day(){
-        LocalDateTime now = LocalDateTime.now();
-        long start = LocalDateTimeUtil.timestamp(now);
-        long end = LocalDateTimeUtil.timestamp(now.plusDays(30));
-        return redisClient.zrangeByScore(KEY, start, end);
     }
 
     /**

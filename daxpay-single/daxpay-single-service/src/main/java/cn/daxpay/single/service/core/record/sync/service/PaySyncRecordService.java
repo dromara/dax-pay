@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 支付同步记录
+ * 支付同步记录, 包括支付/退款/分账
  * @author xxm
  * @since 2023/7/14
  */

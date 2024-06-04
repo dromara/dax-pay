@@ -14,9 +14,10 @@ import cn.daxpay.single.service.core.channel.wechat.entity.WxReconcileBillDetail
 import cn.daxpay.single.service.core.channel.wechat.entity.WxReconcileBillTotal;
 import cn.daxpay.single.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileTradeDetail;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
@@ -41,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -168,7 +170,7 @@ public class WechatPayReconcileService{
      * 转换为通用对账记录对象
      */
     public void convertAndSave(List<WxReconcileBillDetail> billDetails){
-        List<ReconcileTradeDetail> collect = billDetails.stream()
+        List<ReconcileOutTrade> collect = billDetails.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
         // 写入到上下文中
@@ -178,9 +180,9 @@ public class WechatPayReconcileService{
     /**
      * 转换为通用对账记录对象
      */
-    public ReconcileTradeDetail convert(WxReconcileBillDetail billDetail){
+    public ReconcileOutTrade convert(WxReconcileBillDetail billDetail){
         // 默认为支付对账记录
-        ReconcileTradeDetail reconcileTradeDetail = new ReconcileTradeDetail()
+        ReconcileOutTrade reconcileTradeDetail = new ReconcileOutTrade()
                 .setReconcileId(billDetail.getRecordOrderId())
                 .setTradeNo(billDetail.getMchOrderNo())
                 .setTitle(billDetail.getSubject())
@@ -195,9 +197,7 @@ public class WechatPayReconcileService{
         // 支付
         if (Objects.equals(billDetail.getStatus(), "SUCCESS")){
             // 金额
-            String orderAmount = billDetail.getOrderAmount();
-            double v = Double.parseDouble(orderAmount) * 100;
-            int amount = Math.abs(((int) v));
+            int amount = PayUtil.convertCentAmount(new BigDecimal( billDetail.getOrderAmount()));
             reconcileTradeDetail.setType(ReconcileTradeEnum.PAY.getCode())
                     .setAmount(amount);
         }

@@ -8,8 +8,11 @@ import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
+import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.*;
 import com.alipay.api.request.AlipayTradeOrderSettleQueryRequest;
@@ -46,7 +49,7 @@ public class AliPayAllocationService {
     public void allocation(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(allocationOrder.getOrderNo());
+        model.setOutRequestNo(allocationOrder.getAllocationNo());
         model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
 
@@ -55,7 +58,7 @@ public class AliPayAllocationService {
         List<OpenApiRoyaltyDetailInfoPojo> royaltyParameters = orderDetails.stream()
                 .map(o -> {
                     OpenApiRoyaltyDetailInfoPojo infoPojo = new OpenApiRoyaltyDetailInfoPojo();
-                    infoPojo.setAmount(String.valueOf(o.getAmount() / 100.0));
+                    infoPojo.setAmount(PayUtil.conversionAmount(o.getAmount()).toString());
                     infoPojo.setTransIn(o.getReceiverAccount());
                     return infoPojo;
                 })
@@ -76,12 +79,12 @@ public class AliPayAllocationService {
     public void finish(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails ){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(String.valueOf(allocationOrder.getOrderNo()));
+        model.setOutRequestNo(String.valueOf(allocationOrder.getAllocationNo()));
         model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
         // 分账完结参数
         SettleExtendParams extendParams = new SettleExtendParams();
-        extendParams.setRoyaltyFinish("true");
+        extendParams.setRoyaltyFinish(Boolean.TRUE.toString());
         model.setExtendParams(extendParams);
 
         // 分账子参数 根据Id排序
@@ -89,7 +92,7 @@ public class AliPayAllocationService {
         List<OpenApiRoyaltyDetailInfoPojo> royaltyParameters = orderDetails.stream()
                 .map(o -> {
                     OpenApiRoyaltyDetailInfoPojo infoPojo = new OpenApiRoyaltyDetailInfoPojo();
-                    infoPojo.setAmount(String.valueOf(o.getAmount() / 100.0));
+                    infoPojo.setAmount(PayUtil.conversionAmount(o.getAmount()).toString());
                     infoPojo.setTransIn(o.getReceiverAccount());
                     return infoPojo;
                 })
@@ -103,10 +106,10 @@ public class AliPayAllocationService {
      * 分账状态同步
      */
     @SneakyThrows
-    public void sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails){
+    public AllocRemoteSyncResult sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails){
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
         model.setTradeNo(allocationOrder.getOutOrderNo());
-        model.setOutRequestNo(allocationOrder.getOrderNo());
+        model.setOutRequestNo(allocationOrder.getAllocationNo());
         AlipayTradeOrderSettleQueryRequest request = new AlipayTradeOrderSettleQueryRequest();
         request.setBizModel(model);
         AlipayTradeOrderSettleQueryResponse response = AliPayApi.execute(request);
@@ -131,6 +134,7 @@ public class AliPayAllocationService {
                 }
             }
         }
+        return new AllocRemoteSyncResult().setSyncInfo(JSONUtil.toJsonStr(response));
     }
 
     /**

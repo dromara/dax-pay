@@ -9,7 +9,8 @@ import cn.daxpay.single.param.assist.WxAuthUrlParam;
 import cn.daxpay.single.result.DaxResult;
 import cn.daxpay.single.result.assist.WxAccessTokenResult;
 import cn.daxpay.single.result.assist.WxAuthUrlResult;
-import cn.daxpay.single.service.annotation.PaymentApi;
+import cn.daxpay.single.service.annotation.InitPaymentContext;
+import cn.daxpay.single.service.annotation.PaymentSign;
 import cn.daxpay.single.service.core.payment.assist.service.UniPayAssistService;
 import cn.daxpay.single.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,14 +34,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniPayAssistController {
     private final UniPayAssistService uniPayAssistService;
 
-    @PaymentApi(PaymentApiCode.GET_WX_AUTH_URL)
+    @PaymentSign
+    @InitPaymentContext(PaymentApiCode.GET_WX_AUTH_URL)
     @Operation(summary = "获取微信OAuth2授权链接")
     @PostMapping("/getWxAuthUrl")
     public DaxResult<WxAuthUrlResult> getWxAuthUrl(@RequestBody WxAuthUrlParam param){
         return DaxRes.ok(uniPayAssistService.getWxAuthUrl(param));
     }
 
-    @PaymentApi(PaymentApiCode.GET_WX_ACCESS_TOKEN)
+    @PaymentSign
+    @InitPaymentContext(PaymentApiCode.GET_WX_ACCESS_TOKEN)
     @Operation(summary = "获取微信AccessToken")
     @PostMapping("/getWxAccessToken")
     public ResResult<WxAccessTokenResult> getWxAccessToken(@RequestBody WxAccessTokenParam param){
