@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public abstract class PaymentCommonParam {
 
     /** 客户端ip */
-//    @NotBlank(message = "客户端ip不可为空")
     @Schema(description = "客户端ip")
     private String clientIp;
 

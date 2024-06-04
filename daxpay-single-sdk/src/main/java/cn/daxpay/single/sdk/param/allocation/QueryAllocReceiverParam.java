@@ -29,6 +29,8 @@ public class QueryAllocReceiverParam extends DaxPayRequest<AllocReceiversModel> 
     /** 分账接收方编号 */
     private String receiverNo;
 
+
+
     @Override
     public String path() {
         return "/unipay/query/allocationReceiver";

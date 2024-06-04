@@ -1,6 +1,7 @@
 package cn.daxpay.single.sdk.allocation;
 
 import cn.daxpay.single.sdk.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.sdk.code.AllocRelationTypeEnum;
 import cn.daxpay.single.sdk.code.PayChannelEnum;
 import cn.daxpay.single.sdk.code.SignTypeEnum;
 import cn.daxpay.single.sdk.model.allocation.AllocReceiverAddModel;
@@ -42,15 +43,12 @@ public class AllocationReceiverTest {
         AllocReceiverAddParam param = new AllocReceiverAddParam();
         param.setChannel(PayChannelEnum.ALI.getCode());
         param.setClientIp("127.0.0.1");
-        param.setReceiverName("测试");
-        param.setRelationType("user");
-        param.setRelationName("测试");
+        param.setRelationType(AllocRelationTypeEnum.HEADQUARTER.getCode());
         param.setReceiverNo("123456");
-        param.setReceiverType(AllocReceiverTypeEnum.ALI_OPEN_ID.getCode());
-        param.setReceiverAccount("123456");
+        param.setReceiverType(AllocReceiverTypeEnum.ALI_USER_ID.getCode());
+        param.setReceiverAccount("20881233343");
         DaxPayResult<AllocReceiverAddModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        
     }
 
     /**
@@ -60,10 +58,9 @@ public class AllocationReceiverTest {
     public void remove() {
         AllocReceiverRemoveParam param = new AllocReceiverRemoveParam();
         param.setClientIp("127.0.0.1");
-        param.setReceiverNo("123");
+        param.setReceiverNo("123456");
         DaxPayResult<AllocReceiverRemoveModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        
     }
 
     /**
@@ -73,12 +70,10 @@ public class AllocationReceiverTest {
     public void query() {
         QueryAllocReceiverParam param = new QueryAllocReceiverParam();
         param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setReceiverNo("1231");
         param.setClientIp("127.0.0.1");
         DaxPayResult<AllocReceiversModel> execute = DaxPayKit.execute(param);
-
         System.out.println(JSONUtil.toJsonStr(execute));
-        
     }
-
 
 }
