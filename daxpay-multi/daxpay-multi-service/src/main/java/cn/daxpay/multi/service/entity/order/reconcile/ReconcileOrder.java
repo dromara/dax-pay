@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.entity.reconcile;
+package cn.daxpay.multi.service.entity.order.reconcile;
 
 import cn.daxpay.multi.service.code.PayChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;

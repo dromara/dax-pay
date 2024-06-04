@@ -1,4 +1,4 @@
-package cn.daxpay.multi.admin;
+package cn.daxpay.multi.gateway;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -11,16 +11,16 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * 商户运营端
+ * 支付网关启动类
  * @author xxm
- * @since 2024/4/20
+ * @since 2024/6/4
  */
 @Slf4j
 @SpringBootApplication
-public class DaxpayAdminStart {
+public class DaxpayGatewayStart {
 
     public static void main(String[] args) throws UnknownHostException {
-        ConfigurableApplicationContext application = SpringApplication.run(DaxpayAdminStart.class, args);
+        ConfigurableApplicationContext application = SpringApplication.run(DaxpayGatewayStart.class, args);
         Environment env = application.getEnvironment();
         // 环境变量
         String appName = env.getProperty("spring.application.name");
@@ -37,8 +37,8 @@ public class DaxpayAdminStart {
         log.info("""
 
                 ----------------------------------------------------------
-                    {}
-                    {}
+                   {}
+                   {}
                 ----------------------------------------------------------""", appInfo, swagger);
     }
 }

@@ -18,6 +18,7 @@
     <modules>
         <module>daxpay-multi-service</module>
         <module>daxpay-multi-admin</module>
+        <module>daxpay-multi-gateway</module>
     </modules>
 
     <properties>

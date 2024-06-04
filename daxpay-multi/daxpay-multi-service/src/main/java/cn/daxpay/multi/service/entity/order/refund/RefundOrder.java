@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.entity.refund;
+package cn.daxpay.multi.service.entity.order.refund;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.multi.service.code.PayChannelEnum;

@@ -1,5 +1,5 @@
 server:
-  port: 9999
+  port: 8888
 spring:
   application:
     name: dax-pay-admin
@@ -13,3 +13,5 @@ mybatis-plus:
       # PG逻辑删除需要指定为布尔值, 如果为0/1会出现查询类型错误
       logic-delete-value: true
       logic-not-delete-value: false
+mybatis-plus-join:
+  banner: false
