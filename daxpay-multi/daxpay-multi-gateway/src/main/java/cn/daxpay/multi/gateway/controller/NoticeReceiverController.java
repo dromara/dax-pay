@@ -13,11 +13,11 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 三方支付系统回调消息通知接收器
+ * 三方支付回调消息通知接收器
  * @author xxm
  * @since 2024/6/4
  */
-@Tag(name = "三方支付系统回调消息通知接收器")
+@Tag(name = "三方支付回调通知处理器")
 @RestController
 @RequestMapping("/notice/{mchNo}/{AppId}")
 @RequiredArgsConstructor

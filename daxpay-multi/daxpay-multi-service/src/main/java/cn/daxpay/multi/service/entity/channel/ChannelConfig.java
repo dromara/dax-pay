@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.entity.channel;
 
+import cn.daxpay.multi.service.code.PayChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -17,7 +18,10 @@ import lombok.experimental.Accessors;
 @TableName("pay_channel_config")
 public class ChannelConfig extends MchEntity {
 
-    /** 支付通道 */
+    /**
+     * 支付通道
+     * @see PayChannelEnum
+     */
     private String channel;
 
     /** 通道商户号 */
@@ -26,7 +30,13 @@ public class ChannelConfig extends MchEntity {
     /** 通道APPID */
     private String outAppId;
 
+    /** 是否启用 */
+    private boolean enable;
+
     /** 签名类型 */
     private String signType;
+
+    /** 扩展存储 */
+    private String ext;
 
 }

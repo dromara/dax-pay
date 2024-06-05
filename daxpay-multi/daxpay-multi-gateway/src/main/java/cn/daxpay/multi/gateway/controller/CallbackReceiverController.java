@@ -23,21 +23,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class CallbackReceiverController {
 
     @SneakyThrows
-    @Operation(summary = "支付宝信息回调")
+    @Operation(summary = "支付宝回调")
     @PostMapping("/alipay")
     public String aliPayNotify(HttpServletRequest request) {
         return "";
     }
 
     @SneakyThrows
-    @Operation(summary = "微信支付信息回调")
+    @Operation(summary = "微信支付回调")
     @PostMapping("/wechat")
     public String wechatPayNotify(HttpServletRequest request) {
         return "";
     }
 
     @SneakyThrows
-    @Operation(summary = "云闪付支付信息回调")
+    @Operation(summary = "云闪付支付回调")
     @PostMapping("/union")
     public String unionPayNotify(HttpServletRequest request) {
         return "";

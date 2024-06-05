@@ -1,6 +1,7 @@
 package cn.daxpay.multi.gateway.result;
 
 import cn.bootx.platform.core.code.CommonCode;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,12 +17,33 @@ import org.slf4j.MDC;
 @ToString(callSuper = true)
 public class DaxResult<T>{
 
+    /** 状态码 */
+    @Schema(description = "状态码")
+    private int code;
+
+    /** 提示信息 */
+    @Schema(description = "提示信息")
+    private String msg;
+
+    /** 业务内容 */
+    @Schema(description = "业务内容")
+    private T data;
+
+    /** 签名 */
+    @Schema(description = "签名")
+    private String sign;
+
     /** 追踪ID */
     private String traceId = MDC.get(CommonCode.TRACE_ID);
 
-    public DaxResult(int successCode, T data, String success) {
+    public DaxResult(int successCode, T data, String msg) {
+        this.code = successCode;
+        this.data = data;
+        this.msg = msg;
     }
 
-    public DaxResult(int successCode, String success) {
+    public DaxResult(int successCode, String msg) {
+        this.code = successCode;
+        this.msg = msg;
     }
 }

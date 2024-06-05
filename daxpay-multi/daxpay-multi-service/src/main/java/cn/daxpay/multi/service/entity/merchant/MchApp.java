@@ -35,5 +35,15 @@ public class MchApp extends MpBaseEntity {
     /** 私钥 */
     private String privateKey;
 
+    /**
+     * 异步消息通知类型, 当前只支持http方式
+     * @see cn.daxpay.multi.service.code.TradeNotifyTypeEnum
+     */
+    private String notifyType;
+
+    /**
+     * 地址, http/WebSocket 需要配置
+     */
+    private String notifyUrl;
 
 }
