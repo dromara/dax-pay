@@ -1,20 +1,20 @@
-package cn.daxpay.single.service.core.payment.close.service;
+package cn.daxpay.single.service.core.payment.cancel.service;
 
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.payment.pay.PayCloseParam;
-import cn.daxpay.single.result.pay.PayCloseResult;
+import cn.daxpay.single.param.payment.pay.PayCancelParam;
+import cn.daxpay.single.result.pay.PayCancelResult;
 import cn.daxpay.single.service.code.PayCloseTypeEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
-import cn.daxpay.single.service.core.payment.close.factory.PayCloseStrategyFactory;
+import cn.daxpay.single.service.core.payment.cancel.factory.PayCancelStrategyFactory;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.record.close.entity.PayCloseRecord;
 import cn.daxpay.single.service.core.record.close.service.PayCloseRecordService;
-import cn.daxpay.single.service.func.AbsPayCloseStrategy;
+import cn.daxpay.single.service.func.AbsPayCancelStrategy;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayCloseService {
+public class PayCancelService {
     private final PayOrderService payOrderService;
     private final PayOrderQueryService payOrderQueryService;
     private final PayCloseRecordService payCloseRecordService;
@@ -41,49 +41,42 @@ public class PayCloseService {
     private final LockTemplate lockTemplate;
 
     /**
-     * 关闭支付
+     * 撤销支付
      */
-    public PayCloseResult close(PayCloseParam param){
+    public PayCancelResult cancel(PayCancelParam param){
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
                 .orElseThrow(() -> new PayFailureException("支付订单不存在"));
-        LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId(),10000, 50);
+        LockInfo lock = lockTemplate.lock("payment:cancel:" + payOrder.getId(),10000, 50);
         if (Objects.isNull(lock)){
-            throw new RepetitiveOperationException("支付订单已在关闭中，请勿重复发起");
+            throw new RepetitiveOperationException("支付订单已在撤销中，请勿重复发起");
         }
         try {
-            return this.close(payOrder);
+            PayCancelResult result = new PayCancelResult();
+            // 状态检查, 只有支付中可以进行撤销支付
+            if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
+                throw new PayFailureException("订单不是支付中, 无法进行撤销订单");
+            }
+            try {
+                AbsPayCancelStrategy strategy = PayCancelStrategyFactory.create(payOrder.getChannel());
+                // 设置支付订单
+                strategy.setOrder(payOrder);
+                // 撤销前准备
+                strategy.doBeforeCancelHandler();
+                // 执行撤销策略
+                strategy.doCancelHandler();
+                // 成功处理
+                this.successHandler(payOrder);
+                // 返回结果
+                return result;
+            } catch (Exception e) {
+                log.error("撤销订单失败, id: {}:", payOrder.getId());
+                log.error("撤销订单失败:", e);
+                // 记录撤销失败的记录
+                this.saveRecord(payOrder, false, e.getMessage());
+                throw new PayFailureException("撤销订单失败");
+            }
         } finally {
             lockTemplate.releaseLock(lock);
-        }
-    }
-
-    /**
-     * 关闭支付记录
-     */
-    private PayCloseResult close(PayOrder payOrder) {
-        PayCloseResult result = new PayCloseResult();
-        // 状态检查, 只有支付中可以进行取消支付
-        if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
-            throw new PayFailureException("订单不是支付中, 无法进行关闭订单");
-        }
-        try {
-            AbsPayCloseStrategy strategy = PayCloseStrategyFactory.create(payOrder.getChannel());
-            // 设置支付订单
-            strategy.setOrder(payOrder);
-            // 关闭前准备
-            strategy.doBeforeCloseHandler();
-            // 执行关闭策略
-            strategy.doCloseHandler();
-            // 成功处理
-            this.successHandler(payOrder);
-            // 返回结果
-            return result;
-        } catch (Exception e) {
-            log.error("关闭订单失败, id: {}:", payOrder.getId());
-            log.error("关闭订单失败:", e);
-            // 记录关闭失败的记录
-            this.saveRecord(payOrder, false, e.getMessage());
-            throw new PayFailureException("关闭订单失败");
         }
     }
 
@@ -91,8 +84,8 @@ public class PayCloseService {
      * 成功后处理方法
      */
     private void successHandler(PayOrder payOrder){
-        // 关闭订单
-        payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
+        // 撤销订单
+        payOrder.setStatus(PayStatusEnum.CANCEL.getCode())
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);
         // 发送通知
@@ -101,7 +94,7 @@ public class PayCloseService {
     }
 
     /**
-     * 保存关闭记录
+     * 保存撤销记录
      */
     private void saveRecord(PayOrder payOrder, boolean closed, String errMsg){
         String clientIp = PaymentContextLocal.get()
@@ -111,7 +104,7 @@ public class PayCloseService {
                 .setOrderNo(payOrder.getOrderNo())
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setChannel(payOrder.getChannel())
-                .setCloseType(PayCloseTypeEnum.CLOSE.getCode())
+                .setCloseType(PayCloseTypeEnum.CANCEL.getCode())
                 .setClosed(closed)
                 .setErrorMsg(errMsg)
                 .setClientIp(clientIp);

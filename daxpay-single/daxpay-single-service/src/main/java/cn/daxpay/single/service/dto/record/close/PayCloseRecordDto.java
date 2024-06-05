@@ -3,6 +3,7 @@ package cn.daxpay.single.service.dto.record.close;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.daxpay.single.service.code.PayCloseTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,6 +34,13 @@ public class PayCloseRecordDto extends BaseDto {
      */
     @DbColumn(comment = "关闭的异步支付通道")
     private String channel;
+
+    /**
+     * 关闭类型 关闭/撤销
+     * @see PayCloseTypeEnum
+     */
+    @DbColumn(comment = "关闭类型")
+    private String closeType;
 
     /**
      * 是否关闭成功

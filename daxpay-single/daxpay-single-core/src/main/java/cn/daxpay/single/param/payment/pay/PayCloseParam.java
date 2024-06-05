@@ -21,5 +21,5 @@ public class PayCloseParam extends PaymentCommonParam {
 
     /** 商户订单号 */
     @Schema(description = "商户订单号")
-    private String bizTradeNo;
+    private String bizOrderNo;
 }

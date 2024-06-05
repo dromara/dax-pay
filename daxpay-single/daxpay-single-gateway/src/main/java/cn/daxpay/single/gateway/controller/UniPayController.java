@@ -2,16 +2,19 @@ package cn.daxpay.single.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.code.PaymentApiCode;
+import cn.daxpay.single.param.payment.pay.PayCancelParam;
 import cn.daxpay.single.param.payment.pay.PayCloseParam;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.param.payment.refund.RefundParam;
 import cn.daxpay.single.param.payment.transfer.TransferParam;
 import cn.daxpay.single.result.DaxResult;
+import cn.daxpay.single.result.pay.PayCancelResult;
 import cn.daxpay.single.result.pay.PayCloseResult;
 import cn.daxpay.single.result.pay.PayResult;
 import cn.daxpay.single.result.pay.RefundResult;
 import cn.daxpay.single.service.annotation.PaymentSign;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
+import cn.daxpay.single.service.core.payment.cancel.service.PayCancelService;
 import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
 import cn.daxpay.single.service.core.payment.pay.service.PayService;
 import cn.daxpay.single.service.core.payment.refund.service.RefundService;
@@ -38,6 +41,7 @@ public class UniPayController {
     private final PayService payService;
     private final RefundService refundService;
     private final PayCloseService payCloseService;
+    private final PayCancelService payCancelService;
 
     @PaymentSign
     @InitPaymentContext(PaymentApiCode.PAY)
@@ -53,6 +57,14 @@ public class UniPayController {
     @PostMapping("/close")
     public DaxResult<PayCloseResult> close(@RequestBody PayCloseParam param){
         return DaxRes.ok(payCloseService.close(param));
+    }
+
+    @PaymentSign
+    @InitPaymentContext(PaymentApiCode.CANCEL)
+    @Operation(summary = "支付撤销接口")
+    @PostMapping("/cancel")
+    public DaxResult<PayCancelResult> cancel(@RequestBody PayCancelParam param){
+        return DaxRes.ok(payCancelService.cancel(param));
     }
 
     @PaymentSign

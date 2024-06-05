@@ -200,7 +200,7 @@ public class PayAssistService {
                 throw new PayFailureException("已经支付成功，请勿重新支付");
             }
             // 支付失败类型状态
-            List<String> tradesStatus = Arrays.asList(FAIL.getCode(), CLOSE.getCode());
+            List<String> tradesStatus = Arrays.asList(FAIL.getCode(), CLOSE.getCode(), CANCEL.getCode());
             if (tradesStatus.contains(payOrder.getStatus())) {
                 throw new PayFailureException("支付失败或已经被关闭");
             }

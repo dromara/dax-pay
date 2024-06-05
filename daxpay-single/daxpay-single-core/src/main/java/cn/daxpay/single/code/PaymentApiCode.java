@@ -12,6 +12,8 @@ public interface PaymentApiCode {
     String REFUND = "refund";
     /** 关闭订单 */
     String CLOSE = "close";
+    /** 撤销订单 */
+    String CANCEL = "cancel";
     /** 分账 */
     String ALLOCATION = "allocation";
     /** 转账 */

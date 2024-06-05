@@ -2,6 +2,7 @@ package cn.daxpay.single.service.core.order.pay.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.daxpay.single.code.PayMethodEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PayStatusEnum;
@@ -71,6 +72,7 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
 
     /**
      * 支付方式
+     * @see PayMethodEnum
      */
     @DbColumn(comment = "支付方式")
     private String method;

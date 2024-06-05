@@ -16,9 +16,11 @@ import lombok.EqualsAndHashCode;
 @Schema(title = "支付订单撤销")
 public class PayCancelParam extends PaymentCommonParam {
 
+    /** 订单号 */
     @Schema(description = "订单号")
     private String orderNo;
 
+    /** 商户订单号 */
     @Schema(description = "商户订单号")
     private String bizOrderNo;
 }

@@ -83,6 +83,7 @@ public class RefundAssistService {
         List<String> tradesStatus = Arrays.asList(
                 PayStatusEnum.PROGRESS.getCode(),
                 PayStatusEnum.CLOSE.getCode(),
+                PayStatusEnum.CANCEL.getCode(),
                 PayStatusEnum.REFUNDED.getCode(),
                 PayStatusEnum.REFUNDING.getCode(),
                 PayStatusEnum.FAIL.getCode());

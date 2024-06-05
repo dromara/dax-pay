@@ -74,8 +74,7 @@ public class PayRepairService {
                 repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
             case PROGRESS:
-                this.waitPay(order);
-                repairResult.setAfterPayStatus(PayStatusEnum.PROGRESS);
+                // TODO 保存为异常订单
                 break;
             case CLOSE_GATEWAY:
                 this.closeRemote(order, repairStrategy);
@@ -93,17 +92,6 @@ public class PayRepairService {
         return repairResult;
     }
 
-    /**
-     * 变更未待支付
-     * TODO 后期保存为异常订单
-     */
-    private void waitPay(PayOrder order) {
-        // 修改订单支付状态为待支付
-        order.setStatus(PayStatusEnum.PROGRESS.getCode())
-                .setPayTime(null)
-                .setCloseTime(null);
-        payOrderService.updateById(order);
-    }
 
     /**
      * 变更为已支付

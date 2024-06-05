@@ -38,7 +38,7 @@ public class PayCloseRecordQuery extends QueryOrder {
      * 是否关闭成功
      */
     @DbColumn(comment = "是否关闭成功")
-    private boolean closed;
+    private Boolean closed;
 
     /** 错误码 */
     @DbColumn(comment = "错误码")

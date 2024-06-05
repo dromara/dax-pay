@@ -33,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -163,7 +162,7 @@ public class PaySyncService {
          未找到订单可能是发起支付用户未操作、支付已关闭、交易未找到三种情况
          所以需要根据本地订单不同的状态进行特殊处理, 此处视为支付已关闭、交易未找到这两种, 处理方式相同, 都作为支付关闭处理
          */
-        List<String> payCloseEnums = Collections.singletonList(PayStatusEnum.CLOSE.getCode());
+        List<String> payCloseEnums = Arrays.asList(PayStatusEnum.CLOSE.getCode(), PayStatusEnum.CANCEL.getCode());
         List<PaySyncStatusEnum> syncClose = Arrays.asList(CLOSED, NOT_FOUND, NOT_FOUND_UNKNOWN);
         if (payCloseEnums.contains(orderStatus) && syncClose.contains(syncStatus)){
             return true;

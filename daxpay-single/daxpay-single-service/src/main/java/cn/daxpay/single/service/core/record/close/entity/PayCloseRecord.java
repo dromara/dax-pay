@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.record.close.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.service.code.PayCloseTypeEnum;
 import cn.daxpay.single.service.core.record.close.convert.PayCloseRecordConvert;
 import cn.daxpay.single.service.dto.record.close.PayCloseRecordDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -38,6 +39,13 @@ public class PayCloseRecord extends MpCreateEntity implements EntityBaseFunction
      */
     @DbColumn(comment = "关闭的支付通道")
     private String channel;
+
+    /**
+     * 关闭类型 关闭/撤销
+     * @see PayCloseTypeEnum
+     */
+    @DbColumn(comment = "关闭类型")
+    private String closeType;
 
     /**
      * 是否关闭成功
