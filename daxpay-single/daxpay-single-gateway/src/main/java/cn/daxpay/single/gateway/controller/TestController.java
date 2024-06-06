@@ -3,6 +3,7 @@ package cn.daxpay.single.gateway.controller;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
+import cn.daxpay.single.service.core.payment.transfer.service.TransferService;
 import cn.hutool.core.thread.ThreadUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -26,6 +27,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TestController {
     private final LockTemplate lockTemplate;
+
+    private final TransferService transferService;
 
     @Operation(summary = "锁测试1")
     @GetMapping("/lock1")

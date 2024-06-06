@@ -8,19 +8,21 @@ import cn.daxpay.single.service.core.payment.sync.strategy.pay.UnionPaySyncStrat
 import cn.daxpay.single.service.core.payment.sync.strategy.pay.WeChatPaySyncStrategy;
 import cn.daxpay.single.service.func.AbsPaySyncStrategy;
 import cn.hutool.extra.spring.SpringUtil;
+import lombok.experimental.UtilityClass;
 
 /**
  * 支付同步策略工厂类
  * @author xxm
  * @since 2023/7/14
  */
+@UtilityClass
 public class PaySyncStrategyFactory {
     /**
-     * 获取支付同步策略, 只有异步支付方式才需要这个功能
+     * 获取支付同步策略
      * @param channelCode 支付通道编码
      * @return 支付同步策略类
      */
-    public static AbsPaySyncStrategy create(String channelCode) {
+    public AbsPaySyncStrategy create(String channelCode) {
         AbsPaySyncStrategy strategy;
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(channelCode);
         switch (channelEnum) {

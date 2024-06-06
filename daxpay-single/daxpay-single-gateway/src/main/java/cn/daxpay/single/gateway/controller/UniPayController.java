@@ -12,12 +12,14 @@ import cn.daxpay.single.result.pay.PayCancelResult;
 import cn.daxpay.single.result.pay.PayCloseResult;
 import cn.daxpay.single.result.pay.PayResult;
 import cn.daxpay.single.result.pay.RefundResult;
+import cn.daxpay.single.result.transfer.TransferResult;
 import cn.daxpay.single.service.annotation.PaymentSign;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.payment.cancel.service.PayCancelService;
 import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
 import cn.daxpay.single.service.core.payment.pay.service.PayService;
 import cn.daxpay.single.service.core.payment.refund.service.RefundService;
+import cn.daxpay.single.service.core.payment.transfer.service.TransferService;
 import cn.daxpay.single.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,6 +44,7 @@ public class UniPayController {
     private final RefundService refundService;
     private final PayCloseService payCloseService;
     private final PayCancelService payCancelService;
+    private final TransferService transferService;
 
     @PaymentSign
     @InitPaymentContext(PaymentApiCode.PAY)
@@ -79,8 +82,8 @@ public class UniPayController {
     @InitPaymentContext(PaymentApiCode.TRANSFER)
     @Operation(summary = "统一转账接口")
     @PostMapping("/transfer")
-    public DaxResult<Void> transfer(@RequestBody TransferParam param){
-        return DaxRes.ok();
+    public DaxResult<TransferResult> transfer(@RequestBody TransferParam param){
+        return DaxRes.ok(transferService.transfer(param));
     }
 
 }

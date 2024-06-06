@@ -40,7 +40,6 @@ public class RefundOrderService {
 
     /**
      * 手动发起退款
-     * 退款涉及到回调通知, 索所以需要手动初始化一下上下文
      */
     public void refund(PayOrderRefundParam param) {
 

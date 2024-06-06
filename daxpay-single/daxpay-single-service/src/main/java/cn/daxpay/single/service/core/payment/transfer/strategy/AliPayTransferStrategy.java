@@ -46,4 +46,8 @@ public class AliPayTransferStrategy extends AbsTransferStrategy {
         payConfigService.initConfig(this.config);
     }
 
+    @Override
+    public void doTransferHandler() {
+        aliPayTransferService.transfer(this.getTransferOrder());
+    }
 }
