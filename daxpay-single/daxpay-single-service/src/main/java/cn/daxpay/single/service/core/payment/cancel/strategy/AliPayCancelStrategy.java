@@ -28,8 +28,8 @@ public class AliPayCancelStrategy extends AbsPayCancelStrategy {
     private final AliPayCloseService aliPayCloseService;
 
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**

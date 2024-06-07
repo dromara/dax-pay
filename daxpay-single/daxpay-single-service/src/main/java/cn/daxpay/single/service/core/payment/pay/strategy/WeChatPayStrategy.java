@@ -39,8 +39,8 @@ public class WeChatPayStrategy extends AbsPayStrategy {
      * 类型
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WECHAT;
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
     }
 
     /**

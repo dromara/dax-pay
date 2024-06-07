@@ -5,6 +5,7 @@ import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.code.RefundSyncStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.exception.pay.PayUnsupportedMethodException;
 import cn.daxpay.single.param.payment.refund.RefundSyncParam;
 import cn.daxpay.single.result.sync.RefundSyncResult;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
@@ -17,15 +18,17 @@ import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
 import cn.daxpay.single.service.core.payment.repair.result.RefundRepairResult;
 import cn.daxpay.single.service.core.payment.repair.service.RefundRepairService;
-import cn.daxpay.single.service.core.payment.sync.factory.RefundSyncStrategyFactory;
 import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
 import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
 import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,7 +81,7 @@ public class RefundSyncService {
         }
         try {
             // 获取支付同步策略类
-            AbsRefundSyncStrategy syncPayStrategy = RefundSyncStrategyFactory.create(refundOrder.getChannel());
+            AbsRefundSyncStrategy syncPayStrategy = PayStrategyFactory.create(refundOrder.getChannel(),AbsRefundSyncStrategy.class);
             syncPayStrategy.setRefundOrder(refundOrder);
             // 同步前处理, 主要预防请求过于迅速
             syncPayStrategy.doBeforeHandler();
@@ -203,4 +206,5 @@ public class RefundSyncService {
                 .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
+
 }

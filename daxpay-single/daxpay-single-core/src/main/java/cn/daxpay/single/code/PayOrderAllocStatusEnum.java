@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付订单分账状态
+ * 支付订单的分账状态
  * @author xxm
  * @since 2024/4/16
  */

@@ -24,8 +24,8 @@ public class UnionPayRepairStrategy extends AbsPayRepairStrategy {
      * 策略标识
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.UNION_PAY;
+    public String getChannel() {
+        return PayChannelEnum.UNION_PAY.getCode();
     }
 
     /**

@@ -34,8 +34,8 @@ public class UnionRefundStrategy extends AbsRefundStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.UNION_PAY;
+    public String getChannel() {
+        return PayChannelEnum.UNION_PAY.getCode();
     }
 
     /**

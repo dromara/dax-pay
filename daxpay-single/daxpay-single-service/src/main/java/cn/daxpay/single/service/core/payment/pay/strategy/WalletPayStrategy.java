@@ -44,8 +44,8 @@ public class WalletPayStrategy extends AbsPayStrategy {
     private Wallet wallet;
 
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WALLET;
+    public String getChannel() {
+        return PayChannelEnum.WALLET.getCode();
     }
 
     /**

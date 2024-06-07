@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.payment.pay.service;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.result.pay.PayResult;
@@ -205,8 +206,7 @@ public class PayAssistService {
                 throw new PayFailureException("支付失败或已经被关闭");
             }
             // 退款类型状态
-            tradesStatus = Arrays.asList(REFUNDED.getCode(), PARTIAL_REFUND.getCode(), REFUNDING.getCode());
-            if (tradesStatus.contains(payOrder.getStatus())) {
+            if (Objects.equals(payOrder.getRefundStatus(), PayOrderRefundStatusEnum.REFUNDING.getCode())) {
                 throw new PayFailureException("该订单处于退款状态");
             }
             // 其他状态直接抛出兜底异常

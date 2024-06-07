@@ -41,8 +41,8 @@ public class UnionPayStrategy extends AbsPayStrategy {
     private UnionPayConfig unionPayConfig;
 
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.UNION_PAY;
+    public String getChannel() {
+        return PayChannelEnum.UNION_PAY.getCode();
     }
     /**
      * 支付前操作

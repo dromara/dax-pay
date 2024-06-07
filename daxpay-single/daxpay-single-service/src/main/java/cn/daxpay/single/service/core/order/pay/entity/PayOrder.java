@@ -5,6 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.single.code.PayMethodEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.service.core.order.pay.convert.PayOrderConvert;
 import cn.daxpay.single.service.dto.order.pay.PayOrderDto;
@@ -91,6 +92,14 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
      */
     @DbColumn(comment = "支付状态")
     private String status;
+
+    /**
+     * 退款状态
+     * @see PayOrderRefundStatusEnum
+     */
+    @DbColumn(comment = "退款状态")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String refundStatus;
 
     /**
      * 分账状态

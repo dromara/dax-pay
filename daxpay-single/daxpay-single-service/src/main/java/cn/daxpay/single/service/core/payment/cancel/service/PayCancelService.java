@@ -10,11 +10,11 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
-import cn.daxpay.single.service.core.payment.cancel.factory.PayCancelStrategyFactory;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.record.close.entity.PayCloseRecord;
 import cn.daxpay.single.service.core.record.close.service.PayCloseRecordService;
 import cn.daxpay.single.service.func.AbsPayCancelStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +57,7 @@ public class PayCancelService {
                 throw new PayFailureException("订单不是支付中, 无法进行撤销订单");
             }
             try {
-                AbsPayCancelStrategy strategy = PayCancelStrategyFactory.create(payOrder.getChannel());
+                AbsPayCancelStrategy strategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPayCancelStrategy.class);
                 // 设置支付订单
                 strategy.setOrder(payOrder);
                 // 撤销前准备
@@ -110,4 +110,5 @@ public class PayCancelService {
                 .setClientIp(clientIp);
         payCloseRecordService.saveRecord(record);
     }
+
 }

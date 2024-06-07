@@ -1,36 +1,32 @@
 package cn.daxpay.single.code;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * 支付状态
+ * 支付订单的退款状态
  * @author xxm
- * @since 2023/12/17
+ * @since 2024/6/7
  */
 @Getter
-@RequiredArgsConstructor
-public enum PayStatusEnum {
-    PROGRESS("progress","支付中"),
-    SUCCESS("success","成功"),
-    CLOSE("close","支付关闭"),
-    CANCEL("cancel","支付撤销"),
-    FAIL("fail","失败");
-
-    /** 编码 */
+@AllArgsConstructor
+public enum PayOrderRefundStatusEnum {
+    NO_REFUND("no_refund","未退款"),
+    REFUNDING("refunding","退款中"),
+    PARTIAL_REFUND("partial_refund","部分退款"),
+    REFUNDED("refunded","全部退款"),
+    ;
     private final String code;
-
-    /** 名称 */
     private final String name;
 
     /**
      * 根据编码获取枚举
      */
-    public static PayStatusEnum findByCode(String code){
+    public static PayOrderRefundStatusEnum findByCode(String code){
         return Arrays.stream(values())
                 .filter(payStatusEnum -> Objects.equals(payStatusEnum.getCode(), code))
                 .findFirst()

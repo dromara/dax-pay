@@ -32,9 +32,9 @@ public class AliPayTransferStrategy extends AbsTransferStrategy {
     /**
      * 策略标识
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**

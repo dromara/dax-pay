@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.payment.refund.service;
 
+import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.PaySignTypeEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.code.RefundStatusEnum;
@@ -21,6 +22,7 @@ import cn.daxpay.single.util.PaySignUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,20 +80,19 @@ public class RefundAssistService {
      * 检查并处理退款参数
      */
     public void checkAndParam(RefundParam param, PayOrder payOrder){
-
-        // 状态判断, 支付中/失败/取消等不能进行退款
-        List<String> tradesStatus = Arrays.asList(
-                PayStatusEnum.PROGRESS.getCode(),
-                PayStatusEnum.CLOSE.getCode(),
-                PayStatusEnum.CANCEL.getCode(),
-                PayStatusEnum.REFUNDED.getCode(),
-                PayStatusEnum.REFUNDING.getCode(),
-                PayStatusEnum.FAIL.getCode());
-        if (tradesStatus.contains(payOrder.getStatus())) {
+        // 非支付完成的不能进行退款
+        if (!Objects.equals(SUCCESS.getCode(), payOrder.getStatus())) {
             PayStatusEnum statusEnum = PayStatusEnum.findByCode(payOrder.getStatus());
             throw new PayFailureException("当前支付单订状态["+statusEnum.getName()+"]不允许发起退款操作");
         }
-
+        // 退款中和退款完成不能退款
+        List<String> tradesStatus = Arrays.asList(
+                PayOrderRefundStatusEnum.REFUNDED.getCode(),
+                PayOrderRefundStatusEnum.REFUNDING.getCode());
+        if (tradesStatus.contains(payOrder.getRefundStatus())){
+            val statusEnum = PayOrderRefundStatusEnum.findByCode(payOrder.getRefundStatus());
+            throw new PayFailureException("当前支付单退款状态["+statusEnum.getName()+"]不允许发起退款操作");
+        }
         // 退款号唯一校验
         if (StrUtil.isNotBlank(param.getBizRefundNo()) && refundOrderManager.existsByRefundNo(param.getBizRefundNo())){
             throw new PayFailureException("退款单号已存在");

@@ -8,12 +8,12 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
-import cn.daxpay.single.service.core.payment.repair.factory.PayRepairStrategyFactory;
 import cn.daxpay.single.service.core.payment.repair.result.PayRepairResult;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.core.record.repair.entity.PayRepairRecord;
 import cn.daxpay.single.service.core.record.repair.service.PayRepairRecordService;
 import cn.daxpay.single.service.func.AbsPayRepairStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -23,7 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 支付修复服务
@@ -57,7 +58,7 @@ public class PayRepairService {
         }
 
         // 2.1 初始化修复参数
-        AbsPayRepairStrategy repairStrategy = PayRepairStrategyFactory.create(order.getChannel());
+        AbsPayRepairStrategy repairStrategy = PayStrategyFactory.create(order.getChannel(),AbsPayRepairStrategy.class);
         repairStrategy.setOrder(order);
         // 2.2 执行前置处理
         repairStrategy.doBeforeHandler();

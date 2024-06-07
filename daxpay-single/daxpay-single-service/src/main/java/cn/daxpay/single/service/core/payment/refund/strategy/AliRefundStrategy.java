@@ -28,9 +28,9 @@ public class AliRefundStrategy extends AbsRefundStrategy {
      *
      * @see PayChannelEnum
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
 

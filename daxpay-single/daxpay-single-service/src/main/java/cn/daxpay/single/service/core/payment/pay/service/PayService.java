@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.payment.pay.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.daxpay.single.exception.pay.PayUnsupportedMethodException;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.result.pay.PayResult;
 import cn.daxpay.single.service.common.context.PayLocal;
@@ -10,15 +11,17 @@ import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
-import cn.daxpay.single.service.core.payment.pay.factory.PayStrategyFactory;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.func.AbsPayStrategy;
+import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.daxpay.single.util.PayUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,7 +97,7 @@ public class PayService {
      */
     public PayResult firstPay(PayParam payParam){
         // 获取支付策略类
-        AbsPayStrategy payStrategy = PayStrategyFactory.create(payParam.getChannel());
+        AbsPayStrategy payStrategy = PayStrategyFactory.create(payParam.getChannel(), AbsPayStrategy.class);
         // 初始化支付的参数
         payStrategy.setPayParam(payParam);
         // 执行支付前处理动作, 进行各种校验, 校验通过才会进行下面的操作
@@ -145,7 +148,7 @@ public class PayService {
      */
     public PayResult repeatPay(PayParam payParam, PayOrder payOrder){
         // 获取支付策略类
-        AbsPayStrategy payStrategy = PayStrategyFactory.create(payParam.getChannel());
+        AbsPayStrategy payStrategy = PayStrategyFactory.create(payParam.getChannel(),AbsPayStrategy.class);
         // 初始化支付的参数
         payStrategy.initPayParam(payOrder, payParam);
         // 执行支付前处理动作
@@ -191,5 +194,18 @@ public class PayService {
             clientNoticeService.registerPayNotice(payOrder, payOrderExtra);
         }
         return payAssistService.buildResult(payOrder);
+    }
+
+
+    /**
+     * 根据传入的通道获取策略
+     * @return 支付策略
+     */
+    private AbsPayStrategy getStrategy(String channel) {
+        val beansOfType = SpringUtil.getBeansOfType(AbsPayStrategy.class);
+        return beansOfType.values().stream()
+                .filter(strategy -> strategy.getChannel().equals(channel))
+                .findFirst()
+                .orElseThrow(PayUnsupportedMethodException::new);
     }
 }

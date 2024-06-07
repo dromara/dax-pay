@@ -29,9 +29,9 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
     /**
      * 策略标识
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**

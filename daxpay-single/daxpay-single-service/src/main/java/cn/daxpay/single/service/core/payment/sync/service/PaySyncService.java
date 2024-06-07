@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.payment.sync.service;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
@@ -18,11 +19,11 @@ import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.repair.result.PayRepairResult;
 import cn.daxpay.single.service.core.payment.repair.service.PayRepairService;
-import cn.daxpay.single.service.core.payment.sync.factory.PaySyncStrategyFactory;
 import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
 import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
 import cn.daxpay.single.service.func.AbsPaySyncStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -64,9 +65,10 @@ public class PaySyncService {
     public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
                 .orElseThrow(() -> new PayFailureException("支付订单不存在"));
-        // 钱包支付钱包不需要
+
+        // 钱包支付钱包不需要同步
         if (PayChannelEnum.WALLET.getCode().equals(payOrder.getChannel())){
-            throw new PayFailureException("订单没有异步支付方式，不需要同步");
+            throw new PayFailureException("支付订单不需要同步");
         }
         // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);
@@ -84,10 +86,9 @@ public class PaySyncService {
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }
-
         try {
             // 获取支付同步策略类
-            AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getChannel());
+            AbsPaySyncStrategy syncPayStrategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPaySyncStrategy.class);
             syncPayStrategy.initPayParam(payOrder);
             // 执行操作, 获取支付网关同步的结果
             PayRemoteSyncResult payRemoteSyncResult = syncPayStrategy.doSyncStatus();
@@ -168,12 +169,9 @@ public class PaySyncService {
             return true;
         }
 
-        // 退款比对状态不做额外处理, 需要通过退款接口进行处理
-        List<String> orderClose = Arrays.asList(
-                PayStatusEnum.REFUNDED.getCode(),
-                PayStatusEnum.REFUNDING.getCode(),
-                PayStatusEnum.PARTIAL_REFUND.getCode());
-        if (orderClose.contains(orderStatus) || syncStatus.equals(PaySyncStatusEnum.REFUND)){
+        // 退款状态不做额外处理, 需要通过退款接口进行处理
+        if (!Objects.equals(order.getRefundStatus(),PayOrderRefundStatusEnum.NO_REFUND.getCode())
+                || syncStatus.equals(PaySyncStatusEnum.REFUND)){
             return true;
         }
         return false;
@@ -248,4 +246,5 @@ public class PaySyncService {
                 .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
+
 }

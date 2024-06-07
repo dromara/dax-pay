@@ -36,8 +36,8 @@ public class WalletRefundStrategy extends AbsRefundStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WALLET;
+    public String getChannel() {
+        return PayChannelEnum.WALLET.getCode();
     }
 
 

@@ -1,7 +1,5 @@
 package cn.daxpay.single.service.func;
 
-import cn.daxpay.single.code.PayChannelEnum;
-
 /**
  * 支付相关策略标识接口
  * @author xxm
@@ -11,6 +9,7 @@ public interface PayStrategy {
 
     /**
      * 策略标识
+     * @see cn.daxpay.single.param.payment.pay.PayCancelParam
      */
-    PayChannelEnum getChannel();
+    String getChannel();
 }

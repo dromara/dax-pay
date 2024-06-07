@@ -28,8 +28,8 @@ public class WeChatRefundSyncStrategy extends AbsRefundSyncStrategy {
      * 策略标识
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WECHAT;
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
     }
 
     /**

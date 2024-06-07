@@ -32,8 +32,8 @@ public class UnionPayCloseStrategy extends AbsPayCloseStrategy {
 
 
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.UNION_PAY;
+    public String getChannel() {
+        return PayChannelEnum.UNION_PAY.getCode();
     }
 
     /**

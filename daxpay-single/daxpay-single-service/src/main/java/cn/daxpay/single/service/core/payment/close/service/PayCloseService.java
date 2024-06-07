@@ -10,11 +10,11 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
-import cn.daxpay.single.service.core.payment.close.factory.PayCloseStrategyFactory;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.record.close.entity.PayCloseRecord;
 import cn.daxpay.single.service.core.record.close.service.PayCloseRecordService;
 import cn.daxpay.single.service.func.AbsPayCloseStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +67,7 @@ public class PayCloseService {
             throw new PayFailureException("订单不是支付中, 无法进行关闭订单");
         }
         try {
-            AbsPayCloseStrategy strategy = PayCloseStrategyFactory.create(payOrder.getChannel());
+            AbsPayCloseStrategy strategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPayCloseStrategy.class);
             // 设置支付订单
             strategy.setOrder(payOrder);
             // 关闭前准备
@@ -117,4 +117,5 @@ public class PayCloseService {
                 .setClientIp(clientIp);
         payCloseRecordService.saveRecord(record);
     }
+
 }

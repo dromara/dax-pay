@@ -32,8 +32,8 @@ public class WeChatPayCancelStrategy extends AbsPayCancelStrategy {
     private WeChatPayConfig weChatPayConfig;
 
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WECHAT;
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
     }
 
     /**

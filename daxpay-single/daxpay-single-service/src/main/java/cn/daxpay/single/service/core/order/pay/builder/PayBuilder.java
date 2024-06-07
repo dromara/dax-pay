@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.order.pay.builder;
 
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.service.common.context.NoticeLocal;
@@ -38,6 +39,7 @@ public class PayBuilder {
                 .setTitle(payParam.getTitle())
                 .setDescription(payParam.getDescription())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
+                .setRefundStatus(PayOrderRefundStatusEnum.NO_REFUND.getCode())
                 .setAllocation(payParam.getAllocation())
                 .setAmount(payParam.getAmount())
                 .setChannel(payParam.getChannel())

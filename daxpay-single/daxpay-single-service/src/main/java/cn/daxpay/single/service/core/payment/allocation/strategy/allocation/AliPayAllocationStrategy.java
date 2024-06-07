@@ -38,8 +38,8 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      * 策略标识
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**

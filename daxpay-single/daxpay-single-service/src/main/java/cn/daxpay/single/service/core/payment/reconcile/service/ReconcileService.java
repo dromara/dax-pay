@@ -12,17 +12,17 @@ import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileDiffManager;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileOrderManager;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileOutTradeManager;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileDiff;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.service.ReconcileOrderService;
 import cn.daxpay.single.service.core.payment.reconcile.domain.GeneralTradeInfo;
-import cn.daxpay.single.service.core.payment.reconcile.factory.ReconcileStrategyFactory;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileDiffExcel;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileTradeDetailExcel;
 import cn.daxpay.single.service.func.AbsReconcileStrategy;
 import cn.daxpay.single.service.param.reconcile.ReconcileUploadParam;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.daxpay.single.util.OrderNoGenerateUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DatePattern;
@@ -106,7 +106,7 @@ public class ReconcileService {
         // 将对账订单写入到上下文中
         PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
         // 构建对账策略
-        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
+        AbsReconcileStrategy reconcileStrategy = PayStrategyFactory.create(reconcileOrder.getChannel(), AbsReconcileStrategy.class);
         reconcileStrategy.setRecordOrder(reconcileOrder);
         reconcileStrategy.doBeforeHandler();
         try {
@@ -136,7 +136,7 @@ public class ReconcileService {
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
         // 将对账订单写入到上下文中
         PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
-        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
+        AbsReconcileStrategy reconcileStrategy = PayStrategyFactory.create(reconcileOrder.getChannel(), AbsReconcileStrategy.class);
         reconcileStrategy.setRecordOrder(reconcileOrder);
         reconcileStrategy.doBeforeHandler();
 
@@ -183,7 +183,7 @@ public class ReconcileService {
         // 查询对账单
         List<ReconcileOutTrade> reconcileTradeDetails = reconcileOutTradeManager.findAllByReconcileId(reconcileOrder.getId());
         // 构建对账策略
-        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
+        AbsReconcileStrategy reconcileStrategy =PayStrategyFactory.create(reconcileOrder.getChannel(), AbsReconcileStrategy.class);
         // 初始化参数
         reconcileStrategy.setRecordOrder(reconcileOrder);
 
