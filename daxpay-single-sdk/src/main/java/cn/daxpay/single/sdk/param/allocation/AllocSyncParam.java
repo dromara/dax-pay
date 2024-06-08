@@ -18,10 +18,10 @@ import lombok.Setter;
 public class AllocSyncParam extends DaxPayRequest<AllocSyncModel> {
 
     /** 分账号 */
-    private String allocationNo;
+    private String allocNo;
 
     /** 商户分账号 */
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     @Override
     public String path() {

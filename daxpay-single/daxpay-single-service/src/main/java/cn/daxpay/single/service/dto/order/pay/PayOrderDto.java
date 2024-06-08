@@ -3,6 +3,7 @@ package cn.daxpay.single.service.dto.order.pay;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -79,11 +80,18 @@ public class PayOrderDto extends BaseDto {
     private String status;
 
     /**
+     * 退款状态
+     * @see PayOrderRefundStatusEnum
+     */
+    @Schema(description = "退款状态")
+    private String refundStatus;
+
+    /**
      * 分账状态
      * @see PayOrderAllocStatusEnum
      */
     @Schema(description = "分账状态")
-    private String allocationStatus;
+    private String allocStatus;
 
     /** 支付时间 */
     @Schema(description = "支付时间")

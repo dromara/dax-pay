@@ -210,10 +210,9 @@ public class UnionPayReconcileService {
      * 保存下载的原始对账文件
      */
     private void saveOriginalFile(ReconcileOrder reconcileOrder, byte[] bytes) {
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
-        String fileName = StrUtil.format("交易对账单-{}-{}.txt", channelEnum.getName(),date);
+        String fileName = StrUtil.format("交易对账单-云闪付-{}.txt",date);
         UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {
             uploadPretreatment.setOriginalFilename(fileName);

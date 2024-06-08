@@ -3,9 +3,6 @@ package cn.daxpay.single.sdk.code;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 /**
  * 支付通道枚举
  *
@@ -25,16 +22,5 @@ public enum PayChannelEnum {
     private final String code;
     /** 支付通道名称 */
     private final String name;
-
-
-    /**
-     * 根据编码获取枚举
-     */
-    public static PayChannelEnum findByCode(String code){
-        return Arrays.stream(values())
-                .filter(o -> Objects.equals(o.getCode(), code))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("该枚举不存在"));
-    }
 
 }

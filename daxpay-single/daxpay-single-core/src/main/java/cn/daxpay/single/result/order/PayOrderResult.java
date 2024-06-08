@@ -2,6 +2,7 @@ package cn.daxpay.single.result.order;
 
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.result.PaymentCommonResult;
 import cn.daxpay.single.serializer.LocalDateTimeToTimestampSerializer;
@@ -80,11 +81,18 @@ public class PayOrderResult extends PaymentCommonResult {
     private String status;
 
     /**
+     * 退款状态
+     * @see PayOrderRefundStatusEnum
+     */
+    @Schema(description = "退款状态")
+    private String refundStatus;
+
+    /**
      * 分账状态
      * @see PayOrderAllocStatusEnum
      */
     @Schema(description = "分账状态")
-    private String allocationStatus;
+    private String allocStatus;
 
     /** 支付时间 */
     @Schema(description = "支付时间")

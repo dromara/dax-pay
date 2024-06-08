@@ -320,10 +320,9 @@ public class WechatPayReconcileService{
      */
     private void saveOriginalFile(ReconcileOrder reconcileOrder, String text) {
         // 微信接收结果转换为 byte[]
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
-        String fileName = StrUtil.format("交易对账单-{}-{}.txt", channelEnum.getName(),date);
+        String fileName = StrUtil.format("交易对账单-微信-{}.txt",date);
         byte[] bytes = StrUtil.bytes(text, CharsetUtil.CHARSET_UTF_8);
         UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {

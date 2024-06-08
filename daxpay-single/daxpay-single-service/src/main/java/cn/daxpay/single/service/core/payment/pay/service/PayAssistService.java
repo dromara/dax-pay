@@ -157,7 +157,7 @@ public class PayAssistService {
                 .setChannel(payParam.getChannel())
                 .setMethod(payParam.getMethod());
         if (!order.getAllocation()) {
-            order.setAllocationStatus(null);
+            order.setAllocStatus(null);
         }
 
         // 扩展信息

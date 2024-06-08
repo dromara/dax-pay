@@ -71,7 +71,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
         return this.lambdaQuery()
                 .eq(PayOrder::getAllocation, true)
                 .eq(PayOrder::getAutoAllocation, true)
-                .eq(PayOrder::getAllocationStatus, PayOrderAllocStatusEnum.WAITING.getCode())
+                .eq(PayOrder::getAllocStatus, PayOrderAllocStatusEnum.WAITING.getCode())
                 .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())
                 .list();
     }

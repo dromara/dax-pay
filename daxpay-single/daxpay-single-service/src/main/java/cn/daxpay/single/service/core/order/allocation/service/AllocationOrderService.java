@@ -164,8 +164,8 @@ public class AllocationOrderService {
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setOutOrderNo(payOrder.getOutOrderNo())
                 .setTitle(payOrder.getTitle())
-                .setAllocationNo(OrderNoGenerateUtil.allocation())
-                .setBizAllocationNo(param.getBizAllocationNo())
+                .setAllocNo(OrderNoGenerateUtil.allocation())
+                .setBizAllocNo(param.getBizAllocationNo())
                 .setChannel(payOrder.getChannel())
                 .setDescription(param.getDescription())
                 .setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
@@ -187,7 +187,7 @@ public class AllocationOrderService {
         extend.setId(allocId);
 
         // 更新支付订单分账状态
-        payOrder.setAllocationStatus(PayOrderAllocStatusEnum.ALLOCATION.getCode());
+        payOrder.setAllocStatus(PayOrderAllocStatusEnum.ALLOCATION.getCode());
         payOrderManager.updateById(payOrder);
         allocationOrderDetailManager.saveAll(details);
         allocationOrderExtraManager.save(extend);

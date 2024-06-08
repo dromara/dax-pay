@@ -97,7 +97,7 @@ public class ClientNoticeAssistService {
                 .setNoticeType(ClientNoticeTypeEnum.ALLOCATION.getType())
                 .setSendCount(0)
                 .setTradeId(order.getId())
-                .setTradeNo(order.getAllocationNo())
+                .setTradeNo(order.getAllocNo())
                 .setTradeStatus(order.getStatus());
     }
 

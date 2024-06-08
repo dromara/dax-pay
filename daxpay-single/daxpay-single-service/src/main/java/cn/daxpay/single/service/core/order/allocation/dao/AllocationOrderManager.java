@@ -31,14 +31,14 @@ public class AllocationOrderManager extends BaseManager<AllocationOrderMapper, A
      * 根据分账单号查询
      */
     public Optional<AllocationOrder> findByAllocationNo(String allocationNo){
-        return findByField(AllocationOrder::getAllocationNo, allocationNo);
+        return findByField(AllocationOrder::getAllocNo, allocationNo);
     }
 
     /**
      * 根据商户分账号查询
      */
     public Optional<AllocationOrder> findByBizAllocationNo(String bizAllocationNo){
-        return findByField(AllocationOrder::getBizAllocationNo, bizAllocationNo);
+        return findByField(AllocationOrder::getBizAllocNo, bizAllocationNo);
     }
 
     /**

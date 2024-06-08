@@ -18,10 +18,10 @@ import lombok.Setter;
 public class QueryAllocOrderParam extends DaxPayRequest<AllocOrderModel> {
 
     /** 分账单号 */
-    private String allocationNo;
+    private String allocNo;
 
     /** 商户分账单号 */
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     /**
      * 方法请求路径

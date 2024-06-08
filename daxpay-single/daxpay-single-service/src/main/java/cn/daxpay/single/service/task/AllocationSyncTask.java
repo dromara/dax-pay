@@ -43,7 +43,7 @@ public class AllocationSyncTask implements Job {
                     allocationService.finish(allocationOrder);
                 }
             } catch (Exception e) {
-                log.warn("分账同步或完结失败, 分账号:{}", allocationOrder.getAllocationNo());
+                log.warn("分账同步或完结失败, 分账号:{}", allocationOrder.getAllocNo());
                 log.warn("分账同步或完结失败", e);
             }
         }

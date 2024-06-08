@@ -94,7 +94,6 @@ public class AllocationGroupService {
      * 创建分账组
      */
     public void create(AllocationGroupParam param){
-        PayChannelEnum.findByCode(param.getChannel());
         AllocationGroup group = AllocationGroupConvert.CONVERT.convert(param);
         group.setTotalRate(0);
         groupManager.save(group);

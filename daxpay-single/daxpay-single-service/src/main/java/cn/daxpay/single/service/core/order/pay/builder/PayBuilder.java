@@ -48,7 +48,7 @@ public class PayBuilder {
                 .setRefundableBalance(payParam.getAmount());
         // 如果支持分账, 设置分账状态为代分账
         if (payOrder.getAllocation()) {
-            payOrder.setAllocationStatus(PayOrderAllocStatusEnum.WAITING.getCode());
+            payOrder.setAllocStatus(PayOrderAllocStatusEnum.WAITING.getCode());
         }
         return payOrder;
     }

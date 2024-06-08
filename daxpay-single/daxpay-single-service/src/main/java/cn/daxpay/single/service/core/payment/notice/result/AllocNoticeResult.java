@@ -28,19 +28,19 @@ public class AllocNoticeResult extends PaymentCommonResult {
      * 分账单号
      */
     @Schema(description = "分账单号")
-    private String allocationNo;
+    private String allocNo;
 
     /**
      * 商户分账单号
      */
     @Schema(description = "商户分账单号")
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     /**
      * 通道分账号
      */
     @Schema(description = "通道分账号")
-    private String outAllocationNo;
+    private String outAllocNo;
 
     /**
      * 支付订单号

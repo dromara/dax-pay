@@ -106,7 +106,7 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
      * @see PayOrderAllocStatusEnum
      */
     @DbColumn(comment = "分账状态")
-    private String allocationStatus;
+    private String allocStatus;
 
     /** 支付时间 */
     @DbColumn(comment = "支付时间")

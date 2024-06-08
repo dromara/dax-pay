@@ -20,11 +20,11 @@ public class AllocationResult extends PaymentCommonResult {
 
     /** 分账订单号 */
     @Schema(description = "分账订单号")
-    private String allocationNo;
+    private String allocNo;
 
     /** 商户分账订单号 */
     @Schema(description = "商户分账订单号")
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     /**
      * 分账状态

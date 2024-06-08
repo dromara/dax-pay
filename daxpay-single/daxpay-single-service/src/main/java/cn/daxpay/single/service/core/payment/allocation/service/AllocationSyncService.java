@@ -13,12 +13,12 @@ import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailM
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
-import cn.daxpay.single.service.core.payment.allocation.factory.AllocationFactory;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
 import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
 import cn.daxpay.single.service.func.AbsAllocationStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -58,12 +58,12 @@ public class AllocationSyncService {
     public AllocSyncResult sync(AllocSyncParam param) {
         // 获取分账订单
         AllocationOrder allocationOrder = null;
-        if (Objects.nonNull(param.getAllocationNo())){
-            allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocationNo())
+        if (Objects.nonNull(param.getAllocNo())){
+            allocationOrder = allocationOrderManager.findByAllocationNo(param.getAllocNo())
                     .orElseThrow(() -> new DataNotExistException("分账单不存在"));
         }
         if (Objects.isNull(allocationOrder)){
-            allocationOrder = allocationOrderManager.findByAllocationNo(param.getBizAllocationNo())
+            allocationOrder = allocationOrderManager.findByAllocationNo(param.getBizAllocNo())
                     .orElseThrow(() -> new DataNotExistException("分账单不存在"));
         }
         // 如果类型为忽略, 不进行同步处理
@@ -87,7 +87,7 @@ public class AllocationSyncService {
         try {
             List<AllocationOrderDetail> detailList = allocationOrderDetailManager.findAllByOrderId(allocationOrder.getId());
             // 获取分账策略
-            AbsAllocationStrategy allocationStrategy = AllocationFactory.create(allocationOrder.getChannel());
+            AbsAllocationStrategy allocationStrategy =  PayStrategyFactory.create(allocationOrder.getChannel(),AbsAllocationStrategy.class);
             allocationStrategy.initParam(allocationOrder, detailList);
             // 分账完结预处理
             allocationStrategy.doBeforeHandler();
@@ -159,9 +159,9 @@ public class AllocationSyncService {
      */
     private void saveRecord(AllocationOrder order, AllocRemoteSyncResult syncResult, String errorCode, String errorMsg){
         PaySyncRecord paySyncRecord = new PaySyncRecord()
-                .setBizTradeNo(order.getBizAllocationNo())
-                .setTradeNo(order.getAllocationNo())
-                .setOutTradeNo(order.getOutAllocationNo())
+                .setBizTradeNo(order.getBizAllocNo())
+                .setTradeNo(order.getAllocNo())
+                .setOutTradeNo(order.getOutAllocNo())
                 .setSyncType(PaymentTypeEnum.ALLOCATION.getCode())
                 .setChannel(order.getChannel())
                 .setSyncInfo(syncResult.getSyncInfo())

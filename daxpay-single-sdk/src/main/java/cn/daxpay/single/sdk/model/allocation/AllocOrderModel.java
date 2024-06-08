@@ -22,13 +22,13 @@ import java.util.List;
 public class AllocOrderModel extends DaxPayResponseModel {
 
     /** 分账单号 */
-    private String allocationNo;
+    private String allocNo;
 
     /** 商户分账单号 */
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     /** 通道分账号 */
-    private String outAllocationNo;
+    private String outAllocNo;
 
     /** 支付订单号 */
     private String orderNo;

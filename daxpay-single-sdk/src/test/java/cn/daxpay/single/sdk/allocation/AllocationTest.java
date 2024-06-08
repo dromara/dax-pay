@@ -149,7 +149,7 @@ public class AllocationTest {
     public void allocationFinish() {
         // 分账完结参数
         AllocFinishParam param = new AllocFinishParam();
-        param.setAllocationNo("DEVA24060117191963000003");
+        param.setAllocNo("DEVA24060117191963000003");
 
         DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
@@ -162,7 +162,7 @@ public class AllocationTest {
     public void allocationSync() {
         // 分账同步参数
         AllocSyncParam param = new AllocSyncParam();
-        param.setAllocationNo("DEVA24060117191963000003");
+        param.setAllocNo("DEVA24060117191963000003");
 
         DaxPayResult<AllocSyncModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));

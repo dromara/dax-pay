@@ -88,9 +88,9 @@ public class AllocationOrderController {
     @InitPaymentContext(PaymentApiCode.SYNC_ALLOCATION)
     @Operation(summary = "同步分账结果")
     @PostMapping("/sync")
-    public ResResult<Void> sync(String allocationNo){
+    public ResResult<Void> sync(String allocNo){
         AllocSyncParam param = new AllocSyncParam();
-        param.setAllocationNo(allocationNo);
+        param.setAllocNo(allocNo);
         allocationSyncService.sync(param);
         return Res.ok();
     }
@@ -100,7 +100,7 @@ public class AllocationOrderController {
     @PostMapping("/finish")
     public ResResult<Void> finish(String allocationNo){
         AllocFinishParam param = new AllocFinishParam();
-        param.setAllocationNo(allocationNo);
+        param.setAllocNo(allocationNo);
         allocationService.finish(param);
         return Res.ok();
     }

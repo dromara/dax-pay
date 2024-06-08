@@ -20,10 +20,10 @@ import cn.daxpay.single.service.core.payment.allocation.convert.AllocationReceiv
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationGroupReceiverManager;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationReceiverManager;
 import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceiver;
-import cn.daxpay.single.service.core.payment.allocation.factory.AllocationReceiverFactory;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
 import cn.daxpay.single.service.func.AbsAllocationReceiverStrategy;
 import cn.daxpay.single.service.param.allocation.receiver.AllocationReceiverQuery;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -120,8 +120,7 @@ public class AllocationReceiverService {
             }
             AllocationReceiver receiver = AllocationReceiverConvert.CONVERT.convert(param);
             // 获取策略
-            PayChannelEnum channelEnum = PayChannelEnum.findByCode(param.getChannel());
-            AbsAllocationReceiverStrategy receiverStrategy = AllocationReceiverFactory.create(channelEnum);
+            AbsAllocationReceiverStrategy receiverStrategy = PayStrategyFactory.create(param.getChannel(), AbsAllocationReceiverStrategy.class);
             // 校验
             receiverStrategy.setAllocationReceiver(receiver);
             if (!receiverStrategy.validation()){
@@ -148,8 +147,7 @@ public class AllocationReceiverService {
             throw new PayFailureException("该接收方已被使用，无法被删除");
         }
         // 获取策略
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(receiver.getChannel());
-        AbsAllocationReceiverStrategy receiverStrategy = AllocationReceiverFactory.create(channelEnum);
+        AbsAllocationReceiverStrategy receiverStrategy = PayStrategyFactory.create(receiver.getChannel(), AbsAllocationReceiverStrategy.class);
         LockInfo lock = lockTemplate.lock("payment:receiver:" + param.getReceiverNo(),10000,200);
         if (Objects.isNull(lock)){
             throw new PayFailureException("分账方处理中，请勿重复操作");

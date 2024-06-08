@@ -1,13 +1,12 @@
 package cn.daxpay.single.service.core.payment.transfer.service;
 
-import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.param.payment.transfer.TransferParam;
 import cn.daxpay.single.result.transfer.TransferResult;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
-import cn.daxpay.single.service.core.payment.transfer.factory.TransferFactory;
 import cn.daxpay.single.service.func.AbsTransferStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,7 @@ public class TransferService {
     public TransferResult transfer(TransferParam transferParam){
 
         // 获取策略
-        AbsTransferStrategy transferStrategy = TransferFactory.create(PayChannelEnum.ALI.getCode());
+        AbsTransferStrategy transferStrategy = PayStrategyFactory.create(transferParam.getChannel(),AbsTransferStrategy.class);
         // 检查转账参数
         transferStrategy.doValidateParam(transferParam);
         // 创建转账订单并设置

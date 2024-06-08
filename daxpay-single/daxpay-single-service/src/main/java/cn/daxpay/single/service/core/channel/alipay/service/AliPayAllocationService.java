@@ -49,7 +49,7 @@ public class AliPayAllocationService {
     public void allocation(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(allocationOrder.getAllocationNo());
+        model.setOutRequestNo(allocationOrder.getAllocNo());
         model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
 
@@ -79,7 +79,7 @@ public class AliPayAllocationService {
     public void finish(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails ){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(String.valueOf(allocationOrder.getAllocationNo()));
+        model.setOutRequestNo(String.valueOf(allocationOrder.getAllocNo()));
         model.setTradeNo(allocationOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
         // 分账完结参数
@@ -109,7 +109,7 @@ public class AliPayAllocationService {
     public AllocRemoteSyncResult sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails){
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
         model.setTradeNo(allocationOrder.getOutOrderNo());
-        model.setOutRequestNo(allocationOrder.getAllocationNo());
+        model.setOutRequestNo(allocationOrder.getAllocNo());
         AlipayTradeOrderSettleQueryRequest request = new AlipayTradeOrderSettleQueryRequest();
         request.setBizModel(model);
         AlipayTradeOrderSettleQueryResponse response = AliPayApi.execute(request);

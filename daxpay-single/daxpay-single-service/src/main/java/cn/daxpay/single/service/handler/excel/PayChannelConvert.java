@@ -8,6 +8,7 @@ import com.alibaba.excel.metadata.property.ExcelContentProperty;
 
 /**
  * 支付通道转换
+ * TODO 改为读取数据库
  * @author xxm
  * @since 2024/5/6
  */

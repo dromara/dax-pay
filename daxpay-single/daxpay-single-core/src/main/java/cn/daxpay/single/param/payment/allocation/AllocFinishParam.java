@@ -16,8 +16,8 @@ import lombok.EqualsAndHashCode;
 public class AllocFinishParam extends PaymentCommonParam {
 
     @Schema(description = "商户分账单号")
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     @Schema(description = "分账单号")
-    private String allocationNo;
+    private String allocNo;
 }

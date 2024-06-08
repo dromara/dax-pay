@@ -16,8 +16,8 @@ import lombok.EqualsAndHashCode;
 public class AllocSyncParam extends PaymentCommonParam {
 
     @Schema(description = "分账号")
-    private String allocationNo;
+    private String allocNo;
 
     @Schema(description = "商户分账号")
-    private String bizAllocationNo;
+    private String bizAllocNo;
 }

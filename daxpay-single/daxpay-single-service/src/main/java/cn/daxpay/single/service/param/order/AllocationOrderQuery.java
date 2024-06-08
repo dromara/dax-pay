@@ -24,7 +24,7 @@ public class AllocationOrderQuery {
     private String title;
 
     @Schema(description = "分账业务号")
-    private String allocationNo;
+    private String allocNo;
 
     @Schema(description = "分账通道")
     private String channel;
