@@ -36,18 +36,6 @@ public class PayChannelConfig extends MpBaseEntity implements EntityBaseFunction
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String name;
 
-    /** ICON图片 */
-    @DbColumn(comment = "ICON图片")
-    private Long iconId;
-
-    /** 卡牌背景色 */
-    @DbColumn(comment = "卡牌背景色")
-    private String bgColor;
-
-    /** 是否启用 */
-    @DbColumn(comment = "是否启用")
-    private Boolean enable;
-
     /** 备注 */
     @DbColumn(comment = "备注")
     private String remark;

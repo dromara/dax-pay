@@ -7,8 +7,6 @@ import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.refund.RefundParam;
 import cn.daxpay.single.result.pay.RefundResult;
-import cn.daxpay.single.service.common.context.ApiInfoLocal;
-import cn.daxpay.single.service.common.context.NoticeLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -45,36 +43,6 @@ public class RefundAssistService {
     private final RefundOrderManager refundOrderManager;
 
     private final RefundOrderExtraManager refundOrderExtraManager;
-
-    /**
-     * 初始化上下文
-     */
-    public void initRefundContext(RefundParam param){
-        // 初始化通知相关上下文
-        this.initNotice(param);
-    }
-
-    /**
-     * 初始化退款通知相关上下文
-     */
-    private void initNotice(RefundParam param) {
-        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
-        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
-        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
-        // 异步回调为开启状态
-        if (!Objects.equals(param.getNotNotify(), false) && apiInfo.isNotice()){
-            // 首先读取请求参数
-            noticeInfo.setNotifyUrl(param.getNotifyUrl());
-            // 读取接口配置
-            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
-                noticeInfo.setNotifyUrl(apiInfo.getNoticeUrl());
-            }
-            // 读取平台配置
-            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
-                noticeInfo.setNotifyUrl(platform.getNotifyUrl());
-            }
-        }
-    }
 
     /**
      * 检查并处理退款参数
@@ -125,12 +93,11 @@ public class RefundAssistService {
                 .setReason(refundParam.getReason());
         refundOrderManager.save(refundOrder);
         // 生成退款扩展订单
-        NoticeLocal notice = PaymentContextLocal.get().getNoticeInfo();
         RefundOrderExtra orderExtra = new RefundOrderExtra()
                 .setClientIp(refundParam.getClientIp())
                 .setReqTime(refundParam.getReqTime())
                 .setAttach(refundParam.getAttach())
-                .setNotifyUrl(notice.getNotifyUrl());
+                .setNotifyUrl(refundParam.getNotifyUrl());
         orderExtra.setId(refundOrder.getId());
 
         refundOrderExtraManager.save(orderExtra);

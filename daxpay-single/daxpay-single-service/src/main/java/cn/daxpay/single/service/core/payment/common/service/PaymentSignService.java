@@ -4,7 +4,6 @@ import cn.daxpay.single.code.PaySignTypeEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.PaymentCommonParam;
 import cn.daxpay.single.result.PaymentCommonResult;
-import cn.daxpay.single.service.common.context.ApiInfoLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
@@ -36,10 +35,10 @@ public class PaymentSignService {
     public void verifySign(PaymentCommonParam param) {
         // 先触发上下文的初始化
         paymentAssistService.initContext(param);
-        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
+        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
 
         // 判断当前接口是否不需要签名
-        if (!apiInfo.isReqSign()){
+        if (!platformInfo.isReqSign()){
             return;
         }
         // 参数转换为Map对象

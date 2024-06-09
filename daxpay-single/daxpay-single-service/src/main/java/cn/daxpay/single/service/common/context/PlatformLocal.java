@@ -25,8 +25,15 @@ public class PlatformLocal {
     /** 签名秘钥 */
     private String signSecret;
 
-    /** 支付通知地址 */
-    private String notifyUrl;
+    /** 是否对请求进行验签 */
+    private boolean reqSign;
+
+    /** 消息通知方式 */
+    private String noticeType;
+
+    /** 消息通知地址 */
+    private String noticeUrl;
+
 
     /** 支付同步跳转地址 */
     private String returnUrl;
@@ -36,4 +43,5 @@ public class PlatformLocal {
 
     /** 支付限额 */
     private Integer limitAmount;
+
 }

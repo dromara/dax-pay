@@ -3,7 +3,6 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.AliPayWay;
@@ -47,11 +46,6 @@ public class AliPayConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void update(AliPayConfigParam param) {
         AliPayConfig alipayConfig = alipayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
-        // 启用或停用
-        if (!Objects.equals(param.getEnable(), alipayConfig.getEnable())){
-            payChannelConfigService.setEnable(PayChannelEnum.ALI.getCode(), param.getEnable());
-        }
-
         BeanUtil.copyProperties(param, alipayConfig, CopyOptions.create().ignoreNullValue());
         alipayConfigManager.updateById(alipayConfig);
     }

@@ -315,28 +315,10 @@
                 <artifactId>common-starter-quartz</artifactId>
                 <version>${bootx-platform.version}</version>
             </dependency>
-            <!-- 钉钉对接模块 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-dingtalk</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
             <!-- 系统监控信息 -->
             <dependency>
                 <groupId>cn.bootx.platform</groupId>
                 <artifactId>common-starter-monitor</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 微信对接模块 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-wechat</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 企业微信对接模块 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-wecom</artifactId>
                 <version>${bootx-platform.version}</version>
             </dependency>
             <!-- SMS4J 短信发送-->

@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.param.system.config;
 
 import cn.daxpay.single.code.PaySignTypeEnum;
+import cn.daxpay.single.service.code.TradeNotifyTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,6 +19,10 @@ public class PlatformConfigParam {
     @Schema(description = "网站地址")
     private String websiteUrl;
 
+    /** 是否对请求进行验签 */
+    @Schema(description = "是否对请求进行验签")
+    private boolean reqSign;
+
     /**
      * @see PaySignTypeEnum
      */
@@ -27,7 +32,16 @@ public class PlatformConfigParam {
     @Schema(description = "签名秘钥")
     private String signSecret;
 
-    @Schema(description = "支付通知地址")
+    /**
+     * 消息通知方式, 目前只支持http
+     * @see TradeNotifyTypeEnum
+     */
+    @Schema(description = "消息通知方式")
+    private String notifyType;
+
+    /** 消息通知地址 */
+
+    @Schema(description = "消息通知地址")
     private String notifyUrl;
 
     @Schema(description = "同步支付跳转地址")

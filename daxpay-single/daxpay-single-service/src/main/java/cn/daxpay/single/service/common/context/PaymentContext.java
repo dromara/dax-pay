@@ -12,9 +12,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PaymentContext {
 
-    /** 支付接口信息 */
-    private final ApiInfoLocal apiInfo = new ApiInfoLocal();;
-
     /** 平台全局配置 */
     private final PlatformLocal platformInfo = new PlatformLocal();
 
@@ -23,9 +20,6 @@ public class PaymentContext {
 
     /** 退款相关信息 */
     private final RefundLocal refundInfo = new RefundLocal();
-
-    /** 消息通知(主动发起)相关信息 */
-    private final NoticeLocal noticeInfo = new NoticeLocal();
 
     /** 回调相关信息 */
     private final CallbackLocal callbackInfo = new CallbackLocal();

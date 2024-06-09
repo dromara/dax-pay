@@ -6,7 +6,6 @@ import cn.daxpay.single.param.channel.AliPayParam;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.AliPayWay;
-import cn.daxpay.single.service.common.context.NoticeLocal;
 import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
@@ -103,7 +102,6 @@ public class AliPayService {
      * wap支付
      */
     public String wapPay(String amount, PayOrder payOrder, AliPayConfig alipayConfig) {
-        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
@@ -111,8 +109,6 @@ public class AliPayService {
         // 过期时间
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setProductCode(AliPayCode.QUICK_WAP_PAY);
-        // 中途退出地址
-        model.setQuitUrl(noticeInfo.getQuitUrl());
         // 是否分账
         if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();

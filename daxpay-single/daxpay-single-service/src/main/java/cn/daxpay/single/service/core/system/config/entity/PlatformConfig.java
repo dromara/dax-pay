@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.system.config.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.single.code.PaySignTypeEnum;
+import cn.daxpay.single.service.code.TradeNotifyTypeEnum;
 import cn.daxpay.single.service.core.system.config.convert.PlatformConfigConvert;
 import cn.daxpay.single.service.dto.system.config.PlatformConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -33,18 +34,34 @@ public class PlatformConfig extends MpBaseEntity implements EntityBaseFunction<P
     @DbColumn(comment = "签名方式")
     private String signType;
 
+    /** 签名秘钥 */
     @DbColumn(comment = "签名秘钥")
     private String signSecret;
 
-    @DbColumn(comment = "支付通知地址")
+    /** 是否对请求进行验签 */
+    @DbColumn(comment = "是否对请求进行验签")
+    private boolean reqSign;
+
+    /**
+     * 消息通知方式, 目前只支持http
+     * @see TradeNotifyTypeEnum
+     */
+    @DbColumn(comment = "消息通知方式")
+    private String notifyType;
+
+    /** 消息通知地址 */
+    @DbColumn(comment = "消息通知地址")
     private String notifyUrl;
 
+    /** 同步支付跳转地址 */
     @DbColumn(comment = "同步支付跳转地址")
     private String returnUrl;
 
+    /** 支付限额 */
     @DbColumn(comment = "支付限额")
     private Integer limitAmount;
 
+    /** 订单默认超时时间(分钟) */
     @DbColumn(comment = "订单默认超时时间(分钟)")
     private Integer orderTimeout;
 

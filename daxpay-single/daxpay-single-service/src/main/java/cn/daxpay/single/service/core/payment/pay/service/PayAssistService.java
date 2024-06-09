@@ -7,8 +7,6 @@ import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.result.pay.PayResult;
-import cn.daxpay.single.service.common.context.ApiInfoLocal;
-import cn.daxpay.single.service.common.context.NoticeLocal;
 import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -58,8 +56,6 @@ public class PayAssistService {
     public void initPayContext(PayOrder order, PayParam payParam) {
         // 初始化支付订单超时时间
         this.initExpiredTime(order, payParam);
-        // 初始化通知相关上下文
-        this.initNotice(payParam);
     }
 
 
@@ -94,42 +90,6 @@ public class PayAssistService {
     }
 
     /**
-     * 初始化通知相关上下文
-     * 1. 异步通知参数: 读取参数配置 -> 读取接口配置 -> 读取平台参数
-     * 2. 同步跳转参数: 读取参数配置 -> 读取平台参数
-     * 3. 中途退出地址: 读取参数配置
-     */
-    private void initNotice(PayParam payParam) {
-        NoticeLocal noticeInfo = PaymentContextLocal.get()
-                .getNoticeInfo();
-        ApiInfoLocal apiInfo = PaymentContextLocal.get()
-                .getApiInfo();
-        PlatformLocal platform = PaymentContextLocal.get()
-                .getPlatformInfo();
-        // 异步回调为开启状态
-        if (!Objects.equals(payParam.getNotNotify(), false) && apiInfo.isNotice()) {
-            // 首先读取请求参数
-            noticeInfo.setNotifyUrl(payParam.getNotifyUrl());
-            // 读取接口配置
-            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())) {
-                noticeInfo.setNotifyUrl(apiInfo.getNoticeUrl());
-            }
-            // 读取平台配置
-            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())) {
-                noticeInfo.setNotifyUrl(platform.getNotifyUrl());
-            }
-        }
-        // 同步回调
-        noticeInfo.setReturnUrl(payParam.getReturnUrl());
-        if (StrUtil.isBlank(noticeInfo.getReturnUrl())) {
-            noticeInfo.setReturnUrl(platform.getNotifyUrl());
-        }
-        // 退出回调地址
-        noticeInfo.setQuitUrl(payParam.getQuitUrl());
-    }
-
-
-    /**
      * 创建支付订单并保存, 返回支付订单
      */
     @Transactional(rollbackFor = Exception.class)
@@ -161,10 +121,9 @@ public class PayAssistService {
         }
 
         // 扩展信息
-        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         payOrderExtra.setClientIp(payParam.getClientIp())
-                .setNotifyUrl(noticeInfo.getNotifyUrl())
-                .setReturnUrl(noticeInfo.getReturnUrl())
+                .setNotifyUrl(payParam.getNotifyUrl())
+                .setReturnUrl(payParam.getReturnUrl())
                 .setAttach(payParam.getAttach())
                 .setClientIp(payParam.getClientIp())
                 .setReqTime(payParam.getReqTime());

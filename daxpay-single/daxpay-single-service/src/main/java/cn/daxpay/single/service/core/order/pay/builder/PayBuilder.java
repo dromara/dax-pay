@@ -4,7 +4,6 @@ import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.param.payment.pay.PayParam;
-import cn.daxpay.single.service.common.context.NoticeLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
@@ -59,11 +58,10 @@ public class PayBuilder {
      * @param payOrderId 支付订单id
      */
     public PayOrderExtra buildPayOrderExtra(PayParam payParam, Long payOrderId) {
-        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         PayOrderExtra payOrderExtra = new PayOrderExtra()
                 .setClientIp(payParam.getClientIp())
-                .setNotifyUrl(noticeInfo.getNotifyUrl())
-                .setReturnUrl(noticeInfo.getReturnUrl())
+                .setNotifyUrl(payParam.getNotifyUrl())
+                .setReturnUrl(payParam.getReturnUrl())
                 .setAttach(payParam.getAttach())
                 .setReqTime(payParam.getReqTime());
         // 扩展参数

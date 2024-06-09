@@ -2,11 +2,10 @@ package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.WeChatPayWay;
 import cn.daxpay.single.service.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.core.system.config.service.PayChannelConfigService;
 import cn.daxpay.single.service.param.channel.wechat.WeChatPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -41,10 +39,6 @@ public class WeChatPayConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void update(WeChatPayConfigParam param) {
         WeChatPayConfig weChatPayConfig = weChatPayConfigManager.findById(ID).orElseThrow(() -> new PayFailureException("微信支付配置不存在"));
-        // 启用或停用
-        if (!Objects.equals(param.getEnable(), weChatPayConfig.getEnable())){
-            payChannelConfigService.setEnable(PayChannelEnum.WECHAT.getCode(), param.getEnable());
-        }
         BeanUtil.copyProperties(param, weChatPayConfig, CopyOptions.create().ignoreNullValue());
         weChatPayConfigManager.updateById(weChatPayConfig);
     }

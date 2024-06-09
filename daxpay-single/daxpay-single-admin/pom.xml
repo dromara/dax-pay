@@ -47,13 +47,6 @@
             <version>${bootx-platform.version}</version>
         </dependency>
 
-        <!-- 消息通知 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>service-notice</artifactId>
-            <version>${bootx-platform.version}</version>
-        </dependency>
-
         <!-- 文件管理 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>

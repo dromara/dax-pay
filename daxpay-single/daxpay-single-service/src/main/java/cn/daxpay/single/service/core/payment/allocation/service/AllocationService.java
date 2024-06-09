@@ -74,7 +74,6 @@ public class AllocationService {
 
     private final LockTemplate lockTemplate;
 
-
     /**
      * 开启分账 多次请求只会分账一次
      * 优先级 分账接收方列表 > 分账组编号 > 默认分账组
@@ -83,7 +82,6 @@ public class AllocationService {
         // 判断是否已经有分账订单
         AllocationOrder allocationOrder = allocationOrderManager.findByBizAllocationNo(param.getBizAllocationNo())
                 .orElse(null);
-        allocationAssistService.initNotice(param);
         if (Objects.nonNull(allocationOrder)){
             // 重复分账
             return this.retryAllocation(param, allocationOrder);

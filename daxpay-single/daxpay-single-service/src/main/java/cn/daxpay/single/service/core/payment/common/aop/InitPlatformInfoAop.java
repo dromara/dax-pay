@@ -5,7 +5,6 @@ import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.system.config.dao.PayApiConfigManager;
 import cn.daxpay.single.service.core.system.config.entity.PayApiConfig;
-import cn.daxpay.single.service.core.system.config.service.PayApiConfigService;
 import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +25,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InitPlatformInfoAop {
 
-    private final PayApiConfigService payApiConfigService;
-
     private final PayApiConfigManager payApiConfigManager;
 
     private final PlatformConfigService platformConfigService;
@@ -44,8 +41,6 @@ public class InitPlatformInfoAop {
         if (!api.isEnable()){
             throw new PayFailureException("该接口权限未开放");
         }
-        // 设置接口信息
-        payApiConfigService.initApiInfo(api);
         // 初始化平台信息
         platformConfigService.initPlatform();
         return pjp.proceed();

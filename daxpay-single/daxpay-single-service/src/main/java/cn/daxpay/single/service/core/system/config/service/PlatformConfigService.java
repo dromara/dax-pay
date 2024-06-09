@@ -49,9 +49,10 @@ public class PlatformConfigService {
         PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
         platform.setSignType(config.getSignType());
         platform.setSignSecret(config.getSignSecret());
-        platform.setNotifyUrl(config.getNotifyUrl());
         platform.setOrderTimeout(config.getOrderTimeout());
         platform.setLimitAmount(config.getLimitAmount());
         platform.setWebsiteUrl(config.getWebsiteUrl());
+        platform.setNoticeType(config.getNotifyType());
+        platform.setNoticeUrl(config.getNotifyUrl());
     }
 }

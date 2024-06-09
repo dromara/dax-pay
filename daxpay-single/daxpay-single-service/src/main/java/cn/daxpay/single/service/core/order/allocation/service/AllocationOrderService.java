@@ -6,8 +6,6 @@ import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverParam;
 import cn.daxpay.single.param.payment.allocation.AllocationParam;
-import cn.daxpay.single.service.common.context.NoticeLocal;
-import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderExtraManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
@@ -180,9 +178,8 @@ public class AllocationOrderService {
 
         allocationOrder.setId(allocId);
         // 分账订单扩展
-        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
         AllocationOrderExtra extend = new AllocationOrderExtra()
-                .setNotifyUrl(noticeInfo.getNotifyUrl())
+                .setNotifyUrl(param.getNotifyUrl())
                 .setAttach(param.getAttach());
         extend.setId(allocId);
 

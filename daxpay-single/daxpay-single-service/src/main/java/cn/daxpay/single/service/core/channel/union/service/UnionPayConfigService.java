@@ -2,7 +2,6 @@ package cn.daxpay.single.service.core.channel.union.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.UnionPayWay;
 import cn.daxpay.single.service.core.channel.union.dao.UnionPayConfigManager;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -47,11 +45,6 @@ public class UnionPayConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void update(UnionPayConfigParam param) {
         UnionPayConfig unionPayConfig = unionPayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
-        // 启用或停用
-        if (!Objects.equals(param.getEnable(), unionPayConfig.getEnable())){
-            payChannelConfigService.setEnable(PayChannelEnum.UNION_PAY.getCode(), param.getEnable());
-        }
-
         BeanUtil.copyProperties(param, unionPayConfig, CopyOptions.create().ignoreNullValue());
         unionPayConfigManager.updateById(unionPayConfig);
     }
