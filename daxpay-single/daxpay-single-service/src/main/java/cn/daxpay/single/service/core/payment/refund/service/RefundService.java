@@ -13,10 +13,8 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
-import cn.daxpay.single.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.func.AbsRefundStrategy;
@@ -56,8 +54,6 @@ public class RefundService {
     private final PayOrderQueryService payOrderQueryService;
 
     private final TradeFlowRecordService tradeFlowRecordService;
-
-    private final RefundOrderExtraManager refundOrderExtraManager;
 
     private final LockTemplate lockTemplate;
 
@@ -154,15 +150,13 @@ public class RefundService {
         // 获取支付订单
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(refundOrder.getOrderNo(), refundOrder.getBizOrderNo())
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
-        RefundOrderExtra refundOrderExtra = refundOrderExtraManager.findById(refundOrder.getId())
-                .orElseThrow(() -> new DataNotExistException("退款订单扩展信息不存在"));
         AbsRefundStrategy refundStrategy = PayStrategyFactory.create(refundOrder.getChannel(), AbsRefundStrategy.class);
         // 设置退款订单对象
         refundStrategy.setRefundOrder(refundOrder);
         // 退款前准备操作
         refundStrategy.doBeforeRefundHandler();
         // 进行发起退款前的操作, 更新扩展记录信息
-        this.updateExtra(refundOrderExtra, param);
+        this.updateOrder(param,refundOrder);
         try {
             // 执行退款策略
             refundStrategy.doRefundHandler();
@@ -184,15 +178,15 @@ public class RefundService {
     /**
      * 更新退款订单扩展信息
      */
-    private void updateExtra(RefundOrderExtra refundOrderExtra, RefundParam param){
-        refundOrderExtra.setAttach(param.getAttach())
+    private void updateOrder(RefundParam param, RefundOrder order){
+        order.setAttach(param.getAttach())
                 .setClientIp(param.getClientIp())
                 .setNotifyUrl(param.getNotifyUrl())
                 .setReqTime(param.getReqTime());
         if (CollUtil.isNotEmpty(param.getExtraParam())){
-            refundOrderExtra.setExtraParam(JSONUtil.toJsonStr(param.getExtraParam()));
+            order.setExtraParam(JSONUtil.toJsonStr(param.getExtraParam()));
         }
-        refundOrderExtraManager.updateById(refundOrderExtra);
+        refundOrderManager.updateById(order);
     }
 
     /**
@@ -226,7 +220,7 @@ public class RefundService {
         // 发送通知
         List<String> list = Arrays.asList(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
         if (list.contains(refundOrder.getStatus())){
-            clientNoticeService.registerRefundNotice(refundOrder, refundInfo.getRunOrderExtra());
+            clientNoticeService.registerRefundNotice(refundOrder);
         }
     }
 

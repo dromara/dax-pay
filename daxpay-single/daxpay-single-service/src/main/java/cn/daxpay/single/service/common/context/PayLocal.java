@@ -1,7 +1,5 @@
 package cn.daxpay.single.service.common.context;
 
-import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -34,11 +32,5 @@ public class PayLocal {
 
     /** 订单超时时间, */
     private LocalDateTime expiredTime;
-
-    /** 支付订单 */
-    private PayOrder payOrder;
-
-    /** 支付订单扩展 */
-    private PayOrderExtra payOrderExtra;
 
 }

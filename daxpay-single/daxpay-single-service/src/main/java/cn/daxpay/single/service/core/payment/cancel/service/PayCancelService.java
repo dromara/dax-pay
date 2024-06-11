@@ -89,7 +89,7 @@ public class PayCancelService {
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);
         // 发送通知
-        clientsService.registerPayNotice(payOrder,null);
+        clientsService.registerPayNotice(payOrder);
         this.saveRecord(payOrder,true,null);
     }
 

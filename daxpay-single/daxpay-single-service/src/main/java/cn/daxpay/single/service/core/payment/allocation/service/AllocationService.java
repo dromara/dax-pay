@@ -17,11 +17,9 @@ import cn.daxpay.single.result.order.AllocOrderResult;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.convert.AllocationConvert;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
-import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderExtraManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderExtra;
 import cn.daxpay.single.service.core.order.allocation.entity.OrderAndDetail;
 import cn.daxpay.single.service.core.order.allocation.service.AllocationOrderService;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
@@ -69,8 +67,6 @@ public class AllocationService {
     private final AllocationAssistService allocationAssistService;
 
     private final PayOrderQueryService payOrderQueryService;
-
-    private final AllocationOrderExtraManager allocationOrderExtraManager;
 
     private final LockTemplate lockTemplate;
 
@@ -170,11 +166,8 @@ public class AllocationService {
             allocationStrategy.initParam(order, details);
             // 分账预处理
             allocationStrategy.doBeforeHandler();
-            // 查询扩展信息
-            AllocationOrderExtra orderExtra = allocationOrderExtraManager.findById(order.getId())
-                    .orElseThrow(() -> new PayFailureException("未查询到分账单扩展信息"));
             //  更新分账单扩展信息
-            allocationAssistService.updateOrder(param, orderExtra);
+            allocationAssistService.updateOrder(param, order);
             try {
                 // 重复分账处理
                 allocationStrategy.allocation();

@@ -23,7 +23,6 @@ public class PayParamSignTest {
 
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
 
         param.setBizOrderNo("P0001");
         param.setTitle("测试接口支付");

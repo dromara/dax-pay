@@ -3,10 +3,8 @@ package cn.daxpay.single.service.core.order.refund.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.single.param.payment.refund.RefundParam;
-import cn.daxpay.single.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.daxpay.single.service.core.payment.common.service.PaymentAssistService;
 import cn.daxpay.single.service.core.payment.refund.service.RefundService;
 import cn.daxpay.single.service.param.order.PayOrderRefundParam;
@@ -33,8 +31,6 @@ public class RefundOrderService {
     private final RefundService refundService;
 
     private final PaymentAssistService paymentAssistService;
-
-    private final RefundOrderExtraManager refundOrderExtraManager;
 
     private final RefundOrderManager refundOrderManager;
 
@@ -66,10 +62,6 @@ public class RefundOrderService {
     public void resetRefund(Long id){
 
         // 查询扩展信息
-        RefundOrderExtra refundOrderExtra = refundOrderExtraManager.findById(id)
-                .orElseThrow(() -> new DataNotExistException("未找到退款订单"));
-
-        // 查询扩展信息
         RefundOrder refundOrder = refundOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("未找到退款订单"));
 
@@ -80,8 +72,8 @@ public class RefundOrderService {
         RefundParam refundParam = new RefundParam();
         refundParam.setBizRefundNo(refundOrder.getBizRefundNo());
         // 回调通知
-        refundParam.setNotifyUrl(refundOrderExtra.getNotifyUrl());
-        refundParam.setAttach(refundOrderExtra.getAttach());
+        refundParam.setNotifyUrl(refundOrder.getNotifyUrl());
+        refundParam.setAttach(refundOrder.getAttach());
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
 

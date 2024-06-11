@@ -12,14 +12,11 @@ import cn.daxpay.single.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.result.sync.PaySyncResult;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.order.pay.service.PayOrderExtraService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
-import cn.daxpay.single.service.dto.order.pay.PayOrderAndExtraDto;
 import cn.daxpay.single.service.dto.order.pay.PayOrderDto;
-import cn.daxpay.single.service.dto.order.pay.PayOrderExtraDto;
 import cn.daxpay.single.service.param.order.PayOrderQuery;
 import cn.daxpay.single.util.OrderNoGenerateUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +38,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PayOrderController {
     private final PayOrderQueryService queryService;
-    private final PayOrderExtraService payOrderExtraService;
     private final PayCloseService payCloseService;
 
 
@@ -65,20 +61,11 @@ public class PayOrderController {
 
     @Operation(summary = "查询订单详情")
     @GetMapping("/findByOrderNo")
-    public ResResult<PayOrderAndExtraDto> findByOrderNo(String orderNo){
+    public ResResult<PayOrderDto> findByOrderNo(String orderNo){
         PayOrderDto order = queryService.findByOrderNo(orderNo)
                 .map(PayOrder::toDto)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
-        PayOrderAndExtraDto detailDto=new PayOrderAndExtraDto();
-        detailDto.setPayOrder(order);
-        detailDto.setPayOrderExtra(payOrderExtraService.findById(order.getId()));
-        return Res.ok(detailDto);
-    }
-
-    @Operation(summary = "查询支付订单扩展信息")
-    @GetMapping("/getExtraById")
-    public ResResult<PayOrderExtraDto> getExtraById(Long id){
-        return Res.ok(payOrderExtraService.findById(id));
+        return Res.ok(order);
     }
 
     @Operation(summary = "同步支付状态")

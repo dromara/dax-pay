@@ -39,9 +39,6 @@ public class AllocationParam extends DaxPayRequest<AllocationModel> {
     /** 分账接收方列表 */
     private List<AllocReceiverParam> receivers;
 
-    /** 是否不启用异步通知 */
-    private Boolean notNotify;
-
     /** 回调通知地址 */
     private String notifyUrl;
 

@@ -88,7 +88,7 @@ public class PayRepairService {
         // 设置修复iD
         repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
         // 发送通知
-        clientNoticeService.registerPayNotice(order, null);
+        clientNoticeService.registerPayNotice(order);
         this.saveRecord(order, repairType, repairResult);
         return repairResult;
     }

@@ -8,12 +8,9 @@ import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.refund.QueryRefundParam;
 import cn.daxpay.single.result.order.RefundOrderResult;
 import cn.daxpay.single.service.core.order.refund.convert.RefundOrderConvert;
-import cn.daxpay.single.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderDto;
-import cn.daxpay.single.service.dto.order.refund.RefundOrderExtraDto;
 import cn.daxpay.single.service.param.order.PayOrderQuery;
 import cn.daxpay.single.service.param.order.RefundOrderQuery;
 import cn.hutool.core.util.StrUtil;
@@ -35,7 +32,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RefundOrderQueryService {
     private final RefundOrderManager refundOrderManager;
-    private final RefundOrderExtraManager refundOrderExtraManager;
 
     /**
      * 分页查询
@@ -51,14 +47,6 @@ public class RefundOrderQueryService {
     public RefundOrderDto findById(Long id) {
         return refundOrderManager.findById(id).map(RefundOrder::toDto)
                 .orElseThrow(() -> new DataNotExistException("退款订单不存在"));
-    }
-
-    /**
-     * 根据id查询扩展信息
-     */
-    public RefundOrderExtraDto findExtraById(Long id) {
-        return refundOrderExtraManager.findById(id).map(RefundOrderExtra::toDto)
-                .orElseThrow(() -> new DataNotExistException("退款订单扩展信息不存在"));
     }
 
     /**

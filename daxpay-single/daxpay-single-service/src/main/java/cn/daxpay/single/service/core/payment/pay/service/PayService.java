@@ -1,19 +1,15 @@
 package cn.daxpay.single.service.core.payment.pay.service;
 
-import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.daxpay.single.exception.pay.PayUnsupportedMethodException;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.result.pay.PayResult;
 import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
-import cn.daxpay.single.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.func.AbsPayStrategy;
-import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.daxpay.single.util.PayUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -46,8 +42,6 @@ public class PayService {
     private final PayAssistService payAssistService;
 
     private final ClientNoticeService clientNoticeService;
-
-    private final PayOrderExtraManager payOrderExtraManager;
 
     private final TradeFlowRecordService tradeFlowRecordService;
 
@@ -138,7 +132,7 @@ public class PayService {
         // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
             tradeFlowRecordService.savePay(payOrder);
-            clientNoticeService.registerPayNotice(payOrder, payInfo.getPayOrderExtra());
+            clientNoticeService.registerPayNotice(payOrder);
         }
         return payAssistService.buildResult(payOrder);
     }
@@ -153,10 +147,8 @@ public class PayService {
         payStrategy.initPayParam(payOrder, payParam);
         // 执行支付前处理动作
         payStrategy.doBeforePayHandler();
-        // 查询订单扩展记录
-        PayOrderExtra payOrderExtra = payOrderExtraManager.findById(payOrder.getId()).orElseThrow(() -> new DataNotExistException("支付订单不完整"));
-        // 执行支付前的更新动作, 更新并保存订单和扩展的数据
-        payAssistService.updatePayOrder(payParam, payOrder, payOrderExtra);
+        // 执行支付前的更新动作, 更新并保存订单数据
+        payAssistService.updatePayOrder(payParam, payOrder);
 
         try {
             // 支付操作
@@ -168,14 +160,14 @@ public class PayService {
             throw e;
         }
         // 支付调起成功后操作, 使用事务来保证数据一致性
-        return SpringUtil.getBean(this.getClass()).repeatPaySuccess(payOrder, payOrderExtra);
+        return SpringUtil.getBean(this.getClass()).repeatPaySuccess(payOrder);
     }
 
     /**
      * 重复支付成功后操作
      */
     @Transactional(rollbackFor = Exception.class)
-    public PayResult repeatPaySuccess(PayOrder payOrder, PayOrderExtra payOrderExtra) {
+    public PayResult repeatPaySuccess(PayOrder payOrder) {
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         // 如果支付完成, 进行订单完成处理, 同时发送回调消息
         if (payInfo.isComplete()) {
@@ -191,7 +183,7 @@ public class PayService {
         // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), SUCCESS.getCode())){
             tradeFlowRecordService.savePay(payOrder);
-            clientNoticeService.registerPayNotice(payOrder, payOrderExtra);
+            clientNoticeService.registerPayNotice(payOrder);
         }
         return payAssistService.buildResult(payOrder);
     }

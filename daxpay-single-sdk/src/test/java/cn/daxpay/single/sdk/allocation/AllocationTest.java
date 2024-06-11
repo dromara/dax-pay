@@ -46,7 +46,6 @@ public class AllocationTest {
     public void allocationOrder() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
 
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试手动分账");
@@ -69,7 +68,6 @@ public class AllocationTest {
     public void allocationAutoOrder() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
 
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试手动分账");

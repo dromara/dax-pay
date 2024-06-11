@@ -11,9 +11,7 @@ import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.builder.PayBuilder;
-import cn.daxpay.single.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
@@ -47,8 +45,6 @@ public class PayAssistService {
     private final PayOrderService payOrderService;
 
     private final PayOrderQueryService payOrderQueryService;
-
-    private final PayOrderExtraManager payOrderExtraManager;
 
     /**
      * 初始化支付相关上下文
@@ -99,11 +95,6 @@ public class PayAssistService {
         // 构建支付订单并保存
         PayOrder order = PayBuilder.buildPayOrder(payParam);
         payOrderService.save(order);
-        // 构建支付订单扩展表并保存
-        PayOrderExtra payOrderExtra = PayBuilder.buildPayOrderExtra(payParam, order.getId());
-        payOrderExtraManager.save(payOrderExtra);
-        payInfo.setPayOrder(order)
-                .setPayOrderExtra(payOrderExtra);
         return order;
     }
 
@@ -111,30 +102,27 @@ public class PayAssistService {
      * 根据新传入的支付订单更新订单和扩展信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updatePayOrder(PayParam payParam,PayOrder order, PayOrderExtra payOrderExtra) {
+    public void updatePayOrder(PayParam payParam,PayOrder order) {
         // 订单信息
         order.setAllocation(payParam.getAllocation())
+                .setClientIp(payParam.getClientIp())
+                .setNotifyUrl(payParam.getNotifyUrl())
+                .setReturnUrl(payParam.getReturnUrl())
+                .setAttach(payParam.getAttach())
+                .setClientIp(payParam.getClientIp())
+                .setReqTime(payParam.getReqTime())
                 .setChannel(payParam.getChannel())
                 .setMethod(payParam.getMethod());
         if (!order.getAllocation()) {
             order.setAllocStatus(null);
         }
-
-        // 扩展信息
-        payOrderExtra.setClientIp(payParam.getClientIp())
-                .setNotifyUrl(payParam.getNotifyUrl())
-                .setReturnUrl(payParam.getReturnUrl())
-                .setAttach(payParam.getAttach())
-                .setClientIp(payParam.getClientIp())
-                .setReqTime(payParam.getReqTime());
         if (CollUtil.isNotEmpty(payParam.getExtraParam())){
-            payOrderExtra.setExtraParam(JSONUtil.toJsonStr(payParam.getExtraParam()));
+            order.setExtraParam(JSONUtil.toJsonStr(payParam.getExtraParam()));
         } else {
-            payOrderExtra.setExtraParam(null);
+            order.setExtraParam(null);
         }
 
         payOrderService.updateById(order);
-        payOrderExtraManager.updateById(payOrderExtra);
     }
 
     /**

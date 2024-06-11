@@ -113,5 +113,19 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "错误信息")
     private String errorMsg;
 
+    /** 支付终端ip */
+    @Schema(description = "支付终端ip")
+    private String clientIp;
 
+    /** 异步通知地址 */
+    @Schema(description = "异步通知地址，以最后一次为准")
+    private String notifyUrl;
+
+    /** 商户扩展参数,回调时会原样返回 */
+    @Schema(description = "商户扩展参数")
+    private String attach;
+
+    /** 请求时间，时间戳转时间, 以最后一次为准 */
+    @Schema(description = "请求时间，传输时间戳，以最后一次为准")
+    private LocalDateTime reqTime;
 }

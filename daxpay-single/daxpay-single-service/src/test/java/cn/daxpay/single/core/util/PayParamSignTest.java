@@ -23,7 +23,6 @@ class PayParamSignTest {
         PayParam payParam = new PayParam();
         payParam.setBizOrderNo("123");
         payParam.setClientIp("127.0.0.1");
-        payParam.setNotNotify(true);
         payParam.setNotifyUrl("http://127.0.0.1:8080/pay/notify");
         payParam.setReturnUrl("http://127.0.0.1:8080/pay/return");
         // 传入的话需要传输时间戳

@@ -13,10 +13,8 @@ import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.allocation.service.AllocationOrderQueryService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
-import cn.daxpay.single.service.dto.order.allocation.AllocationOrderAndExtraDto;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDto;
-import cn.daxpay.single.service.dto.order.allocation.AllocationOrderExtraDto;
 import cn.daxpay.single.service.param.order.AllocationOrderQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,12 +69,8 @@ public class AllocationOrderController {
 
     @Operation(summary = "查询扩展信息")
     @GetMapping("/findByAllocNo")
-    public ResResult<AllocationOrderAndExtraDto> findByAllocNo(String allocNo){
-        AllocationOrderAndExtraDto result = new AllocationOrderAndExtraDto();
-        AllocationOrderDto order = queryService.findByAllocNo(allocNo);
-        AllocationOrderExtraDto extra = queryService.findExtraById(order.getId());
-        result.setOrder(order).setExtra(extra);
-        return Res.ok(result);
+    public ResResult<AllocationOrderDto> findByAllocNo(String allocNo){
+        return Res.ok(queryService.findByAllocNo(allocNo));
     }
 
     @Operation(summary = "获取可以分账的通道")

@@ -193,7 +193,6 @@ public class AggregateService {
                 .orElse("127.0.0.1");
         payParam.setClientIp(ip);
         // 异步回调地址
-        payParam.setNotNotify(false);
         // 支付成功同步回调地址
         payParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
         // 中途退出 目前经测试不生效

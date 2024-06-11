@@ -11,10 +11,8 @@ import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.daxpay.single.util.OrderNoGenerateUtil;
 import cn.daxpay.single.util.PaySignUtil;
 import cn.hutool.core.util.StrUtil;
@@ -41,8 +39,6 @@ import static cn.daxpay.single.code.RefundStatusEnum.SUCCESS;
 @RequiredArgsConstructor
 public class RefundAssistService {
     private final RefundOrderManager refundOrderManager;
-
-    private final RefundOrderExtraManager refundOrderExtraManager;
 
     /**
      * 检查并处理退款参数
@@ -90,17 +86,12 @@ public class RefundAssistService {
                 .setOrderAmount(payOrder.getAmount())
                 .setAmount(refundParam.getAmount())
                 .setTitle(payOrder.getTitle())
-                .setReason(refundParam.getReason());
-        refundOrderManager.save(refundOrder);
-        // 生成退款扩展订单
-        RefundOrderExtra orderExtra = new RefundOrderExtra()
+                .setReason(refundParam.getReason())
                 .setClientIp(refundParam.getClientIp())
                 .setReqTime(refundParam.getReqTime())
                 .setAttach(refundParam.getAttach())
-                .setNotifyUrl(refundParam.getNotifyUrl());
-        orderExtra.setId(refundOrder.getId());
-
-        refundOrderExtraManager.save(orderExtra);
+                .setNotifyUrl(refundParam.getNotifyUrl());;
+        refundOrderManager.save(refundOrder);
         return refundOrder;
     }
 

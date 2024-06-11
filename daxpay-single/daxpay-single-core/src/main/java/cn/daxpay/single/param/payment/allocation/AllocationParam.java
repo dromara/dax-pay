@@ -47,10 +47,6 @@ public class AllocationParam extends PaymentCommonParam {
     @Valid
     private List<AllocReceiverParam> receivers;
 
-    /** 是否不启用异步通知 */
-    @Schema(description = "是否不启用异步通知")
-    private Boolean notNotify;
-
     /** 回调通知地址 */
     @Schema(description = "回调通知地址")
     private String notifyUrl;

@@ -149,7 +149,7 @@ public class AllocationSyncService {
         // 如果状态为完成, 发送通知
         if (Objects.equals(AllocOrderStatusEnum.ALLOCATION_END.getCode(), allocationOrder.getStatus())){
             // 发送通知
-            clientNoticeService.registerAllocNotice(allocationOrder, null, details);
+            clientNoticeService.registerAllocNotice(allocationOrder, details);
         }
     }
 

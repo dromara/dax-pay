@@ -67,4 +67,12 @@ public class TransferParam extends PaymentCommonParam {
     /** 收款人姓名 */
     @Schema(description = "收款人姓名")
     private String payeeName;
+
+    /** 回调通知地址 */
+    @Schema(description = "回调通知地址")
+    private String notifyUrl;
+
+    /** 商户扩展参数,回调时会原样返回 */
+    @Schema(description = "商户扩展参数,回调时会原样返回")
+    private String attach;
 }

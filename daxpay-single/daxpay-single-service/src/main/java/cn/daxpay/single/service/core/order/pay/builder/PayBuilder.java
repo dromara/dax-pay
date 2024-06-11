@@ -6,10 +6,7 @@ import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
 import cn.daxpay.single.util.OrderNoGenerateUtil;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
@@ -44,33 +41,16 @@ public class PayBuilder {
                 .setChannel(payParam.getChannel())
                 .setMethod(payParam.getMethod())
                 .setExpiredTime(expiredTime)
-                .setRefundableBalance(payParam.getAmount());
+                .setRefundableBalance(payParam.getAmount())
+                .setClientIp(payParam.getClientIp())
+                .setNotifyUrl(payParam.getNotifyUrl())
+                .setReturnUrl(payParam.getReturnUrl())
+                .setAttach(payParam.getAttach())
+                .setReqTime(payParam.getReqTime());
         // 如果支持分账, 设置分账状态为代分账
         if (payOrder.getAllocation()) {
             payOrder.setAllocStatus(PayOrderAllocStatusEnum.WAITING.getCode());
         }
         return payOrder;
     }
-
-    /**
-     * 构建支付订单的额外信息
-     * @param payParam 支付参数
-     * @param payOrderId 支付订单id
-     */
-    public PayOrderExtra buildPayOrderExtra(PayParam payParam, Long payOrderId) {
-        PayOrderExtra payOrderExtra = new PayOrderExtra()
-                .setClientIp(payParam.getClientIp())
-                .setNotifyUrl(payParam.getNotifyUrl())
-                .setReturnUrl(payParam.getReturnUrl())
-                .setAttach(payParam.getAttach())
-                .setReqTime(payParam.getReqTime());
-        // 扩展参数
-        if (CollUtil.isNotEmpty(payParam.getExtraParam())) {
-            payOrderExtra.setExtraParam(JSONUtil.toJsonStr(payParam.getExtraParam()));
-        }
-
-        payOrderExtra.setId(payOrderId);
-        return payOrderExtra;
-    }
-
 }

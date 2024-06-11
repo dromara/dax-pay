@@ -102,8 +102,4 @@ public class PayParam extends PaymentCommonParam {
     /** 异步通知地址 */
     @Schema(description = "异步通知地址")
     private String notifyUrl;
-
-    /** 是否不启用异步通知 */
-    @Schema(description = "是否不启用异步通知")
-    private Boolean notNotify;
 }

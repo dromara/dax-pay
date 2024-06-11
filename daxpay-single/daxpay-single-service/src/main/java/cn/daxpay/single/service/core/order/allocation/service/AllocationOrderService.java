@@ -7,11 +7,9 @@ import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverParam;
 import cn.daxpay.single.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
-import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderExtraManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderExtra;
 import cn.daxpay.single.service.core.order.allocation.entity.OrderAndDetail;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
@@ -49,8 +47,6 @@ public class AllocationOrderService {
     private final AllocationOrderDetailManager allocationOrderDetailManager;
 
     private final PayOrderManager payOrderManager;
-
-    private final AllocationOrderExtraManager allocationOrderExtraManager;
 
 
     /**
@@ -167,7 +163,10 @@ public class AllocationOrderService {
                 .setChannel(payOrder.getChannel())
                 .setDescription(param.getDescription())
                 .setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
-                .setAmount(sumAmount);
+                .setAmount(sumAmount)
+                .setNotifyUrl(param.getNotifyUrl())
+                .setAttach(param.getAttach())
+                .setClientIp(param.getClientIp());
         // 如果分账订单金额为0, 设置为忽略状态
         if (sumAmount == 0){
             allocationOrder.setStatus(AllocOrderStatusEnum.IGNORE.getCode())
@@ -177,17 +176,10 @@ public class AllocationOrderService {
         }
 
         allocationOrder.setId(allocId);
-        // 分账订单扩展
-        AllocationOrderExtra extend = new AllocationOrderExtra()
-                .setNotifyUrl(param.getNotifyUrl())
-                .setAttach(param.getAttach());
-        extend.setId(allocId);
-
         // 更新支付订单分账状态
         payOrder.setAllocStatus(PayOrderAllocStatusEnum.ALLOCATION.getCode());
         payOrderManager.updateById(payOrder);
         allocationOrderDetailManager.saveAll(details);
-        allocationOrderExtraManager.save(extend);
         allocationOrderManager.save(allocationOrder);
         return new OrderAndDetail().setOrder(allocationOrder).setDetails(details);
     }

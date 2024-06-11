@@ -7,7 +7,6 @@ import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.pay.QueryPayParam;
 import cn.daxpay.single.result.order.PayOrderResult;
 import cn.daxpay.single.service.core.order.pay.convert.PayOrderConvert;
-import cn.daxpay.single.service.core.order.pay.dao.PayOrderExtraManager;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.dto.order.pay.PayOrderDto;
@@ -31,7 +30,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PayOrderQueryService {
     private final PayOrderManager payOrderManager;
-    private final PayOrderExtraManager payOrderExtraManager;
 
     /**
      * 分页
@@ -86,9 +84,6 @@ public class PayOrderQueryService {
         // 查询支付单
         PayOrder payOrder = this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo())
                 .orElseThrow(() -> new PayFailureException("支付订单不存在"));
-        // 查询扩展数据
-        payOrderExtraManager.findById(payOrder.getId())
-                .orElseThrow(() -> new PayFailureException("支付订单不完整"));
         return PayOrderConvert.CONVERT.convertResult(payOrder);
     }
 

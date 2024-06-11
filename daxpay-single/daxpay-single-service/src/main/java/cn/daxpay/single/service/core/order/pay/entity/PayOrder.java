@@ -7,6 +7,9 @@ import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.param.channel.AliPayParam;
+import cn.daxpay.single.param.channel.WalletPayParam;
+import cn.daxpay.single.param.channel.WeChatPayParam;
 import cn.daxpay.single.service.core.order.pay.convert.PayOrderConvert;
 import cn.daxpay.single.service.dto.order.pay.PayOrderDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -131,6 +134,38 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     @DbColumn(comment = "错误信息")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
+
+    /** 同步跳转地址, 以最后一次为准 */
+    @DbColumn(comment = "同步跳转地址")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String returnUrl;
+
+    /** 异步通知地址,以最后一次为准 */
+    @DbColumn(comment = "异步通知地址")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String notifyUrl;
+
+    /**
+     * 附加参数 以最后一次为准
+     * @see AliPayParam
+     * @see WeChatPayParam
+     * @see WalletPayParam
+     */
+    @DbColumn(comment = "附加参数")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String extraParam;
+
+    /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
+    @DbColumn(comment = "商户扩展参数")
+    private String attach;
+
+    /** 请求时间，时间戳转时间, 以最后一次为准 */
+    @DbColumn(comment = "请求时间，传输时间戳，以最后一次为准")
+    private LocalDateTime reqTime;
+
+    /** 支付终端ip 以最后一次为准 */
+    @DbColumn(comment = "支付终端ip")
+    private String clientIp;
 
     /**
      * 如果

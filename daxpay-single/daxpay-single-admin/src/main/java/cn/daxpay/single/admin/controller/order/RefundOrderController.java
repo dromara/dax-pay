@@ -11,9 +11,7 @@ import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderService;
 import cn.daxpay.single.service.core.payment.sync.service.RefundSyncService;
-import cn.daxpay.single.service.dto.order.refund.RefundOrderAndExtraDto;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderDto;
-import cn.daxpay.single.service.dto.order.refund.RefundOrderExtraDto;
 import cn.daxpay.single.service.param.order.PayOrderQuery;
 import cn.daxpay.single.service.param.order.PayOrderRefundParam;
 import cn.daxpay.single.service.param.order.RefundOrderQuery;
@@ -45,12 +43,8 @@ public class RefundOrderController {
 
     @Operation(summary = "查询退款订单详情")
     @GetMapping("/findByRefundNo")
-    public ResResult<RefundOrderAndExtraDto> findByRefundNo(String refundNo){
-        RefundOrderDto order = queryService.findByRefundNo(refundNo);
-        RefundOrderAndExtraDto detailDto = new RefundOrderAndExtraDto();
-        detailDto.setRefundOrder(order);
-        detailDto.setRefundOrderExtra(queryService.findExtraById(order.getId()));
-        return Res.ok(detailDto);
+    public ResResult<RefundOrderDto> findByRefundNo(String refundNo){
+        return Res.ok(queryService.findByRefundNo(refundNo));
     }
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
@@ -58,12 +52,6 @@ public class RefundOrderController {
         return Res.ok(queryService.findById(id));
     }
 
-
-    @Operation(summary = "查询扩展信息")
-    @GetMapping("/findExtraById")
-    public ResResult<RefundOrderExtraDto> findExtraById(Long id){
-        return Res.ok(queryService.findExtraById(id));
-    }
 
     @InitPaymentContext(PaymentApiCode.REFUND)
     @Operation(summary = "手动发起退款")

@@ -109,6 +109,27 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "处理结果")
     private String result;
 
+    /** 分账完成时间 */
+    @DbColumn(comment = "分账完成时间")
+    private LocalDateTime finishTime;
+
+    /** 异步通知地址 */
+    @DbColumn(comment = "异步通知地址")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String notifyUrl;
+
+    /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
+    @DbColumn(comment = "商户扩展参数")
+    private String attach;
+
+    /** 请求时间，时间戳转时间 */
+    @DbColumn(comment = "请求时间，传输时间戳")
+    private LocalDateTime reqTime;
+
+    /** 终端ip */
+    @DbColumn(comment = "支付终端ip")
+    private String clientIp;
+
     /**
      * 错误码
      */
@@ -122,10 +143,6 @@ public class AllocationOrder extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "错误原因")
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
-
-    /** 分账完成时间 */
-    @DbColumn(comment = "分账完成时间")
-    private LocalDateTime finishTime;
 
     /**
      * 转换

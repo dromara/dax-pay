@@ -63,10 +63,6 @@ public class RefundParam extends PaymentCommonParam {
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;
 
-    /** 是否不启用异步通知 */
-    @Schema(description = "是否不启用异步通知")
-    private Boolean notNotify;
-
     /** 异步通知地址 */
     @Schema(description = "异步通知地址")
     private String notifyUrl;

@@ -16,4 +16,21 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Schema(title = "转账结果")
 public class TransferResult extends PaymentCommonResult {
+
+    /** 商户转账号 */
+    @Schema(description = "商户转账号")
+    private String bizTransferNo;
+
+    /** 转账号 */
+    @Schema(description = "转账号")
+    private String transferNo;
+
+    /**
+     * 状态
+     * @see cn.daxpay.single.code.TransferStatusEnum
+     */
+    @Schema(description = "状态")
+    private String status;
+
+
 }

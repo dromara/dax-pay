@@ -8,14 +8,11 @@ import cn.bootx.platform.common.core.util.ResultConvertUtil;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderDetailManager;
-import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderExtraManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderExtra;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDto;
-import cn.daxpay.single.service.dto.order.allocation.AllocationOrderExtraDto;
 import cn.daxpay.single.service.param.order.AllocationOrderQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +32,8 @@ import java.util.List;
 public class AllocationOrderQueryService {
 
     private final AllocationOrderDetailManager allocationOrderDetailManager;
+
     private final AllocationOrderManager allocationOrderManager;
-    private final AllocationOrderExtraManager allocationOrderExtraManager;
 
     /**
      * 获取可以分账的通道
@@ -83,11 +80,4 @@ public class AllocationOrderQueryService {
         return allocationOrderDetailManager.findById(id).map(AllocationOrderDetail::toDto).orElseThrow(() -> new DataNotExistException("分账订单明细不存在"));
     }
 
-    /**
-     * 查询扩展订单信息
-     */
-    public AllocationOrderExtraDto findExtraById(Long id) {
-        return allocationOrderExtraManager.findById(id).map(AllocationOrderExtra::toDto)
-                .orElseThrow(() -> new DataNotExistException("未找到"));
-    }
 }

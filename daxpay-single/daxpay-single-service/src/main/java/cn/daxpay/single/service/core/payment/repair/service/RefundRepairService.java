@@ -87,7 +87,7 @@ public class RefundRepairService {
             PayRepairRecord refundRepairRecord = this.refundRepairRecord(refundOrder, repairType, repairResult);
 
             // 发送通知
-            clientNoticeService.registerRefundNotice(refundOrder, null);
+            clientNoticeService.registerRefundNotice(refundOrder);
             recordService.saveAllRecord(Arrays.asList(payRepairRecord, refundRepairRecord));
             return repairResult;
         } finally {
@@ -126,7 +126,7 @@ public class RefundRepairService {
         // 发送通知
         List<String> list = Arrays.asList(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
         if (list.contains(refundOrder.getStatus())){
-            clientNoticeService.registerRefundNotice(refundOrder, null);
+            clientNoticeService.registerRefundNotice(refundOrder);
         }
 
         return new RefundRepairResult()
