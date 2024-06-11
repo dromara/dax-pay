@@ -5,7 +5,6 @@ import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.code.RefundSyncStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.exception.pay.PayUnsupportedMethodException;
 import cn.daxpay.single.param.payment.refund.RefundSyncParam;
 import cn.daxpay.single.result.sync.RefundSyncResult;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
@@ -23,12 +22,10 @@ import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
 import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
 import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
-import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -203,7 +200,7 @@ public class RefundSyncService {
                 .setRepair(repair)
                 .setRepairNo(repairOrderNo)
                 .setErrorMsg(errorMsg)
-                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
+                .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
 

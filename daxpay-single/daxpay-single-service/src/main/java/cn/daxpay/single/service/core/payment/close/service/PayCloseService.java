@@ -105,7 +105,7 @@ public class PayCloseService {
      */
     private void saveRecord(PayOrder payOrder, boolean closed, String errMsg){
         String clientIp = PaymentContextLocal.get()
-                .getRequestInfo()
+                .getClientInfo()
                 .getClientIp();
         PayCloseRecord record = new PayCloseRecord()
                 .setOrderNo(payOrder.getOrderNo())

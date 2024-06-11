@@ -243,7 +243,7 @@ public class PaySyncService {
                 .setRepair(repair)
                 .setRepairNo(repairOrderNo)
                 .setErrorMsg(errorMsg)
-                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
+                .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
 

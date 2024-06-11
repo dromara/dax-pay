@@ -10,7 +10,7 @@ import cn.daxpay.single.service.core.order.pay.convert.PayOrderConvert;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.refund.convert.RefundOrderConvert;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.payment.common.service.PaymentSignService;
+import cn.daxpay.single.service.core.payment.common.service.PaymentAssistService;
 import cn.daxpay.single.service.core.payment.notice.result.AllocDetailNoticeResult;
 import cn.daxpay.single.service.core.payment.notice.result.AllocNoticeResult;
 import cn.daxpay.single.service.core.payment.notice.result.PayNoticeResult;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClientNoticeAssistService {
 
-    private final PaymentSignService paymentSignService;
+    private final PaymentAssistService paymentAssistService;
 
     /**
      * 构建出支付通知任务对象
@@ -40,7 +40,7 @@ public class ClientNoticeAssistService {
     public ClientNoticeTask buildPayTask(PayOrder order){
         PayNoticeResult payNoticeResult = PayOrderConvert.CONVERT.convertNotice(order);
         payNoticeResult.setAttach(order.getAttach());
-        paymentSignService.sign(payNoticeResult);
+        paymentAssistService.sign(payNoticeResult);
         return new ClientNoticeTask()
                 .setUrl(order.getNotifyUrl())
                 // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
@@ -60,7 +60,7 @@ public class ClientNoticeAssistService {
         RefundNoticeResult refundNoticeResult = RefundOrderConvert.CONVERT.convertNotice(order);
         refundNoticeResult.setAttach(order.getAttach());
         // 签名
-        paymentSignService.sign(refundNoticeResult);
+        paymentAssistService.sign(refundNoticeResult);
         return new ClientNoticeTask()
                 .setUrl(order.getNotifyUrl())
                 // 时间序列化进行了重写
@@ -86,7 +86,7 @@ public class ClientNoticeAssistService {
         allocOrderResult.setAttach(order.getAttach())
                 .setDetails(details);
         // 签名
-        paymentSignService.sign(allocOrderResult);
+        paymentAssistService.sign(allocOrderResult);
         return new ClientNoticeTask()
                 .setUrl(order.getNotifyUrl())
                 // 时间序列化进行了重写

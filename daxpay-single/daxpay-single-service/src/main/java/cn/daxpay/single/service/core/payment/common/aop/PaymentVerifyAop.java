@@ -5,8 +5,8 @@ import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.PaymentCommonParam;
 import cn.daxpay.single.result.PaymentCommonResult;
-import cn.daxpay.single.service.annotation.PaymentSign;
-import cn.daxpay.single.service.core.payment.common.service.PaymentSignService;
+import cn.daxpay.single.service.annotation.PaymentVerify;
+import cn.daxpay.single.service.core.payment.common.service.PaymentAssistService;
 import cn.daxpay.single.util.DaxRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +27,11 @@ import org.springframework.stereotype.Component;
 @Component
 @Order()
 @RequiredArgsConstructor
-public class PaymentVerifySignAop {
-    private final PaymentSignService paymentSignService;
+public class PaymentVerifyAop {
+    private final PaymentAssistService paymentAssistService;
 
-    @Around("@annotation(paymentSign)")
-    public Object beforeMethod(ProceedingJoinPoint pjp, @SuppressWarnings("unused") PaymentSign paymentSign) throws Throwable {
+    @Around("@annotation(paymentVerify)")
+    public Object beforeMethod(ProceedingJoinPoint pjp, @SuppressWarnings("unused") PaymentVerify paymentVerify) throws Throwable {
         Object[] args = pjp.getArgs();
         if (args.length == 0){
             throw new PayFailureException("支付方法至少有一个参数，并且需要签名支付参数需要放在第一位");
@@ -40,8 +40,14 @@ public class PaymentVerifySignAop {
         if (param instanceof PaymentCommonParam){
             // 参数校验
             ValidationUtil.validateParam(param);
-            // 参数验签
-            paymentSignService.verifySign((PaymentCommonParam) param);
+
+            // 请求上下文初始化
+            paymentAssistService.initRequest((PaymentCommonParam) param);
+            // 参数签名校验
+            paymentAssistService.signVerify((PaymentCommonParam) param);
+            // 参数请求时间校验
+            paymentAssistService.reqTimeoutVerify((PaymentCommonParam) param);
+
         } else {
             throw new PayFailureException("支付参数需要继承PayCommonParam");
         }
@@ -54,14 +60,14 @@ public class PaymentVerifySignAop {
             // todo 后期错误码统一管理后进行更改
             commonResult.setCode(1);
             commonResult.setMsg(ex.getMessage());
-            paymentSignService.sign(commonResult);
+            paymentAssistService.sign(commonResult);
             return DaxRes.ok(commonResult);
         }
         // 对返回值进行签名
         if (proceed instanceof ResResult){
             Object data = ((ResResult<?>) proceed).getData();
             if (data instanceof PaymentCommonResult){
-                paymentSignService.sign((PaymentCommonResult) data);
+                paymentAssistService.sign((PaymentCommonResult) data);
             } else {
                 throw new PayFailureException("支付方法返回类型需要为 ResResult<T extends PaymentCommonResult> 格式");
             }

@@ -167,7 +167,7 @@ public class AllocationSyncService {
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setErrorCode(errorCode)
                 .setErrorMsg(errorMsg)
-                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
+                .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
 }

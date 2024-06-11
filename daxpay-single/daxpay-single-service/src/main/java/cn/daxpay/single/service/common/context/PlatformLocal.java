@@ -28,6 +28,13 @@ public class PlatformLocal {
     /** 是否对请求进行验签 */
     private boolean reqSign;
 
+    /**
+     * 请求有效时长(秒)
+     * 如果传输的请求时间早于当前服务时间, 而且差值超过配置的时长, 将会请求失败
+     * 如果传输的请求时间比服务时间大于配置的时长(超过一分钟), 将会请求失败
+     */
+    private Integer reqTimeout;
+
     /** 消息通知方式 */
     private String noticeType;
 

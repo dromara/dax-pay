@@ -15,6 +15,9 @@ public class PaymentContext {
     /** 平台全局配置 */
     private final PlatformLocal platformInfo = new PlatformLocal();
 
+    /** 请求终端信息 */
+    private final ClientLocal clientInfo = new ClientLocal();
+
     /** 支付相关信息 */
     private final PayLocal payInfo = new PayLocal();
 
@@ -23,12 +26,6 @@ public class PaymentContext {
 
     /** 回调相关信息 */
     private final CallbackLocal callbackInfo = new CallbackLocal();
-
-    /** 请求相关信息 */
-    private final RequestLocal requestInfo = new RequestLocal();
-
-    /** 支付同步相关信息 */
-    private final PaySyncLocal paySyncInfo = new PaySyncLocal();
 
     /** 修复相关信息 */
     private final RepairLocal repairInfo = new RepairLocal();

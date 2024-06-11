@@ -4,11 +4,15 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 退款请求上下文
+ * 支付请求相关信息
  * @author xxm
- * @since 2023/12/26
+ * @since 2023/12/25
  */
 @Data
 @Accessors(chain = true)
-public class RefundRequestLocal {
+public class ClientLocal {
+
+    /** 客户端ip */
+    private String clientIp;
+
 }

@@ -10,7 +10,7 @@ import cn.daxpay.single.result.DaxResult;
 import cn.daxpay.single.result.allocation.AllocReceiverAddResult;
 import cn.daxpay.single.result.allocation.AllocReceiverRemoveResult;
 import cn.daxpay.single.result.allocation.AllocationResult;
-import cn.daxpay.single.service.annotation.PaymentSign;
+import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
@@ -39,7 +39,7 @@ public class UniAllocationController {
 
     private final AllocationReceiverService receiverService;
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.ALLOCATION)
     @Operation(summary = "发起分账接口")
     @PostMapping("/start")
@@ -47,7 +47,7 @@ public class UniAllocationController {
         return DaxRes.ok(allocationService.allocation(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.ALLOCATION_FINISH)
     @Operation(summary = "分账完结接口")
     @PostMapping("/finish")
@@ -55,7 +55,7 @@ public class UniAllocationController {
         return DaxRes.ok(allocationService.finish(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.ALLOCATION_RECEIVER_ADD)
     @Operation(summary = "分账接收方添加接口")
     @PostMapping("/receiver/add")
@@ -63,7 +63,7 @@ public class UniAllocationController {
         return DaxRes.ok(receiverService.addAndSync(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.ALLOCATION_RECEIVER_REMOVE)
     @Operation(summary = "分账接收方删除接口")
     @PostMapping("/receiver/remove")

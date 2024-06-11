@@ -9,7 +9,7 @@ import cn.daxpay.single.result.DaxResult;
 import cn.daxpay.single.result.sync.AllocSyncResult;
 import cn.daxpay.single.result.sync.PaySyncResult;
 import cn.daxpay.single.result.sync.RefundSyncResult;
-import cn.daxpay.single.service.annotation.PaymentSign;
+import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
@@ -39,7 +39,7 @@ public class UniPaySyncController {
     private final RefundSyncService refundSyncService;
     private final AllocationSyncService allocationSyncService;
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.SYNC_PAY)
     @Operation(summary = "支付同步接口")
     @PostMapping("/pay")
@@ -47,7 +47,7 @@ public class UniPaySyncController {
         return DaxRes.ok(paySyncService.sync(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.SYNC_REFUND)
     @Operation(summary = "退款同步接口")
     @PostMapping("/refund")
@@ -56,7 +56,7 @@ public class UniPaySyncController {
     }
 
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.SYNC_ALLOCATION)
     @Operation(summary = "分账同步接口")
     @PostMapping("/allocation")
@@ -64,7 +64,7 @@ public class UniPaySyncController {
         return DaxRes.ok(allocationSyncService.sync(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.SYNC_TRANSFER)
     @Operation(summary = "转账同步接口")
     @PostMapping("/transfer")

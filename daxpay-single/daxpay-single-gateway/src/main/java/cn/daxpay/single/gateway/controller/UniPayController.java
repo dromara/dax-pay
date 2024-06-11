@@ -13,7 +13,7 @@ import cn.daxpay.single.result.pay.PayCloseResult;
 import cn.daxpay.single.result.pay.PayResult;
 import cn.daxpay.single.result.pay.RefundResult;
 import cn.daxpay.single.result.transfer.TransferResult;
-import cn.daxpay.single.service.annotation.PaymentSign;
+import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.payment.cancel.service.PayCancelService;
 import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
@@ -46,7 +46,7 @@ public class UniPayController {
     private final PayCancelService payCancelService;
     private final TransferService transferService;
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.PAY)
     @Operation(summary = "统一支付接口")
     @PostMapping("/pay")
@@ -54,7 +54,7 @@ public class UniPayController {
         return DaxRes.ok(payService.pay(payParam));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.CLOSE)
     @Operation(summary = "支付关闭接口")
     @PostMapping("/close")
@@ -62,7 +62,7 @@ public class UniPayController {
         return DaxRes.ok(payCloseService.close(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.CANCEL)
     @Operation(summary = "支付撤销接口")
     @PostMapping("/cancel")
@@ -70,7 +70,7 @@ public class UniPayController {
         return DaxRes.ok(payCancelService.cancel(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.REFUND)
     @Operation(summary = "统一退款接口")
     @PostMapping("/refund")
@@ -78,7 +78,7 @@ public class UniPayController {
         return DaxRes.ok(refundService.refund(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.TRANSFER)
     @Operation(summary = "统一转账接口")
     @PostMapping("/transfer")

@@ -24,6 +24,14 @@ public class PlatformConfigParam {
     private boolean reqSign;
 
     /**
+     * 请求有效时长(秒)
+     * 如果传输的请求时间早于当前服务时间, 而且差值超过配置的时长, 将会请求失败
+     * 如果传输的请求时间比服务时间大于配置的时长(超过一分钟), 将会请求失败
+     */
+    @Schema(description = "请求有效时长(秒)")
+    private Integer reqTimeout;
+
+    /**
      * @see PaySignTypeEnum
      */
     @Schema(description = "签名方式")

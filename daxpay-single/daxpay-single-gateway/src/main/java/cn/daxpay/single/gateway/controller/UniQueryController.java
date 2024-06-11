@@ -13,7 +13,7 @@ import cn.daxpay.single.result.order.AllocOrderResult;
 import cn.daxpay.single.result.allocation.AllocReceiversResult;
 import cn.daxpay.single.result.order.PayOrderResult;
 import cn.daxpay.single.result.order.RefundOrderResult;
-import cn.daxpay.single.service.annotation.PaymentSign;
+import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
@@ -46,7 +46,7 @@ public class UniQueryController {
     private final AllocationReceiverService allocationReceiverService;
     private final AllocationService allocationService;
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.QUERY_PAY_ORDER)
     @Operation(summary = "支付订单查询接口")
     @PostMapping("/payOrder")
@@ -54,7 +54,7 @@ public class UniQueryController {
         return DaxRes.ok(payOrderQueryService.queryPayOrder(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.QUERY_REFUND_ORDER)
     @Operation(summary = "退款订单查询接口")
     @PostMapping("/refundOrder")
@@ -62,7 +62,7 @@ public class UniQueryController {
         return DaxRes.ok(refundOrderQueryService.queryRefundOrder(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.QUERY_ALLOCATION_ORDER)
     @Operation(summary = "分账订单查询接口")
     @PostMapping("/allocationOrder")
@@ -70,7 +70,7 @@ public class UniQueryController {
         return DaxRes.ok(allocationService.queryAllocationOrder(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.QUERY_TRANSFER_ORDER)
     @Operation(summary = "转账订单查询接口")
     @PostMapping("/transferOrder")
@@ -78,7 +78,7 @@ public class UniQueryController {
         return DaxRes.ok();
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.QUERY_ALLOCATION_RECEIVER)
     @Operation(summary = "分账接收方查询接口")
     @PostMapping("/allocationReceiver")

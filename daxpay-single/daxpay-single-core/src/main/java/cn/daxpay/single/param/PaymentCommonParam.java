@@ -23,6 +23,10 @@ public abstract class PaymentCommonParam {
     @IpAddress
     private String clientIp;
 
+    /** 随机数 */
+    @Schema(description = "随机数")
+    private String nonceStr;
+
     /** 签名 */
     @Schema(description = "签名")
     private String sign;
