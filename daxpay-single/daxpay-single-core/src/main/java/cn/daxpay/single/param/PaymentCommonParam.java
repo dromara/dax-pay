@@ -1,6 +1,7 @@
 package cn.daxpay.single.param;
 
 import cn.daxpay.single.serializer.TimestampToLocalDateTimeDeserializer;
+import cn.bootx.platform.common.core.validation.IpAddress;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -19,6 +20,7 @@ public abstract class PaymentCommonParam {
 
     /** 客户端ip */
     @Schema(description = "客户端ip")
+    @IpAddress
     private String clientIp;
 
     /** 签名 */
