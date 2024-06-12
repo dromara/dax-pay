@@ -53,8 +53,6 @@ public class PayService {
     public PayResult pay(PayParam payParam){
         // 创建返回类
         PayResult payResult = new PayResult();
-        // 支付参数检查
-        PayUtil.validation(payParam);
         // 校验支付限额
         payAssistService.validationLimitAmount(payParam);
         // 获取商户订单号

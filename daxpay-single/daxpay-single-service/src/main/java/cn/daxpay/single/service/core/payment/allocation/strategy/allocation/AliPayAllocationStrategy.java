@@ -60,7 +60,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void allocation() {
-        aliPayAllocationService.allocation(this.getAllocationOrder(), this.getAllocationOrderDetails());
+        aliPayAllocationService.allocation(this.getAllocOrder(), this.getAllocOrderDetails());
     }
 
     /**
@@ -68,7 +68,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void finish() {
-        aliPayAllocationService.finish(this.getAllocationOrder(), this.getAllocationOrderDetails());
+        aliPayAllocationService.finish(this.getAllocOrder(), this.getAllocOrderDetails());
     }
 
     /**
@@ -76,7 +76,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public AllocRemoteSyncResult doSync() {
-        return aliPayAllocationService.sync(this.getAllocationOrder(), this.getAllocationOrderDetails());
+        return aliPayAllocationService.sync(this.getAllocOrder(), this.getAllocOrderDetails());
     }
 
 }

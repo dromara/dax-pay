@@ -10,12 +10,12 @@ import cn.daxpay.single.param.payment.allocation.AllocFinishParam;
 import cn.daxpay.single.param.payment.allocation.AllocSyncParam;
 import cn.daxpay.single.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
-import cn.daxpay.single.service.core.order.allocation.service.AllocationOrderQueryService;
+import cn.daxpay.single.service.core.order.allocation.service.AllocOrderQueryService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
+import cn.daxpay.single.service.dto.order.allocation.AllocOrderDto;
 import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
-import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDto;
-import cn.daxpay.single.service.param.order.AllocationOrderQuery;
+import cn.daxpay.single.service.param.order.AllocOrderQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AllocationOrderController {
 
-    private final AllocationOrderQueryService queryService;
+    private final AllocOrderQueryService queryService;
 
     private final AllocationService allocationService;
 
@@ -45,7 +45,7 @@ public class AllocationOrderController {
 
     @Operation(summary = "分页")
     @GetMapping("/page")
-    public ResResult<PageResult<AllocationOrderDto>> page(PageParam pageParam, AllocationOrderQuery param){
+    public ResResult<PageResult<AllocOrderDto>> page(PageParam pageParam, AllocOrderQuery param){
         return Res.ok(queryService.page(pageParam,param));
     }
 
@@ -57,7 +57,7 @@ public class AllocationOrderController {
 
     @Operation(summary = "查询详情")
     @GetMapping("/findById")
-    public ResResult<AllocationOrderDto> findById(Long id){
+    public ResResult<AllocOrderDto> findById(Long id){
         return Res.ok(queryService.findById(id));
     }
 
@@ -69,7 +69,7 @@ public class AllocationOrderController {
 
     @Operation(summary = "查询扩展信息")
     @GetMapping("/findByAllocNo")
-    public ResResult<AllocationOrderDto> findByAllocNo(String allocNo){
+    public ResResult<AllocOrderDto> findByAllocNo(String allocNo){
         return Res.ok(queryService.findByAllocNo(allocNo));
     }
 

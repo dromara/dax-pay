@@ -8,8 +8,8 @@ import cn.daxpay.single.service.core.notice.dao.ClientNoticeTaskManager;
 import cn.daxpay.single.service.core.notice.entity.ClientNoticeRecord;
 import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
 import cn.daxpay.single.service.core.notice.service.ClientNoticeRecordService;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.hutool.core.util.StrUtil;
@@ -128,7 +128,7 @@ public class ClientNoticeService {
      * 注册分账消息通知任务
      */
     @Async("bigExecutor")
-    public void registerAllocNotice(AllocationOrder order, List<AllocationOrderDetail> list) {
+    public void registerAllocNotice(AllocOrder order, List<AllocOrderDetail> list) {
         // 判断是否需要进行通知
         if (StrUtil.isBlank(order.getNotifyUrl())){
             log.info("分账订单无需通知，订单ID：{}",order.getId());

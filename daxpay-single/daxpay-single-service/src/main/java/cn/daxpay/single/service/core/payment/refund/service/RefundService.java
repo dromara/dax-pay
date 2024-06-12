@@ -1,7 +1,6 @@
 package cn.daxpay.single.service.core.payment.refund.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.code.RefundStatusEnum;
@@ -20,7 +19,6 @@ import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.func.AbsRefundStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.hutool.extra.spring.SpringUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -182,10 +180,8 @@ public class RefundService {
         order.setAttach(param.getAttach())
                 .setClientIp(param.getClientIp())
                 .setNotifyUrl(param.getNotifyUrl())
-                .setReqTime(param.getReqTime());
-        if (CollUtil.isNotEmpty(param.getExtraParam())){
-            order.setExtraParam(JSONUtil.toJsonStr(param.getExtraParam()));
-        }
+                .setReqTime(param.getReqTime())
+                .setExtraParam(param.getExtraParam());
         refundOrderManager.updateById(order);
     }
 

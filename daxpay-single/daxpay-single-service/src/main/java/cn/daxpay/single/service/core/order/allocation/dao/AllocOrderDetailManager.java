@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.order.allocation.dao;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -16,12 +16,12 @@ import java.util.List;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class AllocationOrderDetailManager extends BaseManager<AllocationOrderDetailMapper, AllocationOrderDetail> {
+public class AllocOrderDetailManager extends BaseManager<AllocOrderDetailMapper, AllocOrderDetail> {
 
     /**
      * 根据订单ID查询
      */
-    public List<AllocationOrderDetail> findAllByOrderId(Long orderId) {
-        return findAllByField(AllocationOrderDetail::getAllocationId, orderId);
+    public List<AllocOrderDetail> findAllByOrderId(Long orderId) {
+        return findAllByField(AllocOrderDetail::getAllocationId, orderId);
     }
 }

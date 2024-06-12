@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "分账订单查询参数")
-public class AllocationOrderQuery {
+public class AllocOrderQuery {
 
     @Schema(description = "分账订单号")
     private String orderNo;

@@ -6,8 +6,8 @@ import cn.daxpay.single.code.AllocDetailResultEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
@@ -46,11 +46,11 @@ public class AliPayAllocationService {
      * 发起分账
      */
     @SneakyThrows
-    public void allocation(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails){
+    public void allocation(AllocOrder allocOrder, List<AllocOrderDetail> orderDetails){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(allocationOrder.getAllocNo());
-        model.setTradeNo(allocationOrder.getOutOrderNo());
+        model.setOutRequestNo(allocOrder.getAllocNo());
+        model.setTradeNo(allocOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
 
         // 分账子参数 根据Id排序
@@ -76,11 +76,11 @@ public class AliPayAllocationService {
      * 分账完结
      */
     @SneakyThrows
-    public void finish(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails ){
+    public void finish(AllocOrder allocOrder, List<AllocOrderDetail> orderDetails ){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
-        model.setOutRequestNo(String.valueOf(allocationOrder.getAllocNo()));
-        model.setTradeNo(allocationOrder.getOutOrderNo());
+        model.setOutRequestNo(String.valueOf(allocOrder.getAllocNo()));
+        model.setTradeNo(allocOrder.getOutOrderNo());
         model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
         // 分账完结参数
         SettleExtendParams extendParams = new SettleExtendParams();
@@ -106,21 +106,21 @@ public class AliPayAllocationService {
      * 分账状态同步
      */
     @SneakyThrows
-    public AllocRemoteSyncResult sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails){
+    public AllocRemoteSyncResult sync(AllocOrder allocOrder, List<AllocOrderDetail> allocOrderDetails){
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
-        model.setTradeNo(allocationOrder.getOutOrderNo());
-        model.setOutRequestNo(allocationOrder.getAllocNo());
+        model.setTradeNo(allocOrder.getOutOrderNo());
+        model.setOutRequestNo(allocOrder.getAllocNo());
         AlipayTradeOrderSettleQueryRequest request = new AlipayTradeOrderSettleQueryRequest();
         request.setBizModel(model);
         AlipayTradeOrderSettleQueryResponse response = AliPayApi.execute(request);
         // 验证
         this.verifyErrorMsg(response);
-        Map<String, AllocationOrderDetail> detailMap = allocationOrderDetails.stream()
-                .collect(Collectors.toMap(AllocationOrderDetail::getReceiverAccount, Function.identity(), CollectorsFunction::retainLatest));
+        Map<String, AllocOrderDetail> detailMap = allocOrderDetails.stream()
+                .collect(Collectors.toMap(AllocOrderDetail::getReceiverAccount, Function.identity(), CollectorsFunction::retainLatest));
         List<RoyaltyDetail> royaltyDetailList = response.getRoyaltyDetailList();
         // 转换成通用的明细详情
         for (RoyaltyDetail receiver : royaltyDetailList) {
-            AllocationOrderDetail detail = detailMap.get(receiver.getTransIn());
+            AllocOrderDetail detail = detailMap.get(receiver.getTransIn());
             if (Objects.nonNull(detail)) {
                 detail.setResult(this.getDetailResultEnum(receiver.getState()).getCode());
                 detail.setErrorCode(receiver.getErrorCode());

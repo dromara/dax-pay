@@ -1,8 +1,6 @@
 package cn.daxpay.single.util;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.exception.pay.PayAmountAbnormalException;
-import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.hutool.core.date.DatePattern;
 import lombok.experimental.UtilityClass;
 
@@ -19,24 +17,6 @@ import java.time.temporal.ChronoUnit;
 @UtilityClass
 public class PayUtil {
     private static final BigDecimal HUNDRED = new BigDecimal(100);
-
-    /**
-     * 校验参数
-     */
-    public void validation(PayParam payParam) {
-        // 验证支付金额
-        validationAmount(payParam);
-    }
-
-    /**
-     * 检查支付金额
-     */
-    public void validationAmount(PayParam param) {
-        // 验证支付金额
-        if (param.getAmount() <= 0) {
-            throw new PayAmountAbnormalException("支付金额不能小于等于0");
-        }
-    }
 
     /**
      * 获取支付宝的过期时间 yyyy-MM-dd HH:mm:ss

@@ -9,13 +9,13 @@ import cn.daxpay.single.code.DaxPayErrorCode;
  * @author xxm
  * @since 2020/12/8
  */
-public class PayAmountAbnormalException extends FatalException {
+public class AmountAbnormalException extends FatalException {
 
-    public PayAmountAbnormalException(String msg) {
+    public AmountAbnormalException(String msg) {
         super(DaxPayErrorCode.PAYMENT_AMOUNT_ABNORMAL, msg);
     }
 
-    public PayAmountAbnormalException() {
+    public AmountAbnormalException() {
         super(DaxPayErrorCode.PAYMENT_AMOUNT_ABNORMAL, "异常金额");
     }
 

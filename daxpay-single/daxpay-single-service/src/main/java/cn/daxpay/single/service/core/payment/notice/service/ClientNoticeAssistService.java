@@ -3,9 +3,9 @@ package cn.daxpay.single.service.core.payment.notice.service;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.daxpay.single.service.code.ClientNoticeTypeEnum;
 import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
-import cn.daxpay.single.service.core.order.allocation.convert.AllocationConvert;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.convert.AllocOrderConvert;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.order.pay.convert.PayOrderConvert;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.refund.convert.RefundOrderConvert;
@@ -75,12 +75,12 @@ public class ClientNoticeAssistService {
     /**
      * 构建分账通知
      */
-    public ClientNoticeTask buildAllocTask(AllocationOrder order, List<AllocationOrderDetail> list){
+    public ClientNoticeTask buildAllocTask(AllocOrder order, List<AllocOrderDetail> list){
         // 分账
-        AllocNoticeResult allocOrderResult = AllocationConvert.CONVERT.toNotice(order);
+        AllocNoticeResult allocOrderResult = AllocOrderConvert.CONVERT.toNotice(order);
         // 分账详情
         List<AllocDetailNoticeResult> details = list.stream()
-                .map(AllocationConvert.CONVERT::toNotice)
+                .map(AllocOrderConvert.CONVERT::toNotice)
                 .collect(Collectors.toList());
         // 分账扩展和明细
         allocOrderResult.setAttach(order.getAttach())

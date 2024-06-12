@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "分账订单")
-public class AllocationOrderDto extends BaseDto {
+public class AllocOrderDto extends BaseDto {
 
     /**
      * 分账订单号

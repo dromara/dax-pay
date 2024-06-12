@@ -56,7 +56,7 @@ public class PayNoticeResult extends PaymentCommonResult {
      * 支付通道
      * @see PayChannelEnum
      */
-    @Schema(description = "异步支付通道")
+    @Schema(description = "支付通道")
     private String channel;
 
     /**
