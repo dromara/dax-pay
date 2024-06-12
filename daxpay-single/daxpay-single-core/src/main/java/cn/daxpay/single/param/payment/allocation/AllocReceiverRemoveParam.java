@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 /**
  * 分账接收者删除参数
@@ -20,7 +22,8 @@ import javax.validation.constraints.NotEmpty;
 public class AllocReceiverRemoveParam extends PaymentCommonParam {
 
     @Schema(description = "接收者编号")
-    @NotEmpty(message = "接收者编号必填")
+    @NotBlank(message = "接收者编号必填")
+    @Size(max = 32, message = "接收者编号不可超过32位")
     private String receiverNo;
 
 }

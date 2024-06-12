@@ -36,65 +36,65 @@ import java.util.List;
 public class ReconcileDiff extends MpBaseEntity implements EntityBaseFunction<ReconcileDiffDto> {
 
     /** 对账单ID */
-    @DbColumn(comment = "对账单ID")
+    @DbColumn(comment = "对账单ID", isNull = false)
     private Long reconcileId;
 
     /** 对账号 */
-    @DbColumn(comment = "对账号")
+    @DbColumn(comment = "对账号", length = 32, isNull = false)
     private String reconcileNo;
 
     /** 对账单明细ID */
-    @DbColumn(comment = "对账单明细ID")
+    @DbColumn(comment = "对账单明细ID", isNull = false)
     private Long detailId;
 
     /** 对账日期 */
-    @DbColumn(comment = "对账日期")
+    @DbColumn(comment = "对账日期", isNull = false)
     private LocalDate reconcileDate;
 
     /** 本地交易号 */
-    @DbColumn(comment = "本地交易号")
+    @DbColumn(comment = "本地交易号", length = 32, isNull = false)
     private String tradeNo;
 
     /** 通道交易号 */
-    @DbColumn(comment = "通道交易号")
+    @DbColumn(comment = "通道交易号", length = 150, isNull = false)
     private String outTradeNo;
 
     /** 交易时间 */
-    @DbColumn(comment = "交易时间")
+    @DbColumn(comment = "交易时间", isNull = false)
     private LocalDateTime tradeTime;
 
     /** 订单标题 */
-    @DbColumn(comment = "订单标题")
+    @DbColumn(comment = "订单标题", length = 100)
     private String title;
 
     /**
      * 通道
      * @see PayChannelEnum
      */
-    @DbColumn(comment = "通道")
+    @DbColumn(comment = "通道", length = 20, isNull = false)
     private String channel;
 
     /** 本地交易金额 */
-    @DbColumn(comment = "本地交易金额")
+    @DbColumn(comment = "本地交易金额", length = 15)
     private Integer amount;
 
 
     /** 通道交易金额 */
-    @DbColumn(comment = "通道交易金额")
+    @DbColumn(comment = "通道交易金额", length = 15)
     private Integer outAmount;
 
     /**
      * 交易类型
      * @see ReconcileTradeEnum
      */
-    @DbColumn(comment = "交易类型")
+    @DbColumn(comment = "交易类型", length = 20)
     private String tradeType;
 
     /**
      * 差异类型
      * @see ReconcileDiffTypeEnum
      */
-    @DbColumn(comment = "差异类型")
+    @DbColumn(comment = "差异类型", length = 20)
     private String diffType;
 
     /**

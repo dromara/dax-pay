@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -20,7 +21,7 @@ public class AllocReceiverParam {
 
     /** 分账接收方编号 */
     @Schema(description = "分账接收方编号")
-    @NotEmpty(message = "分账接收方编号必填")
+    @NotBlank(message = "分账接收方编号必填")
     private String receiverNo;
 
     /** 分账金额 */

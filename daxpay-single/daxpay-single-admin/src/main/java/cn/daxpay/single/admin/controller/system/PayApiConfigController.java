@@ -2,6 +2,7 @@ package cn.daxpay.single.admin.controller.system;
 
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.service.core.system.config.service.PayApiConfigService;
 import cn.daxpay.single.service.dto.system.config.PayApiConfigDto;
 import cn.daxpay.single.service.param.system.config.PayApiConfigParam;
@@ -37,6 +38,7 @@ public class PayApiConfigController {
     @Operation(summary = "更新")
     @PostMapping("/update")
     public ResResult<Void> update(@RequestBody PayApiConfigParam param){
+        ValidationUtil.validateParam(param);
         payApiConfigService.update(param);
         return Res.ok();
     }

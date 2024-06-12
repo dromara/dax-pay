@@ -64,7 +64,6 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     @DbColumn(comment = "回调处理状态", length = 20, isNull = false)
     private String status;
 
-
     /** 修复号 */
     @DbColumn(comment = "修复号", length = 32, isNull = false)
     private String repairOrderNo;

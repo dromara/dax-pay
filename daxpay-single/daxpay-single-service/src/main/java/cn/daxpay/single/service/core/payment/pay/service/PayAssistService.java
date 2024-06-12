@@ -167,8 +167,7 @@ public class PayAssistService {
      */
     public void validationLimitAmount(PayParam payParam) {
         // 总额校验
-        PlatformLocal platformInfo = PaymentContextLocal.get()
-                .getPlatformInfo();
+        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
         if (payParam.getAmount() > platformInfo.getLimitAmount()) {
             throw new PayFailureException("支付金额超过限额");
         }

@@ -25,22 +25,22 @@ import lombok.experimental.Accessors;
 @TableName("pay_api_config")
 public class PayApiConfig extends MpBaseEntity implements EntityBaseFunction<PayApiConfigDto> {
 
-    @DbColumn(comment = "编码")
+    @DbColumn(comment = "编码",length = 50, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String code;
 
-    @DbColumn(comment = "接口地址")
+    @DbColumn(comment = "接口地址", length = 200, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String api;
 
-    @DbColumn(comment = "名称")
+    @DbColumn(comment = "名称", length = 100, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String name;
 
-    @DbColumn(comment = "是否启用")
+    @DbColumn(comment = "是否启用", isNull = false)
     private boolean enable;
 
-    @DbColumn(comment = "备注")
+    @DbColumn(comment = "备注", length = 200)
     private String remark;
 
     /**

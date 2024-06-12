@@ -47,7 +47,7 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     private Boolean allocation;
 
     /** 支付限额 */
-    @DbColumn(comment = "支付限额")
+    @DbColumn(comment = "支付限额", length = 15)
     private Integer singleLimit;
 
     /**
@@ -56,7 +56,7 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
      * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
      * 3. 调用顺序 支付宝网关 -> 本网关进行处理 -> 发送消息通知业务系统
      */
-    @DbColumn(comment = "异步通知页面路径")
+    @DbColumn(comment = "异步通知接收路径", length = 200)
     private String notifyUrl;
 
     /**
@@ -65,22 +65,22 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
      * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
      * 3. 消息顺序 支付宝网关 -> 本网关进行处理 -> 重定向到业务系统中
      */
-    @DbColumn(comment = "同步通知页面路径")
+    @DbColumn(comment = "同步通知页面路径", length = 200)
     private String returnUrl;
 
     /** 支付网关地址 */
-    @DbColumn(comment = "支付网关地址")
+    @DbColumn(comment = "支付网关地址", length = 200)
     private String serverUrl;
 
     /**
      * 认证类型 证书/公钥
      * @see AliPayCode#AUTH_TYPE_KEY
      */
-    @DbColumn(comment = "认证类型")
+    @DbColumn(comment = "认证类型", length = 20)
     private String authType;
 
     /** 签名类型 RSA2 */
-    @DbColumn(comment = "签名类型 RSA2")
+    @DbColumn(comment = "签名类型 RSA2", length = 20)
     public String signType;
 
     /**

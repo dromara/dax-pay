@@ -5,6 +5,7 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.code.PaymentApiCode;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
 import cn.daxpay.single.param.payment.allocation.AllocReceiverRemoveParam;
@@ -66,6 +67,7 @@ public class AllocationReceiverController {
     @Operation(summary = "添加")
     @PostMapping("add")
     public ResResult<Void> add(@RequestBody AllocReceiverAddParam param){
+        ValidationUtil.validateParam(param);
         receiverService.addAndSync(param);
         return Res.ok();
     }
@@ -74,6 +76,7 @@ public class AllocationReceiverController {
     @Operation(summary = "删除")
     @PostMapping("delete")
     public ResResult<Void> delete(@RequestBody AllocReceiverRemoveParam param){
+        ValidationUtil.validateParam(param);
         receiverService.remove(param);
         return Res.ok();
     }

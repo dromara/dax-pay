@@ -9,7 +9,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 分账接收者添加参数
@@ -23,7 +24,8 @@ import javax.validation.constraints.NotEmpty;
 public class AllocReceiverAddParam extends PaymentCommonParam {
 
     @Schema(description = "接收者编号, 需要保证唯一")
-    @NotEmpty(message = "接收者编号必填")
+    @NotBlank(message = "接收者编号必填")
+    @Size(max = 32, message = "接收者编号不可超过32位")
     private String receiverNo;
 
     /**
@@ -31,7 +33,8 @@ public class AllocReceiverAddParam extends PaymentCommonParam {
      * @see PayChannelEnum
      */
     @Schema(description = "所属通道")
-    @NotEmpty(message = "所属通道必填")
+    @NotBlank(message = "所属通道必填")
+    @Size(max = 20, message = "所属通道不可超过20位")
     private String channel;
 
     /**
@@ -39,16 +42,19 @@ public class AllocReceiverAddParam extends PaymentCommonParam {
      * @see AllocReceiverTypeEnum
      */
     @Schema(description = "分账接收方类型")
-    @NotEmpty(message = "分账接收方类型必填")
+    @NotBlank(message = "分账接收方类型必填")
+    @Size(max = 20, message = "分账接收方类型不可超过20位")
     private String receiverType;
 
     /** 接收方账号 */
     @Schema(description = "接收方账号")
-    @NotEmpty(message = "接收方账号必填")
+    @NotBlank(message = "接收方账号必填")
+    @Size(max = 100, message = "接收方账号不可超过100位")
     private String receiverAccount;
 
     /** 接收方姓名 */
     @Schema(description = "接收方姓名")
+    @Size(max = 100, message = "接收方姓名不可超过50位")
     private String receiverName;
 
     /**
@@ -56,10 +62,12 @@ public class AllocReceiverAddParam extends PaymentCommonParam {
      * @see AllocRelationTypeEnum
      */
     @Schema(description = "分账关系类型")
-    @NotEmpty(message = "分账关系类型必填")
+    @NotBlank(message = "分账关系类型必填")
+    @Size(max = 20, message = "分账关系类型不可超过20位")
     private String relationType;
 
     /** 关系名称 关系类型为自定义是填写 */
     @Schema(description = "关系名称")
+    @Size(max = 50, message = "关系名称不可超过50位")
     private String relationName;
 }

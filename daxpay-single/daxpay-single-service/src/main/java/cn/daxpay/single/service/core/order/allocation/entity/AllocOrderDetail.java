@@ -59,12 +59,12 @@ public class AllocOrderDetail extends MpBaseEntity implements EntityBaseFunction
     private String receiverType;
 
     /** 接收方账号 */
-    @DbColumn(comment = "接收方账号", length = 150, isNull = false)
+    @DbColumn(comment = "接收方账号", length = 100, isNull = false)
     @TableField(typeHandler = DecryptTypeHandler.class)
     private String receiverAccount;
 
     /** 接收方姓名 */
-    @DbColumn(comment = "接收方姓名", length = 150)
+    @DbColumn(comment = "接收方姓名", length = 100)
     private String receiverName;
 
     /**
