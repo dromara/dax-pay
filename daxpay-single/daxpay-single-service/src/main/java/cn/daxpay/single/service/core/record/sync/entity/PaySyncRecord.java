@@ -81,15 +81,15 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     private String repairNo;
 
     /** 错误码 */
-    @DbColumn(comment = "错误码")
+    @DbColumn(comment = "错误码", length = 10)
     private String errorCode;
 
-    /** 错误消息 */
-    @DbColumn(comment = "错误消息")
+    /** 错误信息 */
+    @DbColumn(comment = "错误信息", length = 150)
     private String errorMsg;
 
-    /** 客户端IP */
-    @DbColumn(comment = "客户端IP")
+    /** 终端ip */
+    @DbColumn(comment = "支付终端ip", length = 64)
     private String clientIp;
 
     /**

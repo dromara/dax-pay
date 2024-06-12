@@ -2,6 +2,7 @@ package cn.daxpay.single.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
 import cn.daxpay.single.service.core.order.reconcile.conver.ReconcileConvert;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileOutTradeDto;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 public class ReconcileOutTrade extends MpCreateEntity implements EntityBaseFunction<ReconcileOutTradeDto> {
 
     /** 关联对账订单ID */
+    @DbMySqlIndex(comment = "对账单ID索引")
     @DbColumn(comment = "关联对账订单ID")
     private Long reconcileId;
 

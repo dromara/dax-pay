@@ -5,14 +5,15 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.result.order.AllocOrderResult;
 import cn.daxpay.single.service.code.ClientNoticeTypeEnum;
+import cn.daxpay.single.service.core.notice.convert.ClientNoticeConvert;
 import cn.daxpay.single.service.core.payment.notice.result.PayNoticeResult;
 import cn.daxpay.single.service.core.payment.notice.result.RefundNoticeResult;
-import cn.daxpay.single.service.core.notice.convert.ClientNoticeConvert;
 import cn.daxpay.single.service.dto.record.notice.ClientNoticeTaskDto;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -34,18 +35,19 @@ import java.time.LocalDateTime;
 public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction<ClientNoticeTaskDto> {
 
     /** 本地交易ID */
-    @DbColumn(comment = "本地交易ID")
+    @DbColumn(comment = "本地交易ID", isNull = false)
     private Long tradeId;
 
     /** 本地交易号 */
-    @DbColumn(comment = "本地交易号")
+    @DbMySqlIndex(comment = "本地交易号索引")
+    @DbColumn(comment = "本地交易号", length = 32, isNull = false)
     private String tradeNo;
 
     /**
      * 消息类型
      * @see ClientNoticeTypeEnum
      */
-    @DbColumn(comment = "消息类型")
+    @DbColumn(comment = "消息类型", length = 20, isNull = false)
     private String noticeType;
 
     /**
@@ -53,7 +55,7 @@ public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction
      * @see PayStatusEnum
      * @see RefundStatusEnum
      */
-    @DbColumn(comment = "交易状态")
+    @DbColumn(comment = "交易状态", length = 20, isNull = false)
     private String tradeStatus;
 
     /**
@@ -62,24 +64,24 @@ public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction
      * @see RefundNoticeResult
      * @see AllocOrderResult
      */
-    @DbColumn(comment = "消息内容")
+    @DbColumn(comment = "消息内容", isNull = false)
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
     private String content;
 
     /** 是否发送成功 */
-    @DbColumn(comment = "是否发送成功")
+    @DbColumn(comment = "是否发送成功", isNull = false)
     private boolean success;
 
     /** 发送次数 */
-    @DbColumn(comment = "发送次数")
+    @DbColumn(comment = "发送次数", length = 3, isNull = false)
     private Integer sendCount;
 
     /** 发送地址 */
-    @DbColumn(comment = "发送地址")
+    @DbColumn(comment = "发送地址", length = 150, isNull = false)
     private String url;
 
     /** 最后发送时间 */
-    @DbColumn(comment = "最后发送时间")
+    @DbColumn(comment = "最后发送时间", isNull = false)
     private LocalDateTime latestTime;
 
     /**
