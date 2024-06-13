@@ -166,10 +166,6 @@ public class PayOrderTest {
 
 扫码加入QQ交流群
 
-交流一群
-<p>
-<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412132238.3rb0hgrf2z.webp" width = "330" height = "500"/>
-</p>
 交流二群
 <p>
 <img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240513180310.2yy68aykip.webp" width = "330" height = "500"/>
