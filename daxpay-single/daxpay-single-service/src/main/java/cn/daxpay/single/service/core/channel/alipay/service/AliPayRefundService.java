@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.AliPayCode;
+import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
@@ -33,6 +34,7 @@ public class AliPayRefundService {
      */
     public void refund(RefundOrder refundOrder) {
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
         AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();
         refundModel.setOutTradeNo(refundOrder.getOrderNo());
         refundModel.setOutRequestNo(refundOrder.getRefundNo());
@@ -44,8 +46,8 @@ public class AliPayRefundService {
         try {
             AlipayTradeRefundResponse response = AliPayApi.tradeRefundToResponse(refundModel);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                refundInfo.setErrorMsg(response.getSubMsg());
-                refundInfo.setErrorCode(response.getCode());
+                errorInfo.setErrorMsg(response.getSubMsg());
+                errorInfo.setErrorCode(response.getCode());
                 log.error("网关返回退款失败: {}", response.getSubMsg());
                 throw new PayFailureException(response.getSubMsg());
             }
@@ -61,8 +63,8 @@ public class AliPayRefundService {
         }
         catch (AlipayApiException e) {
             log.error("订单退款失败:", e);
-            refundInfo.setErrorMsg(e.getErrMsg());
-            refundInfo.setErrorCode(e.getErrCode());
+            errorInfo.setErrorMsg(e.getErrMsg());
+            errorInfo.setErrorCode(e.getErrCode());
             throw new PayFailureException("订单退款失败");
         }
     }

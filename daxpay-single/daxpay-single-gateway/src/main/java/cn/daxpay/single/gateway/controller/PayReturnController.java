@@ -33,13 +33,13 @@ public class PayReturnController {
         return new ModelAndView("redirect:" + url);
     }
 
-    @Operation(summary = "微信同步通知")
+    @Operation(summary = "微信同步跳转连接")
     @GetMapping("/wechat")
     public ModelAndView wechat(){
         return null;
     }
 
-    @Operation(summary = "云闪付同步通知")
+    @Operation(summary = "云闪付同步跳转连接")
     @PostMapping("/union")
     public ModelAndView union(UnionPayReturnParam param){
         String url = payReturnService.union(param);

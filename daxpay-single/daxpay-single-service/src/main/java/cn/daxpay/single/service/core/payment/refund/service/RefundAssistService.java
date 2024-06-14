@@ -7,6 +7,7 @@ import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.refund.RefundParam;
 import cn.daxpay.single.result.pay.RefundResult;
+import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -117,8 +118,9 @@ public class RefundAssistService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void updateOrderByError(RefundOrder refundOrder){
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-        refundOrder.setErrorCode(refundInfo.getErrorCode());
-        refundOrder.setErrorMsg(refundInfo.getErrorMsg());
+        ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
+        refundOrder.setErrorCode(errorInfo.getErrorCode());
+        refundOrder.setErrorMsg(errorInfo.getErrorMsg());
         refundOrder.setStatus(refundInfo.getStatus().getCode());
         refundOrderManager.updateById(refundOrder);
     }

@@ -3,48 +3,51 @@ package cn.daxpay.single.service.core.payment.transfer.strategy;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.transfer.TransferParam;
-import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
-import cn.daxpay.single.service.core.channel.alipay.service.AliPayTransferService;
+import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
+import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
+import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayTransferService;
 import cn.daxpay.single.service.func.AbsTransferStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.Objects;
 
-import static cn.daxpay.single.code.TransferPayeeTypeEnum.*;
+import static cn.daxpay.single.code.TransferPayeeTypeEnum.WX_PERSONAL;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 支付宝转账策略
+ * 微信转账策略
  * @author xxm
- * @since 2024/3/21
+ * @since 2024/6/14
  */
 @Slf4j
 @Service
 @Scope(SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class AliPayTransferStrategy extends AbsTransferStrategy {
+public class WeChatTransferStrategy extends AbsTransferStrategy {
 
-    private final AliPayConfigService payConfigService;
+    private final WeChatPayConfigService weChatPayConfigService;
 
-    private final AliPayTransferService aliPayTransferService;
+    private final WeChatPayTransferService weChatPayTransferService;
+
+    private WeChatPayConfig weChatPayConfig;
+
+    @Override
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
+    }
 
 
     /**
-     * 策略标识
+     * 校验参数
      */
-     @Override
-    public String getChannel() {
-        return PayChannelEnum.ALI.getCode();
-    }
-
     @Override
     public void doValidateParam(TransferParam transferParam) {
         // 转账接收方类型校验
         String payeeType = transferParam.getPayeeType();
-        if (!Arrays.asList(ALI_USER_ID.getCode(), ALI_OPEN_ID.getCode(), ALI_LOGIN_NAME.getCode()).contains(payeeType)){
+        if (!Objects.equals(WX_PERSONAL.getCode(), payeeType)){
             throw new PayFailureException("支付宝不支持该类型收款人");
         }
     }
@@ -54,7 +57,7 @@ public class AliPayTransferStrategy extends AbsTransferStrategy {
      */
     @Override
     public void doBeforeHandler() {
-        payConfigService.initConfig(payConfigService.getAndCheckConfig());
+        this.weChatPayConfig = weChatPayConfigService.getConfig();
     }
 
     /**
@@ -62,6 +65,7 @@ public class AliPayTransferStrategy extends AbsTransferStrategy {
      */
     @Override
     public void doTransferHandler() {
-        aliPayTransferService.transfer(this.getTransferOrder());
+        weChatPayTransferService.transfer(this.getTransferOrder(), weChatPayConfig);
     }
+
 }

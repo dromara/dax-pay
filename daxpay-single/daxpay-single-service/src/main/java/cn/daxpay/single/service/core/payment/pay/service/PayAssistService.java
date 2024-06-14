@@ -3,18 +3,20 @@ package cn.daxpay.single.service.core.payment.pay.service;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.code.PayOrderRefundStatusEnum;
+import cn.daxpay.single.code.PayStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.payment.pay.PayParam;
 import cn.daxpay.single.result.pay.PayResult;
 import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
-import cn.daxpay.single.service.core.order.pay.builder.PayBuilder;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
+import cn.daxpay.single.util.OrderNoGenerateUtil;
 import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -46,54 +48,37 @@ public class PayAssistService {
 
     private final PayOrderQueryService payOrderQueryService;
 
-    /**
-     * 初始化支付相关上下文
-     */
-    public void initPayContext(PayOrder order, PayParam payParam) {
-        // 初始化支付订单超时时间
-        this.initExpiredTime(order, payParam);
-    }
-
-
-    /**
-     * 初始化支付订单超时时间
-     * 1. 如果支付记录为空, 超时时间读取顺序 PayParam -> 平台设置
-     * 2. 如果支付记录不为空, 超时时间通过支付记录进行反推
-     */
-    public void initExpiredTime(PayOrder order, PayParam payParam) {
-        // 钱包没有超时时间
-        if (PayChannelEnum.WALLET.getCode()
-                .equals(payParam.getChannel())) {
-            return;
-        }
-        PayLocal payInfo = PaymentContextLocal.get()
-                .getPayInfo();
-        PlatformLocal platform = PaymentContextLocal.get()
-                .getPlatformInfo();
-        // 支付订单是非为空
-        if (Objects.nonNull(order)) {
-            payInfo.setExpiredTime(order.getExpiredTime());
-            return;
-        }
-        // 支付参数传入
-        if (Objects.nonNull(payParam.getExpiredTime())) {
-            payInfo.setExpiredTime(payParam.getExpiredTime());
-            return;
-        }
-        // 读取本地时间
-        LocalDateTime paymentExpiredTime = PayUtil.getPaymentExpiredTime(platform.getOrderTimeout());
-        payInfo.setExpiredTime(paymentExpiredTime);
-    }
 
     /**
      * 创建支付订单并保存, 返回支付订单
      */
     @Transactional(rollbackFor = Exception.class)
     public PayOrder createPayOrder(PayParam payParam) {
-        PayLocal payInfo = PaymentContextLocal.get()
-                .getPayInfo();
-        // 构建支付订单并保存
-        PayOrder order = PayBuilder.buildPayOrder(payParam);
+        // 订单超时时间
+        LocalDateTime expiredTime = this.getExpiredTime(payParam);
+        // 构建支付订单对象
+        PayOrder order = new PayOrder()
+                .setBizOrderNo(payParam.getBizOrderNo())
+                .setOrderNo(OrderNoGenerateUtil.pay())
+                .setTitle(payParam.getTitle())
+                .setDescription(payParam.getDescription())
+                .setStatus(PayStatusEnum.PROGRESS.getCode())
+                .setRefundStatus(PayOrderRefundStatusEnum.NO_REFUND.getCode())
+                .setAllocation(payParam.getAllocation())
+                .setAmount(payParam.getAmount())
+                .setChannel(payParam.getChannel())
+                .setMethod(payParam.getMethod())
+                .setExpiredTime(expiredTime)
+                .setRefundableBalance(payParam.getAmount())
+                .setClientIp(payParam.getClientIp())
+                .setNotifyUrl(payParam.getNotifyUrl())
+                .setReturnUrl(payParam.getReturnUrl())
+                .setAttach(payParam.getAttach())
+                .setReqTime(payParam.getReqTime());
+        // 如果支持分账, 设置分账状态为待分账
+        if (order.getAllocation()) {
+            order.setAllocStatus(PayOrderAllocStatusEnum.WAITING.getCode());
+        }
         payOrderService.save(order);
         return order;
     }
@@ -187,12 +172,28 @@ public class PayAssistService {
         payResult.setStatus(payOrder.getStatus());
 
         // 设置支付参数
-        PayLocal payInfo = PaymentContextLocal.get()
-                .getPayInfo();
+        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         if (StrUtil.isNotBlank(payInfo.getPayBody())) {
             payResult.setPayBody(payInfo.getPayBody());
         }
-        // 签名
         return payResult;
+    }
+
+    /**
+     * 获取支付订单超时时间
+     */
+    private LocalDateTime getExpiredTime(PayParam payParam) {
+        // 钱包没有超时时间
+        if (PayChannelEnum.WALLET.getCode()
+                .equals(payParam.getChannel())) {
+            return null;
+        }
+        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
+        // 支付参数传入
+        if (Objects.nonNull(payParam.getExpiredTime())) {
+            return payParam.getExpiredTime();
+        }
+        // 根据平台配置计算出
+        return PayUtil.getPaymentExpiredTime(platform.getOrderTimeout());
     }
 }

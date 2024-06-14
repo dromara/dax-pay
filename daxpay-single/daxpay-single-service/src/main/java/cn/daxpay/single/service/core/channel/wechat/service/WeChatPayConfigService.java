@@ -6,7 +6,7 @@ import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.WeChatPayWay;
 import cn.daxpay.single.service.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.daxpay.single.service.core.system.config.service.PayChannelConfigService;
+import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
 import cn.daxpay.single.service.param.channel.wechat.WeChatPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -31,7 +31,8 @@ public class WeChatPayConfigService {
     /** 默认微信支付配置的主键ID */
     private final static Long ID = 0L;
     private final WeChatPayConfigManager weChatPayConfigManager;
-    private final PayChannelConfigService payChannelConfigService;
+
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 修改
@@ -71,6 +72,20 @@ public class WeChatPayConfigService {
             .stream()
             .map(e -> new LabelValue(e.getName(),e.getCode()))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * 生成微信通知地址
+     */
+    public String generateNotifyUrl(){
+        return platformConfigService.getConfig().getWebsiteUrl() + "/callback/pay/wechat";
+    }
+
+    /**
+     * 生成同步跳转地址
+     */
+    public String generateReturnUrl(){
+        return platformConfigService.getConfig().getWebsiteUrl() + "/return/pay/wechat";
     }
 
 }

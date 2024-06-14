@@ -210,7 +210,11 @@ public class WeChatPayService {
         String errCode = result.get(WeChatPayCode.ERR_CODE);
         // 支付成功处理,
         if (Objects.equals(resultCode, WeChatPayCode.PAY_SUCCESS)) {
-            payInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID)).setComplete(true);
+            String timeEnd = result.get(WeChatPayCode.TIME_END);
+            LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
+            payInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID))
+                    .setCompleteTime(time)
+                    .setComplete(true);
             return;
         }
         // 支付中, 发起轮训同步

@@ -20,6 +20,7 @@ public abstract class AbsTransferStrategy implements PayStrategy{
      * 校验参数
      */
     public void doValidateParam(TransferParam transferParam) {
+
     }
 
     /**

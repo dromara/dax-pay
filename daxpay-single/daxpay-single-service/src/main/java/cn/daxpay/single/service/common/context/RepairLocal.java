@@ -20,7 +20,7 @@ public class RepairLocal {
      */
     private PayRepairSourceEnum source;
 
-    /** 支付完成/退款时间 */
+    /** 完成/退款时间 */
     private LocalDateTime finishTime;
 
 }

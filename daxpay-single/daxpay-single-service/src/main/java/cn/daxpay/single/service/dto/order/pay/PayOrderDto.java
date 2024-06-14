@@ -105,13 +105,6 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "过期时间")
     private LocalDateTime expiredTime;
 
-    /** 错误码 */
-    @Schema(description = "错误码")
-    private String errorCode;
-
-    /** 错误信息 */
-    @Schema(description = "错误信息")
-    private String errorMsg;
 
     /** 支付终端ip */
     @Schema(description = "支付终端ip")
@@ -128,4 +121,12 @@ public class PayOrderDto extends BaseDto {
     /** 请求时间，时间戳转时间, 以最后一次为准 */
     @Schema(description = "请求时间，传输时间戳，以最后一次为准")
     private LocalDateTime reqTime;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误信息 */
+    @Schema(description = "错误信息")
+    private String errorMsg;
 }

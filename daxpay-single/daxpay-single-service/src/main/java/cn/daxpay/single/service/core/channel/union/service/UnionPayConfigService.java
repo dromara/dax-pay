@@ -6,7 +6,7 @@ import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.UnionPayWay;
 import cn.daxpay.single.service.core.channel.union.dao.UnionPayConfigManager;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
-import cn.daxpay.single.service.core.system.config.service.PayChannelConfigService;
+import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
 import cn.daxpay.single.service.param.channel.union.UnionPayConfigParam;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
@@ -37,7 +37,7 @@ public class UnionPayConfigService {
     /** 默认云闪付配置的主键ID */
     private final static Long ID = 0L;
     private final UnionPayConfigManager unionPayConfigManager;
-    private final PayChannelConfigService payChannelConfigService;
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 修改
@@ -75,6 +75,20 @@ public class UnionPayConfigService {
             throw new PayFailureException("云闪付支付未启用");
         }
         return unionPayConfig;
+    }
+
+    /**
+     * 生成通知地址
+     */
+    public String generateNotifyUrl(){
+        return platformConfigService.getConfig().getWebsiteUrl() + "/callback/pay/union";
+    }
+
+    /**
+     * 生成同步跳转地址
+     */
+    public String generateReturnUrl(){
+        return platformConfigService.getConfig().getWebsiteUrl() + "/return/pay/union";
     }
 
 

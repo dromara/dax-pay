@@ -3,6 +3,8 @@ package cn.daxpay.single.service.core.payment.transfer.service;
 import cn.daxpay.single.code.TransferStatusEnum;
 import cn.daxpay.single.param.payment.transfer.TransferParam;
 import cn.daxpay.single.result.transfer.TransferResult;
+import cn.daxpay.single.service.common.context.ErrorInfoLocal;
+import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.transfer.dao.TransferOrderManager;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
 import cn.daxpay.single.util.OrderNoGenerateUtil;
@@ -52,8 +54,11 @@ public class TransferAssistService {
      * 更新转账订单错误信息
      */
     public void updateOrderByError(TransferOrder order) {
-        order.setErrorMsg("")
-                .setErrorCode("");
+        ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
+        order.setStatus(TransferStatusEnum.FAIL.getCode())
+                .setErrorMsg(errorInfo.getErrorMsg())
+                .setErrorCode(errorInfo.getErrorCode());
+        transferOrderManager.updateById(order);
     }
 
     /**

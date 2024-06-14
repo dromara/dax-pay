@@ -9,6 +9,7 @@ import cn.daxpay.single.service.code.AliPayWay;
 import cn.daxpay.single.service.core.channel.alipay.dao.AliPayConfigManager;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.system.config.service.PayChannelConfigService;
+import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
 import cn.daxpay.single.service.param.channel.alipay.AliPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -39,6 +40,7 @@ public class AliPayConfigService {
     private final static Long ID = 0L;
     private final AliPayConfigManager alipayConfigManager;
     private final PayChannelConfigService payChannelConfigService;
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 修改
@@ -78,6 +80,19 @@ public class AliPayConfigService {
         return alipayConfig;
     }
 
+    /**
+     * 生成通知地址
+     */
+    public String generateNotifyUrl(){
+        return platformConfigService.getConfig().getWebsiteUrl() + "/callback/pay/alipay";
+    }
+
+    /**
+     * 生成同步跳转地址
+     */
+    public String generateReturnUrl(){
+        return platformConfigService.getConfig().getWebsiteUrl() + "/return/pay/alipay";
+    }
 
     /**
      * 初始化IJPay服务

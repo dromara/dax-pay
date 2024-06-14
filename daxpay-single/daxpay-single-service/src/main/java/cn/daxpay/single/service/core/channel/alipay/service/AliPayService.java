@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
+import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.code.PayMethodEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.param.channel.AliPayParam;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -252,11 +254,12 @@ public class AliPayService {
         model.setTotalAmount(amount);
         try {
             AlipayTradePayResponse response = AliPayApi.tradePayToResponse(model, alipayConfig.getNotifyUrl());
-
             // 支付成功处理 金额2000以下免密支付, 记录支付完成相关信息
             if (Objects.equals(response.getCode(), AliPayCode.SUCCESS)) {
+                Date gmtPayment = response.getGmtPayment();
                 payInfo.setOutOrderNo(response.getTradeNo())
-                        .setComplete(true);
+                        .setComplete(true)
+                        .setCompleteTime(LocalDateTimeUtil.of(gmtPayment));
             }
             // 非支付中响应码, 进行错误处理
             if (!Objects.equals(response.getCode(), AliPayCode.INPROCESS)) {

@@ -27,7 +27,7 @@ public class CallbackLocal {
     private String tradeNo;
 
     /**
-     * 第三方支付平台交易号
+     * 通道交易号
      */
     private String outTradeNo;
 

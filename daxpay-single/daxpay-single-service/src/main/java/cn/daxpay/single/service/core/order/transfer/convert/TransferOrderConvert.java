@@ -1,5 +1,7 @@
 package cn.daxpay.single.service.core.order.transfer.convert;
 
+import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
+import cn.daxpay.single.service.dto.order.transfer.TransferOrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -12,4 +14,5 @@ import org.mapstruct.factory.Mappers;
 public interface TransferOrderConvert {
     TransferOrderConvert CONVERT = Mappers.getMapper(TransferOrderConvert.class);
 
+    TransferOrderDto convert(TransferOrder in);
 }

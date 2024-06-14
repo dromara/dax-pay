@@ -4,6 +4,7 @@ import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.param.payment.transfer.TransferParam;
 import cn.daxpay.single.result.transfer.TransferResult;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
+import cn.daxpay.single.service.core.order.transfer.dao.TransferOrderManager;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
 import cn.daxpay.single.service.func.AbsTransferStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
@@ -11,6 +12,8 @@ import cn.hutool.extra.spring.SpringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 转账服务
@@ -23,6 +26,8 @@ import org.springframework.stereotype.Service;
 public class TransferService {
 
     private final TransferAssistService transferAssistService;
+
+    private final TransferOrderManager transferOrderManager;
 
     /**
      * 转账
@@ -56,8 +61,9 @@ public class TransferService {
     /**
      * 成功处理
      */
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void successHandler(TransferOrder order){
+        order.setStatus(RefundStatusEnum.SUCCESS.getCode());
+        transferOrderManager.updateById(order);
     }
-
-
 }

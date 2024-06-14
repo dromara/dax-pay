@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.order.transfer.entity;
 
+import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
@@ -7,6 +8,8 @@ import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.TransferPayeeTypeEnum;
 import cn.daxpay.single.code.TransferTypeEnum;
+import cn.daxpay.single.service.core.order.transfer.convert.TransferOrderConvert;
+import cn.daxpay.single.service.dto.order.transfer.TransferOrderDto;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -26,7 +29,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @DbTable(comment = "转账订单")
 @TableName("pay_transfer_order")
-public class TransferOrder extends MpBaseEntity {
+public class TransferOrder extends MpBaseEntity implements EntityBaseFunction<TransferOrderDto> {
 
     /** 商户转账号 */
     @DbMySqlIndex(comment = "商户转账号索引")
@@ -129,4 +132,8 @@ public class TransferOrder extends MpBaseEntity {
     @DbColumn(comment = "错误信息", length = 150)
     private String errorMsg;
 
+    @Override
+    public TransferOrderDto toDto() {
+        return TransferOrderConvert.CONVERT.convert(this);
+    }
 }

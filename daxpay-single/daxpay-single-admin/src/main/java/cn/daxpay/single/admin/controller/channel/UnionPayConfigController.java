@@ -54,4 +54,16 @@ public class UnionPayConfigController {
     public ResResult<String> toBase64(MultipartFile file){
         return Res.ok(Base64.encode(file.getBytes()));
     }
+
+    @Operation(summary = "生成异步通知地址")
+    @GetMapping("/generateNotifyUrl")
+    public ResResult<String> generateNotifyUrl() {
+        return Res.ok(unionPayConfigService.generateNotifyUrl());
+    }
+
+    @Operation(summary = "生成同步通知地址")
+    @GetMapping("/generateReturnUrl")
+    public ResResult<String> generateReturnUrl() {
+        return Res.ok(unionPayConfigService.generateReturnUrl());
+    }
 }

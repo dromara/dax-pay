@@ -11,7 +11,6 @@ import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.func.AbsPayStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
-import cn.daxpay.single.util.PayUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -66,8 +65,6 @@ public class PayService {
         try {
             // 查询并检查订单
             PayOrder payOrder = payAssistService.getOrderAndCheck(payParam.getBizOrderNo());
-            // 初始化支付上下文
-            payAssistService.initPayContext(payOrder, payParam);
             // 走首次下单逻辑还是重复下档逻辑
             if (Objects.isNull(payOrder)){
                 return this.firstPay(payParam);

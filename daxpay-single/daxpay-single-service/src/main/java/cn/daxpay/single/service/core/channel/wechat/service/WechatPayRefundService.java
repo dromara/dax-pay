@@ -2,6 +2,7 @@ package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.daxpay.single.code.RefundStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
@@ -41,6 +42,7 @@ public class WechatPayRefundService {
         String totalFee = String.valueOf(refundOrder.getAmount());
         // 设置退款信息
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
         Map<String, String> params = RefundModel.builder()
                 .appid(weChatPayConfig.getWxAppId())
                 .mch_id(weChatPayConfig.getWxMchId())
@@ -55,8 +57,8 @@ public class WechatPayRefundService {
         // 获取证书文件
         if (StrUtil.isBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
-            refundInfo.setErrorMsg(errorMsg);
-            refundInfo.setErrorCode(RefundStatusEnum.FAIL.getCode());
+            errorInfo.setErrorMsg(errorMsg);
+            errorInfo.setErrorCode(RefundStatusEnum.FAIL.getCode());
             throw new PayFailureException(errorMsg);
         }
         byte[] fileBytes = Base64.decode(weChatPayConfig.getP12());
@@ -82,9 +84,9 @@ public class WechatPayRefundService {
                 errorMsg = result.get(RETURN_MSG);
             }
             log.error("订单退款失败 {}", errorMsg);
-            RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-            refundInfo.setErrorMsg(errorMsg);
-            refundInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
+            ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
+            errorInfo.setErrorMsg(errorMsg);
+            errorInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
             throw new PayFailureException(errorMsg);
         }
     }

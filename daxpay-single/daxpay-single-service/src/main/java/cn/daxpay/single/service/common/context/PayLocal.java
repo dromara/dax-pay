@@ -30,7 +30,4 @@ public class PayLocal {
     /** 支付参数体(通常用于发起支付的参数) */
     private String payBody;
 
-    /** 订单超时时间, */
-    private LocalDateTime expiredTime;
-
 }
