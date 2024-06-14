@@ -160,12 +160,8 @@ dromara:
         storage-path: D:/data/files/
 # 支付系统配置
 dax-pay:
-  # 服务地址
-  server-url: http://localhost:9000
-  # 前端h5地址
+  # h5访问地址
   front-h5-url: http://pay1.bootx.cn/h5/#
-  # 前端web地址
-  front-web-url: http://localhost:9000/#
   # 机器号码
   machine-no: 63
   # 当前环境，会影响订单号的生成

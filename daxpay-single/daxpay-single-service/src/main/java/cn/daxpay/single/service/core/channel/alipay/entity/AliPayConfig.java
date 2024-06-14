@@ -48,7 +48,7 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
 
     /** 支付限额 */
     @DbColumn(comment = "支付限额", length = 15)
-    private Integer singleLimit;
+    private Integer limitAmount;
 
     /**
      * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址

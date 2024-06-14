@@ -59,7 +59,7 @@ public class AliPayService {
             throw new PayFailureException("该支付宝支付方式不可用");
         }
         // 验证订单金额是否超限
-        if(payParam.getAmount() > alipayConfig.getSingleLimit()){
+        if(payParam.getAmount() > alipayConfig.getLimitAmount()){
             throw new PayFailureException("支付宝支付金额超过限额");
         }
         // 支付参数开启分账, 配置未开启分账

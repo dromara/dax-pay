@@ -54,7 +54,7 @@ public class UnionPayService {
             throw new PayFailureException("该云闪付支付方式不可用");
         }
         // 支付金额是否超限
-        if (payParam.getAmount() > unionPayConfig.getSingleLimit()) {
+        if (payParam.getAmount() > unionPayConfig.getLimitAmount()) {
             throw new PayFailureException("云闪付支付金额超限");
         }
         // 分账

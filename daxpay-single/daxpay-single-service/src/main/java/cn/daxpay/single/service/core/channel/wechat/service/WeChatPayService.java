@@ -71,7 +71,7 @@ public class WeChatPayService {
             throw new PayFailureException("该微信支付方式不可用");
         }
         // 支付金额是否超限
-        if (payParam.getAmount() > weChatPayConfig.getSingleLimit()) {
+        if (payParam.getAmount() > weChatPayConfig.getLimitAmount()) {
             throw new PayFailureException("微信支付金额超限");
         }
         // 是否支持分账

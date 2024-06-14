@@ -33,7 +33,7 @@ public class WeChatPayConfigParam {
     private Boolean allocation;
 
     @Schema(description = "支付限额")
-    private Integer singleLimit;
+    private Integer limitAmount;
 
     @Schema(description = "异步通知地址")
     private String notifyUrl;
