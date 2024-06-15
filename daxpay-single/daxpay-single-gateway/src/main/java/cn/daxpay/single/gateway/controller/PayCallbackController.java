@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayCallbackService;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayCallbackService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayCallbackService;
+import cn.daxpay.single.service.core.extra.WeChatOpenIdService;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import com.egzosn.pay.union.api.UnionPayConfigStorage;
 import com.ijpay.alipay.AliPayApi;
@@ -14,15 +15,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
  * 包括支付成功/退款/转账等一系列类型的回调处理
+ * 也包括获取微信OpenId/支付宝UserId等的授权回调
  * @author xxm
  * @since 2021/2/27
  */
@@ -35,6 +36,8 @@ import java.util.Map;
 public class PayCallbackController {
 
     private final AliPayCallbackService aliPayCallbackService;
+
+    private final WeChatOpenIdService wechatOpenIdService;
 
     private final WeChatPayCallbackService weChatPayCallbackService;
 
@@ -55,6 +58,14 @@ public class PayCallbackController {
         String xmlMsg = HttpKit.readData(request);
         Map<String, String> params = WxPayKit.xmlToMap(xmlMsg);
         return weChatPayCallbackService.callback(params);
+    }
+
+    @Operation(summary = "微信获取OpenId授权回调方法")
+    @GetMapping("/wechat/openId/{code}")
+    public ModelAndView wxAuthCallback(@RequestParam("code") String authCode, @PathVariable("code") String code){
+        wechatOpenIdService.authCallback(authCode, code);
+        // 调用页面自动关闭
+        return new ModelAndView("forward:/h5/openIdCallbackClose.html");
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

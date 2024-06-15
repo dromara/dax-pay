@@ -31,7 +31,7 @@ import static cn.daxpay.single.service.code.WeChatPayCode.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WechatPayRefundService {
+public class WeChatPayRefundService {
 
     /**
      * 退款方法

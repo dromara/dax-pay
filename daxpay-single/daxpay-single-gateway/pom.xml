@@ -18,5 +18,4 @@
             <version>${daxpay.version}</version>
         </dependency>
     </dependencies>
-
 </project>

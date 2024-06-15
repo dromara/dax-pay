@@ -33,8 +33,6 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/,classpath:/public/
-  thymeleaf:
-    cache: false
   # 定时任务
   quartz:
     # 持久化方式

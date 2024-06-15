@@ -11,7 +11,7 @@ import cn.daxpay.single.result.assist.WxAccessTokenResult;
 import cn.daxpay.single.result.assist.WxAuthUrlResult;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.annotation.PaymentVerify;
-import cn.daxpay.single.service.core.payment.assist.service.UniPayAssistService;
+import cn.daxpay.single.service.core.extra.WeChatOpenIdService;
 import cn.daxpay.single.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,14 +32,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/unipay/assist")
 @RequiredArgsConstructor
 public class UniPayAssistController {
-    private final UniPayAssistService uniPayAssistService;
+    private final WeChatOpenIdService wechatOpenIdService;
 
     @PaymentVerify
     @InitPaymentContext(PaymentApiCode.GET_WX_AUTH_URL)
     @Operation(summary = "获取微信OAuth2授权链接")
     @PostMapping("/getWxAuthUrl")
     public DaxResult<WxAuthUrlResult> getWxAuthUrl(@RequestBody WxAuthUrlParam param){
-        return DaxRes.ok(uniPayAssistService.getWxAuthUrl(param));
+        return DaxRes.ok(wechatOpenIdService.getWxAuthUrl(param));
     }
 
     @PaymentVerify
@@ -47,7 +47,7 @@ public class UniPayAssistController {
     @Operation(summary = "获取微信AccessToken")
     @PostMapping("/getWxAccessToken")
     public ResResult<WxAccessTokenResult> getWxAccessToken(@RequestBody WxAccessTokenParam param){
-        return Res.ok(uniPayAssistService.getWxAccessToken(param));
+        return Res.ok(wechatOpenIdService.getWxAccessToken(param));
     }
 
 }

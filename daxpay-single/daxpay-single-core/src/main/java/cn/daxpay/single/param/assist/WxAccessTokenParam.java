@@ -17,6 +17,6 @@ import lombok.experimental.Accessors;
 @Schema(title = "获取微信AccessToken参数")
 public class WxAccessTokenParam extends PaymentCommonParam {
 
-    @Schema(description = "微信code")
+    @Schema(description = "微信认证code")
     private String code;
 }

@@ -3,7 +3,7 @@ package cn.daxpay.single.service.core.payment.refund.strategy;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.daxpay.single.service.core.channel.wechat.service.WechatPayRefundService;
+import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayRefundService;
 import cn.daxpay.single.service.func.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -23,7 +23,7 @@ public class WeChatRefundStrategy extends AbsRefundStrategy {
 
     private final WeChatPayConfigService weChatPayConfigService;
 
-    private final WechatPayRefundService wechatPayRefundService;
+    private final WeChatPayRefundService wechatPayRefundService;
 
     private WeChatPayConfig weChatPayConfig;
 
