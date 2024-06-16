@@ -8,12 +8,14 @@ import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.AliPayWay;
 import cn.daxpay.single.service.core.channel.alipay.dao.AliPayConfigManager;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
-import cn.daxpay.single.service.core.system.config.service.PayChannelConfigService;
 import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
 import cn.daxpay.single.service.param.channel.alipay.AliPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.CharsetUtil;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.AlipayConfig;
+import com.alipay.api.DefaultAlipayClient;
 import com.ijpay.alipay.AliPayApiConfig;
 import com.ijpay.alipay.AliPayApiConfigKit;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +41,6 @@ public class AliPayConfigService {
     /** 默认支付宝配置的主键ID */
     private final static Long ID = 0L;
     private final AliPayConfigManager alipayConfigManager;
-    private final PayChannelConfigService payChannelConfigService;
     private final PlatformConfigService platformConfigService;
 
     /**
@@ -92,6 +93,38 @@ public class AliPayConfigService {
      */
     public String generateReturnUrl(){
         return platformConfigService.getConfig().getWebsiteUrl() + "/return/pay/alipay";
+    }
+
+    /**
+     * 获取支付宝SDK的配置
+     */
+    public AlipayClient getAlipayClient(){
+        AliPayConfig aliPayConfig = this.getConfig();
+        return this.getAlipayClient(aliPayConfig);
+    }
+
+    /**
+     * 获取支付宝SDK的配置
+     */
+    @SneakyThrows
+    public AlipayClient getAlipayClient(AliPayConfig aliPayConfig){
+        AlipayConfig config = new AlipayConfig();
+        config.setServerUrl(aliPayConfig.getServerUrl());
+        config.setAppId(aliPayConfig.getAppId());
+        config.setFormat("json");
+        config.setCharset("UTF-8");
+        config.setSignType(aliPayConfig.getSignType());
+        // 证书
+        if (Objects.equals(aliPayConfig.getAuthType(), AliPayCode.AUTH_TYPE_CART)){
+            config.setAppCertContent(aliPayConfig.getAppCert());
+            config.setRootCertContent(aliPayConfig.getAlipayRootCert());
+            config.setAlipayPublicCertContent(aliPayConfig.getAlipayCert());
+        } else {
+            // 公钥
+            config.setPrivateKey(aliPayConfig.getPrivateKey());
+            config.setAlipayPublicKey(aliPayConfig.getAlipayPublicKey());
+        }
+        return new DefaultAlipayClient(config);
     }
 
     /**

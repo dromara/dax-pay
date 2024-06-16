@@ -11,8 +11,6 @@ import cn.daxpay.single.service.dto.extra.OpenIdResult;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alipay.api.AlipayClient;
-import com.alipay.api.AlipayConfig;
-import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import lombok.RequiredArgsConstructor;
@@ -93,7 +91,7 @@ public class AliPayAuthService {
     @SneakyThrows
     public String getOpenId(String authCode) {
         // 初始化SDK
-        AlipayClient alipayClient = new DefaultAlipayClient(this.getAlipayConfig());
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
         // 构造请求参数以调用接口
         AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
         // 设置授权码
@@ -105,26 +103,6 @@ public class AliPayAuthService {
             log.warn("获取支付宝OpenId失败,原因:{}", response.getSubMsg());
             throw new BizException("获取支付宝OpenId失败");
         }
-
         return response.getOpenId();
     }
-
-    /**
-     * 获取支付宝SDK的配置
-     */
-    private AlipayConfig getAlipayConfig(){
-        AliPayConfig aliPayConfig = aliPayConfigService.getConfig();
-        String privateKey  = aliPayConfig.getPrivateKey();
-        String alipayPublicKey =aliPayConfig.getAlipayPublicKey();
-        AlipayConfig alipayConfig = new AlipayConfig();
-        alipayConfig.setServerUrl(aliPayConfig.getServerUrl());
-        alipayConfig.setAppId(aliPayConfig.getAppId());
-        alipayConfig.setPrivateKey(privateKey);
-        alipayConfig.setFormat("json");
-        alipayConfig.setAlipayPublicKey(alipayPublicKey);
-        alipayConfig.setCharset("UTF-8");
-        alipayConfig.setSignType(aliPayConfig.getSignType());
-        return alipayConfig;
-    }
-
 }
