@@ -91,7 +91,7 @@ public class PayOrderController {
     public ResResult<Void> allocation(String orderNo){
         AllocationParam param = new AllocationParam();
         param.setOrderNo(orderNo);
-        param.setBizAllocationNo(OrderNoGenerateUtil.allocation());
+        param.setBizAllocNo(OrderNoGenerateUtil.allocation());
         allocationService.allocation(param);
         return Res.ok();
     }

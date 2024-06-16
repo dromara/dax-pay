@@ -213,6 +213,7 @@ public class RefundRepairService {
                 .setTradeId(refundOrder.getId())
                 .setRepairNo(repairResult.getRepairNo())
                 .setTradeNo(refundOrder.getRefundNo())
+                .setChannel(refundOrder.getChannel())
                 .setRepairType(PaymentTypeEnum.REFUND.getCode())
                 .setBeforeStatus(repairResult.getBeforeRefundStatus().getCode())
                 .setAfterStatus(afterStatus)

@@ -26,6 +26,8 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
 
     private final AliPayConfigService aliPayConfigService;
 
+    private AliPayConfig config;
+
     /**
      * 策略标识
      */
@@ -39,8 +41,7 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doBeforeHandler() {
-        AliPayConfig config = aliPayConfigService.getConfig();
-        aliPayConfigService.initConfig(config);
+        this.config = aliPayConfigService.getConfig();
     }
 
 
@@ -49,6 +50,6 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doCloseRemoteHandler() {
-        closeService.close(this.getOrder());
+        closeService.close(this.getOrder(), this.config);
     }
 }

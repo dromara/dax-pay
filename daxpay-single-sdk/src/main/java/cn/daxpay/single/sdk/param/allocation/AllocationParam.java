@@ -20,7 +20,7 @@ import java.util.List;
 public class AllocationParam extends DaxPayRequest<AllocationModel> {
 
     /** 商户分账单号 */
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     /** 支付订单号 */
     private String orderNo;

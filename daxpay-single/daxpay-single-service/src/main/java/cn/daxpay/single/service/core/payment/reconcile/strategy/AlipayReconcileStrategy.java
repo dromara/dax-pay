@@ -32,6 +32,8 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
 
     private final AliPayConfigService configService;
 
+    private AliPayConfig config;
+
     /**
      * 策略标识
      *
@@ -47,8 +49,7 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
      */
     @Override
     public void doBeforeHandler() {
-        AliPayConfig config = configService.getConfig();
-        configService.initConfig(config);
+        this.config = configService.getConfig();
     }
 
     /**
@@ -66,6 +67,6 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
     @Override
     public void downAndSave() {
         String date = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.NORM_DATE_PATTERN);
-        reconcileService.downAndSave(date,this.getRecordOrder());
+        reconcileService.downAndSave(date,this.getRecordOrder(),this.config);
     }
 }

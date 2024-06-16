@@ -92,9 +92,9 @@ public class AllocationOrderController {
     @InitPaymentContext(PaymentApiCode.ALLOCATION_FINISH)
     @Operation(summary = "分账完结")
     @PostMapping("/finish")
-    public ResResult<Void> finish(String allocationNo){
+    public ResResult<Void> finish(String allocNo){
         AllocFinishParam param = new AllocFinishParam();
-        param.setAllocNo(allocationNo);
+        param.setAllocNo(allocNo);
         allocationService.finish(param);
         return Res.ok();
     }
@@ -102,9 +102,9 @@ public class AllocationOrderController {
     @InitPaymentContext(PaymentApiCode.ALLOCATION)
     @Operation(summary = "重新发起分账")
     @PostMapping("/retry")
-    public ResResult<Void> retryAllocation(String bizAllocationNo){
+    public ResResult<Void> retryAllocation(String bizAllocNo){
         AllocationParam param = new AllocationParam();
-        param.setBizAllocationNo(bizAllocationNo);
+        param.setBizAllocNo(bizAllocNo);
         allocationService.allocation(param);
         return Res.ok();
     }

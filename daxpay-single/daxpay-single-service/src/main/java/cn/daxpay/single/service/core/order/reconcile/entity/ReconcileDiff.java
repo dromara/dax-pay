@@ -56,7 +56,7 @@ public class ReconcileDiff extends MpBaseEntity implements EntityBaseFunction<Re
     private String tradeNo;
 
     /** 通道交易号 */
-    @DbColumn(comment = "通道交易号", length = 150, isNull = false)
+    @DbColumn(comment = "通道交易号", length = 150)
     private String outTradeNo;
 
     /** 交易时间 */

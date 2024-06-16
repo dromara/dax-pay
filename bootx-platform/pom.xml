@@ -61,7 +61,6 @@
         <plumelog.version>3.5.3</plumelog.version>
         <easyexcel.version>3.3.2</easyexcel.version>
         <xxl-job.version>2.4.0</xxl-job.version>
-        <IJPay.version>2.9.7</IJPay.version>
         <sa-token.version>1.36.0</sa-token.version>
         <justauth.version>1.16.6</justauth.version>
         <minio.version>8.5.4</minio.version>

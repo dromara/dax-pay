@@ -6,6 +6,7 @@ import cn.daxpay.single.code.AllocDetailResultEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
+import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
@@ -13,12 +14,13 @@ import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.*;
 import com.alipay.api.request.AlipayTradeOrderSettleQueryRequest;
+import com.alipay.api.request.AlipayTradeOrderSettleRequest;
 import com.alipay.api.response.AlipayTradeOrderSettleQueryResponse;
 import com.alipay.api.response.AlipayTradeOrderSettleResponse;
-import com.ijpay.alipay.AliPayApi;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -41,12 +43,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AliPayAllocationService {
-
+    private final AliPayConfigService aliPayConfigService;
     /**
      * 发起分账
      */
     @SneakyThrows
-    public void allocation(AllocOrder allocOrder, List<AllocOrderDetail> orderDetails){
+    public void allocation(AllocOrder allocOrder, List<AllocOrderDetail> orderDetails, AliPayConfig config){
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(allocOrder.getAllocNo());
@@ -64,11 +67,12 @@ public class AliPayAllocationService {
                 })
                 .collect(Collectors.toList());
         model.setRoyaltyParameters(royaltyParameters);
-
-        AlipayTradeOrderSettleResponse response = AliPayApi.tradeOrderSettleToResponse(model);
+        AlipayTradeOrderSettleRequest request = new AlipayTradeOrderSettleRequest();
+        request.setBizModel(model);
+        AlipayTradeOrderSettleResponse response = alipayClient.execute(request);
         // 需要写入到分账订单中
         String settleNo = response.getSettleNo();
-        PaymentContextLocal.get().getAllocationInfo().setOutAllocationNo(settleNo);
+        PaymentContextLocal.get().getAllocationInfo().setOutAllocNo(settleNo);
         this.verifyErrorMsg(response);
     }
 
@@ -76,7 +80,8 @@ public class AliPayAllocationService {
      * 分账完结
      */
     @SneakyThrows
-    public void finish(AllocOrder allocOrder, List<AllocOrderDetail> orderDetails ){
+    public void finish(AllocOrder allocOrder, List<AllocOrderDetail> orderDetails, AliPayConfig config){
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(String.valueOf(allocOrder.getAllocNo()));
@@ -98,7 +103,9 @@ public class AliPayAllocationService {
                 })
                 .collect(Collectors.toList());
         model.setRoyaltyParameters(royaltyParameters);
-        AlipayTradeOrderSettleResponse response = AliPayApi.tradeOrderSettleToResponse(model);
+        AlipayTradeOrderSettleRequest request = new AlipayTradeOrderSettleRequest();
+        request.setBizModel(model);
+        AlipayTradeOrderSettleResponse response = alipayClient.execute(request);
         this.verifyErrorMsg(response);
     }
 
@@ -106,13 +113,14 @@ public class AliPayAllocationService {
      * 分账状态同步
      */
     @SneakyThrows
-    public AllocRemoteSyncResult sync(AllocOrder allocOrder, List<AllocOrderDetail> allocOrderDetails){
+    public AllocRemoteSyncResult sync(AllocOrder allocOrder, List<AllocOrderDetail> allocOrderDetails, AliPayConfig config){
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
         model.setTradeNo(allocOrder.getOutOrderNo());
         model.setOutRequestNo(allocOrder.getAllocNo());
         AlipayTradeOrderSettleQueryRequest request = new AlipayTradeOrderSettleQueryRequest();
         request.setBizModel(model);
-        AlipayTradeOrderSettleQueryResponse response = AliPayApi.execute(request);
+        AlipayTradeOrderSettleQueryResponse response = alipayClient.execute(request);
         // 验证
         this.verifyErrorMsg(response);
         Map<String, AllocOrderDetail> detailMap = allocOrderDetails.stream()

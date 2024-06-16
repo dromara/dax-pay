@@ -58,7 +58,6 @@ public class AliPayAllocationReceiverStrategy extends AbsAllocationReceiverStrat
         if (Objects.equals(aliPayConfig.getAllocation(),false)){
             throw new PayFailureException("微信支付配置不支持分账");
         }
-        payConfigService.initConfig(this.aliPayConfig);
     }
 
     /**
@@ -69,7 +68,7 @@ public class AliPayAllocationReceiverStrategy extends AbsAllocationReceiverStrat
         if (!receiverService.validation(this.getAllocationReceiver())){
             throw new PayFailureException("分账接收者参数未通过校验");
         }
-        receiverService.bind(this.getAllocationReceiver());
+        receiverService.bind(this.getAllocationReceiver(), this.aliPayConfig);
     }
 
     /**
@@ -80,6 +79,6 @@ public class AliPayAllocationReceiverStrategy extends AbsAllocationReceiverStrat
         if (!receiverService.validation(this.getAllocationReceiver())){
             throw new PayFailureException("分账参数未通过校验");
         }
-        receiverService.unbind(this.getAllocationReceiver());
+        receiverService.unbind(this.getAllocationReceiver(), this.aliPayConfig);
     }
 }

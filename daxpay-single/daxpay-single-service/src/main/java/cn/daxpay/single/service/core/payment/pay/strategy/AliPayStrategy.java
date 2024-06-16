@@ -61,7 +61,7 @@ public class AliPayStrategy extends AbsPayStrategy {
             throw new PayFailureException("支付参数错误");
         }
         // 检查并获取支付宝支付配置
-        this.initAlipayConfig();
+        this.alipayConfig = alipayConfigService.getAndCheckConfig();
         // 支付宝相关校验
         aliPayService.validation(this.getPayParam(), alipayConfig);
     }
@@ -72,15 +72,6 @@ public class AliPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         aliPayService.pay(this.getOrder(), this.aliPayParam, this.alipayConfig);
-    }
-
-    /**
-     * 初始化支付宝配置信息
-     */
-    private void initAlipayConfig() {
-        // 获取并初始化支付宝支付配置
-        this.alipayConfig = alipayConfigService.getAndCheckConfig();
-        alipayConfigService.initConfig(this.alipayConfig);
     }
 
 }

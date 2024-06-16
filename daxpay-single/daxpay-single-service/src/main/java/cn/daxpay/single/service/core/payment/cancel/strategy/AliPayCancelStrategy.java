@@ -27,6 +27,8 @@ public class AliPayCancelStrategy extends AbsPayCancelStrategy {
 
     private final AliPayCloseService aliPayCloseService;
 
+    private AliPayConfig config;
+
     @Override
     public String getChannel() {
         return PayChannelEnum.ALI.getCode();
@@ -37,8 +39,7 @@ public class AliPayCancelStrategy extends AbsPayCancelStrategy {
      */
     @Override
     public void doBeforeCancelHandler() {
-        AliPayConfig config = alipayConfigService.getConfig();
-        alipayConfigService.initConfig(config);
+        this.config = alipayConfigService.getConfig();
     }
 
     /**
@@ -46,6 +47,6 @@ public class AliPayCancelStrategy extends AbsPayCancelStrategy {
      */
     @Override
     public void doCancelHandler() {
-        aliPayCloseService.cancel(this.getOrder());
+        aliPayCloseService.cancel(this.getOrder(),this.config);
     }
 }

@@ -24,7 +24,7 @@ public class AllocationParam extends PaymentCommonParam {
     @NotBlank(message = "商户分账单号不可为空")
     @Size(max = 100, message = "商户分账单号不可超过100位")
     @Schema(description = "商户分账单号")
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     /** 支付订单号 */
     @Size(max = 32, message = "支付订单号不可超过32位")

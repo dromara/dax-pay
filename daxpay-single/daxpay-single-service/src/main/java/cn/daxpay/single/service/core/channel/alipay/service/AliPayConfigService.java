@@ -1,6 +1,5 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
-import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.daxpay.single.exception.pay.PayFailureException;
@@ -12,12 +11,9 @@ import cn.daxpay.single.service.core.system.config.service.PlatformConfigService
 import cn.daxpay.single.service.param.channel.alipay.AliPayConfigParam;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import cn.hutool.core.util.CharsetUtil;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayConfig;
 import com.alipay.api.DefaultAlipayClient;
-import com.ijpay.alipay.AliPayApiConfig;
-import com.ijpay.alipay.AliPayApiConfigKit;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -126,41 +122,4 @@ public class AliPayConfigService {
         }
         return new DefaultAlipayClient(config);
     }
-
-    /**
-     * 初始化IJPay服务
-     */
-    @SneakyThrows
-    public void initConfig(AliPayConfig alipayConfig) {
-        AliPayApiConfig aliPayApiConfig;
-        // 公钥
-        if (Objects.equals(alipayConfig.getAuthType(), AliPayCode.AUTH_TYPE_KEY)) {
-            aliPayApiConfig = AliPayApiConfig.builder()
-                    .setAppId(alipayConfig.getAppId())
-                    .setPrivateKey(alipayConfig.getPrivateKey())
-                    .setAliPayPublicKey(alipayConfig.getAlipayPublicKey())
-                    .setCharset(CharsetUtil.UTF_8)
-                    .setServiceUrl(alipayConfig.getServerUrl())
-                    .setSignType(alipayConfig.getSignType())
-                    .build();
-        }
-        // 证书
-        else if (Objects.equals(alipayConfig.getAuthType(), AliPayCode.AUTH_TYPE_CART)) {
-            aliPayApiConfig = AliPayApiConfig.builder()
-                    .setAppId(alipayConfig.getAppId())
-                    .setPrivateKey(alipayConfig.getPrivateKey())
-                    .setAppCertContent(alipayConfig.getAppCert())
-                    .setAliPayCertContent(alipayConfig.getAlipayCert())
-                    .setAliPayRootCertContent(alipayConfig.getAlipayRootCert())
-                    .setCharset(CharsetUtil.UTF_8)
-                    .setServiceUrl(alipayConfig.getServerUrl())
-                    .setSignType(alipayConfig.getSignType())
-                    .buildByCertContent();
-        }
-        else {
-            throw new BizException("支付宝认证方式不可为空");
-        }
-        AliPayApiConfigKit.setThreadLocalAliPayApiConfig(aliPayApiConfig);
-    }
-
 }

@@ -42,19 +42,19 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
 
     /** 通道交易号 */
     @DbMySqlIndex(comment = "通道交易号索引")
-    @DbColumn(comment = "通道交易号", length = 150, isNull = false)
+    @DbColumn(comment = "通道交易号", length = 150)
     private String outTradeNo;
 
     /**
-     * 三方支付返回状态
+     * 三方支付返回状态, 分账无返回状态
      * @see PaySyncStatusEnum
      * @see RefundSyncStatusEnum
      */
-    @DbColumn(comment = "网关返回状态", length = 20, isNull = false)
+    @DbColumn(comment = "网关返回状态", length = 30)
     private String outTradeStatus;
 
     /**
-     * 同步类型 支付/退款
+     * 同步类型 支付/退款/分账/转账
      * @see PaymentTypeEnum
      */
     @DbColumn(comment = "同步类型", length = 20, isNull = false)

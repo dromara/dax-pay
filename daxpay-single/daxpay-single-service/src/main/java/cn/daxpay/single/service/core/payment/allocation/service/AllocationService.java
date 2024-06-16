@@ -76,7 +76,7 @@ public class AllocationService {
      */
     public AllocationResult allocation(AllocationParam param) {
         // 判断是否已经有分账订单
-        AllocOrder allocOrder = allocationOrderManager.findByBizAllocNo(param.getBizAllocationNo())
+        AllocOrder allocOrder = allocationOrderManager.findByBizAllocNo(param.getBizAllocNo())
                 .orElse(null);
         if (Objects.nonNull(allocOrder)){
             // 重复分账
@@ -130,10 +130,10 @@ public class AllocationService {
                 // TODO 返回异常处理
             }
             // 网关分账号
-            String outAllocationNo = PaymentContextLocal.get()
+            String outAllocNo = PaymentContextLocal.get()
                     .getAllocationInfo()
-                    .getOutAllocationNo();
-            order.setOutAllocNo(outAllocationNo);
+                    .getOutAllocNo();
+            order.setOutAllocNo(outAllocNo);
             allocationOrderManager.updateById(order);
             return new AllocationResult()
                     .setAllocNo(order.getAllocNo())

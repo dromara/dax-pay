@@ -60,7 +60,7 @@ public class TradeFlowRecord extends MpCreateEntity implements EntityBaseFunctio
 
     /** 通道交易号 */
     @DbMySqlIndex(comment = "通道交易号索引")
-    @DbColumn(comment = "通道交易号", length = 150, isNull = false)
+    @DbColumn(comment = "通道交易号", length = 150)
     private String outTradeNo;
 
     @Override

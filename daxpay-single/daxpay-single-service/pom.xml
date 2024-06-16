@@ -78,17 +78,11 @@
             <version>${daxpay.version}</version>
         </dependency>
 
-        <!-- 支付宝支付 -->
+        <!-- 支付宝官方SDK -->
         <dependency>
-            <groupId>com.github.javen205</groupId>
-            <artifactId>IJPay-AliPay</artifactId>
-            <version>${IJPay.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>fastjson</artifactId>
-                    <groupId>com.alibaba</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>${alipay.version}</version>
         </dependency>
 
         <!-- 微信支付 ijpay -->

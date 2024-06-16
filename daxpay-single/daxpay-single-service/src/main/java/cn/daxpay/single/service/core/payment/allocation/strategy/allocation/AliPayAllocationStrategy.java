@@ -52,7 +52,6 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
         if (Objects.equals(aliPayConfig.getAllocation(),false)){
             throw new PayFailureException("支付宝支付配置不支持分账");
         }
-        aliPayConfigService.initConfig(this.aliPayConfig);
     }
 
     /**
@@ -60,7 +59,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void allocation() {
-        aliPayAllocationService.allocation(this.getAllocOrder(), this.getAllocOrderDetails());
+        aliPayAllocationService.allocation(this.getAllocOrder(), this.getAllocOrderDetails(), this.aliPayConfig);
     }
 
     /**
@@ -68,7 +67,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void finish() {
-        aliPayAllocationService.finish(this.getAllocOrder(), this.getAllocOrderDetails());
+        aliPayAllocationService.finish(this.getAllocOrder(), this.getAllocOrderDetails(), this.aliPayConfig);
     }
 
     /**
@@ -76,7 +75,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public AllocRemoteSyncResult doSync() {
-        return aliPayAllocationService.sync(this.getAllocOrder(), this.getAllocOrderDetails());
+        return aliPayAllocationService.sync(this.getAllocOrder(), this.getAllocOrderDetails(), this.aliPayConfig);
     }
 
 }

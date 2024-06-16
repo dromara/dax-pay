@@ -4,10 +4,13 @@ import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.hutool.core.date.DatePattern;
 import lombok.experimental.UtilityClass;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 支付工具类
@@ -51,7 +54,7 @@ public class PayUtil {
      * @param amount 元的金额
      * @return 分的金额
      */
-    public static int convertCentAmount(BigDecimal amount) {
+    public int convertCentAmount(BigDecimal amount) {
         return amount.multiply(HUNDRED).setScale(0, RoundingMode.HALF_UP).intValue();
     }
 
@@ -61,7 +64,27 @@ public class PayUtil {
      * @param amount 元的金额
      * @return 元的金额 两位小数
      */
-    public static BigDecimal conversionAmount(int amount) {
+    public BigDecimal conversionAmount(int amount) {
         return BigDecimal.valueOf(amount).divide(HUNDRED,2, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * 获取请求参数
+     */
+    public Map<String, String> toMap(HttpServletRequest request) {
+        Map<String, String> params = new HashMap<>();
+        Map<String, String[]> requestParams = request.getParameterMap();
+
+        for (String name : requestParams.keySet()) {
+            String[] values = requestParams.get(name);
+            String valueStr = "";
+
+            for (int i = 0; i < values.length; ++i) {
+                valueStr = i == values.length - 1 ? valueStr + values[i] : valueStr + values[i] + ",";
+            }
+
+            params.put(name, valueStr);
+        }
+        return params;
     }
 }

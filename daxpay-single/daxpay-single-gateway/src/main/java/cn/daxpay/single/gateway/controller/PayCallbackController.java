@@ -7,8 +7,8 @@ import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayCallbackSer
 import cn.daxpay.single.service.core.extra.AliPayAuthService;
 import cn.daxpay.single.service.core.extra.WeChatAuthService;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
+import cn.daxpay.single.util.PayUtil;
 import com.egzosn.pay.union.api.UnionPayConfigStorage;
-import com.ijpay.alipay.AliPayApi;
 import com.ijpay.core.kit.HttpKit;
 import com.ijpay.core.kit.WxPayKit;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +50,7 @@ public class PayCallbackController {
     @Operation(summary = "支付宝信息回调")
     @PostMapping("/alipay")
     public String aliPayNotify(HttpServletRequest request) {
-        Map<String, String> stringStringMap = AliPayApi.toMap(request);
+        Map<String, String> stringStringMap = PayUtil.toMap(request);
         return aliPayCallbackService.callback(stringStringMap);
     }
 

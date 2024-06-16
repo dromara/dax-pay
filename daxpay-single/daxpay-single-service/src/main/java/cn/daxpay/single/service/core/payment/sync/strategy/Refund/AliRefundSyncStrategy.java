@@ -2,7 +2,6 @@ package cn.daxpay.single.service.core.payment.sync.strategy.Refund;
 
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PaySyncStatusEnum;
-import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPaySyncService;
 import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
@@ -42,8 +41,6 @@ public class AliRefundSyncStrategy extends AbsRefundSyncStrategy {
      */
     @Override
     public RefundRemoteSyncResult doSyncStatus() {
-        AliPayConfig config = alipayConfigService.getConfig();
-        alipayConfigService.initConfig(config);
         return aliPaySyncService.syncRefundStatus(this.getRefundOrder());
     }
 }

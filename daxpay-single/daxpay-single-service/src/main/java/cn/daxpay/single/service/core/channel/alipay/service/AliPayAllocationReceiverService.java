@@ -3,15 +3,18 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 import cn.daxpay.single.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.AliPayCode;
+import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceiver;
 import cn.hutool.core.util.StrUtil;
+import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.AlipayTradeRoyaltyRelationBindModel;
 import com.alipay.api.domain.AlipayTradeRoyaltyRelationUnbindModel;
 import com.alipay.api.domain.RoyaltyEntity;
+import com.alipay.api.request.AlipayTradeRoyaltyRelationBindRequest;
+import com.alipay.api.request.AlipayTradeRoyaltyRelationUnbindRequest;
 import com.alipay.api.response.AlipayTradeRoyaltyRelationBindResponse;
 import com.alipay.api.response.AlipayTradeRoyaltyRelationUnbindResponse;
-import com.ijpay.alipay.AliPayApi;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,7 @@ import static cn.daxpay.single.code.AllocReceiverTypeEnum.*;
 @Service
 @RequiredArgsConstructor
 public class AliPayAllocationReceiverService {
+    private final AliPayConfigService aliPayConfigService;
 
     /**
      * 校验
@@ -47,7 +51,8 @@ public class AliPayAllocationReceiverService {
      * 绑定关系
      */
     @SneakyThrows
-    public void bind(AllocationReceiver allocationReceiver){
+    public void bind(AllocationReceiver allocationReceiver, AliPayConfig aliPayConfig){
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
         AlipayTradeRoyaltyRelationBindModel model = new AlipayTradeRoyaltyRelationBindModel();
         model.setOutRequestNo(String.valueOf(allocationReceiver.getId()));
 
@@ -60,7 +65,9 @@ public class AliPayAllocationReceiverService {
 
         // 不报错视为同步成功
         model.setReceiverList(Collections.singletonList(entity));
-        AlipayTradeRoyaltyRelationBindResponse response = AliPayApi.tradeRoyaltyRelationBind(model);
+        AlipayTradeRoyaltyRelationBindRequest request = new AlipayTradeRoyaltyRelationBindRequest();
+        request.setBizModel(model);
+        AlipayTradeRoyaltyRelationBindResponse response = alipayClient.execute(request);
         this.verifyErrorMsg(response);
     }
 
@@ -68,7 +75,8 @@ public class AliPayAllocationReceiverService {
      * 解绑关系
      */
     @SneakyThrows
-    public void unbind(AllocationReceiver allocationReceiver){
+    public void unbind(AllocationReceiver allocationReceiver, AliPayConfig aliPayConfig){
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
         AlipayTradeRoyaltyRelationUnbindModel model = new AlipayTradeRoyaltyRelationUnbindModel();
         model.setOutRequestNo(String.valueOf(allocationReceiver.getId()));
 
@@ -78,7 +86,9 @@ public class AliPayAllocationReceiverService {
         entity.setAccount(allocationReceiver.getReceiverAccount());
 
         model.setReceiverList(Collections.singletonList(entity));
-        AlipayTradeRoyaltyRelationUnbindResponse response =  AliPayApi.tradeRoyaltyRelationUnBind(model);
+        AlipayTradeRoyaltyRelationUnbindRequest request = new AlipayTradeRoyaltyRelationUnbindRequest();
+        request.setBizModel(model);
+        AlipayTradeRoyaltyRelationUnbindResponse response =  alipayClient.execute(request);
         System.out.println(response);
         // 如果出现分账方不存在也视为成功
         if (Objects.equals(response.getSubCode(), AliPayCode.USER_NOT_EXIST)) {

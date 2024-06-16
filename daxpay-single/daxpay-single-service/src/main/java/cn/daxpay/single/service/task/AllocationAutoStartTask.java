@@ -28,7 +28,7 @@ public class AllocationAutoStartTask implements Job {
     public void execute(JobExecutionContext jobExecutionContext) {
         for (PayOrder payOrder : payOrderManager.findAutoAllocation()) {
             AllocationParam param = new AllocationParam();
-            param.setBizAllocationNo(OrderNoGenerateUtil.allocation());
+            param.setBizAllocNo(OrderNoGenerateUtil.allocation());
             try {
                 allocationService.allocation(param, payOrder);
             } catch (Exception e) {

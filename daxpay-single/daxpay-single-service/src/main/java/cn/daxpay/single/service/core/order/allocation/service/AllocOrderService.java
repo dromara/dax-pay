@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.order.allocation.service;
 
 import cn.daxpay.single.code.AllocDetailResultEnum;
+import cn.daxpay.single.code.AllocOrderResultEnum;
 import cn.daxpay.single.code.AllocOrderStatusEnum;
 import cn.daxpay.single.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.exception.pay.PayFailureException;
@@ -159,10 +160,11 @@ public class AllocOrderService {
                 .setOutOrderNo(payOrder.getOutOrderNo())
                 .setTitle(payOrder.getTitle())
                 .setAllocNo(OrderNoGenerateUtil.allocation())
-                .setBizAllocNo(param.getBizAllocationNo())
+                .setBizAllocNo(param.getBizAllocNo())
                 .setChannel(payOrder.getChannel())
                 .setDescription(param.getDescription())
                 .setStatus(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())
+                .setResult(AllocOrderResultEnum.ALL_PENDING.getCode())
                 .setAmount(sumAmount)
                 .setNotifyUrl(param.getNotifyUrl())
                 .setAttach(param.getAttach())

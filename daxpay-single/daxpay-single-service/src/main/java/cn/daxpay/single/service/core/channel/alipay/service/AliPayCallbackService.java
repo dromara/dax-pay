@@ -50,7 +50,6 @@ public class AliPayCallbackService {
 
     private final RefundCallbackService refundCallbackService;
 
-
     /**
      * 回调处理入口
      */

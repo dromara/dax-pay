@@ -29,7 +29,8 @@
         <xml-apis.version>1.4.01</xml-apis.version>
         <spring.checkstyle.version>0.0.38</spring.checkstyle.version>
         <plumelog.version>3.5.2</plumelog.version>
-        <IJPay.version>2.9.10</IJPay.version>
+        <alipay.version>4.39.104.ALL</alipay.version>
+        <IJPay.version>2.9.11</IJPay.version>
         <egzosn-java.version>2.14.7</egzosn-java.version>
         <knife4j.version>4.4.0</knife4j.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>

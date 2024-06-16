@@ -40,16 +40,7 @@ public class AliPaySyncStrategy extends AbsPaySyncStrategy {
      */
     @Override
     public PayRemoteSyncResult doSyncStatus() {
-        this.initAlipayConfig();
-        return alipaySyncService.syncPayStatus(this.getOrder());
-    }
-
-    /**
-     * 初始化支付宝配置信息
-     */
-    private void initAlipayConfig() {
-        // 检查并获取支付宝支付配置
         AliPayConfig config = alipayConfigService.getConfig();
-        alipayConfigService.initConfig(config);
+        return alipaySyncService.syncPayStatus(this.getOrder(),config);
     }
 }

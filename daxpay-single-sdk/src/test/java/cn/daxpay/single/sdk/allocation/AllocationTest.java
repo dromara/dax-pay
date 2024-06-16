@@ -91,7 +91,7 @@ public class AllocationTest {
     public void allocationOpen() {
         // 分账参数
         AllocationParam param = new AllocationParam();
-        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setBizAllocNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
         param.setBizOrderNo("SDK_1717264053245");
         param.setDescription("测试分账");
@@ -108,7 +108,7 @@ public class AllocationTest {
     public void allocationOpenByGroup() {
         // 分账参数
         AllocationParam param = new AllocationParam();
-        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setBizAllocNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
         param.setBizOrderNo("SDK_1717257064753");
         param.setGroupNo("123");
@@ -126,7 +126,7 @@ public class AllocationTest {
     public void allocationOpenByReceivers() {
         // 分账参数
         AllocationParam param = new AllocationParam();
-        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setBizAllocNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
         param.setOrderNo("DEVP24060201473363000001");
         AllocReceiverParam allocReceiverParam = new AllocReceiverParam();

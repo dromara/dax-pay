@@ -49,7 +49,7 @@ public class AllocOrder extends MpBaseEntity implements EntityBaseFunction<Alloc
      * 通道分账号
      */
     @DbMySqlIndex(comment = "通道分账号索引")
-    @DbColumn(comment = "通道分账号", length = 150, isNull = false)
+    @DbColumn(comment = "通道分账号", length = 150)
     private String outAllocNo;
 
     /** 支付订单ID */
@@ -99,7 +99,7 @@ public class AllocOrder extends MpBaseEntity implements EntityBaseFunction<Alloc
      * 状态
      * @see AllocOrderStatusEnum
      */
-    @DbColumn(comment = "状态", length = 20, isNull = false)
+    @DbColumn(comment = "状态", length = 30, isNull = false)
     private String status;
 
     /**
