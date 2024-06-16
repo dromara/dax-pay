@@ -9,13 +9,13 @@ import lombok.experimental.Accessors;
 /**
  * 构造微信OAuth2授权的url链接
  * @author xxm
- * @since 2024/2/10
+ * @since 2024/6/16
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "构造微信OAuth2授权的url链接")
-public class WxAuthUrlParam extends PaymentCommonParam {
+public class AliPayAuthUrlParam extends PaymentCommonParam {
 
     @Schema(description = "回调地址")
     private String url;

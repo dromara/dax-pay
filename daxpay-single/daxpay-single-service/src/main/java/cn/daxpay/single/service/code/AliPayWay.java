@@ -19,7 +19,7 @@ public class AliPayWay {
 
     // 支付方式
     private static final List<PayMethodEnum> PAY_WAYS = Arrays.asList(PayMethodEnum.WAP, PayMethodEnum.APP, PayMethodEnum.WEB,
-            PayMethodEnum.QRCODE, PayMethodEnum.BARCODE);
+            PayMethodEnum.QRCODE, PayMethodEnum.BARCODE, PayMethodEnum.JSAPI);
 
     /**
      * 根据编码获取

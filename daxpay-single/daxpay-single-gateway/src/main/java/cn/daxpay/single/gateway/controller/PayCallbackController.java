@@ -4,7 +4,8 @@ import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayCallbackService;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayCallbackService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayCallbackService;
-import cn.daxpay.single.service.core.extra.WeChatOpenIdService;
+import cn.daxpay.single.service.core.extra.AliPayAuthService;
+import cn.daxpay.single.service.core.extra.WeChatAuthService;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import com.egzosn.pay.union.api.UnionPayConfigStorage;
 import com.ijpay.alipay.AliPayApi;
@@ -37,11 +38,13 @@ public class PayCallbackController {
 
     private final AliPayCallbackService aliPayCallbackService;
 
-    private final WeChatOpenIdService wechatOpenIdService;
+    private final WeChatAuthService wechatAuthService;
 
     private final WeChatPayCallbackService weChatPayCallbackService;
 
     private final UnionPayCallbackService unionPayCallbackService;
+
+    private final AliPayAuthService aliPayAuthService;
 
     @SneakyThrows
     @Operation(summary = "支付宝信息回调")
@@ -49,6 +52,15 @@ public class PayCallbackController {
     public String aliPayNotify(HttpServletRequest request) {
         Map<String, String> stringStringMap = AliPayApi.toMap(request);
         return aliPayCallbackService.callback(stringStringMap);
+    }
+
+
+    @Operation(summary = "支付宝认证授权回调")
+    @GetMapping("/alipay/auth/{code}")
+    public ModelAndView wechatCallback(@RequestParam("code") String authCode, @PathVariable("code") String code){
+        aliPayAuthService.authCallback(authCode, code);
+        // 调用页面自动关闭
+        return new ModelAndView("forward:/h5/openIdCallbackClose.html");
     }
 
     @SneakyThrows
@@ -60,10 +72,10 @@ public class PayCallbackController {
         return weChatPayCallbackService.callback(params);
     }
 
-    @Operation(summary = "微信获取OpenId授权回调方法")
-    @GetMapping("/wechat/openId/{code}")
+    @Operation(summary = "微信宝认证授权回调")
+    @GetMapping("/wechat/auth/{code}")
     public ModelAndView wxAuthCallback(@RequestParam("code") String authCode, @PathVariable("code") String code){
-        wechatOpenIdService.authCallback(authCode, code);
+        wechatAuthService.authCallback(authCode, code);
         // 调用页面自动关闭
         return new ModelAndView("forward:/h5/openIdCallbackClose.html");
     }

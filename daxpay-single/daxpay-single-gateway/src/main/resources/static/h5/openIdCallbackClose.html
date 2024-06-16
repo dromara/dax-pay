@@ -19,5 +19,9 @@
     setTimeout(function (){
         WeixinJSBridge.call('closeWindow')
     },500)
+    // 支付宝浏览器关闭
+    setTimeout(function (){
+        AlipayJSBridge.call('closeWebview')
+    },500)
 </script>
 </body>

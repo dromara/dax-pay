@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "微信OpenId查询结果")
-public class WeChatOpenIdResult {
+public class OpenIdResult {
 
     @Schema(description = "OpenId")
     private String openId;

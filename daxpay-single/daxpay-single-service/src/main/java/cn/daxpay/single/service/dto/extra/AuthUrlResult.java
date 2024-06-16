@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "微信授权链接和查询标识返回类")
-public class WeChatAuthUrlResult {
+public class AuthUrlResult {
 
     /** 授权访问链接 */
     @Schema(description = "授权访问链接")

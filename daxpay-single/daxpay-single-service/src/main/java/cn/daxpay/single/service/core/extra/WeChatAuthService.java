@@ -9,8 +9,8 @@ import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.daxpay.single.service.core.system.config.entity.PlatformConfig;
 import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
-import cn.daxpay.single.service.dto.extra.WeChatAuthUrlResult;
-import cn.daxpay.single.service.dto.extra.WeChatOpenIdResult;
+import cn.daxpay.single.service.dto.extra.AuthUrlResult;
+import cn.daxpay.single.service.dto.extra.OpenIdResult;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WeChatOpenIdService {
+public class WeChatAuthService {
 
     public static final String OPEN_ID_KEY_PREFIX = "daxpay:wechat:openId:";
 
@@ -66,18 +66,18 @@ public class WeChatOpenIdService {
     }
 
     /**
-     * 根据传入的标识码code生成一个用于微信授权页面的链接
+     * 生成一个用于微信授权页面的链接和code标识
      */
-    public WeChatAuthUrlResult generateAuthUrl() {
+    public AuthUrlResult generateAuthUrl() {
         PlatformConfig config = platformsConfigService.getConfig();
         String code = RandomUtil.randomString(10);
         // 构建出授权后重定向页面链接
-        String redirectUrl = StrUtil.format("{}/callback/pay/wechat/openId/{}", config.getWebsiteUrl(), code);
+        String redirectUrl = StrUtil.format("{}/callback/pay/wechat/auth/{}", config.getWebsiteUrl(), code);
         WxAuthUrlResult result = this.getWxAuthUrl(new WxAuthUrlParam().setUrl(redirectUrl));
 
         // 写入Redis, 五分钟有效期
         redisClient.setWithTimeout(OPEN_ID_KEY_PREFIX + code, "", 5*60*1000L);
-        return new WeChatAuthUrlResult()
+        return new AuthUrlResult()
                 .setCode(code)
                 .setAuthUrl(result.getUrl());
     }
@@ -99,19 +99,19 @@ public class WeChatOpenIdService {
     /**
      * 通过标识码轮训获取OpenId
      */
-    public WeChatOpenIdResult queryOpenId(String code) {
+    public OpenIdResult queryOpenId(String code) {
         // 从redis中获取
         String openId = redisClient.get(OPEN_ID_KEY_PREFIX + code);
         // 不为空存在
         if (StrUtil.isNotBlank(openId)){
-            return new WeChatOpenIdResult().setOpenId(openId).setStatus("success");
+            return new OpenIdResult().setOpenId(openId).setStatus("success");
         }
         // 为空获取中
         if (Objects.equals(openId, "")){
-            return new WeChatOpenIdResult().setStatus("pending");
+            return new OpenIdResult().setStatus("pending");
         }
         // null不存在
-        return new WeChatOpenIdResult().setStatus("fail");
+        return new OpenIdResult().setStatus("fail");
     }
 
 
