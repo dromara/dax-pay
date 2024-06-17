@@ -1,4 +1,4 @@
-package cn.daxpay.multi.gateway.result;
+package cn.daxpay.multi.core.result;
 
 import cn.bootx.platform.core.code.CommonCode;
 import io.swagger.v3.oas.annotations.media.Schema;

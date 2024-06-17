@@ -1,16 +1,16 @@
-package cn.daxpay.multi.service.code;
+package cn.daxpay.multi.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付系统中常见的操作类型, 如支付/退款/转账等
+ * 常见的交易类型, 如支付/退款/转账等
  * @author xxm
  * @since 2024/1/28
  */
 @Getter
 @AllArgsConstructor
-public enum TrandeTypeEnum {
+public enum TradeTypeEnum {
 
     PAY("pay","支付"),
     REFUND("refund","退款"),

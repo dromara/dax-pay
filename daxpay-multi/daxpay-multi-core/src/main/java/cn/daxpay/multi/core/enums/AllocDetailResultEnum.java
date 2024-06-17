@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.code;
+package cn.daxpay.multi.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

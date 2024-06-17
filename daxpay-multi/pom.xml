@@ -16,6 +16,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>daxpay-multi-core</module>
         <module>daxpay-multi-service</module>
         <module>daxpay-multi-admin</module>
         <module>daxpay-multi-gateway</module>

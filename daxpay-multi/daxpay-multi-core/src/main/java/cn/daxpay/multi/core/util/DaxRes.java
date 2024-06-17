@@ -1,6 +1,6 @@
-package cn.daxpay.multi.gateway.util;
+package cn.daxpay.multi.core.util;
 
-import cn.daxpay.multi.gateway.result.DaxResult;
+import cn.daxpay.multi.core.result.DaxResult;
 import lombok.experimental.UtilityClass;
 
 import static cn.bootx.platform.core.code.CommonCode.SUCCESS_CODE;
