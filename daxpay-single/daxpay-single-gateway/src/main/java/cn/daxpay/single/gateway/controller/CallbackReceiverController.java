@@ -32,9 +32,9 @@ import java.util.Map;
 @Slf4j
 @Tag(name = "支付通道信息回调")
 @RestController
-@RequestMapping("/callback/pay")
+@RequestMapping("/unipay/callback")
 @AllArgsConstructor
-public class PayCallbackController {
+public class CallbackReceiverController {
 
     private final AliPayCallbackService aliPayCallbackService;
 

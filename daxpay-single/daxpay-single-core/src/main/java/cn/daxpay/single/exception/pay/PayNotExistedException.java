@@ -1,7 +1,7 @@
 package cn.daxpay.single.exception.pay;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.daxpay.single.code.DaxPayErrorCode;
+import cn.daxpay.single.code.DaxPayCommonErrorCode;
 
 /**
  * 付款记录不存在
@@ -12,7 +12,7 @@ import cn.daxpay.single.code.DaxPayErrorCode;
 public class PayNotExistedException extends BizException {
 
     public PayNotExistedException() {
-        super(DaxPayErrorCode.PAYMENT_RECORD_NOT_EXISTED, "付款记录不存在");
+        super(DaxPayCommonErrorCode.PAYMENT_RECORD_NOT_EXISTED, "付款记录不存在");
     }
 
 }

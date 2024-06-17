@@ -1,7 +1,7 @@
 package cn.daxpay.single.exception.pay;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.daxpay.single.code.DaxPayErrorCode;
+import cn.daxpay.single.code.DaxPayCommonErrorCode;
 
 /**
  * 付款已存在
@@ -12,7 +12,7 @@ import cn.daxpay.single.code.DaxPayErrorCode;
 public class PayHasExistedException extends BizException {
 
     public PayHasExistedException() {
-        super(DaxPayErrorCode.PAYMENT_HAS_EXISTED, "付款已存在");
+        super(DaxPayCommonErrorCode.PAYMENT_HAS_EXISTED, "付款已存在");
     }
 
 }

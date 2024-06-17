@@ -76,7 +76,7 @@ public class RefundOrderQueryService {
     public RefundOrderResult queryRefundOrder(QueryRefundParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getRefundNo()) && Objects.isNull(param.getBizRefundNo())){
-            throw new PayFailureException("退款号或=商户退款号不能都为空");
+            throw new PayFailureException("退款号或商户退款号不能都为空");
         }
         // 查询退款单
         RefundOrder refundOrder = this.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())

@@ -6,7 +6,10 @@ package cn.daxpay.single.code;
  * @author xxm
  * @since 2020/12/7
  */
-public interface DaxPayErrorCode {
+public interface DaxPayCommonErrorCode {
+
+    /** 未归类的错误 */
+    int UNCLASSIFIED_ERROR = 10000;
 
     /**
      * 支付失败

@@ -81,14 +81,14 @@ public class AliPayConfigService {
      * 生成通知地址
      */
     public String generateNotifyUrl(){
-        return platformConfigService.getConfig().getWebsiteUrl() + "/callback/pay/alipay";
+        return platformConfigService.getConfig().getWebsiteUrl() + "/unipay/callback/alipay";
     }
 
     /**
      * 生成同步跳转地址
      */
     public String generateReturnUrl(){
-        return platformConfigService.getConfig().getWebsiteUrl() + "/return/pay/alipay";
+        return platformConfigService.getConfig().getWebsiteUrl() + "/unipay/return/alipay";
     }
 
     /**

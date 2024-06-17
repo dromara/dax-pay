@@ -1,7 +1,7 @@
 package cn.daxpay.single.exception.pay;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.daxpay.single.code.DaxPayErrorCode;
+import cn.daxpay.single.code.DaxPayCommonErrorCode;
 
 /**
  * 付款正在处理中
@@ -12,7 +12,7 @@ import cn.daxpay.single.code.DaxPayErrorCode;
 public class PayIsProcessingException extends BizException {
 
     public PayIsProcessingException() {
-        super(DaxPayErrorCode.PAYMENT_IS_PROCESSING, "付款正在处理中");
+        super(DaxPayCommonErrorCode.PAYMENT_IS_PROCESSING, "付款正在处理中");
     }
 
 }

@@ -1,7 +1,7 @@
 package cn.daxpay.single.exception.waller;
 
 import cn.bootx.platform.common.core.exception.FatalException;
-import cn.daxpay.single.code.DaxPayErrorCode;
+import cn.daxpay.single.code.DaxPayCommonErrorCode;
 
 /**
  * 钱包日志错误
@@ -12,7 +12,7 @@ import cn.daxpay.single.code.DaxPayErrorCode;
 public class WalletLogError extends FatalException {
 
     public WalletLogError() {
-        super(DaxPayErrorCode.WALLET_LOG_ERROR, "钱包日志错误");
+        super(DaxPayCommonErrorCode.WALLET_LOG_ERROR, "钱包日志错误");
     }
 
 }

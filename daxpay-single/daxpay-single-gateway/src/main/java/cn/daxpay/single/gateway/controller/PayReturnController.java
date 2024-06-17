@@ -14,33 +14,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * 支付同步通知控制器
+ * 同步通知跳转控制器
  * @author xxm
  * @since 2024/1/13
  */
 @IgnoreAuth
-@Tag(name = "支付同步通知")
+@Tag(name = "同步通知跳转控制器")
 @RestController
-@RequestMapping("/return/pay")
+@RequestMapping("/unipay/return")
 @RequiredArgsConstructor
 public class PayReturnController {
     private final PayReturnService payReturnService;
 
-    @Operation(summary = "支付宝同步跳转连接")
-    @GetMapping("/alipay")
+    @Operation(summary = "支付宝同步跳转通知")
+    @GetMapping("/pay/alipay")
     public ModelAndView alipay(AliPayReturnParam param){
         String url = payReturnService.alipay(param);
         return new ModelAndView("redirect:" + url);
     }
 
-    @Operation(summary = "微信同步跳转连接")
-    @GetMapping("/wechat")
+    @Operation(summary = "微信同步跳转通知")
+    @GetMapping("/pay/wechat")
     public ModelAndView wechat(){
         return null;
     }
 
-    @Operation(summary = "云闪付同步跳转连接")
-    @PostMapping("/union")
+    @Operation(summary = "云闪付同步跳转通知")
+    @PostMapping("/pay/union")
     public ModelAndView union(UnionPayReturnParam param){
         String url = payReturnService.union(param);
         return new ModelAndView("redirect:" + url);

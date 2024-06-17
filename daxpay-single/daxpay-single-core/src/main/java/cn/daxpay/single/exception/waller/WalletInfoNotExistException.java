@@ -1,7 +1,7 @@
 package cn.daxpay.single.exception.waller;
 
 import cn.bootx.platform.common.core.exception.FatalException;
-import cn.daxpay.single.code.DaxPayErrorCode;
+import cn.daxpay.single.code.DaxPayCommonErrorCode;
 
 /**
  * 钱包信息不存在
@@ -12,7 +12,7 @@ import cn.daxpay.single.code.DaxPayErrorCode;
 public class WalletInfoNotExistException extends FatalException {
 
     public WalletInfoNotExistException() {
-        super(DaxPayErrorCode.WALLET_INFO_NOT_EXISTS, "钱包信息不存在");
+        super(DaxPayCommonErrorCode.WALLET_INFO_NOT_EXISTS, "钱包信息不存在");
     }
 
 }

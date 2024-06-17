@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.daxpay.single.code.DaxPayCode.FIELD_SIGN;
-
 /**
  * 如果需要进行签名,
  *  1. 参数名ASCII码从小到大排序（字典序）
@@ -26,6 +24,9 @@ import static cn.daxpay.single.code.DaxPayCode.FIELD_SIGN;
  */
 @UtilityClass
 public class PaySignUtil {
+
+    private String FIELD_SIGN  = "sign";
+
 
     /**
      * 将参数转换为map对象. 使用ChatGPT生成

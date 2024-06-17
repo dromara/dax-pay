@@ -23,9 +23,9 @@ import java.util.Objects;
 @IgnoreAuth
 @Tag(name = "支付通道网关消息通知")
 @RestController
-@RequestMapping("/callback/notice")
+@RequestMapping("/unipay/notice")
 @RequiredArgsConstructor
-public class PayNoticeReceiverController {
+public class NoticeReceiverController {
 
     private final AliPayNoticeReceiverService aliPayNoticeReceiverService;
 

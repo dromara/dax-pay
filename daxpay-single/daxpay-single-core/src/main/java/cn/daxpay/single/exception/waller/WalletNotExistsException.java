@@ -1,7 +1,7 @@
 package cn.daxpay.single.exception.waller;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.daxpay.single.code.DaxPayErrorCode;
+import cn.daxpay.single.code.DaxPayCommonErrorCode;
 
 /**
  * 钱包不存在
@@ -12,7 +12,7 @@ import cn.daxpay.single.code.DaxPayErrorCode;
 public class WalletNotExistsException extends BizException {
 
     public WalletNotExistsException() {
-        super(DaxPayErrorCode.WALLET_NOT_EXISTS, "钱包不存在");
+        super(DaxPayCommonErrorCode.WALLET_NOT_EXISTS, "钱包不存在");
     }
 
 }
