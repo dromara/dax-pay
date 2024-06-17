@@ -1,4 +1,4 @@
-package cn.daxpay.single.admin.controller.allocation;
+package cn.daxpay.single.admin.controller.order;
 
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;

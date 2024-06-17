@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * 转正订单服务
+ * 转账订单服务
  * @author xxm
- * @since 2024/3/21
+ * @since 2024/6/17
  */
 @Slf4j
 @Service
@@ -15,6 +15,17 @@ import org.springframework.stereotype.Service;
 public class TransferOrderService {
 
     /**
-     * 创建订单
+     * 手动转账
      */
+    public void transfer(){
+
+    }
+
+    /**
+     * 重试转账
+     */
+    public void retryTransfer(){
+
+    }
+
 }

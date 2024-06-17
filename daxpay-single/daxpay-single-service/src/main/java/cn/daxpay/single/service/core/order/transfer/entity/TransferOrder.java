@@ -76,10 +76,6 @@ public class TransferOrder extends MpBaseEntity implements EntityBaseFunction<Tr
     @DbColumn(comment = "付款方", length = 100)
     private String payer;
 
-    /** 付款方显示名称 */
-    @DbColumn(comment = "付款方显示名称", length = 50)
-    private String payerShowName;
-
     /**
      * 收款人类型
      * @see TransferPayeeTypeEnum

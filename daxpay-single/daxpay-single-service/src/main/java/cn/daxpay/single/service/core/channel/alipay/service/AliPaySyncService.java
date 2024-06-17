@@ -3,22 +3,29 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.code.PaySyncStatusEnum;
 import cn.daxpay.single.code.RefundSyncStatusEnum;
+import cn.daxpay.single.code.TransferStatusEnum;
+import cn.daxpay.single.result.sync.TransferSyncResult;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
+import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
 import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.domain.AlipayFundTransCommonQueryModel;
 import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
+import com.alipay.api.request.AlipayFundTransCommonQueryRequest;
 import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.response.AlipayFundTransCommonQueryResponse;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -140,4 +147,26 @@ public class AliPaySyncService {
         }
         return syncResult;
     }
+
+    /**
+     * 转账同步
+     */
+    @SneakyThrows
+    public TransferSyncResult syncTransferStatus(TransferOrder transferOrder){
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
+        // 构造请求参数以调用接口
+        AlipayFundTransCommonQueryRequest request = new AlipayFundTransCommonQueryRequest();
+        AlipayFundTransCommonQueryModel model = new AlipayFundTransCommonQueryModel();
+        // 设置销售产品码
+        model.setProductCode("STD_RED_PACKET");
+        // 设置描述特定的业务场景
+        model.setBizScene("PERSONAL_PAY");
+        // 设置商户转账唯一订单号
+        model.setOutBizNo(transferOrder.getTransferNo());
+        request.setBizModel(model);
+        AlipayFundTransCommonQueryResponse response = alipayClient.execute(request);
+        System.out.println(response.getBody());
+        return new TransferSyncResult().setStatus(TransferStatusEnum.FAIL.getCode());
+    }
+
 }

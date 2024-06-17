@@ -50,8 +50,6 @@ public class RefundOrderService {
         refundParam.setReason(param.getReason());
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
-        // 手动初始化上下文
-        paymentAssistService.initRequest(refundParam);
         // 调用统一退款接口
         refundService.refund(refundParam);
     }
@@ -60,8 +58,7 @@ public class RefundOrderService {
      * 重新退款
      */
     public void resetRefund(Long id){
-
-        // 查询扩展信息
+        // 查询信息
         RefundOrder refundOrder = refundOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("未找到退款订单"));
 
@@ -76,8 +73,7 @@ public class RefundOrderService {
         refundParam.setAttach(refundOrder.getAttach());
         refundParam.setReqTime(LocalDateTime.now());
         refundParam.setClientIp(ip);
-
-        // 手动初始化请求上下文
-        paymentAssistService.initRequest(refundParam);
+        // 调用统一退款接口
+        refundService.refund(refundParam);
     }
 }

@@ -19,7 +19,7 @@ public class TransferLocal {
     private String outTransferNo;
 
     /** 状态 */
-    private TransferStatusEnum status = TransferStatusEnum.SUCCESS;
+    private TransferStatusEnum status = TransferStatusEnum.TRANSFERRING;
 
     /** 完成时间 */
     private LocalDateTime finishTime;

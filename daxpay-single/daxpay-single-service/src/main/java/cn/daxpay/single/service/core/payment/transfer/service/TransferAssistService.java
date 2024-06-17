@@ -39,7 +39,6 @@ public class TransferAssistService {
                 .setPayeeName(param.getPayeeName())
                 .setPayeeAccount(param.getPayeeAccount())
                 .setPayeeType(param.getPayeeType())
-                .setPayerShowName(param.getPayerShowName())
                 .setReason(param.getReason())
                 .setStatus(TransferStatusEnum.TRANSFERRING.getCode())
                 .setTitle(param.getTitle())

@@ -4,20 +4,18 @@ import cn.daxpay.single.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
 
 /**
- * 转账订单查询参数
+ * 转账状态同步参数
  * @author xxm
- * @since 2024/5/27
+ * @since 2024/6/17
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Accessors(chain = true)
-@Schema(title = "转账订单查询参数")
-public class QueryTransferParam extends PaymentCommonParam {
+@Schema(title = "转账状态同步参数")
+public class TransferSyncParam extends PaymentCommonParam {
 
     /** 商户转账号 */
     @Size(max = 100, message = "商户转账号不可超过100位")

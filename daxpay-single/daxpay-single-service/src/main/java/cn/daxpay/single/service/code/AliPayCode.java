@@ -89,6 +89,10 @@ public interface AliPayCode {
     /** 返回退款时间 */
     String GMT_REFUND_PAY = "gmt_refund_pay";
 
+    // 转账状态
+    /** 转账成功 */
+    String TRANSFER_SUCCESS = "SUCCESS";
+
     // 错误提示
     /** 交易不存在 */
     String ACQ_TRADE_NOT_EXIST = "ACQ.TRADE_NOT_EXIST";

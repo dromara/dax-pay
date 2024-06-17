@@ -1,6 +1,7 @@
-package cn.daxpay.single.service.dto.order.transfer;
+package cn.daxpay.single.service.param.order;
 
-import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.common.core.annotation.QueryParam;
+import cn.bootx.platform.common.core.rest.param.QueryOrder;
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.TransferPayeeTypeEnum;
 import cn.daxpay.single.code.TransferTypeEnum;
@@ -12,26 +13,29 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 转账订单
+ * 转账订单查询参数
  * @author xxm
- * @since 2024/6/14
+ * @since 2024/6/17
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "转账订单")
-public class TransferOrderDto extends BaseDto {
+@Schema(title = "转账订单查询参数")
+public class TransferOrderQuery extends QueryOrder {
 
     /** 商户转账号 */
     @Schema(description = "商户转账号")
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String bizTransferNo;
 
     /** 转账号 */
     @Schema(description = "转账号")
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String transferNo;
 
     /** 通道转账号 */
     @Schema(description = "通道转账号")
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String outTransferNo;
 
     /**
@@ -47,11 +51,8 @@ public class TransferOrderDto extends BaseDto {
 
     /** 标题 */
     @Schema(description = "标题")
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String title;
-
-    /** 转账原因/备注 */
-    @Schema(description = "转账原因/备注")
-    private String reason;
 
     /**
      * 转账类型, 微信使用
@@ -77,6 +78,7 @@ public class TransferOrderDto extends BaseDto {
 
     /** 收款人姓名 */
     @Schema(description = "收款人姓名")
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String payeeName;
 
     /**
@@ -90,32 +92,10 @@ public class TransferOrderDto extends BaseDto {
     @Schema(description = "成功时间")
     private LocalDateTime successTime;
 
-
-    /** 异步通知地址 */
-    @Schema(description = "异步通知地址")
-    private String notifyUrl;
-
-    /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
-    @Schema(description = "商户扩展参数")
-    private String attach;
-
-    /** 请求时间，时间戳转时间 */
-    @Schema(description = "请求时间，传输时间戳")
-    private LocalDateTime reqTime;
-
-    /** 终端ip */
-    @Schema(description = "支付终端ip")
-    private String clientIp;
-
     /**
      * 错误码
      */
     @Schema(description = "错误码")
     private String errorCode;
 
-    /**
-     * 错误原因
-     */
-    @Schema(description = "错误原因")
-    private String errorMsg;
 }

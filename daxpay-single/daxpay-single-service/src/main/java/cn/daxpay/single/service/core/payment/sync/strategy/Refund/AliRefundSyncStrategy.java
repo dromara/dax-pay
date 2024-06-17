@@ -2,7 +2,6 @@ package cn.daxpay.single.service.core.payment.sync.strategy.Refund;
 
 import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.code.PaySyncStatusEnum;
-import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPaySyncService;
 import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
@@ -21,8 +20,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Component
 @RequiredArgsConstructor
 public class AliRefundSyncStrategy extends AbsRefundSyncStrategy {
-
-    private final AliPayConfigService alipayConfigService;
 
     private final AliPaySyncService aliPaySyncService;;
 

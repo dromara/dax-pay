@@ -63,10 +63,6 @@ public class TransferParam extends PaymentCommonParam {
     @Schema(description = "转账类型, 微信使用")
     private String transferType;
 
-    /** 付款方显示名称 */
-    @Size(max = 50, message = "付款方显示名称不可超过50位")
-    @Schema(description = "付款方显示名称")
-    private String payerShowName;
 
     /**
      * 收款人账号类型

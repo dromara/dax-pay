@@ -12,7 +12,6 @@ import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryServic
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderService;
 import cn.daxpay.single.service.core.payment.sync.service.RefundSyncService;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderDto;
-import cn.daxpay.single.service.param.order.PayOrderQuery;
 import cn.daxpay.single.service.param.order.PayOrderRefundParam;
 import cn.daxpay.single.service.param.order.RefundOrderQuery;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * @author xxm
  * @since 2024/1/9
  */
-@Tag(name = "支付退款控制器")
+@Tag(name = "退款订单控制器")
 @RestController
 @RequestMapping("/order/refund")
 @RequiredArgsConstructor
@@ -69,6 +68,7 @@ public class RefundOrderController {
         return Res.ok();
     }
 
+    @InitPaymentContext(PaymentApiCode.SYNC_REFUND)
     @Operation(summary = "退款同步")
     @PostMapping("/syncByRefundNo")
     public ResResult<RefundSyncResult> syncByRefundNo(String refundNo){
@@ -79,7 +79,7 @@ public class RefundOrderController {
 
     @Operation(summary = "查询金额汇总")
     @GetMapping("/getTotalAmount")
-    public ResResult<Integer> getTotalAmount(PayOrderQuery param){
+    public ResResult<Integer> getTotalAmount(RefundOrderQuery param){
         return Res.ok(queryService.getTotalAmount(param));
     }
 }

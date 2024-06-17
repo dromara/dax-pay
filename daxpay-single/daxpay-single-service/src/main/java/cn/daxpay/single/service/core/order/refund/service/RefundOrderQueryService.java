@@ -11,7 +11,6 @@ import cn.daxpay.single.service.core.order.refund.convert.RefundOrderConvert;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderDto;
-import cn.daxpay.single.service.param.order.PayOrderQuery;
 import cn.daxpay.single.service.param.order.RefundOrderQuery;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -89,7 +88,7 @@ public class RefundOrderQueryService {
     /**
      * 查询支付总金额
      */
-    public Integer getTotalAmount(PayOrderQuery param) {
+    public Integer getTotalAmount(RefundOrderQuery param) {
         return refundOrderManager.getTalAmount(param);
     }
 

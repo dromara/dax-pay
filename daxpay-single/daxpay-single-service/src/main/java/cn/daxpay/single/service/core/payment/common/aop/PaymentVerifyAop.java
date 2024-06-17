@@ -40,9 +40,8 @@ public class PaymentVerifyAop {
         if (param instanceof PaymentCommonParam){
             // 参数校验
             ValidationUtil.validateParam(param);
-
-            // 请求上下文初始化
-            paymentAssistService.initRequest((PaymentCommonParam) param);
+            // 终端信息初始化
+            paymentAssistService.initClient((PaymentCommonParam) param);
             // 参数签名校验
             paymentAssistService.signVerify((PaymentCommonParam) param);
             // 参数请求时间校验

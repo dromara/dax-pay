@@ -32,7 +32,7 @@ public class PaymentAssistService {
     /**
      * 初始化请求相关信息上下文
      */
-    public void initRequest(PaymentCommonParam paymentCommonParam){
+    public void initClient(PaymentCommonParam paymentCommonParam){
         ClientLocal request = PaymentContextLocal.get().getClientInfo();
         request.setClientIp(paymentCommonParam.getClientIp());
     }

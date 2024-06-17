@@ -8,17 +8,16 @@ import cn.daxpay.single.service.common.context.TransferLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
-import cn.daxpay.single.util.OrderNoGenerateUtil;
 import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.util.StrUtil;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayFundAccountQueryModel;
-import com.alipay.api.domain.AlipayFundTransToaccountTransferModel;
+import com.alipay.api.domain.AlipayFundTransUniTransferModel;
+import com.alipay.api.domain.Participant;
 import com.alipay.api.request.AlipayFundAccountQueryRequest;
-import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
+import com.alipay.api.request.AlipayFundTransUniTransferRequest;
 import com.alipay.api.response.AlipayFundAccountQueryResponse;
-import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
+import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -57,18 +56,35 @@ public class AliPayTransferService {
     @SneakyThrows
     public void transfer(TransferOrder order, AliPayConfig aliPayConfig){
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
-        AlipayFundTransToaccountTransferModel model = new AlipayFundTransToaccountTransferModel();
-        model.setAmount(PayUtil.conversionAmount(order.getAmount()).toString());
-        model.setOutBizNo(OrderNoGenerateUtil.transfer());
-        model.setPayeeType(order.getPayeeType());
-        model.setPayeeAccount(order.getPayeeAccount());
-        model.setPayerShowName(order.getPayerShowName());
-        // 标题需要用附加方式传输进去
-        model.setExtParam(StrUtil.format("{order_title: '{}'}", order.getTitle()));
+
+        // 构造请求参数以调用接口
+        AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
+        AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();
+
+        // 设置转账业务的标题
+        model.setOrderTitle(order.getTitle());
+        // 设置描述特定的业务场景
+        model.setBizScene("DIRECT_TRANSFER");
+        // 设置业务产品码
+        model.setProductCode("TRANS_ACCOUNT_NO_PWD");
+        // 设置转账业务请求的扩展参数
+        model.setBusinessParams("{payer_show_name_use_alias: true}");
+        // 设置业务备注
         model.setRemark(order.getReason());
-        AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
+        // 设置商家侧唯一订单号
+        model.setOutBizNo(order.getTransferNo());
+        // 设置订单总金额
+        model.setTransAmount(PayUtil.conversionAmount(order.getAmount()).toString());
+
+        // 设置收款方信息
+        Participant payeeInfo = new Participant();
+        payeeInfo.setIdentity(order.getPayeeAccount());
+        payeeInfo.setName(order.getPayeeName());
+        payeeInfo.setIdentityType(order.getPayeeType());
+        model.setPayeeInfo(payeeInfo);
+        model.setRemark(order.getReason());
         request.setBizModel(model);
-        AlipayFundTransToaccountTransferResponse response = alipayClient.execute(request);
+        AlipayFundTransUniTransferResponse response = alipayClient.execute(request);
         if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
             log.error("网关返回退款失败: {}", response.getSubMsg());
             throw new PayFailureException(response.getSubMsg());
@@ -77,9 +93,10 @@ public class AliPayTransferService {
         // 通道转账号
         transferInfo.setOutTransferNo(response.getOrderId());
         // 有完成时间代表处理完成
-        String payDate = response.getPayDate();
-        if (StrUtil.isNotBlank(payDate)){
-            LocalDateTime time = LocalDateTimeUtil.parse(payDate, DatePattern.NORM_DATETIME_PATTERN);
+        if (Objects.equals(response.getStatus(), AliPayCode.TRANSFER_SUCCESS)){
+            // 时间
+            String transDate = response.getTransDate();
+            LocalDateTime time = LocalDateTimeUtil.parse(transDate, DatePattern.NORM_DATETIME_PATTERN);
             transferInfo.setFinishTime(time).setStatus(TransferStatusEnum.SUCCESS);
         }
     }
