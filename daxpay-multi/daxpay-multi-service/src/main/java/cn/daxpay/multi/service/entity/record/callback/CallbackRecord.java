@@ -1,8 +1,8 @@
 package cn.daxpay.multi.service.entity.record.callback;
 
-import cn.daxpay.multi.service.code.CallbackStatusEnum;
-import cn.daxpay.multi.service.code.PayChannelEnum;
-import cn.daxpay.multi.service.code.TrandeTypeEnum;
+import cn.daxpay.multi.core.enums.CallbackStatusEnum;
+import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,7 +32,7 @@ public class CallbackRecord extends MchEntity {
 
     /**
      * 回调类型
-     * @see TrandeTypeEnum
+     * @see TradeTypeEnum
      */
     private String callbackType;
 

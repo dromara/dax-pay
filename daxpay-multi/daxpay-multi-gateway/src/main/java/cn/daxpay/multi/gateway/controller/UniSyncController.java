@@ -1,7 +1,7 @@
 package cn.daxpay.multi.gateway.controller;
 
-import cn.daxpay.multi.gateway.result.DaxResult;
-import cn.daxpay.multi.gateway.util.DaxRes;
+import cn.daxpay.multi.core.result.DaxResult;
+import cn.daxpay.multi.core.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;

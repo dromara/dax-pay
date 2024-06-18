@@ -1,6 +1,6 @@
 package cn.bootx.platform.common.spring.exception;
 
-import cn.bootx.platform.common.core.exception.BizException;
+import cn.bootx.platform.core.exception.BizException;
 
 /**
  * 可重试异常，抛出这个异常进行重试

@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.entity.order.reconcile;
 
-import cn.daxpay.multi.service.code.TrandeTypeEnum;
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class ReconcileOutTrade extends MchEntity {
 
     /**
      * 交易类型
-     * @see TrandeTypeEnum
+     * @see TradeTypeEnum
      */
     private String type;
 

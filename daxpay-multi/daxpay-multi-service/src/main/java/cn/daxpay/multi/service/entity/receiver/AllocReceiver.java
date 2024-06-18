@@ -1,8 +1,8 @@
 package cn.daxpay.multi.service.entity.receiver;
 
-import cn.daxpay.multi.service.code.AllocReceiverTypeEnum;
-import cn.daxpay.multi.service.code.AllocRelationTypeEnum;
-import cn.daxpay.multi.service.code.PayChannelEnum;
+import cn.daxpay.multi.core.enums.AllocReceiverTypeEnum;
+import cn.daxpay.multi.core.enums.AllocRelationTypeEnum;
+import cn.daxpay.multi.core.enums.PayChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;

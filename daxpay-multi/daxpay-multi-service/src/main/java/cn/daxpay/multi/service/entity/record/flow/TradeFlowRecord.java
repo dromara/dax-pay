@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.entity.record.flow;
 
-import cn.daxpay.multi.service.code.PayChannelEnum;
-import cn.daxpay.multi.service.code.TradeFlowTypeEnum;
+import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

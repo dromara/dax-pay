@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.entity.channel;
 
-import cn.daxpay.multi.service.code.PayChannelEnum;
+import cn.daxpay.multi.core.enums.PayChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package cn.daxpay.multi.service.entity.order.allocation;
 
-import cn.daxpay.multi.service.code.AllocOrderResultEnum;
-import cn.daxpay.multi.service.code.AllocOrderStatusEnum;
-import cn.daxpay.multi.service.code.PayChannelEnum;
+import cn.daxpay.multi.core.enums.AllocOrderResultEnum;
+import cn.daxpay.multi.core.enums.AllocOrderStatusEnum;
+import cn.daxpay.multi.core.enums.PayChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;

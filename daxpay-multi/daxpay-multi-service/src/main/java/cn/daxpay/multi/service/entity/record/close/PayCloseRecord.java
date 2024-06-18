@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.entity.record.close;
 
-import cn.daxpay.multi.service.code.PayChannelEnum;
+import cn.daxpay.multi.core.enums.PayChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

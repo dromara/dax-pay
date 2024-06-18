@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.entity.order.allocation;
 
-import cn.daxpay.multi.service.code.AllocDetailResultEnum;
-import cn.daxpay.multi.service.code.AllocReceiverTypeEnum;
+import cn.daxpay.multi.core.enums.AllocDetailResultEnum;
+import cn.daxpay.multi.core.enums.AllocReceiverTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

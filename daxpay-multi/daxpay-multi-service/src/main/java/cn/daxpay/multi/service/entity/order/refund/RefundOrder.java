@@ -1,8 +1,8 @@
 package cn.daxpay.multi.service.entity.order.refund;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.daxpay.multi.service.code.PayChannelEnum;
-import cn.daxpay.multi.service.code.RefundStatusEnum;
+import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
