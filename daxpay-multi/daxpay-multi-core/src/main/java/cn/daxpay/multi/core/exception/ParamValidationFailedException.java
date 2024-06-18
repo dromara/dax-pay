@@ -1,9 +1,9 @@
-package cn.daxpay.multi.core.exception.common;
+package cn.daxpay.multi.core.exception;
 
 import cn.daxpay.multi.core.code.DaxPayCommonErrorCode;
 
 /**
- *
+ * 参数校验未通过
  * @author xxm
  * @since 2024/6/17
  */
@@ -14,6 +14,6 @@ public class ParamValidationFailedException extends PayFailureException{
     }
 
     public ParamValidationFailedException() {
-        super(DaxPayCommonErrorCode.PARAM_VALIDATION_FAILED,"不存在的支付通道");
+        super(DaxPayCommonErrorCode.PARAM_VALIDATION_FAILED,"参数校验未通过");
     }
 }

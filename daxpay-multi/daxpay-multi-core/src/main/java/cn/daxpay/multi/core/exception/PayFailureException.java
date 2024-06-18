@@ -1,4 +1,4 @@
-package cn.daxpay.multi.core.exception.common;
+package cn.daxpay.multi.core.exception;
 
 import cn.bootx.platform.core.exception.BizException;
 import cn.daxpay.multi.core.code.DaxPayCommonErrorCode;
