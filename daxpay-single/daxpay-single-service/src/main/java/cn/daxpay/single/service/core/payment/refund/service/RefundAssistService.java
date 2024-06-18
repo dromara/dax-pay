@@ -4,8 +4,12 @@ import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.core.code.PaySignTypeEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.core.code.RefundStatusEnum;
+import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.refund.RefundParam;
 import cn.daxpay.single.core.result.pay.RefundResult;
+import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.PaySignUtil;
 import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
@@ -13,8 +17,6 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
-import cn.daxpay.single.core.util.PaySignUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +49,7 @@ public class RefundAssistService {
         // 非支付完成的不能进行退款
         if (!Objects.equals(SUCCESS.getCode(), payOrder.getStatus())) {
             PayStatusEnum statusEnum = PayStatusEnum.findByCode(payOrder.getStatus());
-            throw new PayFailureException("当前支付单订状态["+statusEnum.getName()+"]不允许发起退款操作");
+            throw new TradeStatusErrorException("当前支付单订状态["+statusEnum.getName()+"]不允许发起退款操作");
         }
         // 退款中和退款完成不能退款
         List<String> tradesStatus = Arrays.asList(
@@ -55,16 +57,16 @@ public class RefundAssistService {
                 PayOrderRefundStatusEnum.REFUNDING.getCode());
         if (tradesStatus.contains(payOrder.getRefundStatus())){
             val statusEnum = PayOrderRefundStatusEnum.findByCode(payOrder.getRefundStatus());
-            throw new PayFailureException("当前支付单退款状态["+statusEnum.getName()+"]不允许发起退款操作");
+            throw new TradeStatusErrorException("当前支付单退款状态["+statusEnum.getName()+"]不允许发起退款操作");
         }
         // 退款号唯一校验
         if (StrUtil.isNotBlank(param.getBizRefundNo()) && refundOrderManager.existsByRefundNo(param.getBizRefundNo())){
-            throw new PayFailureException("退款单号已存在");
+            throw new ParamValidationFailException("退款单号已存在");
         }
 
         // 金额判断
         if (param.getAmount() > payOrder.getRefundableBalance()){
-            throw new PayFailureException("退款金额不能大于支付金额");
+            throw new ParamValidationFailException("退款金额不能大于支付金额");
         }
     }
 
@@ -143,7 +145,7 @@ public class RefundAssistService {
         } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
             refundResult.setSign(PaySignUtil.md5Sign(refundOrder, platformInfo.getSignSecret()));
         } else {
-            throw new PayFailureException("未获取到签名方式，请检查");
+            throw new ParamValidationFailException("未获取到签名方式，请检查");
         }
         return refundResult;
     }

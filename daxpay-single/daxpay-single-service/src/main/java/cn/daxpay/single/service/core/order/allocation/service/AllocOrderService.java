@@ -4,8 +4,10 @@ import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.code.AllocOrderResultEnum;
 import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.core.exception.ParamValidationFailException;
 import cn.daxpay.single.core.param.payment.allocation.AllocReceiverParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
+import cn.daxpay.single.core.util.OrderNoGenerateUtil;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocOrderDetailManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
@@ -16,7 +18,6 @@ import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationReceiverManager;
 import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceiver;
 import cn.daxpay.single.service.dto.allocation.AllocationGroupReceiverResult;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -96,7 +97,7 @@ public class AllocOrderService {
                 .distinct()
                 .collect(Collectors.toList());
         if (receiverNos.size() != param.getReceivers().size()){
-            throw new PayFailureException("分账接收方编号重复");
+            throw new ParamValidationFailException("分账接收方编号重复");
         }
         Map<String, Integer> receiverNoMap = param.getReceivers()
                 .stream()
@@ -104,13 +105,13 @@ public class AllocOrderService {
         // 查询分账接收方信息
         List<AllocationReceiver> receivers = receiverManager.findAllByReceiverNos(receiverNos);
         if (receivers.size() != receiverNos.size()){
-            throw new PayFailureException("分账接收方列表存在重复或无效的数据");
+            throw new ParamValidationFailException("分账接收方列表存在重复或无效的数据");
         }
         // 判断分账接收方类型是否都与分账订单类型匹配
         boolean anyMatch = receivers.stream()
                 .anyMatch(o -> !Objects.equals(o.getChannel(), payOrder.getChannel()));
         if (anyMatch){
-            throw new PayFailureException("分账接收方列表存在非本通道的数据");
+            throw new ParamValidationFailException("分账接收方列表存在非本通道的数据");
         }
 
 

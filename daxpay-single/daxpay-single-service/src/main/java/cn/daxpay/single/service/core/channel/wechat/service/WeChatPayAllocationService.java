@@ -4,6 +4,7 @@ import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
 import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
@@ -156,7 +157,7 @@ public class WeChatPayAllocationService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("分账操作失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
+            throw new OperationFailException("分账操作失败");
         }
     }
 

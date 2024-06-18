@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.code;
 
-import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.MethodNotExistException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -40,7 +40,7 @@ public enum PayMethodEnum {
         return Arrays.stream(PayMethodEnum.values())
             .filter(e -> Objects.equals(code, e.getCode()))
             .findFirst()
-            .orElseThrow(() -> new PayFailureException("不存在的支付方式"));
+            .orElseThrow(() -> new MethodNotExistException("不存在的支付方式"));
     }
 
 }

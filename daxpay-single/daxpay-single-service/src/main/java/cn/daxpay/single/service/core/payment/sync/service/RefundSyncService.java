@@ -4,6 +4,9 @@ import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.core.code.RefundSyncStatusEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.TradeNotExistException;
 import cn.daxpay.single.core.param.payment.refund.RefundSyncParam;
 import cn.daxpay.single.core.result.sync.RefundSyncResult;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
@@ -57,7 +60,7 @@ public class RefundSyncService {
     public RefundSyncResult sync(RefundSyncParam param){
         // 先获取退款单
         RefundOrder refundOrder = refundOrderQueryService.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())
-                .orElseThrow(() -> new PayFailureException("未查询到退款订单"));
+                .orElseThrow(() -> new TradeNotExistException("未查询到退款订单"));
         // 如果订单已经关闭, 直接返回退款关闭
         if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.CLOSE.getCode())){
             return new RefundSyncResult().setStatus(RefundStatusEnum.CLOSE.getCode());
@@ -88,7 +91,7 @@ public class RefundSyncService {
             if (Objects.equals(refundRemoteSyncResult.getSyncStatus(), RefundSyncStatusEnum.FAIL)) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(refundOrder, refundRemoteSyncResult, false, null, refundRemoteSyncResult.getErrorMsg());
-                throw new PayFailureException(refundRemoteSyncResult.getErrorMsg());
+                throw new OperationFailException(refundRemoteSyncResult.getErrorMsg());
             }
             // 订单的通道交易号是否一致, 不一致进行更新
             if (Objects.nonNull(refundRemoteSyncResult.getOutRefundNo()) && !Objects.equals(refundRemoteSyncResult.getOutRefundNo(), refundOrder.getOutRefundNo())){

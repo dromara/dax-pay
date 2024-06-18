@@ -1,6 +1,9 @@
 package cn.daxpay.single.service.core.payment.allocation.strategy.allocation;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.ConfigNotEnableException;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayAllocationService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
@@ -48,11 +51,11 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
         weChatPayConfig = weChatPayConfigService.getAndCheckConfig();
         // 判断是否支持分账
         if (Objects.equals(weChatPayConfig.getAllocation(),false)){
-            throw new PayFailureException("微信支付配置不支持分账");
+            throw new ConfigNotEnableException("微信支付未开启分账");
         }
         // 如果分账金额为0, 不发起分账
         if (getAllocOrder().getAmount() == 0){
-            throw new PayFailureException("微信订单的分账比例不正确或订单金额太小, 无法进行分账");
+            throw new OperationFailException("微信订单的分账比例不正确或订单金额太小, 无法进行分账");
         }
     }
 

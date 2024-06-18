@@ -5,7 +5,6 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import cn.daxpay.single.code.*;
 import cn.daxpay.single.core.code.*;
 import cn.daxpay.single.core.param.channel.AliPayParam;
 import cn.daxpay.single.core.param.channel.WalletPayParam;

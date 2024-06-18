@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.code;
 
-import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.ChannelNotExistException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +36,7 @@ public enum PayChannelEnum {
         return Arrays.stream(values())
             .filter(e -> Objects.equals(code, e.getCode()))
             .findFirst()
-            .orElseThrow(() -> new PayFailureException("不存在的支付通道"));
+            .orElseThrow(() -> new ChannelNotExistException("不存在的支付通道"));
     }
 
 }

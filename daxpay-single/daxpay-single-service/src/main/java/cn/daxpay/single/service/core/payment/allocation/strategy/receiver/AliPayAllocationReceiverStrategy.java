@@ -1,6 +1,8 @@
 package cn.daxpay.single.service.core.payment.allocation.strategy.receiver;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.ConfigNotEnableException;
+import cn.daxpay.single.core.exception.ParamValidationFailException;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayAllocationReceiverService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
@@ -55,7 +57,7 @@ public class AliPayAllocationReceiverStrategy extends AbsAllocationReceiverStrat
         this.aliPayConfig = payConfigService.getAndCheckConfig();
         // 判断是否支持分账
         if (Objects.equals(aliPayConfig.getAllocation(),false)){
-            throw new PayFailureException("微信支付配置不支持分账");
+            throw new ConfigNotEnableException("微信支付配置未开启分账");
         }
     }
 
@@ -65,7 +67,7 @@ public class AliPayAllocationReceiverStrategy extends AbsAllocationReceiverStrat
     @Override
     public void bind() {
         if (!receiverService.validation(this.getAllocationReceiver())){
-            throw new PayFailureException("分账接收者参数未通过校验");
+            throw new ParamValidationFailException("分账接收者参数未通过校验");
         }
         receiverService.bind(this.getAllocationReceiver(), this.aliPayConfig);
     }
@@ -76,7 +78,7 @@ public class AliPayAllocationReceiverStrategy extends AbsAllocationReceiverStrat
     @Override
     public void unbind() {
         if (!receiverService.validation(this.getAllocationReceiver())){
-            throw new PayFailureException("分账参数未通过校验");
+            throw new ParamValidationFailException("分账参数未通过校验");
         }
         receiverService.unbind(this.getAllocationReceiver(), this.aliPayConfig);
     }

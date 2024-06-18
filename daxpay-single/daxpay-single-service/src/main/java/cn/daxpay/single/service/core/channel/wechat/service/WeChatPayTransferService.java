@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.channel.wechat.service;
 
+import cn.daxpay.single.core.exception.UnsupportedAbilityException;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,6 @@ public class WeChatPayTransferService {
      */
     @SneakyThrows
     public void transfer(TransferOrder order, WeChatPayConfig config) {
-        throw new PayFailureException("微信转账暂未实现");
+        throw new UnsupportedAbilityException("微信转账暂未实现");
     }
 }

@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.code;
 
 import cn.daxpay.single.core.code.PayMethodEnum;
-import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.MethodNotExistException;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class AliPayWay {
         return PAY_WAYS.stream()
             .filter(e -> Objects.equals(code, e.getCode()))
             .findFirst()
-            .orElseThrow(() -> new PayFailureException("不存在的支付方式"));
+            .orElseThrow(() -> new MethodNotExistException("不存在的支付方式"));
     }
 
     /**

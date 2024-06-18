@@ -3,7 +3,7 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.daxpay.single.core.code.AllocDetailResultEnum;
-import cn.daxpay.single.core.exception.TradeFailedException;
+import cn.daxpay.single.core.exception.TradeFaileException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
@@ -155,7 +155,7 @@ public class AliPayAllocationService {
                 errorMsg = alipayResponse.getMsg();
             }
             log.error("分账处理失败 {}", errorMsg);
-            throw new TradeFailedException(errorMsg);
+            throw new TradeFaileException(errorMsg);
         }
     }
 

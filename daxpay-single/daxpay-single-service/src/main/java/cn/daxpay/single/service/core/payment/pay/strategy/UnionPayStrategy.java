@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.payment.pay.strategy;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.ParamValidationFailException;
 import cn.daxpay.single.core.param.channel.UnionPayParam;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayConfigService;
@@ -59,7 +60,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
             }
         }
         catch (JSONException e) {
-            throw new PayFailureException("支付参数错误");
+            throw new ParamValidationFailException("支付参数错误");
         }
         // 检查并获取云闪付支付配置
         this.unionPayConfig = unionPayConfigService.getAndCheckConfig();

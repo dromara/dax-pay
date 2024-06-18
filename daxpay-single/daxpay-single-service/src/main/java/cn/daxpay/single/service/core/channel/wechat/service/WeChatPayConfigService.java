@@ -2,6 +2,7 @@ package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
+import cn.daxpay.single.core.exception.ConfigNotEnableException;
 import cn.daxpay.single.service.code.WeChatPayWay;
 import cn.daxpay.single.service.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
@@ -38,7 +39,7 @@ public class WeChatPayConfigService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void update(WeChatPayConfigParam param) {
-        WeChatPayConfig weChatPayConfig = weChatPayConfigManager.findById(ID).orElseThrow(() -> new PayFailureException("微信支付配置不存在"));
+        WeChatPayConfig weChatPayConfig = weChatPayConfigManager.findById(ID).orElseThrow(() -> new ConfigNotEnableException("微信支付配置不存在"));
         BeanUtil.copyProperties(param, weChatPayConfig, CopyOptions.create().ignoreNullValue());
         weChatPayConfigManager.updateById(weChatPayConfig);
     }
@@ -57,7 +58,7 @@ public class WeChatPayConfigService {
     public WeChatPayConfig getAndCheckConfig(){
         WeChatPayConfig weChatPayConfig = getConfig();
         if (!weChatPayConfig.getEnable()){
-            throw new PayFailureException("微信支付未启用");
+            throw new ConfigNotEnableException("微信支付未启用");
         }
         return weChatPayConfig;
     }

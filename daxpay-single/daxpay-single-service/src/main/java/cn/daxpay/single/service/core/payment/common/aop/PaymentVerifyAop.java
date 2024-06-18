@@ -2,11 +2,13 @@ package cn.daxpay.single.service.core.payment.common.aop;
 
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.util.ValidationUtil;
+import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.core.param.PaymentCommonParam;
 import cn.daxpay.single.core.result.PaymentCommonResult;
+import cn.daxpay.single.core.util.DaxRes;
 import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.core.payment.common.service.PaymentAssistService;
-import cn.daxpay.single.core.util.DaxRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -33,7 +35,7 @@ public class PaymentVerifyAop {
     public Object beforeMethod(ProceedingJoinPoint pjp, @SuppressWarnings("unused") PaymentVerify paymentVerify) throws Throwable {
         Object[] args = pjp.getArgs();
         if (args.length == 0){
-            throw new PayFailureException("支付方法至少有一个参数，并且需要签名支付参数需要放在第一位");
+            throw new ParamValidationFailException("支付方法至少有一个参数，并且需要签名支付参数需要放在第一位");
         }
         Object param = args[0];
         if (param instanceof PaymentCommonParam){
@@ -47,7 +49,7 @@ public class PaymentVerifyAop {
             paymentAssistService.reqTimeoutVerify((PaymentCommonParam) param);
 
         } else {
-            throw new PayFailureException("支付参数需要继承PayCommonParam");
+            throw new ParamValidationFailException("支付参数需要继承PayCommonParam");
         }
         Object proceed;
         try {
@@ -67,10 +69,10 @@ public class PaymentVerifyAop {
             if (data instanceof PaymentCommonResult){
                 paymentAssistService.sign((PaymentCommonResult) data);
             } else {
-                throw new PayFailureException("支付方法返回类型需要为 ResResult<T extends PaymentCommonResult> 格式");
+                throw new ParamValidationFailException("支付方法返回类型需要为 ResResult<T extends PaymentCommonResult> 格式");
             }
         } else {
-            throw new PayFailureException("支付方法返回类型需要为 ResResult<T extends PaymentCommonResult> 格式");
+            throw new ParamValidationFailException("支付方法返回类型需要为 ResResult<T extends PaymentCommonResult> 格式");
         }
         return proceed;
     }

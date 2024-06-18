@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.channel.union.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.core.exception.ChannelNotEnabledException;
+import cn.daxpay.single.core.exception.ChannelNotEnableException;
 import cn.daxpay.single.service.code.UnionPayWay;
 import cn.daxpay.single.service.core.channel.union.dao.UnionPayConfigManager;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
@@ -72,7 +72,7 @@ public class UnionPayConfigService {
     public UnionPayConfig getAndCheckConfig() {
         UnionPayConfig unionPayConfig = this.getConfig();
         if (!unionPayConfig.getEnable()){
-            throw new ChannelNotEnabledException("云闪付支付未启用");
+            throw new ChannelNotEnableException("云闪付支付未启用");
         }
         return unionPayConfig;
     }

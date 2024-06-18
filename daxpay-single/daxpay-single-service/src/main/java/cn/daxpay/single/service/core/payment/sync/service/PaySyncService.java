@@ -6,6 +6,7 @@ import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.core.code.PaySyncStatusEnum;
+import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.core.result.sync.PaySyncResult;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
@@ -63,11 +64,11 @@ public class PaySyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
-                .orElseThrow(() -> new PayFailureException("支付订单不存在"));
+                .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
 
         // 钱包支付钱包不需要同步
         if (PayChannelEnum.WALLET.getCode().equals(payOrder.getChannel())){
-            throw new PayFailureException("支付订单不需要同步");
+            throw new TradeStatusErrorException("支付订单不需要同步");
         }
         // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);
@@ -95,7 +96,7 @@ public class PaySyncService {
             if (Objects.equals(payRemoteSyncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(payOrder, payRemoteSyncResult, false, null, payRemoteSyncResult.getErrorMsg());
-                throw new PayFailureException(payRemoteSyncResult.getErrorMsg());
+                throw new OperationFailException(payRemoteSyncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
             if (!Objects.equals(payRemoteSyncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
@@ -195,7 +196,7 @@ public class PaySyncService {
                 break;
             }
             case REFUND:
-                throw new PayFailureException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
+                throw new TradeStatusErrorException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
             // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
@@ -215,7 +216,7 @@ public class PaySyncService {
                 break;
             }
             default: {
-                throw new PayFailureException("代码有问题");
+                throw new SystemUnknownErrorException("代码有问题");
             }
         }
         return repair;

@@ -1,6 +1,8 @@
 package cn.daxpay.single.service.core.payment.allocation.strategy.allocation;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.ConfigNotEnableException;
+import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayAllocationService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
@@ -49,7 +51,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
         this.aliPayConfig = aliPayConfigService.getConfig();
         // 判断是否支持分账
         if (Objects.equals(aliPayConfig.getAllocation(),false)){
-            throw new PayFailureException("支付宝支付配置不支持分账");
+            throw new ConfigNotEnableException("支付宝支付配置未开启分账");
         }
     }
 

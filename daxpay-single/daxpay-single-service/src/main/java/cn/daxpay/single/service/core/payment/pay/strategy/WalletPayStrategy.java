@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.pay.strategy;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
-import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.channel.WalletPayParam;
 import cn.daxpay.single.service.code.WalletCode;
 import cn.daxpay.single.service.core.channel.wallet.entity.Wallet;
@@ -59,7 +59,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
                 walletPayParam = BeanUtil.toBean(channelParam, WalletPayParam.class);
             }
         } catch (JSONException e) {
-            throw new PayFailureException("支付参数错误");
+            throw new ParamValidationFailException("支付参数错误");
         }
 
         WalletConfig walletConfig = walletConfigService.getAndCheckConfig();
@@ -67,23 +67,23 @@ public class WalletPayStrategy extends AbsPayStrategy {
         // 获取钱包
         this.wallet = walletQueryService.getWallet(walletPayParam);
         if (Objects.isNull(this.wallet)){
-            throw new PayFailureException("钱包不存在");
+            throw new TradeFaileException("钱包不存在");
         }
         // 是否被禁用
         if (Objects.equals(WalletCode.STATUS_FORBIDDEN, this.wallet.getStatus())) {
-            throw new PayFailureException();
+            throw new ConfigNotEnableException();
         }
         // 判断是否超过限额
         if (this.getPayParam().getAmount() > walletConfig.getLimitAmount()){
-            throw new PayFailureException("钱包支付金额超过限额");
+            throw new AmountExceedLimitException("钱包支付金额超过限额");
         }
         // 判断余额
         if (this.wallet.getBalance() < this.getPayParam().getAmount()) {
-            throw new PayFailureException();
+            throw new ConfigErrorException();
         }
         // 分账
         if (Objects.equals(this.getPayParam().getAllocation(),true)){
-            throw new PayFailureException("钱包支付不支持分账");
+            throw new UnsupportedAbilityException("钱包支付不支持分账");
         }
     }
 

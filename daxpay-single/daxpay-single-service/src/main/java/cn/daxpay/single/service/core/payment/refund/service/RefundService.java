@@ -4,6 +4,8 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.core.code.RefundStatusEnum;
+import cn.daxpay.single.core.exception.TradeNotExistException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.refund.RefundParam;
 import cn.daxpay.single.core.result.pay.RefundResult;
 import cn.daxpay.single.service.common.context.RefundLocal;
@@ -142,11 +144,11 @@ public class RefundService {
     public RefundResult repeatRefund(RefundOrder refundOrder, RefundParam param){
         // 退款失败才可以重新发起退款, 重新发起退款
         if (!Objects.equals(refundOrder.getStatus(), RefundStatusEnum.FAIL.getCode())){
-            throw new PayFailureException("只有失败状态的才可以重新发起退款");
+            throw new TradeStatusErrorException("只有失败状态的才可以重新发起退款");
         }
         // 获取支付订单
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(refundOrder.getOrderNo(), refundOrder.getBizOrderNo())
-                .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
+                .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
         AbsRefundStrategy refundStrategy = PayStrategyFactory.create(refundOrder.getChannel(), AbsRefundStrategy.class);
         // 设置退款订单对象
         refundStrategy.setRefundOrder(refundOrder);

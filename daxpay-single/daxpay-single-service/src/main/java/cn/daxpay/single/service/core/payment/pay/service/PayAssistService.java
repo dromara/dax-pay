@@ -6,8 +6,12 @@ import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.exception.AmountExceedLimitException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.pay.PayParam;
 import cn.daxpay.single.core.result.pay.PayResult;
+import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -15,8 +19,6 @@ import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
-import cn.daxpay.single.core.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
@@ -122,26 +124,26 @@ public class PayAssistService {
                 // 如果支付超时, 触发订单同步操作, 同时抛出异常
                 if (Objects.nonNull(payOrder.getExpiredTime()) && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
                     paySyncService.syncPayOrder(payOrder);
-                    throw new PayFailureException("支付已超时，请重新确认支付状态");
+                    throw new TradeStatusErrorException("支付已超时，请重新确认支付状态");
                 }
                 return payOrder;
             }
             // 已经支付状态
             if (SUCCESS.getCode()
                     .equals(payOrder.getStatus())) {
-                throw new PayFailureException("已经支付成功，请勿重新支付");
+                throw new TradeStatusErrorException("已经支付成功，请勿重新支付");
             }
             // 支付失败类型状态
             List<String> tradesStatus = Arrays.asList(FAIL.getCode(), CLOSE.getCode(), CANCEL.getCode());
             if (tradesStatus.contains(payOrder.getStatus())) {
-                throw new PayFailureException("支付失败或已经被关闭");
+                throw new TradeStatusErrorException("支付失败或已经被关闭");
             }
             // 退款类型状态
             if (Objects.equals(payOrder.getRefundStatus(), PayOrderRefundStatusEnum.REFUNDING.getCode())) {
-                throw new PayFailureException("该订单处于退款状态");
+                throw new TradeStatusErrorException("该订单处于退款状态");
             }
             // 其他状态直接抛出兜底异常
-            throw new PayFailureException("订单不是待支付状态，请重新确认订单状态");
+            throw new TradeStatusErrorException("订单不是待支付状态，请重新确认订单状态");
         }
         return null;
     }
@@ -153,7 +155,7 @@ public class PayAssistService {
         // 总额校验
         PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
         if (payParam.getAmount() > platformInfo.getLimitAmount()) {
-            throw new PayFailureException("支付金额超过限额");
+            throw new AmountExceedLimitException("支付金额超过限额");
         }
     }
 

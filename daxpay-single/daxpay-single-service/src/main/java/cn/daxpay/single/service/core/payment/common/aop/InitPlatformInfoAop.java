@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.payment.common.aop;
 
-import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.daxpay.single.core.exception.ConfigErrorException;
+import cn.daxpay.single.core.exception.ConfigNotEnableException;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.system.config.dao.PayApiConfigManager;
 import cn.daxpay.single.service.core.system.config.entity.PayApiConfig;
@@ -36,9 +37,9 @@ public class InitPlatformInfoAop {
         String code = platformContext.value();
         // 接口信息
         PayApiConfig api = payApiConfigManager.findByCode(code)
-                .orElseThrow(() -> new DataNotExistException("未找到接口信息"));
+                .orElseThrow(() -> new ConfigErrorException("未找到接口信息"));
         if (!api.isEnable()){
-            throw new PayFailureException("该接口权限未开放");
+            throw new ConfigNotEnableException("该接口权限未开放");
         }
         // 初始化平台信息
         platformConfigService.initPlatform();

@@ -2,8 +2,7 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.PayMethodEnum;
-import cn.daxpay.single.core.exception.PayFailureException;
-import cn.daxpay.single.core.exception.TradeFailedException;
+import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.channel.AliPayParam;
 import cn.daxpay.single.core.param.payment.pay.PayParam;
 import cn.daxpay.single.core.util.PayUtil;
@@ -53,21 +52,21 @@ public class AliPayService {
     public void validation(PayParam payParam, AliPayConfig alipayConfig) {
 
         if (CollUtil.isEmpty(alipayConfig.getPayWays())){
-            throw new PayFailureException("支付宝未配置可用的支付方式");
+            throw new ConfigErrorException("支付宝未配置可用的支付方式");
         }
         // 发起的支付类型是否在支持的范围内
         PayMethodEnum payMethodEnum = Optional.ofNullable(AliPayWay.findByCode(payParam.getMethod()))
-                .orElseThrow(() -> new PayFailureException("非法的支付宝支付类型"));
+                .orElseThrow(() -> new MethodNotExistException("非法的支付宝支付类型"));
         if (!alipayConfig.getPayWays().contains(payMethodEnum.getCode())) {
-            throw new PayFailureException("该支付宝支付方式不可用");
+            throw new MethodNotEnableException("该支付宝支付方式不可用");
         }
         // 验证订单金额是否超限
         if(payParam.getAmount() > alipayConfig.getLimitAmount()){
-            throw new PayFailureException("支付宝支付金额超过限额");
+            throw new AmountExceedLimitException("支付宝支付金额超过限额");
         }
         // 支付参数开启分账, 配置未开启分账
         if(Objects.equals(payParam.getAllocation(),true) && !Objects.equals(alipayConfig.getAllocation(),true)){
-            throw new PayFailureException("未开启分账配置");
+            throw new ConfigErrorException("未开启分账配置");
         }
     }
 
@@ -143,7 +142,7 @@ public class AliPayService {
         }
         catch (AlipayApiException e) {
             log.error("支付宝手机支付失败", e);
-            throw new TradeFailedException("支付宝手机支付失败");
+            throw new TradeFaileException("支付宝手机支付失败");
         }
     }
 
@@ -178,7 +177,7 @@ public class AliPayService {
         }
         catch (AlipayApiException e) {
             log.error("支付宝APP支付失败", e);
-            throw new PayFailureException("支付宝APP支付失败");
+            throw new TradeFaileException("支付宝APP支付失败");
         }
     }
 
@@ -219,7 +218,7 @@ public class AliPayService {
         }
         catch (AlipayApiException e) {
             log.error("支付宝PC支付失败", e);
-            throw new PayFailureException("支付宝PC支付失败");
+            throw new TradeFaileException("支付宝PC支付失败");
         }
     }
 
@@ -255,7 +254,7 @@ public class AliPayService {
             return response.getTradeNo();
         } catch (AlipayApiException e) {
             log.error("支付宝JsApi支付失败", e);
-            throw new PayFailureException("支付宝JsApi支付失败");
+            throw new TradeFaileException("支付宝JsApi支付失败");
         }
     }
 
@@ -289,7 +288,7 @@ public class AliPayService {
         }
         catch (AlipayApiException e) {
             log.error("支付宝手机支付失败", e);
-            throw new PayFailureException("支付宝手机支付失败");
+            throw new TradeFaileException("支付宝手机支付失败");
         }
     }
 
@@ -335,7 +334,7 @@ public class AliPayService {
         }
         catch (AlipayApiException e) {
             log.error("主动扫码支付失败", e);
-            throw new PayFailureException("主动扫码支付失败");
+            throw new TradeFaileException("主动扫码支付失败");
         }
     }
 
@@ -349,7 +348,7 @@ public class AliPayService {
                 errorMsg = alipayResponse.getMsg();
             }
             log.error("支付失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
+            throw new TradeFaileException(errorMsg);
         }
     }
 

@@ -2,6 +2,9 @@ package cn.daxpay.single.service.core.payment.cancel.service;
 
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.TradeNotExistException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.pay.PayCancelParam;
 import cn.daxpay.single.core.result.pay.PayCancelResult;
 import cn.daxpay.single.service.code.PayCloseTypeEnum;
@@ -44,7 +47,7 @@ public class PayCancelService {
      */
     public PayCancelResult cancel(PayCancelParam param){
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
-                .orElseThrow(() -> new PayFailureException("支付订单不存在"));
+                .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
         LockInfo lock = lockTemplate.lock("payment:cancel:" + payOrder.getId(),10000, 50);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付订单已在撤销中，请勿重复发起");
@@ -53,7 +56,7 @@ public class PayCancelService {
             PayCancelResult result = new PayCancelResult();
             // 状态检查, 只有支付中可以进行撤销支付
             if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
-                throw new PayFailureException("订单不是支付中, 无法进行撤销订单");
+                throw new TradeStatusErrorException("订单不是支付中, 无法进行撤销订单");
             }
             try {
                 AbsPayCancelStrategy strategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPayCancelStrategy.class);
@@ -72,7 +75,7 @@ public class PayCancelService {
                 log.error("撤销订单失败:", e);
                 // 记录撤销失败的记录
                 this.saveRecord(payOrder, false, e.getMessage());
-                throw new PayFailureException("撤销订单失败");
+                throw new OperationFailException("撤销订单失败");
             }
         } finally {
             lockTemplate.releaseLock(lock);

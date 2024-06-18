@@ -1,5 +1,8 @@
 package cn.daxpay.single.service.core.channel.wechat.service;
 
+import cn.daxpay.single.core.exception.ConfigErrorException;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
@@ -61,7 +64,7 @@ public class WeChatPayCloseService {
         // 获取证书文件
         if (StrUtil.isBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
-            throw new PayFailureException(errorMsg);
+            throw new ConfigErrorException(errorMsg);
         }
         byte[] fileBytes = Base64.decode(weChatPayConfig.getP12());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(fileBytes);
@@ -83,7 +86,7 @@ public class WeChatPayCloseService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("订单关闭失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
+            throw new OperationFailException(errorMsg);
         }
     }
 

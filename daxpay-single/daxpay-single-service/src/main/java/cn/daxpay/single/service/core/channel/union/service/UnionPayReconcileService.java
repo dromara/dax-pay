@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.channel.union.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.ReconcileTradeEnum;
-import cn.daxpay.single.core.exception.ReconcileGetFailedException;
+import cn.daxpay.single.core.exception.OperationFailException;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.code.UnionPayCode;
 import cn.daxpay.single.service.code.UnionReconcileFieldEnum;
@@ -63,7 +63,7 @@ public class UnionPayReconcileService {
         // 判断是否成功
         if (!SDKConstants.OK_RESP_CODE.equals(map.get(SDKConstants.param_respCode))) {
             log.warn("云闪付获取对账文件失败");
-            throw new ReconcileGetFailedException("云闪付获取对账文件失败");
+            throw new OperationFailException("云闪付获取对账文件失败");
         }
 
         try {

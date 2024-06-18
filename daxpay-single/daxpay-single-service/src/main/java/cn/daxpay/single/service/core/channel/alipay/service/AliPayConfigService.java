@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.ChannelNotEnableException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.AliPayWay;
 import cn.daxpay.single.service.core.channel.alipay.dao.AliPayConfigManager;
@@ -72,7 +72,7 @@ public class AliPayConfigService {
     public AliPayConfig getAndCheckConfig() {
         AliPayConfig alipayConfig = this.getConfig();
         if (!alipayConfig.getEnable()){
-            throw new PayFailureException("支付宝支付未启用");
+            throw new ChannelNotEnableException("支付宝支付未启用");
         }
         return alipayConfig;
     }

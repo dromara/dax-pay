@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.code;
 
-import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -40,6 +40,6 @@ public enum PaySyncStatusEnum {
         return Arrays.stream(values())
                 .filter(item -> Objects.equals(item.getCode(), code))
                 .findFirst()
-                .orElseThrow(() -> new PayFailureException("不存在的支付状态"));
+                .orElseThrow(() -> new TradeStatusErrorException("不存在的支付状态"));
     }
 }

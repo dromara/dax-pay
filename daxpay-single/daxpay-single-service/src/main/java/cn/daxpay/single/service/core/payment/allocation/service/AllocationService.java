@@ -7,6 +7,7 @@ import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.code.AllocOrderResultEnum;
 import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.payment.allocation.AllocFinishParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.core.param.payment.allocation.QueryAllocOrderParam;
@@ -157,7 +158,7 @@ public class AllocationService {
                     AllocOrderStatusEnum.ALLOCATION_FAILED.getCode(),
                     AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode());
             if (!list.contains(order.getStatus())){
-                throw new PayFailureException("分账单状态错误，无法重试");
+                throw new TradeStatusErrorException("分账单状态错误，无法重试");
             }
             List<AllocOrderDetail> details = this.getDetails(order.getId());
             // 创建分账策略并初始化
@@ -210,7 +211,7 @@ public class AllocationService {
     public AllocationResult finish(AllocOrder allocOrder) {
         // 只有分账结束后才可以完结
         if (!Arrays.asList(ALLOCATION_END.getCode(),FINISH_FAILED.getCode()).contains(allocOrder.getStatus())) {
-            throw new PayFailureException("分账单状态错误");
+            throw new TradeStatusErrorException("分账单状态错误");
         }
         List<AllocOrderDetail> details = this.getDetails(allocOrder.getId());
 
@@ -246,14 +247,14 @@ public class AllocationService {
     private PayOrder getAndCheckPayOrder(AllocationParam param) {
         // 查询支付单
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
-                .orElseThrow(() -> new PayFailureException("支付单不存在"));
+                .orElseThrow(() -> new TradeNotExistException("支付单不存在"));
         // 判断订单是否可以分账
         if (!payOrder.getAllocation()){
-            throw new PayFailureException("该订单不允许分账");
+            throw new OperationUnsupportedException("该订单不允许分账");
         }
         // 判断分账状态
         if (Objects.equals(PayOrderAllocStatusEnum.ALLOCATION.getCode(), payOrder.getAllocStatus())){
-            throw new PayFailureException("该订单已分账完成");
+            throw new TradeStatusErrorException("该订单已分账完成");
         }
         return payOrder;
     }
@@ -264,7 +265,7 @@ public class AllocationService {
     public AllocOrderResult queryAllocationOrder(QueryAllocOrderParam param) {
         // 查询分账单
         AllocOrder allocOrder = allocationOrderManager.findByAllocNo(param.getAllocNo())
-                .orElseThrow(() -> new PayFailureException("分账单不存在"));
+                .orElseThrow(() -> new DataErrorException("分账单不存在"));
         AllocOrderResult result = AllocOrderConvert.CONVERT.toResult(allocOrder);
         // 查询分账单明细
         List<AllocOrderDetailResult> details = allocOrderDetailManager.findAllByOrderId(allocOrder.getId()).stream()
@@ -287,14 +288,14 @@ public class AllocationService {
             AllocationGroup allocationGroup;
             if (Objects.nonNull(param.getGroupNo())){
                 // 指定分账组
-                allocationGroup = groupManager.findByGroupNo(param.getGroupNo()).orElseThrow(() -> new DataNotExistException("未查询到分账组"));
+                allocationGroup = groupManager.findByGroupNo(param.getGroupNo()).orElseThrow(() -> new DataErrorException("未查询到分账组"));
             } else {
                 // 默认分账组
-                allocationGroup = groupManager.findDefaultGroup(payOrder.getChannel()).orElseThrow(() -> new PayFailureException("未查询到默认分账组"));
+                allocationGroup = groupManager.findDefaultGroup(payOrder.getChannel()).orElseThrow(() -> new DataErrorException("未查询到默认分账组"));
             }
             // 判断通道类型是否一致
             if (!Objects.equals(allocationGroup.getChannel(), payOrder.getChannel())){
-                throw new PayFailureException("分账接收方列表存在非本通道的数据");
+                throw new ParamValidationFailException("分账接收方列表存在非本通道的数据");
             }
 
             List<AllocationGroupReceiverResult> receiversByGroups = allocationGroupService.findReceiversByGroups(allocationGroup.getId());

@@ -2,6 +2,8 @@ package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.ReconcileTradeEnum;
+import cn.daxpay.single.core.exception.*;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -12,10 +14,9 @@ import cn.daxpay.single.service.core.channel.wechat.entity.WxReconcileBillDetail
 import cn.daxpay.single.service.core.channel.wechat.entity.WxReconcileBillTotal;
 import cn.daxpay.single.service.core.channel.wechat.entity.WxReconcileFundFlowDetail;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
-import cn.daxpay.single.core.util.PayUtil;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
@@ -280,16 +281,16 @@ public class WeChatPayReconcileService {
         if (Objects.equals(errCode, "20002")){
             if (Objects.equals("No Bill Exist",resultMsg)){
                 log.warn("交易账单不存在, 请检查当前商户号在指定日期内是否有成功的交易");
-                throw new PayFailureException("交易账单不存在");
+                throw new OperationFailException("交易账单不存在, 请检查当前商户号在指定日期内是否有成功的交易");
             }
             if (Objects.equals("Bill Creating",resultMsg)){
                 log.warn("交易账单未生成, 请在上午10点以后再试");
-                throw new PayFailureException("交易账单未生成, 请在上午10点以后再试");
+                throw new OperationFailException("交易账单未生成, 请在上午10点以后再试");
             }
 
         } else {
             log.error("微信交易对账失败, 原因: {}, 错误码: {}, 错误信息: {}", resultMsg, errCode, res);
-            throw new PayFailureException("微信支付交易对账失败");
+            throw new OperationFailException("微信支付交易对账失败");
         }
     }
 
@@ -309,7 +310,7 @@ public class WeChatPayReconcileService {
             errorMsg = result.get(WeChatPayCode.RETURN_MSG);
         }
         log.error("微信资金对账失败, 原因: {}, 错误码: {}, 错误信息: {}", errorMsg, returnCode, res);
-        throw new PayFailureException("微信资金对账失败: " + errorMsg);
+        throw new OperationFailException("微信资金对账失败: " + errorMsg);
     }
 
 

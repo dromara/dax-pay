@@ -45,13 +45,13 @@ public class UnionPayService {
     public void validation(PayParam payParam, UnionPayConfig unionPayConfig) {
 
         if (CollUtil.isEmpty(unionPayConfig.getPayWays())){
-            throw new MethodNotEnabledException("云闪付未配置可用的支付方式");
+            throw new MethodNotEnableException("云闪付未配置可用的支付方式");
         }
         // 发起的支付类型是否在支持的范围内
         PayMethodEnum payMethodEnum = Optional.ofNullable(UnionPayWay.findByCode(payParam.getMethod()))
                 .orElseThrow(() -> new MethodNotExistException("非法的云闪付支付类型"));
         if (!unionPayConfig.getPayWays().contains(payMethodEnum.getCode())) {
-            throw new MethodNotEnabledException("该云闪付支付方式不可用");
+            throw new MethodNotEnableException("该云闪付支付方式不可用");
         }
         // 支付金额是否超限
         if (payParam.getAmount() > unionPayConfig.getLimitAmount()) {
@@ -151,7 +151,7 @@ public class UnionPayService {
         if (!(Objects.equals(resultCode, UnionPayCode.RESP_SUCCESS))) {
             log.warn("云闪付支付失败:{}", result);
             String errMsg = MapUtil.getStr(result, UnionPayCode.RESP_MSG);
-            throw new PayFailureException(errMsg);
+            throw new TradeFaileException(errMsg);
         }
 
         return MapUtil.getStr(result, UnionPayCode.PAY_APP_TN);
@@ -187,7 +187,7 @@ public class UnionPayService {
 
         if (!unionPayKit.verify(new NoticeParams(result))) {
             log.warn("云闪付支付验签失败:{}", result);
-            throw new PayFailureException("云闪付支付验签失败");
+            throw new ParamValidationFailException("云闪付支付验签失败");
         }
 
         String resultCode = MapUtil.getStr(result, UnionPayCode.RESP_CODE);
@@ -196,7 +196,7 @@ public class UnionPayService {
         if (!(Objects.equals(resultCode, UnionPayCode.RESP_SUCCESS))) {
             log.warn("云闪付支付失败:{}", result);
             String errMsg = MapUtil.getStr(result, UnionPayCode.RESP_MSG);
-            throw new PayFailureException(errMsg);
+            throw new TradeFaileException(errMsg);
         }
     }
 }

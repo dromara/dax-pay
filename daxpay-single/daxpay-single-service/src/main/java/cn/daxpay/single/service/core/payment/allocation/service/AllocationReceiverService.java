@@ -8,6 +8,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.payment.allocation.AllocReceiverAddParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocReceiverRemoveParam;
 import cn.daxpay.single.core.param.payment.allocation.QueryAllocReceiverParam;
@@ -110,12 +111,12 @@ public class AllocationReceiverService {
         // 判断是否已经添加
         LockInfo lock = lockTemplate.lock("payment:receiver:" + param.getReceiverNo(),10000,200);
         if (Objects.isNull(lock)){
-            throw new PayFailureException("分账方处理中，请勿重复操作");
+            throw new OperationProcessingException("分账方处理中，请勿重复操作");
         }
         try {
             Optional<AllocationReceiver> receiverOptional = allocationReceiverManager.findByReceiverNo(param.getReceiverNo());
             if (receiverOptional.isPresent()){
-                throw new PayFailureException("该接收方已存在");
+                throw new OperationFailException("该接收方已存在");
             }
             AllocationReceiver receiver = AllocationReceiverConvert.CONVERT.convert(param);
             // 获取策略
@@ -123,7 +124,7 @@ public class AllocationReceiverService {
             // 校验
             receiverStrategy.setAllocationReceiver(receiver);
             if (!receiverStrategy.validation()){
-                throw new PayFailureException("接收方信息校验失败");
+                throw new ParamValidationFailException("接收方信息校验失败");
             }
             // 先添加到三方支付系统中, 然后保存到本地
             receiverStrategy.doBeforeHandler();
@@ -141,15 +142,15 @@ public class AllocationReceiverService {
     public AllocReceiverRemoveResult remove(AllocReceiverRemoveParam param){
         // 判断是否存在
         AllocationReceiver receiver = allocationReceiverManager.findByReceiverNo(param.getReceiverNo())
-                .orElseThrow(() -> new PayFailureException("该接收方不存在"));
+                .orElseThrow(() -> new DataErrorException("该接收方不存在"));
         if (groupReceiverManager.isUsed(receiver.getId())){
-            throw new PayFailureException("该接收方已被使用，无法被删除");
+            throw new OperationFailException("该接收方已被使用，无法被删除");
         }
         // 获取策略
         AbsAllocationReceiverStrategy receiverStrategy = PayStrategyFactory.create(receiver.getChannel(), AbsAllocationReceiverStrategy.class);
         LockInfo lock = lockTemplate.lock("payment:receiver:" + param.getReceiverNo(),10000,200);
         if (Objects.isNull(lock)){
-            throw new PayFailureException("分账方处理中，请勿重复操作");
+            throw new OperationProcessingException("分账方处理中，请勿重复操作");
         }
         try {
             // 校验

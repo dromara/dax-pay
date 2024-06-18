@@ -2,6 +2,9 @@ package cn.daxpay.single.service.core.payment.close.service;
 
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.TradeNotExistException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.pay.PayCloseParam;
 import cn.daxpay.single.core.result.pay.PayCloseResult;
 import cn.daxpay.single.service.code.PayCloseTypeEnum;
@@ -44,7 +47,7 @@ public class PayCloseService {
      */
     public PayCloseResult close(PayCloseParam param){
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
-                .orElseThrow(() -> new PayFailureException("支付订单不存在"));
+                .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
         LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId(),10000, 50);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付订单已在关闭中，请勿重复发起");
@@ -63,7 +66,7 @@ public class PayCloseService {
         PayCloseResult result = new PayCloseResult();
         // 状态检查, 只有支付中可以进行取消支付
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
-            throw new PayFailureException("订单不是支付中, 无法进行关闭订单");
+            throw new TradeStatusErrorException("订单不是支付中, 无法进行关闭订单");
         }
         try {
             AbsPayCloseStrategy strategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPayCloseStrategy.class);
@@ -82,7 +85,7 @@ public class PayCloseService {
             log.error("关闭订单失败:", e);
             // 记录关闭失败的记录
             this.saveRecord(payOrder, false, e.getMessage());
-            throw new PayFailureException("关闭订单失败");
+            throw new OperationFailException("关闭订单失败");
         }
     }
 

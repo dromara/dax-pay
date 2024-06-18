@@ -4,6 +4,8 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.util.OrderNoGenerateUtil;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.code.ReconcileResultEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -22,7 +24,6 @@ import cn.daxpay.single.service.dto.order.reconcile.ReconcileTradeDetailExcel;
 import cn.daxpay.single.service.func.AbsReconcileStrategy;
 import cn.daxpay.single.service.param.reconcile.ReconcileUploadParam;
 import cn.daxpay.single.service.util.PayStrategyFactory;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.CharsetUtil;
@@ -100,7 +101,7 @@ public class ReconcileService {
     public void downAndSave(ReconcileOrder reconcileOrder) {
         // 如果对账单已经存在
         if (reconcileOrder.isDownOrUpload()){
-            throw new PayFailureException("对账单文件已经下载或上传");
+            throw new OperationFailException("对账单文件已经下载或上传");
         }
         // 将对账订单写入到上下文中
         PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
@@ -173,11 +174,11 @@ public class ReconcileService {
     public void compare(ReconcileOrder reconcileOrder){
         // 判断是否已经下载了对账单明细
         if (!reconcileOrder.isDownOrUpload()){
-            throw new PayFailureException("请先下载对账单");
+            throw new OperationFailException("请先下载对账单");
         }
         // 是否对比完成
         if (reconcileOrder.isCompare()){
-            throw new PayFailureException("对账单比对已经完成");
+            throw new OperationFailException("对账单比对已经完成");
         }
         // 查询对账单
         List<ReconcileOutTrade> reconcileTradeDetails = reconcileOutTradeManager.findAllByReconcileId(reconcileOrder.getId());

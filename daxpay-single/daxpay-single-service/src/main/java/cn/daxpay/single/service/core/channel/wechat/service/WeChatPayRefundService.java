@@ -1,6 +1,8 @@
 package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.daxpay.single.core.code.RefundStatusEnum;
+import cn.daxpay.single.core.exception.ConfigErrorException;
+import cn.daxpay.single.core.exception.TradeFaileException;
 import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -58,7 +60,7 @@ public class WeChatPayRefundService {
             String errorMsg = "微信p.12证书未配置，无法进行退款";
             errorInfo.setErrorMsg(errorMsg);
             errorInfo.setErrorCode(RefundStatusEnum.FAIL.getCode());
-            throw new PayFailureException(errorMsg);
+            throw new ConfigErrorException(errorMsg);
         }
         byte[] fileBytes = Base64.decode(weChatPayConfig.getP12());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(fileBytes);
@@ -86,7 +88,7 @@ public class WeChatPayRefundService {
             ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
             errorInfo.setErrorMsg(errorMsg);
             errorInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
-            throw new PayFailureException(errorMsg);
+            throw new TradeFaileException(errorMsg);
         }
     }
 

@@ -1,7 +1,8 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.daxpay.single.core.code.PaySyncStatusEnum;
-import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
@@ -62,11 +63,11 @@ public class AliPayCloseService {
                     return;
                 }
                 log.error("网关返回关闭失败: {}", response.getSubMsg());
-                throw new PayFailureException(response.getSubMsg());
+                throw new OperationFailException(response.getSubMsg());
             }
         } catch (AlipayApiException e) {
             log.error("关闭订单失败:", e);
-            throw new PayFailureException("关闭订单失败");
+            throw new OperationFailException("关闭订单失败");
         }
     }
 
@@ -96,12 +97,12 @@ public class AliPayCloseService {
                         return;
                     }
                     log.error("网关返回关闭失败: {}", response.getSubMsg());
-                    throw new PayFailureException(response.getSubMsg());
+                    throw new OperationFailException(response.getSubMsg());
                 }
             }
         } catch (AlipayApiException e) {
             log.error("关闭订单失败:", e);
-            throw new PayFailureException("关闭订单失败");
+            throw new OperationFailException("关闭订单失败");
         }
     }
 
@@ -117,11 +118,11 @@ public class AliPayCloseService {
         }
         // 同步错误
         else if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
-            throw new PayFailureException("关闭失败, 原因: "+gatewaySyncResult.getErrorMsg());
+            throw new OperationFailException("关闭失败, 原因: "+gatewaySyncResult.getErrorMsg());
         }
         // 其他状态
         else {
-            throw new PayFailureException("当前交易状态不支持关闭操作, 请对订单同步状态后再进行操作");
+            throw new TradeStatusErrorException("当前交易状态不支持关闭操作, 请对订单同步状态后再进行操作");
         }
     }
 }

@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.payment.pay.strategy;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.ParamValidationFailException;
 import cn.daxpay.single.core.param.channel.AliPayParam;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
@@ -57,7 +58,7 @@ public class AliPayStrategy extends AbsPayStrategy {
             }
         }
         catch (JSONException e) {
-            throw new PayFailureException("支付参数错误");
+            throw new ParamValidationFailException("支付参数错误");
         }
         // 检查并获取支付宝支付配置
         this.alipayConfig = alipayConfigService.getAndCheckConfig();
