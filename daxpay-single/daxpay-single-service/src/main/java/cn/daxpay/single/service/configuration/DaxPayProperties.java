@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.configuration;
 
-import cn.daxpay.single.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.OrderNoGenerateUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

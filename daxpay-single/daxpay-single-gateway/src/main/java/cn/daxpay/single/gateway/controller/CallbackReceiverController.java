@@ -7,7 +7,7 @@ import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayCallbackSer
 import cn.daxpay.single.service.core.extra.AliPayAuthService;
 import cn.daxpay.single.service.core.extra.WeChatAuthService;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
-import cn.daxpay.single.util.PayUtil;
+import cn.daxpay.single.core.util.PayUtil;
 import com.egzosn.pay.union.api.UnionPayConfigStorage;
 import com.ijpay.core.kit.HttpKit;
 import com.ijpay.core.kit.WxPayKit;

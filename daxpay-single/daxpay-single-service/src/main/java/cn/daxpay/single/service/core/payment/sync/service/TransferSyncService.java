@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.sync.service;
 
-import cn.daxpay.single.param.payment.transfer.TransferSyncParam;
-import cn.daxpay.single.result.sync.TransferSyncResult;
+import cn.daxpay.single.core.param.payment.transfer.TransferSyncParam;
+import cn.daxpay.single.core.result.sync.TransferSyncResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

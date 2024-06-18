@@ -1,15 +1,16 @@
 package cn.daxpay.single.service.core.payment.common.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PaySignTypeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.PaymentCommonParam;
-import cn.daxpay.single.result.PaymentCommonResult;
+import cn.daxpay.single.core.code.PaySignTypeEnum;
+import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.VerifySignFailedException;
+import cn.daxpay.single.core.param.PaymentCommonParam;
+import cn.daxpay.single.core.result.PaymentCommonResult;
+import cn.daxpay.single.core.util.PaySignUtil;
 import cn.daxpay.single.service.common.context.ClientLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
-import cn.daxpay.single.util.PaySignUtil;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,15 +57,15 @@ public class PaymentAssistService {
         if (Objects.equals(PaySignTypeEnum.HMAC_SHA256.getCode(), signType)){
             boolean verified = PaySignUtil.verifyHmacSha256Sign(param, platform.getSignSecret(), param.getSign());
             if (!verified){
-                throw new PayFailureException("未通过签名验证");
+                throw new VerifySignFailedException();
             }
         } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
             boolean verified = PaySignUtil.verifyMd5Sign(param, platform.getSignSecret(), param.getSign());
             if (!verified){
-                throw new PayFailureException("未通过签名验证");
+                throw new VerifySignFailedException();
             }
         } else {
-            throw new PayFailureException("签名方式错误");
+            throw new VerifySignFailedException();
         }
     }
 

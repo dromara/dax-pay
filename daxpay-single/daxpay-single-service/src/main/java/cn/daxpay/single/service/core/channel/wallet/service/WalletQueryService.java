@@ -4,8 +4,8 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.single.exception.waller.WalletNotExistsException;
-import cn.daxpay.single.param.channel.WalletPayParam;
+import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.param.channel.WalletPayParam;
 import cn.daxpay.single.service.core.channel.wallet.dao.WalletManager;
 import cn.daxpay.single.service.core.channel.wallet.entity.Wallet;
 import cn.daxpay.single.service.dto.channel.wallet.WalletDto;
@@ -65,10 +65,10 @@ public class WalletQueryService {
 
         Wallet wallet = null;
         if (Objects.nonNull(param.getWalletId())){
-            wallet =  walletManager.findById(param.getWalletId()).orElseThrow(WalletNotExistsException::new);
+            wallet =  walletManager.findById(param.getWalletId()).orElseThrow(PayFailureException::new);
         }
         if (Objects.isNull(wallet)){
-            wallet = walletManager.findByUser(param.getUserId()).orElseThrow(WalletNotExistsException::new);
+            wallet = walletManager.findByUser(param.getUserId()).orElseThrow(PayFailureException::new);
         }
         return wallet;
     }

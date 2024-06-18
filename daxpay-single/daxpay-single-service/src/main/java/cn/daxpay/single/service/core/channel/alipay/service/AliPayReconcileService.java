@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.ReconcileTradeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.ReconcileTradeEnum;
+import cn.daxpay.single.core.exception.ReconciliationFailedException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -15,7 +15,7 @@ import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
-import cn.daxpay.single.util.PayUtil;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
@@ -90,7 +90,7 @@ public class AliPayReconcileService {
             // 判断返回结果
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 log.error("获取支付宝对账单失败: {}", response.getSubMsg());
-                throw new PayFailureException(response.getSubMsg());
+                throw new ReconciliationFailedException(response.getSubMsg());
             }
 
             // 获取对账单下载地址并下载

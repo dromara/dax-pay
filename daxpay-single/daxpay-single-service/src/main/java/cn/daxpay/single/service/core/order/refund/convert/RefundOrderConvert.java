@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.order.refund.convert;
 
-import cn.daxpay.single.result.order.RefundOrderResult;
+import cn.daxpay.single.core.result.order.RefundOrderResult;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.payment.notice.result.RefundNoticeResult;
 import cn.daxpay.single.service.dto.order.refund.RefundOrderDto;

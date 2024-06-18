@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.util;
 
-import cn.daxpay.single.exception.pay.PayUnsupportedMethodException;
+import cn.daxpay.single.core.exception.UnsupportedAbilityException;
 import cn.daxpay.single.service.func.PayStrategy;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.experimental.UtilityClass;
@@ -26,6 +26,6 @@ public class PayStrategyFactory {
         return beansOfType.values().stream()
                 .filter(strategy -> strategy.getChannel().equals(channel))
                 .findFirst()
-                .orElseThrow(PayUnsupportedMethodException::new);
+                .orElseThrow(() -> new UnsupportedAbilityException("不支持的能力"));
     }
 }

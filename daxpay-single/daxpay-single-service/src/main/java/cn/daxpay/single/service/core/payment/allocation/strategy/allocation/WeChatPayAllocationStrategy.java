@@ -1,7 +1,6 @@
 package cn.daxpay.single.service.core.payment.allocation.strategy.allocation;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayAllocationService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;

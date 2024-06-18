@@ -1,9 +1,8 @@
 package cn.daxpay.single.service.core.channel.union.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.ReconcileTradeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.ReconcileTradeEnum;
+import cn.daxpay.single.core.exception.ReconcileGetFailedException;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.code.UnionPayCode;
 import cn.daxpay.single.service.code.UnionReconcileFieldEnum;
@@ -11,9 +10,9 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.union.dao.UnionReconcileBillDetailManager;
 import cn.daxpay.single.service.core.channel.union.entity.UnionReconcileBillDetail;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
@@ -64,7 +63,7 @@ public class UnionPayReconcileService {
         // 判断是否成功
         if (!SDKConstants.OK_RESP_CODE.equals(map.get(SDKConstants.param_respCode))) {
             log.warn("云闪付获取对账文件失败");
-            throw new PayFailureException("云闪付获取对账文件失败");
+            throw new ReconcileGetFailedException("云闪付获取对账文件失败");
         }
 
         try {

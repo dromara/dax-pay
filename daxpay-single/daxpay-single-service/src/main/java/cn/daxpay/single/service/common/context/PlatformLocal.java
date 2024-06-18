@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.common.context;
 
-import cn.daxpay.single.code.PaySignTypeEnum;
+import cn.daxpay.single.core.code.PaySignTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

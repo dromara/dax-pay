@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.common.context;
 
-import cn.daxpay.single.code.TransferStatusEnum;
+import cn.daxpay.single.core.code.TransferStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

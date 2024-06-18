@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.allocation.convert;
 
-import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
-import cn.daxpay.single.result.allocation.AllocReceiverResult;
+import cn.daxpay.single.core.param.payment.allocation.AllocReceiverAddParam;
+import cn.daxpay.single.core.result.allocation.AllocReceiverResult;
 import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceiver;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
 import org.mapstruct.Mapper;

@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.order.transfer.convert;
 
-import cn.daxpay.single.result.order.TransferOrderResult;
+import cn.daxpay.single.core.result.order.TransferOrderResult;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
 import cn.daxpay.single.service.dto.order.transfer.TransferOrderDto;
 import org.mapstruct.Mapper;

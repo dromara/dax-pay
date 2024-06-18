@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.task;
 
-import cn.daxpay.single.code.AllocOrderStatusEnum;
+import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;

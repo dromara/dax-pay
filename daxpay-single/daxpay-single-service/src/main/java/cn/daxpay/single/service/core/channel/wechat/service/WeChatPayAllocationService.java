@@ -2,9 +2,8 @@ package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
-import cn.daxpay.single.code.AllocDetailResultEnum;
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.AllocDetailResultEnum;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;

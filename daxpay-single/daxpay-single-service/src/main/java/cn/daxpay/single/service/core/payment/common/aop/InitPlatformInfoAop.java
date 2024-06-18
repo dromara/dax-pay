@@ -1,7 +1,6 @@
 package cn.daxpay.single.service.core.payment.common.aop;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
-import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.system.config.dao.PayApiConfigManager;
 import cn.daxpay.single.service.core.system.config.entity.PayApiConfig;

@@ -2,12 +2,11 @@ package cn.daxpay.single.service.core.payment.common.aop;
 
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.util.ValidationUtil;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.PaymentCommonParam;
-import cn.daxpay.single.result.PaymentCommonResult;
+import cn.daxpay.single.core.param.PaymentCommonParam;
+import cn.daxpay.single.core.result.PaymentCommonResult;
 import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.core.payment.common.service.PaymentAssistService;
-import cn.daxpay.single.util.DaxRes;
+import cn.daxpay.single.core.util.DaxRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

@@ -2,9 +2,10 @@ package cn.daxpay.single.service.param.order;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.common.core.rest.param.QueryOrder;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.TransferPayeeTypeEnum;
-import cn.daxpay.single.code.TransferTypeEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.TransferPayeeTypeEnum;
+import cn.daxpay.single.core.code.TransferStatusEnum;
+import cn.daxpay.single.core.code.TransferTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -83,7 +84,7 @@ public class TransferOrderQuery extends QueryOrder {
 
     /**
      * 状态
-     * @see cn.daxpay.single.code.TransferStatusEnum
+     * @see TransferStatusEnum
      */
     @Schema(description = "状态")
     private String status;

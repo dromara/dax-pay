@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceiver;
@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static cn.daxpay.single.code.AllocReceiverTypeEnum.*;
+import static cn.daxpay.single.core.code.AllocReceiverTypeEnum.*;
 
 /**
  * 支付宝分账
@@ -107,7 +107,7 @@ public class AliPayAllocationReceiverService {
                 errorMsg = alipayResponse.getMsg();
             }
             log.error("分账接收方处理失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
+            throw new TradeStatusErrorException(errorMsg);
         }
     }
 }

@@ -2,9 +2,9 @@ package cn.daxpay.single.service.core.payment.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
-import cn.daxpay.single.code.AllocRelationTypeEnum;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.code.AllocRelationTypeEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.common.typehandler.DecryptTypeHandler;
 import cn.daxpay.single.service.core.payment.allocation.convert.AllocationReceiverConvert;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;

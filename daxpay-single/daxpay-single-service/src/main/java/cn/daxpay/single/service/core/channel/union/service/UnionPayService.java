@@ -1,9 +1,10 @@
 package cn.daxpay.single.service.core.channel.union.service;
 
-import cn.daxpay.single.code.PayMethodEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.channel.UnionPayParam;
-import cn.daxpay.single.param.payment.pay.PayParam;
+import cn.daxpay.single.core.code.PayMethodEnum;
+import cn.daxpay.single.core.exception.*;
+import cn.daxpay.single.core.param.channel.UnionPayParam;
+import cn.daxpay.single.core.param.payment.pay.PayParam;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.daxpay.single.service.code.UnionPayCode;
 import cn.daxpay.single.service.code.UnionPayWay;
 import cn.daxpay.single.service.common.context.PayLocal;
@@ -12,7 +13,6 @@ import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import cn.daxpay.single.service.sdk.union.bean.UnionPayOrder;
-import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
@@ -45,21 +45,21 @@ public class UnionPayService {
     public void validation(PayParam payParam, UnionPayConfig unionPayConfig) {
 
         if (CollUtil.isEmpty(unionPayConfig.getPayWays())){
-            throw new PayFailureException("云闪付未配置可用的支付方式");
+            throw new MethodNotEnabledException("云闪付未配置可用的支付方式");
         }
         // 发起的支付类型是否在支持的范围内
         PayMethodEnum payMethodEnum = Optional.ofNullable(UnionPayWay.findByCode(payParam.getMethod()))
-                .orElseThrow(() -> new PayFailureException("非法的云闪付支付类型"));
+                .orElseThrow(() -> new MethodNotExistException("非法的云闪付支付类型"));
         if (!unionPayConfig.getPayWays().contains(payMethodEnum.getCode())) {
-            throw new PayFailureException("该云闪付支付方式不可用");
+            throw new MethodNotEnabledException("该云闪付支付方式不可用");
         }
         // 支付金额是否超限
         if (payParam.getAmount() > unionPayConfig.getLimitAmount()) {
-            throw new PayFailureException("云闪付支付金额超限");
+            throw new AmountExceedLimitException("云闪付支付金额超限");
         }
         // 分账
         if (Objects.equals(payParam.getAllocation(),true)) {
-            throw new PayFailureException("云闪付不支持分账");
+            throw new UnsupportedAbilityException("云闪付不支持分账");
         }
     }
 

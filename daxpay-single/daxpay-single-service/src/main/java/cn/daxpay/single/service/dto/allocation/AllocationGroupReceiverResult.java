@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.dto.allocation;
 
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
-import cn.daxpay.single.code.AllocRelationTypeEnum;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.code.AllocRelationTypeEnum;
 import cn.bootx.platform.starter.data.perm.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

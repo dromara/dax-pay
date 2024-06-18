@@ -1,14 +1,14 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.TransferStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.TransferStatusEnum;
+import cn.daxpay.single.core.exception.TradeFailedException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.context.TransferLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
-import cn.daxpay.single.util.PayUtil;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayFundAccountQueryModel;
@@ -87,7 +87,7 @@ public class AliPayTransferService {
         AlipayFundTransUniTransferResponse response = alipayClient.execute(request);
         if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
             log.error("网关返回退款失败: {}", response.getSubMsg());
-            throw new PayFailureException(response.getSubMsg());
+            throw new TradeFailedException(response.getSubMsg());
         }
         TransferLocal transferInfo = PaymentContextLocal.get().getTransferInfo();
         // 通道转账号

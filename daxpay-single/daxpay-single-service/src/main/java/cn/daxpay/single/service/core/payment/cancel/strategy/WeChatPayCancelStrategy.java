@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.cancel.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PayMethodEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayMethodEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;

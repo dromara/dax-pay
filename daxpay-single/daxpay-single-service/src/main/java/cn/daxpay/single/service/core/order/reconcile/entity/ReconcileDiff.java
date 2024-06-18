@@ -2,8 +2,8 @@ package cn.daxpay.single.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.ReconcileTradeEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.ReconcileTradeEnum;
 import cn.daxpay.single.service.code.ReconcileDiffTypeEnum;
 import cn.daxpay.single.service.common.typehandler.ReconcileDiffTypeHandler;
 import cn.daxpay.single.service.core.order.reconcile.conver.ReconcileConvert;

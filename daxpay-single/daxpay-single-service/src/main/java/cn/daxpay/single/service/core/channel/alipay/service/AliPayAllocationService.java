@@ -2,15 +2,15 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
-import cn.daxpay.single.code.AllocDetailResultEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.AllocDetailResultEnum;
+import cn.daxpay.single.core.exception.TradeFailedException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
-import cn.daxpay.single.util.PayUtil;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -155,7 +155,7 @@ public class AliPayAllocationService {
                 errorMsg = alipayResponse.getMsg();
             }
             log.error("分账处理失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
+            throw new TradeFailedException(errorMsg);
         }
     }
 

@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.sync.strategy.Refund;
 
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPaySyncService;

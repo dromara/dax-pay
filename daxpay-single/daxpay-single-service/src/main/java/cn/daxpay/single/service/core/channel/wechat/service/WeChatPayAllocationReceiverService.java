@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.channel.wechat.service;
 
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.exception.OperationFailedException;
 import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceiver;
@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.single.code.AllocReceiverTypeEnum.WX_MERCHANT;
-import static cn.daxpay.single.code.AllocReceiverTypeEnum.WX_PERSONAL;
+import static cn.daxpay.single.core.code.AllocReceiverTypeEnum.WX_MERCHANT;
+import static cn.daxpay.single.core.code.AllocReceiverTypeEnum.WX_PERSONAL;
 
 /**
  *
@@ -109,7 +109,7 @@ public class WeChatPayAllocationReceiverService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("分账绑定或解绑失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
+            throw new OperationFailedException("分账绑定或解绑失败");
         }
     }
 }

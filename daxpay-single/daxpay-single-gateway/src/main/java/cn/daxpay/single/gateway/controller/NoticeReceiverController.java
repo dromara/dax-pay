@@ -2,7 +2,7 @@ package cn.daxpay.single.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayNoticeReceiverService;
-import cn.daxpay.single.util.PayUtil;
+import cn.daxpay.single.core.util.PayUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

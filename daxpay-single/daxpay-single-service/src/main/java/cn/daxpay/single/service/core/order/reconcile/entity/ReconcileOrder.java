@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.code.ReconcileResultEnum;
 import cn.daxpay.single.service.core.order.reconcile.conver.ReconcileConvert;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileOrderDto;

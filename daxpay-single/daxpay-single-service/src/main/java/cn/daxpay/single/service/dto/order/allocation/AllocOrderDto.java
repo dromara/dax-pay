@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.dto.order.allocation;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.daxpay.single.code.AllocOrderResultEnum;
-import cn.daxpay.single.code.AllocOrderStatusEnum;
+import cn.daxpay.single.core.code.AllocOrderResultEnum;
+import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

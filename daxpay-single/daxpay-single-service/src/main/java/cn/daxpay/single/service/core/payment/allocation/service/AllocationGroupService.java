@@ -6,7 +6,6 @@ import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.core.payment.allocation.convert.AllocationGroupConvert;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationGroupManager;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationGroupReceiverManager;

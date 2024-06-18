@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.system.config.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.daxpay.single.code.PaySignTypeEnum;
+import cn.daxpay.single.core.code.PaySignTypeEnum;
 import cn.daxpay.single.service.code.TradeNotifyTypeEnum;
 import cn.daxpay.single.service.core.system.config.convert.PlatformConfigConvert;
 import cn.daxpay.single.service.dto.system.config.PlatformConfigDto;

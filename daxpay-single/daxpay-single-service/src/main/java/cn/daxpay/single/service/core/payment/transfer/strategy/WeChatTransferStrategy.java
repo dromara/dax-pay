@@ -1,8 +1,7 @@
 package cn.daxpay.single.service.core.payment.transfer.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.payment.transfer.TransferParam;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.param.payment.transfer.TransferParam;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayTransferService;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-import static cn.daxpay.single.code.TransferPayeeTypeEnum.WX_PERSONAL;
+import static cn.daxpay.single.core.code.TransferPayeeTypeEnum.WX_PERSONAL;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**

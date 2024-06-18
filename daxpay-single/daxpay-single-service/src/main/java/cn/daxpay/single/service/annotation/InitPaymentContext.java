@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.annotation;
 
-import cn.daxpay.single.code.PaymentApiCode;
+import cn.daxpay.single.core.code.PaymentApiCode;
 
 import java.lang.annotation.*;
 

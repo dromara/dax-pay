@@ -7,7 +7,7 @@ import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
 import cn.daxpay.single.service.core.record.callback.convert.PayCallbackRecordConvert;

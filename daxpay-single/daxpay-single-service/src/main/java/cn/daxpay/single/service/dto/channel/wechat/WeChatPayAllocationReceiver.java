@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.dto.channel.wechat;
 
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
 import cn.hutool.core.annotation.Alias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

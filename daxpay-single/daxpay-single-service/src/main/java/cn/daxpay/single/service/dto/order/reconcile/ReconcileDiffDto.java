@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.dto.order.reconcile;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.ReconcileTradeEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.ReconcileTradeEnum;
 import cn.daxpay.single.service.code.ReconcileDiffTypeEnum;
 import cn.daxpay.single.service.core.payment.reconcile.domain.ReconcileDiffDetail;
 import cn.bootx.table.modify.annotation.DbColumn;

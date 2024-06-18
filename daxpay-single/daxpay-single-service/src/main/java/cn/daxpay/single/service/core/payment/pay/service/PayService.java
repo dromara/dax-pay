@@ -1,8 +1,7 @@
 package cn.daxpay.single.service.core.payment.pay.service;
 
-import cn.daxpay.single.exception.pay.PayUnsupportedMethodException;
-import cn.daxpay.single.param.payment.pay.PayParam;
-import cn.daxpay.single.result.pay.PayResult;
+import cn.daxpay.single.core.param.payment.pay.PayParam;
+import cn.daxpay.single.core.result.pay.PayResult;
 import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
@@ -16,13 +15,12 @@ import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-import static cn.daxpay.single.code.PayStatusEnum.SUCCESS;
+import static cn.daxpay.single.core.code.PayStatusEnum.SUCCESS;
 
 
 /**
@@ -183,16 +181,4 @@ public class PayService {
         return payAssistService.buildResult(payOrder);
     }
 
-
-    /**
-     * 根据传入的通道获取策略
-     * @return 支付策略
-     */
-    private AbsPayStrategy getStrategy(String channel) {
-        val beansOfType = SpringUtil.getBeansOfType(AbsPayStrategy.class);
-        return beansOfType.values().stream()
-                .filter(strategy -> strategy.getChannel().equals(channel))
-                .findFirst()
-                .orElseThrow(PayUnsupportedMethodException::new);
-    }
 }

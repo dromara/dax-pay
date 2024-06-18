@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.allocation.service;
 
-import cn.daxpay.single.param.payment.allocation.AllocationParam;
+import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import lombok.RequiredArgsConstructor;

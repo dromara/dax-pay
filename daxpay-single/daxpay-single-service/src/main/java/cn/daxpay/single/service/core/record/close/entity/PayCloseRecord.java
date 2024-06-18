@@ -3,7 +3,7 @@ package cn.daxpay.single.service.core.record.close.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.code.PayCloseTypeEnum;
 import cn.daxpay.single.service.core.record.close.convert.PayCloseRecordConvert;
 import cn.daxpay.single.service.dto.record.close.PayCloseRecordDto;

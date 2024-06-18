@@ -1,10 +1,8 @@
 package cn.daxpay.single.service.core.payment.pay.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.exception.waller.WalletBannedException;
-import cn.daxpay.single.exception.waller.WalletLackOfBalanceException;
-import cn.daxpay.single.param.channel.WalletPayParam;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.param.channel.WalletPayParam;
 import cn.daxpay.single.service.code.WalletCode;
 import cn.daxpay.single.service.core.channel.wallet.entity.Wallet;
 import cn.daxpay.single.service.core.channel.wallet.entity.WalletConfig;
@@ -73,7 +71,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         }
         // 是否被禁用
         if (Objects.equals(WalletCode.STATUS_FORBIDDEN, this.wallet.getStatus())) {
-            throw new WalletBannedException();
+            throw new PayFailureException();
         }
         // 判断是否超过限额
         if (this.getPayParam().getAmount() > walletConfig.getLimitAmount()){
@@ -81,7 +79,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         }
         // 判断余额
         if (this.wallet.getBalance() < this.getPayParam().getAmount()) {
-            throw new WalletLackOfBalanceException();
+            throw new PayFailureException();
         }
         // 分账
         if (Objects.equals(this.getPayParam().getAllocation(),true)){

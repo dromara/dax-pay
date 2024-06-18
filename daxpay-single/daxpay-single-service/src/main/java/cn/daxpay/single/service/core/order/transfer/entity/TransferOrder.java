@@ -5,9 +5,10 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.TransferPayeeTypeEnum;
-import cn.daxpay.single.code.TransferTypeEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.TransferPayeeTypeEnum;
+import cn.daxpay.single.core.code.TransferStatusEnum;
+import cn.daxpay.single.core.code.TransferTypeEnum;
 import cn.daxpay.single.service.core.order.transfer.convert.TransferOrderConvert;
 import cn.daxpay.single.service.dto.order.transfer.TransferOrderDto;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -93,7 +94,7 @@ public class TransferOrder extends MpBaseEntity implements EntityBaseFunction<Tr
 
     /**
      * 状态
-     * @see cn.daxpay.single.code.TransferStatusEnum
+     * @see TransferStatusEnum
      */
     @DbColumn(comment = "状态", length = 20, isNull = false)
     private String status;

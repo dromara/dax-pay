@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.AliPayWay;
 import cn.daxpay.single.service.core.channel.alipay.dao.AliPayConfigManager;

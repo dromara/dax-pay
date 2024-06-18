@@ -1,6 +1,5 @@
 package cn.daxpay.single.service.core.channel.wechat.service;
 
-import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
 import lombok.RequiredArgsConstructor;

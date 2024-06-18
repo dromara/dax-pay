@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
 import cn.daxpay.single.service.code.PayRepairWayEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;

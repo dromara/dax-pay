@@ -1,10 +1,10 @@
 package cn.daxpay.single.service.core.extra;
 
 import cn.bootx.platform.common.redis.RedisClient;
-import cn.daxpay.single.param.assist.WxAccessTokenParam;
-import cn.daxpay.single.param.assist.WxAuthUrlParam;
-import cn.daxpay.single.result.assist.WxAccessTokenResult;
-import cn.daxpay.single.result.assist.WxAuthUrlResult;
+import cn.daxpay.single.core.param.assist.WxAccessTokenParam;
+import cn.daxpay.single.core.param.assist.WxAuthUrlParam;
+import cn.daxpay.single.core.result.assist.WxAccessTokenResult;
+import cn.daxpay.single.core.result.assist.WxAuthUrlResult;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.daxpay.single.service.core.system.config.entity.PlatformConfig;

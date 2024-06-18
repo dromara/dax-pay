@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.dto.system.config;
 
-import cn.daxpay.single.code.PaySignTypeEnum;
+import cn.daxpay.single.core.code.PaySignTypeEnum;
 import cn.daxpay.single.service.code.TradeNotifyTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

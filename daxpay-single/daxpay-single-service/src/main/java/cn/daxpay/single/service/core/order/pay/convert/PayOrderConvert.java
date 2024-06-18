@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.order.pay.convert;
 
-import cn.daxpay.single.result.order.PayOrderResult;
+import cn.daxpay.single.core.result.order.PayOrderResult;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.payment.notice.result.PayNoticeResult;
 import cn.daxpay.single.service.dto.order.pay.PayOrderDto;

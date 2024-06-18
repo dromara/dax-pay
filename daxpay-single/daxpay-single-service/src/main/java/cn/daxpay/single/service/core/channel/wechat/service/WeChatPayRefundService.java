@@ -1,7 +1,6 @@
 package cn.daxpay.single.service.core.channel.wechat.service;
 
-import cn.daxpay.single.code.RefundStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;

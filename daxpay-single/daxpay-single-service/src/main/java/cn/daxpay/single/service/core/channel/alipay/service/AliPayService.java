@@ -1,17 +1,18 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayMethodEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.channel.AliPayParam;
-import cn.daxpay.single.param.payment.pay.PayParam;
+import cn.daxpay.single.core.code.PayMethodEnum;
+import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.TradeFailedException;
+import cn.daxpay.single.core.param.channel.AliPayParam;
+import cn.daxpay.single.core.param.payment.pay.PayParam;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.AliPayWay;
 import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Method;
@@ -142,7 +143,7 @@ public class AliPayService {
         }
         catch (AlipayApiException e) {
             log.error("支付宝手机支付失败", e);
-            throw new PayFailureException("支付宝手机支付失败");
+            throw new TradeFailedException("支付宝手机支付失败");
         }
     }
 

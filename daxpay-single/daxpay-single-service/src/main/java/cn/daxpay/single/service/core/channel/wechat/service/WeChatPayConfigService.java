@@ -2,7 +2,6 @@ package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.exception.pay.PayFailureException;
 import cn.daxpay.single.service.code.WeChatPayWay;
 import cn.daxpay.single.service.core.channel.wechat.dao.WeChatPayConfigManager;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;

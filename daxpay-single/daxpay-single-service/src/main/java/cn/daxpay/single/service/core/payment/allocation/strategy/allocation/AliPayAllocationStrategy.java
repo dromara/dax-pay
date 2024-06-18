@@ -1,7 +1,6 @@
 package cn.daxpay.single.service.core.payment.allocation.strategy.allocation;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayAllocationService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;

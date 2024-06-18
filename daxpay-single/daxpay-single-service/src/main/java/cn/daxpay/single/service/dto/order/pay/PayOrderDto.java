@@ -1,10 +1,10 @@
 package cn.daxpay.single.service.dto.order.pay;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PayOrderAllocStatusEnum;
-import cn.daxpay.single.code.PayOrderRefundStatusEnum;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

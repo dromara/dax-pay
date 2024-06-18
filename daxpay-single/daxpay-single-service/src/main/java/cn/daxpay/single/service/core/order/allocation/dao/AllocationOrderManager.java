@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
-import cn.daxpay.single.code.AllocOrderStatusEnum;
+import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.param.order.AllocOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

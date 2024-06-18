@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.sync.strategy.pay;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PaySyncStatusEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayConfigService;
 import cn.daxpay.single.service.core.channel.union.service.UnionPaySyncService;

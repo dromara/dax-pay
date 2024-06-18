@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.repair.service;
 
-import cn.daxpay.single.code.PayStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.exception.SystemUnknownErrorException;
 import cn.daxpay.single.service.code.PayRepairWayEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -83,7 +83,7 @@ public class PayRepairService {
                 break;
             default:
                 log.error("走到了理论上讲不会走到的分支");
-                throw new PayFailureException("走到了理论上讲不会走到的分支");
+                throw new SystemUnknownErrorException("走到了理论上讲不会走到的分支");
         }
         // 设置修复iD
         repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
