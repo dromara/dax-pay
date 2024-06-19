@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 支付方式未启用
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class MethodNotEnableException extends PayFailureException{
 
     public MethodNotEnableException(String message) {
-        super(DaxPayCommonErrorCode.METHOD_NOT_ENABLE,message);
+        super(DaxPayErrorCode.METHOD_NOT_ENABLE,message);
     }
 
     public MethodNotEnableException() {
-        super(DaxPayCommonErrorCode.METHOD_NOT_ENABLE,"支付方式未启用");
+        super(DaxPayErrorCode.METHOD_NOT_ENABLE,"支付方式未启用");
     }
 }

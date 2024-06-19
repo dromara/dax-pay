@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 配置未启用
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class ConfigNotEnableException extends PayFailureException{
 
     public ConfigNotEnableException(String message) {
-        super(DaxPayCommonErrorCode.CONFIG_NOT_ENABLE,message);
+        super(DaxPayErrorCode.CONFIG_NOT_ENABLE,message);
     }
 
     public ConfigNotEnableException() {
-        super(DaxPayCommonErrorCode.CONFIG_NOT_ENABLE,"配置未启用");
+        super(DaxPayErrorCode.CONFIG_NOT_ENABLE,"配置未启用");
     }
 }

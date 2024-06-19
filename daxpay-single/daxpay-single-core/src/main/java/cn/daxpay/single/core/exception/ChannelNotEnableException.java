@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 支付通道未启用
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class ChannelNotEnableException extends PayFailureException{
 
     public ChannelNotEnableException(String message) {
-        super(DaxPayCommonErrorCode.CHANNEL_NOT_ENABLE,message);
+        super(DaxPayErrorCode.CHANNEL_NOT_ENABLE,message);
     }
 
     public ChannelNotEnableException() {
-        super(DaxPayCommonErrorCode.CHANNEL_NOT_ENABLE,"支付通道未启用");
+        super(DaxPayErrorCode.CHANNEL_NOT_ENABLE,"支付通道未启用");
     }
 }

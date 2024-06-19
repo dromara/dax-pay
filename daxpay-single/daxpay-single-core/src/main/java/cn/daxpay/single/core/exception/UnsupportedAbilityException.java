@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 不支持该能力
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class UnsupportedAbilityException extends PayFailureException{
 
     public UnsupportedAbilityException(String message) {
-        super(DaxPayCommonErrorCode.UNSUPPORTED_ABILITY,message);
+        super(DaxPayErrorCode.UNSUPPORTED_ABILITY,message);
     }
 
     public UnsupportedAbilityException() {
-        super(DaxPayCommonErrorCode.UNSUPPORTED_ABILITY,"不支持该能力");
+        super(DaxPayErrorCode.UNSUPPORTED_ABILITY,"不支持该能力");
     }
 }

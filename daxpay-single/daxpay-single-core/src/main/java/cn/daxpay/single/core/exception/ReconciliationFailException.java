@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 对账失败
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class ReconciliationFailException extends PayFailureException{
 
     public ReconciliationFailException(String message) {
-        super(DaxPayCommonErrorCode.RECONCILE_FAIL,message);
+        super(DaxPayErrorCode.RECONCILE_FAIL,message);
     }
 
     public ReconciliationFailException() {
-        super(DaxPayCommonErrorCode.RECONCILE_FAIL,"对账失败");
+        super(DaxPayErrorCode.RECONCILE_FAIL,"对账失败");
     }
 }

@@ -120,7 +120,7 @@ public class RefundAssistService {
     public void updateOrderByError(RefundOrder refundOrder){
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
-        refundOrder.setErrorCode(errorInfo.getErrorCode());
+        refundOrder.setErrorCode(String.valueOf(errorInfo.getErrorCode()));
         refundOrder.setErrorMsg(errorInfo.getErrorMsg());
         refundOrder.setStatus(refundInfo.getStatus().getCode());
         refundOrderManager.updateById(refundOrder);

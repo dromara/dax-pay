@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 交易已关闭
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class TradeClosedException extends PayFailureException{
 
     public TradeClosedException(String message) {
-        super(DaxPayCommonErrorCode.TRADE_CLOSED,message);
+        super(DaxPayErrorCode.TRADE_CLOSED,message);
     }
 
     public TradeClosedException() {
-        super(DaxPayCommonErrorCode.TRADE_CLOSED,"交易已关闭");
+        super(DaxPayErrorCode.TRADE_CLOSED,"交易已关闭");
     }
 }

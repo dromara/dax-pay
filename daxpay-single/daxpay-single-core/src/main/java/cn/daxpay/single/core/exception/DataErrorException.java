@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 数据错误
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class DataErrorException extends PayFailureException{
 
     public DataErrorException(String message) {
-        super(DaxPayCommonErrorCode.DATA_ERROR,message);
+        super(DaxPayErrorCode.DATA_ERROR,message);
     }
 
     public DataErrorException() {
-        super(DaxPayCommonErrorCode.DATA_ERROR,"数据错误");
+        super(DaxPayErrorCode.DATA_ERROR,"数据错误");
     }
 }

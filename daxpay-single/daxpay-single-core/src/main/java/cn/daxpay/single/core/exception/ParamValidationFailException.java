@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 参数校验未通过
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class ParamValidationFailException extends PayFailureException{
 
     public ParamValidationFailException(String message) {
-        super(DaxPayCommonErrorCode.PARAM_VALIDATION_FAIL,message);
+        super(DaxPayErrorCode.PARAM_VALIDATION_FAIL,message);
     }
 
     public ParamValidationFailException() {
-        super(DaxPayCommonErrorCode.PARAM_VALIDATION_FAIL,"参数校验未通过");
+        super(DaxPayErrorCode.PARAM_VALIDATION_FAIL,"参数校验未通过");
     }
 }

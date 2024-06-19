@@ -33,7 +33,6 @@ public class TransferService {
      * 转账
      */
     public TransferResult transfer(TransferParam transferParam){
-
         // 获取策略
         AbsTransferStrategy transferStrategy = PayStrategyFactory.create(transferParam.getChannel(),AbsTransferStrategy.class);
         // 检查转账参数
@@ -50,6 +49,7 @@ public class TransferService {
             log.error("转账出现错误", e);
             // 记录处理失败状态
             PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
+            PaymentContextLocal.get().getErrorInfo().setException(e);
             // 更新退款失败的记录
             transferAssistService.updateOrderByError(order);
             return transferAssistService.buildResult(order);

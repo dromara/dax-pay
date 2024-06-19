@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 不存在的状态
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class StatusNotExistException extends PayFailureException{
 
     public StatusNotExistException(String message) {
-        super(DaxPayCommonErrorCode.STATUS_NOT_EXIST,message);
+        super(DaxPayErrorCode.STATUS_NOT_EXIST,message);
     }
 
     public StatusNotExistException() {
-        super(DaxPayCommonErrorCode.STATUS_NOT_EXIST,"不存在的状态");
+        super(DaxPayErrorCode.STATUS_NOT_EXIST,"不存在的状态");
     }
 }

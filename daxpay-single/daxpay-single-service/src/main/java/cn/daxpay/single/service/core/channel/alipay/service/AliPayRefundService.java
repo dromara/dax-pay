@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.core.exception.OperationFailException;
 import cn.daxpay.single.core.util.PayUtil;
@@ -53,10 +54,10 @@ public class AliPayRefundService {
         try {
             AlipayTradeRefundResponse response = alipayClient.execute(request);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                errorInfo.setErrorMsg(response.getSubMsg());
-                errorInfo.setErrorCode(response.getCode());
+                OperationFailException operationFailException = new OperationFailException(response.getSubMsg());
+                errorInfo.setException(operationFailException);
                 log.error("网关返回退款失败: {}", response.getSubMsg());
-                throw new OperationFailException(response.getSubMsg());
+                throw operationFailException;
             }
             // 默认为退款中状态
             refundInfo.setStatus(RefundStatusEnum.PROGRESS)
@@ -71,8 +72,8 @@ public class AliPayRefundService {
         catch (AlipayApiException e) {
             log.error("订单退款失败:", e);
             errorInfo.setErrorMsg(e.getErrMsg());
-            errorInfo.setErrorCode(e.getErrCode());
-            throw new OperationFailException("订单退款失败");
+            errorInfo.setErrorCode(DaxPayErrorCode.OPERATION_FAIL);
+            throw new OperationFailException(e.getErrMsg());
         }
     }
 }

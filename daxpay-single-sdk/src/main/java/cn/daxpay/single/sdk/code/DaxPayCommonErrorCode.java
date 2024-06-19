@@ -1,4 +1,4 @@
-package cn.daxpay.single.core.code;
+package cn.daxpay.single.sdk.code;
 
 /**
  * 公共错误码
@@ -73,5 +73,5 @@ public interface DaxPayCommonErrorCode {
     int DATA_ERROR = 20091;
 
     /** 未知异常，系统无法处理 */
-    int SYSTEM_UNKNOWN_ERROR = 20000;
+    int SYSTEM_UNKNOWN_ERROR = 30000;
 }

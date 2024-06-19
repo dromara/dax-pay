@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 交易失败
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class TradeFaileException extends PayFailureException{
 
     public TradeFaileException(String message) {
-        super(DaxPayCommonErrorCode.TRADE_FAILE,message);
+        super(DaxPayErrorCode.TRADE_FAILE,message);
     }
 
     public TradeFaileException() {
-        super(DaxPayCommonErrorCode.TRADE_FAILE,"交易失败");
+        super(DaxPayErrorCode.TRADE_FAILE,"交易失败");
     }
 }

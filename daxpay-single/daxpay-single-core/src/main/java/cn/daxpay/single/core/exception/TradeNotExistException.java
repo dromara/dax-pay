@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 交易不存在
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class TradeNotExistException extends PayFailureException{
 
     public TradeNotExistException(String message) {
-        super(DaxPayCommonErrorCode.TRADE_NOT_EXIST,message);
+        super(DaxPayErrorCode.TRADE_NOT_EXIST,message);
     }
 
     public TradeNotExistException() {
-        super(DaxPayCommonErrorCode.TRADE_NOT_EXIST,"交易不存在");
+        super(DaxPayErrorCode.TRADE_NOT_EXIST,"交易不存在");
     }
 }

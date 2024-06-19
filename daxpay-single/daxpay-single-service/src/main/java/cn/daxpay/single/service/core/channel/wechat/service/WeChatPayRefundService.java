@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.util.Map;
-import java.util.Optional;
 
 import static cn.daxpay.single.service.code.WeChatPayCode.*;
 
@@ -58,9 +57,9 @@ public class WeChatPayRefundService {
         // 获取证书文件
         if (StrUtil.isBlank(weChatPayConfig.getP12())){
             String errorMsg = "微信p.12证书未配置，无法进行退款";
-            errorInfo.setErrorMsg(errorMsg);
-            errorInfo.setErrorCode(RefundStatusEnum.FAIL.getCode());
-            throw new ConfigErrorException(errorMsg);
+            ConfigErrorException configErrorException = new ConfigErrorException(errorMsg);
+            errorInfo.setException(configErrorException);
+            throw configErrorException;
         }
         byte[] fileBytes = Base64.decode(weChatPayConfig.getP12());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(fileBytes);
@@ -85,10 +84,10 @@ public class WeChatPayRefundService {
                 errorMsg = result.get(RETURN_MSG);
             }
             log.error("订单退款失败 {}", errorMsg);
+            TradeFaileException tradeFaileException = new TradeFaileException(errorMsg);
             ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
-            errorInfo.setErrorMsg(errorMsg);
-            errorInfo.setErrorCode(Optional.ofNullable(resultCode).orElse(returnCode));
-            throw new TradeFaileException(errorMsg);
+            errorInfo.setException(tradeFaileException);
+            throw tradeFaileException;
         }
     }
 

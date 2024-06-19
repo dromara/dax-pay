@@ -9,6 +9,7 @@ import cn.daxpay.single.core.param.payment.transfer.TransferParam;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.transfer.service.TransferOrderQueryService;
 import cn.daxpay.single.service.core.order.transfer.service.TransferOrderService;
+import cn.daxpay.single.service.core.payment.transfer.service.TransferService;
 import cn.daxpay.single.service.dto.order.transfer.TransferOrderDto;
 import cn.daxpay.single.service.param.order.TransferOrderQuery;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class TransferOrderController {
     private final TransferOrderQueryService queryService;
     private final TransferOrderService transferOrderService;
+    private final TransferService transferService;
 
 
     @Operation(summary = "分页查询")
@@ -53,6 +55,7 @@ public class TransferOrderController {
     @Operation(summary = "手动发起转账")
     @PostMapping("/transfer")
     public ResResult<Void> transfer(@RequestBody TransferParam param){
+        transferService.transfer(param);
         return Res.ok();
     }
 

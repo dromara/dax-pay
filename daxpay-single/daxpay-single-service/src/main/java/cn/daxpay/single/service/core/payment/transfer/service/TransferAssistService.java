@@ -56,7 +56,7 @@ public class TransferAssistService {
         ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
         order.setStatus(TransferStatusEnum.FAIL.getCode())
                 .setErrorMsg(errorInfo.getErrorMsg())
-                .setErrorCode(errorInfo.getErrorCode());
+                .setErrorCode(String.valueOf(errorInfo.getErrorCode()));
         transferOrderManager.updateById(order);
     }
 

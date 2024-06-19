@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.order.transfer.service;
 
+import cn.daxpay.single.core.param.payment.transfer.TransferParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class TransferOrderService {
     /**
      * 手动转账
      */
-    public void transfer(){
+    public void transfer(TransferParam param){
 
     }
 

@@ -47,7 +47,7 @@ public class RefundOrderTest {
 
         DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        
+
         System.out.println(PaySignUtil.verifyHmacSha256Sign(execute.getData(), "123456", execute.getData().getSign()));
     }
 

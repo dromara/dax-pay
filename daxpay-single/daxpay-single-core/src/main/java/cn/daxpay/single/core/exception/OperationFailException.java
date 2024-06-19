@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 操作失败
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class OperationFailException extends PayFailureException{
 
     public OperationFailException(String message) {
-        super(DaxPayCommonErrorCode.OPERATION_FAIL,message);
+        super(DaxPayErrorCode.OPERATION_FAIL,message);
     }
 
     public OperationFailException() {
-        super(DaxPayCommonErrorCode.OPERATION_FAIL,"操作失败");
+        super(DaxPayErrorCode.OPERATION_FAIL,"操作失败");
     }
 }

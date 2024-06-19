@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 验签失败
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class VerifySignFailedException extends PayFailureException{
 
     public VerifySignFailedException(String message) {
-        super(DaxPayCommonErrorCode.VERIFY_SIGN_FAILED,message);
+        super(DaxPayErrorCode.VERIFY_SIGN_FAILED,message);
     }
 
     public VerifySignFailedException() {
-        super(DaxPayCommonErrorCode.VERIFY_SIGN_FAILED,"验签失败");
+        super(DaxPayErrorCode.VERIFY_SIGN_FAILED,"验签失败");
     }
 }

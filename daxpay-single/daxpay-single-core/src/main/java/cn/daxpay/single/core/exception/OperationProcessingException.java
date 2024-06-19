@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 操作处理中, 请勿重复操作
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class OperationProcessingException extends PayFailureException{
 
     public OperationProcessingException(String message) {
-        super(DaxPayCommonErrorCode.OPERATION_PROCESSING,message);
+        super(DaxPayErrorCode.OPERATION_PROCESSING,message);
     }
 
     public OperationProcessingException() {
-        super(DaxPayCommonErrorCode.OPERATION_PROCESSING,"操作处理中, 请勿重复操作");
+        super(DaxPayErrorCode.OPERATION_PROCESSING,"操作处理中, 请勿重复操作");
     }
 }

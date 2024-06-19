@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 配置错误
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class ConfigErrorException extends PayFailureException{
 
     public ConfigErrorException(String message) {
-        super(DaxPayCommonErrorCode.CONFIG_ERROR,message);
+        super(DaxPayErrorCode.CONFIG_ERROR,message);
     }
 
     public ConfigErrorException() {
-        super(DaxPayCommonErrorCode.CONFIG_ERROR,"配置错误");
+        super(DaxPayErrorCode.CONFIG_ERROR,"配置错误");
     }
 }

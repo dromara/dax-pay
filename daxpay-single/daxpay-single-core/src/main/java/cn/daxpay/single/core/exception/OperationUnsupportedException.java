@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 不支持的操作
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class OperationUnsupportedException extends PayFailureException{
 
     public OperationUnsupportedException(String message) {
-        super(DaxPayCommonErrorCode.OPERATION_UNSUPPORTED,message);
+        super(DaxPayErrorCode.OPERATION_UNSUPPORTED,message);
     }
 
     public OperationUnsupportedException() {
-        super(DaxPayCommonErrorCode.OPERATION_UNSUPPORTED,"不支持的操作");
+        super(DaxPayErrorCode.OPERATION_UNSUPPORTED,"不支持的操作");
     }
 }

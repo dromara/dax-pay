@@ -1,6 +1,6 @@
 package cn.daxpay.single.core.exception;
 
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 不存在的支付通道
@@ -10,10 +10,10 @@ import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
 public class ChannelNotExistException extends PayFailureException{
 
     public ChannelNotExistException(String message) {
-        super(DaxPayCommonErrorCode.CHANNEL_NOT_EXIST,message);
+        super(DaxPayErrorCode.CHANNEL_NOT_EXIST,message);
     }
 
     public ChannelNotExistException() {
-        super(DaxPayCommonErrorCode.CHANNEL_NOT_EXIST,"不存在的支付通道");
+        super(DaxPayErrorCode.CHANNEL_NOT_EXIST,"不存在的支付通道");
     }
 }

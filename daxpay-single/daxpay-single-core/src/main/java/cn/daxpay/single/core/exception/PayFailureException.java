@@ -1,7 +1,7 @@
 package cn.daxpay.single.core.exception;
 
 import cn.bootx.platform.common.core.exception.BizException;
-import cn.daxpay.single.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
 
 /**
  * 支付错误
@@ -17,11 +17,11 @@ public class PayFailureException extends BizException {
     }
 
     public PayFailureException(String message) {
-        super(DaxPayCommonErrorCode.UNCLASSIFIED_ERROR, message);
+        super(DaxPayErrorCode.UNCLASSIFIED_ERROR, message);
     }
 
     public PayFailureException() {
-        super(DaxPayCommonErrorCode.UNCLASSIFIED_ERROR, "支付失败");
+        super(DaxPayErrorCode.UNCLASSIFIED_ERROR, "支付失败");
     }
 
 }
