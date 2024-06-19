@@ -8,7 +8,6 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.daxpay.single.core.code.PaymentApiCode;
 import cn.daxpay.single.core.param.payment.allocation.AllocFinishParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocSyncParam;
-import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.allocation.service.AllocOrderQueryService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
@@ -103,9 +102,7 @@ public class AllocationOrderController {
     @Operation(summary = "重新发起分账")
     @PostMapping("/retry")
     public ResResult<Void> retryAllocation(String bizAllocNo){
-        AllocationParam param = new AllocationParam();
-        param.setBizAllocNo(bizAllocNo);
-        allocationService.allocation(param);
+        allocationService.retry(bizAllocNo);
         return Res.ok();
     }
 }

@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.payment.allocation.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.CollUtil;
+import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.code.AllocOrderResultEnum;
 import cn.daxpay.single.core.code.AllocOrderStatusEnum;
@@ -29,6 +30,7 @@ import cn.daxpay.single.service.core.payment.allocation.entity.AllocationGroup;
 import cn.daxpay.single.service.dto.allocation.AllocationGroupReceiverResult;
 import cn.daxpay.single.service.func.AbsAllocationStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static cn.daxpay.single.core.code.AllocOrderStatusEnum.ALLOCATION_END;
@@ -176,7 +179,6 @@ public class AllocationService {
 
             } catch (Exception e) {
                 log.error("重新分账出现错误:", e);
-                // TODO 失败
                 order.setStatus(AllocOrderStatusEnum.ALLOCATION_FAILED.getCode())
                         .setErrorMsg(e.getMessage());
             }
@@ -313,5 +315,22 @@ public class AllocationService {
         return details.stream()
                 .filter(detail -> !Objects.equals(detail.getResult(), AllocDetailResultEnum.IGNORE.getCode()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 手动重试
+     */
+    public void retry(String bizAllocNo) {
+        AllocOrder allocOrder = allocationOrderManager.findByBizAllocNo(bizAllocNo)
+                .orElseThrow(() -> new DataErrorException("未查询到分账单"));
+        String ip = Optional.ofNullable(WebServletUtil.getRequest())
+                .map(ServletUtil::getClientIP)
+                .orElse("未知");
+        AllocationParam param = new AllocationParam();
+        param.setBizAllocNo(allocOrder.getBizAllocNo());
+        param.setAttach(allocOrder.getAttach());
+        param.setNotifyUrl(allocOrder.getNotifyUrl());
+        param.setClientIp(ip);
+        this.retryAllocation(param, allocOrder);
     }
 }

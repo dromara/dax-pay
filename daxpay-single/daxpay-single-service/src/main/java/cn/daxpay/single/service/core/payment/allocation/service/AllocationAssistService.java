@@ -30,7 +30,6 @@ public class AllocationAssistService {
         orderExtra.setClientIp(allocationParam.getClientIp())
                 .setNotifyUrl(allocationParam.getNotifyUrl())
                 .setAttach(allocationParam.getAttach())
-                .setClientIp(allocationParam.getClientIp())
                 .setReqTime(allocationParam.getReqTime());
         allocationOrderManager.updateById(orderExtra);
     }
