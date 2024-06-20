@@ -32,6 +32,4 @@ public class TransferResult extends PaymentCommonResult {
      */
     @Schema(description = "状态")
     private String status;
-
-
 }
