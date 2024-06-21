@@ -79,11 +79,11 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     private String method;
 
     /** 金额 */
-    @DbColumn(comment = "金额", length = 15, isNull = false)
+    @DbColumn(comment = "金额", length = 8, isNull = false)
     private Integer amount;
 
     /** 可退款余额 */
-    @DbColumn(comment = "可退款余额", length = 15, isNull = false)
+    @DbColumn(comment = "可退款余额", length = 8, isNull = false)
     private Integer refundableBalance;
 
     /**

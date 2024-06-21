@@ -55,7 +55,7 @@ public class TransferOrder extends MpBaseEntity implements EntityBaseFunction<Tr
     private String channel;
 
     /** 转账金额 */
-    @DbColumn(comment = "转账金额", length = 15, isNull = false)
+    @DbColumn(comment = "转账金额", length = 8, isNull = false)
     private Integer amount;
 
     /** 标题 */

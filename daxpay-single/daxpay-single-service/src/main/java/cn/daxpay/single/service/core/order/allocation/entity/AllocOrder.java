@@ -86,7 +86,7 @@ public class AllocOrder extends MpBaseEntity implements EntityBaseFunction<Alloc
     /**
      * 总分账金额
      */
-    @DbColumn(comment = "总分账金额", length = 15, isNull = false)
+    @DbColumn(comment = "总分账金额", length = 8, isNull = false)
     private Integer amount;
 
     /**

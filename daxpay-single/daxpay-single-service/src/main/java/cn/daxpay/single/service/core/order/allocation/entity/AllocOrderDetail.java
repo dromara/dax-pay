@@ -48,7 +48,7 @@ public class AllocOrderDetail extends MpBaseEntity implements EntityBaseFunction
     private Integer rate;
 
     /** 分账金额 */
-    @DbColumn(comment = "分账金额", length = 15, isNull = false)
+    @DbColumn(comment = "分账金额", length = 8, isNull = false)
     private Integer amount;
 
     /**

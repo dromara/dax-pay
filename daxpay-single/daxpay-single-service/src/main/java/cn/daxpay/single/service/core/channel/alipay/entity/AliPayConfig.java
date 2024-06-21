@@ -35,7 +35,7 @@ import java.util.Objects;
 public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<AliPayConfigDto> {
 
     /** 支付宝商户appId */
-    @DbColumn(comment = "支付宝商户appId")
+    @DbColumn(comment = "支付宝商户appId", length = 50)
     private String appId;
 
     /** 是否启用, 只影响支付和退款操作 */
@@ -71,6 +71,10 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     /** 支付网关地址 */
     @DbColumn(comment = "支付网关地址", length = 200)
     private String serverUrl;
+
+    /** 授权回调地址 */
+    @DbColumn(comment = "授权回调地址", length = 200)
+    private String redirectUrl;
 
     /**
      * 认证类型 证书/公钥

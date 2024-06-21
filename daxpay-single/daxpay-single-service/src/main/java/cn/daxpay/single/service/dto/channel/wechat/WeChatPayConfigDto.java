@@ -43,6 +43,9 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     @Schema(description = "同步跳转地址")
     private String returnUrl;
 
+    @Schema(description = "授权回调地址")
+    private String redirectUrl;
+
     /** 接口版本, 使用v2还是v3接口 */
     @Schema(description = "接口版本")
     private String apiVersion;

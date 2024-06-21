@@ -45,16 +45,22 @@ public class AliPayAuthService {
         PlatformConfig platformConfig = platformsConfigService.getConfig();
         AliPayConfig aliPayConfig = aliPayConfigService.getConfig();
         String code = RandomUtil.randomString(10);
+        // 默认读取通道配置
+        String serverUrl = aliPayConfig.getRedirectUrl();
+        // 如果未配置, 读取平台配置
+        if (StrUtil.isBlank(serverUrl)) {
+            serverUrl = platformConfig.getWebsiteUrl();
+        }
         // 构建出授权成功后重定向页面链接
-        String redirectUrl = StrUtil.format("{}/callback/pay/alipay/auth/{}", platformConfig.getWebsiteUrl(), code);
+        String redirectUrl = StrUtil.format("{}/unipay/callback/alipay/auth/{}", platformConfig.getWebsiteUrl(), code);
         // 构造出授权页地址
-        String url = StrUtil.format("{}/h5/alipayAuth.html?appId={}&redirectUrl={}",
+        String authUrl = StrUtil.format("{}/h5/alipayAuth.html?appId={}&redirectUrl={}",
                 platformConfig.getWebsiteUrl(), aliPayConfig.getAppId(), redirectUrl);
         // 写入Redis, 五分钟有效期
         redisClient.setWithTimeout(OPEN_ID_KEY_PREFIX + code, "", 5*60*1000L);
         return new AuthUrlResult()
                 .setCode(code)
-                .setAuthUrl(url);
+                .setAuthUrl(authUrl);
     }
 
     /**

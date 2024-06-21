@@ -5,13 +5,13 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 微信获取OpenId授权链接和查询标识返回类
+ * 获取OpenId授权链接和查询标识返回类
  * @author xxm
  * @since 2024/6/15
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "微信授权链接和查询标识返回类")
+@Schema(title = "授权链接和查询标识返回类")
 public class AuthUrlResult {
 
     /** 授权访问链接 */

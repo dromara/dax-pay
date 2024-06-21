@@ -27,13 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AliPayAuthController {
     private final AliPayAuthService aliPayAuthService;
 
-
     @Operation(summary = "返回获取OpenId授权页面地址和标识码")
     @PostMapping("/generateAuthUrl")
     public ResResult<AuthUrlResult> generateAuthUrl(){
         return Res.ok(aliPayAuthService.generateAuthUrl());
     }
-
 
     @Operation(summary = "根据标识码查询OpenId")
     @GetMapping("/queryOpenId")

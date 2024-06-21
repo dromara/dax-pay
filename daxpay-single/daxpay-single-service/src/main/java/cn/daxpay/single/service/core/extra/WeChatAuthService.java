@@ -69,10 +69,17 @@ public class WeChatAuthService {
      * 生成一个用于微信授权页面的链接和code标识
      */
     public AuthUrlResult generateAuthUrl() {
-        PlatformConfig config = platformsConfigService.getConfig();
+        PlatformConfig platformConfig = platformsConfigService.getConfig();
+        WeChatPayConfig weChatPayConfig = weChatPayConfigService.getConfig();
         String code = RandomUtil.randomString(10);
+        // 默认读取通道配置
+        String serverUrl = weChatPayConfig.getRedirectUrl();
+        // 如果未配置, 读取平台配置
+        if (StrUtil.isBlank(serverUrl)) {
+            serverUrl = platformConfig.getWebsiteUrl();
+        }
         // 构建出授权后重定向页面链接
-        String redirectUrl = StrUtil.format("{}/callback/pay/wechat/auth/{}", config.getWebsiteUrl(), code);
+        String redirectUrl = StrUtil.format("{}/unipay/callback/wechat/auth/{}", serverUrl, code);
         WxAuthUrlResult result = this.getWxAuthUrl(new WxAuthUrlParam().setUrl(redirectUrl));
 
         // 写入Redis, 五分钟有效期

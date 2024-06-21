@@ -65,7 +65,7 @@ public class AllocationReceiverController {
 
     @InitPaymentContext(value = PaymentApiCode.ALLOCATION_RECEIVER_ADD)
     @Operation(summary = "添加")
-    @PostMapping("add")
+    @PostMapping("/add")
     public ResResult<Void> add(@RequestBody AllocReceiverAddParam param){
         ValidationUtil.validateParam(param);
         receiverService.addAndSync(param);
@@ -74,7 +74,7 @@ public class AllocationReceiverController {
 
     @InitPaymentContext(value = PaymentApiCode.ALLOCATION_RECEIVER_REMOVE)
     @Operation(summary = "删除")
-    @PostMapping("delete")
+    @PostMapping("/delete")
     public ResResult<Void> delete(@RequestBody AllocReceiverRemoveParam param){
         ValidationUtil.validateParam(param);
         receiverService.remove(param);

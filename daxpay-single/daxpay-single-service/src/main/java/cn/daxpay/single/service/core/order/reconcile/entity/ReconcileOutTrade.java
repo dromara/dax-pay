@@ -37,7 +37,7 @@ public class ReconcileOutTrade extends MpCreateEntity implements EntityBaseFunct
     private String title;
 
     /** 交易金额 */
-    @DbColumn(comment = "交易金额", length = 15, isNull = false)
+    @DbColumn(comment = "交易金额", length = 8, isNull = false)
     private Integer amount;
 
     /**

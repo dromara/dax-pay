@@ -31,7 +31,7 @@ public class TradeFlowRecord extends MpCreateEntity implements EntityBaseFunctio
     private String title;
 
     /** 金额 */
-    @DbColumn(comment = "金额", length = 15, isNull = false)
+    @DbColumn(comment = "金额", length = 8, isNull = false)
     private Integer amount;
 
     /**

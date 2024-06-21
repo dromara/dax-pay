@@ -36,11 +36,11 @@ import java.util.Objects;
 public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<WeChatPayConfigDto> {
 
     /** 微信商户Id */
-    @DbColumn(comment = "微信商户号")
+    @DbColumn(comment = "微信商户号", length = 50)
     private String wxMchId;
 
     /** 微信应用appId */
-    @DbColumn(comment = "微信应用appId")
+    @DbColumn(comment = "微信应用appId", length = 50)
     private String wxAppId;
 
     /** 是否启用 */
@@ -52,7 +52,7 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     private Boolean allocation;
 
     /** 支付限额 */
-    @DbColumn(comment = "支付限额")
+    @DbColumn(comment = "支付限额", length = 8)
     private Integer limitAmount;
 
     /**
@@ -72,6 +72,10 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
      */
     @DbColumn(comment = "同步通知路径")
     private String returnUrl;
+
+    /** 授权回调地址 */
+    @DbColumn(comment = "授权回调地址", length = 200)
+    private String redirectUrl;
 
     /**
      * 接口版本, 使用v2还是v3接口

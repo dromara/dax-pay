@@ -27,11 +27,14 @@ public class AliPayConfigParam {
     @Schema(description = "支付限额")
     private Integer limitAmount;
 
-    @Schema(description = "服务器异步通知页面路径 需http://或者https://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问")
+    @Schema(description = "服务器异步通知页面路径")
     private String notifyUrl;
 
-    @Schema(description = "页面跳转同步通知页面路径 需http://或者https://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问 商户可以自定义同步跳转地址")
+    @Schema(description = "页面跳转同步通知页面路径")
     private String returnUrl;
+
+    @Schema(description = "授权回调地址")
+    private String redirectUrl;
 
     @Schema(description = "请求网关地址")
     private String serverUrl;

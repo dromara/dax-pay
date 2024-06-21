@@ -80,11 +80,11 @@ public class RefundOrder extends MpBaseEntity implements EntityBaseFunction<Refu
     private String channel;
 
     /** 订单金额 */
-    @DbColumn(comment = "订单金额", length = 15, isNull = false)
+    @DbColumn(comment = "订单金额", length = 8, isNull = false)
     private Integer orderAmount;
 
     /** 退款金额 */
-    @DbColumn(comment = "退款金额", length = 15, isNull = false)
+    @DbColumn(comment = "退款金额", length = 8, isNull = false)
     private Integer amount;
 
     /** 退款原因 */
