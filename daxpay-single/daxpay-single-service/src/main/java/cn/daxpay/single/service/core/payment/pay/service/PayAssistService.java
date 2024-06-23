@@ -85,7 +85,7 @@ public class PayAssistService {
     }
 
     /**
-     * 根据新传入的支付订单更新订单和扩展信息
+     * 根据新传入的支付订单更新订单信息
      */
     @Transactional(rollbackFor = Exception.class)
     public void updatePayOrder(PayParam payParam,PayOrder order) {

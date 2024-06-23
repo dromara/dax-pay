@@ -175,7 +175,7 @@ public class RefundService {
     }
 
     /**
-     * 更新退款订单扩展信息
+     * 更新退款订单信息
      */
     private void updateOrder(RefundParam param, RefundOrder order){
         order.setAttach(param.getAttach())

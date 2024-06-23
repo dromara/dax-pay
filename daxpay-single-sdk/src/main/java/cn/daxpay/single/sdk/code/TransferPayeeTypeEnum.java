@@ -16,18 +16,16 @@ import java.util.List;
 @AllArgsConstructor
 public enum TransferPayeeTypeEnum {
     /** 微信 个人 */
-    WX_PERSONAL("wx_personal","openid", "个人"),
+    WX_PERSONAL("wx_personal", "OpenId"),
     /** 支付宝 userId 以2088开头的纯16位数字 */
-    ALI_USER_ID("ali_user_id","ALIPAY_USERID", "用户ID"),
+    ALI_USER_ID("ali_user_id", "用户ID"),
     /** 支付宝 openId  */
-    ALI_OPEN_ID("ali_open_id","ALIPAY_OPENID", "openId"),
+    ALI_OPEN_ID("ali_open_id", "OpenId"),
     /** 支付宝 账号 支持邮箱和手机号格式 */
-    ALI_LOGIN_NAME("ali_login_name","ALIPAY_LOGONID", "账号");
+    ALI_LOGIN_NAME("ali_login_name", "账号");
 
     /** 编码 */
     private final String code;
-    /** 外部编码, 三方支付系统使用的编码 */
-    private final String outCode;
     /** 名称 */
     private final String name;
 

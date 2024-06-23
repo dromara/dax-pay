@@ -14,8 +14,7 @@ public enum TransferStatusEnum {
 
     TRANSFERRING("transferring", "转账中"),
     SUCCESS("success", "转账成功"),
-    FAIL("fail", "转账失败"),
-    ;
+    FAIL("fail", "转账失败"),;
 
     private final String code;
     private final String name;

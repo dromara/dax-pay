@@ -5,7 +5,6 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.single.core.exception.ParamValidationFailException;
-import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.core.exception.TradeNotExistException;
 import cn.daxpay.single.core.param.payment.transfer.QueryTransferParam;
 import cn.daxpay.single.core.result.order.TransferOrderResult;
@@ -55,7 +54,16 @@ public class TransferOrderQueryService {
      */
     public TransferOrderDto findByTransferNo(String transferNo){
         return transferOrderManager.findByTransferNo(transferNo).map(TransferOrder::toDto)
-                .orElseThrow(() -> new DataNotExistException("转账订单扩展信息不存在"));
+                .orElseThrow(() -> new DataNotExistException("转账订单信息不存在"));
+
+    }
+
+    /**
+     * 根据转账号查询
+     */
+    public TransferOrderDto findByBizTransferNo(String bizTransferNo){
+        return transferOrderManager.findByBizTransferNo(bizTransferNo).map(TransferOrder::toDto)
+                .orElseThrow(() -> new DataNotExistException("转账订单信息不存在"));
 
     }
 

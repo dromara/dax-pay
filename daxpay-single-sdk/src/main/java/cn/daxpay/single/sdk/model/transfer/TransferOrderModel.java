@@ -51,9 +51,6 @@ public class TransferOrderModel extends DaxPayResponseModel {
      */
     private String transferType;
 
-    /** 付款方 */
-    private String payer;
-
     /**
      * 收款人类型
      * @see TransferPayeeTypeEnum

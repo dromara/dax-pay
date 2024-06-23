@@ -81,7 +81,7 @@ public class ClientNoticeTask extends MpBaseEntity implements EntityBaseFunction
     private String url;
 
     /** 最后发送时间 */
-    @DbColumn(comment = "最后发送时间", isNull = false)
+    @DbColumn(comment = "最后发送时间")
     private LocalDateTime latestTime;
 
     /**

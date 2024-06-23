@@ -169,7 +169,7 @@ public class AllocationService {
             allocationStrategy.initParam(order, details);
             // 分账预处理
             allocationStrategy.doBeforeHandler();
-            //  更新分账单扩展信息
+            //  更新分账单信息
             allocationAssistService.updateOrder(param, order);
             try {
                 // 重复分账处理

@@ -62,9 +62,6 @@ public class TransferOrderQuery extends QueryOrder {
     @Schema(description = "转账类型, 微信使用")
     private String transferType;
 
-    /** 付款方 */
-    @Schema(description = "付款方")
-    private String payer;
 
     /**
      * 收款人类型

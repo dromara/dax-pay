@@ -39,15 +39,14 @@ public class RefundOrderTest {
     public void refund(){
         RefundParam param = new RefundParam();
         param.setBizRefundNo("R" + RandomUtil.randomNumbers(5));
-        param.setBizOrderNo("SDK_1715341621498");
+        param.setBizOrderNo("P1719153314573");
         param.setAmount(1);
         param.setAttach("{回调参数}");
-        param.setNotifyUrl("https://abc.com/callback");
+        param.setNotifyUrl("http://127.0.0.1:9000/demo/callback/refundObject");
         param.setClientIp("127.0.0.1");
 
         DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-
         System.out.println(PaySignUtil.verifyHmacSha256Sign(execute.getData(), "123456", execute.getData().getSign()));
     }
 

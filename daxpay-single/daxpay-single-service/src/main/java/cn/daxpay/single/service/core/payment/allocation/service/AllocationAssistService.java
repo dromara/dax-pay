@@ -22,7 +22,7 @@ public class AllocationAssistService {
     private final AllocationOrderManager allocationOrderManager;
 
     /**
-     * 根据新传入的分账订单更新订单和扩展信息
+     * 根据新传入的分账订单更新订单信息
      */
     @Transactional(rollbackFor = Exception.class)
     public void updateOrder(AllocationParam allocationParam, AllocOrder orderExtra) {

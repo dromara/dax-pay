@@ -1,5 +1,6 @@
 package cn.daxpay.single.sdk.model.notice;
 
+import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.sdk.code.PayChannelEnum;
 import cn.daxpay.single.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
@@ -57,6 +58,11 @@ public class RefundNoticeModel extends DaxPayResponseModel {
 
     /** 退款创建时间 */
     private Long createTime;
+    /**
+     * 退款状态
+     * @see RefundStatusEnum
+     */
+    private String status;
 
     /** 商户扩展参数,回调时会原样返回 */
     private String attach;

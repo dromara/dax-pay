@@ -8,7 +8,6 @@ import cn.daxpay.single.core.code.PaymentApiCode;
 import cn.daxpay.single.core.param.payment.transfer.TransferParam;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.transfer.service.TransferOrderQueryService;
-import cn.daxpay.single.service.core.order.transfer.service.TransferOrderService;
 import cn.daxpay.single.service.core.payment.transfer.service.TransferService;
 import cn.daxpay.single.service.dto.order.transfer.TransferOrderDto;
 import cn.daxpay.single.service.param.order.TransferOrderQuery;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TransferOrderController {
     private final TransferOrderQueryService queryService;
-    private final TransferOrderService transferOrderService;
     private final TransferService transferService;
 
 
@@ -38,12 +36,18 @@ public class TransferOrderController {
         return Res.ok(queryService.page(pageParam, query));
     }
 
-
-    @Operation(summary = "查询退款订单详情")
+    @Operation(summary = "根据转账号查询")
     @GetMapping("/findByTransferNo")
     public ResResult<TransferOrderDto> findByTransferNo(String refundNo){
         return Res.ok(queryService.findByTransferNo(refundNo));
     }
+
+    @Operation(summary = "根据商户转账号查询")
+    @GetMapping("/findByBizTransferNo")
+    public ResResult<TransferOrderDto> findByBizTransferNo(String bizTransferNo){
+        return Res.ok(queryService.findByBizTransferNo(bizTransferNo));
+    }
+
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
     public ResResult<TransferOrderDto> findById(Long id){

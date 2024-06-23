@@ -10,6 +10,7 @@ import cn.daxpay.single.sdk.param.transfer.TransferParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
 import cn.hutool.json.JSONUtil;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 转账测试
@@ -33,16 +34,19 @@ public class TransferOrderTest {
     /**
      * 发起转账操作
      */
+    @Test
     public void transfer() {
         // 构建参数
         TransferParam param = new TransferParam();
+        param.setBizTransferNo("T"+System.currentTimeMillis());
         param.setTitle("测试转账");
         param.setReason("我要转个账");
         param.setAmount(500);
         param.setChannel(PayChannelEnum.ALI.getCode());
         param.setPayeeType(TransferPayeeTypeEnum.ALI_OPEN_ID.getCode());
+        param.setClientIp("127.0.0.1");
         // 使用OpenId
-        param.setPayeeAccount("");
+        param.setPayeeAccount("065a9aEjER9Fa__hxYyvgYDlkhUiw_6RINhYHB2oegpWAo5");
         // 发起请求
         DaxPayResult<TransferModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));

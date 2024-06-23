@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.daxpay.single.core.code.TransferPayeeTypeEnum;
 import cn.daxpay.single.core.code.TransferStatusEnum;
 import cn.daxpay.single.core.exception.TradeFaileException;
 import cn.daxpay.single.service.code.AliPayCode;
@@ -75,12 +76,16 @@ public class AliPayTransferService {
         model.setOutBizNo(order.getTransferNo());
         // 设置订单总金额
         model.setTransAmount(PayUtil.conversionAmount(order.getAmount()).toString());
-
         // 设置收款方信息
         Participant payeeInfo = new Participant();
+        // 收款人账号
         payeeInfo.setIdentity(order.getPayeeAccount());
+        // 收款人姓名
         payeeInfo.setName(order.getPayeeName());
-        payeeInfo.setIdentityType(order.getPayeeType());
+        // 收款人类型
+        String identityType = TransferPayeeTypeEnum.findByCode(order.getPayeeType())
+                .getOutCode();
+        payeeInfo.setIdentityType(identityType);
         model.setPayeeInfo(payeeInfo);
         model.setRemark(order.getReason());
         request.setBizModel(model);

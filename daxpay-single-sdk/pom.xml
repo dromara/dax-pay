@@ -85,6 +85,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>cn.daxpay.single</groupId>
+            <artifactId>daxpay-single-core</artifactId>
+            <version>2.0.7</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

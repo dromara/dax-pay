@@ -1,5 +1,6 @@
 package cn.daxpay.single.core.code;
 
+import cn.daxpay.single.core.exception.UnsupportedAbilityException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -41,7 +42,7 @@ public enum AllocReceiverTypeEnum {
         return Arrays.stream(AllocReceiverTypeEnum.values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("未找到对应的分账接收方类型"));
+                .orElseThrow(() -> new UnsupportedAbilityException("未找到对应的分账接收方类型"));
     }
 
     /** 微信支持类型 */

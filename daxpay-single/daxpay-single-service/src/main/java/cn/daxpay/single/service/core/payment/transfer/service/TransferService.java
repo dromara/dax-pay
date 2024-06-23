@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.payment.transfer.service;
 import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.core.param.payment.transfer.TransferParam;
 import cn.daxpay.single.core.result.transfer.TransferResult;
+import cn.daxpay.single.service.common.context.TransferLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.transfer.dao.TransferOrderManager;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
@@ -63,7 +64,11 @@ public class TransferService {
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void successHandler(TransferOrder order){
-        order.setStatus(RefundStatusEnum.SUCCESS.getCode());
+        TransferLocal transferInfo = PaymentContextLocal.get()
+                .getTransferInfo();
+        order.setStatus(transferInfo.getStatus().getCode())
+                .setSuccessTime(transferInfo.getFinishTime())
+                .setOutTransferNo(transferInfo.getOutTransferNo());
         transferOrderManager.updateById(order);
     }
 }

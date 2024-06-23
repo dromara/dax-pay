@@ -46,7 +46,6 @@ public class TransferParam extends DaxPayRequest<TransferModel> {
      */
     private String transferType;
 
-
     /**
      * 收款人账号类型
      * @see TransferPayeeTypeEnum

@@ -48,7 +48,7 @@ public class WeChatTransferStrategy extends AbsTransferStrategy {
         // 转账接收方类型校验
         String payeeType = transferParam.getPayeeType();
         if (!Objects.equals(WX_PERSONAL.getCode(), payeeType)){
-            throw new ParamValidationFailException("支付宝不支持该类型收款人");
+            throw new ParamValidationFailException("微信不支持该类型收款人");
         }
     }
 
