@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.exception.TradeNotExistException;
 import cn.daxpay.single.core.param.payment.transfer.QueryTransferParam;
 import cn.daxpay.single.core.result.order.TransferOrderResult;
@@ -86,7 +86,7 @@ public class TransferOrderQueryService {
     public TransferOrderResult queryTransferOrder(QueryTransferParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getTransferNo()) && Objects.isNull(param.getBizTransferNo())){
-            throw new ParamValidationFailException("转账号或商户转账号不能都为空");
+            throw new ValidationFailedException("转账号或商户转账号不能都为空");
         }
         // 查询转账单
         TransferOrder transferOrder = this.findByBizOrTransferNo(param.getTransferNo(), param.getBizTransferNo())

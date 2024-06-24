@@ -2,7 +2,7 @@ package cn.daxpay.single.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
 import cn.daxpay.single.core.code.PaymentApiCode;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.param.payment.allocation.QueryAllocOrderParam;
 import cn.daxpay.single.core.param.payment.allocation.QueryAllocReceiverParam;
 import cn.daxpay.single.core.param.payment.pay.QueryPayParam;
@@ -87,7 +87,7 @@ public class UniQueryController {
     @PostMapping("/allocationReceiver")
     public DaxResult<AllocReceiversResult> queryAllocReceive(@RequestBody QueryAllocReceiverParam param){
         if (StrUtil.isAllBlank(param.getChannel(), param.getReceiverNo())){
-            throw new ParamValidationFailException("所属通道和接收方编号不可同时为空");
+            throw new ValidationFailedException("所属通道和接收方编号不可同时为空");
         }
         return DaxRes.ok(allocationReceiverService.queryAllocReceive(param));
     }

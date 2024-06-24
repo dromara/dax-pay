@@ -1,11 +1,10 @@
 package cn.daxpay.single.service.core.order.refund.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
-import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.core.exception.TradeNotExistException;
 import cn.daxpay.single.core.param.payment.refund.QueryRefundParam;
 import cn.daxpay.single.core.result.order.RefundOrderResult;
@@ -78,7 +77,7 @@ public class RefundOrderQueryService {
     public RefundOrderResult queryRefundOrder(QueryRefundParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getRefundNo()) && Objects.isNull(param.getBizRefundNo())){
-            throw new ParamValidationFailException("退款号或商户退款号不能都为空");
+            throw new ValidationFailedException("退款号或商户退款号不能都为空");
         }
         // 查询退款单
         RefundOrder refundOrder = this.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())

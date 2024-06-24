@@ -72,7 +72,7 @@ public class CallbackReceiverController {
         return weChatPayCallbackService.callback(params);
     }
 
-    @Operation(summary = "微信宝认证授权回调")
+    @Operation(summary = "微信认证授权回调")
     @GetMapping("/wechat/auth/{code}")
     public ModelAndView wxAuthCallback(@RequestParam("code") String authCode, @PathVariable("code") String code){
         wechatAuthService.authCallback(authCode, code);

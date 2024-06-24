@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.core.exception.ConfigErrorException;
-import cn.daxpay.single.core.exception.TradeFaileException;
+import cn.daxpay.single.core.exception.TradeFailException;
 import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -84,10 +84,10 @@ public class WeChatPayRefundService {
                 errorMsg = result.get(RETURN_MSG);
             }
             log.error("订单退款失败 {}", errorMsg);
-            TradeFaileException tradeFaileException = new TradeFaileException(errorMsg);
+            TradeFailException tradeFailException = new TradeFailException(errorMsg);
             ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
-            errorInfo.setException(tradeFaileException);
-            throw tradeFaileException;
+            errorInfo.setException(tradeFailException);
+            throw tradeFailException;
         }
     }
 

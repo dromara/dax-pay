@@ -3,7 +3,7 @@ package cn.daxpay.single.service.core.order.pay.service;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.exception.TradeNotExistException;
 import cn.daxpay.single.core.param.payment.pay.QueryPayParam;
 import cn.daxpay.single.core.result.order.PayOrderResult;
@@ -80,7 +80,7 @@ public class PayOrderQueryService {
     public PayOrderResult queryPayOrder(QueryPayParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getBizOrderNoeNo()) && Objects.isNull(param.getOrderNo())){
-            throw new ParamValidationFailException("业务号或支付单ID不能都为空");
+            throw new ValidationFailedException("业务号或支付单ID不能都为空");
         }
         // 查询支付单
         PayOrder payOrder = this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo())

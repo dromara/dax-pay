@@ -2,11 +2,10 @@ package cn.daxpay.single.service.core.payment.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.annotation.DbTable;
 import cn.daxpay.single.service.core.payment.allocation.convert.AllocationGroupConvert;
 import cn.daxpay.single.service.dto.allocation.AllocationGroupDto;
-import cn.bootx.table.modify.annotation.DbColumn;
-import cn.bootx.table.modify.annotation.DbComment;
-import cn.bootx.table.modify.annotation.DbTable;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -27,15 +26,15 @@ import lombok.experimental.Accessors;
 public class AllocationGroup extends MpBaseEntity implements EntityBaseFunction<AllocationGroupDto> {
 
     /** 分账组编码 */
-    @DbColumn(comment = "分账组编码")
+    @DbColumn(comment = "分账组编码", length = 20, isNull = false)
     private String groupNo;
 
     /** 名称 */
-    @DbComment("名称")
+    @DbColumn(comment = "名称", length = 50)
     private String name;
 
     /** 通道 */
-    @DbColumn(comment = "通道")
+    @DbColumn(comment = "通道", length = 20, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channel;
 
@@ -44,11 +43,11 @@ public class AllocationGroup extends MpBaseEntity implements EntityBaseFunction<
     private boolean defaultGroup;
 
     /** 总分账比例(万分之多少) */
-    @DbColumn(comment = "总分账比例(万分之多少)")
+    @DbColumn(comment = "总分账比例(万分之多少)", length = 5)
     private Integer totalRate;
 
     /** 备注 */
-    @DbColumn(comment = "备注")
+    @DbColumn(comment = "备注", length = 200)
     private String remark;
 
     /**

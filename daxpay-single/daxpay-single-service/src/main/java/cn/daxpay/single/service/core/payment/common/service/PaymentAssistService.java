@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.payment.common.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.PaySignTypeEnum;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.exception.VerifySignFailedException;
 import cn.daxpay.single.core.param.PaymentCommonParam;
 import cn.daxpay.single.core.result.PaymentCommonResult;
@@ -86,12 +86,12 @@ public class PaymentAssistService {
             if (LocalDateTimeUtil.lt(now, param.getReqTime())){
                 // 请求时间比服务器时间晚, 超过一分钟直接打回
                 if (durationSeconds > 60){
-                    throw new ParamValidationFailException("请求时间晚于服务器接收到的时间，请检查");
+                    throw new ValidationFailedException("请求时间晚于服务器接收到的时间，请检查");
                 }
             } else {
                 // 请求时间比服务器时间早, 超过配置时间直接打回
                 if (durationSeconds > platformInfo.getReqTimeout()){
-                    throw new ParamValidationFailException("请求已过期，请重新发送！");
+                    throw new ValidationFailedException("请求已过期，请重新发送！");
                 }
             }
 
@@ -113,7 +113,7 @@ public class PaymentAssistService {
         } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
             result.setSign(PaySignUtil.md5Sign(result, platformInfo.getSignSecret()));
         } else {
-            throw new ParamValidationFailException("未获取到签名方式，请检查");
+            throw new ValidationFailedException("未获取到签名方式，请检查");
         }
     }
 }

@@ -46,10 +46,7 @@ public interface DaxPayErrorCode {
     int TRADE_STATUS_ERROR = 20044;
 
     /** 交易失败 */
-    int TRADE_FAILE = 20045;
-
-    /** 参数校验未通过 */
-    int PARAM_VALIDATION_FAIL = 20051;
+    int TRADE_FAIL = 20045;
 
     /** 验签失败 */
     int VERIFY_SIGN_FAILED = 20052;

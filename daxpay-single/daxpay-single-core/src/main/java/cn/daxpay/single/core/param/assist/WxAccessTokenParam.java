@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Size;
+
 /**
  * 获取微信AccessToken参数
  * @author xxm
@@ -18,5 +20,6 @@ import lombok.experimental.Accessors;
 public class WxAccessTokenParam extends PaymentCommonParam {
 
     @Schema(description = "微信认证code")
+    @Size(max = 64, message = "微信认证code不可超过100位")
     private String code;
 }

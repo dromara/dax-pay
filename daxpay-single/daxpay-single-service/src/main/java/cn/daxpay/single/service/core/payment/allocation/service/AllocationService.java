@@ -2,13 +2,17 @@ package cn.daxpay.single.service.core.payment.allocation.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.code.AllocOrderResultEnum;
 import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
-import cn.daxpay.single.core.exception.*;
+import cn.daxpay.single.core.exception.DataErrorException;
+import cn.daxpay.single.core.exception.OperationUnsupportedException;
+import cn.daxpay.single.core.exception.TradeNotExistException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.allocation.AllocFinishParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.core.param.payment.allocation.QueryAllocOrderParam;
@@ -297,7 +301,7 @@ public class AllocationService {
             }
             // 判断通道类型是否一致
             if (!Objects.equals(allocationGroup.getChannel(), payOrder.getChannel())){
-                throw new ParamValidationFailException("分账接收方列表存在非本通道的数据");
+                throw new ValidationFailedException("分账接收方列表存在非本通道的数据");
             }
 
             List<AllocationGroupReceiverResult> receiversByGroups = allocationGroupService.findReceiversByGroups(allocationGroup.getId());

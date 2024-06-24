@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.channel.union.service;
 
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.code.PayMethodEnum;
 import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.channel.UnionPayParam;
@@ -151,7 +152,7 @@ public class UnionPayService {
         if (!(Objects.equals(resultCode, UnionPayCode.RESP_SUCCESS))) {
             log.warn("云闪付支付失败:{}", result);
             String errMsg = MapUtil.getStr(result, UnionPayCode.RESP_MSG);
-            throw new TradeFaileException(errMsg);
+            throw new TradeFailException(errMsg);
         }
 
         return MapUtil.getStr(result, UnionPayCode.PAY_APP_TN);
@@ -187,7 +188,7 @@ public class UnionPayService {
 
         if (!unionPayKit.verify(new NoticeParams(result))) {
             log.warn("云闪付支付验签失败:{}", result);
-            throw new ParamValidationFailException("云闪付支付验签失败");
+            throw new ValidationFailedException("云闪付支付验签失败");
         }
 
         String resultCode = MapUtil.getStr(result, UnionPayCode.RESP_CODE);
@@ -196,7 +197,7 @@ public class UnionPayService {
         if (!(Objects.equals(resultCode, UnionPayCode.RESP_SUCCESS))) {
             log.warn("云闪付支付失败:{}", result);
             String errMsg = MapUtil.getStr(result, UnionPayCode.RESP_MSG);
-            throw new TradeFaileException(errMsg);
+            throw new TradeFailException(errMsg);
         }
     }
 }

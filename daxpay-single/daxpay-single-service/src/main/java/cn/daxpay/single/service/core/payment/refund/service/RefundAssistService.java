@@ -4,7 +4,7 @@ import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.core.code.PaySignTypeEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.core.code.RefundStatusEnum;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.refund.RefundParam;
 import cn.daxpay.single.core.result.pay.RefundResult;
@@ -61,12 +61,12 @@ public class RefundAssistService {
         }
         // 退款号唯一校验
         if (StrUtil.isNotBlank(param.getBizRefundNo()) && refundOrderManager.existsByRefundNo(param.getBizRefundNo())){
-            throw new ParamValidationFailException("退款单号已存在");
+            throw new ValidationFailedException("退款单号已存在");
         }
 
         // 金额判断
         if (param.getAmount() > payOrder.getRefundableBalance()){
-            throw new ParamValidationFailException("退款金额不能大于支付金额");
+            throw new ValidationFailedException("退款金额不能大于支付金额");
         }
     }
 
@@ -145,7 +145,7 @@ public class RefundAssistService {
         } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
             refundResult.setSign(PaySignUtil.md5Sign(refundOrder, platformInfo.getSignSecret()));
         } else {
-            throw new ParamValidationFailException("未获取到签名方式，请检查");
+            throw new ValidationFailedException("未获取到签名方式，请检查");
         }
         return refundResult;
     }

@@ -2,13 +2,16 @@ package cn.daxpay.single.service.core.payment.allocation.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.core.code.PayChannelEnum;
-import cn.daxpay.single.core.exception.*;
+import cn.daxpay.single.core.exception.DataErrorException;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.OperationProcessingException;
 import cn.daxpay.single.core.param.payment.allocation.AllocReceiverAddParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocReceiverRemoveParam;
 import cn.daxpay.single.core.param.payment.allocation.QueryAllocReceiverParam;
@@ -124,7 +127,7 @@ public class AllocationReceiverService {
             // 校验
             receiverStrategy.setAllocationReceiver(receiver);
             if (!receiverStrategy.validation()){
-                throw new ParamValidationFailException("接收方信息校验失败");
+                throw new ValidationFailedException("接收方信息校验失败");
             }
             // 先添加到三方支付系统中, 然后保存到本地
             receiverStrategy.doBeforeHandler();

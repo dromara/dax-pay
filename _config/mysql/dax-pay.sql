@@ -4,7 +4,6 @@
  Source Server         : 阿里-mysql5.7
  Source Server Type    : MySQL
  Source Server Version : 50743 (5.7.43-log)
- Source Host           : mysql.dev.bootx.cn:3306
  Source Schema         : dax-pay
 
  Target Server Type    : MySQL

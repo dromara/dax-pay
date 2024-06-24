@@ -3,7 +3,7 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.TransferPayeeTypeEnum;
 import cn.daxpay.single.core.code.TransferStatusEnum;
-import cn.daxpay.single.core.exception.TradeFaileException;
+import cn.daxpay.single.core.exception.TradeFailException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.context.TransferLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -92,7 +92,7 @@ public class AliPayTransferService {
         AlipayFundTransUniTransferResponse response = alipayClient.execute(request);
         if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
             log.error("网关返回退款失败: {}", response.getSubMsg());
-            throw new TradeFaileException(response.getSubMsg());
+            throw new TradeFailException(response.getSubMsg());
         }
         TransferLocal transferInfo = PaymentContextLocal.get().getTransferInfo();
         // 通道转账号

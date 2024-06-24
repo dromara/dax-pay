@@ -203,7 +203,7 @@ public class WeChatPayService {
         // 支付失败
         if (!WxPayKit.codeIsOk(returnCode)) {
             String errorMsg = result.get(WeChatPayCode.ERR_CODE_DES);
-            throw new TradeFaileException(errorMsg);
+            throw new TradeFailException(errorMsg);
         }
 
         String resultCode = result.get(WeChatPayCode.RESULT_CODE);
@@ -232,7 +232,7 @@ public class WeChatPayService {
         if (Objects.equals(resultCode, WeChatPayCode.TRADE_PAYERROR)
                 || Objects.equals(resultCode, WeChatPayCode.PAY_FAIL)) {
             String errorMsg = result.get(WeChatPayCode.ERR_CODE_DES);
-            throw new TradeFaileException(errorMsg);
+            throw new TradeFailException(errorMsg);
         }
     }
 
@@ -269,7 +269,7 @@ public class WeChatPayService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("支付失败 {}", errorMsg);
-            throw new TradeFaileException(errorMsg);
+            throw new TradeFailException(errorMsg);
         }
     }
 

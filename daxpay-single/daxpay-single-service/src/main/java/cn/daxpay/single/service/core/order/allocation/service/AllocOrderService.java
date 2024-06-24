@@ -1,10 +1,10 @@
 package cn.daxpay.single.service.core.order.allocation.service;
 
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.code.AllocOrderResultEnum;
 import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
 import cn.daxpay.single.core.param.payment.allocation.AllocReceiverParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.core.util.OrderNoGenerateUtil;
@@ -97,7 +97,7 @@ public class AllocOrderService {
                 .distinct()
                 .collect(Collectors.toList());
         if (receiverNos.size() != param.getReceivers().size()){
-            throw new ParamValidationFailException("分账接收方编号重复");
+            throw new ValidationFailedException("分账接收方编号重复");
         }
         Map<String, Integer> receiverNoMap = param.getReceivers()
                 .stream()
@@ -105,13 +105,13 @@ public class AllocOrderService {
         // 查询分账接收方信息
         List<AllocationReceiver> receivers = receiverManager.findAllByReceiverNos(receiverNos);
         if (receivers.size() != receiverNos.size()){
-            throw new ParamValidationFailException("分账接收方列表存在重复或无效的数据");
+            throw new ValidationFailedException("分账接收方列表存在重复或无效的数据");
         }
         // 判断分账接收方类型是否都与分账订单类型匹配
         boolean anyMatch = receivers.stream()
                 .anyMatch(o -> !Objects.equals(o.getChannel(), payOrder.getChannel()));
         if (anyMatch){
-            throw new ParamValidationFailException("分账接收方列表存在非本通道的数据");
+            throw new ValidationFailedException("分账接收方列表存在非本通道的数据");
         }
 
 

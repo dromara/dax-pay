@@ -2,7 +2,7 @@ package cn.daxpay.single.service.core.payment.allocation.strategy.receiver;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.exception.ConfigNotEnableException;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayAllocationReceiverService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
@@ -67,7 +67,7 @@ public class WeChatPayAllocationReceiverStrategy extends AbsAllocationReceiverSt
     @Override
     public void bind() {
         if (!receiverService.validation(this.getAllocationReceiver())){
-            throw new ParamValidationFailException("分账接收者参数未通过校验");
+            throw new ValidationFailedException("分账接收者参数未通过校验");
         }
         receiverService.bind(this.getAllocationReceiver(),this.weChatPayConfig);
     }
@@ -78,7 +78,7 @@ public class WeChatPayAllocationReceiverStrategy extends AbsAllocationReceiverSt
     @Override
     public void unbind() {
         if (!receiverService.validation(this.getAllocationReceiver())){
-            throw new ParamValidationFailException("分账参数未通过校验");
+            throw new ValidationFailedException("分账参数未通过校验");
         }
         receiverService.unbind(this.getAllocationReceiver(),this.weChatPayConfig);
     }

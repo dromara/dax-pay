@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.payment.pay.strategy;
 
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.channel.WalletPayParam;
@@ -59,7 +60,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
                 walletPayParam = BeanUtil.toBean(channelParam, WalletPayParam.class);
             }
         } catch (JSONException e) {
-            throw new ParamValidationFailException("支付参数错误");
+            throw new ValidationFailedException("支付参数错误");
         }
 
         WalletConfig walletConfig = walletConfigService.getAndCheckConfig();
@@ -67,7 +68,7 @@ public class WalletPayStrategy extends AbsPayStrategy {
         // 获取钱包
         this.wallet = walletQueryService.getWallet(walletPayParam);
         if (Objects.isNull(this.wallet)){
-            throw new TradeFaileException("钱包不存在");
+            throw new TradeFailException("钱包不存在");
         }
         // 是否被禁用
         if (Objects.equals(WalletCode.STATUS_FORBIDDEN, this.wallet.getStatus())) {

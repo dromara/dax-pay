@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.transfer.strategy;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.param.payment.transfer.TransferParam;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
@@ -47,7 +47,7 @@ public class AliPayTransferStrategy extends AbsTransferStrategy {
         // 转账接收方类型校验
         String payeeType = transferParam.getPayeeType();
         if (!Arrays.asList(ALI_USER_ID.getCode(), ALI_OPEN_ID.getCode(), ALI_LOGIN_NAME.getCode()).contains(payeeType)){
-            throw new ParamValidationFailException("支付宝不支持该类型收款人");
+            throw new ValidationFailedException("支付宝不支持该类型收款人");
         }
     }
 

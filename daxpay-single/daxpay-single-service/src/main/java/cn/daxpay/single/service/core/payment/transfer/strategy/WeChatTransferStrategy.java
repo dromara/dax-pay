@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.transfer.strategy;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
-import cn.daxpay.single.core.exception.ParamValidationFailException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.param.payment.transfer.TransferParam;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
@@ -48,7 +48,7 @@ public class WeChatTransferStrategy extends AbsTransferStrategy {
         // 转账接收方类型校验
         String payeeType = transferParam.getPayeeType();
         if (!Objects.equals(WX_PERSONAL.getCode(), payeeType)){
-            throw new ParamValidationFailException("微信不支持该类型收款人");
+            throw new ValidationFailedException("微信不支持该类型收款人");
         }
     }
 
