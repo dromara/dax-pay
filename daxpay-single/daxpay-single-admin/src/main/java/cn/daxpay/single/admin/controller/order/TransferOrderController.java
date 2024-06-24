@@ -4,8 +4,10 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
+import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.core.code.PaymentApiCode;
 import cn.daxpay.single.core.param.payment.transfer.TransferParam;
+import cn.daxpay.single.core.result.transfer.TransferResult;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.transfer.service.TransferOrderQueryService;
 import cn.daxpay.single.service.core.payment.transfer.service.TransferService;
@@ -15,6 +17,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 /**
  * 转账订单控制器
@@ -58,9 +62,10 @@ public class TransferOrderController {
     @InitPaymentContext(PaymentApiCode.TRANSFER)
     @Operation(summary = "手动发起转账")
     @PostMapping("/transfer")
-    public ResResult<Void> transfer(@RequestBody TransferParam param){
-        transferService.transfer(param);
-        return Res.ok();
+    public ResResult<TransferResult> transfer(@RequestBody TransferParam param){
+        param.setReqTime(LocalDateTime.now());
+        ValidationUtil.validateParam(param);
+        return Res.ok(transferService.transfer(param));
     }
 
     @InitPaymentContext(PaymentApiCode.TRANSFER)

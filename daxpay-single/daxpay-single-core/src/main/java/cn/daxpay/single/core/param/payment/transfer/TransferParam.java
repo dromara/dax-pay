@@ -41,7 +41,7 @@ public class TransferParam extends PaymentCommonParam {
 
     /** 转账金额 */
     @NotNull(message = "转账金额必填")
-    @Min(value = 1, message = "转账金额至少为0.01")
+    @Min(value = 1, message = "转账金额至少为0.01元")
     @Schema(description = "转账金额")
     private Integer amount;
 
