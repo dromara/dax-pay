@@ -1,6 +1,6 @@
 package cn.bootx.platform.baseapi.param.dict;
 
-import cn.bootx.platform.common.mybatisplus.validation.ValidationGroup;
+import cn.bootx.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -18,8 +18,6 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @Schema(title = "数据字典目录")
 public class DictionaryParam implements Serializable {
-
-    private static final long serialVersionUID = 8185789462442511856L;
 
     @Null(message = "Id需要为空", groups = ValidationGroup.add.class)
     @NotNull(message = "Id不可为空", groups = ValidationGroup.edit.class)

@@ -33,7 +33,7 @@ public class StringListTypeHandler extends AbstractJsonTypeHandler<List<String>>
     }
 
     @Override
-    public String toJson(Object obj) {
+    public String toJson(List<String> obj) {
         return JSONUtil.toJsonStr(obj);
     }
 }

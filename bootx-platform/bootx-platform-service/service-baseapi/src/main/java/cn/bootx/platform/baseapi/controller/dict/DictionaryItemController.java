@@ -3,7 +3,7 @@ package cn.bootx.platform.baseapi.controller.dict;
 import cn.bootx.platform.baseapi.param.dict.DictionaryItemParam;
 import cn.bootx.platform.baseapi.result.dict.DictionaryItemResult;
 import cn.bootx.platform.baseapi.service.dict.DictionaryItemService;
-import cn.bootx.platform.common.mybatisplus.validation.ValidationGroup;
+import cn.bootx.platform.core.validation.ValidationGroup;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;

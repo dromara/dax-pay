@@ -43,7 +43,7 @@ public class SqlInjectionUtil {
      *
      */
     public void filterContent(String value, String customXssString) {
-        if (value == null || "".equals(value)) {
+        if (value == null || value.isEmpty()) {
             return;
         }
         // 校验sql注释 不允许有sql注释

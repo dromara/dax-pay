@@ -1,4 +1,4 @@
-package cn.bootx.platform.common.mybatisplus.validation;
+package cn.bootx.platform.core.validation;
 
 /**
  * 校验分组

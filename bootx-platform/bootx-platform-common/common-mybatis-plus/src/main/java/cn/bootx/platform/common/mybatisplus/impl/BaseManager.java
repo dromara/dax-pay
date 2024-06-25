@@ -4,10 +4,10 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.override.MybatisMapperProxy;
 import com.baomidou.mybatisplus.core.toolkit.*;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -18,42 +18,60 @@ import com.baomidou.mybatisplus.extension.kotlin.KtQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.kotlin.KtUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.github.yulichang.base.MPJBaseMapper;
+import lombok.Getter;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 /**
  * 自定义的基础数据库Manager操作类 类似自带的ServiceImpl类
+ * @see com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
  *
  * @author xxm
  * @since 2020/4/15 14:26
  */
-public class BaseManager<M extends BaseMapper<T>, T> {
+public class BaseManager<M extends MPJBaseMapper<T>, T> {
 
     /**
      * 默认批次提交数量
      */
-    protected int DEFAULT_BATCH_SIZE = 1000;
+    protected final int DEFAULT_BATCH_SIZE = 1000;
 
-    protected Log log = LogFactory.getLog(getClass());
+    /** 日志 */
+    protected final Log log = LogFactory.getLog(getClass());
 
+    @Getter
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     protected M baseMapper;
 
-    public M getBaseMapper() {
-        return baseMapper;
-    }
+
+    private volatile SqlSessionFactory sqlSessionFactory;
+
 
     public Class<T> getEntityClass() {
         return currentModelClass();
+    }
+
+
+    protected SqlSessionFactory getSqlSessionFactory() {
+        if (this.sqlSessionFactory == null) {
+            MybatisMapperProxy<?> mybatisMapperProxy = MybatisUtils.getMybatisMapperProxy(this.getBaseMapper());
+            this.sqlSessionFactory = MybatisUtils.getSqlSessionFactory(mybatisMapperProxy);
+        }
+        return this.sqlSessionFactory;
     }
 
     @SuppressWarnings("unchecked")
@@ -216,7 +234,7 @@ public class BaseManager<M extends BaseMapper<T>, T> {
      * @since 3.3.1
      */
     protected <E> boolean executeBatch(Collection<E> list, int batchSize, BiConsumer<SqlSession, E> consumer) {
-        return SqlHelper.executeBatch(currentModelClass(), log, list, batchSize, consumer);
+        return SqlHelper.executeBatch(getSqlSessionFactory(), this.log, list, batchSize, consumer);
     }
 
     /**
@@ -225,18 +243,8 @@ public class BaseManager<M extends BaseMapper<T>, T> {
      * @return boolean
      */
     @Transactional(rollbackFor = Exception.class)
-    public int saveOrUpdate(T entity) {
-        if (null != entity) {
-            String keyProperty = this.getKeyProperty();
-            Object idVal = ReflectionKit.getFieldValue(entity, keyProperty);
-            if (StringUtils.checkValNull(idVal) || Objects.isNull(findById((Serializable) idVal))) {
-                return save(entity);
-            }
-            else {
-                return updateById(entity);
-            }
-        }
-        return 0;
+    public boolean saveOrUpdate(T entity) {
+        return getBaseMapper().insertOrUpdate(entity);
     }
 
     /**
@@ -412,7 +420,7 @@ public class BaseManager<M extends BaseMapper<T>, T> {
         if (tableInfo.isWithLogicDelete() && tableInfo.isWithUpdateFill()) {
             return deleteBatchByIds(list, DEFAULT_BATCH_SIZE, true);
         }
-        return SqlHelper.retBool(getBaseMapper().deleteBatchIds(list));
+        return SqlHelper.retBool(getBaseMapper().deleteByIds(list));
     }
 
     /**

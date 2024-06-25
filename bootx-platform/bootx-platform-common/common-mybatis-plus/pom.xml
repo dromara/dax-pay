@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.github.yulichang</groupId>
             <artifactId>mybatis-plus-join-boot-starter</artifactId>
-            <version>1.4.13</version>
+            <version>${mybatis-plus-join.version}</version>
         </dependency>
         <!-- 多数据源 -->
         <dependency>

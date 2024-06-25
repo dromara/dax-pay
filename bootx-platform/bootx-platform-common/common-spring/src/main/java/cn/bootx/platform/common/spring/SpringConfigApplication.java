@@ -1,5 +1,6 @@
 package cn.bootx.platform.common.spring;
 
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableRetry
 @ComponentScan
+@ConfigurationPropertiesScan
 public class SpringConfigApplication {
 
 }

@@ -22,10 +22,9 @@ public class AopUtil {
      */
     public <T extends Annotation> T getMethodAnnotation(JoinPoint joinPoint, Class<T> annotationClass) {
         Signature signature = joinPoint.getSignature();
-        if (!(signature instanceof MethodSignature)) {
+        if (!(signature instanceof MethodSignature methodSignature)) {
             return null;
         }
-        MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
         if (method != null) {
             return method.getAnnotation(annotationClass);

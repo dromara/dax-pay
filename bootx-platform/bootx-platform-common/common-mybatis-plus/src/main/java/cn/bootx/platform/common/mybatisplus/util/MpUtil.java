@@ -100,6 +100,13 @@ public class MpUtil {
     }
 
     /**
+     * mp page转换为 PageResult 同时进行dto转换
+     */
+    public <T> List<T> toListResult(List<? extends ToResult<T>> list) {
+        return list.stream().map(ToResult::toResult).toList();
+    }
+
+    /**
      * 批量执行语句, 通常用于for循环方式的批量插入
      */
     public <T> void executeBatch(List<T> saveList, Consumer<List<T>> consumer, int batchSize) {
@@ -150,7 +157,7 @@ public class MpUtil {
         // 关闭 count 查询
         page.setSearchCount(false);
         if (CollUtil.isNotEmpty(page.getRecords())) {
-            return Optional.of(page.getRecords().get(0));
+            return Optional.of(page.getRecords().getFirst());
         }
         return Optional.empty();
     }

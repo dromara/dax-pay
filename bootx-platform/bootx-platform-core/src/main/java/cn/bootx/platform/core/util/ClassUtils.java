@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 类工具类
@@ -47,7 +46,7 @@ public class ClassUtils {
             Class<?> clsSup = clas.getSuperclass();
             List<Field> fieldList = new ArrayList<>(Arrays.asList(fields));
             // 获取当前class的所有fields的name列表
-            List<String> fdNames = fieldList.stream().map(Field::getName).collect(Collectors.toList());
+            List<String> fdNames = fieldList.stream().map(Field::getName).toList();
             for (Field pfd : clsSup.getDeclaredFields()) {
                 // 避免重载属性
                 if (fdNames.contains(pfd.getName())) {
