@@ -1,7 +1,13 @@
 package cn.daxpay.multi.service.dao.merchant;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
+import cn.daxpay.multi.service.param.merchant.MchAppQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -15,4 +21,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class MchAppManager extends BaseManager<MchAppMapper, MchApp> {
+
+    /**
+     * 商户是否存在APP
+     */
+    public boolean existByMchNo(String mchNo) {
+        return existedByField(MchApp::getMchNo, mchNo);
+    }
+
+    /**
+     * 分页
+     */
+    public Page<MchApp> page(PageParam pageParam, MchAppQuery query) {
+        Page<MchApp> mpPage = MpUtil.getMpPage(pageParam);
+        QueryWrapper<MchApp> wrapper = QueryGenerator.generator(query, this.getEntityClass());
+        return this.page(mpPage, wrapper);
+    }
 }

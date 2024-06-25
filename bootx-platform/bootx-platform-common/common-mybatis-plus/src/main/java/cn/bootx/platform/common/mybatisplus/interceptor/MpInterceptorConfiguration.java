@@ -21,7 +21,7 @@ public class MpInterceptorConfiguration {
      */
     @Bean
     public MpInterceptor paginationInnerInterceptor() {
-        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.MYSQL);
+        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.POSTGRE_SQL);
         paginationInnerInterceptor.setOptimizeJoin(false);
         return new MpInterceptor(paginationInnerInterceptor, 1);
     }

@@ -1,16 +1,13 @@
 package cn.bootx.platform.common.mybatisplus.util;
 
-import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
-import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
-import cn.bootx.platform.common.mybatisplus.base.MpRealDelEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.bootx.platform.core.anno.BigField;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
@@ -24,7 +21,6 @@ import lombok.experimental.UtilityClass;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -122,30 +118,13 @@ public class MpUtil {
         }
     }
 
-    /**
-     * 初始化数据库Entity, 通常配合 executeBatch 使用
-     * @param entityList 对象列表
-     * @param userId 用户id, 可以为空
-     * @param <T> 泛型 MpIdEntity
-     */
-    public <T extends MpIdEntity> void initEntityList(List<? extends MpIdEntity> entityList, Long userId) {
-        for (MpIdEntity t : entityList) {
-            // 设置id
-            t.setId(IdUtil.getSnowflakeNextId());
-            if (t instanceof MpCreateEntity entity) {
-                entity.setCreator(userId);
-                entity.setCreateTime(LocalDateTime.now());
-            }
-            if (t instanceof MpRealDelEntity entity) {
-                entity.setLastModifier(userId);
-                entity.setLastModifiedTime(LocalDateTime.now());
-                entity.setVersion(0);
-            }
-            if (t instanceof MpBaseEntity entity) {
-                entity.setDeleted(false);
-            }
 
-        }
+    /**
+     * 字段是否存在长文本注解
+     */
+    public static boolean excludeBigField(TableFieldInfo tableFieldInfo) {
+        BigField annotation = tableFieldInfo.getField().getAnnotation(BigField.class);
+        return Objects.isNull(annotation);
     }
 
     /**

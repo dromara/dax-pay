@@ -1,0 +1,59 @@
+package cn.daxpay.multi.service.common.tenant;
+
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.multi.service.common.entity.MchEntity;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.StringValue;
+import org.springframework.stereotype.Component;
+
+/**
+ * 租户拦截处理器, 用商户号进行区分
+ * @author xxm
+ * @since 2024/6/25
+ */
+@Component
+public class MchTenantLineHandler  implements TenantLineHandler {
+
+    /**
+     * 获取租户ID
+     */
+    @Override
+    public Expression getTenantId() {
+        // TODO 从中获取当前用户的商户
+        return new StringValue("");
+    }
+
+    /**
+     * 租户字段
+     */
+    @Override
+    public String getTenantIdColumn() {
+        // 商户号字段
+        return "mch_no";
+    }
+
+    /**
+     * 是否忽略租户拦截
+     * 1. 不是继承 MchEntity 的实体类，默认忽略
+     * 2. 方法或类上添加了忽略注解的, 忽略拦截
+     * 3. 未被MP管理的实体类，默认忽略
+     * 4. 管理端运营人员不需要隔离数据
+     */
+    @Override
+    public boolean ignoreTable(String tableName) {
+        // 读取注解, 判断是否启用商户数据隔离
+        TableInfo tableInfo = MpUtil.getTableInfo(tableName);
+        if (tableInfo == null){
+            return true;
+        }
+        // 判断实体类上是否为 MchEntity 子类
+        if (!tableInfo.getEntityType().isAssignableFrom(MchEntity.class)){
+            return true;
+        }
+        // 管理端运营人员不需要隔离数据
+
+        return false;
+    }
+}

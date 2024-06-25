@@ -33,17 +33,18 @@
             <version>4.5.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-swagger</artifactId>
-            <version>${bootx-platform.version}</version>
-        </dependency>
-
         <!-- 基础API服务 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>service-baseapi</artifactId>
             <version>${bootx-platform.version}</version>
+        </dependency>
+
+        <!-- 支付服务 -->
+        <dependency>
+            <groupId>cn.daxpay.multi</groupId>
+            <artifactId>daxpay-multi-service</artifactId>
+            <version>${daxpay.version}</version>
         </dependency>
     </dependencies>
 

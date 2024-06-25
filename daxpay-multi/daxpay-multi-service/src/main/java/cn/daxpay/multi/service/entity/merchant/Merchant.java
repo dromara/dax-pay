@@ -1,7 +1,12 @@
 package cn.daxpay.multi.service.entity.merchant;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.service.convert.merchant.MerchantConvert;
+import cn.daxpay.multi.service.result.merchant.MerchantResult;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -14,10 +19,11 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "pay_merchant")
-public class Merchant extends MpBaseEntity {
+@TableName("pay_merchant")
+public class Merchant extends MpBaseEntity implements ToResult<MerchantResult> {
 
     /** 商户号 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String mchNo;
 
     /** 商户名称 */
@@ -43,4 +49,9 @@ public class Merchant extends MpBaseEntity {
 
     /** 状态 */
     private String status;
+
+    @Override
+    public MerchantResult toResult() {
+        return MerchantConvert.CONVERT.toResult(this);
+    }
 }

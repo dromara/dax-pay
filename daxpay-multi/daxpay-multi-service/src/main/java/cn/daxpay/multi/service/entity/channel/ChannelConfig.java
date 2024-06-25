@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.entity.channel;
 
+import cn.bootx.platform.core.anno.BigField;
 import cn.daxpay.multi.core.enums.PayChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -37,6 +38,7 @@ public class ChannelConfig extends MchEntity {
     private String signType;
 
     /** 扩展存储 */
+    @BigField
     private String ext;
 
 }

@@ -19,7 +19,7 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!-- 数据持久层框架 -->
+        <!-- 数据持久层依赖 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-mybatis-plus</artifactId>
@@ -30,6 +30,24 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <!-- 异常处理器 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-exception-handler</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- json 序列化配置 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-jackson</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- Spring 封装 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-spring</artifactId>
+            <version>${bootx-platform.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -34,4 +34,5 @@ bootx-platform:
           - cn.bootx.platform.iam
           - cn.bootx.platform.baseapi
           - cn.bootx.platform.notice
-
+        "[支付管理平台新接口]":
+          - cn.daxpay.multi.admin

@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
 import java.util.Set;
 
 /**
- * BeanValidation 工具类
+ * BeanValidation 校验工具类
  *
  * @author xxm
  * @since 2020/5/26 18:14
@@ -32,29 +32,22 @@ public class ValidationUtil {
     }
 
     /**
+     * 验证参数对象，如果验证失败则返回所有失败信息
+     */
+    public String validate(Object paramObject, Class<?>... groups) {
+        Validator validator = validatorFactory.getValidator();
+        Set<ConstraintViolation<Object>> violations = validator.validate(paramObject, groups);
+        return extractMessages(violations);
+    }
+
+    /**
      * 提取校验失败的消息
      */
-    public String extractMessages(Set<ConstraintViolation<Object>> violations) {
+    private String extractMessages(Set<ConstraintViolation<Object>> violations) {
         StringBuilder message = new StringBuilder();
         for (ConstraintViolation<Object> violation : violations) {
             message.append(violation.getMessage()).append(System.lineSeparator());
         }
         return message.toString();
     }
-
-    /**
-     * 验证参数对象，如果验证失败则返回所有失败信息
-     */
-    public String validate(Object paramObject, Class<?>... groups) {
-        Validator validator = validatorFactory.getValidator();
-        Set<ConstraintViolation<Object>> violations = validator.validate(paramObject, groups);
-
-        StringBuilder message = new StringBuilder();
-        for (ConstraintViolation<Object> violation : violations) {
-            message.append(violation.getMessage()).append("\n");
-        }
-
-        return message.toString();
-    }
-
 }

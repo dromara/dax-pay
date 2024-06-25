@@ -32,6 +32,7 @@
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
         <dynamic-datasource.version>4.3.0</dynamic-datasource.version>
+        <caffeine.version>3.1.8</caffeine.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <ttl.version>2.14.3</ttl.version>

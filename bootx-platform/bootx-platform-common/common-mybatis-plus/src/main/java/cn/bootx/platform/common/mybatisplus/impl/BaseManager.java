@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.extension.kotlin.KtUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.yulichang.base.MPJBaseMapper;
+import com.github.yulichang.interfaces.MPJBaseJoin;
 import lombok.Getter;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.logging.Log;
@@ -29,10 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -47,7 +45,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     /**
      * 默认批次提交数量
      */
-    protected final int DEFAULT_BATCH_SIZE = 1000;
+    protected final int public_BATCH_SIZE = 1000;
 
     /** 日志 */
     protected final Log log = LogFactory.getLog(getClass());
@@ -57,9 +55,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     @Autowired
     protected M baseMapper;
 
-
     private volatile SqlSessionFactory sqlSessionFactory;
-
 
     public Class<T> getEntityClass() {
         return currentModelClass();
@@ -186,7 +182,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     @Transactional(rollbackFor = Exception.class)
     public List<T> saveAll(List<T> list) {
         if (CollUtil.isNotEmpty(list)) {
-            saveBatch(list, DEFAULT_BATCH_SIZE);
+            saveBatch(list, public_BATCH_SIZE);
         }
         return list;
     }
@@ -206,7 +202,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     @Transactional(rollbackFor = Exception.class)
     public boolean updateAllById(Collection<T> entityList) {
         if (CollUtil.isNotEmpty(entityList)) {
-            return updateBatchById(entityList, DEFAULT_BATCH_SIZE);
+            return updateBatchById(entityList, public_BATCH_SIZE);
         }
         return false;
     }
@@ -418,7 +414,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
         }
         TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
         if (tableInfo.isWithLogicDelete() && tableInfo.isWithUpdateFill()) {
-            return deleteBatchByIds(list, DEFAULT_BATCH_SIZE, true);
+            return deleteBatchByIds(list, public_BATCH_SIZE, true);
         }
         return SqlHelper.retBool(getBaseMapper().deleteByIds(list));
     }
@@ -466,6 +462,85 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
                 sqlSession.update(sqlStatement, e);
             }
         });
+    }
+
+
+    /**
+     * 根据 Wrapper 条件，连表删除
+     *
+     * @param wrapper joinWrapper
+     */
+    public boolean deleteJoin(MPJBaseJoin<T> wrapper) {
+        return SqlHelper.retBool(getBaseMapper().deleteJoin(wrapper));
+    }
+
+    /**
+     * 根据 whereEntity 条件，更新记录
+     *
+     * @param entity  实体对象 (set 条件值,可以为 null)
+     * @param wrapper 实体对象封装操作类（可以为 null,里面的 entity 用于生成 where 语句）
+     */
+    public boolean updateJoin(T entity, MPJBaseJoin<T> wrapper) {
+        return SqlHelper.retBool(getBaseMapper().updateJoin(entity, wrapper));
+    }
+
+    /**
+     * 根据 whereEntity 条件，更新记录 (null字段也会更新 !!!)
+     *
+     * @param entity  实体对象 (set 条件值,可以为 null)
+     * @param wrapper 实体对象封装操作类（可以为 null,里面的 entity 用于生成 where 语句）
+     */
+    public boolean updateJoinAndNull(T entity, MPJBaseJoin<T> wrapper) {
+        return SqlHelper.retBool(getBaseMapper().updateJoinAndNull(entity, wrapper));
+    }
+
+    /**
+     * 根据 Wrapper 条件，查询总记录数
+     */
+    public Long selectJoinCount(MPJBaseJoin<T> wrapper) {
+        return getBaseMapper().selectJoinCount(wrapper);
+    }
+
+    /**
+     * 连接查询返回一条记录
+     */
+    public <DTO> DTO selectJoinOne(Class<DTO> clazz, MPJBaseJoin<T> wrapper) {
+        return getBaseMapper().selectJoinOne(clazz, wrapper);
+    }
+
+    /**
+     * 连接查询返回集合
+     */
+    public <DTO> List<DTO> selectJoinList(Class<DTO> clazz, MPJBaseJoin<T> wrapper) {
+        return getBaseMapper().selectJoinList(clazz, wrapper);
+    }
+
+    /**
+     * 连接查询返回集合并分页
+     */
+    public <DTO, P extends IPage<DTO>> P selectJoinListPage(P page, Class<DTO> clazz, MPJBaseJoin<T> wrapper) {
+        return getBaseMapper().selectJoinPage(page, clazz, wrapper);
+    }
+
+    /**
+     * 连接查询返回Map
+     */
+    public Map<String, Object> selectJoinMap(MPJBaseJoin<T> wrapper) {
+        return getBaseMapper().selectJoinMap(wrapper);
+    }
+
+    /**
+     * 连接查询返回Map集合
+     */
+    public List<Map<String, Object>> selectJoinMaps(MPJBaseJoin<T> wrapper) {
+        return getBaseMapper().selectJoinMaps(wrapper);
+    }
+
+    /**
+     * 连接查询返回Map集合并分页
+     */
+    public <P extends IPage<Map<String, Object>>> P selectJoinMapsPage(P page, MPJBaseJoin<T> wrapper) {
+        return getBaseMapper().selectJoinMapsPage(page, wrapper);
     }
 
 }
