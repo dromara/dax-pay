@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 通道配置
+ * 通道配置 constant
  * @author xxm
  * @since 2024/6/25
  */
@@ -23,18 +23,10 @@ public class ChannelConfigManager extends BaseManager<ChannelConfigMapper, Chann
      * 根据应用号查询
      */
     public List<ChannelConfig> findByAppId(String appId) {
+        // 首先传讯通道
+
         return lambdaQuery()
                 .select(this.getEntityClass (), MpUtil::excludeBigField)
-                .eq(ChannelConfig::getAppId, appId)
-                .list();
-    }
-    /**
-     * 根据应用号和商户号查询
-     */
-    public List<ChannelConfig> findByMchNoAndAppId(String appId) {
-        return lambdaQuery()
-                .select(this.getEntityClass (), MpUtil::excludeBigField)
-                .eq(ChannelConfig::getAppId, appId)
                 .eq(ChannelConfig::getAppId, appId)
                 .list();
     }

@@ -5,12 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.daxpay.multi</groupId>
-        <artifactId>daxpay-multi</artifactId>
+        <artifactId>daxpay-multi-channel</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>daxpay-multi-service</artifactId>
-    <description>支付服务实现类</description>
+    <artifactId>daxpay-multi-alipay</artifactId>
 
     <dependencies>
         <!-- web框架 -->
@@ -33,13 +32,14 @@
             <version>${daxpay.version}</version>
         </dependency>
 
-        <!-- 临时依赖, 后期会重新整理 -->
+        <!-- 支付服务实现类 -->
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>4.5.0</version>
+            <groupId>cn.daxpay.multi</groupId>
+            <artifactId>daxpay-multi-service</artifactId>
+            <version>${daxpay.version}</version>
         </dependency>
 
+        <!-- swagger  -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-swagger</artifactId>
@@ -53,5 +53,4 @@
             <version>${bootx-platform.version}</version>
         </dependency>
     </dependencies>
-
 </project>

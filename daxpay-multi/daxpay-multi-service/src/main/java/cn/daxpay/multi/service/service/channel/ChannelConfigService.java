@@ -1,9 +1,19 @@
 package cn.daxpay.multi.service.service.channel;
 
 import cn.daxpay.multi.service.dao.channel.ChannelConfigManager;
+import cn.daxpay.multi.service.dao.constant.ChannelConstManager;
+import cn.daxpay.multi.service.entity.channel.ChannelConfig;
+import cn.daxpay.multi.service.entity.constant.ChannelConst;
+import cn.daxpay.multi.service.result.channel.ChannelConfigResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 通道配置
@@ -17,14 +27,26 @@ public class ChannelConfigService {
 
     private final ChannelConfigManager channelConfigManager;
 
-    /**
-     * 列表
-     */
-    public void findAllByAdmin(){
-        //
-    }
+    private final ChannelConstManager channelConstManager;
 
     /**
-     *
+     * 通道配置列表, 根据应用进行查询, 默认返回所有通道配置, 如果未进行配置启用状态会为null
      */
+    public List<ChannelConfigResult> findAllByAppId(String appId){
+        Map<String, ChannelConfig> channelConfigMap = channelConfigManager.findByAppId(appId)
+                .stream()
+                .collect(Collectors.toMap(ChannelConfig::getChannel, Function.identity(), (v1, v2) -> v1));
+        // 遍历通道类型
+        List<ChannelConst> channelList = channelConstManager.findAll();
+
+        return channelList.stream().map(o->{
+            ChannelConfig channelConfig = channelConfigMap.get(o.getChannel());
+            if (Objects.isNull(channelConfig)){
+                return new ChannelConfigResult()
+                        .setChannel(o.getChannel());
+            } else {
+                return channelConfig.toResult();
+            }
+        }).toList();
+    }
 }

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.daxpay.multi</groupId>
-    <artifactId>dax-pay</artifactId>
+    <artifactId>daxpay</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -14,6 +14,7 @@
     <modules>
         <module>bootx-platform</module>
         <module>daxpay-multi</module>
+        <module>daxpay-multi-channel</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

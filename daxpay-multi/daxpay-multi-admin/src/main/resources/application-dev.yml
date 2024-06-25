@@ -24,8 +24,8 @@ bootx-platform:
     # swagger相关配置
     swagger:
       author: DaxPay
-      title: 开源支付平台-多商户版
-      description: 开源支付平台-单商户版-管理端
+      title: 开源支付平台-多商户版-管理端
+      description: 开源支付平台-多商户版-管理端
       version: 0.0.1
       base-packages:
         "[BootxPlatform接口]":
@@ -34,5 +34,5 @@ bootx-platform:
           - cn.bootx.platform.iam
           - cn.bootx.platform.baseapi
           - cn.bootx.platform.notice
-        "[支付管理平台新接口]":
+        "[支付管理平台接口]":
           - cn.daxpay.multi.admin
