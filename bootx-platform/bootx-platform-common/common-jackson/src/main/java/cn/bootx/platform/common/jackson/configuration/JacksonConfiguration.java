@@ -34,7 +34,7 @@ public class JacksonConfiguration {
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper()
+        return new ObjectMapper()
             // 指定要序列化的域
             .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
             // 不将日期写为时间戳
@@ -46,7 +46,6 @@ public class JacksonConfiguration {
             .registerModule(new Jdk8Module())
             .registerModule(new JavaLongTypeModule())
             .registerModule(new SimpleModule());
-        return objectMapper;
     }
 
     /**

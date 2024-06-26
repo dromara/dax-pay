@@ -7,22 +7,25 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 通道常量
+ * 支付方式常量
  * @author xxm
- * @since 2024/6/25
+ * @since 2024/6/26
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_channel_const")
-public class ChannelConst extends MpIdEntity {
+@TableName("pay_method_const")
+public class MethodConst extends MpIdEntity {
 
-    /** 通道编码 */
-    private String channel;
+    /** 编码 */
+    private String code;
 
-    /** 通道名称 */
+    /** 名称 */
     private String name;
 
     /** 是否启用 */
     private boolean enable;
+
+    /** 备注 */
+    private String remark;
 }
