@@ -122,7 +122,7 @@ public class AliPayCloseService {
         }
         // 其他状态
         else {
-            throw new TradeStatusErrorException("当前交易状态不支持关闭操作, 请对订单同步状态后再进行操作");
+            throw new TradeStatusErrorException("当前交易无法关闭操作, 请对订单同步状态后再进行操作");
         }
     }
 }

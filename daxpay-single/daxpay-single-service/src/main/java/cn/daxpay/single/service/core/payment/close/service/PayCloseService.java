@@ -3,6 +3,7 @@ package cn.daxpay.single.service.core.payment.close.service;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.core.exception.TradeNotExistException;
 import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.pay.PayCloseParam;
@@ -85,6 +86,10 @@ public class PayCloseService {
             log.error("关闭订单失败:", e);
             // 记录关闭失败的记录
             this.saveRecord(payOrder, false, e.getMessage());
+            result.setCode(1).setMsg(e.getMessage());
+            if (e instanceof PayFailureException){
+                throw e;
+            }
             throw new OperationFailException("关闭订单失败");
         }
     }

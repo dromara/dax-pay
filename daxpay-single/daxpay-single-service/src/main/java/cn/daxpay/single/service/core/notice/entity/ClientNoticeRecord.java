@@ -31,7 +31,7 @@ public class ClientNoticeRecord extends MpCreateEntity implements EntityBaseFunc
     private Long taskId;
 
     /** 请求次数 */
-    @DbColumn(comment = "请求次数", length = 3, isNull = false)
+    @DbColumn(comment = "请求次数", length = 3)
     private Integer reqCount;
 
     /** 发送是否成功 */

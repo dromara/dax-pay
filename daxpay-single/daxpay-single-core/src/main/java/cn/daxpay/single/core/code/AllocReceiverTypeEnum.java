@@ -19,7 +19,7 @@ public enum AllocReceiverTypeEnum {
     /** 个人 */
     WX_PERSONAL("wx_personal","PERSONAL_OPENID", "个人"),
     /** 商户 */
-    WX_MERCHANT("wx_merchant","MERCHANT_ID", "商户"),
+    WX_MERCHANT("wx_merchant","MERCHANT_ID", "商户号"),
 
     /** userId 以2088开头的纯16位数字 */
     ALI_USER_ID("ali_user_id","userId", "用户ID"),

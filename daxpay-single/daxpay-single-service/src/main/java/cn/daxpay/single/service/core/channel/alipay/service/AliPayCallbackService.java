@@ -157,7 +157,7 @@ public class AliPayCallbackService {
     public void resolveRefundData() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
-        // 退款订单Id
+        // 退款订单号
         callback.setTradeNo(callbackParam.get(OUT_BIZ_NO));
         // 退款状态
         callback.setOutStatus(callbackParam.get(TRADE_STATUS));

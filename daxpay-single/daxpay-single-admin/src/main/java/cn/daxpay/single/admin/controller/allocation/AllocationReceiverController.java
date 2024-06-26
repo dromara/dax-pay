@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -67,6 +68,7 @@ public class AllocationReceiverController {
     @Operation(summary = "添加")
     @PostMapping("/add")
     public ResResult<Void> add(@RequestBody AllocReceiverAddParam param){
+        param.setReqTime(LocalDateTime.now());
         ValidationUtil.validateParam(param);
         receiverService.addAndSync(param);
         return Res.ok();
@@ -76,6 +78,7 @@ public class AllocationReceiverController {
     @Operation(summary = "删除")
     @PostMapping("/delete")
     public ResResult<Void> delete(@RequestBody AllocReceiverRemoveParam param){
+        param.setReqTime(LocalDateTime.now());
         ValidationUtil.validateParam(param);
         receiverService.remove(param);
         return Res.ok();

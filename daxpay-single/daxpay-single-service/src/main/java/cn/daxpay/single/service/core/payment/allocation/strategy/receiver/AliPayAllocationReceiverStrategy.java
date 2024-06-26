@@ -38,7 +38,7 @@ public class AliPayAllocationReceiverStrategy extends AbsAllocationReceiverStrat
      */
     @Override
     public String getChannel() {
-        return PayChannelEnum.WECHAT.getCode();
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**
