@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**
- *
+ * 通道配置
  * @author xxm
  * @since 2024/6/25
  */

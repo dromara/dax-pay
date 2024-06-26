@@ -1,6 +1,6 @@
 package cn.daxpay.multi.core.exception;
 
-import cn.daxpay.multi.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.multi.core.code.DaxPayErrorCode;
 
 /**
  * 交易状态错误
@@ -10,10 +10,10 @@ import cn.daxpay.multi.core.code.DaxPayCommonErrorCode;
 public class TradeStatusErrorException extends PayFailureException{
 
     public TradeStatusErrorException(String message) {
-        super(DaxPayCommonErrorCode.TRADE_STATUS_ERROR,message);
+        super(DaxPayErrorCode.TRADE_STATUS_ERROR,message);
     }
 
     public TradeStatusErrorException() {
-        super(DaxPayCommonErrorCode.TRADE_STATUS_ERROR,"交易状态错误");
+        super(DaxPayErrorCode.TRADE_STATUS_ERROR,"交易状态错误");
     }
 }

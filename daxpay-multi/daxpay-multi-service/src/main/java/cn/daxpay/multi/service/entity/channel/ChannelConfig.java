@@ -41,6 +41,7 @@ public class ChannelConfig extends MchEntity implements ToResult<ChannelConfigRe
     @BigField
     private String ext;
 
+
     @Override
     public ChannelConfigResult toResult() {
         return ChannelConfigConvert.INSTANCE.toResult(this);

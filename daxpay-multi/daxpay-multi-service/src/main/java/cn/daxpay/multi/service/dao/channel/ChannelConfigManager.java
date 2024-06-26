@@ -23,12 +23,20 @@ public class ChannelConfigManager extends BaseManager<ChannelConfigMapper, Chann
      * 根据应用号查询
      */
     public List<ChannelConfig> findByAppId(String appId) {
-        // 首先传讯通道
-
         return lambdaQuery()
                 .select(this.getEntityClass (), MpUtil::excludeBigField)
                 .eq(ChannelConfig::getAppId, appId)
                 .list();
+    }
+
+    /**
+     * 判断是应用否存在指定的通道配置
+     */
+    public boolean existsByAppIdAndChannel(String appId, String channel) {
+        return lambdaQuery()
+                .eq(ChannelConfig::getAppId, appId)
+                .eq(ChannelConfig::getChannel, channel)
+                .exists();
     }
 
 }

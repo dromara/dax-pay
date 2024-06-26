@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.common.entity;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import lombok.experimental.FieldNameConstants;
 public class MchEntity extends MpBaseEntity {
 
     /** 商户号 */
-    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
     private String mchNo;
 
     /** 应用号 */

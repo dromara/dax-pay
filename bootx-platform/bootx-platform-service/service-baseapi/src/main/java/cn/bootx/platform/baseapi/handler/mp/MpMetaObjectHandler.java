@@ -31,6 +31,9 @@ public class MpMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName(CommonCode.LAST_MODIFIER, this.getUserid(), metaObject);
     }
 
+    /**
+     * 获取用户Id
+     */
     public Long getUserid() {
 //        return SecurityUtil.getCurrentUser().map(UserDetail::getId).orElse(DesensitizedUtil.userId());
         return 1L;

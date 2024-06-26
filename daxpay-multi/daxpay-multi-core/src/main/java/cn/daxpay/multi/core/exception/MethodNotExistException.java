@@ -1,6 +1,6 @@
 package cn.daxpay.multi.core.exception;
 
-import cn.daxpay.multi.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.multi.core.code.DaxPayErrorCode;
 
 /**
  * 不存在的支付方式
@@ -10,10 +10,10 @@ import cn.daxpay.multi.core.code.DaxPayCommonErrorCode;
 public class MethodNotExistException extends PayFailureException{
 
     public MethodNotExistException(String message) {
-        super(DaxPayCommonErrorCode.METHOD_NOT_EXIST,message);
+        super(DaxPayErrorCode.METHOD_NOT_EXIST,message);
     }
 
     public MethodNotExistException() {
-        super(DaxPayCommonErrorCode.METHOD_NOT_EXIST,"不存在的支付方式");
+        super(DaxPayErrorCode.METHOD_NOT_EXIST,"不存在的支付方式");
     }
 }

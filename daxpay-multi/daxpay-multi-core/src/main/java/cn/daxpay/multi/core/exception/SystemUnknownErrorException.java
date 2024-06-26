@@ -1,6 +1,6 @@
 package cn.daxpay.multi.core.exception;
 
-import cn.daxpay.multi.core.code.DaxPayCommonErrorCode;
+import cn.daxpay.multi.core.code.DaxPayErrorCode;
 
 /**
  * 未知异常，系统无法处理
@@ -10,10 +10,10 @@ import cn.daxpay.multi.core.code.DaxPayCommonErrorCode;
 public class SystemUnknownErrorException extends PayFailureException{
 
     public SystemUnknownErrorException(String message) {
-        super(DaxPayCommonErrorCode.SYSTEM_UNKNOWN_ERROR,message);
+        super(DaxPayErrorCode.SYSTEM_UNKNOWN_ERROR,message);
     }
 
     public SystemUnknownErrorException() {
-        super(DaxPayCommonErrorCode.SYSTEM_UNKNOWN_ERROR,"未知异常，系统无法处理");
+        super(DaxPayErrorCode.SYSTEM_UNKNOWN_ERROR,"未知异常，系统无法处理");
     }
 }
