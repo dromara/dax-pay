@@ -3670,14 +3670,14 @@ comment on column pay_client_notice_record.error_code is '错误编码';
 INSERT INTO pay_client_notice_record (id, task_id, req_count, success, send_type, error_msg, creator, create_time, error_code) VALUES (1796526918107570176, 1796526917679751168, 1, false, 'auto', e'<!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    
+
     <meta charset="UTF-8" />
     <link
       rel="', 1399985191002447872, '2024-05-31 20:59:29.789000', null);
 INSERT INTO pay_client_notice_record (id, task_id, req_count, success, send_type, error_msg, creator, create_time, error_code) VALUES (1796528223580495872, 1796528223437889536, 1, false, 'auto', e'<!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    
+
     <meta charset="UTF-8" />
     <link
       rel="', 1399985191002447872, '2024-05-31 21:04:41.039000', null);
@@ -4768,66 +4768,6 @@ create index wallet_id
     on pay_wallet_record (wallet_id);
 
 comment on index wallet_id is '钱包ID';
-
-
------
-create table pay_wechat_notice_config
-(
-    id                  bigint  not null
-        primary key,
-    app_id              varchar(255),
-    app_secret          varchar(255),
-    qr_url              varchar(255),
-    oauth2_url          varchar(255),
-    verify_file_name    varchar(255),
-    verify_file_content varchar(255),
-    template_id         varchar(255),
-    template_content    varchar(255),
-    template_remark     varchar(255),
-    creator             bigint,
-    create_time         timestamp(6),
-    last_modifier       bigint,
-    last_modified_time  timestamp(6),
-    version             integer not null,
-    deleted             boolean not null
-);
-
-comment on table pay_wechat_notice_config is '微信消息通知相关配置';
-
-comment on column pay_wechat_notice_config.id is '主键';
-
-comment on column pay_wechat_notice_config.app_id is '应用id';
-
-comment on column pay_wechat_notice_config.app_secret is '应用秘钥';
-
-comment on column pay_wechat_notice_config.qr_url is '公众号二维码';
-
-comment on column pay_wechat_notice_config.oauth2_url is 'OAuth2地址';
-
-comment on column pay_wechat_notice_config.verify_file_name is '微信校验文件名称';
-
-comment on column pay_wechat_notice_config.verify_file_content is '微信校验文件内容';
-
-comment on column pay_wechat_notice_config.template_id is '模板消息Id';
-
-comment on column pay_wechat_notice_config.template_content is '模板消息内容';
-
-comment on column pay_wechat_notice_config.template_remark is '模板消息备注';
-
-comment on column pay_wechat_notice_config.creator is '创建者ID';
-
-comment on column pay_wechat_notice_config.create_time is '创建时间';
-
-comment on column pay_wechat_notice_config.last_modifier is '最后修者ID';
-
-comment on column pay_wechat_notice_config.last_modified_time is '最后修改时间';
-
-comment on column pay_wechat_notice_config.version is '乐观锁';
-
-comment on column pay_wechat_notice_config.deleted is '删除标志';
-
-
-
 
 -----
 create table pay_wechat_pay_config
