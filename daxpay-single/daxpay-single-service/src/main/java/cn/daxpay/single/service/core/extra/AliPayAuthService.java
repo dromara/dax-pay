@@ -52,10 +52,10 @@ public class AliPayAuthService {
             serverUrl = platformConfig.getWebsiteUrl();
         }
         // 构建出授权成功后重定向页面链接
-        String redirectUrl = StrUtil.format("{}/unipay/callback/alipay/auth/{}", platformConfig.getWebsiteUrl(), code);
+        String redirectUrl = StrUtil.format("{}/unipay/callback/alipay/auth/{}", serverUrl, code);
         // 构造出授权页地址
         String authUrl = StrUtil.format("{}/h5/alipayAuth.html?appId={}&redirectUrl={}",
-                platformConfig.getWebsiteUrl(), aliPayConfig.getAppId(), redirectUrl);
+                serverUrl, aliPayConfig.getAppId(), redirectUrl);
         // 写入Redis, 五分钟有效期
         redisClient.setWithTimeout(OPEN_ID_KEY_PREFIX + code, "", 5*60*1000L);
         return new AuthUrlResult()
@@ -64,19 +64,19 @@ public class AliPayAuthService {
     }
 
     /**
-     * 微信授权回调页面, 通过获取到authCode获取到OpenId, 存到到Redis中对应code关联的键值对中
+     * 支付宝权回调页面, 通过获取到authCode获取到OpenId, 存到到Redis中对应code关联的键值对中
      * @param authCode 微信返回的授权码
      * @param code 标识码
      */
     public void authCallback(String authCode, String code) {
-        // 获取OpenId
-        String openId = this.getOpenId(authCode);
+        // 获取OpenId或UserId
+        String openId = this.getOpenIdOrUserId(authCode);
         // 写入Redis
         redisClient.setWithTimeout(OPEN_ID_KEY_PREFIX + code, openId, 60*1000L);
     }
 
     /**
-     * 通过标识码轮训获取OpenId
+     * 通过标识码轮训获取OpenId或UserId
      */
     public OpenIdResult queryOpenId(String code) {
         // 从redis中获取
@@ -94,8 +94,11 @@ public class AliPayAuthService {
     }
 
 
+    /**
+     * 获取OpenId或者userid用户标识
+     */
     @SneakyThrows
-    public String getOpenId(String authCode) {
+    public String getOpenIdOrUserId(String authCode) {
         // 初始化SDK
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
         // 构造请求参数以调用接口
@@ -108,6 +111,10 @@ public class AliPayAuthService {
         if (!response.isSuccess()) {
             log.warn("获取支付宝OpenId失败,原因:{}", response.getSubMsg());
             throw new BizException("获取支付宝OpenId失败");
+        }
+        // 如果未申请 OpenId 方式, 则获取的是UserId
+        if (StrUtil.isBlank(response.getOpenId())) {
+            return response.getUserId();
         }
         return response.getOpenId();
     }

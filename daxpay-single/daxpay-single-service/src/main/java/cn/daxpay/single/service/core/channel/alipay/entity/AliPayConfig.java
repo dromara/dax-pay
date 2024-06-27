@@ -12,6 +12,7 @@ import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -143,6 +144,12 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "备注")
     private String remark;
 
+    @Override
+    public AliPayConfigDto toDto() {
+        return AlipayConvert.CONVERT.convert(this);
+    }
+
+
     public Boolean getAllocation() {
         return Objects.equals(allocation,true);
     }
@@ -151,9 +158,8 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
         return Objects.equals(enable,true);
     }
 
-    @Override
-    public AliPayConfigDto toDto() {
-        return AlipayConvert.CONVERT.convert(this);
+    public String getRedirectUrl() {
+        return StrUtil.removeSuffix(redirectUrl, "/");
     }
 
 }

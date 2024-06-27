@@ -59,7 +59,12 @@ public class UnionPayReconcileService {
     public void downAndSave(ReconcileOrder reconcileOrder, Date date, UnionPayKit unionPayKit){
         // 下载对账单
         Map<String, Object> map = unionPayKit.downloadBill(date, RECONCILE_BILL_TYPE);
-        String fileContent = map.get(FILE_CONTENT).toString();
+        Object o = map.get(FILE_CONTENT);
+        if (o == null) {
+            log.warn("云闪付获取对账文件失败");
+            throw new OperationFailException("云闪付获取对账文件失败");
+        }
+        String fileContent = o.toString();
         // 判断是否成功
         if (!SDKConstants.OK_RESP_CODE.equals(map.get(SDKConstants.param_respCode))) {
             log.warn("云闪付获取对账文件失败");

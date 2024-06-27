@@ -53,7 +53,7 @@ public class PayCloseRecordDto extends BaseDto {
     private String errorCode;
 
     /** 错误信息 */
-    @DbColumn(comment = "错误信息", length = 150)
+    @DbColumn(comment = "错误信息", length = 2048)
     private String errorMsg;
 
     /** 终端ip */

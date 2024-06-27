@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.configuration;
 
 import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -32,5 +33,9 @@ public class DaxPayProperties {
     public void setEnv(String env) {
         this.env = env;
         OrderNoGenerateUtil.setEnv(env);
+    }
+
+    public String getFrontH5Url() {
+        return StrUtil.removeSuffix(frontH5Url, "/");
     }
 }

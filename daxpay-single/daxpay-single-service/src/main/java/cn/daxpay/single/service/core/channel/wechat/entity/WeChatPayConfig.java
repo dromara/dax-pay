@@ -4,14 +4,15 @@ import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.StringListTypeHandler;
-import cn.daxpay.single.service.code.WeChatPayCode;
-import cn.daxpay.single.service.common.typehandler.DecryptTypeHandler;
-import cn.daxpay.single.service.core.channel.wechat.convert.WeChatConvert;
-import cn.daxpay.single.service.dto.channel.wechat.WeChatPayConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
+import cn.daxpay.single.service.code.WeChatPayCode;
+import cn.daxpay.single.service.common.typehandler.DecryptTypeHandler;
+import cn.daxpay.single.service.core.channel.wechat.convert.WeChatConvert;
+import cn.daxpay.single.service.dto.channel.wechat.WeChatPayConfigDto;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -122,6 +123,11 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "备注")
     private String remark;
 
+    @Override
+    public WeChatPayConfigDto toDto() {
+        return WeChatConvert.CONVERT.convert(this);
+    }
+
     public Boolean getAllocation() {
         return Objects.equals(allocation,true);
     }
@@ -130,9 +136,7 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
         return Objects.equals(enable,true);
     }
 
-
-    @Override
-    public WeChatPayConfigDto toDto() {
-        return WeChatConvert.CONVERT.convert(this);
+    public String getRedirectUrl() {
+        return StrUtil.removeSuffix(redirectUrl, "/");
     }
 }

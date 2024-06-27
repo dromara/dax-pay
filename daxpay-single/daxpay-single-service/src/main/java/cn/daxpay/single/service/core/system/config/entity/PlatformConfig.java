@@ -8,6 +8,7 @@ import cn.daxpay.single.service.core.system.config.convert.PlatformConfigConvert
 import cn.daxpay.single.service.dto.system.config.PlatformConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -88,5 +89,9 @@ public class PlatformConfig extends MpBaseEntity implements EntityBaseFunction<P
     @Override
     public PlatformConfigDto toDto() {
         return PlatformConfigConvert.CONVERT.convert(this);
+    }
+
+    public String getWebsiteUrl() {
+        return StrUtil.removeSuffix(websiteUrl, "/");
     }
 }

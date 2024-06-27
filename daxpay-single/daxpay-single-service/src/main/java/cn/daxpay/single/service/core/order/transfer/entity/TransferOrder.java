@@ -122,7 +122,7 @@ public class TransferOrder extends MpBaseEntity implements EntityBaseFunction<Tr
     private String errorCode;
 
     /** 错误信息 */
-    @DbColumn(comment = "错误信息", length = 150)
+    @DbColumn(comment = "错误信息", length = 2048)
     private String errorMsg;
 
     @Override

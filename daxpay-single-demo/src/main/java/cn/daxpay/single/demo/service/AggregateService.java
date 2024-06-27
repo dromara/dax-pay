@@ -114,7 +114,7 @@ public class AggregateService {
         WxAuthUrlParam wxAuthUrlParam = new WxAuthUrlParam();
         wxAuthUrlParam.setState(code);
 
-        String url = StrUtil.format("{}/demo/aggregate/wxAuthCallback", daxPayDemoProperties.getServerUrl());
+        String url = StrUtil.format("{}/demo/aggregate/wxAuthCallback", daxPayDemoProperties.getWxRedirectUrl());
         wxAuthUrlParam.setUrl(url);
         wxAuthUrlParam.setState(code);
         DaxPayResult<WxAuthUrlModel> execute = DaxPayKit.execute(wxAuthUrlParam);
@@ -292,5 +292,4 @@ public class AggregateService {
         }
         return result.getData().getOpenId();
     }
-
 }

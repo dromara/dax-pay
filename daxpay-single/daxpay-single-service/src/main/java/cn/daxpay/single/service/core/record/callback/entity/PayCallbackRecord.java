@@ -36,7 +36,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
 
     /** 通道交易号 */
     @DbMySqlIndex(comment = "通道交易号索引")
-    @DbColumn(comment = "通道交易号", length = 150, isNull = false)
+    @DbColumn(comment = "通道交易号", length = 150)
     private String outTradeNo;
 
     /**
@@ -73,7 +73,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     private String errorCode;
 
     /** 错误信息 */
-    @DbColumn(comment = "错误信息", length = 150)
+    @DbColumn(comment = "错误信息", length = 2048)
     private String errorMsg;
 
     /**

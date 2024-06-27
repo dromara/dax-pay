@@ -128,7 +128,7 @@ public class PayOrder extends MpBaseEntity implements EntityBaseFunction<PayOrde
     private String errorCode;
 
     /** 错误信息 */
-    @DbColumn(comment = "错误信息", length = 150)
+    @DbColumn(comment = "错误信息", length = 2048)
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
 
