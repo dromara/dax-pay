@@ -1,7 +1,6 @@
 package cn.daxpay.single.service.dto.channel.wallet;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +29,7 @@ public class WalletConfigDto extends BaseDto {
 
     /** 单次支持支持多少钱 */
     @Schema(description = "单次支持支持多少钱")
-    private Integer singleLimit;
+    private Integer limitAmount;
 
     /** 备注 */
     @Schema(description = "备注")

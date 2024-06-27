@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.core.payment.notice.result;
 
-import cn.daxpay.single.code.AllocDetailResultEnum;
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
-import cn.daxpay.single.serializer.LocalDateTimeToTimestampSerializer;
+import cn.daxpay.single.core.code.AllocDetailResultEnum;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.serializer.LocalDateTimeToTimestampSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -4,8 +4,8 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
-import cn.daxpay.single.code.PayOrderAllocStatusEnum;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.param.order.PayOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,14 +57,10 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
      * 查询对账用订单记录(指定时间和状态的订单)
      */
     public List<PayOrder> findReconcile(String channel, LocalDateTime startTime, LocalDateTime endTime) {
-        List<String> status = Arrays.asList(PayStatusEnum.SUCCESS.getCode(),
-                PayStatusEnum.PARTIAL_REFUND.getCode(),
-                PayStatusEnum.REFUNDING.getCode(),
-                PayStatusEnum.REFUNDED.getCode());
         return this.lambdaQuery()
                 .eq(PayOrder::getChannel, channel)
                 .between(PayOrder::getPayTime, startTime, endTime)
-                .in(PayOrder::getStatus, status)
+                .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())
                 .list();
     }
 
@@ -73,15 +68,11 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
      * 查询自动分账的订单记录(指定时间和状态的订单)
      */
     public List<PayOrder> findAutoAllocation() {
-        List<String> status = Arrays.asList(PayStatusEnum.SUCCESS.getCode(),
-                PayStatusEnum.PARTIAL_REFUND.getCode(),
-                PayStatusEnum.REFUNDING.getCode(),
-                PayStatusEnum.REFUNDED.getCode());
         return this.lambdaQuery()
                 .eq(PayOrder::getAllocation, true)
                 .eq(PayOrder::getAutoAllocation, true)
-                .eq(PayOrder::getAllocationStatus, PayOrderAllocStatusEnum.WAITING.getCode())
-                .in(PayOrder::getStatus, status)
+                .eq(PayOrder::getAllocStatus, PayOrderAllocStatusEnum.WAITING.getCode())
+                .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())
                 .list();
     }
 
@@ -90,13 +81,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
      */
     public Integer getTalAmount(PayOrderQuery query){
         QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
-        // 成功, 退款相关都算
-        generator.in(MpUtil.getColumnName(PayOrder::getStatus),
-                PayStatusEnum.SUCCESS.getCode(),
-                PayStatusEnum.REFUNDED.getCode(),
-                PayStatusEnum.REFUNDING.getCode(),
-                PayStatusEnum.PARTIAL_REFUND.getCode()
-        );
+        generator.eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
         return baseMapper.getTalAmount(generator);
     }
 
@@ -105,7 +90,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
      */
     public List<PayOrder> queryExpiredOrder() {
         return lambdaQuery()
-                .eq(PayOrder::getStatus, PayStatusEnum.REFUNDING.getCode())
+                .eq(PayOrder::getStatus, PayStatusEnum.PROGRESS.getCode())
                 .lt(PayOrder::getExpiredTime, LocalDateTime.now())
                 .list();
     }

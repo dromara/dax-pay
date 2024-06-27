@@ -17,7 +17,6 @@ public abstract class AbsRefundStrategy implements PayStrategy{
     /** 退款订单 */
     private RefundOrder refundOrder = null;
 
-
     /**
      * 退款前对处理, 主要进行配置的加载和检查
      */

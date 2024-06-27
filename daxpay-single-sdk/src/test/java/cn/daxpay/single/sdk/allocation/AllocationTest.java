@@ -46,7 +46,6 @@ public class AllocationTest {
     public void allocationOrder() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
 
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试手动分账");
@@ -69,7 +68,6 @@ public class AllocationTest {
     public void allocationAutoOrder() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
-        param.setNotNotify(true);
 
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试手动分账");
@@ -93,7 +91,7 @@ public class AllocationTest {
     public void allocationOpen() {
         // 分账参数
         AllocationParam param = new AllocationParam();
-        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setBizAllocNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
         param.setBizOrderNo("SDK_1717264053245");
         param.setDescription("测试分账");
@@ -110,7 +108,7 @@ public class AllocationTest {
     public void allocationOpenByGroup() {
         // 分账参数
         AllocationParam param = new AllocationParam();
-        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setBizAllocNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
         param.setBizOrderNo("SDK_1717257064753");
         param.setGroupNo("123");
@@ -128,7 +126,7 @@ public class AllocationTest {
     public void allocationOpenByReceivers() {
         // 分账参数
         AllocationParam param = new AllocationParam();
-        param.setBizAllocationNo("A"+ RandomUtil.randomNumbers(5));
+        param.setBizAllocNo("A"+ RandomUtil.randomNumbers(5));
         param.setAttach("88899");
         param.setOrderNo("DEVP24060201473363000001");
         AllocReceiverParam allocReceiverParam = new AllocReceiverParam();
@@ -149,7 +147,7 @@ public class AllocationTest {
     public void allocationFinish() {
         // 分账完结参数
         AllocFinishParam param = new AllocFinishParam();
-        param.setAllocationNo("DEVA24060117191963000003");
+        param.setAllocNo("DEVA24060117191963000003");
 
         DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
@@ -162,7 +160,7 @@ public class AllocationTest {
     public void allocationSync() {
         // 分账同步参数
         AllocSyncParam param = new AllocSyncParam();
-        param.setAllocationNo("DEVA24060117191963000003");
+        param.setAllocNo("DEVA24060117191963000003");
 
         DaxPayResult<AllocSyncModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));

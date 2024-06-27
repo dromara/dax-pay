@@ -5,9 +5,10 @@ import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.daxpay.single.code.PaymentApiCode;
-import cn.daxpay.single.param.payment.allocation.AllocReceiverAddParam;
-import cn.daxpay.single.param.payment.allocation.AllocReceiverRemoveParam;
+import cn.bootx.platform.common.core.util.ValidationUtil;
+import cn.daxpay.single.core.code.PaymentApiCode;
+import cn.daxpay.single.core.param.payment.allocation.AllocReceiverAddParam;
+import cn.daxpay.single.core.param.payment.allocation.AllocReceiverRemoveParam;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -64,16 +66,20 @@ public class AllocationReceiverController {
 
     @InitPaymentContext(value = PaymentApiCode.ALLOCATION_RECEIVER_ADD)
     @Operation(summary = "添加")
-    @PostMapping("add")
+    @PostMapping("/add")
     public ResResult<Void> add(@RequestBody AllocReceiverAddParam param){
+        param.setReqTime(LocalDateTime.now());
+        ValidationUtil.validateParam(param);
         receiverService.addAndSync(param);
         return Res.ok();
     }
 
     @InitPaymentContext(value = PaymentApiCode.ALLOCATION_RECEIVER_REMOVE)
     @Operation(summary = "删除")
-    @PostMapping("delete")
+    @PostMapping("/delete")
     public ResResult<Void> delete(@RequestBody AllocReceiverRemoveParam param){
+        param.setReqTime(LocalDateTime.now());
+        ValidationUtil.validateParam(param);
         receiverService.remove(param);
         return Res.ok();
     }

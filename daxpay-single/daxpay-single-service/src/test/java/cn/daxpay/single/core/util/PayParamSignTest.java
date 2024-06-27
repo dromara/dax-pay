@@ -1,8 +1,7 @@
 package cn.daxpay.single.core.util;
 
-import cn.daxpay.single.param.channel.AliPayParam;
-import cn.daxpay.single.param.payment.pay.PayParam;
-import cn.daxpay.single.util.PaySignUtil;
+import cn.daxpay.single.core.param.channel.AliPayParam;
+import cn.daxpay.single.core.param.payment.pay.PayParam;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ class PayParamSignTest {
         PayParam payParam = new PayParam();
         payParam.setBizOrderNo("123");
         payParam.setClientIp("127.0.0.1");
-        payParam.setNotNotify(true);
         payParam.setNotifyUrl("http://127.0.0.1:8080/pay/notify");
         payParam.setReturnUrl("http://127.0.0.1:8080/pay/return");
         // 传入的话需要传输时间戳

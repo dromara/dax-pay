@@ -28,6 +28,9 @@ public interface AliPayCode {
     /** 询余额账户类型 */
     String QUERY_ACCOUNT_TYPE = "ACCTRANS_ACCOUNT";
 
+    /** jsapi */
+    String JSAPI_PAY ="JSAPI_PAY";
+
     /** 付款码支付 */
     String BAR_CODE = "bar_code";
 
@@ -85,6 +88,10 @@ public interface AliPayCode {
     // 参数
     /** 返回退款时间 */
     String GMT_REFUND_PAY = "gmt_refund_pay";
+
+    // 转账状态
+    /** 转账成功 */
+    String TRANSFER_SUCCESS = "SUCCESS";
 
     // 错误提示
     /** 交易不存在 */

@@ -1,16 +1,20 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
-import cn.daxpay.single.code.RefundStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.DaxPayErrorCode;
+import cn.daxpay.single.core.code.RefundStatusEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.daxpay.single.service.code.AliPayCode;
+import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
+import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.util.PayUtil;
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeRefundModel;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
-import com.ijpay.alipay.AliPayApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,26 +32,32 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AliPayRefundService {
 
+    private final AliPayConfigService aliPayConfigService;
+
     /**
      * 退款, 调用支付宝退款
      */
-    public void refund(RefundOrder refundOrder) {
+    public void refund(RefundOrder refundOrder, AliPayConfig config) {
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
+
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-        AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();
-        refundModel.setOutTradeNo(refundOrder.getOrderNo());
-        refundModel.setOutRequestNo(refundOrder.getRefundNo());
+        ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
+        AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+        model.setOutTradeNo(refundOrder.getOrderNo());
+        model.setOutRequestNo(refundOrder.getRefundNo());
         // 金额转换
         String refundAmount = PayUtil.conversionAmount(refundOrder.getAmount()).toString();
-        refundModel.setRefundAmount(refundAmount);
+        model.setRefundAmount(refundAmount);
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        request.setBizModel(model);
 
-        // 设置退款信息
         try {
-            AlipayTradeRefundResponse response = AliPayApi.tradeRefundToResponse(refundModel);
+            AlipayTradeRefundResponse response = alipayClient.execute(request);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                refundInfo.setErrorMsg(response.getSubMsg());
-                refundInfo.setErrorCode(response.getCode());
+                OperationFailException operationFailException = new OperationFailException(response.getSubMsg());
+                errorInfo.setException(operationFailException);
                 log.error("网关返回退款失败: {}", response.getSubMsg());
-                throw new PayFailureException(response.getSubMsg());
+                throw operationFailException;
             }
             // 默认为退款中状态
             refundInfo.setStatus(RefundStatusEnum.PROGRESS)
@@ -61,9 +71,9 @@ public class AliPayRefundService {
         }
         catch (AlipayApiException e) {
             log.error("订单退款失败:", e);
-            refundInfo.setErrorMsg(e.getErrMsg());
-            refundInfo.setErrorCode(e.getErrCode());
-            throw new PayFailureException("订单退款失败");
+            errorInfo.setErrorMsg(e.getErrMsg());
+            errorInfo.setErrorCode(DaxPayErrorCode.OPERATION_FAIL);
+            throw new OperationFailException(e.getErrMsg());
         }
     }
 }

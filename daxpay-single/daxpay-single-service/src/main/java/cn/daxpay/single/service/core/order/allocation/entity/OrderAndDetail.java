@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderAndDetail {
 
     /** 分账订单 */
-    private AllocationOrder order;
+    private AllocOrder order;
     /** 分账订单明细 */
-    private List<AllocationOrderDetail> details;
+    private List<AllocOrderDetail> details;
 }

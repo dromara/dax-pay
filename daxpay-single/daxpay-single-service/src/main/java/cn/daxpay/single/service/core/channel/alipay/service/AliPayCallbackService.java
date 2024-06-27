@@ -2,8 +2,8 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.CertUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
@@ -49,7 +49,6 @@ public class AliPayCallbackService {
     private final PayCallbackService payCallbackService;
 
     private final RefundCallbackService refundCallbackService;
-
 
     /**
      * 回调处理入口
@@ -158,7 +157,7 @@ public class AliPayCallbackService {
     public void resolveRefundData() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
-        // 退款订单Id
+        // 退款订单号
         callback.setTradeNo(callbackParam.get(OUT_BIZ_NO));
         // 退款状态
         callback.setOutStatus(callbackParam.get(TRADE_STATUS));

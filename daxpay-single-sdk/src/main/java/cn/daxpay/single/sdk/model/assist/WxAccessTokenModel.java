@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class WxAccessTokenModel extends DaxPayResponseModel {
 
-    /** 微信AccessToken */
+    /** 微信AccessToken, 目前无返回 */
     private String accessToken;
 
     /** 微信用户唯一标识 */

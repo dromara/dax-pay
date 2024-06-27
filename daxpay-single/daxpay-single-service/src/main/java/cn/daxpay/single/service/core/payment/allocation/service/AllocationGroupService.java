@@ -6,7 +6,6 @@ import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.core.payment.allocation.convert.AllocationGroupConvert;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationGroupManager;
 import cn.daxpay.single.service.core.payment.allocation.dao.AllocationGroupReceiverManager;
@@ -94,7 +93,6 @@ public class AllocationGroupService {
      * 创建分账组
      */
     public void create(AllocationGroupParam param){
-        PayChannelEnum.findByCode(param.getChannel());
         AllocationGroup group = AllocationGroupConvert.CONVERT.convert(param);
         group.setTotalRate(0);
         groupManager.save(group);

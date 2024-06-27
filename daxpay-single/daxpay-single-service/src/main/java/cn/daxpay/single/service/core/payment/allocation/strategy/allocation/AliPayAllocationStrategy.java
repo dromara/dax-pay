@@ -1,7 +1,8 @@
 package cn.daxpay.single.service.core.payment.allocation.strategy.allocation;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.ConfigNotEnableException;
+import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayAllocationService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
@@ -38,8 +39,8 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      * 策略标识
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**
@@ -50,9 +51,8 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
         this.aliPayConfig = aliPayConfigService.getConfig();
         // 判断是否支持分账
         if (Objects.equals(aliPayConfig.getAllocation(),false)){
-            throw new PayFailureException("支付宝支付配置不支持分账");
+            throw new ConfigNotEnableException("支付宝支付配置未开启分账");
         }
-        aliPayConfigService.initConfig(this.aliPayConfig);
     }
 
     /**
@@ -60,7 +60,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void allocation() {
-        aliPayAllocationService.allocation(this.getAllocationOrder(), this.getAllocationOrderDetails());
+        aliPayAllocationService.allocation(this.getAllocOrder(), this.getAllocOrderDetails(), this.aliPayConfig);
     }
 
     /**
@@ -68,7 +68,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void finish() {
-        aliPayAllocationService.finish(this.getAllocationOrder(), this.getAllocationOrderDetails());
+        aliPayAllocationService.finish(this.getAllocOrder(), this.getAllocOrderDetails(), this.aliPayConfig);
     }
 
     /**
@@ -76,7 +76,7 @@ public class AliPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public AllocRemoteSyncResult doSync() {
-        return aliPayAllocationService.sync(this.getAllocationOrder(), this.getAllocationOrderDetails());
+        return aliPayAllocationService.sync(this.getAllocOrder(), this.getAllocOrderDetails(), this.aliPayConfig);
     }
 
 }

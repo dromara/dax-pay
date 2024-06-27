@@ -57,9 +57,6 @@ public class RefundParam extends DaxPayRequest<RefundModel> {
     /** 商户扩展参数,回调时会原样返回 */
     private String attach;
 
-    /** 是否不启用异步通知 */
-    private Boolean notNotify;
-
     /** 异步通知地址 */
     private String notifyUrl;
 

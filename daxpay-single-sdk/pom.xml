@@ -6,7 +6,7 @@
 
     <groupId>cn.daxpay.single</groupId>
     <artifactId>daxpay-single-sdk</artifactId>
-    <version>2.0.7</version>
+    <version>2.0.8</version>
     <packaging>jar</packaging>
 
     <!-- 项目信息 -->
@@ -85,6 +85,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>cn.daxpay.single</groupId>
+            <artifactId>daxpay-single-core</artifactId>
+            <version>2.0.8</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -93,10 +99,11 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.1</version>
+            <version>3.10.1</version>
             <configuration>
                 <source>${java.version}</source>
                 <target>${java.version}</target>
+                <compilerArgument>-parameters</compilerArgument>
             </configuration>
         </plugin>
         <!--打包源码的插件-->

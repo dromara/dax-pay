@@ -2,12 +2,11 @@ package cn.daxpay.single.service.core.channel.union.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.exception.ChannelNotEnableException;
 import cn.daxpay.single.service.code.UnionPayWay;
 import cn.daxpay.single.service.core.channel.union.dao.UnionPayConfigManager;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
-import cn.daxpay.single.service.core.system.config.service.PayChannelConfigService;
+import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
 import cn.daxpay.single.service.param.channel.union.UnionPayConfigParam;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +37,7 @@ public class UnionPayConfigService {
     /** 默认云闪付配置的主键ID */
     private final static Long ID = 0L;
     private final UnionPayConfigManager unionPayConfigManager;
-    private final PayChannelConfigService payChannelConfigService;
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 修改
@@ -47,11 +45,6 @@ public class UnionPayConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void update(UnionPayConfigParam param) {
         UnionPayConfig unionPayConfig = unionPayConfigManager.findById(ID).orElseThrow(() -> new DataNotExistException("支付宝配置不存在"));
-        // 启用或停用
-        if (!Objects.equals(param.getEnable(), unionPayConfig.getEnable())){
-            payChannelConfigService.setEnable(PayChannelEnum.UNION_PAY.getCode(), param.getEnable());
-        }
-
         BeanUtil.copyProperties(param, unionPayConfig, CopyOptions.create().ignoreNullValue());
         unionPayConfigManager.updateById(unionPayConfig);
     }
@@ -79,9 +72,23 @@ public class UnionPayConfigService {
     public UnionPayConfig getAndCheckConfig() {
         UnionPayConfig unionPayConfig = this.getConfig();
         if (!unionPayConfig.getEnable()){
-            throw new PayFailureException("云闪付支付未启用");
+            throw new ChannelNotEnableException("云闪付支付未启用");
         }
         return unionPayConfig;
+    }
+
+    /**
+     * 生成通知地址
+     */
+    public String generateNotifyUrl(){
+        return platformConfigService.getConfig().getWebsiteUrl() + "/unipay/callback/union";
+    }
+
+    /**
+     * 生成同步跳转地址
+     */
+    public String generateReturnUrl(){
+        return platformConfigService.getConfig().getWebsiteUrl() + "/unipay/return/union";
     }
 
 

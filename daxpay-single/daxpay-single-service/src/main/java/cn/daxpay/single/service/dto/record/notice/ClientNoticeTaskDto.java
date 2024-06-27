@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.dto.record.notice;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.daxpay.single.code.PayStatusEnum;
-import cn.daxpay.single.code.RefundStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.service.code.ClientNoticeTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

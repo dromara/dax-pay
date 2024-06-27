@@ -12,8 +12,6 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
       enabled: true
-  thymeleaf:
-    mode: LEGACYHTML5
 # mp配置
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml

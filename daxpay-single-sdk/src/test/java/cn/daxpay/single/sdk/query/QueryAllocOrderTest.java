@@ -37,7 +37,7 @@ public class QueryAllocOrderTest {
     @Test
     public void queryAllocOrder() {
         QueryAllocOrderParam param = new QueryAllocOrderParam();
-        param.setAllocationNo("DEVA240602000243630000101");
+        param.setAllocNo("DEVA240602000243630000101");
         param.setClientIp("127.0.0.1");
         DaxPayResult<AllocOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));

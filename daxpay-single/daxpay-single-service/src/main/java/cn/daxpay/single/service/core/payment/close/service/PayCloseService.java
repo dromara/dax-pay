@@ -1,19 +1,23 @@
 package cn.daxpay.single.service.core.payment.close.service;
 
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
-import cn.daxpay.single.code.PayStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.payment.pay.PayCloseParam;
-import cn.daxpay.single.result.pay.PayCloseResult;
+import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.TradeNotExistException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
+import cn.daxpay.single.core.param.payment.pay.PayCloseParam;
+import cn.daxpay.single.core.result.pay.PayCloseResult;
+import cn.daxpay.single.service.code.PayCloseTypeEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
-import cn.daxpay.single.service.core.payment.close.factory.PayCloseStrategyFactory;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.record.close.entity.PayCloseRecord;
 import cn.daxpay.single.service.core.record.close.service.PayCloseRecordService;
 import cn.daxpay.single.service.func.AbsPayCloseStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +47,8 @@ public class PayCloseService {
      * 关闭支付
      */
     public PayCloseResult close(PayCloseParam param){
-        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizTradeNo())
-                .orElseThrow(() -> new PayFailureException("支付订单不存在"));
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
+                .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
         LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId(),10000, 50);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付订单已在关闭中，请勿重复发起");
@@ -63,10 +67,10 @@ public class PayCloseService {
         PayCloseResult result = new PayCloseResult();
         // 状态检查, 只有支付中可以进行取消支付
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
-            throw new PayFailureException("订单不是支付中, 无法进行关闭订单");
+            throw new TradeStatusErrorException("订单不是支付中, 无法进行关闭订单");
         }
         try {
-            AbsPayCloseStrategy strategy = PayCloseStrategyFactory.create(payOrder.getChannel());
+            AbsPayCloseStrategy strategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPayCloseStrategy.class);
             // 设置支付订单
             strategy.setOrder(payOrder);
             // 关闭前准备
@@ -82,8 +86,11 @@ public class PayCloseService {
             log.error("关闭订单失败:", e);
             // 记录关闭失败的记录
             this.saveRecord(payOrder, false, e.getMessage());
-            throw new PayFailureException("关闭订单失败");
-
+            result.setCode(1).setMsg(e.getMessage());
+            if (e instanceof PayFailureException){
+                throw e;
+            }
+            throw new OperationFailException("关闭订单失败");
         }
     }
 
@@ -96,7 +103,7 @@ public class PayCloseService {
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);
         // 发送通知
-        clientsService.registerPayNotice(payOrder,null);
+        clientsService.registerPayNotice(payOrder);
         this.saveRecord(payOrder,true,null);
     }
 
@@ -105,15 +112,17 @@ public class PayCloseService {
      */
     private void saveRecord(PayOrder payOrder, boolean closed, String errMsg){
         String clientIp = PaymentContextLocal.get()
-                .getRequestInfo()
+                .getClientInfo()
                 .getClientIp();
         PayCloseRecord record = new PayCloseRecord()
                 .setOrderNo(payOrder.getOrderNo())
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setChannel(payOrder.getChannel())
+                .setCloseType(PayCloseTypeEnum.CLOSE.getCode())
                 .setClosed(closed)
                 .setErrorMsg(errMsg)
                 .setClientIp(clientIp);
         payCloseRecordService.saveRecord(record);
     }
+
 }

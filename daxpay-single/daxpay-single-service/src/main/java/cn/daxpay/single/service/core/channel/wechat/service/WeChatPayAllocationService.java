@@ -2,13 +2,13 @@ package cn.daxpay.single.service.core.channel.wechat.service;
 
 import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
-import cn.daxpay.single.code.AllocDetailResultEnum;
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.AllocDetailResultEnum;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
 import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.service.dto.channel.wechat.WeChatPayAllocationReceiver;
 import cn.hutool.core.codec.Base64;
@@ -51,8 +51,8 @@ public class WeChatPayAllocationService {
      * 发起分账
      */
     @SneakyThrows
-    public void allocation(AllocationOrder allocationOrder, List<AllocationOrderDetail> orderDetails, WeChatPayConfig config){
-        String description = allocationOrder.getDescription();
+    public void allocation(AllocOrder allocOrder, List<AllocOrderDetail> orderDetails, WeChatPayConfig config){
+        String description = allocOrder.getDescription();
         if (StrUtil.isBlank(description)){
             description = "分账";
         }
@@ -74,8 +74,8 @@ public class WeChatPayAllocationService {
                 .mch_id(config.getWxMchId())
                 .appid(config.getWxAppId())
                 .nonce_str(WxPayKit.generateStr())
-                .transaction_id(allocationOrder.getOutOrderNo())
-                .out_order_no(allocationOrder.getAllocationNo())
+                .transaction_id(allocOrder.getOutOrderNo())
+                .out_order_no(allocOrder.getAllocNo())
                 .receivers(JSON.toJSONString(list))
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
@@ -90,14 +90,14 @@ public class WeChatPayAllocationService {
     /**
      * 完成分账
      */
-    public void finish(AllocationOrder allocationOrder, WeChatPayConfig config){
+    public void finish(AllocOrder allocOrder, WeChatPayConfig config){
         Map<String, String> params = ProfitSharingModel.builder()
                 .mch_id(config.getWxMchId())
                 .appid(config.getWxAppId())
                 .nonce_str(WxPayKit.generateStr())
-                .transaction_id(allocationOrder.getOutOrderNo())
+                .transaction_id(allocOrder.getOutOrderNo())
                 // 分账要使用单独的的流水号, 不能与分账号相同
-                .out_order_no(allocationOrder.getAllocationNo()+'F')
+                .out_order_no(allocOrder.getAllocNo()+'F')
                 .description("分账已完成")
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
@@ -112,13 +112,13 @@ public class WeChatPayAllocationService {
     /**
      * 同步分账状态
      */
-    public AllocRemoteSyncResult sync(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails, WeChatPayConfig config){
+    public AllocRemoteSyncResult sync(AllocOrder allocOrder, List<AllocOrderDetail> allocOrderDetails, WeChatPayConfig config){
         // 不要传输AppId参数, 否则会失败
         Map<String, String> params = ProfitSharingModel.builder()
                 .mch_id(config.getWxMchId())
                 .nonce_str(WxPayKit.generateStr())
-                .transaction_id(allocationOrder.getOutOrderNo())
-                .out_order_no(allocationOrder.getAllocationNo())
+                .transaction_id(allocOrder.getOutOrderNo())
+                .out_order_no(allocOrder.getAllocNo())
                 .build()
                 .createSign(config.getApiKeyV2(), SignType.HMACSHA256);
         String xmlResult = WxPayApi.profitSharingQuery(params);
@@ -126,11 +126,11 @@ public class WeChatPayAllocationService {
         this.verifyErrorMsg(result);
         String json = result.get(WeChatPayCode.ALLOC_RECEIVERS);
         List<WeChatPayAllocationReceiver> receivers = JSONUtil.toBean(json, new TypeReference<List<WeChatPayAllocationReceiver>>() {}, false);
-        Map<String, AllocationOrderDetail> detailMap = allocationOrderDetails.stream()
-                .collect(Collectors.toMap(AllocationOrderDetail::getReceiverAccount, Function.identity(), CollectorsFunction::retainLatest));
+        Map<String, AllocOrderDetail> detailMap = allocOrderDetails.stream()
+                .collect(Collectors.toMap(AllocOrderDetail::getReceiverAccount, Function.identity(), CollectorsFunction::retainLatest));
         // 根据明细更新订单明细内容
         for (WeChatPayAllocationReceiver receiver : receivers) {
-            AllocationOrderDetail detail = detailMap.get(receiver.getAccount());
+            AllocOrderDetail detail = detailMap.get(receiver.getAccount());
             if (Objects.nonNull(detail)){
                 detail.setResult(this.getDetailResultEnum(receiver.getResult()).getCode());
                 detail.setErrorMsg(receiver.getFailReason());
@@ -157,7 +157,7 @@ public class WeChatPayAllocationService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("分账操作失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
+            throw new OperationFailException("分账操作失败");
         }
     }
 

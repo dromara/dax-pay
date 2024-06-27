@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.callback.service;
 
-import cn.daxpay.single.code.RefundStatusEnum;
+import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
 import cn.daxpay.single.service.code.RefundRepairWayEnum;
 import cn.daxpay.single.service.common.context.CallbackLocal;

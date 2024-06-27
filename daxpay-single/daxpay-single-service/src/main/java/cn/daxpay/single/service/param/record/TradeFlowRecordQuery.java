@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.param.record;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.code.TradeFlowRecordTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

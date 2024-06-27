@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.param.record;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
 import cn.daxpay.single.service.code.PayRepairWayEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;

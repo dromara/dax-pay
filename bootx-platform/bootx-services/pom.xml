@@ -17,7 +17,6 @@
     <modules>
         <module>service-baseapi</module>
         <module>service-iam</module>
-        <module>service-notice</module>
     </modules>
 
     <dependencies>
@@ -168,7 +167,6 @@
             <artifactId>common-exception-handler</artifactId>
         </dependency>
 
-
         <!-- 发号器 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
@@ -233,6 +231,7 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
         </plugins>

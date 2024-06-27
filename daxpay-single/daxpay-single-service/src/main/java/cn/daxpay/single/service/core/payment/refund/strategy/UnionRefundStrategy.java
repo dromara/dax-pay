@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.refund.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayConfigService;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayRefundService;
@@ -34,8 +34,8 @@ public class UnionRefundStrategy extends AbsRefundStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.UNION_PAY;
+    public String getChannel() {
+        return PayChannelEnum.UNION_PAY.getCode();
     }
 
     /**

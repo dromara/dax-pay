@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.repair.result;
 
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

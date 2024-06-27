@@ -3,8 +3,9 @@ package cn.daxpay.single.service.core.payment.reconcile.service;
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.util.OrderNoGenerateUtil;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.code.ReconcileResultEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -12,18 +13,17 @@ import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileDiffManager;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileOrderManager;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileOutTradeManager;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileDiff;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.service.ReconcileOrderService;
 import cn.daxpay.single.service.core.payment.reconcile.domain.GeneralTradeInfo;
-import cn.daxpay.single.service.core.payment.reconcile.factory.ReconcileStrategyFactory;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileDiffExcel;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileTradeDetailExcel;
 import cn.daxpay.single.service.func.AbsReconcileStrategy;
 import cn.daxpay.single.service.param.reconcile.ReconcileUploadParam;
-import cn.daxpay.single.util.OrderNoGenerateUtil;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.util.CharsetUtil;
@@ -101,12 +101,12 @@ public class ReconcileService {
     public void downAndSave(ReconcileOrder reconcileOrder) {
         // 如果对账单已经存在
         if (reconcileOrder.isDownOrUpload()){
-            throw new PayFailureException("对账单文件已经下载或上传");
+            throw new OperationFailException("对账单文件已经下载或上传");
         }
         // 将对账订单写入到上下文中
         PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
         // 构建对账策略
-        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
+        AbsReconcileStrategy reconcileStrategy = PayStrategyFactory.create(reconcileOrder.getChannel(), AbsReconcileStrategy.class);
         reconcileStrategy.setRecordOrder(reconcileOrder);
         reconcileStrategy.doBeforeHandler();
         try {
@@ -136,7 +136,7 @@ public class ReconcileService {
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
         // 将对账订单写入到上下文中
         PaymentContextLocal.get().getReconcileInfo().setReconcileOrder(reconcileOrder);
-        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
+        AbsReconcileStrategy reconcileStrategy = PayStrategyFactory.create(reconcileOrder.getChannel(), AbsReconcileStrategy.class);
         reconcileStrategy.setRecordOrder(reconcileOrder);
         reconcileStrategy.doBeforeHandler();
 
@@ -174,16 +174,16 @@ public class ReconcileService {
     public void compare(ReconcileOrder reconcileOrder){
         // 判断是否已经下载了对账单明细
         if (!reconcileOrder.isDownOrUpload()){
-            throw new PayFailureException("请先下载对账单");
+            throw new OperationFailException("请先下载对账单");
         }
         // 是否对比完成
         if (reconcileOrder.isCompare()){
-            throw new PayFailureException("对账单比对已经完成");
+            throw new OperationFailException("对账单比对已经完成");
         }
         // 查询对账单
         List<ReconcileOutTrade> reconcileTradeDetails = reconcileOutTradeManager.findAllByReconcileId(reconcileOrder.getId());
         // 构建对账策略
-        AbsReconcileStrategy reconcileStrategy = ReconcileStrategyFactory.create(reconcileOrder.getChannel());
+        AbsReconcileStrategy reconcileStrategy =PayStrategyFactory.create(reconcileOrder.getChannel(), AbsReconcileStrategy.class);
         // 初始化参数
         reconcileStrategy.setRecordOrder(reconcileOrder);
 
@@ -257,7 +257,7 @@ public class ReconcileService {
         // 设置header信息
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-
+        // TODO 后续使用数据库中数据
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
@@ -284,7 +284,7 @@ public class ReconcileService {
         byte[] bytes = byteArrayOutputStream.toByteArray();// 设置header信息
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-
+        // TODO 后续使用数据库中数据
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
@@ -316,6 +316,7 @@ public class ReconcileService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
+        // TODO 后续使用数据库中数据
         PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期

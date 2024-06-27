@@ -1,8 +1,6 @@
 package cn.daxpay.single.service.common.context;
 
-import cn.daxpay.single.code.RefundStatusEnum;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
+import cn.daxpay.single.core.code.RefundStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -27,18 +25,6 @@ public class RefundLocal {
      */
     private RefundStatusEnum status = RefundStatusEnum.SUCCESS;
 
-    /** 错误码 */
-    private String errorCode;
-
-    /** 错误内容 */
-    private String errorMsg;
-
-    /** 退款订单 */
-    private RefundOrder refundOrder;
-
     /** 退款完成时间 */
     private LocalDateTime finishTime;
-
-    /** 退款订单扩展 */
-    private RefundOrderExtra runOrderExtra;
 }

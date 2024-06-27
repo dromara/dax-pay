@@ -13,7 +13,6 @@ import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.JSONUtil;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +23,6 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@ToString(callSuper = true)
 public class PayParam extends DaxPayRequest<PayModel> {
 
     /** 商户订单号 */
@@ -79,9 +77,6 @@ public class PayParam extends DaxPayRequest<PayModel> {
 
     /** 异步通知地址 */
     private String notifyUrl;
-
-    /** 是否不启用异步通知 */
-    private Boolean notNotify;
 
     /**
      * 方法请求路径

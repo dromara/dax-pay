@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.reconcile.strategy;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
@@ -32,14 +32,16 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
 
     private final AliPayConfigService configService;
 
+    private AliPayConfig config;
+
     /**
      * 策略标识
      *
      * @see PayChannelEnum
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**
@@ -47,8 +49,7 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
      */
     @Override
     public void doBeforeHandler() {
-        AliPayConfig config = configService.getConfig();
-        configService.initConfig(config);
+        this.config = configService.getConfig();
     }
 
     /**
@@ -66,6 +67,6 @@ public class AlipayReconcileStrategy extends AbsReconcileStrategy {
     @Override
     public void downAndSave() {
         String date = LocalDateTimeUtil.format(this.getRecordOrder().getDate(), DatePattern.NORM_DATE_PATTERN);
-        reconcileService.downAndSave(date,this.getRecordOrder());
+        reconcileService.downAndSave(date,this.getRecordOrder(),this.config);
     }
 }

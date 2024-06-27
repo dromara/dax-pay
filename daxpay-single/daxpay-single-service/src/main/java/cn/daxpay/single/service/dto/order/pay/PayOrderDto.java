@@ -1,9 +1,10 @@
 package cn.daxpay.single.service.dto.order.pay;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PayOrderAllocStatusEnum;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -79,11 +80,18 @@ public class PayOrderDto extends BaseDto {
     private String status;
 
     /**
+     * 退款状态
+     * @see PayOrderRefundStatusEnum
+     */
+    @Schema(description = "退款状态")
+    private String refundStatus;
+
+    /**
      * 分账状态
      * @see PayOrderAllocStatusEnum
      */
     @Schema(description = "分账状态")
-    private String allocationStatus;
+    private String allocStatus;
 
     /** 支付时间 */
     @Schema(description = "支付时间")
@@ -97,6 +105,23 @@ public class PayOrderDto extends BaseDto {
     @Schema(description = "过期时间")
     private LocalDateTime expiredTime;
 
+
+    /** 支付终端ip */
+    @Schema(description = "支付终端ip")
+    private String clientIp;
+
+    /** 异步通知地址 */
+    @Schema(description = "异步通知地址，以最后一次为准")
+    private String notifyUrl;
+
+    /** 商户扩展参数,回调时会原样返回 */
+    @Schema(description = "商户扩展参数")
+    private String attach;
+
+    /** 请求时间，时间戳转时间, 以最后一次为准 */
+    @Schema(description = "请求时间，传输时间戳，以最后一次为准")
+    private LocalDateTime reqTime;
+
     /** 错误码 */
     @Schema(description = "错误码")
     private String errorCode;
@@ -104,6 +129,4 @@ public class PayOrderDto extends BaseDto {
     /** 错误信息 */
     @Schema(description = "错误信息")
     private String errorMsg;
-
-
 }

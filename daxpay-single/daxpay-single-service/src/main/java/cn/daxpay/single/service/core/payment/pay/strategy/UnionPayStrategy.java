@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.core.payment.pay.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.channel.UnionPayParam;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
+import cn.daxpay.single.core.param.channel.UnionPayParam;
 import cn.daxpay.single.service.core.channel.union.entity.UnionPayConfig;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayConfigService;
 import cn.daxpay.single.service.core.channel.union.service.UnionPayService;
@@ -41,8 +41,8 @@ public class UnionPayStrategy extends AbsPayStrategy {
     private UnionPayConfig unionPayConfig;
 
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.UNION_PAY;
+    public String getChannel() {
+        return PayChannelEnum.UNION_PAY.getCode();
     }
     /**
      * 支付前操作
@@ -60,7 +60,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
             }
         }
         catch (JSONException e) {
-            throw new PayFailureException("支付参数错误");
+            throw new ValidationFailedException("支付参数错误");
         }
         // 检查并获取云闪付支付配置
         this.unionPayConfig = unionPayConfigService.getAndCheckConfig();

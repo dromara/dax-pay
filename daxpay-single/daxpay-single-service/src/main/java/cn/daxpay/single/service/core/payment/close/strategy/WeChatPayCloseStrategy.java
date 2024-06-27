@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.close.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
@@ -29,8 +29,8 @@ public class WeChatPayCloseStrategy extends AbsPayCloseStrategy {
     private WeChatPayConfig weChatPayConfig;
 
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WECHAT;
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
     }
 
     /**

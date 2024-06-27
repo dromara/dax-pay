@@ -1,7 +1,8 @@
 package cn.daxpay.single.service.core.payment.repair.service;
 
-import cn.daxpay.single.code.PayStatusEnum;
-import cn.daxpay.single.code.RefundStatusEnum;
+import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
 import cn.daxpay.single.service.code.RefundRepairWayEnum;
 import cn.daxpay.single.service.common.context.RepairLocal;
@@ -16,7 +17,7 @@ import cn.daxpay.single.service.core.payment.repair.result.RefundRepairResult;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.core.record.repair.entity.PayRepairRecord;
 import cn.daxpay.single.service.core.record.repair.service.PayRepairRecordService;
-import cn.daxpay.single.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.OrderNoGenerateUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +87,7 @@ public class RefundRepairService {
             PayRepairRecord refundRepairRecord = this.refundRepairRecord(refundOrder, repairType, repairResult);
 
             // 发送通知
-            clientNoticeService.registerRefundNotice(refundOrder, null);
+            clientNoticeService.registerRefundNotice(refundOrder);
             recordService.saveAllRecord(Arrays.asList(payRepairRecord, refundRepairRecord));
             return repairResult;
         } finally {
@@ -100,20 +101,20 @@ public class RefundRepairService {
     private RefundRepairResult success(RefundOrder refundOrder, PayOrder payOrder) {
         RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
         // 订单相关状态
-        PayStatusEnum beforePayStatus = PayStatusEnum.findByCode(payOrder.getStatus());
-        PayStatusEnum afterPayRefundStatus;
+        PayOrderRefundStatusEnum beforePayStatus = PayOrderRefundStatusEnum.findByCode(payOrder.getRefundStatus());
+        PayOrderRefundStatusEnum afterPayRefundStatus;
         RefundStatusEnum beforeRefundStatus = RefundStatusEnum.findByCode(refundOrder.getStatus());
 
         // 判断订单全部退款还是部分退款
         if (Objects.equals(payOrder.getRefundableBalance(),0)){
-            afterPayRefundStatus = PayStatusEnum.REFUNDED;
+            afterPayRefundStatus = PayOrderRefundStatusEnum.REFUNDED;
         } else {
-            afterPayRefundStatus = PayStatusEnum.PARTIAL_REFUND;
+            afterPayRefundStatus = PayOrderRefundStatusEnum.PARTIAL_REFUND;
         }
         // 设置退款为完成状态和完成时间
         refundOrder.setStatus(RefundStatusEnum.SUCCESS.getCode())
                 .setFinishTime(repairInfo.getFinishTime());
-        payOrder.setStatus(afterPayRefundStatus.getCode());
+        payOrder.setRefundStatus(afterPayRefundStatus.getCode());
 
         // 更新订单和退款相关订单
         payOrderService.updateById(payOrder);
@@ -125,7 +126,7 @@ public class RefundRepairService {
         // 发送通知
         List<String> list = Arrays.asList(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
         if (list.contains(refundOrder.getStatus())){
-            clientNoticeService.registerRefundNotice(refundOrder, null);
+            clientNoticeService.registerRefundNotice(refundOrder);
         }
 
         return new RefundRepairResult()
@@ -144,7 +145,7 @@ public class RefundRepairService {
         RefundRepairResult repairResult = new RefundRepairResult();
 
         // 订单修复前状态
-        PayStatusEnum beforePayStatus = PayStatusEnum.findByCode(refundOrder.getStatus());
+        PayOrderRefundStatusEnum beforePayStatus = PayOrderRefundStatusEnum.findByCode(payOrder.getRefundStatus());
         RefundStatusEnum beforeRefundStatus = RefundStatusEnum.findByCode(refundOrder.getStatus());
         repairResult.setBeforePayStatus(beforePayStatus)
                 .setBeforeRefundStatus(beforeRefundStatus);
@@ -154,11 +155,11 @@ public class RefundRepairService {
         // 退款失败返还后的余额+可退余额 == 订单金额 支付订单回退为为支付成功状态
         if (payOrderAmount == payOrder.getAmount()){
             payOrder.setStatus(PayStatusEnum.SUCCESS.getCode());
-            repairResult.setAfterPayStatus(PayStatusEnum.SUCCESS);
+            repairResult.setAfterPayStatus(PayOrderRefundStatusEnum.NO_REFUND);
         } else {
             // 回归部分退款状态
-            payOrder.setStatus(PayStatusEnum.PARTIAL_REFUND.getCode());
-            repairResult.setAfterPayStatus(PayStatusEnum.PARTIAL_REFUND);
+            payOrder.setRefundStatus(PayOrderRefundStatusEnum.PARTIAL_REFUND.getCode());
+            repairResult.setAfterPayStatus(PayOrderRefundStatusEnum.PARTIAL_REFUND);
         }
 
         // 更新支付订单相关的可退款金额
@@ -179,7 +180,8 @@ public class RefundRepairService {
      */
     private PayRepairRecord payRepairRecord(PayOrder order, RefundRepairWayEnum repairType, RefundRepairResult repairResult){
         // 修复前的状态
-        String beforeStatus = Optional.ofNullable(repairResult.getBeforePayStatus()).map(PayStatusEnum::getCode).orElse(null);
+        String beforeStatus = Optional.ofNullable(repairResult.getBeforePayStatus())
+                .map(PayOrderRefundStatusEnum::getCode).orElse(null);
         // 修复发起来源
         String source = PaymentContextLocal.get()
                 .getRepairInfo()
@@ -211,6 +213,7 @@ public class RefundRepairService {
                 .setTradeId(refundOrder.getId())
                 .setRepairNo(repairResult.getRepairNo())
                 .setTradeNo(refundOrder.getRefundNo())
+                .setChannel(refundOrder.getChannel())
                 .setRepairType(PaymentTypeEnum.REFUND.getCode())
                 .setBeforeStatus(repairResult.getBeforeRefundStatus().getCode())
                 .setAfterStatus(afterStatus)

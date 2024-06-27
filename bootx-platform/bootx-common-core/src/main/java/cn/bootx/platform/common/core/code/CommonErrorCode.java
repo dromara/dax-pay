@@ -8,9 +8,6 @@ public interface CommonErrorCode {
     /** 系统错误 */
     int SYSTEM_ERROR = 10001;
 
-    /** 远程调用错误 */
-    int REMOTE_CALL_ERROR = 10002;
-
     /** 认证失败 */
     int AUTHENTICATION_FAIL = 10004;
 
@@ -37,8 +34,5 @@ public interface CommonErrorCode {
 
     /** 危险SQL异常, */
     int DANGER_SQL = 10012;
-
-    // 未知异常
-    int UNKNOWN_ERROR = -1;
 
 }

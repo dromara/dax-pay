@@ -18,7 +18,7 @@ public class AllocationCallbackService {
     /**
      *
      */
-    public void callback(String allocationNo){
+    public void callback(String allocNo){
 
     }
 }

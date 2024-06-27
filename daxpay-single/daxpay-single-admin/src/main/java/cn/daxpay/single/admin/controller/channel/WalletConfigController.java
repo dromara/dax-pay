@@ -39,9 +39,10 @@ public class WalletConfigController {
         return Res.ok();
     }
 
-    @Operation(summary = "支付宝支持支付方式")
+    @Operation(summary = "钱包支持支付方式")
     @GetMapping("/findPayWays")
     public ResResult<List<LabelValue>> findPayWays() {
         return Res.ok(service.findPayWays());
     }
+
 }

@@ -2,9 +2,9 @@ package cn.daxpay.single.service.core.payment.allocation.entity;
 
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.daxpay.single.code.AllocReceiverTypeEnum;
-import cn.daxpay.single.code.AllocRelationTypeEnum;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
+import cn.daxpay.single.core.code.AllocRelationTypeEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.common.typehandler.DecryptTypeHandler;
 import cn.daxpay.single.service.core.payment.allocation.convert.AllocationReceiverConvert;
 import cn.daxpay.single.service.dto.allocation.AllocationReceiverDto;
@@ -30,14 +30,14 @@ import lombok.experimental.Accessors;
 public class AllocationReceiver extends MpBaseEntity implements EntityBaseFunction<AllocationReceiverDto> {
 
     /** 分账接收方编号, 需要保证唯一 */
-    @DbColumn(comment = "分账接收方编号")
+    @DbColumn(comment = "分账接收方编号", length = 32, isNull = false)
     private String receiverNo;
 
     /**
      * 所属通道
      * @see PayChannelEnum
      */
-    @DbColumn(comment = "所属通道")
+    @DbColumn(comment = "所属通道", length = 20, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channel;
 
@@ -45,16 +45,16 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
      * 分账接收方类型
      * @see AllocReceiverTypeEnum
      */
-    @DbColumn(comment = "分账接收方类型")
+    @DbColumn(comment = "分账接收方类型", length = 20, isNull = false)
     private String receiverType;
 
     /** 接收方账号 */
-    @DbColumn(comment = "接收方账号")
+    @DbColumn(comment = "接收方账号", length = 100, isNull = false)
     @TableField(typeHandler = DecryptTypeHandler.class)
     private String receiverAccount;
 
     /** 接收方姓名 */
-    @DbColumn(comment = "接收方姓名")
+    @DbColumn(comment = "接收方姓名", length = 100)
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String receiverName;
 
@@ -62,11 +62,11 @@ public class AllocationReceiver extends MpBaseEntity implements EntityBaseFuncti
      * 分账关系类型
      * @see AllocRelationTypeEnum
      */
-    @DbColumn(comment = "分账关系类型")
+    @DbColumn(comment = "分账关系类型", length = 20, isNull = false)
     private String relationType;
 
     /** 关系名称 */
-    @DbColumn(comment = "关系名称")
+    @DbColumn(comment = "关系名称", length = 50)
     private String relationName;
 
     /**

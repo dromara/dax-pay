@@ -1,12 +1,12 @@
 package cn.daxpay.single.service.core.payment.sync.result;
 
-import cn.daxpay.single.code.PaySyncStatusEnum;
+import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
-import static cn.daxpay.single.code.PaySyncStatusEnum.FAIL;
+import static cn.daxpay.single.core.code.PaySyncStatusEnum.FAIL;
 
 /**
  * 支付网关同步结果

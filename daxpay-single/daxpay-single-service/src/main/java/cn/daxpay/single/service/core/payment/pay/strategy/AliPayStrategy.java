@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.core.payment.pay.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.channel.AliPayParam;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
+import cn.daxpay.single.core.param.channel.AliPayParam;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayService;
@@ -37,9 +37,9 @@ public class AliPayStrategy extends AbsPayStrategy {
 
     private AliPayParam aliPayParam;
 
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**
@@ -58,10 +58,10 @@ public class AliPayStrategy extends AbsPayStrategy {
             }
         }
         catch (JSONException e) {
-            throw new PayFailureException("支付参数错误");
+            throw new ValidationFailedException("支付参数错误");
         }
         // 检查并获取支付宝支付配置
-        this.initAlipayConfig();
+        this.alipayConfig = alipayConfigService.getAndCheckConfig();
         // 支付宝相关校验
         aliPayService.validation(this.getPayParam(), alipayConfig);
     }
@@ -72,15 +72,6 @@ public class AliPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         aliPayService.pay(this.getOrder(), this.aliPayParam, this.alipayConfig);
-    }
-
-    /**
-     * 初始化支付宝配置信息
-     */
-    private void initAlipayConfig() {
-        // 获取并初始化支付宝支付配置
-        this.alipayConfig = alipayConfigService.getAndCheckConfig();
-        alipayConfigService.initConfig(this.alipayConfig);
     }
 
 }

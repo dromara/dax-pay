@@ -8,16 +8,10 @@ import cn.daxpay.single.service.core.notice.dao.ClientNoticeTaskManager;
 import cn.daxpay.single.service.core.notice.entity.ClientNoticeRecord;
 import cn.daxpay.single.service.core.notice.entity.ClientNoticeTask;
 import cn.daxpay.single.service.core.notice.service.ClientNoticeRecordService;
-import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderExtraManager;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderExtra;
-import cn.daxpay.single.service.core.order.pay.dao.PayOrderExtraManager;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.order.pay.entity.PayOrderExtra;
-import cn.daxpay.single.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpResponse;
@@ -43,17 +37,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ClientNoticeService {
 
-    private final PayOrderExtraManager payOrderExtraManager;
-
-    private final RefundOrderExtraManager refundOrderExtraManager;
-
     private final ClientNoticeAssistService clientNoticeAssistService;
 
     private final ClientNoticeTaskManager taskManager;
 
     private final ClientNoticeRecordService recordService;
-
-    private final AllocationOrderExtraManager allocationOrderExtraManager;
 
     private final RedisClient redisClient;
 
@@ -89,27 +77,17 @@ public class ClientNoticeService {
     /**
      * 注册支付消息通知任务
      * @param order 支付订单
-     * @param orderExtra 支付订单扩展信息
      */
     @Async("bigExecutor")
-    public void registerPayNotice(PayOrder order, PayOrderExtra orderExtra) {
-        // 支付订单扩展信息为空则进行查询
-        if (Objects.isNull(orderExtra)){
-            Optional<PayOrderExtra> extraOpt =  payOrderExtraManager.findById(order.getId());
-            if (!extraOpt.isPresent()){
-                log.error("未找到支付扩展信息，数据错误，订单号：{}",order.getOrderNo());
-                return;
-            }
-            orderExtra = extraOpt.get();
-        }
+    public void registerPayNotice(PayOrder order) {
         // 判断是否需要进行通知
-        if (StrUtil.isBlank(orderExtra.getNotifyUrl())){
+        if (StrUtil.isBlank(order.getNotifyUrl())){
             log.info("支付订单无需通知，订单号：{}",order.getOrderNo());
             return;
         }
 
         // 创建通知任务并保存
-        ClientNoticeTask task = clientNoticeAssistService.buildPayTask(order, orderExtra);
+        ClientNoticeTask task = clientNoticeAssistService.buildPayTask(order);
         try {
             taskManager.save(task);
         } catch (Exception e) {
@@ -124,27 +102,17 @@ public class ClientNoticeService {
     /**
      * 注册退款消息通知任务
      * @param order 退款订单
-     * @param orderExtra 退款订单扩展信息
      */
     @Async("bigExecutor")
-    public void registerRefundNotice(RefundOrder order, RefundOrderExtra orderExtra) {
-        // 退款订单扩展信息为空则进行查询
-        if (Objects.isNull(orderExtra)){
-            Optional<RefundOrderExtra> extraOpt =  refundOrderExtraManager.findById(order.getId());
-            if (!extraOpt.isPresent()){
-                log.error("未找到退款扩展信息，数据错误，订单ID：{}",order.getId());
-                return;
-            }
-            orderExtra = extraOpt.get();
-        }
+    public void registerRefundNotice(RefundOrder order) {
         // 判断是否需要进行通知
-        if (StrUtil.isBlank(orderExtra.getNotifyUrl())){
+        if (StrUtil.isBlank(order.getNotifyUrl())){
             log.info("退款订单无需通知，订单ID：{}",order.getId());
             return;
         }
 
         // 创建通知任务并保存
-        ClientNoticeTask task = clientNoticeAssistService.buildRefundTask(order, orderExtra);
+        ClientNoticeTask task = clientNoticeAssistService.buildRefundTask(order);
         try {
             taskManager.save(task);
         } catch (Exception e) {
@@ -160,23 +128,14 @@ public class ClientNoticeService {
      * 注册分账消息通知任务
      */
     @Async("bigExecutor")
-    public void registerAllocNotice(AllocationOrder order, AllocationOrderExtra orderExtra, List<AllocationOrderDetail> list) {
-        // 创建通知任务并保存
-        if (Objects.isNull(orderExtra)){
-            Optional<AllocationOrderExtra> extraOpt =  allocationOrderExtraManager.findById(order.getId());
-            if (!extraOpt.isPresent()){
-                log.error("未找到分账扩展信息，数据错误，订单ID：{}",order.getId());
-                return;
-            }
-            orderExtra = extraOpt.get();
-        }
+    public void registerAllocNotice(AllocOrder order, List<AllocOrderDetail> list) {
         // 判断是否需要进行通知
-        if (StrUtil.isBlank(orderExtra.getNotifyUrl())){
+        if (StrUtil.isBlank(order.getNotifyUrl())){
             log.info("分账订单无需通知，订单ID：{}",order.getId());
             return;
         }
         // 创建通知任务并保存
-        ClientNoticeTask task = clientNoticeAssistService.buildAllocTask(order, orderExtra, list);
+        ClientNoticeTask task = clientNoticeAssistService.buildAllocTask(order, list);
         try {
             taskManager.save(task);
         } catch (Exception e) {

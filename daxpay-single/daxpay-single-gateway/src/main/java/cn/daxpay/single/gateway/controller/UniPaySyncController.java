@@ -1,20 +1,23 @@
 package cn.daxpay.single.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
-import cn.daxpay.single.code.PaymentApiCode;
-import cn.daxpay.single.param.payment.allocation.AllocSyncParam;
-import cn.daxpay.single.param.payment.pay.PaySyncParam;
-import cn.daxpay.single.param.payment.refund.RefundSyncParam;
-import cn.daxpay.single.result.DaxResult;
-import cn.daxpay.single.result.sync.AllocSyncResult;
-import cn.daxpay.single.result.sync.PaySyncResult;
-import cn.daxpay.single.result.sync.RefundSyncResult;
-import cn.daxpay.single.service.annotation.PaymentSign;
+import cn.daxpay.single.core.code.PaymentApiCode;
+import cn.daxpay.single.core.param.payment.allocation.AllocSyncParam;
+import cn.daxpay.single.core.param.payment.pay.PaySyncParam;
+import cn.daxpay.single.core.param.payment.refund.RefundSyncParam;
+import cn.daxpay.single.core.param.payment.transfer.TransferSyncParam;
+import cn.daxpay.single.core.result.DaxResult;
+import cn.daxpay.single.core.result.sync.AllocSyncResult;
+import cn.daxpay.single.core.result.sync.PaySyncResult;
+import cn.daxpay.single.core.result.sync.RefundSyncResult;
+import cn.daxpay.single.core.result.sync.TransferSyncResult;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
+import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
 import cn.daxpay.single.service.core.payment.sync.service.RefundSyncService;
-import cn.daxpay.single.util.DaxRes;
+import cn.daxpay.single.service.core.payment.sync.service.TransferSyncService;
+import cn.daxpay.single.core.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +41,9 @@ public class UniPaySyncController {
     private final PaySyncService paySyncService;
     private final RefundSyncService refundSyncService;
     private final AllocationSyncService allocationSyncService;
+    private final TransferSyncService transferSyncService;
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.SYNC_PAY)
     @Operation(summary = "支付同步接口")
     @PostMapping("/pay")
@@ -47,7 +51,7 @@ public class UniPaySyncController {
         return DaxRes.ok(paySyncService.sync(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.SYNC_REFUND)
     @Operation(summary = "退款同步接口")
     @PostMapping("/refund")
@@ -55,8 +59,7 @@ public class UniPaySyncController {
         return DaxRes.ok(refundSyncService.sync(param));
     }
 
-
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.SYNC_ALLOCATION)
     @Operation(summary = "分账同步接口")
     @PostMapping("/allocation")
@@ -64,12 +67,12 @@ public class UniPaySyncController {
         return DaxRes.ok(allocationSyncService.sync(param));
     }
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.SYNC_TRANSFER)
     @Operation(summary = "转账同步接口")
     @PostMapping("/transfer")
-    public DaxResult<Void> transfer(@RequestBody AllocSyncParam param){
-        allocationSyncService.sync(param);
-        return DaxRes.ok();
+    public DaxResult<TransferSyncResult> transfer(@RequestBody TransferSyncParam param){
+        return DaxRes.ok(transferSyncService.sync(param));
     }
+
 }

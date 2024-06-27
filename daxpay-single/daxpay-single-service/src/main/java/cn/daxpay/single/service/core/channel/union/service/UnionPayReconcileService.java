@@ -1,9 +1,8 @@
 package cn.daxpay.single.service.core.channel.union.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.ReconcileTradeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.ReconcileTradeEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.code.UnionPayCode;
 import cn.daxpay.single.service.code.UnionReconcileFieldEnum;
@@ -11,9 +10,9 @@ import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.union.dao.UnionReconcileBillDetailManager;
 import cn.daxpay.single.service.core.channel.union.entity.UnionReconcileBillDetail;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
-import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
+import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
@@ -60,11 +59,16 @@ public class UnionPayReconcileService {
     public void downAndSave(ReconcileOrder reconcileOrder, Date date, UnionPayKit unionPayKit){
         // 下载对账单
         Map<String, Object> map = unionPayKit.downloadBill(date, RECONCILE_BILL_TYPE);
-        String fileContent = map.get(FILE_CONTENT).toString();
+        Object o = map.get(FILE_CONTENT);
+        if (o == null) {
+            log.warn("云闪付获取对账文件失败");
+            throw new OperationFailException("云闪付获取对账文件失败");
+        }
+        String fileContent = o.toString();
         // 判断是否成功
         if (!SDKConstants.OK_RESP_CODE.equals(map.get(SDKConstants.param_respCode))) {
             log.warn("云闪付获取对账文件失败");
-            throw new PayFailureException("云闪付获取对账文件失败");
+            throw new OperationFailException("云闪付获取对账文件失败");
         }
 
         try {
@@ -210,10 +214,9 @@ public class UnionPayReconcileService {
      * 保存下载的原始对账文件
      */
     private void saveOriginalFile(ReconcileOrder reconcileOrder, byte[] bytes) {
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
-        String fileName = StrUtil.format("交易对账单-{}-{}.txt", channelEnum.getName(),date);
+        String fileName = StrUtil.format("交易对账单-云闪付-{}.txt",date);
         UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {
             uploadPretreatment.setOriginalFilename(fileName);

@@ -4,14 +4,15 @@ import cn.bootx.platform.common.core.annotation.BigField;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.handler.StringListTypeHandler;
-import cn.daxpay.single.service.code.WeChatPayCode;
-import cn.daxpay.single.service.common.typehandler.DecryptTypeHandler;
-import cn.daxpay.single.service.core.channel.wechat.convert.WeChatConvert;
-import cn.daxpay.single.service.dto.channel.wechat.WeChatPayConfigDto;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
+import cn.daxpay.single.service.code.WeChatPayCode;
+import cn.daxpay.single.service.common.typehandler.DecryptTypeHandler;
+import cn.daxpay.single.service.core.channel.wechat.convert.WeChatConvert;
+import cn.daxpay.single.service.dto.channel.wechat.WeChatPayConfigDto;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -36,11 +37,11 @@ import java.util.Objects;
 public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<WeChatPayConfigDto> {
 
     /** 微信商户Id */
-    @DbColumn(comment = "微信商户号")
+    @DbColumn(comment = "微信商户号", length = 50)
     private String wxMchId;
 
     /** 微信应用appId */
-    @DbColumn(comment = "微信应用appId")
+    @DbColumn(comment = "微信应用appId", length = 50)
     private String wxAppId;
 
     /** 是否启用 */
@@ -52,8 +53,8 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     private Boolean allocation;
 
     /** 支付限额 */
-    @DbColumn(comment = "支付限额")
-    private Integer singleLimit;
+    @DbColumn(comment = "支付限额", length = 8)
+    private Integer limitAmount;
 
     /**
      * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
@@ -72,6 +73,10 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
      */
     @DbColumn(comment = "同步通知路径")
     private String returnUrl;
+
+    /** 授权回调地址 */
+    @DbColumn(comment = "授权回调地址", length = 200)
+    private String redirectUrl;
 
     /**
      * 接口版本, 使用v2还是v3接口
@@ -118,6 +123,11 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
     @DbColumn(comment = "备注")
     private String remark;
 
+    @Override
+    public WeChatPayConfigDto toDto() {
+        return WeChatConvert.CONVERT.convert(this);
+    }
+
     public Boolean getAllocation() {
         return Objects.equals(allocation,true);
     }
@@ -126,9 +136,7 @@ public class WeChatPayConfig extends MpBaseEntity implements EntityBaseFunction<
         return Objects.equals(enable,true);
     }
 
-
-    @Override
-    public WeChatPayConfigDto toDto() {
-        return WeChatConvert.CONVERT.convert(this);
+    public String getRedirectUrl() {
+        return StrUtil.removeSuffix(redirectUrl, "/");
     }
 }

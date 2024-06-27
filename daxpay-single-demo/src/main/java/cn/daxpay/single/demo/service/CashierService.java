@@ -168,7 +168,7 @@ public class CashierService {
     public String getWxAuthUrl() {
         // 回调地址为 结算台微信jsapi支付的回调地址
         WxAuthUrlParam wxAuthUrlParam = new WxAuthUrlParam();
-        String url = StrUtil.format("{}/demo/cashier/wxAuthCallback", daxPayDemoProperties.getServerUrl());
+        String url = StrUtil.format("{}/demo/cashier/wxAuthCallback", daxPayDemoProperties.getWxRedirectUrl());
         wxAuthUrlParam.setUrl(url);
         DaxPayResult<WxAuthUrlModel> execute = DaxPayKit.execute(wxAuthUrlParam);
         if (execute.getCode() != 0){

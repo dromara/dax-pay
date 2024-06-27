@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.func;
 
-import cn.daxpay.single.code.PaySyncStatusEnum;
+import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import lombok.Getter;

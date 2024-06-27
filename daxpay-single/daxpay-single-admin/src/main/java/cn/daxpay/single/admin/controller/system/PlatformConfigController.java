@@ -2,6 +2,7 @@ package cn.daxpay.single.admin.controller.system;
 
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
+import cn.bootx.platform.common.core.util.ValidationUtil;
 import cn.daxpay.single.service.core.system.config.service.PlatformConfigService;
 import cn.daxpay.single.service.dto.system.config.PlatformConfigDto;
 import cn.daxpay.single.service.param.system.config.PlatformConfigParam;
@@ -31,6 +32,7 @@ public class PlatformConfigController {
     @Operation(summary = "更新平台配置项")
     @PostMapping("/update")
     public ResResult<Void> update(@RequestBody PlatformConfigParam param){
+        ValidationUtil.validateParam(param);
         platformConfigService.update(param);
         return Res.ok();
     }

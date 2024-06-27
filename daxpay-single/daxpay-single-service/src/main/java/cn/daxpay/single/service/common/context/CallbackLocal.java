@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.common.context;
 
-import cn.daxpay.single.code.RefundStatusEnum;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.RefundStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class CallbackLocal {
     private String tradeNo;
 
     /**
-     * 第三方支付平台交易号
+     * 通道交易号
      */
     private String outTradeNo;
 

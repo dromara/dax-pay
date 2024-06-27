@@ -1,19 +1,19 @@
 package cn.daxpay.single.service.core.payment.repair.service;
 
-import cn.daxpay.single.code.PayStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.exception.SystemUnknownErrorException;
 import cn.daxpay.single.service.code.PayRepairWayEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
-import cn.daxpay.single.service.core.payment.repair.factory.PayRepairStrategyFactory;
 import cn.daxpay.single.service.core.payment.repair.result.PayRepairResult;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.core.record.repair.entity.PayRepairRecord;
 import cn.daxpay.single.service.core.record.repair.service.PayRepairRecordService;
 import cn.daxpay.single.service.func.AbsPayRepairStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -23,7 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 支付修复服务
@@ -57,7 +58,7 @@ public class PayRepairService {
         }
 
         // 2.1 初始化修复参数
-        AbsPayRepairStrategy repairStrategy = PayRepairStrategyFactory.create(order.getChannel());
+        AbsPayRepairStrategy repairStrategy = PayStrategyFactory.create(order.getChannel(),AbsPayRepairStrategy.class);
         repairStrategy.setOrder(order);
         // 2.2 执行前置处理
         repairStrategy.doBeforeHandler();
@@ -74,8 +75,7 @@ public class PayRepairService {
                 repairResult.setAfterPayStatus(PayStatusEnum.CLOSE);
                 break;
             case PROGRESS:
-                this.waitPay(order);
-                repairResult.setAfterPayStatus(PayStatusEnum.PROGRESS);
+                // TODO 保存为异常订单
                 break;
             case CLOSE_GATEWAY:
                 this.closeRemote(order, repairStrategy);
@@ -83,27 +83,16 @@ public class PayRepairService {
                 break;
             default:
                 log.error("走到了理论上讲不会走到的分支");
-                throw new PayFailureException("走到了理论上讲不会走到的分支");
+                throw new SystemUnknownErrorException("走到了理论上讲不会走到的分支");
         }
         // 设置修复iD
         repairResult.setRepairNo(IdUtil.getSnowflakeNextIdStr());
         // 发送通知
-        clientNoticeService.registerPayNotice(order, null);
+        clientNoticeService.registerPayNotice(order);
         this.saveRecord(order, repairType, repairResult);
         return repairResult;
     }
 
-    /**
-     * 变更未待支付
-     * TODO 后期保存为异常订单
-     */
-    private void waitPay(PayOrder order) {
-        // 修改订单支付状态为待支付
-        order.setStatus(PayStatusEnum.PROGRESS.getCode())
-                .setPayTime(null)
-                .setCloseTime(null);
-        payOrderService.updateById(order);
-    }
 
     /**
      * 变更为已支付

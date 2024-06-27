@@ -5,7 +5,7 @@
 <p align="center">
  <img src="https://img.shields.io/github/stars/dromara/dax-pay?style=flat&label=Github">
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
- <img src="https://img.shields.io/badge/Dax%20Pay-2.0.7-success.svg" alt="Build Status"/>
+ <img src="https://img.shields.io/badge/Dax%20Pay-2.0.8-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Author-Daxpay-orange.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Spring%20Boot-2.7.18-blue.svg" alt="Downloads"/>
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
@@ -166,10 +166,6 @@ public class PayOrderTest {
 
 扫码加入QQ交流群
 
-交流一群
-<p>
-<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412132238.3rb0hgrf2z.webp" width = "330" height = "500"/>
-</p>
 交流二群
 <p>
 <img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240513180310.2yy68aykip.webp" width = "330" height = "500"/>

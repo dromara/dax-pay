@@ -16,9 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public enum AllocReceiverTypeEnum {
     /** 个人 */
-    WX_PERSONAL("wx_personal", "个人"),
+    WX_PERSONAL("wx_personal", "openId"),
     /** 商户 */
-    WX_MERCHANT("wx_merchant", "商户"),
+    WX_MERCHANT("wx_merchant", "商户号"),
 
     /** userId 以2088开头的纯16位数字 */
     ALI_USER_ID("ali_user_id", "用户ID"),

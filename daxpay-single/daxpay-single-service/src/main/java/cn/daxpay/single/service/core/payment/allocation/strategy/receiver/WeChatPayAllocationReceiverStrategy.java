@@ -1,7 +1,8 @@
 package cn.daxpay.single.service.core.payment.allocation.strategy.receiver;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.ConfigNotEnableException;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayAllocationReceiverService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
@@ -36,8 +37,8 @@ public class WeChatPayAllocationReceiverStrategy extends AbsAllocationReceiverSt
      * 策略标识
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WECHAT;
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
     }
 
     /**
@@ -56,7 +57,7 @@ public class WeChatPayAllocationReceiverStrategy extends AbsAllocationReceiverSt
         this.weChatPayConfig = payConfigService.getAndCheckConfig();
         // 判断是否支持分账
         if (Objects.equals(weChatPayConfig.getAllocation(),false)){
-            throw new PayFailureException("微信支付配置不支持分账");
+            throw new ConfigNotEnableException("微信支付配置未开启分账");
         }
     }
 
@@ -66,7 +67,7 @@ public class WeChatPayAllocationReceiverStrategy extends AbsAllocationReceiverSt
     @Override
     public void bind() {
         if (!receiverService.validation(this.getAllocationReceiver())){
-            throw new PayFailureException("分账接收者参数未通过校验");
+            throw new ValidationFailedException("分账接收者参数未通过校验");
         }
         receiverService.bind(this.getAllocationReceiver(),this.weChatPayConfig);
     }
@@ -77,7 +78,7 @@ public class WeChatPayAllocationReceiverStrategy extends AbsAllocationReceiverSt
     @Override
     public void unbind() {
         if (!receiverService.validation(this.getAllocationReceiver())){
-            throw new PayFailureException("分账参数未通过校验");
+            throw new ValidationFailedException("分账参数未通过校验");
         }
         receiverService.unbind(this.getAllocationReceiver(),this.weChatPayConfig);
     }

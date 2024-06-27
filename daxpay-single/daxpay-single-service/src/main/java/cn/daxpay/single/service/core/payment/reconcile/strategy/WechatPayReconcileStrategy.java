@@ -1,11 +1,11 @@
 package cn.daxpay.single.service.core.payment.reconcile.strategy;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.daxpay.single.service.core.channel.wechat.service.WechatPayReconcileService;
+import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayReconcileService;
 import cn.daxpay.single.service.func.AbsReconcileStrategy;
 import cn.hutool.core.date.DatePattern;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
 
-    private final WechatPayReconcileService reconcileService;
+    private final WeChatPayReconcileService reconcileService;
 
     private final WeChatPayConfigService weChatPayConfigService;
 
@@ -40,8 +40,8 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
      * @see PayChannelEnum
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WECHAT;
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
     }
 
     /**

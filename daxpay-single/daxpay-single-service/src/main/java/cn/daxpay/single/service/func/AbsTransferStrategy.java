@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.func;
 
+import cn.daxpay.single.core.param.payment.transfer.TransferParam;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,8 +17,20 @@ public abstract class AbsTransferStrategy implements PayStrategy{
     private TransferOrder transferOrder;
 
     /**
+     * 校验参数
+     */
+    public void doValidateParam(TransferParam transferParam) {
+
+    }
+
+    /**
      * 转账前操作
      */
     public void doBeforeHandler(){}
+
+    /**
+     * 转账操作
+     */
+    public abstract void doTransferHandler();
 
 }

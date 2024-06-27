@@ -13,5 +13,5 @@ import lombok.experimental.Accessors;
 public class AllocationLocal {
 
     /** 通道分账号 */
-    private String outAllocationNo;
+    private String outAllocNo;
 }

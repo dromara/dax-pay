@@ -5,23 +5,22 @@ import cn.daxpay.single.sdk.net.DaxPayRequest;
 import cn.daxpay.single.sdk.response.DaxPayResult;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.JSONUtil;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * 支付关闭参数
  * @author xxm
  * @since 2023/12/17
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 public class PayCloseParam extends DaxPayRequest<PayCloseModel> {
 
     /** 订单号 */
     private String orderNo;
 
     /** 商户订单号 */
-    private String bizTradeNo;
+    private String bizOrderNo;
 
     /**
      * 方法请求路径

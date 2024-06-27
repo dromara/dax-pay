@@ -53,4 +53,16 @@ public class AlipayConfigController {
     public ResResult<String> readPem(MultipartFile file){
         return Res.ok(new String(file.getBytes(), StandardCharsets.UTF_8));
     }
+
+    @Operation(summary = "生成异步通知地址")
+    @GetMapping("/generateNotifyUrl")
+    public ResResult<String> generateNotifyUrl() {
+        return Res.ok(alipayConfigService.generateNotifyUrl());
+    }
+
+    @Operation(summary = "生成同步通知地址")
+    @GetMapping("/generateReturnUrl")
+    public ResResult<String> generateReturnUrl() {
+        return Res.ok(alipayConfigService.generateReturnUrl());
+    }
 }

@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.refund.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayRefundService;
@@ -22,15 +22,18 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class AliRefundStrategy extends AbsRefundStrategy {
 
     private final AliPayConfigService alipayConfigService;
+
     private final AliPayRefundService aliRefundService;
+
+    private AliPayConfig config;
+
     /**
      * 策略标识
-     *
      * @see PayChannelEnum
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
 
@@ -39,8 +42,7 @@ public class AliRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doBeforeRefundHandler() {
-        AliPayConfig config = alipayConfigService.getAndCheckConfig();
-        alipayConfigService.initConfig(config);
+        this.config = alipayConfigService.getAndCheckConfig();
     }
 
     /**
@@ -48,6 +50,6 @@ public class AliRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doRefundHandler() {
-        aliRefundService.refund(this.getRefundOrder());
+        aliRefundService.refund(this.getRefundOrder(),this.config);
     }
 }
