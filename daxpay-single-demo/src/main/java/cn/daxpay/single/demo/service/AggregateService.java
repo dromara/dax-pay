@@ -114,7 +114,7 @@ public class AggregateService {
         WxAuthUrlParam wxAuthUrlParam = new WxAuthUrlParam();
         wxAuthUrlParam.setState(code);
 
-        String url = StrUtil.format("{}/demo/aggregate/wxAuthCallback", daxPayDemoProperties.getServerUrl());
+        String url = StrUtil.format("{}/demo/aggregate/wxAuthCallback", daxPayDemoProperties.getWxRedirectUrl());
         wxAuthUrlParam.setUrl(url);
         wxAuthUrlParam.setState(code);
         DaxPayResult<WxAuthUrlModel> execute = DaxPayKit.execute(wxAuthUrlParam);
@@ -193,7 +193,6 @@ public class AggregateService {
                 .orElse("127.0.0.1");
         payParam.setClientIp(ip);
         // 异步回调地址
-        payParam.setNotNotify(false);
         // 支付成功同步回调地址
         payParam.setReturnUrl(StrUtil.format("{}/result/success", daxPayDemoProperties.getFrontH5Url()));
         // 中途退出 目前经测试不生效
@@ -293,5 +292,4 @@ public class AggregateService {
         }
         return result.getData().getOpenId();
     }
-
 }

@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.repair.result;
 
-import cn.daxpay.single.code.RefundStatusEnum;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
+import cn.daxpay.single.core.code.RefundStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -21,7 +21,7 @@ public class RefundRepairResult {
     /** 退款修复后状态 */
     private RefundStatusEnum afterRefundStatus;
     /** 支付修复前状态 */
-    private PayStatusEnum beforePayStatus;
+    private PayOrderRefundStatusEnum beforePayStatus;
     /** 支付修复后状态 */
-    private PayStatusEnum afterPayStatus;
+    private PayOrderRefundStatusEnum afterPayStatus;
 }

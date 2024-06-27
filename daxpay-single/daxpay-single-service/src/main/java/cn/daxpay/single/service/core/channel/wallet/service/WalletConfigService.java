@@ -2,7 +2,6 @@ package cn.daxpay.single.service.core.channel.wallet.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.rest.dto.LabelValue;
-import cn.daxpay.single.code.PayChannelEnum;
 import cn.daxpay.single.service.code.WalletPayWay;
 import cn.daxpay.single.service.core.channel.wallet.dao.WalletConfigManager;
 import cn.daxpay.single.service.core.channel.wallet.entity.WalletConfig;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -56,10 +54,6 @@ public class WalletConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void update(WalletConfigParam param){
         WalletConfig walletConfig = walletConfigManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
-        // 启用或停用
-        if (!Objects.equals(param.getEnable(), walletConfig.getEnable())){
-            payChannelConfigService.setEnable(PayChannelEnum.WALLET.getCode(), param.getEnable());
-        }
         BeanUtil.copyProperties(param,walletConfig);
         walletConfigManager.updateById(walletConfig);
     }

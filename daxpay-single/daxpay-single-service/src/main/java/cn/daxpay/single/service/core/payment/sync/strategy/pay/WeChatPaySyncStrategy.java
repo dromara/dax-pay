@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.sync.strategy.pay;
 
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPaySyncService;
@@ -32,8 +32,8 @@ public class WeChatPaySyncStrategy extends AbsPaySyncStrategy {
      * 策略标识
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WECHAT;
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
     }
 
     /**

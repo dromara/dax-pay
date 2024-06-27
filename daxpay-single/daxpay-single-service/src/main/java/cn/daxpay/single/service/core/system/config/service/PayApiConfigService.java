@@ -2,8 +2,6 @@ package cn.daxpay.single.service.core.system.config.service;
 
 import cn.bootx.platform.common.core.exception.DataNotExistException;
 import cn.bootx.platform.common.core.util.ResultConvertUtil;
-import cn.daxpay.single.service.common.context.ApiInfoLocal;
-import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.system.config.dao.PayApiConfigManager;
 import cn.daxpay.single.service.core.system.config.entity.PayApiConfig;
 import cn.daxpay.single.service.dto.system.config.PayApiConfigDto;
@@ -49,18 +47,4 @@ public class PayApiConfigService {
     public PayApiConfigDto findById(Long id){
         return openApiInfoManager.findById(id).map(PayApiConfig::toDto).orElseThrow(() -> new DataNotExistException("支付接口配置信息不存在"));
     }
-
-    /**
-     * 初始化接口上下文信息
-     */
-    public void initApiInfo(PayApiConfig api){
-        // 接口信息
-        ApiInfoLocal apiInfoLocal = PaymentContextLocal.get().getApiInfo();
-        apiInfoLocal.setApiCode(api.getCode())
-                .setReqSign(api.isReqSign())
-                .setNotice(api.isNotice())
-                .setNoticeUrl(api.getNoticeUrl());
-    }
-
-
 }

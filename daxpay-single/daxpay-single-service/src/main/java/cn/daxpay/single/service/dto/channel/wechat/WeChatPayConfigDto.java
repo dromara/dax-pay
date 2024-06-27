@@ -35,13 +35,16 @@ public class WeChatPayConfigDto extends BaseDto implements Serializable {
     private Boolean allocation;
 
     @Schema(description = "支付限额")
-    private Integer singleLimit;
+    private Integer limitAmount;
 
     @Schema(description = "异步通知地址")
     private String notifyUrl;
 
     @Schema(description = "同步跳转地址")
     private String returnUrl;
+
+    @Schema(description = "授权回调地址")
+    private String redirectUrl;
 
     /** 接口版本, 使用v2还是v3接口 */
     @Schema(description = "接口版本")

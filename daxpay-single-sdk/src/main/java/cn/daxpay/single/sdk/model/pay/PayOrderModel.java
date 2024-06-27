@@ -2,6 +2,7 @@ package cn.daxpay.single.sdk.model.pay;
 
 import cn.daxpay.single.sdk.code.PayChannelEnum;
 import cn.daxpay.single.sdk.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.sdk.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.sdk.code.PayStatusEnum;
 import cn.daxpay.single.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
@@ -17,7 +18,6 @@ import lombok.ToString;
 @Setter
 @ToString(callSuper = true)
 public class PayOrderModel extends DaxPayResponseModel {
-
 
     /** 订单号 */
     private String orderNo;
@@ -64,10 +64,16 @@ public class PayOrderModel extends DaxPayResponseModel {
     private String status;
 
     /**
+     * 退款状态
+     * @see PayOrderRefundStatusEnum
+     */
+    private String refundStatus;
+
+    /**
      * 分账状态
      * @see PayOrderAllocStatusEnum
      */
-    private String allocationStatus;
+    private String allocStatus;
 
 
     /** 支付时间 */

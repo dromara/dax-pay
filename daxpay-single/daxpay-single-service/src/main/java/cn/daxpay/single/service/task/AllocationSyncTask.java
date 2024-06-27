@@ -1,8 +1,8 @@
 package cn.daxpay.single.service.task;
 
-import cn.daxpay.single.code.AllocOrderStatusEnum;
+import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
 import lombok.RequiredArgsConstructor;
@@ -32,18 +32,18 @@ public class AllocationSyncTask implements Job {
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        for (AllocationOrder allocationOrder : allocationOrderManager.findSyncOrder()) {
+        for (AllocOrder allocOrder : allocationOrderManager.findSyncOrder()) {
             try {
                 // 分账中走同步逻辑
-                if (allocationOrder.getStatus().equals(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())) {
-                    allocationSyncService.sync(allocationOrder);
+                if (allocOrder.getStatus().equals(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode())) {
+                    allocationSyncService.sync(allocOrder);
                 }
                 // 如果分账结束, 调用自动完结逻辑
-                if (allocationOrder.getStatus().equals(AllocOrderStatusEnum.ALLOCATION_END.getCode())) {
-                    allocationService.finish(allocationOrder);
+                if (allocOrder.getStatus().equals(AllocOrderStatusEnum.ALLOCATION_END.getCode())) {
+                    allocationService.finish(allocOrder);
                 }
             } catch (Exception e) {
-                log.warn("分账同步或完结失败, 分账号:{}", allocationOrder.getAllocationNo());
+                log.warn("分账同步或完结失败, 分账号:{}", allocOrder.getAllocNo());
                 log.warn("分账同步或完结失败", e);
             }
         }

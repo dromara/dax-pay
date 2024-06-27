@@ -4,9 +4,9 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
-import cn.daxpay.single.code.AllocOrderStatusEnum;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
-import cn.daxpay.single.service.param.order.AllocationOrderQuery;
+import cn.daxpay.single.core.code.AllocOrderStatusEnum;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
+import cn.daxpay.single.service.param.order.AllocOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -25,38 +25,38 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class AllocationOrderManager extends BaseManager<AllocationOrderMapper, AllocationOrder> {
+public class AllocationOrderManager extends BaseManager<AllocOrderMapper, AllocOrder> {
 
     /**
      * 根据分账单号查询
      */
-    public Optional<AllocationOrder> findByAllocationNo(String allocationNo){
-        return findByField(AllocationOrder::getAllocationNo, allocationNo);
+    public Optional<AllocOrder> findByAllocNo(String allocNo){
+        return findByField(AllocOrder::getAllocNo, allocNo);
     }
 
     /**
      * 根据商户分账号查询
      */
-    public Optional<AllocationOrder> findByBizAllocationNo(String bizAllocationNo){
-        return findByField(AllocationOrder::getBizAllocationNo, bizAllocationNo);
+    public Optional<AllocOrder> findByBizAllocNo(String bizAllocNo){
+        return findByField(AllocOrder::getBizAllocNo, bizAllocNo);
     }
 
     /**
      * 分页
      */
-    public Page<AllocationOrder> page(PageParam pageParam, AllocationOrderQuery param){
-            Page<AllocationOrder> mpPage = MpUtil.getMpPage(pageParam, AllocationOrder.class);
-            QueryWrapper<AllocationOrder> generator = QueryGenerator.generator(param);
+    public Page<AllocOrder> page(PageParam pageParam, AllocOrderQuery param){
+            Page<AllocOrder> mpPage = MpUtil.getMpPage(pageParam, AllocOrder.class);
+            QueryWrapper<AllocOrder> generator = QueryGenerator.generator(param);
             return this.page(mpPage, generator);
     }
 
     /**
      * 查询待同步的分账单
      */
-    public List<AllocationOrder> findSyncOrder(){
+    public List<AllocOrder> findSyncOrder(){
         List<String> statusList = Arrays.asList(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode(), AllocOrderStatusEnum.ALLOCATION_END.getCode());
         return lambdaQuery()
-                .in(AllocationOrder::getStatus, statusList)
+                .in(AllocOrder::getStatus, statusList)
                 .list();
     }
 }

@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.callback.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
 import cn.daxpay.single.service.code.PayRepairWayEnum;
 import cn.daxpay.single.service.common.context.CallbackLocal;

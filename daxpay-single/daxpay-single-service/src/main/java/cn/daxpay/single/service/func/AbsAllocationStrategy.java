@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.func;
 
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrder;
-import cn.daxpay.single.service.core.order.allocation.entity.AllocationOrderDetail;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
+import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,16 +19,16 @@ import java.util.List;
 @Setter
 public abstract class AbsAllocationStrategy implements PayStrategy{
 
-    private AllocationOrder allocationOrder;
+    private AllocOrder allocOrder;
 
-    private List<AllocationOrderDetail> allocationOrderDetails;
+    private List<AllocOrderDetail> allocOrderDetails;
 
     /**
      * 初始化参数
      */
-    public void initParam(AllocationOrder allocationOrder, List<AllocationOrderDetail> allocationOrderDetails) {
-        this.allocationOrder = allocationOrder;
-        this.allocationOrderDetails = allocationOrderDetails;
+    public void initParam(AllocOrder allocOrder, List<AllocOrderDetail> allocOrderDetails) {
+        this.allocOrder = allocOrder;
+        this.allocOrderDetails = allocOrderDetails;
     }
 
     /**

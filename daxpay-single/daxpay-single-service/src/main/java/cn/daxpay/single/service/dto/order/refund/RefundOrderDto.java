@@ -1,8 +1,11 @@
 package cn.daxpay.single.service.dto.order.refund;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.RefundStatusEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.RefundStatusEnum;
+import cn.daxpay.single.core.param.channel.AliPayParam;
+import cn.daxpay.single.core.param.channel.WalletPayParam;
+import cn.daxpay.single.core.param.channel.WeChatPayParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -73,6 +76,7 @@ public class RefundOrderDto extends BaseDto {
     @Schema(description = "退款原因")
     private String reason;
 
+    /** 退款结束时间 */
     @Schema(description = "退款结束时间")
     private LocalDateTime finishTime;
 
@@ -82,6 +86,31 @@ public class RefundOrderDto extends BaseDto {
      */
     @Schema(description = "退款状态")
     private String status;
+
+    /** 异步通知地址 */
+    @Schema(description = "异步通知地址")
+    private String notifyUrl;
+
+    /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
+    @Schema(description = "商户扩展参数,回调时会原样返回, 以最后一次为准")
+    private String attach;
+
+    /**
+     * 附加参数 以最后一次为准
+     * @see AliPayParam
+     * @see WeChatPayParam
+     * @see WalletPayParam
+     */
+    @Schema(description = "附加参数 以最后一次为准")
+    private String extraParam;
+
+    /** 请求时间，时间戳转时间 */
+    @Schema(description = "请求时间，时间戳转时间")
+    private LocalDateTime reqTime;
+
+    /** 终端ip */
+    @Schema(description = "终端ip")
+    private String clientIp;
 
     /** 错误码 */
     @Schema(description = "错误码")

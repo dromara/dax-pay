@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.order.reconcile.entity;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
@@ -21,16 +22,17 @@ import lombok.experimental.Accessors;
 @TableName("pay_reconcile_file")
 public class ReconcileFile extends MpIdEntity {
 
-    @DbColumn(comment = "对账单ID")
+    @DbMySqlIndex(comment = "对账单ID索引")
+    @DbColumn(comment = "对账单ID", isNull = false)
     private Long reconcileId;
 
     /**
      * 明细/汇总
      * @see ReconcileFileTypeEnum
      */
-    @DbColumn(comment = "类型")
+    @DbColumn(comment = "类型", length = 20, isNull = false)
     private String type;
 
-    @DbColumn(comment = "对账单文件")
+    @DbColumn(comment = "对账单文件", isNull = false)
     private Long fileId;
 }

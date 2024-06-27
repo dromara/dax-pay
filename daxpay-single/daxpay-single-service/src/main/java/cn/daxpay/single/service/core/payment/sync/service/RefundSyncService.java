@@ -2,11 +2,13 @@ package cn.daxpay.single.service.core.payment.sync.service;
 
 import cn.bootx.platform.common.core.exception.BizException;
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
-import cn.daxpay.single.code.RefundStatusEnum;
-import cn.daxpay.single.code.RefundSyncStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.payment.refund.RefundSyncParam;
-import cn.daxpay.single.result.sync.RefundSyncResult;
+import cn.daxpay.single.core.code.RefundStatusEnum;
+import cn.daxpay.single.core.code.RefundSyncStatusEnum;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.TradeNotExistException;
+import cn.daxpay.single.core.param.payment.refund.RefundSyncParam;
+import cn.daxpay.single.core.result.sync.RefundSyncResult;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
 import cn.daxpay.single.service.code.RefundRepairWayEnum;
@@ -17,11 +19,11 @@ import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
 import cn.daxpay.single.service.core.payment.repair.result.RefundRepairResult;
 import cn.daxpay.single.service.core.payment.repair.service.RefundRepairService;
-import cn.daxpay.single.service.core.payment.sync.factory.RefundSyncStrategyFactory;
 import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
 import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
 import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +60,7 @@ public class RefundSyncService {
     public RefundSyncResult sync(RefundSyncParam param){
         // 先获取退款单
         RefundOrder refundOrder = refundOrderQueryService.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())
-                .orElseThrow(() -> new PayFailureException("未查询到退款订单"));
+                .orElseThrow(() -> new TradeNotExistException("未查询到退款订单"));
         // 如果订单已经关闭, 直接返回退款关闭
         if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.CLOSE.getCode())){
             return new RefundSyncResult().setStatus(RefundStatusEnum.CLOSE.getCode());
@@ -78,7 +80,7 @@ public class RefundSyncService {
         }
         try {
             // 获取支付同步策略类
-            AbsRefundSyncStrategy syncPayStrategy = RefundSyncStrategyFactory.create(refundOrder.getChannel());
+            AbsRefundSyncStrategy syncPayStrategy = PayStrategyFactory.create(refundOrder.getChannel(),AbsRefundSyncStrategy.class);
             syncPayStrategy.setRefundOrder(refundOrder);
             // 同步前处理, 主要预防请求过于迅速
             syncPayStrategy.doBeforeHandler();
@@ -89,7 +91,7 @@ public class RefundSyncService {
             if (Objects.equals(refundRemoteSyncResult.getSyncStatus(), RefundSyncStatusEnum.FAIL)) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(refundOrder, refundRemoteSyncResult, false, null, refundRemoteSyncResult.getErrorMsg());
-                throw new PayFailureException(refundRemoteSyncResult.getErrorMsg());
+                throw new OperationFailException(refundRemoteSyncResult.getErrorMsg());
             }
             // 订单的通道交易号是否一致, 不一致进行更新
             if (Objects.nonNull(refundRemoteSyncResult.getOutRefundNo()) && !Objects.equals(refundRemoteSyncResult.getOutRefundNo(), refundOrder.getOutRefundNo())){
@@ -200,7 +202,8 @@ public class RefundSyncService {
                 .setRepair(repair)
                 .setRepairNo(repairOrderNo)
                 .setErrorMsg(errorMsg)
-                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
+                .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
+
 }

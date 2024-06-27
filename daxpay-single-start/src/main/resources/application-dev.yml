@@ -33,8 +33,6 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/,classpath:/public/
-  thymeleaf:
-    cache: false
   # 定时任务
   quartz:
     # 持久化方式
@@ -69,7 +67,7 @@ bootx:
     swagger:
       enabled: true
       author: bootx
-      version: 2.0.7
+      version: 2.0.8
       title: 开源支付平台-单商户
       description: 开源支付平台-单商户版
       # 多模块扫码
@@ -160,12 +158,8 @@ dromara:
         storage-path: D:/data/files/
 # 支付系统配置
 dax-pay:
-  # 服务地址
-  server-url: http://localhost:9000
-  # 前端h5地址
-  front-h5-url: http://pay1.bootx.cn/h5/#
-  # 前端web地址
-  front-web-url: http://localhost:9000/#
+  # h5访问地址
+  front-h5-url: https://localhost:9000/h5/#
   # 机器号码
   machine-no: 63
   # 当前环境，会影响订单号的生成
@@ -174,8 +168,10 @@ dax-pay:
   demo:
     # 网关地址
     server-url: http://localhost:9000
+    # 微信授权回调地址
+    wx-redirect-url: https://localhost:9000/
     # 前端h5地址
-    front-h5-url: http://pay1.bootx.cn/h5/#
+    front-h5-url: https://localhost:9000/h5/#
     # 签名秘钥, 需要与系统中配置一致
     sign-secret: 123456
     # 签名方式

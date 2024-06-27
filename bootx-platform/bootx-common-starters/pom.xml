@@ -18,10 +18,7 @@
         <module>common-starter-audit-log</module>
         <module>common-starter-data-perm</module>
         <module>common-starter-file</module>
-        <module>common-starter-dingtalk</module>
         <module>common-starter-monitor</module>
-        <module>common-starter-wechat</module>
-        <module>common-starter-wecom</module>
     </modules>
 
     <dependencies>

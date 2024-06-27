@@ -23,6 +23,9 @@ public abstract class DaxPayRequest<T extends DaxPayResponseModel> {
     /** 请求时间，传输时间戳 */
     private Long reqTime = DateUtil.currentSeconds();
 
+    /** 随机数 */
+    private String nonceStr;
+
     /**
      * 方法请求路径
      * @return 请求路径

@@ -44,7 +44,7 @@ public class UnionPayConfig extends MpBaseEntity implements EntityBaseFunction<U
 
     /** 支付限额 */
     @DbColumn(comment = "支付限额")
-    private Integer singleLimit;
+    private Integer limitAmount;
 
     /**
      * 商户收款账号

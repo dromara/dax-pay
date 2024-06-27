@@ -1,26 +1,26 @@
 package cn.daxpay.single.service.core.payment.refund.service;
 
-import cn.daxpay.single.code.PaySignTypeEnum;
-import cn.daxpay.single.code.PayStatusEnum;
-import cn.daxpay.single.code.RefundStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.payment.refund.RefundParam;
-import cn.daxpay.single.result.pay.RefundResult;
-import cn.daxpay.single.service.common.context.ApiInfoLocal;
-import cn.daxpay.single.service.common.context.NoticeLocal;
+import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
+import cn.daxpay.single.core.code.PaySignTypeEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.code.RefundStatusEnum;
+import cn.bootx.platform.common.core.exception.ValidationFailedException;
+import cn.daxpay.single.core.exception.TradeStatusErrorException;
+import cn.daxpay.single.core.param.payment.refund.RefundParam;
+import cn.daxpay.single.core.result.pay.RefundResult;
+import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.PaySignUtil;
+import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
 import cn.daxpay.single.service.common.context.RefundLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.order.refund.dao.RefundOrderExtraManager;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrderExtra;
-import cn.daxpay.single.util.OrderNoGenerateUtil;
-import cn.daxpay.single.util.PaySignUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static cn.daxpay.single.code.RefundStatusEnum.SUCCESS;
+import static cn.daxpay.single.core.code.RefundStatusEnum.SUCCESS;
 
 /**
  * 支付退款支撑服务
@@ -42,63 +42,31 @@ import static cn.daxpay.single.code.RefundStatusEnum.SUCCESS;
 public class RefundAssistService {
     private final RefundOrderManager refundOrderManager;
 
-    private final RefundOrderExtraManager refundOrderExtraManager;
-
-    /**
-     * 初始化上下文
-     */
-    public void initRefundContext(RefundParam param){
-        // 初始化通知相关上下文
-        this.initNotice(param);
-    }
-
-    /**
-     * 初始化退款通知相关上下文
-     */
-    private void initNotice(RefundParam param) {
-        NoticeLocal noticeInfo = PaymentContextLocal.get().getNoticeInfo();
-        ApiInfoLocal apiInfo = PaymentContextLocal.get().getApiInfo();
-        PlatformLocal platform = PaymentContextLocal.get().getPlatformInfo();
-        // 异步回调为开启状态
-        if (!Objects.equals(param.getNotNotify(), false) && apiInfo.isNotice()){
-            // 首先读取请求参数
-            noticeInfo.setNotifyUrl(param.getNotifyUrl());
-            // 读取接口配置
-            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
-                noticeInfo.setNotifyUrl(apiInfo.getNoticeUrl());
-            }
-            // 读取平台配置
-            if (StrUtil.isBlank(noticeInfo.getNotifyUrl())){
-                noticeInfo.setNotifyUrl(platform.getNotifyUrl());
-            }
-        }
-    }
-
     /**
      * 检查并处理退款参数
      */
     public void checkAndParam(RefundParam param, PayOrder payOrder){
-
-        // 状态判断, 支付中/失败/取消等不能进行退款
-        List<String> tradesStatus = Arrays.asList(
-                PayStatusEnum.PROGRESS.getCode(),
-                PayStatusEnum.CLOSE.getCode(),
-                PayStatusEnum.REFUNDED.getCode(),
-                PayStatusEnum.REFUNDING.getCode(),
-                PayStatusEnum.FAIL.getCode());
-        if (tradesStatus.contains(payOrder.getStatus())) {
+        // 非支付完成的不能进行退款
+        if (!Objects.equals(SUCCESS.getCode(), payOrder.getStatus())) {
             PayStatusEnum statusEnum = PayStatusEnum.findByCode(payOrder.getStatus());
-            throw new PayFailureException("当前支付单订状态["+statusEnum.getName()+"]不允许发起退款操作");
+            throw new TradeStatusErrorException("当前支付单订状态["+statusEnum.getName()+"]不允许发起退款操作");
         }
-
+        // 退款中和退款完成不能退款
+        List<String> tradesStatus = Arrays.asList(
+                PayOrderRefundStatusEnum.REFUNDED.getCode(),
+                PayOrderRefundStatusEnum.REFUNDING.getCode());
+        if (tradesStatus.contains(payOrder.getRefundStatus())){
+            val statusEnum = PayOrderRefundStatusEnum.findByCode(payOrder.getRefundStatus());
+            throw new TradeStatusErrorException("当前支付单退款状态["+statusEnum.getName()+"]不允许发起退款操作");
+        }
         // 退款号唯一校验
         if (StrUtil.isNotBlank(param.getBizRefundNo()) && refundOrderManager.existsByRefundNo(param.getBizRefundNo())){
-            throw new PayFailureException("退款单号已存在");
+            throw new ValidationFailedException("退款单号已存在");
         }
 
         // 金额判断
         if (param.getAmount() > payOrder.getRefundableBalance()){
-            throw new PayFailureException("退款金额不能大于支付金额");
+            throw new ValidationFailedException("退款金额不能大于支付金额");
         }
     }
 
@@ -120,18 +88,12 @@ public class RefundAssistService {
                 .setOrderAmount(payOrder.getAmount())
                 .setAmount(refundParam.getAmount())
                 .setTitle(payOrder.getTitle())
-                .setReason(refundParam.getReason());
-        refundOrderManager.save(refundOrder);
-        // 生成退款扩展订单
-        NoticeLocal notice = PaymentContextLocal.get().getNoticeInfo();
-        RefundOrderExtra orderExtra = new RefundOrderExtra()
+                .setReason(refundParam.getReason())
                 .setClientIp(refundParam.getClientIp())
                 .setReqTime(refundParam.getReqTime())
                 .setAttach(refundParam.getAttach())
-                .setNotifyUrl(notice.getNotifyUrl());
-        orderExtra.setId(refundOrder.getId());
-
-        refundOrderExtraManager.save(orderExtra);
+                .setNotifyUrl(refundParam.getNotifyUrl());;
+        refundOrderManager.save(refundOrder);
         return refundOrder;
     }
 
@@ -157,8 +119,9 @@ public class RefundAssistService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void updateOrderByError(RefundOrder refundOrder){
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-        refundOrder.setErrorCode(refundInfo.getErrorCode());
-        refundOrder.setErrorMsg(refundInfo.getErrorMsg());
+        ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
+        refundOrder.setErrorCode(String.valueOf(errorInfo.getErrorCode()));
+        refundOrder.setErrorMsg(errorInfo.getErrorMsg());
         refundOrder.setStatus(refundInfo.getStatus().getCode());
         refundOrderManager.updateById(refundOrder);
     }
@@ -182,7 +145,7 @@ public class RefundAssistService {
         } else if (Objects.equals(PaySignTypeEnum.MD5.getCode(), signType)){
             refundResult.setSign(PaySignUtil.md5Sign(refundOrder, platformInfo.getSignSecret()));
         } else {
-            throw new PayFailureException("未获取到签名方式，请检查");
+            throw new ValidationFailedException("未获取到签名方式，请检查");
         }
         return refundResult;
     }

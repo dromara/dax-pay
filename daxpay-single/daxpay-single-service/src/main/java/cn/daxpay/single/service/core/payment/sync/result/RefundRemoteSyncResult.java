@@ -1,12 +1,12 @@
 package cn.daxpay.single.service.core.payment.sync.result;
 
-import cn.daxpay.single.code.RefundSyncStatusEnum;
+import cn.daxpay.single.core.code.RefundSyncStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
-import static cn.daxpay.single.code.RefundSyncStatusEnum.PROGRESS;
+import static cn.daxpay.single.core.code.RefundSyncStatusEnum.PROGRESS;
 
 /**
  * 支付退款同步结果

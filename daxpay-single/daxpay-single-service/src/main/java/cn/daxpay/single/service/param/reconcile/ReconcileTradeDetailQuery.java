@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.param.reconcile;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
-import cn.daxpay.single.code.ReconcileTradeEnum;
+import cn.daxpay.single.core.code.ReconcileTradeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;

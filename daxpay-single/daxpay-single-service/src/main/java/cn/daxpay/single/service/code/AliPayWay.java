@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.code;
 
-import cn.daxpay.single.code.PayMethodEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayMethodEnum;
+import cn.daxpay.single.core.exception.MethodNotExistException;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
@@ -19,7 +19,7 @@ public class AliPayWay {
 
     // 支付方式
     private static final List<PayMethodEnum> PAY_WAYS = Arrays.asList(PayMethodEnum.WAP, PayMethodEnum.APP, PayMethodEnum.WEB,
-            PayMethodEnum.QRCODE, PayMethodEnum.BARCODE);
+            PayMethodEnum.QRCODE, PayMethodEnum.BARCODE, PayMethodEnum.JSAPI);
 
     /**
      * 根据编码获取
@@ -28,7 +28,7 @@ public class AliPayWay {
         return PAY_WAYS.stream()
             .filter(e -> Objects.equals(code, e.getCode()))
             .findFirst()
-            .orElseThrow(() -> new PayFailureException("不存在的支付方式"));
+            .orElseThrow(() -> new MethodNotExistException("不存在的支付方式"));
     }
 
     /**

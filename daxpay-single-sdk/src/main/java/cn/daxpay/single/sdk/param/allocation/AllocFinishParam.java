@@ -17,11 +17,11 @@ import lombok.EqualsAndHashCode;
 @Data
 public class AllocFinishParam extends DaxPayRequest<AllocationModel> {
 
-    /** 商户分账单号 */
-    private String bizAllocationNo;
-
     /** 分账单号 */
-    private String allocationNo;
+    private String allocNo;
+
+    /** 商户分账单号 */
+    private String bizAllocNo;
 
     /**
      * 方法请求路径

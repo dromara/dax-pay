@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -22,7 +23,7 @@ public class AllocationGroupUnbindParam {
     @Schema(description = "分账组ID")
     private Long groupId;
 
-    @NotEmpty(message = "分账接收方不可为空")
+    @NotBlank(message = "分账接收方不可为空")
     @Schema(description = "分账接收方集合")
     List<Long> receiverIds;
 }

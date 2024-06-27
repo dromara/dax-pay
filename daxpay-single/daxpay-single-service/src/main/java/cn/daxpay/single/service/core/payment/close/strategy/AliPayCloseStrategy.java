@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.close.strategy;
 
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayCloseService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
@@ -27,9 +27,11 @@ public class AliPayCloseStrategy extends AbsPayCloseStrategy {
 
     private final AliPayCloseService aliPayCloseService;
 
+    private AliPayConfig alipayConfig;
+
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**
@@ -37,8 +39,7 @@ public class AliPayCloseStrategy extends AbsPayCloseStrategy {
      */
     @Override
     public void doBeforeCloseHandler() {
-        AliPayConfig config = alipayConfigService.getConfig();
-        alipayConfigService.initConfig(config);
+        this.alipayConfig = alipayConfigService.getConfig();
     }
 
     /**
@@ -46,6 +47,6 @@ public class AliPayCloseStrategy extends AbsPayCloseStrategy {
      */
     @Override
     public void doCloseHandler() {
-        aliPayCloseService.close(this.getOrder());
+        aliPayCloseService.close(this.getOrder(), this.alipayConfig);
     }
 }

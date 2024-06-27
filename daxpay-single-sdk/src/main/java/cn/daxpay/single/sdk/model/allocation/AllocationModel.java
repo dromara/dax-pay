@@ -17,10 +17,10 @@ import lombok.ToString;
 public class AllocationModel extends DaxPayResponseModel {
 
     /** 分账订单号 */
-    private String allocationNo;
+    private String allocNo;
 
     /** 分账订单号 */
-    private String bizAllocationNo;
+    private String bizAllocNo;
 
     /**
      * 分账状态

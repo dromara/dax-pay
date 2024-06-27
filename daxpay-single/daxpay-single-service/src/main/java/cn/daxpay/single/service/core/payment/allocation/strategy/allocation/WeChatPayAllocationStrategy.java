@@ -1,7 +1,9 @@
 package cn.daxpay.single.service.core.payment.allocation.strategy.allocation;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.exception.ConfigNotEnableException;
+import cn.daxpay.single.core.exception.OperationFailException;
+import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayAllocationService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
@@ -37,8 +39,8 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
      * 策略标识
      */
     @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.WECHAT;
+    public String getChannel() {
+        return PayChannelEnum.WECHAT.getCode();
     }
 
     /**
@@ -49,11 +51,11 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
         weChatPayConfig = weChatPayConfigService.getAndCheckConfig();
         // 判断是否支持分账
         if (Objects.equals(weChatPayConfig.getAllocation(),false)){
-            throw new PayFailureException("微信支付配置不支持分账");
+            throw new ConfigNotEnableException("微信支付未开启分账");
         }
         // 如果分账金额为0, 不发起分账
-        if (getAllocationOrder().getAmount() == 0){
-            throw new PayFailureException("微信订单的分账比例不正确或订单金额太小, 无法进行分账");
+        if (getAllocOrder().getAmount() == 0){
+            throw new OperationFailException("微信订单的分账比例不正确或订单金额太小, 无法进行分账");
         }
     }
 
@@ -62,7 +64,7 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void allocation() {
-        weChatPayAllocationService.allocation(getAllocationOrder(), this.getAllocationOrderDetails(), weChatPayConfig);
+        weChatPayAllocationService.allocation(getAllocOrder(), this.getAllocOrderDetails(), weChatPayConfig);
     }
 
     /**
@@ -70,7 +72,7 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void finish() {
-        weChatPayAllocationService.finish(getAllocationOrder(), weChatPayConfig);
+        weChatPayAllocationService.finish(getAllocOrder(), weChatPayConfig);
     }
 
     /**
@@ -78,7 +80,7 @@ public class WeChatPayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public AllocRemoteSyncResult doSync() {
-        return weChatPayAllocationService.sync(this.getAllocationOrder(),this.getAllocationOrderDetails(),weChatPayConfig);
+        return weChatPayAllocationService.sync(this.getAllocOrder(),this.getAllocOrderDetails(),weChatPayConfig);
     }
 
 }

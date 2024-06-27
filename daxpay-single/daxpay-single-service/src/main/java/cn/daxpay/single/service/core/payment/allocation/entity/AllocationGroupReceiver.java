@@ -20,12 +20,12 @@ import lombok.experimental.Accessors;
 @TableName("pay_allocation_group_receiver")
 public class AllocationGroupReceiver extends MpCreateEntity {
 
-    @DbColumn(comment = "分账组ID")
+    @DbColumn(comment = "分账组ID", isNull = false)
     private Long groupId;
 
-    @DbColumn(comment = "接收者ID")
+    @DbColumn(comment = "接收者ID", isNull = false)
     private Long receiverId;
 
-    @DbColumn(comment = "分账比例(万分之多少)")
+    @DbColumn(comment = "分账比例(万分之多少)", length = 5)
     private Integer rate;
 }

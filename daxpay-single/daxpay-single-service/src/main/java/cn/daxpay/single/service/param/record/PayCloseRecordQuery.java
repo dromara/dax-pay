@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.param.record;
 
 import cn.bootx.platform.common.core.rest.param.QueryOrder;
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.bootx.table.modify.annotation.DbColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -38,7 +38,7 @@ public class PayCloseRecordQuery extends QueryOrder {
      * 是否关闭成功
      */
     @DbColumn(comment = "是否关闭成功")
-    private boolean closed;
+    private Boolean closed;
 
     /** 错误码 */
     @DbColumn(comment = "错误码")
@@ -48,7 +48,7 @@ public class PayCloseRecordQuery extends QueryOrder {
     @DbColumn(comment = "错误消息")
     private String errorMsg;
 
-    /** 客户端IP */
-    @DbColumn(comment = "客户端IP")
+    /** 终端ip */
+    @DbColumn(comment = "支付终端ip", length = 64)
     private String clientIp;
 }

@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.task;
 
-import cn.daxpay.single.param.payment.pay.PaySyncParam;
+import cn.daxpay.single.core.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.payment.pay.dao.PayExpiredTimeRepository;

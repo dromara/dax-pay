@@ -2,12 +2,13 @@ package cn.daxpay.single.service.core.payment.sync.service;
 
 import cn.bootx.platform.common.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PayStatusEnum;
-import cn.daxpay.single.code.PaySyncStatusEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.payment.pay.PaySyncParam;
-import cn.daxpay.single.result.sync.PaySyncResult;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PaySyncStatusEnum;
+import cn.daxpay.single.core.exception.*;
+import cn.daxpay.single.core.param.payment.pay.PaySyncParam;
+import cn.daxpay.single.core.result.sync.PaySyncResult;
 import cn.daxpay.single.service.code.PayRepairSourceEnum;
 import cn.daxpay.single.service.code.PayRepairWayEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
@@ -18,11 +19,11 @@ import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.repair.result.PayRepairResult;
 import cn.daxpay.single.service.core.payment.repair.service.PayRepairService;
-import cn.daxpay.single.service.core.payment.sync.factory.PaySyncStrategyFactory;
 import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
 import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
 import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
 import cn.daxpay.single.service.func.AbsPaySyncStrategy;
+import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static cn.daxpay.single.code.PaySyncStatusEnum.*;
+import static cn.daxpay.single.core.code.PaySyncStatusEnum.*;
 
 /**
  * 支付同步服务
@@ -64,10 +64,11 @@ public class PaySyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
-                .orElseThrow(() -> new PayFailureException("支付订单不存在"));
-        // 钱包支付钱包不需要
+                .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
+
+        // 钱包支付钱包不需要同步
         if (PayChannelEnum.WALLET.getCode().equals(payOrder.getChannel())){
-            throw new PayFailureException("订单没有异步支付方式，不需要同步");
+            throw new TradeStatusErrorException("支付订单不需要同步");
         }
         // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);
@@ -85,10 +86,9 @@ public class PaySyncService {
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }
-
         try {
             // 获取支付同步策略类
-            AbsPaySyncStrategy syncPayStrategy = PaySyncStrategyFactory.create(payOrder.getChannel());
+            AbsPaySyncStrategy syncPayStrategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPaySyncStrategy.class);
             syncPayStrategy.initPayParam(payOrder);
             // 执行操作, 获取支付网关同步的结果
             PayRemoteSyncResult payRemoteSyncResult = syncPayStrategy.doSyncStatus();
@@ -96,7 +96,7 @@ public class PaySyncService {
             if (Objects.equals(payRemoteSyncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(payOrder, payRemoteSyncResult, false, null, payRemoteSyncResult.getErrorMsg());
-                throw new PayFailureException(payRemoteSyncResult.getErrorMsg());
+                throw new OperationFailException(payRemoteSyncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
             if (!Objects.equals(payRemoteSyncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
@@ -163,18 +163,15 @@ public class PaySyncService {
          未找到订单可能是发起支付用户未操作、支付已关闭、交易未找到三种情况
          所以需要根据本地订单不同的状态进行特殊处理, 此处视为支付已关闭、交易未找到这两种, 处理方式相同, 都作为支付关闭处理
          */
-        List<String> payCloseEnums = Collections.singletonList(PayStatusEnum.CLOSE.getCode());
+        List<String> payCloseEnums = Arrays.asList(PayStatusEnum.CLOSE.getCode(), PayStatusEnum.CANCEL.getCode());
         List<PaySyncStatusEnum> syncClose = Arrays.asList(CLOSED, NOT_FOUND, NOT_FOUND_UNKNOWN);
         if (payCloseEnums.contains(orderStatus) && syncClose.contains(syncStatus)){
             return true;
         }
 
-        // 退款比对状态不做额外处理, 需要通过退款接口进行处理
-        List<String> orderClose = Arrays.asList(
-                PayStatusEnum.REFUNDED.getCode(),
-                PayStatusEnum.REFUNDING.getCode(),
-                PayStatusEnum.PARTIAL_REFUND.getCode());
-        if (orderClose.contains(orderStatus) || syncStatus.equals(PaySyncStatusEnum.REFUND)){
+        // 退款状态不做额外处理, 需要通过退款接口进行处理
+        if (!Objects.equals(order.getRefundStatus(),PayOrderRefundStatusEnum.NO_REFUND.getCode())
+                || syncStatus.equals(PaySyncStatusEnum.REFUND)){
             return true;
         }
         return false;
@@ -199,7 +196,7 @@ public class PaySyncService {
                 break;
             }
             case REFUND:
-                throw new PayFailureException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
+                throw new TradeStatusErrorException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
             // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
@@ -219,7 +216,7 @@ public class PaySyncService {
                 break;
             }
             default: {
-                throw new PayFailureException("代码有问题");
+                throw new SystemUnknownErrorException("代码有问题");
             }
         }
         return repair;
@@ -246,7 +243,8 @@ public class PaySyncService {
                 .setRepair(repair)
                 .setRepairNo(repairOrderNo)
                 .setErrorMsg(errorMsg)
-                .setClientIp(PaymentContextLocal.get().getRequestInfo().getClientIp());
+                .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
         paySyncRecordService.saveRecord(paySyncRecord);
     }
+
 }

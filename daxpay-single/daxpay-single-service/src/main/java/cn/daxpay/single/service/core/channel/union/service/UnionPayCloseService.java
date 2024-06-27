@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.channel.union.service;
 
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.exception.UnsupportedAbilityException;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.sdk.union.api.UnionPayKit;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UnionPayCloseService {
      * 关闭订单
      */
     public void close(PayOrder payOrder, UnionPayKit unionPayKit) {
-        throw new PayFailureException("云闪付没有关闭订单功能!");
+        throw new UnsupportedAbilityException("云闪付没有关闭订单功能!");
 //        this.verifyErrorMsg(result);
     }
 }

@@ -1,11 +1,11 @@
 package cn.daxpay.single.gateway.controller;
 
 import cn.bootx.platform.common.core.annotation.IgnoreAuth;
-import cn.daxpay.single.code.PaymentApiCode;
-import cn.daxpay.single.result.DaxResult;
-import cn.daxpay.single.service.annotation.PaymentSign;
+import cn.daxpay.single.core.code.PaymentApiCode;
+import cn.daxpay.single.core.result.DaxResult;
+import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
-import cn.daxpay.single.util.DaxRes;
+import cn.daxpay.single.core.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UniReconcileController {
 
-    @PaymentSign
+    @PaymentVerify
     @InitPaymentContext(PaymentApiCode.PAY)
     @Operation(summary = "下载指定日期的资金流水")
     @PostMapping("/pay")

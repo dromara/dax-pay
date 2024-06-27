@@ -12,6 +12,7 @@ import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -35,7 +36,7 @@ import java.util.Objects;
 public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<AliPayConfigDto> {
 
     /** 支付宝商户appId */
-    @DbColumn(comment = "支付宝商户appId")
+    @DbColumn(comment = "支付宝商户appId", length = 50)
     private String appId;
 
     /** 是否启用, 只影响支付和退款操作 */
@@ -47,8 +48,8 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     private Boolean allocation;
 
     /** 支付限额 */
-    @DbColumn(comment = "支付限额")
-    private Integer singleLimit;
+    @DbColumn(comment = "支付限额", length = 15)
+    private Integer limitAmount;
 
     /**
      * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
@@ -56,7 +57,7 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
      * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
      * 3. 调用顺序 支付宝网关 -> 本网关进行处理 -> 发送消息通知业务系统
      */
-    @DbColumn(comment = "异步通知页面路径")
+    @DbColumn(comment = "异步通知接收路径", length = 200)
     private String notifyUrl;
 
     /**
@@ -65,22 +66,26 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
      * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
      * 3. 消息顺序 支付宝网关 -> 本网关进行处理 -> 重定向到业务系统中
      */
-    @DbColumn(comment = "同步通知页面路径")
+    @DbColumn(comment = "同步通知页面路径", length = 200)
     private String returnUrl;
 
     /** 支付网关地址 */
-    @DbColumn(comment = "支付网关地址")
+    @DbColumn(comment = "支付网关地址", length = 200)
     private String serverUrl;
+
+    /** 授权回调地址 */
+    @DbColumn(comment = "授权回调地址", length = 200)
+    private String redirectUrl;
 
     /**
      * 认证类型 证书/公钥
      * @see AliPayCode#AUTH_TYPE_KEY
      */
-    @DbColumn(comment = "认证类型")
+    @DbColumn(comment = "认证类型", length = 20)
     private String authType;
 
     /** 签名类型 RSA2 */
-    @DbColumn(comment = "签名类型 RSA2")
+    @DbColumn(comment = "签名类型 RSA2", length = 20)
     public String signType;
 
     /**
@@ -139,6 +144,12 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
     @DbColumn(comment = "备注")
     private String remark;
 
+    @Override
+    public AliPayConfigDto toDto() {
+        return AlipayConvert.CONVERT.convert(this);
+    }
+
+
     public Boolean getAllocation() {
         return Objects.equals(allocation,true);
     }
@@ -147,9 +158,8 @@ public class AliPayConfig extends MpBaseEntity implements EntityBaseFunction<Ali
         return Objects.equals(enable,true);
     }
 
-    @Override
-    public AliPayConfigDto toDto() {
-        return AlipayConvert.CONVERT.convert(this);
+    public String getRedirectUrl() {
+        return StrUtil.removeSuffix(redirectUrl, "/");
     }
 
 }

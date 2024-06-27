@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.sync.strategy.pay;
 
 
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPaySyncService;
@@ -30,9 +30,9 @@ public class AliPaySyncStrategy extends AbsPaySyncStrategy {
     /**
      * 策略标识
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**
@@ -40,16 +40,7 @@ public class AliPaySyncStrategy extends AbsPaySyncStrategy {
      */
     @Override
     public PayRemoteSyncResult doSyncStatus() {
-        this.initAlipayConfig();
-        return alipaySyncService.syncPayStatus(this.getOrder());
-    }
-
-    /**
-     * 初始化支付宝配置信息
-     */
-    private void initAlipayConfig() {
-        // 检查并获取支付宝支付配置
         AliPayConfig config = alipayConfigService.getConfig();
-        alipayConfigService.initConfig(config);
+        return alipaySyncService.syncPayStatus(this.getOrder(),config);
     }
 }

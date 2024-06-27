@@ -37,6 +37,6 @@ public class QueryRefundOrderTest {
 
         DaxPayResult<RefundOrderModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
-        
+
     }
 }

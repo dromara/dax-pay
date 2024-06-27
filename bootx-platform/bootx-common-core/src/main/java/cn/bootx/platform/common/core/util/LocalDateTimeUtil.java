@@ -19,7 +19,7 @@ public class LocalDateTimeUtil extends cn.hutool.core.date.LocalDateTimeUtil {
     /**
      * 是否在指定的时间范围内
      */
-    public boolean between(LocalDateTime now, LocalDateTime start, LocalDateTime end) {
+    public boolean inBetween(LocalDateTime now, LocalDateTime start, LocalDateTime end) {
         return ge(now, start) && le(now, end);
     }
 

@@ -35,7 +35,7 @@ public class WalletConfig extends MpBaseEntity implements EntityBaseFunction<Wal
 
     /** 单次支付最多多少金额 */
     @DbColumn(comment = "单次支付最多多少金额 ")
-    private Integer singleLimit;
+    private Integer limitAmount;
 
     /** 可用支付方式 */
     @DbColumn(comment = "可用支付方式")

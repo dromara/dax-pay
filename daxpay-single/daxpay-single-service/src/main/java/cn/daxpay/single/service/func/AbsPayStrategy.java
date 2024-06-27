@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.func;
 
-import cn.daxpay.single.param.payment.pay.PayParam;
+import cn.daxpay.single.core.param.payment.pay.PayParam;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import lombok.Getter;
 import lombok.Setter;

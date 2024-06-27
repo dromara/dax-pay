@@ -29,8 +29,6 @@ import static cn.daxpay.single.service.code.AliPayCode.AUTH_TYPE_KEY;
 @RequiredArgsConstructor
 public class AliPayNoticeReceiverService {
 
-    private final AllocationCallbackService allocationCallbackService;
-
     private final AliPayConfigService aliPayConfigService;
 
     /**

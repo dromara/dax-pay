@@ -27,17 +27,17 @@ import lombok.experimental.Accessors;
 public class PayMethodInfo extends MpBaseEntity implements EntityBaseFunction<PayMethodInfoDto> {
 
     /** 需要与系统中配置的枚举一致 */
-    @DbColumn(comment = "代码")
+    @DbColumn(comment = "代码", length = 20, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String code;
 
     /** 需要与系统中配置的枚举一致 */
-    @DbColumn(comment = "名称")
+    @DbColumn(comment = "名称", length = 100, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String name;
 
     /** 备注 */
-    @DbColumn(comment = "备注")
+    @DbColumn(comment = "备注", length = 200)
     private String remark;
 
     public static PayMethodInfoDto convert(PayMethodInfo in) {

@@ -1,21 +1,21 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.ReconcileTradeEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
+import cn.daxpay.single.core.code.ReconcileTradeEnum;
+import cn.daxpay.single.core.exception.ReconciliationFailException;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.dao.AliReconcileBillDetailManager;
 import cn.daxpay.single.service.core.channel.alipay.dao.AliReconcileBillTotalManager;
+import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliReconcileBillDetail;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliReconcileBillTotal;
 import cn.daxpay.single.service.core.order.reconcile.dao.ReconcileFileManager;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileFile;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOrder;
 import cn.daxpay.single.service.core.order.reconcile.entity.ReconcileOutTrade;
-import cn.daxpay.single.util.PayUtil;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.csv.CsvReader;
@@ -23,12 +23,13 @@ import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayDataDataserviceBillDownloadurlQueryModel;
-import com.ijpay.alipay.AliPayApi;
+import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
+import com.alipay.api.response.AlipayDataDataserviceBillDownloadurlQueryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.dromara.x.file.storage.core.FileInfo;
@@ -57,6 +58,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AliPayReconcileService {
 
+    private final AliPayConfigService aliPayConfigService;
+
     private final AliReconcileBillDetailManager reconcileBillDetailManager;
 
     private final AliReconcileBillTotalManager reconcileBillTotalManager;
@@ -71,20 +74,23 @@ public class AliPayReconcileService {
      *
      * @param date        对账日期 yyyy-MM-dd 格式
      * @param recordOrder 对账单对象
+     * @param config
      */
     @SneakyThrows
     @Transactional(rollbackFor = Exception.class)
-    public void downAndSave(String date, ReconcileOrder recordOrder){
-
+    public void downAndSave(String date, ReconcileOrder recordOrder, AliPayConfig config){
         try {
+            AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
             AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
             model.setBillDate(date);
             model.setBillType("trade");
-            val response = AliPayApi.billDownloadUrlQueryToResponse(model);
+            AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
+            request.setBizModel(model);
+            AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient.execute(request);
             // 判断返回结果
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 log.error("获取支付宝对账单失败: {}", response.getSubMsg());
-                throw new PayFailureException(response.getSubMsg());
+                throw new ReconciliationFailException(response.getSubMsg());
             }
 
             // 获取对账单下载地址并下载
@@ -239,10 +245,9 @@ public class AliPayReconcileService {
      */
     private void saveOriginalFile(ReconcileOrder reconcileOrder, byte[] bytes) {
         // 将原始文件进行保存
-        PayChannelEnum channelEnum = PayChannelEnum.findByCode(reconcileOrder.getChannel());
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
-        String fileName = StrUtil.format("交易对账单-{}-{}.csv", channelEnum.getName(),date);
+        String fileName = StrUtil.format("交易对账单-支付宝-{}.csv",date);
         UploadPretreatment uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {
             uploadPretreatment.setOriginalFilename(fileName);

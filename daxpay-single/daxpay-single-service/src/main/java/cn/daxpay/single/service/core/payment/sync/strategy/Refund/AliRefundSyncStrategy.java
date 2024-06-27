@@ -1,9 +1,7 @@
 package cn.daxpay.single.service.core.payment.sync.strategy.Refund;
 
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PaySyncStatusEnum;
-import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
-import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPaySyncService;
 import cn.daxpay.single.service.core.payment.sync.result.RefundRemoteSyncResult;
 import cn.daxpay.single.service.func.AbsRefundSyncStrategy;
@@ -23,16 +21,14 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliRefundSyncStrategy extends AbsRefundSyncStrategy {
 
-    private final AliPayConfigService alipayConfigService;
-
     private final AliPaySyncService aliPaySyncService;;
 
     /**
      * 策略标识
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**
@@ -42,8 +38,6 @@ public class AliRefundSyncStrategy extends AbsRefundSyncStrategy {
      */
     @Override
     public RefundRemoteSyncResult doSyncStatus() {
-        AliPayConfig config = alipayConfigService.getConfig();
-        alipayConfigService.initConfig(config);
         return aliPaySyncService.syncRefundStatus(this.getRefundOrder());
     }
 }

@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.repair.strategy.pay;
 
-import cn.daxpay.single.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayCloseService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
@@ -26,12 +26,14 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
 
     private final AliPayConfigService aliPayConfigService;
 
+    private AliPayConfig config;
+
     /**
      * 策略标识
      */
-    @Override
-    public PayChannelEnum getChannel() {
-        return PayChannelEnum.ALI;
+     @Override
+    public String getChannel() {
+        return PayChannelEnum.ALI.getCode();
     }
 
     /**
@@ -39,8 +41,7 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doBeforeHandler() {
-        AliPayConfig config = aliPayConfigService.getConfig();
-        aliPayConfigService.initConfig(config);
+        this.config = aliPayConfigService.getConfig();
     }
 
 
@@ -49,6 +50,6 @@ public class AliPayRepairStrategy extends AbsPayRepairStrategy {
      */
     @Override
     public void doCloseRemoteHandler() {
-        closeService.close(this.getOrder());
+        closeService.close(this.getOrder(), this.config);
     }
 }

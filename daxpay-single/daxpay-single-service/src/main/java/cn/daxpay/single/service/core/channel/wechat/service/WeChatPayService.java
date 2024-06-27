@@ -4,10 +4,11 @@ import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.exception.RetryableException;
-import cn.daxpay.single.code.PayMethodEnum;
-import cn.daxpay.single.exception.pay.PayFailureException;
-import cn.daxpay.single.param.payment.pay.PayParam;
-import cn.daxpay.single.result.sync.PaySyncResult;
+import cn.daxpay.single.core.code.PayMethodEnum;
+import cn.daxpay.single.core.exception.*;
+import cn.daxpay.single.core.param.payment.pay.PayParam;
+import cn.daxpay.single.core.result.sync.PaySyncResult;
+import cn.daxpay.single.core.util.PayUtil;
 import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.code.WeChatPayWay;
 import cn.daxpay.single.service.common.context.PayLocal;
@@ -17,7 +18,6 @@ import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
 import cn.daxpay.single.service.param.channel.wechat.WeChatPayParam;
 import cn.daxpay.single.service.sdk.wechat.BarPayModel;
-import cn.daxpay.single.util.PayUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static cn.daxpay.single.code.PaySyncStatusEnum.PROGRESS;
+import static cn.daxpay.single.core.code.PaySyncStatusEnum.PROGRESS;
 import static com.ijpay.wxpay.model.UnifiedOrderModel.UnifiedOrderModelBuilder;
 import static com.ijpay.wxpay.model.UnifiedOrderModel.builder;
 
@@ -62,21 +62,21 @@ public class WeChatPayService {
     public void validation(PayParam payParam, WeChatPayConfig weChatPayConfig) {
         List<String> payWays = weChatPayConfig.getPayWays();
         if (CollUtil.isEmpty(payWays)){
-            throw new PayFailureException("未配置微信支付方式");
+            throw new ConfigNotEnableException("未配置微信支付方式");
         }
 
         PayMethodEnum payMethodEnum = Optional.ofNullable(WeChatPayWay.findByCode(payParam.getMethod()))
-                .orElseThrow(() -> new PayFailureException("非法的微信支付类型"));
+                .orElseThrow(() -> new MethodNotExistException("非法的微信支付类型"));
         if (!payWays.contains(payMethodEnum.getCode())) {
-            throw new PayFailureException("该微信支付方式不可用");
+            throw new MethodNotEnableException("该微信支付方式不可用");
         }
         // 支付金额是否超限
-        if (payParam.getAmount() > weChatPayConfig.getSingleLimit()) {
-            throw new PayFailureException("微信支付金额超限");
+        if (payParam.getAmount() > weChatPayConfig.getLimitAmount()) {
+            throw new AmountExceedLimitException("微信支付金额超限");
         }
         // 是否支持分账
         if (Objects.equals(payParam.getAllocation(),true) && !Objects.equals(weChatPayConfig.getAllocation(),true)) {
-            throw new PayFailureException("未开启分账配置");
+            throw new ConfigNotEnableException("未开启分账配置");
         }
     }
 
@@ -203,14 +203,18 @@ public class WeChatPayService {
         // 支付失败
         if (!WxPayKit.codeIsOk(returnCode)) {
             String errorMsg = result.get(WeChatPayCode.ERR_CODE_DES);
-            throw new PayFailureException(errorMsg);
+            throw new TradeFailException(errorMsg);
         }
 
         String resultCode = result.get(WeChatPayCode.RESULT_CODE);
         String errCode = result.get(WeChatPayCode.ERR_CODE);
         // 支付成功处理,
         if (Objects.equals(resultCode, WeChatPayCode.PAY_SUCCESS)) {
-            payInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID)).setComplete(true);
+            String timeEnd = result.get(WeChatPayCode.TIME_END);
+            LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
+            payInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID))
+                    .setCompleteTime(time)
+                    .setComplete(true);
             return;
         }
         // 支付中, 发起轮训同步
@@ -222,13 +226,13 @@ public class WeChatPayService {
         }
         // 支付撤销
         if (Objects.equals(resultCode, WeChatPayCode.PAY_REVOKED)) {
-            throw new PayFailureException("用户已撤销支付");
+            throw new TradeStatusErrorException("用户已撤销支付");
         }
         // 支付失败
         if (Objects.equals(resultCode, WeChatPayCode.TRADE_PAYERROR)
                 || Objects.equals(resultCode, WeChatPayCode.PAY_FAIL)) {
             String errorMsg = result.get(WeChatPayCode.ERR_CODE_DES);
-            throw new PayFailureException(errorMsg);
+            throw new TradeFailException(errorMsg);
         }
     }
 
@@ -265,7 +269,7 @@ public class WeChatPayService {
                 errorMsg = result.get(WeChatPayCode.RETURN_MSG);
             }
             log.error("支付失败 {}", errorMsg);
-            throw new PayFailureException(errorMsg);
+            throw new TradeFailException(errorMsg);
         }
     }
 

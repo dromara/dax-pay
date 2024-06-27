@@ -53,16 +53,6 @@
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-websocket</artifactId>
         </dependency>
-        <!-- 钉钉平台 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-starter-dingtalk</artifactId>
-        </dependency>
-        <!-- 微信公众平台 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-starter-wechat</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>

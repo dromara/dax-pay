@@ -1,9 +1,9 @@
 package cn.daxpay.single.service.param.record;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PaySyncStatusEnum;
-import cn.daxpay.single.code.RefundSyncStatusEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PaySyncStatusEnum;
+import cn.daxpay.single.core.code.RefundSyncStatusEnum;
 import cn.daxpay.single.service.code.PaymentTypeEnum;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;

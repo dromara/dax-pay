@@ -27,29 +27,17 @@ import lombok.experimental.Accessors;
 public class PayChannelConfig extends MpBaseEntity implements EntityBaseFunction<PayChannelConfigDto> {
 
     /** 需要与系统中配置的枚举一致 */
-    @DbColumn(comment = "代码")
+    @DbColumn(comment = "代码", length = 20, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String code;
 
     /** 需要与系统中配置的枚举一致 */
-    @DbColumn(comment = "名称")
+    @DbColumn(comment = "名称", length = 20, isNull = false)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String name;
 
-    /** ICON图片 */
-    @DbColumn(comment = "ICON图片")
-    private Long iconId;
-
-    /** 卡牌背景色 */
-    @DbColumn(comment = "卡牌背景色")
-    private String bgColor;
-
-    /** 是否启用 */
-    @DbColumn(comment = "是否启用")
-    private Boolean enable;
-
     /** 备注 */
-    @DbColumn(comment = "备注")
+    @DbColumn(comment = "备注", length = 200)
     private String remark;
 
     /**

@@ -29,7 +29,7 @@ public class WalletConfigParam {
 
     /** 单次支付最多少金额 */
     @Schema(description = "单次支付最多少金额")
-    private Integer singleLimit;
+    private Integer limitAmount;
 
     /** 备注 */
     @Schema(description = "备注")

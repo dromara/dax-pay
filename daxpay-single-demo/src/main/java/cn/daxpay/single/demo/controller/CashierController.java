@@ -52,13 +52,13 @@ public class CashierController {
         return Res.ok(cashierService.getUniCashierUrl());
     }
 
-    @Operation(summary = "获取微信授权链接")
+    @Operation(summary = "获取微信授权链接, 用于获取OpenId来发起JsApi支付")
     @GetMapping("getWxAuthUrl")
     public ResResult<String> getWxAuthUrl(){
         return Res.ok(cashierService.getWxAuthUrl());
     }
 
-    @Operation(summary = "微信授权回调页面")
+    @Operation(summary = "微信授权回调接收, 然后携带openid重定向到统一收银台中")
     @GetMapping("/wxAuthCallback")
     public ModelAndView wxAuthCallback(@RequestParam("code") String code){
         return new ModelAndView("redirect:" + cashierService.wxAuthCallback(code));

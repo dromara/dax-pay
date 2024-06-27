@@ -2,9 +2,10 @@ package cn.daxpay.single.service.param.order;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.bootx.platform.common.core.rest.param.QueryOrder;
-import cn.daxpay.single.code.PayChannelEnum;
-import cn.daxpay.single.code.PayOrderAllocStatusEnum;
-import cn.daxpay.single.code.PayStatusEnum;
+import cn.daxpay.single.core.code.PayChannelEnum;
+import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
+import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
+import cn.daxpay.single.core.code.PayStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -72,11 +73,18 @@ public class PayOrderQuery extends QueryOrder {
     private String status;
 
     /**
+     * 退款状态
+     * @see PayOrderRefundStatusEnum
+     */
+    @Schema(description = "退款状态")
+    private String refundStatus;
+
+    /**
      * 分账状态
      * @see PayOrderAllocStatusEnum
      */
     @Schema(description = "分账状态")
-    private String allocationStatus;
+    private String allocStatus;
 
     /** 错误码 */
     @Schema(description = "错误码")
