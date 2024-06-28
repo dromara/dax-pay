@@ -4,7 +4,7 @@ import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -28,7 +28,7 @@ public class AllocationAutoStartTask implements Job {
     public void execute(JobExecutionContext jobExecutionContext) {
         for (PayOrder payOrder : payOrderManager.findAutoAllocation()) {
             AllocationParam param = new AllocationParam();
-            param.setBizAllocNo(OrderNoGenerateUtil.allocation());
+            param.setBizAllocNo(TradeNoGenerateUtil.allocation());
             try {
                 allocationService.allocation(param, payOrder);
             } catch (Exception e) {

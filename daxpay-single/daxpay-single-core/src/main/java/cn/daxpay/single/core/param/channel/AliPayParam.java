@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
+ * 支付宝支付参数
  * @author xxm
  * @since 2021/2/27
  */

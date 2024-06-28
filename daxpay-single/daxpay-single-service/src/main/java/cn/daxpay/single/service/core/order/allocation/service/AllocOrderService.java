@@ -7,7 +7,7 @@ import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.core.param.payment.allocation.AllocReceiverParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocOrderDetailManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
@@ -159,7 +159,7 @@ public class AllocOrderService {
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setOutOrderNo(payOrder.getOutOrderNo())
                 .setTitle(payOrder.getTitle())
-                .setAllocNo(OrderNoGenerateUtil.allocation())
+                .setAllocNo(TradeNoGenerateUtil.allocation())
                 .setBizAllocNo(param.getBizAllocNo())
                 .setChannel(payOrder.getChannel())
                 .setDescription(param.getDescription())

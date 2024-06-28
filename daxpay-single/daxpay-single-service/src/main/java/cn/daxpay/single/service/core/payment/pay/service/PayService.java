@@ -1,5 +1,6 @@
 package cn.daxpay.single.service.core.payment.pay.service;
 
+import cn.daxpay.single.core.exception.TradeProcessingException;
 import cn.daxpay.single.core.param.payment.pay.PayParam;
 import cn.daxpay.single.core.result.pay.PayResult;
 import cn.daxpay.single.service.common.context.PayLocal;
@@ -57,8 +58,8 @@ public class PayService {
         // 加锁
         LockInfo lock = lockTemplate.lock("payment:pay:" + bizOrderNo,10000,200);
         if (Objects.isNull(lock)){
-            payResult.setMsg("正在支付中，请勿重复支付");
-            return payResult;
+            log.warn("正在支付中，请勿重复支付");
+            throw new TradeProcessingException("正在支付中，请勿重复支付");
         }
         try {
             // 查询并检查订单

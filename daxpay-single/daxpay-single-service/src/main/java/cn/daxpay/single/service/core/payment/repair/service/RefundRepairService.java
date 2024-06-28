@@ -17,7 +17,7 @@ import cn.daxpay.single.service.core.payment.repair.result.RefundRepairResult;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.core.record.repair.entity.PayRepairRecord;
 import cn.daxpay.single.service.core.record.repair.service.PayRepairRecordService;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +80,7 @@ public class RefundRepairService {
             }
 
             // 设置修复ID并保存修复记录
-            repairResult.setRepairNo(OrderNoGenerateUtil.repair());
+            repairResult.setRepairNo(TradeNoGenerateUtil.repair());
             // 支付修复记录
             PayRepairRecord payRepairRecord = this.payRepairRecord(payOrder, repairType, repairResult);
             // 退款修复记录

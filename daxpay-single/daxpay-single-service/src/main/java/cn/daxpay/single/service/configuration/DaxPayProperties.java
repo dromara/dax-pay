@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.configuration;
 
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,12 +27,12 @@ public class DaxPayProperties {
 
     public void setMachineNo(String machineNo) {
         this.machineNo = machineNo;
-        OrderNoGenerateUtil.setMachineNo(machineNo);
+        TradeNoGenerateUtil.setMachineNo(machineNo);
     }
 
     public void setEnv(String env) {
         this.env = env;
-        OrderNoGenerateUtil.setEnv(env);
+        TradeNoGenerateUtil.setEnv(env);
     }
 
     public String getFrontH5Url() {

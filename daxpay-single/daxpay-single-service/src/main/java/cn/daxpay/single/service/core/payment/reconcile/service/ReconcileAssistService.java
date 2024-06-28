@@ -147,7 +147,7 @@ public class ReconcileAssistService {
             ReconcileOutTrade outDetail = outDetailMap.get(localTrade.getTradeNo());
             if (Objects.isNull(outDetail)){
                 ReconcileDiff diffRecord = new ReconcileDiff()
-                        .setDiffType(ReconcileDiffTypeEnum.LOCAL_NOT_EXISTS.getCode())
+                        .setDiffType(ReconcileDiffTypeEnum.REMOTE_NOT_EXISTS.getCode())
                         .setTradeNo(localTrade.getTradeNo())
                         .setReconcileId(reconcileOrder.getId())
                         .setReconcileNo(reconcileOrder.getReconcileNo())

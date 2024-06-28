@@ -27,20 +27,20 @@ public class PayReturnController {
     private final PayReturnService payReturnService;
 
     @Operation(summary = "支付宝同步跳转通知")
-    @GetMapping("/pay/alipay")
+    @GetMapping("/alipay")
     public ModelAndView alipay(AliPayReturnParam param){
         String url = payReturnService.alipay(param);
         return new ModelAndView("redirect:" + url);
     }
 
     @Operation(summary = "微信同步跳转通知")
-    @GetMapping("/pay/wechat")
+    @GetMapping("/wechat")
     public ModelAndView wechat(){
         return null;
     }
 
     @Operation(summary = "云闪付同步跳转通知")
-    @PostMapping("/pay/union")
+    @PostMapping("/union")
     public ModelAndView union(UnionPayReturnParam param){
         String url = payReturnService.union(param);
         return new ModelAndView("redirect:" + url);

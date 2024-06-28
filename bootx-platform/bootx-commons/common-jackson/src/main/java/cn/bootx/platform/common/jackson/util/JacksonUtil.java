@@ -21,7 +21,11 @@ public class JacksonUtil {
 
     private static boolean typeObjectMapperFlag;
 
+    private static boolean ignoreNullObjectMapperFlag;
+
     private static ObjectMapper objectMapper;
+
+    private static ObjectMapper ignoreNullObjectMapper;
 
     private static ObjectMapper typeObjectMapper;
 
@@ -41,12 +45,28 @@ public class JacksonUtil {
         JacksonUtil.typeObjectMapper = typeObjectMapper;
     }
 
+    public static void setIgnoreNullObjectMapper(ObjectMapper ignoreNullObjectMapper) {
+        if (ignoreNullObjectMapperFlag) {
+            throw new RepetitiveOperationException();
+        }
+        ignoreNullObjectMapperFlag = true;
+        JacksonUtil.ignoreNullObjectMapper = ignoreNullObjectMapper;
+    }
+
     /**
      * 对象序列化为json字符串,转换异常将被抛出
      */
     public static String toJson(Object o) {
+        return toJson(o,false);
+    }
+
+    public static String toJson(Object o, boolean ignoreNull) {
         try {
-            return objectMapper.writeValueAsString(o);
+            if (ignoreNull){
+                return ignoreNullObjectMapper.writeValueAsString(o);
+            }else {
+                return objectMapper.writeValueAsString(o);
+            }
         }
         catch (JsonProcessingException e) {
             throw new RuntimeException("json序列化失败");
@@ -70,8 +90,19 @@ public class JacksonUtil {
      * JSON字符串转为实体类对象，转换异常将被抛出
      */
     public static <T> T toBean(String content, TypeReference<? extends T> ref) {
+        return toBean(content, ref,false);
+    }
+
+    /**
+     * JSON字符串转为实体类对象，转换异常将被抛出
+     */
+    public static <T> T toBean(String content, TypeReference<? extends T> ref, boolean ignoreNull) {
         try {
-            return objectMapper.readValue(content, ref);
+            if (ignoreNull){
+                return ignoreNullObjectMapper.readValue(content, ref);
+            } else {
+                return objectMapper.readValue(content, ref);
+            }
         }
         catch (JsonProcessingException e) {
             log.error(e.getMessage(), e);

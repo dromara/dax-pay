@@ -5,7 +5,7 @@ import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.exception.OperationFailException;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import cn.daxpay.single.service.code.ReconcileFileTypeEnum;
 import cn.daxpay.single.service.code.ReconcileResultEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -79,7 +79,7 @@ public class ReconcileService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileOrder create(LocalDate date, String channel) {
         ReconcileOrder order = new ReconcileOrder()
-                .setReconcileNo(OrderNoGenerateUtil.reconciliation())
+                .setReconcileNo(TradeNoGenerateUtil.reconciliation())
                 .setChannel(channel)
                 .setDate(date);
         reconcileOrderManager.save(order);
