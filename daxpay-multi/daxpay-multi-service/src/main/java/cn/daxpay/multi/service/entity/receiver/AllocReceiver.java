@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.entity.receiver;
 
 import cn.daxpay.multi.core.enums.AllocReceiverTypeEnum;
 import cn.daxpay.multi.core.enums.AllocRelationTypeEnum;
-import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -25,7 +25,7 @@ public class AllocReceiver extends MchEntity {
 
     /**
      * 所属通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channel;

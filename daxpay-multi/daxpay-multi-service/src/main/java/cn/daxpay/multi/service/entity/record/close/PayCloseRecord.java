@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.entity.record.close;
 
-import cn.daxpay.multi.core.enums.PayChannelEnum;
-import cn.daxpay.multi.core.enums.PayCloseTypeEnum;
+import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.core.enums.CloseTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +25,7 @@ public class PayCloseRecord extends MchEntity {
 
     /**
      * 关闭的支付通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 
@@ -34,7 +34,7 @@ public class PayCloseRecord extends MchEntity {
 
     /**
      * 关闭类型
-     * @see PayCloseTypeEnum
+     * @see CloseTypeEnum
      */
     private String closeType;
 

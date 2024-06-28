@@ -1,7 +1,9 @@
 package cn.daxpay.multi.service.common.tenant;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.multi.core.context.MchTenantContextHolder;
 import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.hutool.core.util.ClassUtil;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import net.sf.jsqlparser.expression.Expression;
@@ -21,8 +23,9 @@ public class MchTenantLineHandler  implements TenantLineHandler {
      */
     @Override
     public Expression getTenantId() {
-        // TODO 从中获取当前用户的商户
-        return new StringValue("");
+        // 从中获取当前用户的商户
+        String mchNo = MchTenantContextHolder.getMchNo();
+        return new StringValue(mchNo);
     }
 
     /**
@@ -37,7 +40,7 @@ public class MchTenantLineHandler  implements TenantLineHandler {
     /**
      * 是否忽略租户拦截
      * 1. 不是继承 MchEntity 的实体类，默认忽略
-     * 2. 方法或类上添加了忽略注解的, 忽略拦截
+     * 2. 方法或类上添加了忽略注解的, 忽略拦截, 通过注解自动实现
      * 3. 未被MP管理的实体类，默认忽略
      * 4. 管理端运营人员不需要隔离数据
      */
@@ -49,10 +52,10 @@ public class MchTenantLineHandler  implements TenantLineHandler {
             return true;
         }
         // 判断实体类上是否为 MchEntity 子类
-        if (!tableInfo.getEntityType().isAssignableFrom(MchEntity.class)){
+        if (!ClassUtil.isAssignable(MchEntity.class, tableInfo.getEntityType())){
             return true;
         }
-        // 管理端运营人员不需要隔离数据
+        // TODO 管理端运营人员不需要隔离数据
 
         return false;
     }

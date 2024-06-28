@@ -49,5 +49,11 @@
             <artifactId>common-spring</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+        <!-- hutool 缓存 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-cache</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
     </dependencies>
 </project>

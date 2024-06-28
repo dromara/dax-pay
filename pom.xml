@@ -15,6 +15,7 @@
         <module>bootx-platform</module>
         <module>daxpay-multi</module>
         <module>daxpay-multi-channel</module>
+        <module>daxpay-multi-sdk</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

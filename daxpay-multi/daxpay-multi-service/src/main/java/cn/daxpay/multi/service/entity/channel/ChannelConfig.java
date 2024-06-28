@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.entity.channel;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.anno.BigField;
-import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import cn.daxpay.multi.service.convert.channel.ChannelConfigConvert;
 import cn.daxpay.multi.service.result.channel.ChannelConfigResult;
@@ -24,7 +24,7 @@ public class ChannelConfig extends MchEntity implements ToResult<ChannelConfigRe
 
     /**
      * 支付通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

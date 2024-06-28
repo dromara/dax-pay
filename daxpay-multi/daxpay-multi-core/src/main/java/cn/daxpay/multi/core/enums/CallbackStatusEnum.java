@@ -11,13 +11,16 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum CallbackStatusEnum {
-
-    SUCCESS("success","成功"),
-    FAIL("fail","失败"),
-    IGNORE("ignore","忽略"),
-    EXCEPTION("exception","异常"),
-    NOT_FOUND("not_found","未找到");
+    /** 成功 */
+    SUCCESS("success"),
+    /** 失败 */
+    FAIL("fail"),
+    /** 忽略 */
+    IGNORE("ignore"),
+    /** 异常 */
+    EXCEPTION("exception"),
+    /** 未找到 */
+    NOT_FOUND("not_found");
 
     private final String code;
-    private final String name;
 }

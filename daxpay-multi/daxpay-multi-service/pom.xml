@@ -40,6 +40,13 @@
             <version>4.5.0</version>
         </dependency>
 
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- swagger -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-swagger</artifactId>

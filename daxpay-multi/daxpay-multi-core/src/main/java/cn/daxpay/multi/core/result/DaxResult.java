@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.slf4j.MDC;
 
+import java.time.LocalDateTime;
+
 /**
  * 支付通用响应参数
  * @author xxm
@@ -32,6 +34,9 @@ public class DaxResult<T>{
     /** 签名 */
     @Schema(description = "签名")
     private String sign;
+
+    @Schema(description = "响应时间")
+    private LocalDateTime resTime = LocalDateTime.now();
 
     /** 追踪ID */
     private String traceId = MDC.get(CommonCode.TRACE_ID);

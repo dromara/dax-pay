@@ -10,6 +10,11 @@
     </parent>
 
     <artifactId>daxpay-multi-alipay</artifactId>
+    <description>支付宝官方支付通道</description>
+
+    <properties>
+        <alipay.version>4.39.104.ALL</alipay.version>
+    </properties>
 
     <dependencies>
         <!-- web框架 -->
@@ -23,6 +28,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- 支付宝SDK -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>${alipay.version}</version>
         </dependency>
 
         <!-- 支付核心包 -->

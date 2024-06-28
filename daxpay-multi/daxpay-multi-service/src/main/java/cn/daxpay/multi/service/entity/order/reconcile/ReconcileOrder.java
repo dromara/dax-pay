@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.entity.order.reconcile;
 
-import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -30,7 +30,7 @@ public class ReconcileOrder extends MchEntity {
 
     /**
      * 通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

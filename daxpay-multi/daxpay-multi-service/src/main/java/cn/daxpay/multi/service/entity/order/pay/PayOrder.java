@@ -1,7 +1,13 @@
 package cn.daxpay.multi.service.entity.order.pay;
 
-import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
+import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
+import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.convert.order.pay.PayOrderConvert;
+import cn.daxpay.multi.service.result.order.pay.PayOrderResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +27,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_order")
-public class PayOrder extends MchEntity {
+public class PayOrder extends MchEntity implements ToResult<PayOrderResult> {
 
     /** 商户订单号 */
     private String bizOrderNo;
@@ -46,7 +52,7 @@ public class PayOrder extends MchEntity {
 
     /**
      * 支付通道, 以最后一次为准
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 
@@ -59,23 +65,25 @@ public class PayOrder extends MchEntity {
     private BigDecimal amount;
 
     /** 可退金额(元) */
-    private Integer refundableBalance;
+    private BigDecimal refundableBalance;
 
     /**
      * 支付状态
+     * @see PayStatusEnum
      */
-    private String payStatus;
+    private String status;
 
     /**
      * 退款状态
+     * @see PayRefundStatusEnum
      */
     private String refundStatus;
 
     /**
      * 分账状态
+     * @see PayAllocStatusEnum
      */
     private String allocStatus;
-
 
     /** 过期时间 */
     private LocalDateTime expiredTime;
@@ -95,10 +103,7 @@ public class PayOrder extends MchEntity {
     private String notifyUrl;
 
     /**
-     * 附加参数 以最后一次为准
-     * @see AliPayParam
-     * @see WeChatPayParam
-     * @see WalletPayParam
+     * 通道附加参数序列化为Json字符串 以最后一次为准
      */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String extraParam;
@@ -106,6 +111,10 @@ public class PayOrder extends MchEntity {
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String attach;
+
+    /** 请求时间，时间戳转时间, 以最后一次为准 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private LocalDateTime reqTime;
 
     /** 支付终端ip 以最后一次为准 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
@@ -119,4 +128,8 @@ public class PayOrder extends MchEntity {
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
 
+    @Override
+    public PayOrderResult toResult() {
+        return PayOrderConvert.CONVERT.toResult(this);
+    }
 }

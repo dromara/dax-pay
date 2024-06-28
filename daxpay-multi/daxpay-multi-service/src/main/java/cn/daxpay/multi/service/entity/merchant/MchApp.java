@@ -2,6 +2,7 @@ package cn.daxpay.multi.service.entity.merchant;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.core.enums.SignTypeEnum;
 import cn.daxpay.multi.core.enums.TradeNotifyTypeEnum;
 import cn.daxpay.multi.service.convert.merchant.MchAppConvert;
 import cn.daxpay.multi.service.enums.MchAppStautsEnum;
@@ -37,14 +38,14 @@ public class MchApp extends MpBaseEntity implements ToResult<MchAppResult> {
     /** 应用名称 */
     private String appName;
 
-    /** 签名方式 */
+    /**
+     * 签名方式
+     * @see SignTypeEnum
+     */
     private String signType;
 
-    /** 公钥 */
-    private String publicKey;
-
-    /** 私钥 */
-    private String privateKey;
+    /** 签名秘钥 */
+    private String signSecret;
 
     /** 是否对请求进行验签 */
     private boolean reqSign;

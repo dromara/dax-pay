@@ -38,5 +38,11 @@
             <artifactId>hutool-json</artifactId>
             <version>${hutool.version}</version>
         </dependency>
+        <!-- hutool工具类 加解密 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
     </dependencies>
 </project>

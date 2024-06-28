@@ -2,14 +2,17 @@ package cn.daxpay.multi.service.service.merchant;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.BizException;
-import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
+import cn.daxpay.multi.core.exception.ConfigNotExistException;
+import cn.daxpay.multi.core.exception.OperationFailException;
 import cn.daxpay.multi.service.convert.merchant.MchAppConvert;
+import cn.daxpay.multi.service.dao.channel.ChannelConfigManager;
 import cn.daxpay.multi.service.dao.merchant.MchAppManager;
 import cn.daxpay.multi.service.dao.merchant.MerchantManager;
+import cn.daxpay.multi.service.entity.channel.ChannelConfig;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
 import cn.daxpay.multi.service.entity.merchant.Merchant;
 import cn.daxpay.multi.service.param.merchant.MchAppParam;
@@ -39,6 +42,8 @@ public class MchAppService {
 
     private final MchAppManager mchAppManager;
 
+    private final ChannelConfigManager channelConfigManager;
+
     /**
      * 添加用户
      */
@@ -57,7 +62,7 @@ public class MchAppService {
      * 修改
      */
     public void update(MchAppParam param) {
-        MchApp mchApp = mchAppManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
+        MchApp mchApp = mchAppManager.findById(param.getId()).orElseThrow(ConfigNotExistException::new);
         BeanUtil.copyProperties(param, mchApp, CopyOptions.create().ignoreNullValue());
         mchAppManager.updateById(mchApp);
     }
@@ -73,7 +78,7 @@ public class MchAppService {
      * 获取单条
      */
     public MchAppResult findById(Long id) {
-        return mchAppManager.findById(id).map(MchApp::toResult).orElseThrow(DataNotExistException::new);
+        return mchAppManager.findById(id).map(MchApp::toResult).orElseThrow(ConfigNotExistException::new);
     }
 
     /**
@@ -89,7 +94,14 @@ public class MchAppService {
      * 删除
      */
     public void delete(Long id) {
-        // TODO 查看是否有配置的支付配置
+        MchApp mchApp = mchAppManager.findById(id)
+                .orElseThrow(ConfigNotExistException::new);
+
+        // 查看是否有配置的支付配置
+        if (channelConfigManager.existedByField(ChannelConfig::getAppId, mchApp.getAppId())){
+            throw new OperationFailException("该商户应用已绑定支付配置，请先删除支付配置");
+        }
+
         mchAppManager.deleteById(id);
     }
 
@@ -97,8 +109,8 @@ public class MchAppService {
      * 验证商户号和商户应用是否匹配
      */
     public boolean checkMatch(String mchNo, String appId) {
-        Merchant merchant = merchantManager.findByField(Merchant::getMchNo, mchNo).orElseThrow(DataNotExistException::new);
-        MchApp mchApp = mchAppManager.findByField(MchApp::getAppId, appId).orElseThrow(DataNotExistException::new);
+        Merchant merchant = merchantManager.findByField(Merchant::getMchNo, mchNo).orElseThrow(ConfigNotExistException::new);
+        MchApp mchApp = mchAppManager.findByField(MchApp::getAppId, appId).orElseThrow(ConfigNotExistException::new);
         // 商户与应用是否有关联关系
         return Objects.equals(mchApp.getMchNo(), merchant.getMchNo());
     }

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 通道配置 constant
@@ -27,6 +28,17 @@ public class ChannelConfigManager extends BaseManager<ChannelConfigMapper, Chann
                 .select(this.getEntityClass (), MpUtil::excludeBigField)
                 .eq(ChannelConfig::getAppId, appId)
                 .list();
+    }
+
+    /**
+     * 根据应用号和通道查询
+     */
+    public Optional<ChannelConfig> findByAppIdAndChannel(String appId, String channel) {
+        return lambdaQuery()
+                .select(this.getEntityClass (), MpUtil::excludeBigField)
+                .eq(ChannelConfig::getAppId, appId)
+                .eq(ChannelConfig::getChannel, channel)
+                .oneOpt();
     }
 
     /**

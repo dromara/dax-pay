@@ -8,6 +8,12 @@ spring:
           url: jdbc:postgresql://postgresql:5432/dax-pay-multi?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
           username: bootx
           password: bootx123
+  data:
+    redis:
+      host: redis
+      port: 26379
+      database: 4
+      password: bootx123
 # 开发时显示debug日志
 logging:
   level:

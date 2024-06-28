@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.result.channel;
 
-import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -20,7 +20,7 @@ public class ChannelConfigResult {
 
     /**
      * 支付通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     @Schema(title = "支付通道")
     private String channel;

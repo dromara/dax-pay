@@ -1,7 +1,6 @@
 package cn.daxpay.multi.service.entity.record.callback;
 
-import cn.daxpay.multi.core.enums.CallbackStatusEnum;
-import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import lombok.Data;
@@ -26,7 +25,7 @@ public class CallbackRecord extends MchEntity {
 
     /**
      * 支付通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

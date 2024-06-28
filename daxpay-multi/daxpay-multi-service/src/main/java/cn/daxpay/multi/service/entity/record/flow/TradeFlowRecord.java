@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.entity.record.flow;
 
-import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import lombok.Data;
@@ -33,7 +33,7 @@ public class TradeFlowRecord extends MchEntity {
 
     /**
      * 支付通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

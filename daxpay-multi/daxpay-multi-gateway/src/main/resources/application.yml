@@ -2,7 +2,7 @@ server:
   port: 8888
 spring:
   application:
-    name: dax-pay-admin
+    name: dax-pay-gateway
   profiles:
     active: dev
 mybatis-plus:

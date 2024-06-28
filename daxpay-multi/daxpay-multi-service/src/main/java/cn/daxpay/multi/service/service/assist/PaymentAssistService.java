@@ -1,0 +1,117 @@
+package cn.daxpay.multi.service.service.assist;
+
+import cn.bootx.platform.core.exception.ValidationFailedException;
+import cn.bootx.platform.core.util.Java8DateUtil;
+import cn.daxpay.multi.core.enums.SignTypeEnum;
+import cn.daxpay.multi.core.exception.VerifySignFailedException;
+import cn.daxpay.multi.core.param.PaymentCommonParam;
+import cn.daxpay.multi.core.result.DaxResult;
+import cn.daxpay.multi.core.util.PaySignUtil;
+import cn.daxpay.multi.service.common.context.ClientLocal;
+import cn.daxpay.multi.service.common.context.MchAppLocal;
+import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.LocalDateTimeUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+/**
+ * 支付、退款等各类操作支持服务
+ * @author xxm
+ * @since 2023/12/26
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class PaymentAssistService {
+
+    /**
+     * 初始化请求相关信息上下文
+     */
+    public void initClient(PaymentCommonParam paymentCommonParam){
+        ClientLocal request = PaymentContextLocal.get().getClientInfo();
+        request.setClientIp(paymentCommonParam.getClientIp());
+    }
+
+    /**
+     * 入参签名校验
+     */
+    public void signVerify(PaymentCommonParam param) {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        // 如果平台配置所有属性为空, 进行初始化
+        if (BeanUtil.isEmpty(mchAppInfo)){
+//            platformConfigService.initPlatform();
+        }
+        // 判断是否不需要签名
+        if (!mchAppInfo.isReqSign()){
+            return;
+        }
+        // 参数转换为Map对象
+        String signType = mchAppInfo.getSignType();
+        if (Objects.equals(SignTypeEnum.HMAC_SHA256.getCode(), signType)){
+            boolean verified = PaySignUtil.verifyHmacSha256Sign(param, mchAppInfo.getSignSecret(), param.getSign());
+            if (!verified){
+                throw new VerifySignFailedException();
+            }
+        } else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
+            boolean verified = PaySignUtil.verifyMd5Sign(param, mchAppInfo.getSignSecret(), param.getSign());
+            if (!verified){
+                throw new VerifySignFailedException();
+            }
+        } else {
+            throw new VerifySignFailedException();
+        }
+    }
+
+    /**
+     * 请求有效时间校验
+     */
+    public void reqTimeoutVerify(PaymentCommonParam param) {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        // 如果平台配置所有属性为空, 进行初始化
+        if (BeanUtil.isEmpty(mchAppInfo)){
+//            platformConfigService.initPlatform();
+        }
+        if (Objects.nonNull(mchAppInfo.getReqTimeout()) ){
+            LocalDateTime now = LocalDateTime.now();
+            // 时间差值(秒)
+            long durationSeconds = Math.abs(LocalDateTimeUtil.between(now, param.getReqTime()).getSeconds());
+            // 当前时间是否晚于请求时间
+            if (Java8DateUtil.lt(now, param.getReqTime())){
+                // 请求时间比服务器时间晚, 超过一分钟直接打回
+                if (durationSeconds > 60){
+                    throw new ValidationFailedException("请求时间晚于服务器接收到的时间，请检查");
+                }
+            } else {
+                // 请求时间比服务器时间早, 超过配置时间直接打回
+                if (durationSeconds > mchAppInfo.getReqTimeout()){
+                    throw new ValidationFailedException("请求已过期，请重新发送！");
+                }
+            }
+
+        }
+    }
+
+    /**
+     * 对对象进行签名
+     */
+    public void sign(DaxResult<?> result) {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        // 如果平台配置所有属性为空, 进行初始化
+        if (BeanUtil.isEmpty(mchAppInfo)){
+//            platformConfigService.initPlatform();
+        }
+        String signType = mchAppInfo.getSignType();
+        if (Objects.equals(SignTypeEnum.HMAC_SHA256.getCode(), signType)){
+            result.setSign(PaySignUtil.hmacSha256Sign(result, mchAppInfo.getSignSecret()));
+        } else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
+            result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
+        } else {
+            throw new ValidationFailedException("未获取到签名方式，请检查");
+        }
+    }
+}

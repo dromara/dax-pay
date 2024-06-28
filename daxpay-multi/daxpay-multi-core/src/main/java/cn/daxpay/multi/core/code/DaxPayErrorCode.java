@@ -30,6 +30,9 @@ public interface DaxPayErrorCode {
     /** 配置错误 */
     int CONFIG_ERROR = 20024;
 
+    /** 配置不存在 */
+    int CONFIG_NOT_EXIST = 20025;
+
     /** 不支持该能力 */
     int UNSUPPORTED_ABILITY = 20030;
 

@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.entity.order.refund;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.daxpay.multi.core.enums.PayChannelEnum;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -50,7 +50,7 @@ public class RefundOrder extends MpBaseEntity {
 
     /**
      * 退款通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 
