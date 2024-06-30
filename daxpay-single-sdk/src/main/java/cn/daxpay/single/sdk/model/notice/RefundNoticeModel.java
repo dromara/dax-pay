@@ -1,7 +1,7 @@
 package cn.daxpay.single.sdk.model.notice;
 
-import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.sdk.code.PayChannelEnum;
+import cn.daxpay.single.sdk.code.RefundStatusEnum;
 import cn.daxpay.single.sdk.net.DaxPayResponseModel;
 import lombok.Getter;
 import lombok.Setter;

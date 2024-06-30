@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -63,16 +64,17 @@ public class TransferParam extends PaymentCommonParam {
     @Schema(description = "转账类型, 微信使用")
     private String transferType;
 
-
     /**
      * 收款人账号类型
      * @see TransferPayeeTypeEnum
      */
+    @NotBlank(message = "收款人账号类型必填")
     @Size(max = 20, message = "收款人账号类型不可超过20位")
     @Schema(description = "收款人账号类型")
     private String payeeType;
 
     /** 收款人账号 */
+    @NotBlank(message = "收款人账号必填")
     @Size(max = 100, message = "收款人账号不可超过100位")
     @Schema(description = "收款人账号")
     private String payeeAccount;

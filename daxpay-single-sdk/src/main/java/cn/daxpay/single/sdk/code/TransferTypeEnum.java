@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 转账类型注解
+ * 转账类型 微信使用
  * @author xxm
  * @since 2024/6/6
  */
