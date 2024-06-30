@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.service.payment.pay;
 
 import cn.daxpay.multi.core.enums.PayStatusEnum;
+import cn.daxpay.multi.core.exception.PayFailureException;
 import cn.daxpay.multi.core.exception.TradeProcessingException;
 import cn.daxpay.multi.core.param.payment.pay.PayParam;
 import cn.daxpay.multi.core.result.PayResult;
@@ -85,7 +86,11 @@ public class PayService {
             // 支付操作
             payStrategy.doPayHandler();
         } catch (Exception e) {
-            payOrder.setErrorMsg(e.getMessage());
+            if (e instanceof PayFailureException){
+                payOrder.setErrorMsg(e.getMessage());
+            } else {
+                payOrder.setErrorCode("支付出现异常");
+            }
             // 这个方法没有事务, 所以可以正常更新
             payOrderService.updateById(payOrder);
             throw e;
