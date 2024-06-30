@@ -16,36 +16,36 @@ import lombok.experimental.Accessors;
 public class MchAppQuery {
 
     /** 商户号 */
-    @Schema(title = "商户号")
+    @Schema(description = "商户号")
     private String mchNo;
 
 
     /** 应用名称 */
-    @Schema(title = "应用名称")
+    @Schema(description = "应用名称")
     private String appName;
 
     /** 签名方式 */
-    @Schema(title = "签名方式")
+    @Schema(description = "签名方式")
     private String signType;
 
     /** 公钥 */
-    @Schema(title = "公钥")
+    @Schema(description = "公钥")
     private String publicKey;
 
     /** 私钥 */
-    @Schema(title = "私钥")
+    @Schema(description = "私钥")
     private String privateKey;
 
     /**
      * 异步消息通知类型, 当前只支持http方式
      * @see TradeNotifyTypeEnum
      */
-    @Schema(title = "异步消息通知类型")
+    @Schema(description = "异步消息通知类型")
     private String notifyType;
 
     /**
      * 通知地址, http/WebSocket 需要配置
      */
-    @Schema(title = "通知地址")
+    @Schema(description = "通知地址")
     private String notifyUrl;
 }

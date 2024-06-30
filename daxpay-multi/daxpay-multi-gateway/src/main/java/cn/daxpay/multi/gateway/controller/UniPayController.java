@@ -1,5 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
+import cn.bootx.platform.core.anno.IgnoreAuth;
 import cn.daxpay.multi.core.anno.PaymentVerify;
 import cn.daxpay.multi.core.param.payment.pay.PayParam;
 import cn.daxpay.multi.core.result.DaxResult;
@@ -19,42 +20,39 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/6/4
  */
+@IgnoreAuth
 @Tag(name = "统一支付接口")
+@PaymentVerify
 @RestController
 @RequestMapping("/unipay")
 @RequiredArgsConstructor
 public class UniPayController {
     private final PayService payService;
 
-    @PaymentVerify
     @Operation(summary = "支付接口")
     @PostMapping("/pay")
     public DaxResult<PayResult> pay(@RequestBody PayParam payParam){
         return DaxRes.ok(payService.pay(payParam));
     }
 
-    @PaymentVerify
     @Operation(summary = "退款接口")
     @PostMapping("/refund")
     public DaxResult<Void> refund(){
         return DaxRes.ok();
     }
 
-    @PaymentVerify
     @Operation(summary = "关闭接口")
     @PostMapping("/close")
     public DaxResult<Void> reconcile(){
         return DaxRes.ok();
     }
 
-    @PaymentVerify
     @Operation(summary = "撤销接口")
     @PostMapping("/cancel")
     public DaxResult<Void> cancel(){
         return DaxRes.ok();
     }
 
-    @PaymentVerify
     @Operation(summary = "转账接口")
     @PostMapping("/transfer")
     public DaxResult<Void> transfer(){

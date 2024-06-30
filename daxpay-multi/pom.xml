@@ -27,6 +27,9 @@
         <maven.compiler.target>21</maven.compiler.target>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- 三方库 -->
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
 
         <bootx-platform.version>0.0.1-SNAPSHOT</bootx-platform.version>
         <daxpay.version>0.0.1-SNAPSHOT</daxpay.version>

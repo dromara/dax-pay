@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_channel_config")
+@TableName("pay_channel_config" )
 public class ChannelConfig extends MchEntity implements ToResult<ChannelConfigResult> {
 
     /**

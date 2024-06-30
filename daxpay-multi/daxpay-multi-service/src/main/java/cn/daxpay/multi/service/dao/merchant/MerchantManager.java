@@ -12,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
- *
+ * 商户信息
  * @author xxm
  * @since 2024/5/27
  */
@@ -21,6 +23,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class MerchantManager extends BaseManager<MerchantMapper, Merchant> {
+
+    /**
+     * 根据商户信息查询
+     */
+    public Optional<Merchant> findByMchNo(String mchNo) {
+        return this.findByField(Merchant::getMchNo, mchNo);
+    }
 
     /**
      * 分页

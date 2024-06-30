@@ -1,5 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
+import cn.daxpay.multi.core.anno.PaymentVerify;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,24 +21,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UniAllocationController {
 
+    @PaymentVerify
     @Operation(summary = "发起分账接口")
     @PostMapping("/start")
     public DaxResult<Void> start(){
         return DaxRes.ok();
     }
 
+    @PaymentVerify
     @Operation(summary = "分账完结接口")
     @PostMapping("/finish")
     public DaxResult<Void> finish(){
         return DaxRes.ok();
     }
 
+    @PaymentVerify
     @Operation(summary = "分账接收方添加接口")
     @PostMapping("/receiver/add")
     public DaxResult<Void> receiverAdd(){
         return DaxRes.ok();
     }
 
+    @PaymentVerify
     @Operation(summary = "分账接收方删除接口")
     @PostMapping("/receiver/remove")
     public DaxResult<Void> receiverRemove(){

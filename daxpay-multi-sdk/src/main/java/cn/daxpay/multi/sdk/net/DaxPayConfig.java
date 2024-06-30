@@ -25,7 +25,7 @@ public class DaxPayConfig {
 
     /** 签名方式 */
     @Builder.Default
-    private SignTypeEnum signType = SignTypeEnum.MD5;
+    private SignTypeEnum signType = SignTypeEnum.HMAC_SHA256;
 
     /** 签名秘钥 */
     private String signSecret;

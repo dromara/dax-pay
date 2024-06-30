@@ -28,6 +28,7 @@
         <bootx-platform.version>0.0.1-SNAPSHOT</bootx-platform.version>
         <springdoc.version>2.5.0</springdoc.version>
         <hutool.version>5.8.27</hutool.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
         <knife4j.version>4.4.0</knife4j.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>

@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * @author xxm
  * @since 2024/6/25
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IgnoreTenant {
 }

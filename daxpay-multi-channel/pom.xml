@@ -26,9 +26,45 @@
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <!-- 三方库 -->
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
+
         <bootx-platform.version>0.0.1-SNAPSHOT</bootx-platform.version>
         <daxpay.version>0.0.1-SNAPSHOT</daxpay.version>
     </properties>
+
+    <dependencies>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- lombok 配合 mapstruct -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <scope>provided</scope>
+            <version>${lombok-mapstruct.version}</version>
+        </dependency>
+
+        <!-- 类型转换处理器 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <scope>provided</scope>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!-- 支付服务实现类 -->
+        <dependency>
+            <groupId>cn.daxpay.multi</groupId>
+            <artifactId>daxpay-multi-service</artifactId>
+            <version>${daxpay.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

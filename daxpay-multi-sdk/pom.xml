@@ -46,6 +46,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback-classic.version>1.2.13</logback-classic.version>
         <hutool.version>5.8.27</hutool.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
         <logback-classic.version>1.2.13</logback-classic.version>
         <lombok.version>1.18.30</lombok.version>
         <junit.version>4.13.2</junit.version>
@@ -67,6 +68,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-crypto</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+        <!-- 国密扩展 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>${bouncycastle.version}</version>
         </dependency>
         <!-- 日志框架 -->
         <dependency>

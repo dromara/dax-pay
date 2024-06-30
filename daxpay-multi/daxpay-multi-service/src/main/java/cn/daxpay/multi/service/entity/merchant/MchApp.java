@@ -71,7 +71,7 @@ public class MchApp extends MpBaseEntity implements ToResult<MchAppResult> {
     private String notifyType;
 
     /**
-     * 地址, http/WebSocket 需要配置
+     * 通知地址, http/WebSocket 需要配置
      */
     private String notifyUrl;
 

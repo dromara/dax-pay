@@ -15,26 +15,26 @@ import lombok.experimental.Accessors;
 @Schema(title = "通道配置")
 public class ChannelConfigResult {
 
-    @Schema(title = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
     /**
      * 支付通道
      * @see ChannelEnum
      */
-    @Schema(title = "支付通道")
+    @Schema(description = "支付通道")
     private String channel;
 
     /** 通道商户号 */
-    @Schema(title = "通道商户号")
+    @Schema(description = "通道商户号")
     private String outMchNo;
 
     /** 通道APPID */
-    @Schema(title = "通道APPID")
+    @Schema(description = "通道APPID")
     private String outAppId;
 
     /** 是否启用 */
-    @Schema(title = "是否启用")
+    @Schema(description = "是否启用")
     private Boolean enable;
 
 }

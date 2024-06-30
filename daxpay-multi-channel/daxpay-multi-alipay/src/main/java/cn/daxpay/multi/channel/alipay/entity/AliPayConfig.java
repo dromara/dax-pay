@@ -4,10 +4,13 @@ import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.convert.AlipayConfigConvert;
 import cn.daxpay.multi.channel.alipay.result.config.AlipayConfigResult;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.entity.channel.ChannelConfig;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.math.BigDecimal;
 
 /**
  * 支付宝配置
@@ -28,7 +31,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     private Boolean enable;
 
     /** 支付限额 */
-    private Integer limitAmount;
+    private BigDecimal limitAmount;
 
     /**
      * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
@@ -98,7 +101,9 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
         channelConfig.setId(this.getId());
         channelConfig.setOutAppId(this.getOutAppId());
         channelConfig.setAppId(this.getAppId());
+        channelConfig.setMchNo(this.getMchNo());
         channelConfig.setEnable(this.getEnable());
+        channelConfig.setChannel(ChannelEnum.ALI.getCode());
         AliPayConfig copy = AlipayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
         copy.setId(null).setAppId(null).setEnable(null).setOutAppId(null).setAppId(null).setMchNo(null);

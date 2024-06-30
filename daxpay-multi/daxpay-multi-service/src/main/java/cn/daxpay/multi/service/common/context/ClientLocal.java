@@ -15,4 +15,7 @@ public class ClientLocal {
     /** 客户端ip */
     private String clientIp;
 
+    /** 请求IP */
+    private String requestIp;
+
 }

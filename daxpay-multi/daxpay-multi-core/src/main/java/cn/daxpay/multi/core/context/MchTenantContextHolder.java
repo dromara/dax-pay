@@ -14,7 +14,7 @@ public class MchTenantContextHolder {
      *  TODO 获取商户号
      */
     public String getMchNo() {
-        return "Dev001";
+        return "test";
     }
 
     /**

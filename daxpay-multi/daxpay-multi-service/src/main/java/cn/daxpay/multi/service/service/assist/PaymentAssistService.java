@@ -7,9 +7,14 @@ import cn.daxpay.multi.core.exception.VerifySignFailedException;
 import cn.daxpay.multi.core.param.PaymentCommonParam;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.util.PaySignUtil;
+import cn.daxpay.multi.service.common.cache.MchAppCacheService;
+import cn.daxpay.multi.service.common.cache.MerchantCacheService;
 import cn.daxpay.multi.service.common.context.ClientLocal;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
+import cn.daxpay.multi.service.common.context.MerchantLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.entity.merchant.MchApp;
+import cn.daxpay.multi.service.entity.merchant.Merchant;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +34,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PaymentAssistService {
 
+    private final MerchantCacheService merchantCacheService;
+
+    private final MchAppCacheService mchAppCacheService;
+
     /**
      * 初始化请求相关信息上下文
      */
@@ -42,10 +51,6 @@ public class PaymentAssistService {
      */
     public void signVerify(PaymentCommonParam param) {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        // 如果平台配置所有属性为空, 进行初始化
-        if (BeanUtil.isEmpty(mchAppInfo)){
-//            platformConfigService.initPlatform();
-        }
         // 判断是否不需要签名
         if (!mchAppInfo.isReqSign()){
             return;
@@ -54,11 +59,6 @@ public class PaymentAssistService {
         String signType = mchAppInfo.getSignType();
         if (Objects.equals(SignTypeEnum.HMAC_SHA256.getCode(), signType)){
             boolean verified = PaySignUtil.verifyHmacSha256Sign(param, mchAppInfo.getSignSecret(), param.getSign());
-            if (!verified){
-                throw new VerifySignFailedException();
-            }
-        } else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
-            boolean verified = PaySignUtil.verifyMd5Sign(param, mchAppInfo.getSignSecret(), param.getSign());
             if (!verified){
                 throw new VerifySignFailedException();
             }
@@ -72,10 +72,6 @@ public class PaymentAssistService {
      */
     public void reqTimeoutVerify(PaymentCommonParam param) {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        // 如果平台配置所有属性为空, 进行初始化
-        if (BeanUtil.isEmpty(mchAppInfo)){
-//            platformConfigService.initPlatform();
-        }
         if (Objects.nonNull(mchAppInfo.getReqTimeout()) ){
             LocalDateTime now = LocalDateTime.now();
             // 时间差值(秒)
@@ -101,17 +97,31 @@ public class PaymentAssistService {
      */
     public void sign(DaxResult<?> result) {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        // 如果平台配置所有属性为空, 进行初始化
-        if (BeanUtil.isEmpty(mchAppInfo)){
-//            platformConfigService.initPlatform();
-        }
         String signType = mchAppInfo.getSignType();
         if (Objects.equals(SignTypeEnum.HMAC_SHA256.getCode(), signType)){
             result.setSign(PaySignUtil.hmacSha256Sign(result, mchAppInfo.getSignSecret()));
-        } else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
-            result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
         } else {
             throw new ValidationFailedException("未获取到签名方式，请检查");
         }
+    }
+
+    /**
+     * 初始化商户和应用信息
+     */
+    public void initMchAndApp(PaymentCommonParam param) {
+        // 获取应用信息
+        Merchant merchant = merchantCacheService.get(param.getMchNo());
+        MchApp mchApp = mchAppCacheService.get(param.getAppId());
+        // 判断是否匹配
+        if (!Objects.equals(mchApp.getMchNo(), merchant.getMchNo())){
+            throw new ValidationFailedException("商户号和应用号不匹配");
+        }
+        // 初始化信息
+        MerchantLocal merchantInfo = PaymentContextLocal.get().getMerchantInfo();
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+
+        BeanUtil.copyProperties(merchant, merchantInfo);
+        BeanUtil.copyProperties(mchApp, mchAppInfo);
+
     }
 }

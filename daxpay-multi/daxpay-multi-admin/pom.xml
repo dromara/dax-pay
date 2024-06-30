@@ -46,6 +46,14 @@
             <artifactId>daxpay-multi-service</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
+
+        <!-- 支付宝通道实现 -->
+        <dependency>
+            <groupId>cn.daxpay.multi</groupId>
+            <artifactId>daxpay-multi-alipay</artifactId>
+            <version>${daxpay.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

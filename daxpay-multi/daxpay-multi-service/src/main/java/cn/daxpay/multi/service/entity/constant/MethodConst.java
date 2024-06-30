@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 
 /**
  * 支付方式常量
+ * @see cn.daxpay.multi.core.enums.PayMethodEnum
  * @author xxm
  * @since 2024/6/26
  */

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  *
  * @author xxm
@@ -21,6 +23,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class MchAppManager extends BaseManager<MchAppMapper, MchApp> {
+
+    /**
+     * 根据应用AppId查询
+     */
+    public Optional<MchApp> findByAppId(String appId) {
+        return this.findByField(MchApp::getAppId, appId);
+    }
 
     /**
      * 商户是否存在APP

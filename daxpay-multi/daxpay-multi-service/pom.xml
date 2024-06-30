@@ -26,6 +26,29 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- lombok 配合 mapstruct -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <scope>provided</scope>
+            <version>${lombok-mapstruct.version}</version>
+        </dependency>
+
+        <!-- 类型转换处理器 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <scope>provided</scope>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!-- 类型转换 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
         <!-- 支付核心包 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>

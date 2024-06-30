@@ -2,7 +2,6 @@ package cn.daxpay.multi.gateway.aop;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.ValidationUtil;
-import cn.daxpay.multi.core.anno.PaymentVerify;
 import cn.daxpay.multi.core.exception.PayFailureException;
 import cn.daxpay.multi.core.param.PaymentCommonParam;
 import cn.daxpay.multi.core.result.DaxResult;
@@ -26,11 +25,15 @@ import org.springframework.stereotype.Component;
 @Component
 @Order()
 @RequiredArgsConstructor
-public class PaymentVerifyAop {
+public class PaymentVerifyAspect {
     private final PaymentAssistService paymentAssistService;
 
-    @Around("@annotation(paymentVerify)")
-    public Object beforeMethod(ProceedingJoinPoint pjp, @SuppressWarnings("unused") PaymentVerify paymentVerify) throws Throwable {
+
+    /**
+     * 切面处理
+     */
+    @Around("@annotation(cn.daxpay.multi.core.anno.PaymentVerify)||within(@cn.daxpay.multi.core.anno.PaymentVerify *)")
+    public Object methodPoint(ProceedingJoinPoint pjp) throws Throwable {
         Object[] args = pjp.getArgs();
         if (args.length == 0){
             throw new ValidationFailedException("支付方法至少有一个参数，并且需要签名的支付参数放在第一位");
@@ -39,6 +42,8 @@ public class PaymentVerifyAop {
         if (param instanceof PaymentCommonParam){
             // 参数校验
             ValidationUtil.validateParam(param);
+            // 商户和应用信息初始化
+            paymentAssistService.initMchAndApp((PaymentCommonParam) param);
             // 终端信息初始化
             paymentAssistService.initClient((PaymentCommonParam) param);
             // 参数签名校验
@@ -61,8 +66,9 @@ public class PaymentVerifyAop {
         if (proceed instanceof DaxResult<?> result){
             paymentAssistService.sign(result);
         } else {
-            throw new ValidationFailedException("支付方法返回类型需要为 ResResult> 格式");
+            throw new ValidationFailedException("支付方法返回类型需要为 DaxResult 类型的对象");
         }
         return proceed;
     }
+
 }

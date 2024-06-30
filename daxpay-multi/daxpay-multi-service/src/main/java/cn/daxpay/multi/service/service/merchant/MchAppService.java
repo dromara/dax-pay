@@ -110,7 +110,7 @@ public class MchAppService {
      */
     public boolean checkMatch(String mchNo, String appId) {
         Merchant merchant = merchantManager.findByField(Merchant::getMchNo, mchNo).orElseThrow(ConfigNotExistException::new);
-        MchApp mchApp = mchAppManager.findByField(MchApp::getAppId, appId).orElseThrow(ConfigNotExistException::new);
+        MchApp mchApp = mchAppManager.findByAppId(appId).orElseThrow(ConfigNotExistException::new);
         // 商户与应用是否有关联关系
         return Objects.equals(mchApp.getMchNo(), merchant.getMchNo());
     }

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -15,4 +17,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class ChannelConstManager extends BaseManager<ChannelConstMapper, ChannelConst> {
+
+    /**
+     * 查询全部启用的通道
+     */
+    public List<ChannelConst> findAllByEnable() {
+        return findAllByField(ChannelConst::isEnable, true);
+    }
 }

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ChannelConfigCacheService {
-    private final Cache<String, ChannelConfig> cache = CacheUtil.newLRUCache(100);
+    private final Cache<String, ChannelConfig> cache = CacheUtil.newLRUCache(1024,15 * 60 * 1000);
 
     private final ChannelConfigManager channelConfigManager;
 
@@ -30,7 +30,7 @@ public class ChannelConfigCacheService {
         ChannelConfig channelConfig = cache.get(key);
         if (channelConfig == null) {
             channelConfig = channelConfigManager.findByAppIdAndChannel(appId, channel)
-                    .orElseThrow(() -> new ConfigNotEnableException("未找到指定的通道配置"));
+                    .orElseThrow(() -> new ConfigNotEnableException("未找到指定的支付通道配置"));
         }
         return channelConfig;
     }

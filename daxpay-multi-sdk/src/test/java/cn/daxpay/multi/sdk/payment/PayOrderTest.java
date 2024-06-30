@@ -26,8 +26,8 @@ public class PayOrderTest {
                 .serviceUrl("http://127.0.0.1:8888")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
-                .mchNo("test1")
-                .appId("test1")
+                .mchNo("test")
+                .appId("test")
                 .build();
         DaxPayKit.initConfig(config);
     }
@@ -44,7 +44,7 @@ public class PayOrderTest {
         param.setTitle("测试接口支付");
         param.setDescription("这是支付备注");
         param.setAmount(1001111);
-        param.setChannel(PayChannelEnum.UNION_PAY.getCode());
+        param.setChannel(PayChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);

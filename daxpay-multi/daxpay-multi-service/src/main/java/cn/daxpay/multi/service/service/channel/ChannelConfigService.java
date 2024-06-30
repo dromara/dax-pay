@@ -37,7 +37,7 @@ public class ChannelConfigService {
                 .stream()
                 .collect(Collectors.toMap(ChannelConfig::getChannel, Function.identity(), (v1, v2) -> v1));
         // 遍历通道类型
-        List<ChannelConst> channelList = channelConstManager.findAll();
+        List<ChannelConst> channelList = channelConstManager.findAllByEnable();
 
         return channelList.stream().map(o->{
             ChannelConfig channelConfig = channelConfigMap.get(o.getChannel());
