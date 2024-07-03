@@ -9,13 +9,16 @@ spring:
           username: bootx
           password: bootx123
       hikari:
-        keepalive-time: 30000
+        keepalive-time: 300000
   data:
     redis:
       host: redis
-      port: 26379
+      port: 6379
       database: 4
       password: bootx123
+      lettuce:
+        pool:
+          max-wait: 1000ms
 # 开发时显示debug日志
 logging:
   level:

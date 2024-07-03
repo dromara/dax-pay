@@ -16,30 +16,6 @@ public class SpringProperties {
     /** cors跨域配置 */
     private Cors cors = new Cors();
 
-    /** 线程池配置 */
-    private Executor executor = new Executor();
-
-    /**
-     * @author xxm
-     * @since 2021/6/11
-     */
-    @Data
-    public static class Executor {
-
-        /** 线程池维护线程的最少数量 */
-        private int corePoolSize = 10;
-
-        /** 线程池维护线程的最大数量 */
-        private int maxPoolSize = 50;
-
-        /** 缓存队列容量 */
-        private int queueCapacity = 5000;
-
-        /** 保持活动秒数 */
-        private int keepAliveSeconds = 60;
-
-    }
-
     @Data
     public static class Cors {
 

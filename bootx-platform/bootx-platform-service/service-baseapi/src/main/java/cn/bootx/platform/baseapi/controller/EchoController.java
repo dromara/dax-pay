@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "系统基础接口")
 @RestController
 @RequiredArgsConstructor
-public class BaseApiController {
+public class EchoController {
 
     @Operation(summary = "回声测试")
     @GetMapping("/echo")

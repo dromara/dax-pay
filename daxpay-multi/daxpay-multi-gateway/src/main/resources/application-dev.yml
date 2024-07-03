@@ -13,7 +13,7 @@ spring:
   data:
     redis:
       host: redis
-      port: 26379
+      port: 6379
       database: 4
       password: bootx123
 # 开发时显示debug日志

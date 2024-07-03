@@ -2,33 +2,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.bootx.platform</groupId>
-        <artifactId>bootx-platform</artifactId>
+        <artifactId>bootx-platform-service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <modules>
-        <module>starter-auth</module>
-        <module>starter-quartz</module>
-    </modules>
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>bootx-platform-starter</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>service-iam</artifactId>
+    <description>身份识别与访问管理</description>
 
     <dependencies>
-        <!-- 核心包 -->
+        <!-- 系统基础服务 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
-            <artifactId>bootx-platform-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>service-baseapi</artifactId>
+            <version>${bootx-platform.version}</version>
         </dependency>
-        <!-- lombok -->
+        <!-- 认证 -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-auth</artifactId>
+            <version>${bootx-platform.version}</version>
         </dependency>
     </dependencies>
 

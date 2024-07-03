@@ -10,6 +10,7 @@
     </parent>
     <modules>
         <module>service-baseapi</module>
+        <module>service-iam</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>
