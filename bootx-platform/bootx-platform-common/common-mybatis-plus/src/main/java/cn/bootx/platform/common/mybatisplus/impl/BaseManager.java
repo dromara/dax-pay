@@ -180,11 +180,11 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
      * 批量保存
      */
     @Transactional(rollbackFor = Exception.class)
-    public List<T> saveAll(List<T> list) {
+    public boolean saveAll(List<T> list) {
         if (CollUtil.isNotEmpty(list)) {
-            saveBatch(list, public_BATCH_SIZE);
+            return saveBatch(list, public_BATCH_SIZE);
         }
-        return list;
+        return false;
     }
 
     /**

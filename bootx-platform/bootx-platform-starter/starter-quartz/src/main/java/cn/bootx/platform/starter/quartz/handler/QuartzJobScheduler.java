@@ -1,6 +1,6 @@
 package cn.bootx.platform.starter.quartz.handler;
 
-import cn.bootx.platform.common.core.exception.BizException;
+import cn.bootx.platform.core.exception.BizException;
 import cn.hutool.core.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

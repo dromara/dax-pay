@@ -1,7 +1,7 @@
 package cn.bootx.platform.starter.quartz.handler;
 
-import cn.bootx.platform.common.core.annotation.JobLog;
-import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.core.annotation.JobLog;
+import cn.bootx.platform.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.starter.quartz.entity.QuartzJobLog;
 import cn.bootx.platform.starter.quartz.service.QuartzJobLogService;
 import lombok.RequiredArgsConstructor;
