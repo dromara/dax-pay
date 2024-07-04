@@ -22,6 +22,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Role extends MpBaseEntity implements ToResult<RoleResult> {
 
+    /** 父级Id */
+    private Long pid;
+
     /** 编码 */
     private String code;
 
@@ -30,9 +33,6 @@ public class Role extends MpBaseEntity implements ToResult<RoleResult> {
 
     /** 是否系统内置 不能修改 */
     private boolean internal;
-
-    /** 父级Id */
-    private Long pid;
 
     /** 备注 */
     private String remark;

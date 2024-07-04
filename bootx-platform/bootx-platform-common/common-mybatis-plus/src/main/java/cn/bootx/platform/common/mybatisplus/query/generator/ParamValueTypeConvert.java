@@ -10,7 +10,8 @@ import cn.hutool.core.util.StrUtil;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * 参数值转换
@@ -44,7 +45,7 @@ public class ParamValueTypeConvert {
                 Collection<?> collection = (Collection<?>) paramValue;
                 yield collection.stream()
                         .map(o -> convertType(o, paramTypeEnum))
-                        .collect(Collectors.toList());
+                        .collect(toList());
             }
         };
     }

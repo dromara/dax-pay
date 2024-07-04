@@ -5,6 +5,7 @@ import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.dao.upms.RolePathManager;
 import cn.bootx.platform.iam.entity.permission.PermPath;
+import cn.bootx.platform.iam.entity.upms.RolePath;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,16 @@ public class PermPathService {
         return MpUtil.toListResult(permPathManager.findAll());
     }
 
+
+    /**
+     * 获取角色拥有的请求路径权限
+     */
+    public List<PermPathResult> findPathsByRole(Long roleId) {
+        List<RolePath> rolePaths = rolePathManager.findAllByField(RolePath::getRoleId, roleId);
+        List<Long> ids = rolePaths.stream()
+                .map(RolePath::getPathId)
+                .toList();
+        return MpUtil.toListResult(permPathManager.findSimpleByIds(ids));
+    }
 
 }

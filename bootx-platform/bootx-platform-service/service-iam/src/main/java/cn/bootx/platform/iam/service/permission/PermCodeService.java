@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.service.permission;
 
+import cn.bootx.platform.iam.dao.permission.PermCodeManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PermCodeService {
-//    private final PermMenuService permMenuService;
+    private final PermCodeManager permCodeManager;
 
 }

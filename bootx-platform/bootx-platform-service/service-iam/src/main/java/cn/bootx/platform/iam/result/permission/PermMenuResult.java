@@ -82,4 +82,8 @@ public class PermMenuResult {
     @Schema(description = "子节点")
     private List<PermMenuResult> children;
 
+    public Double getSortNo(){
+        return sortNo == null ? 0 : sortNo;
+    }
+
 }

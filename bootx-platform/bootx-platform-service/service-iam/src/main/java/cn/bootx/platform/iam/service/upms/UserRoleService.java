@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -60,7 +59,7 @@ public class UserRoleService {
         List<UserRole> userRoles = userIds.stream()
             .map(userId -> this.createUserRoles(userId, roleIds))
             .flatMap(Collection::stream)
-            .collect(Collectors.toList());
+            .toList();
         userRoleManager.saveAll(userRoles);
     }
 
@@ -72,7 +71,7 @@ public class UserRoleService {
             .stream()
             .map(UserRole::getRoleId)
             .distinct()
-            .collect(Collectors.toList());
+            .toList();
     }
 
     /**
@@ -88,7 +87,7 @@ public class UserRoleService {
     private List<UserRole> createUserRoles(Long userId, List<Long> roleIds) {
         return roleIds.stream()
             .map(roleId -> new UserRole().setRoleId(roleId).setUserId(userId))
-            .collect(Collectors.toList());
+            .toList();
     }
 
 }

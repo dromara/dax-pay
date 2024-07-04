@@ -101,7 +101,7 @@ public class DictionaryItemService {
                 .stream()
                 .sorted(Comparator.comparingDouble(DictionaryItem::getSortNo))
                 .map(DictionaryItem::toResult)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -111,7 +111,7 @@ public class DictionaryItemService {
         return dictionaryItemManager.findByDictCodeAndEnable(dictCode, true)
                 .stream()
                 .map(DictionaryItem::toResult)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

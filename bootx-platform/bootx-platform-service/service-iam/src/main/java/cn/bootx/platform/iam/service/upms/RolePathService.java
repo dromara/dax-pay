@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.service.upms;
 
+import cn.bootx.platform.core.util.TreeBuildUtil;
 import cn.bootx.platform.iam.dao.role.RoleManager;
 import cn.bootx.platform.iam.dao.upms.RolePathManager;
 import cn.bootx.platform.iam.dao.user.UserInfoManager;
@@ -78,7 +79,7 @@ public class RolePathService {
                     .toList();
             addRolePath = addRolePath.stream()
                     .filter(o->collect.contains(o.getPathId()))
-                    .collect(Collectors.toList());
+                    .toList();
         }
         rolePathManager.saveAll(addRolePath);
 
@@ -163,6 +164,7 @@ public class RolePathService {
     public List<PermPathResult> findPathsByUser(Long userId) {
         UserInfo userInfo = userInfoManager.findById(userId).orElseThrow(UserInfoNotExistsException::new);
         List<PermPathResult> paths;
+        // 管理员查看所有
         if (userInfo.isAdministrator()) {
             paths = pathService.findAll();
         }
@@ -207,11 +209,25 @@ public class RolePathService {
             List<Long> permissionIds = rolePathManager.findAllByRole(role.getPid())
                     .stream()
                     .map(RolePath::getPathId)
-                    .collect(Collectors.toList());
+                    .toList();
             permPaths = permPaths.stream()
                     .filter(o->permissionIds.contains(o.getId()))
                     .collect(Collectors.toList());
         }
         return permPaths;
+    }
+
+    /**
+     * 递归建树
+     * @param paths 查询出的菜单数据
+     * @return 递归后的树列表
+     */
+    private List<PermPathResult> recursiveBuildTree(List<PermPathResult> paths) {
+        return TreeBuildUtil.build(paths,
+                null,
+                PermPathResult::getCode,
+                PermPathResult::getParentCode,
+                PermPathResult::setChildren);
+
     }
 }

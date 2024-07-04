@@ -35,9 +35,6 @@ public class PermMenuParam {
     @Schema(description = "路由名称，建议唯一")
     private String name;
 
-    @Schema(description = "资源编码(权限码)")
-    private String permCode;
-
     @Schema(description = "是否有效")
     private boolean effect;
 
@@ -62,8 +59,8 @@ public class PermMenuParam {
     @Schema(description = "菜单排序")
     private Double sortNo;
 
-    @Schema(description = "类型（0：一级菜单；1：子菜单 ；2：资源）")
-    private Integer menuType;
+    @Schema(description = "是否是一级菜单")
+    private boolean root;
 
     /**
      * meta

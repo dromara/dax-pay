@@ -19,6 +19,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * 访问路径生成服务
  * @author xxm
@@ -217,7 +219,7 @@ public class PermPathSyncService {
                 .getMethods()
                 .stream()
                 .map(Enum::name)
-                .collect(Collectors.toList());
+                .collect(toList());
         List<RequestPath> list = paths.stream()
                 .map(path -> this.builderRequestPath(path, requestMethods))
                 .flatMap(Collection::stream)
@@ -246,7 +248,7 @@ public class PermPathSyncService {
                 .map(requestMethod -> new RequestPath()
                         .setPath(path)
                         .setRequestType(requestMethod))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
 }

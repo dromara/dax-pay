@@ -111,6 +111,7 @@ public class RoleService {
         // 删除关联的请求和菜单权限
         rolePathManager.deleteByRole(roleId);
         roleMenuManager.deleteByRole(roleId);
+        rolePathManager.deleteByRole(roleId);
     }
 
     /**

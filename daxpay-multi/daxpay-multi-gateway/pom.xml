@@ -45,6 +45,13 @@
             <version>${bootx-platform.version}</version>
         </dependency>
 
+        <!-- 认证服务 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>service-iam</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
         <!-- 支付服务 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>

@@ -5,6 +5,8 @@ import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.iam.convert.permission.PermMenuConvert;
 import cn.bootx.platform.iam.param.permission.PermMenuParam;
 import cn.bootx.platform.iam.result.permission.PermMenuResult;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +25,7 @@ import lombok.experimental.Accessors;
 public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
 
     /** 父id */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private Long parentId;
 
     /** 关联终端code */
@@ -58,9 +61,7 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     /** 菜单排序 */
     private Double sortNo;
 
-    /**
-     * 是否是一级菜单
-     */
+    /** 是否是一级菜单 */
     private boolean root;
 
     /* meta相关信息 */
