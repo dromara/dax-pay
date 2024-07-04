@@ -1,5 +1,6 @@
 package cn.bootx.platform.baseapi.controller;
 
+import cn.bootx.platform.core.anno.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class EchoController {
 
+    @IgnoreAuth
     @Operation(summary = "回声测试")
     @GetMapping("/echo")
     public String echo(String msg){
         return "echo: "+msg;
     }
 
+    @IgnoreAuth(login = true)
     @Operation(summary = "回声测试(必须要进行登录)")
     @GetMapping("/auth/echo")
     public String authEcho(String msg){

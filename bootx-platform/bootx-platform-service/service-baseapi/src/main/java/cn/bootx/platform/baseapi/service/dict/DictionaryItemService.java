@@ -41,7 +41,7 @@ public class DictionaryItemService {
      * 添加内容
      */
     @Transactional(rollbackFor = Exception.class)
-    public DictionaryItemResult add(DictionaryItemParam param) {
+    public void add(DictionaryItemParam param) {
 
         // 在同一个Dictionary不允许存在相同code的DictionaryItem
         if (dictionaryItemManager.existsByCode(param.getCode(), param.getDictId())) {
@@ -53,15 +53,13 @@ public class DictionaryItemService {
         param.setDictCode(dictionary.getCode());
         DictionaryItem dictionaryItem = DictionaryConvert.CONVERT.convert(param);
         dictionaryItemManager.save(dictionaryItem);
-        return dictionaryItem.toResult();
     }
 
     /**
      * 修改内容
      */
     @Transactional(rollbackFor = Exception.class)
-    public DictionaryItemResult update(DictionaryItemParam param) {
-
+    public void update(DictionaryItemParam param) {
         // 判断字典item是否存在
         DictionaryItem dictionaryItem = dictionaryItemManager.findById(param.getId())
                 .orElseThrow(() -> new BizException("字典项不存在"));
@@ -72,7 +70,6 @@ public class DictionaryItemService {
         }
         BeanUtil.copyProperties(param, dictionaryItem, CopyOptions.create().ignoreNullValue());
         dictionaryItemManager.updateById(dictionaryItem);
-        return dictionaryItem.toResult();
     }
 
     /**

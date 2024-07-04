@@ -1,9 +1,8 @@
 package cn.bootx.platform.starter.quartz.handler;
 
-import cn.bootx.platform.core.annotation.JobLog;
-import cn.bootx.platform.core.util.LocalDateTimeUtil;
 import cn.bootx.platform.starter.quartz.entity.QuartzJobLog;
 import cn.bootx.platform.starter.quartz.service.QuartzJobLogService;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -13,7 +12,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * 定时任务日志切面
@@ -41,25 +39,25 @@ public class JobLogAspectHandler {
      */
     @Around("logPointCut()")
     public Object doAfterReturning(ProceedingJoinPoint pjp) throws Throwable {
-        Class<?> clazz = pjp.getTarget().getClass();
-        JobLog jobLog = clazz.getAnnotation(JobLog.class);
-        LocalDateTime start = LocalDateTime.now();
-        try {
+//        Class<?> clazz = pjp.getTarget().getClass();
+//        JobLog jobLog = clazz.getAnnotation(JobLog.class);
+//        LocalDateTime start = LocalDateTime.now();
+//        try {
             Object result = pjp.proceed();
-            LocalDateTime end = LocalDateTime.now();
-            if (Optional.ofNullable(jobLog).map(JobLog::log).orElse(false)) {
-                // 保存正常日志
-                this.addLog(clazz, start, end);
-            }
+//            LocalDateTime end = LocalDateTime.now();
+//            if (Optional.ofNullable(jobLog).map(JobLog::log).orElse(false)) {
+//                // 保存正常日志
+//                this.addLog(clazz, start, end);
+//            }
             return result;
-        }
-        catch (Throwable e) {
-            if (Optional.ofNullable(jobLog).map(JobLog::errorLog).orElse(false)) {
-                // 保存异常日志
-                this.addErrLog(clazz, start, e.getMessage());
-            }
-            throw e;
-        }
+//        }
+//        catch (Throwable e) {
+//            if (Optional.ofNullable(jobLog).map(JobLog::errorLog).orElse(false)) {
+//                // 保存异常日志
+//                this.addErrLog(clazz, start, e.getMessage());
+//            }
+//            throw e;
+//        }
     }
 
     /**

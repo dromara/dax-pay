@@ -23,13 +23,6 @@ public class PermMenuManager extends BaseManager<PermMenuMapper, PermMenu> {
         return existedByField(PermMenu::getParentId, pid);
     }
 
-    public boolean existsByPermCode(String permCode) {
-        return existedByField(PermMenu::getPermCode, permCode);
-    }
-
-    public boolean existsByPermCode(String permCode, Long id) {
-        return existedByField(PermMenu::getPermCode, permCode, id);
-    }
 
     public List<PermMenu> findAllByParentId(Long parentId) {
         return findAllByField(PermMenu::getParentId, parentId);
@@ -38,9 +31,5 @@ public class PermMenuManager extends BaseManager<PermMenuMapper, PermMenu> {
     public List<PermMenu> findAllByClientCode(String clientCode) {
         return findAllByField(PermMenu::getClientCode, clientCode);
     }
-
-//    public List<PermMenu> findAllByResource() {
-//        return findAllByField(PermMenu::getMenuType, PermissionEnum.MENU_TYPE_RESOURCE);
-//    }
 
 }

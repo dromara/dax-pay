@@ -19,8 +19,11 @@ import java.util.List;
 @MappedJdbcTypes({JdbcType.VARCHAR,JdbcType.LONGVARCHAR})
 public class LongListTypeHandler  extends AbstractJsonTypeHandler<List<Long>> {
 
-    public LongListTypeHandler() {
-        super(List.class);
+    /**
+     * 默认初始化
+     */
+    public LongListTypeHandler(Class<?> type) {
+        super(type);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class QuartzJobLogManager extends BaseManager<QuartzJobLogMapper, QuartzJ
      * 分页
      */
     public Page<QuartzJobLog> page(PageParam pageParam, QuartzJobLogQuery query) {
-        Page<QuartzJobLog> mpPage = MpUtil.getMpPage(pageParam, QuartzJobLog.class);
+        Page<QuartzJobLog> mpPage = MpUtil.getMpPage(pageParam);
 
         return this.lambdaQuery()
             .eq(QuartzJobLog::getClassName, query.getClassName())

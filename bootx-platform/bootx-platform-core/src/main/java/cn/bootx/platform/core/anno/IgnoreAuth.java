@@ -14,12 +14,7 @@ import java.lang.annotation.*;
 public @interface IgnoreAuth {
 
     /**
-     * 是否忽略请求鉴权
-     */
-    boolean ignore() default true;
-
-    /**
-     * 只要登录就忽略权限校验, login值为true是ignore将不生效
+     * 只要登录就可以访问，忽略权限校验
      */
     boolean login() default false;
 

@@ -34,9 +34,6 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     /** 路由名称，建议唯一 */
     private String name;
 
-    /** 资源编码(权限码) */
-    private String permCode;
-
     /** 是否有效 */
     private boolean effect;
 
@@ -52,26 +49,21 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     /** 组件 */
     private String component;
 
-    /** 路径 */
+    /** 访问路径 */
     private String path;
 
-    /**
-     * 菜单跳转地址(重定向)
-     */
+    /** 菜单跳转地址(重定向) */
     private String redirect;
 
-    /**
-     * 菜单排序
-     */
+    /** 菜单排序 */
     private Double sortNo;
 
     /**
-     * 类型（0：一级菜单；1：子菜单 ；2：资源）
-     * @see PermissionCode
+     * 是否是一级菜单
      */
-    private Integer menuType;
+    private boolean root;
 
-    /* meta */
+    /* meta相关信息 */
     /**
      * 是否缓存页面
      */
@@ -80,11 +72,8 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     /** 打开方式是否为外部打开 */
     private boolean targetOutside;
 
-    /** 隐藏的标题内容 */
-    private boolean hiddenHeaderContent;
-
-    /** 系统内置 */
-    private boolean internal;
+    /** 是否全屏打开 */
+    private boolean fullscreen;
 
     /** 描述 */
     private String remark;

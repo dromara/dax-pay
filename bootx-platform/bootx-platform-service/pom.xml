@@ -42,6 +42,13 @@
             <version>${mapstruct.version}</version>
         </dependency>
 
+        <!-- 类型转换 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
         <!-- web框架 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -59,13 +66,6 @@
             <groupId>cn.bootx.platform</groupId>
             <artifactId>bootx-platform-core</artifactId>
             <version>${bootx-platform.version}</version>
-        </dependency>
-
-        <!-- 类型转换 -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${mapstruct.version}</version>
         </dependency>
 
         <!-- TTL容器 -->

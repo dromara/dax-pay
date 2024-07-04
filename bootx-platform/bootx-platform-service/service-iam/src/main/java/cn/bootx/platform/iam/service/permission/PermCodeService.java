@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PermCodeService {
-    private final PermMenuService permMenuService;
+//    private final PermMenuService permMenuService;
 
 }

@@ -1,7 +1,6 @@
 package cn.bootx.platform.iam.convert.permission;
 
 import cn.bootx.platform.iam.entity.permission.PermPath;
-import cn.bootx.platform.iam.param.permission.PermPathParam;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -18,7 +17,5 @@ public interface PermPathConvert {
     PermPathConvert CONVERT = Mappers.getMapper(PermPathConvert.class);
 
     PermPathResult convert(PermPath in);
-
-    PermPath convert(PermPathParam in);
 
 }

@@ -220,6 +220,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
         });
     }
 
+
     /**
      * 执行批量操作
      * @param list 数据集合
@@ -241,6 +242,26 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdate(T entity) {
         return getBaseMapper().insertOrUpdate(entity);
+    }
+
+    /**
+     * 批量更新或修改
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveOrUpdateAll(Collection<T> entityList, int batchSize) {
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(this.getEntityClass());
+        Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
+        String keyProperty = tableInfo.getKeyProperty();
+        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        return SqlHelper.saveOrUpdateBatch(getSqlSessionFactory(), this.currentMapperClass(), this.log, entityList, batchSize, (sqlSession, entity) -> {
+            Object idVal = tableInfo.getPropertyValue(entity, keyProperty);
+            return StringUtils.checkValNull(idVal)
+                    || CollectionUtils.isEmpty(sqlSession.selectList(getSqlStatement(SqlMethod.SELECT_BY_ID), entity));
+        }, (sqlSession, entity) -> {
+            MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
+            param.put(Constants.ENTITY, entity);
+            sqlSession.update(getSqlStatement(SqlMethod.UPDATE_BY_ID), param);
+        });
     }
 
     /**
