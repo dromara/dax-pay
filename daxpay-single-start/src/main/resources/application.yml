@@ -3,10 +3,6 @@ spring:
     name: dax-pay-single
   profiles:
     active: dev
-  config:
-    use-legacy-processing: true
-    activate:
-      on-profile: dev
   servlet:
     multipart:
       max-file-size: 100MB

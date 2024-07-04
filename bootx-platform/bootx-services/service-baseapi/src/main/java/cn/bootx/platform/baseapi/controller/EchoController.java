@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "系统基础接口")
 @RestController
 @RequiredArgsConstructor
-public class BaseApiController {
+public class EchoController {
 
     @IgnoreAuth
     @Operation(summary = "回声测试")
