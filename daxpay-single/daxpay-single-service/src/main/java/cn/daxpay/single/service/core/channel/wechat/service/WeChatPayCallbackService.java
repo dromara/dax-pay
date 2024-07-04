@@ -60,7 +60,7 @@ public class WeChatPayCallbackService {
             // 判断并保存回调类型
             PaymentTypeEnum callbackType = this.getCallbackType();
             callbackInfo.setCallbackType(callbackType)
-                    .setChannel(PayChannelEnum.ALI.getCode());
+                    .setChannel(PayChannelEnum.WECHAT.getCode());
 
             // 验证消息
             if (!this.verifyNotify()) {
