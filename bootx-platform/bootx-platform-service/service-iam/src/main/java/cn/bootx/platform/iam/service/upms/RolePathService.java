@@ -1,21 +1,20 @@
 package cn.bootx.platform.iam.service.upms;
 
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.core.util.TreeBuildUtil;
+import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.dao.role.RoleManager;
 import cn.bootx.platform.iam.dao.upms.RolePathManager;
-import cn.bootx.platform.iam.dao.user.UserInfoManager;
+import cn.bootx.platform.iam.entity.permission.PermPath;
 import cn.bootx.platform.iam.entity.role.Role;
 import cn.bootx.platform.iam.entity.upms.RolePath;
-import cn.bootx.platform.iam.entity.user.UserInfo;
 import cn.bootx.platform.iam.exception.role.RoleNotExistedException;
-import cn.bootx.platform.iam.exception.user.UserInfoNotExistsException;
+import cn.bootx.platform.iam.param.permission.PermPathAssignParam;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
 import cn.bootx.platform.iam.result.role.RoleResult;
-import cn.bootx.platform.iam.service.permission.PermPathService;
-import cn.bootx.platform.iam.service.role.RoleService;
-import cn.bootx.platform.starter.auth.util.SecurityUtil;
+import cn.bootx.platform.iam.service.role.RoleQueryService;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.extra.spring.SpringUtil;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -39,41 +40,74 @@ public class RolePathService {
 
     private final RolePathManager rolePathManager;
 
-    private final PermPathService pathService;
-
-    private final RoleService roleService;
+    private final PermPathManager permPathManager;
 
     private final RoleManager roleManager;
 
-    private final UserInfoManager userInfoManager;
+    private final RoleQueryService roleQueryService;
 
-    private final UserRoleService userRoleService;
 
     /**
      * 保存角色路径授权
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveAssign(Long roleId, List<Long> pathIds, boolean updateAddChildren) {
-        // 先删后增
-        List<RolePath> rolePaths = rolePathManager.findAllByRole(roleId);
+    public void saveAssign(PermPathAssignParam param) {
+        Long roleId = param.getRoleId();
+        String clientCode = param.getClientCode();
+        List<Long> pathIds = param.getPathIds();
+
+        // 已经保存的关联信息
+        List<RolePath> rolePaths = rolePathManager.findAllByRoleAndClient(roleId, clientCode);
         List<Long> rolePathIds = rolePaths.stream().map(RolePath::getPathId).toList();
         // 需要删除的请求权限
         List<RolePath> deleteRolePaths = rolePaths.stream()
                 .filter(rolePath -> !pathIds.contains(rolePath.getPathId()))
                 .toList();
-        // 需要删除的关联ID
+
+        // 删除的关联ID
         List<Long> deleteIds = deleteRolePaths.stream().map(RolePath::getId).collect(Collectors.toList());
         rolePathManager.deleteByIds(deleteIds);
 
         // 需要新增的权限关系
+        List<RolePath> addRolePath = this.x(param, rolePathIds);
+
+        List<Long> deletePermIds = deleteRolePaths.stream()
+                .map(RolePath::getPathId)
+                .collect(Collectors.toList());
+        // 级联更新子孙角色
+        if (param.isUpdateChildren()) {
+            // 新增的进行追加
+            List<Long> addPermIds = addRolePath.stream()
+                    .map(RolePath::getPathId)
+                    .collect(Collectors.toList());
+            this.updateChildren(roleId, clientCode, addPermIds, deletePermIds);
+        } else {
+            // 新增的不进行追加
+            this.updateChildren(roleId, clientCode, null, deletePermIds);
+        }
+    }
+
+    /**
+     * 保存并返回需要新增的权限关系
+     * @param param 分配参数
+     * @param rolePathIds 已经保存的关联信息
+     * @return 添加的权限关系
+     */
+    private List<RolePath> x(PermPathAssignParam param, List<Long> rolePathIds){
+
+        Long roleId = param.getRoleId();
+        String clientCode = param.getClientCode();
+        List<Long> pathIds = param.getPathIds();
+
+        // 需要新增的权限关系
         List<RolePath> addRolePath = pathIds.stream()
                 .filter(id -> !rolePathIds.contains(id))
-                .map(permissionId -> new RolePath(roleId, permissionId))
+                .map(permissionId -> new RolePath(roleId, param.getClientCode(), permissionId))
                 .collect(Collectors.toList());
-        // 新增时验证是否超过了父级角色所拥有的权限
+        // 验证是否超过了父级角色所拥有的权限, 如果超过进行过滤
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         if (Objects.nonNull(role.getPid())){
-            List<Long> collect = rolePathManager.findAllByRole(role.getPid())
+            List<Long> collect = rolePathManager.findAllByRoleAndClient(role.getPid(), clientCode)
                     .stream()
                     .map(RolePath::getPathId)
                     .toList();
@@ -81,153 +115,138 @@ public class RolePathService {
                     .filter(o->collect.contains(o.getPathId()))
                     .toList();
         }
-        rolePathManager.saveAll(addRolePath);
-
-        List<Long> deletePermIds = deleteRolePaths.stream()
+        // 去除其中的非叶子节点
+        List<Long> addPathIds = addRolePath.stream()
                 .map(RolePath::getPathId)
-                .collect(Collectors.toList());
-        // 级联更新子孙角色
-        if (updateAddChildren) {
-            // 新增的进行追加
-            List<Long> addPermIds = addRolePath.stream()
-                    .map(RolePath::getPathId)
-                    .collect(Collectors.toList());
-            this.updateChildren(roleId, addPermIds, deletePermIds);
-        } else {
-            // 新增的不进行追加
-            this.updateChildren(roleId, null, deletePermIds);
-        }
+                .toList();
+        List<Long> permPathIds = permPathManager.findSimpleByIds(addPathIds).stream()
+                .map(MpIdEntity::getId)
+                .toList();
+        addRolePath = addRolePath.stream()
+                .filter(o->permPathIds.contains(o.getPathId()))
+                .toList();
+
+        // 保存新增的
+        rolePathManager.saveAll(addRolePath);
+        return addRolePath;
     }
 
     /**
      * 更新子孙角色关联关系
      */
-    private void updateChildren(Long roleId, List<Long> addPermIds, List<Long> deletePermIds) {
-        if (CollUtil.isNotEmpty(addPermIds) && CollUtil.isNotEmpty(deletePermIds)){
+    private void updateChildren(Long roleId, String clientCode, List<Long> addPermIds, List<Long> deleteIds) {
+        if (CollUtil.isNotEmpty(addPermIds) && CollUtil.isNotEmpty(deleteIds)){
             return;
         }
         // 当前角色的子孙角色
-        List<RoleResult> children = roleService.findChildren(roleId);
+        List<RoleResult> children = roleQueryService.findChildren(roleId);
         // 新增
         if (CollUtil.isNotEmpty(addPermIds) && CollUtil.isNotEmpty(children)){
             List<RolePath> addRolePaths = new ArrayList<>();
             for (Long addPermId : addPermIds) {
                 for (RoleResult childrenRole : children) {
-                    addRolePaths.add(new RolePath(childrenRole.getId(), addPermId));
+                    addRolePaths.add(new RolePath(childrenRole.getId(), clientCode, addPermId));
                 }
             }
             rolePathManager.saveAll(addRolePaths);
         }
         // 删除
-        if (CollUtil.isNotEmpty(deletePermIds) && CollUtil.isNotEmpty(children)) {
+        if (CollUtil.isNotEmpty(deleteIds) && CollUtil.isNotEmpty(children)) {
             // 子孙角色
             List<Long> childrenIds = children.stream()
                     .map(RoleResult::getId)
                     .toList();
             for (Long childrenId : childrenIds) {
-                rolePathManager.deleteByPermIds(childrenId,deletePermIds);
+                rolePathManager.deleteByPathIds(childrenId,clientCode,deleteIds);
             }
         }
     }
 
+    /*------------------------------  管理端配置使用  ------------------------------------*/
     /**
-     * 查询用户查询拥有的请求权限信息
+     * 查询当前角色已经选择的请求路径
      */
-    public List<PermPathResult> findPathsByUser() {
-        Long userId = SecurityUtil.getUserId();
-        return this.findPathsByUser(userId);
-    }
-
-    /**
-     * 根据角色id获取关联权限id
-     */
-    public List<Long> findIdsByRole(Long roleId) {
-        List<RolePath> rolePermissions = rolePathManager.findAllByRole(roleId);
+    public List<Long> findIdsByRole(Long roleId, String clientCode) {
+        List<RolePath> rolePermissions = rolePathManager.findAllByRoleAndClient(roleId,clientCode);
         return rolePermissions.stream().map(RolePath::getPathId).collect(Collectors.toList());
     }
 
     /**
-     * 查询用户拥有的路径权限信息( 路径路由拦截使用 )
+     * 获取当前用户角色下可见的请求权限信息, 并转换成树返回
+     * 如果是顶级角色, 可以查看所有的权限
+     * 如果是子角色, 查询分配给自身的权限
      */
-    public List<String> findSimplePathsByUser(String method, Long userId) {
-        return SpringUtil.getBean(this.getClass())
-                .findPathsByUser(userId)
-                .stream()
-                .filter(permPathDto -> Objects.equals(method, permPathDto.getRequestType()))
-                .map(PermPathResult::getPath)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 查询用户拥有的路径权限信息
-     */
-    public List<PermPathResult> findPathsByUser(Long userId) {
-        UserInfo userInfo = userInfoManager.findById(userId).orElseThrow(UserInfoNotExistsException::new);
-        List<PermPathResult> paths;
-        // 管理员查看所有
-        if (userInfo.isAdministrator()) {
-            paths = pathService.findAll();
-        }
-        else {
-            paths = this.findPermissionsByUser(userId);
-        }
-        return paths;
-    }
-
-    /**
-     * 查询用户查询拥有的权限信息
-     */
-    private List<PermPathResult> findPermissionsByUser(Long userId) {
-        List<PermPathResult> permissions = new ArrayList<>(0);
-
-        List<Long> roleIds = userRoleService.findRoleIdsByUser(userId);
-        if (CollUtil.isEmpty(roleIds)) {
-            return permissions;
-        }
-        List<RolePath> rolePaths = rolePathManager.findAllByRoles(roleIds);
-        List<Long> permissionIds = rolePaths.stream()
-                .map(RolePath::getPathId)
-                .distinct()
-                .collect(Collectors.toList());
-        if (CollUtil.isNotEmpty(permissionIds)) {
-            permissions = pathService.findByIds(permissionIds);
-        }
-        return permissions;
-    }
-
-    /**
-     * 获取当前用户角色下可见的请求权限
-     * 如果是顶级角色, 查询到的是当前角色拥有的权限
-     * 如果是子角色, 查询到父级角色分配的权限，范围不会超过父级角色拥有的权限
-     */
-    public List<PermPathResult> findPathsByRole(Long roleId) {
-        List<PermPathResult> permPaths = pathService.findAll();
-        Role role = roleManager.findById(roleId)
-                .orElseThrow(RoleNotExistedException::new);
-        // 如果有有父级角色, 进行过滤筛选, 防止越权
+    public List<PermPathResult> treeByRoleAndClient(Long roleId, String clientCode) {
+        // 查询全部的请求权限
+        List<PermPath> allPermPaths = permPathManager.findAll();
+        // 只保留叶子节点的数据, 如果是顶级角色, 直接可以使用, 不是的话需要进行过滤
+        List<PermPath> permPaths = allPermPaths.stream()
+                .filter(PermPath::isLeaf)
+                .toList();
+        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
+        // 如果有有上级角色, 只可以显示分配给自身的权限
         if (Objects.nonNull(role.getPid())){
-            List<Long> permissionIds = rolePathManager.findAllByRole(role.getPid())
+            List<Long> pathIds = rolePathManager.findAllByRoleAndClient(role.getId(),clientCode)
                     .stream()
                     .map(RolePath::getPathId)
                     .toList();
             permPaths = permPaths.stream()
-                    .filter(o->permissionIds.contains(o.getId()))
-                    .collect(Collectors.toList());
+                    .filter(o->pathIds.contains(o.getId()))
+                    .toList();
         }
-        return permPaths;
-    }
+        // 根据查询出来的数据生成树
+        return this.buildPathTree(permPaths, allPermPaths);
+      }
 
     /**
-     * 递归建树
-     * @param paths 查询出的菜单数据
-     * @return 递归后的树列表
+     * 根据查询出来的请求权限信息数据生成树
      */
-    private List<PermPathResult> recursiveBuildTree(List<PermPathResult> paths) {
-        return TreeBuildUtil.build(paths,
-                null,
-                PermPathResult::getCode,
-                PermPathResult::getParentCode,
-                PermPathResult::setChildren);
+    private List<PermPathResult> buildPathTree(List<PermPath> permPaths, List<PermPath> allPermPaths){
+        // 生成请求权限目录映射表
+        Map<String, PermPath> pathCatalogMap = allPermPaths.stream()
+                .filter(path -> !path.isLeaf())
+                .collect(Collectors.toMap(PermPath::getCode, Function.identity()));
 
+        // 获取分组
+        List<PermPath> groupList = permPaths.stream()
+                .map(PermPath::getParentCode)
+                .distinct()
+                .map(pathCatalogMap::get)
+                .toList();
+
+        // 获取模块
+        List<PermPath> moduleList = groupList.stream()
+                .map(PermPath::getParentCode)
+                .distinct()
+                .map(pathCatalogMap::get)
+                .toList();
+        // 进行合并并转为树状结构
+        permPaths = new ArrayList<>(permPaths);
+        permPaths.addAll(groupList);
+        permPaths.addAll(moduleList);
+        List<PermPathResult> list = permPaths.stream()
+                .map(PermPath::toResult)
+                .toList();
+        return TreeBuildUtil.build(list, null, PermPathResult::getId, PermPathResult::getParentCode, PermPathResult::setChildren);
+    }
+
+    /*------------------------------  运行时使用  ------------------------------------*/
+
+
+    /**
+     * 根据角色和请求方式进行查询出请求路径 需要进行缓存
+     */
+    public List<String> findPathsByRoleAndMethod(Long roleId, String method, String clientCode) {
+        MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
+                .select(PermPath::getPath)//查询user表全部字段
+                // 关联角色请求权限
+                .innerJoin(RolePath.class, RolePath::getRoleId, Role::getId, on-> on.eq(RolePath::getId, clientCode))
+                // 关请求权限
+                .innerJoin(PermPath.class, PermPath::getId, RolePath::getPathId)
+                .eq(Role::getId, roleId)
+
+                .eq(PermPath::getMethod,method.toUpperCase());
+
+        return roleManager.selectJoinList(String.class, wrapper);
     }
 }

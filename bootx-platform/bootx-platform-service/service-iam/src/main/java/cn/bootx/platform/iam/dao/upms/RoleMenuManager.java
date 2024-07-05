@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoleMenuManager extends BaseManager<RoleMenuMapper, RoleMenu> {
 
-    public void deleteByPermission(Long permissionId) {
-        deleteByField(RoleMenu::getMenuId, permissionId);
+    public void deleteByMenuId(Long menuId) {
+        deleteByField(RoleMenu::getMenuId, menuId);
     }
 
     public void deleteByRole(Long roleId) {
@@ -35,28 +35,19 @@ public class RoleMenuManager extends BaseManager<RoleMenuMapper, RoleMenu> {
     }
 
 
-    public List<RoleMenu> findAllByRoleAndClientCode(Long roleId, String clientCode) {
+    public List<RoleMenu> findAllByRoleAndClient(Long roleId, String clientCode) {
         return lambdaQuery().eq(RoleMenu::getRoleId, roleId).eq(RoleMenu::getClientCode, clientCode).list();
 
     }
 
     /**
-     * 根据角色id、客户端code、权限id进行删除
+     * 根据角色id、客户端code、菜单ID进行删除
      */
-    public void deleteByPermIds(Long roleId, String clientCode,List<Long> permissionIds) {
+    public void deleteByMenuIds(Long roleId, String clientCode, List<Long> menuIds) {
         lambdaUpdate()
                 .eq(RoleMenu::getRoleId, roleId)
                 .eq(RoleMenu::getClientCode,clientCode)
-                .in(RoleMenu::getMenuId,permissionIds)
+                .in(RoleMenu::getMenuId,menuIds)
                 .remove();
     }
-
-
-//    @Override
-//    public List<RoleMenu> saveAll(List<RoleMenu> list) {
-//        list.forEach(roleMenu -> roleMenu.setId(IdUtil.getSnowflakeNextId()));
-//        MpUtil.executeBatch(list, baseMapper::saveAll, this.DEFAULT_BATCH_SIZE);
-//        return list;
-//    }
-
 }

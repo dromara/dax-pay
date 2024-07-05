@@ -28,6 +28,11 @@ public class RolePath extends MpIdEntity {
     private Long roleId;
 
     /**
+     * 终端编码
+     */
+    private String clientCode;
+
+    /**
      * 权限id
      */
     private Long pathId;

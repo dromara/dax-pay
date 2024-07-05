@@ -15,3 +15,17 @@ mybatis-plus:
       logic-not-delete-value: false
 mybatis-plus-join:
   banner: false
+sa-token:
+  # token 名称（同时也是 cookie 名称）
+  token-name: satoken
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  is-log: false
+  is-print: false
+# 平台配置
+bootx-platform:
+  config:
+    client-code: dax-pay-admin

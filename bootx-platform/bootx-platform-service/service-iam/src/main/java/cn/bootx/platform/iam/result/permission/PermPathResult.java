@@ -28,7 +28,7 @@ public class PermPathResult {
     private String name;
 
     @Schema(description = "请求类型")
-    private String requestType;
+    private String method;
 
     @Schema(description = "请求路径")
     private String path;

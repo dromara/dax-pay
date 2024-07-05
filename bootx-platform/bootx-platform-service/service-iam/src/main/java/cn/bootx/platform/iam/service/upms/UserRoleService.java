@@ -64,7 +64,7 @@ public class UserRoleService {
     }
 
     /**
-     * 根据id查询角色id
+     * 根据id查询角色id, 作缓存
      */
     public List<Long> findRoleIdsByUser(Long userId) {
         return userRoleManager.findAllByUser(userId)

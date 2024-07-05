@@ -1,4 +1,4 @@
-package cn.bootx.platform.iam.dao.permission;
+package cn.bootx.platform.iam.dao.upms;
 
 import cn.bootx.platform.iam.entity.upms.RoleCode;
 import com.github.yulichang.base.MPJBaseMapper;

@@ -8,7 +8,6 @@ import cn.bootx.platform.iam.dao.upms.RoleMenuManager;
 import cn.bootx.platform.iam.entity.permission.PermMenu;
 import cn.bootx.platform.iam.param.permission.PermMenuParam;
 import cn.bootx.platform.iam.result.permission.PermMenuResult;
-import cn.bootx.platform.iam.service.upms.UserRoleService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +32,6 @@ public class PermMenuService {
 
     private final RoleMenuManager roleMenuManager;
 
-    private final UserRoleService userRoleService;
-
     /**
      * 添加菜单权限
      */
@@ -44,9 +41,8 @@ public class PermMenuService {
         if (param.isRoot()) {
             param.setParentId(null);
         }
-        // 增加判断是否循环依赖情况
-        PermMenu permission = PermMenu.init(param);
-        permMenuManager.save(permission);
+        PermMenu permMenu = PermMenu.init(param);
+        permMenuManager.save(permMenu);
     }
 
     /**
@@ -54,13 +50,12 @@ public class PermMenuService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void update(PermMenuParam param) {
-        PermMenu permMenu = permMenuManager.findById(param.getId()).orElseThrow(() -> new BizException("菜单权限不存在"));
-        permMenu.setClientCode(null);
+        PermMenu permMenu = permMenuManager.findById(param.getId()).orElseThrow(() -> new DataNotExistException("菜单不存在"));
         BeanUtil.copyProperties(param, permMenu, CopyOptions.create().ignoreNullValue());
 
         // 判断是否是一级菜单，是的话清空父菜单ID
         if (param.isRoot()) {
-            permMenu.setParentId(null);
+            permMenu.setPid(null);
         }
         // TODO 检查上级菜单是否出现了循环依赖
         permMenuManager.updateById(permMenu);
@@ -84,7 +79,7 @@ public class PermMenuService {
      * 列表(根据应用code)
      */
     public List<PermMenuResult> findAllByClientCode(String clientCode) {
-        return MpUtil.toListResult(permMenuManager.findAllByClientCode(clientCode));
+        return MpUtil.toListResult(permMenuManager.findAllByClient(clientCode));
     }
 
     /**
@@ -101,9 +96,9 @@ public class PermMenuService {
     public void delete(Long id) {
         // 有子菜单不可以删除
         if (permMenuManager.existsByParentId(id)) {
-            throw new BizException("有子菜单或下属权限不可以删除");
+            throw new BizException("有子菜单不可以删除");
         }
-        roleMenuManager.deleteByPermission(id);
+        roleMenuManager.deleteByMenuId(id);
         permMenuManager.deleteById(id);
     }
 }

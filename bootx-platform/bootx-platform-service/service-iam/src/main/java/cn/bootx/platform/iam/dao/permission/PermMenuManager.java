@@ -20,15 +20,15 @@ import java.util.List;
 public class PermMenuManager extends BaseManager<PermMenuMapper, PermMenu> {
 
     public boolean existsByParentId(Long pid) {
-        return existedByField(PermMenu::getParentId, pid);
+        return existedByField(PermMenu::getPid, pid);
     }
 
 
     public List<PermMenu> findAllByParentId(Long parentId) {
-        return findAllByField(PermMenu::getParentId, parentId);
+        return findAllByField(PermMenu::getPid, parentId);
     }
 
-    public List<PermMenu> findAllByClientCode(String clientCode) {
+    public List<PermMenu> findAllByClient(String clientCode) {
         return findAllByField(PermMenu::getClientCode, clientCode);
     }
 

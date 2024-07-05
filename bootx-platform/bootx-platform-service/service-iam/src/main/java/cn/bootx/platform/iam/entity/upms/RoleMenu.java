@@ -28,7 +28,7 @@ public class RoleMenu extends MpIdEntity {
     private Long roleId;
 
     /**
-     * 终端类型
+     * 终端编码
      */
     private String clientCode;
 

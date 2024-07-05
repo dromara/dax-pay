@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.service.permission;
 
+import cn.bootx.platform.common.config.BootxConfigProperties;
 import cn.bootx.platform.core.anno.RequestGroup;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.dto.permission.RequestPath;
@@ -35,22 +36,25 @@ public class PermPathSyncService {
 
     private final WebApplicationContext applicationContext;
 
+    private final BootxConfigProperties bootxConfigProperties;
+
     private final static String REQUEST_MAPPING_HANDLER_MAPPING = "requestMappingHandlerMapping";
 
     /**
      * 同步
      */
     public void sync() {
+        String clientCode = bootxConfigProperties.getClientCode();
         // 获取系统中的请求路径
         List<RequestPath> requestPaths = this.getRequestPath();
 
         // 查询数据中的数据并转换为请求信息列表
-        List<PermPath> permPaths = permPathManager.findAll();
+        List<PermPath> permPaths = permPathManager.findAllByField(PermPath::getClientCode, clientCode);
 
-        Map<String, RequestPath> requestPathMap = requestPaths.stream()
-                .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getRequestType(), Function.identity()));
-        Map<String, PermPath> permPathMap = permPaths.stream()
-                .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getRequestType(), Function.identity()));
+        var requestPathMap = requestPaths.stream()
+                .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
+        var permPathMap = permPaths.stream()
+                .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
 
         // 需要信息的数据
         List<PermPath> addData = this.getAddData(requestPathMap, permPathMap);
@@ -60,6 +64,7 @@ public class PermPathSyncService {
         List<PermPath> updateData = this.getUpdateData(requestPathMap, permPathMap);
 
         // 保存新增的
+        addData.forEach(o -> o.setClientCode(clientCode));
         permPathManager.saveAll(addData);
         // 更新存在的
         permPathManager.updateAllById(updateData);
@@ -69,13 +74,15 @@ public class PermPathSyncService {
         // 重建树结构 删除非子节点
         permPathManager.deleteNotChild();
         // 生成模块信息
-        Map<String, PermPath> moduleMap = this.builderModule(requestPaths);
+        var moduleMap = this.builderModule(requestPaths);
         // 生成分组信息
-        Map<String, PermPath> groupMap = this.builderGroup(requestPaths);
+        var groupMap = this.builderGroup(requestPaths);
         // 合并进行保存
         ArrayList<PermPath> list = new ArrayList<>();
-        list.addAll(moduleMap.values());
-        list.addAll(groupMap.values());
+        list.addAll(moduleMap);
+        list.addAll(groupMap);
+        // 设置终端编码
+        list.forEach(o -> o.setClientCode(clientCode));
         permPathManager.saveAll(list);
 
     }
@@ -89,7 +96,7 @@ public class PermPathSyncService {
                 .map(requestPathMap::get)
                 .map(o -> new PermPath()
                         .setParentCode(o.getGroupCode())
-                        .setRequestType(o.getRequestType())
+                        .setMethod(o.getMethod())
                         .setPath(o.getPath())
                         .setName(o.getName())
                         .setLeaf(true)
@@ -117,7 +124,7 @@ public class PermPathSyncService {
                 .filter(requestPathMap::containsKey)
                 .map(permPathMap::get)
                 .peek(o -> {
-                    RequestPath requestPath = requestPathMap.get(o.getPath() + ":" + o.getRequestType());
+                    RequestPath requestPath = requestPathMap.get(o.getPath() + ":" + o.getMethod());
                     o.setName(requestPath.getName())
                             .setParentCode(requestPath.getGroupCode());
                 }).toList();
@@ -127,7 +134,7 @@ public class PermPathSyncService {
     /**
      * 生成模块对应的实体
      */
-    private Map<String,PermPath> builderModule(List<RequestPath> allPathList) {
+    private List<PermPath> builderModule(List<RequestPath> allPathList) {
         // 提取模块名称和编码, 模块有多个名字情况下获取其中的一个
         Map<String, String> moduleCodeNameMap = allPathList.stream()
                 .collect(Collectors.toMap(RequestPath::getModuleCode, RequestPath::getModuleName, (v1, v2) -> v1));
@@ -136,13 +143,13 @@ public class PermPathSyncService {
                 .stream()
                 .map(o -> new PermPath().setCode(o)
                         .setName(moduleCodeNameMap.get(o)))
-                .collect(Collectors.toMap(PermPath::getCode, Function.identity()));
+                .toList();
     }
 
     /**
      * 生成组对应的实体
      */
-    private Map<String, PermPath> builderGroup(List<RequestPath> allPathList) {
+    private List<PermPath> builderGroup(List<RequestPath> allPathList) {
         // 提取组名称和编码, 组有多个名字情况下获取其中的一个
         Map<String, List<RequestPath>> groupMap = allPathList.stream()
                 .collect(Collectors.groupingBy(RequestPath::getGroupCode));
@@ -167,8 +174,7 @@ public class PermPathSyncService {
                     .setParentCode(moduleCode);
             groupList.add(permPath);
         }
-        return groupList.stream()
-                .collect(Collectors.toMap(PermPath::getCode, Function.identity()));
+        return groupList;
     }
 
     /**
@@ -247,7 +253,7 @@ public class PermPathSyncService {
         return requestMethods.stream()
                 .map(requestMethod -> new RequestPath()
                         .setPath(path)
-                        .setRequestType(requestMethod))
+                        .setMethod(requestMethod))
                 .collect(toList());
     }
 

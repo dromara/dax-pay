@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 权限
+ * 请求路径权限
  *
  * @author xxm
  * @since 2020/5/10 23:27
@@ -25,10 +25,14 @@ public class PermPathManager extends BaseManager<PermPathMapper, PermPath> {
     }
 
 
+    /**
+     * 查询简单的请求路径权限子节点, 只包括主键、路径和请求方式
+     */
     public List<PermPath> findSimpleByIds(List<Long> ids) {
         return lambdaQuery()
-                .select(PermPath::getId,PermPath::getPath)
+                .select(PermPath::getId,PermPath::getPath,PermPath::getMethod)
                 .eq(PermPath::isLeaf, true)
+                .in(PermPath::getId, ids)
                 .list();
     }
 }

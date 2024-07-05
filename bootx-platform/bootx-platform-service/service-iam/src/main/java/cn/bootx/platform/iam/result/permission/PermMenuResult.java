@@ -20,7 +20,7 @@ public class PermMenuResult {
     private Long id;
 
     @Schema(description = "父id")
-    private Long parentId;
+    private Long pid;
 
     @Schema(description = "关联终端code")
     private String clientCode;

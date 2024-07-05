@@ -57,7 +57,6 @@ public class UserInfoResult {
             .setAccount(this.getUsername())
             .setName(this.name)
             .setAdmin(this.administrator)
-            .setClientIds(this.clientIds)
             .setStatus(this.status);
     }
 

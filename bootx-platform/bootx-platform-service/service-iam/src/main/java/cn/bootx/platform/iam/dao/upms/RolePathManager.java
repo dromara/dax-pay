@@ -19,8 +19,11 @@ public class RolePathManager extends BaseManager<RolePathMapper, RolePath> {
 
     private final RolePathMapper rolePathMapper;
 
-    public List<RolePath> findAllByRole(Long roleId) {
-        return findAllByField(RolePath::getRoleId, roleId);
+    public List<RolePath> findAllByRoleAndClient(Long pathId, String clientCode) {
+        return lambdaQuery()
+                .eq(RolePath::getPathId, pathId)
+                .eq(RolePath::getClientCode, clientCode)
+                .list();
     }
 
     public List<RolePath> findAllByRoles(List<Long> roleIds) {
@@ -50,12 +53,13 @@ public class RolePathManager extends BaseManager<RolePathMapper, RolePath> {
 //    }
 
     /**
-     * 根据角色id 权限ids 删除关联关系
+     * 根据角色id 菜单ids 删除关联关系
      */
-    public void deleteByPermIds(Long roleId, List<Long> permissionIds) {
+    public void deleteByPathIds(Long roleId, String clientCode, List<Long> pathIds) {
         lambdaUpdate()
                 .eq(RolePath::getRoleId, roleId)
-                .in(RolePath::getPathId,permissionIds)
+                .eq(RolePath::getClientCode, clientCode)
+                .in(RolePath::getPathId,pathIds)
                 .remove();
     }
 }

@@ -10,14 +10,9 @@
     </parent>
 
     <artifactId>common-spring</artifactId>
+    <description>Spring 封装</description>
 
     <dependencies>
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!-- web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

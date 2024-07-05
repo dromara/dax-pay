@@ -4,10 +4,13 @@ import cn.bootx.platform.common.mybatisplus.base.MpRealDelEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.iam.convert.permission.PermPathConvert;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * 权限资源(url请求)
@@ -24,6 +27,10 @@ public class PermPath extends MpRealDelEntity implements ToResult<PermPathResult
     /** 上级编码 */
     private String parentCode;
 
+    /** 终端编码 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private String clientCode;
+
     /** 标识编码(模块、分组标识) */
     private String code;
 
@@ -36,8 +43,11 @@ public class PermPath extends MpRealDelEntity implements ToResult<PermPathResult
     /** 请求路径 */
     private String path;
 
-    /** 请求类型 */
-    private String requestType;
+    /**
+     * 请求类型, 为全大写单词
+     * @see RequestMethod
+     */
+    private String method;
 
     @Override
     public PermPathResult toResult() {

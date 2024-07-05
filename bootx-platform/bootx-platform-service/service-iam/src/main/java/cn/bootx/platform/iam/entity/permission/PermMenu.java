@@ -26,9 +26,10 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
 
     /** 父id */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private Long parentId;
+    private Long pid;
 
     /** 关联终端code */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String clientCode;
 
     /** 菜单标题 */

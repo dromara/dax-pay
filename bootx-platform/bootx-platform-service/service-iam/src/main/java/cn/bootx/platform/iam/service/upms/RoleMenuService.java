@@ -1,19 +1,22 @@
 package cn.bootx.platform.iam.service.upms;
 
-import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.core.util.TreeBuildUtil;
+import cn.bootx.platform.iam.dao.permission.PermMenuManager;
 import cn.bootx.platform.iam.dao.role.RoleManager;
 import cn.bootx.platform.iam.dao.upms.RoleMenuManager;
+import cn.bootx.platform.iam.entity.permission.PermMenu;
 import cn.bootx.platform.iam.entity.role.Role;
 import cn.bootx.platform.iam.entity.upms.RoleMenu;
+import cn.bootx.platform.iam.entity.upms.RolePath;
 import cn.bootx.platform.iam.exception.role.RoleNotExistedException;
+import cn.bootx.platform.iam.param.permission.PermMenuAssignParam;
 import cn.bootx.platform.iam.result.permission.PermMenuResult;
 import cn.bootx.platform.iam.result.role.RoleResult;
 import cn.bootx.platform.iam.service.permission.PermMenuService;
+import cn.bootx.platform.iam.service.role.RoleQueryService;
 import cn.bootx.platform.iam.service.role.RoleService;
-import cn.bootx.platform.starter.auth.exception.NotLoginException;
-import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.hutool.core.collection.CollUtil;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,7 +49,12 @@ public class RoleMenuService {
 
     private final UserRoleService userRoleService;
 
+    private final RoleQueryService roleQueryService;
+
     private final PermMenuService permMenuService;
+
+    private final PermMenuManager permMenuManager;
+
 
     /**
      * 保存角色菜单授权
@@ -54,9 +62,13 @@ public class RoleMenuService {
      * 新增角色菜单关系, 会根据 updateAddChildren状态 来决定是否级联新增子孙角色的菜单关系
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveAssign(Long roleId, String clientCode, List<Long> menuIds, boolean updateAddChildren) {
-        List<RoleMenu> RoleMenus = roleMenuManager.findAllByRoleAndClientCode(roleId, clientCode);
-        List<Long> roleMenuIds = RoleMenus.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
+    public void saveAssign(PermMenuAssignParam param) {
+        Long roleId = param.getRoleId();
+        String clientCode = param.getClientCode();
+        List<Long> menuIds = param.getMenuIds();
+        // 已经保存的角色菜单关系
+        List<RoleMenu> RoleMenus = roleMenuManager.findAllByRoleAndClient(roleId, clientCode);
+        List<Long> roleMenuIds = RoleMenus.stream().map(RoleMenu::getMenuId).toList();
         // 需要删除的菜单
         List<RoleMenu> deleteRoleMenus = RoleMenus.stream()
                 .filter(rolePath -> !menuIds.contains(rolePath.getMenuId()))
@@ -74,7 +86,7 @@ public class RoleMenuService {
         Role role = roleManager.findById(roleId)
                 .orElseThrow(RoleNotExistedException::new);
         if (Objects.nonNull(role.getPid())){
-            List<Long> collect = roleMenuManager.findAllByRoleAndClientCode(role.getPid(), clientCode)
+            List<Long> collect = roleMenuManager.findAllByRoleAndClient(role.getPid(), clientCode)
                     .stream()
                     .map(RoleMenu::getMenuId)
                     .toList();
@@ -86,7 +98,7 @@ public class RoleMenuService {
 
         // 级联更新子孙角色
         List<Long> deletePermIds = deleteRoleMenus.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
-        if (updateAddChildren) {
+        if (param.isUpdateChildren()) {
             // 新增的进行追加
             List<Long> addPermIds = addRoleMenus.stream()
                     .map(RoleMenu::getMenuId)
@@ -106,125 +118,80 @@ public class RoleMenuService {
             return;
         }
         // 当前角色的子孙角色
-        List<RoleResult> children = roleService.findChildren(roleId);
+        List<RoleResult> childrenRoles = roleQueryService.findChildren(roleId);
         // 新增
-        if (CollUtil.isNotEmpty(addPermIds) && CollUtil.isNotEmpty(children)){
+        if (CollUtil.isNotEmpty(addPermIds) && CollUtil.isNotEmpty(childrenRoles)){
             List<RoleMenu> addRoleMenus = new ArrayList<>();
             for (Long addPermId : addPermIds) {
-                for (RoleResult childrenRole : children) {
+                for (RoleResult childrenRole : childrenRoles) {
                     addRoleMenus.add(new RoleMenu(childrenRole.getId(), clientCode, addPermId));
                 }
             }
             roleMenuManager.saveAll(addRoleMenus);
         }
         // 删除
-        if (CollUtil.isNotEmpty(deletePermIds) && CollUtil.isNotEmpty(children)) {
+        if (CollUtil.isNotEmpty(deletePermIds) && CollUtil.isNotEmpty(childrenRoles)) {
             // 子孙角色
-            List<Long> childrenIds = children.stream()
+            List<Long> childrenRoleIds = childrenRoles.stream()
                     .map(RoleResult::getId)
                     .toList();
-            for (Long childrenId : childrenIds) {
-                roleMenuManager.deleteByPermIds(childrenId,clientCode,deletePermIds);
+            for (Long childrenId : childrenRoleIds) {
+                roleMenuManager.deleteByMenuIds(childrenId,clientCode,deletePermIds);
             }
         }
     }
 
+
+    /*------------------------------  管理端配置使用  ------------------------------------*/
+
     /**
      * 查询当前角色已经选择的菜单id
      */
-    public List<Long> findMenuIdsByRole(Long roleId, String clientCode) {
-        List<RoleMenu> roleMenus = roleMenuManager.findAllByRoleAndClientCode(roleId, clientCode);
-        return roleMenus.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
+    public List<Long> findIdsByRoleAndClient(Long roleId, String clientCode) {
+        List<RoleMenu> rolePermissions = roleMenuManager.findAllByRoleAndClient(roleId,clientCode);
+        return rolePermissions.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
     }
 
     /**
-     * 获取菜单菜单树
-     * 1. 用户为管理员, 返回所有菜单
-     * 2. 如果用户为非管理员, 则返回当前用户角色下可见的菜单
+     * 获取当前用户角色下可见的菜单信息, 并转换成树返回
+     * 如果是顶级角色, 可以查看所有的菜单
+     * 如果是子角色, 查询分配给自身的菜单
      */
-    public List<PermMenuResult> findMenuTree(String clientCode) {
-        List<PermMenuResult> menus = this.findMenus(clientCode);
-        return this.recursiveBuildTree(menus);
-    }
-
-    /**
-     * 获取当前用户角色下可见的菜单树
-     * 如果是顶级角色, 查询到的是当前角色拥有的菜单
-     * 如果是子角色, 查询到父级角色分配的菜单，范围不会超过父级角色拥有的菜单
-     */
-    public List<PermMenuResult> findTreeByRole(String clientCode, Long roleId) {
-        List<PermMenuResult> menus = this.findMenus(clientCode);
+    public List<PermMenuResult> treeByRoleAndCode(Long roleId, String clientCode) {
         Role role = roleManager.findById(roleId)
                 .orElseThrow(RoleNotExistedException::new);
-        // 如果有有父级角色, 进行过滤筛选, 防止越权
+        // 如果有有上级级角色, 查询可以被分配的菜单(上级角色已经分配的菜单), 没有返回当前终端所有的菜单
+        List<PermMenu> menus;
         if (Objects.nonNull(role.getPid())){
-            List<Long> menuIds = roleMenuManager.findAllByRole(role.getPid())
-                    .stream()
-                    .map(RoleMenu::getMenuId)
-                    .toList();
-            menus = menus.stream()
-                    .filter(o->menuIds.contains(o.getId()))
-                    .collect(Collectors.toList());
-        }
-        return this.recursiveBuildTree(menus);
-    }
-
-    /**
-     * 获取菜单菜单id列表
-     */
-    public List<Long> findMenuIds(String clientCode) {
-        List<PermMenuResult> menus = this.findMenus(clientCode);
-        return menus.stream()
-                .map(PermMenuResult::getId)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 获取菜单信息列表
-     */
-    private List<PermMenuResult> findMenus(String clientCode) {
-        UserDetail userDetail = SecurityUtil.getCurrentUser().orElseThrow(NotLoginException::new);
-        List<PermMenuResult> menus;
-
-        // 系统管理员，获取全部的菜单
-        if (userDetail.isAdmin()) {
-            menus = permMenuService.findAllByClientCode(clientCode);
+            // 查询当前角色父角色被分配的菜单
+            menus = this.findAllByRoleAndClient(role.getPid(), clientCode);
         } else {
-            // 非管理员获取自身拥有的菜单
-            menus = this.findMenusByUser(userDetail.getId())
-                    .stream()
-                    .filter(o -> Objects.equals(clientCode, o.getClientCode()))
-                    .collect(Collectors.toList());
+            menus = permMenuManager.findAllByClient(clientCode);
+
         }
-        return menus;
+        // 转换为树并返回
+        List<PermMenuResult> list = menus.stream()
+                .map(PermMenu::toResult)
+                .toList();
+        return this.buildTree(list);
+
     }
 
+    /*------------------------------  运行时使用  ------------------------------------*/
 
     /**
-     * 查询用户查询拥有的菜单信息
-     * 如果当前用户密码是否过期, 过期或者未修改密码, 返回菜单为空
+     * 根据角色和请求方式进行查询出请求菜单 需要进行缓存,
+     * 构造用户菜单时, 会合并多个角色的菜单, 然后再转换为菜单树
      */
-    private List<PermMenuResult> findMenusByUser(Long userId) {
-        // 判断当前用户密码是否过期, 过期或者未修改密码, 返回菜单为空
-//        UserStatus userStatus = userStatusService.getUserStatus();
-//        if (userStatus.isExpirePassword() || userStatus.isInitialPassword()){
-//            return new ArrayList<>(0);
-//        }
-
-        List<PermMenuResult> menus = new ArrayList<>(0);
-        List<Long> roleIds = userRoleService.findRoleIdsByUser(userId);
-        if (CollUtil.isEmpty(roleIds)) {
-            return menus;
-        }
-        List<RoleMenu> roleMenus = roleMenuManager.findAllByRoles(roleIds);
-        List<Long> menuIds = roleMenus.stream()
-                .map(RoleMenu::getMenuId)
-                .distinct()
-                .collect(Collectors.toList());
-        if (CollUtil.isNotEmpty(menuIds)) {
-            menus = permMenuService.findByIds(menuIds);
-        }
-        return menus;
+    public List<PermMenu> findAllByRoleAndClient(Long roleId, String clientCode) {
+        MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
+                .selectAll(PermMenu.class)
+                // 角色菜单关联
+                .innerJoin(RoleMenu.class, RoleMenu::getRoleId, Role::getId, on-> on.eq(RolePath::getId, clientCode))
+                // 菜单信息
+                .innerJoin(PermMenu.class, PermMenu::getId, RoleMenu::getMenuId)
+                .eq(Role::getId, roleId);
+        return roleManager.selectJoinList(PermMenu.class, wrapper);
     }
 
     /**
@@ -232,8 +199,8 @@ public class RoleMenuService {
      * @param menus 查询出的菜单数据
      * @return 递归后的树列表
      */
-    private List<PermMenuResult> recursiveBuildTree(List<PermMenuResult> menus) {
-        return TreeBuildUtil.build(menus, null, PermMenuResult::getId, PermMenuResult::getParentId,
+    public List<PermMenuResult> buildTree(List<PermMenuResult> menus) {
+        return TreeBuildUtil.build(menus, null, PermMenuResult::getId, PermMenuResult::getPid,
                 PermMenuResult::setChildren, Comparator.comparing(PermMenuResult::getSortNo));
 
     }

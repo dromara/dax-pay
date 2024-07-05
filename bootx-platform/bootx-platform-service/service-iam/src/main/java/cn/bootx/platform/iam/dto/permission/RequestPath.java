@@ -34,5 +34,5 @@ public class RequestPath {
     private String path;
 
     /** 请求类型 */
-    private String requestType;
+    private String method;
 }

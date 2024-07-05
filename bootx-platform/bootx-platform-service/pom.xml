@@ -95,6 +95,13 @@
             <version>${lock4j.version}</version>
         </dependency>
 
+        <!-- 平台配置 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-config</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
     </dependencies>
 
 

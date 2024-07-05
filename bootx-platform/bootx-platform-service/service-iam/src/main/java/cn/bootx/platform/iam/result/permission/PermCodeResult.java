@@ -17,6 +17,12 @@ public class PermCodeResult {
     @Schema(description = "主键")
     private Long id;
 
+    @Schema(description = "父ID")
+    private Long pid;
+
     @Schema(description = "权限码")
     private String code;
+
+    @Schema(description = "权限名称")
+    private String name;
 }

@@ -1,8 +1,10 @@
 package cn.bootx.platform.iam.entity.upms;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -13,17 +15,14 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class RoleCode extends MpIdEntity {
 
     /**
      * 角色id
      */
     private Long roleId;
-
-    /**
-     * 终端类型
-     */
-    private String clientCode;
 
     /**
      * 权限码

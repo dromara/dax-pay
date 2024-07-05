@@ -9,16 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>common-swagger</artifactId>
-    <packaging>jar</packaging>
-    <description>接口文档</description>
+    <artifactId>common-config</artifactId>
+    <description>项目配置</description>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
-        </dependency>
-    </dependencies>
+
 
 </project>

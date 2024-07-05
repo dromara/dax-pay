@@ -17,6 +17,16 @@ public class PermCodeParam {
     @Schema(description = "id")
     private Long id;
 
+    @Schema(description = "父id")
+    private Long pid;
+
     @Schema(description = "权限码")
     private String code;
+
+    @Schema(description = "名称")
+    private String name;
+
+    @Schema(description = "是否为子节点")
+    private boolean leaf;;
+
 }
