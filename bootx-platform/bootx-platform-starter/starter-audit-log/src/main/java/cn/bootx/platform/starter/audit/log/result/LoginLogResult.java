@@ -1,4 +1,4 @@
-package cn.bootx.platform.starter.audit.log.dto;
+package cn.bootx.platform.starter.audit.log.result;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "登录日志")
-public class LoginLogDto {
+public class LoginLogResult {
 
     @Schema(description = "主键")
     private Long id;

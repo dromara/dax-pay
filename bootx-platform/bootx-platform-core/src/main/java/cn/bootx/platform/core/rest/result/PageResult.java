@@ -2,7 +2,6 @@ package cn.bootx.platform.core.rest.result;
 
 import lombok.Getter;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,8 +13,6 @@ import java.util.List;
  */
 @Getter
 public class PageResult<T> {
-
-
     /**
      * 查询数据列表
      */

@@ -1,9 +1,9 @@
-package cn.bootx.platform.starter.audit.log.core.db.entity;
+package cn.bootx.platform.starter.audit.log.entity;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
-import cn.bootx.platform.starter.audit.log.core.db.convert.LogConvert;
-import cn.bootx.platform.starter.audit.log.dto.LoginLogDto;
+import cn.bootx.platform.starter.audit.log.convert.LogConvert;
+import cn.bootx.platform.starter.audit.log.result.LoginLogResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("starter_audit_login_log")
-public class LoginLogDb extends MpIdEntity implements ToResult<LoginLogDto> {
+public class LoginLogDb extends MpIdEntity implements ToResult<LoginLogResult> {
 
     /** 用户账号id */
     private Long userId;
@@ -57,7 +57,7 @@ public class LoginLogDb extends MpIdEntity implements ToResult<LoginLogDto> {
     private LocalDateTime loginTime;
 
     @Override
-    public LoginLogDto toResult() {
+    public LoginLogResult toResult() {
         return LogConvert.CONVERT.convert(this);
     }
 

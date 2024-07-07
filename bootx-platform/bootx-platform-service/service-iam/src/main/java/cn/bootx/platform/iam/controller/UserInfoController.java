@@ -4,8 +4,8 @@ import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.iam.param.user.UserBaseInfoParam;
-import cn.bootx.platform.iam.result.user.LoginAfterUserInfo;
-import cn.bootx.platform.iam.result.user.UserBaseInfoDto;
+import cn.bootx.platform.iam.result.user.LoginAfterUserInfoResult;
+import cn.bootx.platform.iam.result.user.UserBaseInfoResult;
 import cn.bootx.platform.iam.service.service.UserInfoService;
 import cn.bootx.platform.iam.service.service.UserQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +53,7 @@ public class UserInfoController {
 
     @Operation(summary = "查询用户基础信息")
     @GetMapping("/getUserBaseInfo")
-    public Result<UserBaseInfoDto> getUserBaseInfo() {
+    public Result<UserBaseInfoResult> getUserBaseInfo() {
         return Res.ok(userInfoService.getUserBaseInfo());
     }
 
@@ -66,7 +66,7 @@ public class UserInfoController {
 
     @Operation(summary = "登录后获取用户信息")
     @GetMapping("/getLoginAfterUserInfo")
-    public Result<LoginAfterUserInfo> getLoginAfterUserInfo() {
+    public Result<LoginAfterUserInfoResult> getLoginAfterUserInfo() {
         return Res.ok(userInfoService.getLoginAfterUserInfo());
     }
 

@@ -1,9 +1,9 @@
-package cn.bootx.platform.starter.audit.log.core.db.convert;
+package cn.bootx.platform.starter.audit.log.convert;
 
-import cn.bootx.platform.starter.audit.log.core.db.entity.LoginLogDb;
-import cn.bootx.platform.starter.audit.log.core.db.entity.OperateLogDb;
-import cn.bootx.platform.starter.audit.log.dto.LoginLogDto;
-import cn.bootx.platform.starter.audit.log.dto.OperateLogDto;
+import cn.bootx.platform.starter.audit.log.entity.LoginLogDb;
+import cn.bootx.platform.starter.audit.log.entity.OperateLogDb;
+import cn.bootx.platform.starter.audit.log.result.LoginLogResult;
+import cn.bootx.platform.starter.audit.log.result.OperateLogResult;
 import cn.bootx.platform.starter.audit.log.param.LoginLogParam;
 import cn.bootx.platform.starter.audit.log.param.OperateLogParam;
 import org.mapstruct.Mapper;
@@ -20,9 +20,9 @@ public interface LogConvert {
 
     LogConvert CONVERT = Mappers.getMapper(LogConvert.class);
 
-    OperateLogDto convert(OperateLogDb in);
+    OperateLogResult convert(OperateLogDb in);
 
-    LoginLogDto convert(LoginLogDb in);
+    LoginLogResult convert(LoginLogDb in);
 
     OperateLogDb convert(OperateLogParam in);
 

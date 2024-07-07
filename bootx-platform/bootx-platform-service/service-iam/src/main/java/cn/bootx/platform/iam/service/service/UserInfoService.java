@@ -7,8 +7,8 @@ import cn.bootx.platform.iam.entity.user.UserExpandInfo;
 import cn.bootx.platform.iam.entity.user.UserInfo;
 import cn.bootx.platform.iam.exception.user.UserInfoNotExistsException;
 import cn.bootx.platform.iam.param.user.UserBaseInfoParam;
-import cn.bootx.platform.iam.result.user.LoginAfterUserInfo;
-import cn.bootx.platform.iam.result.user.UserBaseInfoDto;
+import cn.bootx.platform.iam.result.user.LoginAfterUserInfoResult;
+import cn.bootx.platform.iam.result.user.UserBaseInfoResult;
 import cn.bootx.platform.iam.result.user.UserInfoResult;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.hutool.core.bean.BeanUtil;
@@ -38,12 +38,12 @@ public class UserInfoService {
     /**
      * 登录后获取用户信息
      */
-    public LoginAfterUserInfo getLoginAfterUserInfo() {
+    public LoginAfterUserInfoResult getLoginAfterUserInfo() {
         UserInfo userInfo = userInfoManager.findById(SecurityUtil.getUserId())
             .orElseThrow(UserInfoNotExistsException::new);
         UserExpandInfo userExpandInfo = userExpandInfoManager.findById(SecurityUtil.getUserId())
             .orElseThrow(UserInfoNotExistsException::new);
-        return new LoginAfterUserInfo().setAvatar(userExpandInfo.getAvatar())
+        return new LoginAfterUserInfoResult().setAvatar(userExpandInfo.getAvatar())
             .setUserId(userInfo.getId())
             .setUsername(userInfo.getUsername())
             .setName(userInfo.getName());
@@ -61,12 +61,12 @@ public class UserInfoService {
     /**
      * 获取用户基本信息
      */
-    public UserBaseInfoDto getUserBaseInfo() {
+    public UserBaseInfoResult getUserBaseInfo() {
         UserInfo userInfo = userInfoManager.findById(SecurityUtil.getUserId())
             .orElseThrow(UserInfoNotExistsException::new);
         UserExpandInfo userExpandInfo = userExpandInfoManager.findById(SecurityUtil.getUserId())
             .orElseThrow(UserInfoNotExistsException::new);
-        return new UserBaseInfoDto().setId(userInfo.getId())
+        return new UserBaseInfoResult().setId(userInfo.getId())
             .setSex(userExpandInfo.getSex())
             .setName(userInfo.getName())
             .setBirthday(userExpandInfo.getBirthday())

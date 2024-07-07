@@ -1,4 +1,4 @@
-package cn.bootx.platform.starter.audit.log.dto;
+package cn.bootx.platform.starter.audit.log.result;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-public class OperateLogDto {
+public class OperateLogResult {
 
     @Schema(description = "日志id")
     private Long id;

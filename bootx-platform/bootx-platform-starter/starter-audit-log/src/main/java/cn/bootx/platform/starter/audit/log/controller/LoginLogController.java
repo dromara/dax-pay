@@ -4,9 +4,9 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import cn.bootx.platform.starter.audit.log.dto.LoginLogDto;
+import cn.bootx.platform.starter.audit.log.result.LoginLogResult;
 import cn.bootx.platform.starter.audit.log.param.LoginLogParam;
-import cn.bootx.platform.starter.audit.log.service.LoginLogService;
+import cn.bootx.platform.starter.audit.log.service.log.LoginLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +29,13 @@ public class LoginLogController {
 
     @Operation(summary = "分页")
     @GetMapping("/page")
-    public Result<PageResult<LoginLogDto>> page(PageParam pageParam, LoginLogParam loginLogParam) {
+    public Result<PageResult<LoginLogResult>> page(PageParam pageParam, LoginLogParam loginLogParam) {
         return Res.ok(loginLogService.page(pageParam, loginLogParam));
     }
 
     @Operation(summary = "获取")
     @GetMapping("/findById")
-    public Result<LoginLogDto> findById(Long id) {
+    public Result<LoginLogResult> findById(Long id) {
         return Res.ok(loginLogService.findById(id));
     }
 

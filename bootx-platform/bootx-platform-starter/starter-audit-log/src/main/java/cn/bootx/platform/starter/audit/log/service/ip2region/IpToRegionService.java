@@ -1,4 +1,4 @@
-package cn.bootx.platform.starter.audit.log.ip2region;
+package cn.bootx.platform.starter.audit.log.service.ip2region;
 
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.starter.audit.log.properties.AuditLogProperties;
