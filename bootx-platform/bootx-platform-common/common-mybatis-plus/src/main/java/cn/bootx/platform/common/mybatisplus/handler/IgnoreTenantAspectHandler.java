@@ -1,6 +1,6 @@
 package cn.bootx.platform.common.mybatisplus.handler;
 
-import cn.bootx.platform.core.anno.IgnoreTenant;
+import cn.bootx.platform.core.annotation.IgnoreTenant;
 import com.baomidou.mybatisplus.core.plugins.IgnoreStrategy;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import lombok.RequiredArgsConstructor;

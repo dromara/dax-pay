@@ -18,6 +18,13 @@ import java.util.List;
 public class PermPathManager extends BaseManager<PermPathMapper, PermPath> {
 
     /**
+     * 根据节点类型查询查询
+     */
+    public List<PermPath> findByLeaf(boolean isLeaf) {
+        return findAllByField(PermPath::isLeaf,isLeaf);
+    }
+
+    /**
      * 删除非子节点
      */
     public void deleteNotChild() {

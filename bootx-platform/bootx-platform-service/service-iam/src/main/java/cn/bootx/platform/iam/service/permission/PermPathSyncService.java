@@ -1,7 +1,7 @@
 package cn.bootx.platform.iam.service.permission;
 
 import cn.bootx.platform.common.config.BootxConfigProperties;
-import cn.bootx.platform.core.anno.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.dto.permission.RequestPath;
 import cn.bootx.platform.iam.entity.permission.PermPath;
@@ -190,7 +190,7 @@ public class PermPathSyncService {
                 .stream()
                 .filter(pathKey -> {
                     HandlerMethod handlerMethod = map.get(pathKey);
-                    return Objects.nonNull(handlerMethod.getMethodAnnotation(cn.bootx.platform.core.anno.RequestPath.class))
+                    return Objects.nonNull(handlerMethod.getMethodAnnotation(cn.bootx.platform.core.annotation.RequestPath.class))
                             &&Objects.nonNull(handlerMethod.getBeanType().getAnnotation(RequestGroup.class));
                 }).toList();
 
@@ -233,7 +233,7 @@ public class PermPathSyncService {
 
         // 读取控制器注解和请求方法注解
         RequestGroup requestGroup = beanClass.getAnnotation(RequestGroup.class);
-        cn.bootx.platform.core.anno.RequestPath requestPath = method.getAnnotation(cn.bootx.platform.core.anno.RequestPath.class);
+        cn.bootx.platform.core.annotation.RequestPath requestPath = method.getAnnotation(cn.bootx.platform.core.annotation.RequestPath.class);
 
         // 设置通用属性
         for (RequestPath path : list) {

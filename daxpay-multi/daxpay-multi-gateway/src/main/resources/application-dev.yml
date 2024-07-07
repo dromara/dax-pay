@@ -44,3 +44,21 @@ bootx-platform:
           - cn.bootx.platform.notice
         "[支付网关接口]":
           - cn.daxpay.multi.gateway
+  starter:
+    auth:
+      enable-admin: true
+      ignore-urls:
+        - '/actuator/**'
+        - '/v3/api-docs/**'
+        - '/doc.html'
+        - '/swagger-resources/**'
+        - '/token/**'
+        - '/ws/**'
+        - '/demo/**'
+        - '/test/**'
+        - '/webjars/**'
+        - '/front/**'
+        - '/h5/**'
+        - '/css/**'
+        - '/error'
+        - '/favicon.ico'

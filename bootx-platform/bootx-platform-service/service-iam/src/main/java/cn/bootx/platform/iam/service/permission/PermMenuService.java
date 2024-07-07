@@ -3,6 +3,7 @@ package cn.bootx.platform.iam.service.permission;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.DataNotExistException;
+import cn.bootx.platform.core.util.TreeBuildUtil;
 import cn.bootx.platform.iam.dao.permission.PermMenuManager;
 import cn.bootx.platform.iam.dao.upms.RoleMenuManager;
 import cn.bootx.platform.iam.entity.permission.PermMenu;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -100,5 +102,15 @@ public class PermMenuService {
         }
         roleMenuManager.deleteByMenuId(id);
         permMenuManager.deleteById(id);
+    }
+
+    /**
+     * 菜单树(查看全部)
+     */
+    public List<PermMenuResult> tree(String clientCode) {
+        List<PermMenuResult> menus = permMenuManager.findAllByClient(clientCode).stream()
+                .map(PermMenu::toResult)
+                .toList();
+        return TreeBuildUtil.build(menus, null, PermMenuResult::getId, PermMenuResult::getPid, PermMenuResult::setChildren, Comparator.comparing(PermMenuResult::getSortNo));
     }
 }

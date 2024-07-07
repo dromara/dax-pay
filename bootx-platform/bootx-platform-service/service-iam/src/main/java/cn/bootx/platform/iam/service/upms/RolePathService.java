@@ -47,6 +47,7 @@ public class RolePathService {
     private final RoleQueryService roleQueryService;
 
 
+
     /**
      * 保存角色路径授权
      */
@@ -176,7 +177,7 @@ public class RolePathService {
      * 如果是顶级角色, 可以查看所有的权限
      * 如果是子角色, 查询分配给自身的权限
      */
-    public List<PermPathResult> treeByRoleAndClient(Long roleId, String clientCode) {
+    public List<PermPathResult> treeByRoleAssign(Long roleId, String clientCode) {
         // 查询全部的请求权限
         List<PermPath> allPermPaths = permPathManager.findAll();
         // 只保留叶子节点的数据, 如果是顶级角色, 直接可以使用, 不是的话需要进行过滤

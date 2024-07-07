@@ -4,6 +4,7 @@ import cn.bootx.platform.core.exception.RepetitiveOperationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -15,11 +16,10 @@ import java.util.List;
  * @since 2020/11/29
  */
 @Slf4j
+@UtilityClass
 public class JacksonUtil {
 
     private static boolean objectMapperFlag;
-
-    private static boolean typeObjectMapperFlag;
 
     private static boolean ignoreNullObjectMapperFlag;
 
@@ -28,9 +28,7 @@ public class JacksonUtil {
     /** 忽略控制 */
     private static ObjectMapper ignoreNullObjectMapper;
 
-    private static ObjectMapper typeObjectMapper;
-
-    public static void setObjectMapper(ObjectMapper objectMapper) {
+    public void setObjectMapper(ObjectMapper objectMapper) {
         if (objectMapperFlag) {
             throw new RepetitiveOperationException();
         }
@@ -38,15 +36,7 @@ public class JacksonUtil {
         JacksonUtil.objectMapper = objectMapper;
     }
 
-    public static void setTypeObjectMapper(ObjectMapper typeObjectMapper) {
-        if (typeObjectMapperFlag) {
-            throw new RepetitiveOperationException();
-        }
-        typeObjectMapperFlag = true;
-        JacksonUtil.typeObjectMapper = typeObjectMapper;
-    }
-
-    public static void setIgnoreNullObjectMapper(ObjectMapper ignoreNullObjectMapper) {
+    public void setIgnoreNullObjectMapper(ObjectMapper ignoreNullObjectMapper) {
         if (ignoreNullObjectMapperFlag) {
             throw new RepetitiveOperationException();
         }
@@ -56,12 +46,13 @@ public class JacksonUtil {
 
     /**
      * 对象序列化为json字符串,转换异常将被抛出
+     * 默认忽略空值
      */
-    public static String toJson(Object o) {
-        return toJson(o,false);
+    public String toJson(Object o) {
+        return toJson(o,true);
     }
 
-    public static String toJson(Object o, boolean ignoreNull) {
+    public String toJson(Object o, boolean ignoreNull) {
         try {
             if (ignoreNull){
                 return ignoreNullObjectMapper.writeValueAsString(o);
@@ -77,7 +68,7 @@ public class JacksonUtil {
     /**
      * JSON字符串转为实体类对象，转换异常将被抛出
      */
-    public static <T> T toBean(String content, Class<T> valueType) {
+    public <T> T toBean(String content, Class<T> valueType) {
         try {
             return objectMapper.readValue(content, valueType);
         }
@@ -89,15 +80,16 @@ public class JacksonUtil {
 
     /**
      * JSON字符串转为实体类对象，转换异常将被抛出
+     * 默认忽略空值
      */
-    public static <T> T toBean(String content, TypeReference<? extends T> ref) {
-        return toBean(content, ref,false);
+    public <T> T toBean(String content, TypeReference<? extends T> ref) {
+        return toBean(content, ref,true);
     }
 
     /**
      * JSON字符串转为实体类对象，转换异常将被抛出
      */
-    public static <T> T toBean(String content, TypeReference<? extends T> ref, boolean ignoreNull) {
+    public <T> T toBean(String content, TypeReference<? extends T> ref, boolean ignoreNull) {
         try {
             if (ignoreNull){
                 return ignoreNullObjectMapper.readValue(content, ref);
@@ -113,55 +105,28 @@ public class JacksonUtil {
 
     /**
      * JSON字符串转为实体类对象列表，转换异常将被抛出
+     * 默认忽略空值
      */
-    public static <T> List<T> toList(String content, Class<T> valueType) {
-        try {
-            return objectMapper.readValue(content,
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, valueType));
-        }
-        catch (JsonProcessingException e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException("json反序列化失败");
-        }
-    }
-
-    /**
-     * 对象序列化为json字符串,转换异常将被抛出(携带类型信息)
-     */
-    public static String toTypeJson(Object o) {
-        try {
-            return typeObjectMapper.writeValueAsString(o);
-        }
-        catch (JsonProcessingException e) {
-            throw new RuntimeException("json序列化失败");
-        }
-    }
-
-    /**
-     * JSON字符串转为实体类对象，转换异常将被抛出 (携带类型信息)
-     */
-    public static <T> T toTypeBean(String content, Class<T> valueType) {
-        try {
-            return typeObjectMapper.readValue(content, valueType);
-        }
-        catch (JsonProcessingException e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException("json反序列化失败");
-        }
+    public <T> List<T> toList(String content, Class<T> valueType) {
+       return toList(content, valueType,true);
     }
 
     /**
      * JSON字符串转为实体类对象列表，转换异常将被抛出
+     * 默认忽略空值
      */
-    public static <T> List<T> toTypeList(String content, Class<T> valueType) {
+    public <T> List<T> toList(String content, Class<T> valueType, boolean ignoreNull) {
         try {
-            return typeObjectMapper.readValue(content,
-                    typeObjectMapper.getTypeFactory().constructCollectionType(List.class, valueType));
+            if (ignoreNull){
+                return ignoreNullObjectMapper.readValue(content, ignoreNullObjectMapper.getTypeFactory().constructCollectionType(List.class, valueType));
+            } else {
+                return objectMapper.readValue(content, objectMapper.getTypeFactory().constructCollectionType(List.class, valueType));
+
+            }
         }
         catch (JsonProcessingException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("json反序列化失败");
         }
     }
-
 }

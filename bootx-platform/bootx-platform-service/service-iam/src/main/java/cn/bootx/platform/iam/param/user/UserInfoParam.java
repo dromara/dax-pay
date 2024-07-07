@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
-
 /**
  * @author xxm
  * @since 2021/6/2
@@ -29,9 +27,6 @@ public class UserInfoParam {
 
     @Schema(description = "邮箱")
     private String email;
-
-    @Schema(description = "终端id列表")
-    private List<Long> clientIds;
 
     @Schema(description = "头像")
     private String avatar;

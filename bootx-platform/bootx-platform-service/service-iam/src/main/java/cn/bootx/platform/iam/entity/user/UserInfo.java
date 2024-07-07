@@ -2,18 +2,15 @@ package cn.bootx.platform.iam.entity.user;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
-import cn.bootx.platform.common.mybatisplus.handler.LongListTypeHandler;
 import cn.bootx.platform.core.entity.UserDetail;
+import cn.bootx.platform.iam.code.UserStatusCode;
 import cn.bootx.platform.iam.convert.user.UserConvert;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
 import cn.bootx.platform.iam.result.user.UserInfoResult;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.util.List;
 
 /**
  * 用户的核心信息
@@ -41,10 +38,6 @@ public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
 
     /** 邮箱 */
     private String email;
-
-    /** 关联终端id集合 */
-    @TableField(typeHandler = LongListTypeHandler.class)
-    private List<Long> clientIds;
 
     /** 是否管理员 */
     private boolean administrator;

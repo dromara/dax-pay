@@ -11,6 +11,7 @@
     <modules>
         <module>starter-auth</module>
         <module>starter-quartz</module>
+        <module>starter-audit-log</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>

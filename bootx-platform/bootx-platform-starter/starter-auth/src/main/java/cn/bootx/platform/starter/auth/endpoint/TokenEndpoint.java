@@ -23,17 +23,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/token")
 @AllArgsConstructor
 public class TokenEndpoint {
+    private final TokenService tokenService;
 
 
     @Operation(summary = "普通登录")
     @PostMapping("/login")
     public Result<String> login(HttpServletRequest request, HttpServletResponse response) {
-        return Res.ok("tokenService.login(request, response");
+        return Res.ok(tokenService.login(request, response));
     }
 
     @Operation(summary = "退出")
     @PostMapping("/logout")
-    public Result<String> logout() {
+    public Result<Void> logout() {
+        tokenService.logout();
         return Res.ok();
     }
 

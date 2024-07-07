@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>common-spring</artifactId>
-    <description>Spring 封装</description>
+    <description>Spring封装</description>
 
     <dependencies>
         <!-- web -->
@@ -27,6 +27,12 @@
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
+        </dependency>
+        <!-- hutool 扩展 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-extra</artifactId>
+            <version>${hutool.version}</version>
         </dependency>
     </dependencies>
 </project>

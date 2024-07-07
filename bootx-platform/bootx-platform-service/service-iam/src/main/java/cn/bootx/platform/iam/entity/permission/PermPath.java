@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * 权限资源(url请求)
- * @see cn.bootx.platform.core.anno.RequestPath
+ * @see cn.bootx.platform.core.annotation.RequestPath
  * @author xxm
  * @since 2020/5/10 23:09
  */

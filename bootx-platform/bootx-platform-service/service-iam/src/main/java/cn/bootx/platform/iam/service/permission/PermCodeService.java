@@ -1,8 +1,8 @@
 package cn.bootx.platform.iam.service.permission;
 
-import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.DataNotExistException;
+import cn.bootx.platform.core.util.TreeBuildUtil;
 import cn.bootx.platform.iam.dao.permission.PermCodeManager;
 import cn.bootx.platform.iam.dao.upms.RoleCodeManager;
 import cn.bootx.platform.iam.entity.permission.PermCode;
@@ -77,20 +77,6 @@ public class PermCodeService {
     }
 
     /**
-     * 列表
-     */
-    public List<PermCodeResult> findAll() {
-        return MpUtil.toListResult(permCodeManager.findAll());
-    }
-
-    /**
-     * 根据id集合查询
-     */
-    public List<PermCodeResult> findByIds(List<Long> permissionIds) {
-        return MpUtil.toListResult(permCodeManager.findAllByIds(permissionIds));
-    }
-
-    /**
      * 删除
      */
     @Transactional(rollbackFor = Exception.class)
@@ -106,4 +92,28 @@ public class PermCodeService {
         permCodeManager.deleteById(id);
     }
 
+    /**
+     * 权限码树
+     */
+    public List<PermCodeResult> tree() {
+        List<PermCodeResult> list = permCodeManager.findAll()
+                .stream()
+                .map(PermCode::toResult)
+                .toList();
+        return TreeBuildUtil.build(list, null, PermCodeResult::getId, PermCodeResult::getPid, PermCodeResult::setChildren);
+    }
+
+    /**
+     * 权限码是否存在
+     */
+    public boolean existsByCode(String permCode) {
+        return permCodeManager.existedByField(PermCode::getCode, permCode);
+    }
+
+    /**
+     * 权限码是否存在
+     */
+    public Boolean existsByPermCode(String permCode, Long id) {
+        return permCodeManager.existedByField(PermCode::getCode, permCode, id);
+    }
 }

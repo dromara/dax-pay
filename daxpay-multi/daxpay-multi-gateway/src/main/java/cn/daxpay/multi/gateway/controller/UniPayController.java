@@ -1,6 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
-import cn.bootx.platform.core.anno.IgnoreAuth;
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.core.anno.PaymentVerify;
 import cn.daxpay.multi.core.param.payment.pay.PayParam;
 import cn.daxpay.multi.core.result.DaxResult;

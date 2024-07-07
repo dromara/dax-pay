@@ -27,12 +27,6 @@
 
         <!-- 临时依赖, 后期会重新整理 -->
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>4.5.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-swagger</artifactId>
             <version>${bootx-platform.version}</version>

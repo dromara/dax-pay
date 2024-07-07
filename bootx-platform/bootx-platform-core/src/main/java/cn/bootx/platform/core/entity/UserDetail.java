@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,9 +34,6 @@ public class UserDetail {
     /** 不进行持久化 */
     @JsonIgnore
     private transient String password;
-
-    /** 角色 */
-    private List<Long> roleIds;
 
     /** 是否管理员 */
     private boolean admin;

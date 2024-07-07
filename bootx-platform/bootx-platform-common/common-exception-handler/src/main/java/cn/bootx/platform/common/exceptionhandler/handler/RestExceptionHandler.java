@@ -55,9 +55,7 @@ public class RestExceptionHandler {
     }
 
     /**
-     * @Author 政辉
-     * @param e
-     * @return
+     * 不支持 HTTP 请求方法异常
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result<?> HttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {

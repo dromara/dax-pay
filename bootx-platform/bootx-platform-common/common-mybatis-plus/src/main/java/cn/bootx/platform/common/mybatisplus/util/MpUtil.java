@@ -1,7 +1,7 @@
 package cn.bootx.platform.common.mybatisplus.util;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
-import cn.bootx.platform.core.anno.BigField;
+import cn.bootx.platform.core.annotation.BigField;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.hutool.core.collection.CollUtil;

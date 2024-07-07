@@ -32,6 +32,7 @@ public class JacksonConfiguration {
 
     /**
      * 对象映射, 不会记录被序列化的类型信息, 就是最常见的那种json格式数据
+     * 不会忽略空值
      */
     @Bean
     @Primary
@@ -54,6 +55,19 @@ public class JacksonConfiguration {
     }
 
     /**
+     * 序列化时忽略空值
+     */
+    @Bean
+    public ObjectMapper ignoreNullObjectMapper(ObjectMapper objectMapper) {
+        // 对象映射器
+        ObjectMapper copy = objectMapper.copy()
+                // null 值不序列化
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        JacksonUtil.setIgnoreNullObjectMapper(copy);
+        return copy;
+    }
+
+    /**
      * 序列化配置 ObjectMapper 对象 会记录被序列化的类型信息, 反序列化时直接能反序列化回原始的对象类型
      */
     @Bean
@@ -66,20 +80,7 @@ public class JacksonConfiguration {
                         JsonTypeInfo.As.WRAPPER_ARRAY)
                 // null 值不序列化
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        JacksonUtil.setTypeObjectMapper(copy);
         return copy;
     }
 
-    /**
-     * 序列化时忽略空值
-     */
-    @Bean
-    public ObjectMapper ignoreNullObjectMapper(ObjectMapper objectMapper) {
-        // 对象映射器
-        ObjectMapper copy = objectMapper.copy()
-                // null 值不序列化
-                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        JacksonUtil.setIgnoreNullObjectMapper(copy);
-        return copy;
-    }
 }

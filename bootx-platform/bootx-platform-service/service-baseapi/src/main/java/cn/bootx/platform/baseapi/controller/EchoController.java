@@ -1,6 +1,6 @@
 package cn.bootx.platform.baseapi.controller;
 
-import cn.bootx.platform.core.anno.IgnoreAuth;
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

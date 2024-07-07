@@ -2,9 +2,12 @@ package cn.bootx.platform.iam.dao.permission;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.iam.entity.permission.PermCode;
+import cn.bootx.platform.iam.entity.permission.PermPath;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 权限编码
@@ -15,4 +18,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class PermCodeManager extends BaseManager<PermCodeMapper, PermCode> {
+    /**
+     * 根据节点类型查询查询
+     */
+    public List<PermCode> findByLeaf(boolean isLeaf) {
+        return findAllByField(PermCode::isLeaf,isLeaf);
+    }
 }

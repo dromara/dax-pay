@@ -39,8 +39,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RoleMenuService {
 
-//    private final UserStatusService userStatusService;
-
     private final RoleService roleService;
 
     private final RoleManager roleManager;
@@ -157,7 +155,7 @@ public class RoleMenuService {
      * 如果是顶级角色, 可以查看所有的菜单
      * 如果是子角色, 查询分配给自身的菜单
      */
-    public List<PermMenuResult> treeByRoleAndCode(Long roleId, String clientCode) {
+    public List<PermMenuResult> treeByRoleAssign(Long roleId, String clientCode) {
         Role role = roleManager.findById(roleId)
                 .orElseThrow(RoleNotExistedException::new);
         // 如果有有上级级角色, 查询可以被分配的菜单(上级角色已经分配的菜单), 没有返回当前终端所有的菜单

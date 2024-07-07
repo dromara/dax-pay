@@ -2,11 +2,10 @@ package cn.bootx.platform.iam.result.user;
 
 import cn.bootx.platform.common.jackson.sensitive.SensitiveInfo;
 import cn.bootx.platform.core.entity.UserDetail;
+import cn.bootx.platform.iam.code.UserStatusCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import java.util.List;
 
 /**
  * @author xxm
@@ -37,9 +36,6 @@ public class UserInfoResult {
     @Schema(description = "邮箱")
     @SensitiveInfo(SensitiveInfo.SensitiveType.EMAIL)
     private String email;
-
-    @Schema(description = "终端id列表")
-    private List<Long> clientIds;
 
     @Schema(description = "是否管理员")
     private boolean administrator;

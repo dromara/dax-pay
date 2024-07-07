@@ -1,12 +1,20 @@
 package cn.bootx.platform.starter.auth.util;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
+import cn.bootx.platform.core.code.CommonCode;
 import cn.bootx.platform.core.entity.UserDetail;
+import cn.bootx.platform.starter.auth.cache.SessionCacheLocal;
 import cn.bootx.platform.starter.auth.exception.NotLoginException;
+import cn.dev33.satoken.exception.SaTokenException;
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.DesensitizedUtil;
+import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
 import org.springframework.lang.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -72,19 +80,24 @@ public class SecurityUtil {
      * 获取当前用户,无异常, 使用线程缓存来减少redis的访问频率
      */
     private Optional<UserDetail> getCurrentUser0() {
-//        Optional<UserDetail> userDetail = Optional.ofNullable(SessionCacheLocal.getUserInfo());
-//        if (!userDetail.isPresent()) {
-//            try {
-//                userDetail = Optional.ofNullable(StpUtil.getSession())
-//                    .map(saSession -> saSession.getModel(CommonCode.USER, UserDetail.class));
-//                SessionCacheLocal.putUserInfo(userDetail.orElse(null));
-//            }
-//            catch (SaTokenException e) {
-//                userDetail = Optional.empty();
-//            }
-//        }
-//        return userDetail;
-        return Optional.of(new UserDetail().setId(0L).setAdmin(true).setName("Admin").setAccount("admin"));
+        Optional<UserDetail> userDetail = Optional.ofNullable(SessionCacheLocal.getUserInfo());
+        if (userDetail.isEmpty()) {
+            try {
+                // 会话不为空. 获取用户信息不为空. 放入缓存
+                SaSession saSession = StpUtil.getSession();
+                if (Objects.nonNull(saSession)){
+                    String json = saSession.getModel(CommonCode.USER, String.class);
+                    if (StrUtil.isNotBlank(json)){
+                        SessionCacheLocal.putUserInfo(JacksonUtil.toBean(json, UserDetail.class));
+                    }
+                }
+                SessionCacheLocal.putUserInfo(null);
+            }
+            catch (SaTokenException e) {
+                userDetail = Optional.empty();
+            }
+        }
+        return userDetail;
     }
 
 }

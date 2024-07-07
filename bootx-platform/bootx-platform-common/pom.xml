@@ -20,6 +20,7 @@
         <module>common-spring</module>
         <module>common-exception-handler</module>
         <module>common-config</module>
+        <module>header-holder</module>
     </modules>
 
     <dependencies>

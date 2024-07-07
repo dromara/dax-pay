@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.param.order.pay;
 
 import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
-import cn.bootx.platform.core.anno.QueryParam;
+import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

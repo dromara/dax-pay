@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * 权限码
  * @author xxm
@@ -25,4 +27,10 @@ public class PermCodeResult {
 
     @Schema(description = "权限名称")
     private String name;
+
+    @Schema(description = "是否叶子节点")
+    private boolean leaf;
+
+    @Schema(description = "子类")
+    private List<PermCodeResult> children;
 }

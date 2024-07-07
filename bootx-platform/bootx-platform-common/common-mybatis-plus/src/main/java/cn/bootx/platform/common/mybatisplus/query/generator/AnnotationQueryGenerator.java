@@ -1,6 +1,6 @@
 package cn.bootx.platform.common.mybatisplus.query.generator;
 
-import cn.bootx.platform.core.anno.QueryParam;
+import cn.bootx.platform.core.annotation.QueryParam;
 import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.common.mybatisplus.query.function.QueryBetween;
 import cn.bootx.platform.core.util.ClassUtils;

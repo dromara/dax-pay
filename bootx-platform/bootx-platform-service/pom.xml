@@ -68,13 +68,6 @@
             <version>${bootx-platform.version}</version>
         </dependency>
 
-        <!-- TTL容器 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>transmittable-thread-local</artifactId>
-            <version>${ttl.version}</version>
-        </dependency>
-
         <!-- Spring 扩展 -->
         <dependency>
             <groupId>cn.hutool</groupId>

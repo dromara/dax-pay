@@ -48,3 +48,21 @@ bootx-platform:
         "[支付管理平台接口]":
           - cn.daxpay.multi.admin
           - cn.daxpay.multi.channel
+  starter:
+    auth:
+      enable-admin: true
+      ignore-urls:
+        - '/actuator/**'
+        - '/v3/api-docs/**'
+        - '/doc.html'
+        - '/swagger-resources/**'
+        - '/token/**'
+        - '/ws/**'
+        - '/demo/**'
+        - '/test/**'
+        - '/webjars/**'
+        - '/front/**'
+        - '/h5/**'
+        - '/css/**'
+        - '/error'
+        - '/favicon.ico'

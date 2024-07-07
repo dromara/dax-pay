@@ -49,11 +49,16 @@
             <artifactId>hutool-cache</artifactId>
             <version>${hutool.version}</version>
         </dependency>
-
         <!-- 安全认证 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>starter-auth</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 审计日志 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-audit-log</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
     </dependencies>

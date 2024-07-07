@@ -1,9 +1,8 @@
 package cn.bootx.platform.iam.service.permission;
 
-import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;
+import cn.bootx.platform.core.util.TreeBuildUtil;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
-import cn.bootx.platform.iam.dao.upms.RolePathManager;
 import cn.bootx.platform.iam.entity.permission.PermPath;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
 import lombok.AllArgsConstructor;
@@ -23,8 +22,6 @@ public class PermPathService {
 
     private final PermPathManager permPathManager;
 
-    private final RolePathManager rolePathManager;
-
     /**
      * 获取单条
      */
@@ -32,23 +29,10 @@ public class PermPathService {
         return permPathManager.findById(id).map(PermPath::toResult).orElseThrow(DataNotExistException::new);
     }
 
-    /**
-     * 根据ids查询权限信息
-     */
-    public List<PermPathResult> findByIds(List<Long> ids) {
-        return MpUtil.toListResult(permPathManager.findAllByIds(ids));
+    public List<PermPathResult> tree(String clientCode) {
+        List<PermPathResult> permPaths = permPathManager.findAllByField(PermPath::getClientCode, clientCode).stream()
+                .map(PermPath::toResult)
+                .toList();
+        return TreeBuildUtil.build(permPaths,null, PermPathResult::getCode, PermPathResult::getParentCode, PermPathResult::setChildren);
     }
-
-    /**
-     * 全部列表
-     */
-    public List<PermPathResult> findAll() {
-        return MpUtil.toListResult(permPathManager.findAll());
-    }
-
-    /**
-     * 根据
-     */
-
-
 }

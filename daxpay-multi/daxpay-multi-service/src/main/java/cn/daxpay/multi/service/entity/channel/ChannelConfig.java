@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.entity.channel;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
-import cn.bootx.platform.core.anno.BigField;
+import cn.bootx.platform.core.annotation.BigField;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import cn.daxpay.multi.service.convert.channel.ChannelConfigConvert;
