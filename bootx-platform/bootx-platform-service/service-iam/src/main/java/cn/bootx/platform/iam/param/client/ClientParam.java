@@ -24,9 +24,6 @@ public class ClientParam {
     @Schema(description = "名称")
     private String name;
 
-    @Schema(description = "是否可用")
-    private Boolean enable;
-
     @Schema(description = "备注")
     private String remark;
 

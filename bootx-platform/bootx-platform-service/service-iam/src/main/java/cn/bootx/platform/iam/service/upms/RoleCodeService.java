@@ -13,6 +13,7 @@ import cn.bootx.platform.iam.result.permission.PermCodeResult;
 import cn.bootx.platform.iam.result.role.RoleResult;
 import cn.bootx.platform.iam.service.role.RoleQueryService;
 import cn.hutool.core.collection.CollUtil;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class RoleCodeService {
         // 先删后增
         List<RoleCode> roleCodes = roleCodeManager.findAllByRole(roleId);
         List<String> RoleCodes = roleCodes.stream().map(RoleCode::getCode).toList();
-        // 需要删除的请求权限
+        // 需要删除的权限码
         List<RoleCode> deleteRoleCodes = roleCodes.stream()
                 .filter(RoleCode -> !codes.contains(RoleCode.getCode()))
                 .toList();
@@ -122,14 +123,15 @@ public class RoleCodeService {
         }
     }
 
+    /*------------------------------  管理端查看和配置使用  ------------------------------------*/
+
     /**
-     * 管理端配置使用
-     * 获取当前用户角色下可见的权限码信息, 并转换成树返回
+     * 获取当前用户角色下可见的权限码信息(即上级菜单被分配的权限), 并转换成树返回, 分配时使用
      * 如果是顶级角色, 可以查看所有的权限
      * 如果是子角色, 查询分配给自身的权限
      */
     public List<PermCodeResult> treeByRoleAssign(Long roleId) {
-        // 查询全部的请求权限, 后续生成树时也会使用
+        // 查询全部的权限码, 后续生成树时也会使用
         List<PermCode> allPermCodes = permCodeManager.findAll();
         // 只保留叶子节点的数据, 如果是顶级角色, 直接可以使用, 不是的话需要进行过滤
         List<PermCode> permCodes = allPermCodes.stream()
@@ -151,17 +153,24 @@ public class RoleCodeService {
     }
 
     /**
-     * 获取当前用户角色被分配请求权限信息
+     * 获取当前用户角色被分配权限码权限信息
      */
-    public List<PermCodeResult> treeByRole(Long roleId) {
-
-        return null;
+    public List<PermCodeResult> findAllByRole(Long roleId) {
+        MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
+                .selectAll(PermCode.class)
+                // 角色菜单关联
+                .innerJoin(RoleCode.class, RoleCode::getCode, Role::getCode,o->o.eq(RoleCode::getRoleId, roleId))
+                // 权限码信息
+                .innerJoin(PermCode.class, PermCode::getCode, RoleCode::getCode);
+        List<PermCode> permCodes = roleManager.selectJoinList(PermCode.class, wrapper);
+        return permCodes.stream().map(PermCode::toResult).toList();
     }
 
+    /*------------------------------  运行时使用  ------------------------------------*/
 
     /**
      * 运行和管理时都会使用
-     * 根据角色和请求方式进行查询出请求路径 需要进行缓存
+     * 根据角色查询出权限码 需要进行缓存
      */
     public List<String> findCodesByRole(Long roleId) {
         return roleCodeManager.findAllByRole(roleId).stream()
@@ -169,8 +178,9 @@ public class RoleCodeService {
                 .toList();
     }
 
+
     /**
-     * 根据查询出来的请求权限信息数据生成树
+     * 根据查询出来的权限码信息数据生成树
      * TODO 需要找到叶子节点往前的节点
      */
     private List<PermCodeResult> buildPathTree(List<PermCode> permCodes, List<PermCode> allPermCodes){
@@ -184,6 +194,4 @@ public class RoleCodeService {
                 .toList();
         return TreeBuildUtil.build(list, null, PermCodeResult::getId, PermCodeResult::getPid, PermCodeResult::setChildren);
     }
-
-
 }

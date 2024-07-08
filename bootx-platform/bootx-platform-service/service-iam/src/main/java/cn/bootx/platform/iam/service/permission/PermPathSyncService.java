@@ -3,6 +3,7 @@ package cn.bootx.platform.iam.service.permission;
 import cn.bootx.platform.common.config.BootxConfigProperties;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
+import cn.bootx.platform.iam.dao.upms.RolePathManager;
 import cn.bootx.platform.iam.dto.permission.RequestPath;
 import cn.bootx.platform.iam.entity.permission.PermPath;
 import cn.hutool.core.collection.CollUtil;
@@ -34,6 +35,8 @@ public class PermPathSyncService {
 
     private final PermPathManager permPathManager;
 
+    private final RolePathManager rolePathManager;
+
     private final WebApplicationContext applicationContext;
 
     private final BootxConfigProperties bootxConfigProperties;
@@ -49,7 +52,7 @@ public class PermPathSyncService {
         List<RequestPath> requestPaths = this.getRequestPath();
 
         // 查询数据中的数据并转换为请求信息列表
-        List<PermPath> permPaths = permPathManager.findAllByField(PermPath::getClientCode, clientCode);
+        List<PermPath> permPaths = permPathManager.findAllByLeafAndClient(true,clientCode);
 
         var requestPathMap = requestPaths.stream()
                 .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
@@ -70,6 +73,8 @@ public class PermPathSyncService {
         permPathManager.updateAllById(updateData);
         // 删除不再需要的
         permPathManager.deleteByIds(deleteIds);
+        // 删除关联关系
+        rolePathManager.deleteByPathIds(deleteIds);
 
         // 重建树结构 删除非子节点
         permPathManager.deleteNotChild();

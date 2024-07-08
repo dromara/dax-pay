@@ -27,11 +27,11 @@ import java.util.Optional;
 public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
 
     public boolean existsByUsername(String username) {
-        return existedByField(UserInfo::getUsername, username);
+        return existedByField(UserInfo::getAccount, username);
     }
 
     public boolean existsByUsername(String username, Long id) {
-        return existedByField(UserInfo::getUsername, username, id);
+        return existedByField(UserInfo::getAccount, username, id);
     }
 
     public boolean existsByEmail(String email) {
@@ -51,7 +51,7 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
     }
 
     public Optional<UserInfo> findByUsername(String username) {
-        return findByField(UserInfo::getUsername, username);
+        return findByField(UserInfo::getAccount, username);
     }
 
     public Optional<UserInfo> findByEmail(String email) {
@@ -65,7 +65,7 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
     public Page<UserInfo> page(PageParam pageParam, UserInfoParam param) {
 
         Page<UserInfo> mpPage = MpUtil.getMpPage(pageParam);
-        lambdaQuery().like(StrUtil.isNotBlank(param.getUsername()), UserInfo::getUsername, param.getUsername())
+        lambdaQuery().like(StrUtil.isNotBlank(param.getAccount()), UserInfo::getAccount, param.getAccount())
             .like(StrUtil.isNotBlank(param.getName()), UserInfo::getName, param.getName())
             .page(mpPage);
         return mpPage;

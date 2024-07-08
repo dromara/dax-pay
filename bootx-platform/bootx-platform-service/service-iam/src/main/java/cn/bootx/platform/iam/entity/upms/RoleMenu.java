@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 角色菜单(包含权限码)关联关系
+ * 角色菜单关联关系
  *
  * @author xxm
  * @since 2021/8/3
@@ -17,9 +17,9 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("iam_role_menu")
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("iam_role_menu")
 public class RoleMenu extends MpIdEntity {
 
     /**

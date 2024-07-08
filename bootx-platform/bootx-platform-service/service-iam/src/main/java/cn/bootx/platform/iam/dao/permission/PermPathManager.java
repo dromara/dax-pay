@@ -20,15 +20,27 @@ public class PermPathManager extends BaseManager<PermPathMapper, PermPath> {
     /**
      * 根据节点类型查询查询
      */
-    public List<PermPath> findByLeaf(boolean isLeaf) {
-        return findAllByField(PermPath::isLeaf,isLeaf);
+    public List<PermPath> findAllByLeafAndClient(boolean isLeaf, String clientCode) {
+        return lambdaQuery()
+                .eq(PermPath::isLeaf, isLeaf)
+                .eq(PermPath::getClientCode, clientCode)
+                .list();
+    }
+
+    /**
+     * 根据终端ID查询
+     */
+    public List<PermPath> findAllByClient(String clientCode) {
+        return lambdaQuery()
+                .eq(PermPath::getClientCode, clientCode)
+                .list();
     }
 
     /**
      * 删除非子节点
      */
     public void deleteNotChild() {
-        lambdaUpdate().eq(PermPath::isLeaf, true).remove();
+        lambdaUpdate().eq(PermPath::isLeaf, false).remove();
     }
 
 

@@ -1,5 +1,6 @@
-package cn.bootx.platform.iam.controller;
+package cn.bootx.platform.iam.controller.permission;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
@@ -28,6 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/perm/path")
 @RequiredArgsConstructor
+@RequestGroup(groupCode = "perm", moduleCode = "iam")
 public class PermPathController {
 
     private final PermPathService pathService;

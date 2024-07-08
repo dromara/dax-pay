@@ -5,7 +5,7 @@ spring:
       datasource:
         master:
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://postgresql:5432/dax-pay-multi?serverTimezone=Asia/Shanghai&autoReconnect=true
+          url: jdbc:postgresql://postgresql:5432/dax-pay-multi?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
           username: bootx
           password: bootx123
       hikari:
@@ -66,3 +66,4 @@ bootx-platform:
         - '/css/**'
         - '/error'
         - '/favicon.ico'
+        - '/**'

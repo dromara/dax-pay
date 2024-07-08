@@ -45,7 +45,7 @@ public class UserInfoService {
             .orElseThrow(UserInfoNotExistsException::new);
         return new LoginAfterUserInfoResult().setAvatar(userExpandInfo.getAvatar())
             .setUserId(userInfo.getId())
-            .setUsername(userInfo.getUsername())
+            .setUsername(userInfo.getAccount())
             .setName(userInfo.getName());
     }
 

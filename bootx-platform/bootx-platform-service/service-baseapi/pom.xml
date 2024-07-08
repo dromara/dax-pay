@@ -61,5 +61,11 @@
             <artifactId>starter-audit-log</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+        <!-- 文件存储 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-file</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
     </dependencies>
 </project>

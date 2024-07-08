@@ -17,9 +17,9 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("iam_role_path")
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("iam_role_path")
 public class RolePath extends MpIdEntity {
 
     /**
@@ -33,7 +33,7 @@ public class RolePath extends MpIdEntity {
     private String clientCode;
 
     /**
-     * 权限id
+     * 请求权限id
      */
     private Long pathId;
 

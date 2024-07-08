@@ -1,5 +1,6 @@
-package cn.bootx.platform.iam.controller;
+package cn.bootx.platform.iam.controller.client;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -8,7 +9,6 @@ import cn.bootx.platform.iam.param.client.ClientParam;
 import cn.bootx.platform.iam.result.client.ClientResult;
 import cn.bootx.platform.iam.service.client.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +20,10 @@ import java.util.List;
  * @author xxm
  * @since 2022-06-27
  */
-@Tag(name = "认证终端")
 @RestController
 @RequestMapping("/client")
 @RequiredArgsConstructor
+@RequestGroup(groupCode = "client", groupName = "终端管理", moduleCode = "iam", moduleName = "身份识别与访问管理" )
 public class ClientController {
 
     private final ClientService clientService;

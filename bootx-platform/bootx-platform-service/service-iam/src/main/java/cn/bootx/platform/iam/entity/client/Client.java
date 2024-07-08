@@ -31,11 +31,8 @@ public class Client extends MpBaseEntity implements ToResult<ClientResult> {
     /** 是否系统内置 */
     private boolean internal;
 
-    /** 是否可用 */
-    private boolean enable;
-
-    /** 描述 */
-    private String description;
+    /** 备注 */
+    private String remark;
 
     /** 创建对象 */
     public static Client init(ClientParam in) {

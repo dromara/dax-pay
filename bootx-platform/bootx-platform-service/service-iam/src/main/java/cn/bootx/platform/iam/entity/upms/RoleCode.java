@@ -1,6 +1,7 @@
 package cn.bootx.platform.iam.entity.upms;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @RequiredArgsConstructor
 @AllArgsConstructor
+@TableName("iam_role_code")
 public class RoleCode extends MpIdEntity {
 
     /**

@@ -86,7 +86,7 @@ public class UserRoleService {
      */
     private List<UserRole> createUserRoles(Long userId, List<Long> roleIds) {
         return roleIds.stream()
-            .map(roleId -> new UserRole().setRoleId(roleId).setUserId(userId))
+            .map(roleId -> new UserRole(userId, roleId))
             .toList();
     }
 

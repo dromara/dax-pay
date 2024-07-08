@@ -25,10 +25,10 @@ import java.time.LocalDateTime;
 public class UserExpandInfo extends MpBaseEntity implements ToResult<UserExpandInfoResult> {
 
     /** 性别 */
-    private Integer sex;
+    private String sex;
 
-    /** 头像 */
-    private String avatar;
+    /** 头像图片ID */
+    private Long avatar;
 
     /** 生日 */
     private LocalDate birthday;

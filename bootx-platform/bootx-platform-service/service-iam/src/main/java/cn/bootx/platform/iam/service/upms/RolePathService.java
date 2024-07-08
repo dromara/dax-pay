@@ -163,7 +163,7 @@ public class RolePathService {
         }
     }
 
-    /*------------------------------  管理端配置使用  ------------------------------------*/
+    /*------------------------------  管理端查看和配置使用  ------------------------------------*/
     /**
      * 查询当前角色已经选择的请求路径
      */
@@ -173,13 +173,13 @@ public class RolePathService {
     }
 
     /**
-     * 获取当前用户角色下可见的请求权限信息, 并转换成树返回
+     * 获取当前用户角色下可见的请求权限信息(即上级菜单被分配的权限), 并转换成树返回, 分配时使用
      * 如果是顶级角色, 可以查看所有的权限
      * 如果是子角色, 查询分配给自身的权限
      */
     public List<PermPathResult> treeByRoleAssign(Long roleId, String clientCode) {
-        // 查询全部的请求权限
-        List<PermPath> allPermPaths = permPathManager.findAll();
+        // 查询该终端全部的请求权限
+        List<PermPath> allPermPaths = permPathManager.findAllByClient(clientCode);
         // 只保留叶子节点的数据, 如果是顶级角色, 直接可以使用, 不是的话需要进行过滤
         List<PermPath> permPaths = allPermPaths.stream()
                 .filter(PermPath::isLeaf)
@@ -197,14 +197,27 @@ public class RolePathService {
         }
         // 根据查询出来的数据生成树
         return this.buildPathTree(permPaths, allPermPaths);
-      }
+    }
+
+    /**
+     * 获取当前用户角色被分配权限码权限信息
+     */
+    public List<PermPath> findAllByRole(Long roleId, String clientCode) {
+        MPJLambdaWrapper<PermPath> wrapper = new MPJLambdaWrapper<PermPath>()
+                .selectAll(PermPath.class)
+                // 角色路径关联
+                .innerJoin(RolePath.class, RolePath::getPathId, PermPath::getId,
+                        o->o.eq(RolePath::getRoleId, roleId)
+                                .eq(RolePath::getClientCode, clientCode));
+        return permPathManager.selectJoinList(PermPath.class, wrapper);
+    }
 
     /**
      * 根据查询出来的请求权限信息数据生成树
      */
-    private List<PermPathResult> buildPathTree(List<PermPath> permPaths, List<PermPath> allPermPaths){
+    public List<PermPathResult> buildPathTree(List<PermPath> permPaths, List<PermPath> catalogPath){
         // 生成请求权限目录映射表
-        Map<String, PermPath> pathCatalogMap = allPermPaths.stream()
+        Map<String, PermPath> pathCatalogMap = catalogPath.stream()
                 .filter(path -> !path.isLeaf())
                 .collect(Collectors.toMap(PermPath::getCode, Function.identity()));
 
@@ -228,7 +241,7 @@ public class RolePathService {
         List<PermPathResult> list = permPaths.stream()
                 .map(PermPath::toResult)
                 .toList();
-        return TreeBuildUtil.build(list, null, PermPathResult::getId, PermPathResult::getParentCode, PermPathResult::setChildren);
+        return TreeBuildUtil.build(list, null, PermPathResult::getCode, PermPathResult::getParentCode, PermPathResult::setChildren);
     }
 
     /*------------------------------  运行时使用  ------------------------------------*/

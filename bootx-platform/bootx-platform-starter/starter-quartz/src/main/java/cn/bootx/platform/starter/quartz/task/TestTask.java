@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
  * @author xxm
  * @since 2021/11/8
  */
+@Setter
 @Slf4j
 @Component
 @DisallowConcurrentExecution
@@ -25,7 +26,6 @@ public class TestTask implements Job {
     /**
      * 若参数变量名修改 QuartzJobScheduler 中也需对应修改 需要给一个set方法, 让系统设置值
      */
-    @Setter
     private String parameter;
 
     @Override

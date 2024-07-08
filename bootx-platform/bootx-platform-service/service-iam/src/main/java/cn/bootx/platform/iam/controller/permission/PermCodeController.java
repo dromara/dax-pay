@@ -1,5 +1,6 @@
-package cn.bootx.platform.iam.controller;
+package cn.bootx.platform.iam.controller.permission;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
@@ -27,11 +28,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/perm/code")
 @RequiredArgsConstructor
+@RequestGroup(groupCode = "perm", groupName = "权限管理", moduleCode = "iam")
 public class PermCodeController {
 
     private final PermCodeService permCodeService;
 
     private final UserRolePremService userRoleService;
+
+    @Operation(summary = "详情")
+    @GetMapping("/findById")
+    public Result<PermCodeResult> findById(Long id) {
+        return Res.ok(permCodeService.findById(id));
+    }
 
     @Operation(summary = "添加")
     @PostMapping("/add")
@@ -65,9 +73,16 @@ public class PermCodeController {
     }
 
     @Operation(summary = "根据用户获取权限码")
-    @GetMapping("/findPermCodesByUser")
-    public Result<List<String>> findPermCodesByUser() {
-        return Res.ok(userRoleService.findPermCodesByUser(SecurityUtil.getUserId()));
+    @GetMapping("/findCodesByUser")
+    public Result<List<String>> findCodesByUser() {
+
+        return Res.ok(permCodeService.findAllCode());
+
+//        UserDetail user = SecurityUtil.getUser();
+//        if (user.isAdmin()){
+//            return Res.ok(permCodeService.findAllCode());
+//        }
+//        return Res.ok(userRoleService.findAllCodesByUser(user.getId()));
     }
 
     @Operation(summary = "编码是否被使用")

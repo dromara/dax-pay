@@ -38,9 +38,6 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     /** 路由名称，建议唯一 */
     private String name;
 
-    /** 是否有效 */
-    private boolean effect;
-
     /** 菜单图标 */
     private String icon;
 
@@ -48,7 +45,7 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     private boolean hidden;
 
     /** 是否隐藏子菜单 */
-    private boolean hideChildrenInMenu;
+    private boolean hideChildrenMenu;
 
     /** 组件 */
     private String component;
@@ -71,11 +68,11 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
      */
     private boolean keepAlive;
 
-    /** 打开方式是否为外部打开 */
+    /** 是否为外部打开 */
     private boolean targetOutside;
 
     /** 是否全屏打开 */
-    private boolean fullscreen;
+    private boolean fullScreen;
 
     /** 描述 */
     private String remark;

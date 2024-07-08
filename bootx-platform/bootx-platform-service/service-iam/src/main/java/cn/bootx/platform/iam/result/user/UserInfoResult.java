@@ -23,7 +23,7 @@ public class UserInfoResult {
     private String name;
 
     @Schema(description = "账号")
-    private String username;
+    private String account;
 
     @Schema(description = "密码")
     @SensitiveInfo(SensitiveInfo.SensitiveType.PASSWORD)
@@ -50,7 +50,7 @@ public class UserInfoResult {
     public UserDetail toUserDetail() {
         return new UserDetail().setId(this.getId())
             .setPassword(this.password)
-            .setAccount(this.getUsername())
+            .setAccount(this.getAccount())
             .setName(this.name)
             .setAdmin(this.administrator)
             .setStatus(this.status);

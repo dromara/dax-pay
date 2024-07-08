@@ -1,6 +1,6 @@
 package cn.bootx.platform.iam.entity.permission;
 
-import cn.bootx.platform.common.mybatisplus.base.MpRealDelEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.iam.convert.permission.PermPathConvert;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Data
 @Accessors(chain = true)
 @TableName("iam_perm_path")
-public class PermPath extends MpRealDelEntity implements ToResult<PermPathResult> {
+public class PermPath extends MpCreateEntity implements ToResult<PermPathResult> {
 
     /** 上级编码 */
     private String parentCode;
@@ -32,7 +32,7 @@ public class PermPath extends MpRealDelEntity implements ToResult<PermPathResult
     private String clientCode;
 
     /** 标识编码(模块、分组标识) */
-    private String code;
+    private String code = "";
 
     /** 名称(请求路径、模块、分组名称) */
     private String name;

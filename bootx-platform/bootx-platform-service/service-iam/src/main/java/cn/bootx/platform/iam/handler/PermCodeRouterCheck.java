@@ -69,7 +69,7 @@ public class PermCodeRouterCheck implements RouterCheck {
         if (UserDetailOpt.isEmpty()) {
             return false;
         }
-        List<String> userPermCodes = userRolePremService.findPermCodesByUser(UserDetailOpt.get().getId());
+        List<String> userPermCodes = userRolePremService.findAllCodesByUser(UserDetailOpt.get().getId());
         return userPermCodes.stream().anyMatch(permCodes::contains);
     }
 

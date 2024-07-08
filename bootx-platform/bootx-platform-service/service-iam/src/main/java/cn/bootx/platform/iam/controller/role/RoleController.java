@@ -1,9 +1,8 @@
-package cn.bootx.platform.iam.controller;
+package cn.bootx.platform.iam.controller.role;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.dto.KeyValue;
-import cn.bootx.platform.core.rest.param.PageParam;
-import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
 import cn.bootx.platform.iam.param.role.RoleParam;
@@ -25,13 +24,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 @RequiredArgsConstructor
+@RequestGroup(groupCode = "role", groupName = "角色管理", moduleCode = "iam")
 public class RoleController {
 
     private final RoleService roleService;
 
     private final RoleQueryService roleQueryService;
 
-    @Operation(summary = "添加角色（返回角色对象）")
+    @Operation(summary = "添加角色")
     @PostMapping(value = "/add")
     public Result<Void> add(@RequestBody RoleParam roleParam) {
         ValidationUtil.validateParam(roleParam);
@@ -46,7 +46,7 @@ public class RoleController {
         return Res.ok();
     }
 
-    @Operation(summary = "修改角色（返回角色对象）")
+    @Operation(summary = "修改角色")
     @PostMapping(value = "/update")
     public Result<Void> update(@RequestBody RoleParam roleParam) {
         ValidationUtil.validateParam(roleParam);
@@ -77,12 +77,6 @@ public class RoleController {
     @GetMapping(value = "/dropdown")
     public Result<List<KeyValue>> dropdown() {
         return Res.ok(roleQueryService.dropdown());
-    }
-
-    @Operation(summary = "分页查询角色")
-    @GetMapping(value = "/page")
-    public Result<PageResult<RoleResult>> page(PageParam pageParam, RoleParam roleParam) {
-        return Res.ok(roleQueryService.page(pageParam, roleParam));
     }
 
     @Operation(summary = "编码是否被使用")

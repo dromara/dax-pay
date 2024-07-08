@@ -77,6 +77,15 @@ public class PermCodeService {
     }
 
     /**
+     * 获取全部权限码
+     */
+    public List<String> findAllCode(){
+        return permCodeManager.findAll().stream()
+                .map(PermCode::getCode)
+                .toList();
+    }
+
+    /**
      * 删除
      */
     @Transactional(rollbackFor = Exception.class)

@@ -17,8 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RolePathManager extends BaseManager<RolePathMapper, RolePath> {
 
-    private final RolePathMapper rolePathMapper;
-
     public List<RolePath> findAllByRoleAndClient(Long pathId, String clientCode) {
         return lambdaQuery()
                 .eq(RolePath::getPathId, pathId)
@@ -34,12 +32,8 @@ public class RolePathManager extends BaseManager<RolePathMapper, RolePath> {
         deleteByField(RolePath::getRoleId, roleId);
     }
 
-    public void deleteByPermission(Long permissionId) {
-        deleteByField(RolePath::getPathId, permissionId);
-    }
-
-    public void deleteByPermissions(List<Long> permissionIds) {
-        deleteByFields(RolePath::getPathId, permissionIds);
+    public void deleteByPathIds(List<Long> pathIds) {
+        deleteByFields(RolePath::getPathId, pathIds);
     }
 
 //    /**

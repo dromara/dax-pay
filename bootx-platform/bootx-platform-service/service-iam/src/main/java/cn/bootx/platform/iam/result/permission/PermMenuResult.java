@@ -34,9 +34,6 @@ public class PermMenuResult {
     @Schema(description = "资源编码(权限码)")
     private String permCode;
 
-    @Schema(description = "是否有效")
-    private boolean effect;
-
     @Schema(description = "图标")
     private String icon;
 

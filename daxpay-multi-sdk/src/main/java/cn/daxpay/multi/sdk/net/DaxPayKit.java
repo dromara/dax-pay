@@ -60,16 +60,18 @@ public class DaxPayKit {
         log.debug("请求参数:{}", data);
 
         String path = config.getServiceUrl() + request.path();
-        HttpResponse execute = HttpUtil.createPost(path)
+        String body;
+        try (HttpResponse execute = HttpUtil.createPost(path)
                 .body(data, ContentType.JSON.getValue())
                 .timeout(config.getReqTimeout())
-                .execute();
-        // 响应码只有200 才可以进行支付
-        if (execute.getStatus() != HttpStatus.HTTP_OK){
-            log.error("请求第三方支付平台失败，请排查配置的支付网关地址是否正常");
-            throw new HttpException("请求失败，内部异常");
+                .execute()) {
+            // 响应码只有200 才可以进行支付
+            if (execute.getStatus() != HttpStatus.HTTP_OK) {
+                log.error("请求第三方支付平台失败，请排查配置的支付网关地址是否正常");
+                throw new HttpException("请求失败，内部异常");
+            }
+            body = execute.body();
         }
-        String body = execute.body();
         log.debug("响应参数:{}", body);
         return request.toModel(body);
     }

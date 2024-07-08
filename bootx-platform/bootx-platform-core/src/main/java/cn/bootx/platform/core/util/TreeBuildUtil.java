@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 构建数据树工具类
@@ -43,7 +44,7 @@ public class TreeBuildUtil {
      */
     public <T> List<T> build(List<T> list, Object pid, Function<T, Object> getId, Function<T, Object> getPid,
                              BiConsumer<T, List<T>> setChildren, Comparator<? super T> comparator) {
-        List<T> children = list.stream().filter(m -> Objects.equals(getPid.apply(m), pid)).toList();
+        List<T> children = list.stream().filter(m -> Objects.equals(getPid.apply(m), pid)).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(children)) {
             return null;
         }

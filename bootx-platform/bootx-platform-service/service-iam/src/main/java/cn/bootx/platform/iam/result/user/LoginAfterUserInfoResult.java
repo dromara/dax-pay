@@ -25,6 +25,6 @@ public class LoginAfterUserInfoResult {
     private String username;
 
     @Schema(description = "头像")
-    private String avatar;
+    private Long avatar;
 
 }

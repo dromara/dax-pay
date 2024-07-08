@@ -7,7 +7,6 @@ import cn.bootx.platform.iam.dao.upms.RoleMenuManager;
 import cn.bootx.platform.iam.entity.permission.PermMenu;
 import cn.bootx.platform.iam.entity.role.Role;
 import cn.bootx.platform.iam.entity.upms.RoleMenu;
-import cn.bootx.platform.iam.entity.upms.RolePath;
 import cn.bootx.platform.iam.exception.role.RoleNotExistedException;
 import cn.bootx.platform.iam.param.permission.PermMenuAssignParam;
 import cn.bootx.platform.iam.result.permission.PermMenuResult;
@@ -140,7 +139,7 @@ public class RoleMenuService {
     }
 
 
-    /*------------------------------  管理端配置使用  ------------------------------------*/
+    /*------------------------------  管理端查看和配置使用  ------------------------------------*/
 
     /**
      * 查询当前角色已经选择的菜单id
@@ -151,7 +150,7 @@ public class RoleMenuService {
     }
 
     /**
-     * 获取当前用户角色下可见的菜单信息, 并转换成树返回
+     * 获取当前用户角色下可见的菜单信息(即上级菜单被分配的权限), 并转换成树返回, 分配时使用
      * 如果是顶级角色, 可以查看所有的菜单
      * 如果是子角色, 查询分配给自身的菜单
      */
@@ -182,14 +181,14 @@ public class RoleMenuService {
      * 构造用户菜单时, 会合并多个角色的菜单, 然后再转换为菜单树
      */
     public List<PermMenu> findAllByRoleAndClient(Long roleId, String clientCode) {
-        MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
+        MPJLambdaWrapper<PermMenu> wrapper = new MPJLambdaWrapper<PermMenu>()
                 .selectAll(PermMenu.class)
                 // 角色菜单关联
-                .innerJoin(RoleMenu.class, RoleMenu::getRoleId, Role::getId, on-> on.eq(RolePath::getId, clientCode))
-                // 菜单信息
-                .innerJoin(PermMenu.class, PermMenu::getId, RoleMenu::getMenuId)
+                .innerJoin(RoleMenu.class, RoleMenu::getRoleId, Role::getId,
+                        on-> on.eq(RoleMenu::getClientCode, clientCode)
+                                .eq(RoleMenu::getRoleId, Role::getId))
                 .eq(Role::getId, roleId);
-        return roleManager.selectJoinList(PermMenu.class, wrapper);
+        return permMenuManager.selectJoinList(PermMenu.class, wrapper);
     }
 
     /**

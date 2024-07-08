@@ -35,9 +35,6 @@ public class PermMenuParam {
     @Schema(description = "路由名称，建议唯一")
     private String name;
 
-    @Schema(description = "是否有效")
-    private boolean effect;
-
     @Schema(description = "菜单图标")
     private String icon;
 

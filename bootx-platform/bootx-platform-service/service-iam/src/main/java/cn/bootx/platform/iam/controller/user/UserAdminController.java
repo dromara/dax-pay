@@ -1,6 +1,7 @@
-package cn.bootx.platform.iam.controller;
+package cn.bootx.platform.iam.controller.user;
 
 import cn.bootx.platform.core.annotation.OperateLog;
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -29,6 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user/admin")
 @RequiredArgsConstructor
+@RequestGroup(groupCode = "user", groupName = "用户管理", moduleCode = "iam")
 public class UserAdminController {
 
     private final UserAdminService userAdminService;

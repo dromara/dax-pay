@@ -7,13 +7,15 @@ import cn.bootx.platform.iam.code.UserStatusCode;
 import cn.bootx.platform.iam.convert.user.UserConvert;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
 import cn.bootx.platform.iam.result.user.UserInfoResult;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 用户的核心信息
+ * 用户核心信息
  *
  * @author xxm
  * @since 2020/4/24 15:21
@@ -21,14 +23,14 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "iam_user_info",autoResultMap = true)
+@TableName("iam_user_info")
 public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
 
     /** 名称 */
     private String name;
 
     /** 账号 */
-    private String username;
+    private String account;
 
     /** 密码 */
     private String password;
@@ -40,6 +42,7 @@ public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
     private String email;
 
     /** 是否管理员 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private boolean administrator;
 
     /**
@@ -60,7 +63,7 @@ public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
     public UserDetail toUserDetail() {
         return new UserDetail().setId(this.getId())
             .setPassword(this.password)
-            .setAccount(this.getUsername())
+            .setAccount(this.getAccount())
             .setName(this.name)
             .setAdmin(this.administrator)
             .setStatus(this.status);

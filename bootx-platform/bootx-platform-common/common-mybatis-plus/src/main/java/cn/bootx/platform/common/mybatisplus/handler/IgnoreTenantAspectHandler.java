@@ -1,6 +1,5 @@
 package cn.bootx.platform.common.mybatisplus.handler;
 
-import cn.bootx.platform.core.annotation.IgnoreTenant;
 import com.baomidou.mybatisplus.core.plugins.IgnoreStrategy;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +20,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class IgnoreTenantAspectHandler {
 
-    @Around("@annotation(ignoreTenant)")
-    public Object doAround(ProceedingJoinPoint pjp, IgnoreTenant ignoreTenant) throws Throwable {
+    @Around("@annotation(cn.bootx.platform.core.annotation.IgnoreTenant)||within(@cn.bootx.platform.core.annotation.IgnoreTenant *)")
+    public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         // 设置忽略租户插件
         InterceptorIgnoreHelper.handle(IgnoreStrategy.builder().tenantLine(true).build());
         try {

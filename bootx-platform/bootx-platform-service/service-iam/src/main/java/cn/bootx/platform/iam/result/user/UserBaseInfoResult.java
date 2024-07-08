@@ -22,10 +22,10 @@ public class UserBaseInfoResult {
     private String name;
 
     @Schema(description = "性别")
-    private Integer sex;
+    private String sex;
 
     @Schema(description = "头像")
-    private String avatar;
+    private Long avatar;
 
     @Schema(description = "生日")
     private LocalDate birthday;

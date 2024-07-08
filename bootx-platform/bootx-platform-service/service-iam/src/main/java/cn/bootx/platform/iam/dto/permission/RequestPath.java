@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.dto.permission;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -35,4 +36,20 @@ public class RequestPath {
 
     /** 请求类型 */
     private String method;
+
+
+    public RequestPath setModuleName(String moduleName) {
+        if (StrUtil.isNotBlank(moduleName)) {
+            this.moduleName = moduleName;
+        }
+        return this;
+    }
+
+    public RequestPath setGroupName(String groupName) {
+        if (StrUtil.isNotBlank(groupName)){
+            this.groupName = groupName;
+        }
+        return this;
+    }
+
 }

@@ -92,21 +92,12 @@ public class IpToRegionService {
         }
 
         // 根据类型获取 Searcher 对象
-        Searcher searcher;
-        switch (auditLogProperties.getIp2region()
+        Searcher searcher = switch (auditLogProperties.getIp2region()
                 .getSearchType()) {
-            case FILE:
-                searcher = getSearcherByFile();
-                break;
-            case VECTOR_INDEX:
-                searcher = getSearcherByIndex();
-                break;
-            case CACHE:
-                searcher = getSearcherByCache();
-                break;
-            default:
-                throw new BizException("IP地址查询方式不合法");
-        }
+            case FILE -> getSearcherByFile();
+            case VECTOR_INDEX -> getSearcherByIndex();
+            case CACHE -> getSearcherByCache();
+        };
         // 无法进行查询
         if (Objects.isNull(searcher)){
             log.warn("");

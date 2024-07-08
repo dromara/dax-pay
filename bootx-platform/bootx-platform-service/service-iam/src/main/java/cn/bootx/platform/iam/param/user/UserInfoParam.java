@@ -20,7 +20,7 @@ public class UserInfoParam {
     private String name;
 
     @Schema(description = "登录账号")
-    private String username;
+    private String account;
 
     @Schema(description = "手机号")
     private String phone;

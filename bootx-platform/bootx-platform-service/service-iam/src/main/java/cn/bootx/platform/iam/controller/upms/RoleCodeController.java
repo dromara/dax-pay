@@ -1,5 +1,6 @@
-package cn.bootx.platform.iam.controller;
+package cn.bootx.platform.iam.controller.upms;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/role/code")
 @RequiredArgsConstructor
+@RequestGroup(groupCode = "upms", groupName = "权限分配管理", moduleCode = "iam")
 public class RoleCodeController {
     private final RoleCodeService roleCodeService;
 

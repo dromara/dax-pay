@@ -1,6 +1,7 @@
-package cn.bootx.platform.iam.controller;
+package cn.bootx.platform.iam.controller.user;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.iam.param.user.UserBaseInfoParam;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @AllArgsConstructor
+@RequestGroup(groupCode = "user", moduleCode = "iam")
 public class UserInfoController {
 
     private final UserInfoService userInfoService;
@@ -67,7 +69,9 @@ public class UserInfoController {
     @Operation(summary = "登录后获取用户信息")
     @GetMapping("/getLoginAfterUserInfo")
     public Result<LoginAfterUserInfoResult> getLoginAfterUserInfo() {
-        return Res.ok(userInfoService.getLoginAfterUserInfo());
+        return Res.ok(new LoginAfterUserInfoResult());
+
+//        return Res.ok(userInfoService.getLoginAfterUserInfo());
     }
 
 }
