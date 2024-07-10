@@ -11,6 +11,7 @@ import cn.bootx.platform.iam.param.permission.PermCodeParam;
 import cn.bootx.platform.iam.result.permission.PermCodeResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,8 @@ public class PermCodeService {
             if (permCodeManager.existedByField(PermCode::getCode, param.getCode())){
                 throw new BizException("权限码已存在");
             }
+        } else {
+            permCode.setCode(null);
         }
         permCodeManager.save(permCode);
     }
@@ -57,6 +60,8 @@ public class PermCodeService {
             if (permCodeManager.existedByField(PermCode::getCode, param.getCode(), param.getId())){
                 throw new BizException("权限码已存在");
             }
+        } else {
+            permCode.setCode(null);
         }
         String oldCode = permCode.getCode();
         String newCode = param.getCode();
@@ -80,7 +85,8 @@ public class PermCodeService {
      * 获取全部权限码
      */
     public List<String> findAllCode(){
-        return permCodeManager.findAll().stream()
+        return permCodeManager.findAllByLeaf(true)
+                .stream()
                 .map(PermCode::getCode)
                 .toList();
     }
@@ -91,7 +97,7 @@ public class PermCodeService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         PermCode permCode = permCodeManager.findById(id).orElseThrow(() -> new BizException("权限码信息不存在"));
-        // 有子菜单不可以删除
+        // 有子权限码不可以删除
         if (permCode.isLeaf()){
             if (permCodeManager.existedByField(PermCode::getPid, id)) {
                 throw new BizException("目录下有权限码数据不允许删除");
@@ -113,6 +119,18 @@ public class PermCodeService {
     }
 
     /**
+     * 权限目录树
+     */
+    public List<PermCodeResult> catalogTree() {
+        List<PermCodeResult> list = permCodeManager.findAllByLeaf(false)
+                .stream()
+                .map(PermCode::toResult)
+                .toList();
+        return TreeBuildUtil.build(list, null, PermCodeResult::getId, PermCodeResult::getPid, PermCodeResult::setChildren);
+
+    }
+
+    /**
      * 权限码是否存在
      */
     public boolean existsByCode(String permCode) {
@@ -124,5 +142,45 @@ public class PermCodeService {
      */
     public Boolean existsByPermCode(String permCode, Long id) {
         return permCodeManager.existedByField(PermCode::getCode, permCode, id);
+    }
+
+
+    /**
+     * 生成树
+     */
+    public List<PermCodeResult> buildTree(List<PermCodeResult> permCodes){
+        // 生成树
+        List<PermCodeResult> tree = TreeBuildUtil.build(permCodes, null, PermCodeResult::getId, PermCodeResult::getPid, PermCodeResult::setChildren);
+        // 平铺树并过滤掉没有子节点的目录
+        List<PermCodeResult> codeResultList = TreeBuildUtil.unfold(tree, PermCodeResult::getChildren)
+                .stream()
+                .filter(this::isOrHasLeaf)
+                .toList();
+        return TreeBuildUtil.build(codeResultList, null, PermCodeResult::getId, PermCodeResult::getPid, PermCodeResult::setChildren);
+    }
+
+    /**
+     * 判断自己和子孙节点中是否有叶子节点
+     */
+    private boolean isOrHasLeaf(PermCodeResult permCode) {
+        List<PermCodeResult> children = permCode.getChildren();
+        if (CollUtil.isEmpty(children)) {
+            return permCode.isLeaf();
+        }
+        for (PermCodeResult codeResult : children) {
+            if (CollUtil.isNotEmpty(codeResult.getChildren())) {
+                // 如果有下级元素, 进行递归判断
+                boolean hasLeaf = this.isOrHasLeaf(codeResult);
+                // 如果存在子节点, 直接返回
+                if (hasLeaf) {
+                    return true;
+                }
+            }
+            // 如果当前节点是子节点, 返回true
+            if (codeResult.isLeaf()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

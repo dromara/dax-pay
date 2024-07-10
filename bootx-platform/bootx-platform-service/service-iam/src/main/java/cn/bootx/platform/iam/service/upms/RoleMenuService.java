@@ -11,9 +11,7 @@ import cn.bootx.platform.iam.exception.role.RoleNotExistedException;
 import cn.bootx.platform.iam.param.permission.PermMenuAssignParam;
 import cn.bootx.platform.iam.result.permission.PermMenuResult;
 import cn.bootx.platform.iam.result.role.RoleResult;
-import cn.bootx.platform.iam.service.permission.PermMenuService;
 import cn.bootx.platform.iam.service.role.RoleQueryService;
-import cn.bootx.platform.iam.service.role.RoleService;
 import cn.hutool.core.collection.CollUtil;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
@@ -38,17 +36,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RoleMenuService {
 
-    private final RoleService roleService;
-
     private final RoleManager roleManager;
 
     private final RoleMenuManager roleMenuManager;
 
-    private final UserRoleService userRoleService;
-
     private final RoleQueryService roleQueryService;
-
-    private final PermMenuService permMenuService;
 
     private final PermMenuManager permMenuManager;
 
@@ -187,7 +179,8 @@ public class RoleMenuService {
                 .innerJoin(RoleMenu.class, RoleMenu::getRoleId, Role::getId,
                         on-> on.eq(RoleMenu::getClientCode, clientCode)
                                 .eq(RoleMenu::getRoleId, Role::getId))
-                .eq(Role::getId, roleId);
+                .eq(Role::getId, roleId)
+                .orderByAsc(PermMenu::getId);
         return permMenuManager.selectJoinList(PermMenu.class, wrapper);
     }
 

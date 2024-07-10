@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * 数据字典项
  *
@@ -39,4 +41,6 @@ public class DictionaryItemResult {
     @Schema(description = "备注")
     private String remark;
 
+    @Schema(description = "创建时间")
+    private LocalDateTime createTime;
 }

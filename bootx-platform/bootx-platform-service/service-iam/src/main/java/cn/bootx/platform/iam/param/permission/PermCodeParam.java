@@ -26,6 +26,9 @@ public class PermCodeParam {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "备注")
+    private String remark;
+
     @Schema(description = "是否为子节点")
     private boolean leaf;;
 

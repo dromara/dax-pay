@@ -19,17 +19,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PermMenuManager extends BaseManager<PermMenuMapper, PermMenu> {
 
-    public boolean existsByParentId(Long pid) {
+    public boolean existsByPid(Long pid) {
         return existedByField(PermMenu::getPid, pid);
     }
 
-
-    public List<PermMenu> findAllByParentId(Long parentId) {
+    public List<PermMenu> findAllByPid(Long parentId) {
         return findAllByField(PermMenu::getPid, parentId);
     }
 
     public List<PermMenu> findAllByClient(String clientCode) {
-        return findAllByField(PermMenu::getClientCode, clientCode);
+        return lambdaQuery()
+                .eq(PermMenu::getClientCode, clientCode)
+                .orderByAsc(PermMenu::getId)
+                .list();
     }
 
 }

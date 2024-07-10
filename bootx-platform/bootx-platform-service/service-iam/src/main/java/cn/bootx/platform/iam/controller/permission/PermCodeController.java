@@ -1,21 +1,16 @@
 package cn.bootx.platform.iam.controller.permission;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
-import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.iam.param.permission.PermCodeParam;
 import cn.bootx.platform.iam.result.permission.PermCodeResult;
 import cn.bootx.platform.iam.service.permission.PermCodeService;
 import cn.bootx.platform.iam.service.upms.UserRolePremService;
-import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,14 +38,14 @@ public class PermCodeController {
 
     @Operation(summary = "添加")
     @PostMapping("/add")
-    public Result<Void> add(PermCodeParam param) {
+    public Result<Void> add(@RequestBody PermCodeParam param) {
         permCodeService.add(param);
         return Res.ok();
     }
 
     @Operation(summary = "更新")
     @PostMapping("/update")
-    public Result<Void> update(PermCodeParam param) {
+    public Result<Void> update(@RequestBody PermCodeParam param) {
         permCodeService.update(param);
         return Res.ok();
     }
@@ -65,11 +60,19 @@ public class PermCodeController {
     @Operation(summary = "权限码树")
     @GetMapping("/tree")
     public Result<List<PermCodeResult>> tree() {
-        UserDetail user = SecurityUtil.getUser();
-        if (user.isAdmin()){
-            return Res.ok(permCodeService.tree());
-        }
-        return Res.ok(userRoleService.codeTreeByUser(user.getId()));
+        return Res.ok(permCodeService.tree());
+//        UserDetail user = SecurityUtil.getUser();
+//        if (user.isAdmin()){
+//            return Res.ok(permCodeService.tree());
+//        }
+//        return Res.ok(userRoleService.codeTreeByUser(user.getId()));
+    }
+
+
+    @Operation(summary = "权限目录树")
+    @GetMapping("/catalogTree")
+    public Result<List<PermCodeResult>> catalogTree() {
+        return Res.ok(permCodeService.catalogTree());
     }
 
     @Operation(summary = "根据用户获取权限码")
@@ -86,14 +89,14 @@ public class PermCodeController {
     }
 
     @Operation(summary = "编码是否被使用")
-    @GetMapping("/existsByPermCode")
-    public Result<Boolean> existsByPermCode(String permCode) {
-        return Res.ok(permCodeService.existsByCode(permCode));
+    @GetMapping("/existsByCode")
+    public Result<Boolean> existsByPermCode(String code) {
+        return Res.ok(permCodeService.existsByCode(code));
     }
 
     @Operation(summary = "编码是否被使用(不包含自己)")
-    @GetMapping("/existsByPermCodeNotId")
-    public Result<Boolean> existsByPermCode(String permCode, Long id) {
-        return Res.ok(permCodeService.existsByPermCode(permCode, id));
+    @GetMapping("/existsByCodeNotId")
+    public Result<Boolean> existsByPermCode(String code, Long id) {
+        return Res.ok(permCodeService.existsByPermCode(code, id));
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * Web 项目异常处理
@@ -79,6 +80,15 @@ public class RestExceptionHandler {
     public Result<Void> handleBusinessException(ValidationException ex) {
         log.info(ex.getMessage(), ex);
         return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+    }
+
+    /**
+     * 请求参数校验未通过
+     */
+    @ExceptionHandler({ NoResourceFoundException.class })
+    public Result<Void> handleBusinessException(NoResourceFoundException ex) {
+        log.info(ex.getMessage(), ex);
+        return Res.response(CommonErrorCode.SOURCES_NOT_EXIST, "页面或资源不存在", MDC.get(CommonCode.TRACE_ID));
     }
 
     /**

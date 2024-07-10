@@ -1,14 +1,12 @@
 package cn.bootx.platform.iam.service.upms;
 
-import cn.bootx.platform.core.util.TreeBuildUtil;
 import cn.bootx.platform.iam.dao.permission.PermCodeManager;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.entity.permission.PermCode;
-import cn.bootx.platform.iam.entity.permission.PermMenu;
 import cn.bootx.platform.iam.entity.permission.PermPath;
 import cn.bootx.platform.iam.result.permission.PermCodeResult;
-import cn.bootx.platform.iam.result.permission.PermMenuResult;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
+import cn.bootx.platform.iam.service.permission.PermCodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,8 +27,6 @@ public class UserRolePremService {
 
     private final UserRoleService userRoleService;
 
-    private final RoleMenuService roleMenuService;
-
     private final RolePathService rolePathService;
 
     private final PermPathManager permPathManager;
@@ -39,27 +35,7 @@ public class UserRolePremService {
 
     private final PermCodeManager permCodeManager;
 
-    /**
-     * 根据传入的用户和终端查询菜单权限树
-     */
-    public List<PermMenuResult> menuTreeByUser(Long userId, String clientCode) {
-        // 获取用户角色
-        List<Long> roleIds = userRoleService.findRoleIdsByUser(userId);
-        return this.menuTreeByRoles(roleIds, clientCode);
-    }
-
-    /**
-     * 根据传入的角色ID列表和终端查询菜单权限树
-     */
-    public List<PermMenuResult> menuTreeByRoles(List<Long> roleIds, String clientCode){
-        List<PermMenuResult> list = roleIds.stream()
-                .map(roleId -> roleMenuService.findAllByRoleAndClient(roleId, clientCode))
-                .flatMap(Collection::stream)
-                .distinct()
-                .map(PermMenu::toResult)
-                .toList();
-        return roleMenuService.buildTree(list);
-    }
+    private final PermCodeService permCodeService;
 
     /**
      * 获取请求路径树
@@ -110,14 +86,14 @@ public class UserRolePremService {
                 .flatMap(Collection::stream)
                 .distinct()
                 .toList();
-        // 获取全部的目录节点, 进行合并后生成树
+        // 获取全部的节点, 进行合并后生成树
         List<PermCodeResult> catalogCodes = permCodeManager.findAllByLeaf(false).stream()
                 .map(PermCode::toResult)
                 .toList();
         List<PermCodeResult> allCodes = new ArrayList<>(list);
         allCodes.addAll(catalogCodes);
-        return TreeBuildUtil.build(allCodes, null, PermCodeResult::getId, PermCodeResult::getPid, PermCodeResult::setChildren);
-
+        // 生成树
+        return permCodeService.buildTree(allCodes);
     }
 
     /**

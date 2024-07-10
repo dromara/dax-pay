@@ -9,6 +9,7 @@ import cn.bootx.platform.iam.param.client.ClientParam;
 import cn.bootx.platform.iam.result.client.ClientResult;
 import cn.bootx.platform.iam.service.client.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.util.List;
  * @author xxm
  * @since 2022-06-27
  */
+@Tag(name = "认证终端")
 @RestController
 @RequestMapping("/client")
 @RequiredArgsConstructor

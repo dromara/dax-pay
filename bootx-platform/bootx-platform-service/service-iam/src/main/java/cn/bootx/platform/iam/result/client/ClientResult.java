@@ -24,6 +24,9 @@ public class ClientResult {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "是否系统内置")
+    private boolean internal;
+
     @Schema(description = "描述")
     private String remark;
 

@@ -45,6 +45,16 @@ public class RoleQueryService {
      * 角色树
      */
     public List<RoleResult> tree(){
+        if (true){
+            // 查询所有的角色
+            List<Role> allRoles = roleManager.findAll();
+            List<RoleResult> roleList = allRoles.stream()
+                    .map(Role::toResult)
+                    .collect(Collectors.toList());
+            // 全部角色的数据树
+            return this.recursiveBuildTree(roleList);
+        }
+
         UserDetail userDetail = SecurityUtil.getCurrentUser().orElseThrow(NotLoginException::new);
         // 查询所有的角色
         List<Role> allRoles = roleManager.findAll();

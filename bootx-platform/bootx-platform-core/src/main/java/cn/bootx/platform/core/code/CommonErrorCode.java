@@ -20,8 +20,11 @@ public interface CommonErrorCode {
     /** 重复操作异常 */
     int REPETITIVE_OPERATION_ERROR = 10507;
 
+    /** 资源不存在 */
+    int SOURCES_NOT_EXIST = 10404;
+
     /** 数据不存在 */
-    int DATA_NOT_EXIST = 10404;
+    int DATA_NOT_EXIST = 10405;
 
     /** 不支持的操作 */
     int UN_SUPPORTED_OPERATE = 10415;

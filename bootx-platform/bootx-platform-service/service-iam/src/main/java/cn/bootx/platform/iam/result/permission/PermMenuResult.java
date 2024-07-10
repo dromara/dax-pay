@@ -41,7 +41,7 @@ public class PermMenuResult {
     private boolean hidden;
 
     @Schema(description = "是否隐藏子菜单")
-    private boolean hideChildrenInMenu;
+    private boolean hideChildrenMenu;
 
     @Schema(description = "组件")
     private String component;
@@ -55,8 +55,8 @@ public class PermMenuResult {
     @Schema(description = "菜单排序")
     private Double sortNo;
 
-    @Schema(description = "类型（0：一级菜单；1：子菜单 ；2：资源）")
-    private Integer menuType;
+    @Schema(description = "是否是一级菜单")
+    private boolean root;
 
     /**
      * meta 元信息
@@ -67,8 +67,8 @@ public class PermMenuResult {
     @Schema(description = "打开方式是否为外部打开")
     private boolean targetOutside;
 
-    @Schema(description = "隐藏的标题内容")
-    private boolean hiddenHeaderContent;
+    @Schema(description = "是否全屏打开")
+    private boolean fullScreen;
 
     @Schema(description = "描述")
     private String remark;

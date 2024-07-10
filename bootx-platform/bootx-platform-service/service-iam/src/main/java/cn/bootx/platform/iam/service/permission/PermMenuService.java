@@ -41,7 +41,7 @@ public class PermMenuService {
     public void add(PermMenuParam param) {
         // 判断是否是一级菜单，是的话清空父菜单
         if (param.isRoot()) {
-            param.setParentId(null);
+            param.setPid(null);
         }
         PermMenu permMenu = PermMenu.init(param);
         permMenuManager.save(permMenu);
@@ -97,7 +97,7 @@ public class PermMenuService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         // 有子菜单不可以删除
-        if (permMenuManager.existsByParentId(id)) {
+        if (permMenuManager.existsByPid(id)) {
             throw new BizException("有子菜单不可以删除");
         }
         roleMenuManager.deleteByMenuId(id);

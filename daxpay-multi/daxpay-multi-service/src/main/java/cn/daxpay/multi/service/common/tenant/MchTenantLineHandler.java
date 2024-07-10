@@ -1,11 +1,13 @@
 package cn.daxpay.multi.service.common.tenant;
 
+import cn.bootx.platform.common.config.BootxConfigProperties;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.multi.core.context.MchTenantContextHolder;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import cn.hutool.core.util.ClassUtil;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
+import lombok.RequiredArgsConstructor;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,10 @@ import org.springframework.stereotype.Component;
  * @since 2024/6/25
  */
 @Component
+@RequiredArgsConstructor
 public class MchTenantLineHandler  implements TenantLineHandler {
+    private final BootxConfigProperties bootxConfigProperties;
+
 
     /**
      * 获取租户ID
@@ -46,6 +51,11 @@ public class MchTenantLineHandler  implements TenantLineHandler {
      */
     @Override
     public boolean ignoreTable(String tableName) {
+        // 管理端运营人员不需要隔离数据
+        if (bootxConfigProperties.getClientCode().equals("dax-pay-admin")){
+            return true;
+        }
+
         // 读取注解, 判断是否启用商户数据隔离
         TableInfo tableInfo = MpUtil.getTableInfo(tableName);
         if (tableInfo == null){
@@ -55,7 +65,6 @@ public class MchTenantLineHandler  implements TenantLineHandler {
         if (!ClassUtil.isAssignable(MchEntity.class, tableInfo.getEntityType())){
             return true;
         }
-        // TODO 管理端运营人员不需要隔离数据
 
         return false;
     }

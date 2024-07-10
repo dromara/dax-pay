@@ -32,6 +32,9 @@ public class PermCode extends MpBaseEntity implements ToResult<PermCodeResult> {
     /** 名称 */
     private String name;
 
+    /** 备注 */
+    private String remark;
+
     /** 是否为子节点 */
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private boolean leaf;

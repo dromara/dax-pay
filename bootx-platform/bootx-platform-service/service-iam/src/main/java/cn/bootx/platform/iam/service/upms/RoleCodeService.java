@@ -11,6 +11,7 @@ import cn.bootx.platform.iam.exception.role.RoleNotExistedException;
 import cn.bootx.platform.iam.param.permission.PermCodeAssignParam;
 import cn.bootx.platform.iam.result.permission.PermCodeResult;
 import cn.bootx.platform.iam.result.role.RoleResult;
+import cn.bootx.platform.iam.service.permission.PermCodeService;
 import cn.bootx.platform.iam.service.role.RoleQueryService;
 import cn.hutool.core.collection.CollUtil;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -37,6 +38,7 @@ public class RoleCodeService {
     private final RoleManager roleManager;
     private final RoleQueryService roleQueryService;
     private final PermCodeManager permCodeManager;
+    private final PermCodeService permCodeService;
 
     /**
      * 保存角色路径授权
@@ -138,9 +140,9 @@ public class RoleCodeService {
                 .filter(PermCode::isLeaf)
                 .toList();
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
-        // 如果有有上级角色, 只可以显示分配给自身的权限
+        // 如果有有上级角色, 显示可以分配给自身的权限
         if (Objects.nonNull(role.getPid())){
-            List<String> codes = roleCodeManager.findAllByRole(role.getId())
+            List<String> codes = roleCodeManager.findAllByRole(role.getPid())
                     .stream()
                     .map(RoleCode::getCode)
                     .toList();
@@ -149,7 +151,16 @@ public class RoleCodeService {
                     .toList();
         }
         // 根据查询出来的数据生成树
-        return this.buildPathTree(permCodes, allPermCodes);
+        List<PermCode> catalogCodes = allPermCodes.stream()
+                .filter(o -> !o.isLeaf())
+                .toList();
+        permCodes = new ArrayList<>(permCodes);
+        permCodes.addAll(catalogCodes);
+        List<PermCodeResult> codeResultList = permCodes.stream()
+                .map(PermCode::toResult)
+                .toList();
+
+        return permCodeService.buildTree(codeResultList);
     }
 
     /**
@@ -183,11 +194,7 @@ public class RoleCodeService {
      * 根据查询出来的权限码信息数据生成树
      * TODO 需要找到叶子节点往前的节点
      */
-    private List<PermCodeResult> buildPathTree(List<PermCode> permCodes, List<PermCode> allPermCodes){
-        List<PermCode> catalogMap = allPermCodes.stream()
-                .filter(o -> !o.isLeaf())
-                .toList();
-
+    private List<PermCodeResult> buildPathTree(List<PermCode> permCodes){
         // 进行合并并转为树状结构
         List<PermCodeResult> list = permCodes.stream()
                 .map(PermCode::toResult)

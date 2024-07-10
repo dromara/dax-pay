@@ -48,12 +48,14 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     private boolean hideChildrenMenu;
 
     /** 组件 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String component;
 
     /** 访问路径 */
     private String path;
 
     /** 菜单跳转地址(重定向) */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String redirect;
 
     /** 菜单排序 */
