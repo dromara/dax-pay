@@ -6,6 +6,7 @@ import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
 import cn.bootx.platform.iam.param.permission.PermPathAssignParam;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
+import cn.bootx.platform.iam.result.permission.SimplePermPathResult;
 import cn.bootx.platform.iam.service.upms.RolePathService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +38,7 @@ public class RolePathController {
 
     @Operation(summary = "指定角色下的请求权限树(分配时用)")
     @GetMapping("/treeByRole")
-    public Result<List<PermPathResult>> treeByRoleAndClient(Long roleId, String clientCode) {
+    public Result<List<SimplePermPathResult>> treeByRoleAndClient(Long roleId, String clientCode) {
         return Res.ok(rolePathService.treeByRoleAssign(roleId,clientCode));
     }
 

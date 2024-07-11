@@ -17,9 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RolePathManager extends BaseManager<RolePathMapper, RolePath> {
 
-    public List<RolePath> findAllByRoleAndClient(Long pathId, String clientCode) {
+    public List<RolePath> findAllByRoleAndClient(Long roleId, String clientCode) {
         return lambdaQuery()
-                .eq(RolePath::getPathId, pathId)
+                .eq(RolePath::getRoleId, roleId)
                 .eq(RolePath::getClientCode, clientCode)
                 .list();
     }
@@ -50,6 +50,9 @@ public class RolePathManager extends BaseManager<RolePathMapper, RolePath> {
      * 根据角色id 菜单ids 删除关联关系
      */
     public void deleteByPathIds(Long roleId, String clientCode, List<Long> pathIds) {
+        if (pathIds.isEmpty()){
+            return;
+        }
         lambdaUpdate()
                 .eq(RolePath::getRoleId, roleId)
                 .eq(RolePath::getClientCode, clientCode)

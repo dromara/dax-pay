@@ -23,6 +23,9 @@ public class RoleCodeManager extends BaseManager<RoleCodeMapper, RoleCode> {
      * 删除权限码关联关系
      */
     public void deleteByCodes(Long roleId, List<String> deleteCodes) {
+        if (deleteCodes.isEmpty()){
+            return;
+        }
         lambdaUpdate()
                 .eq(RoleCode::getRoleId, roleId)
                 .in(RoleCode::getCode, deleteCodes)

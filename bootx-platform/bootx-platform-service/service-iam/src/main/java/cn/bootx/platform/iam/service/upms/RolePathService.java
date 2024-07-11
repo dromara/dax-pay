@@ -11,6 +11,7 @@ import cn.bootx.platform.iam.entity.upms.RolePath;
 import cn.bootx.platform.iam.exception.role.RoleNotExistedException;
 import cn.bootx.platform.iam.param.permission.PermPathAssignParam;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
+import cn.bootx.platform.iam.result.permission.SimplePermPathResult;
 import cn.bootx.platform.iam.result.role.RoleResult;
 import cn.bootx.platform.iam.service.role.RoleQueryService;
 import cn.hutool.core.collection.CollUtil;
@@ -46,8 +47,6 @@ public class RolePathService {
 
     private final RoleQueryService roleQueryService;
 
-
-
     /**
      * 保存角色路径授权
      */
@@ -70,8 +69,10 @@ public class RolePathService {
         rolePathManager.deleteByIds(deleteIds);
 
         // 需要新增的权限关系
-        List<RolePath> addRolePath = this.x(param, rolePathIds);
+        List<RolePath> addRolePath = this.saveAddAssign(param, rolePathIds);
 
+
+        // 需要进行级联删除的权限码
         List<Long> deletePermIds = deleteRolePaths.stream()
                 .map(RolePath::getPathId)
                 .collect(Collectors.toList());
@@ -94,7 +95,7 @@ public class RolePathService {
      * @param rolePathIds 已经保存的关联信息
      * @return 添加的权限关系
      */
-    private List<RolePath> x(PermPathAssignParam param, List<Long> rolePathIds){
+    private List<RolePath> saveAddAssign(PermPathAssignParam param, List<Long> rolePathIds){
 
         Long roleId = param.getRoleId();
         String clientCode = param.getClientCode();
@@ -177,7 +178,7 @@ public class RolePathService {
      * 如果是顶级角色, 可以查看所有的权限
      * 如果是子角色, 查询分配给自身的权限
      */
-    public List<PermPathResult> treeByRoleAssign(Long roleId, String clientCode) {
+    public List<SimplePermPathResult> treeByRoleAssign(Long roleId, String clientCode) {
         // 查询该终端全部的请求权限
         List<PermPath> allPermPaths = permPathManager.findAllByClient(clientCode);
         // 只保留叶子节点的数据, 如果是顶级角色, 直接可以使用, 不是的话需要进行过滤
@@ -196,7 +197,21 @@ public class RolePathService {
                     .toList();
         }
         // 根据查询出来的数据生成树
-        return this.buildPathTree(permPaths, allPermPaths);
+        List<PermPathResult> permPathResults = this.buildPathTree(permPaths, allPermPaths);
+        // 平铺树并转换类型
+        List<SimplePermPathResult> list = TreeBuildUtil.unfold(permPathResults, PermPathResult::getChildren)
+                .stream()
+                .map(PermPathResult::toSimple)
+                .toList();
+        // 设置上下级 id 关联
+        Map<String, Long> codeIdMap = allPermPaths.stream()
+                .filter(o->!o.isLeaf())
+                .collect(Collectors.toMap(PermPath::getCode, MpIdEntity::getId));
+        for (SimplePermPathResult pathResult : list) {
+            pathResult.setPid(codeIdMap.get(pathResult.getParentCode()));
+        }
+        // 重新转换成树
+        return TreeBuildUtil.build(list, null, SimplePermPathResult::getId, SimplePermPathResult::getPid, SimplePermPathResult::setChildren);
     }
 
     /**

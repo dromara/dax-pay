@@ -36,4 +36,17 @@ public class PermPathResult {
     @Schema(description = "子节点")
     private List<PermPathResult> children;
 
+    /**
+     * 转简单对象
+     */
+    public SimplePermPathResult toSimple(){
+        SimplePermPathResult simplePermPathResult = new SimplePermPathResult();
+        simplePermPathResult.setId(id)
+                .setParentCode(parentCode)
+                .setCode(code)
+                .setName(name)
+                .setMethod(method)
+                .setPath(path);
+        return simplePermPathResult;
+    }
 }

@@ -46,7 +46,7 @@ public class TreeBuildUtil {
                              BiConsumer<T, List<T>> setChildren, Comparator<? super T> comparator) {
         List<T> children = list.stream().filter(m -> Objects.equals(getPid.apply(m), pid)).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(children)) {
-            return null;
+            return new ArrayList<>(0);
         }
         for (T region : children) {
             List<T> childrenList = build(list, getId.apply(region), getId, getPid, setChildren,comparator);
@@ -80,7 +80,7 @@ public class TreeBuildUtil {
      */
     private  <T> List<T> unfold(List<T> list, Function<T, List<T>> getChildren, List<T> result){
         if (CollectionUtil.isEmpty(list)) {
-            return null;
+            return new ArrayList<>(0);
         }
         for (T region : list) {
             unfold(getChildren.apply(region), getChildren, result);

@@ -51,7 +51,7 @@ public class RoleCodeService {
 
         // 先删后增
         List<RoleCode> roleCodes = roleCodeManager.findAllByRole(roleId);
-        List<String> RoleCodes = roleCodes.stream().map(RoleCode::getCode).toList();
+        List<String> roleCodeList = roleCodes.stream().map(RoleCode::getCode).toList();
         // 需要删除的权限码
         List<RoleCode> deleteRoleCodes = roleCodes.stream()
                 .filter(RoleCode -> !codes.contains(RoleCode.getCode()))
@@ -62,7 +62,7 @@ public class RoleCodeService {
 
         // 需要新增的权限关系
         List<RoleCode> addRoleCode = codes.stream()
-                .filter(id -> !RoleCodes.contains(id))
+                .filter(id -> !roleCodeList.contains(id))
                 .map(code -> new RoleCode(roleId, code))
                 .collect(Collectors.toList());
         // 新增时验证是否超过了父级角色所拥有的权限
@@ -78,6 +78,7 @@ public class RoleCodeService {
         }
         roleCodeManager.saveAll(addRoleCode);
 
+        // 需要进行级联删除的权限码
         List<String> deleteCodes = deleteRoleCodes.stream()
                 .map(RoleCode::getCode)
                 .collect(Collectors.toList());

@@ -5,6 +5,7 @@ import cn.bootx.platform.iam.entity.permission.PermPath;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,6 +49,9 @@ public class PermPathManager extends BaseManager<PermPathMapper, PermPath> {
      * 查询简单的请求路径权限子节点, 只包括主键、路径和请求方式
      */
     public List<PermPath> findSimpleByIds(List<Long> ids) {
+        if (ids.isEmpty()) {
+            return new ArrayList<>();
+        }
         return lambdaQuery()
                 .select(PermPath::getId,PermPath::getPath,PermPath::getMethod)
                 .eq(PermPath::isLeaf, true)

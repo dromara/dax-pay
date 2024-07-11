@@ -44,6 +44,9 @@ public class RoleMenuManager extends BaseManager<RoleMenuMapper, RoleMenu> {
      * 根据角色id、客户端code、菜单ID进行删除
      */
     public void deleteByMenuIds(Long roleId, String clientCode, List<Long> menuIds) {
+        if (menuIds.isEmpty()) {
+            return;
+        }
         lambdaUpdate()
                 .eq(RoleMenu::getRoleId, roleId)
                 .eq(RoleMenu::getClientCode,clientCode)
