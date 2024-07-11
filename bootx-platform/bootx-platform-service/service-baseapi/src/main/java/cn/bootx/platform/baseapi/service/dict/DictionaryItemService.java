@@ -1,6 +1,6 @@
 package cn.bootx.platform.baseapi.service.dict;
 
-import cn.bootx.platform.baseapi.convert.DictionaryConvert;
+import cn.bootx.platform.baseapi.convert.dict.DictionaryConvert;
 import cn.bootx.platform.baseapi.dao.dict.DictionaryItemManager;
 import cn.bootx.platform.baseapi.dao.dict.DictionaryManager;
 import cn.bootx.platform.baseapi.entity.dict.Dictionary;
@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author xxm

@@ -1,6 +1,6 @@
 package cn.bootx.platform.baseapi.service.dict;
 
-import cn.bootx.platform.baseapi.convert.DictionaryConvert;
+import cn.bootx.platform.baseapi.convert.dict.DictionaryConvert;
 import cn.bootx.platform.baseapi.dao.dict.DictionaryItemManager;
 import cn.bootx.platform.baseapi.dao.dict.DictionaryManager;
 import cn.bootx.platform.baseapi.entity.dict.Dictionary;

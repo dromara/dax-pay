@@ -1,4 +1,4 @@
-package cn.bootx.platform.baseapi.convert;
+package cn.bootx.platform.baseapi.convert.dict;
 
 import cn.bootx.platform.baseapi.entity.dict.Dictionary;
 import cn.bootx.platform.baseapi.entity.dict.DictionaryItem;
