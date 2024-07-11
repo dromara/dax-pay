@@ -35,16 +35,41 @@ public class UserInfoController {
     private final UserQueryService userQueryService;
 
     @Operation(summary = "账号是否被使用")
-    @GetMapping("/existsUsername")
-    public Result<Boolean> existsUsername(String username) {
-        return Res.ok(userQueryService.existsUsername(username));
+    @GetMapping("/existsAccount")
+    public Result<Boolean> existsAccount(String account) {
+        return Res.ok(userQueryService.existsAccount(account));
     }
 
     @Operation(summary = "账号是否被使用(不包含自己)")
-    @GetMapping("/existsUsernameNotId")
-    public Result<Boolean> existsUsername(String username, Long id) {
-        return Res.ok(userQueryService.existsUsername(username, id));
+    @GetMapping("/existsAccountNotId")
+    public Result<Boolean> existsAccount(String account, Long id) {
+        return Res.ok(userQueryService.existsAccount(account, id));
     }
+
+    @Operation(summary = "手机号是否被使用")
+    @GetMapping("/existsPhone")
+    public Result<Boolean> existsPhone(String phone) {
+        return Res.ok(userQueryService.existsPhone(phone));
+    }
+
+    @Operation(summary = "手机号是否被使用(不包含自己)")
+    @GetMapping("/existsPhoneNotId")
+    public Result<Boolean> existsPhone(String phone, Long id) {
+        return Res.ok(userQueryService.existsPhone(phone, id));
+    }
+
+    @Operation(summary = "邮箱是否被使用")
+    @GetMapping("/existsEmail")
+    public Result<Boolean> existsEmail(String email) {
+        return Res.ok(userQueryService.existsEmail(email));
+    }
+
+    @Operation(summary = "邮箱是否被使用(不包含自己)")
+    @GetMapping("/existsEmailNotId")
+    public Result<Boolean> existsEmail(String email, Long id) {
+        return Res.ok(userQueryService.existsEmail(email, id));
+    }
+
 
     @Operation(summary = "修改密码")
     @PostMapping("/updatePassword")
@@ -69,9 +94,8 @@ public class UserInfoController {
     @Operation(summary = "登录后获取用户信息")
     @GetMapping("/getLoginAfterUserInfo")
     public Result<LoginAfterUserInfoResult> getLoginAfterUserInfo() {
-        return Res.ok(new LoginAfterUserInfoResult());
-
-//        return Res.ok(userInfoService.getLoginAfterUserInfo());
+//        return Res.ok(new LoginAfterUserInfoResult());
+        return Res.ok(userInfoService.getLoginAfterUserInfo());
     }
 
 }

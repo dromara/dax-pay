@@ -30,6 +30,7 @@ public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
     private String name;
 
     /** 账号 */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String account;
 
     /** 密码 */

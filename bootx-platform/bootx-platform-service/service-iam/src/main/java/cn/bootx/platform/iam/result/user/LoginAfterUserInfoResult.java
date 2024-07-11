@@ -22,7 +22,7 @@ public class LoginAfterUserInfoResult {
     private String name;
 
     @Schema(description = "账号")
-    private String username;
+    private String account;
 
     @Schema(description = "头像")
     private Long avatar;

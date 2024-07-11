@@ -18,6 +18,6 @@ public class LoginContentParam {
     private String clientId;
 
     @Schema(description = "账号")
-    private String username;
+    private String account;
 
 }

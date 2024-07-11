@@ -24,7 +24,7 @@ public class OperateLogParam {
     private Long operateId;
 
     @Schema(description = "操作人员账号")
-    private String username;
+    private String account;
 
     @Schema(description = "业务类型")
     private String businessType;

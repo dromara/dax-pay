@@ -30,7 +30,7 @@ public class OperateLogDb extends MpIdEntity implements ToResult<OperateLogResul
     private Long operateId;
 
     /** 操作人员账号 */
-    private String username;
+    private String account;
 
     /** 业务类型 */
     private String businessType;

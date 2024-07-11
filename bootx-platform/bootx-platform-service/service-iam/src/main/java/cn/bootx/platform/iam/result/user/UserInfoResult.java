@@ -30,11 +30,9 @@ public class UserInfoResult {
     private String password;
 
     @Schema(description = "手机号")
-    @SensitiveInfo(SensitiveInfo.SensitiveType.MOBILE_PHONE)
     private String phone;
 
     @Schema(description = "邮箱")
-    @SensitiveInfo(SensitiveInfo.SensitiveType.EMAIL)
     private String email;
 
     @Schema(description = "是否管理员")

@@ -29,7 +29,7 @@ public class OperateLogResult {
     private Long operateId;
 
     @Schema(description = "操作人员账号")
-    private String username;
+    private String account;
 
     @Schema(description = "请求方法")
     private String method;

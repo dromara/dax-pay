@@ -48,7 +48,7 @@ public class LoginFailureHandlerImpl implements LoginFailureHandler {
 
         String loginType = SecurityUtil.getLoginType(request);
         String client = SecurityUtil.getClient(request);
-        LoginLogParam loginLog = new LoginLogParam().setAccount(e.getUsername())
+        LoginLogParam loginLog = new LoginLogParam().setAccount(e.getAccount())
                 .setLogin(false)
                 .setClient(client)
                 .setLoginType(loginType)

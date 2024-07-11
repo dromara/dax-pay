@@ -1,12 +1,14 @@
 package cn.bootx.platform.iam.controller.permission;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.iam.param.permission.PermMenuParam;
 import cn.bootx.platform.iam.result.permission.PermMenuResult;
 import cn.bootx.platform.iam.service.permission.PermMenuService;
 import cn.bootx.platform.iam.service.upms.UserRolePremService;
+import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -47,13 +49,12 @@ public class PermMenuController {
     @Operation(summary = "获取菜单树")
     @GetMapping("/tree")
     public Result<List<PermMenuResult>> menuTree(String clientCode) {
-        return Res.ok(permMenuService.tree(clientCode));
 
-//        UserDetail user = SecurityUtil.getUser();
-//        if (user.isAdmin()){
-//            return Res.ok(permMenuService.tree(clientCode));
-//        }
-//        return Res.ok(userRoleService.menuTreeByUser(user.getId(),clientCode));
+        UserDetail user = SecurityUtil.getUser();
+        if (user.isAdmin()){
+            return Res.ok(permMenuService.tree(clientCode));
+        }
+        return Res.ok(userRoleService.menuTreeByUser(user.getId(),clientCode));
     }
 
     @Operation(summary = "根据id查询")

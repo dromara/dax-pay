@@ -28,6 +28,7 @@ public class GetAuthClientServiceImpl implements GetAuthClientService {
         Client client = clientManager.findByCode(authClientCode).orElseThrow(ApplicationNotFoundException::new);
         AuthClient authClient = new AuthClient();
         BeanUtil.copyProperties(client, authClient);
+        authClient.setEnable(true);
         return authClient;
     }
 }

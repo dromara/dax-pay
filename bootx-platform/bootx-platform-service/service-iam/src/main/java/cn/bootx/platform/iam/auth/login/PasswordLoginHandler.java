@@ -33,7 +33,7 @@ import java.util.Objects;
 @SuppressWarnings("FieldCanBeLocal")
 public class PasswordLoginHandler implements AbstractAuthentication {
 
-    private final String USERNAME_PARAMETER = "account";
+    private final String ACCOUNT_PARAMETER = "account";
 
     private final String PASSWORD_PARAMETER = "password";
 
@@ -54,11 +54,11 @@ public class PasswordLoginHandler implements AbstractAuthentication {
      */
     @Override
     public @NotNull AuthInfoResult attemptAuthentication(LoginAuthContext context) {
-        String username = this.obtainUsername(context.getRequest());
+        String account = this.obtainAccount(context.getRequest());
         String password = this.obtainPassword(context.getRequest());
-        UserDetail userDetail = this.loadUserByUsername(username);
+        UserDetail userDetail = this.loadUserByAccount(account);
         // 比对密码未通过
-        if (!BCrypt.checkpw(userDetail.getPassword(), password)) {
+        if (!BCrypt.checkpw(password, userDetail.getPassword())) {
             // 非系统管理员进行错误处理, 包括记录错误次数和账号锁定等操作
             throw new LoginFailureException(userDetail.getAccount(), "账号或密码不正确");
         }
@@ -68,11 +68,11 @@ public class PasswordLoginHandler implements AbstractAuthentication {
     /**
      * 根据账号获取密码
      */
-    public UserDetail loadUserByUsername(String username) throws UserNotFoundException {
+    public UserDetail loadUserByAccount(String account) throws UserNotFoundException {
         // 根据 账号 获取账户信息
-        UserInfoResult userInfoResult = userQueryService.findByAccount(username);
+        UserInfoResult userInfoResult = userQueryService.findByAccount(account);
         if (Objects.isNull(userInfoResult)) {
-            throw new UserNotFoundException(username);
+            throw new UserNotFoundException(account);
         }
         return userInfoResult.toUserDetail();
     }
@@ -84,7 +84,7 @@ public class PasswordLoginHandler implements AbstractAuthentication {
     }
 
     @Nullable
-    protected String obtainUsername(HttpServletRequest request) {
-        return request.getParameter(this.USERNAME_PARAMETER);
+    protected String obtainAccount(HttpServletRequest request) {
+        return request.getParameter(this.ACCOUNT_PARAMETER);
     }
 }

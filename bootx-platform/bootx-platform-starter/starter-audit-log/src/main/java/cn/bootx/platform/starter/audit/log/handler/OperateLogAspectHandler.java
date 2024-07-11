@@ -93,7 +93,7 @@ public class OperateLogAspectHandler {
         for (OperateLog log : logs) {
             OperateLogParam operateLog = new OperateLogParam().setTitle(log.title())
                     .setOperateId(currentUser.map(UserDetail::getId).orElse(DesensitizedUtil.userId()))
-                    .setUsername(currentUser.map(UserDetail::getAccount).orElse("未知"))
+                    .setAccount(currentUser.map(UserDetail::getAccount).orElse("未知"))
                     .setBusinessType(log.businessType().name().toLowerCase(Locale.ROOT))
                     .setOperateUrl(HeaderHolder.getHeader(ServletCode.REQUEST_URI))
                     .setMethod(className + "#" + methodName)

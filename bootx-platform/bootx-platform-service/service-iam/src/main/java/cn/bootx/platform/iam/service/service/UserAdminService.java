@@ -95,7 +95,7 @@ public class UserAdminService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void add(UserInfoParam userInfoParam) {
-        if (userQueryService.existsUsername(userInfoParam.getAccount())) {
+        if (userQueryService.existsAccount(userInfoParam.getAccount())) {
             throw new BizException("账号已存在");
         }
         // 注册时间

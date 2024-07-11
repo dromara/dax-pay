@@ -28,8 +28,8 @@ public class OperateLogDbManager extends BaseManager<OperateLogDbMapper, Operate
     public Page<OperateLogDb> page(PageParam pageParam, OperateLogParam operateLogParam) {
         Page<OperateLogDb> mpPage = MpUtil.getMpPage(pageParam);
         return lambdaQuery()
-            .like(StrUtil.isNotBlank(operateLogParam.getUsername()), OperateLogDb::getUsername,
-                    operateLogParam.getUsername())
+            .like(StrUtil.isNotBlank(operateLogParam.getAccount()), OperateLogDb::getAccount,
+                    operateLogParam.getAccount())
             .like(StrUtil.isNotBlank(operateLogParam.getTitle()), OperateLogDb::getTitle, operateLogParam.getTitle())
             .eq(Objects.nonNull(operateLogParam.getBusinessType()), OperateLogDb::getBusinessType,
                     operateLogParam.getBusinessType())

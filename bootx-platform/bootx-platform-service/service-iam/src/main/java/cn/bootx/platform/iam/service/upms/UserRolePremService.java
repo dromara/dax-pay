@@ -3,8 +3,10 @@ package cn.bootx.platform.iam.service.upms;
 import cn.bootx.platform.iam.dao.permission.PermCodeManager;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.entity.permission.PermCode;
+import cn.bootx.platform.iam.entity.permission.PermMenu;
 import cn.bootx.platform.iam.entity.permission.PermPath;
 import cn.bootx.platform.iam.result.permission.PermCodeResult;
+import cn.bootx.platform.iam.result.permission.PermMenuResult;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
 import cn.bootx.platform.iam.service.permission.PermCodeService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,8 @@ public class UserRolePremService {
 
     private final RolePathService rolePathService;
 
+    private final RoleMenuService roleMenuService;
+
     private final PermPathManager permPathManager;
 
     private final RoleCodeService roleCodeService;
@@ -36,6 +40,29 @@ public class UserRolePremService {
     private final PermCodeManager permCodeManager;
 
     private final PermCodeService permCodeService;
+
+
+    /**
+     * 根据传入的用户和终端查询菜单权限树
+     */
+    public List<PermMenuResult> menuTreeByUser(Long userId, String clientCode) {
+        // 获取用户角色
+        List<Long> roleIds = userRoleService.findRoleIdsByUser(userId);
+        return this.menuTreeByRoles(roleIds, clientCode);
+    }
+
+    /**
+     * 根据传入的角色ID列表和终端查询菜单权限树
+     */
+    public List<PermMenuResult> menuTreeByRoles(List<Long> roleIds, String clientCode){
+        List<PermMenuResult> list = roleIds.stream()
+                .map(roleId -> roleMenuService.findAllByRoleAndClient(roleId, clientCode))
+                .flatMap(Collection::stream)
+                .distinct()
+                .map(PermMenu::toResult)
+                .toList();
+        return roleMenuService.buildTree(list);
+    }
 
     /**
      * 获取请求路径树
@@ -49,7 +76,6 @@ public class UserRolePremService {
                 .flatMap(Collection::stream)
                 .distinct()
                 .toList();
-
         // 获取目录节点, 进行合并后生成树
         List<PermPath> catalogCodes = permPathManager.findAllByLeafAndClient(false, clientCode);
         return rolePathService.buildPathTree(leafList, catalogCodes);

@@ -24,9 +24,6 @@ public class AuthClient {
     /** 名称 */
     private String name;
 
-    /** 在线时长 分钟 */
-    private long timeout;
-
     /** 是否可用 */
     private boolean enable;
 

@@ -29,8 +29,8 @@ public class TokenEndpoint {
     @Operation(summary = "普通登录")
     @PostMapping("/login")
     public Result<String> login(HttpServletRequest request, HttpServletResponse response) {
-        return Res.ok("cs");
-//        return Res.ok(tokenService.login(request, response));
+//        return Res.ok("cs");
+        return Res.ok(tokenService.login(request, response));
     }
 
     @Operation(summary = "退出")

@@ -1,12 +1,14 @@
 package cn.bootx.platform.iam.controller.permission;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.iam.param.permission.PermCodeParam;
 import cn.bootx.platform.iam.result.permission.PermCodeResult;
 import cn.bootx.platform.iam.service.permission.PermCodeService;
 import cn.bootx.platform.iam.service.upms.UserRolePremService;
+import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -78,14 +80,13 @@ public class PermCodeController {
     @Operation(summary = "根据用户获取权限码")
     @GetMapping("/findCodesByUser")
     public Result<List<String>> findCodesByUser() {
+//        return Res.ok(permCodeService.findAllCode());
 
-        return Res.ok(permCodeService.findAllCode());
-
-//        UserDetail user = SecurityUtil.getUser();
-//        if (user.isAdmin()){
-//            return Res.ok(permCodeService.findAllCode());
-//        }
-//        return Res.ok(userRoleService.findAllCodesByUser(user.getId()));
+        UserDetail user = SecurityUtil.getUser();
+        if (user.isAdmin()){
+            return Res.ok(permCodeService.findAllCode());
+        }
+        return Res.ok(userRoleService.findAllCodesByUser(user.getId()));
     }
 
     @Operation(summary = "编码是否被使用")

@@ -26,12 +26,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
 
-    public boolean existsByUsername(String username) {
-        return existedByField(UserInfo::getAccount, username);
+    public boolean existsByAccount(String account) {
+        return existedByField(UserInfo::getAccount, account);
     }
 
-    public boolean existsByUsername(String username, Long id) {
-        return existedByField(UserInfo::getAccount, username, id);
+    public boolean existsByAccount(String account, Long id) {
+        return existedByField(UserInfo::getAccount, account, id);
     }
 
     public boolean existsByEmail(String email) {
@@ -50,8 +50,8 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
         return existedByField(UserInfo::getPhone, phone, id);
     }
 
-    public Optional<UserInfo> findByUsername(String username) {
-        return findByField(UserInfo::getAccount, username);
+    public Optional<UserInfo> findByAccount(String account) {
+        return findByField(UserInfo::getAccount, account);
     }
 
     public Optional<UserInfo> findByEmail(String email) {

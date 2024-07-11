@@ -12,16 +12,16 @@ import lombok.Getter;
 @Getter
 public class LoginFailureException extends BizException {
 
-    private final String username;
+    private final String account;
 
     public LoginFailureException(String message) {
         super(message);
-        this.username = "未知";
+        this.account = "未知";
     }
 
-    public LoginFailureException(String username, String message) {
+    public LoginFailureException(String account, String message) {
         super(message);
-        this.username = username;
+        this.account = account;
     }
 
 }
