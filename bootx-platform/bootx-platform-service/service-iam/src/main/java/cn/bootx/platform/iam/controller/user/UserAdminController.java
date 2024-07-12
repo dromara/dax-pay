@@ -6,13 +6,15 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.bootx.platform.iam.param.user.RestartPwdBatchParam;
+import cn.bootx.platform.iam.param.user.RestartPwdParam;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
 import cn.bootx.platform.iam.result.user.UserInfoResult;
 import cn.bootx.platform.iam.service.service.UserAdminService;
 import cn.bootx.platform.iam.service.service.UserQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -60,18 +62,16 @@ public class UserAdminController {
     @Operation(summary = "重置密码")
     @OperateLog(title = "重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @PostMapping("/restartPassword")
-    public Result<Void> restartPassword(@NotNull(message = "用户不可为空") Long userId,
-            @NotBlank(message = "新密码不能为空") String newPassword) {
-        userAdminService.restartPassword(userId, newPassword);
+    public Result<Void> restartPassword(@RequestBody @Valid RestartPwdParam param) {
+        userAdminService.restartPassword(param.getUserId(), param.getNewPassword());
         return Res.ok();
     }
 
     @Operation(summary = "批量重置密码")
     @OperateLog(title = "批量重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @PostMapping("/restartPasswordBatch")
-    public Result<Void> restartPasswordBatch(@NotEmpty(message = "用户不可为空") @RequestBody List<Long> userIds,
-            @NotBlank(message = "新密码不能为空") String newPassword) {
-        userAdminService.restartPasswordBatch(userIds, newPassword);
+    public Result<Void> restartPasswordBatch(@RequestBody @Valid RestartPwdBatchParam param) {
+        userAdminService.restartPasswordBatch(param.getUserIds(), param.getNewPassword());
         return Res.ok();
     }
 

@@ -46,14 +46,14 @@ public class UserRoleController {
 
     @Operation(summary = "根据用户ID获取到角色集合")
     @GetMapping(value = "/findRolesByUser")
-    public Result<List<RoleResult>> findRolesByUser(Long id) {
-        return Res.ok(userRoleService.findRolesByUser(id));
+    public Result<List<RoleResult>> findRolesByUser(Long userId) {
+        return Res.ok(userRoleService.findRolesByUser(userId));
     }
 
     @Operation(summary = "根据用户ID获取到角色id集合")
     @GetMapping(value = "/findRoleIdsByUser")
-    public Result<List<Long>> findRoleIdsByUser(Long id) {
-        return Res.ok(userRoleService.findRoleIdsByUser(id));
+    public Result<List<Long>> findRoleIdsByUser(Long userId) {
+        return Res.ok(userRoleService.findRoleIdsByUser(userId));
     }
 
 }

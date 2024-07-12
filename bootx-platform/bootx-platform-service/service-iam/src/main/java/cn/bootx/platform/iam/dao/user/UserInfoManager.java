@@ -62,12 +62,17 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
         return findByField(UserInfo::getPhone, phone);
     }
 
+    /**
+     * 管理员用户不显示
+     */
     public Page<UserInfo> page(PageParam pageParam, UserInfoParam param) {
 
         Page<UserInfo> mpPage = MpUtil.getMpPage(pageParam);
-        lambdaQuery().like(StrUtil.isNotBlank(param.getAccount()), UserInfo::getAccount, param.getAccount())
-            .like(StrUtil.isNotBlank(param.getName()), UserInfo::getName, param.getName())
-            .page(mpPage);
+        lambdaQuery()
+                .like(StrUtil.isNotBlank(param.getAccount()), UserInfo::getAccount, param.getAccount())
+                .like(StrUtil.isNotBlank(param.getName()), UserInfo::getName, param.getName())
+                .eq(UserInfo::isAdministrator, false)
+                .page(mpPage);
         return mpPage;
     }
 

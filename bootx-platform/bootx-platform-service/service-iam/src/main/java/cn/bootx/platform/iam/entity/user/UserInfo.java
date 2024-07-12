@@ -42,7 +42,7 @@ public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
     /** 邮箱 */
     private String email;
 
-    /** 是否管理员 */
+    /** 是否管理员, 管理员用户不在列表中显示 */
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private boolean administrator;
 
