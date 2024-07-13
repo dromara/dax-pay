@@ -14,10 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 商户应用控制器
@@ -49,13 +46,13 @@ public class MchAppController {
     }
 
     @Operation(summary = "分页")
-    @PostMapping("/page")
+    @GetMapping("/page")
     public Result<PageResult<MchAppResult>> page(PageParam pageParam, MchAppQuery param){
         return Res.ok(mchAppService.page(pageParam, param));
     }
 
     @Operation(summary = "根据id查询")
-    @PostMapping("/findById")
+    @GetMapping("/findById")
     public Result<MchAppResult> findById(@NotNull(message = "id不可为空")Long id){
         return Res.ok(mchAppService.findById(id));
     }

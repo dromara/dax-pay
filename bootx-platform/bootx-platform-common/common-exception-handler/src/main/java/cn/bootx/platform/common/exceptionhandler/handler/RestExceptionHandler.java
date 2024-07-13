@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,6 +33,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class RestExceptionHandler {
 
     private final ExceptionHandlerProperties properties;
+
 
     /**
      * 业务异常
@@ -107,6 +109,14 @@ public class RestExceptionHandler {
     @ExceptionHandler(HttpMessageConversionException.class)
     public Result<Void> handleHttpMessageConversionException(HttpMessageConversionException ex) {
         log.info(ex.getMessage(), ex);
+        return Res.response(CommonErrorCode.PARSE_PARAMETERS_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+    }
+    /**
+     * 处理 HttpMessageConversionException
+     */
+    @ExceptionHandler(BindException.class)
+    public Result<Void> handleBindException(BindException ex) {
+        log.info("参数绑定失败 ", ex);
         return Res.response(CommonErrorCode.PARSE_PARAMETERS_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
     }
 

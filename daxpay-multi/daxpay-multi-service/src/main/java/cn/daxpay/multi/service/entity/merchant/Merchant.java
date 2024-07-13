@@ -39,7 +39,7 @@ public class Merchant extends MpBaseEntity implements ToResult<MerchantResult> {
     private String idNo;
 
     /** 联系方式 */
-    private String tel;
+    private String contact;
 
     /** 法人名称 */
     private String legalPerson;

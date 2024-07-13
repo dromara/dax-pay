@@ -6,6 +6,7 @@ import lombok.Getter;
 
 /**
  * 业务异常基类
+ *
  */
 @Getter
 public class BizException extends RuntimeException {

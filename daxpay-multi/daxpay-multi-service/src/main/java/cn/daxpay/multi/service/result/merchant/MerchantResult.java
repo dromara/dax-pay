@@ -40,7 +40,7 @@ public class MerchantResult {
 
     /** 联系方式 */
     @Schema(description = "联系方式")
-    private String tel;
+    private String contact;
 
     /** 法人名称 */
     @Schema(description = "法人名称")

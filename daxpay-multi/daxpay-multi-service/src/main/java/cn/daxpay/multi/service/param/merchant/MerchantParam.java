@@ -28,32 +28,27 @@ public class MerchantParam {
     private String mchName;
 
     /** 公司名称 */
-    @NotBlank(message = "商户名称不可为空", groups = ValidationGroup.add.class)
+    @NotBlank(message = "公司名称不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "公司名称")
     private String companyName;
 
     /** 证件类型 */
-    @NotBlank(message = "商户名称不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "证件类型")
     private String idType;
 
     /** 证件号 */
-    @NotBlank(message = "商户名称不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "证件号")
     private String idNo;
 
     /** 联系方式 */
-    @NotBlank(message = "商户名称不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "联系方式")
-    private String tel;
+    private String contact;
 
     /** 法人名称 */
-    @NotBlank(message = "商户名称不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "法人名称")
     private String legalPerson;
 
     /** 法人证件号码 */
-    @NotBlank(message = "商户名称不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "法人证件号码")
     private String legalPersonIdNo;
 }

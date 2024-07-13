@@ -4,7 +4,6 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import cn.bootx.platform.core.util.ValidationUtil;
 import cn.bootx.platform.core.validation.ValidationGroup;
 import cn.daxpay.multi.service.param.merchant.MerchantParam;
 import cn.daxpay.multi.service.param.merchant.MerchantQuery;
@@ -15,10 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 商户控制器
@@ -35,28 +31,26 @@ public class MerchantController {
 
     @Operation(summary = "新增")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody MerchantParam param){
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
+    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantParam param){
         merchantService.add(param);
         return Res.ok();
     }
 
     @Operation(summary = "修改")
     @PostMapping("/update")
-    public Result<Void> update(@RequestBody MerchantParam param){
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
+    public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MerchantParam param){
         merchantService.update(param);
         return Res.ok();
     }
 
     @Operation(summary = "分页")
-    @PostMapping("/page")
+    @GetMapping("/page")
     public Result<PageResult<MerchantResult>> page(PageParam pageParam, MerchantQuery param){
         return Res.ok(merchantService.page(pageParam, param));
     }
 
     @Operation(summary = "根据id查询")
-    @PostMapping("/findById")
+    @GetMapping("/findById")
     public Result<MerchantResult> findById(@NotNull(message = "id不可为空")Long id){
         return Res.ok(merchantService.findById(id));
     }
