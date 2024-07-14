@@ -1,6 +1,9 @@
 package cn.daxpay.multi.service.entity.constant;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.service.convert.constant.ChannelConstConvert;
+import cn.daxpay.multi.service.result.constant.ChannelConstResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_channel_const")
-public class ChannelConst extends MpIdEntity {
+public class ChannelConst extends MpIdEntity implements ToResult<ChannelConstResult> {
 
     /** 通道编码 */
     private String channel;
@@ -28,4 +31,12 @@ public class ChannelConst extends MpIdEntity {
 
     /** 备注 */
     private String remark;
+
+    /**
+     * 转换
+     */
+    @Override
+    public ChannelConstResult toResult() {
+        return ChannelConstConvert.CONVERT.toResult(this);
+    }
 }

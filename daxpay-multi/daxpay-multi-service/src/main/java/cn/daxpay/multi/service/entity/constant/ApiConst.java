@@ -2,30 +2,32 @@ package cn.daxpay.multi.service.entity.constant;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
-import cn.daxpay.multi.service.convert.constant.MethodConstConvert;
-import cn.daxpay.multi.service.result.constant.MethodConstResult;
+import cn.daxpay.multi.service.convert.constant.ApiConstConvert;
+import cn.daxpay.multi.service.result.constant.ApiConstResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 支付方式常量
- * @see cn.daxpay.multi.core.enums.PayMethodEnum
+ * 支付接口常量
  * @author xxm
- * @since 2024/6/26
+ * @since 2024/7/14
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_method_const")
-public class MethodConst extends MpIdEntity implements ToResult<MethodConstResult> {
+@TableName("pay_api_const")
+public class ApiConst extends MpIdEntity implements ToResult<ApiConstResult> {
 
     /** 编码 */
     private String code;
 
-    /** 名称 */
+    /** 接口名称 */
     private String name;
+
+    /** 接口地址 */
+    private String api;
 
     /** 是否启用 */
     private boolean enable;
@@ -37,7 +39,7 @@ public class MethodConst extends MpIdEntity implements ToResult<MethodConstResul
      * 转换
      */
     @Override
-    public MethodConstResult toResult() {
-        return MethodConstConvert.CONVERT.toResult(this);
+    public ApiConstResult toResult() {
+        return ApiConstConvert.CONVERT.toResult(this);
     }
 }

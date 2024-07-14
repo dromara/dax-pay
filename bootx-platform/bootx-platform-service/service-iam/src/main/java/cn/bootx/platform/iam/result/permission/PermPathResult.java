@@ -33,6 +33,9 @@ public class PermPathResult {
     @Schema(description = "请求路径")
     private String path;
 
+    @Schema(description = "叶子节点")
+    private boolean leaf;
+
     @Schema(description = "子节点")
     private List<PermPathResult> children;
 
