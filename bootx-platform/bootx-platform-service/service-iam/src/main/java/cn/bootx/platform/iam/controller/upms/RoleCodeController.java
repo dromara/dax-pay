@@ -1,6 +1,7 @@
 package cn.bootx.platform.iam.controller.upms;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
@@ -27,6 +28,7 @@ import java.util.List;
 public class RoleCodeController {
     private final RoleCodeService roleCodeService;
 
+    @RequestPath("保存请求权限关系")
     @Operation(summary = "保存请求权限关系")
     @PostMapping("/save")
     public Result<Boolean> save(@RequestBody PermCodeAssignParam param) {
@@ -35,12 +37,14 @@ public class RoleCodeController {
         return Res.ok(true);
     }
 
+    @RequestPath("指定角色下的请求权限树(分配时用)")
     @Operation(summary = "指定角色下的请求权限树(分配时用)")
     @GetMapping("/treeByRole")
     public Result<List<PermCodeResult>> treeByRole(Long roleId) {
         return Res.ok(roleCodeService.treeByRoleAssign(roleId));
     }
 
+    @RequestPath("查询当前角色已经选择的菜单id")
     @Operation(summary = "查询当前角色已经选择的菜单id")
     @GetMapping("/findIdsByRole")
     public Result<List<String>> findIdsByRole(Long roleId) {

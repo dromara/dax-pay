@@ -75,7 +75,7 @@ public class QuartzJobController {
     }
 
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public Result<Void> delete(Long id) {
         quartzJobService.delete(id);
         return Res.ok();

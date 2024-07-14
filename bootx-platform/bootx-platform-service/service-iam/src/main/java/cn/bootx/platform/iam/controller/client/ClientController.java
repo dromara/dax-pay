@@ -1,6 +1,8 @@
 package cn.bootx.platform.iam.controller.client;
 
+import cn.bootx.platform.core.annotation.InternalPath;
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -30,13 +32,15 @@ public class ClientController {
 
     private final ClientService clientService;
 
-    @Operation(summary = "添加")
+    @InternalPath
+    @Operation(summary = "添加终端")
     @PostMapping(value = "/add")
     public Result<Void> add(@RequestBody ClientParam param) {
         clientService.add(param);
         return Res.ok();
     }
 
+    @InternalPath
     @Operation(summary = "修改")
     @PostMapping(value = "/update")
     public Result<Void> update(@RequestBody ClientParam param) {
@@ -44,37 +48,43 @@ public class ClientController {
         return Res.ok();
     }
 
+    @InternalPath
     @Operation(summary = "删除")
-    @DeleteMapping(value = "/delete")
+    @PostMapping(value = "/delete")
     public Result<Void> delete(Long id) {
         clientService.delete(id);
         return Res.ok();
     }
 
+    @RequestPath("通过ID查询终端")
     @Operation(summary = "通过ID查询")
     @GetMapping(value = "/findById")
     public Result<ClientResult> findById(Long id) {
         return Res.ok(clientService.findById(id));
     }
 
+    @RequestPath("查询所有终端")
     @Operation(summary = "查询所有")
     @GetMapping(value = "/findAll")
     public Result<List<ClientResult>> findAll() {
         return Res.ok(clientService.findAll());
     }
 
+    @RequestPath("分页查询终端")
     @Operation(summary = "分页查询")
     @GetMapping(value = "/page")
     public Result<PageResult<ClientResult>> page(PageParam pageParam, ClientParam clientParam) {
         return Res.ok(clientService.page(pageParam, clientParam));
     }
 
+    @RequestPath("编码是否被使用")
     @Operation(summary = "编码是否被使用")
     @GetMapping("/existsByCode")
     public Result<Boolean> existsByCode(String code) {
         return Res.ok(clientService.existsByCode(code));
     }
 
+    @RequestPath("编码是否被使用(不包含自己)")
     @Operation(summary = "编码是否被使用(不包含自己)")
     @GetMapping("/existsByCodeNotId")
     public Result<Boolean> existsByCode(String code, Long id) {

@@ -2,7 +2,10 @@ package cn.bootx.platform.common.exceptionhandler.handler;
 
 import cn.bootx.platform.core.code.CommonCode;
 import cn.bootx.platform.core.code.CommonErrorCode;
+import cn.bootx.platform.core.exception.BizErrorException;
 import cn.bootx.platform.core.exception.BizException;
+import cn.bootx.platform.core.exception.BizInfoException;
+import cn.bootx.platform.core.exception.BizWarnException;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import jakarta.validation.ConstraintViolation;
@@ -34,6 +37,32 @@ public class RestExceptionHandler {
 
     private final ExceptionHandlerProperties properties;
 
+    /**
+     * 普通业务异常, 不需要进行堆栈跟踪
+     */
+    @ExceptionHandler(BizInfoException.class)
+    public Result<Void> handleBizInfoException(BizInfoException ex) {
+        log.info(ex.getMessage());
+        return Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+    }
+
+    /**
+     * 警告业务异常, 如果量多需要关注
+     */
+    @ExceptionHandler(BizWarnException.class)
+    public Result<Void> handleBizWarnException(BizWarnException ex) {
+        log.warn(ex.getMessage(), ex);
+        return Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+    }
+
+    /**
+     * 致命警告业务异常, 需要进行立即进入排查
+     */
+    @ExceptionHandler(BizErrorException.class)
+    public Result<Void> handleBizErrorException(BizErrorException ex) {
+        log.error(ex.getMessage(), ex);
+        return Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+    }
 
     /**
      * 业务异常
@@ -71,7 +100,7 @@ public class RestExceptionHandler {
         if (methods != null) {
             sb.append(String.join("、", methods));
         }
-        log.error(sb.toString(), e);
+        log.info(sb.toString(), e);
         return Res.error(sb.toString());
     }
 
@@ -125,7 +154,7 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler(NullPointerException.class)
     public Result<Void> handleNullPointerException(NullPointerException ex) {
-        log.error("空指针 ", ex);
+        log.warn("空指针 ", ex);
         return Res.response(CommonErrorCode.SYSTEM_ERROR, "数据错误", MDC.get(CommonCode.TRACE_ID));
     }
 

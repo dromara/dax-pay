@@ -1,5 +1,6 @@
 package cn.bootx.platform.starter.audit.log.controller;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -10,7 +11,7 @@ import cn.bootx.platform.starter.audit.log.service.log.LoginLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "登录日志")
 @RestController
 @RequestMapping("/log/login")
+@RequestGroup(groupCode = "loginLog", groupName = "登录日志", moduleCode = "auditLog", moduleName = "日志管理")
 @RequiredArgsConstructor
 public class LoginLogController {
 
@@ -40,7 +42,7 @@ public class LoginLogController {
     }
 
     @Operation(summary = "清除指定天数之前的日志")
-    @DeleteMapping("/deleteByDay")
+    @PostMapping("/deleteByDay")
     public Result<Void> deleteByDay(int deleteDay){
         loginLogService.deleteByDay(deleteDay);
         return Res.ok();

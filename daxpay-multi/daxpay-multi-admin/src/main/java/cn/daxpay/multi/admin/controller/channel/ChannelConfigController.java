@@ -1,5 +1,7 @@
 package cn.daxpay.multi.admin.controller.channel;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.daxpay.multi.service.result.channel.ChannelConfigResult;
 import cn.daxpay.multi.service.service.channel.ChannelConfigService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,11 +20,13 @@ import java.util.List;
  */
 @Tag(name = "通道配置")
 @RestController
+@RequestGroup(groupCode = "channelConfig", groupName = "通道配置", moduleCode = "PayConfig", moduleName = "支付配置")
 @RequestMapping("/channel/config")
 @RequiredArgsConstructor
 public class ChannelConfigController {
     private final ChannelConfigService channelConfigService;
 
+    @RequestPath("根据应用AppId查询配置列表")
     @Operation(summary = "根据应用AppId查询配置列表")
     @GetMapping("/findAllByAppId")
     public List<ChannelConfigResult> findAllByAppId(String appId){

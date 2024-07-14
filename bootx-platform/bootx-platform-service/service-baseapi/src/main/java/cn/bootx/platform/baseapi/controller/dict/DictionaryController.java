@@ -44,7 +44,7 @@ public class DictionaryController {
 
     @RequestPath("根据主键删除字典")
     @Operation(summary = "根据主键删除")
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public Result<Boolean> delete(Long id) {
         dictionaryService.delete(id);
         return Res.ok();

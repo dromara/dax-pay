@@ -2,6 +2,7 @@ package cn.bootx.platform.iam.controller.user;
 
 import cn.bootx.platform.core.annotation.OperateLog;
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -39,12 +40,14 @@ public class UserAdminController {
 
     private final UserQueryService userQueryService;
 
+    @RequestPath("根据用户id查询用户 ")
     @Operation(summary = "根据用户id查询用户")
     @GetMapping("/findById")
     public Result<UserInfoResult> findById(Long id) {
         return Res.ok(userQueryService.findById(id));
     }
 
+    @RequestPath("添加用户")
     @Operation(summary = "添加用户")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody UserInfoParam userInfoParam) {
@@ -52,6 +55,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
+    @RequestPath("修改用户")
     @Operation(summary = "修改用户")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody UserInfoParam userInfoParam) {
@@ -59,6 +63,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
+    @RequestPath("重置密码")
     @Operation(summary = "重置密码")
     @OperateLog(title = "重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @PostMapping("/restartPassword")
@@ -67,6 +72,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
+    @RequestPath("批量重置密码")
     @Operation(summary = "批量重置密码")
     @OperateLog(title = "批量重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @PostMapping("/restartPasswordBatch")
@@ -75,6 +81,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
+    @RequestPath("封禁用户")
     @OperateLog(title = "封禁用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @Operation(summary = "封禁用户")
     @PostMapping("/ban")
@@ -83,6 +90,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
+    @RequestPath("批量封禁用户")
     @OperateLog(title = "批量封禁用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @Operation(summary = "批量封禁用户")
     @PostMapping("/banBatch")
@@ -91,6 +99,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
+    @RequestPath("解锁用户")
     @OperateLog(title = "解锁用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @Operation(summary = "解锁用户")
     @PostMapping("/unlock")
@@ -99,6 +108,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
+    @RequestPath("批量解锁用户")
     @OperateLog(title = "批量解锁用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @Operation(summary = "批量解锁用户")
     @PostMapping("/unlockBatch")
@@ -107,7 +117,8 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @Operation(summary = "分页")
+    @RequestPath("用户分页")
+    @Operation(summary = "用户分页")
     @GetMapping("/page")
     public Result<PageResult<UserInfoResult>> page(PageParam pageParam, UserInfoParam userInfoParam) {
         return Res.ok(userAdminService.page(pageParam, userInfoParam));

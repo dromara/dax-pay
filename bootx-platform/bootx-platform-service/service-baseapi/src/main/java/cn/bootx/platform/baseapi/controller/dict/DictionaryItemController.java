@@ -52,7 +52,7 @@ public class DictionaryItemController {
 
     @RequestPath("删除字典项")
     @Operation(summary = "删除字典项")
-    @DeleteMapping(value = "/delete")
+    @PostMapping(value = "/delete")
     public Result<Void> delete(Long id) {
         dictionaryItemService.delete(id);
         return Res.ok();

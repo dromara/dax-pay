@@ -1,5 +1,7 @@
 package cn.daxpay.multi.admin.controller.merchant;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -24,12 +26,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "商户应用控制器")
 @RestController
 @RequestMapping("/mch/app")
+@RequestGroup(groupCode = "merchant", groupName = "商户配置", moduleCode = "PayConfig")
 @RequiredArgsConstructor
 public class MchAppController {
     private final MchAppService mchAppService;
 
-
-    @Operation(summary = "新增")
+    @RequestPath("新增商户应用")
+    @Operation(summary = "新增商户应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody MchAppParam param){
         ValidationUtil.validateParam(param, ValidationGroup.add.class);
@@ -37,7 +40,8 @@ public class MchAppController {
         return Res.ok();
     }
 
-    @Operation(summary = "修改")
+    @RequestPath("修改商户应用")
+    @Operation(summary = "修改商户应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody MchAppParam param){
         ValidationUtil.validateParam(param, ValidationGroup.edit.class);
@@ -45,19 +49,22 @@ public class MchAppController {
         return Res.ok();
     }
 
-    @Operation(summary = "分页")
+    @RequestPath("商户应用分页")
+    @Operation(summary = "商户应用分页")
     @GetMapping("/page")
     public Result<PageResult<MchAppResult>> page(PageParam pageParam, MchAppQuery param){
         return Res.ok(mchAppService.page(pageParam, param));
     }
 
-    @Operation(summary = "根据id查询")
+    @RequestPath("根据id查询商户应用")
+    @Operation(summary = "根据id查询商户应用")
     @GetMapping("/findById")
     public Result<MchAppResult> findById(@NotNull(message = "id不可为空")Long id){
         return Res.ok(mchAppService.findById(id));
     }
 
-    @Operation(summary = "删除")
+    @RequestPath("删除商户应用")
+    @Operation(summary = "删除商户应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "id不可为空") Long id){
         mchAppService.delete(id);

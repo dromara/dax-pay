@@ -25,6 +25,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 登录端点服务
+ * @author xxm
+ * @since 2024/7/14
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

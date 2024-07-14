@@ -1,6 +1,7 @@
 package cn.bootx.platform.iam.controller.upms;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
@@ -28,6 +29,7 @@ public class UserRoleController {
 
     private final UserRoleService userRoleService;
 
+    @RequestPath("给用户分配角色")
     @Operation(summary = "给用户分配角色")
     @PostMapping(value = "/saveAssign")
     public Result<Void> saveAssign(@RequestBody UserRoleParam param) {
@@ -36,6 +38,7 @@ public class UserRoleController {
         return Res.ok();
     }
 
+    @RequestPath("给用户分配角色(批量)")
     @Operation(summary = "给用户分配角色(批量)")
     @PostMapping(value = "/saveAssignBatch")
     public Result<Void> saveAssignBatch(@RequestBody UserRoleBatchParam param) {
@@ -44,12 +47,14 @@ public class UserRoleController {
         return Res.ok();
     }
 
+    @RequestPath("根据用户ID获取到角色集合")
     @Operation(summary = "根据用户ID获取到角色集合")
     @GetMapping(value = "/findRolesByUser")
     public Result<List<RoleResult>> findRolesByUser(Long userId) {
         return Res.ok(userRoleService.findRolesByUser(userId));
     }
 
+    @RequestPath("根据用户ID获取到角色id集合")
     @Operation(summary = "根据用户ID获取到角色id集合")
     @GetMapping(value = "/findRoleIdsByUser")
     public Result<List<Long>> findRoleIdsByUser(Long userId) {

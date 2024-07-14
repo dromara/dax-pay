@@ -1,6 +1,7 @@
 package cn.bootx.platform.iam.controller.upms;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
@@ -29,6 +30,7 @@ public class RoleMenuController {
 
     private final RoleMenuService rolePermService;
 
+    @RequestPath("保存请求权限关系")
     @Operation(summary = "保存请求权限关系")
     @PostMapping("/save")
     public Result<Boolean> save(@RequestBody PermMenuAssignParam param) {
@@ -38,12 +40,14 @@ public class RoleMenuController {
     }
 
 
+    @RequestPath("指定角色下的菜单权限树(分配时用)")
     @Operation(summary = "指定角色下的菜单权限树(分配时用)")
     @GetMapping("/treeByRole")
     public Result<List<PermMenuResult>> treeByRole(Long roleId, String clientCode) {
         return Res.ok(rolePermService.treeByRoleAssign(roleId,clientCode));
     }
 
+    @RequestPath("查询当前角色已经选择的菜单id")
     @Operation(summary = "查询当前角色已经选择的菜单id")
     @GetMapping("/findIdsByRole")
     public Result<List<Long>> findIdsByRole(Long roleId, String clientCode) {

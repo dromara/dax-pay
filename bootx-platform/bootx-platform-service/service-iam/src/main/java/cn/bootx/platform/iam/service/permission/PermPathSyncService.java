@@ -7,6 +7,7 @@ import cn.bootx.platform.iam.dao.upms.RolePathManager;
 import cn.bootx.platform.iam.dto.permission.RequestPath;
 import cn.bootx.platform.iam.entity.permission.PermPath;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -142,7 +143,8 @@ public class PermPathSyncService {
     private List<PermPath> builderModule(List<RequestPath> allPathList) {
         // 提取模块名称和编码, 模块有多个名字情况下获取其中的一个
         Map<String, String> moduleCodeNameMap = allPathList.stream()
-                .collect(Collectors.toMap(RequestPath::getModuleCode, RequestPath::getModuleName, (v1, v2) -> v1));
+                .filter(o-> StrUtil.isNotBlank(o.getModuleName()))
+                .collect(HashMap::new,(map,item)->map.put(item.getModuleCode(),item.getModuleName()), HashMap::putAll);
         // 模块名称和编码生成模块信息并返回分组
         return moduleCodeNameMap.keySet()
                 .stream()
@@ -166,6 +168,7 @@ public class PermPathSyncService {
             String groupName = groupMap.get(groupCode)
                     .stream()
                     .map(RequestPath::getGroupName)
+                    .filter(StrUtil::isNotBlank)
                     .findFirst()
                     .orElse(null);
             // 模块code

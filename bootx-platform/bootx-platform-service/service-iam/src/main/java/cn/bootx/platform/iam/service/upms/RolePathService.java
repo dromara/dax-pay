@@ -188,7 +188,7 @@ public class RolePathService {
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         // 如果有有上级角色, 只可以显示分配给自身的权限
         if (Objects.nonNull(role.getPid())){
-            List<Long> pathIds = rolePathManager.findAllByRoleAndClient(role.getId(),clientCode)
+            List<Long> pathIds = rolePathManager.findAllByRoleAndClient(role.getPid(),clientCode)
                     .stream()
                     .map(RolePath::getPathId)
                     .toList();

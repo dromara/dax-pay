@@ -44,7 +44,7 @@ public class FIleUpLoadController {
     }
 
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public Result<Void> delete(Long id) {
         uploadService.delete(id);
         return Res.ok();
