@@ -22,24 +22,14 @@ public class RoleCodeManager extends BaseManager<RoleCodeMapper, RoleCode> {
     /**
      * 删除权限码关联关系
      */
-    public void deleteByCodes(Long roleId, List<String> deleteCodes) {
-        if (deleteCodes.isEmpty()){
+    public void deleteByCodeIds(Long roleId, List<Long> deleteCodeIds) {
+        if (deleteCodeIds.isEmpty()){
             return;
         }
         lambdaUpdate()
                 .eq(RoleCode::getRoleId, roleId)
-                .in(RoleCode::getCode, deleteCodes)
+                .in(RoleCode::getCodeId, deleteCodeIds)
                 .remove();
-    }
-
-    /**
-     * 更新权限码
-     */
-    public void updateCodes(String oldCode, String newCode) {
-        lambdaUpdate()
-                .eq(RoleCode::getCode, oldCode)
-                .set(RoleCode::getCode, newCode)
-                .update();
     }
 
     public List<RoleCode> findAllByRole(Long roleId) {

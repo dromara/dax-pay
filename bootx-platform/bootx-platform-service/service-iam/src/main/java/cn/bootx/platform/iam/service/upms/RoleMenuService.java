@@ -173,15 +173,17 @@ public class RoleMenuService {
      * 构造用户菜单时, 会合并多个角色的菜单, 然后再转换为菜单树
      */
     public List<PermMenu> findAllByRoleAndClient(Long roleId, String clientCode) {
-        MPJLambdaWrapper<PermMenu> wrapper = new MPJLambdaWrapper<PermMenu>()
+        MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
                 .selectAll(PermMenu.class)
-                // 角色菜单关联
-                .innerJoin(RoleMenu.class, RoleMenu::getRoleId, Role::getId,
-                        on-> on.eq(RoleMenu::getClientCode, clientCode)
-                                .eq(RoleMenu::getRoleId, Role::getId))
+                // 菜单关联
+                .innerJoin(RoleMenu.class,RoleMenu::getRoleId, Role::getId)
+                .innerJoin(PermMenu.class, PermMenu::getId, RoleMenu::getMenuId)
+                // 角色关联
                 .eq(Role::getId, roleId)
+                .eq(RoleMenu::getClientCode, clientCode)
+                .eq(RoleMenu::getRoleId, Role::getId)
                 .orderByAsc(PermMenu::getId);
-        return permMenuManager.selectJoinList(PermMenu.class, wrapper);
+        return roleManager.selectJoinList(PermMenu.class, wrapper);
     }
 
     /**

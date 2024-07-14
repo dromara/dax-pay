@@ -21,7 +21,7 @@ public class PermCodeAssignParam {
     private Long roleId;
     /** 菜单ID */
     @Schema(description = "权限码")
-    private List<String> codes;
+    private List<Long> codeIds;
     /** 是否更新子孙角色 */
     @Schema(description = "是否更新子孙角色")
     private boolean updateChildren;

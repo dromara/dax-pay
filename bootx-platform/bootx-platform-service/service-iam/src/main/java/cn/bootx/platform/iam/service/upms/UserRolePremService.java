@@ -112,7 +112,7 @@ public class UserRolePremService {
                 .flatMap(Collection::stream)
                 .distinct()
                 .toList();
-        // 获取全部的节点, 进行合并后生成树
+        // 获取全部的目录节点, 进行合并后生成树
         List<PermCodeResult> catalogCodes = permCodeManager.findAllByLeaf(false).stream()
                 .map(PermCode::toResult)
                 .toList();

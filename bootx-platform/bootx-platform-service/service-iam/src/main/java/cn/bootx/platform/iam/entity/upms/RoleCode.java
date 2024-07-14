@@ -29,5 +29,5 @@ public class RoleCode extends MpIdEntity {
     /**
      * 权限码
      */
-    private String code;
+    private Long codeId;
 }

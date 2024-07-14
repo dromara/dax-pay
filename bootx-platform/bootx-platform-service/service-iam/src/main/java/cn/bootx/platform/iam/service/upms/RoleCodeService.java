@@ -1,6 +1,5 @@
 package cn.bootx.platform.iam.service.upms;
 
-import cn.bootx.platform.core.util.TreeBuildUtil;
 import cn.bootx.platform.iam.dao.permission.PermCodeManager;
 import cn.bootx.platform.iam.dao.role.RoleManager;
 import cn.bootx.platform.iam.dao.upms.RoleCodeManager;
@@ -47,81 +46,82 @@ public class RoleCodeService {
     public void saveAssign(PermCodeAssignParam param) {
 
         Long roleId = param.getRoleId();
-        List<String> codes = param.getCodes();
+        List<Long> codeIds = param.getCodeIds();
 
         // 先删后增
-        List<RoleCode> roleCodes = roleCodeManager.findAllByRole(roleId);
-        List<String> roleCodeList = roleCodes.stream().map(RoleCode::getCode).toList();
-        // 需要删除的权限码
-        List<RoleCode> deleteRoleCodes = roleCodes.stream()
-                .filter(RoleCode -> !codes.contains(RoleCode.getCode()))
+        List<RoleCode> allRoleCodes = roleCodeManager.findAllByRole(roleId);
+        List<Long> allRoleCodeIds = allRoleCodes.stream().map(RoleCode::getId).toList();
+        // ------------------------ 需要删除的权限码 -----------------------------------------------------------
+        List<RoleCode> deleteRoleCodes = allRoleCodes.stream()
+                .filter(RoleCode -> !codeIds.contains(RoleCode.getId()))
                 .toList();
-        // 需要删除的关联ID
         List<Long> deleteIds = deleteRoleCodes.stream().map(RoleCode::getId).collect(Collectors.toList());
         roleCodeManager.deleteByIds(deleteIds);
 
-        // 需要新增的权限关系
-        List<RoleCode> addRoleCode = codes.stream()
-                .filter(id -> !roleCodeList.contains(id))
-                .map(code -> new RoleCode(roleId, code))
+        // ------------------------ 需要新增的权限关系 -----------------------------------------------------------
+        //过滤掉目录权限
+        List<Long> catalogIds = permCodeManager.findAllByLeaf(false)
+                .stream()
+                .map(PermCode::getId)
+                .toList();
+        List<RoleCode> addRoleCode = codeIds.stream()
+                .filter(id -> !allRoleCodeIds.contains(id))
+                .filter(id -> !catalogIds.contains(id))
+                .map(codeId -> new RoleCode(roleId, codeId))
                 .collect(Collectors.toList());
         // 新增时验证是否超过了父级角色所拥有的权限
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         if (Objects.nonNull(role.getPid())){
-            List<String> collect = roleCodeManager.findAllByRole(role.getPid())
+            List<Long> collect = roleCodeManager.findAllByRole(role.getPid())
                     .stream()
-                    .map(RoleCode::getCode)
+                    .map(RoleCode::getId)
                     .toList();
             addRoleCode = addRoleCode.stream()
-                    .filter(o->collect.contains(o.getCode()))
+                    .filter(o->collect.contains(o.getId()))
                     .toList();
         }
         roleCodeManager.saveAll(addRoleCode);
 
-        // 需要进行级联删除的权限码
-        List<String> deleteCodes = deleteRoleCodes.stream()
-                .map(RoleCode::getCode)
-                .collect(Collectors.toList());
-        // 级联更新子孙角色
+        // ----------------------------------- 级联更新子孙角色 ------------------------------------------
         if (param.isUpdateChildren()) {
             // 新增的进行追加
-            List<String> addCodes = addRoleCode.stream()
-                    .map(RoleCode::getCode)
+            List<Long> addCodeIds = addRoleCode.stream()
+                    .map(RoleCode::getId)
                     .collect(Collectors.toList());
-            this.updateChildren(roleId, addCodes, deleteCodes);
+            this.updateChildren(roleId, addCodeIds, deleteIds);
         } else {
             // 新增的不进行追加
-            this.updateChildren(roleId, null, deleteCodes);
+            this.updateChildren(roleId, null, deleteIds);
         }
     }
 
     /**
      * 更新子孙角色关联关系
      */
-    private void updateChildren(Long roleId, List<String> addCodes, List<String> deleteCodes) {
-        if (CollUtil.isNotEmpty(addCodes) && CollUtil.isNotEmpty(deleteCodes)){
+    private void updateChildren(Long roleId, List<Long> addCodeIds, List<Long> deleteIds) {
+        if (CollUtil.isNotEmpty(addCodeIds) && CollUtil.isNotEmpty(deleteIds)){
             return;
         }
         // 获取当前角色的子孙角色
         List<RoleResult> childrenRoles = roleQueryService.findChildren(roleId);
-        // 新增
-        if (CollUtil.isNotEmpty(addCodes) && CollUtil.isNotEmpty(childrenRoles)){
+        // 级联新增
+        if (CollUtil.isNotEmpty(addCodeIds) && CollUtil.isNotEmpty(childrenRoles)){
             List<RoleCode> addRoleCodes = new ArrayList<>();
-            for (var addCode : addCodes) {
+            for (var addCode : addCodeIds) {
                 for (RoleResult childrenRole : childrenRoles) {
                     addRoleCodes.add(new RoleCode(childrenRole.getId(), addCode));
                 }
             }
             roleCodeManager.saveAll(addRoleCodes);
         }
-        // 删除
-        if (CollUtil.isNotEmpty(deleteCodes) && CollUtil.isNotEmpty(childrenRoles)) {
+        // 级联删除
+        if (CollUtil.isNotEmpty(deleteIds) && CollUtil.isNotEmpty(childrenRoles)) {
             // 子孙角色的id
             List<Long> childrenRoleIds = childrenRoles.stream()
                     .map(RoleResult::getId)
                     .toList();
             for (Long childrenId : childrenRoleIds) {
-                roleCodeManager.deleteByCodes(childrenId,deleteCodes);
+                roleCodeManager.deleteByCodeIds(childrenId,deleteIds);
             }
         }
     }
@@ -136,22 +136,22 @@ public class RoleCodeService {
     public List<PermCodeResult> treeByRoleAssign(Long roleId) {
         // 查询全部的权限码, 后续生成树时也会使用
         List<PermCode> allPermCodes = permCodeManager.findAll();
-        // 只保留叶子节点的数据, 如果是顶级角色, 直接可以使用, 不是的话需要进行过滤
+        // 权限码列表
         List<PermCode> permCodes = allPermCodes.stream()
                 .filter(PermCode::isLeaf)
-                .toList();
+                .toList();;
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
-        // 如果有有上级角色, 显示可以分配给自身的权限
+        // 如果有有上级角色, 显示上级角色已分配的权限
         if (Objects.nonNull(role.getPid())){
-            List<String> codes = roleCodeManager.findAllByRole(role.getPid())
+            List<Long> codeIds = roleCodeManager.findAllByRole(role.getPid())
                     .stream()
-                    .map(RoleCode::getCode)
+                    .map(RoleCode::getCodeId)
                     .toList();
-            permCodes = permCodes.stream()
-                    .filter(o->codes.contains(o.getCode()))
+            permCodes = allPermCodes.stream()
+                    .filter(o->codeIds.contains(o.getId()))
                     .toList();
         }
-        // 根据查询出来的数据生成树
+        // 获取目录节点
         List<PermCode> catalogCodes = allPermCodes.stream()
                 .filter(o -> !o.isLeaf())
                 .toList();
@@ -160,7 +160,7 @@ public class RoleCodeService {
         List<PermCodeResult> codeResultList = permCodes.stream()
                 .map(PermCode::toResult)
                 .toList();
-
+        // 根据查询出来的数据生成树
         return permCodeService.buildTree(codeResultList);
     }
 
@@ -170,36 +170,37 @@ public class RoleCodeService {
     public List<PermCodeResult> findAllByRole(Long roleId) {
         MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
                 .selectAll(PermCode.class)
-                // 角色菜单关联
-                .innerJoin(RoleCode.class, RoleCode::getCode, Role::getCode,o->o.eq(RoleCode::getRoleId, roleId))
+                // 角色权限码关联
+                .innerJoin(RoleCode.class, RoleCode::getRoleId, Role::getId)
                 // 权限码信息
-                .innerJoin(PermCode.class, PermCode::getCode, RoleCode::getCode);
+                .innerJoin(PermCode.class, PermCode::getId, RoleCode::getCodeId)
+                .eq(RoleCode::getRoleId, roleId);
         List<PermCode> permCodes = roleManager.selectJoinList(PermCode.class, wrapper);
         return permCodes.stream().map(PermCode::toResult).toList();
     }
 
+
+    /**
+     * 根据角色查询出选中的权限码
+     */
+    public List<Long> findCodeIdsByRole(Long roleId) {
+        return roleCodeManager.findAllByRole(roleId).stream()
+                .map(RoleCode::getCodeId)
+                .toList();
+    }
     /*------------------------------  运行时使用  ------------------------------------*/
 
     /**
-     * 运行和管理时都会使用
      * 根据角色查询出权限码 需要进行缓存
      */
     public List<String> findCodesByRole(Long roleId) {
-        return roleCodeManager.findAllByRole(roleId).stream()
-                .map(RoleCode::getCode)
-                .toList();
-    }
-
-
-    /**
-     * 根据查询出来的权限码信息数据生成树
-     * TODO 需要找到叶子节点往前的节点
-     */
-    private List<PermCodeResult> buildPathTree(List<PermCode> permCodes){
-        // 进行合并并转为树状结构
-        List<PermCodeResult> list = permCodes.stream()
-                .map(PermCode::toResult)
-                .toList();
-        return TreeBuildUtil.build(list, null, PermCodeResult::getId, PermCodeResult::getPid, PermCodeResult::setChildren);
+        MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
+                .select(PermCode::getCode)
+                // 角色权限码关联
+                .innerJoin(RoleCode.class, RoleCode::getRoleId, Role::getId)
+                // 权限码信息
+                .innerJoin(PermCode.class, PermCode::getId, RoleCode::getCodeId)
+                .eq(RoleCode::getRoleId, roleId);
+        return roleManager.selectJoinList(String.class, wrapper);
     }
 }
