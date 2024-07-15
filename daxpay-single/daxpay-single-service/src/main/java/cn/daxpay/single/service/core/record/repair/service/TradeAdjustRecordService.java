@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- *
+ * 交易调整记录
  * @author xxm
  * @since 2024/7/15
  */

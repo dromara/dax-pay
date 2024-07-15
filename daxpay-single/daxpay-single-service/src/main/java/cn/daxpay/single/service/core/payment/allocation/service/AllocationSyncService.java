@@ -15,8 +15,8 @@ import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
-import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
-import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
+import cn.daxpay.single.service.core.record.sync.entity.TradeSyncRecord;
+import cn.daxpay.single.service.core.record.sync.service.TradeSyncRecordService;
 import cn.daxpay.single.service.func.AbsAllocationStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
@@ -47,7 +47,7 @@ public class AllocationSyncService {
 
     private final AllocOrderDetailManager allocOrderDetailManager;
 
-    private final PaySyncRecordService paySyncRecordService;
+    private final TradeSyncRecordService tradeSyncRecordService;
 
     private final LockTemplate lockTemplate;
 
@@ -158,16 +158,16 @@ public class AllocationSyncService {
      * 保存同步记录
      */
     private void saveRecord(AllocOrder order, AllocRemoteSyncResult syncResult, String errorCode, String errorMsg){
-        PaySyncRecord paySyncRecord = new PaySyncRecord()
+        TradeSyncRecord tradeSyncRecord = new TradeSyncRecord()
                 .setBizTradeNo(order.getBizAllocNo())
                 .setTradeNo(order.getAllocNo())
                 .setOutTradeNo(order.getOutAllocNo())
-                .setSyncType(TradeTypeEnum.ALLOCATION.getCode())
+                .setType(TradeTypeEnum.ALLOCATION.getCode())
                 .setChannel(order.getChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setErrorCode(errorCode)
                 .setErrorMsg(errorMsg)
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
-        paySyncRecordService.saveRecord(paySyncRecord);
+        tradeSyncRecordService.saveRecord(tradeSyncRecord);
     }
 }

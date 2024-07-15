@@ -1,4 +1,4 @@
-package cn.daxpay.single.service.core.payment.repair.service;
+package cn.daxpay.single.service.core.payment.adjust.service;
 
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.core.exception.OperationProcessingException;
@@ -6,11 +6,10 @@ import cn.daxpay.single.core.exception.SystemUnknownErrorException;
 import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import cn.daxpay.single.service.code.TradeTypeEnum;
-import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
-import cn.daxpay.single.service.core.payment.repair.param.PayRepairParam;
+import cn.daxpay.single.service.core.payment.adjust.param.PayAdjustParam;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import cn.daxpay.single.service.core.record.repair.entity.TradeAdjustRecord;
 import cn.daxpay.single.service.core.record.repair.service.TradeAdjustRecordService;
@@ -21,6 +20,7 @@ import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -45,7 +45,9 @@ public class PayAdjustService {
     /**
      * 调整服务
      */
-    public String adjust(PayOrder order, PayRepairParam param){
+    @Transactional(rollbackFor = Exception.class)
+    public String adjust(PayAdjustParam param){
+        PayOrder order = param.getOrder();
         // 添加分布式锁
         LockInfo lock = lockTemplate.lock("repair:pay:" + order.getId(), 10000, 200);
         if (Objects.isNull(lock)){
@@ -67,7 +69,7 @@ public class PayAdjustService {
         // 根据不同的调整方式执行对应的修复逻辑
         switch (param.getAdjustWay()) {
             case SUCCESS:
-                this.success(order);
+                this.success(order, param);
                 break;
             case CLOSE_LOCAL:
                 this.closeLocal(order);
@@ -83,7 +85,7 @@ public class PayAdjustService {
         // 发送通知
         clientNoticeService.registerPayNotice(order);
         TradeAdjustRecord record = this.saveRecord(order, param, beforeStatus);
-        return record.getRepairNo();
+        return record.getAdjustNo();
     }
 
     /**
@@ -91,14 +93,11 @@ public class PayAdjustService {
      * 同步: 将异步支付状态修改为成功
      * 回调: 将异步支付状态修改为成功
      */
-    private void success(PayOrder order) {
-        // 读取支付网关中的完成时间
-        LocalDateTime payTime = PaymentContextLocal.get()
-                .getRepairInfo()
-                .getFinishTime();
+    private void success(PayOrder order, PayAdjustParam param) {
         // 修改订单支付状态为成功
         order.setStatus(PayStatusEnum.SUCCESS.getCode())
-                .setPayTime(payTime)
+                .setPayTime(param.getFinishTime())
+                .setOutOrderNo(param.getOutTradeNo())
                 .setCloseTime(null);
         tradeFlowRecordService.savePay(order);
         payOrderService.updateById(order);
@@ -129,10 +128,10 @@ public class PayAdjustService {
     /**
      * 保存记录
      */
-    private TradeAdjustRecord saveRecord(PayOrder order, PayRepairParam param, String beforeStatus){
+    private TradeAdjustRecord saveRecord(PayOrder order, PayAdjustParam param, String beforeStatus){
         // 修复后的状态
         TradeAdjustRecord record = new TradeAdjustRecord()
-                .setRepairNo(TradeNoGenerateUtil.adjust())
+                .setAdjustNo(TradeNoGenerateUtil.adjust())
                 .setTradeId(order.getId())
                 .setChannel(order.getChannel())
                 .setSource(param.getSource().getCode())

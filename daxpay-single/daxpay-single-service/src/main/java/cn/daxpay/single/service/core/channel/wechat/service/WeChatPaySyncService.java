@@ -74,7 +74,7 @@ public class WeChatPaySyncService {
             if (Objects.equals(tradeStatus, WeChatPayCode.PAY_SUCCESS) || Objects.equals(tradeStatus, WeChatPayCode.PAY_ACCEPT)) {
                 String timeEnd = result.get(WeChatPayCode.TIME_END);
                 LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
-                return syncResult.setPayTime(time).setSyncStatus(PaySyncStatusEnum.SUCCESS);
+                return syncResult.setFinishTime(time).setSyncStatus(PaySyncStatusEnum.SUCCESS);
             }
             // 待支付
             if (Objects.equals(tradeStatus, WeChatPayCode.PAY_NOTPAY)

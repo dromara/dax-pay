@@ -11,24 +11,24 @@ import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import cn.daxpay.single.core.code.RefundSyncStatusEnum;
 import cn.daxpay.single.service.code.TradeTypeEnum;
-import cn.daxpay.single.service.core.record.sync.convert.PaySyncRecordConvert;
-import cn.daxpay.single.service.dto.record.sync.PaySyncRecordDto;
+import cn.daxpay.single.service.core.record.sync.convert.TradeSyncRecordConvert;
+import cn.daxpay.single.service.dto.record.sync.SyncRecordDto;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 支付同步订单
+ * 交易同步记录
  * @author xxm
  * @since 2023/7/14
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@DbTable(comment = "支付同步订单")
+@DbTable(comment = "交易同步记录")
 @Accessors(chain = true)
-@TableName("pay_sync_record")
-public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<PaySyncRecordDto> {
+@TableName("pay_trade_sync_record")
+public class TradeSyncRecord extends MpCreateEntity implements EntityBaseFunction<SyncRecordDto> {
 
     /** 本地交易号 */
     @DbMySqlIndex(comment = "本地交易号索引")
@@ -58,13 +58,13 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
      * @see TradeTypeEnum
      */
     @DbColumn(comment = "同步类型", length = 20, isNull = false)
-    private String syncType;
+    private String type;
 
     /**
-     * 同步的异步通道
+     * 同步通道
      * @see PayChannelEnum#getCode()
      */
-    @DbColumn(comment = "同步的异步通道", length = 20, isNull = false)
+    @DbColumn(comment = "同步通道", length = 20, isNull = false)
     private String channel;
 
     /** 网关返回的同步消息 */
@@ -73,14 +73,14 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
     private String syncInfo;
 
     /**
-     * 支付单如果状态不一致, 是否进行修复
+     * 支付单如果状态不一致, 是否进行调整
      */
-    @DbColumn(comment = "是否进行修复", isNull = false)
-    private boolean repair;
+    @DbColumn(comment = "是否进行调整", isNull = false)
+    private boolean adjust;
 
     /** 修复单号 */
-    @DbColumn(comment = "修复单号", length = 32)
-    private String repairNo;
+    @DbColumn(comment = "调整记录号", length = 32)
+    private String adjustNo;
 
     /** 错误码 */
     @DbColumn(comment = "错误码", length = 10)
@@ -98,7 +98,7 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
      * 转换
      */
     @Override
-    public PaySyncRecordDto toDto() {
-        return PaySyncRecordConvert.CONVERT.convert(this);
+    public SyncRecordDto toDto() {
+        return TradeSyncRecordConvert.CONVERT.convert(this);
     }
 }

@@ -54,7 +54,7 @@ public class PayCallbackRecordService {
                 .setChannel(callbackInfo.getChannel())
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackParam()))
                 .setCallbackType(callbackInfo.getCallbackType().getCode())
-                .setRepairOrderNo(callbackInfo.getRepairNo())
+                .setRepairOrderNo(callbackInfo.getAdjustNo())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())
                 .setErrorMsg(callbackInfo.getErrorMsg());
         callbackRecordManager.save(payNotifyRecord);

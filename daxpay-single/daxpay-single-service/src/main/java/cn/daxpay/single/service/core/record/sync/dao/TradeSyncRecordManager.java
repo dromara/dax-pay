@@ -1,11 +1,11 @@
-package cn.daxpay.single.service.core.record.repair.dao;
+package cn.daxpay.single.service.core.record.sync.dao;
 
 import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
-import cn.daxpay.single.service.core.record.repair.entity.PayRepairRecord;
-import cn.daxpay.single.service.param.record.PayRepairRecordQuery;
+import cn.daxpay.single.service.core.record.sync.entity.TradeSyncRecord;
+import cn.daxpay.single.service.param.record.TradeSyncRecordQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -15,19 +15,20 @@ import org.springframework.stereotype.Repository;
 /**
  *
  * @author xxm
- * @since 2024/1/6
+ * @since 2023/7/14
  */
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class PayRepairRecordManager extends BaseManager<PayRepairRecordMapper, PayRepairRecord> {
+public class TradeSyncRecordManager extends BaseManager<TradeSyncRecordMapper, TradeSyncRecord> {
 
     /**
      * 分页
      */
-    public Page<PayRepairRecord> page(PageParam pageParam, PayRepairRecordQuery query){
-        Page<PayRepairRecord> mpPage = MpUtil.getMpPage(pageParam, PayRepairRecord.class);
-        QueryWrapper<PayRepairRecord> generator = QueryGenerator.generator(query);
+    public Page<TradeSyncRecord> page(PageParam pageParam, TradeSyncRecordQuery query) {
+        Page<TradeSyncRecord> mpPage = MpUtil.getMpPage(pageParam, TradeSyncRecord.class);
+        QueryWrapper<TradeSyncRecord> generator = QueryGenerator.generator(query);
         return page(mpPage, generator);
     }
+
 }

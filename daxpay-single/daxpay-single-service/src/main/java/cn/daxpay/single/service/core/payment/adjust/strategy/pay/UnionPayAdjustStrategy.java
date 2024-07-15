@@ -1,4 +1,4 @@
-package cn.daxpay.single.service.core.payment.repair.strategy.pay;
+package cn.daxpay.single.service.core.payment.adjust.strategy.pay;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.func.AbsPayAdjustStrategy;

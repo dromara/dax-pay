@@ -5,7 +5,6 @@ import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
 import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.common.context.CallbackLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -69,9 +68,6 @@ public class WeChatPayCallbackService {
                 callbackService.saveCallbackRecord();
                 return null;
             }
-            // 提前设置订单修复的来源
-            PaymentContextLocal.get().getRepairInfo().setSource(TradeAdjustSourceEnum.CALLBACK);
-
             if (callbackType == TradeTypeEnum.PAY){
                 // 解析支付数据并放处理
                 this.resolvePayData();

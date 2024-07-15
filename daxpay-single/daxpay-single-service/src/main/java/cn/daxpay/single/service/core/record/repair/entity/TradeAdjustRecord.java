@@ -26,10 +26,9 @@ public class TradeAdjustRecord extends MpCreateEntity implements EntityBaseFunct
 
     /**
      * 调整号
-     * 如果记录有多个, 使用这个作为关联
      */
-    @DbColumn(comment = "修复号", length = 32, isNull = false)
-    private String repairNo;
+    @DbColumn(comment = "调整号", length = 32, isNull = false)
+    private String adjustNo;
 
     /** 交易ID */
     @DbColumn(comment = "本地订单ID", isNull = false)

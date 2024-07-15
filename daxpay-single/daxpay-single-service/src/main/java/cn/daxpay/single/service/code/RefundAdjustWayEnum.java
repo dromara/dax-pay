@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 交易调整出发来源, 不同来源的修复类型要执行的逻辑不相同
+ * 退款修复方式枚举
  * @author xxm
- * @since 2023/12/29
+ * @since 2024/1/26
  */
 @Getter
 @AllArgsConstructor
-public enum TradeAdjustSourceEnum {
+public enum RefundAdjustWayEnum {
 
-    SYNC("sync","同步"),
-    CALLBACK("callback","回调"),
-;
+    SUCCESS("success","退款成功"),
+    FAIL("fail","退款失败");
+
     private final String code;
     private final String name;
 }

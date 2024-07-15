@@ -1,30 +1,29 @@
-package cn.daxpay.single.service.dto.record.sync;
+package cn.daxpay.single.service.param.record;
 
-import cn.bootx.platform.common.core.rest.dto.BaseDto;
+import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.daxpay.single.core.code.PayChannelEnum;
-import cn.daxpay.single.core.code.RefundSyncStatusEnum;
 import cn.daxpay.single.core.code.PaySyncStatusEnum;
+import cn.daxpay.single.core.code.RefundSyncStatusEnum;
 import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 支付同步记录
+ * 交易同步记录查询参数
  * @author xxm
- * @since 2023/7/14
+ * @since 2024/1/9
  */
-@EqualsAndHashCode(callSuper = true)
+@QueryParam(type = QueryParam.CompareTypeEnum.EQ)
 @Data
 @Accessors(chain = true)
-@Schema(title = "支付同步订单")
-public class PaySyncRecordDto extends BaseDto {
+@Schema(title = "交易同步记录查询参数")
+public class TradeSyncRecordQuery {
 
     /** 本地交易号 */
-    @Schema(description = "本地订单ID")
+    @Schema(description = "本地交易号")
     private String tradeNo;
 
     /** 商户交易号 */
@@ -37,11 +36,11 @@ public class PaySyncRecordDto extends BaseDto {
 
 
     /**
-     * 三方支付返回状态
+     * 同步结果
      * @see PaySyncStatusEnum
      * @see RefundSyncStatusEnum
      */
-    @Schema(description = "网关返回状态")
+    @Schema(description = "同步结果")
     private String outTradeStatus;
 
 
@@ -59,9 +58,9 @@ public class PaySyncRecordDto extends BaseDto {
     @Schema(description = "同步的异步通道")
     private String channel;
 
-    /** 网关返回的同步消息 */
+    /** 三方支付返回的消息内容 */
     @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
-    @Schema(description = "同步消息")
+    @Schema(description = "消息内容")
     private String syncInfo;
 
     /**

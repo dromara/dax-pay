@@ -73,7 +73,7 @@ public class AliPaySyncService {
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_FINISHED)) {
                 // 支付完成时间
                 LocalDateTime payTime = LocalDateTimeUtil.of(response.getSendPayDate());
-                return syncResult.setSyncStatus(PaySyncStatusEnum.SUCCESS).setPayTime(payTime);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.SUCCESS).setFinishTime(payTime);
             }
             // 待支付
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_WAIT_BUYER_PAY)) {

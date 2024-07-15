@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.record.sync.dao;
 
-import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
+import cn.daxpay.single.service.core.record.sync.entity.TradeSyncRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023/7/14
  */
 @Mapper
-public interface PaySyncRecordMapper extends BaseMapper<PaySyncRecord> {
+public interface TradeSyncRecordMapper extends BaseMapper<TradeSyncRecord> {
 }
