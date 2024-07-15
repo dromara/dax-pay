@@ -1,6 +1,7 @@
 package cn.bootx.platform.starter.audit.log.controller;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -29,18 +30,21 @@ public class LoginLogController {
 
     private final LoginLogService loginLogService;
 
+    @RequestPath("登录日志分页")
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<LoginLogResult>> page(PageParam pageParam, LoginLogParam loginLogParam) {
         return Res.ok(loginLogService.page(pageParam, loginLogParam));
     }
 
+    @RequestPath("获取登录日志")
     @Operation(summary = "获取")
     @GetMapping("/findById")
     public Result<LoginLogResult> findById(Long id) {
         return Res.ok(loginLogService.findById(id));
     }
 
+    @RequestPath("清除指定天数之前的登录日志")
     @Operation(summary = "清除指定天数之前的日志")
     @PostMapping("/deleteByDay")
     public Result<Void> deleteByDay(int deleteDay){

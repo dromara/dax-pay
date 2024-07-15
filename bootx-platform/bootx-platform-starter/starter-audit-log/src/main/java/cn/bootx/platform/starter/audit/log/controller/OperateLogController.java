@@ -1,6 +1,7 @@
 package cn.bootx.platform.starter.audit.log.controller;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -31,12 +32,14 @@ public class OperateLogController {
 
     private final OperateLogService operateLogService;
 
+    @RequestPath("操作日志分页")
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<OperateLogResult>> page(PageParam pageParam, OperateLogParam operateLogParam) {
         return Res.ok(operateLogService.page(pageParam, operateLogParam));
     }
 
+    @RequestPath("获取日志分页")
     @Operation(summary = "获取")
     @GetMapping("/findById")
     public Result<OperateLogResult> findById(Long id) {
@@ -44,6 +47,7 @@ public class OperateLogController {
     }
 
 
+    @RequestPath("清除指定天数的操作日志")
     @Operation(summary = "清除指定天数的日志")
     @PostMapping("/deleteByDay")
     public Result<Void> deleteByDay(Integer type){
