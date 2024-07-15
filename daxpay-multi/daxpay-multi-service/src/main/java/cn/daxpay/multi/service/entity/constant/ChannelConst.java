@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 public class ChannelConst extends MpIdEntity implements ToResult<ChannelConstResult> {
 
     /** 通道编码 */
-    private String channel;
+    private String code;
 
     /** 通道名称 */
     private String name;

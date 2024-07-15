@@ -40,10 +40,10 @@ public class ChannelConfigService {
         List<ChannelConst> channelList = channelConstManager.findAllByEnable();
 
         return channelList.stream().map(o->{
-            ChannelConfig channelConfig = channelConfigMap.get(o.getChannel());
+            ChannelConfig channelConfig = channelConfigMap.get(o.getCode());
             if (Objects.isNull(channelConfig)){
                 return new ChannelConfigResult()
-                        .setChannel(o.getChannel());
+                        .setChannel(o.getCode());
             } else {
                 return channelConfig.toResult();
             }

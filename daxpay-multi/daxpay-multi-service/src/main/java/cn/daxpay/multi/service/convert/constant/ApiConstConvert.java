@@ -2,6 +2,7 @@ package cn.daxpay.multi.service.convert.constant;
 
 import cn.daxpay.multi.service.entity.constant.ApiConst;
 import cn.daxpay.multi.service.result.constant.ApiConstResult;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -9,6 +10,7 @@ import org.mapstruct.factory.Mappers;
  * @author xxm
  * @since 2024/7/14
  */
+@Mapper
 public interface ApiConstConvert {
     ApiConstConvert CONVERT = Mappers.getMapper(ApiConstConvert.class);
 

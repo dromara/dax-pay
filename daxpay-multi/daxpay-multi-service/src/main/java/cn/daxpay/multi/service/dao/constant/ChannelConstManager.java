@@ -1,7 +1,13 @@
 package cn.daxpay.multi.service.dao.constant;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.constant.ChannelConst;
+import cn.daxpay.multi.service.param.constant.ChannelConstQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -17,6 +23,15 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class ChannelConstManager extends BaseManager<ChannelConstMapper, ChannelConst> {
+
+    /**
+     * 分页
+     */
+    public Page<ChannelConst> page(PageParam pageParam, ChannelConstQuery query) {
+        Page<ChannelConst> mpPage = MpUtil.getMpPage(pageParam);
+        QueryWrapper<ChannelConst> wrapper = QueryGenerator.generator(query);
+        return this.page(mpPage, wrapper);
+    }
 
     /**
      * 查询全部启用的通道

@@ -1,5 +1,11 @@
 package cn.daxpay.multi.service.service.constant;
 
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.rest.param.PageParam;
+import cn.bootx.platform.core.rest.result.PageResult;
+import cn.daxpay.multi.service.dao.constant.ChannelConstManager;
+import cn.daxpay.multi.service.param.constant.ChannelConstQuery;
+import cn.daxpay.multi.service.result.constant.ChannelConstResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,4 +19,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ChannelConstService {
+    private final ChannelConstManager channelConstManager;
+    /**
+     * 分页
+     */
+    public PageResult<ChannelConstResult> page(PageParam pageParam, ChannelConstQuery query) {
+        return MpUtil.toPageResult(channelConstManager.page(pageParam, query));
+    }
 }

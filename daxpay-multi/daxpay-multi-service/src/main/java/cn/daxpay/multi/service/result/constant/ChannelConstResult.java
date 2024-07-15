@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 public class ChannelConstResult {
     /** 通道编码 */
     @Schema(description = "通道编码")
-    private String channel;
+    private String code;
 
     /** 通道名称 */
     @Schema(description = "通道名称")

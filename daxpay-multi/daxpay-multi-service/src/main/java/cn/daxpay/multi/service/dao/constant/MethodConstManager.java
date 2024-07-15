@@ -1,7 +1,13 @@
 package cn.daxpay.multi.service.dao.constant;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.constant.MethodConst;
+import cn.daxpay.multi.service.param.constant.MethodConstQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -15,4 +21,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class MethodConstManager extends BaseManager<MethodConstMapper, MethodConst> {
+
+    /**
+     * 分页
+     */
+    public Page<MethodConst> page(PageParam pageParam, MethodConstQuery query) {
+        Page<MethodConst> mpPage = MpUtil.getMpPage(pageParam);
+        QueryWrapper<MethodConst> wrapper = QueryGenerator.generator(query);
+        return this.page(mpPage, wrapper);
+    }
 }

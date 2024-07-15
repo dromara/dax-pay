@@ -43,7 +43,7 @@ public class MchAppManager extends BaseManager<MchAppMapper, MchApp> {
      */
     public Page<MchApp> page(PageParam pageParam, MchAppQuery query) {
         Page<MchApp> mpPage = MpUtil.getMpPage(pageParam);
-        QueryWrapper<MchApp> wrapper = QueryGenerator.generator(query, this.getEntityClass());
+        QueryWrapper<MchApp> wrapper = QueryGenerator.generator(query);
         return this.page(mpPage, wrapper);
     }
 }
