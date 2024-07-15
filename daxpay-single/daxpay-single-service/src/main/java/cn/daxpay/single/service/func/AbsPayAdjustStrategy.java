@@ -13,7 +13,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public abstract class AbsPayRepairStrategy implements PayStrategy{
+public abstract class AbsPayAdjustStrategy implements PayStrategy{
 
     /** 支付订单 */
     private PayOrder order = null;

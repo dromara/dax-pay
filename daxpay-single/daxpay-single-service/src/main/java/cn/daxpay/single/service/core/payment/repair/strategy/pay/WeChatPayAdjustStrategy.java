@@ -4,7 +4,7 @@ import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayCloseService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
-import cn.daxpay.single.service.func.AbsPayRepairStrategy;
+import cn.daxpay.single.service.func.AbsPayAdjustStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -21,7 +21,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Service
 @RequiredArgsConstructor
-public class WeChatPayRepairStrategy extends AbsPayRepairStrategy {
+public class WeChatPayAdjustStrategy extends AbsPayAdjustStrategy {
     private final WeChatPayCloseService closeService;
 
     private final WeChatPayConfigService weChatPayConfigService;

@@ -1,6 +1,7 @@
 package cn.daxpay.single.service.core.payment.repair.param;
 
-import cn.daxpay.single.service.code.PayRepairWayEnum;
+import cn.daxpay.single.service.code.PayAdjustWayEnum;
+import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -14,6 +15,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PayRepairParam {
 
-    @Schema(description = "修复类型")
-    private PayRepairWayEnum repairType;
+    @Schema(description = "触发来源")
+    private TradeAdjustSourceEnum source;
+
+    @Schema(description = "调整方式")
+    private PayAdjustWayEnum adjustWay;
+
+    @Schema(description = "支付订单号")
+    private String orderNo;
 }

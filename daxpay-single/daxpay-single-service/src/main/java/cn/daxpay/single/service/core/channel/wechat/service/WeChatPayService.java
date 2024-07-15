@@ -213,7 +213,7 @@ public class WeChatPayService {
             String timeEnd = result.get(WeChatPayCode.TIME_END);
             LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
             payInfo.setOutOrderNo(result.get(WeChatPayCode.TRANSACTION_ID))
-                    .setCompleteTime(time)
+                    .setFinishTime(time)
                     .setComplete(true);
             return;
         }

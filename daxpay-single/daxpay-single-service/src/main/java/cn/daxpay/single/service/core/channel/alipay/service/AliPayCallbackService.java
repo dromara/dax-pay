@@ -5,8 +5,8 @@ import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.common.context.CallbackLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
@@ -60,7 +60,7 @@ public class AliPayCallbackService {
             callbackInfo.getCallbackParam().putAll(params);
 
             // 判断并保存回调类型
-            PaymentTypeEnum callbackType = this.getCallbackType();
+            TradeTypeEnum callbackType = this.getCallbackType();
             callbackInfo.setCallbackType(callbackType)
                     .setChannel(PayChannelEnum.ALI.getCode());
 
@@ -72,9 +72,9 @@ public class AliPayCallbackService {
                 return null;
             }
             // 提前设置订单修复的来源
-            PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
+            PaymentContextLocal.get().getRepairInfo().setSource(TradeAdjustSourceEnum.CALLBACK);
 
-            if (callbackType == PaymentTypeEnum.PAY){
+            if (callbackType == TradeTypeEnum.PAY){
                 // 解析支付数据并放处理
                 this.resolvePayData();
                 payCallbackService.payCallback();
@@ -177,17 +177,17 @@ public class AliPayCallbackService {
     /**
      * 判断类型 支付回调/退款回调
      *
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
-    public PaymentTypeEnum getCallbackType() {
+    public TradeTypeEnum getCallbackType() {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = callback.getCallbackParam();
         String refundFee = callbackParam.get(REFUND_FEE);
         // 如果有退款金额，说明是退款回调
         if (StrUtil.isNotBlank(refundFee)){
-            return PaymentTypeEnum.REFUND;
+            return TradeTypeEnum.REFUND;
         } else {
-            return PaymentTypeEnum.PAY;
+            return TradeTypeEnum.PAY;
         }
     }
 

@@ -2,9 +2,9 @@ package cn.daxpay.single.service.param.record;
 
 import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.daxpay.single.core.code.PayStatusEnum;
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
-import cn.daxpay.single.service.code.PayRepairWayEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
+import cn.daxpay.single.service.code.PayAdjustWayEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.code.RefundRepairWayEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -37,21 +37,21 @@ public class PayRepairRecordQuery {
 
     /**
      * 修复类型 支付修复/退款修复
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @Schema(description = "修复类型")
     private String repairType;
 
     /**
      * 修复来源
-     * @see PayRepairSourceEnum
+     * @see TradeAdjustSourceEnum
      */
     @Schema(description = "修复来源")
     private String repairSource;
 
     /**
      * 修复方式
-     * @see PayRepairWayEnum
+     * @see PayAdjustWayEnum
      * @see RefundRepairWayEnum
      */
     @Schema(description = "修复方式")

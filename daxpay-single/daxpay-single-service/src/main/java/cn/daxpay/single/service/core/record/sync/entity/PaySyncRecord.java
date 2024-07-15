@@ -10,7 +10,7 @@ import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import cn.daxpay.single.core.code.RefundSyncStatusEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.core.record.sync.convert.PaySyncRecordConvert;
 import cn.daxpay.single.service.dto.record.sync.PaySyncRecordDto;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -55,7 +55,7 @@ public class PaySyncRecord extends MpCreateEntity implements EntityBaseFunction<
 
     /**
      * 同步类型 支付/退款/分账/转账
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @DbColumn(comment = "同步类型", length = 20, isNull = false)
     private String syncType;

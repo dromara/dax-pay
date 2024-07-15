@@ -3,7 +3,7 @@ package cn.daxpay.single.service.core.order.reconcile.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.core.order.reconcile.conver.ReconcileConvert;
 import cn.daxpay.single.service.dto.order.reconcile.ReconcileOutTradeDto;
 import cn.bootx.table.modify.annotation.DbColumn;
@@ -42,7 +42,7 @@ public class ReconcileOutTrade extends MpCreateEntity implements EntityBaseFunct
 
     /**
      * 交易类型
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @DbColumn(comment = "交易类型", length = 20, isNull = false)
     private String type;

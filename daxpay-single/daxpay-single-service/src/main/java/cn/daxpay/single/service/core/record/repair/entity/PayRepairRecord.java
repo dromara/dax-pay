@@ -6,9 +6,9 @@ import cn.bootx.table.modify.annotation.DbColumn;
 import cn.bootx.table.modify.annotation.DbTable;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.daxpay.single.core.code.PayStatusEnum;
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
-import cn.daxpay.single.service.code.PayRepairWayEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
+import cn.daxpay.single.service.code.PayAdjustWayEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.code.RefundRepairWayEnum;
 import cn.daxpay.single.service.core.record.repair.convert.PayRepairRecordConvert;
 import cn.daxpay.single.service.dto.record.repair.PayRepairRecordDto;
@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
+ * 调整
  * 支付修复记录 包括支付修复记录和退款修复记录
  * @author xxm
  * @since 2024/1/6
@@ -49,21 +50,21 @@ public class PayRepairRecord extends MpCreateEntity implements EntityBaseFunctio
 
     /**
      * 修复类型 支付修复/退款修复
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @DbColumn(comment = "修复类型", length = 20, isNull = false)
     private String repairType;
 
     /**
      * 修复来源
-     * @see PayRepairSourceEnum
+     * @see TradeAdjustSourceEnum
      */
     @DbColumn(comment = "修复来源", length = 20, isNull = false)
     private String repairSource;
 
     /**
      * 修复方式
-     * @see PayRepairWayEnum
+     * @see PayAdjustWayEnum
      * @see RefundRepairWayEnum
      */
     @DbColumn(comment = "修复方式", length = 20, isNull = false)

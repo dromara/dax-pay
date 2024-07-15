@@ -7,7 +7,7 @@ import cn.daxpay.single.core.code.AllocOrderResultEnum;
 import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.core.param.payment.allocation.AllocSyncParam;
 import cn.daxpay.single.core.result.sync.AllocSyncResult;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocOrderDetailManager;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
@@ -162,7 +162,7 @@ public class AllocationSyncService {
                 .setBizTradeNo(order.getBizAllocNo())
                 .setTradeNo(order.getAllocNo())
                 .setOutTradeNo(order.getOutAllocNo())
-                .setSyncType(PaymentTypeEnum.ALLOCATION.getCode())
+                .setSyncType(TradeTypeEnum.ALLOCATION.getCode())
                 .setChannel(order.getChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setErrorCode(errorCode)

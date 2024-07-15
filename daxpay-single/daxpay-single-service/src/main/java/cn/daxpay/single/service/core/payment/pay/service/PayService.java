@@ -122,7 +122,7 @@ public class PayService {
         if (payInfo.isComplete()) {
             payOrder.setOutOrderNo(payInfo.getOutOrderNo())
                     .setStatus(SUCCESS.getCode())
-                    .setPayTime(payInfo.getCompleteTime());
+                    .setPayTime(payInfo.getFinishTime());
         }
         payOrderService.updateById(payOrder);
         // 扩展记录更新
@@ -177,7 +177,7 @@ public class PayService {
         if (payInfo.isComplete()) {
             payOrder.setOutOrderNo(payInfo.getOutOrderNo())
                     .setStatus(SUCCESS.getCode())
-                    .setPayTime(payInfo.getCompleteTime());
+                    .setPayTime(payInfo.getFinishTime());
         }
         payOrderService.updateById(payOrder);
         // 扩展记录更新

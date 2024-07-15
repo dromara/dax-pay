@@ -3,7 +3,7 @@ package cn.daxpay.single.service.common.context;
 import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -53,7 +53,7 @@ public class CallbackLocal {
     private String repairNo;
 
     /** 回调类型 */
-    private PaymentTypeEnum callbackType;
+    private TradeTypeEnum callbackType;
 
     /**
      * 回调处理状态

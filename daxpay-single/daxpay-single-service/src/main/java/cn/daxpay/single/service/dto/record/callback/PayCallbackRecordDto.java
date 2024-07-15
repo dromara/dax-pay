@@ -3,7 +3,7 @@ package cn.daxpay.single.service.dto.record.callback;
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +34,7 @@ public class PayCallbackRecordDto extends BaseDto {
 
     /**
      * 回调类型
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @Schema(description = "回调类型")
     private String callbackType;

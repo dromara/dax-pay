@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.annotation.QueryParam;
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import cn.daxpay.single.core.code.RefundSyncStatusEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,7 +46,7 @@ public class PaySyncRecordQuery {
 
     /**
      * 同步类型 支付/退款
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @Schema(description = "同步类型")
     private String syncType;

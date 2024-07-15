@@ -4,7 +4,7 @@ import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayCloseService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
-import cn.daxpay.single.service.func.AbsPayRepairStrategy;
+import cn.daxpay.single.service.func.AbsPayAdjustStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -21,7 +21,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Service
 @RequiredArgsConstructor
-public class AliPayRepairStrategy extends AbsPayRepairStrategy {
+public class AliPayAdjustStrategy extends AbsPayAdjustStrategy {
     private final AliPayCloseService closeService;
 
     private final AliPayConfigService aliPayConfigService;

@@ -9,10 +9,10 @@ import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.core.result.sync.PaySyncResult;
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
-import cn.daxpay.single.service.code.PayRepairWayEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
-import cn.daxpay.single.service.common.context.RepairLocal;
+import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
+import cn.daxpay.single.service.code.PayAdjustWayEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
+import cn.daxpay.single.service.common.context.AdjustLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
@@ -110,9 +110,9 @@ public class PaySyncService {
                 // 状态不一致，执行支付单修复逻辑
                 if (!statusSync){
                     // 如果没有修复触发来源, 设置修复触发来源为同步
-                    RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
+                    AdjustLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
                     if (Objects.isNull(repairInfo.getSource())){
-                        repairInfo.setSource(PayRepairSourceEnum.SYNC);
+                        repairInfo.setSource(TradeAdjustSourceEnum.SYNC);
                     }
                     // 设置支付单完成时间
                     repairInfo.setFinishTime(payRemoteSyncResult.getPayTime());
@@ -187,12 +187,7 @@ public class PaySyncService {
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
             case SUCCESS: {
-                repair = repairService.repair(payOrder, PayRepairWayEnum.PAY_SUCCESS);
-                break;
-            }
-            // 待支付, 将订单状态重新设置为待支付
-            case PROGRESS: {
-                repair = repairService.repair(payOrder, PayRepairWayEnum.PROGRESS);
+                repair = repairService.repair(payOrder, PayAdjustWayEnum.SUCCESS);
                 break;
             }
             case REFUND:
@@ -200,13 +195,13 @@ public class PaySyncService {
             // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
-                repair = repairService.repair(payOrder, PayRepairWayEnum.CLOSE_LOCAL);
+                repair = repairService.repair(payOrder, PayAdjustWayEnum.CLOSE_LOCAL);
                 break;
             }
             // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
             case TIMEOUT:
             case NOT_FOUND_UNKNOWN:{
-                repair = repairService.repair(payOrder, PayRepairWayEnum.CLOSE_GATEWAY);
+                repair = repairService.repair(payOrder, PayAdjustWayEnum.CLOSE_GATEWAY);
                 break;
             }
             // 调用出错
@@ -237,7 +232,7 @@ public class PaySyncService {
                 .setTradeNo(payOrder.getOrderNo())
                 .setOutTradeNo(payOrder.getOutOrderNo())
                 .setOutTradeStatus(payRemoteSyncResult.getSyncStatus().getCode())
-                .setSyncType(PaymentTypeEnum.PAY.getCode())
+                .setSyncType(TradeTypeEnum.PAY.getCode())
                 .setChannel(payOrder.getChannel())
                 .setSyncInfo(payRemoteSyncResult.getSyncInfo())
                 .setRepair(repair)

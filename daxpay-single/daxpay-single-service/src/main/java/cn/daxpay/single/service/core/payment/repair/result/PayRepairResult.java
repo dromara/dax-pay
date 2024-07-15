@@ -1,6 +1,5 @@
 package cn.daxpay.single.service.core.payment.repair.result;
 
-import cn.daxpay.single.core.code.PayStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,8 +13,4 @@ import lombok.experimental.Accessors;
 public class PayRepairResult {
     /** 修复号 */
     private String repairNo;
-    /** 修复前状态 */
-    private PayStatusEnum beforeStatus;
-    /** 修复后状态 */
-    private PayStatusEnum afterPayStatus;
 }

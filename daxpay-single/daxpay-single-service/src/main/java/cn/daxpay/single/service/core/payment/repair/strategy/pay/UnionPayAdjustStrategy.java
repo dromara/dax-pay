@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.core.payment.repair.strategy.pay;
 
 import cn.daxpay.single.core.code.PayChannelEnum;
-import cn.daxpay.single.service.func.AbsPayRepairStrategy;
+import cn.daxpay.single.service.func.AbsPayAdjustStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +18,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Service
 @RequiredArgsConstructor
-public class UnionPayRepairStrategy extends AbsPayRepairStrategy {
+public class UnionPayAdjustStrategy extends AbsPayAdjustStrategy {
 
     /**
      * 策略标识

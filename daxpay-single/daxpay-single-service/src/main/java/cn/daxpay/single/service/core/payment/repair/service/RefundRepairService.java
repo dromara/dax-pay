@@ -3,9 +3,9 @@ package cn.daxpay.single.service.core.payment.repair.service;
 import cn.daxpay.single.core.code.PayOrderRefundStatusEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.core.code.RefundStatusEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.code.RefundRepairWayEnum;
-import cn.daxpay.single.service.common.context.RepairLocal;
+import cn.daxpay.single.service.common.context.AdjustLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
@@ -80,7 +80,7 @@ public class RefundRepairService {
             }
 
             // 设置修复ID并保存修复记录
-            repairResult.setRepairNo(TradeNoGenerateUtil.repair());
+            repairResult.setRepairNo(TradeNoGenerateUtil.adjust());
             // 支付修复记录
             PayRepairRecord payRepairRecord = this.payRepairRecord(payOrder, repairType, repairResult);
             // 退款修复记录
@@ -99,7 +99,7 @@ public class RefundRepairService {
      * 退款成功, 更新退款单和支付单
      */
     private RefundRepairResult success(RefundOrder refundOrder, PayOrder payOrder) {
-        RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
+        AdjustLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
         // 订单相关状态
         PayOrderRefundStatusEnum beforePayStatus = PayOrderRefundStatusEnum.findByCode(payOrder.getRefundStatus());
         PayOrderRefundStatusEnum afterPayRefundStatus;
@@ -190,7 +190,7 @@ public class RefundRepairService {
                 .setTradeId(order.getId())
                 .setTradeNo(order.getOrderNo())
                 .setRepairNo(repairResult.getRepairNo())
-                .setRepairType(PaymentTypeEnum.PAY.getCode())
+                .setRepairType(TradeTypeEnum.PAY.getCode())
                 .setRepairSource(source)
                 .setRepairWay(repairType.getCode())
                 .setChannel(order.getChannel())
@@ -214,7 +214,7 @@ public class RefundRepairService {
                 .setRepairNo(repairResult.getRepairNo())
                 .setTradeNo(refundOrder.getRefundNo())
                 .setChannel(refundOrder.getChannel())
-                .setRepairType(PaymentTypeEnum.REFUND.getCode())
+                .setRepairType(TradeTypeEnum.REFUND.getCode())
                 .setBeforeStatus(repairResult.getBeforeRefundStatus().getCode())
                 .setAfterStatus(afterStatus)
                 .setRepairSource(source)

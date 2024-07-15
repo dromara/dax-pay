@@ -82,7 +82,7 @@ public class TradeNoGenerateUtil {
     /**
      * 生成修复单号
      */
-    public static String repair() {
+    public static String adjust() {
         StringBuilder orderNo = new StringBuilder();
         String dateStr = LocalDateTime.now().format(DatePattern.PURE_DATETIME_FORMATTER);
         long id = ATOMIC_LONG.incrementAndGet();

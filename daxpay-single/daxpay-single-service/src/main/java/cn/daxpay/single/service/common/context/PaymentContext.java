@@ -31,7 +31,7 @@ public class PaymentContext {
     private final CallbackLocal callbackInfo = new CallbackLocal();
 
     /** 修复相关信息 */
-    private final RepairLocal repairInfo = new RepairLocal();
+    private final AdjustLocal repairInfo = new AdjustLocal();
 
     /** 对账相关信息 */
     private final ReconcileLocal reconcileInfo = new ReconcileLocal();

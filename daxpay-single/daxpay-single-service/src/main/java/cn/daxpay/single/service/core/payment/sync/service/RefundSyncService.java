@@ -9,10 +9,10 @@ import cn.daxpay.single.core.exception.PayFailureException;
 import cn.daxpay.single.core.exception.TradeNotExistException;
 import cn.daxpay.single.core.param.payment.refund.RefundSyncParam;
 import cn.daxpay.single.core.result.sync.RefundSyncResult;
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.code.RefundRepairWayEnum;
-import cn.daxpay.single.service.common.context.RepairLocal;
+import cn.daxpay.single.service.common.context.AdjustLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.refund.dao.RefundOrderManager;
 import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
@@ -105,9 +105,9 @@ public class RefundSyncService {
                 // 状态不一致，执行退款单修复逻辑
                 if (!statusSync) {
                     // 如果没有支付来源, 设置支付来源为同步
-                    RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
+                    AdjustLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
                     if (Objects.isNull(repairInfo.getSource())){
-                        repairInfo.setSource(PayRepairSourceEnum.SYNC);
+                        repairInfo.setSource(TradeAdjustSourceEnum.SYNC);
                     }
                     repairInfo.setFinishTime(refundRemoteSyncResult.getFinishTime());
                     repairResult = this.repairHandler(refundRemoteSyncResult, refundOrder);
@@ -196,7 +196,7 @@ public class RefundSyncService {
                 .setBizTradeNo(refundOrder.getBizRefundNo())
                 .setOutTradeNo(syncResult.getOutRefundNo())
                 .setOutTradeStatus(syncResult.getSyncStatus().getCode())
-                .setSyncType(PaymentTypeEnum.REFUND.getCode())
+                .setSyncType(TradeTypeEnum.REFUND.getCode())
                 .setChannel(refundOrder.getChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setRepair(repair)

@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.common.context;
 
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
+import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-public class RepairLocal {
+public class AdjustLocal {
 
     /**
      * 触发来源
      */
-    private PayRepairSourceEnum source;
+    private TradeAdjustSourceEnum source;
 
-    /** 完成/退款时间 */
+    /** 完成时间 */
     private LocalDateTime finishTime;
 
 }

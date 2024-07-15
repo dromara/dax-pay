@@ -10,15 +10,12 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum PayRepairWayEnum {
+public enum PayAdjustWayEnum {
 
-    PAY_SUCCESS("pay_success","支付成功"),
+    SUCCESS("pay_success","支付成功"),
     CLOSE_LOCAL("pay_close_local","关闭本地支付"),
-    PROGRESS("pay_progress","切换到支付中"),
     /** 同时也会关闭本地支付 */
-    CLOSE_GATEWAY("pay_close_gateway","关闭网关支付"),
-    REFUND_SUCCESS("refund_success","退款成功"),
-    REFUND_FAIL("refund_fail","退款失败");;
+    CLOSE_GATEWAY("pay_close_gateway","关闭网关支付");
 
     private final String code;
     private final String name;

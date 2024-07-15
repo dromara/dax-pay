@@ -8,13 +8,13 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * 支付系统中常见的操作类型, 如支付/退款/转账等
+ * 交易类型类型, 如支付/退款/转账等
  * @author xxm
  * @since 2024/1/28
  */
 @Getter
 @AllArgsConstructor
-public enum PaymentTypeEnum {
+public enum TradeTypeEnum {
 
     PAY("pay","支付"),
     REFUND("refund","退款"),
@@ -24,11 +24,11 @@ public enum PaymentTypeEnum {
     private final String code;
     private final String name;
 
-    public static PaymentTypeEnum findByCode(String code){
+    public static TradeTypeEnum findByCode(String code){
         return Arrays.stream(values())
                 .filter(value -> Objects.equals(value.getCode(), code))
                 .findFirst()
-                .orElseThrow(() -> new DataNotExistException("未找到对应的支付类型"));
+                .orElseThrow(() -> new DataNotExistException("未找到对应的交易类型"));
 
     }
 }
