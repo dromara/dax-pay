@@ -1,0 +1,69 @@
+spring:
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://postgresql:5432/dax-pay-multi?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+          username: bootx
+          password: bootx123
+      hikari:
+        keepalive-time: 300000
+  data:
+    redis:
+      host: redis
+      port: 6379
+      database: 4
+      password: bootx123
+      lettuce:
+        pool:
+          max-wait: 1000ms
+# 开发时显示debug日志
+logging:
+  level:
+    cn.bootx.**: debug
+    cn.daxpay.**: debug
+    org.springframework.jdbc.core: debug
+# 接口文档配置
+springdoc:
+  # 默认展开对象类型的属性, 主要用在get类型的参数中
+  default-flat-param-object: true
+# 基础脚手架配置
+bootx-platform:
+  common:
+    # swagger相关配置
+    swagger:
+      author: DaxPay
+      title: 开源支付平台-多商户版-商户端
+      description: 开源支付平台-多商户版-商户端
+      version: 0.0.1
+      base-packages:
+        "[BootxPlatform接口]":
+          - cn.bootx.platform.common
+          - cn.bootx.platform.starter
+          - cn.bootx.platform.iam
+          - cn.bootx.platform.baseapi
+          - cn.bootx.platform.notice
+        "[商户平台接口]":
+          - cn.daxpay.multi.merchant
+          - cn.daxpay.multi.channel
+  starter:
+    auth:
+      enable-admin: true
+      ignore-urls:
+        - '/actuator/**'
+        - '/v3/api-docs/**'
+        - '/doc.html'
+        - '/swagger-resources/**'
+        - '/token/**'
+        - '/ws/**'
+        - '/demo/**'
+        - '/test/**'
+        - '/webjars/**'
+        - '/front/**'
+        - '/h5/**'
+        - '/css/**'
+        - '/error'
+        - '/favicon.ico'
+        - '/**'

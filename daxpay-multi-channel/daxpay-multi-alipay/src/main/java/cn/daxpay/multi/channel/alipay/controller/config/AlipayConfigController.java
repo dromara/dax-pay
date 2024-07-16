@@ -1,5 +1,7 @@
 package cn.daxpay.multi.channel.alipay.controller.config;
 
+import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.daxpay.multi.channel.alipay.param.config.AlipayConfigParam;
@@ -26,15 +28,18 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("/alipay/config")
 @RequiredArgsConstructor
+@RequestGroup(groupCode = "AlipayConfig", groupName = "支付宝配置", moduleCode = "alipay", moduleName = "支付宝支付")
 public class AlipayConfigController {
     private final AliPayConfigService alipayConfigService;
 
+    @RequestPath("获取配置")
     @Operation(summary = "获取配置")
     @GetMapping("/findById")
     public Result<AlipayConfigResult> findById(@NotNull(message = "ID不可为空") Long id) {
         return Res.ok(alipayConfigService.findById(id));
     }
 
+    @RequestPath("新增或更新")
     @Operation(summary = "新增或更新")
     @PostMapping("/saveOrUpdate")
     public Result<Void> saveOrUpdate(@RequestBody AlipayConfigParam param) {
@@ -43,18 +48,21 @@ public class AlipayConfigController {
     }
 
     @SneakyThrows
+    @RequestPath("读取证书文件内容")
     @Operation(summary = "读取证书文件内容")
     @PostMapping("/readPem")
     public Result<String> readPem(MultipartFile file){
         return Res.ok(new String(file.getBytes(), StandardCharsets.UTF_8));
     }
 
+    @RequestPath("生成异步通知地址")
     @Operation(summary = "生成异步通知地址")
     @GetMapping("/generateNotifyUrl")
     public Result<String> generateNotifyUrl() {
         return Res.ok();
     }
 
+    @RequestPath("生成同步通知地址")
     @Operation(summary = "生成同步通知地址")
     @GetMapping("/generateReturnUrl")
     public Result<String> generateReturnUrl() {

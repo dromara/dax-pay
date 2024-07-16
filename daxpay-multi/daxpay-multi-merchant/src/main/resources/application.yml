@@ -1,8 +1,8 @@
 server:
-  port: 10880
+  port: 8888
 spring:
   application:
-    name: dax-pay-gateway
+    name: dax-pay-merchant
   profiles:
     active: dev
 mybatis-plus:
@@ -16,7 +16,9 @@ mybatis-plus:
 mybatis-plus-join:
   banner: false
 sa-token:
-  token-name: satoken
+  # token 名称（同时也是 cookie 名称）
+  token-name: Accesstoken
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
   timeout: 2592000
   active-timeout: -1
   is-concurrent: true
@@ -26,4 +28,5 @@ sa-token:
 # 平台配置
 bootx-platform:
   config:
-    client-code: dax-pay-gateway
+    # 不可以进行更改, 内部会根据终端编码进行处理
+    client-code: dax-pay-merchant

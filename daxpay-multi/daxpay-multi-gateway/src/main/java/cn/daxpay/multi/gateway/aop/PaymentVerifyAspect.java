@@ -28,7 +28,6 @@ import org.springframework.stereotype.Component;
 public class PaymentVerifyAspect {
     private final PaymentAssistService paymentAssistService;
 
-
     /**
      * 切面处理
      */

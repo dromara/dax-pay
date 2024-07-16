@@ -17,6 +17,8 @@
     <description>多商户支付通道功能实现</description>
     <modules>
         <module>daxpay-multi-alipay</module>
+        <module>daxpay-multi-wechat</module>
+        <module>daxpay-multi-union</module>
     </modules>
     <packaging>pom</packaging>
 

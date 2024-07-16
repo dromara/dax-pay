@@ -9,9 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>daxpay-multi-admin</artifactId>
+    <artifactId>daxpay-multi-merchant</artifactId>
     <packaging>jar</packaging>
-    <description>运营管理端</description>
+    <description>商户端</description>
 
     <dependencies>
         <!-- web框架 -->

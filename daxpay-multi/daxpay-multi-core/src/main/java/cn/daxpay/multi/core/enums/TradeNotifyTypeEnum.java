@@ -13,12 +13,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TradeNotifyTypeEnum {
     /** http */
-    HTTP("http","http"),
+    HTTP("http"),
     /** websocket */
-    WEBSOCKET("websocket","WebSocket"),
+    WEBSOCKET("websocket"),
     /** mq */
-    MQ("mq","消息队列");
+    MQ("mq");
 
     private final String code;
-    private final String name;
 }
