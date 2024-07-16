@@ -19,6 +19,9 @@ public class MchAppQuery {
     @Schema(description = "商户号")
     private String mchNo;
 
+    /** 应用名称 */
+    @Schema(description = "应用号")
+    private String appId;
 
     /** 应用名称 */
     @Schema(description = "应用名称")
@@ -28,14 +31,6 @@ public class MchAppQuery {
     @Schema(description = "签名方式")
     private String signType;
 
-    /** 公钥 */
-    @Schema(description = "公钥")
-    private String publicKey;
-
-    /** 私钥 */
-    @Schema(description = "私钥")
-    private String privateKey;
-
     /**
      * 异步消息通知类型, 当前只支持http方式
      * @see TradeNotifyTypeEnum
@@ -43,9 +38,5 @@ public class MchAppQuery {
     @Schema(description = "异步消息通知类型")
     private String notifyType;
 
-    /**
-     * 通知地址, http/WebSocket 需要配置
-     */
-    @Schema(description = "通知地址")
-    private String notifyUrl;
+
 }

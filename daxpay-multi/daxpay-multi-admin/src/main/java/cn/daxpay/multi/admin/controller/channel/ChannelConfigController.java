@@ -2,6 +2,8 @@ package cn.daxpay.multi.admin.controller.channel;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
+import cn.bootx.platform.core.rest.Res;
+import cn.bootx.platform.core.rest.result.Result;
 import cn.daxpay.multi.service.result.channel.ChannelConfigResult;
 import cn.daxpay.multi.service.service.channel.ChannelConfigService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,8 +31,8 @@ public class ChannelConfigController {
     @RequestPath("根据应用AppId查询配置列表")
     @Operation(summary = "根据应用AppId查询配置列表")
     @GetMapping("/findAllByAppId")
-    public List<ChannelConfigResult> findAllByAppId(String appId){
-        return channelConfigService.findAllByAppId(appId);
+    public Result<List<ChannelConfigResult>> findAllByAppId(String appId){
+        return Res.ok(channelConfigService.findAllByAppId(appId));
     }
 
 }

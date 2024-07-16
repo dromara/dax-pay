@@ -3,6 +3,7 @@ package cn.daxpay.multi.admin.controller.merchant;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
+import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
@@ -17,6 +18,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 商户控制器
@@ -60,6 +63,13 @@ public class MerchantController {
     @GetMapping("/findById")
     public Result<MerchantResult> findById(@NotNull(message = "id不可为空")Long id){
         return Res.ok(merchantService.findById(id));
+    }
+
+    @RequestPath("商户下拉列表")
+    @Operation(summary = "商户下拉列表")
+    @GetMapping("/dropdown")
+    public Result<List<LabelValue>> dropdown(){
+        return Res.ok(merchantService.dropdown());
     }
 
     @RequestPath("删除商户")

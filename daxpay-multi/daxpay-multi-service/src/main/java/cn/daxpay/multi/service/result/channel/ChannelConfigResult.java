@@ -25,6 +25,10 @@ public class ChannelConfigResult {
     @Schema(description = "支付通道")
     private String channel;
 
+    /** 通道名称 */
+    @Schema(description = "通道名称")
+    private String name;
+
     /** 通道商户号 */
     @Schema(description = "通道商户号")
     private String outMchNo;

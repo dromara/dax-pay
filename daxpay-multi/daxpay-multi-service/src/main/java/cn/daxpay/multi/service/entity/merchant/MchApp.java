@@ -73,6 +73,7 @@ public class MchApp extends MpBaseEntity implements ToResult<MchAppResult> {
     /**
      * 通知地址, http/WebSocket 需要配置
      */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
     @Override

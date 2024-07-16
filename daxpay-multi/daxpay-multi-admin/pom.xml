@@ -43,6 +43,13 @@
             <version>${daxpay.version}</version>
         </dependency>
 
+        <!-- 用户认证和鉴权服务 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>service-iam</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

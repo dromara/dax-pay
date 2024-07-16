@@ -43,9 +43,10 @@ public class ChannelConfigService {
             ChannelConfig channelConfig = channelConfigMap.get(o.getCode());
             if (Objects.isNull(channelConfig)){
                 return new ChannelConfigResult()
-                        .setChannel(o.getCode());
+                        .setChannel(o.getCode())
+                        .setName(o.getName());
             } else {
-                return channelConfig.toResult();
+                return channelConfig.toResult().setName(o.getName());
             }
         }).toList();
     }

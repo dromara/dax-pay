@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.dao.constant;
 
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -37,6 +38,9 @@ public class ChannelConstManager extends BaseManager<ChannelConstMapper, Channel
      * 查询全部启用的通道
      */
     public List<ChannelConst> findAllByEnable() {
-        return findAllByField(ChannelConst::isEnable, true);
+        return lambdaQuery()
+                .eq(ChannelConst::isEnable, true)
+                .orderByAsc(MpIdEntity::getId)
+                .list();
     }
 }

@@ -17,7 +17,9 @@ public enum TradeNotifyTypeEnum {
     /** websocket */
     WEBSOCKET("websocket"),
     /** mq */
-    MQ("mq");
+    MQ("mq"),
+    /** 不启用 */
+    NONE("none");
 
     private final String code;
 }
