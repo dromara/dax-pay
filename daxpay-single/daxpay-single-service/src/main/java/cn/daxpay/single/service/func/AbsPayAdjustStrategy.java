@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 支付订单修复策略
- * 1. 异步支付方式要实现所有的修复方法
- * 2. 同步支付通常只需要实现必须得修复方法即可(关闭订单)
+ * 支付订单调整策略
  * @author xxm
  * @since 2023/12/27
  */
@@ -19,7 +17,7 @@ public abstract class AbsPayAdjustStrategy implements PayStrategy{
     private PayOrder order = null;
 
     /**
-     * 修复前处理
+     * 调整前处理
      */
     public void doBeforeHandler(){
 

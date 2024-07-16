@@ -49,7 +49,7 @@ public class RefundSyncService {
 
     private final TradeSyncRecordService tradeSyncRecordService;
 
-    private final RefundAdjustService repairService;
+    private final RefundAdjustService adjustService;
 
     private final LockTemplate lockTemplate;
 
@@ -102,10 +102,10 @@ public class RefundSyncService {
             boolean statusSync = this.checkSyncStatus(refundRemoteSyncResult, refundOrder);
             String adjustNo = null;
             try {
-                // 状态不一致，执行退款单修复逻辑
+                // 状态不一致，执行退款单调整逻辑
                 if (!statusSync) {
                     // 如果没有支付来源, 设置支付来源为同步
-                    adjustNo = this.repairHandler(refundRemoteSyncResult, refundOrder);
+                    adjustNo = this.adjustHandler(refundRemoteSyncResult, refundOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
@@ -152,7 +152,7 @@ public class RefundSyncService {
     /**
      * 进行退款订单和支付订单的调整
      */
-    private String repairHandler(RefundRemoteSyncResult syncResult, RefundOrder order){
+    private String adjustHandler(RefundRemoteSyncResult syncResult, RefundOrder order){
         RefundSyncStatusEnum syncStatusEnum = syncResult.getSyncStatus();
         RefundAdjustParam param = new RefundAdjustParam()
                 .setOrder(order)
@@ -164,17 +164,17 @@ public class RefundSyncService {
         switch (syncStatusEnum) {
             case SUCCESS:
                 param.setAdjustWay(RefundAdjustWayEnum.SUCCESS);
-                return repairService.adjust(param);
+                return adjustService.adjust(param);
             case PROGRESS:
                 // 不进行处理
                 break;
             case FAIL: {
                 param.setAdjustWay(RefundAdjustWayEnum.FAIL);
-                return repairService.adjust(param);
+                return adjustService.adjust(param);
             }
             case NOT_FOUND:
                 param.setAdjustWay(RefundAdjustWayEnum.FAIL);
-                return repairService.adjust(param);
+                return adjustService.adjust(param);
             default: {
                 throw new BizException("代码有问题");
             }
@@ -186,9 +186,9 @@ public class RefundSyncService {
      * 保存同步记录, 使用新事务进行保存
      * @param refundOrder 支付单
      * @param syncResult 同步结果
-     * @param repairOrderNo 修复号
+     * @param adjustNo 调整号
      */
-    private void saveRecord(RefundOrder refundOrder, RefundRemoteSyncResult syncResult, String repairOrderNo){
+    private void saveRecord(RefundOrder refundOrder, RefundRemoteSyncResult syncResult, String adjustNo){
         TradeSyncRecord tradeSyncRecord = new TradeSyncRecord()
                 .setTradeNo(refundOrder.getRefundNo())
                 .setBizTradeNo(refundOrder.getBizRefundNo())
@@ -197,8 +197,8 @@ public class RefundSyncService {
                 .setType(TradeTypeEnum.REFUND.getCode())
                 .setChannel(refundOrder.getChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
-                .setAdjust(StrUtil.isNotBlank(repairOrderNo))
-                .setAdjustNo(repairOrderNo)
+                .setAdjust(StrUtil.isNotBlank(adjustNo))
+                .setAdjustNo(adjustNo)
                 .setErrorCode(syncResult.getErrorCode())
                 .setErrorMsg(syncResult.getErrorMsg())
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());

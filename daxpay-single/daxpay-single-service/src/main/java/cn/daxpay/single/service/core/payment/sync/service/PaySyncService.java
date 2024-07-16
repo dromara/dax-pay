@@ -76,7 +76,7 @@ public class PaySyncService {
     /**
      * 同步支付状态, 开启一个新的事务, 不受外部抛出异常的影响
      * 1. 如果状态一致, 不进行处理
-     * 2. 如果状态不一致, 调用修复逻辑进行修复, 更新状态和完成时间
+     * 2. 如果状态不一致, 调用调整逻辑进行调整, 更新状态和完成时间
      * 3. 会更新关联网关订单号
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
@@ -107,9 +107,9 @@ public class PaySyncService {
             boolean statusSync = this.checkAndAdjustSyncStatus(payRemoteSyncResult,payOrder);
             String adjustNo = null;
             try {
-                // 状态不一致，执行支付单修复逻辑
+                // 状态不一致，执行支付单调整逻辑
                 if (!statusSync){
-                    adjustNo = this.repairHandler(payRemoteSyncResult, payOrder);
+                    adjustNo = this.adjustHandler(payRemoteSyncResult, payOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
@@ -170,10 +170,10 @@ public class PaySyncService {
     }
 
     /**
-     * 根据同步的结果对支付单进行修复处理
+     * 根据同步的结果对支付单进行调整处理
      * @return 调整单号, 如果为空, 说明订单未做调整
      */
-    private String repairHandler(PayRemoteSyncResult payRemoteSyncResult, PayOrder payOrder){
+    private String adjustHandler(PayRemoteSyncResult payRemoteSyncResult, PayOrder payOrder){
         PaySyncStatusEnum syncStatusEnum = payRemoteSyncResult.getSyncStatus();
         PayAdjustParam param = new PayAdjustParam()
                 .setOrder(payOrder)
@@ -218,9 +218,9 @@ public class PaySyncService {
      * 保存同步记录
      * @param payOrder 支付单
      * @param payRemoteSyncResult 同步结果
-     * @param repairOrderNo 修复号
+     * @param adjustNo 调整号
      */
-    private void saveRecord(PayOrder payOrder, PayRemoteSyncResult payRemoteSyncResult, String repairOrderNo){
+    private void saveRecord(PayOrder payOrder, PayRemoteSyncResult payRemoteSyncResult, String adjustNo){
         TradeSyncRecord tradeSyncRecord = new TradeSyncRecord()
                 .setBizTradeNo(payOrder.getBizOrderNo())
                 .setTradeNo(payOrder.getOrderNo())
@@ -229,8 +229,8 @@ public class PaySyncService {
                 .setType(TradeTypeEnum.PAY.getCode())
                 .setChannel(payOrder.getChannel())
                 .setSyncInfo(payRemoteSyncResult.getSyncInfo())
-                .setAdjust(StrUtil.isNotBlank(repairOrderNo))
-                .setAdjustNo(repairOrderNo)
+                .setAdjust(StrUtil.isNotBlank(adjustNo))
+                .setAdjustNo(adjustNo)
                 .setErrorCode(payRemoteSyncResult.getErrorCode())
                 .setErrorMsg(payRemoteSyncResult.getErrorMsg())
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());

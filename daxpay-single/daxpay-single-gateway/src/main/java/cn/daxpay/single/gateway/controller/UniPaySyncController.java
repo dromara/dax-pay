@@ -13,7 +13,7 @@ import cn.daxpay.single.core.result.sync.RefundSyncResult;
 import cn.daxpay.single.core.result.sync.TransferSyncResult;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.annotation.PaymentVerify;
-import cn.daxpay.single.service.core.payment.allocation.service.AllocationSyncService;
+import cn.daxpay.single.service.core.payment.sync.service.AllocSyncService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
 import cn.daxpay.single.service.core.payment.sync.service.RefundSyncService;
 import cn.daxpay.single.service.core.payment.sync.service.TransferSyncService;
@@ -40,7 +40,7 @@ public class UniPaySyncController {
 
     private final PaySyncService paySyncService;
     private final RefundSyncService refundSyncService;
-    private final AllocationSyncService allocationSyncService;
+    private final AllocSyncService allocSyncService;
     private final TransferSyncService transferSyncService;
 
     @PaymentVerify
@@ -64,7 +64,7 @@ public class UniPaySyncController {
     @Operation(summary = "分账同步接口")
     @PostMapping("/allocation")
     public DaxResult<AllocSyncResult> allocation(@RequestBody AllocSyncParam param){
-        return DaxRes.ok(allocationSyncService.sync(param));
+        return DaxRes.ok(allocSyncService.sync(param));
     }
 
     @PaymentVerify

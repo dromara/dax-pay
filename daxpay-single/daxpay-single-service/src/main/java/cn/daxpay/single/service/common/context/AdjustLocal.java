@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 修复相关信息
+ * 调整相关信息
  * @author xxm
  * @since 2024/1/25
  */

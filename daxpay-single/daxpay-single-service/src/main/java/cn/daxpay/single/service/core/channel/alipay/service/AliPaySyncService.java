@@ -111,8 +111,8 @@ public class AliPaySyncService {
      * 退款同步查询
      * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
-    public RefundRemoteSyncResult syncRefundStatus(RefundOrder refundOrder){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
+    public RefundRemoteSyncResult syncRefundStatus(RefundOrder refundOrder, AliPayConfig config){
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
         RefundRemoteSyncResult syncResult = new RefundRemoteSyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
         try {
             AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();

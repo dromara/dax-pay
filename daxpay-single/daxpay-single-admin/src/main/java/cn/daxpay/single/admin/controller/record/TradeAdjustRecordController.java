@@ -4,8 +4,8 @@ import cn.bootx.platform.common.core.rest.PageResult;
 import cn.bootx.platform.common.core.rest.Res;
 import cn.bootx.platform.common.core.rest.ResResult;
 import cn.bootx.platform.common.core.rest.param.PageParam;
-import cn.daxpay.single.service.core.record.repair.service.TradeAdjustRecordService;
-import cn.daxpay.single.service.dto.record.repair.TradeAdjustRecordDto;
+import cn.daxpay.single.service.core.record.adjust.service.TradeAdjustRecordService;
+import cn.daxpay.single.service.dto.record.adjust.TradeAdjustRecordDto;
 import cn.daxpay.single.service.param.report.TradeAdjustRecordQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 支付修复记录控制器
+ * 支付调整记录控制器
  * @author xxm
  * @since 2024/1/9
  */

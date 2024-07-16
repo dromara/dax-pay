@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 交易调整出发来源, 不同来源的修复类型要执行的逻辑不相同
+ * 交易调整出发来源, 不同来源的调整类型要执行的逻辑不相同
  * @author xxm
  * @since 2023/12/29
  */

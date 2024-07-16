@@ -21,7 +21,7 @@ import static cn.daxpay.single.core.code.PaySyncStatusEnum.FAIL;
 public class PaySyncResult extends PaymentCommonResult {
 
     /**
-     * 支付网关同步状态
+     * 通道订单状态
      * @see PaySyncStatusEnum
      */
     @Schema(description = "同步状态")

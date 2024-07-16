@@ -16,8 +16,8 @@ import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.payment.adjust.param.RefundAdjustParam;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
-import cn.daxpay.single.service.core.record.repair.entity.TradeAdjustRecord;
-import cn.daxpay.single.service.core.record.repair.service.TradeAdjustRecordService;
+import cn.daxpay.single.service.core.record.adjust.entity.TradeAdjustRecord;
+import cn.daxpay.single.service.core.record.adjust.service.TradeAdjustRecordService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 退款订单修复, 只有存在异步支付的退款订单才存在修复
+ * 退款订单调整
  * @author xxm
  * @since 2024/1/26
  */
@@ -54,14 +54,14 @@ public class RefundAdjustService {
     private final LockTemplate lockTemplate;
 
     /**
-     * 调整退款单
+     * 退款订单调整
      */
     @Transactional(rollbackFor = Exception.class)
     public String adjust(RefundAdjustParam param){
         RefundOrder refundOrder = param.getOrder();
-        RefundAdjustWayEnum repairType = param.getAdjustWay();
+        RefundAdjustWayEnum adjustType = param.getAdjustWay();
         // 添加分布式锁
-        LockInfo lock = lockTemplate.lock("repair:refund:" + refundOrder.getId(), 10000, 200);
+        LockInfo lock = lockTemplate.lock("adjust:refund:" + refundOrder.getId(), 10000, 200);
         if (Objects.isNull(lock)){
             log.warn("当前退款订单正在调整中: {}", refundOrder.getId());
             throw new OperationProcessingException("当前退款订单正在调整中");
@@ -74,10 +74,10 @@ public class RefundAdjustService {
             // 获取关联支付单
             PayOrder payOrder = payOrderQueryService.findById(refundOrder.getOrderId()).orElseThrow(() -> new RuntimeException("支付单不存在"));
             String adjustNo = null;
-            // 根据不同的类型执行对应的修复逻辑
-            if (repairType == RefundAdjustWayEnum.SUCCESS) {
+            // 根据不同的类型执行对应的调整逻辑
+            if (adjustType == RefundAdjustWayEnum.SUCCESS) {
                 adjustNo = this.success(param, payOrder);
-            } else if (repairType == RefundAdjustWayEnum.FAIL) {
+            } else if (adjustType == RefundAdjustWayEnum.FAIL) {
                 adjustNo = this.close(param, payOrder);
             } else {
                 log.error("走到了理论上讲不会走到的分支");
@@ -163,7 +163,6 @@ public class RefundAdjustService {
      */
     private TradeAdjustRecord saveRecord(RefundAdjustParam param, String beforeRefundStatus){
         RefundOrder refundOrder = param.getOrder();
-        // 修复发起来源
         TradeAdjustRecord record = new TradeAdjustRecord()
                 .setTradeId(refundOrder.getId())
                 .setAdjustNo(TradeNoGenerateUtil.adjust())

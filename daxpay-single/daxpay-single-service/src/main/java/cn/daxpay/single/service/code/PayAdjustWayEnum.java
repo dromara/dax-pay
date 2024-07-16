@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付修复方式, 包含退款的修复方式, 退款修复方式是支付修复的子集
+ * 支付订单调整方式
  * @author xxm
  * @since 2023/12/28
  */

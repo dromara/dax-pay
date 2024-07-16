@@ -50,8 +50,8 @@ public class PayCallbackRecordDto extends BaseDto {
     @Schema(description = "回调处理状态")
     private String status;
 
-    @Schema(description = "修复号")
-    private String repairNo;
+    @Schema(description = "调整号")
+    private String adjustNo;
 
     /** 提示信息 */
     @Schema(description = "提示信息")

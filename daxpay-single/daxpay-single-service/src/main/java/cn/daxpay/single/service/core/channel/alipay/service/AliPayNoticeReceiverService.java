@@ -2,7 +2,6 @@ package cn.daxpay.single.service.core.channel.alipay.service;
 
 import cn.bootx.platform.common.core.util.CertUtil;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
-import cn.daxpay.single.service.core.payment.allocation.service.AllocationCallbackService;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;

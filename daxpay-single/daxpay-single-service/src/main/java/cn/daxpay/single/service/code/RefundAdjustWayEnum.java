@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 退款修复方式枚举
+ * 退款调整方式枚举
  * @author xxm
  * @since 2024/1/26
  */

@@ -64,14 +64,14 @@ public class TradeSyncRecordQuery {
     private String syncInfo;
 
     /**
-     * 支付单如果状态不一致, 是否进行修复
+     * 支付单如果状态不一致, 是否进行调整
      */
-    @Schema(description = "是否进行修复")
-    private boolean repair;
+    @Schema(description = "是否进行调整")
+    private boolean adjust;
 
-    /** 修复单号 */
-    @Schema(description = "修复单号")
-    private String repairNo;
+    /** 调整单号 */
+    @Schema(description = "调整单号")
+    private String adjustNo;
 
     /** 错误码 */
     @Schema(description = "错误码")

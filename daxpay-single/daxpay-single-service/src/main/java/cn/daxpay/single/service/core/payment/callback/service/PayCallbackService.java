@@ -74,7 +74,7 @@ public class PayCallbackService {
     }
 
     /**
-     * 成功处理 使用修复策略将支付订单调整为支付成功状态
+     * 成功处理 使用调整策略将支付订单调整为支付成功状态
      */
     private void success(PayOrder payOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
@@ -106,7 +106,7 @@ public class PayCallbackService {
     }
 
     /**
-     * 失败处理, 使用修复策略将支付订单调整为关闭状态
+     * 失败处理, 使用调整策略将支付订单调整为关闭状态
      */
     private void fail(PayOrder payOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();

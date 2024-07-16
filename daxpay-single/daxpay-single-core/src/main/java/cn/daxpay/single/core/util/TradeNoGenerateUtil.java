@@ -80,7 +80,7 @@ public class TradeNoGenerateUtil {
     }
 
     /**
-     * 生成修复单号
+     * 生成调整单号
      */
     public static String adjust() {
         StringBuilder orderNo = new StringBuilder();

@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 支付订单修复参数
+ * 支付订单调整参数
  * @author xxm
  * @since 2023/12/27
  */

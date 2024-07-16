@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 微信支付订单修复策略类
+ * 微信支付订单调整策略类
  * @author xxm
  * @since 2023/12/29
  */
@@ -38,7 +38,7 @@ public class WeChatPayAdjustStrategy extends AbsPayAdjustStrategy {
 
 
     /**
-     * 修复前处理
+     * 调整前处理
      */
     @Override
     public void doBeforeHandler() {

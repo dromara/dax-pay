@@ -11,8 +11,8 @@ import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
 import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
 import cn.daxpay.single.service.core.payment.adjust.param.PayAdjustParam;
 import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
-import cn.daxpay.single.service.core.record.repair.entity.TradeAdjustRecord;
-import cn.daxpay.single.service.core.record.repair.service.TradeAdjustRecordService;
+import cn.daxpay.single.service.core.record.adjust.entity.TradeAdjustRecord;
+import cn.daxpay.single.service.core.record.adjust.service.TradeAdjustRecordService;
 import cn.daxpay.single.service.func.AbsPayAdjustStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
@@ -49,10 +49,10 @@ public class PayAdjustService {
     public String adjust(PayAdjustParam param){
         PayOrder order = param.getOrder();
         // 添加分布式锁
-        LockInfo lock = lockTemplate.lock("repair:pay:" + order.getId(), 10000, 200);
+        LockInfo lock = lockTemplate.lock("adjust:pay:" + order.getId(), 10000, 200);
         if (Objects.isNull(lock)){
-            log.warn("当前支付订单正在修复中: {}", order.getId());
-            throw new OperationProcessingException("当前支付订单正在修复中");
+            log.warn("当前支付订单正在调整中: {}", order.getId());
+            throw new OperationProcessingException("当前支付订单正在调整中");
         }
         // 如果到达终态不能向前回滚
         if (Objects.equals(order.getStatus(), PayStatusEnum.SUCCESS.getCode())){
@@ -60,13 +60,13 @@ public class PayAdjustService {
         }
 
         // 初始化调整参数
-        AbsPayAdjustStrategy repairStrategy = PayStrategyFactory.create(order.getChannel(), AbsPayAdjustStrategy.class);
-        repairStrategy.setOrder(order);
+        AbsPayAdjustStrategy adjustStrategy = PayStrategyFactory.create(order.getChannel(), AbsPayAdjustStrategy.class);
+        adjustStrategy.setOrder(order);
 
         // 执行前置处理
-        repairStrategy.doBeforeHandler();
+        adjustStrategy.doBeforeHandler();
         String beforeStatus = order.getStatus();
-        // 根据不同的调整方式执行对应的修复逻辑
+        // 根据不同的调整方式执行对应的调整逻辑
         switch (param.getAdjustWay()) {
             case SUCCESS:
                 this.success(order, param);
@@ -75,7 +75,7 @@ public class PayAdjustService {
                 this.closeLocal(order);
                 break;
             case CLOSE_GATEWAY:
-                this.closeRemote(order, repairStrategy);
+                this.closeRemote(order, adjustStrategy);
                 break;
             default:
                 log.error("走到了理论上讲不会走到的分支");
@@ -129,7 +129,6 @@ public class PayAdjustService {
      * 保存记录
      */
     private TradeAdjustRecord saveRecord(PayOrder order, PayAdjustParam param, String beforeStatus){
-        // 修复后的状态
         TradeAdjustRecord record = new TradeAdjustRecord()
                 .setAdjustNo(TradeNoGenerateUtil.adjust())
                 .setTradeId(order.getId())

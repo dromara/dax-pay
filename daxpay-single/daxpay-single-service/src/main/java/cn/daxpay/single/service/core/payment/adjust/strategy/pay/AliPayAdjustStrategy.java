@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 支付宝订单修复策略
+ * 支付宝订单调整策略
  * @author xxm
  * @since 2023/12/27
  */
@@ -37,7 +37,7 @@ public class AliPayAdjustStrategy extends AbsPayAdjustStrategy {
     }
 
     /**
-     * 修复前处理
+     * 调整前处理
      */
     @Override
     public void doBeforeHandler() {
