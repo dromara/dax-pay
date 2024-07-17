@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- *
+ * 统一支付响应参数
  * @author xxm
  * @since 2024/6/27
  */

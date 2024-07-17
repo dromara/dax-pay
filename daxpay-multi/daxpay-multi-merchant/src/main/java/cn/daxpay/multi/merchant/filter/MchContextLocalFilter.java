@@ -1,7 +1,5 @@
-package cn.daxpay.multi.service.common.filter;
+package cn.daxpay.multi.merchant.filter;
 
-import cn.daxpay.multi.service.common.local.MchContextLocal;
-import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,22 +13,24 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * 支付上下文本地过滤器
+ * 商户信息过滤器
  * @author xxm
- * @since 2023/12/22
+ * @since 2024/7/17
  */
-@Order(value = Integer.MIN_VALUE)
+@Order(value = Integer.MIN_VALUE+1000)
 @Component
 @RequiredArgsConstructor
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-public class PaymentContextLocalFilter extends OncePerRequestFilter {
+public class MchContextLocalFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            filterChain.doFilter(request,response);
+            // 是否登录
+
+            // 登录后获取关联商户信息
+
         } finally {
-            PaymentContextLocal.clear();
-            MchContextLocal.clearMchNo();
+            filterChain.doFilter(request,response);
         }
     }
 }

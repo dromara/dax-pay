@@ -12,12 +12,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PaymentContext {
 
-    /** 平台全局配置 */
-    private final PlatformLocal platformInfo = new PlatformLocal();
-
-    /** 商户配置 */
-    private final MerchantLocal merchantInfo = new MerchantLocal();
-
     /** 应用配置 */
     private final MchAppLocal mchAppInfo = new MchAppLocal();
 

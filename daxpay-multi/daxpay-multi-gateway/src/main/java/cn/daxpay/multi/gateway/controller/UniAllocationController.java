@@ -1,6 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
-import cn.daxpay.multi.core.anno.PaymentVerify;
+import cn.daxpay.multi.service.common.anno.PaymentVerify;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;

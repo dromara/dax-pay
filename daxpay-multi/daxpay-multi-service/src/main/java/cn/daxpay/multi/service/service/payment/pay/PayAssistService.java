@@ -6,15 +6,14 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.payment.pay.PayParam;
 import cn.daxpay.multi.core.result.PayResult;
+import cn.daxpay.multi.core.util.PayUtil;
+import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
 import cn.daxpay.multi.service.common.context.PayLocal;
-import cn.daxpay.multi.service.common.context.PlatformLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
-import cn.daxpay.multi.core.util.PayUtil;
-import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -131,7 +130,6 @@ public class PayAssistService {
      */
     public void validationLimitAmount(PayParam payParam) {
         // 总额校验
-        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
 //        if (payParam.getAmount() > platformInfo.getLimitAmount()) {
 //            throw new AmountExceedLimitException("支付金额超过限额");
 //        }

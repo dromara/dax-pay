@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.common.tenant;
 
 import cn.bootx.platform.common.mybatisplus.function.MetaObjectFill;
-import cn.daxpay.multi.core.context.MchTenantContextHolder;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class MchTenantMetaObjectHandler implements MetaObjectFill {
      * 获取商户号
      */
     public String getMchNo() {
-        return MchTenantContextHolder.getMchNo();
+        return MchContextLocal.getMchNo();
     }
 
 }

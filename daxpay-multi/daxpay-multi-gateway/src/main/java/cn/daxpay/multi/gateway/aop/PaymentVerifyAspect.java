@@ -31,7 +31,7 @@ public class PaymentVerifyAspect {
     /**
      * 切面处理
      */
-    @Around("@annotation(cn.daxpay.multi.core.anno.PaymentVerify)||within(@cn.daxpay.multi.core.anno.PaymentVerify *)")
+    @Around("@annotation(cn.daxpay.multi.service.common.anno.PaymentVerify)||within(@cn.daxpay.multi.service.common.anno.PaymentVerify *)")
     public Object methodPoint(ProceedingJoinPoint pjp) throws Throwable {
         Object[] args = pjp.getArgs();
         if (args.length == 0){

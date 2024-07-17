@@ -4,16 +4,16 @@ import cn.daxpay.multi.channel.wechat.convert.config.WechatPayConfigConvert;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.param.config.WechatPayConfigParam;
 import cn.daxpay.multi.channel.wechat.result.config.WechatPayConfigResult;
-import cn.daxpay.multi.core.context.MchTenantContextHolder;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.exception.ConfigNotEnableException;
 import cn.daxpay.multi.core.exception.DataErrorException;
 import cn.daxpay.multi.service.common.cache.ChannelConfigCacheService;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
-import cn.daxpay.multi.service.common.context.PlatformLocal;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.channel.ChannelConfigManager;
 import cn.daxpay.multi.service.entity.channel.ChannelConfig;
+import cn.daxpay.multi.service.service.config.PlatformConfigService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.StrUtil;
@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class WechatPayConfigService {
     private final ChannelConfigManager channelConfigManager;
     private final ChannelConfigCacheService channelConfigCacheService;
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 查询
@@ -63,7 +64,7 @@ public class WechatPayConfigService {
         WechatPayConfig entity = WechatPayConfigConvert.CONVERT.toEntity(param);
         ChannelConfig channelConfig = entity.toChannelConfig();
         // 如果运营端使用, 商户号写入上下文中
-        MchTenantContextHolder.setMchNo(channelConfig.getMchNo());
+        MchContextLocal.setMchNo(channelConfig.getMchNo());
         // 判断商户和应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(channelConfig.getAppId(), channelConfig.getChannel())){
             throw new DataErrorException("该应用下已存在微信配置, 请勿重新添加");
@@ -88,7 +89,7 @@ public class WechatPayConfigService {
     }
 
     /**
-     * 获取支付宝支付配置
+     * 获取微信支付配置
      */
     public WechatPayConfig getWechatPayConfig(){
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
@@ -101,7 +102,7 @@ public class WechatPayConfigService {
      */
     public String getNotifyUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
+        var platformInfo = platformConfigService.getConfig();
         return StrUtil.format("{}/unipay/callback/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 
@@ -110,7 +111,7 @@ public class WechatPayConfigService {
      */
     public String getReturnUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
+        var platformInfo = platformConfigService.getConfig();
         return StrUtil.format("{}/unipay/return/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 

@@ -1,4 +1,4 @@
-package cn.daxpay.multi.core.anno;
+package cn.daxpay.multi.service.common.anno;
 
 import java.lang.annotation.*;
 

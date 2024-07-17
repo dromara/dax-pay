@@ -5,16 +5,16 @@ import cn.daxpay.multi.channel.alipay.convert.config.AlipayConfigConvert;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.param.config.AliPayConfigParam;
 import cn.daxpay.multi.channel.alipay.result.config.AlipayConfigResult;
-import cn.daxpay.multi.core.context.MchTenantContextHolder;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.exception.ConfigNotEnableException;
 import cn.daxpay.multi.core.exception.DataErrorException;
 import cn.daxpay.multi.service.common.cache.ChannelConfigCacheService;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
-import cn.daxpay.multi.service.common.context.PlatformLocal;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.channel.ChannelConfigManager;
 import cn.daxpay.multi.service.entity.channel.ChannelConfig;
+import cn.daxpay.multi.service.service.config.PlatformConfigService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.StrUtil;
@@ -40,6 +40,7 @@ import java.util.Objects;
 public class AliPayConfigService {
     private final ChannelConfigManager channelConfigManager;
     private final ChannelConfigCacheService channelConfigCacheService;
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 查询
@@ -70,7 +71,7 @@ public class AliPayConfigService {
         AliPayConfig entity = AlipayConfigConvert.CONVERT.toEntity(param);
         ChannelConfig channelConfig = entity.toChannelConfig();
         // 如果运营端使用, 商户号写入上下文中
-        MchTenantContextHolder.setMchNo(channelConfig.getMchNo());
+        MchContextLocal.setMchNo(channelConfig.getMchNo());
         // 判断商户和应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(channelConfig.getAppId(), channelConfig.getChannel())){
             throw new DataErrorException("该应用下已存在支付宝配置, 请勿重新添加");
@@ -117,8 +118,8 @@ public class AliPayConfigService {
      * 获取异步通知地址
      */
     public String getNotifyUrl() {
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
+        var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        var platformInfo = platformConfigService.getConfig();
         return StrUtil.format("{}/unipay/callback/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 
@@ -127,7 +128,7 @@ public class AliPayConfigService {
      */
     public String getReturnUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
+        var platformInfo = platformConfigService.getConfig();
         return StrUtil.format("{}/unipay/return/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 

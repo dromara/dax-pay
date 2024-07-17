@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.common.tenant;
 
 import cn.bootx.platform.common.config.BootxConfigProperties;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.multi.core.context.MchTenantContextHolder;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import cn.hutool.core.util.ClassUtil;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -29,7 +29,7 @@ public class MchTenantLineHandler  implements TenantLineHandler {
     @Override
     public Expression getTenantId() {
         // 从中获取当前用户的商户
-        String mchNo = MchTenantContextHolder.getMchNo();
+        String mchNo = MchContextLocal.getMchNo();
         return new StringValue(mchNo);
     }
 

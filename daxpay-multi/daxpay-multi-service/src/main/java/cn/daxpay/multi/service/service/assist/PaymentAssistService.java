@@ -11,7 +11,7 @@ import cn.daxpay.multi.service.common.cache.MchAppCacheService;
 import cn.daxpay.multi.service.common.cache.MerchantCacheService;
 import cn.daxpay.multi.service.common.context.ClientLocal;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
-import cn.daxpay.multi.service.common.context.MerchantLocal;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
 import cn.daxpay.multi.service.entity.merchant.Merchant;
@@ -116,12 +116,11 @@ public class PaymentAssistService {
         if (!Objects.equals(mchApp.getMchNo(), merchant.getMchNo())){
             throw new ValidationFailedException("商户号和应用号不匹配");
         }
-        // 初始化信息
-        MerchantLocal merchantInfo = PaymentContextLocal.get().getMerchantInfo();
+        // 初始化支付上下文信息
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
 
-        BeanUtil.copyProperties(merchant, merchantInfo);
         BeanUtil.copyProperties(mchApp, mchAppInfo);
-
+        // 初始化商户租户上下文信息
+        MchContextLocal.setMchNo(merchant.getMchNo());
     }
 }

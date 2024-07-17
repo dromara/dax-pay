@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString(callSuper = true)
+@Schema(title = "支付通用响应参数")
 public class DaxResult<T>{
 
     /** 状态码 */
