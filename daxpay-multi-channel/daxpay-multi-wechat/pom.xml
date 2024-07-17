@@ -12,4 +12,31 @@
     <artifactId>daxpay-multi-wechat</artifactId>
     <description>微信支付通道实现</description>
 
+    <properties>
+        <wxjava.version>4.6.0</wxjava.version>
+        <wxpay.version>0.2.12</wxpay.version>
+        <IJPay.version>2.9.11</IJPay.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- v2版本接入 -->
+<!--        <dependency>-->
+<!--            <groupId>com.github.javen205</groupId>-->
+<!--            <artifactId>IJPay-WxPay</artifactId>-->
+<!--            <version>${IJPay.version}</version>-->
+<!--        </dependency>-->
+        <!-- 微信支付三方SDK 同时支持 v2/v3版本接入-->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>${wxjava.version}</version>
+        </dependency>
+        <!-- 微信支付官方SDK v3版本接入 -->
+        <dependency>
+            <groupId>com.github.wechatpay-apiv3</groupId>
+            <artifactId>wechatpay-java</artifactId>
+            <version>${wxpay.version}</version>
+        </dependency>
+    </dependencies>
 </project>

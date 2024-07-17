@@ -10,6 +10,8 @@ import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+
 /**
  * 微信支付配置
  *
@@ -33,7 +35,7 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
     private Boolean enable;
 
     /** 支付限额 */
-    private Integer limitAmount;
+    private BigDecimal limitAmount;
 
     /**
      * 接口版本, 使用v2还是v3接口
@@ -49,6 +51,12 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
 
     /** APPID对应的接口密码，用于获取微信公众号jsapi支付时使用 */
     private String appSecret;
+
+    /** 私钥字符串 */
+    private String privateKey;
+
+    /** 证书序列号 */
+    private String certSerialNo;
 
     /** API证书中p12证书Base64 */
     private String p12;
