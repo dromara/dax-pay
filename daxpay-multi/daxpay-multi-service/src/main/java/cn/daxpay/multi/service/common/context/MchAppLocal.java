@@ -16,6 +16,9 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 public class MchAppLocal {
 
+    /** 商户号 */
+    private String mchNo;
+
     /** 应用号 */
     private String appId;;
 

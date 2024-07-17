@@ -1,9 +1,11 @@
 package cn.daxpay.multi.service.service.channel;
 
+import cn.daxpay.multi.service.common.cache.MchAppCacheService;
 import cn.daxpay.multi.service.dao.channel.ChannelConfigManager;
 import cn.daxpay.multi.service.dao.constant.ChannelConstManager;
 import cn.daxpay.multi.service.entity.channel.ChannelConfig;
 import cn.daxpay.multi.service.entity.constant.ChannelConst;
+import cn.daxpay.multi.service.entity.merchant.MchApp;
 import cn.daxpay.multi.service.result.channel.ChannelConfigResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,8 @@ public class ChannelConfigService {
 
     private final ChannelConstManager channelConstManager;
 
+    private final MchAppCacheService mchAppCacheService;
+
     /**
      * 通道配置列表, 根据应用进行查询, 默认返回所有通道配置, 如果未进行配置启用状态会为null
      */
@@ -38,15 +42,20 @@ public class ChannelConfigService {
                 .collect(Collectors.toMap(ChannelConfig::getChannel, Function.identity(), (v1, v2) -> v1));
         // 遍历通道类型
         List<ChannelConst> channelList = channelConstManager.findAllByEnable();
-
+        MchApp mchApp = mchAppCacheService.get(appId);
         return channelList.stream().map(o->{
             ChannelConfig channelConfig = channelConfigMap.get(o.getCode());
             if (Objects.isNull(channelConfig)){
                 return new ChannelConfigResult()
                         .setChannel(o.getCode())
-                        .setName(o.getName());
+                        .setName(o.getName())
+                        .setMchNo(mchApp.getMchNo())
+                        .setAppId(mchApp.getAppId());
             } else {
-                return channelConfig.toResult().setName(o.getName());
+                return channelConfig.toResult()
+                        .setName(o.getName())
+                        .setMchNo(mchApp.getMchNo())
+                        .setAppId(mchApp.getAppId());
             }
         }).toList();
     }

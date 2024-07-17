@@ -1,7 +1,6 @@
 package cn.daxpay.multi.sdk.util;
 
-import cn.daxpay.multi.sdk.util.PaySignUtil;
-import cn.daxpay.multi.sdk.param.channel.WeChatPayParam;
+import cn.daxpay.multi.sdk.param.channel.WechatPayParam;
 import cn.daxpay.multi.sdk.param.pay.PayParam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -51,7 +50,7 @@ public class PayParamSignTest {
 
         param.setBizOrderNo("P0002");
         param.setTitle("测试接口支付");
-        WeChatPayParam weChatPayParam = new WeChatPayParam();
+        WechatPayParam weChatPayParam = new WechatPayParam();
         weChatPayParam.setOpenId("6688812");
         weChatPayParam.setAuthCode("123456");
         param.setExtraParam(weChatPayParam);

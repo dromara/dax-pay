@@ -12,7 +12,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PlatformLocal {
 
-    /** 网站地址 */
-    private String websiteUrl;
+    /** 管理平台访问地址 */
+    private String adminServiceUrl;
+    /** 支付网关地址 */
+    private String gatewayServiceUrl;
+    /** 商户平台地址 */
+    private String merchantServiceUrl;
 
 }

@@ -3,9 +3,9 @@ package cn.daxpay.multi.sdk.param.refund;
 import cn.daxpay.multi.sdk.model.refund.RefundModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.param.ChannelParam;
-import cn.daxpay.multi.sdk.param.channel.AliPayParam;
+import cn.daxpay.multi.sdk.param.channel.AlipayParam;
 import cn.daxpay.multi.sdk.param.channel.UnionPayParam;
-import cn.daxpay.multi.sdk.param.channel.WeChatPayParam;
+import cn.daxpay.multi.sdk.param.channel.WechatPayParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.daxpay.multi.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
@@ -48,8 +48,8 @@ public class RefundParam extends DaxPayRequest<RefundModel> {
 
     /**
      * 预留的退款扩展参数
-     * @see AliPayParam
-     * @see WeChatPayParam
+     * @see AlipayParam
+     * @see WechatPayParam
      * @see UnionPayParam
      */
     private ChannelParam extraParam;

@@ -49,14 +49,13 @@ public class MchAppService {
      */
     public void add(MchAppParam param) {
         // 校验商户是否存在
-        if (merchantManager.existedByField(Merchant::getMchNo, param.getMchNo())) {
+        if (!merchantManager.existedByField(Merchant::getMchNo, param.getMchNo())) {
             throw new ValidationFailedException("该商户号不存在");
         }
-        // 生成应用号
-        String appId = generateAppId();
         MchApp entity = MchAppConvert.CONVERT.toEntity(param);
-
-        entity.setAppId(appId);
+        // 生成应用号
+        entity.setAppId(this.generateAppId());
+        mchAppManager.save(entity);
     }
     /**
      * 修改
@@ -122,9 +121,9 @@ public class MchAppService {
         String mchNo = RandomUtil.randomNumbers(16);
         for (int i = 0; i < 10; i++){
             if (!mchAppManager.existedByField(MchApp::getAppId, mchNo)){
-                return mchNo;
+                return "M"+mchNo;
             }
-            mchNo = "M" + System.currentTimeMillis();
+            mchNo = String.valueOf(System.currentTimeMillis());
         }
         throw new BizException("应用号生成失败");
     }

@@ -1,8 +1,8 @@
 package cn.daxpay.multi.channel.alipay.service.pay;
 
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
-import cn.daxpay.multi.channel.alipay.entity.AliPayConfig;
-import cn.daxpay.multi.channel.alipay.param.pay.AliPayParam;
+import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
+import cn.daxpay.multi.channel.alipay.param.pay.AlipayParam;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
 import cn.daxpay.multi.core.exception.TradeFailException;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AliPayService {
+public class AlipayService {
 
     private final AliPayConfigService aliPayConfigService;
 
@@ -68,7 +68,7 @@ public class AliPayService {
     /**
      * 调起支付
      */
-    public void pay(PayOrder payOrder, AliPayParam aliPayParam) {
+    public void pay(PayOrder payOrder, AlipayParam aliPayParam) {
         AliPayConfig alipayConfig = aliPayConfigService.getAliPayConfig();
         String amount = PayUtil.toDecimal(payOrder.getAmount()).toString();
         String payBody = null;
@@ -127,9 +127,9 @@ public class AliPayService {
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         request.setBizModel(model);
         // 异步回调必须到当前支付网关系统中, 然后系统负责转发
-        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
         // 同步回调地址必须到当前支付网关系统中, 然后系统负责跳转
-        request.setReturnUrl(alipayConfig.getReturnUrl());
+        request.setReturnUrl(aliPayConfigService.getReturnUrl());
 
         try {
             // 通过GET方式的请求, 返回URL的响应, 默认是POST方式的请求, 返回的是表单响应
@@ -165,7 +165,7 @@ public class AliPayService {
         }
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         request.setBizModel(model);
-        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
         try {
             // 异步回调必须到当前系统中
             AlipayTradeAppPayResponse response = alipayClient.execute(request);
@@ -204,9 +204,9 @@ public class AliPayService {
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         request.setBizModel(model);
         // 异步回调必须到当前系统中
-        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
         // 同步回调
-        request.setReturnUrl(alipayConfig.getReturnUrl());
+        request.setReturnUrl(aliPayConfigService.getReturnUrl());
         try {
             // 通过GET方式的请求, 返回URL的响应, 默认是POST方式的请求, 返回的是表单响应
             AlipayTradePagePayResponse response = alipayClient.pageExecute(request, HttpMethod.GET.name());
@@ -222,7 +222,7 @@ public class AliPayService {
      * jsapi支付
      */
     @SneakyThrows
-    public String jsapiPay(String amount, PayOrder payOrder, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
+    public String jsapiPay(String amount, PayOrder payOrder, AlipayParam aliPayParam, AliPayConfig alipayConfig) {
         // 获取支付宝客户端
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(alipayConfig);
 
@@ -276,7 +276,7 @@ public class AliPayService {
         model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
         request.setBizModel(model);
-        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
         try {
             AlipayTradePrecreateResponse response = alipayClient.execute(request);
             this.verifyErrorMsg(response);
@@ -292,7 +292,7 @@ public class AliPayService {
      * 付款码支付
      */
     @SneakyThrows
-    public void barCode(String amount, PayOrder payOrder, AliPayParam aliPayParam, AliPayConfig alipayConfig) {
+    public void barCode(String amount, PayOrder payOrder, AlipayParam aliPayParam, AliPayConfig alipayConfig) {
         // 获取支付宝客户端
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(alipayConfig);
 
@@ -313,7 +313,7 @@ public class AliPayService {
         model.setTotalAmount(amount);
         AlipayTradePayRequest request = new AlipayTradePayRequest();
         request.setBizModel(model);
-        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
         try {
             AlipayTradePayResponse response = alipayClient.execute(request);
             // 支付成功处理 金额2000以下免密支付, 记录支付完成相关信息

@@ -17,7 +17,6 @@
     </properties>
 
     <dependencies>
-
         <!-- 支付宝SDK -->
         <dependency>
             <groupId>com.alipay.sdk</groupId>

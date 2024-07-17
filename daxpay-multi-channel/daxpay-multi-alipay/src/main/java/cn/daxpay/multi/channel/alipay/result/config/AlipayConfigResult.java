@@ -1,5 +1,6 @@
 package cn.daxpay.multi.channel.alipay.result.config;
 
+import cn.bootx.platform.common.jackson.sensitive.SensitiveInfo;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -33,31 +34,9 @@ public class AlipayConfigResult {
     @Schema(description = "支付限额")
     private BigDecimal limitAmount;
 
-    /**
-     * 服务器异步通知地址, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
-     * 1. 需http://或者https://格式的完整路径，
-     * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
-     * 3. 调用顺序 支付宝网关 -> 本网关进行处理 -> 发送消息通知业务系统
-     */
-    @Schema(description = "服务器异步通知地址")
-    private String notifyUrl;
-
-    /**
-     * 服务器同步通知地址, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
-     * 1. 需http://或者https://格式的完整路径，
-     * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
-     * 3. 消息顺序 支付宝网关 -> 本网关进行处理 -> 重定向到业务系统中
-     */
-    @Schema(description = "服务器同步通知地址")
-    private String returnUrl;
-
     /** 支付网关地址 */
     @Schema(description = "支付网关地址")
     private String serverUrl;
-
-    /** 授权回调地址 */
-    @Schema(description = "授权回调地址")
-    private String redirectUrl;
 
     /**
      * 认证类型 证书/公钥
@@ -78,22 +57,27 @@ public class AlipayConfigResult {
 
     /** 支付宝公钥 */
     @Schema(description = "支付宝公钥")
+    @SensitiveInfo
     public String alipayPublicKey;
 
     /** 私钥 */
     @Schema(description = "私钥")
+    @SensitiveInfo
     private String privateKey;
 
     /** 应用公钥证书 */
     @Schema(description = "应用公钥证书")
+    @SensitiveInfo
     private String appCert;
 
     /** 支付宝公钥证书 */
     @Schema(description = "支付宝公钥证书")
+    @SensitiveInfo
     private String alipayCert;
 
     /** 支付宝CA根证书 */
     @Schema(description = "支付宝CA根证书")
+    @SensitiveInfo
     private String alipayRootCert;
 
     /** 是否沙箱环境 */

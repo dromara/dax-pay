@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Schema(title = "支付宝支付参数")
-public class AliPayParam {
+public class AlipayParam {
     /**
      * 授权码(主动扫描用户的付款码)
      */

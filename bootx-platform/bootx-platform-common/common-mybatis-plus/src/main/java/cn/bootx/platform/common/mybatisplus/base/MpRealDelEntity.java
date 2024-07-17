@@ -30,6 +30,6 @@ public abstract class MpRealDelEntity extends MpCreateEntity {
 
     /** 版本号, 使用乐观锁 */
     @Version
-    private Integer version = 0;
+    private Integer version;
 
 }

@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class AliPayParam implements ChannelParam {
+public class AlipayParam implements ChannelParam {
 
     /**
      * 授权码(主动扫描用户的付款码)

@@ -1,8 +1,8 @@
-package cn.daxpay.multi.channel.alipay.entity;
+package cn.daxpay.multi.channel.alipay.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
-import cn.daxpay.multi.channel.alipay.convert.AlipayConfigConvert;
+import cn.daxpay.multi.channel.alipay.convert.config.AlipayConfigConvert;
 import cn.daxpay.multi.channel.alipay.result.config.AlipayConfigResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.entity.channel.ChannelConfig;
@@ -33,27 +33,8 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     /** 支付限额 */
     private BigDecimal limitAmount;
 
-    /**
-     * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
-     * 1. 需http://或者https://格式的完整路径，
-     * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
-     * 3. 调用顺序 支付宝网关 -> 本网关进行处理 -> 发送消息通知业务系统
-     */
-    private String notifyUrl;
-
-    /**
-     * 服务器同步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
-     * 1. 需http://或者https://格式的完整路径，
-     * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
-     * 3. 消息顺序 支付宝网关 -> 本网关进行处理 -> 重定向到业务系统中
-     */
-    private String returnUrl;
-
     /** 支付网关地址 */
     private String serverUrl;
-
-    /** 授权回调地址 */
-    private String redirectUrl;
 
     /**
      * 认证类型 证书/公钥
@@ -119,7 +100,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
         AliPayConfig config = JSONUtil.toBean(channelConfig.getExt(), AliPayConfig.class);
 
         config.setId(channelConfig.getId())
-                .setAppId(channelConfig.getOutAppId())
+                .setOutAppId(channelConfig.getOutAppId())
                 .setEnable(channelConfig.isEnable());
         return config;
     }

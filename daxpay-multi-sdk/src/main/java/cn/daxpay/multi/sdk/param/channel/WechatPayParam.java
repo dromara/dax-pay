@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class WeChatPayParam implements ChannelParam {
+public class WechatPayParam implements ChannelParam {
 
     /** 微信openId */
     private String openId;

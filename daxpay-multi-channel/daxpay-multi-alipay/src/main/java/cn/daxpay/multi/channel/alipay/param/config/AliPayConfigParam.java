@@ -16,22 +16,15 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付宝配置参数")
-public class AlipayConfigParam {
+public class AliPayConfigParam {
 
     /** 主键 */
     @Schema(description = "主键")
     private Long id;
 
-    /** 商户号 */
-    @Schema(description = "商户号")
-    private String mchNo;
-
-    /** 商户AppId */
-    @Schema(description = "商户AppId")
-    @NotBlank(message = "商户AppId不可为空")
-    private String appId;
 
     /** 支付宝商户appId */
+    @NotBlank(message = "支付宝AppId不可为空")
     @Schema(description = "支付宝商户appId")
     private String outAppId;
 
@@ -45,34 +38,10 @@ public class AlipayConfigParam {
     @NotBlank(message = "支付限额不可为空")
     private BigDecimal limitAmount;
 
-    /**
-     * 服务器异步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
-     * 1. 需http://或者https://格式的完整路径，
-     * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
-     * 3. 调用顺序 支付宝网关 -> 本网关进行处理 -> 发送消息通知业务系统
-     */
-    @Schema(description = "服务器异步通知页面路径")
-    @NotBlank(message = "服务器异步通知页面路径不可为空")
-    private String notifyUrl;
-
-    /**
-     * 服务器同步通知页面路径, 需要填写本网关服务的地址, 不可以直接填写业务系统的地址
-     * 1. 需http://或者https://格式的完整路径，
-     * 2. 不能加?id=123这类自定义参数，必须外网可以正常访问
-     * 3. 消息顺序 支付宝网关 -> 本网关进行处理 -> 重定向到业务系统中
-     */
-    @Schema(description = "服务器同步通知页面路径")
-    @NotBlank(message = "服务器同步通知页面路径不可为空")
-    private String returnUrl;
-
     /** 支付网关地址 */
     @Schema(description = "支付网关地址")
     @NotBlank(message = "支付网关地址不可为空")
     private String serverUrl;
-
-    /** 授权回调地址 */
-    @Schema(description = "授权回调地址")
-    private String redirectUrl;
 
     /**
      * 认证类型 证书/公钥
@@ -116,4 +85,14 @@ public class AlipayConfigParam {
     /** 是否沙箱环境 */
     @Schema(description = "是否沙箱环境")
     private boolean sandbox;
+
+    /** 商户号 */
+    @NotBlank(message = "商户号不可为空")
+    @Schema(description = "商户号")
+    private String mchNo;
+
+    /** 商户AppId */
+    @Schema(description = "商户AppId")
+    @NotBlank(message = "商户AppId不可为空")
+    private String appId;
 }

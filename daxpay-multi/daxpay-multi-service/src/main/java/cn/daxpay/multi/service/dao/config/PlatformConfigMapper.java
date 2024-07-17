@@ -1,0 +1,14 @@
+package cn.daxpay.multi.service.dao.config;
+
+import cn.daxpay.multi.service.entity.config.PlatformConfig;
+import com.github.yulichang.base.MPJBaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ *
+ * @author xxm
+ * @since 2024/7/17
+ */
+@Mapper
+public interface PlatformConfigMapper extends MPJBaseMapper<PlatformConfig> {
+}

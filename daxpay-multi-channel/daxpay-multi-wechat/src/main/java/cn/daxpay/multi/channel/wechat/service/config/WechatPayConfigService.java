@@ -1,10 +1,9 @@
-package cn.daxpay.multi.channel.alipay.service.config;
+package cn.daxpay.multi.channel.wechat.service.config;
 
-import cn.daxpay.multi.channel.alipay.code.AliPayCode;
-import cn.daxpay.multi.channel.alipay.convert.config.AlipayConfigConvert;
-import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
-import cn.daxpay.multi.channel.alipay.param.config.AliPayConfigParam;
-import cn.daxpay.multi.channel.alipay.result.config.AlipayConfigResult;
+import cn.daxpay.multi.channel.wechat.convert.config.WechatPayConfigConvert;
+import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
+import cn.daxpay.multi.channel.wechat.param.config.WechatPayConfigParam;
+import cn.daxpay.multi.channel.wechat.result.config.WechatPayConfigResult;
 import cn.daxpay.multi.core.context.MchTenantContextHolder;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.exception.ConfigNotEnableException;
@@ -18,44 +17,38 @@ import cn.daxpay.multi.service.entity.channel.ChannelConfig;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.StrUtil;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.AlipayConfig;
-import com.alipay.api.DefaultAlipayClient;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 /**
- * 支付宝配置
+ * 微信支付配置
  * @author xxm
- * @since 2024/6/25
+ * @since 2024/7/17
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AliPayConfigService {
+public class WechatPayConfigService {
     private final ChannelConfigManager channelConfigManager;
     private final ChannelConfigCacheService channelConfigCacheService;
 
     /**
      * 查询
      */
-    public AlipayConfigResult findById(Long id) {
+    public WechatPayConfigResult findById(Long id) {
         return channelConfigManager.findById(id)
-                .map(AliPayConfig::convertConfig)
-                .map(AliPayConfig::toResult)
-                .orElseThrow(() -> new ConfigNotEnableException("支付宝配置不存在"));
+                .map(WechatPayConfig::convertConfig)
+                .map(WechatPayConfig::toResult)
+                .orElseThrow(() -> new ConfigNotEnableException("微信支付配置不存在"));
     }
 
     /**
      * 新增或更新
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdate(AliPayConfigParam param){
+    public void saveOrUpdate(WechatPayConfigParam param){
         if (param.getId() == null){
             this.save(param);
         } else {
@@ -66,14 +59,14 @@ public class AliPayConfigService {
     /**
      * 添加
      */
-    public void save(AliPayConfigParam param) {
-        AliPayConfig entity = AlipayConfigConvert.CONVERT.toEntity(param);
+    public void save(WechatPayConfigParam param) {
+        WechatPayConfig entity = WechatPayConfigConvert.CONVERT.toEntity(param);
         ChannelConfig channelConfig = entity.toChannelConfig();
         // 如果运营端使用, 商户号写入上下文中
         MchTenantContextHolder.setMchNo(channelConfig.getMchNo());
         // 判断商户和应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(channelConfig.getAppId(), channelConfig.getChannel())){
-            throw new DataErrorException("该应用下已存在支付宝配置, 请勿重新添加");
+            throw new DataErrorException("该应用下已存在微信配置, 请勿重新添加");
         }
         channelConfigManager.save(channelConfig);
     }
@@ -81,15 +74,15 @@ public class AliPayConfigService {
     /**
      * 更新
      */
-    public void update(AliPayConfigParam param){
+    public void update(WechatPayConfigParam param){
         ChannelConfig channelConfig = channelConfigManager.findById(param.getId())
-                .orElseThrow(() -> new ConfigNotEnableException("支付宝配置不存在"));
-        // 通道配置 --转换--> 支付宝配置  ----> 从更新参数赋值  --转换-->  通道配置 ----> 保存更新
-        AliPayConfig alipayConfig = AliPayConfig.convertConfig(channelConfig);
+                .orElseThrow(() -> new ConfigNotEnableException("微信支付配置不存在"));
+        // 通道配置 --转换--> 微信支付配置  ----> 从更新参数赋值  --转换-->  通道配置 ----> 保存更新
+        WechatPayConfig alipayConfig = WechatPayConfig.convertConfig(channelConfig);
         BeanUtil.copyProperties(param, alipayConfig, CopyOptions.create().ignoreNullValue());
         ChannelConfig channelConfigParam = alipayConfig.toChannelConfig();
         // 手动清空一下默认的数据版本号
-        channelConfigParam.setVersion(null);
+        channelConfig.setVersion(null);
         BeanUtil.copyProperties(channelConfigParam, channelConfig, CopyOptions.create().ignoreNullValue());
         channelConfigManager.updateById(channelConfig);
     }
@@ -97,20 +90,10 @@ public class AliPayConfigService {
     /**
      * 获取支付宝支付配置
      */
-    public AliPayConfig getAliPayConfig(){
+    public WechatPayConfig getWechatPayConfig(){
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.ALI.getCode());
-        return AliPayConfig.convertConfig(channelConfig);
-    }
-
-    /**
-     * 获取支付宝SDK的配置
-     */
-    public AlipayClient getAlipayClient(){
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.ALI.getCode());
-        AliPayConfig aliPayConfig = AliPayConfig.convertConfig(channelConfig);
-        return this.getAlipayClient(aliPayConfig);
+        return WechatPayConfig.convertConfig(channelConfig);
     }
 
     /**
@@ -129,30 +112,6 @@ public class AliPayConfigService {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
         return StrUtil.format("{}/unipay/return/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
-    }
-
-    /**
-     * 获取支付宝SDK的配置
-     */
-    @SneakyThrows
-    public AlipayClient getAlipayClient(AliPayConfig aliPayConfig){
-        AlipayConfig config = new AlipayConfig();
-        config.setServerUrl(aliPayConfig.getServerUrl());
-        config.setAppId(aliPayConfig.getAppId());
-        config.setFormat("json");
-        config.setCharset("UTF-8");
-        config.setSignType(aliPayConfig.getSignType());
-        // 证书
-        if (Objects.equals(aliPayConfig.getAuthType(), AliPayCode.AUTH_TYPE_CART)){
-            config.setAppCertContent(aliPayConfig.getAppCert());
-            config.setRootCertContent(aliPayConfig.getAlipayRootCert());
-            config.setAlipayPublicCertContent(aliPayConfig.getAlipayCert());
-        } else {
-            // 公钥
-            config.setPrivateKey(aliPayConfig.getPrivateKey());
-            config.setAlipayPublicKey(aliPayConfig.getAlipayPublicKey());
-        }
-        return new DefaultAlipayClient(config);
     }
 
 }

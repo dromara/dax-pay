@@ -5,8 +5,8 @@ import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.model.pay.PayModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.param.ChannelParam;
-import cn.daxpay.multi.sdk.param.channel.AliPayParam;
-import cn.daxpay.multi.sdk.param.channel.WeChatPayParam;
+import cn.daxpay.multi.sdk.param.channel.AlipayParam;
+import cn.daxpay.multi.sdk.param.channel.WechatPayParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.daxpay.multi.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
@@ -59,8 +59,8 @@ public class PayParam extends DaxPayRequest<PayModel> {
 
     /**
      * 支付扩展参数
-     * @see AliPayParam
-     * @see WeChatPayParam
+     * @see AlipayParam
+     * @see WechatPayParam
      */
     private ChannelParam extraParam;
 
