@@ -26,7 +26,7 @@ public class AliPayConfigParam {
     /** 支付宝商户appId */
     @NotBlank(message = "支付宝AppId不可为空")
     @Schema(description = "支付宝商户appId")
-    private String outAppId;
+    private String aliAppId;
 
     /** 是否启用 */
     @Schema(description = "是否启用")

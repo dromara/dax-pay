@@ -52,8 +52,11 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
     /** APPID对应的接口密码，用于获取微信公众号jsapi支付时使用 */
     private String appSecret;
 
-    /** 私钥字符串 */
+    /** apiclient_key. pem证书base64编码 */
     private String privateKey;
+
+    /** apiclient_cert. pem证书base64编码 */
+    private String privateCert;
 
     /** 证书序列号 */
     private String certSerialNo;
@@ -94,14 +97,14 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
     }
 
     /**
-     * 从通道配置转换为支付宝配置
+     * 从通道配置转换为微信支付配置
      */
     public static WechatPayConfig convertConfig(ChannelConfig channelConfig) {
         WechatPayConfig config = JSONUtil.toBean(channelConfig.getExt(), WechatPayConfig.class);
 
         config.setId(channelConfig.getId())
                 .setWxAppId(channelConfig.getOutAppId())
-                .setWxMchId(channelConfig.getMchNo())
+                .setWxMchId(channelConfig.getOutMchNo())
                 .setEnable(channelConfig.isEnable());
         return config;
     }

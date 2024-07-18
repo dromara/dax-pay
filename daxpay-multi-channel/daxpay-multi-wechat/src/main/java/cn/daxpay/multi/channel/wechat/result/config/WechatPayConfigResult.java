@@ -1,5 +1,6 @@
 package cn.daxpay.multi.channel.wechat.result.config;
 
+import cn.bootx.platform.common.jackson.sensitive.SensitiveInfo;
 import cn.daxpay.multi.channel.wechat.code.WechatPayCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -45,18 +46,36 @@ public class WechatPayConfigResult {
 
     /** 商户平台「API安全」中的 APIv2 密钥 */
     @Schema(description = "APIv2 密钥")
+    @SensitiveInfo
     private String apiKeyV2;
 
     /** 商户平台「API安全」中的 APIv3 密钥 */
     @Schema(description = "APIv3 密钥")
+    @SensitiveInfo
     private String apiKeyV3;
 
     /** APPID对应的接口密码，用于获取微信公众号jsapi支付时使用 */
     @Schema(description = "APPID对应的接口密码，用于获取微信公众号jsapi支付时使用")
+    @SensitiveInfo
     private String appSecret;
 
-    /** API证书中p12证书Base64 */
+    /** apiclient_key.pem证书base64编码 */
+    @SensitiveInfo
+    @Schema(description = "私钥Key的base64编码")
+    private String privateKey;
+
+    /** apiclient_cert.pem证书base64编码 */
+    @SensitiveInfo
+    @Schema(description = "私钥证书base64编码")
+    private String privateCert;
+
+    /** 证书序列号 */
+    @Schema(description = "证书序列号")
+    private String certSerialNo;
+
+    /** apiclient_cert.p12证书Base64 */
     @Schema(description = "API证书中p12证书")
+    @SensitiveInfo
     private String p12;
 
     /** 是否沙箱环境 */

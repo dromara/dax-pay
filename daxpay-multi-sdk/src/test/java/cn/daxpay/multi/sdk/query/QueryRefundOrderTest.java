@@ -21,7 +21,7 @@ public class QueryRefundOrderTest {
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:8888")
+                .serviceUrl("http://127.0.0.1:10880")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .build();

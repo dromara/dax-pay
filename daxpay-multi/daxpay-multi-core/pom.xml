@@ -18,12 +18,7 @@
             <artifactId>bootx-platform-core</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <!-- javaEE web相关 -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>

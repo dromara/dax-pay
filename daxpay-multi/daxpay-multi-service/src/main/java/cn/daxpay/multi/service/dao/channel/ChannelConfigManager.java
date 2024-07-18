@@ -35,7 +35,6 @@ public class ChannelConfigManager extends BaseManager<ChannelConfigMapper, Chann
      */
     public Optional<ChannelConfig> findByAppIdAndChannel(String appId, String channel) {
         return lambdaQuery()
-                .select(this.getEntityClass (), MpUtil::excludeBigField)
                 .eq(ChannelConfig::getAppId, appId)
                 .eq(ChannelConfig::getChannel, channel)
                 .oneOpt();

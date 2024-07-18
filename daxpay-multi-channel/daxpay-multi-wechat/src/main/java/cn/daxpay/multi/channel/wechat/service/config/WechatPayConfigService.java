@@ -92,7 +92,7 @@ public class WechatPayConfigService {
         BeanUtil.copyProperties(param, alipayConfig, CopyOptions.create().ignoreNullValue());
         ChannelConfig channelConfigParam = alipayConfig.toChannelConfig();
         // 手动清空一下默认的数据版本号
-        channelConfig.setVersion(null);
+        channelConfigParam.setVersion(null);
         BeanUtil.copyProperties(channelConfigParam, channelConfig, CopyOptions.create().ignoreNullValue());
         channelConfigManager.updateById(channelConfig);
     }
@@ -102,7 +102,7 @@ public class WechatPayConfigService {
      */
     public WechatPayConfig getWechatPayConfig(){
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.ALI.getCode());
+        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.WECHAT.getCode());
         return WechatPayConfig.convertConfig(channelConfig);
     }
 
@@ -125,18 +125,21 @@ public class WechatPayConfigService {
     }
 
     /**
-     * wxjava 支付包
+     * wxjava 支付开发包
      */
-    public void wxJavaSdk(WechatPayConfig wechatPayConfig){
+    public WxPayService wxJavaSdk(WechatPayConfig wechatPayConfig){
         WxPayConfig payConfig = new WxPayConfig();
         payConfig.setMchId(wechatPayConfig.getWxMchId());
         payConfig.setAppId(wechatPayConfig.getWxAppId());
         payConfig.setMchKey(wechatPayConfig.getApiKeyV2());
         payConfig.setApiV3Key(wechatPayConfig.getApiKeyV3());
-        payConfig.setKeyString(wechatPayConfig.getP12());
+        payConfig.setPrivateKeyString(wechatPayConfig.getPrivateKey());
+        payConfig.setPrivateCertString(wechatPayConfig.getPrivateCert());
         payConfig.setCertSerialNo(wechatPayConfig.getCertSerialNo());
+        payConfig.setKeyString(wechatPayConfig.getP12());
         WxPayService wxPayService = new WxPayServiceImpl();
         wxPayService.setConfig(payConfig);
+        return wxPayService;
     }
 
     /**

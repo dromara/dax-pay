@@ -9,6 +9,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 各类型订单号审查工具类
+ *
+ * 前缀(5)+业务类型(1)+机器码(2)+日期(14)+流水号(6)
+ *
  * @author yxc
  * @since 2024/4/15
  */
@@ -17,10 +20,10 @@ public class TradeNoGenerateUtil {
 
     private static final AtomicLong ATOMIC_LONG = new AtomicLong();
     private final static long ORDER_MAX_LIMIT = 999999L;
-    /** 机器号 */
+    /** 机器号 两位 */
     @Setter
     private static String machineNo;
-    /** 环境前缀 */
+    /** 环境前缀 最长五位 */
     @Setter
     private static String env;
 

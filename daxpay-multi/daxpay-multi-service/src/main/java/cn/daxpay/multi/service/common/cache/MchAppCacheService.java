@@ -32,6 +32,7 @@ public class MchAppCacheService {
         if (Objects.isNull(mchApp)) {
             mchApp = mchAppManager.findByAppId(appId)
                     .orElseThrow(() -> new ConfigNotEnableException("未找到指定的应用配置"));
+            cache.put(appId, mchApp);
         }
         return mchApp;
     }

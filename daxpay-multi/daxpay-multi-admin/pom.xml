@@ -20,15 +20,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- 临时依赖, 后期会重新整理 -->
-
         <!-- 支付服务 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>
@@ -36,24 +27,25 @@
             <version>${daxpay.version}</version>
         </dependency>
 
+        <!-- 支付通道实现 -->
+
         <!-- 支付宝通道实现 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>
             <artifactId>daxpay-multi-alipay</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
-        <!-- 微信支付通道实现 -->
+        <!-- 微信通道实现 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>
             <artifactId>daxpay-multi-wechat</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
-
-        <!-- 用户认证和鉴权服务 -->
+        <!-- 云闪付通道实现 -->
         <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>service-iam</artifactId>
-            <version>${bootx-platform.version}</version>
+            <groupId>cn.daxpay.multi</groupId>
+            <artifactId>daxpay-multi-union</artifactId>
+            <version>${daxpay.version}</version>
         </dependency>
 
     </dependencies>

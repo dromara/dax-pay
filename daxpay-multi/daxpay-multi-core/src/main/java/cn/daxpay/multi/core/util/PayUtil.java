@@ -24,6 +24,7 @@ public class PayUtil {
     /**
      * 获取支付宝的过期时间 yyyy-MM-dd HH:mm:ss
      */
+    @Deprecated
     public String getAliTimeExpire(LocalDateTime dateTime) {
         return LocalDateTimeUtil.format(dateTime, DatePattern.NORM_DATETIME_PATTERN);
     }
@@ -31,6 +32,7 @@ public class PayUtil {
     /**
      * 获取微信的过期时间 yyyyMMddHHmmss
      */
+    @Deprecated
     public String getWxExpiredTime(LocalDateTime dateTime) {
         return LocalDateTimeUtil.format(dateTime, DatePattern.PURE_DATETIME_PATTERN);
     }
@@ -38,6 +40,7 @@ public class PayUtil {
     /**
      * 获取云闪付的过期时间 yyyyMMddHHmmss
      */
+    @Deprecated
     public String getUnionExpiredTime(LocalDateTime dateTime) {
         return LocalDateTimeUtil.format(dateTime, DatePattern.PURE_DATETIME_PATTERN);
     }

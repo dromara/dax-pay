@@ -32,6 +32,7 @@ public class MerchantCacheService {
         if (Objects.isNull(merchant)) {
             merchant = merchantManager.findByMchNo(mchNo)
                     .orElseThrow(() -> new ConfigNotEnableException("未找到指定的商户配置"));
+//            cache.put(mchNo, merchant);
         }
         return merchant;
     }

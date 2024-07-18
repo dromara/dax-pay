@@ -1,4 +1,4 @@
-package cn.daxpay.multi.channel.wechat.param.config.pay;
+package cn.daxpay.multi.channel.wechat.param.pay;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

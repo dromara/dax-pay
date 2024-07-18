@@ -43,17 +43,17 @@ public class DaxPayKit {
      * @param <T> 业务对象
      */
     public <T extends DaxPayResponseModel> DaxPayResult<T> execute(DaxPayRequest<T> request, boolean sign){
-        // 判断是是否进行签名
-        if (sign) {
-                String hmacSha256Sign = PaySignUtil.hmacSha256Sign(request, config.getSignSecret());
-                request.setSign(hmacSha256Sign);
-        }
         // 判断是否需要填充商户号和应用号
         if (Objects.isNull(request.getMchNo())){
             request.setMchNo(config.getMchNo());
         }
         if (Objects.isNull(request.getAppId())){
             request.setAppId(config.getAppId());
+        }
+        // 判断是是否进行签名
+        if (sign) {
+                String hmacSha256Sign = PaySignUtil.hmacSha256Sign(request, config.getSignSecret());
+                request.setSign(hmacSha256Sign);
         }
         // 参数序列化
         String data = JsonUtil.toJson(request);

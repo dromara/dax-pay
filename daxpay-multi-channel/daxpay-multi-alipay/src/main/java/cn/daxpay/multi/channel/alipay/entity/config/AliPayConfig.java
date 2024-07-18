@@ -25,7 +25,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     private Long id;
 
     /** 支付宝商户appId */
-    private String outAppId;
+    private String aliAppId;
 
     /** 是否启用, 只影响支付和退款操作 */
     private Boolean enable;
@@ -80,14 +80,14 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     public ChannelConfig toChannelConfig() {
         ChannelConfig channelConfig = new ChannelConfig();
         channelConfig.setId(this.getId());
-        channelConfig.setOutAppId(this.getOutAppId());
+        channelConfig.setOutAppId(this.getAliAppId());
         channelConfig.setAppId(this.getAppId());
         channelConfig.setMchNo(this.getMchNo());
         channelConfig.setEnable(this.getEnable());
         channelConfig.setChannel(ChannelEnum.ALI.getCode());
         AliPayConfig copy = AlipayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
-        copy.setId(null).setAppId(null).setEnable(null).setOutAppId(null).setAppId(null).setMchNo(null);
+        copy.setId(null).setAppId(null).setEnable(null).setAliAppId(null).setAppId(null).setMchNo(null);
         String jsonStr = JSONUtil.toJsonStr(copy);
         channelConfig.setExt(jsonStr);
         return channelConfig;
@@ -100,7 +100,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
         AliPayConfig config = JSONUtil.toBean(channelConfig.getExt(), AliPayConfig.class);
 
         config.setId(channelConfig.getId())
-                .setOutAppId(channelConfig.getOutAppId())
+                .setAliAppId(channelConfig.getOutAppId())
                 .setEnable(channelConfig.isEnable());
         return config;
     }

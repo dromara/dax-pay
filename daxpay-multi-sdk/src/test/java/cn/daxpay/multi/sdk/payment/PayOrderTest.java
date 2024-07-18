@@ -23,7 +23,7 @@ public class PayOrderTest {
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:8888")
+                .serviceUrl("http://127.0.0.1:10880")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .mchNo("test")
@@ -43,8 +43,8 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试接口支付");
         param.setDescription("这是支付备注");
-        param.setAmount(1001111);
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setAmount(1001);
+        param.setChannel(PayChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);

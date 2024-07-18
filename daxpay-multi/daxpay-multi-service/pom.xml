@@ -19,29 +19,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- lombok 配合 mapstruct -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-mapstruct-binding</artifactId>
-            <scope>provided</scope>
-            <version>${lombok-mapstruct.version}</version>
-        </dependency>
-
-        <!-- 类型转换处理器 -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <scope>provided</scope>
-            <version>${mapstruct.version}</version>
-        </dependency>
-
         <!-- 类型转换 -->
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -73,9 +50,10 @@
         <!-- 基础API服务 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
-            <artifactId>service-baseapi</artifactId>
+            <artifactId>service-iam</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+
     </dependencies>
 
 </project>

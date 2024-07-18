@@ -3,7 +3,7 @@ package cn.daxpay.multi.channel.wechat.strategy;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.daxpay.multi.channel.wechat.code.WechatPayCode;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
-import cn.daxpay.multi.channel.wechat.param.config.pay.WechatPayParam;
+import cn.daxpay.multi.channel.wechat.param.pay.WechatPayParam;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.service.pay.WechatPayService;
 import cn.daxpay.multi.channel.wechat.service.pay.WechatPayV2Service;
@@ -41,9 +41,16 @@ public class WechatPayStrategy extends AbsPayStrategy {
 
     private WechatPayParam wechatPayParam;
 
+    /**
+     * 策略标识, 可以自行进行扩展
+     */
+    @Override
+    public String getChannel() {
+        return ChannelEnum.WECHAT.getCode();
+    }
+
     @Override
     public void doBeforePayHandler(){
-        this.wechatPayConfig = aliPayConfigService.getWechatPayConfig();
         // 微信参数验证
         String channelParam = this.getPayParam().getExtraParam();
         if (StrUtil.isNotEmpty(channelParam)) {
@@ -51,6 +58,8 @@ public class WechatPayStrategy extends AbsPayStrategy {
         } else {
             this.wechatPayParam = new WechatPayParam();
         }
+        this.wechatPayConfig = aliPayConfigService.getWechatPayConfig();
+        wechatPayService.validation(this.getPayParam(),wechatPayConfig);
     }
 
     /**
@@ -59,18 +68,11 @@ public class WechatPayStrategy extends AbsPayStrategy {
     @Override
     public void doPayHandler() {
         if (Objects.equals(wechatPayConfig.getApiVersion(), WechatPayCode.API_V2)){
-
+            wechatPayV2Service.pay(getOrder(), wechatPayParam, wechatPayConfig);
         } else {
-
+            wechatPayV3Service.pay(getOrder(), wechatPayParam, wechatPayConfig);
         }
 
     }
 
-    /**
-     * 策略标识, 可以自行进行扩展
-     */
-    @Override
-    public String getChannel() {
-        return ChannelEnum.WECHAT.getCode();
-    }
 }

@@ -19,10 +19,10 @@ public class DaxPayProperties {
     /** 前端地址(h5) */
     private String frontH5Url;
 
-    /** 机器码, 用于区分不同机器生成的流水号 */
+    /** 通常为两位内 机器码, 用于区分不同机器生成的流水号 */
     private String machineNo = "58";
 
-    /** 当前环境，会影响订单号的生成 */
+    /**  当前环境，会影响订单号的生成 */
     private String env = "";
 
     public void setMachineNo(String machineNo) {

@@ -5,12 +5,12 @@ import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.bootx.platform.core.util.ValidationUtil;
 import cn.daxpay.multi.channel.wechat.param.config.WechatPayConfigParam;
 import cn.daxpay.multi.channel.wechat.result.config.WechatPayConfigResult;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -44,17 +44,10 @@ public class WechatPayConfigController {
     @RequestPath("新增或更新")
     @Operation(summary = "新增或更新")
     @PostMapping("/saveOrUpdate")
-    public Result<Void> saveOrUpdate(@Valid @RequestBody WechatPayConfigParam param) {
+    public Result<Void> saveOrUpdate(@RequestBody WechatPayConfigParam param) {
+        ValidationUtil.validateParam(param);
         wechatPayConfigService.saveOrUpdate(param);
         return Res.ok();
-    }
-
-    @SneakyThrows
-    @IgnoreAuth
-    @Operation(summary = "读取证书文件内容")
-    @PostMapping("/readPem")
-    public Result<String> readPem(MultipartFile file){
-        return Res.ok(new String(file.getBytes(), StandardCharsets.UTF_8));
     }
 
 }

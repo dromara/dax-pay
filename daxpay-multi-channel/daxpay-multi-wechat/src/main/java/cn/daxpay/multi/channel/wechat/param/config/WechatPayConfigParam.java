@@ -63,7 +63,19 @@ public class WechatPayConfigParam {
     @Schema(description = "APPID对应的接口密码，用于获取微信公众号jsapi支付时使用")
     private String appSecret;
 
-    /** API证书中p12证书Base64 */
+    /** apiclient_key.pem证书base64编码 */
+    @Schema(description = "私钥证书base64编码")
+    private String privateKey;
+
+    /** apiclient_cert.pem证书base64编码 */
+    @Schema(description = "私钥Key的base64编码")
+    private String privateCert;
+
+    /** 证书序列号 */
+    @Schema(description = "证书序列号")
+    private String certSerialNo;
+
+    /** apiclient_cert.p12证书Base64 */
     @Schema(description = "API证书中p12证书")
     private String p12;
 

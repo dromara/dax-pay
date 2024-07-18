@@ -283,8 +283,8 @@ public class AlipayService {
             return response.getQrCode();
         }
         catch (AlipayApiException e) {
-            log.error("支付宝手机支付失败", e);
-            throw new TradeFailException("支付宝手机支付失败");
+            log.error("支付宝扫码支付失败", e);
+            throw new TradeFailException("支付宝扫码支付失败");
         }
     }
 

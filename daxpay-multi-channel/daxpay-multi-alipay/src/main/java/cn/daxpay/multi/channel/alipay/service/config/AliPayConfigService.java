@@ -139,7 +139,7 @@ public class AliPayConfigService {
     public AlipayClient getAlipayClient(AliPayConfig aliPayConfig){
         AlipayConfig config = new AlipayConfig();
         config.setServerUrl(aliPayConfig.getServerUrl());
-        config.setAppId(aliPayConfig.getAppId());
+        config.setAppId(aliPayConfig.getAliAppId());
         config.setFormat("json");
         config.setCharset("UTF-8");
         config.setSignType(aliPayConfig.getSignType());

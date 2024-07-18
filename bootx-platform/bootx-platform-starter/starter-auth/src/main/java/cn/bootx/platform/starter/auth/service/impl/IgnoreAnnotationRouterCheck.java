@@ -54,7 +54,7 @@ public class IgnoreAnnotationRouterCheck implements RouterCheck {
         if (ignoreAuth.login()) {
             return SecurityUtil.getCurrentUser().isPresent();
         }
-        return false;
+        return true;
     }
 
 }

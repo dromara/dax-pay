@@ -15,9 +15,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PlatformConfig extends MpBaseEntity {
     /** 管理平台访问地址 */
-    private String adminServiceUrl;
+    private String adminServiceUrl = "http://abc.com";
     /** 支付网关地址 */
-    private String gatewayServiceUrl;
+    private String gatewayServiceUrl = "http://abc.com";
     /** 商户平台地址 */
-    private String merchantServiceUrl;
+    private String merchantServiceUrl = "http://abc.com";
 }

@@ -24,7 +24,7 @@ public class AlipayConfigResult {
 
     /** 支付宝商户appId */
     @Schema(description = "支付宝商户appId")
-    private String outAppId;
+    private String aliAppId;
 
     /** 是否启用 */
     @Schema(description = "是否启用")

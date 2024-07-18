@@ -12,6 +12,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,6 +71,12 @@ public class PaySignUtil {
                         Map<String, String> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                         m.putAll((Map) fieldValue);
                         toMap(fieldValue, m);
+                    }
+                    // BigDecimal类型
+                    else if (field.getType().equals(BigDecimal.class)) {
+                        BigDecimal bigDecimal = (BigDecimal) fieldValue;
+                        String decimalString = bigDecimal.toString();
+                        map.put(fieldName, decimalString);
                     }
                     // 集合类型
                     else if (Collection.class.isAssignableFrom(field.getType())) {
@@ -168,7 +175,7 @@ public class PaySignUtil {
         // 创建待签名字符串
         String data = createLinkString(map);
         // 将签名key追加到字符串最后
-        return data +  "&key=" + signKey;
+        return data + "&key=" + signKey;
     }
 
     /**
