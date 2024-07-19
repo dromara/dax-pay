@@ -139,7 +139,12 @@ public class WeChatPayService {
         String xmlResult = WxPayApi.pushOrder(false, params);
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
-        return result.get(WeChatPayCode.PREPAY_ID);
+        String prepayId = result.get(WeChatPayCode.PREPAY_ID);
+        Map<String, String> packageParams = WxPayKit.miniAppPrepayIdCreateSign(weChatPayConfig.getWxAppId(), prepayId,
+                weChatPayConfig.getApiKeyV2(), SignType.HMACSHA256);
+        String jsonStr = JacksonUtil.toJson(packageParams);
+        log.info("Jsapi支付的参数:" + jsonStr);
+        return jsonStr;
     }
 
     /**
