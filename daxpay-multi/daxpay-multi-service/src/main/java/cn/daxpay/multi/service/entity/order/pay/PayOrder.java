@@ -17,6 +17,7 @@ import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * 支付订单
@@ -127,6 +128,14 @@ public class PayOrder extends MchEntity implements ToResult<PayOrderResult> {
     /** 错误信息 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
+
+    public boolean getAllocation() {
+        return Objects.equals(true, allocation);
+    }
+
+    public boolean getAutoAllocation() {
+        return Objects.equals(true, autoAllocation);
+    }
 
     @Override
     public PayOrderResult toResult() {

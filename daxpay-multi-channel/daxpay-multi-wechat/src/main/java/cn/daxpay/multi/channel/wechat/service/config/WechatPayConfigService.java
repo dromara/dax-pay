@@ -23,9 +23,6 @@ import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAConfig;
 import com.wechat.pay.java.service.payments.nativepay.NativePayService;
-import com.wechat.pay.java.service.payments.nativepay.model.Amount;
-import com.wechat.pay.java.service.payments.nativepay.model.PrepayRequest;
-import com.wechat.pay.java.service.payments.nativepay.model.PrepayResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -150,24 +147,10 @@ public class WechatPayConfigService {
                         .merchantId(wechatPayConfig.getWxMchId())
                         .privateKey(wechatPayConfig.getPrivateKey())
                         .merchantSerialNumber(wechatPayConfig.getCertSerialNo())
-                        .wechatPayCertificates(wechatPayConfig.getP12())
+                        .wechatPayCertificates(wechatPayConfig.getPrivateCert())
                         .build();
         // 构建service
         NativePayService service = new NativePayService.Builder().config(config).build();
-        // request.setXxx(val)设置所需参数，具体参数可见Request定义
-        PrepayRequest request = new PrepayRequest();
-        Amount amount = new Amount();
-        amount.setTotal(100);
-        request.setAmount(amount);
-        request.setAppid("wxa9d9651ae******");
-        request.setMchid("190000****");
-        request.setDescription("测试商品标题");
-        request.setNotifyUrl("https://notify_url");
-        request.setOutTradeNo("out_trade_no_001");
-        // 调用下单方法，得到应答
-        PrepayResponse response = service.prepay(request);
-        // 使用微信扫描 code_url 对应的二维码，即可体验Native支付
-        System.out.println(response.getCodeUrl());
     }
 
 }

@@ -29,7 +29,7 @@ public enum PayMethodEnum {
     QRCODE("qrcode"),
     /** 付款码 */
     BARCODE("barcode"),
-    /** 公众号/小程序支付 */
+    /** 小程序支付 */
     JSAPI("jsapi"),
     ;
 
