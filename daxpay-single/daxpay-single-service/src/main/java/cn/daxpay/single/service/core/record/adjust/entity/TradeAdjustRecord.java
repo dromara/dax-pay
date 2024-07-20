@@ -3,7 +3,9 @@ package cn.daxpay.single.service.core.record.adjust.entity;
 import cn.bootx.platform.common.core.function.EntityBaseFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.table.modify.annotation.DbColumn;
+import cn.bootx.table.modify.mysql.annotation.DbMySqlFieldType;
 import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
+import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
 import cn.daxpay.single.service.core.record.adjust.convert.TradeAdjustRecordConvert;
@@ -76,6 +78,13 @@ public class TradeAdjustRecord extends MpCreateEntity implements EntityBaseFunct
      */
     @DbColumn(comment = "调整后状态", length = 20, isNull = false)
     private String afterStatus;
+
+    /**
+     * 扩展信息, json格式
+     */
+    @DbColumn(comment = "扩展信息")
+    @DbMySqlFieldType(MySqlFieldTypeEnum.LONGTEXT)
+    private String ext;
 
     /**
      * 备注
