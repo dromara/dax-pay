@@ -113,7 +113,7 @@ public class PayOrder extends MchEntity implements ToResult<PayOrderResult> {
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String attach;
 
-    /** 请求时间，时间戳转时间, 以最后一次为准 */
+    /** 请求时间 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private LocalDateTime reqTime;
 

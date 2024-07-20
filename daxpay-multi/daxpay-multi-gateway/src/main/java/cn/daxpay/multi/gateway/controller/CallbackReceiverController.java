@@ -1,5 +1,8 @@
 package cn.daxpay.multi.gateway.controller;
 
+import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.service.service.assist.PaymentAssistService;
+import cn.daxpay.multi.service.service.notice.callback.CallbackReceiverService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,24 +26,31 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class CallbackReceiverController {
 
+    private final CallbackReceiverService callbackReceiverService;
+
+    private final PaymentAssistService paymentAssistService;
+
     @SneakyThrows
     @Operation(summary = "支付宝回调")
     @PostMapping("/alipay")
     public String aliPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
-        return "";
+        paymentAssistService.initMchAndApp(mchNo, appId);
+        return callbackReceiverService.handle(request, ChannelEnum.ALI.getCode());
     }
 
     @SneakyThrows
     @Operation(summary = "微信支付回调")
     @PostMapping("/wechat")
     public String wechatPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
-        return "";
+        paymentAssistService.initMchAndApp(mchNo, appId);
+        return callbackReceiverService.handle(request, ChannelEnum.WECHAT.getCode());
     }
 
     @SneakyThrows
     @Operation(summary = "云闪付支付回调")
     @PostMapping("/union")
     public String unionPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
-        return "";
+        paymentAssistService.initMchAndApp(mchNo, appId);
+        return callbackReceiverService.handle(request, ChannelEnum.UNION_PAY.getCode());
     }
 }

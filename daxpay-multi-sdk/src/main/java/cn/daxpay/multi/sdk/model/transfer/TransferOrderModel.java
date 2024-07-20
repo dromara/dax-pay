@@ -79,7 +79,7 @@ public class TransferOrderModel extends DaxPayResponseModel {
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
     private String attach;
 
-    /** 请求时间，时间戳转时间 */
+    /** 请求时间 */
     private LocalDateTime reqTime;
 
     /** 终端ip */

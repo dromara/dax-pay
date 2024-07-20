@@ -1,8 +1,13 @@
 package cn.daxpay.multi.service.result.order.pay;
 
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
+import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
+import cn.daxpay.multi.core.enums.PayStatusEnum;
+import cn.daxpay.multi.service.common.result.MchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
@@ -11,10 +16,11 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2021/2/25
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付订单")
-public class PayOrderResult {
+public class PayOrderResult extends MchResult {
 
     /** 商户订单号 */
     @Schema(description = "商户订单号")
@@ -75,14 +81,14 @@ public class PayOrderResult {
 
     /**
      * 退款状态
-     * @see PayOrderRefundStatusEnum
+     * @see PayRefundStatusEnum
      */
     @Schema(description = "退款状态")
     private String refundStatus;
 
     /**
      * 分账状态
-     * @see PayOrderAllocStatusEnum
+     * @see PayAllocStatusEnum
      */
     @Schema(description = "分账状态")
     private String allocStatus;
@@ -111,8 +117,8 @@ public class PayOrderResult {
     @Schema(description = "商户扩展参数")
     private String attach;
 
-    /** 请求时间，时间戳转时间, 以最后一次为准 */
-    @Schema(description = "请求时间，传输时间戳，以最后一次为准")
+    /** 请求时间 */
+    @Schema(description = "请求时间")
     private LocalDateTime reqTime;
 
     /** 错误码 */

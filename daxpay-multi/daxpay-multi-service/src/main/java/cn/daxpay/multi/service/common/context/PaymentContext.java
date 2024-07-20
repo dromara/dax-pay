@@ -12,7 +12,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PaymentContext {
 
-    /** 应用配置 */
+    /**
+     * 调用统一支付相关接口时，会进行初始化
+     * 接收到回调时，会进行初始化
+     */
     private final MchAppLocal mchAppInfo = new MchAppLocal();
 
     /** 请求终端信息 */

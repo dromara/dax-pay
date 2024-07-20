@@ -38,17 +38,17 @@ public class PaymentVerifyAspect {
             throw new ValidationFailedException("支付方法至少有一个参数，并且需要签名的支付参数放在第一位");
         }
         Object param = args[0];
-        if (param instanceof PaymentCommonParam){
+        if (param instanceof PaymentCommonParam paymentParam){
             // 参数校验
-            ValidationUtil.validateParam(param);
+            ValidationUtil.validateParam(paymentParam);
             // 商户和应用信息初始化
-            paymentAssistService.initMchAndApp((PaymentCommonParam) param);
+            paymentAssistService.initMchAndApp(paymentParam.getMchNo(), paymentParam.getAppId());
             // 终端信息初始化
-            paymentAssistService.initClient((PaymentCommonParam) param);
+            paymentAssistService.initClient(paymentParam);
             // 参数签名校验
-            paymentAssistService.signVerify((PaymentCommonParam) param);
+            paymentAssistService.signVerify(paymentParam);
             // 参数请求时间校验
-            paymentAssistService.reqTimeoutVerify((PaymentCommonParam) param);
+            paymentAssistService.reqTimeoutVerify(paymentParam);
 
         } else {
             throw new ValidationFailedException("参数需要继承PayCommonParam");

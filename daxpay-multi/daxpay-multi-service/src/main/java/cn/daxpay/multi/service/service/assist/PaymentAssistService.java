@@ -108,10 +108,10 @@ public class PaymentAssistService {
     /**
      * 初始化商户和应用信息
      */
-    public void initMchAndApp(PaymentCommonParam param) {
+    public void initMchAndApp(String mchNo, String appId) {
         // 获取应用信息
-        Merchant merchant = merchantCacheService.get(param.getMchNo());
-        MchApp mchApp = mchAppCacheService.get(param.getAppId());
+        Merchant merchant = merchantCacheService.get(mchNo);
+        MchApp mchApp = mchAppCacheService.get(appId);
         // 判断是否匹配
         if (!Objects.equals(mchApp.getMchNo(), merchant.getMchNo())){
             throw new ValidationFailedException("商户号和应用号不匹配");

@@ -94,7 +94,7 @@ public class RefundOrder extends MpBaseEntity {
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String extraParam;
 
-    /** 请求时间，时间戳转时间 */
+    /** 请求时间 */
     private LocalDateTime reqTime;
 
     /** 终端ip */
