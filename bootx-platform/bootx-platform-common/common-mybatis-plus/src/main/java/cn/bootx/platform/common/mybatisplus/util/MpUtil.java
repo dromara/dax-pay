@@ -42,6 +42,12 @@ public class MpUtil {
     public <T> Page<T> getMpPage(PageParam page) {
         return Page.of(page.getCurrent(), page.getSize());
     }
+    /**
+     * 获取分页对象 MyBatis-Plus
+     */
+    public <T> Page<T> getMpPage(PageParam page, Class<T> clazz) {
+        return Page.of(page.getCurrent(), page.getSize());
+    }
 
     /**
      * 获取行名称

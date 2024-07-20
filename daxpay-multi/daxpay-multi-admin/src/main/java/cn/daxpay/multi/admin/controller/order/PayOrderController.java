@@ -1,4 +1,4 @@
-package cn.daxpay.multi.admin.controller.order.pay;
+package cn.daxpay.multi.admin.controller.order;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/1/9
  */
-@RequestGroup(moduleCode = "TradeOrder", moduleName = "交易订单记录", groupCode = "payOrder", groupName = "支付订单")
 @Tag(name = "支付订单控制器")
 @RestController
 @RequestMapping("/order/pay")
+@RequestGroup(moduleCode = "TradeOrder", moduleName = "交易订单记录", groupCode = "PayOrder", groupName = "支付订单")
 @RequiredArgsConstructor
 public class PayOrderController {
     private final PayOrderQueryService queryService;

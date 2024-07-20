@@ -3,7 +3,7 @@ package cn.daxpay.multi.sdk.allocation;
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.model.allocation.AllocationModel;
+import cn.daxpay.multi.sdk.model.allocation.AllocModel;
 import cn.daxpay.multi.sdk.model.pay.PayModel;
 import cn.daxpay.multi.sdk.model.sync.AllocSyncModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
@@ -97,7 +97,7 @@ public class AllocationTest {
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
 
-        DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<AllocModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 
@@ -115,7 +115,7 @@ public class AllocationTest {
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
 
-        DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<AllocModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 
@@ -136,7 +136,7 @@ public class AllocationTest {
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
 
-        DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<AllocModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 
@@ -149,7 +149,7 @@ public class AllocationTest {
         AllocFinishParam param = new AllocFinishParam();
         param.setAllocNo("DEVA24060117191963000003");
 
-        DaxPayResult<AllocationModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<AllocModel> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 

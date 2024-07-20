@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "通道配置")
-public class ChannelConfigResult {
+public class ChannelConfigResult{
 
     @Schema(description = "主键ID")
     private Long id;

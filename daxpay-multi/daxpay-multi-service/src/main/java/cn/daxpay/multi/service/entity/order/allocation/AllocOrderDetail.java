@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class AllocOrderDetail extends MchEntity {
 
     /** 分账订单ID */
-    private Long allocationId;
+    private Long allocId;
 
     /** 接收者ID */
     private Long receiverId;

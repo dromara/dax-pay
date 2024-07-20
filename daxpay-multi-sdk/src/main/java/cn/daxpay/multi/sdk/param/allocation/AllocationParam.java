@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.param.allocation;
 
-import cn.daxpay.multi.sdk.model.allocation.AllocationModel;
+import cn.daxpay.multi.sdk.model.allocation.AllocModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.daxpay.multi.sdk.util.JsonUtil;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class AllocationParam extends DaxPayRequest<AllocationModel> {
+public class AllocationParam extends DaxPayRequest<AllocModel> {
 
     /** 商户分账单号 */
     private String bizAllocNo;
@@ -58,7 +58,7 @@ public class AllocationParam extends DaxPayRequest<AllocationModel> {
      * 将请求返回结果反序列化为实体类
      */
     @Override
-    public DaxPayResult<AllocationModel> toModel(String json) {
-        return JsonUtil.toBean(json, new TypeReference<DaxPayResult<AllocationModel>>() {});
+    public DaxPayResult<AllocModel> toModel(String json) {
+        return JsonUtil.toBean(json, new TypeReference<DaxPayResult<AllocModel>>() {});
     }
 }
