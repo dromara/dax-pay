@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 交易调整记录
+ * 退款调整记录
  * @author xxm
  * @since 2024/7/15
  */
@@ -15,6 +15,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "交易调整记录")
-public class TradeAdjustRecordDto extends BaseDto {
+public class RefundAdjustRecordDto extends BaseDto {
 
 }

@@ -6,6 +6,7 @@ import cn.daxpay.single.core.exception.OperationFailException;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayAllocService;
 import cn.daxpay.single.service.core.channel.wechat.service.WeChatPayConfigService;
+import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.service.func.AbsAllocStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,5 +74,12 @@ public class WeChatPayAllocStrategy extends AbsAllocStrategy {
         weChatPayAllocService.finish(getAllocOrder(), weChatPayConfig);
     }
 
+    /**
+     * 同步状态
+     */
+    @Override
+    public AllocRemoteSyncResult doSync() {
+        return weChatPayAllocService.sync(this.getAllocOrder(),this.getAllocOrderDetails(),weChatPayConfig);
+    }
 
 }

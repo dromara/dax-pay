@@ -36,6 +36,6 @@ public class WeChatAllocSyncStrategy extends AbsAllocSyncStrategy {
     @Override
     public AllocRemoteSyncResult doSync() {
         WeChatPayConfig config = weChatPayConfigService.getConfig();
-        return weChatPayAllocService.sync(this.getAllocOrder(),config);
+        return weChatPayAllocService.sync(this.getAllocOrder(),this.getAllocOrderDetails(), config);
     }
 }

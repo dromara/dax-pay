@@ -1,17 +1,17 @@
 package cn.daxpay.single.service.core.channel.alipay.service;
 
-import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.exception.TradeFailException;
-import cn.daxpay.single.core.util.PayUtil;
 import cn.daxpay.single.service.code.AliPayCode;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
-import cn.daxpay.single.service.core.payment.adjust.dto.AllocResultItem;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
+import cn.daxpay.single.core.util.PayUtil;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayClient;
@@ -26,11 +26,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -112,7 +113,7 @@ public class AliPayAllocService {
      * 分账状态同步
      */
     @SneakyThrows
-    public AllocRemoteSyncResult sync(AllocOrder allocOrder, AliPayConfig config){
+    public AllocRemoteSyncResult sync(AllocOrder allocOrder, List<AllocOrderDetail> allocOrderDetails, AliPayConfig config){
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
         model.setTradeNo(allocOrder.getOutOrderNo());
@@ -122,32 +123,25 @@ public class AliPayAllocService {
         AlipayTradeOrderSettleQueryResponse response = alipayClient.execute(request);
         // 验证
         this.verifyErrorMsg(response);
-        // 接收到的结果
+        Map<String, AllocOrderDetail> detailMap = allocOrderDetails.stream()
+                .collect(Collectors.toMap(AllocOrderDetail::getReceiverAccount, Function.identity(), CollectorsFunction::retainLatest));
         List<RoyaltyDetail> royaltyDetailList = response.getRoyaltyDetailList();
-        // 转换成通用的明细详情
-        List<AllocResultItem> resultItems = royaltyDetailList.stream()
-                .map(receiver -> {
-                    // 金额
-                    int amount = PayUtil.convertCentAmount(new BigDecimal(receiver.getAmount()));
-                    AllocResultItem detail = new AllocResultItem()
-                            .setResult(this.getDetailResultEnum(receiver.getState()).getCode())
-                            .setAccount(receiver.getTransIn())
-                            .setAmount(amount)
-                            .setErrorCode(receiver.getErrorCode())
-                            .setErrorMsg(receiver.getErrorDesc());
-                    // 如果是完成, 更新时间
-                    if (AllocDetailResultEnum.SUCCESS.getCode()
-                            .equals(detail.getResult())) {
-                        LocalDateTime finishTime = LocalDateTimeUtil.of(receiver.getExecuteDt());
-                        detail.setFinishTime(finishTime)
-                                .setErrorMsg(null)
-                                .setErrorCode(null);
-                    }
-                    return detail;
-                })
-                .collect(Collectors.toList());
-
-        return new AllocRemoteSyncResult().setSyncInfo(JSONUtil.toJsonStr(response)).setResultItems(resultItems);
+        for (RoyaltyDetail receiver : royaltyDetailList) {
+            AllocOrderDetail detail = detailMap.get(receiver.getTransIn());
+            if (Objects.nonNull(detail)) {
+                detail.setResult(this.getDetailResultEnum(receiver.getState()).getCode());
+                detail.setErrorCode(receiver.getErrorCode());
+                detail.setErrorMsg(receiver.getErrorDesc());
+                // 如果是完成, 更新时间
+                if (AllocDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){
+                    LocalDateTime finishTime = LocalDateTimeUtil.of(receiver.getExecuteDt());
+                    detail.setFinishTime(finishTime)
+                            .setErrorMsg(null)
+                            .setErrorCode(null);
+                }
+            }
+        }
+        return new AllocRemoteSyncResult().setSyncInfo(JSONUtil.toJsonStr(response));
     }
 
     /**

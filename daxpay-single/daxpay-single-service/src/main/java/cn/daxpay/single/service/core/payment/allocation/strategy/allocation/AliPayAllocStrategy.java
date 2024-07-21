@@ -5,6 +5,7 @@ import cn.daxpay.single.core.exception.ConfigNotEnableException;
 import cn.daxpay.single.service.core.channel.alipay.entity.AliPayConfig;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayAllocService;
 import cn.daxpay.single.service.core.channel.alipay.service.AliPayConfigService;
+import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.service.func.AbsAllocStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class AliPayAllocStrategy extends AbsAllocStrategy {
 
     private final AliPayConfigService aliPayConfigService;
 
-    private AliPayConfig aliPayConfig;
+    private AliPayConfig aliPayConfig;;
 
 
     /**
@@ -67,6 +68,14 @@ public class AliPayAllocStrategy extends AbsAllocStrategy {
     @Override
     public void finish() {
         aliPayAllocService.finish(this.getAllocOrder(), this.getAllocOrderDetails(), this.aliPayConfig);
+    }
+
+    /**
+     * 同步状态
+     */
+    @Override
+    public AllocRemoteSyncResult doSync() {
+        return aliPayAllocService.sync(this.getAllocOrder(), this.getAllocOrderDetails(), this.aliPayConfig);
     }
 
 }

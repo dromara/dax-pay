@@ -2,15 +2,14 @@ package cn.daxpay.single.service.core.payment.callback.service;
 
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.PayStatusEnum;
-import cn.daxpay.single.service.code.PayAdjustWayEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.TradeAdjustSourceEnum;
 import cn.daxpay.single.service.common.context.CallbackLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
-import cn.daxpay.single.service.core.payment.adjust.param.PayAdjustParam;
-import cn.daxpay.single.service.core.payment.adjust.service.PayAdjustService;
+import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
+import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
+import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +32,11 @@ public class PayCallbackService {
 
     private final PayOrderQueryService payOrderQueryService;
 
-    private final PayAdjustService payAdjustService;
-
     private final LockTemplate lockTemplate;
+
+    private final PayOrderService payOrderService;
+    private final TradeFlowRecordService tradeFlowRecordService;
+    private final ClientNoticeService clientNoticeService;
 
     /**
      * 支付统一回调处理
@@ -74,7 +75,7 @@ public class PayCallbackService {
     }
 
     /**
-     * 成功处理 使用调整策略将支付订单调整为支付成功状态
+     * 成功处理 将支付订单调整为支付成功状态
      */
     private void success(PayOrder payOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
@@ -94,15 +95,14 @@ public class PayCallbackService {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setErrorMsg("支付单不是待支付状态,记录回调记录");
             return;
         }
-        // 执行支付成功的调整逻辑
-        PayAdjustParam param = new PayAdjustParam()
-                .setOrder(payOrder)
-                .setOutTradeNo(callbackInfo.getOutTradeNo())
-                .setAdjustWay(PayAdjustWayEnum.SUCCESS)
-                .setSource(TradeAdjustSourceEnum.CALLBACK)
-                .setFinishTime(callbackInfo.getFinishTime());
-        String adjustNo = payAdjustService.adjust(param);
-        callbackInfo.setAdjustNo(adjustNo);
+        // 修改订单支付状态为成功
+        payOrder.setStatus(PayStatusEnum.SUCCESS.getCode())
+                .setPayTime(callbackInfo.getFinishTime())
+                .setOutOrderNo(callbackInfo.getOutTradeNo())
+                .setCloseTime(null);
+        payOrderService.updateById(payOrder);
+        tradeFlowRecordService.savePay(payOrder);
+        clientNoticeService.registerPayNotice(payOrder);
     }
 
     /**
@@ -121,14 +121,11 @@ public class PayCallbackService {
             return;
         }
         // 执行支付关闭的调整逻辑
-        PayAdjustParam param = new PayAdjustParam()
-                .setOrder(payOrder)
-                .setOutTradeNo(callbackInfo.getOutTradeNo())
-                .setAdjustWay(PayAdjustWayEnum.CLOSE_LOCAL)
-                .setSource(TradeAdjustSourceEnum.CALLBACK)
-                .setFinishTime(callbackInfo.getFinishTime());
-        String adjustNo = payAdjustService.adjust(param);
-        callbackInfo.setAdjustNo(adjustNo);
+        // 执行策略的关闭方法
+        payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
+                .setCloseTime(LocalDateTime.now());
+        payOrderService.updateById(payOrder);
+        clientNoticeService.registerPayNotice(payOrder);
     }
 
 }

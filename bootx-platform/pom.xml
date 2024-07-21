@@ -80,7 +80,7 @@
         <kryo.serializers.version>0.41</kryo.serializers.version>
         <asyncTool.version>V1.4-SNAPSHOT</asyncTool.version>
         <velocity.version>2.3</velocity.version>
-        <wxjava.version>4.5.2.B</wxjava.version>
+        <wxjava.version>4.6.0</wxjava.version>
         <ding-talk.version>1.3.81</ding-talk.version>
         <lock4j.version>2.2.7</lock4j.version>
         <ip2region.version>2.7.0</ip2region.version>

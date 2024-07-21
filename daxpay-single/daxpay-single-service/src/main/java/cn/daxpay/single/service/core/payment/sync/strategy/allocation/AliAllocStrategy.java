@@ -33,7 +33,7 @@ public class AliAllocStrategy extends AbsAllocSyncStrategy {
     @Override
     public AllocRemoteSyncResult doSync() {
         AliPayConfig config = alipayConfigService.getConfig();
-        return aliPayAllocService.sync(this.getAllocOrder(), config);
+        return aliPayAllocService.sync(this.getAllocOrder(),this.getAllocOrderDetails(), config);
     }
 
 }

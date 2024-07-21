@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.channel.wechat.service;
 
-import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
+import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
@@ -9,11 +9,11 @@ import cn.daxpay.single.service.code.WeChatPayCode;
 import cn.daxpay.single.service.core.channel.wechat.entity.WeChatPayConfig;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
-import cn.daxpay.single.service.core.payment.adjust.dto.AllocResultItem;
 import cn.daxpay.single.service.core.payment.sync.result.AllocRemoteSyncResult;
 import cn.daxpay.single.service.dto.channel.wechat.WeChatPayAllocReceiver;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -34,6 +34,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -111,7 +112,7 @@ public class WeChatPayAllocService {
     /**
      * 同步分账状态
      */
-    public AllocRemoteSyncResult sync(AllocOrder allocOrder, WeChatPayConfig config){
+    public AllocRemoteSyncResult sync(AllocOrder allocOrder, List<AllocOrderDetail> allocOrderDetails, WeChatPayConfig config){
         // 不要传输AppId参数, 否则会失败
         Map<String, String> params = ProfitSharingModel.builder()
                 .mch_id(config.getWxMchId())
@@ -124,26 +125,23 @@ public class WeChatPayAllocService {
         Map<String, String> result = WxPayKit.xmlToMap(xmlResult);
         this.verifyErrorMsg(result);
         String json = result.get(WeChatPayCode.ALLOC_RECEIVERS);
-        // 接收到的分账内容
         List<WeChatPayAllocReceiver> receivers = JSONUtil.toBean(json, new TypeReference<List<WeChatPayAllocReceiver>>() {}, false);
-
-        // 转换成通用的明细详情
-        List<AllocResultItem> resultItems = receivers.stream()
-                .map(receiver -> {
-                    AllocResultItem detail = new AllocResultItem()
-                            .setResult(this.getDetailResultEnum(receiver.getResult()).getCode())
-                            .setAccount(receiver.getAccount())
-                            .setErrorMsg(receiver.getFailReason());
-                    // 如果是完成, 更新时间
-                    if (AllocDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){
-                        LocalDateTime finishTime = LocalDateTimeUtil.parse(receiver.getFinishTime(), DatePattern.PURE_DATETIME_PATTERN);
-                        detail.setFinishTime(finishTime);
-                    }
-                    return detail;
-                })
-                .collect(Collectors.toList());
-
-        return new AllocRemoteSyncResult().setSyncInfo(json).setResultItems(resultItems);
+        Map<String, AllocOrderDetail> detailMap = allocOrderDetails.stream()
+                .collect(Collectors.toMap(AllocOrderDetail::getReceiverAccount, Function.identity(), CollectorsFunction::retainLatest));
+        // 根据明细更新订单明细内容
+        for (WeChatPayAllocReceiver receiver : receivers) {
+            AllocOrderDetail detail = detailMap.get(receiver.getAccount());
+            if (Objects.nonNull(detail)){
+                detail.setResult(this.getDetailResultEnum(receiver.getResult()).getCode());
+                detail.setErrorMsg(receiver.getFailReason());
+                // 如果是完成, 更新时间
+                if (AllocDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){
+                    LocalDateTime finishTime = LocalDateTimeUtil.parse(receiver.getFinishTime(), DatePattern.PURE_DATETIME_PATTERN);
+                    detail.setFinishTime(finishTime);
+                }
+            }
+        }
+        return new AllocRemoteSyncResult().setSyncInfo(JSONUtil.toJsonStr(receivers));
     }
 
 

@@ -58,10 +58,6 @@ public class CallbackLocal {
      */
     private PayCallbackStatusEnum callbackStatus = PayCallbackStatusEnum.SUCCESS;
 
-
-    /** 调整号 */
-    private String adjustNo;
-
     /** 提示信息 */
     private String errorMsg;
 }

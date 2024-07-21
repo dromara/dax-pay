@@ -78,10 +78,6 @@ public class TradeSyncRecord extends MpCreateEntity implements EntityBaseFunctio
     @DbColumn(comment = "是否进行调整", isNull = false)
     private boolean adjust;
 
-    /** 调整记录号 */
-    @DbColumn(comment = "调整记录号", length = 32)
-    private String adjustNo;
-
     /** 错误码 */
     @DbColumn(comment = "错误码", length = 10)
     private String errorCode;

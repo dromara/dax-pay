@@ -59,14 +59,11 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     private String notifyInfo;
 
     /**
+     * 回调处理状态
      * @see PayCallbackStatusEnum
      */
     @DbColumn(comment = "回调处理状态", length = 20, isNull = false)
     private String status;
-
-    /** 调整号 */
-    @DbColumn(comment = "调整号", length = 32, isNull = false)
-    private String adjustNo;
 
     /** 错误码 */
     @DbColumn(comment = "错误码", length = 10)
