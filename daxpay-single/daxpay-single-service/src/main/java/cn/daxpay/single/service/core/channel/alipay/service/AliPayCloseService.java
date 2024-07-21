@@ -71,9 +71,9 @@ public class AliPayCloseService {
         }
     }
 
-    /**
-     * 交易撤销: 如果用户支付成功，会将此订单资金退还给用户. 限制时间为1天，过了24小时，该接口无法再使用。
+    /**交易撤销: 如果用户支付成功，会将此订单资金退还给用户. 限制时间为1天，过了24小时，该接口无法再使用。
      * 可以视为一个特殊的接口, 需要专门签约这个接口的权限
+     *
      */
     public void cancel(PayOrder payOrder, AliPayConfig config) {
 
