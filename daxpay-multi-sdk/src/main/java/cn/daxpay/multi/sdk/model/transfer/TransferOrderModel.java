@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -37,19 +38,13 @@ public class TransferOrderModel extends DaxPayResponseModel {
     private String channel;
 
     /** 转账金额 */
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 标题 */
     private String title;
 
     /** 转账原因/备注 */
     private String reason;
-
-    /**
-     * 转账类型, 微信使用
-     * @see TransferTypeEnum
-     */
-    private String transferType;
 
     /**
      * 收款人类型

@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.entity.order.transfer;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
 import cn.daxpay.multi.service.result.order.transfer.TransferOrderResult;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -39,19 +41,13 @@ public class TransferOrder extends MchEntity implements ToResult<TransferOrderRe
     private String channel;
 
     /** 转账金额 */
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 标题 */
     private String title;
 
     /** 转账原因/备注 */
     private String reason;
-
-    /**
-     * 转账类型, 微信使用
-     * @see TransferTypeEnum
-     */
-    private String transferType;
 
     /**
      * 收款人类型

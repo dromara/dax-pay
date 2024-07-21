@@ -27,7 +27,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     /** 支付宝商户appId */
     private String aliAppId;
 
-    /** 是否启用, 只影响支付和退款操作 */
+    /** 是否启用 */
     private Boolean enable;
 
     /** 支付限额 */

@@ -96,6 +96,13 @@ public class PayUtil {
     }
 
     /**
+     * 是否大于或等于
+     */
+    public boolean isGreaterAndEqualThan(BigDecimal first, BigDecimal last) {
+        return compareTo(first, last) >= 0;
+    }
+
+    /**
      * 是否小于
      */
     public boolean isLessThan(BigDecimal first, BigDecimal last) {

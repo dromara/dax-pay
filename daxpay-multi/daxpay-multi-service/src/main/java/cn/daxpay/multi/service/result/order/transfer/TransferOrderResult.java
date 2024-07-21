@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.result.order.transfer;
 
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.common.result.MchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -42,7 +44,7 @@ public class TransferOrderResult extends MchResult {
 
     /** 转账金额 */
     @Schema(description = "转账金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 标题 */
     @Schema(description = "标题")
@@ -51,13 +53,6 @@ public class TransferOrderResult extends MchResult {
     /** 转账原因/备注 */
     @Schema(description = "转账原因/备注")
     private String reason;
-
-    /**
-     * 转账类型, 微信使用
-     * @see TransferTypeEnum
-     */
-    @Schema(description = "转账类型, 微信使用")
-    private String transferType;
 
     /**
      * 收款人类型

@@ -28,7 +28,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Service
 @RequiredArgsConstructor
-public class WeChatPayCloseStrategy extends AbsPayCloseStrategy {
+public class WechatPayCloseStrategy extends AbsPayCloseStrategy {
 
     private final WechatPayConfigService wechatPayConfigService;
     private final WechatPayCloseV2Service payCloseV2Service;

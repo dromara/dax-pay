@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -45,19 +46,13 @@ public class TransferOrderQuery extends SortParam {
 
     /** 转账金额 */
     @Schema(description = "转账金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 标题 */
     @Schema(description = "标题")
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String title;
 
-    /**
-     * 转账类型, 微信使用
-     * @see TransferTypeEnum
-     */
-    @Schema(description = "转账类型, 微信使用")
-    private String transferType;
 
 
     /**

@@ -2,7 +2,6 @@ package cn.daxpay.multi.sdk.param.transfer;
 
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.TransferPayeeTypeEnum;
-import cn.daxpay.multi.sdk.code.TransferTypeEnum;
 import cn.daxpay.multi.sdk.model.transfer.TransferModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
@@ -11,6 +10,8 @@ import cn.hutool.core.lang.TypeReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.math.BigDecimal;
 
 /**
  * 转账参数
@@ -32,19 +33,13 @@ public class TransferParam extends DaxPayRequest<TransferModel> {
     private String channel;
 
     /** 转账金额 */
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 标题 */
     private String title;
 
     /** 转账原因/备注 */
     private String reason;
-
-    /**
-     * 转账类型, 微信使用
-     * @see TransferTypeEnum
-     */
-    private String transferType;
 
     /**
      * 收款人账号类型
