@@ -3,9 +3,10 @@ package cn.daxpay.multi.service.service.payment.pay;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
+import cn.daxpay.multi.core.exception.AmountExceedLimitException;
 import cn.daxpay.multi.core.exception.TradeStatusErrorException;
-import cn.daxpay.multi.core.param.payment.pay.PayParam;
-import cn.daxpay.multi.core.result.PayResult;
+import cn.daxpay.multi.core.param.trade.pay.PayParam;
+import cn.daxpay.multi.core.result.trade.PayResult;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
@@ -129,10 +130,12 @@ public class PayAssistService {
      * 检验订单是否超过限额
      */
     public void validationLimitAmount(PayParam payParam) {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get()
+                .getMchAppInfo();
         // 总额校验
-//        if (payParam.getAmount() > platformInfo.getLimitAmount()) {
-//            throw new AmountExceedLimitException("支付金额超过限额");
-//        }
+        if (PayUtil.isGreaterThan(payParam.getAmount(),mchAppInfo.getLimitAmount())) {
+            throw new AmountExceedLimitException("支付金额超过限额");
+        }
     }
 
 

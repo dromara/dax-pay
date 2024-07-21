@@ -3,8 +3,8 @@ package cn.daxpay.multi.service.service.payment.pay;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.exception.PayFailureException;
 import cn.daxpay.multi.core.exception.TradeProcessingException;
-import cn.daxpay.multi.core.param.payment.pay.PayParam;
-import cn.daxpay.multi.core.result.PayResult;
+import cn.daxpay.multi.core.param.trade.pay.PayParam;
+import cn.daxpay.multi.core.result.trade.PayResult;
 import cn.daxpay.multi.service.common.context.PayLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
@@ -40,7 +40,6 @@ public class PayService {
      * 支付入口
      */
     public PayResult pay(PayParam payParam){
-        // 创建返回类
         // 校验支付限额
         payAssistService.validationLimitAmount(payParam);
         // 获取商户订单号

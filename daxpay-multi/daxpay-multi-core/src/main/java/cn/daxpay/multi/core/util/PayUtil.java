@@ -30,14 +30,6 @@ public class PayUtil {
     }
 
     /**
-     * 获取微信的过期时间 yyyyMMddHHmmss
-     */
-    @Deprecated
-    public String getWxExpiredTime(LocalDateTime dateTime) {
-        return LocalDateTimeUtil.format(dateTime, DatePattern.PURE_DATETIME_PATTERN);
-    }
-
-    /**
      * 获取云闪付的过期时间 yyyyMMddHHmmss
      */
     @Deprecated
@@ -76,6 +68,45 @@ public class PayUtil {
      */
     public BigDecimal toDecimal(BigDecimal amount) {
         return amount.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * 比较大小
+     * @param first 数字1
+     * @param last 数字2
+     * @return first > last =1 / first == last = 0 / first < last = -1
+     */
+    public int compareTo(BigDecimal first, BigDecimal last) {
+        BigDecimal newFirst = BigDecimal.ZERO;
+        BigDecimal newLast = BigDecimal.ZERO;
+        if (first != null) {
+            newFirst = first;
+        }
+        if (last != null) {
+            newLast = last;
+        }
+        return newFirst.compareTo(newLast);
+    }
+
+    /**
+     * 是否大于
+     */
+    public boolean isGreaterThan(BigDecimal first, BigDecimal last) {
+        return compareTo(first, last) > 0;
+    }
+
+    /**
+     * 是否小于
+     */
+    public boolean isLessThan(BigDecimal first, BigDecimal last) {
+        return compareTo(first, last) < 0;
+    }
+
+    /**
+     * 是否等于
+     */
+    public boolean isEqual(BigDecimal first, BigDecimal last) {
+        return compareTo(first, last) == 0;
     }
 
     /**

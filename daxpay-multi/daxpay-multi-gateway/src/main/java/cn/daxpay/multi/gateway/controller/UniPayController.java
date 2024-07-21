@@ -1,12 +1,15 @@
 package cn.daxpay.multi.gateway.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.multi.core.param.trade.refund.RefundParam;
+import cn.daxpay.multi.core.result.trade.RefundResult;
 import cn.daxpay.multi.service.common.anno.PaymentVerify;
-import cn.daxpay.multi.core.param.payment.pay.PayParam;
+import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.core.result.DaxResult;
-import cn.daxpay.multi.core.result.PayResult;
+import cn.daxpay.multi.core.result.trade.PayResult;
 import cn.daxpay.multi.core.util.DaxRes;
 import cn.daxpay.multi.service.service.payment.pay.PayService;
+import cn.daxpay.multi.service.service.payment.refund.RefundService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @IgnoreAuth
 @Tag(name = "统一支付接口")
-@PaymentVerify
+@PaymentVerify // 所有接口都属于支付接口
 @RestController
 @RequestMapping("/unipay")
 @RequiredArgsConstructor
 public class UniPayController {
     private final PayService payService;
+    private final RefundService refundService;
 
     @Operation(summary = "支付接口")
     @PostMapping("/pay")
@@ -37,8 +41,8 @@ public class UniPayController {
 
     @Operation(summary = "退款接口")
     @PostMapping("/refund")
-    public DaxResult<Void> refund(){
-        return DaxRes.ok();
+    public DaxResult<RefundResult> refund(@RequestBody RefundParam payParam){
+        return DaxRes.ok(refundService.refund(payParam));
     }
 
     @Operation(summary = "关闭接口")

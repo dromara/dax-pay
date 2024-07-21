@@ -1,4 +1,4 @@
-package cn.daxpay.multi.core.param.payment.pay;
+package cn.daxpay.multi.core.param.trade.pay;
 
 import cn.daxpay.multi.core.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;

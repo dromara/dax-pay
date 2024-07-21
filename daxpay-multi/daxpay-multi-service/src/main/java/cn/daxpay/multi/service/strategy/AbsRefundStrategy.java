@@ -17,8 +17,10 @@ public abstract class AbsRefundStrategy implements PaymentStrategy{
     /** 退款订单 */
     private RefundOrder refundOrder = null;
 
+    /**  */
+
     /**
-     * 退款前对处理, 主要进行配置的加载和检查
+     * 退款前对处理, 主要进行各种检查
      */
     public void doBeforeRefundHandler() {
     }

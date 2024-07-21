@@ -21,7 +21,7 @@ public class RefundLocal {
     private String outRefundNo;
 
     /**
-     * 退款状态, 默认为成功, 通常含有异步支付时, 才会出现别的状态
+     * 退款状态, 默认为成功, 如果有别的状态需要手工处理
      */
     private RefundStatusEnum status = RefundStatusEnum.SUCCESS;
 

@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class PaySignUtil {
 
-    private String FIELD_SIGN  = "sign";
+    private final String FIELD_SIGN  = "sign";
 
 
     /**

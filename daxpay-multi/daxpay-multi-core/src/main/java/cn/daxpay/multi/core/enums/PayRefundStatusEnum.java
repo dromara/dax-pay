@@ -15,12 +15,13 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 public enum PayRefundStatusEnum {
-    NO_REFUND("no_refund"),
-    REFUNDING("refunding"),
-    PARTIAL_REFUND("partial_refund"),
-    REFUNDED("refunded"),
+    NO_REFUND("no_refund","未退款"),
+    REFUNDING("refunding","退款中"),
+    PARTIAL_REFUND("partial_refund","部分退款"),
+    REFUNDED("refunded","全部退款"),
     ;
     private final String code;
+    private final String name;
 
     /**
      * 根据编码获取枚举

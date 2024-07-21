@@ -78,7 +78,7 @@ public class SystemParamService {
      * 根据键名获取键值
      */
     public String findByKey(String key) {
-        val param = systemParamManager.findByKey(key).orElseThrow(DataNotExistException::new);
+        var param = systemParamManager.findByKey(key).orElseThrow(DataNotExistException::new);
         if (Objects.equals(param.getEnable(), false)) {
             throw new BizException("该参数已停用");
         }

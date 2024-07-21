@@ -115,12 +115,21 @@ public class AliPayConfigService {
     }
 
     /**
-     * 获取异步通知地址
+     * 获取支付异步通知地址
      */
-    public String getNotifyUrl() {
+    public String getPayNotifyUrl() {
         var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/{}/pay/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+    }
+
+    /**
+     * 获取退款异步通知地址
+     */
+    public String getRefundNotifyUrl() {
+        var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        var platformInfo = platformConfigService.getConfig();
+        return StrUtil.format("{}/unipay/callback/{}/{}/refund/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 
     /**

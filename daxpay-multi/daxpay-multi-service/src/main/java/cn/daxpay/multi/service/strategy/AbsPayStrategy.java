@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.strategy;
 
-import cn.daxpay.multi.core.param.payment.pay.PayParam;
+import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import lombok.Getter;
 import lombok.Setter;

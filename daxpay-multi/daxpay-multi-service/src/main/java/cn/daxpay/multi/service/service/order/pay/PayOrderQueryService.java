@@ -5,7 +5,7 @@ import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.daxpay.multi.core.exception.TradeNotExistException;
-import cn.daxpay.multi.core.param.payment.pay.QueryPayParam;
+import cn.daxpay.multi.core.param.trade.pay.QueryPayParam;
 import cn.daxpay.multi.service.convert.order.pay.PayOrderConvert;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;

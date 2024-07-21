@@ -5,12 +5,14 @@ import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.param.pay.AlipayParam;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
+import cn.daxpay.multi.core.exception.AmountExceedLimitException;
 import cn.daxpay.multi.core.exception.TradeFailException;
-import cn.daxpay.multi.core.param.payment.pay.PayParam;
+import cn.daxpay.multi.core.param.trade.pay.PayParam;
+import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.common.context.PayLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
-import cn.daxpay.multi.core.util.PayUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alipay.api.AlipayApiException;
@@ -25,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -46,23 +49,10 @@ public class AlipayService {
     public void validation(PayParam payParam) {
         AliPayConfig alipayConfig = aliPayConfigService.getAliPayConfig();
 
-//        if (CollUtil.isEmpty(alipayConfig.getPayWays())){
-//            throw new ConfigErrorException("支付宝未配置可用的支付方式");
-//        }
-        // 发起的支付类型是否在支持的范围内
-//        MethodEnum payMethodEnum = Optional.ofNullable(AliPayWay.findByCode(payParam.getMethod()))
-//                .orElseThrow(() -> new MethodNotExistException("非法的支付宝支付类型"));
-//        if (!alipayConfig.getPayWays().contains(payMethodEnum.getCode())) {
-//            throw new MethodNotEnableException("该支付宝支付方式不可用");
-//        }
         // 验证订单金额是否超限
-//        if(payParam.getAmount() > alipayConfig.getLimitAmount()){
-//            throw new AmountExceedLimitException("支付宝支付金额超过限额");
-//        }
-        // 支付参数开启分账, 配置未开启分账
-//        if(Objects.equals(payParam.getAllocation(),true) && !Objects.equals(alipayConfig.getAllocation(),true)){
-//            throw new ConfigErrorException("未开启分账配置");
-//        }
+        if(PayUtil.isGreaterThan(payParam.getAmount(), alipayConfig.getLimitAmount())){
+            throw new AmountExceedLimitException("支付宝支付金额超过限额");
+        }
     }
 
     /**
@@ -115,7 +105,7 @@ public class AlipayService {
         model.setOutTradeNo(payOrder.getOrderNo());
         model.setTotalAmount(amount);
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
+        model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setProductCode(AliPayCode.QUICK_WAP_PAY);
         // 是否分账
         if (payOrder.getAllocation()){
@@ -127,7 +117,7 @@ public class AlipayService {
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         request.setBizModel(model);
         // 异步回调必须到当前支付网关系统中, 然后系统负责转发
-        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getPayNotifyUrl());
         // 同步回调地址必须到当前支付网关系统中, 然后系统负责跳转
         request.setReturnUrl(aliPayConfigService.getReturnUrl());
 
@@ -155,7 +145,7 @@ public class AlipayService {
         model.setProductCode(AliPayCode.QUICK_MSECURITY_PAY);
         model.setOutTradeNo(payOrder.getOrderNo());
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
+        model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(amount);
         // 是否分账
         if (payOrder.getAllocation()){
@@ -165,7 +155,7 @@ public class AlipayService {
         }
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         request.setBizModel(model);
-        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getPayNotifyUrl());
         try {
             // 异步回调必须到当前系统中
             AlipayTradeAppPayResponse response = alipayClient.execute(request);
@@ -189,7 +179,7 @@ public class AlipayService {
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
+        model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(amount);
         // 目前仅支持FAST_INSTANT_TRADE_PAY
         model.setProductCode(AliPayCode.FAST_INSTANT_TRADE_PAY);
@@ -204,7 +194,7 @@ public class AlipayService {
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         request.setBizModel(model);
         // 异步回调必须到当前系统中
-        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getPayNotifyUrl());
         // 同步回调
         request.setReturnUrl(aliPayConfigService.getReturnUrl());
         try {
@@ -235,7 +225,7 @@ public class AlipayService {
         model.setTotalAmount(amount);
         model.setSubject(payOrder.getTitle());
         model.setOpBuyerOpenId(aliPayParam.getOpenId());
-        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
+        model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         // 是否分账
         if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
@@ -273,10 +263,10 @@ public class AlipayService {
             model.setExtendParams(extendParams);
         }
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
+        model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
         request.setBizModel(model);
-        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getPayNotifyUrl());
         try {
             AlipayTradePrecreateResponse response = alipayClient.execute(request);
             this.verifyErrorMsg(response);
@@ -309,11 +299,11 @@ public class AlipayService {
             model.setExtendParams(extendParams);
         }
         // 过期时间
-        model.setTimeExpire(PayUtil.getAliTimeExpire(payOrder.getExpiredTime()));
+        model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(amount);
         AlipayTradePayRequest request = new AlipayTradePayRequest();
         request.setBizModel(model);
-        request.setNotifyUrl(aliPayConfigService.getNotifyUrl());
+        request.setNotifyUrl(aliPayConfigService.getPayNotifyUrl());
         try {
             AlipayTradePayResponse response = alipayClient.execute(request);
             // 支付成功处理 金额2000以下免密支付, 记录支付完成相关信息
@@ -346,5 +336,12 @@ public class AlipayService {
             log.error("支付失败 {}", errorMsg);
             throw new TradeFailException(errorMsg);
         }
+    }
+
+    /**
+     * 获取支付宝的过期时间 yyyy-MM-dd HH:mm:ss
+     */
+    public String getAliTimeExpire(LocalDateTime dateTime) {
+        return LocalDateTimeUtil.format(dateTime, DatePattern.NORM_DATETIME_PATTERN);
     }
 }

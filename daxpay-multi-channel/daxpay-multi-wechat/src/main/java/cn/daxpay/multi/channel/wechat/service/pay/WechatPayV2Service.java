@@ -49,7 +49,6 @@ public class WechatPayV2Service {
         String payBody = null;
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
-
         // wap支付
         if (payMethodEnum == PayMethodEnum.WAP) {
             payBody = this.wapPay(payOrder, config);
@@ -195,9 +194,9 @@ public class WechatPayV2Service {
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setOutTradeNo(payOrder.getOrderNo());
         request.setTimeExpire(this.getExpiredTime(payOrder.getExpiredTime()));
-        request.setNotifyUrl(wechatPayConfigService.getNotifyUrl());
+        request.setNotifyUrl(wechatPayConfigService.getPayNotifyUrl());
         request.setTotalFee(PayUtil.convertCentAmount(payOrder.getAmount()));
-        request.setNotifyUrl(wechatPayConfigService.getNotifyUrl());
+        request.setNotifyUrl(wechatPayConfigService.getPayNotifyUrl());
         request.setSpbillCreateIp(payOrder.getClientIp());
         return request;
     }

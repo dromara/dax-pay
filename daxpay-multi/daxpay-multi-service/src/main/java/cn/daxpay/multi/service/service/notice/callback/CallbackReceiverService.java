@@ -16,10 +16,16 @@ import org.springframework.stereotype.Service;
 public class CallbackReceiverService {
 
     /**
-     * 信息处理
+     * 支付信息回调处理
      */
-    public String handle(HttpServletRequest request, String channel){
+    public String payHandle(HttpServletRequest request, String channel){
+        return "";
+    }
 
+    /**
+     * 退款信息回调处理
+     */
+    public String refundHandle(HttpServletRequest request, String channel){
         return "";
     }
 }

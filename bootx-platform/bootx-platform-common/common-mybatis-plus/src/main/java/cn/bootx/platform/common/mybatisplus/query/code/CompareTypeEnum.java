@@ -56,9 +56,9 @@ public enum CompareTypeEnum {
         if (StrUtil.isEmpty(code)) {
             return null;
         }
-        for (CompareTypeEnum val : values()) {
-            if (val.getCode().equals(code)) {
-                return val;
+        for (CompareTypeEnum type : values()) {
+            if (type.getCode().equals(code)) {
+                return type;
             }
         }
         return null;

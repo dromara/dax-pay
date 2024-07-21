@@ -59,7 +59,7 @@ public class AnnotationQueryGenerator {
             if (!StrUtil.isBlankIfStr(paramValue)) {
                 PropertyDescriptor clazzDescriptor = entityClassPropMap.get(paramProp.getName());
                 // 获取查询注解 clazz 类上 < clazz 字段 < queryParams 类上 < clazz 字段
-                val annotation = getQueryParamAnnotation(paramProp, queryParams.getClass(), clazzDescriptor, clazz);
+                var annotation = getQueryParamAnnotation(paramProp, queryParams.getClass(), clazzDescriptor, clazz);
                 // 是否忽略本字段
                 if (annotation.map(QueryParam::ignore).orElse(false)) {
                     continue;
@@ -100,7 +100,7 @@ public class AnnotationQueryGenerator {
             Object paramValue = BeanUtil.getProperty(queryParams, paramProp.getName());
             if (!StrUtil.isBlankIfStr(paramValue)) {
                 // 获取查询注解 clazz 类上 < clazz 字段 < queryParams 类上 < clazz 字段
-                val annotation = getQueryParamAnnotation(paramProp, queryParams.getClass(), null, null);
+                var annotation = getQueryParamAnnotation(paramProp, queryParams.getClass(), null, null);
                 // 是否忽略本字段
                 if (annotation.map(QueryParam::ignore).orElse(false)) {
                     continue;
@@ -214,7 +214,7 @@ public class AnnotationQueryGenerator {
     private String getDatabaseFieldName(PropertyDescriptor paramDescriptor, Class<?> paramClass,
             PropertyDescriptor entityDescriptor, Class<?> entityClass, QueryParam.NamingCaseEnum namingCase) {
         // 读取注解， 判断有没有自定义字段名, 有自定义字段名直接返回
-        val queryParam = getQueryParamAnnotation(paramDescriptor, paramClass, entityDescriptor, entityClass);
+        var queryParam = getQueryParamAnnotation(paramDescriptor, paramClass, entityDescriptor, entityClass);
         if (queryParam.map(QueryParam::fieldName).isPresent()) {
             String fieldName = queryParam.map(QueryParam::fieldName).get();
             if (StrUtil.isNotBlank(fieldName)){

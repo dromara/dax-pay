@@ -1,32 +1,29 @@
-package cn.daxpay.multi.service.entity.record.flow;
+package cn.daxpay.multi.service.result.record.flow;
 
-import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
-import cn.daxpay.multi.service.convert.record.flow.TradeFlowRecordConvert;
-import cn.daxpay.multi.service.result.record.flow.TradeFlowRecordResult;
+import cn.daxpay.multi.service.common.result.MchResult;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 /**
- * 交易流水记录
+ * 资金流水记录
  * @author xxm
- * @since 2024/6/3
+ * @since 2024/5/17
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class TradeFlowRecord extends MchEntity implements ToResult<TradeFlowRecordResult> {
+@Schema(title = "资金流水记录")
+public class TradeFlowRecordResult extends MchResult {
 
     /** 订单标题 */
     private String title;
 
     /** 金额 */
-    private BigDecimal amount;
+    private Integer amount;
 
     /**
      * 业务类型
@@ -48,12 +45,4 @@ public class TradeFlowRecord extends MchEntity implements ToResult<TradeFlowReco
 
     /** 通道交易号 */
     private String outTradeNo;
-
-    /**
-     * 转换
-     */
-    @Override
-    public TradeFlowRecordResult toResult() {
-        return TradeFlowRecordConvert.CONVERT.convert(this);
-    }
 }

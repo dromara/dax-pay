@@ -31,26 +31,50 @@ public class CallbackReceiverController {
     private final PaymentAssistService paymentAssistService;
 
     @SneakyThrows
-    @Operation(summary = "支付宝回调")
-    @PostMapping("/alipay")
+    @Operation(summary = "支付宝支付回调")
+    @PostMapping("/pay/alipay")
     public String aliPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
         paymentAssistService.initMchAndApp(mchNo, appId);
-        return callbackReceiverService.handle(request, ChannelEnum.ALI.getCode());
+        return callbackReceiverService.payHandle(request, ChannelEnum.ALI.getCode());
     }
 
     @SneakyThrows
     @Operation(summary = "微信支付回调")
-    @PostMapping("/wechat")
+    @PostMapping("/pay/wechat")
     public String wechatPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
         paymentAssistService.initMchAndApp(mchNo, appId);
-        return callbackReceiverService.handle(request, ChannelEnum.WECHAT.getCode());
+        return callbackReceiverService.payHandle(request, ChannelEnum.WECHAT.getCode());
     }
 
     @SneakyThrows
     @Operation(summary = "云闪付支付回调")
-    @PostMapping("/union")
+    @PostMapping("/pay/union")
     public String unionPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
         paymentAssistService.initMchAndApp(mchNo, appId);
-        return callbackReceiverService.handle(request, ChannelEnum.UNION_PAY.getCode());
+        return callbackReceiverService.payHandle(request, ChannelEnum.UNION_PAY.getCode());
+    }
+
+    @SneakyThrows
+    @Operation(summary = "支付宝退款回调")
+    @PostMapping("/refund/alipay")
+    public String aliRefundNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(mchNo, appId);
+        return callbackReceiverService.refundHandle(request, ChannelEnum.ALI.getCode());
+    }
+
+    @SneakyThrows
+    @Operation(summary = "微信退款回调")
+    @PostMapping("/refund/wechat")
+    public String wechatRefundNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(mchNo, appId);
+        return callbackReceiverService.refundHandle(request, ChannelEnum.WECHAT.getCode());
+    }
+
+    @SneakyThrows
+    @Operation(summary = "云闪付退款回调")
+    @PostMapping("/refund/union")
+    public String unionRefundNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(mchNo, appId);
+        return callbackReceiverService.refundHandle(request, ChannelEnum.UNION_PAY.getCode());
     }
 }

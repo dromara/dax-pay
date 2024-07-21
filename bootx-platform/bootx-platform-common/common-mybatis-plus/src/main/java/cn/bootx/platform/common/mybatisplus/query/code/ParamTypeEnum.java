@@ -45,9 +45,9 @@ public enum ParamTypeEnum {
         if (StrUtil.isEmpty(code)) {
             return null;
         }
-        for (ParamTypeEnum val : values()) {
-            if (val.getCode().equals(code)) {
-                return val;
+        for (ParamTypeEnum type : values()) {
+            if (type.getCode().equals(code)) {
+                return type;
             }
         }
         return null;

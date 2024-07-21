@@ -190,7 +190,7 @@ public class WechatPayV3Service {
             settleInfo.setProfitSharing(true);
             request.setSettleInfo(settleInfo);
         }
-        request.setNotifyUrl(wechatPayConfigService.getNotifyUrl());
+        request.setNotifyUrl(wechatPayConfigService.getPayNotifyUrl());
         request.setAmount(amount);
         return request;
     }

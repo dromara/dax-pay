@@ -11,14 +11,12 @@ import cn.bootx.platform.starter.file.entity.UploadFileInfo;
 import cn.bootx.platform.starter.file.param.UploadFileParam;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
 import org.dromara.x.file.storage.core.UploadPretreatment;
@@ -32,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 文件上传管理类
@@ -99,7 +98,7 @@ public class FileUploadService {
             return;
         }
         byte[] bytes = fileStorageService.download(info).bytes();
-        val is = new ByteArrayInputStream(bytes);
+        var is = new ByteArrayInputStream(bytes);
         // 获取响应输出流
         ServletOutputStream os = response.getOutputStream();
         IoUtil.copy(is, os);
@@ -119,7 +118,7 @@ public class FileUploadService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         String fileName = fileInfo.getOriginalFilename();
-        headers.setContentDispositionFormData("attachment", URLEncoder.encode(fileName, CharsetUtil.UTF_8));
+        headers.setContentDispositionFormData("attachment", URLEncoder.encode(fileName, StandardCharsets.UTF_8));
         return new ResponseEntity<>(bytes,headers,HttpStatus.OK);
     }
 

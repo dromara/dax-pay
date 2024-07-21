@@ -1,6 +1,6 @@
 package cn.daxpay.multi.core.enums;
 
-import cn.daxpay.multi.core.exception.StatusNotExistException;
+import cn.bootx.platform.core.exception.DataNotExistException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,14 +15,17 @@ import java.util.Objects;
 @Getter
 @RequiredArgsConstructor
 public enum PayStatusEnum {
-    PROGRESS("progress"),
-    SUCCESS("success"),
-    CLOSE("close"),
-    CANCEL("cancel"),
-    FAIL("fail");
+    PROGRESS("progress","支付中"),
+    SUCCESS("success","成功"),
+    CLOSE("close","支付关闭"),
+    CANCEL("cancel","支付撤销"),
+    FAIL("fail","失败");
 
     /** 编码 */
     private final String code;
+
+    /** 名称 */
+    private final String name;
 
     /**
      * 根据编码获取枚举
@@ -31,7 +34,7 @@ public enum PayStatusEnum {
         return Arrays.stream(values())
                 .filter(payStatusEnum -> Objects.equals(payStatusEnum.getCode(), code))
                 .findFirst()
-                .orElseThrow(() -> new StatusNotExistException("该枚举不存在"));
+                .orElseThrow(() -> new DataNotExistException("该支付状态不存在"));
     }
 
 }
