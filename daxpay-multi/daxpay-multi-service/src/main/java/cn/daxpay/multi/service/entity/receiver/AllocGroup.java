@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.entity.receiver;
 
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class AllocGroup extends MchEntity {
+public class AllocGroup extends MchBaseEntity {
 
     /** 分账组编码 */
     private String groupNo;

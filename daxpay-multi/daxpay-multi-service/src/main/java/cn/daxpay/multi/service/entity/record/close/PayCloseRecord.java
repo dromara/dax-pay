@@ -3,7 +3,7 @@ package cn.daxpay.multi.service.entity.record.close;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.CloseTypeEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchRecordEntity;
 import cn.daxpay.multi.service.convert.record.PayCloseRecordConvert;
 import cn.daxpay.multi.service.result.record.close.PayCloseRecordResult;
 import lombok.Data;
@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class PayCloseRecord extends MchEntity implements ToResult<PayCloseRecordResult> {
+public class PayCloseRecord extends MchRecordEntity implements ToResult<PayCloseRecordResult> {
 
     /** 订单号 */
     private String orderNo;

@@ -12,6 +12,8 @@ import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 /**
  * 转账测试
  * @author xxm
@@ -41,7 +43,7 @@ public class TransferOrderTest {
         param.setBizTransferNo("T"+System.currentTimeMillis());
         param.setTitle("测试转账");
         param.setReason("我要转个账");
-        param.setAmount(500);
+        param.setAmount(BigDecimal.valueOf(500));
         param.setChannel(PayChannelEnum.ALI.getCode());
         param.setPayeeType(TransferPayeeTypeEnum.ALI_OPEN_ID.getCode());
         param.setClientIp("127.0.0.1");

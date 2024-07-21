@@ -5,7 +5,7 @@ import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.convert.order.pay.PayOrderConvert;
 import cn.daxpay.multi.service.result.order.pay.PayOrderResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -28,7 +28,7 @@ import java.util.Objects;
 @Data
 @Accessors(chain = true)
 @TableName("pay_order")
-public class PayOrder extends MchEntity implements ToResult<PayOrderResult> {
+public class PayOrder extends MchBaseEntity implements ToResult<PayOrderResult> {
 
     /** 商户订单号 */
     private String bizOrderNo;

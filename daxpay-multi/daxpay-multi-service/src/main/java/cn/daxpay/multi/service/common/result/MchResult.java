@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 @Schema(title = "商户应用基础返回结果")
 public class MchResult {
 
+    @Schema(description = "主键")
+    private Long id;
+
     @Schema(description = "商户号")
     private String mchNo;
 

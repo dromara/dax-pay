@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransferOrderController {
     private final TransferOrderQueryService queryService;
 
-
     @RequestPath("分页查询")
     @Operation(summary = "分页查询")
     @GetMapping("/page")

@@ -3,7 +3,7 @@ package cn.daxpay.multi.service.entity.order.allocation;
 import cn.daxpay.multi.core.enums.AllocOrderResultEnum;
 import cn.daxpay.multi.core.enums.AllocOrderStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_alloc_order")
-public class AllocOrder extends MchEntity {
+public class AllocOrder extends MchBaseEntity {
 
     /**
      * 分账单号

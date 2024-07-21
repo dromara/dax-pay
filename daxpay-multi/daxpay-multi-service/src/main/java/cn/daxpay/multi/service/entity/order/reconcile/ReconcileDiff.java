@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.entity.order.reconcile;
 
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_reconcile_diff")
-public class ReconcileDiff extends MchEntity {
+public class ReconcileDiff extends MchBaseEntity {
 
     /** 关联对账订单ID */
     private Long reconcileId;

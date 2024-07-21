@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "支付订单控制器")
 @RestController
 @RequestMapping("/order/pay")
-@RequestGroup(moduleCode = "TradeOrder", moduleName = "交易订单记录", groupCode = "PayOrder", groupName = "支付订单")
+@RequestGroup(moduleCode = "TradeOrder", moduleName = "交易订单", groupCode = "PayOrder", groupName = "支付订单")
 @RequiredArgsConstructor
 public class PayOrderController {
     private final PayOrderQueryService queryService;

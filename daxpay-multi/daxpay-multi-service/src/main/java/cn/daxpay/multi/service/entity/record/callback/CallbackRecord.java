@@ -1,8 +1,9 @@
 package cn.daxpay.multi.service.entity.record.callback;
 
+import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchRecordEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,7 +16,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class CallbackRecord extends MchEntity {
+public class CallbackRecord extends MchRecordEntity {
 
     /** 本地交易号 */
     private String tradeNo;

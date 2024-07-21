@@ -7,7 +7,6 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.param.order.transfer.TransferOrderQuery;
-import cn.daxpay.multi.service.result.order.transfer.TransferOrderResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +54,7 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
      */
     public Integer getTalAmount(TransferOrderQuery query){
         QueryWrapper<TransferOrderQuery> generator = QueryGenerator.generator(query);
-        generator.eq(MpUtil.getColumnName(TransferOrderResult::getStatus), TransferStatusEnum.SUCCESS.getCode());
+        generator.eq(MpUtil.getColumnName(TransferOrder::getStatus), TransferStatusEnum.SUCCESS.getCode());
         return baseMapper.getTalAmount(generator);
     }
 }

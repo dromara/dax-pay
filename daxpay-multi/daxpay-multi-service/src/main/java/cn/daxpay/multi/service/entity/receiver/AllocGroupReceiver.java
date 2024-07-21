@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.entity.receiver;
 
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class AllocGroupReceiver extends MchEntity {
+public class AllocGroupReceiver extends MchBaseEntity {
 
     /** 分账组ID */
     private Long groupId;

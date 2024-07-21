@@ -9,6 +9,7 @@ import cn.daxpay.multi.service.common.context.PayLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
+import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.strategy.AbsPayStrategy;
 import cn.daxpay.multi.service.util.PayStrategyFactory;
 import cn.hutool.extra.spring.SpringUtil;
@@ -35,6 +36,7 @@ public class PayService {
 
     private final LockTemplate lockTemplate;
     private final PayOrderService payOrderService;
+    private final TradeFlowRecordService tradeFlowRecordService;
 
     /**
      * 支付入口
@@ -117,7 +119,7 @@ public class PayService {
         payOrderService.updateById(payOrder);
         // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())){
-//            tradeFlowRecordService.savePay(payOrder);
+            tradeFlowRecordService.savePay(payOrder);
 //            clientNoticeService.registerPayNotice(payOrder);
         }
         return payAssistService.buildResult(payOrder);
@@ -168,7 +170,7 @@ public class PayService {
         payOrderService.updateById(payOrder);
         // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())){
-//            tradeFlowRecordService.savePay(payOrder);
+            tradeFlowRecordService.savePay(payOrder);
 //            clientNoticeService.registerPayNotice(payOrder);
         }
         return payAssistService.buildResult(payOrder);

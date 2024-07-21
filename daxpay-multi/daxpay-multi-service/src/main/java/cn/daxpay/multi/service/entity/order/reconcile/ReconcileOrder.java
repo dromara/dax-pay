@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.entity.order.reconcile;
 
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 @Data
 @Accessors(chain = true)
 @TableName("pay_reconcile_order")
-public class ReconcileOrder extends MchEntity {
+public class ReconcileOrder extends MchBaseEntity {
 
     /** 对账号 */
     private String reconcileNo;

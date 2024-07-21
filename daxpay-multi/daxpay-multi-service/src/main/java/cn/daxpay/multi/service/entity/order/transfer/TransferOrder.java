@@ -3,7 +3,8 @@ package cn.daxpay.multi.service.entity.order.transfer;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
+import cn.daxpay.multi.service.convert.order.transfer.TransferOrderConvert;
 import cn.daxpay.multi.service.result.order.transfer.TransferOrderResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_transfer_order")
-public class TransferOrder extends MchEntity implements ToResult<TransferOrderResult> {
+public class TransferOrder extends MchBaseEntity implements ToResult<TransferOrderResult> {
     /** 商户转账号 */
     private String bizTransferNo;
 
@@ -92,6 +93,6 @@ public class TransferOrder extends MchEntity implements ToResult<TransferOrderRe
 
     @Override
     public TransferOrderResult toResult() {
-        return null;
+        return TransferOrderConvert.CONVERT.toResult(this);
     }
 }

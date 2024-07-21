@@ -42,7 +42,7 @@ public class TradeFlowRecordService {
     }
 
     /**
-     * 支付记账
+     * 支付记录
      */
     public void savePay(PayOrder payOrder){
         TradeFlowRecord tradeFlowRecord = new TradeFlowRecord()

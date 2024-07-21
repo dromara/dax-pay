@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.entity.order.allocation;
 
 import cn.daxpay.multi.core.enums.AllocDetailResultEnum;
 import cn.daxpay.multi.core.enums.AllocReceiverTypeEnum;
-import cn.daxpay.multi.service.common.entity.MchEntity;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_alloc_order_detail")
-public class AllocOrderDetail extends MchEntity {
+public class AllocOrderDetail extends MchBaseEntity {
 
     /** 分账订单ID */
     private Long allocId;
