@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.service.order.refund;
 
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
-import cn.daxpay.multi.service.service.payment.refund.RefundService;
+import cn.daxpay.multi.service.service.trade.refund.RefundService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

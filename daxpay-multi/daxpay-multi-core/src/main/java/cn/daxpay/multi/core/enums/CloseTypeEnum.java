@@ -12,10 +12,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CloseTypeEnum {
 
-    CLOSE("close","关闭"),
-    CANCEL("cancel","撤销"),
+    /** 关闭 */
+    CLOSE("close", PayStatusEnum.CLOSE),
+    /** 撤销 */
+    CANCEL("cancel", PayStatusEnum.CANCEL),
     ;
 
     private final String code;
-    private final String name;
+    private final PayStatusEnum payStatus;
 }

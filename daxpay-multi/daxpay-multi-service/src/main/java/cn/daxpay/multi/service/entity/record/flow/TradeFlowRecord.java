@@ -4,7 +4,7 @@ import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchEntity;
-import cn.daxpay.multi.service.convert.record.flow.TradeFlowRecordConvert;
+import cn.daxpay.multi.service.convert.record.TradeFlowRecordConvert;
 import cn.daxpay.multi.service.result.record.flow.TradeFlowRecordResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.service.payment.pay;
+package cn.daxpay.multi.service.service.trade.pay;
 
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.exception.PayFailureException;

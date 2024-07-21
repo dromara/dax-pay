@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.service.payment.pay;
+package cn.daxpay.multi.service.service.trade.pay;
 
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;

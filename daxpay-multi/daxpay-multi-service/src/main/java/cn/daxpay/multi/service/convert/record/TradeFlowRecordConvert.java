@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.convert.record.flow;
+package cn.daxpay.multi.service.convert.record;
 
 import cn.daxpay.multi.service.entity.record.flow.TradeFlowRecord;
 import cn.daxpay.multi.service.result.record.flow.TradeFlowRecordResult;
