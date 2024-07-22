@@ -7,6 +7,7 @@ import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +21,8 @@ import java.util.Map;
 @Accessors(chain = true)
 public class CallbackLocal {
 
-    /** 回调参数内容 */
-    private Map<String, String> callbackParam = new HashMap<>();
+    /** 回调数据内容 */
+    private Map<String, ?> callbackData = new HashMap<>();
 
     /** 交易号 */
     private String tradeNo;
@@ -44,16 +45,20 @@ public class CallbackLocal {
     private String outStatus;
 
     /** 金额(元) */
-    private String amount;
+    private BigDecimal amount;
 
     /** 完成时间(支付/退款) */
     private LocalDateTime finishTime;
 
-    /** 修复号 */
-    private String repairNo;
-
     /** 交易类型 */
     private TradeTypeEnum callbackType;
+
+
+    /** 回调信息错误码 */
+    private String errorCode;
+
+    /** 回调信息错误信息 */
+    private String errorMsg;
 
     /**
      * 回调处理状态

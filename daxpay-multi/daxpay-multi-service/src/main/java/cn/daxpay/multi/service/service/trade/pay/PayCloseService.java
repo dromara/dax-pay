@@ -11,7 +11,7 @@ import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.close.PayCloseRecordService;
 import cn.daxpay.multi.service.strategy.AbsPayCloseStrategy;
-import cn.daxpay.multi.service.util.PayStrategyFactory;
+import cn.daxpay.multi.service.util.PaymentStrategyFactory;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -65,7 +65,7 @@ public class PayCloseService {
             throw new TradeStatusErrorException("订单不是支付中, 无法进行关闭订单");
         }
         try {
-            AbsPayCloseStrategy strategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPayCloseStrategy.class);
+            AbsPayCloseStrategy strategy = PaymentStrategyFactory.create(payOrder.getChannel(), AbsPayCloseStrategy.class);
             // 初始化参数
             strategy.init(payOrder, useCancel);
             // 关闭前准备

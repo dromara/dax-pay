@@ -21,9 +21,6 @@ public class PaymentContext {
     /** 请求终端信息 */
     private final ClientLocal clientInfo = new ClientLocal();
 
-    /** 错误信息 */
-    private final ErrorInfoLocal errorInfo = new ErrorInfoLocal();
-
     /** 支付相关信息 */
     private final PayLocal payInfo = new PayLocal();
 

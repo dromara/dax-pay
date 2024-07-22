@@ -1,12 +1,12 @@
 package cn.daxpay.multi.channel.wechat.strategy;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
+import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.service.transfer.WechatPayTransferV3Service;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
-import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.param.order.transfer.TransferParam;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
 import cn.hutool.core.util.StrUtil;
@@ -58,11 +58,11 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
         String name = transferParam.getPayeeName();
         BigDecimal amount = transferParam.getAmount();
         if (StrUtil.isBlank(name)){
-            if (PayUtil.isGreaterAndEqualThan(amount, BigDecimal.valueOf(2000))){
+            if (BigDecimalUtil.isGreaterAndEqualThan(amount, BigDecimal.valueOf(2000))){
                 throw new ValidationFailedException("微信转账金额 >= 2,000元时，该笔明细必须填写收款用户姓名");
             }
         } else {
-            if (PayUtil.isLessThan(amount, BigDecimal.valueOf(0.3))){
+            if (BigDecimalUtil.isLessThan(amount, BigDecimal.valueOf(0.3))){
                 throw new ValidationFailedException("微信转账金额<0.3元时，不允许填写收款用户姓名");
             }
         }

@@ -3,7 +3,7 @@ package cn.daxpay.multi.channel.alipay.strategy;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
-import cn.daxpay.multi.channel.alipay.service.transfer.AliPayTransferService;
+import cn.daxpay.multi.channel.alipay.service.transfer.AliTransferService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.param.order.transfer.TransferParam;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
@@ -30,7 +30,7 @@ public class AliTransferStrategy extends AbsTransferStrategy {
 
     private final AliPayConfigService payConfigService;
 
-    private final AliPayTransferService aliPayTransferService;
+    private final AliTransferService aliTransferService;
 
     private AliPayConfig config;
 
@@ -64,6 +64,6 @@ public class AliTransferStrategy extends AbsTransferStrategy {
      */
     @Override
     public void doTransferHandler() {
-        aliPayTransferService.transfer(this.getTransferOrder(), this.config);
+        aliTransferService.transfer(this.getTransferOrder(), this.config);
     }
 }

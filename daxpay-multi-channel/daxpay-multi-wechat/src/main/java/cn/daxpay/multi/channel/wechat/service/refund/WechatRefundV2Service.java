@@ -5,7 +5,6 @@ import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
-import cn.daxpay.multi.service.common.context.ErrorInfoLocal;
 import cn.daxpay.multi.service.common.context.RefundLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
@@ -36,8 +35,6 @@ public class WechatRefundV2Service {
     public void refund(RefundOrder refundOrder, WechatPayConfig config) {
         RefundLocal refundInfo = PaymentContextLocal.get()
                 .getRefundInfo();
-        ErrorInfoLocal errorInfo = PaymentContextLocal.get()
-                .getErrorInfo();
 
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         WxPayRefundRequest request = new WxPayRefundRequest()
@@ -54,7 +51,6 @@ public class WechatRefundV2Service {
                     .setOutRefundNo(result.getRefundId());
         } catch (WxPayException e) {
             log.error("微信退款V2失败", e);
-            errorInfo.setErrorMsg(e.getErrCodeDes());
             throw new TradeFailException("微信退款V2失败: " + e.getMessage());
         }
     }

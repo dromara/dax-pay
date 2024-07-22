@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.service.trade.refund;
 
 import cn.bootx.platform.core.exception.DataNotExistException;
+import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.bootx.platform.core.util.ValidationUtil;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
@@ -9,7 +10,6 @@ import cn.daxpay.multi.core.exception.TradeProcessingException;
 import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.result.trade.RefundResult;
-import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.common.context.RefundLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
@@ -19,7 +19,7 @@ import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.strategy.AbsRefundStrategy;
-import cn.daxpay.multi.service.util.PayStrategyFactory;
+import cn.daxpay.multi.service.util.PaymentStrategyFactory;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -94,7 +94,7 @@ public class RefundService {
         // 检查退款参数
         refundAssistService.checkAndParam(param, payOrder);
         // 通过退款参数获取退款策略
-        AbsRefundStrategy refundStrategy = PayStrategyFactory.create(payOrder.getChannel(), AbsRefundStrategy.class);
+        AbsRefundStrategy refundStrategy = PaymentStrategyFactory.create(payOrder.getChannel(), AbsRefundStrategy.class);
         // 进行退款前预处理
         refundStrategy.doBeforeRefundHandler();
         // 退款操作的预处理, 对支付订单进行预扣款, 返回创建成功的退款订单, 成功后才可以进行下一阶段的操作
@@ -105,10 +105,8 @@ public class RefundService {
             refundStrategy.doRefundHandler();
         } catch (Exception e) {
             log.error("退款出现错误", e);
-            // 记录处理失败状态
-            PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             // 更新退款失败的记录
-            refundAssistService.updateOrderByError(refundOrder);
+            refundAssistService.updateOrderByError(refundOrder,e);
             return refundAssistService.buildResult(refundOrder);
         }
         SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder);
@@ -144,7 +142,7 @@ public class RefundService {
         // 获取支付订单
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(refundOrder.getOrderNo(), refundOrder.getBizOrderNo())
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
-        AbsRefundStrategy refundStrategy = PayStrategyFactory.create(refundOrder.getChannel(), AbsRefundStrategy.class);
+        AbsRefundStrategy refundStrategy = PaymentStrategyFactory.create(refundOrder.getChannel(), AbsRefundStrategy.class);
         // 设置退款订单对象
         refundStrategy.setRefundOrder(refundOrder);
         // 退款前准备操作
@@ -160,7 +158,7 @@ public class RefundService {
             // 记录处理失败状态
             PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             // 记录退款失败的记录
-            refundAssistService.updateOrderByError(refundOrder);
+            refundAssistService.updateOrderByError(refundOrder, e);
             // 返回错误响应对象
             return refundAssistService.buildResult(refundOrder);
         }
@@ -196,7 +194,7 @@ public class RefundService {
         }
         // 退款状态为成功
         else {
-            if (PayUtil.isEqual(refundableBalance,BigDecimal.ZERO)) {
+            if (BigDecimalUtil.isEqual(refundableBalance,BigDecimal.ZERO)) {
                 payOrder.setRefundStatus(PayRefundStatusEnum.REFUNDED.getCode());
             } else {
                 payOrder.setRefundStatus(PayRefundStatusEnum.PARTIAL_REFUND.getCode());

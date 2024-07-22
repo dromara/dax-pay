@@ -11,7 +11,7 @@ import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.strategy.AbsPayStrategy;
-import cn.daxpay.multi.service.util.PayStrategyFactory;
+import cn.daxpay.multi.service.util.PaymentStrategyFactory;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -75,7 +75,7 @@ public class PayService {
      */
     public PayResult firstPay(PayParam payParam){
         // 获取支付策略类
-        AbsPayStrategy payStrategy = PayStrategyFactory.create(payParam.getChannel(), AbsPayStrategy.class);
+        AbsPayStrategy payStrategy = PaymentStrategyFactory.create(payParam.getChannel(), AbsPayStrategy.class);
         // 初始化支付的参数
         payStrategy.setPayParam(payParam);
         // 执行支付前处理动作, 进行各种校验, 校验通过才会进行下面的操作
@@ -130,7 +130,7 @@ public class PayService {
      */
     public PayResult repeatPay(PayParam payParam, PayOrder payOrder){
         // 获取支付策略类
-        AbsPayStrategy payStrategy = PayStrategyFactory.create(payParam.getChannel(),AbsPayStrategy.class);
+        AbsPayStrategy payStrategy = PaymentStrategyFactory.create(payParam.getChannel(),AbsPayStrategy.class);
         // 初始化支付的参数
         payStrategy.initPayParam(payOrder, payParam);
         // 执行支付前处理动作

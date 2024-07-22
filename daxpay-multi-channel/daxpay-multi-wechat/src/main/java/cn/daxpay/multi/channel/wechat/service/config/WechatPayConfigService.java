@@ -104,7 +104,7 @@ public class WechatPayConfigService {
     }
 
     /**
-     * 获取异步通知地址
+     * 获取支付异步通知地址
      */
     public String getPayNotifyUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
@@ -113,21 +113,12 @@ public class WechatPayConfigService {
     }
 
     /**
-     * 获取异步通知地址
+     * 获取退款异步通知地址
      */
     public String getRefundNotifyUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
         return StrUtil.format("{}/unipay/callback/{}/{}/refund/wechat",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
-    }
-
-    /**
-     * 获取同步通知地址
-     */
-    public String getReturnUrl() {
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/return/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 
     /**

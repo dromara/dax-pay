@@ -11,7 +11,7 @@ import lombok.experimental.UtilityClass;
  * @since 2024/6/7
  */
 @UtilityClass
-public class PayStrategyFactory {
+public class PaymentStrategyFactory {
 
     /**
      * 获取策略

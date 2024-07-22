@@ -1,12 +1,12 @@
 package cn.daxpay.multi.channel.wechat.service.pay;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
+import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.param.pay.WechatPayParam;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
 import cn.daxpay.multi.core.exception.AmountExceedLimitException;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
-import cn.daxpay.multi.core.util.PayUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class WechatPayService {
      */
     public void validation(PayParam payParam, WechatPayParam wechatPayParam, WechatPayConfig weChatPayConfig) {
         // 支付金额是否超限
-        if (PayUtil.isGreaterThan(payParam.getAmount(),weChatPayConfig.getLimitAmount())) {
+        if (BigDecimalUtil.isGreaterThan(payParam.getAmount(),weChatPayConfig.getLimitAmount())) {
             throw new AmountExceedLimitException("微信支付金额超限");
         }
         // 微信JSAPI支付

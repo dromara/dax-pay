@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.service.trade.pay;
 
+import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
@@ -133,7 +134,7 @@ public class PayAssistService {
         MchAppLocal mchAppInfo = PaymentContextLocal.get()
                 .getMchAppInfo();
         // 总额校验
-        if (PayUtil.isGreaterThan(payParam.getAmount(),mchAppInfo.getLimitAmount())) {
+        if (BigDecimalUtil.isGreaterThan(payParam.getAmount(),mchAppInfo.getLimitAmount())) {
             throw new AmountExceedLimitException("支付金额超过限额");
         }
     }

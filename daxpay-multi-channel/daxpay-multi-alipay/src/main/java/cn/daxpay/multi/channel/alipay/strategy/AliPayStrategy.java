@@ -2,7 +2,7 @@ package cn.daxpay.multi.channel.alipay.strategy;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.daxpay.multi.channel.alipay.param.pay.AlipayParam;
-import cn.daxpay.multi.channel.alipay.service.pay.AlipayService;
+import cn.daxpay.multi.channel.alipay.service.pay.AliPayService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.strategy.AbsPayStrategy;
 import cn.hutool.core.util.StrUtil;
@@ -24,7 +24,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliPayStrategy extends AbsPayStrategy {
 
-    private final AlipayService aliPayService;
+    private final AliPayService aliPayService;
 
     private AlipayParam aliPayParam;
 

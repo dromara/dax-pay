@@ -1,6 +1,5 @@
 package cn.daxpay.multi.service.service.trade.transfer;
 
-import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.result.trade.TransferResult;
 import cn.daxpay.multi.service.common.context.TransferLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
@@ -8,7 +7,7 @@ import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.param.order.transfer.TransferParam;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
-import cn.daxpay.multi.service.util.PayStrategyFactory;
+import cn.daxpay.multi.service.util.PaymentStrategyFactory;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +34,7 @@ public class TransferService {
      */
     public TransferResult transfer(TransferParam transferParam){
         // 获取策略
-        AbsTransferStrategy transferStrategy = PayStrategyFactory.create(transferParam.getChannel(), AbsTransferStrategy.class);
+        AbsTransferStrategy transferStrategy = PaymentStrategyFactory.create(transferParam.getChannel(), AbsTransferStrategy.class);
         // 检查转账参数
         transferStrategy.doValidateParam(transferParam);
         // 创建转账订单并设置
@@ -48,11 +47,8 @@ public class TransferService {
             transferStrategy.doTransferHandler();
         } catch (Exception e) {
             log.error("转账出现错误", e);
-            // 记录处理失败状态
-            PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
-            PaymentContextLocal.get().getErrorInfo().setException(e);
             // 更新退款失败的记录
-            transferAssistService.updateOrderByError(order);
+            transferAssistService.updateOrderByError(order, e);
             return transferAssistService.buildResult(order);
         }
         SpringUtil.getBean(this.getClass()).successHandler(order);

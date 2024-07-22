@@ -33,7 +33,7 @@ import static cn.daxpay.multi.channel.alipay.code.AliPayCode.QUERY_ACCOUNT_TYPE;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AliPayTransferService {
+public class AliTransferService {
 
     private final AliPayConfigService aliPayConfigService;
 

@@ -1,15 +1,14 @@
 package cn.daxpay.multi.service.service.trade.refund;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
+import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.result.trade.RefundResult;
-import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
-import cn.daxpay.multi.service.common.context.ErrorInfoLocal;
 import cn.daxpay.multi.service.common.context.RefundLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
@@ -60,7 +59,7 @@ public class RefundAssistService {
         }
 
         // 金额判断
-        if (PayUtil.isGreaterThan(param.getAmount(),payOrder.getRefundableBalance())){
+        if (BigDecimalUtil.isGreaterThan(param.getAmount(),payOrder.getRefundableBalance())){
             throw new ValidationFailedException("退款金额不能大于支付金额");
         }
     }
@@ -112,11 +111,9 @@ public class RefundAssistService {
      * 更新退款错误信息
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void updateOrderByError(RefundOrder refundOrder){
+    public void updateOrderByError(RefundOrder refundOrder, Exception e){
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-        ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
-        refundOrder.setErrorCode(String.valueOf(errorInfo.getErrorCode()));
-        refundOrder.setErrorMsg(errorInfo.getErrorMsg());
+        refundOrder.setErrorMsg(e.getMessage());
         refundOrder.setStatus(refundInfo.getStatus().getCode());
         refundOrderManager.updateById(refundOrder);
     }

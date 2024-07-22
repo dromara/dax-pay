@@ -3,11 +3,10 @@ package cn.daxpay.multi.channel.alipay.service.refund;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
-import cn.daxpay.multi.core.code.DaxPayErrorCode;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
+import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
-import cn.daxpay.multi.service.common.context.ErrorInfoLocal;
 import cn.daxpay.multi.service.common.context.RefundLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
@@ -42,7 +41,6 @@ public class AliPayRefundService {
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
 
         RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-        ErrorInfoLocal errorInfo = PaymentContextLocal.get().getErrorInfo();
         AlipayTradeRefundModel model = new AlipayTradeRefundModel();
         model.setOutTradeNo(refundOrder.getOrderNo());
         model.setOutRequestNo(refundOrder.getRefundNo());
@@ -56,9 +54,8 @@ public class AliPayRefundService {
         try {
             AlipayTradeRefundResponse response = alipayClient.execute(request);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                OperationFailException operationFailException = new OperationFailException(response.getSubMsg());
-                errorInfo.setException(operationFailException);
-                log.error("网关返回退款失败: {}", response.getSubMsg());
+                TradeFailException operationFailException = new TradeFailException("支付宝退款失败: "+response.getSubMsg());
+                log.error("支付宝退款失败: {}", response.getSubMsg());
                 throw operationFailException;
             }
             // 默认为退款中状态
@@ -72,10 +69,8 @@ public class AliPayRefundService {
             }
         }
         catch (AlipayApiException e) {
-            log.error("订单退款失败:", e);
-            errorInfo.setErrorMsg(e.getErrMsg());
-            errorInfo.setErrorCode(DaxPayErrorCode.OPERATION_FAIL);
-            throw new OperationFailException(e.getErrMsg());
+            log.error("支付宝退款失败:", e);
+            throw new OperationFailException("支付宝退款失败: "+e.getErrMsg());
         }
     }
 }

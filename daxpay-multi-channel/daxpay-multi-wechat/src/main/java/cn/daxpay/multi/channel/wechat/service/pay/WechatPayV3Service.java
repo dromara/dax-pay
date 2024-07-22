@@ -3,14 +3,13 @@ package cn.daxpay.multi.channel.wechat.service.pay;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.param.pay.WechatPayParam;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
+import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.common.context.PayLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.json.JSONUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
@@ -21,10 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,8 +41,6 @@ public class WechatPayV3Service {
      */
     public void pay(PayOrder payOrder, WechatPayParam wechatPayParam, WechatPayConfig config) {
 
-        BigDecimal amount = payOrder.getAmount();
-        String totalFee = String.valueOf(PayUtil.convertCentAmount(amount));
         PayLocal payInfo = PaymentContextLocal.get().getPayInfo();;
         String payBody = null;
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
@@ -86,7 +79,7 @@ public class WechatPayV3Service {
             return wxPayService.createOrderV3(TradeTypeEnum.H5, request);
         } catch (WxPayException e) {
             log.error("微信V3手机网站支付失败", e);
-            throw new TradeFailException("微信V3手机网站支付失败");
+            throw new TradeFailException("微信V3手机网站支付失败: "+e.getMessage());
         }
     }
 
@@ -97,13 +90,12 @@ public class WechatPayV3Service {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         var request = this.buildRequest(payOrder);
         try {
-            // h5Url
             WxPayUnifiedOrderV3Result.AppResult result = wxPayService.createOrderV3(TradeTypeEnum.APP, request);
             Map<String, String> map = this.buildAppResult(result);
             return JSONUtil.toJsonStr(map);
         } catch (WxPayException e) {
             log.error("微信V3程序支付失败", e);
-            throw new TradeFailException("微信V3程序支付失败");
+            throw new TradeFailException("微信V3程序支付失败: "+e.getMessage());
         }
     }
 
@@ -122,8 +114,8 @@ public class WechatPayV3Service {
             Map<String, String> map = this.buildJsapiResult(result);
             return JSONUtil.toJsonStr(map);
         } catch (WxPayException e) {
-            log.error("微信V3程序支付失败", e);
-            throw new TradeFailException("微信V3程序支付失败");
+            log.error("微信V3JsApi支付失败", e);
+            throw new TradeFailException("微信V3JsApi支付失败: "+e.getMessage());
         }
     }
 
@@ -137,7 +129,7 @@ public class WechatPayV3Service {
             return wxPayService.createOrderV3(TradeTypeEnum.NATIVE, request);
         } catch (WxPayException e) {
             log.error("微信V3扫码支付失败", e);
-            throw new TradeFailException("微信V3扫码支付失败");
+            throw new TradeFailException("微信V3扫码支付失败: "+e.getMessage());
         }
     }
 
@@ -184,7 +176,7 @@ public class WechatPayV3Service {
         amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
         request.setDescription(payOrder.getDescription());
         request.setOutTradeNo(payOrder.getOrderNo());
-        request.setTimeExpire(this.getWxExpiredTime(payOrder.getExpiredTime()));
+        request.setTimeExpire(WechatPayUtil.formatV3(payOrder.getExpiredTime()));
         if (payOrder.getAllocation()){
             var settleInfo = new WxPayUnifiedOrderV3Request.SettleInfo();
             settleInfo.setProfitSharing(true);
@@ -193,18 +185,6 @@ public class WechatPayV3Service {
         request.setNotifyUrl(wechatPayConfigService.getPayNotifyUrl());
         request.setAmount(amount);
         return request;
-    }
-
-    /**
-     * 获取微信的过期时间
-     * 遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，
-     * HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。
-     * 例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日 13点29分35秒。
-     */
-    private String getWxExpiredTime(LocalDateTime dateTime) {
-        String format = LocalDateTimeUtil.format(dateTime, DatePattern.NORM_DATETIME_PATTERN);
-        dateTime = LocalDateTimeUtil.parse(format, DatePattern.NORM_DATETIME_PATTERN);
-        return dateTime.atOffset(ZoneOffset.ofHours(8)).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
 }
