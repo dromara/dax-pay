@@ -43,9 +43,9 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试接口支付");
         param.setDescription("这是支付备注");
-        param.setAmount(1001);
-        param.setChannel(PayChannelEnum.WECHAT.getCode());
-        param.setMethod(PayMethodEnum.QRCODE.getCode());
+        param.setAmount(1);
+        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setMethod(PayMethodEnum.JSAPI.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");

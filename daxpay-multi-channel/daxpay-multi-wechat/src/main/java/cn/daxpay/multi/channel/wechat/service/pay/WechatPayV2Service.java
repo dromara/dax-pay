@@ -84,7 +84,7 @@ public class WechatPayV2Service {
             return result.getMwebUrl();
         } catch (WxPayException e) {
             log.error("微信V2Wap支付失败", e);
-            throw new TradeFailException("微信V2Wap支付失败");
+            throw new TradeFailException("微信V2手机网站支付失败: "+e.getMessage());
         }
     }
 
@@ -100,7 +100,7 @@ public class WechatPayV2Service {
             return JSONUtil.toJsonStr(map);
         } catch (WxPayException e) {
             log.error("微信V2App支付失败", e);
-            throw new TradeFailException("微信V2App支付失败");
+            throw new TradeFailException("微信V2App程序支付失败: "+e.getMessage());
         }
 
     }
@@ -118,7 +118,7 @@ public class WechatPayV2Service {
             return JSONUtil.toJsonStr(map);
         } catch (WxPayException e) {
             log.error("微信V2Jaspi支付失败", e);
-            throw new TradeFailException("微信V2Jaspi支付失败");
+            throw new TradeFailException("微信V2Jaspi支付失败: "+e.getMessage());
         }
     }
 
@@ -133,7 +133,7 @@ public class WechatPayV2Service {
             return  result.getCodeUrl();
         } catch (WxPayException e) {
             log.error("微信V2扫码支付失败", e);
-            throw new TradeFailException("微信V2扫码支付失败");
+            throw new TradeFailException("微信V2扫码支付失败: "+e.getMessage());
         }
     }
 
@@ -154,7 +154,7 @@ public class WechatPayV2Service {
             WxPayMicropayResult micropay = wxPayService.micropay(request);
         } catch (WxPayException e) {
             log.error("微信V2付款码支付失败", e);
-            throw new TradeFailException("微信V2付款码支付失败");
+            throw new TradeFailException("微信V2付款码支付失败: "+e.getMessage());
         }
     }
 

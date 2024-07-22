@@ -4,7 +4,6 @@ import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.model.pay.PayModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
-import cn.daxpay.multi.sdk.param.ChannelParam;
 import cn.daxpay.multi.sdk.param.channel.AlipayParam;
 import cn.daxpay.multi.sdk.param.channel.WechatPayParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
@@ -58,11 +57,11 @@ public class PayParam extends DaxPayRequest<PayModel> {
     private Integer amount;
 
     /**
-     * 支付扩展参数
+     * 支付扩展参数, json字符串格式
      * @see AlipayParam
      * @see WechatPayParam
      */
-    private ChannelParam extraParam;
+    private String extraParam;
 
     /** 商户扩展参数,回调时会原样返回 */
     private String attach;

@@ -53,7 +53,7 @@ public class PayParamSignTest {
         WechatPayParam weChatPayParam = new WechatPayParam();
         weChatPayParam.setOpenId("6688812");
         weChatPayParam.setAuthCode("123456");
-        param.setExtraParam(weChatPayParam);
+        param.setExtraParam(weChatPayParam.toJson());
 
         Map<String, String> map = PaySignUtil.toMap(param);
         log.info("转换为有序MAP后的内容: {}",map);
