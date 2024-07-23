@@ -60,6 +60,7 @@ bootx-platform:
         - '/front/**'
         - '/h5/**'
         - '/css/**'
+        - '/unipay/**'
         - '/error'
         - '/favicon.ico'
 dax-pay:

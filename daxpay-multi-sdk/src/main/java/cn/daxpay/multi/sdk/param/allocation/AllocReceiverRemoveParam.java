@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.param.allocation;
 
-import cn.daxpay.multi.sdk.model.allocation.AllocReceiverRemoveModel;
+import cn.daxpay.multi.sdk.result.allocation.AllocReceiverRemoveModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.daxpay.multi.sdk.util.JsonUtil;

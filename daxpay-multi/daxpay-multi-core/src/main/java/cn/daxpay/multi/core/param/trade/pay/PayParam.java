@@ -5,9 +5,7 @@ import cn.daxpay.multi.core.param.PaymentCommonParam;
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -75,6 +73,8 @@ public class PayParam extends PaymentCommonParam {
     /** 支付金额 */
     @Schema(description = "支付金额")
     @NotNull(message = "支付金额不可为空")
+    @DecimalMin(value = "0.01", message = "支付金额不可小于0.01元")
+    @Digits(integer = 8, fraction = 2, message = "支付金额精度到分, 且要小于一亿元")
     private BigDecimal amount;
 
     /**

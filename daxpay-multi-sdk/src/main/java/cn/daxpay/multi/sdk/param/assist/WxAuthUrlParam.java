@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.param.assist;
 
-import cn.daxpay.multi.sdk.model.assist.WxAuthUrlModel;
+import cn.daxpay.multi.sdk.result.assist.WxAuthUrlModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.daxpay.multi.sdk.util.JsonUtil;

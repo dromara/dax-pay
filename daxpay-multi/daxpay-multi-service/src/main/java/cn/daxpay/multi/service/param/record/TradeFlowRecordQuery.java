@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+
 /**
  * 流水记录查询类
  * @author xxm
@@ -24,7 +26,7 @@ public class TradeFlowRecordQuery {
 
     /** 金额 */
     @Schema(description = "金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /**
      * 业务类型

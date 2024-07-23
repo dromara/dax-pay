@@ -1,5 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import java.util.Objects;
  * @author xxm
  * @since 2024/6/4
  */
+@IgnoreAuth
 @Tag(name = "支付通道网关消息通知")
 @RestController
 @RequestMapping("/unipay/notice/{mchNo}/{AppId}")

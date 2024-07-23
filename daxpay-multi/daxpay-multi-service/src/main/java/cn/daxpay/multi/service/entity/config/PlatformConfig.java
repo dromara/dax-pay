@@ -17,7 +17,7 @@ public class PlatformConfig extends MpBaseEntity {
     /** 管理平台访问地址 */
     private String adminServiceUrl = "http://abc.com";
     /** 支付网关地址 */
-    private String gatewayServiceUrl = "http://abc.com";
+    private String gatewayServiceUrl = "http://pay1.bootx.cn";
     /** 商户平台地址 */
     private String merchantServiceUrl = "http://abc.com";
 }

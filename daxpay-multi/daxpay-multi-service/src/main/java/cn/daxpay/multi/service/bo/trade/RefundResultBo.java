@@ -20,9 +20,9 @@ public class RefundResultBo {
     private String outRefundNo;
 
     /**
-     * 退款状态, 默认为成功, 如果有别的状态需要手工处理
+     * 退款状态
      */
-    private RefundStatusEnum status = RefundStatusEnum.SUCCESS;
+    private RefundStatusEnum status;
 
     /** 退款完成时间 */
     private LocalDateTime finishTime;

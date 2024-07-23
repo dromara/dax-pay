@@ -21,7 +21,7 @@ public class BootxLocalDateTimeDeserializer extends LocalDateTimeDeserializer {
      * 解析日期时间
      */
     @Override
-    protected LocalDateTime _fromString(JsonParser p, DeserializationContext ctxt, String string0) throws IOException {
+    protected LocalDateTime _fromString(JsonParser p, DeserializationContext ctxt, String string0) {
         // 首先解析毫秒级时间, 如果解析失败, 则解析秒级时间
         try {
             return LocalDateTimeUtil.parse(string0, DatePattern.NORM_DATETIME_MS_PATTERN);

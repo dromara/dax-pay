@@ -29,7 +29,7 @@ public class AliPayCallbackStrategy extends AbsCallbackStrategy {
 
     @Override
     public String getChannel() {
-        return ChannelEnum.WECHAT.getCode();
+        return ChannelEnum.ALI.getCode();
     }
 
     /**

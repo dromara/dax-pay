@@ -10,7 +10,6 @@ import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
-import cn.daxpay.multi.service.service.notice.callback.PayCallbackService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -37,13 +36,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class WechatRefundCallbackService {
     private final WechatPayConfigService wechatPayConfigService;
-    private final PayCallbackService payCallbackService;
 
     /**
-     * 退款回调处理
-     *
+     * 退款回调处理, 解析数据
      */
-    public String pay(HttpServletRequest request){
+    public String refund(HttpServletRequest request){
         WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // v2 或 v3
@@ -55,8 +52,6 @@ public class WechatRefundCallbackService {
                 var result = wxPayService.parseRefundNotifyResult(xml);
                 // 解析数据
                 resolveV2PayData(result);
-                // 进行退款的处理
-                payCallbackService.payCallback();
                 return WxPayNotifyResponse.success("OK");
             } catch (WxPayException e) {
                 log.error("微信退款V2回调处理失败", e);
@@ -67,17 +62,15 @@ public class WechatRefundCallbackService {
             String body = JakartaServletUtil.getBody(request);
             Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
             SignatureHeader signatureHeader = new SignatureHeader();
-            signatureHeader.setNonce(headerMap.get(Constant.WECHAT_PAY_NONCE));
-            signatureHeader.setTimeStamp(headerMap.get(Constant.WECHAT_PAY_TIMESTAMP));
-            signatureHeader.setSerial(headerMap.get(Constant.WECHAT_PAY_SERIAL));
-            signatureHeader.setSignature(headerMap.get(Constant.WECHAT_PAY_SIGNATURE));
+            signatureHeader.setNonce(headerMap.get(Constant.WECHAT_PAY_NONCE.toLowerCase()));
+            signatureHeader.setTimeStamp(headerMap.get(Constant.WECHAT_PAY_TIMESTAMP.toLowerCase()));
+            signatureHeader.setSerial(headerMap.get(Constant.WECHAT_PAY_SERIAL.toLowerCase()));
+            signatureHeader.setSignature(headerMap.get(Constant.WECHAT_PAY_SIGNATURE.toLowerCase()));
             try {
                 // 转换请求
                 var result = wxPayService.parseRefundNotifyV3Result(body, signatureHeader);
                 // 解析数据
                 this.resolveV3PayData(result);
-                // 进行退款的处理
-                payCallbackService.payCallback();
             } catch (WxPayException e) {
                 log.error("微信退款V3回调处理失败", e);
                 return WxPayNotifyV3Response.fail("FAIL");
@@ -133,11 +126,11 @@ public class WechatRefundCallbackService {
         callbackInfo.setCallbackType(TradeTypeEnum.PAY)
                 .setChannel(ChannelEnum.WECHAT.getCode());
         // 回调数据
-        callbackInfo.setCallbackData(BeanUtil.beanToMap(v3Result));
+        callbackInfo.setCallbackData(BeanUtil.beanToMap(result));
         // 网关退款号
-        callbackInfo.setOutTradeNo(result.getTransactionId());
+        callbackInfo.setOutTradeNo(result.getRefundId());
         // 退款号
-        callbackInfo.setTradeNo(result.getOutTradeNo());
+        callbackInfo.setTradeNo(result.getOutRefundNo());
         // 退款状态 - 成功
         if (Objects.equals(WxPayConstants.RefundStatus.SUCCESS, result.getRefundStatus())){
             callbackInfo.setOutStatus(RefundStatusEnum.SUCCESS.getCode());
@@ -152,7 +145,6 @@ public class WechatRefundCallbackService {
         }
         // 退款金额
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getAmount().getTotal()));
-        String timeEnd = result.getSuccessTime();
-        callbackInfo.setFinishTime(WechatPayUtil.parseV3(timeEnd));
+        callbackInfo.setFinishTime(WechatPayUtil.parseV3(result.getSuccessTime()));
     }
 }

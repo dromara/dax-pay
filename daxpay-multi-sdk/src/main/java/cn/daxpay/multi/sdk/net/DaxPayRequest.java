@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-public abstract class DaxPayRequest<T extends DaxPayResponseModel> {
+public abstract class DaxPayRequest<T> {
 
     /** 商户号 */
     private String mchNo;

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -34,7 +35,7 @@ public class AllocOrderDetail extends MchBaseEntity {
     private Integer rate;
 
     /** 分账金额 */
-    private Integer amount;
+    private BigDecimal amount;
 
     /**
      * 分账接收方类型

@@ -31,7 +31,7 @@ public class DaxPayKit {
      * @return DaxPayResult 响应类
      * @param <T> 业务对象
      */
-    public <T extends DaxPayResponseModel> DaxPayResult<T> execute(DaxPayRequest<T> request){
+    public <T> DaxPayResult<T> execute(DaxPayRequest<T> request){
         return execute(request, true);
     }
 
@@ -42,7 +42,7 @@ public class DaxPayKit {
      * @return DaxPayResult 响应类
      * @param <T> 业务对象
      */
-    public <T extends DaxPayResponseModel> DaxPayResult<T> execute(DaxPayRequest<T> request, boolean sign){
+    public <T> DaxPayResult<T> execute(DaxPayRequest<T> request, boolean sign){
         // 判断是否需要填充商户号和应用号
         if (Objects.isNull(request.getMchNo())){
             request.setMchNo(config.getMchNo());
@@ -67,7 +67,7 @@ public class DaxPayKit {
                 .execute()) {
             // 响应码只有200 才可以进行支付
             if (execute.getStatus() != HttpStatus.HTTP_OK) {
-                log.error("请求第三方支付平台失败，请排查配置的支付网关地址是否正常");
+                log.error("请求第支付网关失败，请排查配置的支付网关地址是否正常");
                 throw new HttpException("请求失败，内部异常");
             }
             body = execute.body();

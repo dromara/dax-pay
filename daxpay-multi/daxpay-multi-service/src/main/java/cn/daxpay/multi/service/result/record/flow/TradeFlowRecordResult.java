@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+
 /**
  * 资金流水记录
  * @author xxm
@@ -23,7 +25,7 @@ public class TradeFlowRecordResult extends MchResult {
     private String title;
 
     /** 金额 */
-    private Integer amount;
+    private BigDecimal amount;
 
     /**
      * 业务类型

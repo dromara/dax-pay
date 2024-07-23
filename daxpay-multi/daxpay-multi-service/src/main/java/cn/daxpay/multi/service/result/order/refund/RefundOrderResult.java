@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.result.order.refund;
 
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.service.common.result.MchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -54,7 +56,7 @@ public class RefundOrderResult extends MchResult {
 
     /**
      * 退款通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     @Schema(description = "支付通道")
     private String channel;
@@ -65,7 +67,7 @@ public class RefundOrderResult extends MchResult {
 
     /** 退款金额 */
     @Schema(description = "退款金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 退款原因 */
     @Schema(description = "退款原因")
@@ -92,9 +94,6 @@ public class RefundOrderResult extends MchResult {
 
     /**
      * 附加参数 以最后一次为准
-     * @see AliPayParam
-     * @see WeChatPayParam
-     * @see WalletPayParam
      */
     @Schema(description = "附加参数 以最后一次为准")
     private String extraParam;

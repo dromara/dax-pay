@@ -13,7 +13,6 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.experimental.UtilityClass;
-import lombok.val;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;

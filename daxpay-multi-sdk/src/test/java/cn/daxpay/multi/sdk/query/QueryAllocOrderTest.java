@@ -2,8 +2,8 @@ package cn.daxpay.multi.sdk.query;
 
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.model.allocation.AllocOrderModel;
-import cn.daxpay.multi.sdk.model.allocation.AllocReceiversModel;
+import cn.daxpay.multi.sdk.result.allocation.AllocOrderModel;
+import cn.daxpay.multi.sdk.result.allocation.AllocReceiversModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
 import cn.daxpay.multi.sdk.param.allocation.QueryAllocOrderParam;

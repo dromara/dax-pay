@@ -1,5 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.service.common.anno.PaymentVerify;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.util.DaxRes;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/6/4
  */
+@IgnoreAuth
 @Tag(name = "统一查询接口")
 @RestController
 @RequestMapping("/unipay/query")

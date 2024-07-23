@@ -40,6 +40,7 @@ public class DaxResult<T>{
     private LocalDateTime resTime = LocalDateTime.now();
 
     /** 追踪ID */
+    @Schema(description = "追踪ID")
     private String traceId = MDC.get(CommonCode.TRACE_ID);
 
     public DaxResult(int successCode, T data, String msg) {

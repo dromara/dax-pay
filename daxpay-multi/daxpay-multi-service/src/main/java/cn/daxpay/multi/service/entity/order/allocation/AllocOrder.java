@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -71,7 +72,7 @@ public class AllocOrder extends MchBaseEntity {
     /**
      * 总分账金额
      */
-    private Integer amount;
+    private BigDecimal amount;
 
     /**
      * 分账描述

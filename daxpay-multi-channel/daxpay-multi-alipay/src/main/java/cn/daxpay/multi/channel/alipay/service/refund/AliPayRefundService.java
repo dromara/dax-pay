@@ -60,10 +60,6 @@ public class AliPayRefundService {
                 log.error("支付宝退款失败: {}", response.getSubMsg());
                 throw operationFailException;
             }
-            // 默认为退款中状态
-            refundInfo.setStatus(RefundStatusEnum.PROGRESS)
-                    .setOutRefundNo(response.getTradeNo());
-
             // 接口返回fund_change=Y为退款成功，fund_change=N或无此字段值返回时需通过退款查询接口进一步确认退款状态
             if (response.getFundChange().equals("Y")){
                 refundInfo.setStatus(RefundStatusEnum.SUCCESS);

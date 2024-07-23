@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.service.assist;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
-import cn.bootx.platform.core.util.Java8DateUtil;
+import cn.bootx.platform.core.util.DateTimeUtil;
 import cn.daxpay.multi.core.enums.SignTypeEnum;
 import cn.daxpay.multi.core.exception.VerifySignFailedException;
 import cn.daxpay.multi.core.param.PaymentCommonParam;
@@ -62,6 +62,11 @@ public class PaymentAssistService {
             if (!verified){
                 throw new VerifySignFailedException();
             }
+        } else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
+            boolean verified = PaySignUtil.verifyMd5Sign(param, mchAppInfo.getSignSecret(), param.getSign());
+            if (!verified){
+                throw new VerifySignFailedException();
+            }
         } else {
             throw new VerifySignFailedException();
         }
@@ -77,7 +82,7 @@ public class PaymentAssistService {
             // 时间差值(秒)
             long durationSeconds = Math.abs(LocalDateTimeUtil.between(now, param.getReqTime()).getSeconds());
             // 当前时间是否晚于请求时间
-            if (Java8DateUtil.lt(now, param.getReqTime())){
+            if (DateTimeUtil.lt(now, param.getReqTime())){
                 // 请求时间比服务器时间晚, 超过一分钟直接打回
                 if (durationSeconds > 60){
                     throw new ValidationFailedException("请求时间晚于服务器接收到的时间，请检查");
@@ -100,7 +105,11 @@ public class PaymentAssistService {
         String signType = mchAppInfo.getSignType();
         if (Objects.equals(SignTypeEnum.HMAC_SHA256.getCode(), signType)){
             result.setSign(PaySignUtil.hmacSha256Sign(result, mchAppInfo.getSignSecret()));
-        } else {
+        }
+        else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
+            result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
+        }
+        else {
             throw new ValidationFailedException("未获取到签名方式，请检查");
         }
     }

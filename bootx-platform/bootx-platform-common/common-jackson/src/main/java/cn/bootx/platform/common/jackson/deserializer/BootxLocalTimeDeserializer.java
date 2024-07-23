@@ -21,7 +21,7 @@ public class BootxLocalTimeDeserializer extends LocalTimeDeserializer {
      * 反序列化
      */
     @Override
-    protected LocalTime _fromString(JsonParser p, DeserializationContext ctxt, String string0) throws IOException {
+    protected LocalTime _fromString(JsonParser p, DeserializationContext ctxt, String string0) {
         try {
             return LocalTime.parse(string0, DateTimeFormatter.ofPattern("HH:mm:ss.SSS"));
         } catch (DateTimeParseException e) {

@@ -89,7 +89,7 @@ public class SqlInjectionUtil {
     public void filterContent(String[] values, String customXssString) {
         String[] xssArr = XSS_STR.split("\\|");
         for (String value : values) {
-            if (value == null || "".equals(value)) {
+            if (value == null || value.isEmpty()) {
                 return;
             }
             // 校验sql注释 不允许有sql注释

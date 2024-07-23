@@ -19,7 +19,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
-import org.dromara.x.file.storage.core.UploadPretreatment;
+import org.dromara.x.file.storage.core.upload.UploadPretreatment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

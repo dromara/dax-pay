@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -66,11 +67,11 @@ public class PayOrderResult extends MchResult {
 
     /** 金额 */
     @Schema(description = "金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 可退款余额 */
     @Schema(description = "可退款余额")
-    private Integer refundableBalance;
+    private BigDecimal refundableBalance;
 
     /**
      * 支付状态

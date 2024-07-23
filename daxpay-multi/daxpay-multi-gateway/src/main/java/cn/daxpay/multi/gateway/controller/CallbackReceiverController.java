@@ -1,5 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.service.notice.callback.CallbackReceiverService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/6/4
  */
+@IgnoreAuth
 @Slf4j
 @Tag(name = "支付通道信息回调")
 @RestController
@@ -30,7 +32,6 @@ public class CallbackReceiverController {
 
     private final PaymentAssistService paymentAssistService;
 
-    @SneakyThrows
     @Operation(summary = "支付宝支付回调")
     @PostMapping("/pay/alipay")
     public String aliPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
@@ -38,7 +39,6 @@ public class CallbackReceiverController {
         return callbackReceiverService.payHandle(request, ChannelEnum.ALI.getCode());
     }
 
-    @SneakyThrows
     @Operation(summary = "微信支付回调")
     @PostMapping("/pay/wechat")
     public String wechatPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {

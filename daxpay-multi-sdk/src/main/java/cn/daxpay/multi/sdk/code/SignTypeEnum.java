@@ -16,7 +16,9 @@ import java.util.Objects;
 public enum SignTypeEnum {
 
     HMAC_SHA256("HMAC_SHA256"),
-    MD5("MD5"),;
+    MD5("MD5"),
+    SM3("SM3"),
+    ;
 
     /** 支付方式 */
     private final String code;

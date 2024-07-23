@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -27,7 +28,7 @@ public class ReconcileDiff extends MchBaseEntity {
     private String title;
 
     /** 交易金额 */
-    private Integer amount;
+    private BigDecimal amount;
 
     /**
      * 交易类型

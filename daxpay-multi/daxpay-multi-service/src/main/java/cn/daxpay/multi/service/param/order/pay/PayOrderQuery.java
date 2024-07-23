@@ -3,11 +3,15 @@ package cn.daxpay.multi.service.param.order.pay;
 import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
+import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.math.BigDecimal;
 
 /**
  * 支付订单查询参数
@@ -61,7 +65,7 @@ public class PayOrderQuery extends SortParam {
 
     /** 金额 */
     @Schema(description = "金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /**
      * 支付状态
@@ -72,14 +76,14 @@ public class PayOrderQuery extends SortParam {
 
     /**
      * 退款状态
-     * @see PayOrderRefundStatusEnum
+     * @see PayRefundStatusEnum
      */
     @Schema(description = "退款状态")
     private String refundStatus;
 
     /**
      * 分账状态
-     * @see PayOrderAllocStatusEnum
+     * @see PayAllocStatusEnum
      */
     @Schema(description = "分账状态")
     private String allocStatus;

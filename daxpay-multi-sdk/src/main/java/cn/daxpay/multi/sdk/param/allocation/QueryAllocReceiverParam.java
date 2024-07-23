@@ -1,7 +1,7 @@
 package cn.daxpay.multi.sdk.param.allocation;
 
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
-import cn.daxpay.multi.sdk.model.allocation.AllocReceiversModel;
+import cn.daxpay.multi.sdk.result.allocation.AllocReceiversModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.daxpay.multi.sdk.util.JsonUtil;

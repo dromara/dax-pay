@@ -1,5 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/6/4
  */
+@IgnoreAuth
 @Tag(name = "统一同步接口")
 @RestController
 @RequestMapping("/unipay/sync")

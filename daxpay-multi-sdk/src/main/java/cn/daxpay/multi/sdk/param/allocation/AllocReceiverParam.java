@@ -3,6 +3,8 @@ package cn.daxpay.multi.sdk.param.allocation;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * 分账接收方列表参数
  * @author xxm
@@ -16,5 +18,5 @@ public class AllocReceiverParam {
     private String receiverNo;
 
     /** 分账金额 */
-    private Integer amount;
+    private BigDecimal amount;
 }

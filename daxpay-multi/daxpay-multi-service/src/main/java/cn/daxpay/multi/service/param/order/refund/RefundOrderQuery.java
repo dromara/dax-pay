@@ -2,6 +2,7 @@ package cn.daxpay.multi.service.param.order.refund;
 
 import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.core.annotation.QueryParam;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -48,7 +49,7 @@ public class RefundOrderQuery extends SortParam {
 
     /**
      * 退款通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     @Schema(description = "支付通道")
     private String channel;

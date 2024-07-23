@@ -1,7 +1,7 @@
 package cn.daxpay.multi.sdk.util;
 
 import cn.daxpay.multi.sdk.param.channel.WechatPayParam;
-import cn.daxpay.multi.sdk.param.pay.PayParam;
+import cn.daxpay.multi.sdk.param.trade.pay.PayParam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

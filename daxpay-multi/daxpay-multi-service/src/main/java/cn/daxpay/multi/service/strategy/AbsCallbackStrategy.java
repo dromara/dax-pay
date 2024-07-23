@@ -11,12 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
 public abstract class AbsCallbackStrategy implements PaymentStrategy{
 
     /**
-     * 支付回调处理
+     * 支付回调处理 解析回调数据
      */
     public String doPayCallbackHandler(HttpServletRequest request){return "";}
 
     /**
-     * 退款回调处理
+     * 退款回调处理, 解析回调数据
      */
     public String doRefundCallbackHandler(HttpServletRequest request){return "";}
 

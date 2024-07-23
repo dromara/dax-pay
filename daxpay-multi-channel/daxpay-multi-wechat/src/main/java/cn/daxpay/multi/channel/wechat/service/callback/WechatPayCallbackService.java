@@ -10,7 +10,6 @@ import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
-import cn.daxpay.multi.service.service.notice.callback.PayCallbackService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -39,10 +38,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class WechatPayCallbackService {
     private final WechatPayConfigService wechatPayConfigService;
-    private final PayCallbackService payCallbackService;
 
     /**
-     * 支付回调处理
+     * 支付回调处理, 解析数据
      *
      */
     public String pay(HttpServletRequest request){
@@ -57,8 +55,6 @@ public class WechatPayCallbackService {
                 WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(xml);
                 // 解析数据
                 this.resolveV2PayData(wxPayOrderNotifyResult);
-                // 进行退款的处理
-                payCallbackService.payCallback();
                 return WxPayNotifyResponse.success("OK");
             } catch (WxPayException e) {
                 log.error("微信支付V2回调处理失败", e);
@@ -69,17 +65,15 @@ public class WechatPayCallbackService {
             String body = JakartaServletUtil.getBody(request);
             Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
             SignatureHeader signatureHeader = new SignatureHeader();
-            signatureHeader.setNonce(headerMap.get(Constant.WECHAT_PAY_NONCE));
-            signatureHeader.setTimeStamp(headerMap.get(Constant.WECHAT_PAY_TIMESTAMP));
-            signatureHeader.setSerial(headerMap.get(Constant.WECHAT_PAY_SERIAL));
-            signatureHeader.setSignature(headerMap.get(Constant.WECHAT_PAY_SIGNATURE));
+            signatureHeader.setNonce(headerMap.get(Constant.WECHAT_PAY_NONCE.toLowerCase()));
+            signatureHeader.setTimeStamp(headerMap.get(Constant.WECHAT_PAY_TIMESTAMP.toLowerCase()));
+            signatureHeader.setSerial(headerMap.get(Constant.WECHAT_PAY_SERIAL.toLowerCase()));
+            signatureHeader.setSignature(headerMap.get(Constant.WECHAT_PAY_SIGNATURE.toLowerCase()));
             try {
                 // 转换请求
                 WxPayNotifyV3Result wxPayNotifyV3Result = wxPayService.parseOrderNotifyV3Result(body, signatureHeader);
                 // 解析数据
                 this.resolveV3PayData(wxPayNotifyV3Result);
-                // 进行退款的处理
-                payCallbackService.payCallback();
             } catch (WxPayException e) {
                 log.error("微信支付V3回调处理失败", e);
                 return WxPayNotifyV3Response.fail("FAIL");
@@ -91,7 +85,7 @@ public class WechatPayCallbackService {
     /**
      * 解析数据 v2
      */
-    public void resolveV2PayData(WxPayOrderNotifyResult result){
+    private void resolveV2PayData(WxPayOrderNotifyResult result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 设置类型和通道
         callbackInfo.setCallbackType(TradeTypeEnum.PAY)
@@ -117,14 +111,14 @@ public class WechatPayCallbackService {
     /**
      * 解析数据 v3
      */
-    public void resolveV3PayData(WxPayNotifyV3Result v3Result){
+    private void resolveV3PayData(WxPayNotifyV3Result v3Result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         var result = v3Result.getResult();
         // 设置类型和通道
         callbackInfo.setCallbackType(TradeTypeEnum.PAY)
                 .setChannel(ChannelEnum.ALI.getCode());
         // 回调数据
-        Map<String, Object> map = BeanUtil.beanToMap(v3Result);
+        Map<String, Object> map = BeanUtil.beanToMap(result);
         callbackInfo.setCallbackData(map);
         // 网关支付号
         callbackInfo.setOutTradeNo(result.getTransactionId());
@@ -139,7 +133,7 @@ public class WechatPayCallbackService {
             callbackInfo.setOutStatus(PayStatusEnum.PROGRESS.getCode());
         }
         // 支付状态 - 失败
-        if (Arrays.asList(WxpayTradeStatus.SUCCESS,WxpayTradeStatus.REFUND).contains(result.getTradeState())){
+        if (Objects.equals(WxpayTradeStatus.PAY_ERROR, result.getTradeState())){
             callbackInfo.setOutStatus(PayStatusEnum.FAIL.getCode());
         }
         // 撤销

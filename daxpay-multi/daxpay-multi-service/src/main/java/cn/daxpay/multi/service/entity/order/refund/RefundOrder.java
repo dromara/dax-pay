@@ -90,9 +90,6 @@ public class RefundOrder extends MpBaseEntity implements ToResult<RefundOrderRes
 
     /**
      * 附加参数 以最后一次为准
-     * @see AliPayParam
-     * @see WeChatPayParam
-     * @see WalletPayParam
      */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String extraParam;

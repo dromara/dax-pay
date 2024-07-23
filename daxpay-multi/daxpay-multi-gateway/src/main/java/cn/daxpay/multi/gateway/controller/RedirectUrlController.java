@@ -1,5 +1,6 @@
 package cn.daxpay.multi.gateway.controller;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author xxm
  * @since 2024/6/4
  */
+@IgnoreAuth
 @Tag(name = "同步通知跳转控制器")
 @RestController
 @RequestMapping("/unipay/return/{mchNo}/{AppId}")

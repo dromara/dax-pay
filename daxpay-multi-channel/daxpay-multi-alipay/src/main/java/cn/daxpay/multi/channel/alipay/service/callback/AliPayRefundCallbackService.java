@@ -5,7 +5,6 @@ import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
-import cn.daxpay.multi.service.service.notice.callback.RefundCallbackService;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -31,11 +30,9 @@ import static cn.daxpay.multi.channel.alipay.code.AliPayCode.*;
 @Service
 @RequiredArgsConstructor
 public class AliPayRefundCallbackService {
-    private final RefundCallbackService refundCallbackService;
-
 
     /**
-     * 支付回调处理
+     * 支付回调处理, 解析数据
      */
     public String refund(HttpServletRequest request) {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
@@ -59,8 +56,6 @@ public class AliPayRefundCallbackService {
         } else {
             callback.setFinishTime(LocalDateTime.now());
         }
-        // 进行退款的处理
-        refundCallbackService.refundCallback();
         return "success";
     }
 }

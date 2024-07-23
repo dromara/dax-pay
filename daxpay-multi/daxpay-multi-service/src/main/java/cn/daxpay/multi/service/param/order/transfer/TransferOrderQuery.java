@@ -2,6 +2,7 @@ package cn.daxpay.multi.service.param.order.transfer;
 
 import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.core.annotation.QueryParam;
+import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -1,10 +1,10 @@
 package cn.daxpay.multi.sdk.query;
 
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.model.pay.PayOrderModel;
+import cn.daxpay.multi.sdk.result.trade.pay.PayOrderModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
-import cn.daxpay.multi.sdk.param.pay.QueryPayParam;
+import cn.daxpay.multi.sdk.param.trade.pay.QueryPayParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.hutool.json.JSONUtil;
 import org.junit.Before;

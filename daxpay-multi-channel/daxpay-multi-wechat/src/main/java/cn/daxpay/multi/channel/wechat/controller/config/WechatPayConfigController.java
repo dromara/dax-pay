@@ -1,6 +1,5 @@
 package cn.daxpay.multi.channel.wechat.controller.config;
 
-import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
@@ -13,12 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author xxm

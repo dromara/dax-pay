@@ -3,22 +3,23 @@ package cn.daxpay.multi.sdk.allocation;
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.model.allocation.AllocModel;
-import cn.daxpay.multi.sdk.model.pay.PayModel;
-import cn.daxpay.multi.sdk.model.sync.AllocSyncModel;
+import cn.daxpay.multi.sdk.result.allocation.AllocResult;
+import cn.daxpay.multi.sdk.result.trade.pay.PayResult;
+import cn.daxpay.multi.sdk.result.allocation.AllocSyncModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
 import cn.daxpay.multi.sdk.param.allocation.AllocFinishParam;
 import cn.daxpay.multi.sdk.param.allocation.AllocReceiverParam;
 import cn.daxpay.multi.sdk.param.allocation.AllocSyncParam;
 import cn.daxpay.multi.sdk.param.allocation.AllocationParam;
-import cn.daxpay.multi.sdk.param.pay.PayParam;
+import cn.daxpay.multi.sdk.param.trade.pay.PayParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 /**
@@ -50,13 +51,13 @@ public class AllocationTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试手动分账");
         param.setDescription("这是支付备注");
-        param.setAmount(10000);
+        param.setAmount(BigDecimal.valueOf(10000));
         param.setChannel(PayChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(true);
 
-        DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
 
     }
@@ -72,14 +73,14 @@ public class AllocationTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试手动分账");
         param.setDescription("这是支付备注");
-        param.setAmount(10000);
+        param.setAmount(BigDecimal.valueOf(10000));
         param.setChannel(PayChannelEnum.UNION_PAY.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(true);
         param.setAutoAllocation(true);
 
-        DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
 
     }
@@ -97,7 +98,7 @@ public class AllocationTest {
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
 
-        DaxPayResult<AllocModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<AllocResult> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 
@@ -115,7 +116,7 @@ public class AllocationTest {
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
 
-        DaxPayResult<AllocModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<AllocResult> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 
@@ -131,12 +132,12 @@ public class AllocationTest {
         param.setOrderNo("DEVP24060201473363000001");
         AllocReceiverParam allocReceiverParam = new AllocReceiverParam();
         allocReceiverParam.setReceiverNo("123");
-        allocReceiverParam.setAmount(6500);
+        allocReceiverParam.setAmount(BigDecimal.valueOf(6500));
         param.setReceivers(Collections.singletonList(allocReceiverParam));
         param.setDescription("测试分账");
         param.setClientIp("127.0.0.1");
 
-        DaxPayResult<AllocModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<AllocResult> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 
@@ -149,7 +150,7 @@ public class AllocationTest {
         AllocFinishParam param = new AllocFinishParam();
         param.setAllocNo("DEVA24060117191963000003");
 
-        DaxPayResult<AllocModel> execute = DaxPayKit.execute(param);
+        DaxPayResult<AllocResult> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 

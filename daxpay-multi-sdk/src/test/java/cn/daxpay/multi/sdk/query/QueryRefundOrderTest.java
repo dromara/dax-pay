@@ -1,10 +1,10 @@
 package cn.daxpay.multi.sdk.query;
 
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.model.refund.RefundOrderModel;
+import cn.daxpay.multi.sdk.result.trade.refund.RefundOrderModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
-import cn.daxpay.multi.sdk.param.refund.QueryRefundParam;
+import cn.daxpay.multi.sdk.param.trade.refund.QueryRefundParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.hutool.json.JSONUtil;
 import org.junit.Before;
