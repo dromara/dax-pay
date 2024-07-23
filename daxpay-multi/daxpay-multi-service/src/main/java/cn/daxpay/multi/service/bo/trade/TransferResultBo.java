@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.common.context;
+package cn.daxpay.multi.service.bo.trade;
 
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import lombok.Data;
@@ -7,14 +7,13 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 转账相关信息
+ * 转账结果业务类
  * @author xxm
- * @since 2024/6/14
+ * @since 2024/7/23
  */
 @Data
 @Accessors(chain = true)
-public class TransferLocal {
-
+public class TransferResultBo {
     /** 通道转账订单号 */
     private String outTransferNo;
 
@@ -24,4 +23,3 @@ public class TransferLocal {
     /** 完成时间 */
     private LocalDateTime finishTime;
 }
-

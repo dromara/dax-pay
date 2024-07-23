@@ -9,6 +9,7 @@ import cn.daxpay.multi.channel.wechat.service.pay.WechatPayService;
 import cn.daxpay.multi.channel.wechat.service.pay.WechatPayV2Service;
 import cn.daxpay.multi.channel.wechat.service.pay.WechatPayV3Service;
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.strategy.AbsPayStrategy;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -66,13 +67,11 @@ public class WechatPayStrategy extends AbsPayStrategy {
      * 支付操作
      */
     @Override
-    public void doPayHandler() {
+    public PayResultBo doPayHandler() {
         if (Objects.equals(wechatPayConfig.getApiVersion(), WechatPayCode.API_V2)){
-            wechatPayV2Service.pay(getOrder(), wechatPayParam, wechatPayConfig);
+            return wechatPayV2Service.pay(getOrder(), wechatPayParam, wechatPayConfig);
         } else {
-            wechatPayV3Service.pay(getOrder(), wechatPayParam, wechatPayConfig);
+            return wechatPayV3Service.pay(getOrder(), wechatPayParam, wechatPayConfig);
         }
-
     }
-
 }

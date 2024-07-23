@@ -8,7 +8,6 @@ import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
-import cn.daxpay.multi.service.service.record.callback.CallbackRecordService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -35,8 +34,6 @@ public class PayCallbackService {
     private final LockTemplate lockTemplate;
 
     private final PayOrderService payOrderService;
-
-    private final CallbackRecordService callbackRecordService;
 
     private final TradeFlowRecordService tradeFlowRecordService;
 
@@ -73,8 +70,6 @@ public class PayCallbackService {
                 // 失败状态
                 this.fail(payOrder);
             }
-            // 保存记录
-            callbackRecordService.saveCallbackRecord();
         } finally {
             lockTemplate.releaseLock(lock);
         }

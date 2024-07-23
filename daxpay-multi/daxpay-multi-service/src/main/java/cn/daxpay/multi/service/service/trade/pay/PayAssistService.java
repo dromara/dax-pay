@@ -10,8 +10,8 @@ import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.core.result.trade.PayResult;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
+import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
-import cn.daxpay.multi.service.common.context.PayLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
@@ -53,7 +53,7 @@ public class PayAssistService {
         // 构建支付订单对象
         PayOrder order = new PayOrder();
         BeanUtil.copyProperties(payParam, order);
-       order.setOrderNo(TradeNoGenerateUtil.pay())
+        order.setOrderNo(TradeNoGenerateUtil.pay())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setRefundStatus(PayRefundStatusEnum.NO_REFUND.getCode())
                 .setExpiredTime(expiredTime)
@@ -142,20 +142,20 @@ public class PayAssistService {
 
     /**
      * 根据支付订单构建支付结果
+     *
      * @param payOrder 支付订单
+     * @param result 支付结果业务类
      * @return PayResult 支付结果
      */
-    public PayResult buildResult(PayOrder payOrder) {
-        PayResult payResult;
-        payResult = new PayResult();
-        payResult.setBizOrderNo(payOrder.getBizOrderNo());
-        payResult.setOrderNo(payOrder.getOrderNo());
-        payResult.setStatus(payOrder.getStatus());
+    public PayResult buildResult(PayOrder payOrder, PayResultBo result) {
+        PayResult payResult = new PayResult()
+                .setBizOrderNo(payOrder.getBizOrderNo())
+                .setOrderNo(payOrder.getOrderNo())
+                .setStatus(payOrder.getStatus());
 
         // 设置支付参数
-        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
-        if (StrUtil.isNotBlank(payInfo.getPayBody())) {
-            payResult.setPayBody(payInfo.getPayBody());
+        if (StrUtil.isNotBlank(result.getPayBody())) {
+            payResult.setPayBody(result.getPayBody());
         }
         return payResult;
     }

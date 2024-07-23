@@ -7,8 +7,7 @@ import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
-import cn.daxpay.multi.service.common.context.PayLocal;
-import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.hutool.json.JSONUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
@@ -39,9 +38,8 @@ public class WechatPayV3Service {
     /**
      * 调起支付
      */
-    public void pay(PayOrder payOrder, WechatPayParam wechatPayParam, WechatPayConfig config) {
-
-        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();;
+    public PayResultBo pay(PayOrder payOrder, WechatPayParam wechatPayParam, WechatPayConfig config) {
+        PayResultBo payResult = new PayResultBo();
         String payBody = null;
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
@@ -63,9 +61,10 @@ public class WechatPayV3Service {
         }
         // 付款码支付
         else if (payMethodEnum == PayMethodEnum.BARCODE) {
-            wechatPayV2Service.barCodePay(payOrder, wechatPayParam.getAuthCode(), config);
+            wechatPayV2Service.barCodePay(payOrder, wechatPayParam.getAuthCode(), config, payResult);
         }
-        payInfo.setPayBody(payBody);
+        payResult.setPayBody(payBody);
+        return payResult;
     }
 
     /**

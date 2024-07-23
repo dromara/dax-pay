@@ -37,6 +37,9 @@ public class CallbackLocal {
      */
     private String channel;
 
+    /** 交易类型 */
+    private TradeTypeEnum callbackType;
+
     /**
      * 三方支付系统返回状态
      * @see PayStatusEnum 支付状态
@@ -49,9 +52,6 @@ public class CallbackLocal {
 
     /** 完成时间(支付/退款) */
     private LocalDateTime finishTime;
-
-    /** 交易类型 */
-    private TradeTypeEnum callbackType;
 
 
     /** 回调信息错误码 */

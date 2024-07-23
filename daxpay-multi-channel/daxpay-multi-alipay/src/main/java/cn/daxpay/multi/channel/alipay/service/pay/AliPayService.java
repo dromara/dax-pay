@@ -10,8 +10,7 @@ import cn.daxpay.multi.core.exception.AmountExceedLimitException;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.core.util.PayUtil;
-import cn.daxpay.multi.service.common.context.PayLocal;
-import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
@@ -59,12 +58,12 @@ public class AliPayService {
     /**
      * 调起支付
      */
-    public void pay(PayOrder payOrder, AlipayParam aliPayParam) {
+    public PayResultBo pay(PayOrder payOrder, AlipayParam aliPayParam) {
         AliPayConfig alipayConfig = aliPayConfigService.getAliPayConfig();
         String amount = PayUtil.toDecimal(payOrder.getAmount()).toString();
         String payBody = null;
         // 异步线程存储
-        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
+        PayResultBo payResult = new PayResultBo();
         // wap支付
         if (Objects.equals(payOrder.getMethod(), PayMethodEnum.WAP.getCode())) {
             payBody = this.wapPay(amount, payOrder, alipayConfig);
@@ -85,12 +84,14 @@ public class AliPayService {
         else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.QRCODE.getCode())) {
             payBody = this.qrCodePay(amount, payOrder, alipayConfig);
         }
-        // 付款码支付
+        // 付款码支付, 付款码存在直接支付成功的情况, 所以返回结果特殊处理
         else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.BARCODE.getCode())) {
-            this.barCode(amount, payOrder, aliPayParam, alipayConfig);
+            this.barCode(amount, payOrder, aliPayParam, alipayConfig, payResult);
+            return payResult;
         }
         // 通常是发起支付的参数
-        payInfo.setPayBody(payBody);
+        payResult.setPayBody(payBody);
+        return payResult;
     }
 
     /**
@@ -283,11 +284,10 @@ public class AliPayService {
      * 付款码支付
      */
     @SneakyThrows
-    public void barCode(String amount, PayOrder payOrder, AlipayParam aliPayParam, AliPayConfig alipayConfig) {
+    public void barCode(String amount, PayOrder payOrder, AlipayParam aliPayParam, AliPayConfig alipayConfig, PayResultBo result) {
         // 获取支付宝客户端
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(alipayConfig);
 
-        PayLocal payInfo = PaymentContextLocal.get().getPayInfo();
         AlipayTradePayModel model = new AlipayTradePayModel();
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
@@ -310,9 +310,9 @@ public class AliPayService {
             // 支付成功处理 金额2000以下免密支付, 记录支付完成相关信息
             if (Objects.equals(response.getCode(), AliPayCode.SUCCESS)) {
                 Date gmtPayment = response.getGmtPayment();
-                payInfo.setOutOrderNo(response.getTradeNo())
+                result.setOutOrderNo(response.getTradeNo())
                         .setComplete(true)
-                        .setCompleteTime(LocalDateTimeUtil.of(gmtPayment));
+                        .setFinishTime(LocalDateTimeUtil.of(gmtPayment));
             }
             // 非支付中响应码, 进行错误处理
             if (!Objects.equals(response.getCode(), AliPayCode.INPROCESS)) {

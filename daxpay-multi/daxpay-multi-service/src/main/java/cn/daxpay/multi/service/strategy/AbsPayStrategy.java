@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.strategy;
 
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
+import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +42,6 @@ public abstract class AbsPayStrategy implements PaymentStrategy{
      * 支付操作
      * 出现错误会保存相关信息
      */
-    public abstract void doPayHandler();
+    public abstract PayResultBo doPayHandler();
 
 }

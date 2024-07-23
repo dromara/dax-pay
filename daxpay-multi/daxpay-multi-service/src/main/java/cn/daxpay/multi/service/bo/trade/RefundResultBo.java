@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.common.context;
+package cn.daxpay.multi.service.bo.trade;
 
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import lombok.Data;
@@ -7,14 +7,13 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 异步退款信息
+ * 退款结果业务类
  * @author xxm
- * @since 2023/12/24
+ * @since 2024/7/23
  */
 @Data
 @Accessors(chain = true)
-public class RefundLocal {
-
+public class RefundResultBo {
     /**
      * 第三方支付网关生成的退款订单号, 用与将记录关联起来
      */

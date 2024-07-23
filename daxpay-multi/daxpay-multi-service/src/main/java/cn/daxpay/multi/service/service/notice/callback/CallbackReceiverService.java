@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.service.notice.callback;
 
+import cn.daxpay.multi.service.service.record.callback.CallbackRecordService;
 import cn.daxpay.multi.service.strategy.AbsCallbackStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,13 +18,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CallbackReceiverService {
 
+    private final CallbackRecordService callbackRecordService;
 
     /**
      * 支付信息回调处理
      */
     public String payHandle(HttpServletRequest request, String channel){
         var callbackStrategy = PaymentStrategyFactory.create(channel, AbsCallbackStrategy.class);
-        return callbackStrategy.doPayCallbackHandler(request);
+        // 执行回调处理逻辑
+        String msg = callbackStrategy.doPayCallbackHandler(request);
+        // 保存记录
+        callbackRecordService.saveCallbackRecord();
+        return msg;
     }
 
     /**
@@ -31,6 +37,9 @@ public class CallbackReceiverService {
      */
     public String refundHandle(HttpServletRequest request, String channel){
         var callbackStrategy = PaymentStrategyFactory.create(channel, AbsCallbackStrategy.class);
-        return callbackStrategy.doRefundCallbackHandler(request);
+        // 执行回调处理逻辑
+        String msg = callbackStrategy.doRefundCallbackHandler(request);
+        callbackRecordService.saveCallbackRecord();
+        return msg;
     }
 }

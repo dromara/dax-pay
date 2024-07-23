@@ -4,6 +4,7 @@ import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.channel.alipay.service.refund.AliPayRefundService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.strategy.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -49,7 +50,7 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
      * 退款
      */
     @Override
-    public void doRefundHandler() {
-        aliRefundService.refund(this.getRefundOrder(),this.config);
+    public RefundResultBo doRefundHandler() {
+        return aliRefundService.refund(this.getRefundOrder(),this.config);
     }
 }

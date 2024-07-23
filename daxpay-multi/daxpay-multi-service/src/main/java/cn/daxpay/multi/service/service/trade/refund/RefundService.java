@@ -10,8 +10,7 @@ import cn.daxpay.multi.core.exception.TradeProcessingException;
 import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.result.trade.RefundResult;
-import cn.daxpay.multi.service.common.context.RefundLocal;
-import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
@@ -86,7 +85,7 @@ public class RefundService {
     /**
      * 首次退款
      */
-    private RefundResult firstRefund(RefundParam param){
+    private RefundResult firstRefund(RefundParam param) {
 
         // 获取支付订单
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
@@ -98,18 +97,20 @@ public class RefundService {
         // 进行退款前预处理
         refundStrategy.doBeforeRefundHandler();
         // 退款操作的预处理, 对支付订单进行预扣款, 返回创建成功的退款订单, 成功后才可以进行下一阶段的操作
-        RefundOrder refundOrder = SpringUtil.getBean(this.getClass()).preRefundMethod(param, payOrder);
+        RefundOrder refundOrder = SpringUtil.getBean(this.getClass())
+                .preRefundMethod(param, payOrder);
         refundStrategy.setRefundOrder(refundOrder);
+        RefundResultBo refundResultBo;
         try {
             // 执行退款策略
-            refundStrategy.doRefundHandler();
+            refundResultBo = refundStrategy.doRefundHandler();
         } catch (Exception e) {
             log.error("退款出现错误", e);
             // 更新退款失败的记录
-            refundAssistService.updateOrderByError(refundOrder,e);
+            refundAssistService.updateOrderByError(refundOrder, e);
             return refundAssistService.buildResult(refundOrder);
         }
-        SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder);
+        SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder, refundResultBo);
         return refundAssistService.buildResult(refundOrder);
     }
 
@@ -134,9 +135,9 @@ public class RefundService {
      * 2. 更新退款扩展参数
      * 3. 构建退款策略, 发起退款
      */
-    private RefundResult repeatRefund(RefundOrder refundOrder, RefundParam param){
+    private RefundResult repeatRefund(RefundOrder refundOrder, RefundParam param) {
         // 退款失败才可以重新发起退款, 重新发起退款
-        if (!Objects.equals(refundOrder.getStatus(), RefundStatusEnum.FAIL.getCode())){
+        if (!Objects.equals(refundOrder.getStatus(), RefundStatusEnum.FAIL.getCode())) {
             throw new TradeStatusErrorException("只有失败状态的才可以重新发起退款");
         }
         // 获取支付订单
@@ -148,22 +149,20 @@ public class RefundService {
         // 退款前准备操作
         refundStrategy.doBeforeRefundHandler();
         // 进行发起退款前的操作, 更新扩展记录信息
-        this.updateOrder(param,refundOrder);
+        this.updateOrder(param, refundOrder);
+        RefundResultBo refundResultBo;
         try {
             // 执行退款策略
-            refundStrategy.doRefundHandler();
-        }
-        catch (Exception e) {
+            refundResultBo = refundStrategy.doRefundHandler();
+        } catch (Exception e) {
             log.error("重新退款失败:", e);
-            // 记录处理失败状态
-            PaymentContextLocal.get().getRefundInfo().setStatus(RefundStatusEnum.FAIL);
             // 记录退款失败的记录
             refundAssistService.updateOrderByError(refundOrder, e);
             // 返回错误响应对象
             return refundAssistService.buildResult(refundOrder);
         }
         // 退款发起成功处理
-        SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder);
+        SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder, refundResultBo);
         return refundAssistService.buildResult(refundOrder);
     }
 
@@ -183,9 +182,7 @@ public class RefundService {
      * 成功处理, 更新退款订单, 支付订单,
      */
     @Transactional(rollbackFor = Exception.class)
-    public void successHandler(RefundOrder refundOrder, PayOrder payOrder) {
-        RefundLocal refundInfo = PaymentContextLocal.get()
-                .getRefundInfo();
+    public void successHandler(RefundOrder refundOrder, PayOrder payOrder, RefundResultBo refundInfo) {
         // 剩余可退款余额
         BigDecimal refundableBalance = payOrder.getRefundableBalance();
         // 退款状态为退款中
@@ -205,7 +202,7 @@ public class RefundService {
         payOrderService.updateById(payOrder);
 
         // 更新退款订单
-        refundAssistService.updateOrder(refundOrder);
+        refundAssistService.updateOrder(refundOrder, refundInfo);
 
         // 发送通知
         List<String> list = Arrays.asList(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());

@@ -5,6 +5,7 @@ import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.channel.alipay.service.transfer.AliTransferService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.param.order.transfer.TransferParam;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +64,7 @@ public class AliTransferStrategy extends AbsTransferStrategy {
      * 转账操作
      */
     @Override
-    public void doTransferHandler() {
-        aliTransferService.transfer(this.getTransferOrder(), this.config);
+    public TransferResultBo doTransferHandler() {
+        return aliTransferService.transfer(this.getTransferOrder(), this.config);
     }
 }

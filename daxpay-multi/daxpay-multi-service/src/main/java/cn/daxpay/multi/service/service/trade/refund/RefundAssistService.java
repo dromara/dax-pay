@@ -9,8 +9,7 @@ import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.result.trade.RefundResult;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
-import cn.daxpay.multi.service.common.context.RefundLocal;
-import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
@@ -95,14 +94,13 @@ public class RefundAssistService {
      * 更新退款成功信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updateOrder(RefundOrder refundOrder){
-        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
-        refundOrder.setStatus(refundInfo.getStatus().getCode())
-                .setOutRefundNo(refundInfo.getOutRefundNo());
+    public void updateOrder(RefundOrder refundOrder, RefundResultBo resultBo){
+        refundOrder.setStatus(resultBo.getStatus().getCode())
+                .setOutRefundNo(resultBo.getOutRefundNo());
         // 退款成功更新退款时间
         if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.SUCCESS.getCode())){
             // 读取网关返回的退款时间和完成时间
-            refundOrder.setFinishTime(refundInfo.getFinishTime());
+            refundOrder.setFinishTime(resultBo.getFinishTime());
         }
         refundOrderManager.updateById(refundOrder);
     }
@@ -112,9 +110,8 @@ public class RefundAssistService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void updateOrderByError(RefundOrder refundOrder, Exception e){
-        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
         refundOrder.setErrorMsg(e.getMessage());
-        refundOrder.setStatus(refundInfo.getStatus().getCode());
+        refundOrder.setStatus(RefundStatusEnum.FAIL.getCode());
         refundOrderManager.updateById(refundOrder);
     }
 

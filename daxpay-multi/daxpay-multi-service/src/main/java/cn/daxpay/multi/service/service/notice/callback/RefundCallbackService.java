@@ -12,7 +12,6 @@ import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
-import cn.daxpay.multi.service.service.record.callback.CallbackRecordService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -20,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -36,7 +36,6 @@ public class RefundCallbackService {
     private final LockTemplate lockTemplate;
     private final TradeFlowRecordService tradeFlowRecordService;
     private final PayOrderService payOrderService;
-    private final CallbackRecordService callbackRecordService;
 //    private final ClientNoticeService clientNoticeService;
 
     /**
@@ -72,8 +71,6 @@ public class RefundCallbackService {
             }  else {
                 this.close(refundOrder);
             }
-            // 保存记录
-            callbackRecordService.saveCallbackRecord();
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -91,7 +88,7 @@ public class RefundCallbackService {
         PayRefundStatusEnum payRefundStatusEnum;
 
         // 判断订单全部退款还是部分退款
-        if (Objects.equals(payOrder.getRefundableBalance(), 0)) {
+        if (BigDecimalUtil.isEqual(payOrder.getRefundableBalance(), BigDecimal.ZERO)) {
             payRefundStatusEnum = PayRefundStatusEnum.REFUNDED;
         } else {
             payRefundStatusEnum = PayRefundStatusEnum.PARTIAL_REFUND;

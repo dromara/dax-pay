@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.strategy;
 
+import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.param.order.transfer.TransferParam;
 import lombok.Getter;
@@ -31,6 +32,6 @@ public abstract class AbsTransferStrategy implements PaymentStrategy{
     /**
      * 转账操作
      */
-    public abstract void doTransferHandler();
+    public abstract TransferResultBo doTransferHandler();
 
 }

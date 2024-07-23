@@ -4,6 +4,7 @@ import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
+import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.hutool.core.util.StrUtil;
 import com.github.binarywang.wxpay.bean.merchanttransfer.TransferCreateRequest;
@@ -31,7 +32,9 @@ public class WechatPayTransferV3Service {
     /**
      * 单笔转账转账接口
      */
-    public void transfer(TransferOrder order, WechatPayConfig config) {
+    public TransferResultBo transfer(TransferOrder order, WechatPayConfig config) {
+        TransferResultBo result = new TransferResultBo();
+
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         MerchantTransferService merchantTransferService = wxPayService.getMerchantTransferService();
 
@@ -56,10 +59,11 @@ public class WechatPayTransferV3Service {
                 .setTransferDetailList(Collections.singletonList(transferDetail));
         try {
             TransferCreateResult transfer = merchantTransferService.createTransfer(request);
-            transfer.getBatchId();
+            result.setOutTransferNo(transfer.getBatchId());
         } catch (WxPayException e) {
             log.error("微信转账失败", e);
             throw new TradeFailException("微信转账失败: "+e.getErrCodeDes());
         }
+        return result;
     }
 }

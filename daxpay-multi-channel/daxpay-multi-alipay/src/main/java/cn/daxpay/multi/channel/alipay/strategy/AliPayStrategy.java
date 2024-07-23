@@ -4,6 +4,7 @@ import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.daxpay.multi.channel.alipay.param.pay.AlipayParam;
 import cn.daxpay.multi.channel.alipay.service.pay.AliPayService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.strategy.AbsPayStrategy;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
@@ -59,8 +60,8 @@ public class AliPayStrategy extends AbsPayStrategy {
      * 发起支付操作
      */
     @Override
-    public void doPayHandler() {
-        aliPayService.pay(this.getOrder(), this.aliPayParam);
+    public PayResultBo doPayHandler() {
+        return aliPayService.pay(this.getOrder(), this.aliPayParam);
     }
 
 }

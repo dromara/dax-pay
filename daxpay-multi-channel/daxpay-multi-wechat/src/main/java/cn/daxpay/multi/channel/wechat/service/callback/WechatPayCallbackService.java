@@ -4,6 +4,7 @@ import cn.daxpay.multi.channel.wechat.code.WechatPayCode;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.util.PayUtil;
@@ -11,8 +12,7 @@ import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.service.notice.callback.PayCallbackService;
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.github.binarywang.wxpay.bean.notify.*;
 import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
@@ -50,10 +50,13 @@ public class WechatPayCallbackService {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // v2 或 v3
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V2)) {
+            // V2 回调接收处理
             String xml = WechatPayUtil.readV2Data(request);
             try {
+                // 转换请求
                 WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(xml);
-                resolveV2PayData(wxPayOrderNotifyResult);
+                // 解析数据
+                this.resolveV2PayData(wxPayOrderNotifyResult);
                 // 进行退款的处理
                 payCallbackService.payCallback();
                 return WxPayNotifyResponse.success("OK");
@@ -62,6 +65,7 @@ public class WechatPayCallbackService {
                 return WxPayNotifyResponse.fail("FAIL");
             }
         } else {
+            // V3 回调接收处理
             String body = JakartaServletUtil.getBody(request);
             Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
             SignatureHeader signatureHeader = new SignatureHeader();
@@ -70,7 +74,9 @@ public class WechatPayCallbackService {
             signatureHeader.setSerial(headerMap.get(Constant.WECHAT_PAY_SERIAL));
             signatureHeader.setSignature(headerMap.get(Constant.WECHAT_PAY_SIGNATURE));
             try {
+                // 转换请求
                 WxPayNotifyV3Result wxPayNotifyV3Result = wxPayService.parseOrderNotifyV3Result(body, signatureHeader);
+                // 解析数据
                 this.resolveV3PayData(wxPayNotifyV3Result);
                 // 进行退款的处理
                 payCallbackService.payCallback();
@@ -87,8 +93,9 @@ public class WechatPayCallbackService {
      */
     public void resolveV2PayData(WxPayOrderNotifyResult result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        // 设置类型
-        callbackInfo.setCallbackType(TradeTypeEnum.PAY);
+        // 设置类型和通道
+        callbackInfo.setCallbackType(TradeTypeEnum.PAY)
+                .setChannel(ChannelEnum.ALI.getCode());
         // 回调数据
         Map<String, String> map = result.toMap();
         callbackInfo.setCallbackData(map);
@@ -102,8 +109,10 @@ public class WechatPayCallbackService {
         // 支付金额
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getTotalFee()));
         String timeEnd = result.getTimeEnd();
-        LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
-        callbackInfo.setFinishTime(time);
+        if (StrUtil.isNotBlank(timeEnd)) {
+            LocalDateTime time = WechatPayUtil.parseV2(timeEnd);
+            callbackInfo.setFinishTime(time);
+        }
     }
     /**
      * 解析数据 v3
@@ -111,8 +120,9 @@ public class WechatPayCallbackService {
     public void resolveV3PayData(WxPayNotifyV3Result v3Result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         var result = v3Result.getResult();
-        // 设置类型
-        callbackInfo.setCallbackType(TradeTypeEnum.PAY);
+        // 设置类型和通道
+        callbackInfo.setCallbackType(TradeTypeEnum.PAY)
+                .setChannel(ChannelEnum.ALI.getCode());
         // 回调数据
         Map<String, Object> map = BeanUtil.beanToMap(v3Result);
         callbackInfo.setCallbackData(map);
@@ -144,6 +154,8 @@ public class WechatPayCallbackService {
         // 支付金额
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getAmount().getTotal()));
         String timeEnd = result.getSuccessTime();
-        callbackInfo.setFinishTime(WechatPayUtil.parseV3(timeEnd));
+        if (StrUtil.isNotBlank(timeEnd)) {
+            callbackInfo.setFinishTime(WechatPayUtil.parseV3(timeEnd));
+        }
     }
 }

@@ -13,30 +13,16 @@ import lombok.experimental.Accessors;
 public class PaymentContext {
 
     /**
-     * 调用统一支付相关接口时，会进行初始化
+     * 统一支付相关接口调用时，会进行初始化
      * 接收到回调时，会进行初始化
+     * 接收到消息通知时是, 会进行初始化
      */
     private final MchAppLocal mchAppInfo = new MchAppLocal();
 
     /** 请求终端信息 */
     private final ClientLocal clientInfo = new ClientLocal();
 
-    /** 支付相关信息 */
-    private final PayLocal payInfo = new PayLocal();
-
-    /** 退款相关信息 */
-    private final RefundLocal refundInfo = new RefundLocal();
-
     /** 回调相关信息 */
     private final CallbackLocal callbackInfo = new CallbackLocal();
-
-    /** 对账相关信息 */
-    private final ReconcileLocal reconcileInfo = new ReconcileLocal();
-
-    /** 分账相关信息 */
-    private final AllocationLocal allocationInfo = new AllocationLocal();
-
-    /** 转账相关信息 */
-    private final TransferLocal transferInfo = new TransferLocal();
 
 }

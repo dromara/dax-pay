@@ -7,8 +7,7 @@ import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
-import cn.daxpay.multi.service.common.context.RefundLocal;
-import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -20,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,16 +37,18 @@ public class AliPayRefundService {
     /**
      * 退款, 调用支付宝退款
      */
-    public void refund(RefundOrder refundOrder, AliPayConfig config) {
+    public RefundResultBo refund(RefundOrder refundOrder, AliPayConfig config) {
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
-
-        RefundLocal refundInfo = PaymentContextLocal.get().getRefundInfo();
+        RefundResultBo refundInfo = new RefundResultBo();
         AlipayTradeRefundModel model = new AlipayTradeRefundModel();
         model.setOutTradeNo(refundOrder.getOrderNo());
         model.setOutRequestNo(refundOrder.getRefundNo());
         // 金额格式化
         String refundAmount = PayUtil.toDecimal(refundOrder.getAmount()).toString();
         model.setRefundAmount(refundAmount);
+        // 银行卡冲退信息, 只有传输了此值, 才会触发退款回调
+        model.setQueryOptions(List.of("deposit_back_info"));
+
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizModel(model);
         request.setNotifyUrl(aliPayConfigService.getRefundNotifyUrl());
@@ -72,5 +74,6 @@ public class AliPayRefundService {
             log.error("支付宝退款失败:", e);
             throw new OperationFailException("支付宝退款失败: "+e.getErrMsg());
         }
+        return refundInfo;
     }
 }

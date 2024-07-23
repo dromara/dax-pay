@@ -7,6 +7,7 @@ import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.service.transfer.WechatPayTransferV3Service;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
+import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.param.order.transfer.TransferParam;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
 import cn.hutool.core.util.StrUtil;
@@ -81,7 +82,7 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
      * 转账操作
      */
     @Override
-    public void doTransferHandler() {
-        transferV3Service.transfer(this.getTransferOrder(), weChatPayConfig);
+    public TransferResultBo doTransferHandler() {
+        return transferV3Service.transfer(this.getTransferOrder(), weChatPayConfig);
     }
 }

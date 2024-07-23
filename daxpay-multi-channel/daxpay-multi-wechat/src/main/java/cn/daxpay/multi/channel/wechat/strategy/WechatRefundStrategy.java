@@ -6,6 +6,7 @@ import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.service.refund.WechatRefundV2Service;
 import cn.daxpay.multi.channel.wechat.service.refund.WechatRefundV3Service;
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.strategy.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -56,11 +57,11 @@ public class WechatRefundStrategy extends AbsRefundStrategy {
      * 退款操作
      */
     @Override
-    public void doRefundHandler() {
+    public RefundResultBo doRefundHandler() {
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V2)){
-            wechatRefundV2Service.refund(this.getRefundOrder(),this.config);
+            return wechatRefundV2Service.refund(this.getRefundOrder(),this.config);
         } else {
-            wechatRefundV3Service.refund(this.getRefundOrder(),this.config);
+            return wechatRefundV3Service.refund(this.getRefundOrder(),this.config);
         }
     }
 

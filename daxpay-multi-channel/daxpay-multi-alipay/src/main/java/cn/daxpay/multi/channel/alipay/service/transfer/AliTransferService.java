@@ -7,8 +7,7 @@ import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
-import cn.daxpay.multi.service.common.context.TransferLocal;
-import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
@@ -56,9 +55,10 @@ public class AliTransferService {
      * 转账接口
      */
     @SneakyThrows
-    public void transfer(TransferOrder order, AliPayConfig aliPayConfig){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
+    public TransferResultBo transfer(TransferOrder order, AliPayConfig aliPayConfig){
+        TransferResultBo transferInfo = new TransferResultBo();
 
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
         // 构造请求参数以调用接口
         AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
         AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();
@@ -95,7 +95,6 @@ public class AliTransferService {
             log.error("网关返回退款失败: {}", response.getSubMsg());
             throw new TradeFailException(response.getSubMsg());
         }
-        TransferLocal transferInfo = PaymentContextLocal.get().getTransferInfo();
         // 通道转账号
         transferInfo.setOutTransferNo(response.getOrderId());
         // 有完成时间代表处理完成
@@ -105,5 +104,6 @@ public class AliTransferService {
             LocalDateTime time = LocalDateTimeUtil.parse(transDate, DatePattern.NORM_DATETIME_PATTERN);
             transferInfo.setFinishTime(time).setStatus(TransferStatusEnum.SUCCESS);
         }
+        return transferInfo;
     }
 }

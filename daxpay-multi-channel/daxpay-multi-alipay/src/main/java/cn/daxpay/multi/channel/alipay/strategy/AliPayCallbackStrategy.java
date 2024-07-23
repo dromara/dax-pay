@@ -1,6 +1,7 @@
 package cn.daxpay.multi.channel.alipay.strategy;
 
 import cn.daxpay.multi.channel.alipay.service.callback.AliPayCallbackService;
+import cn.daxpay.multi.channel.alipay.service.callback.AliPayRefundCallbackService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.strategy.AbsCallbackStrategy;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,8 @@ public class AliPayCallbackStrategy extends AbsCallbackStrategy {
 
     private final AliPayCallbackService aliPayCallbackService;
 
+    private final AliPayRefundCallbackService refundCallbackService;
+
     @Override
     public String getChannel() {
         return ChannelEnum.WECHAT.getCode();
@@ -35,5 +38,10 @@ public class AliPayCallbackStrategy extends AbsCallbackStrategy {
     @Override
     public String doPayCallbackHandler(HttpServletRequest request) {
         return aliPayCallbackService.pay(request);
+    }
+
+    @Override
+    public String doRefundCallbackHandler(HttpServletRequest request) {
+        return refundCallbackService.refund(request);
     }
 }

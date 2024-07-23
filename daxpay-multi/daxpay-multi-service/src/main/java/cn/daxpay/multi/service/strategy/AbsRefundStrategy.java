@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.strategy;
 
+import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +18,6 @@ public abstract class AbsRefundStrategy implements PaymentStrategy{
     /** 退款订单 */
     private RefundOrder refundOrder = null;
 
-    /**  */
-
     /**
      * 退款前对处理, 主要进行各种检查
      */
@@ -28,6 +27,6 @@ public abstract class AbsRefundStrategy implements PaymentStrategy{
     /**
      * 退款操作
      */
-    public abstract void doRefundHandler();
+    public abstract RefundResultBo doRefundHandler();
 
 }

@@ -1,8 +1,7 @@
 package cn.daxpay.multi.service.service.trade.transfer;
 
 import cn.daxpay.multi.core.result.trade.TransferResult;
-import cn.daxpay.multi.service.common.context.TransferLocal;
-import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.param.order.transfer.TransferParam;
@@ -32,7 +31,7 @@ public class TransferService {
     /**
      * 转账
      */
-    public TransferResult transfer(TransferParam transferParam){
+    public TransferResult transfer(TransferParam transferParam) {
         // 获取策略
         AbsTransferStrategy transferStrategy = PaymentStrategyFactory.create(transferParam.getChannel(), AbsTransferStrategy.class);
         // 检查转账参数
@@ -42,16 +41,18 @@ public class TransferService {
         transferStrategy.setTransferOrder(order);
         // 执行预处理
         transferStrategy.doBeforeHandler();
+        TransferResultBo transferResultBo;
         try {
             // 执行转账策略
-            transferStrategy.doTransferHandler();
+            transferResultBo = transferStrategy.doTransferHandler();
         } catch (Exception e) {
             log.error("转账出现错误", e);
             // 更新退款失败的记录
             transferAssistService.updateOrderByError(order, e);
             return transferAssistService.buildResult(order);
         }
-        SpringUtil.getBean(this.getClass()).successHandler(order);
+        SpringUtil.getBean(this.getClass())
+                .successHandler(order, transferResultBo);
         return transferAssistService.buildResult(order);
     }
 
@@ -59,9 +60,7 @@ public class TransferService {
      * 成功处理
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void successHandler(TransferOrder order){
-        TransferLocal transferInfo = PaymentContextLocal.get()
-                .getTransferInfo();
+    public void successHandler(TransferOrder order, TransferResultBo transferInfo){
         order.setStatus(transferInfo.getStatus().getCode())
                 .setSuccessTime(transferInfo.getFinishTime())
                 .setOutTransferNo(transferInfo.getOutTransferNo());

@@ -107,6 +107,10 @@ public class PaymentAssistService {
 
     /**
      * 初始化商户和应用信息
+     * 统一支付相关接口调用时，会进行初始化
+     * 接收到回调时，会进行初始化
+     * 接收到消息通知时是, 会进行初始化
+     *
      */
     public void initMchAndApp(String mchNo, String appId) {
         // 获取应用信息
