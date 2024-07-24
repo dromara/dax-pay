@@ -3,6 +3,7 @@ package cn.daxpay.multi.sdk.trade;
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
+import cn.daxpay.multi.sdk.param.channel.WechatPayParam;
 import cn.daxpay.multi.sdk.result.trade.pay.PayResult;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
@@ -61,7 +62,24 @@ public class PayOrderTest {
      */
     @Test
     public void wxBarCode(){
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试微信条码支付");
+        param.setAmount(BigDecimal.valueOf(0.01));
+        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setMethod(PayMethodEnum.BARCODE.getCode());
 
+        WechatPayParam wechatPayParam = new WechatPayParam();
+        wechatPayParam.setAuthCode("131513396074955617");
+        param.setExtraParam(JSONUtil.toJsonStr(wechatPayParam));
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("https://abc.com/callback");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JSONUtil.toJsonStr(execute));
     }
 
     /**

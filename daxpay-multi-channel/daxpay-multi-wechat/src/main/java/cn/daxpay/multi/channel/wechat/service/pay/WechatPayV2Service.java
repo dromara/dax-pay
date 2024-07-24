@@ -161,7 +161,7 @@ public class WechatPayV2Service {
         request.setProfitSharing(payOrder.getAutoAllocation()?"Y":"N");
         try {
             WxPayMicropayResult result = wxPayService.micropay(request);
-            // 支付成功处理,
+            // 支付成功处理, 如果不成功会走异常流
             String timeEnd = result.getTimeEnd();
             LocalDateTime time = WechatPayUtil.parseV2(timeEnd);
             payResult.setOutOrderNo(result.getTransactionId())
@@ -218,6 +218,8 @@ public class WechatPayV2Service {
     private WxPayUnifiedOrderRequest buildRequest(PayOrder payOrder){
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setOutTradeNo(payOrder.getOrderNo());
+        request.setBody(payOrder.getTitle());
+        request.setDetail(payOrder.getDescription());
         request.setTimeExpire(this.getExpiredTime(payOrder.getExpiredTime()));
         request.setNotifyUrl(wechatPayConfigService.getPayNotifyUrl());
         request.setTotalFee(PayUtil.convertCentAmount(payOrder.getAmount()));

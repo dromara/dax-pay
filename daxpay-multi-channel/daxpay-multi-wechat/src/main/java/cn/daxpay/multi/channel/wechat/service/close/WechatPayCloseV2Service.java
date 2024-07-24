@@ -44,6 +44,7 @@ public class WechatPayCloseV2Service {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(weChatPayConfig);
         try {
             WxPayOrderReverseRequest request = new WxPayOrderReverseRequest();
+            request.setOutTradeNo(payOrder.getOrderNo());
             wxPayService.reverseOrder(request);
         } catch (WxPayException e) {
             log.error("微信撤销订单V2失败", e);

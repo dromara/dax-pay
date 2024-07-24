@@ -1,7 +1,10 @@
 package cn.daxpay.multi.channel.wechat.service.pay;
 
+import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.param.pay.WechatPayParam;
+import cn.daxpay.multi.channel.wechat.param.pay.WxBarCodeV3PayRequest;
+import cn.daxpay.multi.channel.wechat.result.pay.WxBarCodeV3PayResult;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
@@ -9,18 +12,28 @@ import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
+import com.github.binarywang.wxpay.config.WxPayConfig;
+import com.github.binarywang.wxpay.constant.WxPayConstants;
+import com.github.binarywang.wxpay.constant.WxPayErrorCode;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 微信支付服务v3版本
@@ -32,6 +45,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WechatPayV3Service {
     private final WechatPayConfigService wechatPayConfigService;
+
+    private static final Gson GSON = new GsonBuilder().create();
 
     private final WechatPayV2Service wechatPayV2Service;
 
@@ -61,11 +76,13 @@ public class WechatPayV3Service {
         }
         // 付款码支付
         else if (payMethodEnum == PayMethodEnum.BARCODE) {
-            wechatPayV2Service.barCodePay(payOrder, wechatPayParam.getAuthCode(), config, payResult);
+//            wechatPayV2Service.barCodePay(payOrder, wechatPayParam.getAuthCode(), config, payResult);
+            this.barCodePay(payOrder, wechatPayParam.getAuthCode(), config, payResult);
         }
         payResult.setPayBody(payBody);
         return payResult;
     }
+
 
     /**
      * wap支付
@@ -165,6 +182,68 @@ public class WechatPayV3Service {
         return packageParams;
     }
 
+    /**
+     * 付款码支付
+     */
+    private void barCodePay(PayOrder payOrder, String authCode, WechatPayConfig config, PayResultBo payResult) {
+        WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
+        try {
+            WxBarCodeV3PayRequest request = new WxBarCodeV3PayRequest();
+            // 设置公共属性
+            WxPayConfig wxPayConfig = wxPayService.getConfig();
+            request.setMchid(wxPayConfig.getMchId())
+                    .setAppid(wxPayConfig.getAppId());
+
+            request.setDescription(payOrder.getTitle());
+            request.setOutTradeNo(payOrder.getOrderNo());
+
+            // 金额
+            var amount = new WxBarCodeV3PayRequest.Amount();
+            amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
+            request.setAmount(amount);
+
+            // 场景信息
+            var sceneInfo = new WxBarCodeV3PayRequest.SceneInfo();
+            var storeInfo = new WxBarCodeV3PayRequest.StoreInfo();
+            storeInfo.setOutId("1");
+            sceneInfo.setStoreInfo(storeInfo);
+            request.setSceneInfo(sceneInfo);
+
+            // 条码参数
+            var payer = new WxBarCodeV3PayRequest.Payer();
+            payer.setAuthCode(authCode);
+            request.setPayer(payer);
+
+            // 分账参数
+            if (payOrder.getAllocation()){
+                var settleInfo = new WxBarCodeV3PayRequest.SettleInfo();
+                settleInfo.setProfitSharing(true);
+                request.setSettleInfo(settleInfo);
+            }
+            // 拼接和发送请求
+            String url = String.format("%s/v3/pay/transactions/codepay", wxPayService.getPayBaseUrl());
+            String body = wxPayService.postV3(url, GSON.toJson(request));
+            var result = GSON.fromJson(body, WxBarCodeV3PayResult.class);
+
+            // 支付成功处理, 如果不成功会走异常流
+            payResult.setComplete(true)
+                    .setFinishTime(WechatPayUtil.parseV3(result.getSuccessTime()))
+                    .setOutOrderNo(result.getTransactionId());
+        } catch (WxPayException e) {
+            String errCode = e.getErrCode();
+            String resultCode = e.getResultCode();
+            // 支付中, 发起轮训同步
+            // 提交支付请求后微信会同步返回支付结果。当返回结果为“系统错误”时，商户系统等待5秒后调用【查询订单API】
+            // 查询支付实际交易结果；当返回结果为“USERPAYING”时，商户系统可设置间隔时间(建议10秒)重新查询支付结果，直到支付成功或超时(建议45秒)；
+            if (Objects.equals(resultCode, WxPayErrorCode.UnifiedOrder.SYSTEMERROR)
+                    || Objects.equals(errCode, WxPayConstants.WxpayTradeStatus.USER_PAYING)) {
+                SpringUtil.getBean(this.getClass()).rotationSync(payOrder);
+                return;
+            }
+            log.error("微信付款码支付V3失败", e);
+            throw new TradeFailException("微信付款码支付V3失败: "+e.getMessage());
+        }
+    }
 
     /**
      * 构建请求参数
@@ -173,7 +252,7 @@ public class WechatPayV3Service {
         WxPayUnifiedOrderV3Request request = new WxPayUnifiedOrderV3Request();
         WxPayUnifiedOrderV3Request.Amount amount = new WxPayUnifiedOrderV3Request.Amount();
         amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
-        request.setDescription(payOrder.getDescription());
+        request.setDescription(payOrder.getTitle());
         request.setOutTradeNo(payOrder.getOrderNo());
         request.setTimeExpire(WechatPayUtil.formatV3(payOrder.getExpiredTime()));
         if (payOrder.getAllocation()){
@@ -186,5 +265,18 @@ public class WechatPayV3Service {
         return request;
     }
 
+
+    /**
+     * 多次重试同步支付状态, 最多10次, 30秒不操作微信会自动关闭
+     */
+    @Async
+    @Retryable(retryFor = RetryableException.class, maxAttempts = 10, backoff = @Backoff(value = 5000L))
+    public void rotationSync(PayOrder payOrder) {
+//        PaySyncResult paySyncResult = paySyncService.syncPayOrder(payOrder);
+//        // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
+//        if (Objects.equals(PROGRESS.getCode(), paySyncResult.getStatus())) {
+//            throw new RetryableException();
+//        }
+    }
 }
 

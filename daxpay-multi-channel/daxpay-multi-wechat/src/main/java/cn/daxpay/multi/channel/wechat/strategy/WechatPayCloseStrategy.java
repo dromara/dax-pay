@@ -57,7 +57,11 @@ public class WechatPayCloseStrategy extends AbsPayCloseStrategy {
         PayOrder order = this.getOrder();
         // 只有付款码可以撤销支付
         if (this.isUseCancel() && order.getMethod().equals(PayMethodEnum.BARCODE.getCode())){
-            payCloseV2Service.cancel(order,config);
+            if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V2)){
+                payCloseV2Service.cancel(order,config);
+            } else {
+                payCloseV3Service.cancel(order,config);
+            }
             return CloseTypeEnum.CANCEL;
         }
         // 判断接口是v2还是v3

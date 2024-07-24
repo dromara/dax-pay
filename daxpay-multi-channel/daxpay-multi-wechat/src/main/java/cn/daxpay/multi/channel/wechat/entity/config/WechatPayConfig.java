@@ -105,6 +105,8 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
         config.setId(channelConfig.getId())
                 .setWxAppId(channelConfig.getOutAppId())
                 .setWxMchId(channelConfig.getOutMchNo())
+                .setAppId(channelConfig.getAppId())
+                .setMchNo(channelConfig.getMchNo())
                 .setEnable(channelConfig.isEnable());
         return config;
     }

@@ -24,10 +24,15 @@ public class CloseOrderTest {
                 .serviceUrl("http://127.0.0.1:10880")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
+                .mchNo("test")
+                .appId("test")
                 .build();
         DaxPayKit.initConfig(config);
     }
 
+    /**
+     * 关闭
+     */
     @Test
     public void close(){
         PayCloseParam param = new PayCloseParam();
@@ -37,11 +42,15 @@ public class CloseOrderTest {
         System.out.println(JSONUtil.toJsonStr(execute));
     }
 
+    /**
+     * 撤销
+     */
     @Test
     public void cancel(){
         PayCloseParam param = new PayCloseParam();
-        param.setOrderNo("DEVP24060518083863000001");
+        param.setBizOrderNo("SDK_1721807811589");
         param.setClientIp("127.0.0.1");
+        param.setUseCancel(true);
         DaxPayResult<Void> execute = DaxPayKit.execute(param);
         System.out.println(JSONUtil.toJsonStr(execute));
     }

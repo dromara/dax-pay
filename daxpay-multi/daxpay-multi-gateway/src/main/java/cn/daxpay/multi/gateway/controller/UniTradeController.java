@@ -1,6 +1,7 @@
 package cn.daxpay.multi.gateway.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.multi.core.param.trade.pay.PayCloseParam;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.result.trade.RefundResult;
 import cn.daxpay.multi.service.common.anno.PaymentVerify;
@@ -8,6 +9,7 @@ import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.result.trade.PayResult;
 import cn.daxpay.multi.core.util.DaxRes;
+import cn.daxpay.multi.service.service.trade.pay.PayCloseService;
 import cn.daxpay.multi.service.service.trade.pay.PayService;
 import cn.daxpay.multi.service.service.trade.refund.RefundService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniTradeController {
     private final PayService payService;
     private final RefundService refundService;
+    private final PayCloseService payCloseService;
 
     @Operation(summary = "支付接口")
     @PostMapping("/pay")
@@ -47,13 +50,8 @@ public class UniTradeController {
 
     @Operation(summary = "关闭接口")
     @PostMapping("/close")
-    public DaxResult<Void> reconcile(){
-        return DaxRes.ok();
-    }
-
-    @Operation(summary = "撤销接口")
-    @PostMapping("/cancel")
-    public DaxResult<Void> cancel(){
+    public DaxResult<Void> reconcile(@RequestBody PayCloseParam param){
+        payCloseService.close(param);
         return DaxRes.ok();
     }
 
