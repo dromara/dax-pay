@@ -6,10 +6,10 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
-import cn.daxpay.multi.service.dao.record.callback.CallbackRecordManager;
-import cn.daxpay.multi.service.entity.record.callback.CallbackRecord;
-import cn.daxpay.multi.service.param.record.CallbackRecordQuery;
-import cn.daxpay.multi.service.result.record.callback.CallbackRecordResult;
+import cn.daxpay.multi.service.dao.record.callback.TradeCallbackRecordManager;
+import cn.daxpay.multi.service.entity.record.callback.TradeCallbackRecord;
+import cn.daxpay.multi.service.param.record.TradeCallbackRecordQuery;
+import cn.daxpay.multi.service.result.record.callback.TradeCallbackRecordResult;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,20 +25,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CallbackRecordService {
-    private final CallbackRecordManager callbackRecordManager;
+public class TradeCallbackRecordService {
+    private final TradeCallbackRecordManager callbackRecordManager;
 
     /**
      * 根据id查询
      */
-    public CallbackRecordResult findById(Long id) {
-        return callbackRecordManager.findById(id).map(CallbackRecord::toResult).orElseThrow(DataNotExistException::new);
+    public TradeCallbackRecordResult findById(Long id) {
+        return callbackRecordManager.findById(id).map(TradeCallbackRecord::toResult).orElseThrow(DataNotExistException::new);
     }
 
     /**
      * 分页查询
      */
-    public PageResult<CallbackRecordResult> page(PageParam pageParam, CallbackRecordQuery param){
+    public PageResult<TradeCallbackRecordResult> page(PageParam pageParam, TradeCallbackRecordQuery param){
         return MpUtil.toPageResult(callbackRecordManager.page(pageParam,param));
     }
 
@@ -48,7 +48,7 @@ public class CallbackRecordService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void saveCallbackRecord() {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        CallbackRecord payNotifyRecord = new CallbackRecord()
+        TradeCallbackRecord payNotifyRecord = new TradeCallbackRecord()
                 .setTradeNo(callbackInfo.getTradeNo())
                 .setOutTradeNo(callbackInfo.getOutTradeNo())
                 .setChannel(callbackInfo.getChannel())

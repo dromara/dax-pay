@@ -1,11 +1,11 @@
 package cn.daxpay.multi.service.service.trade.transfer;
 
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
-import cn.daxpay.multi.core.result.trade.TransferResult;
+import cn.daxpay.multi.core.result.trade.transfer.TransferResult;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
-import cn.daxpay.multi.service.param.order.transfer.TransferParam;
+import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

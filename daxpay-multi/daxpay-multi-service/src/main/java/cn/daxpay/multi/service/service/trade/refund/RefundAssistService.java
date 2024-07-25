@@ -7,7 +7,7 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
-import cn.daxpay.multi.core.result.trade.RefundResult;
+import cn.daxpay.multi.core.result.trade.refund.RefundResult;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;

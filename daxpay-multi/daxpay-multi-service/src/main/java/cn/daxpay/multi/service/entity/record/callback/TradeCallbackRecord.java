@@ -5,8 +5,8 @@ import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchRecordEntity;
-import cn.daxpay.multi.service.convert.record.CallbackRecordConvert;
-import cn.daxpay.multi.service.result.record.callback.CallbackRecordResult;
+import cn.daxpay.multi.service.convert.record.TradeCallbackRecordConvert;
+import cn.daxpay.multi.service.result.record.callback.TradeCallbackRecordResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,8 +20,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_callback_record")
-public class CallbackRecord extends MchRecordEntity implements ToResult<CallbackRecordResult> {
+@TableName("pay_trade_callback_record")
+public class TradeCallbackRecord extends MchRecordEntity implements ToResult<TradeCallbackRecordResult> {
 
     /** 本地交易号 */
     private String tradeNo;
@@ -60,7 +60,7 @@ public class CallbackRecord extends MchRecordEntity implements ToResult<Callback
      * 转换
      */
     @Override
-    public CallbackRecordResult toResult() {
-        return CallbackRecordConvert.CONVERT.convert(this);
+    public TradeCallbackRecordResult toResult() {
+        return TradeCallbackRecordConvert.CONVERT.convert(this);
     }
 }

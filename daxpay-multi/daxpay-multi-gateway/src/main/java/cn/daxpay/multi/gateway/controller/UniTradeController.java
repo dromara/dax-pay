@@ -3,15 +3,18 @@ package cn.daxpay.multi.gateway.controller;
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.core.param.trade.pay.PayCloseParam;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
-import cn.daxpay.multi.core.result.trade.RefundResult;
+import cn.daxpay.multi.core.result.trade.refund.RefundResult;
+import cn.daxpay.multi.core.result.trade.transfer.TransferResult;
 import cn.daxpay.multi.service.common.anno.PaymentVerify;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.core.result.DaxResult;
-import cn.daxpay.multi.core.result.trade.PayResult;
+import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.core.util.DaxRes;
+import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
 import cn.daxpay.multi.service.service.trade.pay.PayCloseService;
 import cn.daxpay.multi.service.service.trade.pay.PayService;
 import cn.daxpay.multi.service.service.trade.refund.RefundService;
+import cn.daxpay.multi.service.service.trade.transfer.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ public class UniTradeController {
     private final PayService payService;
     private final RefundService refundService;
     private final PayCloseService payCloseService;
+    private final TransferService transferService;
 
     @Operation(summary = "支付接口")
     @PostMapping("/pay")
@@ -57,7 +61,7 @@ public class UniTradeController {
 
     @Operation(summary = "转账接口")
     @PostMapping("/transfer")
-    public DaxResult<Void> transfer(){
-        return DaxRes.ok();
+    public DaxResult<TransferResult> transfer(@RequestBody TransferParam transferParam){
+        return DaxRes.ok(transferService.transfer(transferParam));
     }
 }

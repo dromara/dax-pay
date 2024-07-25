@@ -32,7 +32,7 @@ import static cn.daxpay.multi.channel.alipay.code.AliPayCode.QUERY_ACCOUNT_TYPE;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AliTransferService {
+public class AliPayTransferService {
 
     private final AliPayConfigService aliPayConfigService;
 
@@ -92,8 +92,8 @@ public class AliTransferService {
         request.setBizModel(model);
         AlipayFundTransUniTransferResponse response = alipayClient.execute(request);
         if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-            log.error("网关返回退款失败: {}", response.getSubMsg());
-            throw new TradeFailException(response.getSubMsg());
+            log.error("支付宝转账失败: {}", response.getSubMsg());
+            throw new TradeFailException("支付宝转账失败: "+response.getSubMsg());
         }
         // 通道转账号
         transferInfo.setOutTransferNo(response.getOrderId());

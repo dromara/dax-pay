@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.strategy;
 
 import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
-import cn.daxpay.multi.service.param.order.transfer.TransferParam;
+import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
 import lombok.Getter;
 import lombok.Setter;
 

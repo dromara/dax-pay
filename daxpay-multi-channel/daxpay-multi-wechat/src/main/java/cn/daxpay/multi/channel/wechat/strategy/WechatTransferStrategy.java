@@ -8,7 +8,7 @@ import cn.daxpay.multi.channel.wechat.service.transfer.WechatPayTransferV3Servic
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.service.bo.trade.TransferResultBo;
-import cn.daxpay.multi.service.param.order.transfer.TransferParam;
+import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;

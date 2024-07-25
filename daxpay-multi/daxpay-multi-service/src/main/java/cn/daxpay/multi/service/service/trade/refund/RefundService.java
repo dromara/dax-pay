@@ -9,7 +9,7 @@ import cn.daxpay.multi.core.exception.TradeNotExistException;
 import cn.daxpay.multi.core.exception.TradeProcessingException;
 import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
-import cn.daxpay.multi.core.result.trade.RefundResult;
+import cn.daxpay.multi.core.result.trade.refund.RefundResult;
 import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;

@@ -1,4 +1,4 @@
-package cn.daxpay.multi.core.result.trade;
+package cn.daxpay.multi.core.result.trade.refund;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

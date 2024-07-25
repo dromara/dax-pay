@@ -3,8 +3,10 @@ package cn.daxpay.multi.service.result.record.callback;
 import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
+import cn.daxpay.multi.service.common.result.MchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -12,10 +14,11 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/7/22
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "回调记录")
-public class CallbackRecordResult {
+public class TradeCallbackRecordResult extends MchResult {
 
     @Schema(description = "交易号")
     private String tradeNo;

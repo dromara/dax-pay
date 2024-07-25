@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.service.notice.callback;
 
-import cn.daxpay.multi.service.service.record.callback.CallbackRecordService;
+import cn.daxpay.multi.service.service.record.callback.TradeCallbackRecordService;
 import cn.daxpay.multi.service.strategy.AbsCallbackStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CallbackReceiverService {
 
-    private final CallbackRecordService callbackRecordService;
+    private final TradeCallbackRecordService tradeCallbackRecordService;
 
     private final PayCallbackService payCallbackService;
 
@@ -34,7 +34,7 @@ public class CallbackReceiverService {
         // 执行回调业务处理
         payCallbackService.payCallback();
         // 保存记录
-        callbackRecordService.saveCallbackRecord();
+        tradeCallbackRecordService.saveCallbackRecord();
         return msg;
     }
 
@@ -48,7 +48,7 @@ public class CallbackReceiverService {
         // 执行回调业务处理
         refundCallbackService.refundCallback();
         // 记录保存
-        callbackRecordService.saveCallbackRecord();
+        tradeCallbackRecordService.saveCallbackRecord();
         return msg;
     }
 }

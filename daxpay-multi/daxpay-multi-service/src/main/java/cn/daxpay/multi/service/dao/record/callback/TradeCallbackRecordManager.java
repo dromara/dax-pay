@@ -4,8 +4,8 @@ import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
-import cn.daxpay.multi.service.entity.record.callback.CallbackRecord;
-import cn.daxpay.multi.service.param.record.CallbackRecordQuery;
+import cn.daxpay.multi.service.entity.record.callback.TradeCallbackRecord;
+import cn.daxpay.multi.service.param.record.TradeCallbackRecordQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +20,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CallbackRecordManager extends BaseManager<CallbackRecordMapper, CallbackRecord> {
+public class TradeCallbackRecordManager extends BaseManager<TradeCallbackRecordMapper, TradeCallbackRecord> {
 
     /**
      * 分页
      */
-    public Page<CallbackRecord> page(PageParam pageParam, CallbackRecordQuery query){
-        Page<CallbackRecord> mpPage = MpUtil.getMpPage(pageParam, CallbackRecord.class);
-        QueryWrapper<CallbackRecord> generator = QueryGenerator.generator(query);
+    public Page<TradeCallbackRecord> page(PageParam pageParam, TradeCallbackRecordQuery query){
+        Page<TradeCallbackRecord> mpPage = MpUtil.getMpPage(pageParam, TradeCallbackRecord.class);
+        QueryWrapper<TradeCallbackRecord> generator = QueryGenerator.generator(query);
         return page(mpPage, generator);
     }
 }

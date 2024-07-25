@@ -7,7 +7,7 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.exception.AmountExceedLimitException;
 import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
-import cn.daxpay.multi.core.result.trade.PayResult;
+import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.bo.trade.PayResultBo;

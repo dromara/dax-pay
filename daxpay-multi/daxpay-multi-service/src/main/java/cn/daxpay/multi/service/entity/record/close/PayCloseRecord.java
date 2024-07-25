@@ -6,6 +6,7 @@ import cn.daxpay.multi.core.enums.CloseTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchRecordEntity;
 import cn.daxpay.multi.service.convert.record.PayCloseRecordConvert;
 import cn.daxpay.multi.service.result.record.close.PayCloseRecordResult;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -18,6 +19,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@TableName("pay_close_record")
 public class PayCloseRecord extends MchRecordEntity implements ToResult<PayCloseRecordResult> {
 
     /** 订单号 */

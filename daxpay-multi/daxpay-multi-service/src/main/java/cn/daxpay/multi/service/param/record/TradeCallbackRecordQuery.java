@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付回调信息记录")
-public class CallbackRecordQuery extends SortParam {
+public class TradeCallbackRecordQuery extends SortParam {
 
     @Schema(description = "交易号")
     private String tradeNo;

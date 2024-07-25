@@ -28,6 +28,8 @@ public class TransferOrderTest {
                 .serviceUrl("http://127.0.0.1:10880")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
+                .mchNo("test")
+                .appId("test")
                 .build();
         DaxPayKit.initConfig(config);
     }
@@ -43,7 +45,7 @@ public class TransferOrderTest {
         param.setBizTransferNo("T"+System.currentTimeMillis());
         param.setTitle("测试转账");
         param.setReason("我要转个账");
-        param.setAmount(BigDecimal.valueOf(500));
+        param.setAmount(BigDecimal.valueOf(5));
         param.setChannel(PayChannelEnum.ALI.getCode());
         param.setPayeeType(TransferPayeeTypeEnum.ALI_OPEN_ID.getCode());
         param.setClientIp("127.0.0.1");

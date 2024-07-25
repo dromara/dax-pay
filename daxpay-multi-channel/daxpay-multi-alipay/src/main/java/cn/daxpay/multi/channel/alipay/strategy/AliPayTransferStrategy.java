@@ -3,10 +3,10 @@ package cn.daxpay.multi.channel.alipay.strategy;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
-import cn.daxpay.multi.channel.alipay.service.transfer.AliTransferService;
+import cn.daxpay.multi.channel.alipay.service.transfer.AliPayTransferService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.bo.trade.TransferResultBo;
-import cn.daxpay.multi.service.param.order.transfer.TransferParam;
+import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +27,11 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @Scope(SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class AliTransferStrategy extends AbsTransferStrategy {
+public class AliPayTransferStrategy extends AbsTransferStrategy {
 
     private final AliPayConfigService payConfigService;
 
-    private final AliTransferService aliTransferService;
+    private final AliPayTransferService aliPayTransferService;
 
     private AliPayConfig config;
 
@@ -65,6 +65,6 @@ public class AliTransferStrategy extends AbsTransferStrategy {
      */
     @Override
     public TransferResultBo doTransferHandler() {
-        return aliTransferService.transfer(this.getTransferOrder(), this.config);
+        return aliPayTransferService.transfer(this.getTransferOrder(), this.config);
     }
 }

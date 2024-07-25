@@ -4,7 +4,7 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.exception.PayFailureException;
 import cn.daxpay.multi.core.exception.TradeProcessingException;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
-import cn.daxpay.multi.core.result.trade.PayResult;
+import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;

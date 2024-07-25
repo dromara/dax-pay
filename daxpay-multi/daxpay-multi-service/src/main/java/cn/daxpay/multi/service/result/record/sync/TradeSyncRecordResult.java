@@ -1,0 +1,80 @@
+package cn.daxpay.multi.service.result.record.sync;
+
+import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.service.common.result.MchResult;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+/**
+ * 支付同步记录
+ * @author xxm
+ * @since 2023/7/14
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
+@Schema(title = "支付同步订单")
+public class TradeSyncRecordResult extends MchResult {
+
+    /** 本地交易号 */
+    @Schema(description = "本地订单ID")
+    private String tradeNo;
+
+    /** 商户交易号 */
+    @Schema(description = "商户交易号")
+    private String bizTradeNo;
+
+    /** 通道交易号 */
+    @Schema(description = "通道交易号")
+    private String outTradeNo;
+
+
+    /**
+     * 三方支付返回状态
+     */
+    @Schema(description = "网关返回状态")
+    private String outTradeStatus;
+
+
+    /**
+     * 同步类型 支付/退款
+     * @see cn.daxpay.multi.core.enums.TradeTypeEnum
+     */
+    @Schema(description = "同步类型")
+    private String syncType;
+
+    /**
+     * 同步的异步通道
+     * @see ChannelEnum#getCode()
+     */
+    @Schema(description = "同步的异步通道")
+    private String channel;
+
+    /** 网关返回的同步消息 */
+    @Schema(description = "同步消息")
+    private String syncInfo;
+
+    /**
+     * 支付单如果状态不一致, 是否进行调整
+     */
+    @Schema(description = "是否进行调整")
+    private boolean adjust;
+
+    /** 调整单号 */
+    @Schema(description = "调整单号")
+    private String adjustNo;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误消息 */
+    @Schema(description = "错误消息")
+    private String errorMsg;
+
+    /** 客户端IP */
+    @Schema(description = "客户端IP")
+    private String clientIp;
+}

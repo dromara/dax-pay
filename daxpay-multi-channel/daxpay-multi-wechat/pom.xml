@@ -20,12 +20,6 @@
 
     <dependencies>
 
-        <!-- v2版本接入 -->
-<!--        <dependency>-->
-<!--            <groupId>com.github.javen205</groupId>-->
-<!--            <artifactId>IJPay-WxPay</artifactId>-->
-<!--            <version>${IJPay.version}</version>-->
-<!--        </dependency>-->
         <!-- 微信支付三方SDK 同时支持 v2/v3版本接入-->
         <dependency>
             <groupId>com.github.binarywang</groupId>

@@ -109,13 +109,13 @@ public class AliPayCloseService {
      * 关闭失败后, 获取支付网关的状态, 如果是关闭返回true, 其他情况抛出异常
      */
     private boolean syncStatus(PayOrder payOrder, AliPayConfig config){
-//        PayRemoteSyncResult gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder,config);
+//        PaySyncResultBo gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder,config);
 //        // 已经关闭
-//        if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncStatusEnum.CLOSED)){
+//        if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncResultEnum.CLOSED)){
 //            return true;
 //        }
 //        // 同步错误
-//        else if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
+//        else if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncResultEnum.FAIL)){
 //            throw new OperationFailException("关闭失败, 原因: "+gatewaySyncResult.getErrorMsg());
 //        }
 //        // 其他状态

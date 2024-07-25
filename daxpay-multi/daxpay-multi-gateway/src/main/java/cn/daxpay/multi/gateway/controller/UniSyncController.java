@@ -1,11 +1,13 @@
 package cn.daxpay.multi.gateway.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.multi.core.param.trade.pay.PaySyncParam;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @IgnoreAuth
 @Tag(name = "统一同步接口")
 @RestController
-@RequestMapping("/unipay/sync")
+@RequestMapping("/unipay/sync/order")
 public class UniSyncController {
 
     @Operation(summary = "支付同步接口")
     @PostMapping("/pay")
-    public DaxResult<Void> pay(){
+    public DaxResult<Void> pay(@RequestBody PaySyncParam param){
         return DaxRes.ok();
     }
 

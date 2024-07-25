@@ -39,16 +39,16 @@ public class UniQueryController {
     }
 
     @PaymentVerify
-    @Operation(summary = "分账订单查询接口")
-    @PostMapping("/allocOrder")
-    public DaxResult<Void> queryAllocationOrder(){
+    @Operation(summary = "转账订单查询接口")
+    @PostMapping("/transferOrder")
+    public DaxResult<Void> transferOrder(){
         return DaxRes.ok();
     }
 
     @PaymentVerify
-    @Operation(summary = "转账订单查询接口")
-    @PostMapping("/transferOrder")
-    public DaxResult<Void> transferOrder(){
+    @Operation(summary = "分账订单查询接口")
+    @PostMapping("/allocOrder")
+    public DaxResult<Void> queryAllocationOrder(){
         return DaxRes.ok();
     }
 
