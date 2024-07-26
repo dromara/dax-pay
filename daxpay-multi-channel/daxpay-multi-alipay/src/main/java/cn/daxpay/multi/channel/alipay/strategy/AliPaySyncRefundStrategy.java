@@ -2,10 +2,11 @@ package cn.daxpay.multi.channel.alipay.strategy;
 
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
-import cn.daxpay.multi.channel.alipay.service.sync.AliPaySyncService;
+import cn.daxpay.multi.channel.alipay.service.sync.AliPayRefundSyncService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
-import cn.daxpay.multi.service.strategy.AbsSyncPayOrderStrategy;
+import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
+import cn.daxpay.multi.service.enums.PaySyncResultEnum;
+import cn.daxpay.multi.service.strategy.AbsSyncRefundOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -13,33 +14,39 @@ import org.springframework.stereotype.Component;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 支付宝支付同步
+ * 支付宝退款订单查询
  * @author xxm
- * @since 2023/7/14
+ * @since 2024/7/25
  */
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class AliPaySyncPayOrderStrategy extends AbsSyncPayOrderStrategy {
+public class AliPaySyncRefundStrategy extends AbsSyncRefundOrderStrategy {
+
 
     private final AliPayConfigService alipayConfigService;
 
-    private final AliPaySyncService alipaySyncService;
+    private final AliPayRefundSyncService alipaySyncService;
 
     /**
-     * 策略标识
+     * 策略标识, 可以自行进行扩展
+     *
+     * @see ChannelEnum
      */
-     @Override
+    @Override
     public String getChannel() {
         return ChannelEnum.ALI.getCode();
     }
 
     /**
-     * 异步支付单与支付网关进行状态比对
+     * 异步支付单与支付网关进行状态比对后的结果
+     *
+     * @see PaySyncResultEnum
      */
     @Override
-    public PaySyncResultBo doSync() {
+    public RefundSyncResultBo doSync() {
         AliPayConfig config = alipayConfigService.getAliPayConfig();
-        return alipaySyncService.syncPayStatus(this.getOrder(),config);
+        return alipaySyncService.syncRefundStatus(getRefundOrder(), config);
     }
+
 }

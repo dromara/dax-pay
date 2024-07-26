@@ -15,7 +15,6 @@
     <properties>
         <wxjava.version>4.6.0</wxjava.version>
         <wxpay.version>0.2.12</wxpay.version>
-        <IJPay.version>2.9.11</IJPay.version>
     </properties>
 
     <dependencies>
@@ -26,6 +25,7 @@
             <artifactId>weixin-java-pay</artifactId>
             <version>${wxjava.version}</version>
         </dependency>
+
         <!-- 微信支付官方SDK v3版本接入 -->
         <dependency>
             <groupId>com.github.wechatpay-apiv3</groupId>
