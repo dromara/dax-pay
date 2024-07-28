@@ -39,7 +39,7 @@ public class AliPayRefundSyncService {
      */
     public RefundSyncResultBo syncRefundStatus(RefundOrder refundOrder, AliPayConfig config){
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
-        RefundSyncResultBo syncResult = new RefundSyncResultBo().setSyncStatus(RefundSyncResultEnum.FAIL);
+        RefundSyncResultBo syncResult = new RefundSyncResultBo();
         try {
             AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
             // 退款请求号
@@ -61,7 +61,7 @@ public class AliPayRefundSyncService {
             }
             String tradeStatus = response.getRefundStatus();
             // 成功
-            if (Objects.equals(tradeStatus, AliPayCode.REFUND_SUCCESS)){
+            if (Objects.equals(tradeStatus, AliPayCode.RefundStatus.REFUND_SUCCESS)){
                 LocalDateTime localDateTime = LocalDateTimeUtil.of(response.getGmtRefundPay());
                 return syncResult.setFinishTime(localDateTime).setSyncStatus(RefundSyncResultEnum.SUCCESS);
             } else {

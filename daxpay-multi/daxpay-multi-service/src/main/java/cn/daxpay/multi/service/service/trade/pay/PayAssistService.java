@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.service.trade.pay;
 
 import cn.bootx.platform.core.util.BigDecimalUtil;
+import cn.bootx.platform.core.util.DateTimeUtil;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
@@ -16,6 +17,7 @@ import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
+import cn.daxpay.multi.service.service.sync.pay.PaySyncService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,7 @@ public class PayAssistService {
     private final PayOrderService payOrderService;
 
     private final PayOrderQueryService payOrderQueryService;
+    private final PaySyncService paySyncService;
 
 
     /**
@@ -98,10 +101,10 @@ public class PayAssistService {
             // 待支付
             if (Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
                 // 如果支付超时, 触发订单同步操作, 同时抛出异常
-//                if (Objects.nonNull(payOrder.getExpiredTime()) && LocalDateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
-//                    paySyncService.syncPayOrder(payOrder);
-//                    throw new TradeStatusErrorException("支付已超时，请重新确认支付状态");
-//                }
+                if (Objects.nonNull(payOrder.getExpiredTime()) && DateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
+                    paySyncService.syncPayOrder(payOrder);
+                    throw new TradeStatusErrorException("支付已超时，请重新确认支付状态");
+                }
                 return payOrder;
             }
             // 已经支付状态

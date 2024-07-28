@@ -68,10 +68,6 @@ public class RefundSyncService {
         // 先获取退款单
         RefundOrder refundOrder = refundOrderQueryService.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())
                 .orElseThrow(() -> new TradeNotExistException("未查询到退款订单"));
-        // 如果订单已经关闭, 直接返回退款关闭
-        if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.CLOSE.getCode())){
-            return new RefundSyncResult().setStatus(RefundStatusEnum.CLOSE.getCode());
-        }
         return this.syncRefundOrder(refundOrder);
     }
 
@@ -85,12 +81,13 @@ public class RefundSyncService {
         if (Objects.isNull(lock)) {
             throw new RepetitiveOperationException("退款同步处理中，请勿重复操作");
         }
+        // 获取支付同步策略类
+        AbsSyncRefundOrderStrategy syncPayStrategy = PaymentStrategyFactory.create(refundOrder.getChannel(),AbsSyncRefundOrderStrategy.class);
+        syncPayStrategy.setRefundOrder(refundOrder);
+        // 同步前处理, 主要预防请求过于迅速
+        syncPayStrategy.doBeforeHandler();
         try {
-            // 获取支付同步策略类
-            AbsSyncRefundOrderStrategy syncPayStrategy = PaymentStrategyFactory.create(refundOrder.getChannel(),AbsSyncRefundOrderStrategy.class);
-            syncPayStrategy.setRefundOrder(refundOrder);
-            // 同步前处理, 主要预防请求过于迅速
-            syncPayStrategy.doBeforeHandler();
+
             // 执行操作, 获取支付网关同步的结果
             RefundSyncResultBo syncResultBo = syncPayStrategy.doSync();
 
@@ -106,7 +103,7 @@ public class RefundSyncService {
                 refundOrderManager.updateById(refundOrder);
             }
             // 判断网关状态是否和支付单一致
-            boolean statusSync = this.checkSyncStatus(syncResultBo, refundOrder);
+            boolean statusSync = this.checkStatus(syncResultBo, refundOrder);
             try {
                 // 状态不一致，执行退款单调整逻辑
                 if (!statusSync) {
@@ -116,12 +113,14 @@ public class RefundSyncService {
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 syncResultBo.setSyncStatus(RefundSyncResultEnum.FAIL);
-                this.saveRecord(refundOrder, syncResultBo, statusSync);
+                this.saveRecord(refundOrder, syncResultBo, false);
                 throw e;
             }
             // 同步成功记录日志
             this.saveRecord(refundOrder, syncResultBo, statusSync);
-            return new RefundSyncResult().setStatus(syncResultBo.getSyncStatus().getCode());
+            return new RefundSyncResult()
+                    .setOrderStatus(refundOrder.getStatus())
+                    .setAdjust(statusSync);
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -133,23 +132,24 @@ public class RefundSyncService {
      * @see RefundSyncResultEnum 同步返回类型
      * @see RefundStatusEnum 退款单状态
      */
-    private boolean checkSyncStatus(RefundSyncResultBo syncResult, RefundOrder order){
-        RefundSyncResultEnum syncStatus = syncResult.getSyncStatus();
+    private boolean checkStatus(RefundSyncResultBo syncResult, RefundOrder order){
+        var syncStatus = syncResult.getSyncStatus();
         String orderStatus = order.getStatus();
-        // 退款完成
-        if (Objects.equals(syncStatus, RefundSyncResultEnum.SUCCESS)&&
-                Objects.equals(orderStatus, RefundStatusEnum.SUCCESS.getCode())) {
-            return true;
-        }
-        // 退款失败
-        if (Objects.equals(syncStatus, RefundSyncResultEnum.FAIL)&&
-                Objects.equals(orderStatus, RefundStatusEnum.FAIL.getCode())) {
-            return true;
-        }
-        // 退款中
-        if (Objects.equals(syncStatus, RefundSyncResultEnum.PROGRESS)&&
-                Objects.equals(orderStatus, RefundStatusEnum.PROGRESS.getCode())) {
-            return true;
+
+        // 如果订单为退款中, 对状态进行比较
+        if (Objects.equals(orderStatus, RefundStatusEnum.SUCCESS.getCode())){
+            // 退款完成
+            if (Objects.equals(syncStatus, RefundSyncResultEnum.SUCCESS)) {
+                return true;
+            }
+            // 退款失败
+            if (Objects.equals(syncStatus, RefundSyncResultEnum.FAIL)) {
+                return true;
+            }
+            // 退款中
+            if (Objects.equals(syncStatus, RefundSyncResultEnum.PROGRESS)) {
+                return true;
+            }
         }
         return false;
     }
@@ -220,7 +220,9 @@ public class RefundSyncService {
         PayOrder payOrder = payOrderService.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
         // 退款失败返还后的余额
-        var payOrderAmount =  refundOrder.getAmount().add(payOrder.getRefundableBalance());
+        var payOrderAmount =  refundOrder
+                .getAmount()
+                .add(payOrder.getRefundableBalance());
         // 退款失败返还后的余额+可退余额 == 订单金额 支付订单回退为为支付成功状态
         if (BigDecimalUtil.isEqual(payOrderAmount, payOrder.getAmount())) {
             payOrder.setStatus(PayStatusEnum.SUCCESS.getCode());

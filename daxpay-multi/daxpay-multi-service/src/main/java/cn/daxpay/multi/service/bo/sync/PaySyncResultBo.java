@@ -4,9 +4,10 @@ import cn.daxpay.multi.service.enums.PaySyncResultEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static cn.daxpay.multi.service.enums.PaySyncResultEnum.FAIL;
+import static cn.daxpay.multi.service.enums.PaySyncResultEnum.UNKNOWN;
 
 /**
  *
@@ -21,12 +22,17 @@ public class PaySyncResultBo {
      * 支付网关订单状态
      * @see PaySyncResultEnum
      */
-    private PaySyncResultEnum syncStatus = FAIL;
+    private PaySyncResultEnum syncStatus = UNKNOWN;
 
     /**
      * 外部第三方支付系统的交易号, 用与和本地记录关联起来
      */
     private String outOrderNo;
+
+    /**
+     * 金额
+     */
+    private BigDecimal amount;
 
     /** 支付完成时间 */
     private LocalDateTime finishTime;

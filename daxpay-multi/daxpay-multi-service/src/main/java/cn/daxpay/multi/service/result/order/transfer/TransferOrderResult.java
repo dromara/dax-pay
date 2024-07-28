@@ -76,9 +76,9 @@ public class TransferOrderResult extends MchResult {
     @Schema(description = "状态")
     private String status;
 
-    /** 成功时间 */
-    @Schema(description = "成功时间")
-    private LocalDateTime successTime;
+    /** 完成时间 */
+    @Schema(description = "完成时间")
+    private LocalDateTime finishTime;
 
     /** 异步通知地址 */
     @Schema(description = "异步通知地址")
@@ -88,8 +88,8 @@ public class TransferOrderResult extends MchResult {
     @Schema(description = "商户扩展参数")
     private String attach;
 
-    /** 请求时间，时间戳转时间 */
-    @Schema(description = "请求时间，传输时间戳")
+    /** 请求时间 */
+    @Schema(description = "请求时间")
     private LocalDateTime reqTime;
 
     /** 终端ip */

@@ -1,6 +1,7 @@
 package cn.daxpay.multi.channel.alipay.service.sync;
 
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
+import cn.daxpay.multi.channel.alipay.code.AliPayCode.PayStatus;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
@@ -43,7 +44,7 @@ public class AliPaySyncService {
      */
     public PaySyncResultBo syncPayStatus(PayOrder payOrder, AliPayConfig aliPayConfig){
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
-        PaySyncResultBo syncResult = new PaySyncResultBo().setSyncStatus(PaySyncResultEnum.FAIL);
+        PaySyncResultBo syncResult = new PaySyncResultBo();
         // 查询
         try {
             AlipayTradeQueryModel model = new AlipayTradeQueryModel();
@@ -56,17 +57,17 @@ public class AliPaySyncService {
             // 设置网关订单号
             syncResult.setOutOrderNo(response.getTradeNo());
             // 支付完成  部分退款无法进行区分, 需要借助对账进行处理
-            if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_FINISHED)) {
+            if (Objects.equals(tradeStatus, PayStatus.TRADE_SUCCESS) || Objects.equals(tradeStatus, PayStatus.TRADE_FINISHED)) {
                 // 支付完成时间
                 LocalDateTime payTime = LocalDateTimeUtil.of(response.getSendPayDate());
                 return syncResult.setSyncStatus(PaySyncResultEnum.SUCCESS).setFinishTime(payTime);
             }
             // 待支付
-            if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_WAIT_BUYER_PAY)) {
+            if (Objects.equals(tradeStatus, PayStatus.WAIT_BUYER_PAY)) {
                 return syncResult.setSyncStatus(PaySyncResultEnum.PROGRESS);
             }
             // 已关闭或支付完成后全额退款
-            if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_CLOSED)) {
+            if (Objects.equals(tradeStatus, PayStatus.TRADE_CLOSED)) {
                 // 判断是否有支付时间, 有支付时间说明是退款
                 if (Objects.nonNull(response.getSendPayDate())){
                     return syncResult.setSyncStatus(PaySyncResultEnum.REFUND);
@@ -76,14 +77,14 @@ public class AliPaySyncService {
             }
             // 支付宝支付后, 客户未进行操作将不会创建出订单, 所以交易不存在约等于未查询订单
             if (Objects.equals(response.getSubCode(), AliPayCode.ACQ_TRADE_NOT_EXIST)) {
-                return syncResult.setSyncStatus(PaySyncResultEnum.NOT_FOUND_UNKNOWN);
+                return syncResult.setSyncStatus(PaySyncResultEnum.UNKNOWN);
             }
             // 查询失败
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 syncResult.setSyncStatus(PaySyncResultEnum.FAIL);
                 syncResult.setErrorCode(response.getSubCode());
                 syncResult.setErrorMsg(response.getSubMsg());
-                return syncResult;
+                return syncResult.setSyncStatus(PaySyncResultEnum.FAIL);
             }
         }
         catch (AlipayApiException e) {

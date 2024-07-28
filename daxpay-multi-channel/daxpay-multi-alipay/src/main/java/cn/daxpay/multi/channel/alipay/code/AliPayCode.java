@@ -8,12 +8,33 @@ package cn.daxpay.multi.channel.alipay.code;
  */
 public interface AliPayCode {
 
+
+
+    /**
+     * 退款状态
+     * SUCCESS：转账成功；
+     * WAIT_PAY：等待支付；
+     * CLOSED：订单超时关闭；
+     * FAIL：失败（适用于"单笔转账到银行卡"）；
+     * DEALING：处理中（适用于"单笔转账到银行卡"）；
+     * REFUND：退票（适用于"单笔转账到银行卡"）；
+     */
+    interface TransferStatus{
+        String SUCCESS = "SUCCESS";
+        String WAIT_PAY = "WAIT_PAY";
+        String CLOSED = "CLOSED";
+        String FAIL = "FAIL";
+        String DEALING = "DEALING";
+        String REFUND = "REFUND";
+    }
+
     // 认证类型
     /** 公钥 */
     String AUTH_TYPE_KEY = "key";
 
     /** 证书 */
     String AUTH_TYPE_CART = "cart";
+
 
     // 渠道枚举
     /** 目前PC支付必填 */
@@ -68,22 +89,36 @@ public interface AliPayCode {
     /** appId */
     String APP_ID = "app_id";
 
-    // 回调通知返回的交易状态说明
-    /** 交易创建，等待买家付款 */
-    String NOTIFY_WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
+    /**
+     *  支付交易状态说明
+     *  WAIT_BUYER_PAY（交易创建，等待买家付款）、
+     *  TRADE_CLOSED（未付款交易超时关闭，或支付完成后全额退款）、
+     *  TRADE_SUCCESS（交易支付成功）、
+     *  TRADE_FINISHED（交易结束，不可退款）
+     */
+    interface PayStatus {
+        /** 交易创建，等待买家付款 */
+        String WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
 
-    /** 未付款交易超时关闭，或支付完成后全额退款 */
-    String NOTIFY_TRADE_CLOSED = "TRADE_CLOSED";
+        /** 未付款交易超时关闭，或支付完成后全额退款 */
+        String TRADE_CLOSED = "TRADE_CLOSED";
 
-    /** 交易支付成功 */
-    String NOTIFY_TRADE_SUCCESS = "TRADE_SUCCESS";
+        /** 交易支付成功 */
+        String TRADE_SUCCESS = "TRADE_SUCCESS";
 
-    /** 交易结束，不可退款 */
-    String NOTIFY_TRADE_FINISHED = "TRADE_FINISHED";
+        /** 交易结束，不可退款 */
+        String TRADE_FINISHED = "TRADE_FINISHED";
+    }
+
+    /**
+     * 退款状态
+     */
+    interface RefundStatus {
+        /** 退款成功 */
+        String REFUND_SUCCESS = "REFUND_SUCCESS";
+    }
 
     // 退款状态
-    /** 退款成功 */
-    String REFUND_SUCCESS = "REFUND_SUCCESS";
 
     // 参数
     /** 返回退款时间 */

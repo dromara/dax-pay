@@ -2,7 +2,6 @@ package cn.daxpay.multi.service.service.sync.pay;
 
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.core.util.DateTimeUtil;
-import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.exception.*;
@@ -59,13 +58,12 @@ public class PaySyncService {
     public PaySyncResult sync(PaySyncParam param) {
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
-
         // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);
     }
     /**
      * 同步支付状态, 开启一个新的事务, 不受外部抛出异常的影响
-     * 1. 如果状态一致, 不进行处理
+     * 1. 如果状态一致, 不进行处理， 直接返回
      * 2. 如果状态不一致, 更新状态/完成时间/关联网关订单号
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
@@ -75,39 +73,41 @@ public class PaySyncService {
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("支付同步处理中，请勿重复操作");
         }
+        // 获取支付同步策略类并初始化
+        AbsSyncPayOrderStrategy syncPayStrategy = PaymentStrategyFactory.create(payOrder.getChannel(), AbsSyncPayOrderStrategy.class);
+        syncPayStrategy.setOrder(payOrder);
         try {
-            // 获取支付同步策略类
-            AbsSyncPayOrderStrategy syncPayStrategy = PaymentStrategyFactory.create(payOrder.getChannel(), AbsSyncPayOrderStrategy.class);
-            syncPayStrategy.initPayParam(payOrder);
             // 执行操作, 获取支付网关同步的结果
-            PaySyncResultBo payRemoteSyncResult = syncPayStrategy.doSync();
+            PaySyncResultBo syncResult = syncPayStrategy.doSync();
             // 判断是否同步成功
-            if (Objects.equals(payRemoteSyncResult.getSyncStatus(), PaySyncResultEnum.FAIL)){
+            if (Objects.equals(syncResult.getSyncStatus(), PaySyncResultEnum.FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(payOrder, payRemoteSyncResult, false);
-                throw new OperationFailException(payRemoteSyncResult.getErrorMsg());
+                this.saveRecord(payOrder, syncResult, false);
+                throw new OperationFailException(syncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
-            if (!Objects.equals(payRemoteSyncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
-                payOrder.setOutOrderNo(payRemoteSyncResult.getOutOrderNo());
+            if (!Objects.equals(syncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
+                payOrder.setOutOrderNo(syncResult.getOutOrderNo());
                 payOrderService.updateById(payOrder);
             }
-            // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
-            boolean statusSync = this.checkAndAdjustSyncStatus(payRemoteSyncResult,payOrder);
+            // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态或记录异常信息
+            boolean statusSync = this.checkAndAdjust(syncResult,payOrder);
             try {
                 // 状态不一致，执行支付单调整逻辑
                 if (!statusSync){
-                    this.adjustHandler(payRemoteSyncResult, payOrder);
+                    this.adjustHandler(syncResult, payOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                payRemoteSyncResult.setSyncStatus(PaySyncResultEnum.FAIL);
-                this.saveRecord(payOrder, payRemoteSyncResult, false);
+                syncResult.setSyncStatus(PaySyncResultEnum.FAIL);
+                this.saveRecord(payOrder, syncResult, false);
                 throw e;
             }
             // 同步成功记录日志
-            this.saveRecord( payOrder, payRemoteSyncResult, statusSync);
-            return new PaySyncResult().setStatus(payRemoteSyncResult.getSyncStatus().getCode());
+            this.saveRecord(payOrder, syncResult, statusSync);
+            return new PaySyncResult()
+                    .setOrderStatus(payOrder.getStatus())
+                    .setAdjust(statusSync);
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -115,44 +115,44 @@ public class PaySyncService {
 
     /**
      * 判断支付单和网关状态是否一致, 同时待支付状态下, 支付单支付超时进行状态的更改
+     * 如果本地订单状态为支付中, 会对订单信息进行调整
+     * 如果本地订单状态不为为支付中, 状态不一致, 未来将 记录异常情况, 现在不会进行任何操作
      */
-    private boolean checkAndAdjustSyncStatus(PaySyncResultBo payRemoteSyncResult, PayOrder order){
+    private boolean checkAndAdjust(PaySyncResultBo payRemoteSyncResult, PayOrder order){
         PaySyncResultEnum syncStatus = payRemoteSyncResult.getSyncStatus();
         String orderStatus = order.getStatus();
-        // 本地支付成功/网关支付成功
-        if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(SUCCESS)){
-            return true;
-        }
 
-        /*
-        本地支付中/网关支付中或者订单未找到(未知)  支付宝特殊情况，未找到订单可能是发起支付用户未操作、支付已关闭、交易未找到三种情况
-        所以需要根据本地订单不同的状态进行特殊处理
-         */
-        List<PaySyncResultEnum> syncWaitEnums = Arrays.asList(PROGRESS, NOT_FOUND_UNKNOWN);
-        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode()) && syncWaitEnums.contains(syncStatus)){
-            // 判断支付单是否支付超时, 如果待支付状态下触发超时
-            if (DateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
-                // 将支付单同步状态状态调整为支付超时, 进行订单的关闭
-                payRemoteSyncResult.setSyncStatus(TIMEOUT);
-                return false;
+        // 本地订单为支付中, 对状态进行比较
+        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode())){
+             /*
+              本地支付中/网关支付中或者订单未找到(未知)  支付宝特殊情况，未找到订单可能是发起支付用户未操作、支付已关闭、交易未找到三种情况
+              所以需要根据本地订单不同的状态进行特殊处理
+             */
+            List<PaySyncResultEnum> syncWaitEnums = Arrays.asList(PROGRESS, UNKNOWN);
+            if (syncWaitEnums.contains(syncStatus)){
+                // 判断支付单是否支付超时, 如果待支付状态下触发超时
+                if (DateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
+                    // 将支付单同步状态状态调整为支付超时, 进行订单的关闭
+                    payRemoteSyncResult.setSyncStatus(TIMEOUT);
+                    return false;
+                }
+                return true;
             }
-            return true;
-        }
-        /*
-         关闭 /网关支付关闭、订单未找到、订单未找到(特殊)， 订单未找到(特殊)主要是支付宝特殊情况，
-         未找到订单可能是发起支付用户未操作、支付已关闭、交易未找到三种情况
-         所以需要根据本地订单不同的状态进行特殊处理, 此处视为支付已关闭、交易未找到这两种, 处理方式相同, 都作为支付关闭处理
-         */
-        List<String> payCloseEnums = Arrays.asList(PayStatusEnum.CLOSE.getCode(), PayStatusEnum.CANCEL.getCode());
-        List<PaySyncResultEnum> syncClose = Arrays.asList(CLOSED, NOT_FOUND, NOT_FOUND_UNKNOWN);
-        if (payCloseEnums.contains(orderStatus) && syncClose.contains(syncStatus)){
-            return true;
-        }
-
-        // 退款状态不做额外处理, 需要通过退款接口进行处理
-        if (!Objects.equals(order.getRefundStatus(), PayRefundStatusEnum.NO_REFUND.getCode())
-                || syncStatus.equals(REFUND)){
-            return true;
+        } else {
+            // 本地支付成功/网关支付成功
+            if (orderStatus.equals(PayStatusEnum.SUCCESS.getCode()) && syncStatus.equals(SUCCESS)){
+                return true;
+            }
+             /*
+                 同步结果为 关闭、未找到、状态未知， 状态未知主要是支付宝特殊情况，
+                 本地订单为 关闭、撤销两种状态
+                 需要根据本地订单不同的状态进行特殊处理, 此处视为支付已关闭、交易未找到这两种, 处理方式相同, 都作为支付关闭处理
+             */
+            List<String> payCloseEnums = Arrays.asList(PayStatusEnum.CLOSE.getCode(), PayStatusEnum.CANCEL.getCode());
+            List<PaySyncResultEnum> syncClose = Arrays.asList(CLOSED, NOT_FOUND, UNKNOWN);
+            if (payCloseEnums.contains(orderStatus) && syncClose.contains(syncStatus)){
+                return true;
+            }
         }
         return false;
     }
@@ -170,7 +170,7 @@ public class PaySyncService {
             }
             case REFUND:
                 throw new TradeStatusErrorException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
-            // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
+                // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
                 this.closeLocal(payOrder);
@@ -178,7 +178,7 @@ public class PaySyncService {
             // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
             case TIMEOUT:
                 this.closeRemote(payOrder);
-            case NOT_FOUND_UNKNOWN:{
+            case UNKNOWN:{
             }
             // 调用出错
             case FAIL: {
@@ -202,7 +202,6 @@ public class PaySyncService {
         // 修改订单支付状态为成功
         order.setStatus(PayStatusEnum.SUCCESS.getCode())
                 .setPayTime(param.getFinishTime())
-                .setOutOrderNo(param.getOutOrderNo())
                 .setCloseTime(null);
         payOrderService.updateById(order);
     }

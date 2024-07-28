@@ -16,9 +16,16 @@ import lombok.experimental.Accessors;
 public class RefundSyncResult{
 
     /**
-     * 同步状态
+     * 退款订单同步后的状态状态
+     * @see cn.daxpay.multi.core.enums.RefundStatusEnum
      */
     @Schema(description = "同步状态")
-    private String status;
+    private String orderStatus;
+
+    /**
+     * 是否触发了调整
+     */
+    @Schema(description = "是否触发了调整")
+    private boolean adjust;
 
 }

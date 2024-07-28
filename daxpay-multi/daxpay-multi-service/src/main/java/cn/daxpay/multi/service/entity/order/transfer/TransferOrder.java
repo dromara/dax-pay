@@ -68,15 +68,15 @@ public class TransferOrder extends MchBaseEntity implements ToResult<TransferOrd
      */
     private String status;
 
-    /** 成功时间 */
-    private LocalDateTime successTime;
-
+    /** 完成时间 */
+    private LocalDateTime finishTime;
 
     /** 异步通知地址 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String attach;
 
     /** 请求时间，时间戳转时间 */
@@ -86,9 +86,11 @@ public class TransferOrder extends MchBaseEntity implements ToResult<TransferOrd
     private String clientIp;
 
     /** 错误码 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorCode;
 
     /** 错误信息 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
 
     @Override

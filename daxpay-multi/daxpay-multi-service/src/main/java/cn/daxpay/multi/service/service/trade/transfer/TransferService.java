@@ -62,7 +62,7 @@ public class TransferService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void successHandler(TransferOrder order, TransferResultBo transferInfo){
         order.setStatus(transferInfo.getStatus().getCode())
-                .setSuccessTime(transferInfo.getFinishTime())
+                .setFinishTime(transferInfo.getFinishTime())
                 .setOutTransferNo(transferInfo.getOutTransferNo());
         transferOrderManager.updateById(order);
     }

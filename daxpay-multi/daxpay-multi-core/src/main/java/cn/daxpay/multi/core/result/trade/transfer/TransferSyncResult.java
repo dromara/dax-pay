@@ -19,5 +19,11 @@ public class TransferSyncResult {
      * @see cn.daxpay.multi.core.enums.TransferStatusEnum
      */
     @Schema(description = "转账状态")
-    private String status;
+    private String orderStatus;
+
+    /**
+     * 是否触发了调整
+     */
+    @Schema(description = "是否触发了调整")
+    private boolean adjust;
 }

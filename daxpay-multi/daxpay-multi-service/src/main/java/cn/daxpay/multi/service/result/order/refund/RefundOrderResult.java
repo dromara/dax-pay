@@ -98,8 +98,8 @@ public class RefundOrderResult extends MchResult {
     @Schema(description = "附加参数 以最后一次为准")
     private String extraParam;
 
-    /** 请求时间，时间戳转时间 */
-    @Schema(description = "请求时间，时间戳转时间")
+    /** 请求时间 */
+    @Schema(description = "请求时间")
     private LocalDateTime reqTime;
 
     /** 终端ip */
