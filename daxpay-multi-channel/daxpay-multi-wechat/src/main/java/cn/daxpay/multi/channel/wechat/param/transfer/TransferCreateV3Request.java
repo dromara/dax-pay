@@ -12,9 +12,6 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Accessors(chain = true)
 public class TransferCreateV3Request extends TransferCreateRequest {
 
