@@ -1,7 +1,7 @@
 package cn.daxpay.multi.channel.wechat.service.close;
 
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
-import cn.daxpay.multi.channel.wechat.param.clode.WxPayOrderCanalV3Request;
+import cn.daxpay.multi.channel.wechat.param.clode.WxPayOrderReverseV3Request;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
@@ -47,7 +47,7 @@ public class WechatPayCloseV3Service {
         try {
             WxPayConfig wxPayConfig = wxPayService.getConfig();
             // 设置公共属性
-            WxPayOrderCanalV3Request request = new WxPayOrderCanalV3Request();
+            WxPayOrderReverseV3Request request = new WxPayOrderReverseV3Request();
             request.setMchid(wxPayConfig.getMchId());
             request.setAppid(wxPayConfig.getAppId());
 

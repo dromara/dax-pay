@@ -81,15 +81,14 @@ public class AliPaySyncService {
             }
             // 查询失败
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                syncResult.setSyncStatus(PaySyncResultEnum.FAIL);
-                syncResult.setErrorCode(response.getSubCode());
-                syncResult.setErrorMsg(response.getSubMsg());
-                return syncResult.setSyncStatus(PaySyncResultEnum.FAIL);
+                return syncResult.setSyncStatus(PaySyncResultEnum.SYNC_FAIL)
+                        .setErrorCode(response.getSubCode())
+                        .setErrorMsg(response.getSubMsg());
             }
         }
         catch (AlipayApiException e) {
             log.error("支付订单同步失败:", e);
-            syncResult.setErrorMsg(e.getErrMsg());
+            syncResult.setErrorMsg(e.getErrMsg()).setSyncStatus(PaySyncResultEnum.SYNC_FAIL);
         }
         return syncResult;
     }

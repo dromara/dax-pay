@@ -54,7 +54,7 @@ public class AliPayRefundSyncService {
             syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
             // 失败
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                syncResult.setSyncStatus(RefundSyncResultEnum.FAIL);
+                syncResult.setSyncStatus(RefundSyncResultEnum.SYNC_FAIL);
                 syncResult.setErrorCode(response.getSubCode());
                 syncResult.setErrorMsg(response.getSubMsg());
                 return syncResult;
@@ -65,7 +65,7 @@ public class AliPayRefundSyncService {
                 LocalDateTime localDateTime = LocalDateTimeUtil.of(response.getGmtRefundPay());
                 return syncResult.setFinishTime(localDateTime).setSyncStatus(RefundSyncResultEnum.SUCCESS);
             } else {
-                return syncResult.setSyncStatus(RefundSyncResultEnum.FAIL).setErrorMsg("支付宝网关退款未成功");
+                return syncResult.setSyncStatus(RefundSyncResultEnum.FAIL).setErrorMsg("支付宝网关退款失败");
             }
         } catch (AlipayApiException e) {
             log.error("退款订单同步失败:", e);

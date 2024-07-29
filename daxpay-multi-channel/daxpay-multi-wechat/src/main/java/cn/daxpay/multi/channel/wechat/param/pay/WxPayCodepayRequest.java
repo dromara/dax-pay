@@ -1,6 +1,5 @@
-package cn.daxpay.multi.channel.wechat.result.pay;
+package cn.daxpay.multi.channel.wechat.param.pay;
 
-import cn.daxpay.multi.channel.wechat.param.pay.WxBarCodeV3PayRequest;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,13 +10,16 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 微信V3付款码返回结果
+ * 微信条码(付款码)支付参数
+ * 参考接口地址: https://pay.weixin.qq.com/docs/merchant/apis/code-payment-v3/direct/code-pay.html
  * @author xxm
  * @since 2024/7/24
  */
 @Data
+@NoArgsConstructor
 @Accessors(chain = true)
-public class WxBarCodeV3PayResult implements Serializable {
+public class WxPayCodepayRequest implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
     /**
@@ -48,6 +50,19 @@ public class WxBarCodeV3PayResult implements Serializable {
     protected String mchid;
     /**
      * <pre>
+     * 字段名：商品描述
+     * 变量名：description
+     * 是否必填：是
+     * 类型：string[1,127]
+     * 描述：
+     *  商品描述
+     *  示例值：Image形象店-深圳腾大-QQ公仔
+     * </pre>
+     */
+    @SerializedName(value = "description")
+    protected String description;
+    /**
+     * <pre>
      * 字段名：商户订单号
      * 变量名：out_trade_no
      * 是否必填：是
@@ -73,79 +88,6 @@ public class WxBarCodeV3PayResult implements Serializable {
      */
     @SerializedName(value = "transaction_id")
     private String transactionId;
-    /**
-     * <pre>
-     * 字段名：交易类型
-     * 变量名：trade_type
-     * 是否必填：是
-     * 类型：string[1,16]
-     * 描述：
-     *  枚举值：
-     *  NATIVE：扫码支付
-     *  JSAPI：公众号支付
-     *  APP：APP支付
-     *  MWEB：H5支付
-     *  示例值： JSAPI
-     * </pre>
-     */
-    @SerializedName(value = "trade_type")
-    private String tradeType;
-    /**
-     * <pre>
-     * 字段名：付款银行
-     * 变量名：bank_type
-     * 是否必填：否
-     * 类型：string（16）
-     * 描述：
-     *  银行类型，采用字符串类型的银行标识。
-     *  示例值：CMC
-     * </pre>
-     */
-    @SerializedName(value = "bank_type")
-    private String bankType;
-    /**
-     * <pre>
-     * 字段名：支付完成时间
-     * 变量名：success_time
-     * 是否必填：否
-     * 类型：string（64）
-     * 描述：支付完成时间，遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日 13点29分35秒。
-     * 示例值：2018-06-08T10:34:56+08:00
-     * </pre>
-     */
-    @SerializedName(value = "success_time")
-    private String successTime;
-    /**
-     * <pre>
-     * 字段名：交易状态
-     * 变量名：trade_state
-     * 是否必填：是
-     * 类型：string[1,32]
-     * 描述：
-     *  交易状态，枚举值：
-     *  SUCCESS：支付成功
-     *  REFUND：转入退款
-     *  NOTPAY：未支付
-     *  REVOKED：已撤销（付款码支付）
-     *  USERPAYING：用户支付中（付款码支付）
-     *  PAYERROR：支付失败(其他原因，如银行返回失败)
-     *  示例值：SUCCESS
-     * </pre>
-     */
-    @SerializedName(value = "trade_state")
-    private String tradeState;
-    /**
-     * <pre>
-     * 字段名：交易状态描述
-     * 变量名：trade_state_desc
-     * 是否必填：是
-     * 类型：string（256）
-     * 描述：交易状态描述
-     * 示例值：支付失败，请重新下单支付
-     * </pre>
-     */
-    @SerializedName(value = "trade_state_desc")
-    private String tradeStateDesc;
     /**
      * <pre>
      * 字段名：附加数据
@@ -195,7 +137,7 @@ public class WxBarCodeV3PayResult implements Serializable {
      * </pre>
      */
     @SerializedName(value = "payer")
-    private WxBarCodeV3PayRequest.Payer payer;
+    private Payer payer;
     /**
      * <pre>
      * 字段名：订单金额
@@ -207,7 +149,7 @@ public class WxBarCodeV3PayResult implements Serializable {
      * </pre>
      */
     @SerializedName(value = "amount")
-    private WxBarCodeV3PayRequest.Amount amount;
+    private Amount amount;
     /**
      * <pre>
      * 字段名：场景信息
@@ -219,7 +161,7 @@ public class WxBarCodeV3PayResult implements Serializable {
      * </pre>
      */
     @SerializedName(value = "scene_info")
-    private WxBarCodeV3PayRequest.SceneInfo sceneInfo;
+    private SceneInfo sceneInfo;
 
     /**
      * <pre>
@@ -232,7 +174,20 @@ public class WxBarCodeV3PayResult implements Serializable {
      * </pre>
      */
     @SerializedName(value = "promotion_detail")
-    private List<WxBarCodeV3PayRequest.PromotionDetail> promotionDetails;
+    private List<PromotionDetail> promotionDetails;
+
+    /**
+     * <pre>
+     * 字段名：结算信息
+     * 变量名：settle_info
+     * 是否必填：否
+     * 类型：Object
+     * 描述：结算信息
+     * </pre>
+     */
+    @SerializedName(value = "settle_info")
+    private SettleInfo settleInfo;
+
 
     @Data
     @NoArgsConstructor
@@ -355,7 +310,7 @@ public class WxBarCodeV3PayResult implements Serializable {
          * </pre>
          */
         @SerializedName(value = "store_info")
-        private WxBarCodeV3PayRequest.StoreInfo storeInfo;
+        private StoreInfo storeInfo;
     }
 
     /**
@@ -421,6 +376,9 @@ public class WxBarCodeV3PayResult implements Serializable {
     }
 
 
+    /**
+     * 优惠功能
+     */
     @Data
     @NoArgsConstructor
     public static class PromotionDetail implements Serializable {
@@ -567,7 +525,7 @@ public class WxBarCodeV3PayResult implements Serializable {
          * </pre>
          */
         @SerializedName(value = "goods_detail")
-        private List<WxBarCodeV3PayRequest.GoodsDetail> goodsDetails;
+        private List<GoodsDetail> goodsDetails;
     }
 
     @Data
@@ -641,4 +599,3 @@ public class WxBarCodeV3PayResult implements Serializable {
         private String goodsRemark;
     }
 }
-

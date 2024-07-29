@@ -133,48 +133,32 @@ public class AnnotationQueryGenerator {
     private <T> void compareTypeSwitch(QueryParam.CompareTypeEnum compareType, QueryWrapper<T> wrapper, String columnName,
                                        Object paramValue) {
         switch (compareType) {
-            case GT:
-                wrapper.gt(columnName, paramValue);
-                break;
-            case GE:
-                wrapper.ge(columnName, paramValue);
-                break;
-            case LT:
-                wrapper.lt(columnName, paramValue);
-                break;
-            case LE:
-                wrapper.le(columnName, paramValue);
-                break;
-            case BETWEEN:{
+            case GT -> wrapper.gt(columnName, paramValue);
+            case GE -> wrapper.ge(columnName, paramValue);
+            case LT -> wrapper.lt(columnName, paramValue);
+            case LE -> wrapper.le(columnName, paramValue);
+            case BETWEEN -> {
                 if (paramValue instanceof QueryBetween queryBetween) {
                     wrapper.between(columnName, queryBetween.getStart(), queryBetween.getEnd());
                 } else {
                     throw new IllegalArgumentException("Between查询条件值必须是实现QueryBetween接口");
                 }
-                break;
             }
-            case LIKE:
-                wrapper.like(columnName, paramValue);
-                break;
-            case LIKE_LEFT:
-                wrapper.likeLeft(columnName, paramValue);
-                break;
-            case LIKE_RIGHT:
-                wrapper.likeRight(columnName, paramValue);
-                break;
-            case IS_NULL:
+            case LIKE -> wrapper.like(columnName, paramValue);
+            case LIKE_LEFT -> wrapper.likeLeft(columnName, paramValue);
+            case LIKE_RIGHT -> wrapper.likeRight(columnName, paramValue);
+            case IS_NULL -> {
                 if (paramValue instanceof Boolean) {
                     if ((Boolean) paramValue) {
                         wrapper.isNull(columnName);
-                    }
-                    else {
+                    } else {
                         wrapper.isNotNull(columnName);
                     }
                 }
-                break;
-            case EQ:
-            default:
-                wrapper.eq(columnName, paramValue);
+            }
+            case SORT -> {
+            }
+            default -> wrapper.eq(columnName, paramValue);
         }
 
     }

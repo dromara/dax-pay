@@ -72,7 +72,7 @@ public class TransferSyncService {
             // 执行操作, 获取支付网关同步的结果
             var syncResult = syncPayStrategy.doSync();
             // 判断是否同步成功
-            if (Objects.equals(syncResult.getSyncStatus(), TransferSyncResultEnum.FAIL)){
+            if (Objects.equals(syncResult.getSyncStatus(), TransferSyncResultEnum.SYNC_FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(transferOrder, syncResult, false);
                 throw new OperationFailException(syncResult.getErrorMsg());
@@ -91,7 +91,7 @@ public class TransferSyncService {
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResult.setSyncStatus(TransferSyncResultEnum.FAIL);
+                syncResult.setSyncStatus(TransferSyncResultEnum.SYNC_FAIL);
                 this.saveRecord(transferOrder, syncResult, false);
                 throw e;
             }

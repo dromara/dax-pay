@@ -53,22 +53,29 @@ public class AliPayTransferSyncService {
             // 设置网关订单号
             syncResult.setOutTransferNo(response.getPayFundOrderId());
 
-            //  SUCCESS：转账成功； WAIT_PAY：等待支付； CLOSED：订单超时关闭； FAIL：失败（适用于"单笔转账到银行卡"）；
-            //  DEALING：处理中（适用于"单笔转账到银行卡"）； REFUND：退票（适用于"单笔转账到银行卡"）；
+            //  FAIL：失败（适用于"单笔转账到银行卡"）；
+            //  ；
             String status = response.getStatus();
+            //  SUCCESS：转账成功；
             if (Objects.equals(status, TransferStatus.SUCCESS)){
                 return syncResult.setSyncStatus(TransferSyncResultEnum.SUCCESS);
             }
+            //  WAIT_PAY：等待支付；DEALING：处理中（适用于"单笔转账到银行卡"）
             if (List.of(TransferStatus.DEALING,TransferStatus.WAIT_PAY).contains(status)){
                 return syncResult.setSyncStatus(TransferSyncResultEnum.PROGRESS);
             }
-            if (List.of(TransferStatus.CLOSED,TransferStatus.REFUND, TransferStatus.FAIL).contains(status)){
+            //  FAIL：失败（适用于"单笔转账到银行卡"）；
+            if (Objects.equals(TransferStatus.FAIL, status)){
                 return syncResult.setSyncStatus(TransferSyncResultEnum.FAIL);
+            }
+            //  REFUND：退票（适用于"单笔转账到银行卡"）； CLOSED：订单超时关闭；
+            if (List.of(TransferStatus.CLOSED, TransferStatus.REFUND).contains(status)){
+                return syncResult.setSyncStatus(TransferSyncResultEnum.CLOSE);
             }
             return syncResult;
         } catch (AlipayApiException e) {
             log.error("支付宝转账记录同步失败:", e);
-            return syncResult.setErrorMsg(e.getErrMsg());
+            return syncResult.setErrorMsg(e.getErrMsg()).setSyncStatus(TransferSyncResultEnum.SYNC_FAIL);
         }
     }
 }

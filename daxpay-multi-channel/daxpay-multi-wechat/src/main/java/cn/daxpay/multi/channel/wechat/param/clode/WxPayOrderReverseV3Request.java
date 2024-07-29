@@ -10,15 +10,15 @@ import java.io.Serializable;
 
 /**
  * <pre>
- *  撤销订单请求对象类
+ *  V3撤销订单请求对象类
  * </pre>
  *
- * @author thinsstar
+ * @author xxm
  */
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class WxPayOrderCanalV3Request implements Serializable {
+public class WxPayOrderReverseV3Request implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
     /**

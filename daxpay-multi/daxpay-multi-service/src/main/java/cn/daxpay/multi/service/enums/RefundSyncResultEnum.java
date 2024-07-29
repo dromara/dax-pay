@@ -12,10 +12,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum RefundSyncResultEnum {
 
-    SUCCESS("refund_success","退款成功"),
-    FAIL("refund_fail","退款失败"),
-    PROGRESS("refund_progress","退款中"),
-    NOT_FOUND("pay_not_found", "交易不存在"),
+    SYNC_FAIL("sync_fail","退款查询失败"),
+    FAIL("fail","退款失败"),
+    SUCCESS("success","退款成功"),
+    CLOSE("close","退款关闭"),
+    PROGRESS("progress","退款中"),
+    NOT_FOUND("not_found", "交易不存在"),
     UNKNOWN("unknown","状态未知"),
     ;
 

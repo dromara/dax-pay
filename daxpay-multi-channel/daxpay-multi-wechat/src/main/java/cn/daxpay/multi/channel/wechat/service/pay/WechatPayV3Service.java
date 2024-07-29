@@ -3,8 +3,8 @@ package cn.daxpay.multi.channel.wechat.service.pay;
 import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.param.pay.WechatPayParam;
-import cn.daxpay.multi.channel.wechat.param.pay.WxBarCodeV3PayRequest;
-import cn.daxpay.multi.channel.wechat.result.pay.WxBarCodeV3PayResult;
+import cn.daxpay.multi.channel.wechat.param.pay.WxPayCodepayRequest;
+import cn.daxpay.multi.channel.wechat.result.pay.WxPayCodepayResult;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
@@ -47,8 +47,6 @@ public class WechatPayV3Service {
     private final WechatPayConfigService wechatPayConfigService;
 
     private static final Gson GSON = new GsonBuilder().create();
-
-    private final WechatPayV2Service wechatPayV2Service;
 
     /**
      * 调起支付
@@ -188,7 +186,7 @@ public class WechatPayV3Service {
     private void barCodePay(PayOrder payOrder, String authCode, WechatPayConfig config, PayResultBo payResult) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         try {
-            WxBarCodeV3PayRequest request = new WxBarCodeV3PayRequest();
+            WxPayCodepayRequest request = new WxPayCodepayRequest();
             // 设置公共属性
             WxPayConfig wxPayConfig = wxPayService.getConfig();
             request.setMchid(wxPayConfig.getMchId())
@@ -198,32 +196,32 @@ public class WechatPayV3Service {
             request.setOutTradeNo(payOrder.getOrderNo());
 
             // 金额
-            var amount = new WxBarCodeV3PayRequest.Amount();
+            var amount = new WxPayCodepayRequest.Amount();
             amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
             request.setAmount(amount);
 
             // 场景信息
-            var sceneInfo = new WxBarCodeV3PayRequest.SceneInfo();
-            var storeInfo = new WxBarCodeV3PayRequest.StoreInfo();
+            var sceneInfo = new WxPayCodepayRequest.SceneInfo();
+            var storeInfo = new WxPayCodepayRequest.StoreInfo();
             storeInfo.setOutId("1");
             sceneInfo.setStoreInfo(storeInfo);
             request.setSceneInfo(sceneInfo);
 
             // 条码参数
-            var payer = new WxBarCodeV3PayRequest.Payer();
+            var payer = new WxPayCodepayRequest.Payer();
             payer.setAuthCode(authCode);
             request.setPayer(payer);
 
             // 分账参数
             if (payOrder.getAllocation()){
-                var settleInfo = new WxBarCodeV3PayRequest.SettleInfo();
+                var settleInfo = new WxPayCodepayRequest.SettleInfo();
                 settleInfo.setProfitSharing(true);
                 request.setSettleInfo(settleInfo);
             }
             // 拼接和发送请求
             String url = String.format("%s/v3/pay/transactions/codepay", wxPayService.getPayBaseUrl());
             String body = wxPayService.postV3(url, GSON.toJson(request));
-            var result = GSON.fromJson(body, WxBarCodeV3PayResult.class);
+            var result = GSON.fromJson(body, WxPayCodepayResult.class);
 
             // 支付成功处理, 如果不成功会走异常流
             payResult.setComplete(true)

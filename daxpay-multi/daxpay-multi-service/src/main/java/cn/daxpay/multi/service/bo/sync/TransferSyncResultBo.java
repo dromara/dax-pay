@@ -1,6 +1,5 @@
 package cn.daxpay.multi.service.bo.sync;
 
-import cn.daxpay.multi.service.enums.RefundSyncResultEnum;
 import cn.daxpay.multi.service.enums.TransferSyncResultEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,7 +18,7 @@ public class TransferSyncResultBo {
 
     /**
      * 支付网关订单状态, 默认为转账中
-     * @see RefundSyncResultEnum
+     * @see TransferSyncResultEnum
      */
     private TransferSyncResultEnum syncStatus = TransferSyncResultEnum.UNKNOWN;
 

@@ -92,7 +92,7 @@ public class RefundSyncService {
             RefundSyncResultBo syncResultBo = syncPayStrategy.doSync();
 
             // 判断是否同步成功
-            if (Objects.equals(syncResultBo.getSyncStatus(), RefundSyncResultEnum.FAIL)) {
+            if (Objects.equals(syncResultBo.getSyncStatus(), RefundSyncResultEnum.SYNC_FAIL)) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(refundOrder, syncResultBo, false);
                 throw new OperationFailException(syncResultBo.getErrorMsg());
@@ -112,12 +112,12 @@ public class RefundSyncService {
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResultBo.setSyncStatus(RefundSyncResultEnum.FAIL);
+                syncResultBo.setSyncStatus(RefundSyncResultEnum.SYNC_FAIL);
                 this.saveRecord(refundOrder, syncResultBo, false);
                 throw e;
             }
             // 同步成功记录日志
-            this.saveRecord(refundOrder, syncResultBo, statusSync);
+            this.saveRecord(refundOrder, syncResultBo, !statusSync);
             return new RefundSyncResult()
                     .setOrderStatus(refundOrder.getStatus())
                     .setAdjust(statusSync);
@@ -161,22 +161,14 @@ public class RefundSyncService {
         RefundSyncResultEnum syncStatusEnum = syncResult.getSyncStatus();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
-            case SUCCESS:
+            case SUCCESS ->
                 this.success(order, syncResult);
-                break;
-            case PROGRESS:
-                // 不进行处理
-                break;
-            case FAIL: {
-                this.close(order);
-                break;
+            case PROGRESS -> {}
+            case SYNC_FAIL -> {
+                log.error("退款同步失败, 退款单号:{}, 错误信息:{}", order.getRefundNo(), syncResult.getErrorMsg());
             }
-            case NOT_FOUND:
-                this.close(order);
-                break;
-            default: {
-                throw new BizException("代码有问题");
-            }
+            case FAIL, CLOSE, NOT_FOUND-> this.close(order);
+            case UNKNOWN -> throw new BizException("代码有问题");
         }
     }
 

@@ -14,7 +14,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.github.binarywang.wxpay.bean.notify.*;
-import com.github.binarywang.wxpay.constant.WxPayConstants;
+import com.github.binarywang.wxpay.constant.WxPayConstants.RefundStatus;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.wechat.pay.java.core.http.Constant;
@@ -97,18 +97,18 @@ public class WechatRefundCallbackService {
         // 退款号
         callbackInfo.setTradeNo(result.getRefundId());
         // 退款状态 - 成功
-        if (Objects.equals(WxPayConstants.RefundStatus.SUCCESS, result.getRefundStatus())){
+        if (Objects.equals(RefundStatus.SUCCESS, result.getRefundStatus())){
             callbackInfo.setOutStatus(RefundStatusEnum.SUCCESS.getCode());
         }
         // 退款状态 - 退款关闭
-        if (Objects.equals(result.getRefundStatus(), WxPayConstants.RefundStatus.REFUND_CLOSE)){
+        if (Objects.equals(result.getRefundStatus(), RefundStatus.REFUND_CLOSE)){
             callbackInfo.setOutStatus(RefundStatusEnum.CLOSE.getCode());
         }
         // 退款状态 - 失败
-        if (Objects.equals(WxPayConstants.RefundStatus.CHANGE, result.getRefundStatus())){
+        if (Objects.equals(RefundStatus.CHANGE, result.getRefundStatus())){
             callbackInfo.setOutStatus(RefundStatusEnum.FAIL.getCode());
         }
-        // 退款金额
+        // 退款金额和时间
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getRefundFee()));
         String timeEnd = result.getSuccessTime();
         if (StrUtil.isNotBlank(timeEnd)){
@@ -132,15 +132,15 @@ public class WechatRefundCallbackService {
         // 退款号
         callbackInfo.setTradeNo(result.getOutRefundNo());
         // 退款状态 - 成功
-        if (Objects.equals(WxPayConstants.RefundStatus.SUCCESS, result.getRefundStatus())){
+        if (Objects.equals(RefundStatus.SUCCESS, result.getRefundStatus())){
             callbackInfo.setOutStatus(RefundStatusEnum.SUCCESS.getCode());
         }
         // 退款状态 - 退款关闭
-        if (Objects.equals(result.getRefundStatus(), WxPayConstants.RefundStatus.CLOSED)){
+        if (Objects.equals(result.getRefundStatus(), RefundStatus.CLOSED)){
             callbackInfo.setOutStatus(RefundStatusEnum.CLOSE.getCode());
         }
         // 退款状态 - 失败
-        if (Objects.equals(WxPayConstants.RefundStatus.ABNORMAL, result.getRefundStatus())){
+        if (Objects.equals(RefundStatus.ABNORMAL, result.getRefundStatus())){
             callbackInfo.setOutStatus(RefundStatusEnum.FAIL.getCode());
         }
         // 退款金额

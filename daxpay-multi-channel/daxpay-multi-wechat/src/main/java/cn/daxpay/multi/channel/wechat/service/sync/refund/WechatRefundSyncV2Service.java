@@ -1,11 +1,22 @@
 package cn.daxpay.multi.channel.wechat.service.sync.refund;
 
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
+import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
+import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
+import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
+import cn.daxpay.multi.service.enums.RefundSyncResultEnum;
+import cn.hutool.core.collection.CollUtil;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundQueryRequest;
+import com.github.binarywang.wxpay.constant.WxPayConstants.RefundStatus;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * 微信退款订单信息同步
@@ -16,12 +27,45 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class WechatRefundSyncV2Service {
+    private final WechatPayConfigService wechatPayConfigService;
 
     /**
      * 退款信息查询
      */
-    public RefundSyncResultBo syncRefundStatus(RefundOrder refundOrder, WechatPayConfig weChatPayConfig){
+    public RefundSyncResultBo sync(RefundOrder refundOrder, WechatPayConfig weChatPayConfig){
         RefundSyncResultBo syncResult = new RefundSyncResultBo();
+        WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(weChatPayConfig);
+        // 使用退款单号查询, 只返回当前这条, 如果使用支付订单号查询,返回所有相关的
+        var request = new WxPayRefundQueryRequest();
+        request.setOutRefundNo(refundOrder.getRefundNo());
+        try {
+            var result = wxPayService.refundQuery(request);
+            // 网关退款号
+            syncResult.setOutRefundNo(result.getTransactionId())
+
+                    .setAmount(PayUtil.conversionAmount(result.getRefundFee()));
+            // 交易不存在
+            if (CollUtil.isEmpty(result.getRefundRecords())){
+                syncResult.setSyncStatus(RefundSyncResultEnum.NOT_FOUND);
+            }
+            var record = result.getRefundRecords().getFirst();
+            // 退款状态 - 成功
+            if (Objects.equals(RefundStatus.SUCCESS, record.getRefundStatus())){
+                syncResult.setSyncStatus(RefundSyncResultEnum.SUCCESS)
+                        .setFinishTime(WechatPayUtil.parseV2(record.getRefundSuccessTime()));
+            }
+            // 退款状态 - 退款关闭
+            if (Objects.equals(RefundStatus.REFUND_CLOSE, record.getRefundStatus())){
+                syncResult.setSyncStatus(RefundSyncResultEnum.CLOSE);
+            }
+            // 退款状态 - 失败
+            if (Objects.equals(RefundStatus.CHANGE, record.getRefundStatus())){
+                syncResult.setSyncStatus(RefundSyncResultEnum.FAIL);
+            }
+        } catch (WxPayException e) {
+            log.error("微信退款订单查询V3失败", e);
+            syncResult.setErrorMsg(e.getCustomErrorMsg()).setSyncStatus(RefundSyncResultEnum.FAIL);
+        }
         return syncResult;
     }
 }

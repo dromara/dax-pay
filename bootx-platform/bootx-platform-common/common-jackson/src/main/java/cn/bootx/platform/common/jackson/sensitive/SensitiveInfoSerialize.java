@@ -31,61 +31,20 @@ public class SensitiveInfoSerialize extends JsonSerializer<String> implements Co
     public void serialize(String s, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
             throws IOException {
         switch (this.sensitiveInfo.value()) {
-            case CHINESE_NAME: {
-                jsonGenerator.writeString(DesensitizedUtil.chineseName(s));
-                break;
-            }
-            case USER_ID: {
-                jsonGenerator.writeString(String.valueOf(DesensitizedUtil.userId()));
-                break;
-            }
-            case PASSWORD: {
-                jsonGenerator.writeString(DesensitizedUtil.password(s));
-                break;
-            }
-            case ID_CARD: {
-                jsonGenerator.writeString(DesensitizedUtil.idCardNum(s, 6, 2));
-                break;
-            }
-            case FIXED_PHONE: {
-                jsonGenerator.writeString(DesensitizedUtil.fixedPhone(s));
-                break;
-            }
-            case MOBILE_PHONE: {
-                jsonGenerator.writeString(DesensitizedUtil.mobilePhone(s));
-                break;
-            }
-            case IP: {
-                jsonGenerator.writeString(this.ip(s));
-                break;
-            }
-            case ADDRESS: {
-                jsonGenerator.writeString(DesensitizedUtil.address(s, 6));
-                break;
-            }
-            case CAR_LICENSE: {
-                jsonGenerator.writeString(DesensitizedUtil.carLicense(s));
-                break;
-            }
-            case EMAIL: {
-                jsonGenerator.writeString(DesensitizedUtil.email(s));
-                break;
-            }
-            case BANK_CARD: {
-                jsonGenerator.writeString(DesensitizedUtil.bankCard(s));
-                break;
-            }
-            case CNAPS_CODE: {
-                jsonGenerator.writeString(this.hide(s, 4, 4));
-                break;
-            }
-            case OTHER: {
-                jsonGenerator.writeString(this.hide(s, sensitiveInfo.front(), sensitiveInfo.end()));
-                break;
-            }
-            default: {
-                jsonGenerator.writeString(s);
-            }
+            case CHINESE_NAME -> jsonGenerator.writeString(DesensitizedUtil.chineseName(s));
+            case USER_ID -> jsonGenerator.writeString(String.valueOf(DesensitizedUtil.userId()));
+            case PASSWORD -> jsonGenerator.writeString(DesensitizedUtil.password(s));
+            case ID_CARD -> jsonGenerator.writeString(DesensitizedUtil.idCardNum(s, 6, 2));
+            case FIXED_PHONE -> jsonGenerator.writeString(DesensitizedUtil.fixedPhone(s));
+            case MOBILE_PHONE -> jsonGenerator.writeString(DesensitizedUtil.mobilePhone(s));
+            case IP -> jsonGenerator.writeString(this.ip(s));
+            case ADDRESS -> jsonGenerator.writeString(DesensitizedUtil.address(s, 6));
+            case CAR_LICENSE -> jsonGenerator.writeString(DesensitizedUtil.carLicense(s));
+            case EMAIL -> jsonGenerator.writeString(DesensitizedUtil.email(s));
+            case BANK_CARD -> jsonGenerator.writeString(DesensitizedUtil.bankCard(s));
+            case CNAPS_CODE -> jsonGenerator.writeString(this.hide(s, 4, 4));
+            case OTHER -> jsonGenerator.writeString(this.hide(s, sensitiveInfo.front(), sensitiveInfo.end()));
+            default -> jsonGenerator.writeString(s);
         }
 
     }

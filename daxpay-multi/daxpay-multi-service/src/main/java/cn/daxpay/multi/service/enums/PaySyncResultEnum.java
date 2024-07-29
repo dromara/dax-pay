@@ -16,7 +16,8 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 public enum PaySyncResultEnum {
-    FAIL("fail", "支付查询失败"),
+    SYNC_FAIL("sync_fail", "支付查询失败"),
+    FAIL("fail", "支付失败"),
     SUCCESS("success", "支付成功"),
     PROGRESS("progress", "支付中"),
     CLOSED("closed", "支付已关闭"),

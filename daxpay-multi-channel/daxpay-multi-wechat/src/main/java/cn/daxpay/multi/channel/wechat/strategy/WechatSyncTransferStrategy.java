@@ -1,9 +1,11 @@
 package cn.daxpay.multi.channel.wechat.strategy;
 
+import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
+import cn.daxpay.multi.channel.wechat.service.sync.transfer.WechatTransferSyncV3Service;
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
+import cn.daxpay.multi.service.bo.sync.TransferSyncResultBo;
 import cn.daxpay.multi.service.enums.PaySyncResultEnum;
-import cn.daxpay.multi.service.strategy.AbsSyncPayOrderStrategy;
+import cn.daxpay.multi.service.strategy.AbsSyncTransferOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,15 +13,18 @@ import org.springframework.stereotype.Component;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 微信支付订单同步
+ * 微信退款订单查询
  * @author xxm
- * @since 2023/7/14
+ * @since 2024/7/25
  */
 @Scope(SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-public class WechatSyncPayOrderStrategy extends AbsSyncPayOrderStrategy {
+public class WechatSyncTransferStrategy extends AbsSyncTransferOrderStrategy {
 
+    private final WechatTransferSyncV3Service wechatTransferSyncV3Service;
+
+    private final WechatPayConfigService wechatPayConfigService;
 
     /**
      * 策略标识, 可以自行进行扩展
@@ -37,7 +42,9 @@ public class WechatSyncPayOrderStrategy extends AbsSyncPayOrderStrategy {
      * @see PaySyncResultEnum
      */
     @Override
-    public PaySyncResultBo doSync() {
-        return null;
+    public TransferSyncResultBo doSync() {
+        var wechatPayConfig = wechatPayConfigService.getWechatPayConfig();
+        return wechatTransferSyncV3Service.sync(this.getTransferOrder(), wechatPayConfig);
     }
+
 }

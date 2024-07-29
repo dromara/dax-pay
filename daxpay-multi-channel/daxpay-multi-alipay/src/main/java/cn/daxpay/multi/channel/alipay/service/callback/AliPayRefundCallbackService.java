@@ -22,7 +22,7 @@ import static cn.daxpay.multi.channel.alipay.code.AliPayCode.*;
 /**
  * 支付宝退款回调
  * 退款存在退到银行卡场景时，收单会根据银行回执消息发送退款完成信息。仅当退款发起时，在query_options中传入：deposit_back_info时会发送。
- * 通常不会触发这个, 触发了也没什么需要处理的, 所以不进行任务处理, 仅做记录
+ * TODO 通常不会触发这个, 触发了也没什么需要处理的, 所以不进行任务处理, 代码保留留着后期用
  * @author xxm
  * @since 2024/7/23
  */
@@ -39,8 +39,7 @@ public class AliPayRefundCallbackService {
         Map<String, String> callbackParam = PayUtil.toMap(request);
         callback.setCallbackData(callbackParam);
         // 设置类型和通道
-        callback.setCallbackType(TradeTypeEnum.REFUND)
-                .setChannel(ChannelEnum.ALI.getCode());
+        callback.setCallbackType(TradeTypeEnum.REFUND).setChannel(ChannelEnum.ALI.getCode());
         // 退款订单号
         callback.setTradeNo(callbackParam.get(OUT_BIZ_NO));
         // 退款状态

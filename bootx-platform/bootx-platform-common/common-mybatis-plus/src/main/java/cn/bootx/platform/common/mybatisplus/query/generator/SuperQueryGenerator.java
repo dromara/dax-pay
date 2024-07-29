@@ -84,66 +84,35 @@ public class SuperQueryGenerator {
         CompareTypeEnum compareTypeEnum = Optional.ofNullable(CompareTypeEnum.getByCode(queryParam.getCompareType()))
             .orElseThrow(() -> new BizException("查询匹配类型非法"));
         switch (compareTypeEnum) {
-            case GT:
-                queryWrapper.gt(paramName, paramValue);
-                break;
-            case GE:
-                queryWrapper.ge(paramName, paramValue);
-                break;
-            case LT:
-                queryWrapper.lt(paramName, paramValue);
-                break;
-            case LE:
-                queryWrapper.le(paramName, paramValue);
-                break;
-            case EQ:
-                queryWrapper.eq(paramName, paramValue);
-                break;
-            case NE:
-                queryWrapper.ne(paramName, paramValue);
-                break;
-            case IN:
-                queryWrapper.in(paramName, (Collection<?>) paramValue);
-                break;
-            case NOT_IN:
-                queryWrapper.notIn(paramName, (Collection<?>) paramValue);
-                break;
-            case BETWEEN: {
+            case GT -> queryWrapper.gt(paramName, paramValue);
+            case GE -> queryWrapper.ge(paramName, paramValue);
+            case LT -> queryWrapper.lt(paramName, paramValue);
+            case LE -> queryWrapper.le(paramName, paramValue);
+            case EQ -> queryWrapper.eq(paramName, paramValue);
+            case NE -> queryWrapper.ne(paramName, paramValue);
+            case IN -> queryWrapper.in(paramName, (Collection<?>) paramValue);
+            case NOT_IN -> queryWrapper.notIn(paramName, (Collection<?>) paramValue);
+            case BETWEEN -> {
                 if (Objects.isNull(paramValue)) {
                     throw new BizException("between 查询条件为空");
                 }
                 QueryBetweenParam value = (QueryBetweenParam) paramValue;
                 queryWrapper.between(paramName, value.getStart(), value.getEnd());
-                break;
             }
-            case NOT_BETWEEN: {
+            case NOT_BETWEEN -> {
                 if (Objects.isNull(paramValue)) {
                     throw new BizException("between 查询条件为空");
                 }
                 QueryBetweenParam value = (QueryBetweenParam) paramValue;
                 queryWrapper.notBetween(paramName, value.getStart(), value.getEnd());
-                break;
             }
-            case LIKE:
-                queryWrapper.like(paramName, paramValue);
-                break;
-            case NOT_LIKE:
-                queryWrapper.notLike(paramName, paramValue);
-                break;
-            case LIKE_LEFT:
-                queryWrapper.likeLeft(paramName, paramValue);
-                break;
-            case LIKE_RIGHT:
-                queryWrapper.likeRight(paramName, paramValue);
-                break;
-            case IS_NULL:
-                queryWrapper.isNull(paramName);
-                break;
-            case NOT_NULL:
-                queryWrapper.isNotNull(paramName);
-                break;
-            default:
-                throw new BizException("查询匹配类型非法");
+            case LIKE -> queryWrapper.like(paramName, paramValue);
+            case NOT_LIKE -> queryWrapper.notLike(paramName, paramValue);
+            case LIKE_LEFT -> queryWrapper.likeLeft(paramName, paramValue);
+            case LIKE_RIGHT -> queryWrapper.likeRight(paramName, paramValue);
+            case IS_NULL -> queryWrapper.isNull(paramName);
+            case NOT_NULL -> queryWrapper.isNotNull(paramName);
+            default -> throw new BizException("查询匹配类型非法");
         }
     }
 

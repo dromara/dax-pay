@@ -22,7 +22,6 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAConfig;
-import com.wechat.pay.java.service.payments.nativepay.NativePayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -122,6 +121,15 @@ public class WechatPayConfigService {
     }
 
     /**
+     * 转账回调地址
+     */
+    public String getTransferNotifyUrl() {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        var platformInfo = platformConfigService.getConfig();
+        return StrUtil.format("{}/unipay/callback/{}/{}/transfer/wechat",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+    }
+
+    /**
      * wxjava 支付开发包
      */
     public WxPayService wxJavaSdk(WechatPayConfig wechatPayConfig){
@@ -141,16 +149,15 @@ public class WechatPayConfigService {
 
     /**
      * 官方SDK
+     * 官方又不管不更新了, 后面看看是不是做一下官方SDK的视线
      */
-    public void wxv3Sdk(WechatPayConfig wechatPayConfig){
+    public Config wxv3Config(WechatPayConfig wechatPayConfig){
         Config config = new RSAConfig.Builder()
                         .merchantId(wechatPayConfig.getWxMchId())
                         .privateKey(wechatPayConfig.getPrivateKey())
                         .merchantSerialNumber(wechatPayConfig.getCertSerialNo())
                         .wechatPayCertificates(wechatPayConfig.getPrivateCert())
                         .build();
-        // 构建service
-        NativePayService service = new NativePayService.Builder().config(config).build();
+        return config;
     }
-
 }

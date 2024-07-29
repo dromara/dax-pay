@@ -1,6 +1,7 @@
 package cn.daxpay.multi.channel.wechat.service.transfer;
 
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
+import cn.daxpay.multi.channel.wechat.param.transfer.TransferCreateV3Request;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.core.exception.TradeFailException;
 import cn.daxpay.multi.core.util.PayUtil;
@@ -31,6 +32,7 @@ public class WechatPayTransferV3Service {
     private final WechatPayConfigService wechatPayConfigService;
     /**
      * 单笔转账转账接口
+     * 微信转账是批量转账形式, 所以商家批次单号和商家明细单号使用同一个值
      */
     public TransferResultBo transfer(TransferOrder order, WechatPayConfig config) {
         TransferResultBo result = new TransferResultBo();
@@ -50,8 +52,10 @@ public class WechatPayTransferV3Service {
                 .setTransferRemark(reason)
                 .setOpenid(order.getPayeeAccount())
                 .setUserName(order.getPayeeName());
-        TransferCreateRequest request = new TransferCreateRequest()
-                .setAppid(config.getWxAppId())
+        // 设置回调地址
+        var request = new TransferCreateV3Request()
+                .setNotifyUrl(wechatPayConfigService.getTransferNotifyUrl());
+        request.setAppid(config.getWxAppId())
                 .setBatchName(order.getTitle())
                 .setOutBatchNo(order.getOutTransferNo())
                 .setBatchRemark(reason)

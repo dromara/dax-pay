@@ -80,7 +80,7 @@ public class PaySyncService {
             // 执行操作, 获取支付网关同步的结果
             PaySyncResultBo syncResult = syncPayStrategy.doSync();
             // 判断是否同步成功
-            if (Objects.equals(syncResult.getSyncStatus(), PaySyncResultEnum.FAIL)){
+            if (Objects.equals(syncResult.getSyncStatus(), PaySyncResultEnum.SYNC_FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(payOrder, syncResult, false);
                 throw new OperationFailException(syncResult.getErrorMsg());
@@ -99,12 +99,12 @@ public class PaySyncService {
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResult.setSyncStatus(PaySyncResultEnum.FAIL);
+                syncResult.setSyncStatus(PaySyncResultEnum.SYNC_FAIL);
                 this.saveRecord(payOrder, syncResult, false);
                 throw e;
             }
             // 同步成功记录日志
-            this.saveRecord(payOrder, syncResult, statusSync);
+            this.saveRecord(payOrder, syncResult, !statusSync);
             return new PaySyncResult()
                     .setOrderStatus(payOrder.getStatus())
                     .setAdjust(statusSync);
@@ -165,30 +165,17 @@ public class PaySyncService {
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
-            case SUCCESS: {
-                this.success(payOrder, payRemoteSyncResult);
-            }
-            case REFUND:
-                throw new TradeStatusErrorException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
-                // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
-            case CLOSED:
-            case NOT_FOUND: {
-                this.closeLocal(payOrder);
-            }
+            case SUCCESS -> this.success(payOrder, payRemoteSyncResult);
+            case REFUND ->
+                    throw new TradeStatusErrorException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
+            // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
+            case UNKNOWN, PROGRESS -> {}
+            case CLOSED, NOT_FOUND -> this.closeLocal(payOrder);
             // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
-            case TIMEOUT:
-                this.closeRemote(payOrder);
-            case UNKNOWN:{
-            }
-            // 调用出错
-            case FAIL: {
-                // 不进行处理
-                log.warn("支付状态同步接口调用出错");
-                break;
-            }
-            default: {
-                throw new SystemUnknownErrorException("代码有问题");
-            }
+            case TIMEOUT -> this.closeRemote(payOrder);
+            // 调用出错 不进行处理
+            case SYNC_FAIL -> log.warn("支付状态同步接口调用出错");
+            default -> throw new SystemUnknownErrorException("代码有问题");
         }
     }
 
