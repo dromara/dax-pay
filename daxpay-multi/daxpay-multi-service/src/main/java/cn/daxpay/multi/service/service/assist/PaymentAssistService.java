@@ -108,6 +108,8 @@ public class PaymentAssistService {
         }
         else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
             result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
+        } else if (Objects.equals(SignTypeEnum.SM3.getCode(), signType)){
+            result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
         }
         else {
             throw new ValidationFailedException("未获取到签名方式，请检查");

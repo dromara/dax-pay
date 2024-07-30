@@ -5,6 +5,7 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.digest.HmacAlgorithm;
 import cn.hutool.json.JSONUtil;
 import lombok.SneakyThrows;
@@ -159,6 +160,17 @@ public class PaySignUtil {
         return SecureUtil.hmac(HmacAlgorithm.HmacSHA256, signKey).digestHex(data);
     }
 
+
+    /**
+     * 生成16进制 sm3 字符串
+     *
+     * @param data 数据
+     * @return SM3方式进行签名 字符串
+     */
+    public String sm3(String data) {
+        return SmUtil.sm3(data);
+    }
+
     /**
      * 生成待签名字符串
      * @param object 待签名对象
@@ -197,6 +209,16 @@ public class PaySignUtil {
     }
 
     /**
+     * sm3方式进行签名
+     *
+     * @return 签名值
+     */
+    public String sm3Sign(Object object, String signKey){
+        String data = signString(object, signKey);
+        return sm3(data);
+    }
+
+    /**
      * MD5签名验证
      */
     public boolean verifyMd5Sign(Object object, String signKey, String sign){
@@ -212,4 +234,12 @@ public class PaySignUtil {
         return hmacSha256Sign.equals(sign);
     }
 
+
+    /**
+     * SM3签名验证
+     */
+    public boolean verifySm3Sign(Object object, String signKey, String sign){
+        String sm3Sign = sm3Sign(object, signKey);
+        return sm3Sign.equals(sign);
+    }
 }

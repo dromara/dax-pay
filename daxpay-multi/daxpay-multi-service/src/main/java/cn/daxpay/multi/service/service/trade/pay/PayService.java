@@ -114,7 +114,6 @@ public class PayService {
                     .setPayTime(result.getFinishTime());
         }
         payOrderService.updateById(payOrder);
-        // 扩展记录更新
         payOrder.setErrorCode(null);
         payOrder.setErrorMsg(null);
         payOrderService.updateById(payOrder);

@@ -1,11 +1,11 @@
 package cn.daxpay.multi.sdk.util;
 
-import cn.daxpay.multi.sdk.param.SortMapParam;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.digest.HmacAlgorithm;
 import cn.hutool.json.JSONUtil;
 import lombok.SneakyThrows;
@@ -17,17 +17,19 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 /**
  * 如果需要进行签名,
  *  1. 参数名ASCII码从小到大排序（字典序）
- *  *  2. 如果参数的值为空不参与签名
- *  *  3. 参数名不区分大小写
- *  *  4. 嵌套对象转换成先转换成MAP再序列化为字符串
- *  *  5. 支持两层嵌套, 更多层级嵌套未测试, 可能会导致不可预知的问题
+ *  2. 如果参数的值为空不参与签名
+ *  3. 参数名不区分大小写
+ *  4. 嵌套对象转换成先转换成MAP再序列化为字符串
+ *  5. 支持两层嵌套, 更多层级嵌套未测试, 可能会导致不可预知的问题
  */
 @UtilityClass
 public class PaySignUtil {
+
+    private final String FIELD_SIGN  = "sign";
+
 
     /**
      * 将参数转换为map对象. 使用ChatGPT生成
@@ -42,7 +44,7 @@ public class PaySignUtil {
     }
 
     /**
-     * 将参数转换为map对象. 使用ChatGPT生成, 仅局限于对请求支付相关参数进行签名
+     * 将参数转换为map对象. 使用ChatGPT生成, 仅局限于对支付相关参数和返回值进行签名
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     @SneakyThrows
@@ -59,6 +61,7 @@ public class PaySignUtil {
                     if (ClassUtil.isBasicType(field.getType())|| field.getType().equals(String.class)) {
                         String fieldValueString = String.valueOf(fieldValue);
                         map.put(fieldName, fieldValueString);
+
                     }
                     // java8时间类型 转为 yyyy-MM-dd HH:mm:ss 格式
                     else if (field.getType().equals(LocalDateTime.class)) {
@@ -70,7 +73,7 @@ public class PaySignUtil {
                     else if (Map.class.isAssignableFrom(field.getType())) {
                         Map<String, String> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                         m.putAll((Map) fieldValue);
-                        toMap(fieldValue, m);
+                        map.put(fieldName, JSONUtil.toJsonStr(m));
                     }
                     // BigDecimal类型
                     else if (field.getType().equals(BigDecimal.class)) {
@@ -92,16 +95,10 @@ public class PaySignUtil {
                                     .collect(Collectors.toList());
                             map.put(fieldName,  JSONUtil.toJsonStr(maps));
                         }
-                    }
-                    // 可以转换为MAP并进行排序的类型
-                    else if (SortMapParam.class.isAssignableFrom(field.getType())) {
+                        // 其他类型直接转换为json
+                    } else {
                         Map<String, String> nestedMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                         toMap(fieldValue, nestedMap);
-                        String nestedJson = JSONUtil.toJsonStr(nestedMap);
-                        map.put(fieldName, nestedJson);
-                    }
-                    else {
-                        // 其他类型v转换为json
                         String nestedJson = JSONUtil.toJsonStr(fieldValue);
                         map.put(fieldName, nestedJson);
                     }
@@ -110,6 +107,7 @@ public class PaySignUtil {
             clazz = clazz.getSuperclass();
         }
     }
+
 
     /**
      * 把所有元素排序, 并拼接成字符, 用于签名, 同时会过滤掉 " 和 \ 字符
@@ -140,6 +138,7 @@ public class PaySignUtil {
         return s;
     }
 
+
     /**
      * 生成16进制 MD5 字符串
      *
@@ -161,6 +160,17 @@ public class PaySignUtil {
         return SecureUtil.hmac(HmacAlgorithm.HmacSHA256, signKey).digestHex(data);
     }
 
+
+    /**
+     * 生成16进制 sm3 字符串
+     *
+     * @param data 数据
+     * @return SM3方式进行签名 字符串
+     */
+    public String sm3(String data) {
+        return SmUtil.sm3(data);
+    }
+
     /**
      * 生成待签名字符串
      * @param object 待签名对象
@@ -171,11 +181,11 @@ public class PaySignUtil {
         // 签名
         Map<String, String> map = toMap(object);
         // 生成签名前先去除sign参数
-        map.remove("sign");
+        map.remove(FIELD_SIGN);
         // 创建待签名字符串
         String data = createLinkString(map);
         // 将签名key追加到字符串最后
-        return data + "&key=" + signKey;
+        return  data + "&key=" + signKey;
     }
 
     /**
@@ -199,6 +209,16 @@ public class PaySignUtil {
     }
 
     /**
+     * sm3方式进行签名
+     *
+     * @return 签名值
+     */
+    public String sm3Sign(Object object, String signKey){
+        String data = signString(object, signKey);
+        return sm3(data);
+    }
+
+    /**
      * MD5签名验证
      */
     public boolean verifyMd5Sign(Object object, String signKey, String sign){
@@ -212,5 +232,14 @@ public class PaySignUtil {
     public boolean verifyHmacSha256Sign(Object object, String signKey, String sign){
         String hmacSha256Sign = hmacSha256Sign(object, signKey);
         return hmacSha256Sign.equals(sign);
+    }
+
+
+    /**
+     * SM3签名验证
+     */
+    public boolean verifySm3Sign(Object object, String signKey, String sign){
+        String sm3Sign = sm3Sign(object, signKey);
+        return sm3Sign.equals(sign);
     }
 }

@@ -1,5 +1,6 @@
 package cn.daxpay.multi.sdk.net;
 
+import cn.daxpay.multi.sdk.code.SignTypeEnum;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
 import cn.daxpay.multi.sdk.util.JsonUtil;
 import cn.daxpay.multi.sdk.util.PaySignUtil;
@@ -52,8 +53,13 @@ public class DaxPayKit {
         }
         // 判断是是否进行签名
         if (sign) {
-                String hmacSha256Sign = PaySignUtil.hmacSha256Sign(request, config.getSignSecret());
-                request.setSign(hmacSha256Sign);
+            if (Objects.equals(SignTypeEnum.MD5,config.getSignType())){
+                request.setSign(PaySignUtil.md5Sign(request, config.getSignSecret()));
+            } else if (Objects.equals(SignTypeEnum.HMAC_SHA256,config.getSignType())){
+                request.setSign(PaySignUtil.hmacSha256Sign(request, config.getSignSecret()));
+            } else if (Objects.equals(SignTypeEnum.SM3,config.getSignType())){
+                request.setSign(PaySignUtil.sm3Sign(request, config.getSignSecret()));
+            }
         }
         // 参数序列化
         String data = JsonUtil.toJson(request);
