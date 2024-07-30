@@ -14,6 +14,7 @@ import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
+import cn.daxpay.multi.service.service.notice.ClientNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
@@ -28,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -51,6 +51,7 @@ public class RefundService {
     private final RefundAssistService refundAssistService;
     private final PayOrderService payOrderService;
     private final TradeFlowRecordService tradeFlowRecordService;
+    private final ClientNoticeService clientNoticeService;
 
     /**
      * 分支付通道进行退款
@@ -205,9 +206,9 @@ public class RefundService {
         refundAssistService.updateOrder(refundOrder, refundInfo);
 
         // 发送通知
-        List<String> list = Arrays.asList(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
+        List<String> list = List.of(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
         if (list.contains(refundOrder.getStatus())){
-//            clientNoticeService.registerRefundNotice(refundOrder);
+            clientNoticeService.registerRefundNotice(refundOrder);
         }
     }
 }

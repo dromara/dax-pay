@@ -7,7 +7,7 @@ import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.convert.order.pay.PayOrderConvert;
-import cn.daxpay.multi.service.result.order.pay.PayOrderResult;
+import cn.daxpay.multi.service.result.order.pay.PayOrderVo;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -28,7 +28,7 @@ import java.util.Objects;
 @Data
 @Accessors(chain = true)
 @TableName("pay_order")
-public class PayOrder extends MchBaseEntity implements ToResult<PayOrderResult> {
+public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
 
     /** 商户订单号 */
     private String bizOrderNo;
@@ -138,7 +138,7 @@ public class PayOrder extends MchBaseEntity implements ToResult<PayOrderResult> 
     }
 
     @Override
-    public PayOrderResult toResult() {
-        return PayOrderConvert.CONVERT.toResult(this);
+    public PayOrderVo toResult() {
+        return PayOrderConvert.CONVERT.toVo(this);
     }
 }

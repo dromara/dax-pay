@@ -8,7 +8,7 @@ import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
-import cn.daxpay.multi.service.service.notice.callback.TransferCallbackService;
+import cn.daxpay.multi.service.service.trade.transfer.TransferCallbackService;
 import cn.daxpay.multi.service.service.record.callback.TradeCallbackRecordService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;

@@ -7,7 +7,7 @@ import cn.bootx.platform.core.rest.result.PageResult;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.param.order.refund.RefundOrderQuery;
-import cn.daxpay.multi.service.result.order.refund.RefundOrderResult;
+import cn.daxpay.multi.service.result.order.refund.RefundOrderVo;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class RefundOrderQueryService {
     /**
      * 分页查询
      */
-    public PageResult<RefundOrderResult> page(PageParam pageParam, RefundOrderQuery query) {
+    public PageResult<RefundOrderVo> page(PageParam pageParam, RefundOrderQuery query) {
         Page<RefundOrder> page = refundOrderManager.page(pageParam, query);
         return MpUtil.toPageResult(page);
     }
@@ -38,7 +38,7 @@ public class RefundOrderQueryService {
     /**
      * 根据id查询
      */
-    public RefundOrderResult findById(Long id) {
+    public RefundOrderVo findById(Long id) {
         return refundOrderManager.findById(id).map(RefundOrder::toResult)
                 .orElseThrow(() -> new DataNotExistException("退款订单不存在"));
     }
@@ -46,7 +46,7 @@ public class RefundOrderQueryService {
     /**
      * 根据退款号查询
      */
-    public RefundOrderResult findByRefundNo(String refundNo){
+    public RefundOrderVo findByRefundNo(String refundNo){
         return refundOrderManager.findByRefundNo(refundNo).map(RefundOrder::toResult)
                 .orElseThrow(() -> new DataNotExistException("退款订单扩展信息不存在"));
 

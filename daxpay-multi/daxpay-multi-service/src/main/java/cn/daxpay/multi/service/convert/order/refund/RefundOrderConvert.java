@@ -1,7 +1,8 @@
 package cn.daxpay.multi.service.convert.order.refund;
 
+import cn.daxpay.multi.core.result.order.RefundOrderResult;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
-import cn.daxpay.multi.service.result.order.refund.RefundOrderResult;
+import cn.daxpay.multi.service.result.order.refund.RefundOrderVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -13,6 +14,8 @@ import org.mapstruct.factory.Mappers;
 public interface RefundOrderConvert {
 
     RefundOrderConvert CONVERT = Mappers.getMapper(RefundOrderConvert.class);
+
+    RefundOrderVo toVo(RefundOrder in);
 
     RefundOrderResult toResult(RefundOrder in);
 }

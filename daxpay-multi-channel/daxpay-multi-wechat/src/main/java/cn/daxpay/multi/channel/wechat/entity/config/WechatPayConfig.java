@@ -5,7 +5,7 @@ import cn.daxpay.multi.channel.wechat.code.WechatPayCode;
 import cn.daxpay.multi.channel.wechat.convert.config.WechatPayConfigConvert;
 import cn.daxpay.multi.channel.wechat.result.config.WechatPayConfigResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.service.entity.channel.ChannelConfig;
+import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;

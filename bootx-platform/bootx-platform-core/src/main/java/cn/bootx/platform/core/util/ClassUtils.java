@@ -44,7 +44,7 @@ public class ClassUtils {
     public Field[] recursionParents(Class<?> clas, Field[] fields) {
         if (Objects.nonNull(clas.getSuperclass())) {
             Class<?> clsSup = clas.getSuperclass();
-            List<Field> fieldList = new ArrayList<>(Arrays.asList(fields));
+            List<Field> fieldList = new ArrayList<>(List.of(fields));
             // 获取当前class的所有fields的name列表
             List<String> fdNames = fieldList.stream().map(Field::getName).toList();
             for (Field pfd : clsSup.getDeclaredFields()) {

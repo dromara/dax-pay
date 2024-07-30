@@ -1,8 +1,8 @@
-package cn.daxpay.multi.service.result.order.refund;
+package cn.daxpay.multi.core.result.order;
 
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
-import cn.daxpay.multi.service.common.result.MchResult;
+import cn.daxpay.multi.core.result.MchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -84,31 +84,13 @@ public class RefundOrderResult extends MchResult {
     @Schema(description = "退款状态")
     private String status;
 
-    /** 异步通知地址 */
-    @Schema(description = "异步通知地址")
-    private String notifyUrl;
-
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
     @Schema(description = "商户扩展参数,回调时会原样返回, 以最后一次为准")
     private String attach;
 
-    /**
-     * 附加参数 以最后一次为准
-     */
-    @Schema(description = "附加参数 以最后一次为准")
-    private String extraParam;
-
-    /** 请求时间 */
-    @Schema(description = "请求时间")
-    private LocalDateTime reqTime;
-
     /** 终端ip */
     @Schema(description = "终端ip")
     private String clientIp;
-
-    /** 错误码 */
-    @Schema(description = "错误码")
-    private String errorCode;
 
     /** 错误信息 */
     @Schema(description = "错误信息")

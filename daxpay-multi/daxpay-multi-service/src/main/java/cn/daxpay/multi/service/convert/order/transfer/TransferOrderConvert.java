@@ -1,7 +1,8 @@
 package cn.daxpay.multi.service.convert.order.transfer;
 
+import cn.daxpay.multi.core.result.order.TransferOrderResult;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
-import cn.daxpay.multi.service.result.order.transfer.TransferOrderResult;
+import cn.daxpay.multi.service.result.order.transfer.TransferOrderVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -14,5 +15,8 @@ import org.mapstruct.factory.Mappers;
 public interface TransferOrderConvert {
     TransferOrderConvert CONVERT = Mappers.getMapper(TransferOrderConvert.class);
 
+    TransferOrderVo toVo(TransferOrder in);
+
     TransferOrderResult toResult(TransferOrder in);
+
 }

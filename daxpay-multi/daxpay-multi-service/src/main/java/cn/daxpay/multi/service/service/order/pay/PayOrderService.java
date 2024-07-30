@@ -25,7 +25,7 @@ public class PayOrderService {
 //    private final PayExpiredTimeService expiredTimeService;
 
     // 支付完成常量集合
-    private final List<String> ORDER_FINISH = Arrays.asList(
+    private final List<String> ORDER_FINISH = List.of(
             PayStatusEnum.CLOSE.getCode(),
             PayStatusEnum.CANCEL.getCode(),
             PayStatusEnum.SUCCESS.getCode());

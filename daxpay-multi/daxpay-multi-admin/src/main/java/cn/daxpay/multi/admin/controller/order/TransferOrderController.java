@@ -7,7 +7,7 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.daxpay.multi.service.param.order.transfer.TransferOrderQuery;
-import cn.daxpay.multi.service.result.order.transfer.TransferOrderResult;
+import cn.daxpay.multi.service.result.order.transfer.TransferOrderVo;
 import cn.daxpay.multi.service.service.order.transfer.TransferOrderQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,28 +32,28 @@ public class TransferOrderController {
     @RequestPath("分页查询")
     @Operation(summary = "分页查询")
     @GetMapping("/page")
-    public Result<PageResult<TransferOrderResult>> page(PageParam pageParam, TransferOrderQuery query){
+    public Result<PageResult<TransferOrderVo>> page(PageParam pageParam, TransferOrderQuery query){
         return Res.ok(queryService.page(pageParam, query));
     }
 
     @RequestPath("根据转账号查询")
     @Operation(summary = "根据转账号查询")
     @GetMapping("/findByTransferNo")
-    public Result<TransferOrderResult> findByTransferNo(String refundNo){
+    public Result<TransferOrderVo> findByTransferNo(String refundNo){
         return Res.ok(queryService.findByTransferNo(refundNo));
     }
 
     @RequestPath("根据商户转账号查询")
     @Operation(summary = "根据商户转账号查询")
     @GetMapping("/findByBizTransferNo")
-    public Result<TransferOrderResult> findByBizTransferNo(String bizTransferNo){
+    public Result<TransferOrderVo> findByBizTransferNo(String bizTransferNo){
         return Res.ok(queryService.findByBizTransferNo(bizTransferNo));
     }
 
     @RequestPath("查询单条")
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
-    public Result<TransferOrderResult> findById(Long id){
+    public Result<TransferOrderVo> findById(Long id){
         return Res.ok(queryService.findById(id));
     }
 

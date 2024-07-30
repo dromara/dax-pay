@@ -1,8 +1,8 @@
 package cn.daxpay.multi.service.common.cache;
 
 import cn.daxpay.multi.core.exception.ConfigNotEnableException;
-import cn.daxpay.multi.service.dao.channel.ChannelConfigManager;
-import cn.daxpay.multi.service.entity.channel.ChannelConfig;
+import cn.daxpay.multi.service.dao.config.ChannelConfigManager;
+import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
 import lombok.RequiredArgsConstructor;

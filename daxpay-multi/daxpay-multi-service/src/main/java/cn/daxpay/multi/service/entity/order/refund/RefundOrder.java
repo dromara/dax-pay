@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.service.convert.order.refund.RefundOrderConvert;
-import cn.daxpay.multi.service.result.order.refund.RefundOrderResult;
+import cn.daxpay.multi.service.result.order.refund.RefundOrderVo;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_refund_order")
-public class RefundOrder extends MpBaseEntity implements ToResult<RefundOrderResult> {
+public class RefundOrder extends MpBaseEntity implements ToResult<RefundOrderVo> {
 
     /** 支付订单ID */
     private Long orderId;
@@ -104,7 +104,7 @@ public class RefundOrder extends MpBaseEntity implements ToResult<RefundOrderRes
      * 转换
      */
     @Override
-    public RefundOrderResult toResult() {
-        return RefundOrderConvert.CONVERT.toResult(this);
+    public RefundOrderVo toResult() {
+        return RefundOrderConvert.CONVERT.toVo(this);
     }
 }

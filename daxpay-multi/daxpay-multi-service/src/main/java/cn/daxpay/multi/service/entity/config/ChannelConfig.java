@@ -1,11 +1,11 @@
-package cn.daxpay.multi.service.entity.channel;
+package cn.daxpay.multi.service.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.annotation.BigField;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
-import cn.daxpay.multi.service.convert.channel.ChannelConfigConvert;
-import cn.daxpay.multi.service.result.channel.ChannelConfigResult;
+import cn.daxpay.multi.service.convert.config.ChannelConfigConvert;
+import cn.daxpay.multi.service.result.constant.ChannelConfigResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

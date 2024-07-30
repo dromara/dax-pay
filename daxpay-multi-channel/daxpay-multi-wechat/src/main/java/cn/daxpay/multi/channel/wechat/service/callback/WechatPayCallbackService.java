@@ -129,7 +129,7 @@ public class WechatPayCallbackService {
         // 支付号
         callbackInfo.setTradeNo(result.getOutTradeNo());
         // 支付状态 - 成功
-        if (Arrays.asList(WxpayTradeStatus.SUCCESS,WxpayTradeStatus.REFUND).contains(result.getTradeState())){
+        if (List.of(WxpayTradeStatus.SUCCESS,WxpayTradeStatus.REFUND).contains(result.getTradeState())){
             callbackInfo.setTradeStatus(PayStatusEnum.SUCCESS.getCode());
         }
         // 支付状态 - 支付中

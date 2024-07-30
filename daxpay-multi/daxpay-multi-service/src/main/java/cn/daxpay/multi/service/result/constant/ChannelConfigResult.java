@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.result.channel;
+package cn.daxpay.multi.service.result.constant;
 
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;

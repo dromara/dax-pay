@@ -3,7 +3,7 @@ package cn.daxpay.multi.gateway.controller;
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
-import cn.daxpay.multi.service.service.notice.callback.CallbackReceiverService;
+import cn.daxpay.multi.service.service.trade.callback.CallbackReceiverService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

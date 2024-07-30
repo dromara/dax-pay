@@ -5,7 +5,7 @@ import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.convert.config.AlipayConfigConvert;
 import cn.daxpay.multi.channel.alipay.result.config.AlipayConfigResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.service.entity.channel.ChannelConfig;
+import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;

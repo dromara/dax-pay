@@ -45,7 +45,7 @@ public class RefundAssistService {
             throw new TradeStatusErrorException("当前支付单订状态["+statusEnum.getName()+"]不允许发起退款操作");
         }
         // 退款中和退款完成不能退款
-        List<String> tradesStatus = Arrays.asList(
+        List<String> tradesStatus = List.of(
                 PayRefundStatusEnum.REFUNDED.getCode(),
                 PayRefundStatusEnum.REFUNDING.getCode());
         if (tradesStatus.contains(payOrder.getRefundStatus())){

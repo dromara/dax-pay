@@ -43,12 +43,12 @@ public class WeChatPaySyncV2Service {
                     .setOutOrderNo(result.getTransactionId())
                     .setAmount(PayUtil.conversionAmount(result.getTotalFee()));
             // 支付状态 - 成功 SUCCESS：支付成功  REFUND：转入退款
-            if (Arrays.asList(WxpayTradeStatus.SUCCESS, WxpayTradeStatus.REFUND).contains(result.getTradeState())){
+            if (List.of(WxpayTradeStatus.SUCCESS, WxpayTradeStatus.REFUND).contains(result.getTradeState())){
                 syncResult.setSyncStatus(PaySyncResultEnum.SUCCESS)
                         .setFinishTime(WechatPayUtil.parseV2(result.getTimeEnd()));
             }
             // 支付状态 - 支付中  NOTPAY：未支付，等待扣款 USERPAYING：用户支付中（付款码支付）
-            if (Arrays.asList(WxpayTradeStatus.NOTPAY, WxpayTradeStatus.USER_PAYING).contains(result.getTradeState())){
+            if (List.of(WxpayTradeStatus.NOTPAY, WxpayTradeStatus.USER_PAYING).contains(result.getTradeState())){
                 syncResult.setSyncStatus(PaySyncResultEnum.PROGRESS);
             }
             // 支付状态 - 失败 PAYERROR：支付失败(其他原因，如银行返回失败)
@@ -56,7 +56,7 @@ public class WeChatPaySyncV2Service {
                 syncResult.setSyncStatus(PaySyncResultEnum.CLOSED);
             }
             // 关闭  REVOKED：已撤销（付款码支付） CLOSED：已关闭
-            if (Arrays.asList(WxpayTradeStatus.REVOKED, WxpayTradeStatus.CLOSED).contains(result.getTradeState())){
+            if (List.of(WxpayTradeStatus.REVOKED, WxpayTradeStatus.CLOSED).contains(result.getTradeState())){
                 syncResult.setSyncStatus(PaySyncResultEnum.CLOSED);
             }
         } catch (WxPayException e) {

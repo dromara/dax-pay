@@ -15,8 +15,8 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class IpRegion {
-    private static final List<String> BIG_CHINA = Arrays.asList("香港","澳门","台湾");
-    private static final List<String> PROVINCE_LEVEL_CITY = Arrays.asList("北京","上海","重庆","天津");
+    private static final List<String> BIG_CHINA = List.of("香港","澳门","台湾");
+    private static final List<String> PROVINCE_LEVEL_CITY = List.of("北京","上海","重庆","天津");
 
     /** 国家 */
     private String country;

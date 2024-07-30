@@ -42,6 +42,6 @@ public enum TransferPayeeTypeEnum {
     /** 微信支持类型 */
     public static final List<TransferPayeeTypeEnum> WECHAT_LIST = Collections.singletonList(WX_PERSONAL);
     /** 支付宝支持类型 */
-    public static final List<TransferPayeeTypeEnum> ALI_LIST = Collections.unmodifiableList(Arrays.asList(ALI_OPEN_ID, ALI_USER_ID, ALI_LOGIN_NAME));
+    public static final List<TransferPayeeTypeEnum> ALI_LIST = Collections.unmodifiableList(List.of(ALI_OPEN_ID, ALI_USER_ID, ALI_LOGIN_NAME));
 
 }

@@ -10,7 +10,7 @@ import cn.daxpay.multi.service.convert.order.pay.PayOrderConvert;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.param.order.pay.PayOrderQuery;
-import cn.daxpay.multi.service.result.order.pay.PayOrderResult;
+import cn.daxpay.multi.service.result.order.pay.PayOrderVo;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class PayOrderQueryService {
     /**
      * 分页
      */
-    public PageResult<PayOrderResult> page(PageParam pageParam, PayOrderQuery param) {
+    public PageResult<PayOrderVo> page(PageParam pageParam, PayOrderQuery param) {
         Page<PayOrder> page = payOrderManager.page(pageParam, param);
         return MpUtil.toPageResult(page);
     }
@@ -76,14 +76,14 @@ public class PayOrderQueryService {
     /**
      * 查询支付记录
      */
-    public PayOrderResult queryPayOrder(QueryPayParam param) {
+    public PayOrderVo queryPayOrder(QueryPayParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getBizOrderNoeNo()) && Objects.isNull(param.getOrderNo())){
             throw new ValidationFailedException("业务号或支付单ID不能都为空");
         }
         // 查询支付单
         return this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo())
-                .map(PayOrderConvert.CONVERT::toResult)
+                .map(PayOrderConvert.CONVERT::toVo)
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
     }
 

@@ -54,7 +54,7 @@ public class AllocOrderManager extends BaseManager<AllocOrderMapper, AllocOrder>
      * 查询待同步的分账单
      */
     public List<AllocOrder> findSyncOrder(){
-        List<String> statusList = Arrays.asList(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode(), AllocOrderStatusEnum.ALLOCATION_END.getCode());
+        List<String> statusList = List.of(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode(), AllocOrderStatusEnum.ALLOCATION_END.getCode());
         return lambdaQuery()
                 .in(AllocOrder::getStatus, statusList)
                 .list();

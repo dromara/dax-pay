@@ -19,6 +19,7 @@ import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
 import cn.daxpay.multi.service.enums.RefundSyncResultEnum;
+import cn.daxpay.multi.service.service.notice.ClientNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.order.refund.RefundOrderQueryService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
@@ -57,7 +58,7 @@ public class RefundSyncService {
 
     private final TradeFlowRecordService tradeFlowRecordService;
 
-//    private final ClientNoticeService clientNoticeService;
+    private final ClientNoticeService clientNoticeService;
 
     /**
      * 退款同步, 开启一个新的事务, 不受外部抛出异常的影响
@@ -200,7 +201,7 @@ public class RefundSyncService {
         // 记录流水
         tradeFlowRecordService.saveRefund(refundOrder);
         // 发送通知
-//        clientNoticeService.registerRefundNotice(refundOrder);
+        clientNoticeService.registerRefundNotice(refundOrder);
     }
 
 
@@ -230,7 +231,7 @@ public class RefundSyncService {
         payOrderService.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
         // 发送通知
-//        clientNoticeService.registerRefundNotice(refundOrder);
+        clientNoticeService.registerRefundNotice(refundOrder);
     }
 
     /**

@@ -1,8 +1,8 @@
-package cn.daxpay.multi.service.dao.channel;
+package cn.daxpay.multi.service.dao.config;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.multi.service.entity.channel.ChannelConfig;
+import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

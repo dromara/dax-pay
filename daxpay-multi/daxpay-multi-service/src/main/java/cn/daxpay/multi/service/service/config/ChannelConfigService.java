@@ -1,12 +1,12 @@
-package cn.daxpay.multi.service.service.channel;
+package cn.daxpay.multi.service.service.config;
 
 import cn.daxpay.multi.service.common.cache.MchAppCacheService;
-import cn.daxpay.multi.service.dao.channel.ChannelConfigManager;
+import cn.daxpay.multi.service.dao.config.ChannelConfigManager;
 import cn.daxpay.multi.service.dao.constant.ChannelConstManager;
-import cn.daxpay.multi.service.entity.channel.ChannelConfig;
+import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import cn.daxpay.multi.service.entity.constant.ChannelConst;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
-import cn.daxpay.multi.service.result.channel.ChannelConfigResult;
+import cn.daxpay.multi.service.result.constant.ChannelConfigResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

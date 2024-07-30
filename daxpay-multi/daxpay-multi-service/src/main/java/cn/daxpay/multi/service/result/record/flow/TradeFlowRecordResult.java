@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.result.record.flow;
 
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
-import cn.daxpay.multi.service.common.result.MchResult;
+import cn.daxpay.multi.core.result.MchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

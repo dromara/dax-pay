@@ -113,7 +113,7 @@ public class PayAssistService {
                 throw new TradeStatusErrorException("已经支付成功，请勿重新支付");
             }
             // 支付失败类型状态
-            List<String> tradesStatus = Arrays.asList(
+            List<String> tradesStatus = List.of(
                     PayStatusEnum.FAIL.getCode(),
                     PayStatusEnum.CLOSE.getCode(),
                     PayStatusEnum.CANCEL.getCode());

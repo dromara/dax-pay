@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.common.result;
+package cn.daxpay.multi.core.result;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

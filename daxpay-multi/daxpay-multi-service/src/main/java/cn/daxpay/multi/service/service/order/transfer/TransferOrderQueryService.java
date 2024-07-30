@@ -7,7 +7,7 @@ import cn.bootx.platform.core.rest.result.PageResult;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.param.order.transfer.TransferOrderQuery;
-import cn.daxpay.multi.service.result.order.transfer.TransferOrderResult;
+import cn.daxpay.multi.service.result.order.transfer.TransferOrderVo;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class TransferOrderQueryService {
     /**
      * 分页查询
      */
-    public PageResult<TransferOrderResult> page(PageParam pageParam, TransferOrderQuery query) {
+    public PageResult<TransferOrderVo> page(PageParam pageParam, TransferOrderQuery query) {
         Page<TransferOrder> page = transferOrderManager.page(pageParam, query);
         return MpUtil.toPageResult(page);
     }
@@ -38,7 +38,7 @@ public class TransferOrderQueryService {
     /**
      * 根据id查询
      */
-    public TransferOrderResult findById(Long id) {
+    public TransferOrderVo findById(Long id) {
         return transferOrderManager.findById(id).map(TransferOrder::toResult)
                 .orElseThrow(() -> new DataNotExistException("转账订单不存在"));
     }
@@ -46,7 +46,7 @@ public class TransferOrderQueryService {
     /**
      * 根据转账号查询
      */
-    public TransferOrderResult findByTransferNo(String transferNo){
+    public TransferOrderVo findByTransferNo(String transferNo){
         return transferOrderManager.findByTransferNo(transferNo).map(TransferOrder::toResult)
                 .orElseThrow(() -> new DataNotExistException("转账订单信息不存在"));
 
@@ -55,7 +55,7 @@ public class TransferOrderQueryService {
     /**
      * 根据转账号查询
      */
-    public TransferOrderResult findByBizTransferNo(String bizTransferNo){
+    public TransferOrderVo findByBizTransferNo(String bizTransferNo){
         return transferOrderManager.findByBizTransferNo(bizTransferNo).map(TransferOrder::toResult)
                 .orElseThrow(() -> new DataNotExistException("转账订单信息不存在"));
 

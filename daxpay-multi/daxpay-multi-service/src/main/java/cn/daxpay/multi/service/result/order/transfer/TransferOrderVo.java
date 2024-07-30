@@ -1,14 +1,10 @@
-package cn.daxpay.multi.service.entity.order.transfer;
+package cn.daxpay.multi.service.result.order.transfer;
 
-import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
-import cn.daxpay.multi.service.common.entity.MchBaseEntity;
-import cn.daxpay.multi.service.convert.order.transfer.TransferOrderConvert;
-import cn.daxpay.multi.service.result.order.transfer.TransferOrderVo;
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import cn.daxpay.multi.core.result.MchResult;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,82 +15,97 @@ import java.time.LocalDateTime;
 /**
  * 转账订单
  * @author xxm
- * @since 2024/6/1
+ * @since 2024/7/20
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_transfer_order")
-public class TransferOrder extends MchBaseEntity implements ToResult<TransferOrderVo> {
+@Schema(title = "转账订单")
+public class TransferOrderVo extends MchResult {
+
     /** 商户转账号 */
+    @Schema(description = "商户转账号")
     private String bizTransferNo;
 
     /** 转账号 */
+    @Schema(description = "转账号")
     private String transferNo;
 
     /** 通道转账号 */
+    @Schema(description = "通道转账号")
     private String outTransferNo;
 
     /**
      * 支付通道
-     * @see cn.daxpay.multi.core.enums.ChannelEnum
+     * @see ChannelEnum
      */
+    @Schema(description = "支付通道")
     private String channel;
 
     /** 转账金额 */
+    @Schema(description = "转账金额")
     private BigDecimal amount;
 
     /** 标题 */
+    @Schema(description = "标题")
     private String title;
 
     /** 转账原因/备注 */
+    @Schema(description = "转账原因/备注")
     private String reason;
 
     /**
      * 收款人类型
      * @see TransferPayeeTypeEnum
      */
+    @Schema(description = "收款人类型")
     private String payeeType;
 
     /** 收款人账号 */
+    @Schema(description = "收款人账号")
     private String payeeAccount;
 
     /** 收款人姓名 */
+    @Schema(description = "收款人姓名")
     private String payeeName;
 
     /**
      * 状态
      * @see TransferStatusEnum
      */
+    @Schema(description = "状态")
     private String status;
 
     /** 完成时间 */
+    @Schema(description = "完成时间")
     private LocalDateTime finishTime;
 
     /** 异步通知地址 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    @Schema(description = "异步通知地址")
     private String notifyUrl;
 
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    @Schema(description = "商户扩展参数")
     private String attach;
 
-    /** 请求时间，时间戳转时间 */
+    /** 请求时间 */
+    @Schema(description = "请求时间")
     private LocalDateTime reqTime;
 
     /** 终端ip */
+    @Schema(description = "支付终端ip")
     private String clientIp;
 
-    /** 错误码 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    /**
+     * 错误码
+     */
+    @Schema(description = "错误码")
     private String errorCode;
 
-    /** 错误信息 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    /**
+     * 错误原因
+     */
+    @Schema(description = "错误原因")
     private String errorMsg;
-
-    @Override
-    public TransferOrderVo toResult() {
-        return TransferOrderConvert.CONVERT.toVo(this);
-    }
 }
+
