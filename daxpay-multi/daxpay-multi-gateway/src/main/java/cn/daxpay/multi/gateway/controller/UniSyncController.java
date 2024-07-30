@@ -7,8 +7,8 @@ import cn.daxpay.multi.core.param.trade.transfer.TransferSyncParam;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.result.trade.pay.PaySyncResult;
 import cn.daxpay.multi.core.result.trade.refund.RefundSyncResult;
+import cn.daxpay.multi.core.result.trade.transfer.TransferSyncResult;
 import cn.daxpay.multi.core.util.DaxRes;
-import cn.daxpay.multi.service.bo.sync.TransferSyncResultBo;
 import cn.daxpay.multi.service.service.sync.pay.PaySyncService;
 import cn.daxpay.multi.service.service.sync.refund.RefundSyncService;
 import cn.daxpay.multi.service.service.sync.transfer.TransferSyncService;
@@ -53,7 +53,7 @@ public class UniSyncController {
 
     @Operation(summary = "分账同步接口")
     @PostMapping("/allocation")
-    public DaxResult<TransferSyncResultBo> allocation(@RequestBody TransferSyncParam param){
+    public DaxResult<TransferSyncResult> allocation(@RequestBody TransferSyncParam param){
         return DaxRes.ok(transferSyncService.sync(param));
     }
 }

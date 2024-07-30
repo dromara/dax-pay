@@ -61,7 +61,7 @@ public class WechatTransferSyncV3Service {
 
         } catch (WxPayException e) {
             log.error("微信转账订单查询V3失败", e);
-            syncResult.setErrorMsg(e.getCustomErrorMsg()).setSyncStatus(TransferSyncResultEnum.SYNC_FAIL);
+            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncStatus(TransferSyncResultEnum.SYNC_FAIL);
         }
         return syncResult;
     }

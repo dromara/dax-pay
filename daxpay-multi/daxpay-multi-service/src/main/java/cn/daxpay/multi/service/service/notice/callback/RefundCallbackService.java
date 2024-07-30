@@ -47,7 +47,7 @@ public class RefundCallbackService {
         // 加锁
         LockInfo lock = lockTemplate.lock("callback:refund:" + callbackInfo.getTradeNo(),10000, 200);
         if (Objects.isNull(lock)){
-            callbackInfo.setCallbackStatus(CallbackStatusEnum.IGNORE).setErrorMsg("回调正在处理中，忽略本次回调请求");
+            callbackInfo.setCallbackStatus(CallbackStatusEnum.IGNORE).setCallbackErrorMsg("回调正在处理中，忽略本次回调请求");
             log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getTradeNo());
             return;
         }
@@ -56,25 +56,25 @@ public class RefundCallbackService {
             RefundOrder refundOrder = refundOrderManager.findByRefundNo(callbackInfo.getTradeNo()).orElse(null);
             // 退款单不存在,记录回调记录
             if (Objects.isNull(refundOrder)) {
-                callbackInfo.setCallbackStatus(CallbackStatusEnum.NOT_FOUND).setErrorMsg("退款单不存在,记录回调记录");
+                callbackInfo.setCallbackStatus(CallbackStatusEnum.NOT_FOUND).setCallbackErrorMsg("退款单不存在,记录回调记录");
                 return;
             }
             // 退款单已经被处理, 记录回调记录
             if (!Objects.equals(RefundStatusEnum.PROGRESS.getCode(), refundOrder.getStatus())) {
-                callbackInfo.setCallbackStatus(CallbackStatusEnum.IGNORE).setErrorMsg("退款单状态已处理,记录回调记录");
+                callbackInfo.setCallbackStatus(CallbackStatusEnum.IGNORE).setCallbackErrorMsg("退款单状态已处理,记录回调记录");
                 return;
             }
 
             // 退款成功
-            if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), callbackInfo.getOutStatus())) {
+            if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), callbackInfo.getTradeStatus())) {
                 this.success(refundOrder);
             }
             // 退款失败
-            if (Objects.equals(RefundStatusEnum.FAIL.getCode(), callbackInfo.getOutStatus())){
+            if (Objects.equals(RefundStatusEnum.FAIL.getCode(), callbackInfo.getTradeStatus())){
                 this.close(refundOrder);
             }
             // 退款异常
-            if (Objects.equals(RefundStatusEnum.CLOSE.getCode(), callbackInfo.getOutStatus())){
+            if (Objects.equals(RefundStatusEnum.CLOSE.getCode(), callbackInfo.getTradeStatus())){
                 this.close(refundOrder);
             }
         } finally {
@@ -119,6 +119,8 @@ public class RefundCallbackService {
      * 退款失败, 关闭退款单并将失败的退款金额归还回订单
      */
     private void close(RefundOrder refundOrder) {
+        CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+
         PayOrder payOrder = payOrderService.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
         // 退款失败返还后的余额
@@ -133,7 +135,8 @@ public class RefundCallbackService {
 
         // 更新支付订单相关的可退款金额
         payOrder.setRefundableBalance(payOrderAmount);
-        refundOrder.setStatus(RefundStatusEnum.CLOSE.getCode());
+        refundOrder.setStatus(RefundStatusEnum.CLOSE.getCode())
+                .setErrorMsg(callbackInfo.getTradeErrorMsg());
 
         // 更新订单和退款相关订单
         payOrderService.updateById(payOrder);

@@ -106,7 +106,7 @@ public class WechatPayCallbackService {
         callbackInfo.setTradeNo(result.getOutTradeNo());
         // 支付状态
         PayStatusEnum payStatus = WechatPayUtil.codeIsOk(result.getResultCode()) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
-        callbackInfo.setOutStatus(payStatus.getCode());
+        callbackInfo.setTradeStatus(payStatus.getCode());
         // 支付金额
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getTotalFee()));
         String timeEnd = result.getTimeEnd();
@@ -130,23 +130,23 @@ public class WechatPayCallbackService {
         callbackInfo.setTradeNo(result.getOutTradeNo());
         // 支付状态 - 成功
         if (Arrays.asList(WxpayTradeStatus.SUCCESS,WxpayTradeStatus.REFUND).contains(result.getTradeState())){
-            callbackInfo.setOutStatus(PayStatusEnum.SUCCESS.getCode());
+            callbackInfo.setTradeStatus(PayStatusEnum.SUCCESS.getCode());
         }
         // 支付状态 - 支付中
         if (Objects.equals(result.getTradeState(), WxpayTradeStatus.NOTPAY)){
-            callbackInfo.setOutStatus(PayStatusEnum.PROGRESS.getCode());
+            callbackInfo.setTradeStatus(PayStatusEnum.PROGRESS.getCode());
         }
         // 支付状态 - 失败
         if (Objects.equals(WxpayTradeStatus.PAY_ERROR, result.getTradeState())){
-            callbackInfo.setOutStatus(PayStatusEnum.FAIL.getCode());
+            callbackInfo.setTradeStatus(PayStatusEnum.FAIL.getCode());
         }
         // 撤销
         if (Objects.equals(result.getTradeState(), WxpayTradeStatus.REVOKED)){
-            callbackInfo.setOutStatus(PayStatusEnum.CANCEL.getCode());
+            callbackInfo.setTradeStatus(PayStatusEnum.CANCEL.getCode());
         }
         // 关闭
         if (Objects.equals(result.getTradeState(), WxpayTradeStatus.CLOSED)){
-            callbackInfo.setOutStatus(PayStatusEnum.CLOSE.getCode());
+            callbackInfo.setTradeStatus(PayStatusEnum.CLOSE.getCode());
         }
 
         // 支付金额

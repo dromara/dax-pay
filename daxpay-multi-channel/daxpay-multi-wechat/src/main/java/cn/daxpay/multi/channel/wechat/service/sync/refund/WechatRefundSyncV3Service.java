@@ -54,7 +54,7 @@ public class WechatRefundSyncV3Service {
             }
         } catch (WxPayException e) {
             log.error("微信退款订单查询V3失败", e);
-            syncResult.setErrorMsg(e.getCustomErrorMsg()).setSyncStatus(RefundSyncResultEnum.FAIL);
+            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncStatus(RefundSyncResultEnum.FAIL);
         }
         return syncResult;
     }

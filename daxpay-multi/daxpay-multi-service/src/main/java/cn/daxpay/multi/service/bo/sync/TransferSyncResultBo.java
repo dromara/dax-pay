@@ -20,7 +20,7 @@ public class TransferSyncResultBo {
      * 支付网关订单状态, 默认为转账中
      * @see TransferSyncResultEnum
      */
-    private TransferSyncResultEnum syncStatus = TransferSyncResultEnum.UNKNOWN;
+    private TransferSyncResultEnum syncStatus;
 
     /** 同步时网关返回的对象, 序列化为json字符串 */
     private String syncInfo;
@@ -31,6 +31,11 @@ public class TransferSyncResultBo {
     private String outTransferNo;
 
     /**
+     * 交易错误信息
+     */
+    private String tradeErrorMsg;
+
+    /**
      * 金额
      */
     private BigDecimal amount;
@@ -39,8 +44,8 @@ public class TransferSyncResultBo {
     private LocalDateTime finishTime;
 
     /** 错误提示码 */
-    private String errorCode;
+    private String syncErrorCode;
 
-    /** 错误提示 */
-    private String errorMsg;
+    /** 同步错误提示 */
+    private String syncErrorMsg;
 }

@@ -106,15 +106,15 @@ public class WechatRefundCallbackService {
         callbackInfo.setTradeNo(result.getRefundId());
         // 退款状态 - 成功
         if (Objects.equals(RefundStatus.SUCCESS, result.getRefundStatus())){
-            callbackInfo.setOutStatus(RefundStatusEnum.SUCCESS.getCode());
+            callbackInfo.setTradeStatus(RefundStatusEnum.SUCCESS.getCode());
         }
         // 退款状态 - 退款关闭
         if (Objects.equals(result.getRefundStatus(), RefundStatus.REFUND_CLOSE)){
-            callbackInfo.setOutStatus(RefundStatusEnum.CLOSE.getCode());
+            callbackInfo.setTradeStatus(RefundStatusEnum.CLOSE.getCode());
         }
         // 退款状态 - 失败
         if (Objects.equals(RefundStatus.CHANGE, result.getRefundStatus())){
-            callbackInfo.setOutStatus(RefundStatusEnum.FAIL.getCode());
+            callbackInfo.setTradeStatus(RefundStatusEnum.FAIL.getCode());
         }
         // 退款金额和时间
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getRefundFee()));
@@ -138,15 +138,15 @@ public class WechatRefundCallbackService {
         callbackInfo.setTradeNo(result.getOutRefundNo());
         // 退款状态 - 成功
         if (Objects.equals(RefundStatus.SUCCESS, result.getRefundStatus())){
-            callbackInfo.setOutStatus(RefundStatusEnum.SUCCESS.getCode());
+            callbackInfo.setTradeStatus(RefundStatusEnum.SUCCESS.getCode());
         }
         // 退款状态 - 退款关闭
         if (Objects.equals(result.getRefundStatus(), RefundStatus.CLOSED)){
-            callbackInfo.setOutStatus(RefundStatusEnum.CLOSE.getCode());
+            callbackInfo.setTradeStatus(RefundStatusEnum.CLOSE.getCode());
         }
         // 退款状态 - 失败
         if (Objects.equals(RefundStatus.ABNORMAL, result.getRefundStatus())){
-            callbackInfo.setOutStatus(RefundStatusEnum.FAIL.getCode());
+            callbackInfo.setTradeStatus(RefundStatusEnum.FAIL.getCode());
         }
         // 退款金额
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getAmount().getTotal()));

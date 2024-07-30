@@ -55,8 +55,8 @@ public class TradeCallbackRecordService {
                 .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackData()))
                 .setCallbackType(callbackInfo.getCallbackType().getCode())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())
-                .setErrorCode(callbackInfo.getErrorCode())
-                .setErrorMsg(callbackInfo.getErrorMsg());
+                .setErrorCode(callbackInfo.getCallbackErrorCode())
+                .setErrorMsg(callbackInfo.getCallbackErrorMsg());
         callbackRecordManager.save(payNotifyRecord);
     }
 }

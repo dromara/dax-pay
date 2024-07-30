@@ -43,7 +43,7 @@ public class AliPayRefundCallbackService {
         // 退款订单号
         callback.setTradeNo(callbackParam.get(OUT_BIZ_NO));
         // 退款状态
-        callback.setOutStatus(callbackParam.get(TRADE_STATUS));
+        callback.setTradeStatus(callbackParam.get(TRADE_STATUS));
         // 退款金额
         callback.setAmount(new BigDecimal(callbackParam.get(REFUND_FEE)));
 

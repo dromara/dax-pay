@@ -7,8 +7,6 @@ import lombok.experimental.Accessors;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static cn.daxpay.multi.service.enums.RefundSyncResultEnum.UNKNOWN;
-
 /**
  * 支付退款同步结果
  * @author xxm
@@ -22,7 +20,7 @@ public class RefundSyncResultBo {
      * 支付网关订单状态, 默认为退款中
      * @see RefundSyncResultEnum
      */
-    private RefundSyncResultEnum syncStatus = UNKNOWN;
+    private RefundSyncResultEnum syncStatus;
 
     /** 同步时网关返回的对象, 序列化为json字符串 */
     private String syncInfo;
@@ -33,6 +31,11 @@ public class RefundSyncResultBo {
     private String outRefundNo;
 
     /**
+     * 交易错误信息
+     */
+    private String tradeErrorMsg;
+
+    /**
      * 金额
      */
     private BigDecimal amount;
@@ -41,8 +44,8 @@ public class RefundSyncResultBo {
     private LocalDateTime finishTime;
 
     /** 错误提示码 */
-    private String errorCode;
+    private String syncErrorCode;
 
     /** 错误提示 */
-    private String errorMsg;
+    private String syncErrorMsg;
 }

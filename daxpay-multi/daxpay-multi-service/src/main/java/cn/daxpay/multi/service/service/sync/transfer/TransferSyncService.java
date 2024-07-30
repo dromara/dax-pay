@@ -75,7 +75,7 @@ public class TransferSyncService {
             if (Objects.equals(syncResult.getSyncStatus(), TransferSyncResultEnum.SYNC_FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(transferOrder, syncResult, false);
-                throw new OperationFailException(syncResult.getErrorMsg());
+                throw new OperationFailException(syncResult.getSyncErrorMsg());
             }
             // 转账订单的网关订单号是否一致, 不一致进行更新
             if (!Objects.equals(syncResult.getOutTransferNo(), transferOrder.getOutTransferNo())){
@@ -140,22 +140,10 @@ public class TransferSyncService {
         var syncStatusEnum = syncResult.getSyncStatus();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
-            case SUCCESS:
-                this.success(order, syncResult);
-                break;
-            case PROGRESS:
-                // 不进行处理
-                break;
-            case FAIL: {
-                this.close(order);
-                break;
-            }
-            case NOT_FOUND:
-                this.close(order);
-                break;
-            default: {
-                throw new BizException("代码有问题");
-            }
+            case SUCCESS -> this.success(order, syncResult);
+            case PROGRESS -> {}
+            case FAIL,CLOSE -> this.close(order);
+            default -> throw new BizException("代码有问题");
         }
     }
 
@@ -197,8 +185,8 @@ public class TransferSyncService {
                 .setChannel(order.getChannel())
                 .setSyncInfo(payRemoteSyncResult.getSyncInfo())
                 .setAdjust(adjust)
-                .setErrorCode(payRemoteSyncResult.getErrorCode())
-                .setErrorMsg(payRemoteSyncResult.getErrorMsg())
+                .setErrorCode(payRemoteSyncResult.getSyncErrorCode())
+                .setErrorMsg(payRemoteSyncResult.getSyncErrorMsg())
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
         tradeSyncRecordService.saveRecord(tradeSyncRecord);
     }

@@ -1,6 +1,5 @@
 package cn.daxpay.multi.service.service.sync.refund;
 
-import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
@@ -95,7 +94,7 @@ public class RefundSyncService {
             if (Objects.equals(syncResultBo.getSyncStatus(), RefundSyncResultEnum.SYNC_FAIL)) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(refundOrder, syncResultBo, false);
-                throw new OperationFailException(syncResultBo.getErrorMsg());
+                throw new OperationFailException(syncResultBo.getSyncErrorMsg());
             }
             // 订单的通道交易号是否一致, 不一致进行更新
             if (Objects.nonNull(syncResultBo.getOutRefundNo()) && !Objects.equals(syncResultBo.getOutRefundNo(), refundOrder.getOutRefundNo())){
@@ -165,10 +164,10 @@ public class RefundSyncService {
                 this.success(order, syncResult);
             case PROGRESS -> {}
             case SYNC_FAIL -> {
-                log.error("退款同步失败, 退款单号:{}, 错误信息:{}", order.getRefundNo(), syncResult.getErrorMsg());
+                log.error("退款同步失败, 退款单号:{}, 错误信息:{}", order.getRefundNo(), syncResult.getSyncErrorMsg());
             }
-            case FAIL, CLOSE, NOT_FOUND-> this.close(order);
-            case UNKNOWN -> throw new BizException("代码有问题");
+            case FAIL, CLOSE-> this.close(order);
+            default -> log.error("退款同步结果未知, 退款单号:{}, 错误信息:{}", order.getRefundNo(), syncResult.getSyncErrorMsg());
         }
     }
 
@@ -249,8 +248,8 @@ public class RefundSyncService {
                 .setChannel(refundOrder.getChannel())
                 .setSyncInfo(syncResult.getSyncInfo())
                 .setAdjust(adjust)
-                .setErrorCode(syncResult.getErrorCode())
-                .setErrorMsg(syncResult.getErrorMsg())
+                .setErrorCode(syncResult.getSyncErrorCode())
+                .setErrorMsg(syncResult.getSyncErrorMsg())
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
         tradeSyncRecordService.saveRecord(tradeSyncRecord);
     }

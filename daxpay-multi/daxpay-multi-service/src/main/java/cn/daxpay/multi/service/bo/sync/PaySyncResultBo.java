@@ -7,8 +7,6 @@ import lombok.experimental.Accessors;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static cn.daxpay.multi.service.enums.PaySyncResultEnum.UNKNOWN;
-
 /**
  *
  * @author xxm
@@ -18,16 +16,23 @@ import static cn.daxpay.multi.service.enums.PaySyncResultEnum.UNKNOWN;
 @Accessors(chain = true)
 public class PaySyncResultBo {
 
+    /** 同步时网关返回的对象, 序列化为json字符串 */
+    private String syncInfo;
     /**
      * 支付网关订单状态
      * @see PaySyncResultEnum
      */
-    private PaySyncResultEnum syncStatus = UNKNOWN;
+    private PaySyncResultEnum syncStatus;
 
     /**
      * 外部第三方支付系统的交易号, 用与和本地记录关联起来
      */
     private String outOrderNo;
+
+    /**
+     * 交易错误信息
+     */
+    private String tradeErrorMsg;
 
     /**
      * 金额
@@ -37,12 +42,10 @@ public class PaySyncResultBo {
     /** 支付完成时间 */
     private LocalDateTime finishTime;
 
-    /** 同步时网关返回的对象, 序列化为json字符串 */
-    private String syncInfo;
 
     /** 错误提示码 */
-    private String errorCode;
+    private String syncErrorCode;
 
     /** 错误提示 */
-    private String errorMsg;
+    private String syncErrorMsg;
 }

@@ -31,6 +31,8 @@ public class AliPayNoticeReceiverService {
 
     private final AliPayConfigService aliPayConfigService;
 
+    private final AliPayTransferNoticeService aliPayTransferNoticeService;
+
     /**
      * 通知消息处理
      */
@@ -44,10 +46,19 @@ public class AliPayNoticeReceiverService {
 
         // 通过 msg_method 获取消息类型
         String msgMethod = map.get("msg_method");
-        // 通过 biz_content 获取值
-        String bizContent = map.get("biz_content");
-        return null;
+
+        switch (msgMethod){
+            // 交易分账结果通知
+            case "alipay.trade.order.settle.notify"-> {
+                return aliPayTransferNoticeService.transferHandle(map);
+            }
+            // 资金单据状态变更通知
+            case "alipay.fund.trans.order.changed"->{}
+            default -> log.info("消息类型:{}, 暂时无法处理", msgMethod);
+        }
+        return "success";
     }
+
 
     /**
      * 校验消息通知

@@ -65,7 +65,7 @@ public class AliPayCallbackService {
         callback.setTradeNo(callbackParam.get(OUT_TRADE_NO));
         // 支付状态
         PayStatusEnum payStatus = Objects.equals(callbackParam.get(TRADE_STATUS), PayStatus.TRADE_SUCCESS) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
-        callback.setOutStatus(payStatus.getCode());
+        callback.setTradeStatus(payStatus.getCode());
         // 支付金额
         String amountStr = callbackParam.get(TOTAL_AMOUNT);
         callback.setAmount(new BigDecimal(amountStr));

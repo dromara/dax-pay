@@ -17,8 +17,6 @@ public enum RefundSyncResultEnum {
     SUCCESS("success","退款成功"),
     CLOSE("close","退款关闭"),
     PROGRESS("progress","退款中"),
-    NOT_FOUND("not_found", "交易不存在"),
-    UNKNOWN("unknown","状态未知"),
     ;
 
     /** 编码 */

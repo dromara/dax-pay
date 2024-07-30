@@ -59,7 +59,7 @@ public class WeChatPaySyncV3Service {
             }
         } catch (WxPayException e) {
             log.error("微信支付V3订单查询失败", e);
-            syncResult.setErrorMsg(e.getCustomErrorMsg()).setSyncStatus(PaySyncResultEnum.SYNC_FAIL);
+            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncStatus(PaySyncResultEnum.SYNC_FAIL);
         }
         return syncResult;
     }

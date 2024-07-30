@@ -22,14 +22,15 @@ import java.util.Map;
 @Accessors(chain = true)
 public class CallbackLocal {
 
-    /** 回调数据内容 */
-    private Map<String, ?> callbackData = new HashMap<>();
 
     /**
      * 原始数据, 回调数据内容不存在的时候使用这个
      * 主要处理类似需要二次解密的回调, 如微信转账退款等
      */
     private String rawData;
+
+    /** 回调数据内容 */
+    private Map<String, ?> callbackData = new HashMap<>();
 
     /** 交易号 */
     private String tradeNo;
@@ -48,12 +49,15 @@ public class CallbackLocal {
     private TradeTypeEnum callbackType;
 
     /**
-     * 三方支付系统返回状态
+     * 交易状态状态
      * @see PayStatusEnum 支付状态
      * @see RefundStatusEnum 退款状态
      * @see TransferStatusEnum 转账状态
      */
-    private String outStatus;
+    private String tradeStatus;
+
+    /** 交易错误信息 */
+    private String tradeErrorMsg;
 
     /** 金额(元) */
     private BigDecimal amount;
@@ -63,10 +67,10 @@ public class CallbackLocal {
 
 
     /** 回调信息错误码 */
-    private String errorCode;
+    private String callbackErrorCode;
 
     /** 回调信息错误信息 */
-    private String errorMsg;
+    private String callbackErrorMsg;
 
     /**
      * 回调处理状态

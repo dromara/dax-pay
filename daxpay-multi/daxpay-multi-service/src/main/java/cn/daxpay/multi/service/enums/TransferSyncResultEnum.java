@@ -16,8 +16,6 @@ public enum TransferSyncResultEnum {
     PROGRESS("progress","转账中"),
     CLOSE("close","转账关闭"),
     FAIL("fail","转账失败"),
-    NOT_FOUND("not_found", "转账不存在"),
-    UNKNOWN("unknown","状态未知"),
     ;
     private final String code;
     private final String name;

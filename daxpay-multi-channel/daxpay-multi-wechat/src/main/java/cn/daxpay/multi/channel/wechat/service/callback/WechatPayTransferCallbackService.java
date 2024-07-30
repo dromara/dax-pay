@@ -104,17 +104,17 @@ public class WechatPayTransferCallbackService {
 
         // FINISHED:已完成。批次内的所有转账明细单都已处理完成
         if ("FINISHED".equals(result.getBatchStatus())){
-            callbackInfo.setOutStatus(TransferStatusEnum.SUCCESS.getCode());
+            callbackInfo.setTradeStatus(TransferStatusEnum.SUCCESS.getCode());
         }
         // CLOSED:已关闭。可查询具体的批次关闭原因确认
         if ("CLOSED".equals(result.getBatchStatus())){
-            callbackInfo.setOutStatus(TransferStatusEnum.CLOSE.getCode());
+            callbackInfo.setTradeStatus(TransferStatusEnum.CLOSE.getCode());
         }
         // WAIT_PAY: 待付款确认。需要付款出资商户在商家助手小程序或服务商助手小程序进行付款确认
         // ACCEPTED:已受理。批次已受理成功，若发起批量转账的30分钟后，转账批次单仍处于该状态，可能原因是商户账户余额不足等。商户可查询账户资金流水，若该笔转账批次单的扣款已经发生，则表示批次已经进入转账中，请再次查单确认
         // PROCESSING:转账中。已开始处理批次内的转账明细单
         if (List.of("WAIT_PAY", "ACCEPTED", "PROCESSING").contains(result.getBatchStatus())){
-            callbackInfo.setOutStatus(TransferStatusEnum.PROGRESS.getCode());
+            callbackInfo.setTradeStatus(TransferStatusEnum.PROGRESS.getCode());
         }
     }
 }
