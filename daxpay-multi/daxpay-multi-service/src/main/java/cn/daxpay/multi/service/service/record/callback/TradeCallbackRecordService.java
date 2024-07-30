@@ -4,6 +4,7 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.record.callback.TradeCallbackRecordManager;
@@ -52,7 +53,7 @@ public class TradeCallbackRecordService {
                 .setTradeNo(callbackInfo.getTradeNo())
                 .setOutTradeNo(callbackInfo.getOutTradeNo())
                 .setChannel(callbackInfo.getChannel())
-                .setNotifyInfo(JSONUtil.toJsonStr(callbackInfo.getCallbackData()))
+                .setNotifyInfo(JsonUtil.toJsonStr(callbackInfo.getCallbackData()))
                 .setCallbackType(callbackInfo.getCallbackType().getCode())
                 .setStatus(callbackInfo.getCallbackStatus().getCode())
                 .setErrorCode(callbackInfo.getCallbackErrorCode())

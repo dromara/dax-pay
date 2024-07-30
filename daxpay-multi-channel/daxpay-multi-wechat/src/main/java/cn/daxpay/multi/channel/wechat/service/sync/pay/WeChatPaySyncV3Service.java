@@ -1,5 +1,6 @@
 package cn.daxpay.multi.channel.wechat.service.sync.pay;
 
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
@@ -7,7 +8,6 @@ import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.enums.PaySyncResultEnum;
-import cn.hutool.json.JSONUtil;
 import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,7 +37,7 @@ public class WeChatPaySyncV3Service {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         try {
             var result = wxPayService.queryOrderV3(null, order.getOrderNo());
-            syncResult.setSyncInfo(JSONUtil.toJsonStr(result))
+            syncResult.setSyncInfo(JsonUtil.toJsonStr(result))
                     .setOutOrderNo(result.getTransactionId())
                     .setAmount(PayUtil.conversionAmount(result.getAmount().getPayerTotal()));
             // 支付状态 - 成功 SUCCESS：支付成功  REFUND：转入退款

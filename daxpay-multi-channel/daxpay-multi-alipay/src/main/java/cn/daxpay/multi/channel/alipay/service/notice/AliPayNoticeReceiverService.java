@@ -1,13 +1,13 @@
 package cn.daxpay.multi.channel.alipay.service.notice;
 
 import cn.bootx.platform.core.util.CertUtil;
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayConstants;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -64,7 +64,7 @@ public class AliPayNoticeReceiverService {
      * 校验消息通知
      */
     private boolean verifyNotify(Map<String, String> params) {
-        String callReq = JSONUtil.toJsonStr(params);
+        String callReq = JsonUtil.toJsonStr(params);
         log.info("支付宝消息通知报文: {}", callReq);
         String appId = params.get("app_id");
         if (StrUtil.isBlank(appId)) {

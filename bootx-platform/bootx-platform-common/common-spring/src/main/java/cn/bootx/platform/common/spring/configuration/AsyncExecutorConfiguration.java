@@ -1,6 +1,6 @@
 package cn.bootx.platform.common.spring.configuration;
 
-import cn.hutool.json.JSONUtil;
+import cn.bootx.platform.core.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
@@ -39,7 +39,7 @@ public class AsyncExecutorConfiguration implements AsyncConfigurer {
         @Override
         public void handleUncaughtException(Throwable throwable, Method method, Object... objects) {
 
-            log.error("异步方法中发生异常，方法：{}，参数：{}，异常：{}", method.getName(), JSONUtil.toJsonStr(objects),
+            log.error("异步方法中发生异常，方法：{}，参数：{}，异常：{}", method.getName(), JsonUtil.toJsonStr(objects),
                     throwable.getMessage());
             log.error("详细异常信息", throwable);
         }

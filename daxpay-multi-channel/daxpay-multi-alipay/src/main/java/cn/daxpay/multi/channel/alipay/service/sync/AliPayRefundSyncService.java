@@ -1,5 +1,6 @@
 package cn.daxpay.multi.channel.alipay.service.sync;
 
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
@@ -7,7 +8,6 @@ import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.enums.RefundSyncResultEnum;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
@@ -51,7 +51,7 @@ public class AliPayRefundSyncService {
             AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
             request.setBizModel(model);
             AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
-            syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
+            syncResult.setSyncInfo(JsonUtil.toJsonStr(response));
             // 失败
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 syncResult.setSyncStatus(RefundSyncResultEnum.SYNC_FAIL);

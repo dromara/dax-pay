@@ -17,13 +17,6 @@ import java.time.ZoneId;
 public class DateTimeUtil {
 
     /**
-     * 是否在指定的时间范围内
-     */
-    public boolean inBetween(LocalDateTime now, LocalDateTime start, LocalDateTime end) {
-        return ge(now, start) && le(now, end);
-    }
-
-    /**
      * 大于
      */
     public boolean gt(LocalDateTime now, LocalDateTime next) {

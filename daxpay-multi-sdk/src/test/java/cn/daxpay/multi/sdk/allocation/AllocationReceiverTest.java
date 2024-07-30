@@ -4,16 +4,16 @@ import cn.daxpay.multi.sdk.code.AllocReceiverTypeEnum;
 import cn.daxpay.multi.sdk.code.AllocRelationTypeEnum;
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.result.allocation.AllocReceiverAddModel;
-import cn.daxpay.multi.sdk.result.allocation.AllocReceiverRemoveModel;
-import cn.daxpay.multi.sdk.result.allocation.AllocReceiversModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
 import cn.daxpay.multi.sdk.param.allocation.AllocReceiverAddParam;
 import cn.daxpay.multi.sdk.param.allocation.AllocReceiverRemoveParam;
 import cn.daxpay.multi.sdk.param.allocation.QueryAllocReceiverParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
-import cn.hutool.json.JSONUtil;
+import cn.daxpay.multi.sdk.result.allocation.AllocReceiverAddModel;
+import cn.daxpay.multi.sdk.result.allocation.AllocReceiverRemoveModel;
+import cn.daxpay.multi.sdk.result.allocation.AllocReceiversModel;
+import cn.daxpay.multi.sdk.util.JsonUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +48,7 @@ public class AllocationReceiverTest {
         param.setReceiverType(AllocReceiverTypeEnum.ALI_USER_ID.getCode());
         param.setReceiverAccount("20881233343");
         DaxPayResult<AllocReceiverAddModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
     /**
@@ -60,7 +60,7 @@ public class AllocationReceiverTest {
         param.setClientIp("127.0.0.1");
         param.setReceiverNo("123456");
         DaxPayResult<AllocReceiverRemoveModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
     /**
@@ -73,7 +73,7 @@ public class AllocationReceiverTest {
         param.setReceiverNo("1231");
         param.setClientIp("127.0.0.1");
         DaxPayResult<AllocReceiversModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
 }

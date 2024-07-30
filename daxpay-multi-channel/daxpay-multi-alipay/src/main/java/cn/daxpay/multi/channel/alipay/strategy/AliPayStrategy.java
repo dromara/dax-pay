@@ -1,6 +1,7 @@
 package cn.daxpay.multi.channel.alipay.strategy;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.param.pay.AlipayParam;
 import cn.daxpay.multi.channel.alipay.service.pay.AliPayService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
@@ -8,7 +9,6 @@ import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.strategy.AbsPayStrategy;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -43,7 +43,7 @@ public class AliPayStrategy extends AbsPayStrategy {
             // 支付宝参数验证
             String channelParam = this.getPayParam().getExtraParam();
             if (StrUtil.isNotBlank(channelParam)) {
-                this.aliPayParam = JSONUtil.toBean(channelParam, AlipayParam.class);
+                this.aliPayParam = JsonUtil.toBean(channelParam, AlipayParam.class);
             }
             else {
                 this.aliPayParam = new AlipayParam();

@@ -5,15 +5,15 @@ import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.channel.alipay.service.transfer.AliPayTransferService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
+import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static cn.daxpay.multi.core.enums.TransferPayeeTypeEnum.*;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;

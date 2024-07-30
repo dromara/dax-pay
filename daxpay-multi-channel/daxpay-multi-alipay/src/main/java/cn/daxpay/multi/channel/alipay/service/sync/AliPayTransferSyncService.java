@@ -1,12 +1,12 @@
 package cn.daxpay.multi.channel.alipay.service.sync;
 
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode.TransferStatus;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.service.bo.sync.TransferSyncResultBo;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.enums.TransferSyncResultEnum;
-import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayFundTransCommonQueryModel;
@@ -49,7 +49,7 @@ public class AliPayTransferSyncService {
         try {
             var response = alipayClient.execute(request);
             // 设置网关订单号
-            syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
+            syncResult.setSyncInfo(JsonUtil.toJsonStr(response));
             // 设置网关订单号
             syncResult.setOutTransferNo(response.getPayFundOrderId());
 

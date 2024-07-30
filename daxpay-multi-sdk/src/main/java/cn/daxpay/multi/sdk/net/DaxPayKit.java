@@ -62,7 +62,7 @@ public class DaxPayKit {
             }
         }
         // 参数序列化
-        String data = JsonUtil.toJson(request);
+        String data = JsonUtil.toJsonStr(request);
         log.debug("请求参数:{}", data);
 
         String path = config.getServiceUrl() + request.path();

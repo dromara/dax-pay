@@ -73,7 +73,7 @@ public class PaySignUtil {
                     else if (Map.class.isAssignableFrom(field.getType())) {
                         Map<String, String> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                         m.putAll((Map) fieldValue);
-                        map.put(fieldName, JSONUtil.toJsonStr(m));
+                        map.put(fieldName, JsonUtil.toJsonStr(m));
                     }
                     // BigDecimal类型
                     else if (field.getType().equals(BigDecimal.class)) {
@@ -93,13 +93,13 @@ public class PaySignUtil {
                                         return nestedMap;
                                     })
                                     .collect(Collectors.toList());
-                            map.put(fieldName,  JSONUtil.toJsonStr(maps));
+                            map.put(fieldName,  JsonUtil.toJsonStr(maps));
                         }
                         // 其他类型直接转换为json
                     } else {
                         Map<String, String> nestedMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                         toMap(fieldValue, nestedMap);
-                        String nestedJson = JSONUtil.toJsonStr(fieldValue);
+                        String nestedJson = JsonUtil.toJsonStr(fieldValue);
                         map.put(fieldName, nestedJson);
                     }
                 }

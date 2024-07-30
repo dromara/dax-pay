@@ -1,6 +1,7 @@
 package cn.daxpay.multi.channel.alipay.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.convert.config.AlipayConfigConvert;
 import cn.daxpay.multi.channel.alipay.result.config.AlipayConfigResult;
@@ -88,7 +89,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
         AliPayConfig copy = AlipayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
         copy.setId(null).setAppId(null).setEnable(null).setAliAppId(null).setAppId(null).setMchNo(null);
-        String jsonStr = JSONUtil.toJsonStr(copy);
+        String jsonStr = JsonUtil.toJsonStr(copy);
         channelConfig.setExt(jsonStr);
         return channelConfig;
     }
@@ -97,7 +98,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
      * 从通道配置转换为支付宝配置
      */
     public static AliPayConfig convertConfig(ChannelConfig channelConfig) {
-        AliPayConfig config = JSONUtil.toBean(channelConfig.getExt(), AliPayConfig.class);
+        AliPayConfig config = JsonUtil.toBean(channelConfig.getExt(), AliPayConfig.class);
 
         config.setId(channelConfig.getId())
                 .setAliAppId(channelConfig.getOutAppId())

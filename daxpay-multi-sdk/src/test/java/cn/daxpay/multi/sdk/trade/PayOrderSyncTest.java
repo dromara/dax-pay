@@ -1,12 +1,12 @@
 package cn.daxpay.multi.sdk.trade;
 
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.result.trade.pay.PaySyncModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
 import cn.daxpay.multi.sdk.param.trade.pay.PaySyncParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
-import cn.hutool.json.JSONUtil;
+import cn.daxpay.multi.sdk.result.trade.pay.PaySyncModel;
+import cn.daxpay.multi.sdk.util.JsonUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +33,7 @@ public class PayOrderSyncTest {
         PaySyncParam param = new PaySyncParam();
         param.setBizOrderNo("SDK_1715341621498");
         DaxPayResult<PaySyncModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
 
     }
 

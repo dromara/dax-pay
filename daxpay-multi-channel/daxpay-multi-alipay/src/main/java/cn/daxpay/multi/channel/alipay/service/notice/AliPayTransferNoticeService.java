@@ -1,5 +1,6 @@
 package cn.daxpay.multi.channel.alipay.service.notice;
 
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.result.notice.AliPayOrderChangedResult;
 import cn.daxpay.multi.core.enums.CallbackStatusEnum;
@@ -8,10 +9,9 @@ import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
-import cn.daxpay.multi.service.service.trade.transfer.TransferCallbackService;
 import cn.daxpay.multi.service.service.record.callback.TradeCallbackRecordService;
+import cn.daxpay.multi.service.service.trade.transfer.TransferCallbackService;
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,14 +50,14 @@ public class AliPayTransferNoticeService {
      */
     public String callback(Map<String, String> map) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        callbackInfo.setRawData(JSONUtil.toJsonStr(map))
+        callbackInfo.setRawData(JsonUtil.toJsonStr(map))
                 .setChannel(ChannelEnum.ALI.getCode())
                 .setCallbackType(TradeTypeEnum.TRANSFER);
 
         // 通过 biz_content 获取值
         try {
             String bizContent = map.get("biz_content");
-            var response = JSONUtil.toBean(bizContent, AliPayOrderChangedResult.class);
+            var response = JsonUtil.toBean(bizContent, AliPayOrderChangedResult.class);
             callbackInfo.setCallbackData(BeanUtil.beanToMap(response));
             this.resolveData(response);
             return "success";

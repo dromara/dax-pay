@@ -2,14 +2,14 @@ package cn.daxpay.multi.sdk.query;
 
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.result.allocation.AllocOrderModel;
-import cn.daxpay.multi.sdk.result.allocation.AllocReceiversModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
 import cn.daxpay.multi.sdk.param.allocation.QueryAllocOrderParam;
 import cn.daxpay.multi.sdk.param.allocation.QueryAllocReceiverParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
-import cn.hutool.json.JSONUtil;
+import cn.daxpay.multi.sdk.result.allocation.AllocOrderModel;
+import cn.daxpay.multi.sdk.result.allocation.AllocReceiversModel;
+import cn.daxpay.multi.sdk.util.JsonUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class QueryAllocOrderTest {
         param.setAllocNo("DEVA240602000243630000101");
         param.setClientIp("127.0.0.1");
         DaxPayResult<AllocOrderModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
     /**
@@ -53,7 +53,7 @@ public class QueryAllocOrderTest {
         param.setReceiverNo("123");
         param.setClientIp("127.0.0.1");
         DaxPayResult<AllocReceiversModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
 

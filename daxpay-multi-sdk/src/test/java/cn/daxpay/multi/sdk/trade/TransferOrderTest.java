@@ -3,12 +3,12 @@ package cn.daxpay.multi.sdk.trade;
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
 import cn.daxpay.multi.sdk.code.TransferPayeeTypeEnum;
-import cn.daxpay.multi.sdk.result.trade.transfer.TransferModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
 import cn.daxpay.multi.sdk.param.trade.transfer.TransferParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
-import cn.hutool.json.JSONUtil;
+import cn.daxpay.multi.sdk.result.trade.transfer.TransferModel;
+import cn.daxpay.multi.sdk.util.JsonUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,6 +53,6 @@ public class TransferOrderTest {
         param.setPayeeAccount("065a9aEjER9Fa__hxYyvgYDlkhUiw_6RINhYHB2oegpWAo5");
         // 发起请求
         DaxPayResult<TransferModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 }

@@ -1,6 +1,7 @@
 package cn.daxpay.multi.channel.wechat.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.wechat.code.WechatPayCode;
 import cn.daxpay.multi.channel.wechat.convert.config.WechatPayConfigConvert;
 import cn.daxpay.multi.channel.wechat.result.config.WechatPayConfigResult;
@@ -91,7 +92,7 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
         WechatPayConfig copy = WechatPayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
         copy.setId(null).setAppId(null).setEnable(null).setWxMchId(null).setAppId(null).setAppId(null).setMchNo(null);
-        String jsonStr = JSONUtil.toJsonStr(copy);
+        String jsonStr = JsonUtil.toJsonStr(copy);
         channelConfig.setExt(jsonStr);
         return channelConfig;
     }
@@ -100,7 +101,7 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
      * 从通道配置转换为微信支付配置
      */
     public static WechatPayConfig convertConfig(ChannelConfig channelConfig) {
-        WechatPayConfig config = JSONUtil.toBean(channelConfig.getExt(), WechatPayConfig.class);
+        WechatPayConfig config = JsonUtil.toBean(channelConfig.getExt(), WechatPayConfig.class);
 
         config.setId(channelConfig.getId())
                 .setWxAppId(channelConfig.getOutAppId())

@@ -1,6 +1,7 @@
 package cn.daxpay.multi.channel.wechat.service.pay;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.param.pay.WechatPayParam;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
@@ -13,7 +14,6 @@ import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import cn.hutool.json.JSONUtil;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayMicropayRequest;
@@ -106,7 +106,7 @@ public class WechatPayV2Service {
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.APP, request);
             Map<String, String> map = this.buildAppResult(result);
-            return JSONUtil.toJsonStr(map);
+            return JsonUtil.toJsonStr(map);
         } catch (WxPayException e) {
             log.error("微信V2App支付失败", e);
             throw new TradeFailException("微信V2App程序支付失败: "+e.getMessage());
@@ -124,7 +124,7 @@ public class WechatPayV2Service {
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.JSAPI, request);
             Map<String, String> map = this.buildJsapiResult(result);
-            return JSONUtil.toJsonStr(map);
+            return JsonUtil.toJsonStr(map);
         } catch (WxPayException e) {
             log.error("微信V2Jaspi支付失败", e);
             throw new TradeFailException("微信V2Jaspi支付失败: "+e.getMessage());

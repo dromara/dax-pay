@@ -1,5 +1,6 @@
 package cn.daxpay.multi.channel.alipay.service.sync;
 
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode.PayStatus;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
@@ -8,7 +9,6 @@ import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.enums.PaySyncResultEnum;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeQueryModel;
@@ -53,7 +53,7 @@ public class AliPaySyncService {
             request.setBizModel(model);
             AlipayTradeQueryResponse response = alipayClient.execute(request);
             String tradeStatus = response.getTradeStatus();
-            syncResult.setSyncInfo(JSONUtil.toJsonStr(response));
+            syncResult.setSyncInfo(JsonUtil.toJsonStr(response));
             // 设置网关订单号
             syncResult.setOutOrderNo(response.getTradeNo());
             // 支付完成  部分退款无法进行区分, 需要借助对账进行处理

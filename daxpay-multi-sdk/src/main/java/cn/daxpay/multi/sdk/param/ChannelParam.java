@@ -1,6 +1,7 @@
 package cn.daxpay.multi.sdk.param;
 
-import cn.hutool.json.JSONUtil;
+
+import cn.daxpay.multi.sdk.util.JsonUtil;
 
 /**
  * 通道支付参数标识接口
@@ -13,6 +14,6 @@ public interface ChannelParam extends SortMapParam {
      * 转换成字符串
      */
     default String toJson(){
-        return JSONUtil.toJsonStr(this);
+        return JsonUtil.toJsonStr(this);
     }
 }

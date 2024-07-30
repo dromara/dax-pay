@@ -43,8 +43,8 @@ public enum AllocReceiverTypeEnum {
     }
 
     /** 微信支持类型 */
-    public static final List<AllocReceiverTypeEnum> WECHAT_LIST = Collections.unmodifiableList(List.of(WX_PERSONAL, WX_MERCHANT));
+    public static final List<AllocReceiverTypeEnum> WECHAT_LIST = Collections.unmodifiableList(Arrays.asList(WX_PERSONAL, WX_MERCHANT));
     /** 支付宝支持类型 */
-    public static final List<AllocReceiverTypeEnum> ALI_LIST = Collections.unmodifiableList(List.of(ALI_OPEN_ID, ALI_USER_ID, ALI_LOGIN_NAME));
+    public static final List<AllocReceiverTypeEnum> ALI_LIST = Collections.unmodifiableList(Arrays.asList(ALI_OPEN_ID, ALI_USER_ID, ALI_LOGIN_NAME));
 
 }

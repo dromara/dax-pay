@@ -1,6 +1,7 @@
 package cn.daxpay.multi.channel.wechat.service.pay;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.param.pay.WechatPayParam;
 import cn.daxpay.multi.channel.wechat.param.pay.WxPayCodepayRequest;
@@ -13,7 +14,6 @@ import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.hutool.extra.spring.SpringUtil;
-import cn.hutool.json.JSONUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
@@ -106,7 +106,7 @@ public class WechatPayV3Service {
         try {
             WxPayUnifiedOrderV3Result.AppResult result = wxPayService.createOrderV3(TradeTypeEnum.APP, request);
             Map<String, String> map = this.buildAppResult(result);
-            return JSONUtil.toJsonStr(map);
+            return JsonUtil.toJsonStr(map);
         } catch (WxPayException e) {
             log.error("微信V3程序支付失败", e);
             throw new TradeFailException("微信V3程序支付失败: "+e.getMessage());
@@ -126,7 +126,7 @@ public class WechatPayV3Service {
             // h5Url
             WxPayUnifiedOrderV3Result.JsapiResult result = wxPayService.createOrderV3(TradeTypeEnum.JSAPI, request);
             Map<String, String> map = this.buildJsapiResult(result);
-            return JSONUtil.toJsonStr(map);
+            return JsonUtil.toJsonStr(map);
         } catch (WxPayException e) {
             log.error("微信V3JsApi支付失败", e);
             throw new TradeFailException("微信V3JsApi支付失败: "+e.getMessage());

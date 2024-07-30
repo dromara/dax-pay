@@ -5,7 +5,7 @@ import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
 import cn.daxpay.multi.sdk.param.trade.pay.PayCloseParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
-import cn.hutool.json.JSONUtil;
+import cn.daxpay.multi.sdk.util.JsonUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +39,7 @@ public class CloseOrderTest {
         param.setOrderNo("DEVP24051019404463000001");
         param.setClientIp("127.0.0.1");
         DaxPayResult<Void> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
     /**
@@ -52,6 +52,6 @@ public class CloseOrderTest {
         param.setClientIp("127.0.0.1");
         param.setUseCancel(true);
         DaxPayResult<Void> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 }

@@ -23,9 +23,10 @@ public class JacksonUtil {
 
     private static boolean ignoreNullObjectMapperFlag;
 
+    /** 标准 */
     private static ObjectMapper objectMapper;
 
-    /** 忽略控制 */
+    /** 忽略空值 */
     private static ObjectMapper ignoreNullObjectMapper;
 
     public void setObjectMapper(ObjectMapper objectMapper) {

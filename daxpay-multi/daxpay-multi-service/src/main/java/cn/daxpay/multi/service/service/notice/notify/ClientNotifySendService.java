@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.service.notice.notify;
 
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.util.DaxRes;
 import cn.daxpay.multi.service.dao.notice.notify.ClientNotifyRecordManager;
@@ -13,7 +14,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,11 +55,11 @@ public class ClientNotifySendService {
         String body = null;
         try {
             // 构造通知消息并签名
-            DaxResult<Map<String, Object>> daxResult = DaxRes.ok(JSONUtil.parseObj(task.getContent()));
+            DaxResult<Map<String, Object>> daxResult = DaxRes.ok(JsonUtil.parseObj(task.getContent()));
             paymentAssistService.sign(daxResult);
 
             HttpResponse execute = HttpUtil.createPost(url)
-                    .body(JSONUtil.toJsonStr(daxResult), ContentType.JSON.getValue())
+                    .body(JsonUtil.toJsonStr(daxResult), ContentType.JSON.getValue())
                     .timeout(5000)
                     .execute();
             body = execute.body();

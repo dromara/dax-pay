@@ -3,9 +3,6 @@ package cn.daxpay.multi.sdk.allocation;
 import cn.daxpay.multi.sdk.code.PayChannelEnum;
 import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
-import cn.daxpay.multi.sdk.result.allocation.AllocResult;
-import cn.daxpay.multi.sdk.result.trade.pay.PayResult;
-import cn.daxpay.multi.sdk.result.allocation.AllocSyncModel;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
 import cn.daxpay.multi.sdk.param.allocation.AllocFinishParam;
@@ -14,8 +11,11 @@ import cn.daxpay.multi.sdk.param.allocation.AllocSyncParam;
 import cn.daxpay.multi.sdk.param.allocation.AllocationParam;
 import cn.daxpay.multi.sdk.param.trade.pay.PayParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
+import cn.daxpay.multi.sdk.result.allocation.AllocResult;
+import cn.daxpay.multi.sdk.result.allocation.AllocSyncModel;
+import cn.daxpay.multi.sdk.result.trade.pay.PayResult;
+import cn.daxpay.multi.sdk.util.JsonUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.json.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,7 +58,7 @@ public class AllocationTest {
         param.setAllocation(true);
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
 
     }
 
@@ -81,7 +81,7 @@ public class AllocationTest {
         param.setAutoAllocation(true);
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
 
     }
 
@@ -99,7 +99,7 @@ public class AllocationTest {
         param.setClientIp("127.0.0.1");
 
         DaxPayResult<AllocResult> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
     /**
@@ -117,7 +117,7 @@ public class AllocationTest {
         param.setClientIp("127.0.0.1");
 
         DaxPayResult<AllocResult> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
     /**
@@ -138,7 +138,7 @@ public class AllocationTest {
         param.setClientIp("127.0.0.1");
 
         DaxPayResult<AllocResult> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
     /**
@@ -151,7 +151,7 @@ public class AllocationTest {
         param.setAllocNo("DEVA24060117191963000003");
 
         DaxPayResult<AllocResult> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
     /**
@@ -164,7 +164,7 @@ public class AllocationTest {
         param.setAllocNo("DEVA24060117191963000003");
 
         DaxPayResult<AllocSyncModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
 }
