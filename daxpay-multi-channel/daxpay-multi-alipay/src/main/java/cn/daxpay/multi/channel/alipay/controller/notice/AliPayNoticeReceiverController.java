@@ -1,0 +1,37 @@
+package cn.daxpay.multi.channel.alipay.controller.notice;
+
+import cn.bootx.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.multi.channel.alipay.service.notice.AliPayNoticeReceiverService;
+import cn.daxpay.multi.service.service.assist.PaymentAssistService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * 支付宝消息通知
+ * @author xxm
+ * @since 2024/4/16
+ */
+@IgnoreAuth
+@Tag(name = "支付宝消息通知")
+@RestController
+@RequestMapping("/unipay/notice/{mchNo}/{AppId}")
+@RequiredArgsConstructor
+public class AliPayNoticeReceiverController {
+
+    private final AliPayNoticeReceiverService aliPayNoticeReceiverService;
+
+    private final PaymentAssistService paymentAssistService;
+
+    @Operation(summary = "支付宝消息通知")
+    @PostMapping("/alipay")
+    public String aliPayNotice(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(mchNo, appId);
+        return aliPayNoticeReceiverService.noticeReceiver(request);
+    }
+}

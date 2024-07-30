@@ -4,6 +4,7 @@ import cn.daxpay.multi.channel.wechat.code.WechatPayCode;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
+import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
@@ -44,20 +45,27 @@ public class WechatPayCallbackService {
      *
      */
     public String pay(HttpServletRequest request){
+        CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+        // 设置类型和通道
+        callbackInfo.setCallbackType(TradeTypeEnum.PAY)
+                .setChannel(ChannelEnum.WECHAT.getCode());
+
         WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // v2 或 v3
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V2)) {
             // V2 回调接收处理
             String xml = WechatPayUtil.readV2Data(request);
+            callbackInfo.setRawData(xml);
             try {
                 // 转换请求
                 WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(xml);
                 // 解析数据
-                this.resolveV2PayData(wxPayOrderNotifyResult);
+                this.resolveV2Data(wxPayOrderNotifyResult);
                 return WxPayNotifyResponse.success("OK");
             } catch (WxPayException e) {
-                log.error("微信支付V2回调处理失败", e);
+                log.error("微信支付回调V2处理失败", e);
+                callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
                 return WxPayNotifyResponse.fail("FAIL");
             }
         } else {
@@ -69,13 +77,15 @@ public class WechatPayCallbackService {
             signatureHeader.setTimeStamp(headerMap.get(Constant.WECHAT_PAY_TIMESTAMP.toLowerCase()));
             signatureHeader.setSerial(headerMap.get(Constant.WECHAT_PAY_SERIAL.toLowerCase()));
             signatureHeader.setSignature(headerMap.get(Constant.WECHAT_PAY_SIGNATURE.toLowerCase()));
+            callbackInfo.setRawData(body);
             try {
                 // 转换请求
                 WxPayNotifyV3Result wxPayNotifyV3Result = wxPayService.parseOrderNotifyV3Result(body, signatureHeader);
                 // 解析数据
-                this.resolveV3PayData(wxPayNotifyV3Result);
+                this.resolvePayData(wxPayNotifyV3Result);
             } catch (WxPayException e) {
-                log.error("微信支付V3回调处理失败", e);
+                callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
+                log.error("微信支付回调V3处理失败", e);
                 return WxPayNotifyV3Response.fail("FAIL");
             }
             return WxPayNotifyV3Response.success("OK");
@@ -85,11 +95,8 @@ public class WechatPayCallbackService {
     /**
      * 解析数据 v2
      */
-    private void resolveV2PayData(WxPayOrderNotifyResult result){
+    private void resolveV2Data(WxPayOrderNotifyResult result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        // 设置类型和通道
-        callbackInfo.setCallbackType(TradeTypeEnum.PAY)
-                .setChannel(ChannelEnum.ALI.getCode());
         // 回调数据
         Map<String, String> map = result.toMap();
         callbackInfo.setCallbackData(map);
@@ -111,12 +118,9 @@ public class WechatPayCallbackService {
     /**
      * 解析数据 v3
      */
-    private void resolveV3PayData(WxPayNotifyV3Result v3Result){
+    private void resolvePayData(WxPayNotifyV3Result v3Result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         var result = v3Result.getResult();
-        // 设置类型和通道
-        callbackInfo.setCallbackType(TradeTypeEnum.PAY)
-                .setChannel(ChannelEnum.ALI.getCode());
         // 回调数据
         Map<String, Object> map = BeanUtil.beanToMap(result);
         callbackInfo.setCallbackData(map);

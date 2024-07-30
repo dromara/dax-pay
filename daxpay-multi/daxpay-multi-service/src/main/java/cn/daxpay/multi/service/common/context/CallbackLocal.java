@@ -4,6 +4,7 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
+import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -23,6 +24,12 @@ public class CallbackLocal {
 
     /** 回调数据内容 */
     private Map<String, ?> callbackData = new HashMap<>();
+
+    /**
+     * 原始数据, 回调数据内容不存在的时候使用这个
+     * 主要处理类似需要二次解密的回调, 如微信转账退款等
+     */
+    private String rawData;
 
     /** 交易号 */
     private String tradeNo;
@@ -44,6 +51,7 @@ public class CallbackLocal {
      * 三方支付系统返回状态
      * @see PayStatusEnum 支付状态
      * @see RefundStatusEnum 退款状态
+     * @see TransferStatusEnum 转账状态
      */
     private String outStatus;
 

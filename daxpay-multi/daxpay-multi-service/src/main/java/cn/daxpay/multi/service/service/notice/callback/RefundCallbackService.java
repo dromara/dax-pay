@@ -65,10 +65,16 @@ public class RefundCallbackService {
                 return;
             }
 
-            // 退款成功还是失败
+            // 退款成功
             if (Objects.equals(RefundStatusEnum.SUCCESS.getCode(), callbackInfo.getOutStatus())) {
                 this.success(refundOrder);
-            }  else {
+            }
+            // 退款失败
+            if (Objects.equals(RefundStatusEnum.FAIL.getCode(), callbackInfo.getOutStatus())){
+                this.close(refundOrder);
+            }
+            // 退款异常
+            if (Objects.equals(RefundStatusEnum.CLOSE.getCode(), callbackInfo.getOutStatus())){
                 this.close(refundOrder);
             }
         } finally {

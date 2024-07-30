@@ -13,9 +13,11 @@ import lombok.Getter;
 public enum TransferStatusEnum {
 
     /** 转账中 */
-    TRANSFERRING("transferring"),
+    PROGRESS("progress"),
     /** 转账成功 */
     SUCCESS("success"),
+    /** 转账关闭 */
+    CLOSE("close"),
     /** 转账失败 */
     FAIL("fail"),
     ;

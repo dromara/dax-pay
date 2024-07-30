@@ -4,6 +4,7 @@ import cn.daxpay.multi.channel.wechat.code.WechatPayCode;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
+import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
@@ -41,19 +42,27 @@ public class WechatRefundCallbackService {
      * 退款回调处理, 解析数据
      */
     public String refund(HttpServletRequest request){
+        CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+
+        // 设置类型和通道
+        callbackInfo.setCallbackType(TradeTypeEnum.REFUND)
+                .setChannel(ChannelEnum.WECHAT.getCode());
+
         WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // v2 或 v3
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V2)) {
             // V2 回调接收处理
             String xml = WechatPayUtil.readV2Data(request);
+            callbackInfo.setRawData(xml);
             try {
                 // 转换请求
                 var result = wxPayService.parseRefundNotifyResult(xml);
                 // 解析数据
-                resolveV2PayData(result);
+                resolveV2Data(result);
                 return WxPayNotifyResponse.success("OK");
             } catch (WxPayException e) {
+                callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
                 log.error("微信退款V2回调处理失败", e);
                 return WxPayNotifyResponse.fail("FAIL");
             }
@@ -66,12 +75,14 @@ public class WechatRefundCallbackService {
             signatureHeader.setTimeStamp(headerMap.get(Constant.WECHAT_PAY_TIMESTAMP.toLowerCase()));
             signatureHeader.setSerial(headerMap.get(Constant.WECHAT_PAY_SERIAL.toLowerCase()));
             signatureHeader.setSignature(headerMap.get(Constant.WECHAT_PAY_SIGNATURE.toLowerCase()));
+            callbackInfo.setRawData(body);
             try {
                 // 转换请求
                 var result = wxPayService.parseRefundNotifyV3Result(body, signatureHeader);
                 // 解析数据
-                this.resolveV3PayData(result);
+                this.resolveV3Data(result);
             } catch (WxPayException e) {
+                callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
                 log.error("微信退款V3回调处理失败", e);
                 return WxPayNotifyV3Response.fail("FAIL");
             }
@@ -82,14 +93,11 @@ public class WechatRefundCallbackService {
     /**
      * 解析数据 v2
      */
-    public void resolveV2PayData(WxPayRefundNotifyResult notifyResult){
+    public void resolveV2Data(WxPayRefundNotifyResult notifyResult){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 解密的数据
         var result = notifyResult.getReqInfo();
 
-        // 设置类型和通道
-        callbackInfo.setCallbackType(TradeTypeEnum.PAY)
-                .setChannel(ChannelEnum.WECHAT.getCode());
         // 回调数据
         callbackInfo.setCallbackData(BeanUtil.beanToMap(result));
         // 网关退款号
@@ -119,12 +127,9 @@ public class WechatRefundCallbackService {
     /**
      * 解析数据 v3
      */
-    public void resolveV3PayData(WxPayRefundNotifyV3Result v3Result){
+    public void resolveV3Data(WxPayRefundNotifyV3Result v3Result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         var result = v3Result.getResult();
-        // 设置类型合同到
-        callbackInfo.setCallbackType(TradeTypeEnum.PAY)
-                .setChannel(ChannelEnum.WECHAT.getCode());
         // 回调数据
         callbackInfo.setCallbackData(BeanUtil.beanToMap(result));
         // 网关退款号

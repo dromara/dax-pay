@@ -176,7 +176,7 @@ public class TransferSyncService {
      */
     private void close(TransferOrder order) {
         // 执行策略的关闭方法
-        order.setStatus(TransferStatusEnum.FAIL.getCode());
+        order.setStatus(TransferStatusEnum.CLOSE.getCode());
         transferOrderManager.updateById(order);
     }
 

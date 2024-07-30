@@ -18,7 +18,7 @@ public class TransferResultBo {
     private String outTransferNo;
 
     /** 状态 */
-    private TransferStatusEnum status = TransferStatusEnum.TRANSFERRING;
+    private TransferStatusEnum status = TransferStatusEnum.PROGRESS;
 
     /** 完成时间 */
     private LocalDateTime finishTime;

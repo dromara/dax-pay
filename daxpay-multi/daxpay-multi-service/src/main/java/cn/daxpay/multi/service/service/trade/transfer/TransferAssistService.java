@@ -38,7 +38,7 @@ public class TransferAssistService {
                 .setPayeeAccount(param.getPayeeAccount())
                 .setPayeeType(param.getPayeeType())
                 .setReason(param.getReason())
-                .setStatus(TransferStatusEnum.TRANSFERRING.getCode())
+                .setStatus(TransferStatusEnum.PROGRESS.getCode())
                 .setTitle(param.getTitle())
                 .setNotifyUrl(param.getNotifyUrl())
                 .setAttach(param.getAttach())
