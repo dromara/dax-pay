@@ -43,6 +43,12 @@
             <artifactId>common-spring</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+        <!-- Redis配置-->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
         <!-- hutool 缓存 -->
         <dependency>
             <groupId>cn.hutool</groupId>

@@ -34,11 +34,6 @@
         </dependency>
 
         <!-- 临时依赖, 后期会重新整理 -->
-        <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
 
         <!-- swagger -->
         <dependency>

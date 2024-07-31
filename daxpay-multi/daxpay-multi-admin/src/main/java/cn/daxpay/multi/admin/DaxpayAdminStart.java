@@ -32,8 +32,8 @@ public class DaxpayAdminStart {
         // 应用信息栏
         String appInfo = StrUtil.format("应用 '{}' 运行成功! ", appName);
         // swagger栏
+        String swagger = StrUtil.format("Swagger文档: \t\thttp://{}:{}{}{}/doc.html", host, port, contextPath, path);
         String localSwagger = StrUtil.format("Swagger文档: \t\thttp://{}:{}{}{}/doc.html", "127.0.0.1", port, contextPath, path);
-        String swagger = StrUtil.format("Swagger文档(): \t\thttp://{}:{}{}{}/doc.html", host, port, contextPath, path);
 
         log.info("""
 

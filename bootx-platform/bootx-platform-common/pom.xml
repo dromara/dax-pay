@@ -21,6 +21,7 @@
         <module>common-exception-handler</module>
         <module>common-config</module>
         <module>header-holder</module>
+        <module>common-redis</module>
     </modules>
 
     <dependencies>
