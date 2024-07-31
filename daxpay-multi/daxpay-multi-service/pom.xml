@@ -35,6 +35,13 @@
 
         <!-- 临时依赖, 后期会重新整理 -->
 
+        <!-- 延时任务 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-redis-delay-queue</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
         <!-- swagger -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ * 交易记录
  * @author xxm
  * @since 2024/7/24
  */
-@Tag(name = "")
+@Tag(name = "交易记录")
 @RestController
 @RequestGroup(moduleCode = "TradeRecord", moduleName = "交易记录", groupCode = "TradeCallback", groupName = "交易回调记录")
 @RequestMapping("/record/callback")

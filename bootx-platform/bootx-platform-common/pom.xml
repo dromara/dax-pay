@@ -23,6 +23,7 @@
         <module>header-holder</module>
         <module>common-redis</module>
         <module>common-cache</module>
+        <module>common-redis-delay-queue</module>
     </modules>
 
     <dependencies>

@@ -17,6 +17,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,7 @@ public class DictionaryItemService {
     /**
      * 添加内容
      */
+    @CacheEvict(value = "cache:dict", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void add(DictionaryItemParam param) {
 
@@ -57,6 +60,7 @@ public class DictionaryItemService {
     /**
      * 修改内容
      */
+    @CacheEvict(value = "cache:dict", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(DictionaryItemParam param) {
         // 判断字典item是否存在
@@ -74,6 +78,7 @@ public class DictionaryItemService {
     /**
      * 删除内容
      */
+    @CacheEvict(value = "cache:dict", allEntries = true)
     public void delete(Long id) {
         dictionaryItemManager.deleteById(id);
     }
@@ -151,6 +156,7 @@ public class DictionaryItemService {
     /**
      * 获取启用的字典项列表
      */
+    @Cacheable(value = "cache:dict")
     public List<DictionaryItemResult> findAllByEnable() {
 
         // 获取被停用的字典

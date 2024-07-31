@@ -13,7 +13,6 @@
         <module>starter-quartz</module>
         <module>starter-audit-log</module>
         <module>starter-file</module>
-        <module>starter-delay-queue-redis</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>

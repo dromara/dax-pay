@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "支付订单关闭记录")
 @RestController
 @RequestMapping("/record/close")
-@RequestGroup(moduleCode = "TradeRecord", moduleName = "交易记录", groupCode = "CloseRecord", groupName = "支付关闭记录")
+@RequestGroup(moduleCode = "TradeRecord", groupCode = "CloseRecord", groupName = "支付关闭记录")
 @RequiredArgsConstructor
 public class PayCloseRecordController {
     private final PayCloseRecordService service;

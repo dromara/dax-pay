@@ -14,6 +14,7 @@ import cn.bootx.platform.core.rest.result.PageResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,7 @@ public class DictionaryService {
      * 添加字典
      */
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "cache:dict", allEntries = true)
     public DictionaryResult add(DictionaryParam param) {
         if (dictionaryManager.existsByCode(param.getCode())) {
             throw new BizException("字典编码已存在");
@@ -48,6 +50,7 @@ public class DictionaryService {
     /**
      * 删除字典
      */
+    @CacheEvict(value = "cache:dict", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
 
@@ -63,6 +66,7 @@ public class DictionaryService {
     /**
      * 更新
      */
+    @CacheEvict(value = "cache:dict", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public DictionaryResult update(DictionaryParam param) {
 

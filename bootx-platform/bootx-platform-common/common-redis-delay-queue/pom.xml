@@ -9,13 +9,19 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>starter-delay-queue-redis</artifactId>
+    <artifactId>common-redis-delay-queue</artifactId>
     <description>延迟队列-redis实现</description>
 
     <dependencies>
+        <!-- redis -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-redis</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-spring</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
     </dependencies>
