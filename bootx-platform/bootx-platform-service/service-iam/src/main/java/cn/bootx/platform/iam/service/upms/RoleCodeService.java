@@ -16,6 +16,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,7 @@ public class RoleCodeService {
     /**
      * 保存角色路径授权
      */
+    @Cacheable(value = "cache:permCode", key = "#param.roleId")
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(PermCodeAssignParam param) {
 
@@ -193,6 +195,7 @@ public class RoleCodeService {
     /**
      * 根据角色查询出权限码 需要进行缓存
      */
+    @Cacheable(value = "cache:permCode", key = "#roleId")
     public List<String> findCodesByRole(Long roleId) {
         MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
                 .select(PermCode::getCode)

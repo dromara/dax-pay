@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.controller.permission;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.annotation.InternalPath;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
@@ -65,6 +66,7 @@ public class PermCodeController {
         return Res.ok();
     }
 
+    @InternalPath
     @Operation(summary = "权限码树")
     @GetMapping("/tree")
     public Result<List<PermCodeResult>> tree() {
@@ -83,6 +85,7 @@ public class PermCodeController {
         return Res.ok(permCodeService.catalogTree());
     }
 
+    @IgnoreAuth
     @Operation(summary = "根据用户获取权限码")
     @GetMapping("/findCodesByUser")
     public Result<List<String>> findCodesByUser() {

@@ -16,6 +16,8 @@ import cn.hutool.core.collection.CollUtil;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,7 @@ public class RoleMenuService {
      * 如果删除角色关门的菜单关系, 将会级联删除子孙角色的菜单关系
      * 新增角色菜单关系, 会根据 updateAddChildren状态 来决定是否级联新增子孙角色的菜单关系
      */
+    @CacheEvict(value = "cache:permMenu", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(PermMenuAssignParam param) {
         Long roleId = param.getRoleId();
@@ -172,6 +175,7 @@ public class RoleMenuService {
      * 根据角色和请求方式进行查询出请求菜单 需要进行缓存,
      * 构造用户菜单时, 会合并多个角色的菜单, 然后再转换为菜单树
      */
+    @Cacheable(value = "cache:permMenu", key = "#clientCode+':'+#roleId")
     public List<PermMenu> findAllByRoleAndClient(Long roleId, String clientCode) {
         MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
                 .selectAll(PermMenu.class)

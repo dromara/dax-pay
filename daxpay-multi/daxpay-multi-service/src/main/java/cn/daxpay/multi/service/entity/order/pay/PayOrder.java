@@ -30,6 +30,9 @@ import java.util.Objects;
 @TableName("pay_order")
 public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
 
+//    private String cs;
+    private String cs3;
+
     /** 商户订单号 */
     private String bizOrderNo;
 

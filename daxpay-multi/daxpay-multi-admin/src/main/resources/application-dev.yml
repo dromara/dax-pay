@@ -66,7 +66,7 @@ bootx-platform:
         - '/css/**'
         - '/error'
         - '/favicon.ico'
-        - '/**'
+#        - '/**'
 dax-pay:
   env: dev_
   machine-no: 70

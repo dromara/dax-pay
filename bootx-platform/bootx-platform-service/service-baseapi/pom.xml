@@ -49,6 +49,12 @@
             <artifactId>common-redis</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+        <!-- Spring 缓存配置 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-cache</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
         <!-- hutool 缓存 -->
         <dependency>
             <groupId>cn.hutool</groupId>

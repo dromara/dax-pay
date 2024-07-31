@@ -18,6 +18,8 @@ import cn.hutool.core.collection.CollUtil;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,7 @@ public class RolePathService {
     /**
      * 保存角色路径授权
      */
+    @CacheEvict(value = "cache:permPath", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(PermPathAssignParam param) {
         Long roleId = param.getRoleId();
@@ -265,15 +268,16 @@ public class RolePathService {
     /**
      * 根据角色和请求方式进行查询出请求路径 需要进行缓存
      */
+    @Cacheable(value = "cache:permPath", key = "#method+':'+#clientCode+':'+#roleId")
     public List<String> findPathsByRoleAndMethod(Long roleId, String method, String clientCode) {
         MPJLambdaWrapper<Role> wrapper = new MPJLambdaWrapper<Role>()
                 .select(PermPath::getPath)//查询user表全部字段
                 // 关联角色请求权限
-                .innerJoin(RolePath.class, RolePath::getRoleId, Role::getId, on-> on.eq(RolePath::getId, clientCode))
-                // 关请求权限
+                .innerJoin(RolePath.class, RolePath::getRoleId, Role::getId)
+                // 关联请求权限
                 .innerJoin(PermPath.class, PermPath::getId, RolePath::getPathId)
                 .eq(Role::getId, roleId)
-
+                .eq(RolePath::getClientCode, clientCode)
                 .eq(PermPath::getMethod,method.toUpperCase());
 
         return roleManager.selectJoinList(String.class, wrapper);

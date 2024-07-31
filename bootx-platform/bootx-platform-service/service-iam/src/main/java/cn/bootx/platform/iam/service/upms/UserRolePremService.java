@@ -41,7 +41,6 @@ public class UserRolePremService {
 
     private final PermCodeService permCodeService;
 
-
     /**
      * 根据传入的用户和终端查询菜单权限树
      */

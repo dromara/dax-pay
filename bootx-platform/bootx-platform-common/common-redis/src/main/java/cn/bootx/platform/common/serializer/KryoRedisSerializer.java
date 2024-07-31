@@ -32,12 +32,17 @@ public class KryoRedisSerializer<T> implements RedisSerializer<T> {
      */
     private static final ThreadLocal<Kryo> KRYO_THREAD_LOCAL = ThreadLocal.withInitial(() -> {
         Kryo kryo = new Kryo();
-        // 设置循环引用
-        kryo.setReferences(true);
+        // 设置循环引用，代价是序列化大小轻微变大
+//        kryo.setReferences(true);
+        kryo.setReferences(false);
         // 设置序列化时对象是否需要设置对象类型
         kryo.setRegistrationRequired(false);
-        // 首先尝试使用无参构造方法，如果尝试失败，再尝试使用 StdInstantiatorStrategy 作为后备方案，因为后备方案不需要调用任何构造方法
+        // 禁用泛型优化可以提高性能，但代价是序列化大小越大。
+//        kryo.setOptimizedGenerics(false);
+        // 首先尝试使用无参构造方法，如果尝试失败，再尝试使用不需要调用任何构造方法的后备方案,
         kryo.setInstantiatorStrategy(new DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+        // 提供向后兼容性和可选的前向兼容性。这意味着可以添加或重命名字段, 代价是序列化大小会明显变大(约1/4)。
+//        kryo.setDefaultSerializer(CompatibleFieldSerializer.class);
         return kryo;
     });
 

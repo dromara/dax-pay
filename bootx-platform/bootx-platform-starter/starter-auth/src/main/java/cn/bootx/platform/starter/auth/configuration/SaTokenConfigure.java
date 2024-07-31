@@ -1,11 +1,14 @@
 package cn.bootx.platform.starter.auth.configuration;
 
 import cn.bootx.platform.starter.auth.handler.SaRouteHandler;
+import cn.dev33.satoken.dao.SaTokenDaoRedisJackson;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,6 +29,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 
     private final SaRouteHandler saRouteHandler;
 
+
     /**
      * 注册拦截器
      */
@@ -43,5 +47,15 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         registry.addInterceptor(saInterceptor)
                 .addPathPatterns("/**");
     }
+
+    /**
+     * 替换序列化方式为 Kryo 方式
+     */
+    @Autowired
+    public void initSaTokenDao(SaTokenDaoRedisJackson saTokenDaoRedisJackson, RedisTemplate<String, Object> redisTemplate){
+        saTokenDaoRedisJackson.objectRedisTemplate = redisTemplate;
+    }
+
+
 
 }

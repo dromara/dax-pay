@@ -22,6 +22,7 @@
         <module>common-config</module>
         <module>header-holder</module>
         <module>common-redis</module>
+        <module>common-cache</module>
     </modules>
 
     <dependencies>

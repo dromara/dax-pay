@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.controller.permission;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.annotation.InternalPath;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
@@ -51,10 +52,10 @@ public class PermMenuController {
     }
 
 
+    @IgnoreAuth
     @Operation(summary = "获取菜单树")
     @GetMapping("/tree")
     public Result<List<PermMenuResult>> menuTree(String clientCode) {
-
         UserDetail user = SecurityUtil.getUser();
         if (user.isAdmin()){
             return Res.ok(permMenuService.tree(clientCode));
