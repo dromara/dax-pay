@@ -1,7 +1,6 @@
 package cn.bootx.platform.common.redis.delay.container;
 
 import cn.bootx.platform.common.redis.delay.bean.Job;
-import cn.bootx.platform.core.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.BoundHashOperations;
@@ -19,44 +18,33 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JobPool {
 
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String,Job<?>> redisTemplate;
 
-    private String NAME = "job.pool";
+    private String NAME = "job:pool:";
 
-    private BoundHashOperations getPool () {
-        BoundHashOperations ops = redisTemplate.boundHashOps(NAME);
-        return ops;
+    private BoundHashOperations<String,String,Job<?>> getPool () {
+        return redisTemplate.boundHashOps(NAME);
     }
 
     /**
      * 添加任务
-     * @param job
      */
-    public void addJob (Job job) {
-        log.info("任务池添加任务：{}", JsonUtil.toJsonStr(job));
-        getPool().put(job.getId(),job);
-        return ;
+    public void addJob (Job<?> job) {
+        this.getPool().put(job.getId(),job);
     }
 
     /**
      * 获得任务
-     * @param jobId
      */
-    public Job getJob(String jobId) {
-        Object o = getPool().get(jobId);
-        if (o instanceof Job) {
-            return (Job) o;
-        }
-        return null;
+    public Job<?> getJob(String jobId) {
+        return getPool().get(jobId);
     }
 
     /**
      * 移除任务
-     * @param jobId
      */
-    public void removeDelayJob (Long jobId) {
+    public void removeDelayJob (String jobId) {
         log.info("任务池移除任务：{}",jobId);
-        // 移除任务
         getPool().delete(jobId);
     }
 }

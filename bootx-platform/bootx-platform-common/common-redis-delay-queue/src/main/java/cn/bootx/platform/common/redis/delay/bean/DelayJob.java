@@ -31,7 +31,7 @@ public class DelayJob implements Serializable {
     private String topic;
 
 
-    public DelayJob(Job job) {
+    public DelayJob(Job<?> job) {
         this.jodId = job.getId();
         this.delayDate = System.currentTimeMillis() + job.getDelayTime();
         this.topic = job.getTopic();

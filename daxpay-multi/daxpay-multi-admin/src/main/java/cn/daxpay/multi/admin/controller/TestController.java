@@ -1,7 +1,8 @@
 package cn.daxpay.multi.admin.controller;
 
 import cn.bootx.platform.common.redis.delay.annotation.DelayTaskJob;
-import cn.bootx.platform.common.redis.delay.annotation.DelayTaskJobBeanPostProcessor;
+import cn.bootx.platform.common.redis.delay.annotation.DelayTaskJobProcessor;
+import cn.bootx.platform.common.redis.delay.annotation.DelayTaskEvent;
 import cn.bootx.platform.common.redis.delay.bean.DelayJob;
 import cn.bootx.platform.common.redis.delay.bean.Job;
 import cn.bootx.platform.common.redis.delay.service.JobService;
@@ -42,7 +43,7 @@ public class TestController {
     private final static AtomicInteger index = new AtomicInteger(0);
 
     private final static String[] tag = new String[]{"test","web","java"};
-    private final DelayTaskJobBeanPostProcessor delayTaskJobBeanPostProcessor;
+    private final DelayTaskJobProcessor delayTaskJobProcessor;
 
 
     @Operation(summary = "测试路径生成")
@@ -84,23 +85,16 @@ public class TestController {
         return JSON.toJSONString(delayJob);
     }
 
-    @Operation(summary = "获取任务")
-    @GetMapping(value = "pop/{topic}")
-    public String getProcessJob(@PathVariable("topic") String topic) {
-        Job process = jobService.getProcessJob(topic);
-        return JSON.toJSONString(process);
-    }
-
     @Operation(summary = "完成一个执行的任务")
     @DeleteMapping(value = "finish")
-    public String finishJob(Long jobId) {
+    public String finishJob(String jobId) {
         jobService.finishJob(jobId);
         return "success";
     }
 
     @DelayTaskJob("hello")
-    public void hello(Object message) {
-        log.info("hello:{}",message);
+    public void hello(DelayTaskEvent<PayOrder> event) {
+        log.info("hello:{}",event);
     }
 
 }

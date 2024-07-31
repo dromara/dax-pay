@@ -28,7 +28,7 @@ public class SpringCorsConfiguration {
     private final SpringProperties springProperties;
 
     @Bean
-    @ConditionalOnProperty(prefix = "bootx.common.spring.cors", value = "enable", havingValue = "true",
+    @ConditionalOnProperty(prefix = "bootx-platform.common.spring.cors", value = "enable", havingValue = "true",
             matchIfMissing = true)
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     public FilterRegistrationBean<CorsFilter> corsWebFilter() {

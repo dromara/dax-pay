@@ -1,6 +1,7 @@
 package cn.bootx.platform.common.cache.manager;
 
 import cn.bootx.platform.common.cache.configuration.BootxRedisCacheManager;
+import cn.bootx.platform.common.cache.configuration.CachingProperties;
 import cn.bootx.platform.common.serializer.KryoRedisSerializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,7 +30,7 @@ import java.time.Duration;
 @EnableCaching
 @EnableConfigurationProperties(CachingProperties.class)
 @ConditionalOnClass(CacheManager.class)
-@ConditionalOnProperty(prefix = "bootx.common.cache", value = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "bootx-platform.cache", value = "enabled", havingValue = "true", matchIfMissing = true)
 public class CachingConfiguration extends CachingConfigurerSupport {
 
     private final CachingProperties cachingProperties;

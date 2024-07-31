@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
+ * 任务服务类
  * @author daify
  * @date 2019-07-28
  */
@@ -27,7 +28,7 @@ public class JobService {
     private final JobPool jobPool;
 
 
-    public DelayJob addDefJob(Job job) {
+    public DelayJob addDefJob(Job<?> job) {
         job.setStatus(JobStatus.DELAY);
         jobPool.addJob(job);
         DelayJob delayJob = new DelayJob(job);
@@ -38,13 +39,13 @@ public class JobService {
     /**
      * 获取
      */
-    public Job getProcessJob(String topic) {
+    public Job<?> getProcessJob(String topic) {
         // 拿到任务
         DelayJob delayJob = readyQueue.popJob(topic);
         if (delayJob == null || StrUtil.isBlank(delayJob.getJodId())) {
-            return new Job();
+            return new Job<>();
         }
-        Job job = jobPool.getJob(delayJob.getJodId());
+        Job<?> job = jobPool.getJob(delayJob.getJodId());
         // 元数据已经删除，则取下一个
         if (job == null) {
             job = getProcessJob(topic);
@@ -60,10 +61,15 @@ public class JobService {
 
     /**
      * 完成一个执行的任务
-     * @param jobId
-     * @return
      */
-    public void finishJob(Long jobId) {
+    public void finishJob(String jobId) {
+        jobPool.removeDelayJob(jobId);
+    }
+
+    /**
+     * 伤处一个执行的任务
+     */
+    public void deleteJob(String jobId) {
         jobPool.removeDelayJob(jobId);
     }
 

@@ -1,5 +1,6 @@
 package cn.bootx.platform.common.redis.delay;
 
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -8,5 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
  * @since 2024/7/31
  */
 @ComponentScan
+@ConfigurationPropertiesScan
 public class DelayQueryAutoConfiguration {
 }

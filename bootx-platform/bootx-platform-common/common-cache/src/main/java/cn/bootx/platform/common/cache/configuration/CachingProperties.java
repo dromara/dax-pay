@@ -1,4 +1,4 @@
-package cn.bootx.platform.common.cache.manager;
+package cn.bootx.platform.common.cache.configuration;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Data
 @Accessors(chain = true)
-@ConfigurationProperties(prefix = "bootx.common.cache")
+@ConfigurationProperties(prefix = "bootx-platform.common.cache")
 public class CachingProperties {
 
     /** 默认超时时间 30分钟 */

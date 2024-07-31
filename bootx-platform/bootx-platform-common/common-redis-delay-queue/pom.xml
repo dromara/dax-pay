@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.bootx.platform</groupId>
-        <artifactId>bootx-platform-starter</artifactId>
+        <artifactId>bootx-platform-common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -19,10 +19,17 @@
             <artifactId>common-redis</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+        <!-- spring 封装 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-spring</artifactId>
             <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 分布式锁 若使用redisTemplate作为分布式锁底层，则需要引入-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
+            <version>${lock4j.version}</version>
         </dependency>
     </dependencies>
 </project>

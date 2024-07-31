@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "bootx.starter.audit-log")
+@ConfigurationProperties(prefix = "bootx-platform.starter.audit-log")
 public class AuditLogProperties {
 
     /**

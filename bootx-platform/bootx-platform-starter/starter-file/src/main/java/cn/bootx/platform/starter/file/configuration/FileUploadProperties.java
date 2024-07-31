@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @Accessors(chain = true)
-@ConfigurationProperties(prefix = "bootx.starter.file-upload")
+@ConfigurationProperties(prefix = "bootx-platform.starter.file-upload")
 public class FileUploadProperties {
 
     /**

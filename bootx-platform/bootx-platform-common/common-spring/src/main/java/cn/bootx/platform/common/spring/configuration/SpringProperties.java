@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author xxm
  * @since 2020/4/9 13:50
  */
-@ConfigurationProperties(prefix = "bootx.common.spring")
+@ConfigurationProperties(prefix = "bootx-platform.common.spring")
 @Data
 @Accessors(chain = true)
 public class SpringProperties {

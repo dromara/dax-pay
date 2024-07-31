@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 延时任务接收注解
+ * 延时任务接收方法注解
  * @author xxm
  * @since 2024/7/31
  */
@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 public @interface DelayTaskJob {
 
     /**
-     * 任务名称
+     * 任务topic名称
      */
     String value();
 }
