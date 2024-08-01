@@ -4,14 +4,16 @@ import cn.bootx.platform.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.core.util.DateTimeUtil;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
-import cn.daxpay.multi.core.exception.*;
+import cn.daxpay.multi.core.exception.OperationFailException;
+import cn.daxpay.multi.core.exception.PayFailureException;
+import cn.daxpay.multi.core.exception.SystemUnknownErrorException;
+import cn.daxpay.multi.core.exception.TradeNotExistException;
 import cn.daxpay.multi.core.param.trade.pay.PaySyncParam;
 import cn.daxpay.multi.core.result.trade.pay.PaySyncResult;
 import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
-import cn.daxpay.multi.service.enums.PaySyncResultEnum;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.sync.TradeSyncRecordService;
@@ -28,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static cn.daxpay.multi.core.enums.PayStatusEnum.*;
 
 
 /**
@@ -76,7 +80,7 @@ public class PaySyncService {
             // 执行操作, 获取支付网关同步的结果
             PaySyncResultBo syncResult = syncPayStrategy.doSync();
             // 判断是否同步成功
-            if (Objects.equals(syncResult.getSyncStatus(), PaySyncResultEnum.SYNC_FAIL)){
+            if (!syncResult.isSyncSuccess()){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(payOrder, syncResult, false);
                 throw new OperationFailException(syncResult.getSyncErrorMsg());
@@ -95,7 +99,7 @@ public class PaySyncService {
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResult.setSyncStatus(PaySyncResultEnum.SYNC_FAIL);
+                syncResult.setSyncSuccess(false);
                 this.saveRecord(payOrder, syncResult, false);
                 throw e;
             }
@@ -115,17 +119,17 @@ public class PaySyncService {
      * 如果本地订单状态不为为支付中, 状态不一致, 未来将 记录异常情况, 现在不会进行任何操作
      */
     private boolean checkAndAdjust(PaySyncResultBo payRemoteSyncResult, PayOrder order){
-        PaySyncResultEnum syncStatus = payRemoteSyncResult.getSyncStatus();
+        var payStatus = payRemoteSyncResult.getPayStatus();
         String orderStatus = order.getStatus();
 
         // 本地订单为支付中时, 对状态进行比较,
-        if (orderStatus.equals(PayStatusEnum.PROGRESS.getCode())){
+        if (orderStatus.equals(PROGRESS.getCode())){
             // 如果返回订单也是支付中
-            if (Objects.equals(PaySyncResultEnum.PROGRESS, syncStatus)){
+            if (Objects.equals(PROGRESS, payStatus)){
                 // 判断支付单是否支付超时, 如果待支付状态下触发超时
                 if (DateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
                     // 将支付单同步状态状态调整为支付超时, 进行订单的关闭
-                    payRemoteSyncResult.setSyncStatus(PaySyncResultEnum.TIMEOUT);
+                    payRemoteSyncResult.setPayStatus(PayStatusEnum.TIMEOUT);
                     return false;
                 }
                 return true;
@@ -140,20 +144,15 @@ public class PaySyncService {
      * 根据同步的结果对支付单进行调整处理
      */
     private void adjustHandler(PaySyncResultBo payRemoteSyncResult, PayOrder payOrder){
-        PaySyncResultEnum syncStatusEnum = payRemoteSyncResult.getSyncStatus();
+        var payStatus = payRemoteSyncResult.getPayStatus();
         // 对支付网关同步的结果进行处理
-        switch (syncStatusEnum) {
+        switch (payStatus) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
-            case SUCCESS -> this.success(payOrder, payRemoteSyncResult);
-            case REFUND ->
-                    throw new TradeStatusErrorException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
-            // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case PROGRESS -> {}
-            case CLOSED, NOT_FOUND -> this.closeLocal(payOrder);
+            case SUCCESS -> this.success(payOrder, payRemoteSyncResult);
+            case CLOSE, CANCEL -> this.closeLocal(payOrder);
             // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
             case TIMEOUT -> this.closeRemote(payOrder);
-            // 调用出错 不进行处理
-            case SYNC_FAIL -> log.warn("支付状态同步接口调用出错");
             default -> throw new SystemUnknownErrorException("代码有问题");
         }
     }
@@ -166,7 +165,7 @@ public class PaySyncService {
      */
     private void success(PayOrder order, PaySyncResultBo param) {
         // 修改订单支付状态为成功
-        order.setStatus(PayStatusEnum.SUCCESS.getCode())
+        order.setStatus(SUCCESS.getCode())
                 .setPayTime(param.getFinishTime())
                 .setCloseTime(null);
         payOrderService.updateById(order);
@@ -178,7 +177,7 @@ public class PaySyncService {
      */
     private void closeLocal(PayOrder order) {
         // 执行策略的关闭方法
-        order.setStatus(PayStatusEnum.CLOSE.getCode())
+        order.setStatus(CLOSE.getCode())
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(order);
     }
@@ -192,7 +191,7 @@ public class PaySyncService {
         strategy.setOrder(payOrder);
         // 执行策略的关闭方法
         strategy.doCloseHandler();
-        payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
+        payOrder.setStatus(CLOSE.getCode())
                 .setCloseTime(LocalDateTime.now());
         payOrderService.updateById(payOrder);
     }
@@ -208,10 +207,10 @@ public class PaySyncService {
                 .setBizTradeNo(payOrder.getBizOrderNo())
                 .setTradeNo(payOrder.getOrderNo())
                 .setOutTradeNo(payOrder.getOutOrderNo())
-                .setOutTradeStatus(payRemoteSyncResult.getSyncStatus().getCode())
+                .setOutTradeStatus(payRemoteSyncResult.getPayStatus().getCode())
                 .setType(TradeTypeEnum.PAY.getCode())
                 .setChannel(payOrder.getChannel())
-                .setSyncInfo(payRemoteSyncResult.getSyncInfo())
+                .setSyncInfo(payRemoteSyncResult.getSyncData())
                 .setAdjust(adjust)
                 .setErrorCode(payRemoteSyncResult.getSyncErrorCode())
                 .setErrorMsg(payRemoteSyncResult.getSyncErrorMsg())

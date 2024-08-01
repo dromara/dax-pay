@@ -6,7 +6,6 @@ import cn.daxpay.multi.channel.wechat.service.sync.refund.WechatRefundSyncV2Serv
 import cn.daxpay.multi.channel.wechat.service.sync.refund.WechatRefundSyncV3Service;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
-import cn.daxpay.multi.service.enums.PaySyncResultEnum;
 import cn.daxpay.multi.service.strategy.AbsSyncRefundOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -45,7 +44,6 @@ public class WechatSyncRefundStrategy extends AbsSyncRefundOrderStrategy {
     /**
      * 异步支付单与支付网关进行状态比对后的结果
      *
-     * @see PaySyncResultEnum
      */
     @Override
     public RefundSyncResultBo doSync() {

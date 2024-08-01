@@ -10,8 +10,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -23,6 +25,25 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class MerchantManager extends BaseManager<MerchantMapper, Merchant> {
+
+    /**
+     * 根据id进行更新
+     */
+    @Override
+    @CacheEvict(value = "cache:merchantCache", key = "#merchant.mchNo")
+    public int updateById(Merchant merchant) {
+        return super.updateById(merchant);
+    }
+
+
+    /**
+     * 批量更新
+     */
+    @Override
+    @CacheEvict(value = "cache:merchantCache", allEntries = true)
+    public boolean updateAllById(Collection<Merchant> entityList) {
+        return super.updateAllById(entityList);
+    }
 
     /**
      * 根据商户信息查询

@@ -4,7 +4,6 @@ import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.service.sync.transfer.WechatTransferSyncV3Service;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.bo.sync.TransferSyncResultBo;
-import cn.daxpay.multi.service.enums.PaySyncResultEnum;
 import cn.daxpay.multi.service.strategy.AbsSyncTransferOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -39,7 +38,6 @@ public class WechatSyncTransferStrategy extends AbsSyncTransferOrderStrategy {
     /**
      * 异步支付单与支付网关进行状态比对后的结果
      *
-     * @see PaySyncResultEnum
      */
     @Override
     public TransferSyncResultBo doSync() {

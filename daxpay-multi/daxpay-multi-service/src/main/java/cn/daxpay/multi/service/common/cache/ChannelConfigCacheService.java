@@ -7,6 +7,7 @@ import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,6 +26,7 @@ public class ChannelConfigCacheService {
     /**
      * 获取通道配置
      */
+    @Cacheable(value = "cache:channelConfig", key = "#appId + ':' + #channel")
     public ChannelConfig get(String appId, String channel) {
         String key = appId + "_" + channel;
         ChannelConfig channelConfig = cache.get(key);

@@ -10,8 +10,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -23,6 +25,25 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class MchAppManager extends BaseManager<MchAppMapper, MchApp> {
+
+
+    /**
+     * 根据id进行更新
+     */
+    @Override
+    @CacheEvict(value = "cache:mchApp", key = "#mchApp.appId")
+    public int updateById(MchApp mchApp) {
+        return super.updateById(mchApp);
+    }
+
+    /**
+     * 批量更新
+     */
+    @Override
+    @CacheEvict(value = "cache:mchApp", allEntries = true)
+    public boolean updateAllById(Collection<MchApp> entityList) {
+        return super.updateAllById(entityList);
+    }
 
     /**
      * 根据应用AppId查询

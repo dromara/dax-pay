@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.bo.sync;
 
-import cn.daxpay.multi.service.enums.PaySyncResultEnum;
+import cn.daxpay.multi.core.enums.PayStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,32 +16,29 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class PaySyncResultBo {
 
-    /** 同步时网关返回的对象, 序列化为json字符串 */
-    private String syncInfo;
+
+    /** 同步是否成功 */
+    private boolean syncSuccess = true;
+
     /**
      * 支付网关订单状态
-     * @see PaySyncResultEnum
      */
-    private PaySyncResultEnum syncStatus;
+    private PayStatusEnum payStatus;
 
-    /**
-     * 外部第三方支付系统的交易号, 用与和本地记录关联起来
-     */
+    /** 支付通道对应系统的交易号, 用与和本地记录关联起来 */
     private String outOrderNo;
 
-    /**
-     * 交易错误信息
-     */
+    /** 交易错误信息 */
     private String tradeErrorMsg;
 
-    /**
-     * 金额
-     */
+    /** 交易金额 */
     private BigDecimal amount;
 
     /** 支付完成时间 */
     private LocalDateTime finishTime;
 
+    /** 同步时网关返回的对象, 序列化为json字符串 */
+    private String syncData;
 
     /** 错误提示码 */
     private String syncErrorCode;

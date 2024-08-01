@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.bo.sync;
 
-import cn.daxpay.multi.service.enums.RefundSyncResultEnum;
+import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,32 +16,26 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class RefundSyncResultBo {
 
-    /**
-     * 支付网关订单状态, 默认为退款中
-     * @see RefundSyncResultEnum
-     */
-    private RefundSyncResultEnum syncStatus;
+    /** 同步是否成功 */
+    private boolean syncSuccess = true;
 
-    /** 同步时网关返回的对象, 序列化为json字符串 */
-    private String syncInfo;
+    /** 退款状态 */
+    private RefundStatusEnum refundStatus;
 
-    /**
-     * 外部三方支付网关生成的退款交易号, 用与将记录关联起来
-     */
+    /** 外部三方支付网关生成的退款交易号, 用与将记录关联起来 */
     private String outRefundNo;
 
-    /**
-     * 交易错误信息
-     */
+    /** 交易错误信息 */
     private String tradeErrorMsg;
 
-    /**
-     * 金额
-     */
+    /** 交易金额 */
     private BigDecimal amount;
 
     /** 退款完成时间(通常用于接收网关返回的时间) */
     private LocalDateTime finishTime;
+
+    /** 同步时网关返回的对象, 序列化为json字符串 */
+    private String syncData;
 
     /** 错误提示码 */
     private String syncErrorCode;

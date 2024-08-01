@@ -3,10 +3,10 @@ package cn.daxpay.multi.channel.wechat.service.sync.refund;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
+import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
-import cn.daxpay.multi.service.enums.RefundSyncResultEnum;
 import cn.hutool.core.collection.CollUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundQueryRequest;
 import com.github.binarywang.wxpay.constant.WxPayConstants.RefundStatus;
@@ -46,25 +46,25 @@ public class WechatRefundSyncV2Service {
                     .setAmount(PayUtil.conversionAmount(result.getRefundFee()));
             // 交易不存在
             if (CollUtil.isEmpty(result.getRefundRecords())){
-                syncResult.setSyncStatus(RefundSyncResultEnum.FAIL).setTradeErrorMsg("交易不存在");
+                syncResult.setRefundStatus(RefundStatusEnum.FAIL).setTradeErrorMsg("交易不存在");
             }
             var record = result.getRefundRecords().getFirst();
             // 退款状态 - 成功
             if (Objects.equals(RefundStatus.SUCCESS, record.getRefundStatus())){
-                syncResult.setSyncStatus(RefundSyncResultEnum.SUCCESS)
+                syncResult.setRefundStatus(RefundStatusEnum.SUCCESS)
                         .setFinishTime(WechatPayUtil.parseV2(record.getRefundSuccessTime()));
             }
             // 退款状态 - 退款关闭
             if (Objects.equals(RefundStatus.REFUND_CLOSE, record.getRefundStatus())){
-                syncResult.setSyncStatus(RefundSyncResultEnum.CLOSE);
+                syncResult.setRefundStatus(RefundStatusEnum.CLOSE);
             }
             // 退款状态 - 失败
             if (Objects.equals(RefundStatus.CHANGE, record.getRefundStatus())){
-                syncResult.setSyncStatus(RefundSyncResultEnum.FAIL);
+                syncResult.setRefundStatus(RefundStatusEnum.FAIL);
             }
         } catch (WxPayException e) {
             log.error("微信退款订单查询V3失败", e);
-            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncStatus(RefundSyncResultEnum.SYNC_FAIL);
+            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncSuccess(false);
         }
         return syncResult;
     }

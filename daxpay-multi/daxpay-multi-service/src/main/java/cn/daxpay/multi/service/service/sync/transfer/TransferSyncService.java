@@ -2,7 +2,6 @@ package cn.daxpay.multi.service.service.sync.transfer;
 
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
-import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
@@ -15,8 +14,6 @@ import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
-import cn.daxpay.multi.service.enums.RefundSyncResultEnum;
-import cn.daxpay.multi.service.enums.TransferSyncResultEnum;
 import cn.daxpay.multi.service.service.order.transfer.TransferOrderQueryService;
 import cn.daxpay.multi.service.service.record.sync.TradeSyncRecordService;
 import cn.daxpay.multi.service.strategy.AbsSyncTransferOrderStrategy;
@@ -72,7 +69,7 @@ public class TransferSyncService {
             // 执行操作, 获取支付网关同步的结果
             var syncResult = syncPayStrategy.doSync();
             // 判断是否同步成功
-            if (Objects.equals(syncResult.getSyncStatus(), TransferSyncResultEnum.SYNC_FAIL)){
+            if (!syncResult.isSyncSuccess()){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(transferOrder, syncResult, false);
                 throw new OperationFailException(syncResult.getSyncErrorMsg());
@@ -91,7 +88,7 @@ public class TransferSyncService {
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResult.setSyncStatus(TransferSyncResultEnum.SYNC_FAIL);
+                syncResult.setSyncSuccess(false);
                 this.saveRecord(transferOrder, syncResult, false);
                 throw e;
             }
@@ -108,25 +105,24 @@ public class TransferSyncService {
 
     /**
      * 检查状态是否一致
-     * @see RefundSyncResultEnum 同步返回类型
-     * @see RefundStatusEnum 退款单状态
+     * @see TransferStatusEnum 退款单状态
      */
     private boolean checkStatus(TransferSyncResultBo syncResult, TransferOrder order){
-        var syncStatus = syncResult.getSyncStatus();
+        var syncStatus = syncResult.getTransferStatus();
         String orderStatus = order.getStatus();
 
         // 如果订单为退款中, 对状态进行比较
-        if (Objects.equals(orderStatus, RefundStatusEnum.SUCCESS.getCode())){
+        if (Objects.equals(orderStatus, TransferStatusEnum.SUCCESS.getCode())){
             // 转账完成
-            if (Objects.equals(syncStatus, TransferSyncResultEnum.SUCCESS)) {
+            if (Objects.equals(syncStatus, TransferStatusEnum.SUCCESS)) {
                 return true;
             }
             // 转账失败
-            if (Objects.equals(syncStatus, TransferSyncResultEnum.FAIL)) {
+            if (Objects.equals(syncStatus, TransferStatusEnum.FAIL)) {
                 return true;
             }
             // 转账中
-            if (Objects.equals(syncStatus, TransferSyncResultEnum.PROGRESS)) {
+            if (Objects.equals(syncStatus, TransferStatusEnum.PROGRESS)) {
                 return true;
             }
         }
@@ -137,7 +133,7 @@ public class TransferSyncService {
      * 进行退款订单和支付订单的调整
      */
     private void adjustHandler(TransferSyncResultBo syncResult, TransferOrder order){
-        var syncStatusEnum = syncResult.getSyncStatus();
+        var syncStatusEnum = syncResult.getTransferStatus();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
             case SUCCESS -> this.success(order, syncResult);
@@ -180,10 +176,10 @@ public class TransferSyncService {
                 .setBizTradeNo(order.getBizTransferNo())
                 .setTradeNo(order.getTransferNo())
                 .setOutTradeNo(order.getOutTransferNo())
-                .setOutTradeStatus(payRemoteSyncResult.getSyncStatus().getCode())
+                .setOutTradeStatus(payRemoteSyncResult.getTransferStatus().getCode())
                 .setType(TradeTypeEnum.TRANSFER.getCode())
                 .setChannel(order.getChannel())
-                .setSyncInfo(payRemoteSyncResult.getSyncInfo())
+                .setSyncInfo(payRemoteSyncResult.getSyncData())
                 .setAdjust(adjust)
                 .setErrorCode(payRemoteSyncResult.getSyncErrorCode())
                 .setErrorMsg(payRemoteSyncResult.getSyncErrorMsg())

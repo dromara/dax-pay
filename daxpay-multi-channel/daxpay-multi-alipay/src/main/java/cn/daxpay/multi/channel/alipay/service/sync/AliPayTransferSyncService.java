@@ -4,9 +4,9 @@ import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode.TransferStatus;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
+import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.bo.sync.TransferSyncResultBo;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
-import cn.daxpay.multi.service.enums.TransferSyncResultEnum;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayFundTransCommonQueryModel;
@@ -49,31 +49,31 @@ public class AliPayTransferSyncService {
         try {
             var response = alipayClient.execute(request);
             // 设置网关订单号
-            syncResult.setSyncInfo(JsonUtil.toJsonStr(response));
+            syncResult.setSyncData(JsonUtil.toJsonStr(response));
             // 设置网关订单号
             syncResult.setOutTransferNo(response.getPayFundOrderId());
 
             String status = response.getStatus();
             //  SUCCESS：转账成功；
             if (Objects.equals(status, TransferStatus.SUCCESS)){
-                return syncResult.setSyncStatus(TransferSyncResultEnum.SUCCESS);
+                return syncResult.setTransferStatus(TransferStatusEnum.SUCCESS);
             }
             //  WAIT_PAY：等待支付；DEALING：处理中（适用于"单笔转账到银行卡"）
             if (List.of(TransferStatus.DEALING,TransferStatus.WAIT_PAY).contains(status)){
-                return syncResult.setSyncStatus(TransferSyncResultEnum.PROGRESS);
+                return syncResult.setTransferStatus(TransferStatusEnum.PROGRESS);
             }
             //  FAIL：失败（适用于"单笔转账到银行卡"）；
             if (Objects.equals(TransferStatus.FAIL, status)){
-                return syncResult.setSyncStatus(TransferSyncResultEnum.FAIL).setTradeErrorMsg(response.getFailReason());
+                return syncResult.setTransferStatus(TransferStatusEnum.FAIL).setTradeErrorMsg(response.getFailReason());
             }
             //  REFUND：退票（适用于"单笔转账到银行卡"）； CLOSED：订单超时关闭；
             if (List.of(TransferStatus.CLOSED, TransferStatus.REFUND).contains(status)){
-                return syncResult.setSyncStatus(TransferSyncResultEnum.CLOSE).setTradeErrorMsg(response.getFailReason());
+                return syncResult.setTransferStatus(TransferStatusEnum.CLOSE).setTradeErrorMsg(response.getFailReason());
             }
             return syncResult;
         } catch (AlipayApiException e) {
             log.error("支付宝转账记录同步失败:", e);
-            return syncResult.setSyncErrorMsg(e.getErrMsg()).setSyncStatus(TransferSyncResultEnum.SYNC_FAIL);
+            return syncResult.setSyncErrorMsg(e.getErrMsg()).setSyncSuccess(false);
         }
     }
 }

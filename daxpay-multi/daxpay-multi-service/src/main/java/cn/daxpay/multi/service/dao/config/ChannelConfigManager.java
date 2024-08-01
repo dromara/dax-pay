@@ -5,8 +5,10 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,24 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class ChannelConfigManager extends BaseManager<ChannelConfigMapper, ChannelConfig> {
+
+    /**
+     * 根据id进行更新
+     */
+    @Override
+    @CacheEvict(value = "cache:channelConfig", key = "#channelConfig.appId + ':' + #channelConfig.channel")
+    public int updateById(ChannelConfig channelConfig) {
+        return super.updateById(channelConfig);
+    }
+
+    /**
+     * 批量更新
+     */
+    @Override
+    @CacheEvict(value = "cache:channelConfig", allEntries = true)
+    public boolean updateAllById(Collection<ChannelConfig> entityList) {
+        return super.updateAllById(entityList);
+    }
 
     /**
      * 根据应用号查询

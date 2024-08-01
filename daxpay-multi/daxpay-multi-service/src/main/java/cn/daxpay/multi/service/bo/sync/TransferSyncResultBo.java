@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.bo.sync;
 
-import cn.daxpay.multi.service.enums.TransferSyncResultEnum;
+import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,32 +16,26 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class TransferSyncResultBo {
 
-    /**
-     * 支付网关订单状态, 默认为转账中
-     * @see TransferSyncResultEnum
-     */
-    private TransferSyncResultEnum syncStatus;
+    /** 同步是否成功 */
+    private boolean syncSuccess = true;
 
-    /** 同步时网关返回的对象, 序列化为json字符串 */
-    private String syncInfo;
+    /** 转账订单状态 */
+    private TransferStatusEnum transferStatus;
 
-    /**
-     * 外部三方支付网关生成的转账交易号, 用与将记录关联起来
-     */
+    /** 支付通道生成的转账交易号, 用与将本地记录关联起来 */
     private String outTransferNo;
 
-    /**
-     * 交易错误信息
-     */
+    /** 交易错误信息 */
     private String tradeErrorMsg;
 
-    /**
-     * 金额
-     */
+    /** 交易金额 */
     private BigDecimal amount;
 
     /** 完成时间(通常用于接收网关返回的时间) */
     private LocalDateTime finishTime;
+
+    /** 同步时网关返回的对象, 序列化为json字符串 */
+    private String syncData;
 
     /** 错误提示码 */
     private String syncErrorCode;

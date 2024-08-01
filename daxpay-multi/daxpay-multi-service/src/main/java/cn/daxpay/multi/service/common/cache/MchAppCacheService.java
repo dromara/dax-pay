@@ -7,6 +7,7 @@ import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -27,12 +28,13 @@ public class MchAppCacheService {
     /**
      * 获取通道配置
      */
+    @Cacheable(value = "cache:mchApp", key = "#appId")
     public MchApp get(String appId) {
         var mchApp = cache.get(appId);
         if (Objects.isNull(mchApp)) {
             mchApp = mchAppManager.findByAppId(appId)
                     .orElseThrow(() -> new ConfigNotEnableException("未找到指定的应用配置"));
-            cache.put(appId, mchApp);
+//            cache.put(appId, mchApp);
         }
         return mchApp;
     }

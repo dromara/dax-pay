@@ -18,7 +18,6 @@ import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
-import cn.daxpay.multi.service.enums.RefundSyncResultEnum;
 import cn.daxpay.multi.service.service.notice.ClientNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.order.refund.RefundOrderQueryService;
@@ -92,7 +91,7 @@ public class RefundSyncService {
             RefundSyncResultBo syncResultBo = syncPayStrategy.doSync();
 
             // 判断是否同步成功
-            if (Objects.equals(syncResultBo.getSyncStatus(), RefundSyncResultEnum.SYNC_FAIL)) {
+            if (!syncResultBo.isSyncSuccess()) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 this.saveRecord(refundOrder, syncResultBo, false);
                 throw new OperationFailException(syncResultBo.getSyncErrorMsg());
@@ -112,7 +111,7 @@ public class RefundSyncService {
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResultBo.setSyncStatus(RefundSyncResultEnum.SYNC_FAIL);
+                syncResultBo.setSyncSuccess(false);
                 this.saveRecord(refundOrder, syncResultBo, false);
                 throw e;
             }
@@ -129,25 +128,24 @@ public class RefundSyncService {
 
     /**
      * 检查状态是否一致
-     * @see RefundSyncResultEnum 同步返回类型
      * @see RefundStatusEnum 退款单状态
      */
     private boolean checkStatus(RefundSyncResultBo syncResult, RefundOrder order){
-        var syncStatus = syncResult.getSyncStatus();
+        var syncStatus = syncResult.getRefundStatus();
         String orderStatus = order.getStatus();
 
         // 如果订单为退款中, 对状态进行比较
         if (Objects.equals(orderStatus, RefundStatusEnum.SUCCESS.getCode())){
             // 退款完成
-            if (Objects.equals(syncStatus, RefundSyncResultEnum.SUCCESS)) {
+            if (Objects.equals(syncStatus, RefundStatusEnum.SUCCESS)) {
                 return true;
             }
             // 退款失败
-            if (Objects.equals(syncStatus, RefundSyncResultEnum.FAIL)) {
+            if (Objects.equals(syncStatus, RefundStatusEnum.FAIL)) {
                 return true;
             }
             // 退款中
-            if (Objects.equals(syncStatus, RefundSyncResultEnum.PROGRESS)) {
+            if (Objects.equals(syncStatus, RefundStatusEnum.PROGRESS)) {
                 return true;
             }
         }
@@ -158,15 +156,11 @@ public class RefundSyncService {
      * 进行退款订单和支付订单的调整
      */
     private void adjustHandler(RefundSyncResultBo syncResult, RefundOrder order){
-        RefundSyncResultEnum syncStatusEnum = syncResult.getSyncStatus();
+        var refundStatus = syncResult.getRefundStatus();
         // 对支付网关同步的结果进行处理
-        switch (syncStatusEnum) {
-            case SUCCESS ->
-                this.success(order, syncResult);
+        switch (refundStatus) {
+            case SUCCESS -> this.success(order, syncResult);
             case PROGRESS -> {}
-            case SYNC_FAIL -> {
-                log.error("退款同步失败, 退款单号:{}, 错误信息:{}", order.getRefundNo(), syncResult.getSyncErrorMsg());
-            }
             case FAIL, CLOSE-> this.close(order);
             default -> log.error("退款同步结果未知, 退款单号:{}, 错误信息:{}", order.getRefundNo(), syncResult.getSyncErrorMsg());
         }
@@ -244,10 +238,10 @@ public class RefundSyncService {
                 .setTradeNo(refundOrder.getRefundNo())
                 .setBizTradeNo(refundOrder.getBizRefundNo())
                 .setOutTradeNo(syncResult.getOutRefundNo())
-                .setOutTradeStatus(syncResult.getSyncStatus().getCode())
+                .setOutTradeStatus(syncResult.getRefundStatus().getCode())
                 .setType(TradeTypeEnum.REFUND.getCode())
                 .setChannel(refundOrder.getChannel())
-                .setSyncInfo(syncResult.getSyncInfo())
+                .setSyncInfo(syncResult.getSyncData())
                 .setAdjust(adjust)
                 .setErrorCode(syncResult.getSyncErrorCode())
                 .setErrorMsg(syncResult.getSyncErrorMsg())

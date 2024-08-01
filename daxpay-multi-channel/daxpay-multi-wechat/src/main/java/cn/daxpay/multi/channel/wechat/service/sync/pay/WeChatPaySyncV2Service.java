@@ -4,10 +4,10 @@ import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
+import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
-import cn.daxpay.multi.service.enums.PaySyncResultEnum;
 import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -39,29 +39,33 @@ public class WeChatPaySyncV2Service {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         try {
             var result = wxPayService.queryOrder(null, order.getOrderNo());
-            syncResult.setSyncInfo(JsonUtil.toJsonStr(result))
+            syncResult.setSyncData(JsonUtil.toJsonStr(result))
                     .setOutOrderNo(result.getTransactionId())
                     .setAmount(PayUtil.conversionAmount(result.getTotalFee()));
             // 支付状态 - 成功 SUCCESS：支付成功  REFUND：转入退款
             if (List.of(WxpayTradeStatus.SUCCESS, WxpayTradeStatus.REFUND).contains(result.getTradeState())){
-                syncResult.setSyncStatus(PaySyncResultEnum.SUCCESS)
+                syncResult.setPayStatus(PayStatusEnum.SUCCESS)
                         .setFinishTime(WechatPayUtil.parseV2(result.getTimeEnd()));
             }
             // 支付状态 - 支付中  NOTPAY：未支付，等待扣款 USERPAYING：用户支付中（付款码支付）
             if (List.of(WxpayTradeStatus.NOTPAY, WxpayTradeStatus.USER_PAYING).contains(result.getTradeState())){
-                syncResult.setSyncStatus(PaySyncResultEnum.PROGRESS);
+                syncResult.setPayStatus(PayStatusEnum.PROGRESS);
             }
             // 支付状态 - 失败 PAYERROR：支付失败(其他原因，如银行返回失败)
             if (Objects.equals(WxpayTradeStatus.PAY_ERROR, result.getTradeState())){
-                syncResult.setSyncStatus(PaySyncResultEnum.CLOSED);
+                syncResult.setPayStatus(PayStatusEnum.FAIL);
             }
             // 关闭  REVOKED：已撤销（付款码支付） CLOSED：已关闭
-            if (List.of(WxpayTradeStatus.REVOKED, WxpayTradeStatus.CLOSED).contains(result.getTradeState())){
-                syncResult.setSyncStatus(PaySyncResultEnum.CLOSED);
+            if (Objects.equals(WxpayTradeStatus.CLOSED, result.getTradeState())){
+                syncResult.setPayStatus(PayStatusEnum.CLOSE);
+            }
+            // 撤销
+            if (Objects.equals(WxpayTradeStatus.REVOKED, result.getTradeState())){
+                syncResult.setPayStatus(PayStatusEnum.CANCEL);
             }
         } catch (WxPayException e) {
             log.error("微信支付V2订单查询失败", e);
-            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncStatus(PaySyncResultEnum.SYNC_FAIL);
+            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncSuccess(false);
         }
         return syncResult;
     }

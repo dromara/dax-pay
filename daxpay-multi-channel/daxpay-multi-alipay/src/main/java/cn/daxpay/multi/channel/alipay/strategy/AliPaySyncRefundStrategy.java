@@ -7,7 +7,6 @@ import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
 import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
-import cn.daxpay.multi.service.enums.PaySyncResultEnum;
 import cn.daxpay.multi.service.strategy.AbsSyncRefundOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -57,7 +56,6 @@ public class AliPaySyncRefundStrategy extends AbsSyncRefundOrderStrategy {
     /**
      * 异步支付单与支付网关进行状态比对后的结果
      *
-     * @see PaySyncResultEnum
      */
     @Override
     public RefundSyncResultBo doSync() {

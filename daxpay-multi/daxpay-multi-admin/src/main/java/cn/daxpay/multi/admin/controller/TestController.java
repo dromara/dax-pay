@@ -72,7 +72,7 @@ public class TestController {
             job.setId(String.valueOf(index.addAndGet(1)));
             job.setTopic("hello");
             job.setMessage(new PayOrder());
-            job.setDelayTime(RandomUtil.randomInt(1000, 15000));
+            job.setDelayTime(RandomUtil.randomInt(1000, 1500));
             job.setTtrTime(1000);
             delayJobService.addJob(job);
         }
@@ -88,6 +88,10 @@ public class TestController {
 
     @DelayTaskJob("hello")
     public void hello(DelayTaskEvent<PayOrder> event) {
+        if (RandomUtil.randomBoolean()){
+            throw new RuntimeException("测试异常");
+        }
+
         log.info("接收到消息:{}",event);
     }
 
