@@ -5,6 +5,10 @@ spring:
     name: dax-pay-merchant
   profiles:
     active: dev
+  task:
+    scheduling:
+      pool:
+        size: 8
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   global-config:

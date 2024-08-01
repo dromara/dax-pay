@@ -4,8 +4,8 @@ import cn.bootx.platform.common.redis.delay.bean.DelayJob;
 import cn.bootx.platform.common.redis.delay.bean.Job;
 import cn.bootx.platform.common.redis.delay.constants.JobStatus;
 import cn.bootx.platform.common.redis.delay.container.DelayBucket;
-import cn.bootx.platform.common.redis.delay.container.JobPool;
-import cn.bootx.platform.common.redis.delay.container.ReadyQueue;
+import cn.bootx.platform.common.redis.delay.container.DelayJobPool;
+import cn.bootx.platform.common.redis.delay.container.DelayQueue;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,41 +19,43 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JobService {
+public class DelayJobService {
 
     private final DelayBucket delayBucket;
 
-    private final ReadyQueue readyQueue;
+    private final DelayQueue delayQueue;
 
-    private final JobPool jobPool;
+    private final DelayJobPool delayJobPool;
 
-
-    public DelayJob addDefJob(Job<?> job) {
+    /**
+     * 添加任务, 返回延时任务对象
+     */
+    public DelayJob addJob(Job<?> job) {
         job.setStatus(JobStatus.DELAY);
-        jobPool.addJob(job);
+        delayJobPool.addOrUpdateJob(job);
         DelayJob delayJob = new DelayJob(job);
         delayBucket.addDelayJob(delayJob);
         return delayJob;
     }
 
     /**
-     * 获取
+     * 获取任务
      */
     public Job<?> getProcessJob(String topic) {
-        // 拿到任务
-        DelayJob delayJob = readyQueue.popJob(topic);
+        // 从就绪队列拿到任务
+        DelayJob delayJob = delayQueue.popJob(topic);
         if (delayJob == null || StrUtil.isBlank(delayJob.getJodId())) {
-            return new Job<>();
+            return null;
         }
-        Job<?> job = jobPool.getJob(delayJob.getJodId());
+        Job<?> job = delayJobPool.getJob(delayJob.getJodId());
         // 元数据已经删除，则取下一个
         if (job == null) {
             job = getProcessJob(topic);
         } else {
             job.setStatus(JobStatus.RESERVED);
+            // 设置再次投递时间, 如果消费失败将会再次投递, 消费成功会删掉任务
             delayJob.setDelayDate(System.currentTimeMillis() + job.getTtrTime());
-
-            jobPool.addJob(job);
+            delayJobPool.addOrUpdateJob(job);
             delayBucket.addDelayJob(delayJob);
         }
         return job;
@@ -62,15 +64,15 @@ public class JobService {
     /**
      * 完成一个执行的任务
      */
-    public void finishJob(String jobId) {
-        jobPool.removeDelayJob(jobId);
+    public void finishJob(Job<?> job) {
+        delayJobPool.removeJob(job.getId());
     }
 
     /**
-     * 伤处一个执行的任务
+     * 删除一个执行的任务
      */
     public void deleteJob(String jobId) {
-        jobPool.removeDelayJob(jobId);
+        delayJobPool.removeJob(jobId);
     }
 
 }

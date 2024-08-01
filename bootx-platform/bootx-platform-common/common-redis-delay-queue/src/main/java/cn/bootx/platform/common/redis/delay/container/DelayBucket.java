@@ -39,7 +39,7 @@ public class DelayBucket {
     @Bean
     public List<String> createBuckets() {
         IntStream.range(0, delayQueueProperties.getBucketCount())
-                .mapToObj(i -> "bucket" + i)
+                .mapToObj(i -> "delay:queue:bucket:" + i)
                 .forEach(bucketNames::add);
         return bucketNames;
     }
@@ -65,7 +65,7 @@ public class DelayBucket {
      */
     public void addDelayJob(DelayJob job) {
         String thisBucketName = getThisBucketName();
-        var bucket = getBucket(thisBucketName);
+        var bucket = this.getBucket(thisBucketName);
         bucket.add(job,job.getDelayDate());
     }
 

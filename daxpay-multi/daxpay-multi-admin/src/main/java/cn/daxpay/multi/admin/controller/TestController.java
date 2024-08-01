@@ -5,12 +5,13 @@ import cn.bootx.platform.common.redis.delay.annotation.DelayTaskJobProcessor;
 import cn.bootx.platform.common.redis.delay.annotation.DelayTaskEvent;
 import cn.bootx.platform.common.redis.delay.bean.DelayJob;
 import cn.bootx.platform.common.redis.delay.bean.Job;
-import cn.bootx.platform.common.redis.delay.service.JobService;
+import cn.bootx.platform.common.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.iam.service.permission.PermPathSyncService;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +38,7 @@ public class TestController {
     private final PermPathSyncService permPathSyncService;
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final JobService jobService;
+    private final DelayJobService delayJobService;
 
 
     private final static AtomicInteger index = new AtomicInteger(0);
@@ -63,38 +64,31 @@ public class TestController {
         return Res.ok(payOrder1);
     }
 
-    @Operation(summary = "添加测试任务")
+    @Operation(summary = "添加测试延时任务")
     @PostMapping(value = "addTest")
-    public String addDefJobTest() {
-        Job request = new Job();
-        int i = index.addAndGet(1);
-        request.setId(String.valueOf(i));
-        int num = i%3;
-        request.setTopic("hello");
-        request.setMessage(new PayOrder());
-        request.setDelayTime(0);
-        request.setTtrTime(1000);
-        DelayJob delayJob = jobService.addDefJob(request);
-        return JSON.toJSONString(delayJob);
+    public Result<Void> addDefJobTest() {
+        for (int i = 0; i < 100; i++){
+            Job<PayOrder> job = new Job<>();
+            job.setId(String.valueOf(index.addAndGet(1)));
+            job.setTopic("hello");
+            job.setMessage(new PayOrder());
+            job.setDelayTime(RandomUtil.randomInt(1000, 15000));
+            job.setTtrTime(1000);
+            delayJobService.addJob(job);
+        }
+        return Res.ok();
     }
 
     @Operation(summary = "添加测试任务(自定义)")
     @PostMapping("add")
     public String addDefJob(Job request) {
-        DelayJob delayJob = jobService.addDefJob(request);
+        DelayJob delayJob = delayJobService.addJob(request);
         return JSON.toJSONString(delayJob);
-    }
-
-    @Operation(summary = "完成一个执行的任务")
-    @DeleteMapping(value = "finish")
-    public String finishJob(String jobId) {
-        jobService.finishJob(jobId);
-        return "success";
     }
 
     @DelayTaskJob("hello")
     public void hello(DelayTaskEvent<PayOrder> event) {
-        log.info("hello:{}",event);
+        log.info("接收到消息:{}",event);
     }
 
 }

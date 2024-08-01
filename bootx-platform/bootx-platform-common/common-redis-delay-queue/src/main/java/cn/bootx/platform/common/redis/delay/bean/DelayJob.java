@@ -2,6 +2,8 @@ package cn.bootx.platform.common.redis.delay.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -11,9 +13,10 @@ import java.io.Serializable;
  * @date 2019-07-25 15:24
  **/
 @Data
+@Accessors(chain = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class DelayJob implements Serializable {
-
 
     /**
      * 延迟任务的唯一标识
@@ -29,7 +32,6 @@ public class DelayJob implements Serializable {
      * 任务类型（具体业务类型）
      */
     private String topic;
-
 
     public DelayJob(Job<?> job) {
         this.jodId = job.getId();

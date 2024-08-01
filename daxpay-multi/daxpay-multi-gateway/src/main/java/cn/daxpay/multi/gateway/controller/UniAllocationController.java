@@ -1,9 +1,9 @@
 package cn.daxpay.multi.gateway.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
-import cn.daxpay.multi.service.common.anno.PaymentVerify;
 import cn.daxpay.multi.core.result.DaxResult;
 import cn.daxpay.multi.core.util.DaxRes;
+import cn.daxpay.multi.service.common.anno.PaymentVerify;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

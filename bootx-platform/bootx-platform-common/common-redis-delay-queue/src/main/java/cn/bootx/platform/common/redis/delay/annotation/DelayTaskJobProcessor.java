@@ -1,6 +1,10 @@
 package cn.bootx.platform.common.redis.delay.annotation;
 
 import cn.bootx.platform.common.redis.delay.bean.Job;
+import cn.bootx.platform.core.exception.UnSupportOperateException;
+import cn.hutool.core.util.StrUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +25,7 @@ import java.util.Objects;
 @Configuration
 public class DelayTaskJobProcessor implements BeanPostProcessor {
 
+    private static final Logger log = LoggerFactory.getLogger(DelayTaskJobProcessor.class);
     /**
      * 代理对象列表
      */
@@ -47,9 +52,20 @@ public class DelayTaskJobProcessor implements BeanPostProcessor {
     }
 
     /**
-     * 执行任务
+     * 判断是存在topic接受方法
      */
-    public void run(String topic, Job<?> o) throws InvocationTargetException, IllegalAccessException {
+    public boolean existTopic(String topic) {
+        return annotatedMethods.values()
+                .stream()
+                .map(method -> method.getAnnotation(DelayTaskJob.class))
+                .anyMatch(annotation -> Objects.equals(topic, annotation.value()));
+
+    }
+
+    /**
+     * 执行任务, 如果有多个接受方法,
+     */
+    public void invoke(String topic, Job<?> o) throws InvocationTargetException, IllegalAccessException {
         for (Map.Entry<String, Method> entry : annotatedMethods.entrySet()) {
             String beanMethodName = entry.getKey();
             String beanName = beanMethodName.split("#")[0];
@@ -66,8 +82,9 @@ public class DelayTaskJobProcessor implements BeanPostProcessor {
                             .setMessage(o.getMessage())
                             .setStatus(o.getStatus())
                             .setTtrTime(o.getTtrTime());
-
                     method.invoke(proxyBean, result);
+                } else {
+                    throw new UnSupportOperateException(StrUtil.format("延时任务接受方法 {}#{} 参数错误, 无法被消费! ",proxyBean.getClass().getName(),method.getName()));
                 }
         }
     }

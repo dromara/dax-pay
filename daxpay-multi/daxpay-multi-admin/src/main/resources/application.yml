@@ -1,10 +1,14 @@
 server:
-  port: 9999
+  port: 9998
 spring:
   application:
     name: dax-pay-admin
   profiles:
     active: dev
+  task:
+    scheduling:
+      pool:
+        size: 8
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   global-config:

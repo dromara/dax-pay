@@ -15,14 +15,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ReadyQueue {
+public class DelayQueue {
 
     private final RedisTemplate<String,DelayJob> redisTemplate;
 
-    private String NAME = "process:queue:";
-
+    /**
+     * 获取队列key
+     */
     private String getKey(String topic) {
-        return NAME + topic;
+        return "delay:queue:ready:topic" + topic;
     }
 
     /**
@@ -45,8 +46,37 @@ public class ReadyQueue {
      */
     public DelayJob popJob(String topic) {
         var listOperations = this.getQueue(topic);
-        var job = listOperations.leftPop();
-        return job;
+        return listOperations.leftPop();
+    }
+
+    /**
+     * 获取死信队列key
+     */
+    private String getDeadKey(String topic) {
+        return "delay:queue:dead:"+topic;
+    }
+
+    /**
+     * 获得死信队列
+     */
+    private BoundListOperations<String, DelayJob> getDeadQueue(String topic) {
+        return redisTemplate.boundListOps(getDeadKey(topic));
+    }
+
+    /**
+     * 设置死信任务
+     */
+    public void  pushDeadJob(DelayJob delayJob) {
+        var listOperations = getDeadQueue(delayJob.getTopic());
+        listOperations.leftPush(delayJob);
+    }
+
+    /**
+     * 移除并获得死信任务
+     */
+    public DelayJob popDeadJob(String topic) {
+        var listOperations = this.getDeadQueue(topic);
+        return listOperations.leftPop();
     }
 
 }
