@@ -27,10 +27,10 @@ public class DaxPayKitConfiguration {
 //    @EventListener(webstarteve.class)
     public void initDaxPayKit(){
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl(daxPayDemoProperties.getServerUrl())
-                .signType(daxPayDemoProperties.getSignType())
-                .signSecret(daxPayDemoProperties.getSignSecret())
-                .reqTimeout(daxPayDemoProperties.getReqTimeout())
+                .serviceUrl(daxPayDemoProperties.getServerUrl())   // 服务地址
+                .signType(daxPayDemoProperties.getSignType())      // 签名类型
+                .signSecret(daxPayDemoProperties.getSignSecret())  // 签名密钥
+                .reqTimeout(daxPayDemoProperties.getReqTimeout())  // 超时时间
                 .build();
         DaxPayKit.initConfig(config);
     }
