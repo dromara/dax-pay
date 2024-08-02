@@ -6,7 +6,7 @@ import cn.daxpay.multi.service.dao.constant.ChannelConstManager;
 import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import cn.daxpay.multi.service.entity.constant.ChannelConst;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
-import cn.daxpay.multi.service.result.constant.ChannelConfigResult;
+import cn.daxpay.multi.service.result.config.ChannelConfigResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

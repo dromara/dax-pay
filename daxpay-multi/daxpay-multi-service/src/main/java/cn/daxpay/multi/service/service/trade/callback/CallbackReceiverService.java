@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * 支付/退款回调服务
+ * 接收支付/退款回调服务
  * @author xxm
  * @since 2024/7/20
  */

@@ -1,6 +1,6 @@
 package cn.bootx.platform.common.redis.delay.container;
 
-import cn.bootx.platform.common.redis.delay.bean.DelayJob;
+import cn.bootx.platform.common.redis.delay.bean.QueueJob;
 import cn.bootx.platform.common.redis.delay.configuration.DelayQueueProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class DelayBucket {
 
-    private final RedisTemplate<String, DelayJob> redisTemplate;
+    private final RedisTemplate<String, QueueJob> redisTemplate;
 
     private static final AtomicInteger index = new AtomicInteger(0);
 
@@ -56,14 +56,14 @@ public class DelayBucket {
     /**
      * 获得桶集合
      */
-    private BoundZSetOperations<String, DelayJob> getBucket(String bucketName) {
+    private BoundZSetOperations<String, QueueJob> getBucket(String bucketName) {
         return redisTemplate.boundZSetOps(bucketName);
     }
 
     /**
      * 放入延时任务
      */
-    public void addDelayJob(DelayJob job) {
+    public void addDelayJob(QueueJob job) {
         String thisBucketName = getThisBucketName();
         var bucket = this.getBucket(thisBucketName);
         bucket.add(job,job.getDelayDate());
@@ -72,7 +72,7 @@ public class DelayBucket {
     /**
      * 获得最新的延期任务
      */
-    public DelayJob getFirstDelayTime(Integer index) {
+    public QueueJob getFirstDelayTime(Integer index) {
         String name = bucketNames.get(index);
         var bucket = getBucket(name);
         var set = bucket.rangeWithScores(0, 1);
@@ -86,10 +86,10 @@ public class DelayBucket {
     /**
      * 移除延时任务
      */
-    public void removeDelayTime(Integer index,DelayJob delayJob) {
+    public void removeDelayTime(Integer index, QueueJob queueJob) {
         String name = bucketNames.get(index);
         var bucket = getBucket(name);
-        bucket.remove(delayJob);
+        bucket.remove(queueJob);
     }
 
 }

@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.param.merchant;
 
 import cn.bootx.platform.core.validation.ValidationGroup;
 import cn.daxpay.multi.core.enums.SignTypeEnum;
-import cn.daxpay.multi.core.enums.TradeNotifyTypeEnum;
+import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -67,7 +67,7 @@ public class MchAppParam {
 
     /**
      * 异步消息通知类型, 当前只支持http方式
-     * @see TradeNotifyTypeEnum
+     * @see MerchantNotifyTypeEnum
      */
     @Schema(description = "异步消息通知类型")
     private String notifyType;

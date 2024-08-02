@@ -14,7 +14,7 @@ import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
-import cn.daxpay.multi.service.service.notice.ClientNoticeService;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
@@ -51,7 +51,7 @@ public class RefundService {
     private final RefundAssistService refundAssistService;
     private final PayOrderService payOrderService;
     private final TradeFlowRecordService tradeFlowRecordService;
-    private final ClientNoticeService clientNoticeService;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 分支付通道进行退款
@@ -208,7 +208,7 @@ public class RefundService {
         // 发送通知
         List<String> list = List.of(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
         if (list.contains(refundOrder.getStatus())){
-            clientNoticeService.registerRefundNotice(refundOrder);
+            merchantNoticeService.registerRefundNotice(refundOrder);
         }
     }
 }

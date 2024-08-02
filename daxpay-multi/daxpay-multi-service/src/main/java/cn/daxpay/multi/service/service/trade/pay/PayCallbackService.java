@@ -6,7 +6,7 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
-import cn.daxpay.multi.service.service.notice.ClientNoticeService;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
@@ -38,7 +38,7 @@ public class PayCallbackService {
 
     private final TradeFlowRecordService tradeFlowRecordService;
 
-    private final ClientNoticeService clientNoticeService;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 支付统一回调处理
@@ -104,7 +104,7 @@ public class PayCallbackService {
                 .setCloseTime(null);
         payOrderService.updateById(payOrder);
         tradeFlowRecordService.savePay(payOrder);
-        clientNoticeService.registerPayNotice(payOrder);
+        merchantNoticeService.registerPayNotice(payOrder);
     }
 
     /**

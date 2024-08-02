@@ -1,0 +1,114 @@
+package cn.daxpay.multi.service.service.notice.notify;
+
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
+import cn.bootx.platform.common.redis.delay.service.DelayJobService;
+import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
+import cn.daxpay.multi.service.code.DaxPayCode;
+import cn.daxpay.multi.service.common.context.MchAppLocal;
+import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.convert.order.pay.PayOrderConvert;
+import cn.daxpay.multi.service.convert.order.refund.RefundOrderConvert;
+import cn.daxpay.multi.service.convert.order.transfer.TransferOrderConvert;
+import cn.daxpay.multi.service.dao.notice.notify.MerchantNotifyTaskManager;
+import cn.daxpay.multi.service.entity.notice.notify.MerchantNotifyTask;
+import cn.daxpay.multi.service.entity.order.pay.PayOrder;
+import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
+import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
+import cn.daxpay.multi.service.enums.NotifyTypeEnum;
+import cn.daxpay.multi.service.service.config.MerchantNotifyConfigService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
+/**
+ * 商户消息通知服务类
+ * @author xxm
+ * @since 2024/7/30
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class MerchantNotifyTaskService {
+
+    private final MerchantNotifyTaskManager taskManager;
+
+    private final MerchantNotifyConfigService notifyConfigService;
+
+    private final DelayJobService delayJobService;
+
+    /**
+     * 注册支付通知
+     */
+    public void registerPayNotice(PayOrder order) {
+        if (this.nonRegister(NotifyTypeEnum.PAY)){
+            return;
+        }
+        var noticeResult = PayOrderConvert.CONVERT.toResult(order);
+        var task = new MerchantNotifyTask()
+                // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
+                .setContent(JacksonUtil.toJson(noticeResult))
+                .setNotifyType(NotifyTypeEnum.PAY.getCode())
+                .setSendCount(0)
+                .setTradeId(order.getId())
+                .setTradeNo(order.getOrderNo());
+        taskManager.save(task);
+        delayJobService.registerByTransaction(task, DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
+        log.info("注册支付通知");
+    }
+
+    /**
+     * 注册退款通知
+     */
+    public void registerRefundNotice(RefundOrder order) {
+        if (this.nonRegister(NotifyTypeEnum.REFUND)){
+            return;
+        }
+        var noticeResult = RefundOrderConvert.CONVERT.toResult(order);
+        var task = new MerchantNotifyTask()
+                // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
+                .setContent(JacksonUtil.toJson(noticeResult))
+                .setNotifyType(NotifyTypeEnum.REFUND.getCode())
+                .setSendCount(0)
+                .setTradeId(order.getId())
+                .setTradeNo(order.getRefundNo());
+        taskManager.save(task);
+        delayJobService.registerByTransaction(task, DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
+        log.info("注册退款通知");
+    }
+
+    /**
+     * 注册转账通知
+     */
+    public void registerTransferNotice(TransferOrder order) {
+        if (this.nonRegister(NotifyTypeEnum.TRANSFER)){
+            return;
+        }
+        var noticeResult = TransferOrderConvert.CONVERT.toResult(order);
+        var task = new MerchantNotifyTask()
+                // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
+                .setContent(JacksonUtil.toJson(noticeResult))
+                .setNotifyType(NotifyTypeEnum.TRANSFER.getCode())
+                .setSendCount(0)
+                .setTradeId(order.getId())
+                .setTradeNo(order.getTransferNo());
+        taskManager.save(task);
+        delayJobService.registerByTransaction(task, DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
+        log.info("注册转账通知");
+    }
+
+    /**
+     * 判断是否需要注册通知
+     */
+    private boolean nonRegister(NotifyTypeEnum notifyType) {
+        // 判断是否开启消息通知功能
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        if (!Objects.equals(mchAppInfo.getNotifyType(), MerchantNotifyTypeEnum.HTTP)){
+            return false;
+        }
+        // 判断是否订阅该类型的通知
+        return notifyConfigService.getSubscribeByAppIdAndType(mchAppInfo.getAppId(), notifyType.getCode());
+    }
+
+}

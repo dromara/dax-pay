@@ -4,21 +4,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/**   
+/**
  * 商户通知类型
- * @author xxm  
- * @since 2024/7/30 
+ * @author xxm
+ * @since 2024/7/30
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "支付通道")
+@Schema(title = "商户通知类型")
 public class MerchantNotifyConstResult {
     /** 通道编码 */
-    @Schema(description = "通道编码")
+    @Schema(description = "通知类型编码")
     private String code;
 
     /** 通道名称 */
-    @Schema(description = "通道名称")
+    @Schema(description = "名称")
     private String name;
 
     /** 是否启用 */

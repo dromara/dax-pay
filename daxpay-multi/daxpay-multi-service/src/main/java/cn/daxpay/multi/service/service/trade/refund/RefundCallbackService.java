@@ -11,7 +11,7 @@ import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
-import cn.daxpay.multi.service.service.notice.ClientNoticeService;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import com.baomidou.lock.LockInfo;
@@ -37,7 +37,7 @@ public class RefundCallbackService {
     private final LockTemplate lockTemplate;
     private final TradeFlowRecordService tradeFlowRecordService;
     private final PayOrderService payOrderService;
-    private final ClientNoticeService clientNoticeService;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 退款回调统一处理
@@ -112,7 +112,7 @@ public class RefundCallbackService {
         // 记录流水
         tradeFlowRecordService.saveRefund(refundOrder);
         // 发送通知
-        clientNoticeService.registerRefundNotice(refundOrder);
+        merchantNoticeService.registerRefundNotice(refundOrder);
     }
 
 
@@ -143,6 +143,6 @@ public class RefundCallbackService {
         payOrderService.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
         // 发送通知
-        clientNoticeService.registerRefundNotice(refundOrder);
+        merchantNoticeService.registerRefundNotice(refundOrder);
     }
 }

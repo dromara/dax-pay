@@ -6,7 +6,7 @@ import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
-import cn.daxpay.multi.service.service.notice.ClientNoticeService;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Objects;
 public class TransferCallbackService {
     private final LockTemplate lockTemplate;
     private final TransferOrderManager transferOrderManager;
-    private final ClientNoticeService clientNoticeService;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 转账回调统一处理
@@ -76,7 +76,7 @@ public class TransferCallbackService {
                 .setFinishTime(callbackInfo.getFinishTime());
         transferOrderManager.updateById(transferOrder);
         // 发送通知
-        clientNoticeService.registerTransferNotice(transferOrder);
+        merchantNoticeService.registerTransferNotice(transferOrder);
     }
 
 
@@ -90,7 +90,7 @@ public class TransferCallbackService {
                         .setErrorMsg(callbackInfo.getTradeErrorMsg());
         transferOrderManager.updateById(transferOrder);
         // 发送通知
-        clientNoticeService.registerTransferNotice(transferOrder);
+        merchantNoticeService.registerTransferNotice(transferOrder);
     }
 }
 

@@ -1,0 +1,48 @@
+package cn.daxpay.multi.service.service.notice;
+
+import cn.daxpay.multi.service.entity.order.pay.PayOrder;
+import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
+import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
+import cn.daxpay.multi.service.service.notice.callback.MerchantCallbackTaskService;
+import cn.daxpay.multi.service.service.notice.notify.MerchantNotifyTaskService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/**
+ * 客户通知服务
+ * @author xxm
+ * @since 2024/7/30
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class MerchantNoticeService {
+    private final MerchantNotifyTaskService merchantNotifyService;
+
+    private final MerchantCallbackTaskService merchantCallbackService;
+
+    /**
+     * 注册支付通知
+     */
+    public void registerPayNotice(PayOrder order) {
+        merchantNotifyService.registerPayNotice(order);
+        merchantCallbackService.registerPayNotice(order);
+    }
+
+    /**
+     * 注册退款通知
+     */
+    public void registerRefundNotice(RefundOrder order) {
+        merchantNotifyService.registerRefundNotice(order);
+        merchantCallbackService.registerRefundNotice(order);
+    }
+
+    /**
+     * 注册转账通知
+     */
+    public void registerTransferNotice(TransferOrder order) {
+        merchantNotifyService.registerTransferNotice(order);
+        merchantCallbackService.registerTransferNotice(order);
+    }
+}

@@ -118,9 +118,9 @@ public class PaymentAssistService {
 
     /**
      * 初始化商户和应用信息
-     * 统一支付相关接口调用时，会进行初始化
-     * 接收到回调时，会进行初始化
-     * 接收到消息通知时是, 会进行初始化
+     * 1. 统一支付相关接口调用时，要进行初始化
+     * 2. 接收到回调时，要进行初始化
+     * 3. 接收到消息通知时, 要进行初始化
      *
      */
     public void initMchAndApp(String mchNo, String appId) {

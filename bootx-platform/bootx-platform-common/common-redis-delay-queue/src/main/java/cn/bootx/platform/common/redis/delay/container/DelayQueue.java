@@ -1,6 +1,6 @@
 package cn.bootx.platform.common.redis.delay.container;
 
-import cn.bootx.platform.common.redis.delay.bean.DelayJob;
+import cn.bootx.platform.common.redis.delay.bean.QueueJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.BoundListOperations;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DelayQueue {
 
-    private final RedisTemplate<String,DelayJob> redisTemplate;
+    private final RedisTemplate<String, QueueJob> redisTemplate;
 
     /**
      * 获取队列key
@@ -29,22 +29,22 @@ public class DelayQueue {
     /**
      * 获得队列
      */
-    private BoundListOperations<String, DelayJob> getQueue (String topic) {
+    private BoundListOperations<String, QueueJob> getQueue (String topic) {
         return redisTemplate.boundListOps(getKey(topic));
     }
 
     /**
      * 设置任务
      */
-    public void  pushJob(DelayJob delayJob) {
-        var listOperations = getQueue(delayJob.getTopic());
-        listOperations.leftPush(delayJob);
+    public void  pushJob(QueueJob queueJob) {
+        var listOperations = getQueue(queueJob.getTopic());
+        listOperations.leftPush(queueJob);
     }
 
     /**
      * 移除并获得任务
      */
-    public DelayJob popJob(String topic) {
+    public QueueJob popJob(String topic) {
         var listOperations = this.getQueue(topic);
         return listOperations.leftPop();
     }
@@ -59,22 +59,22 @@ public class DelayQueue {
     /**
      * 获得死信队列
      */
-    private BoundListOperations<String, DelayJob> getDeadQueue(String topic) {
+    private BoundListOperations<String, QueueJob> getDeadQueue(String topic) {
         return redisTemplate.boundListOps(getDeadKey(topic));
     }
 
     /**
      * 设置死信任务
      */
-    public void  pushDeadJob(DelayJob delayJob) {
-        var listOperations = getDeadQueue(delayJob.getTopic());
-        listOperations.leftPush(delayJob);
+    public void  pushDeadJob(QueueJob queueJob) {
+        var listOperations = getDeadQueue(queueJob.getTopic());
+        listOperations.leftPush(queueJob);
     }
 
     /**
      * 移除并获得死信任务
      */
-    public DelayJob popDeadJob(String topic) {
+    public QueueJob popDeadJob(String topic) {
         var listOperations = this.getDeadQueue(topic);
         return listOperations.leftPop();
     }

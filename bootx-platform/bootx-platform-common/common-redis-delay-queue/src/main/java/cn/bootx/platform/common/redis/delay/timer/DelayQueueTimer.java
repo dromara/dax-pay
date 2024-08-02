@@ -1,7 +1,7 @@
 package cn.bootx.platform.common.redis.delay.timer;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayTaskJobProcessor;
-import cn.bootx.platform.common.redis.delay.bean.Job;
+import cn.bootx.platform.common.redis.delay.annotation.DelayJobProcessor;
+import cn.bootx.platform.common.redis.delay.bean.DelayJob;
 import cn.bootx.platform.common.redis.delay.configuration.DelayQueueProperties;
 import cn.bootx.platform.common.redis.delay.container.*;
 import cn.bootx.platform.common.redis.delay.service.DelayJobService;
@@ -39,7 +39,7 @@ public class DelayQueueTimer implements ApplicationListener<ContextRefreshedEven
     private final DelayQueue delayQueue;
     private final DelayQueueProperties delayQueueProperties;
     private final DelayJobService delayJobService;
-    private final DelayTaskJobProcessor delayTaskJobProcessor;
+    private final DelayJobProcessor delayJobProcessor;
     private final LockTemplate lockTemplate;
 
 
@@ -73,20 +73,20 @@ public class DelayQueueTimer implements ApplicationListener<ContextRefreshedEven
         // 读取topic 信息表, 获取数量不为空的主题名称
         for (String topic : delayTopic.getAll()) {
             // 只处理订阅的主题
-            if (!delayTaskJobProcessor.existTopic(topic)){
+            if (!delayJobProcessor.existTopic(topic)){
                continue;
             }
-            Job<?> processJob = delayJobService.getProcessJob(topic);
-            while (processJob != null){
+            DelayJob<?> processDelayJob = delayJobService.getProcessJob(topic);
+            while (processDelayJob != null){
                 try {
-                    delayTaskJobProcessor.invoke(processJob.getTopic(), processJob);
-                    delayJobService.finishJob(processJob);
+                    delayJobProcessor.invoke(processDelayJob.getTopic(), processDelayJob);
+                    delayJobService.finishJob(processDelayJob);
                 } catch (InvocationTargetException | IllegalAccessException | UnSupportOperateException e) {
                     log.warn("消息消费失败! ",e);
                 }
-                delayTopic.decrement(processJob.getTopic());
+                delayTopic.decrement(processDelayJob.getTopic());
                 // 如果有任务就继续进行执行
-                processJob = delayJobService.getProcessJob(topic);
+                processDelayJob = delayJobService.getProcessJob(topic);
             }
         }
     }

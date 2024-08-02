@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.result.merchant;
 
 import cn.daxpay.multi.core.enums.SignTypeEnum;
-import cn.daxpay.multi.core.enums.TradeNotifyTypeEnum;
+import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
 import cn.daxpay.multi.service.enums.MchAppStautsEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -67,7 +67,7 @@ public class MchAppResult {
 
     /**
      * 异步消息通知类型, 当前只支持http方式
-     * @see TradeNotifyTypeEnum
+     * @see MerchantNotifyTypeEnum
      */
     @Schema(description = "异步消息通知类型")
     private String notifyType;

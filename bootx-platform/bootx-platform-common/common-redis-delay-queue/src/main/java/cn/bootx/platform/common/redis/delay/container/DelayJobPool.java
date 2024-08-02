@@ -1,6 +1,6 @@
 package cn.bootx.platform.common.redis.delay.container;
 
-import cn.bootx.platform.common.redis.delay.bean.Job;
+import cn.bootx.platform.common.redis.delay.bean.DelayJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.BoundHashOperations;
@@ -18,12 +18,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DelayJobPool {
 
-    private final RedisTemplate<String,Job<?>> redisTemplate;
+    private final RedisTemplate<String, DelayJob<?>> redisTemplate;
 
     /**
      * 获取正常任务池
      */
-    private BoundHashOperations<String,String,Job<?>> getPool () {
+    private BoundHashOperations<String,String, DelayJob<?>> getPool () {
         String name = "delay:queue:jobs";
         return redisTemplate.boundHashOps(name);
     }
@@ -31,14 +31,14 @@ public class DelayJobPool {
     /**
      * 添加或更新正常任务
      */
-    public void addOrUpdateJob(Job<?> job) {
-        this.getPool().put(job.getId(),job);
+    public void addOrUpdateJob(DelayJob<?> delayJob) {
+        this.getPool().put(delayJob.getId(), delayJob);
     }
 
     /**
      * 获得正常任务
      */
-    public Job<?> getJob(String jobId) {
+    public DelayJob<?> getJob(String jobId) {
         return getPool().get(jobId);
     }
 
@@ -53,7 +53,7 @@ public class DelayJobPool {
     /**
      * 获取死信任务池
      */
-    private BoundHashOperations<String,String,Job<?>> getDeadPool () {
+    private BoundHashOperations<String,String, DelayJob<?>> getDeadPool () {
         String name = "delay:queue:dead:jobs";
         return redisTemplate.boundHashOps(name);
     }
@@ -61,14 +61,14 @@ public class DelayJobPool {
     /**
      * 添加或更新死信任务
      */
-    public void addOrUpdateDeadJob(Job<?> job) {
-        this.getDeadPool().put(job.getId(),job);
+    public void addOrUpdateDeadJob(DelayJob<?> delayJob) {
+        this.getDeadPool().put(delayJob.getId(), delayJob);
     }
 
     /**
      * 获得死信任务
      */
-    public Job<?> getDeadJob(String jobId) {
+    public DelayJob<?> getDeadJob(String jobId) {
         return getDeadPool().get(jobId);
     }
 

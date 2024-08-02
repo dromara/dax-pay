@@ -1,7 +1,7 @@
 package cn.bootx.platform.common.redis.delay.timer;
 
+import cn.bootx.platform.common.redis.delay.bean.QueueJob;
 import cn.bootx.platform.common.redis.delay.bean.DelayJob;
-import cn.bootx.platform.common.redis.delay.bean.Job;
 import cn.bootx.platform.common.redis.delay.configuration.DelayQueueProperties;
 import cn.bootx.platform.common.redis.delay.constants.JobStatus;
 import cn.bootx.platform.common.redis.delay.container.*;
@@ -34,34 +34,34 @@ public record DelayJobHandler(DelayBucket delayBucket,
         while (true) {
             try {
                 // 从存储桶中获取延时任务
-                DelayJob delayJob = delayBucket.getFirstDelayTime(index);
+                QueueJob queueJob = delayBucket.getFirstDelayTime(index);
                 //没有任务
-                if (delayJob == null) {
+                if (queueJob == null) {
                     ThreadUtil.sleep(delayQueueProperties.getSleepTime());
                     continue;
                 }
                 // 延迟时间没到
-                if (delayJob.getDelayDate() > System.currentTimeMillis()) {
+                if (queueJob.getDelayDate() > System.currentTimeMillis()) {
                     ThreadUtil.sleep(delayQueueProperties.getSleepTime());
                     continue;
                 }
-                Job<?> job = delayJobPool.getJob(delayJob.getJodId());
+                DelayJob<?> delayJob = delayJobPool.getJob(queueJob.getJodId());
                 //延迟任务元数据不存在
-                if (job == null) {
-                    log.debug("移除结束的任务:{}", delayJob.getJodId());
-                    delayBucket.removeDelayTime(index, delayJob);
+                if (delayJob == null) {
+                    log.debug("移除结束的任务:{}", queueJob.getJodId());
+                    delayBucket.removeDelayTime(index, queueJob);
                     continue;
                 }
                 // 任务超时
-                JobStatus status = job.getStatus();
+                JobStatus status = delayJob.getStatus();
                 if (JobStatus.RESERVED.equals(status)) {
-                    log.debug("超时任务处理:{}", job.getId());
+                    log.debug("超时任务处理:{}", delayJob.getId());
                     // 超时任务处理, 重新投递到延时队列
-                    this.processTtrJob(delayJob, job);
+                    this.processTtrJob(queueJob, delayJob);
                 }  else if (JobStatus.DELAY.equals(status)){
                     // 延时任务处理, 写入延时队列
-                    log.debug("延时任务处理:{}", job.getId());
-                    this.processDelayJob(delayJob, job);
+                    log.debug("延时任务处理:{}", delayJob.getId());
+                    this.processDelayJob(queueJob, delayJob);
                 }
             } catch (Exception e) {
                 log.error("扫描DelayBucket出错：", e);
@@ -73,35 +73,35 @@ public record DelayJobHandler(DelayBucket delayBucket,
     /**
      * 处理超时任务, 超时后如果重试未超过重试次数则重新投递,
      */
-    private void processTtrJob(DelayJob delayJob, Job<?> job) {
+    private void processTtrJob(QueueJob queueJob, DelayJob<?> delayJob) {
         // 加锁
-        LockInfo lock = lockTemplate.lock("lock:processTtrJob:"+job.getId());
+        LockInfo lock = lockTemplate.lock("lock:processTtrJob:"+ delayJob.getId());
         if (lock == null){
             return;
         }
         try {
             // 如果重试次数未超过最大次数进行重新投递, 超过后则直接设置为死亡
-            if (job.getRetryCount() < delayQueueProperties.getRetryCount()){
+            if (delayJob.getRetryCount() < delayQueueProperties.getRetryCount()){
                 // 修改任务池状态
-                delayJobPool.addOrUpdateJob(job);
+                delayJobPool.addOrUpdateJob(delayJob);
                 // 移除delayBucket中的任务
-                delayBucket.removeDelayTime(index, delayJob);
+                delayBucket.removeDelayTime(index, queueJob);
                 // 设置指定时间后重新投递, 当前时间 + 指定延后推送时间
                 long delayDate = System.currentTimeMillis() + delayQueueProperties.getRetryTime();
-                delayJob.setDelayDate(delayDate);
+                queueJob.setDelayDate(delayDate);
                 // 再次添加到delayBucket中
-                delayBucket.addDelayJob(delayJob);
-                job.setRetryCount(job.getRetryCount() + 1)
+                delayBucket.addDelayJob(queueJob);
+                delayJob.setRetryCount(delayJob.getRetryCount() + 1)
                         .setStatus(JobStatus.DELAY);
-                delayJobPool.addOrUpdateJob(job);
+                delayJobPool.addOrUpdateJob(delayJob);
             } else {
-                log.debug("任务处理失败, 移入死信队列:{}", job.getId());
-                job.setStatus(JobStatus.DEAD);
-                delayJobPool.removeJob(job.getId());
-                delayJobPool.addOrUpdateDeadJob(job);
+                log.debug("任务处理失败, 移入死信队列:{}", delayJob.getId());
+                delayJob.setStatus(JobStatus.DEAD);
+                delayJobPool.removeJob(delayJob.getId());
+                delayJobPool.addOrUpdateDeadJob(delayJob);
                 // 写入死信队列
-                delayTopic.incrementDead(job.getTopic());
-                delayQueue.pushDeadJob(delayJob);
+                delayTopic.incrementDead(delayJob.getTopic());
+                delayQueue.pushDeadJob(queueJob);
             }
         } finally {
             lockTemplate.releaseLock(lock);
@@ -111,22 +111,22 @@ public record DelayJobHandler(DelayBucket delayBucket,
     /**
      * 处理延时任务, 写入就绪队列
      */
-    private void processDelayJob(DelayJob delayJob, Job<?> job) {
+    private void processDelayJob(QueueJob queueJob, DelayJob<?> delayJob) {
         // 加锁
-        LockInfo lock = lockTemplate.lock("lock:processDelayJob:"+job.getId());
+        LockInfo lock = lockTemplate.lock("lock:processDelayJob:"+ delayJob.getId());
         if (lock == null){
             return;
         }
         try {
             // 修改任务池状态
-            job.setStatus(JobStatus.READY);
-            delayJobPool.addOrUpdateJob(job);
+            delayJob.setStatus(JobStatus.READY);
+            delayJobPool.addOrUpdateJob(delayJob);
             // 设置到待处理任务
-            delayQueue.pushJob(delayJob);
+            delayQueue.pushJob(queueJob);
             // topic中待处理数量自增+1
-            delayTopic.increment(job.getTopic());
+            delayTopic.increment(delayJob.getTopic());
             // 移除delayBucket中的任务
-            delayBucket.removeDelayTime(index, delayJob);
+            delayBucket.removeDelayTime(index, queueJob);
         } finally {
             lockTemplate.releaseLock(lock);
         }

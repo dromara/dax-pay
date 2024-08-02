@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.common.context;
 
-import cn.daxpay.multi.core.enums.TradeNotifyTypeEnum;
+import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
 import cn.daxpay.multi.service.enums.MchAppStautsEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -52,7 +52,7 @@ public class MchAppLocal {
 
     /**
      * 异步消息通知类型, 当前只支持http方式
-     * @see TradeNotifyTypeEnum
+     * @see MerchantNotifyTypeEnum
      */
     private String notifyType;
 

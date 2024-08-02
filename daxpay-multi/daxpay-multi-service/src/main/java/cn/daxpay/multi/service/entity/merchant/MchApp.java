@@ -3,7 +3,7 @@ package cn.daxpay.multi.service.entity.merchant;
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.SignTypeEnum;
-import cn.daxpay.multi.core.enums.TradeNotifyTypeEnum;
+import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
 import cn.daxpay.multi.service.convert.merchant.MchAppConvert;
 import cn.daxpay.multi.service.enums.MchAppStautsEnum;
 import cn.daxpay.multi.service.result.merchant.MchAppResult;
@@ -66,7 +66,7 @@ public class MchApp extends MpBaseEntity implements ToResult<MchAppResult> {
 
     /**
      * 异步消息通知类型, 当前只支持http方式
-     * @see TradeNotifyTypeEnum
+     * @see MerchantNotifyTypeEnum
      */
     private String notifyType;
 

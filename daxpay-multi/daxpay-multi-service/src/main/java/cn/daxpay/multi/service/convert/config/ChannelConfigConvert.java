@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.convert.config;
 
 import cn.daxpay.multi.service.entity.config.ChannelConfig;
-import cn.daxpay.multi.service.result.constant.ChannelConfigResult;
+import cn.daxpay.multi.service.result.config.ChannelConfigResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
