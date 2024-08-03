@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,7 +84,7 @@ public class RefundAssistService {
                 .setClientIp(refundParam.getClientIp())
                 .setReqTime(refundParam.getReqTime())
                 .setAttach(refundParam.getAttach())
-                .setNotifyUrl(refundParam.getNotifyUrl());;
+                .setNotifyUrl(refundParam.getNotifyUrl());
         refundOrderManager.save(refundOrder);
         return refundOrder;
     }

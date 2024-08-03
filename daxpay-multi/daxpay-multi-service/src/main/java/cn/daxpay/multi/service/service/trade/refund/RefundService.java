@@ -11,12 +11,13 @@ import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.result.trade.refund.RefundResult;
 import cn.daxpay.multi.service.bo.trade.RefundResultBo;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
-import cn.daxpay.multi.service.service.order.pay.PayOrderService;
+import cn.daxpay.multi.service.service.order.refund.RefundOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.strategy.AbsRefundStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
@@ -29,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -48,10 +48,16 @@ public class RefundService {
     private final PayOrderQueryService payOrderQueryService;
 
     private final LockTemplate lockTemplate;
+
     private final RefundAssistService refundAssistService;
-    private final PayOrderService payOrderService;
+
+    private final PayOrderManager payOrderManager;
+
     private final TradeFlowRecordService tradeFlowRecordService;
+
     private final MerchantNoticeService merchantNoticeService;
+
+    private final RefundOrderService refundOrderService;
 
     /**
      * 分支付通道进行退款
@@ -125,7 +131,7 @@ public class RefundService {
         var orderRefundableBalance = payOrder.getRefundableBalance().subtract(refundParam.getAmount());
         payOrder.setRefundableBalance(orderRefundableBalance)
                 .setRefundStatus(PayRefundStatusEnum.REFUNDING.getCode());
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         // -----------------------   退款订单创建   -------------------------
         return refundAssistService.createOrder(refundParam, payOrder);
     }
@@ -155,6 +161,8 @@ public class RefundService {
         try {
             // 执行退款策略
             refundResultBo = refundStrategy.doRefundHandler();
+            // 注册一个两分钟后执行的同步任务, 作为接不到回调任务的兜底
+            refundOrderService.register(refundOrder);
         } catch (Exception e) {
             log.error("重新退款失败:", e);
             // 记录退款失败的记录
@@ -200,15 +208,12 @@ public class RefundService {
             // 记录流水
             tradeFlowRecordService.saveRefund(refundOrder);
         }
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
 
         // 更新退款订单
         refundAssistService.updateOrder(refundOrder, refundInfo);
 
         // 发送通知
-        List<String> list = List.of(RefundStatusEnum.SUCCESS.getCode(), RefundStatusEnum.CLOSE.getCode(),  RefundStatusEnum.FAIL.getCode());
-        if (list.contains(refundOrder.getStatus())){
-            merchantNoticeService.registerRefundNotice(refundOrder);
-        }
+        merchantNoticeService.registerRefundNotice(refundOrder);
     }
 }

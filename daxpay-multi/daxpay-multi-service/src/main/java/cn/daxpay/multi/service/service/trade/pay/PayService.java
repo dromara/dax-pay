@@ -6,9 +6,9 @@ import cn.daxpay.multi.core.exception.TradeProcessingException;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.service.bo.trade.PayResultBo;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
-import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.strategy.AbsPayStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
@@ -35,7 +35,7 @@ public class PayService {
     private final PayAssistService payAssistService;
 
     private final LockTemplate lockTemplate;
-    private final PayOrderService payOrderService;
+    private final PayOrderManager payOrderManager;
     private final TradeFlowRecordService tradeFlowRecordService;
     private final MerchantNoticeService merchantNoticeService;
 
@@ -95,7 +95,7 @@ public class PayService {
                 payOrder.setErrorCode("支付出现异常");
             }
             // 这个方法没有事务, 所以可以正常更新
-            payOrderService.updateById(payOrder);
+            payOrderManager.updateById(payOrder);
             throw e;
         }
         // 支付调起成功后操作, 使用事务来保证数据一致性
@@ -113,10 +113,10 @@ public class PayService {
                     .setStatus(PayStatusEnum.SUCCESS.getCode())
                     .setPayTime(result.getFinishTime());
         }
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         payOrder.setErrorCode(null);
         payOrder.setErrorMsg(null);
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())){
             tradeFlowRecordService.savePay(payOrder);
@@ -145,7 +145,7 @@ public class PayService {
         } catch (Exception e) {
             // 记录错误原因, 此处没有事务, 所以可以正常更新
             payOrder.setErrorMsg(e.getMessage());
-            payOrderService.updateById(payOrder);
+            payOrderManager.updateById(payOrder);
             throw e;
         }
         // 支付调起成功后操作, 使用事务来保证数据一致性
@@ -164,11 +164,11 @@ public class PayService {
                     .setStatus(PayStatusEnum.SUCCESS.getCode())
                     .setPayTime(payResultBo.getFinishTime());
         }
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         // 扩展记录更新
         payOrder.setErrorMsg(null);
         payOrder.setErrorCode(null);
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())){
             tradeFlowRecordService.savePay(payOrder);

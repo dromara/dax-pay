@@ -1,10 +1,12 @@
 package cn.daxpay.multi.service.service.trade.transfer;
 
+import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.core.result.trade.transfer.TransferResult;
 import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.strategy.AbsTransferStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
 import cn.hutool.extra.spring.SpringUtil;
@@ -13,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 /**
  * 转账服务
@@ -27,6 +31,7 @@ public class TransferService {
     private final TransferAssistService transferAssistService;
 
     private final TransferOrderManager transferOrderManager;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 转账
@@ -64,6 +69,10 @@ public class TransferService {
         order.setStatus(transferInfo.getStatus().getCode())
                 .setFinishTime(transferInfo.getFinishTime())
                 .setOutTransferNo(transferInfo.getOutTransferNo());
+        if (Objects.equals(transferInfo.getStatus(), TransferStatusEnum.SUCCESS)){
+            merchantNoticeService.registerTransferNotice(order);
+        }
+
         transferOrderManager.updateById(order);
     }
 }

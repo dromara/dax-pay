@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.service.sync.transfer;
+package cn.daxpay.multi.service.service.trade.transfer;
 
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
@@ -14,6 +14,7 @@ import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.transfer.TransferOrderQueryService;
 import cn.daxpay.multi.service.service.record.sync.TradeSyncRecordService;
 import cn.daxpay.multi.service.strategy.AbsSyncTransferOrderStrategy;
@@ -40,6 +41,7 @@ public class TransferSyncService {
     private final LockTemplate lockTemplate;
     private final TradeSyncRecordService tradeSyncRecordService;
     private final TransferOrderManager transferOrderManager;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 转账同步接口
@@ -152,6 +154,7 @@ public class TransferSyncService {
         order.setStatus(TransferStatusEnum.SUCCESS.getCode())
                 .setFinishTime(syncResult.getFinishTime());
         transferOrderManager.updateById(order);
+        merchantNoticeService.registerTransferNotice(order);
     }
 
 
@@ -162,6 +165,7 @@ public class TransferSyncService {
         // 执行策略的关闭方法
         order.setStatus(TransferStatusEnum.CLOSE.getCode());
         transferOrderManager.updateById(order);
+        merchantNoticeService.registerTransferNotice(order);
     }
 
 

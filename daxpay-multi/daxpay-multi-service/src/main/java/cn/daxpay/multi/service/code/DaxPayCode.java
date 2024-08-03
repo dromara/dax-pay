@@ -20,5 +20,11 @@ public interface DaxPayCode {
         /** 支付任务超时 */
         String MERCHANT_PAY_TIMEOUT = "PayTimeout";
 
+        /** 退款任务同步 默认两分钟后查询 */
+        String MERCHANT_REFUND_SYNC = "RefundSync";
+
+        /** 转账任务同步 默认两分钟后查询 */
+        String MERCHANT_TRANSFER_SYNC = "TransferSync";
+
     }
 }

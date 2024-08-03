@@ -5,10 +5,10 @@ import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
-import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -34,7 +34,7 @@ public class PayCallbackService {
 
     private final LockTemplate lockTemplate;
 
-    private final PayOrderService payOrderService;
+    private final PayOrderManager payOrderManager;
 
     private final TradeFlowRecordService tradeFlowRecordService;
 
@@ -102,7 +102,7 @@ public class PayCallbackService {
                 .setPayTime(callbackInfo.getFinishTime())
                 .setOutOrderNo(callbackInfo.getOutTradeNo())
                 .setCloseTime(null);
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         tradeFlowRecordService.savePay(payOrder);
         merchantNoticeService.registerPayNotice(payOrder);
     }
@@ -127,8 +127,8 @@ public class PayCallbackService {
         payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
                 .setErrorMsg(callbackInfo.getTradeErrorMsg())
                 .setCloseTime(LocalDateTime.now());
-        payOrderService.updateById(payOrder);
-//        clientNoticeService.registerPayNotice(payOrder);
+        payOrderManager.updateById(payOrder);
+        merchantNoticeService.registerPayNotice(payOrder);
     }
 
 }

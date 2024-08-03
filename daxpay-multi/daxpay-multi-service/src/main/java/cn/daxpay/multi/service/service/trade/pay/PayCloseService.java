@@ -5,10 +5,11 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.exception.*;
 import cn.daxpay.multi.core.param.trade.pay.PayCloseParam;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.record.close.PayCloseRecord;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
-import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.close.PayCloseRecordService;
 import cn.daxpay.multi.service.strategy.AbsPayCloseStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
@@ -31,11 +32,13 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PayCloseService {
-    private final PayOrderService payOrderService;
+    private final PayOrderManager payOrderManager;
 
     private final PayOrderQueryService payOrderQueryService;
 
     private final PayCloseRecordService payCloseRecordService;
+
+    private final MerchantNoticeService merchantNoticeService;
 
     private final LockTemplate lockTemplate;
 
@@ -76,9 +79,9 @@ public class PayCloseService {
             var payStatusEnum = useCancel ? PayStatusEnum.CANCEL : PayStatusEnum.CLOSE;
             payOrder.setStatus(payStatusEnum.getCode())
                     .setCloseTime(LocalDateTime.now());
-            payOrderService.updateById(payOrder);
+            payOrderManager.updateById(payOrder);
             // 发送通知
-//        clientsService.registerPayNotice(payOrder);
+            merchantNoticeService.registerPayNotice(payOrder);
             this.saveRecord(payOrder,closeType,null);
             // 返回结果
         } catch (Exception e) {

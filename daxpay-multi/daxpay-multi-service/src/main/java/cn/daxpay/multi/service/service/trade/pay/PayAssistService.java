@@ -14,10 +14,10 @@ import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderService;
-import cn.daxpay.multi.service.service.sync.pay.PaySyncService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,10 +39,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PayAssistService {
 
-    private final PayOrderService payOrderService;
+    private final PayOrderManager payOrderManager;
 
     private final PayOrderQueryService payOrderQueryService;
     private final PaySyncService paySyncService;
+    private final PayOrderService payOrderService;
 
 
     /**
@@ -65,7 +65,9 @@ public class PayAssistService {
         if (order.getAllocation()) {
             order.setAllocStatus(PayAllocStatusEnum.WAITING.getCode());
         }
-        payOrderService.save(order);
+        payOrderManager.save(order);
+        // 注册支付超时任务
+        payOrderService.register(order);
         return order;
     }
 
@@ -87,7 +89,7 @@ public class PayAssistService {
         if (!order.getAllocation()) {
             order.setAllocStatus(null);
         }
-        payOrderService.updateById(order);
+        payOrderManager.updateById(order);
     }
 
     /**

@@ -1,14 +1,17 @@
 package cn.daxpay.multi.service.service.order.pay;
 
+import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
+import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
+import cn.bootx.platform.common.redis.delay.service.DelayJobService;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
+import cn.daxpay.multi.service.code.DaxPayCode;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
+import cn.daxpay.multi.service.service.trade.pay.PaySyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,38 +24,28 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PayOrderService {
     private final PayOrderManager payOrderManager;
-
-//    private final PayExpiredTimeService expiredTimeService;
-
-    // 支付完成常量集合
-    private final List<String> ORDER_FINISH = List.of(
-            PayStatusEnum.CLOSE.getCode(),
-            PayStatusEnum.CANCEL.getCode(),
-            PayStatusEnum.SUCCESS.getCode());
+    private final DelayJobService delayJobService;
+    private final PaySyncService paySyncService;
 
     /**
-     * 查询
+     * 注册超时时间
      */
-    public Optional<PayOrder> findById(Long id){
-        return payOrderManager.findById(id);
+    public void register(PayOrder payOrder) {
+        delayJobService.registerByTransaction(payOrder.getId(), DaxPayCode.Event.MERCHANT_PAY_TIMEOUT, payOrder.getExpiredTime());
     }
 
     /**
-     * 新增
+     * 接收订单超时事件
      */
-    public void save(PayOrder payOrder){
-        payOrderManager.save(payOrder);
-//      expiredTimeService.registerExpiredTime(payOrder);
-    }
-
-    /**
-     * 更新
-     */
-    public void updateById(PayOrder payOrder){
-        // 如果是异步支付且支付订单完成, 需要删除订单超时任务记录
-        if (ORDER_FINISH.contains(payOrder.getStatus())){
-//            expiredTimeService.cancelExpiredTime(payOrder.getOrderNo());
+    @DelayEventListener(DaxPayCode.Event.MERCHANT_PAY_TIMEOUT)
+    public void payExpired(DelayJobEvent<Long> event) {
+        Optional<PayOrder> orderOpt = payOrderManager.findById(event.getMessage());
+        if (orderOpt.isPresent()) {
+            PayOrder payOrder = orderOpt.get();
+            // 不是支付中不需要进行同步
+            if (payOrder.getStatus().equals(PayStatusEnum.PROGRESS.getCode())|| payOrder.getStatus().equals(PayStatusEnum.TIMEOUT.getCode())) {
+                paySyncService.syncPayOrder(payOrder);
+            }
         }
-        payOrderManager.updateById(payOrder);
     }
 }

@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.service.sync.refund;
+package cn.daxpay.multi.service.service.trade.refund;
 
 import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
@@ -14,12 +14,12 @@ import cn.daxpay.multi.core.param.trade.refund.RefundSyncParam;
 import cn.daxpay.multi.core.result.trade.refund.RefundSyncResult;
 import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
-import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.order.refund.RefundOrderQueryService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.service.record.sync.TradeSyncRecordService;
@@ -53,7 +53,7 @@ public class RefundSyncService {
 
     private final LockTemplate lockTemplate;
 
-    private final PayOrderService payOrderService;
+    private final PayOrderManager payOrderManager;
 
     private final TradeFlowRecordService tradeFlowRecordService;
 
@@ -171,7 +171,7 @@ public class RefundSyncService {
      * 退款成功, 更新退款单和支付单
      */
     private void success(RefundOrder refundOrder,RefundSyncResultBo syncResult) {
-        PayOrder payOrder = payOrderService.findById(refundOrder.getOrderId())
+        PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
 
         // 订单相关状态
@@ -189,7 +189,7 @@ public class RefundSyncService {
         payOrder.setRefundStatus(afterPayRefundStatus.getCode());
 
         // 更新订单和退款相关订单
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
 
         // 记录流水
@@ -203,7 +203,7 @@ public class RefundSyncService {
      * 退款失败, 关闭退款单并将失败的退款金额归还回订单
      */
     private void close(RefundOrder refundOrder) {
-        PayOrder payOrder = payOrderService.findById(refundOrder.getOrderId())
+        PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
         // 退款失败返还后的余额
         var payOrderAmount =  refundOrder
@@ -222,7 +222,7 @@ public class RefundSyncService {
         refundOrder.setStatus(RefundStatusEnum.CLOSE.getCode());
 
         // 更新订单和退款相关订单
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
         // 发送通知
         merchantNoticeService.registerRefundNotice(refundOrder);

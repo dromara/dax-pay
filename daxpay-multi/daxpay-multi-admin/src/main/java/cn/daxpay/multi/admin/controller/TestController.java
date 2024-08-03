@@ -61,7 +61,7 @@ public class TestController {
     public Result<Object> redis(){
         PayOrder payOrder = new PayOrder();
         payOrder.setOrderNo("123");
-       redisTemplate.opsForValue().set("payOrder",payOrder);
+        redisTemplate.opsForValue().set("payOrder",payOrder);
         var payOrder1 = redisTemplate.opsForValue().get("payOrder");
         return Res.ok(payOrder1);
     }

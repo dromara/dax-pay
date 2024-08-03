@@ -8,11 +8,11 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
-import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -36,7 +36,7 @@ public class RefundCallbackService {
 
     private final LockTemplate lockTemplate;
     private final TradeFlowRecordService tradeFlowRecordService;
-    private final PayOrderService payOrderService;
+    private final PayOrderManager payOrderManager;
     private final MerchantNoticeService merchantNoticeService;
 
     /**
@@ -88,7 +88,7 @@ public class RefundCallbackService {
      */
     private void success(RefundOrder refundOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        PayOrder payOrder = payOrderService.findById(refundOrder.getOrderId())
+        PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
 
         // 订单相关状态
@@ -106,7 +106,7 @@ public class RefundCallbackService {
         payOrder.setRefundStatus(payRefundStatusEnum.getCode());
 
         // 更新订单和退款相关订单
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
 
         // 记录流水
@@ -122,7 +122,7 @@ public class RefundCallbackService {
     private void close(RefundOrder refundOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
 
-        PayOrder payOrder = payOrderService.findById(refundOrder.getOrderId())
+        PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
         // 退款失败返还后的余额
         var payOrderAmount = refundOrder.getAmount().add(payOrder.getRefundableBalance());
@@ -140,7 +140,7 @@ public class RefundCallbackService {
                 .setErrorMsg(callbackInfo.getTradeErrorMsg());
 
         // 更新订单和退款相关订单
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
         // 发送通知
         merchantNoticeService.registerRefundNotice(refundOrder);

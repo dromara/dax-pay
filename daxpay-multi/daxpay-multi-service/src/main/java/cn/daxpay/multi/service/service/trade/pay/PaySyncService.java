@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.service.sync.pay;
+package cn.daxpay.multi.service.service.trade.pay;
 
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.core.util.DateTimeUtil;
@@ -12,10 +12,11 @@ import cn.daxpay.multi.core.param.trade.pay.PaySyncParam;
 import cn.daxpay.multi.core.result.trade.pay.PaySyncResult;
 import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
-import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.daxpay.multi.service.service.record.sync.TradeSyncRecordService;
 import cn.daxpay.multi.service.strategy.AbsPayCloseStrategy;
 import cn.daxpay.multi.service.strategy.AbsSyncPayOrderStrategy;
@@ -45,11 +46,12 @@ import static cn.daxpay.multi.core.enums.PayStatusEnum.*;
 public class PaySyncService {
     private final PayOrderQueryService payOrderQueryService;
 
-    private final PayOrderService payOrderService;
+    private final PayOrderManager payOrderManager;
 
     private final TradeSyncRecordService tradeSyncRecordService;
 
     private final LockTemplate lockTemplate;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 支付同步, 开启一个新的事务, 不受外部抛出异常的影响
@@ -88,7 +90,7 @@ public class PaySyncService {
             // 支付订单的网关订单号是否一致, 不一致进行更新
             if (!Objects.equals(syncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
                 payOrder.setOutOrderNo(syncResult.getOutOrderNo());
-                payOrderService.updateById(payOrder);
+                payOrderManager.updateById(payOrder);
             }
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态或记录异常信息
             boolean statusSync = this.checkAndAdjust(syncResult,payOrder);
@@ -168,7 +170,8 @@ public class PaySyncService {
         order.setStatus(SUCCESS.getCode())
                 .setPayTime(param.getFinishTime())
                 .setCloseTime(null);
-        payOrderService.updateById(order);
+        payOrderManager.updateById(order);
+        merchantNoticeService.registerPayNotice(order);
     }
 
     /**
@@ -179,21 +182,23 @@ public class PaySyncService {
         // 执行策略的关闭方法
         order.setStatus(CLOSE.getCode())
                 .setCloseTime(LocalDateTime.now());
-        payOrderService.updateById(order);
+        payOrderManager.updateById(order);
+        merchantNoticeService.registerPayNotice(order);
     }
     /**
      * 关闭网关交易, 同时也会关闭本地支付
      * 回调: 执行所有的支付通道关闭支付逻辑
      */
-    private void closeRemote(PayOrder payOrder) {
+    private void closeRemote(PayOrder order) {
         // 初始化调整参数
-        AbsPayCloseStrategy strategy = PaymentStrategyFactory.create(payOrder.getChannel(), AbsPayCloseStrategy.class);
-        strategy.setOrder(payOrder);
+        AbsPayCloseStrategy strategy = PaymentStrategyFactory.create(order.getChannel(), AbsPayCloseStrategy.class);
+        strategy.setOrder(order);
         // 执行策略的关闭方法
         strategy.doCloseHandler();
-        payOrder.setStatus(CLOSE.getCode())
+        order.setStatus(CLOSE.getCode())
                 .setCloseTime(LocalDateTime.now());
-        payOrderService.updateById(payOrder);
+        payOrderManager.updateById(order);
+        merchantNoticeService.registerPayNotice(order);
     }
 
     /**

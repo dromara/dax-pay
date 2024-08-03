@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 
 /**
  * 延时任务接收方法注解
+ * 参数需要固定为 DelayJobEvent<T>
+ * @see DelayJobEvent
  * @author xxm
  * @since 2024/7/31
  */
