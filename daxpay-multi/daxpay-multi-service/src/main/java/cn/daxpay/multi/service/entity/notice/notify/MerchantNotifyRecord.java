@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_client_notify_record")
+@TableName("pay_merchant_notify_record")
 public class MerchantNotifyRecord extends MchRecordEntity implements ToResult<MerchantNotifyRecordResult> {
 
     /** 任务ID */

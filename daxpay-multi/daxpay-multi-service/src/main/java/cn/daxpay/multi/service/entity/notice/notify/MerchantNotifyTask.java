@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_client_notify_task")
+@TableName("pay_merchant_notify_task")
 public class MerchantNotifyTask extends MchBaseEntity implements ToResult<MerchantNotifyTaskResult> {
 
     /** 本地交易ID */

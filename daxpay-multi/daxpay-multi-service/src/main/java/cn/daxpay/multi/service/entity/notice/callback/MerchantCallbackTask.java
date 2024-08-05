@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_client_callback_task")
+@TableName("pay_merchant_callback_task")
 public class MerchantCallbackTask extends MchBaseEntity implements ToResult<MerchantCallbackTaskResult> {
 
     /** 本地交易ID */

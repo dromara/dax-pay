@@ -40,7 +40,7 @@ public class MerchantCallbackQueryService {
      */
     public MerchantCallbackTaskResult findById(Long id){
         return taskManager.findById(id)
-                .map(MerchantCallbackTask::toResult).orElseThrow(() -> new DataNotExistException("商户订阅通知任务不存在"));
+                .map(MerchantCallbackTask::toResult).orElseThrow(() -> new DataNotExistException("商户回调通知任务不存在"));
     }
 
     /**
