@@ -20,7 +20,6 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayConstants;
 import com.alipay.api.internal.util.AlipaySignature;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +91,6 @@ public class AliPayCallbackService {
     /**
      * 验证信息格式是否合法
      */
-    @SneakyThrows
     public boolean verifyNotify() {
         Map<String, String> params =PaymentContextLocal.get().getCallbackInfo().getCallbackParam();
         String callReq = JSONUtil.toJsonStr(params);

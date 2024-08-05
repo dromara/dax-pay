@@ -165,8 +165,6 @@ public class AliPaySyncService {
         model.setOutBizNo(transferOrder.getTransferNo());
         request.setBizModel(model);
         AlipayFundTransCommonQueryResponse response = alipayClient.execute(request);
-        System.out.println(response.getBody());
         return new TransferSyncResult().setStatus(TransferStatusEnum.FAIL.getCode());
     }
-
 }
