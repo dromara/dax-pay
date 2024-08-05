@@ -1,7 +1,10 @@
 package cn.daxpay.multi.service.entity.notice.callback;
 
-import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.common.entity.MchRecordEntity;
+import cn.daxpay.multi.service.convert.notice.MerchantCallbackConvert;
+import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.daxpay.multi.service.result.notice.callback.MerchantCallbackRecordResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_client_callback_record")
-public class MerchantCallbackRecord extends MchRecordEntity {
+public class MerchantCallbackRecord extends MchRecordEntity implements ToResult<MerchantCallbackRecordResult> {
 
     /** 任务ID */
     private Long taskId;
@@ -38,4 +41,12 @@ public class MerchantCallbackRecord extends MchRecordEntity {
 
     /** 错误信息 */
     private String errorMsg;
+
+    /**
+     * 转换
+     */
+    @Override
+    public MerchantCallbackRecordResult toResult() {
+        return MerchantCallbackConvert.CONVERT.toResult(this);
+    }
 }

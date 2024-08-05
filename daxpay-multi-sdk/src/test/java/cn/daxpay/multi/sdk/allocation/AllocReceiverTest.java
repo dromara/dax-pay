@@ -22,7 +22,7 @@ import org.junit.Test;
  * @author xxm
  * @since 2024/5/27
  */
-public class AllocationReceiverTest {
+public class AllocReceiverTest {
 
     @Before
     public void init() {

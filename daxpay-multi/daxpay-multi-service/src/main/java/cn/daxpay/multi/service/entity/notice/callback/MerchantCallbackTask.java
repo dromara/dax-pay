@@ -1,10 +1,13 @@
 package cn.daxpay.multi.service.entity.notice.callback;
 
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.result.order.PayOrderResult;
 import cn.daxpay.multi.core.result.order.RefundOrderResult;
 import cn.daxpay.multi.core.result.order.TransferOrderResult;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
+import cn.daxpay.multi.service.convert.notice.MerchantCallbackConvert;
+import cn.daxpay.multi.service.result.notice.callback.MerchantCallbackTaskResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,7 +26,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_client_callback_task")
-public class MerchantCallbackTask extends MchBaseEntity {
+public class MerchantCallbackTask extends MchBaseEntity implements ToResult<MerchantCallbackTaskResult> {
 
     /** 本地交易ID */
     private Long tradeId;
@@ -55,7 +58,7 @@ public class MerchantCallbackTask extends MchBaseEntity {
     /** 发送次数 */
     private Integer sendCount;
 
-    /** 延迟次数 */
+    /** 延迟重试次数 */
     private Integer delayCount;
 
     /** 发送地址 */
@@ -63,4 +66,12 @@ public class MerchantCallbackTask extends MchBaseEntity {
 
     /** 最后发送时间 */
     private LocalDateTime latestTime;
+
+    /**
+     * 转换
+     */
+    @Override
+    public MerchantCallbackTaskResult toResult() {
+        return MerchantCallbackConvert.CONVERT.toResult(this);
+    }
 }

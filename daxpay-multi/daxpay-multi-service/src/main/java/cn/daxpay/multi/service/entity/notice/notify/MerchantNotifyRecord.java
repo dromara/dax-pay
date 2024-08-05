@@ -1,14 +1,17 @@
 package cn.daxpay.multi.service.entity.notice.notify;
 
-import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.common.entity.MchRecordEntity;
+import cn.daxpay.multi.service.convert.notice.MerchantNotifyConvert;
+import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.daxpay.multi.service.result.notice.notify.MerchantNotifyRecordResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 客户通知消息发送记录
+ * 客户订阅通知发送记录
  * @author xxm
  * @since 2024/7/30
  */
@@ -16,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_client_notify_record")
-public class MerchantNotifyRecord extends MchRecordEntity {
+public class MerchantNotifyRecord extends MchRecordEntity implements ToResult<MerchantNotifyRecordResult> {
 
     /** 任务ID */
     private Long taskId;
@@ -38,4 +41,12 @@ public class MerchantNotifyRecord extends MchRecordEntity {
 
     /** 错误信息 */
     private String errorMsg;
+
+    /**
+     * 转换
+     */
+    @Override
+    public MerchantNotifyRecordResult toResult() {
+        return MerchantNotifyConvert.CONVERT.toResult(this);
+    }
 }

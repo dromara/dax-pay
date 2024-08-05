@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 商户消息通知发送服务类
+ * 商户订阅消息通知发送服务类
  * @author xxm
  * @since 2024/7/30
  */
@@ -132,6 +132,27 @@ public class MerchantNotifySendService {
     public void receiveJob(DelayJobEvent<Long> event){
         // 获取任务
         Long taskId = event.getMessage();
+        var taskOpt = taskManager.findById(taskId);
+        if (taskOpt.isPresent()){
+            var task = taskOpt.get();
+            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+            MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+            // 判断通知方式是否为http并且订阅了该类型的通知
+            boolean subscribe = notifyConfigService.getSubscribeByAppIdAndType(mchAppInfo.getAppId(), task.getNotifyType());
+            if (Objects.equals(mchAppInfo.getNotifyType(), MerchantNotifyTypeEnum.HTTP.getCode()) && subscribe){
+                this.sendData(task, mchAppInfo.getNotifyUrl(), LocalDateTime.now(), true);
+            } else {
+                log.info("商户消息通知未开启，任务ID：{}",taskId);
+            }
+        } else {
+            log.error("发送任务不存在，任务ID：{}",taskId);
+        }
+    }
+
+    /**
+     * 手动发送
+     */
+    public void send(Long taskId){
         var taskOpt = taskManager.findById(taskId);
         if (taskOpt.isPresent()){
             var task = taskOpt.get();

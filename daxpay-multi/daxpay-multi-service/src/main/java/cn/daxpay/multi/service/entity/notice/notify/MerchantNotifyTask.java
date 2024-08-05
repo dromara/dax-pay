@@ -1,7 +1,10 @@
 package cn.daxpay.multi.service.entity.notice.notify;
 
-import cn.daxpay.multi.service.enums.NotifyTypeEnum;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
+import cn.daxpay.multi.service.convert.notice.MerchantNotifyConvert;
+import cn.daxpay.multi.service.enums.NotifyTypeEnum;
+import cn.daxpay.multi.service.result.notice.notify.MerchantNotifyTaskResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -12,7 +15,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 客户通知消息任务
+ * 客户订阅通知消息任务
  * @author xxm
  * @since 2024/7/30
  */
@@ -20,7 +23,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_client_notify_task")
-public class MerchantNotifyTask extends MchBaseEntity {
+public class MerchantNotifyTask extends MchBaseEntity implements ToResult<MerchantNotifyTaskResult> {
 
     /** 本地交易ID */
     private Long tradeId;
@@ -52,4 +55,12 @@ public class MerchantNotifyTask extends MchBaseEntity {
 
     /** 最后发送时间 */
     private LocalDateTime latestTime;
+
+    /**
+     * 转换
+     */
+    @Override
+    public MerchantNotifyTaskResult toResult() {
+        return MerchantNotifyConvert.CONVERT.toResult(this);
+    }
 }

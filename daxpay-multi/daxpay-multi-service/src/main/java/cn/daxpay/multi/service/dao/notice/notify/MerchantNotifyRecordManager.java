@@ -1,7 +1,10 @@
 package cn.daxpay.multi.service.dao.notice.notify;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.notice.notify.MerchantNotifyRecord;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -15,4 +18,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class MerchantNotifyRecordManager extends BaseManager<MerchantNotifyRecordMapper, MerchantNotifyRecord> {
+
+    /**
+     * 分页
+     */
+    public Page<MerchantNotifyRecord> page(PageParam param, Long taskId){
+        var mpPage = MpUtil.getMpPage(param, MerchantNotifyRecord.class);
+       return lambdaQuery().eq(MerchantNotifyRecord::getTaskId,taskId)
+               .page(mpPage);
+    }
 }

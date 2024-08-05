@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.entity.receiver;
+package cn.daxpay.multi.service.entity.allocation.receiver;
 
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import lombok.Data;

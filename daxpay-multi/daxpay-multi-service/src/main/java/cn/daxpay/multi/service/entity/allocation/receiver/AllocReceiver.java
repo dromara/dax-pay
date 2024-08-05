@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.entity.receiver;
+package cn.daxpay.multi.service.entity.allocation.receiver;
 
 import cn.daxpay.multi.core.enums.AllocReceiverTypeEnum;
 import cn.daxpay.multi.core.enums.AllocRelationTypeEnum;

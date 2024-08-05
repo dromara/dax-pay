@@ -135,4 +135,18 @@ public class MerchantCallbackSendService {
             log.error("发送任务不存在，任务ID：{}",taskId);
         }
     }
+
+    /**
+     * 手动发送
+     */
+    public void send(Long taskId){
+        var taskOpt = taskManager.findById(taskId);
+        if (taskOpt.isPresent()){
+            var task = taskOpt.get();
+            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+            this.sendData(task,false);
+        } else {
+            log.error("发送任务不存在，任务ID：{}",taskId);
+        }
+    }
 }

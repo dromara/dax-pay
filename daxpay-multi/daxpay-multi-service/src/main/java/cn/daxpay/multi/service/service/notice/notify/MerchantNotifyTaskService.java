@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 /**
- * 商户消息通知服务类
+ * 商户订阅消息通知服务类
  * @author xxm
  * @since 2024/7/30
  */
