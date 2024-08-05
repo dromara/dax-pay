@@ -30,7 +30,7 @@ public class MethodConstController {
     private final MethodConstService methodConstService;
 
     @RequestPath("支付方式分页")
-    @Operation(summary = "/支付方式分页")
+    @Operation(summary = "支付方式分页")
     @GetMapping("/page")
     public Result<PageResult<MethodConstResult>> page(PageParam pageParam, MethodConstQuery query) {
         return Res.ok(methodConstService.page(pageParam, query));

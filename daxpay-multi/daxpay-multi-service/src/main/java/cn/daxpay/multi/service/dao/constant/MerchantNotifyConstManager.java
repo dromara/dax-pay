@@ -1,7 +1,13 @@
 package cn.daxpay.multi.service.dao.constant;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.constant.MerchantNotifyConst;
+import cn.daxpay.multi.service.param.constant.MerchantNotifyConstQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -15,4 +21,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class MerchantNotifyConstManager extends BaseManager<MerchantNotifyConstMapper,MerchantNotifyConst> {
+
+    /**
+     * 分页
+     */
+    public Page<MerchantNotifyConst> page(PageParam pageParam, MerchantNotifyConstQuery query) {
+        Page<MerchantNotifyConst> mpPage = MpUtil.getMpPage(pageParam);
+        QueryWrapper<MerchantNotifyConst> wrapper = QueryGenerator.generator(query);
+        return this.page(mpPage, wrapper);
+    }
 }

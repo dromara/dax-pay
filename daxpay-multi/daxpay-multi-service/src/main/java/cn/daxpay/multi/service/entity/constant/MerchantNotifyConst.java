@@ -1,13 +1,16 @@
 package cn.daxpay.multi.service.entity.constant;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.service.convert.constant.MerchantNotifyConstConvert;
+import cn.daxpay.multi.service.result.constant.MerchantNotifyConstResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 商户通知类型
+ * 商户订阅通知类型
  * @author xxm
  * @since 2024/7/30
  */
@@ -15,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_merchant_notify_const")
-public class MerchantNotifyConst extends MpIdEntity {
+public class MerchantNotifyConst extends MpIdEntity implements ToResult<MerchantNotifyConstResult> {
 
     /** 编码 */
     private String code;
@@ -28,4 +31,12 @@ public class MerchantNotifyConst extends MpIdEntity {
 
     /** 启用 */
     private boolean enable;
+
+    /**
+     * 转换
+     */
+    @Override
+    public MerchantNotifyConstResult toResult() {
+        return MerchantNotifyConstConvert.CONVERT.toResult(this);
+    }
 }

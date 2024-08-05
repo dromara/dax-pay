@@ -21,12 +21,12 @@ public class MerchantNotifyConstResult {
     @Schema(description = "名称")
     private String name;
 
+    /** 描述 */
+    @Schema(description = "描述")
+    private String description;
+
     /** 是否启用 */
     @Schema(description = "是否启用")
     private boolean enable;
-
-    /** 备注 */
-    @Schema(description = "备注")
-    private String remark;
 
 }

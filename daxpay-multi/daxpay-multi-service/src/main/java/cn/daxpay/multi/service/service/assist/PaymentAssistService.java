@@ -138,4 +138,22 @@ public class PaymentAssistService {
         // 初始化商户租户上下文信息
         MchContextLocal.setMchNo(merchant.getMchNo());
     }
+
+    /**
+     * 初始化商户和应用信息
+     * 1. 统一支付相关接口调用时，要进行初始化
+     * 2. 接收到回调时，要进行初始化
+     * 3. 接收到消息通知时, 要进行初始化
+     *
+     */
+    public void initMchAndApp(String appId) {
+        // 获取应用信息
+        MchApp mchApp = mchAppCacheService.get(appId);
+        Merchant merchant = merchantCacheService.get(mchApp.getMchNo());
+        // 初始化支付上下文信息
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        BeanUtil.copyProperties(mchApp, mchAppInfo);
+        // 初始化商户租户上下文信息
+        MchContextLocal.setMchNo(merchant.getMchNo());
+    }
 }
