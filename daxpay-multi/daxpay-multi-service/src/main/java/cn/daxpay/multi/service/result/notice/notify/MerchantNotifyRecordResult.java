@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.result.notice.notify;
 
 import cn.daxpay.multi.core.result.MchResult;
+import cn.daxpay.multi.service.enums.SendTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,4 +17,31 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Schema(title = "客户订阅通知发送记录")
 public class MerchantNotifyRecordResult extends MchResult {
+
+    /** 任务ID */
+    @Schema(description = "任务ID")
+    private Long taskId;
+
+    /** 请求次数 */
+    @Schema(description = "请求次数")
+    private Integer reqCount;
+
+    /** 发送是否成功 */
+    @Schema(description = "发送是否成功")
+    private boolean success;
+
+    /**
+     * 发送类型, 自动发送, 手动发送
+     * @see SendTypeEnum
+     */
+    @Schema(description = "发送类型")
+    private String sendType;
+
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
+
+    /** 错误信息 */
+    @Schema(description = "错误信息")
+    private String errorMsg;
 }

@@ -19,7 +19,7 @@ public class MerchantNotifyConfigResult extends MchResult {
 
     /** 消息通知类型编码 */
     @Schema(description = "消息通知类型编码")
-    private String notifyType;
+    private String code;
 
     /** 订阅名称 */
     @Schema(description = "订阅名称")

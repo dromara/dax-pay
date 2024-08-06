@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestGroup(groupCode = "MerchantNotify", groupName = "商户订阅通知", moduleCode = "MerchantNotice")
 @Tag(name = "商户订阅通知控制器")
 @RestController
-@RequestMapping("/notice/notify")
+@RequestMapping("/merchant/notice/notify")
 @RequiredArgsConstructor
 public class MerchantNotifyController {
     private final MerchantNotifyQueryService queryService;

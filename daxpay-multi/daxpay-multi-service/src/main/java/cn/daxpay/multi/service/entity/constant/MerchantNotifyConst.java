@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 
 /**
  * 商户订阅通知类型
+ * @see cn.daxpay.multi.service.enums.NotifyTypeEnum
  * @author xxm
  * @since 2024/7/30
  */

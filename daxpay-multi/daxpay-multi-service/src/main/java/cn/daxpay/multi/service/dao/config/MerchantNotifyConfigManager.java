@@ -23,7 +23,7 @@ public class MerchantNotifyConfigManager extends BaseManager<MerchantNotifyConfi
      * 根据id进行更新
      */
     @Override
-    @CacheEvict(value = "cache:notifyConfig", key = "#merchantNotifyConfig.appId + ':' + #merchantNotifyConfig.notifyType")
+    @CacheEvict(value = "cache:notifyConfig", key = "#merchantNotifyConfig.appId + ':' + #merchantNotifyConfig.code")
     public int updateById(MerchantNotifyConfig merchantNotifyConfig) {
         return super.updateById(merchantNotifyConfig);
     }
@@ -34,7 +34,7 @@ public class MerchantNotifyConfigManager extends BaseManager<MerchantNotifyConfi
     public Optional<MerchantNotifyConfig> findByAppIdAndType(String appId, String notifyType) {
         return lambdaQuery()
                 .eq(MerchantNotifyConfig::getAppId, appId)
-                .eq(MerchantNotifyConfig::getNotifyType, notifyType)
+                .eq(MerchantNotifyConfig::getCode, notifyType)
                 .oneOpt();
     }
 }

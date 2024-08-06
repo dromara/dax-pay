@@ -18,13 +18,7 @@ import lombok.experimental.Accessors;
 public class MerchantNotifyConfig extends MchBaseEntity {
 
     /** 消息通知类型编码 */
-    private String notifyType;
-
-    /** 订阅名称 */
-    private String name;
-
-    /** 描述 */
-    private String description;
+    private String code;
 
     /** 是否订阅 */
     private boolean subscribe;

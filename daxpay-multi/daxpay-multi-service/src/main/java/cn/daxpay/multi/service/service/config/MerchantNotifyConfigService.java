@@ -1,16 +1,23 @@
 package cn.daxpay.multi.service.service.config;
 
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.daxpay.multi.service.common.cache.MchAppCacheService;
 import cn.daxpay.multi.service.dao.config.MerchantNotifyConfigManager;
+import cn.daxpay.multi.service.dao.constant.MerchantNotifyConstManager;
 import cn.daxpay.multi.service.entity.config.MerchantNotifyConfig;
 import cn.daxpay.multi.service.entity.constant.MerchantNotifyConst;
+import cn.daxpay.multi.service.entity.merchant.MchApp;
 import cn.daxpay.multi.service.result.config.MerchantNotifyConfigResult;
-import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.service.GenericResponseService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 商户应用消息通知配置服务
@@ -22,20 +29,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MerchantNotifyConfigService {
 
-    private final MerchantNotifyConfigManager merchantNotifyConfigManager;
+    private final MerchantNotifyConstManager constManagerAll;
+
+    private final MerchantNotifyConfigManager configManager;
+    private final MchAppCacheService mchAppCacheService;
+    private final GenericResponseService responseBuilder;
 
     /**
      * 显示列表
      */
     public List<MerchantNotifyConfigResult> findAllByAppId(String appId) {
-        var wrapper = new MPJLambdaWrapper<MerchantNotifyConfig>()
-                .select(MerchantNotifyConfig::isSubscribe)
-                .selectAll(MerchantNotifyConst.class)
-                .rightJoin(MerchantNotifyConst.class, MerchantNotifyConst::getCode, MerchantNotifyConfig::getNotifyType)
-                .eq(MerchantNotifyConst::isEnable, true)
-                .eq(MerchantNotifyConfig::getAppId, appId)
-                .orderByAsc(MerchantNotifyConst::getId);
-        return merchantNotifyConfigManager.selectJoinList(MerchantNotifyConfigResult.class, wrapper);
+        var map = configManager.findAll()
+                .stream()
+                .collect(Collectors.toMap(MerchantNotifyConfig::getCode, Function.identity(), (v1, v2) -> v1));
+        List<MerchantNotifyConst> costs = constManagerAll.lambdaQuery().orderByAsc(MpIdEntity::getId).list();
+        MchApp mchApp = mchAppCacheService.get(appId);
+
+        return costs.stream()
+                .map(o->{
+                    Boolean subscribe = Optional.ofNullable(map.get(o.getCode()))
+                            .map(MerchantNotifyConfig::isSubscribe)
+                            .orElse(false);
+                    var result = new MerchantNotifyConfigResult()
+                            .setCode(o.getCode())
+                            .setName(o.getName())
+                            .setDescription(o.getDescription())
+                            .setSubscribe(subscribe);
+                    result.setAppId(appId)
+                            .setMchNo(mchApp.getMchNo());
+                    return result;
+                }).toList();
     }
 
 
@@ -45,9 +68,9 @@ public class MerchantNotifyConfigService {
      */
     @Cacheable(value = "cache:notifyConfig", key = "#appId + ':' + #notifyType")
     public boolean getSubscribeByAppIdAndType(String appId, String notifyType) {
-        return merchantNotifyConfigManager.lambdaQuery()
+        return configManager.lambdaQuery()
                 .eq(MerchantNotifyConfig::getAppId, appId)
-                .eq(MerchantNotifyConfig::getNotifyType, notifyType)
+                .eq(MerchantNotifyConfig::getCode, notifyType)
                 .oneOpt()
                 .map(MerchantNotifyConfig::isSubscribe)
                 .orElse(false);
@@ -58,17 +81,17 @@ public class MerchantNotifyConfigService {
      */
     public void subscribe(String appId, String notifyType, boolean subscribe){
         // 判断是否存在配置
-        var notifyConfigOpt = merchantNotifyConfigManager.findByAppIdAndType(appId, notifyType);
+        var notifyConfigOpt = configManager.findByAppIdAndType(appId, notifyType);
 
         if (notifyConfigOpt.isPresent()) {
             notifyConfigOpt.get().setSubscribe(subscribe);
-            merchantNotifyConfigManager.updateById(notifyConfigOpt.get());
+            configManager.updateById(notifyConfigOpt.get());
         } else {
             MerchantNotifyConfig merchantNotifyConfig = new MerchantNotifyConfig();
             merchantNotifyConfig.setAppId(appId);
-            merchantNotifyConfig.setNotifyType(notifyType);
+            merchantNotifyConfig.setCode(notifyType);
             merchantNotifyConfig.setSubscribe(subscribe);
-            merchantNotifyConfigManager.save(merchantNotifyConfig);
+            configManager.save(merchantNotifyConfig);
         }
     }
 
