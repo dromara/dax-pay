@@ -1,0 +1,35 @@
+package cn.daxpay.multi.service.bo.reconcile;
+
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
+
+/**
+ * 支付通道交易对账单
+ * @author xxm
+ * @since 2024/8/6
+ */
+@Data
+@Accessors(chain = true)
+public class ChannelReconcileTradeBo {
+
+    /**
+     * 交易类型
+     * @see TradeTypeEnum
+     */
+    private String type;
+
+    /** 本地交易号 */
+    private String tradeNo;
+
+    /** 通道交易号 */
+    private String outTradeNo;
+
+    /** 交易金额 */
+    private Integer amount;
+
+    /** 交易时间 */
+    private LocalDateTime tradeTime;
+}

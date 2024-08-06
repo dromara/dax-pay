@@ -1,14 +1,9 @@
-package cn.daxpay.multi.service.entity.reconcile;
+package cn.daxpay.multi.service.result.reconcile;
 
-import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.service.common.entity.MchBaseEntity;
-import cn.daxpay.multi.service.convert.reconcile.ReconcileConvert;
+import cn.daxpay.multi.core.result.MchResult;
 import cn.daxpay.multi.service.enums.ReconcileResultEnum;
-import cn.daxpay.multi.service.result.reconcile.ReconcileStatementResult;
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,85 +14,94 @@ import java.time.LocalDate;
 /**
  * 对账报告
  * @author xxm
- * @since 2024/1/18
+ * @since 2024/8/6
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "pay_reconcile_statement")
-public class ReconcileStatement extends MchBaseEntity implements ToResult<ReconcileStatementResult> {
+@Schema(title = "对账报告")
+public class ReconcileStatementResult extends MchResult {
+
 
     /** 对账号 */
+    @Schema(description = "对账号")
     private String reconcileNo;
 
     /** 日期 */
+    @Schema(description = "日期")
     private LocalDate date;
 
     /**
      * 通道
      * @see ChannelEnum
      */
+    @Schema(description = "通道")
     private String channel;
 
     /** 交易对账文件是否下载或上传成功 */
+    @Schema(description = "交易对账文件是否下载或上传成功")
     private boolean downOrUpload;
 
     /** 交易对账文件是否比对完成 */
+    @Schema(description = "交易对账文件是否比对完成")
     private boolean compare;
 
     /** 支付订单数 */
+    @Schema(description = "支付订单数")
     private Integer orderCount;
 
     /** 退款订单数 */
+    @Schema(description = "退款订单数")
     private Integer refundCount;
 
     /** 通道支付订单数 */
+    @Schema(description = "通道支付订单数")
     private Integer channelOrderCount;
 
     /** 通道退款订单数 */
+    @Schema(description = "通道退款订单数")
     private Integer channelRefundCount;
 
     /** 支付交易金额 */
+    @Schema(description = "支付交易金额")
     private BigDecimal tradeAmount;
 
     /** 退款交易金额 */
+    @Schema(description = "退款交易金额")
     private BigDecimal refundAmount;
 
     /** 通道支付交易金额 */
+    @Schema(description = "通道支付交易金额")
     private BigDecimal channelTradeAmount;
 
     /** 通道退款交易金额 */
+    @Schema(description = "通道退款交易金额")
     private BigDecimal channelRefundAmount;
 
     /**
      * 交易对账结果
      * @see ReconcileResultEnum
      */
+    @Schema(description = "交易对账结果")
     private String result;
 
     /**
      *  原始通道对账单文件id
      */
+    @Schema(description = "原始通道对账单文件id")
     private Long channelFileId;
 
     /**
      * 生成平台对账单文件ID
      */
+    @Schema(description = "生成平台对账单文件ID")
     private Long platformFileId;
 
     /** 错误码 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    @Schema(description = "错误码")
     private String errorCode;
 
     /** 错误信息 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    @Schema(description = "错误信息")
     private String errorMsg;
-
-    /**
-     * 转换
-     */
-    @Override
-    public ReconcileStatementResult toResult() {
-        return ReconcileConvert.CONVERT.toResult(this);
-    }
 }

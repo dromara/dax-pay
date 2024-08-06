@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.entity.reconcile;
 
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@TableName("pay_reconcile_discrepancy")
 public class ReconcileDiscrepancy extends MchBaseEntity {
 
     /** 对账单ID */

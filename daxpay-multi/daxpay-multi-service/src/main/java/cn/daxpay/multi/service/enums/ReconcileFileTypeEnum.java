@@ -16,8 +16,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum ReconcileFileTypeEnum {
 
-    FUNDS("funds", "资金对账"),
-    TRADE("trade", "交易对账"),
+    TRADE("trade", "交易对账单"),
     ZIP("zip", "压缩包"),
     ;
 
