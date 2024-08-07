@@ -7,15 +7,18 @@ import cn.daxpay.multi.service.bo.reconcile.ChannelReconcileTradeBo;
 import cn.daxpay.multi.service.bo.reconcile.ReconcileResolveResultBo;
 import cn.daxpay.multi.service.convert.reconcile.ReconcileConvert;
 import cn.daxpay.multi.service.dao.reconcile.ChannelReconcileTradeManage;
+import cn.daxpay.multi.service.dao.reconcile.ReconcileDiscrepancyManager;
 import cn.daxpay.multi.service.dao.reconcile.ReconcileStatementManager;
 import cn.daxpay.multi.service.entity.reconcile.ChannelReconcileTrade;
 import cn.daxpay.multi.service.entity.reconcile.ReconcileStatement;
 import cn.daxpay.multi.service.enums.ReconcileFileTypeEnum;
+import cn.daxpay.multi.service.enums.ReconcileResultEnum;
 import cn.daxpay.multi.service.param.reconcile.ReconcileCreatParam;
 import cn.daxpay.multi.service.param.reconcile.ReconcileUploadParam;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.strategy.AbsReconcileStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,12 +37,13 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReconcileService {
+public class ReconcileStatementService {
 
-    private final ReconcileStatementManager reconcileOrderManager;
     private final PaymentAssistService paymentAssistService;
     private final ReconcileStatementManager reconcileStatementManager;
     private final ChannelReconcileTradeManage reconcileTradeManage;
+    private final ReconcileDiscrepancyManager discrepancyManager;
+    private final ReconcileAssistService reconcileAssistService;
 
     /**
      * 创建对账订单,
@@ -50,7 +54,7 @@ public class ReconcileService {
                 .setReconcileNo(TradeNoGenerateUtil.reconciliation())
                 .setChannel(param.getChannel())
                 .setDate(param.getDate());
-        reconcileOrderManager.save(order);
+        reconcileStatementManager.save(order);
         return order;
     }
 
@@ -76,7 +80,7 @@ public class ReconcileService {
 
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = PaymentStrategyFactory.create(reconcileStatement.getChannel(), AbsReconcileStrategy.class);
-        reconcileStrategy.setReconcileStatement(reconcileStatement);
+        reconcileStrategy.setStatement(reconcileStatement);
         reconcileStrategy.doBeforeHandler();
         try {
             // 下载
@@ -100,7 +104,7 @@ public class ReconcileService {
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
         // 将对账订单写入到上下文中
         AbsReconcileStrategy reconcileStrategy = PaymentStrategyFactory.create(statement.getChannel(), AbsReconcileStrategy.class);
-        reconcileStrategy.setReconcileStatement(statement);
+        reconcileStrategy.setStatement(statement);
         reconcileStrategy.doBeforeHandler();
 
         // 上传类型
@@ -124,16 +128,74 @@ public class ReconcileService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void resolveAndSave(ReconcileStatement statement, ReconcileResolveResultBo resolveResultBo) {
-
         List<ChannelReconcileTradeBo> channelTrades = resolveResultBo.getChannelTrades();
         List<ChannelReconcileTrade> list = ReconcileConvert.CONVERT.toList(channelTrades);
         for (var trade : list) {
             trade.setReconcileId(statement.getId());
         }
-        statement.setChannelFileId(resolveResultBo.getChannelFileId())
+        statement.setChannelFileUrl(resolveResultBo.getChannelFileUrl())
                 .setErrorCode(null)
                 .setErrorMsg(null);
         reconcileStatementManager.updateById(statement);
         reconcileTradeManage.saveAll(list);
+    }
+
+    /**
+     * 对账单明细比对
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void compare(Long id){
+        var statement = reconcileStatementManager.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未找到对账单"));
+        this.compare(statement);
+    }
+
+    /**
+     * 交易对账比对
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void compare(ReconcileStatement statement){
+        // 判断是否已经下载了对账单明细
+        if (!statement.isDownOrUpload()){
+            throw new OperationFailException("请先下载对账单");
+        }
+        // 是否对比完成
+        if (statement.isCompare()){
+            throw new OperationFailException("对账单比对已经完成");
+        }
+        // 查询对账单
+        List<ChannelReconcileTrade> reconcileTradeDetails = reconcileTradeManage.findAllByReconcileId(statement.getId());
+        // 构建对账策略
+        AbsReconcileStrategy reconcileStrategy =PaymentStrategyFactory.create(statement.getChannel(), AbsReconcileStrategy.class);
+        // 初始化参数
+        reconcileStrategy.setStatement(statement);
+
+        try {
+            // 执行比对任务, 获取对账差异记录并保存
+           var generalTradeInfo = reconcileAssistService.getPlatformReconcileTrades(statement);
+            var discrepancies =
+                    reconcileAssistService.generateDiscrepancy(statement, generalTradeInfo, reconcileTradeDetails);
+            // 判断是否有差异
+            if (CollUtil.isNotEmpty(discrepancies)){
+                statement.setResult(ReconcileResultEnum.INCONSISTENT.getCode());
+            }else {
+                statement.setResult(ReconcileResultEnum.CONSISTENT.getCode());
+            }
+            // 生成对账单文件
+            String fileUrl = this.saveReconcileFile();
+            statement.setCompare(true);
+            reconcileStatementManager.updateById(statement);
+            discrepancyManager.saveAll(discrepancies);
+        } catch (Exception e) {
+            log.error("比对对账单异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 生成对账文件并保存
+     */
+    public String saveReconcileFile(){
+        return "";
     }
 }

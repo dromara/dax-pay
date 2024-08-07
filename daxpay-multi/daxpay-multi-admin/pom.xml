@@ -27,8 +27,14 @@
             <version>${daxpay.version}</version>
         </dependency>
 
-        <!-- 支付通道实现 -->
+        <!--文件存储 (minio方式)-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+        </dependency>
 
+        <!-- 支付通道实现 -->
         <!-- 支付宝通道实现 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>

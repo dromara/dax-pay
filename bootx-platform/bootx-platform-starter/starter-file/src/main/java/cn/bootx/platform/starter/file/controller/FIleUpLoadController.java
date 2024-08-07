@@ -53,43 +53,36 @@ public class FIleUpLoadController {
     @IgnoreAuth(login = true)
     @Operation(summary = "上传")
     @PostMapping("/upload")
-    public Result<UploadFileResult> local(MultipartFile file, String fileName) {
+    public Result<UploadFileResult> local(@RequestPart MultipartFile file, String fileName) {
         return Res.ok(uploadService.upload(file, fileName));
     }
 
     @IgnoreAuth
-    @Operation(summary = "获取文件预览地址(流量会经过后端)")
-    @GetMapping("/getFilePreviewUrl")
-    public Result<String> getFilePreviewUrl(Long id) {
-        return Res.ok(uploadService.getFilePreviewUrl(id));
-    }
-
-    @IgnoreAuth
-    @Operation(summary = "获取文件预览地址前缀")
-    @GetMapping("/getFilePreviewUrlPrefix")
+    @Operation(summary = "获取文件预览地址前缀(流量会经过后端)")
+    @GetMapping("/forward/getFilePreviewUrlPrefix")
     public Result<String> getFilePreviewUrlPrefix() {
-        return Res.ok(uploadService.getFilePreviewUrlPrefix());
-    }
-
-    @IgnoreAuth
-    @Operation(summary = "获取文件下载地址(流量会经过后端)")
-    @GetMapping("/getFileDownloadUrl")
-    public Result<String> getFileDownloadUrl(Long id) {
-        return Res.ok(uploadService.getFileDownloadUrl(id));
+        return Res.ok(uploadService.getServerFilePreviewUrlPrefix());
     }
 
     @IgnoreAuth
     @Operation(summary = "预览文件(流量会经过后端)")
-    @GetMapping("/preview/{id}")
+    @GetMapping("/forward/preview/{id}")
     public void preview(@PathVariable Long id, HttpServletResponse response) {
         uploadService.preview(id, response);
     }
 
     @IgnoreAuth
     @Operation(summary = "下载文件(流量会经过后端)")
-    @GetMapping("/download/{id}")
+    @GetMapping("/forward/download/{id}")
     public ResponseEntity<byte[]> download(@PathVariable Long id) {
         return uploadService.download(id);
+    }
+
+    @IgnoreAuth
+    @Operation(summary = "获取文件服务商的地址(流量不会经过后端), 用于拼接文件路径进行访问")
+    @GetMapping("/getFileServerUrl")
+    public Result<String> getFileServerUrl() {
+        return Res.ok(uploadService.getFileServerUrl());
     }
 
 }

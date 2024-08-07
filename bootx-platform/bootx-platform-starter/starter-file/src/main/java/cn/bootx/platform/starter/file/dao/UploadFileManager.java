@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author xxm
@@ -21,6 +22,21 @@ import java.util.Objects;
 @Repository
 @RequiredArgsConstructor
 public class UploadFileManager extends BaseManager<UploadFileMapper, UploadFileInfo> {
+
+
+    /**
+     * 根据URL查询
+     */
+    public Optional<UploadFileInfo> findByUrl(String url){
+        return findByField(UploadFileInfo::getUrl, url);
+    }
+
+    /**
+     * 根据URL删除
+     */
+    public boolean deleteByUrl(String url){
+        return deleteByField(UploadFileInfo::getUrl, url);
+    }
 
     /**
      * 分页

@@ -1,5 +1,6 @@
 package cn.bootx.platform.starter.file.configuration;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,14 +17,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class FileUploadProperties {
 
     /**
-     * 是否通过后端服务进行文件访问的代理
-     * 开启 Web -> 后端服务 -> 具体的的文件服务
+     * 文件访问转发地址(当前后端服务地址或被代理后的地址), 流量会经过后端服务的转发
      */
-    private boolean serviceProxy = true;
+    private String forwardServerUrl = "http://127.0.0.1:9999";
 
     /**
-     * 文件服务访问地址
+     * 文件服务访问地址, 直接访问文件, 不经过后端服务中转
      */
-    private String serverUrl = "http://127.0.0.1:9999";
+    private String fileServerUrl = "http://127.0.0.1:9999";
 
+    /**
+     * 处理为 / 结尾
+     */
+    public String getForwardServerUrl() {
+        return StrUtil.removeSuffix(forwardServerUrl, "/")+"/";
+    }
+
+    /**
+     * 处理为 / 结尾
+     */
+    public String getFileServerUrl() {
+        return StrUtil.removeSuffix(fileServerUrl, "/")+"/";
+    }
 }

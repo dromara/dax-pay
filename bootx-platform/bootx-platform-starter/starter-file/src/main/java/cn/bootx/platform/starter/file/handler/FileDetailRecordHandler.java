@@ -1,6 +1,5 @@
 package cn.bootx.platform.starter.file.handler;
 
-import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.starter.file.dao.UploadFileManager;
 import cn.bootx.platform.starter.file.entity.UploadFileInfo;
 import lombok.RequiredArgsConstructor;
@@ -32,28 +31,18 @@ public class FileDetailRecordHandler extends DefaultFileRecorder {
     }
 
     /**
-     * 根据 ID(Long) 获取文件记录, 注意不是根据URL
+     * 根据URL获取文件记录
      */
     @Override
     public FileInfo getByUrl(String url) {
-        try {
-            Long id = Long.valueOf(url);
-            return uploadFileManager.findById(id).map(UploadFileInfo::toFileInfo).orElse(null);
-        } catch (NumberFormatException e) {
-            throw new BizException("URL是文件的ID，注意不要传错参数");
-        }
+        return uploadFileManager.findByUrl(url).map(UploadFileInfo::toFileInfo).orElse(null);
     }
 
     /**
-     * 根据  ID(Long) 删除文件记录, 注意不是根据URL
+     * 根据URL删除
      */
     @Override
     public boolean delete(String url) {
-        try {
-            Long id = Long.valueOf(url);
-            return uploadFileManager.deleteById(id);
-        } catch (NumberFormatException e) {
-            return false;
-        }
+            return uploadFileManager.deleteByUrl(url);
     }
 }

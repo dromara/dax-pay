@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public abstract class AbsReconcileStrategy implements PaymentStrategy{
 
     /** 对账单 */
-    private ReconcileStatement reconcileStatement;
+    private ReconcileStatement statement;
 
     /**
      * 对账前处理, 主要是初始化支付SDK配置

@@ -88,7 +88,7 @@ public class FileUploadService {
     }
 
     /**
-     * 浏览
+     * 文件预览
      */
     @SneakyThrows
     public void preview(Long id, HttpServletResponse response) {
@@ -123,38 +123,23 @@ public class FileUploadService {
     }
 
     /**
-     * 获取文件预览地址
+     * 文件访问转发地址(当前后端服务地址或被代理后的地址), 流量会经过后端服务的转发
      */
-    public String getFilePreviewUrl(Long id) {
-        if (fileUploadProperties.isServiceProxy()){
-            return this.getServerUrl() + "/file/preview/" + id;
-        } else {
-            return "";
-        }
+    public String getServerFilePreviewUrlPrefix() {
+        return this.getForwardServerUrl() + "/file/preview/";
     }
 
     /**
-     * 获取文件预览地址前缀
+     * 文件访问转发地址(当前后端服务地址或被代理后的地址), 流量会经过后端服务的转发
      */
-    public String getFilePreviewUrlPrefix() {
-        return this.getServerUrl() + "/file/preview/";
+    private String getForwardServerUrl() {
+        return fileUploadProperties.getForwardServerUrl();
     }
 
     /**
-     * 获取文件地址
+     * 获取后端服务文件下载地址前缀
      */
-    public String getFileDownloadUrl(Long id) {
-        if (fileUploadProperties.isServiceProxy()){
-            return this.getServerUrl() + "/file/download/" + id;
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     * 服务地址
-     */
-    private String getServerUrl() {
-        return fileUploadProperties.getServerUrl();
+    public String getFileServerUrl(){
+        return fileUploadProperties.getFileServerUrl();
     }
 }

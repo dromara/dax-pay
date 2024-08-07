@@ -25,7 +25,7 @@ public class UserBaseInfoResult {
     private String sex;
 
     @Schema(description = "头像")
-    private Long avatar;
+    private String avatar;
 
     @Schema(description = "生日")
     private LocalDate birthday;

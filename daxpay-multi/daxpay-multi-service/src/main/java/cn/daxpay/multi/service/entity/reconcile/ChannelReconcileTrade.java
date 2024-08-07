@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -36,7 +37,7 @@ public class ChannelReconcileTrade extends MchRecordEntity {
     private String outTradeNo;
 
     /** 交易金额 */
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 交易时间 */
     private LocalDateTime tradeTime;

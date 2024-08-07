@@ -34,7 +34,7 @@
         <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
         <dynamic-datasource.version>4.3.0</dynamic-datasource.version>
         <lock4j.version>2.2.7</lock4j.version>
-        <x-file-storage.version>2.2.0</x-file-storage.version>
+        <x-file-storage.version>2.2.1</x-file-storage.version>
         <minio.version>8.5.4</minio.version>
         <sa-token.version>1.38.0</sa-token.version>
         <justauth.version>1.16.6</justauth.version>

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -15,4 +17,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class ChannelReconcileTradeManage extends BaseManager<ChannelReconcileTradeMapper, ChannelReconcileTrade> {
+
+    /**
+     * 根据订单id查询
+     */
+    public List<ChannelReconcileTrade> findAllByReconcileId(Long reconcileId){
+        return this.findAllByField(ChannelReconcileTrade::getReconcileId, reconcileId);
+    }
 }

@@ -8,13 +8,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 支付通道交易对账单
+ * 平台通用交易对象对象，用于与网关进行对账
  * @author xxm
- * @since 2024/8/6
+ * @since 2024/3/1
  */
 @Data
 @Accessors(chain = true)
-public class ChannelReconcileTradeBo {
+public class PlatformReconcileTradeBo {
 
     /**
      * 交易类型
@@ -22,15 +22,15 @@ public class ChannelReconcileTradeBo {
      */
     private String type;
 
+    /** 金额 */
+    private BigDecimal amount;
+
     /** 本地交易号 */
     private String tradeNo;
 
     /** 通道交易号 */
     private String outTradeNo;
 
-    /** 交易金额 */
-    private BigDecimal amount;
-
-    /** 交易时间 */
+    /** 完成时间 */
     private LocalDateTime tradeTime;
 }

@@ -28,7 +28,7 @@ public class UserExpandInfo extends MpBaseEntity implements ToResult<UserExpandI
     private String sex;
 
     /** 头像图片ID */
-    private Long avatar;
+    private String avatar;
 
     /** 生日 */
     private LocalDate birthday;

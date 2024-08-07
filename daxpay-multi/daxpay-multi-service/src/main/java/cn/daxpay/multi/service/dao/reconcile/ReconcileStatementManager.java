@@ -1,13 +1,19 @@
 package cn.daxpay.multi.service.dao.reconcile;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.reconcile.ReconcileStatement;
+import cn.daxpay.multi.service.param.reconcile.ReconcileStatementQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 /**
- * 
+ *
  * @author xxm
  * @since 2024/8/5
  */
@@ -15,4 +21,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class ReconcileStatementManager extends BaseManager<ReconcileStatementMapper, ReconcileStatement> {
+
+    /**
+     * 分页
+     */
+    public Page<ReconcileStatement> page(PageParam pageParam, ReconcileStatementQuery query){
+        Page<ReconcileStatement> mpPage = MpUtil.getMpPage(pageParam, ReconcileStatement.class);
+        QueryWrapper<ReconcileStatement> generator = QueryGenerator.generator(query);
+        return this.page(mpPage,generator);
+    }
 }

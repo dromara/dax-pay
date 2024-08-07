@@ -22,6 +22,6 @@ public class ReconcileResolveResultBo {
     /**
      * 原始对账文件
      */
-    private Long channelFileId;
+    private String channelFileUrl;
 
 }

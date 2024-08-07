@@ -1,12 +1,17 @@
 package cn.daxpay.multi.service.entity.reconcile;
 
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
+import cn.daxpay.multi.service.convert.reconcile.ReconcileConvert;
+import cn.daxpay.multi.service.enums.ReconcileDiscrepancyTypeEnum;
+import cn.daxpay.multi.service.result.reconcile.ReconcileDiscrepancyResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -18,7 +23,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_reconcile_discrepancy")
-public class ReconcileDiscrepancy extends MchBaseEntity {
+public class ReconcileDiscrepancy extends MchBaseEntity implements ToResult<ReconcileDiscrepancyResult> {
 
     /** 对账单ID */
     private Long reconcileId;
@@ -26,15 +31,24 @@ public class ReconcileDiscrepancy extends MchBaseEntity {
     /** 对账号 */
     private String reconcileNo;
 
+    /** 对账日期 */
+    private LocalDate reconcileDate;
+
+    /** 支付通道 */
+    private String channel;
+
+    /**
+     * 差异类型
+     * @see ReconcileDiscrepancyTypeEnum
+      */
+    private String discrepancyType;
+
     /* 平台侧信息 */
     /** 商户交易号 */
     private String TradeNo;
 
     /** 通道交易号(平台交易订单) */
     private String outTradeNo;
-
-    /** 支付通道 */
-    private String channel;
 
     /** 交易类型 */
     private String tradeType;
@@ -71,4 +85,11 @@ public class ReconcileDiscrepancy extends MchBaseEntity {
     /** 通道交易时间 */
     private LocalDateTime channelTradeTime;
 
+    /**
+     * 转换
+     */
+    @Override
+    public ReconcileDiscrepancyResult toResult() {
+        return ReconcileConvert.CONVERT.toResult(this);
+    }
 }

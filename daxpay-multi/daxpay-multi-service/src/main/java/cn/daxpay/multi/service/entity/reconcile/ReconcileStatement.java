@@ -78,12 +78,12 @@ public class ReconcileStatement extends MchBaseEntity implements ToResult<Reconc
     /**
      *  原始通道对账单文件id
      */
-    private Long channelFileId;
+    private String channelFileUrl;
 
     /**
      * 生成平台对账单文件ID
      */
-    private Long platformFileId;
+    private String platformFileUrl;
 
     /** 错误码 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
