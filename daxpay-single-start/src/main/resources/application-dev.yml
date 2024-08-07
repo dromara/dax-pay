@@ -138,7 +138,7 @@ bootx:
       server-url: http://127.0.0.1:9000
 # 自动建表 生产环境关闭
 table-modify:
-  update-type: update
+  update-type: none
   database-type: mysql
   fail-fast: true
   scan-package: cn.daxpay.single
