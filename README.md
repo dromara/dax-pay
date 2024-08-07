@@ -42,11 +42,11 @@
 
 ### 项目地址
 
-| 项目      | GITEE                                       | GITHUB                                          |
-|---------|---------------------------------------------|-------------------------------------------------|
-| 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    |
-| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |
-| H5前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |
+| 项目      | GITEE                                       | GITHUB                                          |GITCODE                                          |
+|---------|---------------------------------------------|-------------------------------------------------|---------------------------------------------|
+| 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    | [GITCODE](https://gitcode.com/dromara/dax-pay)    |
+| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) | [GITCODE](https://github.com/daxpay/dax-pay-ui) |
+| H5前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) | [GITCODE](https://github.com/daxpay/dax-pay-h5) |
 
 
 ## 🏬 系统演示

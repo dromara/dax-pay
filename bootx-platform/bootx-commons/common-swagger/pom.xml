@@ -23,6 +23,7 @@
                     <artifactId>swagger-ui</artifactId>
                 </exclusion>
                 <exclusion>
+                    <!-- 排除自带的webjars-locator-core组件 -->
                     <groupId>org.webjars</groupId>
                     <artifactId>webjars-locator-core</artifactId>
                 </exclusion>
