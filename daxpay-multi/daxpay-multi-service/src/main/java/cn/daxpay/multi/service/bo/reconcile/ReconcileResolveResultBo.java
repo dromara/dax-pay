@@ -20,8 +20,8 @@ public class ReconcileResolveResultBo {
     private List<ChannelReconcileTradeBo> channelTrades;
 
     /**
-     * 原始对账文件
+     * 原始对账文件URL
      */
-    private String channelFileUrl;
+    private String originalFileUrl;
 
 }

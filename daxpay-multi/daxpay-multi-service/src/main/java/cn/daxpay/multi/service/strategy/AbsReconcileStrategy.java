@@ -35,10 +35,4 @@ public abstract class AbsReconcileStrategy implements PaymentStrategy{
      */
     public abstract ReconcileResolveResultBo downAndResolve();
 
-    /**
-     *
-     * @param reconcileResolveResultBo
-     * @return
-     */
-    public abstract ReconcileResolveResultBo Resolve(ReconcileResolveResultBo reconcileResolveResultBo);
 }

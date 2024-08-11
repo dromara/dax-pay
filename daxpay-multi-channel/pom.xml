@@ -31,6 +31,7 @@
         <!-- 三方库 -->
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
+        <autopoi.version>1.4.8</autopoi.version>
 
         <bootx-platform.version>0.0.1-SNAPSHOT</bootx-platform.version>
         <daxpay.version>0.0.1-SNAPSHOT</daxpay.version>

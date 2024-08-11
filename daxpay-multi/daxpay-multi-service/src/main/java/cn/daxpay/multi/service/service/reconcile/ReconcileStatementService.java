@@ -22,6 +22,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.x.file.storage.core.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,7 @@ public class ReconcileStatementService {
     private final ChannelReconcileTradeManage reconcileTradeManage;
     private final ReconcileDiscrepancyManager discrepancyManager;
     private final ReconcileAssistService reconcileAssistService;
+    private final FileStorageService fileStorageService;
 
     /**
      * 创建对账订单,
@@ -133,7 +135,7 @@ public class ReconcileStatementService {
         for (var trade : list) {
             trade.setReconcileId(statement.getId());
         }
-        statement.setChannelFileUrl(resolveResultBo.getChannelFileUrl())
+        statement.setChannelFileUrl(resolveResultBo.getOriginalFileUrl())
                 .setErrorCode(null)
                 .setErrorMsg(null);
         reconcileStatementManager.updateById(statement);
@@ -196,6 +198,13 @@ public class ReconcileStatementService {
      * 生成对账文件并保存
      */
     public String saveReconcileFile(){
+
+        // 生成对账文件
+
+        byte[] bytes = new byte[0];
+
+        fileStorageService.of(bytes, "对账文件.xlsx");
+
         return "";
     }
 }

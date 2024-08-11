@@ -44,6 +44,7 @@
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <ttl.version>2.14.3</ttl.version>
         <kryo.version>5.6.0</kryo.version>
+        <autopoi.version>1.4.8</autopoi.version>
 
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>

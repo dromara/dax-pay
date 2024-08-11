@@ -43,6 +43,13 @@ public class FIleUpLoadController {
         return Res.ok(uploadService.findById(id));
     }
 
+    @IgnoreAuth
+    @Operation(summary = "根据URL获取单条详情")
+    @GetMapping("/findByUrl")
+    public Result<UploadFileResult> findById(String url) {
+        return Res.ok(uploadService.findById(url));
+    }
+
     @Operation(summary = "删除")
     @PostMapping("/delete")
     public Result<Void> delete(Long id) {
@@ -50,7 +57,7 @@ public class FIleUpLoadController {
         return Res.ok();
     }
 
-    @IgnoreAuth(login = true)
+    @IgnoreAuth
     @Operation(summary = "上传")
     @PostMapping("/upload")
     public Result<UploadFileResult> local(@RequestPart MultipartFile file, String fileName) {

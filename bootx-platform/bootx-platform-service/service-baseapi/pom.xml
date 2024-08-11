@@ -79,5 +79,11 @@
             <artifactId>starter-file</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+        <!-- 表格工具 -->
+        <dependency>
+            <groupId>org.jeecgframework</groupId>
+            <artifactId>autopoi</artifactId>
+            <version>${autopoi.version}</version>
+        </dependency>
     </dependencies>
 </project>

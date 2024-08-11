@@ -63,6 +63,15 @@ public class FileUploadService {
     }
 
     /**
+     * 根据URL获取单条详情
+     */
+    public UploadFileResult findById(String url){
+        return uploadFileManager.findByUrl(url)
+                .map(UploadFileInfo::toResult)
+               .orElseThrow(DataNotExistException::new);
+    }
+
+    /**
      * 文件删除
      */
     @Transactional(rollbackFor = Exception.class)

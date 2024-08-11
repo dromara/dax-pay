@@ -76,7 +76,7 @@ public class ReconcileStatement extends MchBaseEntity implements ToResult<Reconc
     private String result;
 
     /**
-     *  原始通道对账单文件id
+     * 原始通道对账单文件id
      */
     private String channelFileUrl;
 

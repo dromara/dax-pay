@@ -14,6 +14,7 @@
 
     <properties>
         <alipay.version>4.39.104.ALL</alipay.version>
+        <commons-compress.version>1.19</commons-compress.version>
     </properties>
 
     <dependencies>
@@ -22,6 +23,13 @@
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
             <version>${alipay.version}</version>
+        </dependency>
+
+        <!-- 用于读取对账接口返回zip的解析 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>${commons-compress.version}</version>
         </dependency>
 
     </dependencies>

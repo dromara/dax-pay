@@ -22,6 +22,9 @@ public class ChannelReconcileTradeBo {
      */
     private String type;
 
+    /** 交易状态 */
+    private String status;
+
     /** 本地交易号 */
     private String tradeNo;
 
