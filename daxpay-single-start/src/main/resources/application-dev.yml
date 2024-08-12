@@ -102,6 +102,7 @@ bootx:
   starter:
     # 认证
     auth:
+      # 开启超级管理员登录
       enable-admin: true
       default-password: 123456
       ignore-urls:

@@ -87,9 +87,9 @@ bootx:
   starter:
     # 认证
     auth:
-      default-password: 123456
       # 关闭超级管理员登录
       enable-admin: false
+      default-password: 123456
       ignore-urls:
         - '/actuator/**'
         - '/v3/api-docs/**'
