@@ -55,7 +55,7 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
      */
     public Integer getTalAmount(TransferOrderQuery query){
         QueryWrapper<TransferOrderQuery> generator = QueryGenerator.generator(query);
-        generator.eq(MpUtil.getColumnName(TransferOrderResult::getStatus), TransferStatusEnum.SUCCESS.getCode());
+        generator.eq(MpUtil.getColumnName(TransferOrder::getStatus), TransferStatusEnum.SUCCESS.getCode());
         return baseMapper.getTalAmount(generator);
     }
 }
