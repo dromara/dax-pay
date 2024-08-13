@@ -8,8 +8,9 @@ import cn.bootx.platform.starter.file.configuration.FileUploadProperties;
 import cn.bootx.platform.starter.file.convert.FileConvert;
 import cn.bootx.platform.starter.file.dao.UploadFileManager;
 import cn.bootx.platform.starter.file.entity.UploadFileInfo;
-import cn.bootx.platform.starter.file.param.UploadFileParam;
+import cn.bootx.platform.starter.file.param.UploadFileQuery;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.ServletOutputStream;
@@ -49,7 +50,7 @@ public class FileUploadService {
     /**
      * 分页
      */
-    public PageResult<UploadFileResult> page(PageParam pageParam, UploadFileParam param) {
+    public PageResult<UploadFileResult> page(PageParam pageParam, UploadFileQuery param) {
         return MpUtil.toPageResult(uploadFileManager.page(pageParam,param));
     }
 
@@ -92,7 +93,10 @@ public class FileUploadService {
         if (StrUtil.isNotBlank(fileName)){
             uploadPretreatment.setOriginalFilename(fileName);
         }
-        FileInfo upload =uploadPretreatment.upload();
+        // 按年月日进行分目录
+        uploadPretreatment.setPath(DateUtil.format(DateUtil.date(), "yyyy/MM/dd/"));
+
+        FileInfo upload = uploadPretreatment.upload();
         return FileConvert.CONVERT.toDto(upload);
     }
 
@@ -143,12 +147,5 @@ public class FileUploadService {
      */
     private String getForwardServerUrl() {
         return fileUploadProperties.getForwardServerUrl();
-    }
-
-    /**
-     * 获取后端服务文件下载地址前缀
-     */
-    public String getFileServerUrl(){
-        return fileUploadProperties.getFileServerUrl();
     }
 }

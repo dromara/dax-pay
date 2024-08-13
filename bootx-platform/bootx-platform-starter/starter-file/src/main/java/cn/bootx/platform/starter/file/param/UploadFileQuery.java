@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "上传文件查询参数")
-public class UploadFileParam {
+public class UploadFileQuery {
 
     /** 原始文件名 */
     @Schema(description = "原始文件名")

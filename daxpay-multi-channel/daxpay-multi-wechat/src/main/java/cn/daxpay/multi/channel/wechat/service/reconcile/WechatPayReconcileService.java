@@ -3,9 +3,7 @@ package cn.daxpay.multi.channel.wechat.service.reconcile;
 import cn.daxpay.multi.channel.wechat.bo.reconcile.WechatReconcileBillDetail;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
-import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
-import cn.daxpay.multi.service.bo.reconcile.ChannelReconcileTradeBo;
 import cn.daxpay.multi.service.bo.reconcile.ReconcileResolveResultBo;
 import cn.daxpay.multi.service.entity.reconcile.ReconcileStatement;
 import cn.hutool.core.date.DatePattern;
@@ -29,10 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 微信支付对账
@@ -75,7 +70,7 @@ public class WechatPayReconcileService {
             // 保存原始对账文件
             String originalFile = this.saveOriginalFile(statement, bytes);
             // 解析账单文件
-            ReconcileResolveResultBo result = this.resolve(statement, details);
+//            ReconcileResolveResultBo result = this.convertReconcileTrade( details);
 
 
             return new ReconcileResolveResultBo()
@@ -89,7 +84,7 @@ public class WechatPayReconcileService {
     /**
      * 转换为通用对账记录对象
      */
-    private List<ChannelReconcileTradeBo> convertReconcileTrade(List<WechatReconcileBillDetail> billDetails){
+    private List<ReconcileResolveResultBo> convertReconcileTrade(List<WechatReconcileBillDetail> billDetails){
         return billDetails.stream()
                 .map(this::convert)
                 .toList();
@@ -98,29 +93,30 @@ public class WechatPayReconcileService {
     /**
      * 转换为通用对账记录对象
      */
-    private ChannelReconcileTradeBo convert(WechatReconcileBillDetail billDetail){
-        // 金额
-        var amount = new BigDecimal(billDetail.getTotalFee());
-
-        // 默认为支付对账记录
-        ChannelReconcileTradeBo reconcileTradeBo = new ChannelReconcileTradeBo()
-                .setTradeNo(billDetail.getOutRefundNo())
-                .setType(TradeTypeEnum.PAY.getCode())
-                .setAmount(amount)
-                .setOutTradeNo(billDetail.getTradeNo());
-        // 时间
-        String endTime = billDetail.getEndTime();
-        if (StrUtil.isNotBlank(endTime)) {
-            LocalDateTime time = LocalDateTimeUtil.parse(endTime, DatePattern.NORM_DATETIME_PATTERN);
-            reconcileTradeBo.setTradeTime(time);
-        }
-
-        // 退款覆盖更新对应的字段
-        if (Objects.equals(billDetail.getTradeType(), "退款")){
-            reconcileTradeBo.setTradeNo(billDetail.getBatchNo())
-                    .setType(TradeTypeEnum.REFUND.getCode());
-        }
-        return reconcileTradeBo;
+    private ReconcileResolveResultBo convert(WechatReconcileBillDetail billDetail){
+//        // 金额
+//        var amount = new BigDecimal(billDetail.getTotalFee());
+//
+//        // 默认为支付对账记录
+//        ReconcileResolveResultBo reconcileTradeBo = new ReconcileResolveResultBo()
+//                .setTradeNo(billDetail.getOutRefundNo())
+//                .setType(TradeTypeEnum.PAY.getCode())
+//                .setAmount(amount)
+//                .setOutTradeNo(billDetail.getTradeNo());
+//        // 时间
+//        String endTime = billDetail.getEndTime();
+//        if (StrUtil.isNotBlank(endTime)) {
+//            LocalDateTime time = LocalDateTimeUtil.parse(endTime, DatePattern.NORM_DATETIME_PATTERN);
+//            reconcileTradeBo.setTradeTime(time);
+//        }
+//
+//        // 退款覆盖更新对应的字段
+//        if (Objects.equals(billDetail.getTradeType(), "退款")){
+//            reconcileTradeBo.setTradeNo(billDetail.getBatchNo())
+//                    .setType(TradeTypeEnum.REFUND.getCode());
+//        }
+//        return reconcileTradeBo;
+        return null;
     }
 
     /**

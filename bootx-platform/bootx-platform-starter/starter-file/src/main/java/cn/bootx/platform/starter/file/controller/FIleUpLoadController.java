@@ -5,7 +5,7 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import cn.bootx.platform.starter.file.param.UploadFileParam;
+import cn.bootx.platform.starter.file.param.UploadFileQuery;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
 import cn.bootx.platform.starter.file.service.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +33,7 @@ public class FIleUpLoadController {
     @IgnoreAuth
     @Operation(summary = "分页")
     @GetMapping("/page")
-    public Result<PageResult<UploadFileResult>> page(PageParam pageParam, UploadFileParam param) {
+    public Result<PageResult<UploadFileResult>> page(PageParam pageParam, UploadFileQuery param) {
         return Res.ok(uploadService.page(pageParam,param));
     }
 
@@ -84,12 +84,4 @@ public class FIleUpLoadController {
     public ResponseEntity<byte[]> download(@PathVariable Long id) {
         return uploadService.download(id);
     }
-
-    @IgnoreAuth
-    @Operation(summary = "获取文件服务商的地址(流量不会经过后端), 用于拼接文件路径进行访问")
-    @GetMapping("/getFileServerUrl")
-    public Result<String> getFileServerUrl() {
-        return Res.ok(uploadService.getFileServerUrl());
-    }
-
 }

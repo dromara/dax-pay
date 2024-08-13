@@ -4,7 +4,7 @@ import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.starter.file.entity.UploadFileInfo;
-import cn.bootx.platform.starter.file.param.UploadFileParam;
+import cn.bootx.platform.starter.file.param.UploadFileQuery;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class UploadFileManager extends BaseManager<UploadFileMapper, UploadFileI
     /**
      * 分页
      */
-    public Page<UploadFileInfo> page(PageParam pageParam, UploadFileParam param) {
+    public Page<UploadFileInfo> page(PageParam pageParam, UploadFileQuery param) {
         Page<UploadFileInfo> mpPage = MpUtil.getMpPage(pageParam);
         return lambdaQuery()
                 .like(StrUtil.isNotBlank(param.getOriginalFilename()), UploadFileInfo::getOriginalFilename, param.getOriginalFilename())

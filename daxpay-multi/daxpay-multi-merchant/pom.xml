@@ -20,6 +20,19 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- 数据库驱动 PG -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- 数据库驱动 MySQL -->
+<!--        <dependency>-->
+<!--            <groupId>com.mysql</groupId>-->
+<!--            <artifactId>mysql-connector-j</artifactId>-->
+<!--        </dependency>-->
+
         <!-- 支付服务 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>

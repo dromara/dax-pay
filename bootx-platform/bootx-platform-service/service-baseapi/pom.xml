@@ -19,12 +19,6 @@
             <artifactId>common-mybatis-plus</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
-        <!-- 数据库驱动 -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <!-- 异常处理器 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>

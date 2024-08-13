@@ -22,21 +22,9 @@ public class FileUploadProperties {
     private String forwardServerUrl = "http://127.0.0.1:9999";
 
     /**
-     * 文件服务访问地址, 直接访问文件, 不经过后端服务中转
-     */
-    private String fileServerUrl = "http://127.0.0.1:9999";
-
-    /**
      * 处理为 / 结尾
      */
     public String getForwardServerUrl() {
-        return StrUtil.removeSuffix(forwardServerUrl, "/")+"/";
-    }
-
-    /**
-     * 处理为 / 结尾
-     */
-    public String getFileServerUrl() {
-        return StrUtil.removeSuffix(fileServerUrl, "/")+"/";
+        return StrUtil.removeSuffix(forwardServerUrl, "/");
     }
 }

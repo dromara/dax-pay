@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * @author xxm
  * @since 2024/6/25
  */
+@Validated
 @Tag(name = "商户应用控制器")
 @RestController
 @RequestMapping("/mch/app")

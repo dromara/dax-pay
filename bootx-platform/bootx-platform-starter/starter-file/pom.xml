@@ -24,9 +24,16 @@
             <artifactId>x-file-storage-spring</artifactId>
             <version>${x-file-storage.version}</version>
         </dependency>
+        <!-- 数据库 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-mybatis-plus</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 认证 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-auth</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
     </dependencies>

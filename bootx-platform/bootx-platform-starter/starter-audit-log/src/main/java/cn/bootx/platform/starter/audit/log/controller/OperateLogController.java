@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "操作日志")
 @RestController
 @RequestMapping("/log/operate")
-@RequestGroup(groupCode = "operateLog", groupName = "操作日志", moduleCode = "auditLog")
+@RequestGroup(groupCode = "operateLog", groupName = "操作日志", moduleCode = "starter", moduleName = "starter模块")
 @RequiredArgsConstructor
 public class OperateLogController {
 
