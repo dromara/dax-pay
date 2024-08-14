@@ -16,6 +16,10 @@ import java.time.LocalDate;
 @Schema(title = "对账任务创建参数")
 public class ReconcileCreatParam {
 
+    /** 名称 */
+    @Schema(description = "名称")
+    private String name;
+
     /** 应用Appid */
     @Schema(description = "应用Appid")
     private String appId;

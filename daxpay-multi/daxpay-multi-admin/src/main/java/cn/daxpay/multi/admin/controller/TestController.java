@@ -1,8 +1,7 @@
 package cn.daxpay.multi.admin.controller;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
 import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobProcessor;
+import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
 import cn.bootx.platform.common.redis.delay.bean.DelayJob;
 import cn.bootx.platform.common.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.annotation.IgnoreAuth;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -42,11 +40,6 @@ public class TestController {
     private final RedisTemplate<String, Object> redisTemplate;
     private final DelayJobService delayJobService;
 
-
-    private final static AtomicInteger index = new AtomicInteger(0);
-
-    private final static String[] tag = new String[]{"test","web","java"};
-    private final DelayJobProcessor delayJobProcessor;
 
 
     @Operation(summary = "测试路径生成")
@@ -83,8 +76,6 @@ public class TestController {
         if (RandomUtil.randomBoolean()){
             throw new RuntimeException("测试异常");
         }
-
         log.info("接收到消息:{}",event);
     }
-
 }

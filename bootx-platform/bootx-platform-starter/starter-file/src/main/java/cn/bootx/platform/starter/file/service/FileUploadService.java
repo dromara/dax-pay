@@ -11,6 +11,7 @@ import cn.bootx.platform.starter.file.entity.UploadFileInfo;
 import cn.bootx.platform.starter.file.param.UploadFileQuery;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.ServletOutputStream;
@@ -32,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 /**
  * 文件上传管理类
@@ -94,7 +96,7 @@ public class FileUploadService {
             uploadPretreatment.setOriginalFilename(fileName);
         }
         // 按年月日进行分目录
-        uploadPretreatment.setPath(DateUtil.format(DateUtil.date(), "yyyy/MM/dd/"));
+        uploadPretreatment.setPath(LocalDateTimeUtil.format(LocalDateTime.now(), "yyyy/MM/dd/"));
 
         FileInfo upload = uploadPretreatment.upload();
         return FileConvert.CONVERT.toDto(upload);

@@ -16,10 +16,7 @@ import cn.daxpay.multi.service.service.reconcile.ReconcileStatementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -56,7 +53,7 @@ public class ReconcileStatementController {
     @RequestPath("手动上传交易对账单文件")
     @Operation(summary = "手动上传交易对账单文件")
     @PostMapping("/upload")
-    public Result<Void> upload(ReconcileUploadParam param, MultipartFile file){
+    public Result<Void> upload(ReconcileUploadParam param, @RequestPart MultipartFile file){
         ValidationUtil.validateParam(param);
         statementService.uploadAndSave(param,file);
         return Res.ok();

@@ -22,6 +22,9 @@ import java.time.LocalDate;
 @Schema(title = "对账报告")
 public class ReconcileStatementResult extends MchResult {
 
+    /** 名称 */
+    @Schema(description = "名称")
+    private String name;
 
     /** 对账号 */
     @Schema(description = "对账号")
@@ -50,29 +53,29 @@ public class ReconcileStatementResult extends MchResult {
     @Schema(description = "支付订单数")
     private Integer orderCount;
 
+    /** 支付交易金额 */
+    @Schema(description = "支付交易金额")
+    private BigDecimal orderAmount;
+
     /** 退款订单数 */
     @Schema(description = "退款订单数")
     private Integer refundCount;
-
-    /** 通道支付订单数 */
-    @Schema(description = "通道支付订单数")
-    private Integer channelOrderCount;
-
-    /** 通道退款订单数 */
-    @Schema(description = "通道退款订单数")
-    private Integer channelRefundCount;
-
-    /** 支付交易金额 */
-    @Schema(description = "支付交易金额")
-    private BigDecimal tradeAmount;
 
     /** 退款交易金额 */
     @Schema(description = "退款交易金额")
     private BigDecimal refundAmount;
 
+    /** 通道支付订单数 */
+    @Schema(description = "通道支付订单数")
+    private Integer channelOrderCount;
+
     /** 通道支付交易金额 */
     @Schema(description = "通道支付交易金额")
-    private BigDecimal channelTradeAmount;
+    private BigDecimal channelOrderAmount;
+
+    /** 通道退款订单数 */
+    @Schema(description = "通道退款订单数")
+    private Integer channelRefundCount;
 
     /** 通道退款交易金额 */
     @Schema(description = "通道退款交易金额")

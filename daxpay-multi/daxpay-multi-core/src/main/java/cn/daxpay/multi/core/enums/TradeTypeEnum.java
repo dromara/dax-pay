@@ -1,7 +1,10 @@
 package cn.daxpay.multi.core.enums;
 
+import cn.daxpay.multi.core.exception.ConfigNotExistException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
 
 /**
  * 常见的交易类型, 如支付/退款/转账等
@@ -18,4 +21,11 @@ public enum TradeTypeEnum {
 
     private final String code;
     private final String name;
+
+    public static TradeTypeEnum findByCode(String code) {
+        return Arrays.stream(values())
+                .filter(tradeTypeEnum -> tradeTypeEnum.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new ConfigNotExistException("交易类型不存在"));
+    }
 }

@@ -55,9 +55,10 @@ public class ReconcileAssistService {
         for (PayOrder payOrder : payOrders) {
             reconcileTradeBos.add(new PlatformReconcileTradeBo()
                     .setTradeNo(payOrder.getOrderNo())
+                    .setBizTradeNo(payOrder.getBizOrderNo())
                     .setOutTradeNo(payOrder.getOutOrderNo())
                     .setTradeTime(payOrder.getPayTime())
-                    .setType(TradeTypeEnum.PAY.getCode())
+                    .setTradeType(TradeTypeEnum.PAY.getCode())
                     .setAmount(payOrder.getAmount())
             );
         }
@@ -65,9 +66,10 @@ public class ReconcileAssistService {
         for (RefundOrder refundOrder : refundOrders) {
             reconcileTradeBos.add(new PlatformReconcileTradeBo()
                     .setTradeNo(refundOrder.getRefundNo())
+                    .setBizTradeNo(refundOrder.getBizRefundNo())
                     .setOutTradeNo(refundOrder.getOutRefundNo())
                     .setTradeTime(refundOrder.getFinishTime())
-                    .setType(TradeTypeEnum.REFUND.getCode())
+                    .setTradeType(TradeTypeEnum.REFUND.getCode())
                     .setAmount(refundOrder.getAmount()));
         }
         return reconcileTradeBos;
@@ -103,10 +105,9 @@ public class ReconcileAssistService {
                         .setReconcileId(reconcileOrder.getId())
                         .setReconcileNo(reconcileOrder.getReconcileNo())
                         .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.LOCAL_NOT_EXISTS.getCode())
-                        .setTradeType(channelDetail.getType())
+                        .setTradeType(channelDetail.getTradeType())
                         .setChannel(reconcileOrder.getChannel())
                         .setChannelTradeNo(channelDetail.getTradeNo())
-                        .setChannelOutTradeNo(channelDetail.getOutTradeNo())
                         .setChannelTradeAmount(channelDetail.getAmount())
                         .setChannelTradeTime(channelDetail.getTradeTime());
                 discrepancies.add(discrepancy);
@@ -121,14 +122,12 @@ public class ReconcileAssistService {
                         .setChannel(reconcileOrder.getChannel())
                         .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.NOT_MATCH.getCode())
                         .setTradeNo(localTrade.getTradeNo())
-                        .setTradeType(localTrade.getType())
-                        .setOutTradeNo(localTrade.getOutTradeNo())
+                        .setBizTradeNo(localTrade.getBizTradeNo())
+                        .setTradeType(localTrade.getTradeType())
                         .setTradeAmount(localTrade.getAmount())
                         .setTradeTime(localTrade.getTradeTime())
-
                         .setChannelTradeNo(channelDetail.getTradeNo())
-                        .setChannelTradeType(channelDetail.getType())
-                        .setChannelOutTradeNo(channelDetail.getOutTradeNo())
+                        .setChannelTradeType(channelDetail.getTradeType())
                         .setChannelTradeAmount(channelDetail.getAmount())
                         .setChannelTradeTime(channelDetail.getTradeTime());
                 discrepancies.add(discrepancy);
@@ -145,8 +144,9 @@ public class ReconcileAssistService {
                         .setChannel(reconcileOrder.getChannel())
                         .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.REMOTE_NOT_EXISTS.getCode())
                         .setTradeNo(localTrade.getTradeNo())
-                        .setTradeType(localTrade.getType())
-                        .setOutTradeNo(localTrade.getOutTradeNo())
+                        .setBizTradeNo(localTrade.getBizTradeNo())
+                        .setTradeType(localTrade.getTradeType())
+                        .setChannelTradeNo(localTrade.getOutTradeNo())
                         .setTradeAmount(localTrade.getAmount())
                         .setTradeTime(localTrade.getTradeTime());
                 discrepancies.add(diffRecord);
@@ -165,14 +165,14 @@ public class ReconcileAssistService {
     private boolean reconcileDiff(ChannelReconcileTrade outDetail, PlatformReconcileTradeBo localTrade){
 
         // 判断类型是否相同
-        if (!Objects.equals(outDetail.getType(), localTrade.getType())){
-            log.warn("订单类型不一致: {},{}", outDetail.getType(), localTrade.getType());
+        if (!Objects.equals(outDetail.getTradeType(), localTrade.getTradeType())){
+            log.warn("订单类型不一致: {},{}", outDetail.getTradeType(), localTrade.getTradeType());
             return false;
         }
         // 判断金额是否一致
         if (!Objects.equals(outDetail.getAmount(), localTrade.getAmount())){
             log.warn("订单金额不一致: {},{}", outDetail.getAmount(), localTrade.getAmount());
-           return false;
+            return false;
         }
         return true;
     }

@@ -8,6 +8,7 @@ import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.convert.order.pay.PayOrderConvert;
 import cn.daxpay.multi.service.result.order.pay.PayOrderVo;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -135,6 +136,11 @@ public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
 
     public boolean getAutoAllocation() {
         return Objects.equals(true, autoAllocation);
+    }
+
+    public PayOrder setErrorMsg(String errorMsg) {
+        this.errorMsg = StrUtil.sub(errorMsg,0,200);
+        return this;
     }
 
     @Override

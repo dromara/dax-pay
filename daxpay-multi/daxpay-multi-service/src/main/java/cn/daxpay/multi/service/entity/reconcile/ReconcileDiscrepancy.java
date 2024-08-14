@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.entity.reconcile;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.convert.reconcile.ReconcileConvert;
 import cn.daxpay.multi.service.enums.ReconcileDiscrepancyTypeEnum;
@@ -44,13 +45,16 @@ public class ReconcileDiscrepancy extends MchBaseEntity implements ToResult<Reco
     private String discrepancyType;
 
     /* 平台侧信息 */
-    /** 商户交易号 */
+    /** 平台交易号 */
     private String TradeNo;
 
-    /** 通道交易号(平台交易订单) */
-    private String outTradeNo;
+    /** 商户订单号 */
+    private String bizTradeNo;
 
-    /** 交易类型 */
+    /**
+     * 交易类型
+     * @see TradeTypeEnum
+     */
     private String tradeType;
 
     /** 交易金额 */
@@ -64,11 +68,8 @@ public class ReconcileDiscrepancy extends MchBaseEntity implements ToResult<Reco
 
     /* 通道侧信息 */
 
-    /** 通道交易号(对账文件中的平台交易号) */
-    private String channelTradeNo;
-
     /** 通道交易号 */
-    private String channelOutTradeNo;
+    private String channelTradeNo;
 
     /** 通道交易类型 */
     private String channelTradeType;
@@ -76,11 +77,8 @@ public class ReconcileDiscrepancy extends MchBaseEntity implements ToResult<Reco
     /** 通道交易金额 */
     private BigDecimal channelTradeAmount;
 
-    /** 通道交易状态(转换为系统内的属性) */
+    /** 通道交易状态 */
     private String channelTradeStatus;
-
-    /** 通道交易状态(原始) */
-    private String channelTradeRawStatus;
 
     /** 通道交易时间 */
     private LocalDateTime channelTradeTime;

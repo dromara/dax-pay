@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * 转账接收方类型
@@ -38,10 +36,5 @@ public enum TransferPayeeTypeEnum {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("未找到对应的分账接收方类型"));
     }
-
-    /** 微信支持类型 */
-    public static final List<TransferPayeeTypeEnum> WECHAT_LIST = Collections.singletonList(WX_PERSONAL);
-    /** 支付宝支持类型 */
-    public static final List<TransferPayeeTypeEnum> ALI_LIST = Collections.unmodifiableList(Arrays.asList(ALI_OPEN_ID, ALI_USER_ID, ALI_LOGIN_NAME));
 
 }

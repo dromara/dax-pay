@@ -146,7 +146,6 @@ public class AliPayReconcileService {
     private ChannelReconcileTradeBo convert(AliReconcileBillDetail billDetail){
         // 金额
         var amount = new BigDecimal(billDetail.getOrderAmount());
-
         // 默认为支付对账记录
         ChannelReconcileTradeBo reconcileTradeBo = new ChannelReconcileTradeBo()
                 .setTradeNo(billDetail.getOutTradeNo())

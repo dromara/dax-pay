@@ -20,13 +20,19 @@ public class PlatformReconcileTradeBo {
      * 交易类型
      * @see TradeTypeEnum
      */
-    private String type;
+    private String tradeType;
 
     /** 金额 */
     private BigDecimal amount;
 
+    /** 交易状态 */
+    private String tradeStatus;
+
     /** 本地交易号 */
     private String tradeNo;
+
+    /** 商户交易号 */
+    private String bizTradeNo;
 
     /** 通道交易号 */
     private String outTradeNo;

@@ -5,6 +5,7 @@ import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
+import cn.daxpay.multi.sdk.param.channel.AlipayParam;
 import cn.daxpay.multi.sdk.param.channel.WechatPayParam;
 import cn.daxpay.multi.sdk.param.trade.pay.PayParam;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
@@ -140,6 +141,25 @@ public class PayOrderTest {
      */
     @Test
     public void aliPayBarCode(){
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试支付宝付款码支付");
+        param.setDescription("这是支付宝付款码支付");
+        param.setAmount(BigDecimal.valueOf(1));
+        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setMethod(PayMethodEnum.BARCODE.getCode());
 
+        AlipayParam alipayParam = new AlipayParam();
+        alipayParam.setAuthCode("");
+        param.setExtraParam(JsonUtil.toJsonStr(alipayParam));
+
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("https://abc.com/callback");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 }

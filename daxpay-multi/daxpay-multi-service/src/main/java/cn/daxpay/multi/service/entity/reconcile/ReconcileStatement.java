@@ -27,6 +27,9 @@ import java.time.LocalDate;
 @TableName(value = "pay_reconcile_statement")
 public class ReconcileStatement extends MchBaseEntity implements ToResult<ReconcileStatementResult> {
 
+    /** 名称 */
+    private String name;
+
     /** 对账号 */
     private String reconcileNo;
 
@@ -48,23 +51,23 @@ public class ReconcileStatement extends MchBaseEntity implements ToResult<Reconc
     /** 支付订单数 */
     private Integer orderCount;
 
+    /** 支付交易金额 */
+    private BigDecimal orderAmount;
+
     /** 退款订单数 */
     private Integer refundCount;
-
-    /** 通道支付订单数 */
-    private Integer channelOrderCount;
-
-    /** 通道退款订单数 */
-    private Integer channelRefundCount;
-
-    /** 支付交易金额 */
-    private BigDecimal tradeAmount;
 
     /** 退款交易金额 */
     private BigDecimal refundAmount;
 
+    /** 通道支付订单数 */
+    private Integer channelOrderCount;
+
     /** 通道支付交易金额 */
-    private BigDecimal channelTradeAmount;
+    private BigDecimal channelOrderAmount;
+
+    /** 通道退款订单数 */
+    private Integer channelRefundCount;
 
     /** 通道退款交易金额 */
     private BigDecimal channelRefundAmount;
@@ -76,12 +79,12 @@ public class ReconcileStatement extends MchBaseEntity implements ToResult<Reconc
     private String result;
 
     /**
-     * 原始通道对账单文件id
+     * 原始通道对账单文件url
      */
     private String channelFileUrl;
 
     /**
-     * 生成平台对账单文件ID
+     * 生成平台对账单文件url
      */
     private String platformFileUrl;
 

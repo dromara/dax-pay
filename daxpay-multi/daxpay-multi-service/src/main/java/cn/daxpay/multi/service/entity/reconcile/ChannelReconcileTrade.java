@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 通道对账交易明细, 通过解析通道对账文件获得
+ * 通道对账交易明细, 通过解析通道对账文件获得,
  * @author xxm
  * @since 2024/8/6
  */
@@ -28,16 +28,19 @@ public class ChannelReconcileTrade extends MchRecordEntity {
      * 交易类型
      * @see TradeTypeEnum
      */
-    private String type;
+    private String tradeType;
 
     /** 本地交易号 */
     private String tradeNo;
 
-    /** 通道交易号 - 支付宝/微信的订单号 */
+    /** 通道交易号 */
     private String outTradeNo;
 
     /** 交易金额 */
     private BigDecimal amount;
+
+    /** 交易状态 */
+    private String tradeStatus;
 
     /** 交易时间 */
     private LocalDateTime tradeTime;

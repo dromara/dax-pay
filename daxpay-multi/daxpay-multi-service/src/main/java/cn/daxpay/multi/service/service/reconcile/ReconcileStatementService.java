@@ -1,16 +1,18 @@
 package cn.daxpay.multi.service.service.reconcile;
 
 import cn.bootx.platform.core.exception.DataNotExistException;
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
-import cn.daxpay.multi.service.bo.reconcile.ChannelReconcileTradeBo;
-import cn.daxpay.multi.service.bo.reconcile.ReconcileResolveResultBo;
+import cn.daxpay.multi.service.bo.reconcile.*;
 import cn.daxpay.multi.service.convert.reconcile.ReconcileConvert;
 import cn.daxpay.multi.service.dao.reconcile.ChannelReconcileTradeManage;
 import cn.daxpay.multi.service.dao.reconcile.ReconcileDiscrepancyManager;
 import cn.daxpay.multi.service.dao.reconcile.ReconcileStatementManager;
 import cn.daxpay.multi.service.entity.reconcile.ChannelReconcileTrade;
+import cn.daxpay.multi.service.entity.reconcile.ReconcileDiscrepancy;
 import cn.daxpay.multi.service.entity.reconcile.ReconcileStatement;
+import cn.daxpay.multi.service.enums.ReconcileDiscrepancyTypeEnum;
 import cn.daxpay.multi.service.enums.ReconcileFileTypeEnum;
 import cn.daxpay.multi.service.enums.ReconcileResultEnum;
 import cn.daxpay.multi.service.param.reconcile.ReconcileCreatParam;
@@ -19,16 +21,29 @@ import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.strategy.AbsReconcileStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
+import org.dromara.x.file.storage.core.upload.UploadPretreatment;
+import org.jeecgframework.poi.excel.ExcelExportUtil;
+import org.jeecgframework.poi.excel.entity.TemplateExportParams;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 对账服务类
@@ -52,12 +67,13 @@ public class ReconcileStatementService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileStatement create(ReconcileCreatParam param) {
-        ReconcileStatement order = new ReconcileStatement()
+        ReconcileStatement statement = new ReconcileStatement()
+                .setName(param.getName())
                 .setReconcileNo(TradeNoGenerateUtil.reconciliation())
                 .setChannel(param.getChannel())
                 .setDate(param.getDate());
-        reconcileStatementManager.save(order);
-        return order;
+        reconcileStatementManager.save(statement);
+        return statement;
     }
 
     /**
@@ -149,14 +165,6 @@ public class ReconcileStatementService {
     public void compare(Long id){
         var statement = reconcileStatementManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("未找到对账单"));
-        this.compare(statement);
-    }
-
-    /**
-     * 交易对账比对
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void compare(ReconcileStatement statement){
         // 判断是否已经下载了对账单明细
         if (!statement.isDownOrUpload()){
             throw new OperationFailException("请先下载对账单");
@@ -165,46 +173,206 @@ public class ReconcileStatementService {
         if (statement.isCompare()){
             throw new OperationFailException("对账单比对已经完成");
         }
-        // 查询对账单
-        List<ChannelReconcileTrade> reconcileTradeDetails = reconcileTradeManage.findAllByReconcileId(statement.getId());
-        // 构建对账策略
-        AbsReconcileStrategy reconcileStrategy =PaymentStrategyFactory.create(statement.getChannel(), AbsReconcileStrategy.class);
-        // 初始化参数
-        reconcileStrategy.setStatement(statement);
 
-        try {
-            // 执行比对任务, 获取对账差异记录并保存
-           var generalTradeInfo = reconcileAssistService.getPlatformReconcileTrades(statement);
-            var discrepancies =
-                    reconcileAssistService.generateDiscrepancy(statement, generalTradeInfo, reconcileTradeDetails);
-            // 判断是否有差异
-            if (CollUtil.isNotEmpty(discrepancies)){
-                statement.setResult(ReconcileResultEnum.INCONSISTENT.getCode());
-            }else {
-                statement.setResult(ReconcileResultEnum.CONSISTENT.getCode());
-            }
-            // 生成对账单文件
-            String fileUrl = this.saveReconcileFile();
-            statement.setCompare(true);
-            reconcileStatementManager.updateById(statement);
-            discrepancyManager.saveAll(discrepancies);
-        } catch (Exception e) {
-            log.error("比对对账单异常", e);
-            throw e;
+        // 通道交易记录
+        var channelTrades = reconcileTradeManage.findAllByReconcileId(statement.getId());
+        // 平台交易记录
+        var platformTrades = reconcileAssistService.getPlatformReconcileTrades(statement);
+        // 汇总数据计算
+        this.calculationTotal(statement, channelTrades, platformTrades);
+        // 进行比对
+        var discrepancies = this.compare(statement, channelTrades, platformTrades);
+        // 生成对账单文件并保存
+        this.genReconcileFile(statement, discrepancies, platformTrades, channelTrades);
+
+    }
+
+    /**
+     * 交易对账比对
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public List<ReconcileDiscrepancy> compare(ReconcileStatement statement, List<ChannelReconcileTrade> channelTrades, List<PlatformReconcileTradeBo> platformTrades){
+
+        // 执行比对任务, 获取对账差异记录并保存
+        var discrepancies = reconcileAssistService.generateDiscrepancy(statement, platformTrades, channelTrades);
+        // 判断是否有差异
+        if (CollUtil.isNotEmpty(discrepancies)){
+            statement.setResult(ReconcileResultEnum.INCONSISTENT.getCode());
+        }else {
+            statement.setResult(ReconcileResultEnum.CONSISTENT.getCode());
         }
+        discrepancyManager.saveAll(discrepancies);
+        return discrepancies;
     }
 
     /**
      * 生成对账文件并保存
      */
-    public String saveReconcileFile(){
-
+    @SneakyThrows
+    public void genReconcileFile(ReconcileStatement statement, List<ReconcileDiscrepancy> discrepancies, List<PlatformReconcileTradeBo> platformTrades, List<ChannelReconcileTrade> channelTrades){
         // 生成对账文件
+        var params = new TemplateExportParams("classpath:template/对账单模板.xlsx");
+        params.setScanAllsheet(true);
+        Map<String, Object> map = new HashMap<>();
+        // 汇总
+        map.put("total", this.convertTotal(statement));
+        // 明细
+        map.put("trades", this.convertTrades(discrepancies, platformTrades, channelTrades));
+        // 生成对账单文件
+        Workbook workbook = ExcelExportUtil.exportExcel(params, map);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        workbook.write(baos);
+        workbook.close();
+        UploadPretreatment uploadPretreatment = fileStorageService.of(baos.toByteArray(), "对账文件.xlsx");
+        uploadPretreatment.setPath(LocalDateTimeUtil.format(LocalDateTime.now(), "yyyy/MM/dd/"));
+        uploadPretreatment.setOriginalFilename(statement.getName()+".xlsx");
+        FileInfo upload = uploadPretreatment.upload();
+        statement.setPlatformFileUrl(upload.getUrl());
+    }
 
-        byte[] bytes = new byte[0];
+    /**
+     * 计算汇总数据
+     */
+    public void calculationTotal(ReconcileStatement statement, List<ChannelReconcileTrade> channelTrades, List<PlatformReconcileTradeBo> platformTrades){
+        // 平台支付
+        BigDecimal tradeAmount = platformTrades.stream()
+                .filter(o-> Objects.equals(o.getTradeType(), TradeTypeEnum.PAY.getCode()))
+                .map(PlatformReconcileTradeBo::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        long tradeCount = platformTrades.stream()
+                .filter(o -> Objects.equals(o.getTradeType(), TradeTypeEnum.PAY.getCode()))
+                .count();
+        statement.setOrderCount(Math.toIntExact(tradeCount))
+                .setOrderAmount(tradeAmount);
+        // 平台退款
+        BigDecimal refundAmount = platformTrades.stream()
+                .filter(o-> Objects.equals(o.getTradeType(), TradeTypeEnum.REFUND.getCode()))
+                .map(PlatformReconcileTradeBo::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        long refundCount = platformTrades.stream()
+                .filter(o -> Objects.equals(o.getTradeType(), TradeTypeEnum.REFUND.getCode()))
+                .count();
+        statement.setRefundCount(Math.toIntExact(refundCount))
+                .setRefundAmount(refundAmount);
+        // 通道支付
+        BigDecimal channelTradeAmount = channelTrades.stream()
+                .filter(o-> Objects.equals(o.getTradeType(), TradeTypeEnum.PAY.getCode()))
+                .map(ChannelReconcileTrade::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        long channelTradeCount = channelTrades.stream()
+                .filter(o -> Objects.equals(o.getTradeType(), TradeTypeEnum.PAY.getCode()))
+                .count();
+        statement.setChannelOrderCount(Math.toIntExact(channelTradeCount))
+                .setChannelOrderAmount(channelTradeAmount);
 
-        fileStorageService.of(bytes, "对账文件.xlsx");
+        // 通道退款
+        BigDecimal channelRefundAmount = channelTrades.stream()
+                .filter(o-> Objects.equals(o.getTradeType(), TradeTypeEnum.REFUND.getCode()))
+                .map(ChannelReconcileTrade::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        long channelRefundCount = channelTrades.stream()
+                .filter(o -> Objects.equals(o.getTradeType(), TradeTypeEnum.REFUND.getCode()))
+                .count();
+        statement.setChannelRefundCount(Math.toIntExact(channelRefundCount))
+                .setChannelRefundAmount(channelRefundAmount);
+    }
 
-        return "";
+
+    /**
+     * 转换对账单概览
+     */
+    public ReconcileTotalExcel convertTotal(ReconcileStatement statement){
+        // 汇总
+        return new ReconcileTotalExcel()
+                .setReconcileDate(LocalDateTimeUtil.format(statement.getDate(), DatePattern.CHINESE_DATE_PATTERN))
+                .setCreateTime(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                .setChannel(statement.getChannel())
+                .setResult(ReconcileResultEnum.findByCode(statement.getResult()).getName())
+                .setTradeAmount(statement.getOrderAmount().toString())
+                .setTradeCount(statement.getOrderCount())
+                .setRefundAmount(statement.getRefundAmount().toString())
+                .setRefundCount(statement.getRefundCount())
+                .setChannelTradeAmount(statement.getChannelOrderAmount().toString())
+                .setChannelTradeCount(statement.getChannelOrderCount())
+                .setChannelRefundAmount(statement.getChannelRefundAmount().toString())
+                .setChannelRefundCount(statement.getChannelRefundCount());
+    }
+
+    /**
+     * 转换对账单明细
+     */
+    public List<ReconcileTradeExcel> convertTrades(List<ReconcileDiscrepancy> discrepancies, List<PlatformReconcileTradeBo> platformTrades, List<ChannelReconcileTrade> channelTrades) {
+        // 平台异常交易
+        var platformDiscrepancyMap = discrepancies.stream()
+                .collect(Collectors.toMap(ReconcileDiscrepancy::getTradeNo, Function.identity(), (o1, o2) -> o1));
+        // 通道正常交易
+        var channelTradeMap = channelTrades.stream()
+                .collect(Collectors.toMap(ChannelReconcileTrade::getTradeNo, Function.identity(), (o1, o2) -> o1));
+
+        List<ReconcileTradeExcel> tradeExcels = new ArrayList<>();
+
+        // 先执行平台的正常订单
+        for (PlatformReconcileTradeBo platformTrade : platformTrades) {
+            if (Objects.nonNull(platformDiscrepancyMap.get(platformTrade.getTradeNo()))){
+                continue;
+            }
+            var channelTrade = channelTradeMap.get(platformTrade.getTradeNo());
+            tradeExcels.add(new ReconcileTradeExcel()
+                    .setResult("一致")
+                    .setTradeNo(platformTrade.getTradeNo())
+                    .setBizTradeNo(platformTrade.getBizTradeNo())
+                    .setTradeType(TradeTypeEnum.findByCode(platformTrade.getTradeType()).getName())
+                    .setTradeAmount(platformTrade.getAmount().toString())
+                    .setTradeStatus(platformTrade.getTradeStatus())
+                    .setTradeTime(LocalDateTimeUtil.format(platformTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                    .setChannelTradeAmount(channelTrade.getAmount().toString())
+                    .setChannelTradeStatus(channelTrade.getTradeStatus())
+                    .setChannelTradeTime(LocalDateTimeUtil.format(channelTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+            );
+        }
+        // 处理异常订单
+        for (ReconcileDiscrepancy discrepancy : discrepancies) {
+            var discrepancyTrade = platformDiscrepancyMap.get(discrepancy.getTradeNo());
+            switch (ReconcileDiscrepancyTypeEnum.findByCode(discrepancy.getDiscrepancyType())) {
+                // 处理本地短单
+                case LOCAL_NOT_EXISTS -> tradeExcels.add(new ReconcileTradeExcel()
+                        .setResult(ReconcileDiscrepancyTypeEnum.LOCAL_NOT_EXISTS.getName())
+                        .setTradeNo(discrepancy.getTradeNo())
+                        .setOutTradeNo(discrepancy.getChannelTradeNo())
+                        .setTradeType(TradeTypeEnum.findByCode(discrepancy.getTradeType()).getName())
+                        .setChannelTradeStatus(discrepancy.getChannelTradeStatus())
+                        .setChannelTradeAmount(discrepancy.getChannelTradeAmount().toString())
+                        .setChannelTradeTime(discrepancyTrade.getTradeStatus())
+                );
+                // 处理远程短单
+                case REMOTE_NOT_EXISTS -> {
+                    tradeExcels.add(new ReconcileTradeExcel()
+                            .setResult(ReconcileDiscrepancyTypeEnum.REMOTE_NOT_EXISTS.getName())
+                            .setTradeNo(discrepancyTrade.getTradeNo())
+                            .setBizTradeNo(discrepancyTrade.getBizTradeNo())
+                            .setTradeType(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType()).getName())
+                            .setTradeAmount(discrepancyTrade.getTradeAmount().toString())
+                            .setTradeStatus(discrepancyTrade.getTradeStatus())
+                            .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                    );
+                }
+                // 处理信息不一致订单
+                case NOT_MATCH -> {
+                    tradeExcels.add(new ReconcileTradeExcel()
+                            .setResult(ReconcileDiscrepancyTypeEnum.NOT_MATCH.getName())
+                            .setTradeNo(discrepancyTrade.getTradeNo())
+                            .setBizTradeNo(discrepancyTrade.getBizTradeNo())
+                            .setTradeType(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType()).getName())
+                            .setTradeAmount(discrepancyTrade.getTradeAmount().toString())
+                            .setTradeStatus(discrepancyTrade.getTradeStatus())
+                            .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                            .setChannelTradeAmount(discrepancy.getChannelTradeAmount().toString())
+                            .setChannelTradeStatus(discrepancy.getChannelTradeStatus())
+                            .setChannelTradeTime(LocalDateTimeUtil.format(discrepancy.getChannelTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                    );
+                }
+            }
+        }
+        return tradeExcels;
     }
 }
