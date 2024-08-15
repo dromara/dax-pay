@@ -36,5 +36,6 @@
             <artifactId>starter-auth</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
+
     </dependencies>
 </project>

@@ -43,7 +43,7 @@ public class MerchantService {
         String mchNo = this.getMchNo();
         Merchant entity = MerchantConvert.CONVERT.toEntity(param);
         entity.setMchNo(mchNo)
-                .setStatus(MerchantStatusEnum.DISABLED.toString());
+                .setStatus(MerchantStatusEnum.ENABLE.getCode());
         merchantManager.save(entity);
     }
 

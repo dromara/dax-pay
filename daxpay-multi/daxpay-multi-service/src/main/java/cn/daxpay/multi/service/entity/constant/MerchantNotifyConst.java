@@ -3,6 +3,7 @@ package cn.daxpay.multi.service.entity.constant;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.convert.constant.MerchantNotifyConstConvert;
+import cn.daxpay.multi.service.enums.NotifyContentTypeEnum;
 import cn.daxpay.multi.service.result.constant.MerchantNotifyConstResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.experimental.Accessors;
 
 /**
  * 商户订阅通知类型
- * @see cn.daxpay.multi.service.enums.NotifyTypeEnum
+ * @see NotifyContentTypeEnum
  * @author xxm
  * @since 2024/7/30
  */

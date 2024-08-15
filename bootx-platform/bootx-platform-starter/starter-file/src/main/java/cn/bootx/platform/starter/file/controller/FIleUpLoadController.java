@@ -8,6 +8,7 @@ import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.starter.file.param.UploadFileQuery;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
 import cn.bootx.platform.starter.file.service.FileUploadService;
+import com.fhs.core.trans.anno.TransMethodResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,12 +32,14 @@ public class FIleUpLoadController {
     private final FileUploadService uploadService;
 
     @IgnoreAuth
+    @TransMethodResult
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<UploadFileResult>> page(PageParam pageParam, UploadFileQuery param) {
         return Res.ok(uploadService.page(pageParam,param));
     }
 
+    @TransMethodResult
     @Operation(summary = "获取单条详情")
     @GetMapping("/findById")
     public Result<UploadFileResult> findById(Long id) {

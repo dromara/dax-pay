@@ -26,13 +26,13 @@
 
     <properties>
         <bootx-platform.version>0.0.1-SNAPSHOT</bootx-platform.version>
-        <springdoc.version>2.5.0</springdoc.version>
+        <springdoc.version>2.6.0</springdoc.version>
         <hutool.version>5.8.31</hutool.version>
         <bouncycastle.version>1.78.1</bouncycastle.version>
         <knife4j.version>4.5.0</knife4j.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
-        <dynamic-datasource.version>4.3.0</dynamic-datasource.version>
+        <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
         <lock4j.version>2.2.7</lock4j.version>
         <x-file-storage.version>2.2.1</x-file-storage.version>
         <minio.version>8.5.4</minio.version>
@@ -42,9 +42,10 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <ip2region.version>2.7.0</ip2region.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <ttl.version>2.14.3</ttl.version>
+        <ttl.version>2.14.5</ttl.version>
         <kryo.version>5.6.0</kryo.version>
         <autopoi.version>1.4.8</autopoi.version>
+        <easytrans.version>3.0.5</easytrans.version>
 
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>

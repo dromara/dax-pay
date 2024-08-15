@@ -14,7 +14,7 @@ import cn.daxpay.multi.service.entity.notice.notify.MerchantNotifyTask;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
-import cn.daxpay.multi.service.enums.NotifyTypeEnum;
+import cn.daxpay.multi.service.enums.NotifyContentTypeEnum;
 import cn.daxpay.multi.service.service.config.MerchantNotifyConfigService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,14 +42,14 @@ public class MerchantNotifyTaskService {
      * 注册支付通知
      */
     public void registerPayNotice(PayOrder order) {
-        if (this.nonRegister(NotifyTypeEnum.PAY)){
+        if (this.nonRegister(NotifyContentTypeEnum.PAY)){
             return;
         }
         var noticeResult = PayOrderConvert.CONVERT.toResult(order);
         var task = new MerchantNotifyTask()
                 // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
                 .setContent(JacksonUtil.toJson(noticeResult))
-                .setNotifyType(NotifyTypeEnum.PAY.getCode())
+                .setNotifyType(NotifyContentTypeEnum.PAY.getCode())
                 .setSendCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getOrderNo());
@@ -62,14 +62,14 @@ public class MerchantNotifyTaskService {
      * 注册退款通知
      */
     public void registerRefundNotice(RefundOrder order) {
-        if (this.nonRegister(NotifyTypeEnum.REFUND)){
+        if (this.nonRegister(NotifyContentTypeEnum.REFUND)){
             return;
         }
         var noticeResult = RefundOrderConvert.CONVERT.toResult(order);
         var task = new MerchantNotifyTask()
                 // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
                 .setContent(JacksonUtil.toJson(noticeResult))
-                .setNotifyType(NotifyTypeEnum.REFUND.getCode())
+                .setNotifyType(NotifyContentTypeEnum.REFUND.getCode())
                 .setSendCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getRefundNo());
@@ -82,14 +82,14 @@ public class MerchantNotifyTaskService {
      * 注册转账通知
      */
     public void registerTransferNotice(TransferOrder order) {
-        if (this.nonRegister(NotifyTypeEnum.TRANSFER)){
+        if (this.nonRegister(NotifyContentTypeEnum.TRANSFER)){
             return;
         }
         var noticeResult = TransferOrderConvert.CONVERT.toResult(order);
         var task = new MerchantNotifyTask()
                 // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
                 .setContent(JacksonUtil.toJson(noticeResult))
-                .setNotifyType(NotifyTypeEnum.TRANSFER.getCode())
+                .setNotifyType(NotifyContentTypeEnum.TRANSFER.getCode())
                 .setSendCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getTransferNo());
@@ -101,7 +101,7 @@ public class MerchantNotifyTaskService {
     /**
      * 判断是否需要注册通知
      */
-    private boolean nonRegister(NotifyTypeEnum notifyType) {
+    private boolean nonRegister(NotifyContentTypeEnum notifyType) {
         // 判断是否开启消息通知功能
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         if (!Objects.equals(mchAppInfo.getNotifyType(), MerchantNotifyTypeEnum.HTTP)){

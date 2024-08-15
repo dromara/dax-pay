@@ -1,4 +1,4 @@
-package cn.bootx.platform.iam.dto.permission;
+package cn.bootx.platform.iam.bo.permission;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class RequestPath {
+public class RequestPathBo {
 
     /** 主键, 只有通过数据库数据生成的才会有值 */
     private Long id;
@@ -38,14 +38,14 @@ public class RequestPath {
     private String method;
 
 
-    public RequestPath setModuleName(String moduleName) {
+    public RequestPathBo setModuleName(String moduleName) {
         if (StrUtil.isNotBlank(moduleName)) {
             this.moduleName = moduleName;
         }
         return this;
     }
 
-    public RequestPath setGroupName(String groupName) {
+    public RequestPathBo setGroupName(String groupName) {
         if (StrUtil.isNotBlank(groupName)){
             this.groupName = groupName;
         }

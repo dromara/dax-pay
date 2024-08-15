@@ -4,7 +4,7 @@ import cn.bootx.platform.common.config.BootxConfigProperties;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.dao.upms.RolePathManager;
-import cn.bootx.platform.iam.dto.permission.RequestPath;
+import cn.bootx.platform.iam.bo.permission.RequestPathBo;
 import cn.bootx.platform.iam.entity.permission.PermPath;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -50,12 +50,12 @@ public class PermPathSyncService {
     public void sync() {
         String clientCode = bootxConfigProperties.getClientCode();
         // 获取系统中的请求路径
-        List<RequestPath> requestPaths = this.getRequestPath();
+        List<RequestPathBo> requestPathBos = this.getRequestPath();
 
         // 查询数据中的数据并转换为请求信息列表
         List<PermPath> permPaths = permPathManager.findAllByLeafAndClient(true,clientCode);
 
-        var requestPathMap = requestPaths.stream()
+        var requestPathMap = requestPathBos.stream()
                 .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
         var permPathMap = permPaths.stream()
                 .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
@@ -80,9 +80,9 @@ public class PermPathSyncService {
         // 重建树结构 删除非子节点
         permPathManager.deleteNotChild();
         // 生成模块信息
-        var moduleMap = this.builderModule(requestPaths);
+        var moduleMap = this.builderModule(requestPathBos);
         // 生成分组信息
-        var groupMap = this.builderGroup(requestPaths);
+        var groupMap = this.builderGroup(requestPathBos);
         // 合并进行保存
         ArrayList<PermPath> list = new ArrayList<>();
         list.addAll(moduleMap);
@@ -96,7 +96,7 @@ public class PermPathSyncService {
     /**
      * 获取新增的
      */
-    public List<PermPath> getAddData(Map<String, RequestPath> requestPathMap, Map<String, PermPath> permPathMap){
+    public List<PermPath> getAddData(Map<String, RequestPathBo> requestPathMap, Map<String, PermPath> permPathMap){
         return requestPathMap.keySet().stream()
                 .filter(o -> !permPathMap.containsKey(o))
                 .map(requestPathMap::get)
@@ -113,7 +113,7 @@ public class PermPathSyncService {
     /**
      * 获取删除的
      */
-    public List<Long> getDeleteData(Map<String, RequestPath> requestPathMap, Map<String, PermPath> permPathMap){
+    public List<Long> getDeleteData(Map<String, RequestPathBo> requestPathMap, Map<String, PermPath> permPathMap){
         return permPathMap.keySet().stream()
                 .filter(o -> !requestPathMap.containsKey(o))
                 .map(permPathMap::get)
@@ -125,14 +125,14 @@ public class PermPathSyncService {
     /**
      * 获取要更新的
      */
-    public List<PermPath> getUpdateData(Map<String, RequestPath> requestPathMap, Map<String, PermPath> permPathMap){
+    public List<PermPath> getUpdateData(Map<String, RequestPathBo> requestPathMap, Map<String, PermPath> permPathMap){
         return permPathMap.keySet().stream()
                 .filter(requestPathMap::containsKey)
                 .map(permPathMap::get)
                 .peek(o -> {
-                    RequestPath requestPath = requestPathMap.get(o.getPath() + ":" + o.getMethod());
-                    o.setName(requestPath.getName())
-                            .setParentCode(requestPath.getGroupCode());
+                    RequestPathBo requestPathBo = requestPathMap.get(o.getPath() + ":" + o.getMethod());
+                    o.setName(requestPathBo.getName())
+                            .setParentCode(requestPathBo.getGroupCode());
                 }).toList();
     }
 
@@ -140,7 +140,7 @@ public class PermPathSyncService {
     /**
      * 生成模块对应的实体
      */
-    private List<PermPath> builderModule(List<RequestPath> allPathList) {
+    private List<PermPath> builderModule(List<RequestPathBo> allPathList) {
         // 提取模块名称和编码, 模块有多个名字情况下获取其中的一个
         Map<String, String> moduleCodeNameMap = allPathList.stream()
                 .filter(o-> StrUtil.isNotBlank(o.getModuleName()))
@@ -156,10 +156,10 @@ public class PermPathSyncService {
     /**
      * 生成组对应的实体
      */
-    private List<PermPath> builderGroup(List<RequestPath> allPathList) {
+    private List<PermPath> builderGroup(List<RequestPathBo> allPathList) {
         // 提取组名称和编码, 组有多个名字情况下获取其中的一个
-        Map<String, List<RequestPath>> groupMap = allPathList.stream()
-                .collect(Collectors.groupingBy(RequestPath::getGroupCode));
+        Map<String, List<RequestPathBo>> groupMap = allPathList.stream()
+                .collect(Collectors.groupingBy(RequestPathBo::getGroupCode));
         // 组名称和编码生成组信息并返回分组
         // 生成组信息
         List<PermPath> groupList = new ArrayList<>(groupMap.size());
@@ -167,14 +167,14 @@ public class PermPathSyncService {
             // 组 code name
             String groupName = groupMap.get(groupCode)
                     .stream()
-                    .map(RequestPath::getGroupName)
+                    .map(RequestPathBo::getGroupName)
                     .filter(StrUtil::isNotBlank)
                     .findFirst()
                     .orElse(null);
             // 模块code
             String moduleCode = groupMap.get(groupCode)
                     .stream()
-                    .map(RequestPath::getModuleCode)
+                    .map(RequestPathBo::getModuleCode)
                     .findFirst()
                     .orElse(null);
             PermPath permPath = new PermPath().setCode(groupCode)
@@ -188,7 +188,7 @@ public class PermPathSyncService {
     /**
      * 获取系统请求列表
      */
-    public List<RequestPath> getRequestPath(){
+    public List<RequestPathBo> getRequestPath(){
         RequestMappingHandlerMapping mapping = applicationContext.getBean(REQUEST_MAPPING_HANDLER_MAPPING,
                 RequestMappingHandlerMapping.class);
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
@@ -216,7 +216,7 @@ public class PermPathSyncService {
     /**
      * 根据系统重映射配置生成请求路径对象
      */
-    private List<RequestPath> builderRequestPath(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    private List<RequestPathBo> builderRequestPath(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
         Method method = handlerMethod.getMethod();
         Class<?> beanClass = method.getDeclaringClass();
         // 请求路径
@@ -234,7 +234,7 @@ public class PermPathSyncService {
                 .stream()
                 .map(Enum::name)
                 .collect(toList());
-        List<RequestPath> list = paths.stream()
+        List<RequestPathBo> list = paths.stream()
                 .map(path -> this.builderRequestPath(path, requestMethods))
                 .flatMap(Collection::stream)
                 .toList();
@@ -244,7 +244,7 @@ public class PermPathSyncService {
         cn.bootx.platform.core.annotation.RequestPath requestPath = method.getAnnotation(cn.bootx.platform.core.annotation.RequestPath.class);
 
         // 设置通用属性
-        for (RequestPath path : list) {
+        for (RequestPathBo path : list) {
             path.setModuleCode(requestGroup.moduleCode())
                     .setModuleName(requestGroup.moduleName())
                     .setGroupCode(requestGroup.groupCode())
@@ -257,9 +257,9 @@ public class PermPathSyncService {
     /**
      * 构建请求路径路径和请求方式
      */
-    private List<RequestPath> builderRequestPath(String path, List<String> requestMethods) {
+    private List<RequestPathBo> builderRequestPath(String path, List<String> requestMethods) {
         return requestMethods.stream()
-                .map(requestMethod -> new RequestPath()
+                .map(requestMethod -> new RequestPathBo()
                         .setPath(path)
                         .setMethod(requestMethod))
                 .collect(toList());

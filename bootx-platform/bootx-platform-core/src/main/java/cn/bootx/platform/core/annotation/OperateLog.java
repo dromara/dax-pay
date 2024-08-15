@@ -37,6 +37,7 @@ public @interface OperateLog {
 
     /**
      * 业务操作类型
+     * 字典: log_business_type
      */
     enum BusinessType {
 

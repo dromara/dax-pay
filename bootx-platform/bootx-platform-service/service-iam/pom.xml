@@ -13,12 +13,7 @@
     <description>身份识别与访问管理</description>
 
     <dependencies>
-        <!-- 系统基础服务 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>service-baseapi</artifactId>
-            <version>${bootx-platform.version}</version>
-        </dependency>
+
         <!-- 认证 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
@@ -31,7 +26,12 @@
             <artifactId>hutool-http</artifactId>
             <version>${hutool.version}</version>
         </dependency>
-
+        <!-- 系统基础服务 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>service-baseapi</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

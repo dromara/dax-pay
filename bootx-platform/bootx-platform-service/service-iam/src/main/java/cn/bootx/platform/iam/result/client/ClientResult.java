@@ -1,7 +1,9 @@
 package cn.bootx.platform.iam.result.client;
 
+import cn.bootx.platform.core.result.BaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -10,13 +12,11 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2022-06-27
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "认证应用")
 @Accessors(chain = true)
-public class ClientResult {
-
-    @Schema(description = "主键")
-    private Long id;
+public class ClientResult extends BaseResult {
 
     @Schema(description = "编码")
     private String code;

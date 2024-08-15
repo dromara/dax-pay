@@ -3,7 +3,7 @@ package cn.daxpay.multi.service.entity.notice.notify;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.convert.notice.MerchantNotifyConvert;
-import cn.daxpay.multi.service.enums.NotifyTypeEnum;
+import cn.daxpay.multi.service.enums.NotifyContentTypeEnum;
 import cn.daxpay.multi.service.result.notice.notify.MerchantNotifyTaskResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -33,7 +33,7 @@ public class MerchantNotifyTask extends MchBaseEntity implements ToResult<Mercha
 
     /**
      * 通知类型
-     * @see NotifyTypeEnum
+     * @see NotifyContentTypeEnum
      */
     private String notifyType;
 

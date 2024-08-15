@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 客户通知类型
+ * 客户通知内容类型
+ * 字典: notify_content_type
  * @author xxm
  * @since 2024/7/30
  */
 @Getter
 @AllArgsConstructor
-public enum NotifyTypeEnum {
+public enum NotifyContentTypeEnum {
 
     /** 支付订单变动通知 */
     PAY("pay", "支付订单变动通知"),

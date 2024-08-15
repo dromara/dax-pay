@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 支付订单关闭类型
+ * 字典值 close_type
  * @author xxm
  * @since 2024/6/3
  */

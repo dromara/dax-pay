@@ -1,7 +1,9 @@
 package cn.daxpay.multi.service.result.merchant;
 
+import cn.bootx.platform.core.result.BaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -9,14 +11,11 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/6/24
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "商户信息")
-public class MerchantResult {
-
-    /** 商户id */
-    @Schema(description = "商户id")
-    private Long id;
+public class MerchantResult extends BaseResult {
 
     /** 商户号 */
     @Schema(description = "商户号")
@@ -30,17 +29,17 @@ public class MerchantResult {
     @Schema(description = "公司名称")
     private String companyName;
 
-    /** 证件类型 */
-    @Schema(description = "证件类型")
-    private String idType;
+    /** 公司联系方式 */
+    @Schema(description = "公司联系方式")
+    private String companyContact;
 
-    /** 证件号 */
-    @Schema(description = "证件号")
-    private String idNo;
+    /** 公司信用编码 */
+    @Schema(description = "公司信用编码")
+    private String companyCode;
 
-    /** 联系方式 */
-    @Schema(description = "联系方式")
-    private String contact;
+    /** 公司地址 */
+    @Schema(description = "公司地址")
+    private String companyAddress;
 
     /** 法人名称 */
     @Schema(description = "法人名称")
@@ -48,9 +47,14 @@ public class MerchantResult {
 
     /** 法人证件号码 */
     @Schema(description = "法人证件号码")
-    private String legalPersonIdNo;
+    private String idNo;
+
+    /** 法人联系方式 */
+    @Schema(description = "联系方式")
+    private String contact;
 
     /** 状态 */
     @Schema(description = "状态")
     private String status;
+
 }

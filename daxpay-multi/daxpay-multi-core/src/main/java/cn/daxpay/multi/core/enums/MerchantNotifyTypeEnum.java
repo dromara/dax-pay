@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 商户消息通知类型
- * 业务系统使用什么样的方式接收通知消息
+ * 商户消息通知类型, 业务系统使用什么样的方式接收通知消息
+ * 字典: merchant_notify_type
  * @author xxm
  * @since 2024/6/5
  */

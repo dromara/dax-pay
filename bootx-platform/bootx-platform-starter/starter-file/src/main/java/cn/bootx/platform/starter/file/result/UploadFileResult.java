@@ -1,13 +1,20 @@
 package cn.bootx.platform.starter.file.result;
 
+import cn.bootx.platform.core.result.BaseResult;
+import cn.bootx.platform.starter.file.entity.FilePlatform;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Dict;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.vo.TransPojo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.constant.Constant;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -16,59 +23,72 @@ import java.util.Map;
  * @author xxm
  * @since 2022/1/12
  */
+@FieldNameConstants
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class UploadFileResult {
-
-    /**
-     * 文件id
-     */
-    private Long id;
+@Schema(title = "上传文件信息")
+public class UploadFileResult extends BaseResult implements TransPojo {
 
     /**
      * 文件访问地址
      */
+    @Schema(description = "访问地址")
     private String url;
 
     /**
      * 文件大小，单位字节
      */
+    @Schema(description = "文件大小")
     private Long size;
 
     /**
      * 文件名称
      */
+    @Schema(description = "文件名称")
     private String filename;
 
     /**
      * 原始文件名
      */
+    @Schema(description = "原始文件名")
     private String originalFilename;
 
     /**
      * 基础存储路径
      */
+    @Schema(description = "基础存储路径")
     private String basePath;
 
     /**
      * 存储路径
      */
+    @Schema(description = "存储路径")
     private String path;
 
     /**
      * 文件扩展名
      */
+    @Schema(description = "扩展名")
     private String ext;
 
     /**
      * MIME 类型
      */
+    @Schema(description = "MIME 类型")
     private String contentType;
 
     /**
      * 存储平台
      */
+    @Trans(type = TransType.SIMPLE, target = FilePlatform.class, fields = FilePlatform.Fields.name, ref = Fields.platformName, uniqueField=FilePlatform.Fields.type)
+    @Schema(description = "存储平台")
     private String platform;
+
+    /**
+     * 存储平台
+     */
+    private String platformName;
 
     /**
      * 缩略图访问路径
@@ -151,12 +171,6 @@ public class UploadFileResult {
      * 详情见{@link FileInfo#setFileAcl}
      */
     private Object thFileAcl;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
 
     /**
      * 文件大小

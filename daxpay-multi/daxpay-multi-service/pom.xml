@@ -49,7 +49,7 @@
             <version>${bootx-platform.version}</version>
         </dependency>
 
-        <!-- 基础API服务 -->
+        <!-- 认证服务 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>service-iam</artifactId>

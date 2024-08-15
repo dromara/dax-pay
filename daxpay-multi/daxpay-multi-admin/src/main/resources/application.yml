@@ -9,6 +9,7 @@ spring:
     scheduling:
       pool:
         size: 8
+# ORM
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   global-config:
@@ -19,6 +20,7 @@ mybatis-plus:
       logic-not-delete-value: false
 mybatis-plus-join:
   banner: false
+# 安全框架
 sa-token:
   # token 名称（同时也是 cookie 名称）
   token-name: Accesstoken
@@ -29,6 +31,10 @@ sa-token:
   is-share: true
   is-log: false
   is-print: false
+# 字段翻译
+easy-trans:
+  #启用平铺模式
+  is-enable-tile: true
 # 平台配置
 bootx-platform:
   config:

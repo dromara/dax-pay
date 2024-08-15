@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 
 /**
  * 文件存储平台
@@ -20,6 +21,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@FieldNameConstants
 @Accessors(chain = true)
 @TableName("starter_file_platform")
 public class FilePlatform extends MpRealDelEntity implements ToResult<FilePlatformResult> {

@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.param.notice.notify;
 
 import cn.bootx.platform.core.annotation.QueryParam;
-import cn.daxpay.multi.service.enums.NotifyTypeEnum;
+import cn.daxpay.multi.service.enums.NotifyContentTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -24,7 +24,7 @@ public class MerchantNotifyTaskQuery {
 
     /**
      * 通知类型
-     * @see NotifyTypeEnum
+     * @see NotifyContentTypeEnum
      */
     @Schema(description = "通知类型")
     private String notifyType;

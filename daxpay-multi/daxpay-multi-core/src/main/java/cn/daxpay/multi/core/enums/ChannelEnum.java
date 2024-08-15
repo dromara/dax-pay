@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 支付通道枚举
+ * 字典值: channel
  *
  * @author xxm
  * @since 2021/7/26

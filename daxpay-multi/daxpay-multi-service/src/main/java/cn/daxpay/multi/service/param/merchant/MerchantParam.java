@@ -22,6 +22,10 @@ public class MerchantParam {
     @NotNull(message = "主键ID不可为空", groups = ValidationGroup.edit.class)
     private Long id;
 
+    /** 商户号 */
+    @Schema(description = "商户号")
+    private String mchNo;
+
     /** 商户名称 */
     @NotBlank(message = "商户名称不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "商户名称")
@@ -32,17 +36,17 @@ public class MerchantParam {
     @Schema(description = "公司名称")
     private String companyName;
 
-    /** 证件类型 */
-    @Schema(description = "证件类型")
-    private String idType;
+    /** 公司联系方式 */
+    @Schema(description = "公司联系方式")
+    private String companyContact;
 
-    /** 证件号 */
-    @Schema(description = "证件号")
-    private String idNo;
+    /** 公司信用编码 */
+    @Schema(description = "公司信用编码")
+    private String companyCode;
 
-    /** 联系方式 */
-    @Schema(description = "联系方式")
-    private String contact;
+    /** 公司地址 */
+    @Schema(description = "公司地址")
+    private String companyAddress;
 
     /** 法人名称 */
     @Schema(description = "法人名称")
@@ -50,5 +54,13 @@ public class MerchantParam {
 
     /** 法人证件号码 */
     @Schema(description = "法人证件号码")
-    private String legalPersonIdNo;
+    private String idNo;
+
+    /** 法人联系方式 */
+    @Schema(description = "联系方式")
+    private String contact;
+
+    /** 状态 */
+    @Schema(description = "状态")
+    private String status;
 }

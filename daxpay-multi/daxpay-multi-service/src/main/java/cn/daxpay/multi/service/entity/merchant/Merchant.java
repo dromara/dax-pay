@@ -32,20 +32,26 @@ public class Merchant extends MpBaseEntity implements ToResult<MerchantResult> {
     /** 公司名称 */
     private String companyName;
 
-    /** 证件类型 */
-    private String idType;
+    /** 公司联系方式 */
+    private String companyContact;
 
-    /** 证件号 */
-    private String idNo;
+    /** 公司地址 */
+    private String companyAddress;
 
-    /** 联系方式 */
-    private String contact;
+    /** 公司信用编码 */
+    private String companyCode;
 
     /** 法人名称 */
     private String legalPerson;
 
-    /** 法人证件号码 */
-    private String legalPersonIdNo;
+    /** 法人证件类型 */
+    private String idType;
+
+    /** 法人证件号 */
+    private String idNo;
+
+    /** 法人联系方式 */
+    private String contact;
 
     /** 状态 */
     private String status;
