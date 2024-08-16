@@ -2613,6 +2613,34 @@ CREATE TABLE `pay_callback_record`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for pay_trade_sync_record
+-- ----------------------------
+DROP TABLE IF EXISTS `pay_trade_sync_record`;
+CREATE TABLE `pay_trade_sync_record`  (
+  `id` bigint(20) NOT NULL COMMENT '主键',
+  `trade_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '本地交易号',
+  `biz_trade_no` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商户交易号',
+  `out_trade_no` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通道交易号',
+  `out_trade_status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '网关返回状态',
+  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '同步类型',
+  `channel` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '同步通道',
+  `sync_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '同步消息',
+  `adjust` bit(1) NOT NULL COMMENT '是否进行调整',
+  `error_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误码',
+  `error_msg` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误信息',
+  `client_ip` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付终端ip',
+  `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者ID',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `trade_no`(`trade_no`) USING BTREE COMMENT '本地交易号索引',
+  INDEX `biz_trade_no`(`biz_trade_no`) USING BTREE COMMENT '商户交易号索引',
+  INDEX `out_trade_no`(`out_trade_no`) USING BTREE COMMENT '通道交易号索引'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '交易同步记录' ROW_FORMAT = Dynamic;
+-- ----------------------------
+-- Records of pay_trade_sync_record
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for pay_channel_config
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_channel_config`;
