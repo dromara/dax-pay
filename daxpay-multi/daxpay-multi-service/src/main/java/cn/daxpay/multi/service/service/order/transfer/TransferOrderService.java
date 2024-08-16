@@ -7,6 +7,7 @@ import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.code.DaxPayCode;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
+import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.service.trade.transfer.TransferSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class TransferOrderService {
     private final DelayJobService delayJobService;
 
     private final TransferOrderManager transferOrderManager;
+    private final PaymentAssistService paymentAssistService;
 
     /**
      * 注册一个两分钟后的延时同步任务
@@ -46,6 +48,7 @@ public class TransferOrderService {
             var order = orderOpt.get();
             // 不是退款中不需要进行同步
             if (order.getStatus().equals(TransferStatusEnum.PROGRESS.getCode())) {
+                paymentAssistService.initMchAndApp(order.getMchNo(), order.getAppId());
                 transferSyncService.syncTransferOrder(order);
             }
         }

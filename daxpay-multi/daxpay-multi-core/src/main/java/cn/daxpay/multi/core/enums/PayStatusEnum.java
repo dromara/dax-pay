@@ -9,6 +9,7 @@ import java.util.Objects;
 
 /**
  * 支付状态
+ * 字典: pay_status
  * @author xxm
  * @since 2023/12/17
  */

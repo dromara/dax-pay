@@ -1,9 +1,9 @@
 package cn.daxpay.multi.service.entity.order.refund;
 
-import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.convert.order.refund.RefundOrderConvert;
 import cn.daxpay.multi.service.result.order.refund.RefundOrderVo;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_refund_order")
-public class RefundOrder extends MpBaseEntity implements ToResult<RefundOrderVo> {
+public class RefundOrder extends MchBaseEntity implements ToResult<RefundOrderVo> {
 
     /** 支付订单ID */
     private Long orderId;

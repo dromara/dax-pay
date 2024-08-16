@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 交易流水记录类型
+ * 字典: trade_flow_type
  * @author xxm
  * @since 2024/2/20
  */

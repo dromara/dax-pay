@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 退款状态枚举
+ * 字典: refund_status
  * @author xxm
  * @since 2023/12/18
  */
@@ -16,9 +17,9 @@ public enum RefundStatusEnum {
      * 接口调用成功不代表成功
      */
     PROGRESS("progress","退款中"),
-    SUCCESS("success","成功"),
-    CLOSE("close","关闭"),
-    FAIL("fail","失败");
+    SUCCESS("success","退款成功"),
+    CLOSE("close","退款关闭"),
+    FAIL("fail","退款失败");
 
     /** 编码 */
     private final String code;

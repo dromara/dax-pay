@@ -187,7 +187,9 @@ public class RoleMenuService {
                 .eq(RoleMenu::getClientCode, clientCode)
                 .eq(RoleMenu::getRoleId, Role::getId)
                 .orderByAsc(PermMenu::getId);
-        return roleManager.selectJoinList(PermMenu.class, wrapper);
+        List<PermMenu> permMenus = roleManager.selectJoinList(PermMenu.class, wrapper);
+        return permMenus.stream()
+                .collect(Collectors.toList());
     }
 
     /**

@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 支付订单的分账状态
+ * 字典表：pay_alloc_status
  * @author xxm
  * @since 2024/4/16
  */
@@ -15,6 +16,6 @@ public enum PayAllocStatusEnum {
     ALLOCATION("allocation", "已分账"),
     ;
 
-    final String code;
-    final String name;
+    private final String code;
+    private final String name;
 }

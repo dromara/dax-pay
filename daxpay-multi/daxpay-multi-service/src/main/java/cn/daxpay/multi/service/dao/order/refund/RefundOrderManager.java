@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +86,7 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     /**
      * 查询汇总金额
      */
-    public Integer getTalAmount(RefundOrderQuery query){
+    public BigDecimal getTalAmount(RefundOrderQuery query){
         QueryWrapper<RefundOrder> generator = QueryGenerator.generator(query);
         generator.eq(MpUtil.getColumnName(RefundOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
         return baseMapper.getTalAmount(generator);

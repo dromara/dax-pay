@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.service.trade.refund;
 
+import cn.bootx.platform.common.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.bootx.platform.core.util.ValidationUtil;
@@ -11,13 +12,13 @@ import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.result.trade.refund.RefundResult;
 import cn.daxpay.multi.service.bo.trade.RefundResultBo;
+import cn.daxpay.multi.service.code.DaxPayCode;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
-import cn.daxpay.multi.service.service.order.refund.RefundOrderService;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.strategy.AbsRefundStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
@@ -57,7 +58,7 @@ public class RefundService {
 
     private final MerchantNoticeService merchantNoticeService;
 
-    private final RefundOrderService refundOrderService;
+    private final DelayJobService delayJobService;
 
     /**
      * 分支付通道进行退款
@@ -66,9 +67,6 @@ public class RefundService {
      * 3. 根据API返回信息更新退款订单信息
      */
     public RefundResult refund(RefundParam param){
-        RefundResult result = new RefundResult()
-                .setRefundNo(param.getBizRefundNo())
-                .setBizRefundNo(param.getBizRefundNo());
         // 参数校验
         ValidationUtil.validateParam(param);
         // 加锁
@@ -162,7 +160,7 @@ public class RefundService {
             // 执行退款策略
             refundResultBo = refundStrategy.doRefundHandler();
             // 注册一个两分钟后执行的同步任务, 作为接不到回调任务的兜底
-            refundOrderService.register(refundOrder);
+            delayJobService.registerByTransaction(refundOrder.getId(), DaxPayCode.Event.MERCHANT_PAY_TIMEOUT, 2*60*1000L);
         } catch (Exception e) {
             log.error("重新退款失败:", e);
             // 记录退款失败的记录

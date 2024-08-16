@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 支付签名类型
+ * 字典 sign_type
  * @author xxm
  * @since 2023/12/24
  */

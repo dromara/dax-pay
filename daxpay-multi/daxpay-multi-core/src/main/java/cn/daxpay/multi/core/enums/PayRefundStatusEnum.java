@@ -9,6 +9,7 @@ import java.util.Objects;
 
 /**
  * 支付订单的退款状态
+ * 字典: pay_refund_status
  * @author xxm
  * @since 2024/6/7
  */

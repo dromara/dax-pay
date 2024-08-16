@@ -28,8 +28,8 @@ public class TransferOrderTest {
                 .serviceUrl("http://127.0.0.1:10880")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
-                .mchNo("test")
-                .appId("test")
+                .mchNo("M1723635576766")
+                .appId("M8088873888246277")
                 .build();
         DaxPayKit.initConfig(config);
     }

@@ -156,7 +156,7 @@ public class DictionaryItemService {
     /**
      * 获取启用的字典项列表
      */
-    @Cacheable(value = "cache:dict")
+    @Cacheable(value = "cache:dict", key = "'all'")
     public List<DictionaryItemResult> findAllByEnable() {
 
         // 获取被停用的字典
@@ -173,6 +173,7 @@ public class DictionaryItemService {
                         .thenComparing(DictionaryItem::getSortNo)
                         .thenComparing(MpIdEntity::getId))
                 .map(DictionaryItem::toResult)
+                .peek(item -> item.setEnable(null).setId(null).setCreateTime(null).setDictId(null).setRemark(null))
                 .toList();
     }
 

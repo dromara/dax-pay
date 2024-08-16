@@ -30,8 +30,8 @@ public class PayOrderTest {
                 .serviceUrl("http://127.0.0.1:10880")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
-                .mchNo("test")
-                .appId("test")
+                .mchNo("M1723635576766")
+                .appId("M8088873888246277")
                 .build();
         DaxPayKit.initConfig(config);
     }
@@ -151,7 +151,7 @@ public class PayOrderTest {
         param.setMethod(PayMethodEnum.BARCODE.getCode());
 
         AlipayParam alipayParam = new AlipayParam();
-        alipayParam.setAuthCode("");
+        alipayParam.setAuthCode("287109871028487115");
         param.setExtraParam(JsonUtil.toJsonStr(alipayParam));
 
         param.setAttach("{回调参数}");
@@ -161,5 +161,15 @@ public class PayOrderTest {
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
+    }
+
+    /**
+     * 支付宝web支付
+     */
+    @Test
+    public void aliPayWebPay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
     }
 }

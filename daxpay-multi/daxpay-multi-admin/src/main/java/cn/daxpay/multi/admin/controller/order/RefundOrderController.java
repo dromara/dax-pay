@@ -6,13 +6,18 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.daxpay.multi.service.param.order.refund.RefundCreateParam;
 import cn.daxpay.multi.service.param.order.refund.RefundOrderQuery;
 import cn.daxpay.multi.service.result.order.refund.RefundOrderVo;
 import cn.daxpay.multi.service.service.order.refund.RefundOrderQueryService;
+import cn.daxpay.multi.service.service.order.refund.RefundOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * 支付退款控制器
@@ -26,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RefundOrderController {
     private final RefundOrderQueryService queryService;
+    private final RefundOrderService refundOrderService;
 
     @RequestPath("退款订单分页查询")
     @Operation(summary = "分页查询")
@@ -33,7 +39,6 @@ public class RefundOrderController {
     public Result<PageResult<RefundOrderVo>> page(PageParam pageParam, RefundOrderQuery query){
         return Res.ok(queryService.page(pageParam, query));
     }
-
 
     @RequestPath("根据商户退款号查询")
     @Operation(summary = "查询退款订单详情")
@@ -49,11 +54,19 @@ public class RefundOrderController {
         return Res.ok(queryService.findById(id));
     }
 
-
     @RequestPath("查询金额汇总")
     @Operation(summary = "查询金额汇总")
     @GetMapping("/getTotalAmount")
-    public Result<Integer> getTotalAmount(RefundOrderQuery param){
+    public Result<BigDecimal> getTotalAmount(RefundOrderQuery param){
         return Res.ok(queryService.getTotalAmount(param));
     }
+
+    @RequestPath("发起退款")
+    @Operation(summary = "发起退款")
+    @PostMapping("/create")
+    public Result<Void> create(@Validated @RequestBody RefundCreateParam param){
+        refundOrderService.create(param);
+        return Res.ok();
+    }
+
 }

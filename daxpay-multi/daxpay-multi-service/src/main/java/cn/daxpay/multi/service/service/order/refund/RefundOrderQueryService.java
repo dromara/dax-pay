@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
@@ -68,8 +69,9 @@ public class RefundOrderQueryService {
     /**
      * 查询支付总金额
      */
-    public Integer getTotalAmount(RefundOrderQuery param) {
+    public BigDecimal getTotalAmount(RefundOrderQuery param) {
         return refundOrderManager.getTalAmount(param);
     }
+
 
 }

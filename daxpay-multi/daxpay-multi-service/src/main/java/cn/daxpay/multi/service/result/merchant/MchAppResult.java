@@ -1,10 +1,12 @@
 package cn.daxpay.multi.service.result.merchant;
 
-import cn.daxpay.multi.core.enums.SignTypeEnum;
+import cn.bootx.platform.core.result.BaseResult;
 import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
+import cn.daxpay.multi.core.enums.SignTypeEnum;
 import cn.daxpay.multi.service.enums.MchAppStautsEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
@@ -14,14 +16,11 @@ import java.math.BigDecimal;
  * @author xxm
  * @since 2024/6/24
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "商户应用")
-public class MchAppResult {
-
-    /** 主键 */
-    @Schema(description = "主键")
-    private Long id;
+public class MchAppResult extends BaseResult {
 
     /** 商户号 */
     @Schema(description = "商户号")

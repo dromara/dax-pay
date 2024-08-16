@@ -1,16 +1,20 @@
 package cn.daxpay.multi.service.service.order.refund;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
-import cn.bootx.platform.common.redis.delay.service.DelayJobService;
-import cn.daxpay.multi.core.enums.RefundStatusEnum;
-import cn.daxpay.multi.service.code.DaxPayCode;
-import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
-import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
-import cn.daxpay.multi.service.service.trade.refund.RefundSyncService;
+import cn.bootx.platform.common.spring.util.WebServletUtil;
+import cn.daxpay.multi.core.exception.TradeNotExistException;
+import cn.daxpay.multi.core.param.trade.refund.RefundParam;
+import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
+import cn.daxpay.multi.service.param.order.refund.RefundCreateParam;
+import cn.daxpay.multi.service.service.assist.PaymentAssistService;
+import cn.daxpay.multi.service.service.trade.refund.RefundService;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * 退款
@@ -23,32 +27,35 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RefundOrderService {
 
-    private final RefundSyncService refundSyncService;
+    private final PaymentAssistService paymentAssistService;
 
-    private final DelayJobService delayJobService;
+    private final PayOrderManager payOrderManager;
 
-    private final RefundOrderManager refundOrderManager;
-
-    /**
-     * 注册一个两分钟后的延时同步任务
-     */
-    public void register(RefundOrder refundOrder) {
-        delayJobService.registerByTransaction(refundOrder.getId(), DaxPayCode.Event.MERCHANT_PAY_TIMEOUT, 2*60*1000L);
-    }
+    private final RefundService refundService;
 
     /**
-     * 接收订单超时事件
+     * 创建退款订单
      */
-    @DelayEventListener(DaxPayCode.Event.MERCHANT_PAY_TIMEOUT)
-    public void refundDelaySync(DelayJobEvent<Long> event) {
-        var orderOpt = refundOrderManager.findById(event.getMessage());
-        if (orderOpt.isPresent()) {
-            var order = orderOpt.get();
-            // 不是退款中不需要进行同步
-            if (order.getStatus().equals(RefundStatusEnum.PROGRESS.getCode())) {
-                refundSyncService.syncRefundOrder(order);
-            }
-        }
-    }
+    public void create(RefundCreateParam param) {
 
+        var payOrder = payOrderManager.findByOrderNo(param.getOrderNo())
+                .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
+
+        // 初始化商户和应用
+        paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+
+        String ip = Optional.ofNullable(WebServletUtil.getRequest())
+                .map(JakartaServletUtil::getClientIP)
+                .orElse("未知");
+
+        // 构建退款参数并发起
+        var refundParam = new RefundParam();
+        refundParam.setMchNo(payOrder.getMchNo());
+        refundParam.setAppId(payOrder.getAppId());
+        refundParam.setClientIp(ip);
+        refundParam.setReqTime(LocalDateTime.now());
+        refundParam.setOrderNo(payOrder.getOrderNo());
+        refundParam.setBizRefundNo("MANUAL_"+TradeNoGenerateUtil.refund());
+        refundService.refund(refundParam);
+    }
 }

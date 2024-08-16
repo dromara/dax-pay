@@ -8,7 +8,6 @@ import java.util.Objects;
 
 /**
  * 支付方式
- *
  * @author xxm
  * @since 2021/7/26
  */
@@ -16,7 +15,6 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum PayMethodEnum {
 
-    NORMAL("normal", "常规支付"),
     WAP("wap", "wap支付"),
     APP("app", "应用支付"),
     WEB("web", "web支付"),

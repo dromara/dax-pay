@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author xxm
@@ -18,5 +20,5 @@ public interface RefundOrderMapper extends MPJBaseMapper<RefundOrder> {
 
 
     @Select("select sum(amount) from pay_refund_order ${ew.customSqlSegment}")
-    Integer getTalAmount(@Param(Constants.WRAPPER) QueryWrapper<RefundOrder> generator);
+    BigDecimal getTalAmount(@Param(Constants.WRAPPER) QueryWrapper<RefundOrder> generator);
 }
