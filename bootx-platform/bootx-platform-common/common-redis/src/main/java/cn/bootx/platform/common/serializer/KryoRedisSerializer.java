@@ -1,6 +1,7 @@
 package cn.bootx.platform.common.serializer;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.ByteBufferOutput;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.util.DefaultInstantiatorStrategy;
@@ -12,7 +13,6 @@ import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -53,8 +53,8 @@ public class KryoRedisSerializer<T> implements RedisSerializer<T> {
         if (t == null) {
             return EMPTY_BYTE_ARRAY;
         }
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             Output output = new Output(baos)) {
+        // 序列化缓存区默认4K, 最大10M
+        try (Output output = new ByteBufferOutput(4096,10*1024*1024)) {
             Kryo kryo = KRYO_THREAD_LOCAL.get();
             // 对象的 Class 信息一起序列化
             kryo.writeClassAndObject(output, t);
