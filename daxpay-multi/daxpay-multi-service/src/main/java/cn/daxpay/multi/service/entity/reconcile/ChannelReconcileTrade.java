@@ -30,7 +30,7 @@ public class ChannelReconcileTrade extends MchRecordEntity {
      */
     private String tradeType;
 
-    /** 本地交易号 */
+    /** 平台交易号 */
     private String tradeNo;
 
     /** 通道交易号 */

@@ -43,8 +43,8 @@ public class TradeFlowRecordQuery {
     @Schema(description = "支付通道")
     private String channel;
 
-    /** 本地交易号 */
-    @Schema(description = "本地交易号")
+    /** 平台交易号 */
+    @Schema(description = "平台交易号")
     private String tradeNo;
 
     /** 商户交易号 */

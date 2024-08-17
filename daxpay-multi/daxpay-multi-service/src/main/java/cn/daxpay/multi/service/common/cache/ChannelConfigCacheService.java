@@ -33,7 +33,6 @@ public class ChannelConfigCacheService {
         if (channelConfig == null) {
             channelConfig = channelConfigManager.findByAppIdAndChannel(appId, channel)
                     .orElseThrow(() -> new ConfigNotEnableException("未找到指定的支付通道配置"));
-//            cache.put(key, channelConfig);
         }
         return channelConfig;
     }

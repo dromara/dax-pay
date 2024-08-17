@@ -48,24 +48,21 @@ public class PayCloseService {
     public void close(PayCloseParam param){
         PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
-        LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId(),10000, 50);
-        if (Objects.isNull(lock)){
-            throw new TradeProcessingException("支付订单已在关闭中，请勿重复发起");
-        }
-        try {
-            this.close(payOrder, param.isUseCancel());
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+        this.closeOrder(payOrder, param.isUseCancel());
+
     }
 
     /**
      * 关闭支付记录
      */
-    private void close(PayOrder payOrder, boolean useCancel) {
+    public void closeOrder(PayOrder payOrder, boolean useCancel) {
         // 状态检查, 只有支付中可以进行取消支付
         if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
             throw new TradeStatusErrorException("订单不是支付中, 无法进行关闭订单");
+        }
+        LockInfo lock = lockTemplate.lock("payment:close:" + payOrder.getId(),10000, 50);
+        if (Objects.isNull(lock)){
+            throw new TradeProcessingException("支付订单已在关闭中，请勿重复发起");
         }
         try {
             AbsPayCloseStrategy strategy = PaymentStrategyFactory.create(payOrder.getChannel(), AbsPayCloseStrategy.class);
@@ -93,6 +90,8 @@ public class PayCloseService {
                 throw e;
             }
             throw new OperationFailException("关闭订单失败");
+        } finally {
+            lockTemplate.releaseLock(lock);
         }
     }
 
@@ -113,5 +112,4 @@ public class PayCloseService {
                 .setClientIp(clientIp);
         payCloseRecordService.saveRecord(record);
     }
-
 }

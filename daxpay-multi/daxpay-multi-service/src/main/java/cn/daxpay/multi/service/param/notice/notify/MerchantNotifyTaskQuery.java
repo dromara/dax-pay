@@ -17,9 +17,9 @@ import lombok.experimental.Accessors;
 @Schema(title = "客户订阅通知任务查询参数")
 public class MerchantNotifyTaskQuery {
 
-    /** 本地交易号 */
+    /** 平台交易号 */
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "本地交易号")
+    @Schema(description = "平台交易号")
     private String tradeNo;
 
     /**

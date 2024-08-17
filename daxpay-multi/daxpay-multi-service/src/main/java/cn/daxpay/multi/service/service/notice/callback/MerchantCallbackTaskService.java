@@ -49,7 +49,7 @@ public class MerchantCallbackTaskService {
                 .setTradeId(order.getId())
                 .setTradeNo(order.getOrderNo());
         taskManager.save(task);
-        delayJobService.registerByTransaction(task, DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
+        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
         log.info("注册支付通知");
     }
 
@@ -72,7 +72,7 @@ public class MerchantCallbackTaskService {
                 .setTradeId(order.getId())
                 .setTradeNo(order.getRefundNo());
         taskManager.save(task);
-        delayJobService.registerByTransaction(task, DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
+        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
         log.info("注册退款通知");
     }
 
@@ -95,7 +95,7 @@ public class MerchantCallbackTaskService {
                 .setTradeId(order.getId())
                 .setTradeNo(order.getTransferNo());
         taskManager.save(task);
-        delayJobService.registerByTransaction(task, DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
+        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
         log.info("注册转账通知");
     }
 }

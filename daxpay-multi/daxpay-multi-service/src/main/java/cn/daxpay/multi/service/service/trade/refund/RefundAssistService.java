@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.service.trade.refund;
 
+import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
@@ -10,9 +11,12 @@ import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.result.trade.refund.RefundResult;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.bo.trade.RefundResultBo;
+import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
+import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +39,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class RefundAssistService {
     private final RefundOrderManager refundOrderManager;
+    private final PayOrderManager payOrderManager;
+    private final MerchantNoticeService merchantNoticeService;
+    private final TradeFlowRecordService tradeFlowRecordService;
 
     /**
      * 检查并处理退款参数
@@ -112,6 +121,67 @@ public class RefundAssistService {
         refundOrder.setErrorMsg(e.getMessage());
         refundOrder.setStatus(RefundStatusEnum.FAIL.getCode());
         refundOrderManager.updateById(refundOrder);
+    }
+
+    /**
+     * 退款失败, 关闭退款单并将失败的退款金额归还回订单
+     */
+    public void close(RefundOrder refundOrder) {
+        PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
+                .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
+        // 退款失败返还后的余额
+        var payOrderAmount =  refundOrder
+                .getAmount()
+                .add(payOrder.getRefundableBalance());
+        // 退款失败返还后的余额+可退余额 == 订单金额 支付订单回退为为未退款状态
+        if (BigDecimalUtil.isEqual(payOrderAmount, payOrder.getAmount())) {
+            payOrder.setRefundStatus(PayRefundStatusEnum.NO_REFUND.getCode());
+        } else {
+            // 回归部分退款状态
+            payOrder.setRefundStatus(PayRefundStatusEnum.PARTIAL_REFUND.getCode());
+        }
+
+        // 更新支付订单相关的可退款金额
+        payOrder.setRefundableBalance(payOrderAmount);
+        refundOrder.setStatus(RefundStatusEnum.CLOSE.getCode());
+
+        // 更新订单和退款相关订单
+        payOrderManager.updateById(payOrder);
+        refundOrderManager.updateById(refundOrder);
+        // 发送通知
+        merchantNoticeService.registerRefundNotice(refundOrder);
+    }
+
+
+    /**
+     * 退款成功, 更新退款单和支付单
+     */
+    public void success(RefundOrder refundOrder, LocalDateTime finishTime) {
+        PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
+                .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
+
+        // 订单相关状态
+        PayRefundStatusEnum afterPayRefundStatus;
+
+        // 判断订单全部退款还是部分退款
+        if (BigDecimalUtil.isEqual(payOrder.getRefundableBalance(), BigDecimal.ZERO)) {
+            afterPayRefundStatus = PayRefundStatusEnum.REFUNDED;
+        } else {
+            afterPayRefundStatus = PayRefundStatusEnum.PARTIAL_REFUND;
+        }
+        // 设置退款为完成状态和完成时间
+        refundOrder.setStatus(RefundStatusEnum.SUCCESS.getCode())
+                .setFinishTime(finishTime);
+        payOrder.setRefundStatus(afterPayRefundStatus.getCode());
+
+        // 更新订单和退款相关订单
+        payOrderManager.updateById(payOrder);
+        refundOrderManager.updateById(refundOrder);
+
+        // 记录流水
+        tradeFlowRecordService.saveRefund(refundOrder);
+        // 发送通知
+        merchantNoticeService.registerRefundNotice(refundOrder);
     }
 
     /**

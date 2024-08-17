@@ -213,7 +213,7 @@ public class PaySyncService {
                 .setTradeNo(payOrder.getOrderNo())
                 .setOutTradeNo(payOrder.getOutOrderNo())
                 .setOutTradeStatus(payRemoteSyncResult.getPayStatus().getCode())
-                .setType(TradeTypeEnum.PAY.getCode())
+                .setTradeType(TradeTypeEnum.PAY.getCode())
                 .setChannel(payOrder.getChannel())
                 .setSyncInfo(payRemoteSyncResult.getSyncData())
                 .setAdjust(adjust)

@@ -1,5 +1,6 @@
 package cn.daxpay.multi.channel.wechat.strategy;
 
+import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.daxpay.multi.channel.wechat.code.WechatPayCode;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.close.WechatPayCloseV2Service;
@@ -46,6 +47,11 @@ public class WechatPayCloseStrategy extends AbsPayCloseStrategy {
      */
     @Override
     public void doBeforeCloseHandler() {
+        PayOrder order = this.getOrder();
+        // 只有付款码可以撤销支付
+        if (this.isUseCancel() && !order.getMethod().equals(PayMethodEnum.BARCODE.getCode())){
+            throw new ValidationFailedException("该订单不支持撤销操作");
+        }
         this.config = wechatPayConfigService.getWechatPayConfig();
     }
 

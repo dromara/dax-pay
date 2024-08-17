@@ -181,7 +181,7 @@ public class TransferSyncService {
                 .setTradeNo(order.getTransferNo())
                 .setOutTradeNo(order.getOutTransferNo())
                 .setOutTradeStatus(payRemoteSyncResult.getTransferStatus().getCode())
-                .setType(TradeTypeEnum.TRANSFER.getCode())
+                .setTradeType(TradeTypeEnum.TRANSFER.getCode())
                 .setChannel(order.getChannel())
                 .setSyncInfo(payRemoteSyncResult.getSyncData())
                 .setAdjust(adjust)

@@ -1,10 +1,6 @@
 package cn.daxpay.multi.service.service.trade.refund;
 
-import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
-import cn.bootx.platform.core.util.BigDecimalUtil;
-import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
-import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
@@ -14,14 +10,10 @@ import cn.daxpay.multi.core.param.trade.refund.RefundSyncParam;
 import cn.daxpay.multi.core.result.trade.refund.RefundSyncResult;
 import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
-import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
-import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
-import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.refund.RefundOrderQueryService;
-import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.service.record.sync.TradeSyncRecordService;
 import cn.daxpay.multi.service.strategy.AbsSyncRefundOrderStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
@@ -33,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -51,13 +42,9 @@ public class RefundSyncService {
 
     private final TradeSyncRecordService tradeSyncRecordService;
 
+    private final RefundAssistService refundAssistService;
+
     private final LockTemplate lockTemplate;
-
-    private final PayOrderManager payOrderManager;
-
-    private final TradeFlowRecordService tradeFlowRecordService;
-
-    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 退款同步, 开启一个新的事务, 不受外部抛出异常的影响
@@ -159,73 +146,11 @@ public class RefundSyncService {
         var refundStatus = syncResult.getRefundStatus();
         // 对支付网关同步的结果进行处理
         switch (refundStatus) {
-            case SUCCESS -> this.success(order, syncResult);
+            case SUCCESS -> refundAssistService.success(order, syncResult.getFinishTime());
             case PROGRESS -> {}
-            case FAIL, CLOSE-> this.close(order);
+            case FAIL, CLOSE-> refundAssistService.close(order);
             default -> log.error("退款同步结果未知, 退款单号:{}, 错误信息:{}", order.getRefundNo(), syncResult.getSyncErrorMsg());
         }
-    }
-
-
-    /**
-     * 退款成功, 更新退款单和支付单
-     */
-    private void success(RefundOrder refundOrder,RefundSyncResultBo syncResult) {
-        PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
-                .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
-
-        // 订单相关状态
-        PayRefundStatusEnum afterPayRefundStatus;
-
-        // 判断订单全部退款还是部分退款
-        if (BigDecimalUtil.isEqual(payOrder.getRefundableBalance(), BigDecimal.ZERO)) {
-            afterPayRefundStatus = PayRefundStatusEnum.REFUNDED;
-        } else {
-            afterPayRefundStatus = PayRefundStatusEnum.PARTIAL_REFUND;
-        }
-        // 设置退款为完成状态和完成时间
-        refundOrder.setStatus(RefundStatusEnum.SUCCESS.getCode())
-                .setFinishTime(syncResult.getFinishTime());
-        payOrder.setRefundStatus(afterPayRefundStatus.getCode());
-
-        // 更新订单和退款相关订单
-        payOrderManager.updateById(payOrder);
-        refundOrderManager.updateById(refundOrder);
-
-        // 记录流水
-        tradeFlowRecordService.saveRefund(refundOrder);
-        // 发送通知
-        merchantNoticeService.registerRefundNotice(refundOrder);
-    }
-
-
-    /**
-     * 退款失败, 关闭退款单并将失败的退款金额归还回订单
-     */
-    private void close(RefundOrder refundOrder) {
-        PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
-                .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
-        // 退款失败返还后的余额
-        var payOrderAmount =  refundOrder
-                .getAmount()
-                .add(payOrder.getRefundableBalance());
-        // 退款失败返还后的余额+可退余额 == 订单金额 支付订单回退为为支付成功状态
-        if (BigDecimalUtil.isEqual(payOrderAmount, payOrder.getAmount())) {
-            payOrder.setStatus(PayStatusEnum.SUCCESS.getCode());
-        } else {
-            // 回归部分退款状态
-            payOrder.setRefundStatus(PayRefundStatusEnum.PARTIAL_REFUND.getCode());
-        }
-
-        // 更新支付订单相关的可退款金额
-        payOrder.setRefundableBalance(payOrderAmount);
-        refundOrder.setStatus(RefundStatusEnum.CLOSE.getCode());
-
-        // 更新订单和退款相关订单
-        payOrderManager.updateById(payOrder);
-        refundOrderManager.updateById(refundOrder);
-        // 发送通知
-        merchantNoticeService.registerRefundNotice(refundOrder);
     }
 
     /**
@@ -239,7 +164,7 @@ public class RefundSyncService {
                 .setBizTradeNo(refundOrder.getBizRefundNo())
                 .setOutTradeNo(syncResult.getOutRefundNo())
                 .setOutTradeStatus(syncResult.getRefundStatus().getCode())
-                .setType(TradeTypeEnum.REFUND.getCode())
+                .setTradeType(TradeTypeEnum.REFUND.getCode())
                 .setChannel(refundOrder.getChannel())
                 .setSyncInfo(syncResult.getSyncData())
                 .setAdjust(adjust)

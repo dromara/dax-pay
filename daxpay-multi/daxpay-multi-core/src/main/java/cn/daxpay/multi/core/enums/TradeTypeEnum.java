@@ -7,7 +7,8 @@ import lombok.Getter;
 import java.util.Arrays;
 
 /**
- * 常见的交易类型, 如支付/退款/转账等
+ * 交易类型, 如支付/退款/转账等
+ * 字典: trade_type
  * @author xxm
  * @since 2024/1/28
  */

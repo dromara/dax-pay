@@ -228,7 +228,6 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
      * @param consumer 执行方法
      * @param <E> 泛型
      * @return 操作结果
-     * @since 3.3.1
      */
     protected <E> boolean executeBatch(Collection<E> list, int batchSize, BiConsumer<SqlSession, E> consumer) {
         return SqlHelper.executeBatch(getSqlSessionFactory(), this.log, list, batchSize, consumer);

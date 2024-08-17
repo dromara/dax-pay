@@ -28,7 +28,7 @@ public class MerchantNotifyTask extends MchBaseEntity implements ToResult<Mercha
     /** 本地交易ID */
     private Long tradeId;
 
-    /** 本地交易号 */
+    /** 平台交易号 */
     private String tradeNo;
 
     /**

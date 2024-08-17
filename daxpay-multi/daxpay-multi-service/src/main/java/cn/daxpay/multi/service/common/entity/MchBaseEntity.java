@@ -23,7 +23,7 @@ public class MchBaseEntity extends MpBaseEntity {
     private String mchNo;
 
     /** 应用号 */
-    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
     private String appId;
 
 }

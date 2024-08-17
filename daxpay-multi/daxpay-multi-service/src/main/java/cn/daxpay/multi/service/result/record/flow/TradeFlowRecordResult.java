@@ -39,7 +39,7 @@ public class TradeFlowRecordResult extends MchResult {
      */
     private String channel;
 
-    /** 本地交易号 */
+    /** 平台交易号 */
     private String tradeNo;
 
     /** 商户交易号 */

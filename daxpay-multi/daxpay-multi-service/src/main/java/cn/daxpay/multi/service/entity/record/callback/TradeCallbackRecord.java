@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 @TableName("pay_trade_callback_record")
 public class TradeCallbackRecord extends MchRecordEntity implements ToResult<TradeCallbackRecordResult> {
 
-    /** 本地交易号 */
+    /** 平台交易号 */
     private String tradeNo;
 
     /** 通道交易号 */

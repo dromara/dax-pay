@@ -54,9 +54,10 @@ public class AliPayRefundSyncService {
             syncResult.setSyncData(JsonUtil.toJsonStr(response));
             // 失败
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                syncResult.setSyncSuccess(false);
-                syncResult.setSyncErrorCode(response.getSubCode());
-                syncResult.setSyncErrorMsg(response.getSubMsg());
+                syncResult.setSyncSuccess(false)
+                        .setSyncErrorCode(response.getSubCode())
+                        .setRefundStatus(RefundStatusEnum.FAIL)
+                        .setSyncErrorMsg(response.getSubMsg());
                 return syncResult;
             }
             String tradeStatus = response.getRefundStatus();

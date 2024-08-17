@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付同步订单")
 public class TradeSyncRecordResult extends MchResult {
 
-    /** 本地交易号 */
+    /** 平台交易号 */
     @Schema(description = "本地订单ID")
     private String tradeNo;
 
@@ -39,17 +39,17 @@ public class TradeSyncRecordResult extends MchResult {
 
 
     /**
-     * 同步类型 支付/退款
+     * 交易类型
      * @see cn.daxpay.multi.core.enums.TradeTypeEnum
      */
-    @Schema(description = "同步类型")
-    private String syncType;
+    @Schema(description = "交易类型")
+    private String tradeType;
 
     /**
-     * 同步的异步通道
+     * 同步通道
      * @see ChannelEnum#getCode()
      */
-    @Schema(description = "同步的异步通道")
+    @Schema(description = "同步通道")
     private String channel;
 
     /** 网关返回的同步消息 */

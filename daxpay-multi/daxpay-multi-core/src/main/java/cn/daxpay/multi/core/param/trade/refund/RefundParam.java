@@ -38,12 +38,12 @@ public class RefundParam extends PaymentCommonParam {
      * 商户支付订单号，与订单号至少要传输一个，同时传输以订单号为准
      */
     @Schema(description = "商户订单号")
-    @Size(max = 100, message = "商户支付订单号不可超过100位")
+    @Size(max = 100, message = "商户订单号不可超过100位")
     private String bizOrderNo;
 
     /** 退款金额 */
     @Schema(description = "退款金额")
-    @NotNull(message = "支付金额不可为空")
+    @NotNull(message = "退款金额不可为空")
     @DecimalMin(value = "0.01", message = "支付金额不可小于0.01元")
     @Digits(integer = 8, fraction = 2, message = "支付金额精度到分, 且要小于一亿元")
     private BigDecimal amount;

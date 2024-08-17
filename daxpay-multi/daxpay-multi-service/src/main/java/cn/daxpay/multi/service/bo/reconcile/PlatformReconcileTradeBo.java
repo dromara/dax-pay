@@ -28,7 +28,7 @@ public class PlatformReconcileTradeBo {
     /** 交易状态 */
     private String tradeStatus;
 
-    /** 本地交易号 */
+    /** 平台交易号 */
     private String tradeNo;
 
     /** 商户交易号 */

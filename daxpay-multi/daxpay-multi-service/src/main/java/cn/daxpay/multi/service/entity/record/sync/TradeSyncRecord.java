@@ -3,7 +3,7 @@ package cn.daxpay.multi.service.entity.record.sync;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
-import cn.daxpay.multi.service.common.entity.MchBaseEntity;
+import cn.daxpay.multi.service.common.entity.MchRecordEntity;
 import cn.daxpay.multi.service.convert.record.TradeSyncRecordConvert;
 import cn.daxpay.multi.service.result.record.sync.TradeSyncRecordResult;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,9 +20,9 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_trade_sync_record")
-public class TradeSyncRecord extends MchBaseEntity implements ToResult<TradeSyncRecordResult> {
+public class TradeSyncRecord extends MchRecordEntity implements ToResult<TradeSyncRecordResult> {
 
-    /** 本地交易号 */
+    /** 平台交易号 */
     private String tradeNo;
 
     /** 商户交易号 */
@@ -32,15 +32,15 @@ public class TradeSyncRecord extends MchBaseEntity implements ToResult<TradeSync
     private String outTradeNo;
 
     /**
-     * 三方支付返回状态, 分账无返回状态
+     * 通道返回的状态
      */
     private String outTradeStatus;
 
     /**
-     * 同步类型 支付/退款/分账/转账
+     * 交易类型
      * @see TradeTypeEnum
      */
-    private String type;
+    private String tradeType;
 
     /**
      * 同步通道

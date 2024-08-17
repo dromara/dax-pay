@@ -79,4 +79,20 @@ public class PayOrderController {
         payOrderService.sync(id);
         return Res.ok();
     }
+
+    @RequestPath("关闭支付订单")
+    @Operation(summary = "关闭支付订单")
+    @PostMapping("/close")
+    public Result<Void> close(@NotNull(message = "支付订单id不能为空") Long id){
+        payOrderService.close(id);
+        return Res.ok();
+    }
+
+    @RequestPath("撤销支付订单")
+    @Operation(summary = "撤销支付订单")
+    @PostMapping("/cancel")
+    public Result<Void> cancel(@NotNull(message = "支付订单id不能为空") Long id){
+        payOrderService.cancel(id);
+        return Res.ok();
+    }
 }

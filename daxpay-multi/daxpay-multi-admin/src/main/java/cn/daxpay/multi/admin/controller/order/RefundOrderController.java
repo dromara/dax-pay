@@ -13,6 +13,8 @@ import cn.daxpay.multi.service.service.order.refund.RefundOrderQueryService;
 import cn.daxpay.multi.service.service.order.refund.RefundOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ import java.math.BigDecimal;
  * @author xxm
  * @since 2024/1/9
  */
+@Validated
 @Tag(name = "退款订单控制器")
 @RestController
 @RequestMapping("/order/refund")
@@ -43,14 +46,14 @@ public class RefundOrderController {
     @RequestPath("根据商户退款号查询")
     @Operation(summary = "查询退款订单详情")
     @GetMapping("/findByRefundNo")
-    public Result<RefundOrderVo> findByRefundNo(String refundNo){
+    public Result<RefundOrderVo> findByRefundNo(@NotBlank(message = "退款号不可为空") String refundNo){
         return Res.ok(queryService.findByRefundNo(refundNo));
     }
 
     @RequestPath("根据ID查询")
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
-    public Result<RefundOrderVo> findById(Long id){
+    public Result<RefundOrderVo> findById(@NotNull(message = "退款ID不可为空") Long id){
         return Res.ok(queryService.findById(id));
     }
 
@@ -66,6 +69,30 @@ public class RefundOrderController {
     @PostMapping("/create")
     public Result<Void> create(@Validated @RequestBody RefundCreateParam param){
         refundOrderService.create(param);
+        return Res.ok();
+    }
+
+    @RequestPath("退款同步")
+    @Operation(summary = "退款同步")
+    @PostMapping("/sync")
+    public Result<Void> sync(@NotNull(message = "退款ID不可为空") Long id){
+        refundOrderService.sync(id);
+        return Res.ok();
+    }
+
+    @RequestPath("退款重试")
+    @Operation(summary = "退款重试")
+    @PostMapping("/retry")
+    public Result<Void> retry(@NotNull(message = "退款ID不可为空") Long id){
+        refundOrderService.retry(id);
+        return Res.ok();
+    }
+
+    @RequestPath("退款关闭")
+    @Operation(summary = "退款关闭")
+    @PostMapping("/close")
+    public Result<Void> close(@NotNull(message = "退款ID不可为空") Long id){
+        refundOrderService.close(id);
         return Res.ok();
     }
 

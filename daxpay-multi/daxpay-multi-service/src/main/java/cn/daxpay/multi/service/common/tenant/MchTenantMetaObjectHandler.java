@@ -40,8 +40,7 @@ public class MchTenantMetaObjectHandler implements MetaObjectFill {
      * 不是所有情况下都会获取到应用号
      */
     public String getAppId() {
-        MchAppLocal mchAppInfo = PaymentContextLocal.get()
-                .getMchAppInfo();
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         return mchAppInfo.getAppId();
     }
 
