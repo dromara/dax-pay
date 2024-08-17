@@ -11,10 +11,15 @@ import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.param.order.pay.PayOrderQuery;
 import cn.daxpay.multi.service.result.order.pay.PayOrderVo;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
+import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/1/9
  */
+@Validated
 @Tag(name = "支付订单控制器")
 @RestController
 @RequestMapping("/order/pay")
@@ -30,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PayOrderController {
     private final PayOrderQueryService queryService;
+    private final PayOrderService payOrderService;
 
     @RequestPath("分页查询")
     @Operation(summary = "分页查询")
@@ -41,7 +48,7 @@ public class PayOrderController {
     @RequestPath("查询订单详情")
     @Operation(summary = "查询订单详情")
     @GetMapping("/findById")
-    public Result<PayOrderVo> findById(Long id){
+    public Result<PayOrderVo> findById(@NotNull(message = "支付订单id不能为空") Long id){
         PayOrderVo order = queryService.findById(id)
                 .map(PayOrder::toResult)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
@@ -51,7 +58,7 @@ public class PayOrderController {
     @RequestPath("根据订单号查询详情")
     @Operation(summary = "根据订单号查询详情")
     @GetMapping("/findByOrderNo")
-    public Result<PayOrderVo> findByOrderNo(String orderNo){
+    public Result<PayOrderVo> findByOrderNo(@NotBlank(message = "支付订单号不能为空") String orderNo){
         PayOrderVo order = queryService.findByOrderNo(orderNo)
                 .map(PayOrder::toResult)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
@@ -63,5 +70,13 @@ public class PayOrderController {
     @GetMapping("/getTotalAmount")
     public Result<Integer> getTotalAmount(PayOrderQuery param){
         return Res.ok(queryService.getTotalAmount(param));
+    }
+
+    @RequestPath("同步支付订单状态")
+    @Operation(summary = "同步支付订单状态")
+    @PostMapping("/sync")
+    public Result<Void> sync(@NotNull(message = "支付订单id不能为空") Long id){
+        payOrderService.sync(id);
+        return Res.ok();
     }
 }

@@ -9,6 +9,7 @@ import java.util.Objects;
 
 /**
  * 对账差异类型
+ * 字典: reconcile_discrepancy_type
  * @author xxm
  * @since 2024/3/1
  */

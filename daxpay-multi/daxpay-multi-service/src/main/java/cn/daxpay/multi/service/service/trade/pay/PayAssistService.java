@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.service.trade.pay;
 
+import cn.bootx.platform.common.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.bootx.platform.core.util.DateTimeUtil;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
@@ -12,12 +13,12 @@ import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.bo.trade.PayResultBo;
+import cn.daxpay.multi.service.code.DaxPayCode;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.order.pay.PayOrderQueryService;
-import cn.daxpay.multi.service.service.order.pay.PayOrderService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +41,9 @@ import java.util.Objects;
 public class PayAssistService {
 
     private final PayOrderManager payOrderManager;
-
     private final PayOrderQueryService payOrderQueryService;
     private final PaySyncService paySyncService;
-    private final PayOrderService payOrderService;
+    private final DelayJobService delayJobService;
 
 
     /**
@@ -67,7 +67,7 @@ public class PayAssistService {
         }
         payOrderManager.save(order);
         // 注册支付超时任务
-        payOrderService.register(order);
+        delayJobService.registerByTransaction(order.getId(), DaxPayCode.Event.MERCHANT_PAY_TIMEOUT, order.getExpiredTime());
         return order;
     }
 

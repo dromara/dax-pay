@@ -5,9 +5,12 @@ import cn.daxpay.multi.core.exception.TradeNotExistException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
+import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
+import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.param.order.refund.RefundCreateParam;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.service.trade.refund.RefundService;
+import cn.daxpay.multi.service.service.trade.refund.RefundSyncService;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +34,10 @@ public class RefundOrderService {
 
     private final PayOrderManager payOrderManager;
 
+    private final RefundOrderManager refundOrderManager;
+
     private final RefundService refundService;
+    private final RefundSyncService refundSyncService;
 
     /**
      * 创建退款订单
@@ -57,5 +63,17 @@ public class RefundOrderService {
         refundParam.setOrderNo(payOrder.getOrderNo());
         refundParam.setBizRefundNo("MANUAL_"+TradeNoGenerateUtil.refund());
         refundService.refund(refundParam);
+    }
+
+    /**
+     * 同步
+     */
+    public void sync(Long id) {
+        RefundOrder refundOrder = refundOrderManager.findById(id)
+                .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
+        // 初始化商户和应用
+        paymentAssistService.initMchAndApp(refundOrder.getMchNo(),refundOrder.getAppId());
+
+        refundSyncService.syncRefundOrder(refundOrder);
     }
 }
