@@ -61,7 +61,7 @@ public class RefundService {
     private final DelayJobService delayJobService;
 
     /**
-     * 分支付通道进行退款
+     * 退款
      * 1. 创建退款订单(单独事务)
      * 2. 调用API发起退款(异步退款)
      * 3. 根据API返回信息更新退款订单信息
@@ -141,7 +141,7 @@ public class RefundService {
      * 3. 构建退款策略, 发起退款
      */
     private RefundResult repeatRefund(RefundOrder refundOrder, RefundParam param) {
-        // 退款失败才可以重新发起退款, 重新发起退款
+        // 退款失败才可以重新发起退款
         if (!Objects.equals(refundOrder.getStatus(), RefundStatusEnum.FAIL.getCode())) {
             throw new TradeStatusErrorException("只有失败状态的才可以重新发起退款");
         }
@@ -209,9 +209,17 @@ public class RefundService {
         payOrderManager.updateById(payOrder);
 
         // 更新退款订单
-        refundAssistService.updateOrder(refundOrder, refundInfo);
-
-        // 发送通知
-        merchantNoticeService.registerRefundNotice(refundOrder);
+        refundOrder.setStatus(refundInfo.getStatus().getCode())
+                .setOutRefundNo(refundInfo.getOutRefundNo())
+                .setFinishTime(refundInfo.getFinishTime());
+        // 是否直接返回了退款成功
+        if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.SUCCESS.getCode())){
+            // 发送通知
+            merchantNoticeService.registerRefundNotice(refundOrder);
+        } else {
+            // 注册延时同步事件
+            delayJobService.registerByTransaction(refundOrder.getId(), DaxPayCode.Event.MERCHANT_REFUND_SYNC, 2*60*1000L);
+        }
+        refundOrderManager.updateById(refundOrder);
     }
 }

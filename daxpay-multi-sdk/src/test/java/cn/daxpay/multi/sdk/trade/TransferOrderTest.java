@@ -36,14 +36,14 @@ public class TransferOrderTest {
 
 
     /**
-     * 发起转账操作
+     * 发起转账操作(支付宝)
      */
     @Test
     public void transfer() {
         // 构建参数
         TransferParam param = new TransferParam();
         param.setBizTransferNo("T"+System.currentTimeMillis());
-        param.setTitle("测试转账");
+        param.setTitle("测试支付宝转账");
         param.setReason("我要转个账");
         param.setAmount(BigDecimal.valueOf(5));
         param.setChannel(PayChannelEnum.ALI.getCode());

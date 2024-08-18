@@ -11,8 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 /**
  * 支付订单查询参数
  * @author xxm
@@ -20,7 +18,7 @@ import java.math.BigDecimal;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@QueryParam
+@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "支付订单查询参数")
 public class PayOrderQuery extends SortParam {
@@ -44,9 +42,11 @@ public class PayOrderQuery extends SortParam {
     private String title;
 
     /** 是否支持分账 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "是否需要分账")
     private Boolean allocation;
 
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "是否开启自动分账")
     private Boolean autoAllocation;
 
@@ -54,23 +54,22 @@ public class PayOrderQuery extends SortParam {
      * 支付通道
      * @see ChannelEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "异步支付通道")
     private String channel;
 
     /**
      * 支付方式
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付方式")
     private String method;
-
-    /** 金额 */
-    @Schema(description = "金额")
-    private BigDecimal amount;
 
     /**
      * 支付状态
      * @see PayStatusEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付状态")
     private String status;
 
@@ -78,6 +77,7 @@ public class PayOrderQuery extends SortParam {
      * 退款状态
      * @see PayRefundStatusEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "退款状态")
     private String refundStatus;
 
@@ -85,6 +85,7 @@ public class PayOrderQuery extends SortParam {
      * 分账状态
      * @see PayAllocStatusEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "分账状态")
     private String allocStatus;
 
@@ -92,8 +93,14 @@ public class PayOrderQuery extends SortParam {
     @Schema(description = "错误码")
     private String errorCode;
 
-    /** 错误信息 */
-    @Schema(description = "错误信息")
-    private String errorMsg;
+    /** 商户号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "商户号")
+    private String mchNo;
+
+    /** 应用号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "应用号")
+    private String appId;
 
 }

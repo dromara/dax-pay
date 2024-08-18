@@ -92,6 +92,6 @@ public class PayOrderQueryService {
      * 查询支付总金额
      */
     public Integer getTotalAmount(PayOrderQuery param) {
-        return payOrderManager.getTalAmount(param);
+        return payOrderManager.getTotalAmount(param);
     }
 }

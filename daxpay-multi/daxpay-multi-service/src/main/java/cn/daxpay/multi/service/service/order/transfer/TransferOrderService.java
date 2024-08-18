@@ -1,17 +1,23 @@
 package cn.daxpay.multi.service.service.order.transfer;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
-import cn.bootx.platform.common.redis.delay.service.DelayJobService;
+import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
-import cn.daxpay.multi.service.code.DaxPayCode;
+import cn.daxpay.multi.core.exception.TradeNotExistException;
+import cn.daxpay.multi.core.exception.TradeProcessingException;
+import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
-import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
+import cn.daxpay.multi.service.service.trade.transfer.TransferAssistService;
+import cn.daxpay.multi.service.service.trade.transfer.TransferService;
 import cn.daxpay.multi.service.service.trade.transfer.TransferSyncService;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 转账订单服务
@@ -23,34 +29,61 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TransferOrderService {
 
-
-    private final TransferSyncService transferSyncService;
-
-    private final DelayJobService delayJobService;
-
+    private final TransferAssistService transferAssistService;
+    private final TransferService transferService;
     private final TransferOrderManager transferOrderManager;
     private final PaymentAssistService paymentAssistService;
+    private final TransferSyncService transferSyncService;
 
     /**
-     * 注册一个两分钟后的延时同步任务
+     * 同步
      */
-    public void register(RefundOrder refundOrder) {
-        delayJobService.registerByTransaction(refundOrder.getId(), DaxPayCode.Event.MERCHANT_PAY_TIMEOUT, 2*60*1000L);
+    public void sync(Long id) {
+        var transferOrder = transferOrderManager.findById(id)
+                .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
+        // 初始化商户和应用
+        paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
+        // 同步转账订单状态
+        transferSyncService.syncTransferOrder(transferOrder);
     }
 
     /**
-     * 接收订单超时事件
+     * 转账重试
      */
-    @DelayEventListener(DaxPayCode.Event.MERCHANT_PAY_TIMEOUT)
-    public void TransferDelaySync(DelayJobEvent<Long> event) {
-        var orderOpt = transferOrderManager.findById(event.getMessage());
-        if (orderOpt.isPresent()) {
-            var order = orderOpt.get();
-            // 不是退款中不需要进行同步
-            if (order.getStatus().equals(TransferStatusEnum.PROGRESS.getCode())) {
-                paymentAssistService.initMchAndApp(order.getMchNo(), order.getAppId());
-                transferSyncService.syncTransferOrder(order);
-            }
+    public void retry(Long id) {
+        var transferOrder = transferOrderManager.findById(id)
+                .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
+        // 初始化商户和应用
+        paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
+
+        String ip = Optional.ofNullable(WebServletUtil.getRequest())
+                .map(JakartaServletUtil::getClientIP)
+                .orElse("未知");
+
+        // 构建转账参数并发起
+        var transferParam = new TransferParam();
+        transferParam.setMchNo(transferOrder.getMchNo());
+        transferParam.setAppId(transferOrder.getAppId());
+        transferParam.setClientIp(ip);
+        transferParam.setReqTime(LocalDateTime.now());
+        transferParam.setBizTransferNo(transferOrder.getBizTransferNo());
+        transferParam.setAmount(transferOrder.getAmount());
+        // 发起转账
+        transferService.transfer(transferParam);
+    }
+
+    /**
+     * 转账关闭
+     */
+    public void close(Long id) {
+        var transferOrder = transferOrderManager.findById(id)
+                .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
+        // 初始化商户和应用
+        paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
+        // 更新订单状态
+        if (!Objects.equals(TransferStatusEnum.FAIL.getCode(), transferOrder.getStatus())){
+            throw new TradeProcessingException("只有失败状态的才可以关闭");
         }
+        transferAssistService.close(transferOrder,LocalDateTime.now());
     }
 }

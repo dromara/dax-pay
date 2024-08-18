@@ -105,7 +105,7 @@ public class RefundAssistService {
     public void updateOrder(RefundOrder refundOrder, RefundResultBo resultBo){
         refundOrder.setStatus(resultBo.getStatus().getCode())
                 .setOutRefundNo(resultBo.getOutRefundNo());
-        // 退款成功更新退款时间
+        // 是否直接返回了退款成功
         if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.SUCCESS.getCode())){
             // 读取网关返回的退款时间和完成时间
             refundOrder.setFinishTime(resultBo.getFinishTime());
@@ -126,6 +126,7 @@ public class RefundAssistService {
     /**
      * 退款失败, 关闭退款单并将失败的退款金额归还回订单
      */
+    @Transactional(rollbackFor = Exception.class)
     public void close(RefundOrder refundOrder) {
         PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));
@@ -156,6 +157,7 @@ public class RefundAssistService {
     /**
      * 退款成功, 更新退款单和支付单
      */
+    @Transactional(rollbackFor = Exception.class)
     public void success(RefundOrder refundOrder, LocalDateTime finishTime) {
         PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("退款订单关联支付订单不存在"));

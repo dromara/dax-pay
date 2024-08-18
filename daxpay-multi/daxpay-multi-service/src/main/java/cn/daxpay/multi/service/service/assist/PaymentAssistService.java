@@ -52,7 +52,7 @@ public class PaymentAssistService {
     public void signVerify(PaymentCommonParam param) {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         // 判断是否不需要签名
-        if (!mchAppInfo.isReqSign()){
+        if (!mchAppInfo.getReqSign()){
             return;
         }
         // 参数转换为Map对象

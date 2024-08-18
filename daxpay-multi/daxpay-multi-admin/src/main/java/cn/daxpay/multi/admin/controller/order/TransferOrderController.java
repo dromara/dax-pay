@@ -9,10 +9,13 @@ import cn.bootx.platform.core.rest.result.Result;
 import cn.daxpay.multi.service.param.order.transfer.TransferOrderQuery;
 import cn.daxpay.multi.service.result.order.transfer.TransferOrderVo;
 import cn.daxpay.multi.service.service.order.transfer.TransferOrderQueryService;
+import cn.daxpay.multi.service.service.order.transfer.TransferOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TransferOrderController {
     private final TransferOrderQueryService queryService;
+    private final TransferOrderService transferOrderService;
 
     @RequestPath("分页查询")
     @Operation(summary = "分页查询")
@@ -58,11 +62,35 @@ public class TransferOrderController {
     }
 
 
-
     @RequestPath("查询金额汇总")
     @Operation(summary = "查询金额汇总")
     @GetMapping("/getTotalAmount")
     public Result<Integer> getTotalAmount(TransferOrderQuery param){
         return Res.ok(queryService.getTotalAmount(param));
+    }
+
+
+    @RequestPath("转账同步")
+    @Operation(summary = "转账同步")
+    @PostMapping("/sync")
+    public Result<Void> sync(@NotNull(message = "转账ID不可为空") Long id){
+        transferOrderService.sync(id);
+        return Res.ok();
+    }
+
+    @RequestPath("转账重试")
+    @Operation(summary = "转账重试")
+    @PostMapping("/retry")
+    public Result<Void> retry(@NotNull(message = "转账ID不可为空") Long id){
+        transferOrderService.retry(id);
+        return Res.ok();
+    }
+
+    @RequestPath("转账关闭")
+    @Operation(summary = "转账关闭")
+    @PostMapping("/close")
+    public Result<Void> close(@NotNull(message = "转账ID不可为空") Long id){
+        transferOrderService.close(id);
+        return Res.ok();
     }
 }

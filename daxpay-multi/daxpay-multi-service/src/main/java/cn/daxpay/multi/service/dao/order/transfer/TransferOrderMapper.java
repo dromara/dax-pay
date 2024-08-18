@@ -21,5 +21,5 @@ public interface TransferOrderMapper extends MPJBaseMapper<TransferOrder> {
      * 查询转账总金额
      */
     @Select("select sum(amount) from pay_transfer_order ${ew.customSqlSegment}")
-    Integer getTalAmount(@Param(Constants.WRAPPER) QueryWrapper<TransferOrderQuery> generator);
+    Integer getTotalAmount(@Param(Constants.WRAPPER) QueryWrapper<TransferOrderQuery> generator);
 }

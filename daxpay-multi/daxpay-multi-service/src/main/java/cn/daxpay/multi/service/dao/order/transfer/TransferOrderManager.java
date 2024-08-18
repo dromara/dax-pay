@@ -52,9 +52,9 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
     /**
      * 查询汇总金额
      */
-    public Integer getTalAmount(TransferOrderQuery query){
+    public Integer getTotalAmount(TransferOrderQuery query){
         QueryWrapper<TransferOrderQuery> generator = QueryGenerator.generator(query);
         generator.eq(MpUtil.getColumnName(TransferOrder::getStatus), TransferStatusEnum.SUCCESS.getCode());
-        return baseMapper.getTalAmount(generator);
+        return baseMapper.getTotalAmount(generator);
     }
 }

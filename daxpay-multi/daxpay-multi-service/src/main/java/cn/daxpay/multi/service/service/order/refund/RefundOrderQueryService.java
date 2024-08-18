@@ -67,11 +67,9 @@ public class RefundOrderQueryService {
     }
 
     /**
-     * 查询支付总金额
+     * 查询退款总金额
      */
     public BigDecimal getTotalAmount(RefundOrderQuery param) {
-        return refundOrderManager.getTalAmount(param);
+        return refundOrderManager.getTotalAmount(param);
     }
-
-
 }

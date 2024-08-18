@@ -79,6 +79,6 @@ public class TransferOrderQueryService {
      * 查询支付总金额
      */
     public Integer getTotalAmount(TransferOrderQuery param) {
-        return transferOrderManager.getTalAmount(param);
+        return transferOrderManager.getTotalAmount(param);
     }
 }

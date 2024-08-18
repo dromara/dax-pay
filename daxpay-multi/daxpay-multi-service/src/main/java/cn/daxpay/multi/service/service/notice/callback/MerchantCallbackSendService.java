@@ -1,7 +1,5 @@
 package cn.daxpay.multi.service.service.notice.callback;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
 import cn.bootx.platform.common.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.core.result.DaxResult;
@@ -116,23 +114,6 @@ public class MerchantCallbackSendService {
             int delay = merchantNoticeAssistService.getDelayTime(task.getDelayCount());
             // 注册延时任务
             delayJobService.register(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, delay);
-        }
-    }
-
-    /**
-     * 接受发送任务的延时消息
-     */
-    @DelayEventListener(DaxPayCode.Event.MERCHANT_CALLBACK_SENDER)
-    public void receiveJob(DelayJobEvent<Long> event){
-        // 获取任务
-        Long taskId = event.getMessage();
-        var taskOpt = taskManager.findById(taskId);
-        if (taskOpt.isPresent()){
-            var task = taskOpt.get();
-            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
-            this.sendData(task,true);
-        } else {
-            log.error("发送任务不存在，任务ID：{}",taskId);
         }
     }
 

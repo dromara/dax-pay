@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "支付退款查询参数")
 public class RefundOrderQuery extends SortParam {
@@ -51,16 +51,28 @@ public class RefundOrderQuery extends SortParam {
      * 退款通道
      * @see ChannelEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付通道")
     private String channel;
 
     /**
      * @see RefundStatusEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "退款状态")
     private String status;
 
     /** 错误码 */
     @Schema(description = "错误码")
     private String errorCode;
+
+    /** 商户号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "商户号")
+    private String mchNo;
+
+    /** 应用号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "应用号")
+    private String appId;
 }

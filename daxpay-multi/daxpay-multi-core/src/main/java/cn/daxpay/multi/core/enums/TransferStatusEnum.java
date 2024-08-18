@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 转账状态
+ * 字典: transfer_status
  * @author xxm
  * @since 2024/6/11
  */

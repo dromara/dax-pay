@@ -45,7 +45,6 @@ public class PayAssistService {
     private final PaySyncService paySyncService;
     private final DelayJobService delayJobService;
 
-
     /**
      * 创建支付订单并保存, 返回支付订单
      */

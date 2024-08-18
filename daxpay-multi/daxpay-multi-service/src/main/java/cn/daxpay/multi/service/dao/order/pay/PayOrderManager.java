@@ -77,11 +77,11 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     /**
      * 查询汇总金额
      */
-    public Integer getTalAmount(PayOrderQuery query){
+    public Integer getTotalAmount(PayOrderQuery query){
         QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
+        // 商户和应用AppId
         generator.eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
-//        todo return baseMapper.getTalAmount(generator);
-        return null;
+        return baseMapper.getTotalAmount(generator);
     }
 
     /**

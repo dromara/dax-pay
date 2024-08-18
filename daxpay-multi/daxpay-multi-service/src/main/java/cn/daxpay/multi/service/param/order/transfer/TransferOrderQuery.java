@@ -9,14 +9,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 /**
  * 转账订单查询参数
  * @author xxm
  * @since 2024/6/17
  */
+@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -42,16 +40,12 @@ public class TransferOrderQuery extends SortParam {
      * 支付通道
      * @see cn.daxpay.multi.core.enums.ChannelEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付通道")
     private String channel;
 
-    /** 转账金额 */
-    @Schema(description = "转账金额")
-    private BigDecimal amount;
-
     /** 标题 */
     @Schema(description = "标题")
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String title;
 
 
@@ -60,6 +54,7 @@ public class TransferOrderQuery extends SortParam {
      * 收款人类型
      * @see TransferPayeeTypeEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "收款人类型")
     private String payeeType;
 
@@ -69,19 +64,25 @@ public class TransferOrderQuery extends SortParam {
 
     /** 收款人姓名 */
     @Schema(description = "收款人姓名")
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     private String payeeName;
 
     /**
      * 状态
      * @see TransferStatusEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "状态")
     private String status;
 
-    /** 成功时间 */
-    @Schema(description = "成功时间")
-    private LocalDateTime successTime;
+    /** 商户号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "商户号")
+    private String mchNo;
+
+    /** 应用号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "应用号")
+    private String appId;
 
     /**
      * 错误码

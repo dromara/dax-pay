@@ -4,7 +4,6 @@ import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
-import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.param.order.refund.RefundOrderQuery;
@@ -86,9 +85,9 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     /**
      * 查询汇总金额
      */
-    public BigDecimal getTalAmount(RefundOrderQuery query){
+    public BigDecimal getTotalAmount(RefundOrderQuery query){
         QueryWrapper<RefundOrder> generator = QueryGenerator.generator(query);
-        generator.eq(MpUtil.getColumnName(RefundOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
-        return baseMapper.getTalAmount(generator);
+        generator.eq(MpUtil.getColumnName(RefundOrder::getStatus), RefundStatusEnum.SUCCESS.getCode());
+        return baseMapper.getTotalAmount(generator);
     }
 }

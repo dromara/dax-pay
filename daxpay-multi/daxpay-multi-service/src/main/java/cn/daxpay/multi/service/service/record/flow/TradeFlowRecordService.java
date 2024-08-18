@@ -8,6 +8,7 @@ import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
 import cn.daxpay.multi.service.dao.record.flow.TradeFlowRecordManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
+import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.entity.record.flow.TradeFlowRecord;
 import cn.daxpay.multi.service.param.record.TradeFlowRecordQuery;
 import cn.daxpay.multi.service.result.record.flow.TradeFlowRecordResult;
@@ -68,6 +69,21 @@ public class TradeFlowRecordService {
                 .setTitle(refundOrder.getTitle())
                 .setType(TradeFlowTypeEnum.REFUND.getCode())
                 .setAmount(refundOrder.getAmount());
+        tradeFlowRecordManager.save(tradeFlowRecord);
+    }
+
+    /**
+     * 转账记账
+     */
+    public void saveTransfer(TransferOrder transferOrder){
+        TradeFlowRecord tradeFlowRecord = new TradeFlowRecord()
+                .setTradeNo(transferOrder.getTransferNo())
+                .setBizTradeNo(transferOrder.getBizTransferNo())
+                .setOutTradeNo(transferOrder.getOutTransferNo())
+                .setChannel(transferOrder.getChannel())
+                .setTitle(transferOrder.getTitle())
+                .setType(TradeFlowTypeEnum.TRANSFER.getCode())
+                .setAmount(transferOrder.getAmount());
         tradeFlowRecordManager.save(tradeFlowRecord);
     }
 

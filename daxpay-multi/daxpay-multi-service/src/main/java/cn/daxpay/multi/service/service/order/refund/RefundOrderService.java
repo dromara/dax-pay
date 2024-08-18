@@ -1,7 +1,9 @@
 package cn.daxpay.multi.service.service.order.refund;
 
 import cn.bootx.platform.common.spring.util.WebServletUtil;
+import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.exception.TradeNotExistException;
+import cn.daxpay.multi.core.exception.TradeStatusErrorException;
 import cn.daxpay.multi.core.param.trade.refund.RefundParam;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -116,7 +119,10 @@ public class RefundOrderService {
                 .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(refundOrder.getMchNo(),refundOrder.getAppId());
-        // 更新订单状态
+        if (!Objects.equals(refundOrder.getStatus(), RefundStatusEnum.FAIL.getCode())) {
+            throw new TradeStatusErrorException("只有失败状态的才可以关闭退款");
+        }
+        // 关闭
         refundAssistService.close(refundOrder);
     }
 }

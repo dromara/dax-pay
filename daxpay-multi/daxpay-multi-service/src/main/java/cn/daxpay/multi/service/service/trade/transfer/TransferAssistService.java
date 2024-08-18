@@ -1,15 +1,19 @@
 package cn.daxpay.multi.service.service.trade.transfer;
 
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
+import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
 import cn.daxpay.multi.core.result.trade.transfer.TransferResult;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
-import cn.daxpay.multi.core.param.trade.transfer.TransferParam;
+import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * 转账辅助服务
@@ -22,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransferAssistService {
 
     private final TransferOrderManager transferOrderManager;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 创建转账订单
@@ -48,12 +53,14 @@ public class TransferAssistService {
     }
 
     /**
-     * 更新转账订单错误信息
+     *  转账关闭
      */
-    public void updateOrderByError(TransferOrder order, Exception e) {
-        order.setStatus(TransferStatusEnum.FAIL.getCode())
-                .setErrorMsg(e.getMessage());
+    public void close(TransferOrder order, LocalDateTime finishTime) {
+        // 执行策略的关闭方法
+        order.setStatus(TransferStatusEnum.CLOSE.getCode())
+                .setFinishTime(Optional.ofNullable(finishTime).orElse(LocalDateTime.now()));
         transferOrderManager.updateById(order);
+        merchantNoticeService.registerTransferNotice(order);
     }
 
     /**

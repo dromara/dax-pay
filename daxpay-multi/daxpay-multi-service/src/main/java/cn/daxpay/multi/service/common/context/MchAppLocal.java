@@ -29,7 +29,7 @@ public class MchAppLocal {
     private String signSecret;
 
     /** 是否对请求进行验签 */
-    private boolean reqSign;
+    private Boolean reqSign;
 
     /** 支付限额 */
     private BigDecimal limitAmount;
@@ -60,4 +60,8 @@ public class MchAppLocal {
      * 地址, http/WebSocket 需要配置
      */
     private String notifyUrl;
+
+    public Boolean getReqSign() {
+        return Boolean.TRUE.equals(reqSign);
+    }
 }

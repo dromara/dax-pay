@@ -7,11 +7,15 @@ import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
+import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -27,6 +31,8 @@ public class TransferCallbackService {
     private final LockTemplate lockTemplate;
     private final TransferOrderManager transferOrderManager;
     private final MerchantNoticeService merchantNoticeService;
+    private final TransferAssistService transferAssistService;
+    private final TradeFlowRecordService tradeFlowRecordService;
 
     /**
      * 转账回调统一处理
@@ -56,11 +62,11 @@ public class TransferCallbackService {
             }
             // 转账成功
             if (Objects.equals(TransferStatusEnum.SUCCESS.getCode(), callbackInfo.getTradeStatus())) {
-                this.success(transferOrder);
+                SpringUtil.getBean(this.getClass()).success(transferOrder);
             }
-            // 转账关闭
+            // 转账失败
             if (Objects.equals(TransferStatusEnum.FAIL.getCode(), callbackInfo.getTradeStatus())){
-                this.close(transferOrder);
+                this.fail(transferOrder);
             }
         } finally {
             lockTemplate.releaseLock(lock);
@@ -70,11 +76,19 @@ public class TransferCallbackService {
     /**
      * 转账成功
      */
-    private void success(TransferOrder transferOrder) {
+    @Transactional(rollbackFor = Exception.class)
+    public void success(TransferOrder transferOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         transferOrder.setStatus(TransferStatusEnum.SUCCESS.getCode())
                 .setFinishTime(callbackInfo.getFinishTime());
+
+        if (StrUtil.isNotBlank(callbackInfo.getOutTradeNo())){
+            transferOrder.setTransferNo(callbackInfo.getTradeNo());
+        }
+
         transferOrderManager.updateById(transferOrder);
+        // 记录流水
+        tradeFlowRecordService.saveTransfer(transferOrder);
         // 发送通知
         merchantNoticeService.registerTransferNotice(transferOrder);
     }
@@ -83,13 +97,10 @@ public class TransferCallbackService {
     /**
      * 转账失败或关闭
      */
-    private void close(TransferOrder transferOrder) {
+    private void fail(TransferOrder transferOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        transferOrder.setStatus(TransferStatusEnum.CLOSE.getCode())
-                .setFinishTime(callbackInfo.getFinishTime())
-                        .setErrorMsg(callbackInfo.getTradeErrorMsg());
-        transferOrderManager.updateById(transferOrder);
-        // 发送通知
+        transferOrder.setErrorMsg(callbackInfo.getTradeErrorMsg());
+        transferAssistService.close(transferOrder,callbackInfo.getFinishTime());
         merchantNoticeService.registerTransferNotice(transferOrder);
     }
 }

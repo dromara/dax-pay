@@ -16,14 +16,18 @@ import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.entity.record.sync.TradeSyncRecord;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeService;
 import cn.daxpay.multi.service.service.order.transfer.TransferOrderQueryService;
+import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import cn.daxpay.multi.service.service.record.sync.TradeSyncRecordService;
 import cn.daxpay.multi.service.strategy.AbsSyncTransferOrderStrategy;
 import cn.daxpay.multi.service.util.PaymentStrategyFactory;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -42,6 +46,9 @@ public class TransferSyncService {
     private final TradeSyncRecordService tradeSyncRecordService;
     private final TransferOrderManager transferOrderManager;
     private final MerchantNoticeService merchantNoticeService;
+    private final TransferAssistService transferAssistService;
+    private final TradeFlowRecordService tradeFlowRecordService;
+    private final SpringUtil springUtil;
 
     /**
      * 转账同步接口
@@ -138,9 +145,9 @@ public class TransferSyncService {
         var syncStatusEnum = syncResult.getTransferStatus();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
-            case SUCCESS -> this.success(order, syncResult);
+            case SUCCESS -> SpringUtil.getBean(this.getClass()).success(order, syncResult);
             case PROGRESS -> {}
-            case FAIL,CLOSE -> this.close(order);
+            case FAIL,CLOSE -> transferAssistService.close(order,syncResult.getFinishTime());
             default -> throw new BizException("代码有问题");
         }
     }
@@ -149,24 +156,20 @@ public class TransferSyncService {
     /**
      * 退款成功, 更新退款单和支付单
      */
-    private void success(TransferOrder order, TransferSyncResultBo syncResult) {
+    @Transactional(rollbackFor = Exception.class)
+    public void success(TransferOrder order, TransferSyncResultBo syncResult) {
         // 修改订单支付状态为成功
         order.setStatus(TransferStatusEnum.SUCCESS.getCode())
                 .setFinishTime(syncResult.getFinishTime());
+
+        if (StrUtil.isNotBlank(syncResult.getOutTransferNo())){
+            order.setTransferNo(syncResult.getOutTransferNo());
+        }
+        tradeFlowRecordService.saveTransfer(order);
         transferOrderManager.updateById(order);
         merchantNoticeService.registerTransferNotice(order);
     }
 
-
-    /**
-     * 退款失败, 关闭退款单并将失败的退款金额归还回订单
-     */
-    private void close(TransferOrder order) {
-        // 执行策略的关闭方法
-        order.setStatus(TransferStatusEnum.CLOSE.getCode());
-        transferOrderManager.updateById(order);
-        merchantNoticeService.registerTransferNotice(order);
-    }
 
 
     /**

@@ -79,7 +79,7 @@ public class TransferOrder extends MchBaseEntity implements ToResult<TransferOrd
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String attach;
 
-    /** 请求时间，时间戳转时间 */
+    /** 请求时间 */
     private LocalDateTime reqTime;
 
     /** 终端ip */

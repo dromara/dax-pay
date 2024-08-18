@@ -1,7 +1,5 @@
 package cn.daxpay.multi.service.service.notice.notify;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
 import cn.bootx.platform.common.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
@@ -122,30 +120,6 @@ public class MerchantNotifySendService {
             int delay = merchantNoticeAssistService.getDelayTime(task.getDelayCount());
             // 注册延时任务
             delayJobService.register(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, delay);
-        }
-    }
-
-    /**
-     * 接受发送任务的延时消息
-     */
-    @DelayEventListener(DaxPayCode.Event.MERCHANT_NOTIFY_SENDER)
-    public void receiveJob(DelayJobEvent<Long> event){
-        // 获取任务
-        Long taskId = event.getMessage();
-        var taskOpt = taskManager.findById(taskId);
-        if (taskOpt.isPresent()){
-            var task = taskOpt.get();
-            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
-            MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-            // 判断通知方式是否为http并且订阅了该类型的通知
-            boolean subscribe = notifyConfigService.getSubscribeByAppIdAndType(mchAppInfo.getAppId(), task.getNotifyType());
-            if (Objects.equals(mchAppInfo.getNotifyType(), MerchantNotifyTypeEnum.HTTP.getCode()) && subscribe){
-                this.sendData(task, mchAppInfo.getNotifyUrl(), LocalDateTime.now(), true);
-            } else {
-                log.info("商户消息通知未开启，任务ID：{}",taskId);
-            }
-        } else {
-            log.error("发送任务不存在，任务ID：{}",taskId);
         }
     }
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 支付回调处理状态
+ * 字典: callback_status
  * @author xxm
  * @since 2023/12/20
  */

@@ -20,5 +20,5 @@ public interface RefundOrderMapper extends MPJBaseMapper<RefundOrder> {
 
 
     @Select("select sum(amount) from pay_refund_order ${ew.customSqlSegment}")
-    BigDecimal getTalAmount(@Param(Constants.WRAPPER) QueryWrapper<RefundOrder> generator);
+    BigDecimal getTotalAmount(@Param(Constants.WRAPPER) QueryWrapper<RefundOrder> generator);
 }

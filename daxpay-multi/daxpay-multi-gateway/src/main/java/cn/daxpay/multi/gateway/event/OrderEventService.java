@@ -4,13 +4,16 @@ import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
 import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
+import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.code.DaxPayCode;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
+import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.service.trade.pay.PaySyncService;
 import cn.daxpay.multi.service.service.trade.refund.RefundSyncService;
+import cn.daxpay.multi.service.service.trade.transfer.TransferSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,9 +38,11 @@ public class OrderEventService {
     private final RefundSyncService refundSyncService;
 
     private final RefundOrderManager refundOrderManager;
+    private final TransferOrderManager transferOrderManager;
+    private final TransferSyncService transferSyncService;
 
     /**
-     * 接收订单超时事件
+     * 接收订单超时事件, 发起同步
      */
     @DelayEventListener(DaxPayCode.Event.MERCHANT_PAY_TIMEOUT)
     public void payExpired(DelayJobEvent<Long> event) {
@@ -52,9 +57,9 @@ public class OrderEventService {
         }
     }
     /**
-     * 接收退款订单超时事件
+     * 接收退款订单同步事件
      */
-    @DelayEventListener(DaxPayCode.Event.MERCHANT_PAY_TIMEOUT)
+    @DelayEventListener(DaxPayCode.Event.MERCHANT_REFUND_SYNC)
     public void refundDelaySync(DelayJobEvent<Long> event) {
         var orderOpt = refundOrderManager.findById(event.getMessage());
         if (orderOpt.isPresent()) {
@@ -63,6 +68,23 @@ public class OrderEventService {
             if (order.getStatus().equals(RefundStatusEnum.PROGRESS.getCode())) {
                 paymentAssistService.initMchAndApp(order.getMchNo(), order.getAppId());
                 refundSyncService.syncRefundOrder(order);
+            }
+        }
+    }
+
+
+    /**
+     * 接收转账订单超时事件
+     */
+    @DelayEventListener(DaxPayCode.Event.MERCHANT_TRANSFER_SYNC)
+    public void TransferDelaySync(DelayJobEvent<Long> event) {
+        var orderOpt = transferOrderManager.findById(event.getMessage());
+        if (orderOpt.isPresent()) {
+            var order = orderOpt.get();
+            // 不是退款中不需要进行同步
+            if (order.getStatus().equals(TransferStatusEnum.PROGRESS.getCode())) {
+                paymentAssistService.initMchAndApp(order.getMchNo(), order.getAppId());
+                transferSyncService.syncTransferOrder(order);
             }
         }
     }
