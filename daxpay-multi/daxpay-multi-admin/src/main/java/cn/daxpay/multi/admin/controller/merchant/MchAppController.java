@@ -3,6 +3,7 @@ package cn.daxpay.multi.admin.controller.merchant;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
+import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
@@ -18,6 +19,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 商户应用控制器
@@ -71,5 +74,12 @@ public class MchAppController {
     public Result<Void> delete(@NotNull(message = "id不可为空") Long id){
         mchAppService.delete(id);
         return Res.ok();
+    }
+
+    @RequestPath("根据商户号查询商户应用下拉列表")
+    @Operation(summary = "根据商户号查询商户应用下拉列表")
+    @GetMapping("/dropdown")
+    public Result<List<LabelValue>> dropdown(@NotNull(message = "商户号不可为空")String mchNo){
+        return Res.ok(mchAppService.dropdown(mchNo));
     }
 }

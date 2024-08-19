@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -102,16 +101,6 @@ public class MchAppService {
         }
 
         mchAppManager.deleteById(id);
-    }
-
-    /**
-     * 验证商户号和商户应用是否匹配
-     */
-    public boolean checkMatch(String mchNo, String appId) {
-        Merchant merchant = merchantManager.findByField(Merchant::getMchNo, mchNo).orElseThrow(ConfigNotExistException::new);
-        MchApp mchApp = mchAppManager.findByAppId(appId).orElseThrow(ConfigNotExistException::new);
-        // 商户与应用是否有关联关系
-        return Objects.equals(mchApp.getMchNo(), merchant.getMchNo());
     }
 
     /**

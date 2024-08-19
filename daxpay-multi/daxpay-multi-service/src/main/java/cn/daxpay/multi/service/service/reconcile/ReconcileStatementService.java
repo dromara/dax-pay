@@ -67,6 +67,7 @@ public class ReconcileStatementService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileStatement create(ReconcileCreatParam param) {
+        paymentAssistService.initMchAndApp(param.getAppId());
         ReconcileStatement statement = new ReconcileStatement()
                 .setName(param.getName())
                 .setReconcileNo(TradeNoGenerateUtil.reconciliation())
