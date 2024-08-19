@@ -141,13 +141,13 @@ public class PayOrderTest {
 
 ## 🍎 系统截图
 ### 收银台演示
-![微信截图_20240326141126](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
+![微信截图_20240326141126](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
 ### 驾驶舱
-![QQ截图20240326141912](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
+![QQ截图20240326141912](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
 ### H5收银台演示
-![h5](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
+![h5](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
 ### 支付通道配置
-![微信截图_20240326142208](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
+![微信截图_20240326142208](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
 ## 🛣️ 路线图
 > gateway为开发分支，本地运行请使用master分支进行测试，当前正在进行整个系统的优化重构工作，各种功能都会有可能调整，
 `V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容。
@@ -168,17 +168,17 @@ public class PayOrderTest {
 
 交流二群: 598644350
 <p>
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240513180310.2yy68aykip.webp" width = "330" height = "500"/>
+<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240513180310.2yy68aykip.webp" width = "330" height = "500"/>
 </p>
 
 扫码加入钉钉交流群: [加群连接](https://qr.dingtalk.com/action/joingroup?code=v1,k1,AzkcWLa8J/OHXi+nTWwNRc68IAJ0ckWXEEIvrJofq2A=&_dt_no_comment=1&origin=11)
 <p>
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/connect/png-(1).7egk526qnp.webp" width = "400" height = "400"/>
+<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/png-(1).7egk526qnp.webp" width = "400" height = "400"/>
 </p>
 
 微信扫码加小助手拉群: sdcit2020
 <p>
-<img alt="微信图片_20240226144703" height="480" src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
+<img alt="微信图片_20240226144703" height="480" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
 </p>
 
 ## Star History
