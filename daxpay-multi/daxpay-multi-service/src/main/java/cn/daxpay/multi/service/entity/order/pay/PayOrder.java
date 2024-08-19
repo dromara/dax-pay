@@ -139,7 +139,7 @@ public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
     }
 
     public PayOrder setErrorMsg(String errorMsg) {
-        this.errorMsg = StrUtil.sub(errorMsg,0,200);
+        this.errorMsg = StrUtil.sub(errorMsg,0,300);
         return this;
     }
 

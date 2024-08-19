@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.param.record;
 
 import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
+import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/1/9
  */
+@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -30,24 +32,24 @@ public class PayCloseRecordQuery extends SortParam {
      * 关闭的支付通道
      * @see ChannelEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "关闭的支付通道")
     private String channel;
 
     /**
      * 是否关闭成功
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "是否关闭成功")
     private Boolean closed;
 
-    /** 错误码 */
-    @Schema(description = "错误码")
-    private String errorCode;
+    /** 商户号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "商户号")
+    private String mchNo;
 
-    /** 错误消息 */
-    @Schema(description = "错误消息")
-    private String errorMsg;
-
-    /** 终端ip */
-    @Schema(description = "支付终端ip")
-    private String clientIp;
+    /** 应用号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "应用号")
+    private String appId;
 }

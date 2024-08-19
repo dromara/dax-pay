@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * @since 2024/1/9
  */
 @EqualsAndHashCode(callSuper = true)
-@QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付回调信息记录")
@@ -32,6 +32,7 @@ public class TradeCallbackRecordQuery extends SortParam {
      * 支付通道
      * @see ChannelEnum#getCode()
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付通道")
     private String channel;
 
@@ -39,6 +40,7 @@ public class TradeCallbackRecordQuery extends SortParam {
      * 回调类型
      * @see TradeTypeEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "回调类型")
     private String callbackType;
 
@@ -46,9 +48,17 @@ public class TradeCallbackRecordQuery extends SortParam {
      * 回调处理状态
      * @see CallbackStatusEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "回调处理状态")
     private String status;
 
-    @Schema(description = "调整号")
-    private String adjustNo;
+    /** 商户号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "商户号")
+    private String mchNo;
+
+    /** 应用号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "应用号")
+    private String appId;
 }

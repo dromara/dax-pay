@@ -7,6 +7,7 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.daxpay.multi.service.param.record.TradeFlowRecordQuery;
+import cn.daxpay.multi.service.result.record.flow.TradeFlowAmountResult;
 import cn.daxpay.multi.service.result.record.flow.TradeFlowRecordResult;
 import cn.daxpay.multi.service.service.record.flow.TradeFlowRecordService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,5 +42,12 @@ public class TradeFlowRecordController {
     @GetMapping("/findById")
     public Result<TradeFlowRecordResult> findById(Long id) {
         return Res.ok(service.findById(id));
+    }
+
+    @RequestPath("查询各类金额汇总")
+    @Operation(summary = "查询各类金额汇总")
+    @GetMapping("/summary")
+    public Result<TradeFlowAmountResult> summary(TradeFlowRecordQuery query) {
+        return Res.ok(service.summary(query));
     }
 }

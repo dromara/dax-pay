@@ -4,6 +4,7 @@ import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.entity.record.flow.TradeFlowRecord;
 import cn.daxpay.multi.service.param.record.TradeFlowRecordQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,6 +12,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
 
 /**
  * 交易流水
@@ -30,4 +33,14 @@ public class TradeFlowRecordManager extends BaseManager<TradeFlowRecordMapper, T
         QueryWrapper<TradeFlowRecord> generator = QueryGenerator.generator(param);
         return page(mpPage, generator);
     }
+
+    /**
+     * 查询汇总金额
+     */
+    public BigDecimal getTotalAmount(TradeFlowRecordQuery query, TradeTypeEnum tradeTypeEnum){
+        QueryWrapper<TradeFlowRecord> generator = QueryGenerator.generator(query);
+        generator.eq(MpUtil.getColumnName(TradeFlowRecord::getType), tradeTypeEnum.getCode());
+        return baseMapper.getTotalAmount(generator);
+    }
+
 }

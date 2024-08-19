@@ -12,7 +12,7 @@ import cn.daxpay.multi.service.dao.notice.notify.MerchantNotifyRecordManager;
 import cn.daxpay.multi.service.dao.notice.notify.MerchantNotifyTaskManager;
 import cn.daxpay.multi.service.entity.notice.notify.MerchantNotifyRecord;
 import cn.daxpay.multi.service.entity.notice.notify.MerchantNotifyTask;
-import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.daxpay.multi.service.enums.NoticeSendTypeEnum;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.service.config.MerchantNotifyConfigService;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeAssistService;
@@ -61,7 +61,7 @@ public class MerchantNotifySendService {
         // 创建发送记录
         MerchantNotifyRecord record = new MerchantNotifyRecord()
                 .setTaskId(task.getId())
-                .setSendType(SendTypeEnum.AUTO.getType())
+                .setSendType(NoticeSendTypeEnum.AUTO.getType())
                 .setReqCount(task.getSendCount()+1);
         String body = null;
         try {
@@ -86,8 +86,8 @@ public class MerchantNotifySendService {
             this.failHandler(task,sendTime,autoSend);
             // 如果响应地址不为空, 将错误响应写到记录中
             if (Objects.nonNull(body)){
-                // 预防返回值过长, 只保留200位
-                record.setErrorMsg(StrUtil.sub(body,0,200));
+                // 预防返回值过长, 只保留300位
+                record.setErrorMsg(StrUtil.sub(body,0,300));
             }
         }
         task.setSendCount(task.getSendCount() + 1)

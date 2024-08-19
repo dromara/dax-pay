@@ -6,6 +6,7 @@ import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -13,7 +14,8 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/1/9
  */
-@QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+@EqualsAndHashCode(callSuper = true)
+@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Data
 @Accessors(chain = true)
 @Schema(title = "交易同步记录查询参数")
@@ -41,6 +43,7 @@ public class TradeSyncRecordQuery extends SortParam {
      * 交易类型
      * @see TradeTypeEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "交易类型")
     private String tradeType;
 
@@ -48,24 +51,24 @@ public class TradeSyncRecordQuery extends SortParam {
      * 同步通道
      * @see ChannelEnum#getCode()
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "同步通道")
     private String channel;
-
-    /** 三方支付返回的消息内容 */
-    @Schema(description = "消息内容")
-    private String syncInfo;
 
     /**
      * 支付单如果状态不一致, 是否进行调整
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "是否进行调整")
-    private boolean adjust;
+    private Boolean adjust;
 
-    /** 调整单号 */
-    @Schema(description = "调整单号")
-    private String adjustNo;
+    /** 商户号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "商户号")
+    private String mchNo;
 
-    /** 客户端IP */
-    @Schema(description = "客户端IP")
-    private String clientIp;
+    /** 应用号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "应用号")
+    private String appId;
 }

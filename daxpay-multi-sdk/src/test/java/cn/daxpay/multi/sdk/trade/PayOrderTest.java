@@ -31,7 +31,7 @@ public class PayOrderTest {
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .mchNo("M1723635576766")
-                .appId("M8088873888246277")
+                .appId("M7934041241299655")
                 .build();
         DaxPayKit.initConfig(config);
     }
@@ -171,5 +171,17 @@ public class PayOrderTest {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试支付宝WEB支付");
+        param.setDescription("这是支付宝WEB支付");
+        param.setAmount(BigDecimal.valueOf(50000));
+        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setMethod(PayMethodEnum.WEB.getCode());
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("https://abc.com/callback");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 }

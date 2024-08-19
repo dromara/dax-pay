@@ -43,8 +43,8 @@ public class TransferOrderController {
     @RequestPath("根据转账号查询")
     @Operation(summary = "根据转账号查询")
     @GetMapping("/findByTransferNo")
-    public Result<TransferOrderVo> findByTransferNo(String refundNo){
-        return Res.ok(queryService.findByTransferNo(refundNo));
+    public Result<TransferOrderVo> findByTransferNo(String transferNo){
+        return Res.ok(queryService.findByTransferNo(transferNo));
     }
 
     @RequestPath("根据商户转账号查询")

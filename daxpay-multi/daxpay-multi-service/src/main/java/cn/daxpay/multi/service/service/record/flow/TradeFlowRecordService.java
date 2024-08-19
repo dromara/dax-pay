@@ -5,12 +5,14 @@ import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.dao.record.flow.TradeFlowRecordManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.entity.record.flow.TradeFlowRecord;
 import cn.daxpay.multi.service.param.record.TradeFlowRecordQuery;
+import cn.daxpay.multi.service.result.record.flow.TradeFlowAmountResult;
 import cn.daxpay.multi.service.result.record.flow.TradeFlowRecordResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,21 @@ public class TradeFlowRecordService {
         return tradeFlowRecordManager.findById(id).map(TradeFlowRecord::toResult)
                 .orElseThrow(()->new DataNotExistException("交易流水记录不存在"));
     }
+
+    /**
+     * 查询各类金额汇总
+     */
+    public TradeFlowAmountResult summary(TradeFlowRecordQuery query){
+        var result = new TradeFlowAmountResult();
+        // 支付
+        result.setIncomeAmount(tradeFlowRecordManager.getTotalAmount(query, TradeTypeEnum.PAY));
+        // 退款
+        result.setRefundAmount(tradeFlowRecordManager.getTotalAmount(query, TradeTypeEnum.REFUND));
+        // 转账
+        result.setTransferAmount(tradeFlowRecordManager.getTotalAmount(query, TradeTypeEnum.TRANSFER));
+        return result;
+    }
+
 
     /**
      * 支付记录

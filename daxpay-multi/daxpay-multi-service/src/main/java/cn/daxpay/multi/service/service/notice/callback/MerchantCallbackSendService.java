@@ -9,7 +9,7 @@ import cn.daxpay.multi.service.dao.notice.callback.MerchantCallbackRecordManager
 import cn.daxpay.multi.service.dao.notice.callback.MerchantCallbackTaskManager;
 import cn.daxpay.multi.service.entity.notice.callback.MerchantCallbackRecord;
 import cn.daxpay.multi.service.entity.notice.callback.MerchantCallbackTask;
-import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.daxpay.multi.service.enums.NoticeSendTypeEnum;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.service.notice.MerchantNoticeAssistService;
 import cn.hutool.core.util.StrUtil;
@@ -53,7 +53,7 @@ public class MerchantCallbackSendService {
         // 创建发送记录
         MerchantCallbackRecord record = new MerchantCallbackRecord()
                 .setTaskId(task.getId())
-                .setSendType(SendTypeEnum.AUTO.getType())
+                .setSendType(NoticeSendTypeEnum.AUTO.getType())
                 .setReqCount(task.getSendCount()+1);
         String body = null;
         try {
@@ -81,8 +81,8 @@ public class MerchantCallbackSendService {
             this.failHandler(task,sendTime,autoSend);
             // 如果响应地址不为空, 将错误响应写到记录中
             if (Objects.nonNull(body)){
-                // 预防返回值过长, 只保留200位
-                record.setErrorMsg(StrUtil.sub(body,0,200));
+                // 预防返回值过长, 只保留300位
+                record.setErrorMsg(StrUtil.sub(body,0,300));
             }
         }
         // 保存请求记录更新任务

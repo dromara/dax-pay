@@ -5,12 +5,13 @@ import lombok.Getter;
 
 /**
  * 消息发送类型
+ * 字典: notice_send_type
  * @author xxm
  * @since 2024/2/25
  */
 @Getter
 @AllArgsConstructor
-public enum SendTypeEnum {
+public enum NoticeSendTypeEnum {
 
     /** 自动发送 */
     AUTO("auto", "自动发送"),

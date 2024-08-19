@@ -3,7 +3,7 @@ package cn.daxpay.multi.service.entity.notice.callback;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.common.entity.MchRecordEntity;
 import cn.daxpay.multi.service.convert.notice.MerchantCallbackConvert;
-import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.daxpay.multi.service.enums.NoticeSendTypeEnum;
 import cn.daxpay.multi.service.result.notice.callback.MerchantCallbackRecordResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -32,7 +32,7 @@ public class MerchantCallbackRecord extends MchRecordEntity implements ToResult<
 
     /**
      * 发送类型, 自动发送, 手动发送
-     * @see SendTypeEnum
+     * @see NoticeSendTypeEnum
      */
     private String sendType;
 

@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.entity.record.flow;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
-import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.common.entity.MchRecordEntity;
 import cn.daxpay.multi.service.convert.record.TradeFlowRecordConvert;
 import cn.daxpay.multi.service.result.record.flow.TradeFlowRecordResult;
@@ -32,7 +32,7 @@ public class TradeFlowRecord extends MchRecordEntity implements ToResult<TradeFl
 
     /**
      * 业务类型
-     * @see TradeFlowTypeEnum
+     * @see TradeTypeEnum
      */
     private String type;
 

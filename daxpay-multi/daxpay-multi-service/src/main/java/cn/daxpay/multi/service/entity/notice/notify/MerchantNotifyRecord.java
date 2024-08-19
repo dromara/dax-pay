@@ -3,7 +3,7 @@ package cn.daxpay.multi.service.entity.notice.notify;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.common.entity.MchRecordEntity;
 import cn.daxpay.multi.service.convert.notice.MerchantNotifyConvert;
-import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.daxpay.multi.service.enums.NoticeSendTypeEnum;
 import cn.daxpay.multi.service.result.notice.notify.MerchantNotifyRecordResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -32,7 +32,7 @@ public class MerchantNotifyRecord extends MchRecordEntity implements ToResult<Me
 
     /**
      * 发送类型, 自动发送, 手动发送
-     * @see SendTypeEnum
+     * @see NoticeSendTypeEnum
      */
     private String sendType;
 

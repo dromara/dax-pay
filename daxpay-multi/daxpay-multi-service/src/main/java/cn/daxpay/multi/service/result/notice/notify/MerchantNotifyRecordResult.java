@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.result.notice.notify;
 
 import cn.daxpay.multi.core.result.MchResult;
-import cn.daxpay.multi.service.enums.SendTypeEnum;
+import cn.daxpay.multi.service.enums.NoticeSendTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,7 +32,7 @@ public class MerchantNotifyRecordResult extends MchResult {
 
     /**
      * 发送类型, 自动发送, 手动发送
-     * @see SendTypeEnum
+     * @see NoticeSendTypeEnum
      */
     @Schema(description = "发送类型")
     private String sendType;

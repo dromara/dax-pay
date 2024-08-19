@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 /**
  * 流水记录查询类
  * @author xxm
@@ -24,10 +22,6 @@ public class TradeFlowRecordQuery {
     @Schema(description = "订单标题")
     private String title;
 
-    /** 金额 */
-    @Schema(description = "金额")
-    private BigDecimal amount;
-
     /**
      * 业务类型
      * @see TradeFlowTypeEnum
@@ -40,6 +34,7 @@ public class TradeFlowRecordQuery {
      * 支付通道
      * @see ChannelEnum
      */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付通道")
     private String channel;
 
@@ -54,5 +49,15 @@ public class TradeFlowRecordQuery {
     /** 通道交易号 */
     @Schema(description = "通道交易号")
     private String outTradeNo;
+
+    /** 商户号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "商户号")
+    private String mchNo;
+
+    /** 应用号 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "应用号")
+    private String appId;
 
 }

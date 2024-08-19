@@ -94,12 +94,12 @@ public class PayOrderQuery extends SortParam {
     private String errorCode;
 
     /** 商户号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     @Schema(description = "商户号")
     private String mchNo;
 
     /** 应用号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     @Schema(description = "应用号")
     private String appId;
 
