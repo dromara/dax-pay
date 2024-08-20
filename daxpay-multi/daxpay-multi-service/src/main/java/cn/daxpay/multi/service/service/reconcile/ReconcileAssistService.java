@@ -2,6 +2,7 @@ package cn.daxpay.multi.service.service.reconcile;
 
 import cn.bootx.platform.common.mybatisplus.function.CollectorsFunction;
 import cn.bootx.platform.core.util.DateTimeUtil;
+import cn.daxpay.multi.core.enums.TradeStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.bo.reconcile.PlatformReconcileTradeBo;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
@@ -59,6 +60,7 @@ public class ReconcileAssistService {
                     .setOutTradeNo(payOrder.getOutOrderNo())
                     .setTradeTime(payOrder.getPayTime())
                     .setTradeType(TradeTypeEnum.PAY.getCode())
+                    .setTradeStatus(TradeStatusEnum.SUCCESS.getCode())
                     .setAmount(payOrder.getAmount())
             );
         }
@@ -70,6 +72,7 @@ public class ReconcileAssistService {
                     .setOutTradeNo(refundOrder.getOutRefundNo())
                     .setTradeTime(refundOrder.getFinishTime())
                     .setTradeType(TradeTypeEnum.REFUND.getCode())
+                    .setTradeStatus(TradeStatusEnum.SUCCESS.getCode())
                     .setAmount(refundOrder.getAmount()));
         }
         return reconcileTradeBos;
@@ -105,9 +108,10 @@ public class ReconcileAssistService {
                         .setReconcileId(reconcileOrder.getId())
                         .setReconcileNo(reconcileOrder.getReconcileNo())
                         .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.LOCAL_NOT_EXISTS.getCode())
-                        .setTradeType(channelDetail.getTradeType())
                         .setChannel(reconcileOrder.getChannel())
+                        .setChannelTradeType(channelDetail.getTradeType())
                         .setChannelTradeNo(channelDetail.getTradeNo())
+                        .setChannelTradeStatus(channelDetail.getTradeStatus())
                         .setChannelTradeAmount(channelDetail.getAmount())
                         .setChannelTradeTime(channelDetail.getTradeTime());
                 discrepancies.add(discrepancy);
@@ -125,9 +129,11 @@ public class ReconcileAssistService {
                         .setBizTradeNo(localTrade.getBizTradeNo())
                         .setTradeType(localTrade.getTradeType())
                         .setTradeAmount(localTrade.getAmount())
+                        .setChannelTradeStatus(localTrade.getTradeStatus())
                         .setTradeTime(localTrade.getTradeTime())
                         .setChannelTradeNo(channelDetail.getTradeNo())
                         .setChannelTradeType(channelDetail.getTradeType())
+                        .setChannelTradeStatus(channelDetail.getTradeStatus())
                         .setChannelTradeAmount(channelDetail.getAmount())
                         .setChannelTradeTime(channelDetail.getTradeTime());
                 discrepancies.add(discrepancy);
@@ -146,6 +152,7 @@ public class ReconcileAssistService {
                         .setTradeNo(localTrade.getTradeNo())
                         .setBizTradeNo(localTrade.getBizTradeNo())
                         .setTradeType(localTrade.getTradeType())
+                        .setTradeStatus(localTrade.getTradeStatus())
                         .setChannelTradeNo(localTrade.getOutTradeNo())
                         .setTradeAmount(localTrade.getAmount())
                         .setTradeTime(localTrade.getTradeTime());

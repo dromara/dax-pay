@@ -4,10 +4,12 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.daxpay.multi.service.dao.constant.ChannelConstManager;
+import cn.daxpay.multi.service.entity.constant.ChannelConst;
 import cn.daxpay.multi.service.param.constant.ChannelConstQuery;
 import cn.daxpay.multi.service.result.constant.ChannelConstResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,5 +27,11 @@ public class ChannelConstService {
      */
     public PageResult<ChannelConstResult> page(PageParam pageParam, ChannelConstQuery query) {
         return MpUtil.toPageResult(channelConstManager.page(pageParam, query));
+    }
+
+    @Cacheable(value = "cache:channel", key = "#code")
+    public String findNameByCode(String code) {
+        return channelConstManager.findByField(ChannelConst::getCode, code).map(ChannelConst::getName)
+                .orElse(null);
     }
 }

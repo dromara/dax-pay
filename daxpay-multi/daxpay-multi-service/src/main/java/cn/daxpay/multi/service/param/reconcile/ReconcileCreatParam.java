@@ -2,6 +2,7 @@ package cn.daxpay.multi.service.param.reconcile;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -20,7 +21,7 @@ public class ReconcileCreatParam {
     /** 名称 */
     @Schema(description = "名称")
     @NotBlank(message = "名称不可为空")
-    private String name;
+    private String title;
 
     /** 通道 */
     @Schema(description = "通道")
@@ -29,7 +30,7 @@ public class ReconcileCreatParam {
 
     /** 日期 */
     @Schema(description = "日期")
-    @NotBlank(message = "日期不可为空")
+    @NotNull(message = "日期不可为空")
     private LocalDate date;
 
     /** 商户号 */

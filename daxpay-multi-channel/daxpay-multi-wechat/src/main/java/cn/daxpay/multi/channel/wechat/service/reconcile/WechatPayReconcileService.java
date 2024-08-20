@@ -1,5 +1,7 @@
 package cn.daxpay.multi.channel.wechat.service.reconcile;
 
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.daxpay.multi.channel.wechat.bo.reconcile.WechatReconcileBillDetail;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
@@ -21,8 +23,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
-import org.jeecgframework.poi.excel.ExcelImportUtil;
-import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,7 +102,7 @@ public class WechatPayReconcileService {
         // 默认为支付对账记录
         ChannelReconcileTradeBo reconcileTradeBo = new ChannelReconcileTradeBo()
                 .setTradeNo(billDetail.getOutTradeNo())
-                .setType(TradeTypeEnum.PAY.getCode())
+                .setTradeType(TradeTypeEnum.PAY.getCode())
                 .setAmount(amount)
                 .setOutTradeNo(billDetail.getTransactionId());
         // 时间
@@ -116,7 +116,7 @@ public class WechatPayReconcileService {
         if (Objects.equals(billDetail.getTradeType(), "REFUND")){
             reconcileTradeBo.setTradeNo(billDetail.getOutRefundNo())
                     .setOutTradeNo(billDetail.getRefundId())
-                    .setType(TradeTypeEnum.REFUND.getCode());
+                    .setTradeType(TradeTypeEnum.REFUND.getCode());
         }
         return reconcileTradeBo;
     }

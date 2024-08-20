@@ -12,7 +12,7 @@ import cn.daxpay.multi.service.service.reconcile.ReconcileDiscrepancyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,14 +31,14 @@ public class ReconcileDiscrepancyController {
 
     @RequestPath("对账差异记录分页")
     @Operation(summary = "对账差异记录分页")
-    @PostMapping("/page")
+    @GetMapping("/page")
     public Result<PageResult<ReconcileDiscrepancyResult>> page(PageParam pageParam, ReconcileDiscrepancyQuery query){
         return Res.ok(reconcileDiscrepancyService.page(pageParam,query));
     }
 
     @RequestPath("查询对账差异记录")
     @Operation(summary = "查询对账差异记录")
-    @PostMapping("/findById")
+    @GetMapping("/findById")
     public Result<ReconcileDiscrepancyResult> findById(Long id){
         return Res.ok(reconcileDiscrepancyService.findById(id));
     }

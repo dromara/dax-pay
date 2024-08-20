@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.bo.reconcile;
 
+import cn.daxpay.multi.core.enums.TradeStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -25,7 +26,10 @@ public class PlatformReconcileTradeBo {
     /** 金额 */
     private BigDecimal amount;
 
-    /** 交易状态 */
+    /**
+     * 交易状态
+     * @see TradeStatusEnum
+     */
     private String tradeStatus;
 
     /** 平台交易号 */

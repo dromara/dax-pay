@@ -75,9 +75,9 @@
         </dependency>
         <!-- 表格工具 -->
         <dependency>
-            <groupId>org.jeecgframework</groupId>
-            <artifactId>autopoi</artifactId>
-            <version>${autopoi.version}</version>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
+            <version>${easypoi.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,7 +1,7 @@
 package cn.bootx.platform.starter.file.convert;
 
-import cn.bootx.platform.starter.file.result.UploadFileResult;
 import cn.bootx.platform.starter.file.entity.UploadFileInfo;
+import cn.bootx.platform.starter.file.result.UploadFileResult;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

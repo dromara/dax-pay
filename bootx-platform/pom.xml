@@ -45,6 +45,7 @@
         <ttl.version>2.14.5</ttl.version>
         <kryo.version>5.6.0</kryo.version>
         <autopoi.version>1.4.8</autopoi.version>
+        <easypoi.version>4.5.0</easypoi.version>
         <easytrans.version>3.0.5</easytrans.version>
 
         <java.version>21</java.version>

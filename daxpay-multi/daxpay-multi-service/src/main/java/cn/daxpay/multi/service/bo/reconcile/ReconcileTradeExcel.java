@@ -13,8 +13,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ReconcileTradeExcel {
 
-    /** 商户交易号 */
-    private String TradeNo;
+    /** 平台交易号 */
+    private String tradeNo;
 
     /** 商户订单号 */
     private String bizTradeNo;
@@ -28,11 +28,11 @@ public class ReconcileTradeExcel {
      */
     private String result;
 
+    /* 平台侧信息 */
 
     /** 交易类型 */
     private String tradeType;
 
-    /* 平台侧信息 */
     /** 交易金额 */
     private String tradeAmount;
 
@@ -43,6 +43,9 @@ public class ReconcileTradeExcel {
     private String tradeTime;
 
     /* 通道侧信息 */
+    /** 交易类型 */
+    private String channelTradeType;
+
     /** 通道交易金额 */
     private String channelTradeAmount;
 

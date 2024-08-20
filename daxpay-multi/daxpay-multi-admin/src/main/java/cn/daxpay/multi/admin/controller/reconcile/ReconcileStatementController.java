@@ -15,6 +15,7 @@ import cn.daxpay.multi.service.service.reconcile.ReconcileStatementQueryService;
 import cn.daxpay.multi.service.service.reconcile.ReconcileStatementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,7 +46,7 @@ public class ReconcileStatementController {
     @RequestPath("手动触发对账文件下载")
     @Operation(summary = "手动触发对账文件下载")
     @PostMapping("/downAndSave")
-    public Result<Void> downAndSave(Long id){
+    public Result<Void> downAndSave(@NotNull(message = "对账单ID不能为空") Long id){
         statementService.downAndSave(id);
         return Res.ok();
     }
@@ -62,22 +63,22 @@ public class ReconcileStatementController {
     @RequestPath("手动触发交易对账单比对")
     @Operation(summary = "手动触发交易对账单比对")
     @PostMapping("/compare")
-    public Result<Void> compare(Long id){
+    public Result<Void> compare(@NotNull(message = "对账单ID不能为空") Long id){
         statementService.compare(id);
         return Res.ok();
     }
 
     @RequestPath("对账单分页")
     @Operation(summary = "对账单分页")
-    @PostMapping("/page")
+    @GetMapping("/page")
     public Result<PageResult<ReconcileStatementResult>> page(PageParam pageParam, ReconcileStatementQuery query){
         return Res.ok(queryService.page(pageParam,query));
     }
 
     @RequestPath("查询对账单")
     @Operation(summary = "查询对账单")
-    @PostMapping("/findById")
-    public Result<ReconcileStatementResult> findById(Long id){
+    @GetMapping("/findById")
+    public Result<ReconcileStatementResult> findById(@NotNull(message = "对账单ID不能为空") Long id){
         return Res.ok(queryService.findById(id));
     }
 }

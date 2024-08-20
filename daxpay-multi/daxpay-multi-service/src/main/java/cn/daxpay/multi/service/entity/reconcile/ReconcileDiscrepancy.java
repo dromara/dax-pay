@@ -2,7 +2,7 @@ package cn.daxpay.multi.service.entity.reconcile;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
-import cn.daxpay.multi.service.common.entity.MchBaseEntity;
+import cn.daxpay.multi.service.common.entity.MchRecordEntity;
 import cn.daxpay.multi.service.convert.reconcile.ReconcileConvert;
 import cn.daxpay.multi.service.enums.ReconcileDiscrepancyTypeEnum;
 import cn.daxpay.multi.service.result.reconcile.ReconcileDiscrepancyResult;
@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_reconcile_discrepancy")
-public class ReconcileDiscrepancy extends MchBaseEntity implements ToResult<ReconcileDiscrepancyResult> {
+public class ReconcileDiscrepancy extends MchRecordEntity implements ToResult<ReconcileDiscrepancyResult> {
 
     /** 对账单ID */
     private Long reconcileId;

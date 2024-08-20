@@ -4,6 +4,7 @@ import cn.daxpay.multi.channel.alipay.bo.reconcile.AliReconcileBillDetail;
 import cn.daxpay.multi.channel.alipay.bo.reconcile.AliReconcileBillTotal;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
+import cn.daxpay.multi.core.enums.TradeStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.exception.ReconciliationFailException;
 import cn.daxpay.multi.service.bo.reconcile.ChannelReconcileTradeBo;
@@ -100,6 +101,7 @@ public class AliPayReconcileService {
             }
             // 保存原始对账文件
             String originalFile = this.saveOriginalFile(statement, bytes);
+
             // 将原始交易明细对账记录转换通用结构
             var reconcileTradeBos = this.convertReconcileTrade(billDetails);
             return new ReconcileResolveResultBo()
@@ -149,8 +151,9 @@ public class AliPayReconcileService {
         // 默认为支付对账记录
         ChannelReconcileTradeBo reconcileTradeBo = new ChannelReconcileTradeBo()
                 .setTradeNo(billDetail.getOutTradeNo())
-                .setType(TradeTypeEnum.PAY.getCode())
+                .setTradeType(TradeTypeEnum.PAY.getCode())
                 .setAmount(amount)
+                .setTradeStatus(TradeStatusEnum.SUCCESS.getCode())
                 .setOutTradeNo(billDetail.getTradeNo());
         // 时间
         String endTime = billDetail.getEndTime();
@@ -162,7 +165,7 @@ public class AliPayReconcileService {
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
             reconcileTradeBo.setTradeNo(billDetail.getBatchNo())
-                    .setType(TradeTypeEnum.REFUND.getCode());
+                    .setTradeType(TradeTypeEnum.REFUND.getCode());
         }
         return reconcileTradeBo;
     }
