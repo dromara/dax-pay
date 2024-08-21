@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.convert.order.pay;
 
-import cn.daxpay.multi.core.result.order.PayOrderResult;
+import cn.daxpay.multi.core.result.trade.pay.PayOrderResult;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.result.order.pay.PayOrderVo;
 import org.mapstruct.Mapper;

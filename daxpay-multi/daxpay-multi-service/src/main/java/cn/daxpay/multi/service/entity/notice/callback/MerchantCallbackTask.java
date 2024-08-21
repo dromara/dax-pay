@@ -2,9 +2,9 @@ package cn.daxpay.multi.service.entity.notice.callback;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
-import cn.daxpay.multi.core.result.order.PayOrderResult;
-import cn.daxpay.multi.core.result.order.RefundOrderResult;
-import cn.daxpay.multi.core.result.order.TransferOrderResult;
+import cn.daxpay.multi.core.result.trade.pay.PayOrderResult;
+import cn.daxpay.multi.core.result.trade.refund.RefundOrderResult;
+import cn.daxpay.multi.core.result.trade.transfer.TransferOrderResult;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.convert.notice.MerchantCallbackConvert;
 import cn.daxpay.multi.service.result.notice.callback.MerchantCallbackTaskResult;

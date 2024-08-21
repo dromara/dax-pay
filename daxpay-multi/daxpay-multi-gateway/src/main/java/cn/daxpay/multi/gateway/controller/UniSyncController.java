@@ -39,19 +39,19 @@ public class UniSyncController {
     private final TransferSyncService transferSyncService;
 
 
-    @Operation(summary = "支付同步接口")
+    @Operation(summary = "支付订单同步接口")
     @PostMapping("/pay")
     public DaxResult<PaySyncResult> pay(@RequestBody PaySyncParam param){
         return DaxRes.ok(paySyncService.sync(param));
     }
 
-    @Operation(summary = "退款同步接口")
+    @Operation(summary = "退款订单同步接口")
     @PostMapping("/refund")
     public DaxResult<RefundSyncResult> refund(RefundSyncParam param){
         return DaxRes.ok(refundSyncService.sync(param));
     }
 
-    @Operation(summary = "分账同步接口")
+    @Operation(summary = "分账订单同步接口")
     @PostMapping("/allocation")
     public DaxResult<TransferSyncResult> allocation(@RequestBody TransferSyncParam param){
         return DaxRes.ok(transferSyncService.sync(param));

@@ -2,9 +2,9 @@ package cn.daxpay.multi.service.result.notice.callback;
 
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.result.MchResult;
-import cn.daxpay.multi.core.result.order.PayOrderResult;
-import cn.daxpay.multi.core.result.order.RefundOrderResult;
-import cn.daxpay.multi.core.result.order.TransferOrderResult;
+import cn.daxpay.multi.core.result.trade.pay.PayOrderResult;
+import cn.daxpay.multi.core.result.trade.refund.RefundOrderResult;
+import cn.daxpay.multi.core.result.trade.transfer.TransferOrderResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

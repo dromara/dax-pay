@@ -29,6 +29,9 @@ public class QuartzJob extends MpBaseEntity implements ToResult<QuartzJobResult>
     /** 任务类名 */
     private String jobClassName;
 
+    /** 分组 */
+    private String groupName;
+
     /** cron表达式 */
     private String cron;
 

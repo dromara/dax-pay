@@ -1,6 +1,7 @@
 package cn.bootx.platform.starter.quartz.handler;
 
 import cn.bootx.platform.core.exception.BizException;
+import cn.bootx.platform.starter.quartz.entity.QuartzJob;
 import cn.hutool.core.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -35,27 +36,25 @@ public class QuartzJobScheduler {
 
     /**
      * 添加定时任务
-     * @param id 主键
-     * @param jobClassName 任务类名
-     * @param cron 表达式
-     * @param parameter 参数
      */
-    public void add(Long id, String jobClassName, String cron, String parameter) {
+    public void add(QuartzJob quartzJob) {
         try {
-            String idStr = String.valueOf(id);
+            String idStr = String.valueOf(quartzJob.getId());
             // 启动调度器
             scheduler.start();
             // 构建job信息
-            JobDetail jobDetail = JobBuilder.newJob(getJobClass(jobClassName))
+            JobDetail jobDetail = JobBuilder.newJob(getJobClass(quartzJob.getJobClassName()))
                 .withIdentity(idStr)
-                .usingJobData(PARAMETER, parameter)
+                .usingJobData(PARAMETER, quartzJob.getParameter())
                 .build();
 
             // 表达式调度构建器(即任务执行的时间)
-            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(quartzJob.getCron());
 
             // 按新的cronExpression表达式构建一个新的trigger
-            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(idStr).withSchedule(scheduleBuilder).build();
+            CronTrigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity(idStr,quartzJob.getGroupName())
+                    .withSchedule(scheduleBuilder).build();
 
             scheduler.scheduleJob(jobDetail, trigger);
         }

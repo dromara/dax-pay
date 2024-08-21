@@ -52,7 +52,7 @@ public class UniTradeController {
         return DaxRes.ok(refundService.refund(payParam));
     }
 
-    @Operation(summary = "关闭接口")
+    @Operation(summary = "关闭和撤销接口")
     @PostMapping("/close")
     public DaxResult<Void> reconcile(@RequestBody PayCloseParam param){
         payCloseService.close(param);

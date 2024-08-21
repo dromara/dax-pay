@@ -6,6 +6,7 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.daxpay.multi.core.exception.TradeNotExistException;
 import cn.daxpay.multi.core.param.trade.pay.QueryPayParam;
+import cn.daxpay.multi.core.result.trade.pay.PayOrderResult;
 import cn.daxpay.multi.service.convert.order.pay.PayOrderConvert;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
@@ -76,14 +77,14 @@ public class PayOrderQueryService {
     /**
      * 查询支付记录
      */
-    public PayOrderVo queryPayOrder(QueryPayParam param) {
+    public PayOrderResult queryPayOrder(QueryPayParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getBizOrderNoeNo()) && Objects.isNull(param.getOrderNo())){
             throw new ValidationFailedException("业务号或支付单ID不能都为空");
         }
         // 查询支付单
         return this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo())
-                .map(PayOrderConvert.CONVERT::toVo)
+                .map(PayOrderConvert.CONVERT::toResult)
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
     }
 

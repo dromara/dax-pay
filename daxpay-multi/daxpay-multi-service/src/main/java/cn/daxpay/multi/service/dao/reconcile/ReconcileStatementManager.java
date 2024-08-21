@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -29,5 +32,15 @@ public class ReconcileStatementManager extends BaseManager<ReconcileStatementMap
         Page<ReconcileStatement> mpPage = MpUtil.getMpPage(pageParam, ReconcileStatement.class);
         QueryWrapper<ReconcileStatement> generator = QueryGenerator.generator(query);
         return this.page(mpPage,generator);
+    }
+
+    /**
+     * 根据日期查询
+     */
+    public List<ReconcileStatement> findByChannelAndData(String channel, LocalDate date){
+        return this.lambdaQuery()
+                .eq(ReconcileStatement::getDate,date)
+                .eq(ReconcileStatement::getChannel,channel)
+                .list();
     }
 }

@@ -1,4 +1,4 @@
-package cn.daxpay.multi.core.result.order;
+package cn.daxpay.multi.core.result.trade.transfer;
 
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;

@@ -2,8 +2,13 @@ package cn.daxpay.multi.service.service.order.transfer;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;
+import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
+import cn.daxpay.multi.core.exception.TradeNotExistException;
+import cn.daxpay.multi.core.param.trade.transfer.QueryTransferParam;
+import cn.daxpay.multi.core.result.trade.transfer.TransferOrderResult;
+import cn.daxpay.multi.service.convert.order.transfer.TransferOrderConvert;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.param.order.transfer.TransferOrderQuery;
@@ -14,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -72,6 +78,22 @@ public class TransferOrderQueryService {
         } else {
             return Optional.empty();
         }
+    }
+
+
+    /**
+     * 查询转账订单
+     */
+    public TransferOrderResult queryTransferOrder(QueryTransferParam param) {
+        // 校验参数
+        if (StrUtil.isBlank(param.getTransferNo()) && Objects.isNull(param.getBizTransferNo())){
+            throw new ValidationFailedException("转账号或商户转账号不能都为空");
+        }
+        // 查询转账单
+        TransferOrder transferOrder = this.findByBizOrTransferNo(param.getTransferNo(), param.getBizTransferNo())
+                .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
+
+        return TransferOrderConvert.CONVERT.toResult(transferOrder);
     }
 
 

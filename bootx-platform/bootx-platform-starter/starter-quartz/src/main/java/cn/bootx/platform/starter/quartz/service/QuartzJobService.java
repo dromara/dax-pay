@@ -62,8 +62,7 @@ public class QuartzJobService {
         quartzJobManager.updateById(quartzJob);
         jobScheduler.delete(quartzJob.getId());
         if (Objects.equals(quartzJob.getState(), QuartzJobCode.RUNNING)) {
-            jobScheduler.add(quartzJob.getId(), quartzJob.getJobClassName(), quartzJob.getCron(),
-                    quartzJob.getParameter());
+            jobScheduler.add(quartzJob);
         }
     }
 
@@ -77,8 +76,7 @@ public class QuartzJobService {
         if (!Objects.equals(quartzJob.getState(), QuartzJobCode.RUNNING)) {
             quartzJob.setState(QuartzJobCode.RUNNING);
             quartzJobManager.updateById(quartzJob);
-            jobScheduler.add(quartzJob.getId(), quartzJob.getJobClassName(), quartzJob.getCron(),
-                    quartzJob.getParameter());
+            jobScheduler.add(quartzJob);
         }
         else {
             throw new BizException("已经是启动状态");

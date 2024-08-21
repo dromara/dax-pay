@@ -2,8 +2,13 @@ package cn.daxpay.multi.service.service.order.refund;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;
+import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
+import cn.daxpay.multi.core.exception.TradeNotExistException;
+import cn.daxpay.multi.core.param.trade.refund.QueryRefundParam;
+import cn.daxpay.multi.core.result.trade.refund.RefundOrderResult;
+import cn.daxpay.multi.service.convert.order.refund.RefundOrderConvert;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.param.order.refund.RefundOrderQuery;
@@ -15,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -64,6 +70,21 @@ public class RefundOrderQueryService {
         } else {
             return Optional.empty();
         }
+    }
+
+    /**
+     * 查询退款订单
+     */
+    public RefundOrderResult queryRefundOrder(QueryRefundParam param) {
+        // 校验参数
+        if (StrUtil.isBlank(param.getRefundNo()) && Objects.isNull(param.getBizRefundNo())){
+            throw new ValidationFailedException("退款号或商户退款号不能都为空");
+        }
+        // 查询退款单
+        RefundOrder refundOrder = this.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())
+                .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
+
+        return RefundOrderConvert.CONVERT.toResult(refundOrder);
     }
 
     /**

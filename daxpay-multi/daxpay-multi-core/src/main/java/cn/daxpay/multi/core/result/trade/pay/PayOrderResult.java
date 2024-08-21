@@ -1,13 +1,11 @@
-package cn.daxpay.multi.core.result.order;
+package cn.daxpay.multi.core.result.trade.pay;
 
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
-import cn.daxpay.multi.core.result.MchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
@@ -18,11 +16,10 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2021/2/25
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付订单")
-public class PayOrderResult extends MchResult {
+public class PayOrderResult {
 
     /** 商户订单号 */
     @Schema(description = "商户订单号")

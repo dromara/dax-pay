@@ -25,6 +25,24 @@ spring:
       lettuce:
         pool:
           max-wait: 1000ms
+  # 定时任务
+  quartz:
+    # 持久化方式
+    job-store-type: jdbc
+    #定时任务启动开关，true-开  false-关
+    auto-startup: true
+    #启动时更新己存在的Job
+    overwrite-existing-jobs: true
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: quartzScheduler
+            instanceId: AUTO
+          threadPool:
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
 # 开发时显示debug日志
 logging:
   level:

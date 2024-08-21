@@ -96,13 +96,6 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- 注解标识 -->
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>13.0</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- 测试类 -->
         <dependency>
             <groupId>junit</groupId>
