@@ -84,33 +84,34 @@ public class ReconcileAssistService {
      * 2. 远程无, 本地有
      * 3. 远程有, 本地有, 但信息(金额)不一致
      *
-     * @param reconcileOrder 对账单
+     * @param statement 对账单
      * @param localTrades 本地交易明细
      * @param channelTrades 通道交易明细
      */
-    public List<ReconcileDiscrepancy> generateDiscrepancy(ReconcileStatement reconcileOrder,
+    public List<ReconcileDiscrepancy> generateDiscrepancy(ReconcileStatement statement,
                                                           List<PlatformReconcileTradeBo> localTrades,
                                                           List<ChannelReconcileTrade> channelTrades){
         List<ReconcileDiscrepancy> discrepancies = new ArrayList<>();
         // 三方对账订单
         Map<String, ChannelReconcileTrade> outDetailMap = channelTrades.stream()
-                .collect(Collectors.toMap(ChannelReconcileTrade::getTradeNo, Function.identity(), CollectorsFunction::retainLatest));
+                .collect(Collectors.toMap(ChannelReconcileTrade::getOutTradeNo, Function.identity(), CollectorsFunction::retainLatest));
         // 本地订单记录
         Map<String, PlatformReconcileTradeBo> localTradeMap = localTrades.stream()
                 .collect(Collectors.toMap(PlatformReconcileTradeBo::getTradeNo, Function.identity(), CollectorsFunction::retainLatest));
         // 对账与比对
         for (var channelDetail : channelTrades) {
             // 判断本地有没有记录, 流水没有记录查询本地订单
-            var localTrade = localTradeMap.get(channelDetail.getTradeNo());
+            var localTrade = localTradeMap.get(channelDetail.getOutTradeNo());
             if (Objects.isNull(localTrade)){
-                log.info("本地订单不存在: {}", channelDetail.getTradeNo());
                 var discrepancy = new ReconcileDiscrepancy()
-                        .setReconcileId(reconcileOrder.getId())
-                        .setReconcileNo(reconcileOrder.getReconcileNo())
+                        .setReconcileId(statement.getId())
+                        .setReconcileNo(statement.getReconcileNo())
+                        .setReconcileDate(statement.getDate())
                         .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.LOCAL_NOT_EXISTS.getCode())
-                        .setChannel(reconcileOrder.getChannel())
+                        .setChannel(statement.getChannel())
                         .setChannelTradeType(channelDetail.getTradeType())
                         .setChannelTradeNo(channelDetail.getTradeNo())
+                        .setChannelOutTradeNo(channelDetail.getOutTradeNo())
                         .setChannelTradeStatus(channelDetail.getTradeStatus())
                         .setChannelTradeAmount(channelDetail.getAmount())
                         .setChannelTradeTime(channelDetail.getTradeTime());
@@ -120,18 +121,20 @@ public class ReconcileAssistService {
             // 如果远程和本地都存在, 比对差异
             if (this.reconcileDiff(channelDetail, localTrade)) {
                 var discrepancy = new ReconcileDiscrepancy()
-                        .setReconcileId(reconcileOrder.getId())
-                        .setReconcileNo(reconcileOrder.getReconcileNo())
-                        .setReconcileDate(reconcileOrder.getDate())
-                        .setChannel(reconcileOrder.getChannel())
+                        .setReconcileId(statement.getId())
+                        .setReconcileNo(statement.getReconcileNo())
+                        .setReconcileDate(statement.getDate())
+                        .setChannel(statement.getChannel())
                         .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.NOT_MATCH.getCode())
                         .setTradeNo(localTrade.getTradeNo())
                         .setBizTradeNo(localTrade.getBizTradeNo())
+                        .setOutTradeNo(localTrade.getOutTradeNo())
                         .setTradeType(localTrade.getTradeType())
                         .setTradeAmount(localTrade.getAmount())
                         .setChannelTradeStatus(localTrade.getTradeStatus())
                         .setTradeTime(localTrade.getTradeTime())
                         .setChannelTradeNo(channelDetail.getTradeNo())
+                        .setChannelOutTradeNo(channelDetail.getOutTradeNo())
                         .setChannelTradeType(channelDetail.getTradeType())
                         .setChannelTradeStatus(channelDetail.getTradeStatus())
                         .setChannelTradeAmount(channelDetail.getAmount())
@@ -144,13 +147,14 @@ public class ReconcileAssistService {
             var channelTrade = outDetailMap.get(localTrade.getTradeNo());
             if (Objects.isNull(channelTrade)){
                 var diffRecord = new ReconcileDiscrepancy()
-                        .setReconcileId(reconcileOrder.getId())
-                        .setReconcileNo(reconcileOrder.getReconcileNo())
-                        .setReconcileDate(reconcileOrder.getDate())
-                        .setChannel(reconcileOrder.getChannel())
+                        .setReconcileId(statement.getId())
+                        .setReconcileNo(statement.getReconcileNo())
+                        .setReconcileDate(statement.getDate())
+                        .setChannel(statement.getChannel())
                         .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.REMOTE_NOT_EXISTS.getCode())
                         .setTradeNo(localTrade.getTradeNo())
                         .setBizTradeNo(localTrade.getBizTradeNo())
+                        .setOutTradeNo(localTrade.getOutTradeNo())
                         .setTradeType(localTrade.getTradeType())
                         .setTradeStatus(localTrade.getTradeStatus())
                         .setChannelTradeNo(localTrade.getOutTradeNo())

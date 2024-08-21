@@ -9,6 +9,7 @@ import cn.bootx.platform.core.rest.result.Result;
 import cn.daxpay.multi.service.param.reconcile.ReconcileDiscrepancyQuery;
 import cn.daxpay.multi.service.result.reconcile.ReconcileDiscrepancyResult;
 import cn.daxpay.multi.service.service.reconcile.ReconcileDiscrepancyService;
+import com.fhs.core.trans.anno.TransMethodResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReconcileDiscrepancyController {
     private final ReconcileDiscrepancyService reconcileDiscrepancyService;
 
+    @TransMethodResult
     @RequestPath("对账差异记录分页")
     @Operation(summary = "对账差异记录分页")
     @GetMapping("/page")
@@ -36,6 +38,7 @@ public class ReconcileDiscrepancyController {
         return Res.ok(reconcileDiscrepancyService.page(pageParam,query));
     }
 
+    @TransMethodResult
     @RequestPath("查询对账差异记录")
     @Operation(summary = "查询对账差异记录")
     @GetMapping("/findById")

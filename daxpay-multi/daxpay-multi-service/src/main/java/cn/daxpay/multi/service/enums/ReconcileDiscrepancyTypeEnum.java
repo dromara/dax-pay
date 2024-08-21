@@ -17,6 +17,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum ReconcileDiscrepancyTypeEnum {
 
+    /** 一致 */
+    CONSISTENT("consistent","一致"),
     /** 本地订单不存在 */
     LOCAL_NOT_EXISTS("local_not_exists","本地订单不存在"),
     /** 远程订单不存在 */
@@ -24,8 +26,9 @@ public enum ReconcileDiscrepancyTypeEnum {
     /** 订单信息不一致 */
     NOT_MATCH("not_match","订单信息不一致");
 
-    final String code;
-    final String name;
+
+    private final String code;
+    private final String name;
 
 
     public static ReconcileDiscrepancyTypeEnum findByCode(String code){
@@ -33,6 +36,5 @@ public enum ReconcileDiscrepancyTypeEnum {
                 .filter(value -> Objects.equals(value.getCode(), code))
                 .findFirst()
                 .orElseThrow(() -> new ConfigNotExistException("未找到对应的支付类型"));
-
     }
 }

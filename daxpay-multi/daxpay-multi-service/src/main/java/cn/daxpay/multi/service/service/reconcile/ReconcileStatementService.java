@@ -70,7 +70,8 @@ public class ReconcileStatementService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileStatement create(ReconcileCreatParam param) {
-        paymentAssistService.initMchAndApp(param.getAppId());
+        // 初始化上下文
+        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
         ReconcileStatement statement = new ReconcileStatement()
                 .setName(param.getTitle())
                 .setReconcileNo(TradeNoGenerateUtil.reconciliation())
@@ -84,39 +85,33 @@ public class ReconcileStatementService {
      * 下载对账单并进行保存
      */
     public void downAndSave(Long reconcileOrderId) {
-        ReconcileStatement reconcileOrder = reconcileStatementManager.findById(reconcileOrderId)
+        ReconcileStatement statement = reconcileStatementManager.findById(reconcileOrderId)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
-        this.downAndSave(reconcileOrder);
-    }
-
-    /**
-     * 下载交易对账单并进行保存
-     */
-    public void downAndSave(ReconcileStatement reconcileStatement) {
         // 如果对账单已经存在
-        if (reconcileStatement.isDownOrUpload()){
+        if (statement.isDownOrUpload()){
             throw new OperationFailException("对账单文件已经下载或上传");
         }
         // 初始化对商户和应用上下文
-        paymentAssistService.initMchAndApp(reconcileStatement.getMchNo(), reconcileStatement.getAppId());
+        paymentAssistService.initMchAndApp(statement.getMchNo(), statement.getAppId());
 
         // 构建对账策略
-        AbsReconcileStrategy reconcileStrategy = PaymentStrategyFactory.create(reconcileStatement.getChannel(), AbsReconcileStrategy.class);
-        reconcileStrategy.setStatement(reconcileStatement);
+        AbsReconcileStrategy reconcileStrategy = PaymentStrategyFactory.create(statement.getChannel(), AbsReconcileStrategy.class);
+        reconcileStrategy.setStatement(statement);
         reconcileStrategy.doBeforeHandler();
         try {
             // 下载
             var resolveResultBo = reconcileStrategy.downAndResolve();
             // 解析返回的交易记录, 并是对账单文件进行保存
-            SpringUtil.getBean(this.getClass()).resolveAndSave(reconcileStatement, resolveResultBo);
+            SpringUtil.getBean(this.getClass()).resolveAndSave(statement, resolveResultBo);
         } catch (Exception e) {
             log.error("解析对账单异常", e);
-            reconcileStatement.setErrorMsg("原因: " + e.getMessage());
+            statement.setErrorMsg("原因: " + e.getMessage());
             // 本方法无事务, 更新信息不会被回滚
-            reconcileStatementManager.updateById(reconcileStatement);
+            reconcileStatementManager.updateById(statement);
             throw new OperationFailException("解析对账单异常");
         }
     }
+
 
     /**
      * 手动传输交易对账单
@@ -124,6 +119,9 @@ public class ReconcileStatementService {
     public void uploadAndSave(ReconcileUploadParam param, MultipartFile file) {
         var statement = reconcileStatementManager.findById(param.getId())
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
+
+        paymentAssistService.initMchAndApp(statement.getMchNo(), statement.getAppId());
+
         // 将对账订单写入到上下文中
         AbsReconcileStrategy reconcileStrategy = PaymentStrategyFactory.create(statement.getChannel(), AbsReconcileStrategy.class);
         reconcileStrategy.setStatement(statement);
@@ -170,6 +168,7 @@ public class ReconcileStatementService {
     public void compare(Long id){
         var statement = reconcileStatementManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("未找到对账单"));
+
         // 判断是否已经下载了对账单明细
         if (!statement.isDownOrUpload()){
             throw new OperationFailException("请先下载对账单");
@@ -178,6 +177,7 @@ public class ReconcileStatementService {
         if (statement.isCompare()){
             throw new OperationFailException("对账单比对已经完成");
         }
+        paymentAssistService.initMchAndApp(statement.getMchNo(), statement.getAppId());
 
         // 通道交易记录
         var channelTrades = reconcileTradeManage.findAllByReconcileId(statement.getId());
@@ -318,7 +318,7 @@ public class ReconcileStatementService {
                 .collect(Collectors.toMap(ReconcileDiscrepancy::getTradeNo, Function.identity(), (o1, o2) -> o1));
         // 通道正常交易
         var channelTradeMap = channelTrades.stream()
-                .collect(Collectors.toMap(ChannelReconcileTrade::getTradeNo, Function.identity(), (o1, o2) -> o1));
+                .collect(Collectors.toMap(ChannelReconcileTrade::getOutTradeNo, Function.identity(), (o1, o2) -> o1));
 
         List<ReconcileTradeExcel> tradeExcels = new ArrayList<>();
 

@@ -46,10 +46,13 @@ public class ReconcileDiscrepancy extends MchRecordEntity implements ToResult<Re
 
     /* 平台侧信息 */
     /** 平台交易号 */
-    private String TradeNo;
+    private String tradeNo;
 
-    /** 商户订单号 */
+    /** 商户交易号 */
     private String bizTradeNo;
+
+    /** 平台关联通道交易号 */
+    private String outTradeNo;
 
     /**
      * 交易类型
@@ -70,6 +73,9 @@ public class ReconcileDiscrepancy extends MchRecordEntity implements ToResult<Re
 
     /** 通道交易号 */
     private String channelTradeNo;
+
+    /** 通道关联平台交易号 */
+    private String channelOutTradeNo;
 
     /** 通道交易类型 */
     private String channelTradeType;

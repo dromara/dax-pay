@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 /**
  * 对账结果
+ * 字典: reconcile_result
  * @author xxm
  * @since 2024/5/3
  */

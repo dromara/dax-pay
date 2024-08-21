@@ -150,11 +150,11 @@ public class AliPayReconcileService {
         var amount = new BigDecimal(billDetail.getOrderAmount());
         // 默认为支付对账记录
         ChannelReconcileTradeBo reconcileTradeBo = new ChannelReconcileTradeBo()
-                .setTradeNo(billDetail.getOutTradeNo())
+                .setOutTradeNo(billDetail.getOutTradeNo())
                 .setTradeType(TradeTypeEnum.PAY.getCode())
                 .setAmount(amount)
                 .setTradeStatus(TradeStatusEnum.SUCCESS.getCode())
-                .setOutTradeNo(billDetail.getTradeNo());
+                .setTradeNo(billDetail.getTradeNo());
         // 时间
         String endTime = billDetail.getEndTime();
         if (StrUtil.isNotBlank(endTime)) {
@@ -164,7 +164,7 @@ public class AliPayReconcileService {
 
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "退款")){
-            reconcileTradeBo.setTradeNo(billDetail.getBatchNo())
+            reconcileTradeBo.setOutTradeNo(billDetail.getBatchNo())
                     .setTradeType(TradeTypeEnum.REFUND.getCode());
         }
         return reconcileTradeBo;

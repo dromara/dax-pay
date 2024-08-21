@@ -101,10 +101,10 @@ public class WechatPayReconcileService {
         var amount = new BigDecimal(billDetail.getTotalFee());
         // 默认为支付对账记录
         ChannelReconcileTradeBo reconcileTradeBo = new ChannelReconcileTradeBo()
-                .setTradeNo(billDetail.getOutTradeNo())
+                .setOutTradeNo(billDetail.getOutTradeNo())
                 .setTradeType(TradeTypeEnum.PAY.getCode())
                 .setAmount(amount)
-                .setOutTradeNo(billDetail.getTransactionId());
+                .setTradeNo(billDetail.getTransactionId());
         // 时间
         String endTime = billDetail.getTransactionTime();
         if (StrUtil.isNotBlank(endTime)) {
@@ -114,8 +114,8 @@ public class WechatPayReconcileService {
 
         // 退款覆盖更新对应的字段
         if (Objects.equals(billDetail.getTradeType(), "REFUND")){
-            reconcileTradeBo.setTradeNo(billDetail.getOutRefundNo())
-                    .setOutTradeNo(billDetail.getRefundId())
+            reconcileTradeBo.setOutTradeNo(billDetail.getOutRefundNo())
+                    .setTradeNo(billDetail.getRefundId())
                     .setTradeType(TradeTypeEnum.REFUND.getCode());
         }
         return reconcileTradeBo;

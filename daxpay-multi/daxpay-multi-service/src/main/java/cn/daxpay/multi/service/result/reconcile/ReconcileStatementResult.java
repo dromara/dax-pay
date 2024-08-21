@@ -89,15 +89,15 @@ public class ReconcileStatementResult extends MchResult {
     private String result;
 
     /**
-     *  原始通道对账单文件id
+     *  通道对账单文件url
      */
-    @Schema(description = "原始通道对账单文件id")
+    @Schema(description = "通道对账单文件url")
     private String channelFileUrl;
 
     /**
-     * 生成平台对账单文件ID
+     * 平台对账单文件url
      */
-    @Schema(description = "生成平台对账单文件ID")
+    @Schema(description = "平台对账单文件url")
     private String platformFileUrl;
 
     /** 错误码 */

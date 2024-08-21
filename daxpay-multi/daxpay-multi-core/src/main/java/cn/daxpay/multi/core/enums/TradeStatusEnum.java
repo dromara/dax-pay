@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 /**
  * 交易状态
+ * 字典 trade_status
  * @author xxm
  * @since 2024/8/20
  */
@@ -23,6 +24,7 @@ public enum TradeStatusEnum {
     CLOSED("closed","关闭"),
     /** 撤销 */
     REVOKED("revoked","撤销");
+
     private final String code;
     private final String name;
 

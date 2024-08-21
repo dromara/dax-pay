@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
  * @author xxm
  * @since 2024/1/18
  */
+@FieldNameConstants
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

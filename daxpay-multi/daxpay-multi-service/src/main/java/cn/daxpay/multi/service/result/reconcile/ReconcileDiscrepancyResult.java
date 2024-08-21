@@ -2,11 +2,16 @@ package cn.daxpay.multi.service.result.reconcile;
 
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.result.MchResult;
+import cn.daxpay.multi.service.entity.reconcile.ReconcileStatement;
 import cn.daxpay.multi.service.enums.ReconcileDiscrepancyTypeEnum;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.vo.TransPojo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,26 +22,32 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/8/6
  */
+@FieldNameConstants
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "对账差异记录")
-public class ReconcileDiscrepancyResult extends MchResult {
+public class ReconcileDiscrepancyResult extends MchResult implements TransPojo {
 
     /** 对账单ID */
     @Schema(description = "对账单ID")
+    @Trans(type = TransType.SIMPLE, target = ReconcileStatement.class, fields = ReconcileStatement.Fields.name, ref = ReconcileDiscrepancyResult.Fields.name)
     private Long reconcileId;
 
     /** 对账号 */
     @Schema(description = "对账号")
     private String reconcileNo;
 
+    /** 对账名称 */
+    @Schema(description = "对账名称")
+    private String name;
+
     /** 对账日期 */
     @Schema(description = "对账日期")
     private LocalDate reconcileDate;
 
-    /** 支付通道 */
-    @Schema(description = "支付通道")
+    /** 对账通道 */
+    @Schema(description = "对账通道")
     private String channel;
 
     /**
@@ -49,11 +60,15 @@ public class ReconcileDiscrepancyResult extends MchResult {
     /* 平台侧信息 */
     /** 平台交易号 */
     @Schema(description = "平台交易号")
-    private String TradeNo;
+    private String tradeNo;
 
-    /** 商户订单号 */
+    /** 商户交易号 */
     @Schema(description = "商户订单号")
     private String bizTradeNo;
+
+    /** 关联通道交易号 */
+    @Schema(description = "关联通道交易号")
+    private String outTradeNo;
 
     /**
      * 交易类型
@@ -78,6 +93,9 @@ public class ReconcileDiscrepancyResult extends MchResult {
     /** 通道交易号 */
     @Schema(description = "通道交易号")
     private String channelTradeNo;
+
+    @Schema(description = "通道关联平台交易号")
+    private String channelOutTradeNo;
 
     /** 通道交易类型 */
     @Schema(description = "通道交易类型")
