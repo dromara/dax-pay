@@ -51,7 +51,7 @@ public class ReconcileStatementQueryService {
                 .map(ReconcileStatement::getChannelFileUrl)
                 .findFirst()
                 .orElseThrow(()->new DataNotExistException("未找到通道对账单下载链接"));
-        new ReconcileDownResult().setFileUrl(url);
+        return new ReconcileDownResult().setFileUrl(url);
     }
 
     /**
@@ -64,6 +64,6 @@ public class ReconcileStatementQueryService {
                 .map(ReconcileStatement::getPlatformFileUrl)
                 .findFirst()
                 .orElseThrow(()->new DataNotExistException("未找到平台对账单下载链接"));
-        new ReconcileDownResult().setFileUrl(url);
+        return new ReconcileDownResult().setFileUrl(url);
     }
 }

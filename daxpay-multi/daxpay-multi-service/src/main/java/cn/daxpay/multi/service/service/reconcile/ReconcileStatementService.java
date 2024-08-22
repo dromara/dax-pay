@@ -61,12 +61,13 @@ public class ReconcileStatementService {
     private final ReconcileStatementManager reconcileStatementManager;
     private final ChannelReconcileTradeManage reconcileTradeManage;
     private final ReconcileDiscrepancyManager discrepancyManager;
+    private final ReconcileDiscrepancyService reconcileDiscrepancyService;
     private final ReconcileAssistService reconcileAssistService;
     private final FileStorageService fileStorageService;
     private final ChannelConstService channelConstService;
 
     /**
-     * 创建对账订单,
+     * 创建对账订单
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileStatement create(ReconcileCreatParam param) {
@@ -84,6 +85,7 @@ public class ReconcileStatementService {
     /**
      * 下载对账单并进行保存
      */
+    @Transactional(rollbackFor = Exception.class)
     public void downAndSave(Long reconcileOrderId) {
         ReconcileStatement statement = reconcileStatementManager.findById(reconcileOrderId)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
@@ -144,7 +146,7 @@ public class ReconcileStatementService {
 
 
     /**
-     * 生成对账文件, 如果有交易不一致, 同时创建并保存对账差异记录
+     * 转换为对账交易并保存
      */
     @Transactional(rollbackFor = Exception.class)
     public void resolveAndSave(ReconcileStatement statement, ReconcileResolveResultBo resolveResultBo) {
@@ -162,7 +164,7 @@ public class ReconcileStatementService {
     }
 
     /**
-     * 对账单明细比对
+     * 数据比对
      */
     @Transactional(rollbackFor = Exception.class)
     public void compare(Long id){
@@ -179,13 +181,13 @@ public class ReconcileStatementService {
         }
         paymentAssistService.initMchAndApp(statement.getMchNo(), statement.getAppId());
 
-        // 通道交易记录
+        // 获取通道交易记录
         var channelTrades = reconcileTradeManage.findAllByReconcileId(statement.getId());
-        // 平台交易记录
-        var platformTrades = reconcileAssistService.getPlatformReconcileTrades(statement);
-        // 汇总数据计算
+        // 获取平台交易记录
+        var platformTrades = reconcileAssistService.getPlatformTrades(statement);
+        // 汇总类数据计算
         this.calculationTotal(statement, channelTrades, platformTrades);
-        // 进行比对
+        // 进行比对并生成交易差异
         var discrepancies = this.compare(statement, channelTrades, platformTrades);
         // 生成对账单文件并保存
         this.genReconcileFile(statement, discrepancies, platformTrades, channelTrades);
@@ -200,7 +202,7 @@ public class ReconcileStatementService {
     public List<ReconcileDiscrepancy> compare(ReconcileStatement statement, List<ChannelReconcileTrade> channelTrades, List<PlatformReconcileTradeBo> platformTrades){
 
         // 执行比对任务, 获取对账差异记录并保存
-        var discrepancies = reconcileAssistService.generateDiscrepancy(statement, platformTrades, channelTrades);
+        var discrepancies = reconcileDiscrepancyService.generateDiscrepancy(statement, platformTrades, channelTrades);
         // 判断是否有差异
         if (CollUtil.isNotEmpty(discrepancies)){
             statement.setResult(ReconcileResultEnum.INCONSISTENT.getCode());
@@ -310,7 +312,7 @@ public class ReconcileStatementService {
     }
 
     /**
-     * 转换对账单明细
+     * 转换对账单明细表格导出对象
      */
     public List<ReconcileTradeExcel> convertTrades(List<ReconcileDiscrepancy> discrepancies, List<PlatformReconcileTradeBo> platformTrades, List<ChannelReconcileTrade> channelTrades) {
         // 平台异常交易
@@ -332,17 +334,19 @@ public class ReconcileStatementService {
                     .setResult("一致")
                     .setTradeNo(platformTrade.getTradeNo())
                     .setBizTradeNo(platformTrade.getBizTradeNo())
+                    .setOutTradeNo(platformTrade.getOutTradeNo())
                     .setTradeType(TradeTypeEnum.findByCode(platformTrade.getTradeType()).getName())
                     .setTradeAmount(platformTrade.getAmount().toString())
                     .setTradeStatus(platformTrade.getTradeStatus())
                     .setTradeTime(LocalDateTimeUtil.format(platformTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                    .setChannelTradeNo(channelTrade.getTradeNo())
                     .setChannelTradeType(TradeTypeEnum.findByCode(channelTrade.getTradeType()).getName())
                     .setChannelTradeAmount(channelTrade.getAmount().toString())
                     .setChannelTradeStatus(channelTrade.getTradeStatus())
                     .setChannelTradeTime(LocalDateTimeUtil.format(channelTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
             );
         }
-        // 处理异常订单
+        // 处理异常订单,
         for (ReconcileDiscrepancy discrepancy : discrepancies) {
             var discrepancyTrade = platformDiscrepancyMap.get(discrepancy.getTradeNo());
             switch (ReconcileDiscrepancyTypeEnum.findByCode(discrepancy.getDiscrepancyType())) {
@@ -350,7 +354,7 @@ public class ReconcileStatementService {
                 case LOCAL_NOT_EXISTS -> tradeExcels.add(new ReconcileTradeExcel()
                         .setResult(ReconcileDiscrepancyTypeEnum.LOCAL_NOT_EXISTS.getName())
                         .setTradeNo(discrepancy.getTradeNo())
-                        .setOutTradeNo(discrepancy.getChannelTradeNo())
+                        .setChannelTradeNo(discrepancy.getChannelTradeNo())
                         .setChannelTradeType(TradeTypeEnum.findByCode(discrepancy.getChannelTradeType()).getName())
                         .setChannelTradeStatus(discrepancy.getChannelTradeStatus())
                         .setChannelTradeAmount(discrepancy.getChannelTradeAmount().toString())
@@ -374,10 +378,12 @@ public class ReconcileStatementService {
                             .setResult(ReconcileDiscrepancyTypeEnum.NOT_MATCH.getName())
                             .setTradeNo(discrepancyTrade.getTradeNo())
                             .setBizTradeNo(discrepancyTrade.getBizTradeNo())
+                            .setOutTradeNo(discrepancyTrade.getOutTradeNo())
                             .setTradeType(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType()).getName())
                             .setTradeAmount(discrepancyTrade.getTradeAmount().toString())
                             .setTradeStatus(discrepancyTrade.getTradeStatus())
                             .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                            .setChannelTradeNo(discrepancy.getChannelTradeNo())
                             .setChannelTradeAmount(discrepancy.getChannelTradeAmount().toString())
                             .setChannelTradeStatus(discrepancy.getChannelTradeStatus())
                             .setChannelTradeTime(LocalDateTimeUtil.format(discrepancy.getChannelTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))

@@ -1,7 +1,11 @@
 package cn.daxpay.multi.core.enums;
 
+import cn.daxpay.multi.core.exception.ConfigNotExistException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 退款状态枚举
@@ -25,5 +29,12 @@ public enum RefundStatusEnum {
     private final String code;
     /** 名称 */
     private final String name;
+
+    public static RefundStatusEnum findByCode(String code) {
+        return Arrays.stream(values())
+                .filter(item -> Objects.equals(item.code, code))
+                .findFirst()
+                .orElseThrow(() -> new ConfigNotExistException("退款状态不存在"));
+    }
 
 }

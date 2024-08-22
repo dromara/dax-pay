@@ -1,7 +1,8 @@
 package cn.daxpay.multi.service.service.reconcile;
 
-import cn.bootx.platform.common.mybatisplus.function.CollectorsFunction;
 import cn.bootx.platform.core.util.DateTimeUtil;
+import cn.daxpay.multi.core.enums.PayStatusEnum;
+import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.enums.TradeStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.service.bo.reconcile.PlatformReconcileTradeBo;
@@ -21,10 +22,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * 对账支撑服务
@@ -43,7 +40,7 @@ public class ReconcileAssistService {
     /**
      * 获取通用对账对象, 将支付/退款订单转换为对账对象
      */
-    public List<PlatformReconcileTradeBo> getPlatformReconcileTrades(ReconcileStatement statement){
+    public List<PlatformReconcileTradeBo> getPlatformTrades(ReconcileStatement statement){
         List<PlatformReconcileTradeBo> reconcileTradeBos = new ArrayList<>();
         // 查询流水
         LocalDateTime localDateTime = DateTimeUtil.date2DateTime(statement.getDate());
@@ -52,7 +49,7 @@ public class ReconcileAssistService {
 
         // 支付订单
         List<PayOrder> payOrders = payOrderManager.findReconcile(statement.getChannel(), start, end);
-        List<RefundOrder> refundOrders = refundOrderManager.findReconcile(statement.getChannel(), start, end);
+        List<RefundOrder> refundOrders = refundOrderManager.findSuccessReconcile(statement.getChannel(), start, end);
         for (PayOrder payOrder : payOrders) {
             reconcileTradeBos.add(new PlatformReconcileTradeBo()
                     .setTradeNo(payOrder.getOrderNo())
@@ -79,112 +76,111 @@ public class ReconcileAssistService {
     }
 
     /**
-     * 比对生成对账差异单, 通道对账单
-     * 1. 远程有, 本地无
-     * 2. 远程无, 本地有
-     * 3. 远程有, 本地有, 但信息(金额)不一致
-     *
-     * @param statement 对账单
-     * @param localTrades 本地交易明细
-     * @param channelTrades 通道交易明细
+     * 获取通用对账对象, 将支付/退款订单转换为对账对象
      */
-    public List<ReconcileDiscrepancy> generateDiscrepancy(ReconcileStatement statement,
-                                                          List<PlatformReconcileTradeBo> localTrades,
-                                                          List<ChannelReconcileTrade> channelTrades){
-        List<ReconcileDiscrepancy> discrepancies = new ArrayList<>();
-        // 三方对账订单
-        Map<String, ChannelReconcileTrade> outDetailMap = channelTrades.stream()
-                .collect(Collectors.toMap(ChannelReconcileTrade::getOutTradeNo, Function.identity(), CollectorsFunction::retainLatest));
-        // 本地订单记录
-        Map<String, PlatformReconcileTradeBo> localTradeMap = localTrades.stream()
-                .collect(Collectors.toMap(PlatformReconcileTradeBo::getTradeNo, Function.identity(), CollectorsFunction::retainLatest));
-        // 对账与比对
-        for (var channelDetail : channelTrades) {
-            // 判断本地有没有记录, 流水没有记录查询本地订单
-            var localTrade = localTradeMap.get(channelDetail.getOutTradeNo());
-            if (Objects.isNull(localTrade)){
-                var discrepancy = new ReconcileDiscrepancy()
-                        .setReconcileId(statement.getId())
-                        .setReconcileNo(statement.getReconcileNo())
-                        .setReconcileDate(statement.getDate())
-                        .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.LOCAL_NOT_EXISTS.getCode())
-                        .setChannel(statement.getChannel())
-                        .setChannelTradeType(channelDetail.getTradeType())
-                        .setChannelTradeNo(channelDetail.getTradeNo())
-                        .setChannelOutTradeNo(channelDetail.getOutTradeNo())
-                        .setChannelTradeStatus(channelDetail.getTradeStatus())
-                        .setChannelTradeAmount(channelDetail.getAmount())
-                        .setChannelTradeTime(channelDetail.getTradeTime());
-                discrepancies.add(discrepancy);
-                continue;
+    public List<PlatformReconcileTradeBo> getPlatformTradesByTradeNo(List<String> tradeNos){
+        List<PlatformReconcileTradeBo> reconcileTradeBos = new ArrayList<>();
+        // 支付订单
+        List<PayOrder> payOrders = payOrderManager.findAllByFields(PayOrder::getOrderNo, tradeNos);
+        List<RefundOrder> refundOrders = refundOrderManager.findAllByFields(RefundOrder::getOrderNo, tradeNos);
+        for (PayOrder payOrder : payOrders) {
+            var tradeBo = new PlatformReconcileTradeBo()
+                    .setTradeNo(payOrder.getOrderNo())
+                    .setBizTradeNo(payOrder.getBizOrderNo())
+                    .setOutTradeNo(payOrder.getOutOrderNo())
+                    .setTradeTime(payOrder.getPayTime())
+                    .setTradeType(TradeTypeEnum.PAY.getCode())
+                    .setAmount(payOrder.getAmount());
+            switch (PayStatusEnum.findByCode(payOrder.getStatus())){
+                case PROGRESS, TIMEOUT -> tradeBo.setTradeStatus(TradeStatusEnum.PROGRESS.getCode());
+                case SUCCESS -> tradeBo.setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
+                case CLOSE -> tradeBo.setTradeStatus(TradeStatusEnum.CLOSED.getCode());
+                case CANCEL -> tradeBo.setTradeStatus(TradeStatusEnum.REVOKED.getCode());
+                case FAIL -> tradeBo.setTradeStatus(TradeStatusEnum.FAIL.getCode());
             }
-            // 如果远程和本地都存在, 比对差异
-            if (this.reconcileDiff(channelDetail, localTrade)) {
-                var discrepancy = new ReconcileDiscrepancy()
-                        .setReconcileId(statement.getId())
-                        .setReconcileNo(statement.getReconcileNo())
-                        .setReconcileDate(statement.getDate())
-                        .setChannel(statement.getChannel())
-                        .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.NOT_MATCH.getCode())
-                        .setTradeNo(localTrade.getTradeNo())
-                        .setBizTradeNo(localTrade.getBizTradeNo())
-                        .setOutTradeNo(localTrade.getOutTradeNo())
-                        .setTradeType(localTrade.getTradeType())
-                        .setTradeAmount(localTrade.getAmount())
-                        .setChannelTradeStatus(localTrade.getTradeStatus())
-                        .setTradeTime(localTrade.getTradeTime())
-                        .setChannelTradeNo(channelDetail.getTradeNo())
-                        .setChannelOutTradeNo(channelDetail.getOutTradeNo())
-                        .setChannelTradeType(channelDetail.getTradeType())
-                        .setChannelTradeStatus(channelDetail.getTradeStatus())
-                        .setChannelTradeAmount(channelDetail.getAmount())
-                        .setChannelTradeTime(channelDetail.getTradeTime());
-                discrepancies.add(discrepancy);
-            }
+            reconcileTradeBos.add(tradeBo);
         }
-        // 本地与对账单比对, 找出本地有, 远程没有的记录
-        for (var localTrade : localTrades) {
-            var channelTrade = outDetailMap.get(localTrade.getTradeNo());
-            if (Objects.isNull(channelTrade)){
-                var diffRecord = new ReconcileDiscrepancy()
-                        .setReconcileId(statement.getId())
-                        .setReconcileNo(statement.getReconcileNo())
-                        .setReconcileDate(statement.getDate())
-                        .setChannel(statement.getChannel())
-                        .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.REMOTE_NOT_EXISTS.getCode())
-                        .setTradeNo(localTrade.getTradeNo())
-                        .setBizTradeNo(localTrade.getBizTradeNo())
-                        .setOutTradeNo(localTrade.getOutTradeNo())
-                        .setTradeType(localTrade.getTradeType())
-                        .setTradeStatus(localTrade.getTradeStatus())
-                        .setChannelTradeNo(localTrade.getOutTradeNo())
-                        .setTradeAmount(localTrade.getAmount())
-                        .setTradeTime(localTrade.getTradeTime());
-                discrepancies.add(diffRecord);
-                log.info("远程订单不存在: {}", localTrade.getTradeNo());
-                continue;
+        // 退款订单
+        for (RefundOrder refundOrder : refundOrders) {
+            var tradeBo = new PlatformReconcileTradeBo()
+                    .setTradeNo(refundOrder.getRefundNo())
+                    .setBizTradeNo(refundOrder.getBizRefundNo())
+                    .setOutTradeNo(refundOrder.getOutRefundNo())
+                    .setTradeTime(refundOrder.getFinishTime())
+                    .setTradeType(TradeTypeEnum.REFUND.getCode())
+                    .setAmount(refundOrder.getAmount());
+            switch (RefundStatusEnum.findByCode(refundOrder.getStatus())){
+                case PROGRESS -> tradeBo.setTradeStatus(TradeStatusEnum.PROGRESS.getCode());
+                case SUCCESS -> tradeBo.setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
+                case CLOSE -> tradeBo.setTradeStatus(TradeStatusEnum.CLOSED.getCode());
+                case FAIL -> tradeBo.setTradeStatus(TradeStatusEnum.FAIL.getCode());
             }
+            reconcileTradeBos.add(tradeBo);
         }
-        return discrepancies;
+        return reconcileTradeBos;
     }
 
     /**
-     * 判断订单之间存在哪些差异
-     * @param outDetail 下载的对账订单
-     * @param localTrade 本地交易订单
+     * 构建本地短单差异记录
      */
-    private boolean reconcileDiff(ChannelReconcileTrade outDetail, PlatformReconcileTradeBo localTrade){
-
-        // 判断类型是否相同
-        if (!Objects.equals(outDetail.getTradeType(), localTrade.getTradeType())){
-            log.warn("订单类型不一致: {},{}", outDetail.getTradeType(), localTrade.getTradeType());
-            return false;
-        }
-        // 判断金额是否一致
-        if (!Objects.equals(outDetail.getAmount(), localTrade.getAmount())){
-            log.warn("订单金额不一致: {},{}", outDetail.getAmount(), localTrade.getAmount());
-            return false;
-        }
-        return true;
+    public ReconcileDiscrepancy buildDiscrepancy(ReconcileStatement statement, ChannelReconcileTrade channelDetail) {
+        return new ReconcileDiscrepancy()
+                .setReconcileId(statement.getId())
+                .setReconcileNo(statement.getReconcileNo())
+                .setReconcileDate(statement.getDate())
+                .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.LOCAL_NOT_EXISTS.getCode())
+                .setChannel(statement.getChannel())
+                .setChannelTradeType(channelDetail.getTradeType())
+                .setChannelTradeNo(channelDetail.getTradeNo())
+                .setChannelOutTradeNo(channelDetail.getOutTradeNo())
+                .setChannelTradeStatus(channelDetail.getTradeStatus())
+                .setChannelTradeAmount(channelDetail.getAmount())
+                .setChannelTradeTime(channelDetail.getTradeTime());
     }
+
+    /**
+     * 构建远程短单差异记录
+     */
+    public ReconcileDiscrepancy buildDiscrepancy(ReconcileStatement statement, PlatformReconcileTradeBo localTrade) {
+        return new ReconcileDiscrepancy()
+                .setReconcileId(statement.getId())
+                .setReconcileNo(statement.getReconcileNo())
+                .setReconcileDate(statement.getDate())
+                .setChannel(statement.getChannel())
+                .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.REMOTE_NOT_EXISTS.getCode())
+                .setTradeNo(localTrade.getTradeNo())
+                .setBizTradeNo(localTrade.getBizTradeNo())
+                .setOutTradeNo(localTrade.getOutTradeNo())
+                .setTradeType(localTrade.getTradeType())
+                .setTradeStatus(localTrade.getTradeStatus())
+                .setChannelTradeNo(localTrade.getOutTradeNo())
+                .setTradeAmount(localTrade.getAmount())
+                .setTradeTime(localTrade.getTradeTime());
+    }
+
+    /**
+     * 构建差异记录
+     */
+    public ReconcileDiscrepancy buildDiscrepancy(ReconcileStatement statement, PlatformReconcileTradeBo localTrade, ChannelReconcileTrade channelDetail){
+       return new ReconcileDiscrepancy()
+                .setReconcileId(statement.getId())
+                .setReconcileNo(statement.getReconcileNo())
+                .setReconcileDate(statement.getDate())
+                .setChannel(statement.getChannel())
+                .setDiscrepancyType(ReconcileDiscrepancyTypeEnum.NOT_MATCH.getCode())
+                .setTradeNo(localTrade.getTradeNo())
+                .setBizTradeNo(localTrade.getBizTradeNo())
+                .setOutTradeNo(localTrade.getOutTradeNo())
+                .setTradeType(localTrade.getTradeType())
+                .setTradeAmount(localTrade.getAmount())
+                .setChannelTradeStatus(localTrade.getTradeStatus())
+                .setTradeTime(localTrade.getTradeTime())
+                .setChannelTradeNo(channelDetail.getTradeNo())
+                .setChannelOutTradeNo(channelDetail.getOutTradeNo())
+                .setChannelTradeType(channelDetail.getTradeType())
+                .setChannelTradeStatus(channelDetail.getTradeStatus())
+                .setChannelTradeAmount(channelDetail.getAmount())
+                .setChannelTradeTime(channelDetail.getTradeTime());
+    }
+
 }

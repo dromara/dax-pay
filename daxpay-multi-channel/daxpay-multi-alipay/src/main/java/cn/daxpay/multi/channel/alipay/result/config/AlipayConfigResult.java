@@ -34,10 +34,6 @@ public class AlipayConfigResult {
     @Schema(description = "支付限额")
     private BigDecimal limitAmount;
 
-    /** 支付网关地址 */
-    @Schema(description = "支付网关地址")
-    private String serverUrl;
-
     /**
      * 认证类型 证书/公钥
      * @see AliPayCode#AUTH_TYPE_KEY

@@ -64,5 +64,5 @@ bootx-platform:
         - '/error'
         - '/favicon.ico'
 dax-pay:
-  env: dev_
+  env: DEV_
   machine-no: 60

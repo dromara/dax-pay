@@ -1,10 +1,9 @@
 package cn.daxpay.multi.channel.wechat.service.reconcile;
 
-import cn.afterturn.easypoi.excel.ExcelImportUtil;
-import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.daxpay.multi.channel.wechat.bo.reconcile.WechatReconcileBillDetail;
 import cn.daxpay.multi.channel.wechat.entity.config.WechatPayConfig;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
+import cn.daxpay.multi.core.enums.TradeStatusEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
 import cn.daxpay.multi.service.bo.reconcile.ChannelReconcileTradeBo;
@@ -13,9 +12,12 @@ import cn.daxpay.multi.service.entity.reconcile.ReconcileStatement;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.text.csv.CsvReader;
+import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayApplyTradeBillV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayApplyBillV3Result;
+import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +28,9 @@ import org.dromara.x.file.storage.core.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -67,14 +68,29 @@ public class WechatPayReconcileService {
             try (InputStream inputStream = wxPayService.downloadBill(downloadUrl)) {
                 bytes = IoUtil.readBytes(inputStream);
             }
-            List<WechatReconcileBillDetail> details = ExcelImportUtil
-                    .importExcel(new ByteArrayInputStream(bytes), WechatReconcileBillDetail.class, new ImportParams());
-            // 去除前缀的 ` 符号
-            details.forEach(WechatReconcileBillDetail::removeStartSymbol);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
+            String result = IoUtil.read(reader);
+            // 过滤特殊字符
+            result = result.replaceAll("`", "").replaceAll("\uFEFF", "");
+            CsvReader csvRows = CsvUtil.getReader();
+            // 获取交易记录并保存 同时过滤出当前应用的交易记录
+            String billDetail = StrUtil.subBefore(result, "总交易单数", false);
+            var billDetails = csvRows.read(billDetail, WechatReconcileBillDetail.class).stream()
+                    // 只读取当前商户的订单
+                    .filter(o->Objects.equals(o.getAppid(), config.getWxAppId()))
+                    // 只读取对账日的记录
+                    .filter(o->{
+                        String transactionTime = o.getTransactionTime();
+                        LocalDateTime time = LocalDateTimeUtil.parse(transactionTime, DatePattern.NORM_DATETIME_PATTERN);
+                        return Objects.equals(statement.getDate(), LocalDate.from(time));
+                    })
+                    .toList();
+
             // 保存原始对账文件
             String originalFile = this.saveOriginalFile(statement, bytes);
             // 解析账单文件
-            var tradeBos = this.convertReconcileTrade(details);
+            var tradeBos = this.convertReconcileTrade(billDetails);
             return new ReconcileResolveResultBo()
                     .setOriginalFileUrl(originalFile)
                     .setChannelTrades(tradeBos);
@@ -97,28 +113,43 @@ public class WechatPayReconcileService {
      * 转换为通用对账记录对象
      */
     private ChannelReconcileTradeBo convert(WechatReconcileBillDetail billDetail){
-        // 金额
-        var amount = new BigDecimal(billDetail.getTotalFee());
+        // 交易时间时间 指该笔交易的支付成功时间或发起退款成功时间（注：不是退款成功时间）
+        LocalDateTime time = LocalDateTimeUtil.parse(billDetail.getTransactionTime(), DatePattern.NORM_DATETIME_PATTERN);
         // 默认为支付对账记录
-        ChannelReconcileTradeBo reconcileTradeBo = new ChannelReconcileTradeBo()
+        ChannelReconcileTradeBo tradeBo = new ChannelReconcileTradeBo()
                 .setOutTradeNo(billDetail.getOutTradeNo())
                 .setTradeType(TradeTypeEnum.PAY.getCode())
-                .setAmount(amount)
+                .setTradeTime(time)
                 .setTradeNo(billDetail.getTransactionId());
-        // 时间
-        String endTime = billDetail.getTransactionTime();
-        if (StrUtil.isNotBlank(endTime)) {
-            LocalDateTime time = LocalDateTimeUtil.parse(endTime, DatePattern.NORM_DATETIME_PATTERN);
-            reconcileTradeBo.setTradeTime(time);
+        if (Objects.equals(billDetail.getTradeState(), WxPayConstants.WxpayTradeStatus.SUCCESS)) {
+            tradeBo.setTradeType(TradeTypeEnum.PAY.getCode())
+                    .setAmount(new BigDecimal(billDetail.getTotalFee()))
+           .setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
         }
 
         // 退款覆盖更新对应的字段
-        if (Objects.equals(billDetail.getTradeType(), "REFUND")){
-            reconcileTradeBo.setOutTradeNo(billDetail.getOutRefundNo())
+        if (Objects.equals(billDetail.getTradeState(), WxPayConstants.WxpayTradeStatus.REFUND)) {
+            tradeBo.setOutTradeNo(billDetail.getOutRefundNo())
                     .setTradeNo(billDetail.getRefundId())
+                    .setAmount(new BigDecimal(billDetail.getRefundFee()))
                     .setTradeType(TradeTypeEnum.REFUND.getCode());
+            tradeBo.setTradeType(TradeTypeEnum.REFUND.getCode());
+            // 状态
+            switch (billDetail.getRefundStatus()) {
+                case WxPayConstants.RefundStatus.SUCCESS -> tradeBo.setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
+                case WxPayConstants.RefundStatus.PROCESSING -> tradeBo.setTradeStatus(TradeStatusEnum.CLOSED.getCode());
+                case WxPayConstants.ResultCode.FAIL -> tradeBo.setTradeStatus(TradeStatusEnum.FAIL.getCode());
+                case WxPayConstants.RefundStatus.CHANGE -> tradeBo.setTradeStatus(TradeStatusEnum.EXCEPTION.getCode());
+            }
+            tradeBo.setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
         }
-        return reconcileTradeBo;
+        // 撤销状态
+        if (Objects.equals(billDetail.getTradeState(), WxPayConstants.WxpayTradeStatus.REVOKED)) {
+            tradeBo.setTradeType(TradeTypeEnum.PAY.getCode());
+            tradeBo.setTradeStatus(TradeStatusEnum.REVOKED.getCode());
+        }
+
+        return tradeBo;
     }
 
     /**
@@ -127,7 +158,7 @@ public class WechatPayReconcileService {
     private String saveOriginalFile(ReconcileStatement reconcileOrder, byte[] bytes) {
         String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
-        String fileName = StrUtil.format("交易对账单-微信-{}.xlsx",date);
+        String fileName = StrUtil.format("交易对账单-微信-{}.csv",date);
         var uploadPretreatment = fileStorageService.of(bytes);
         if (StrUtil.isNotBlank(fileName)) {
             uploadPretreatment.setOriginalFilename(fileName);

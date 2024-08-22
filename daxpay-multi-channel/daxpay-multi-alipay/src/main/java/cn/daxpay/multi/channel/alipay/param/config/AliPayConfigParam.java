@@ -38,11 +38,6 @@ public class AliPayConfigParam {
     @NotBlank(message = "支付限额不可为空")
     private BigDecimal limitAmount;
 
-    /** 支付网关地址 */
-    @Schema(description = "支付网关地址")
-    @NotBlank(message = "支付网关地址不可为空")
-    private String serverUrl;
-
     /**
      * 认证类型 证书/公钥
      * @see AliPayCode#AUTH_TYPE_KEY

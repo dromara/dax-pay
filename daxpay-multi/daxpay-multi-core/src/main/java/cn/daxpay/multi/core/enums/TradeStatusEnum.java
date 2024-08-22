@@ -16,6 +16,8 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum TradeStatusEnum {
 
+    /** 执行中 */
+    PROGRESS("progress","执行中"),
     /** 成功 */
     SUCCESS("success","成功"),
     /** 失败 */
@@ -23,13 +25,16 @@ public enum TradeStatusEnum {
     /** 关闭 */
     CLOSED("closed","关闭"),
     /** 撤销 */
-    REVOKED("revoked","撤销");
+    REVOKED("revoked","撤销"),
+    /** 异常 */
+    EXCEPTION("exception","异常"),
+    ;
 
     private final String code;
     private final String name;
 
     public static TradeStatusEnum findByCode(String code) {
-        return Arrays.stream(TradeStatusEnum.values())
+        return Arrays.stream(values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
                 .orElseThrow(() -> new ConfigNotExistException("交易状态不存在"));

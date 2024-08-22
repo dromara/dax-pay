@@ -147,7 +147,6 @@ public class AliPayConfigService {
     @SneakyThrows
     public AlipayClient getAlipayClient(AliPayConfig aliPayConfig){
         AlipayConfig config = new AlipayConfig();
-        config.setServerUrl(aliPayConfig.getServerUrl());
         config.setAppId(aliPayConfig.getAliAppId());
         config.setFormat("json");
         config.setCharset("UTF-8");
@@ -162,6 +161,13 @@ public class AliPayConfigService {
             config.setPrivateKey(aliPayConfig.getPrivateKey());
             config.setAlipayPublicKey(aliPayConfig.getAlipayPublicKey());
         }
+        // 沙箱
+        if (aliPayConfig.isSandbox()){
+            config.setServerUrl("https://openapi-sandbox.dl.alipaydev.com/gateway.do");
+        } else {
+            config.setServerUrl("https://openapi.alipay.com/gateway.do");
+        }
+
         return new DefaultAlipayClient(config);
     }
 

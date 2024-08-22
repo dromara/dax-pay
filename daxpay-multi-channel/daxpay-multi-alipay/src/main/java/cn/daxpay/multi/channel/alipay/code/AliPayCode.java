@@ -8,7 +8,15 @@ package cn.daxpay.multi.channel.alipay.code;
  */
 public interface AliPayCode {
 
-
+    /**
+     *
+     */
+    interface ServerUrl{
+        /** 沙箱地址 */
+        String SANDBOX = "https://openapi-sandbox.dl.alipaydev.com/gateway.do";
+        /** 生产地址 */
+        String PRODUCTION = "https://openapi.alipay.com/gateway.do";
+    }
 
     /**
      * 退款状态

@@ -58,7 +58,7 @@ public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
      */
     @Override
     public ReconcileResolveResultBo downAndResolve() {
-        String date = LocalDateTimeUtil.format(this.getStatement().getDate(), DatePattern.PURE_DATE_PATTERN);
+        String date = LocalDateTimeUtil.format(this.getStatement().getDate(), DatePattern.NORM_DATE_PATTERN);
         return reconcileService.downAndResolve(this.getStatement(), date);
     }
 

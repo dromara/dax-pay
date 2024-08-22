@@ -7,7 +7,6 @@ import cn.daxpay.multi.channel.alipay.convert.config.AlipayConfigConvert;
 import cn.daxpay.multi.channel.alipay.result.config.AlipayConfigResult;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.entity.config.ChannelConfig;
-import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -33,9 +32,6 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
 
     /** 支付限额 */
     private BigDecimal limitAmount;
-
-    /** 支付网关地址 */
-    private String serverUrl;
 
     /**
      * 认证类型 证书/公钥

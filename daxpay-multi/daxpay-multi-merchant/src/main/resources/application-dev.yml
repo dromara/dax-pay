@@ -68,5 +68,5 @@ bootx-platform:
         - '/favicon.ico'
         - '/**'
 dax-pay:
-  env: dev_
+  env: DEV_
   machine-no: 80

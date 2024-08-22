@@ -43,6 +43,9 @@ public class ReconcileTradeExcel {
     private String tradeTime;
 
     /* 通道侧信息 */
+    /** 通道交易号 */
+    private String channelTradeNo;
+
     /** 交易类型 */
     private String channelTradeType;
 

@@ -70,11 +70,10 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
                 .list();
     }
 
-
     /**
      * 查询对账用订单记录(指定时间和状态的订单)
      */
-    public List<RefundOrder> findReconcile(String channel, LocalDateTime startTime, LocalDateTime endTime) {
+    public List<RefundOrder> findSuccessReconcile(String channel, LocalDateTime startTime, LocalDateTime endTime) {
         return this.lambdaQuery()
                 .eq(RefundOrder::getChannel, channel)
                 .between(RefundOrder::getFinishTime, startTime, endTime)
