@@ -1,7 +1,7 @@
 package cn.daxpay.multi.service.dao.merchant;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import cn.daxpay.multi.service.entity.merchant.UserMerchant;
+import cn.daxpay.multi.service.entity.merchant.MerchantUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class UserMerchantManager extends BaseManager<UserMerchantMapper, UserMerchant> {
+public class MerchantUserManager extends BaseManager<MerchantUserMapper, MerchantUser> {
 }

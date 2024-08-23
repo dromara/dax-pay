@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +55,10 @@ public class RoleManager extends BaseManager<RoleMapper, Role> {
             .map(role -> new KeyValue(String.valueOf(role.getId()), role.getName()))
             .collect(Collectors.toList());
 
+    }
+
+    public Optional<Role> findByCode(String code) {
+        return findByField(Role::getCode, code);
     }
 
     public Page<Role> page(PageParam pageParam, RoleParam roleParam) {

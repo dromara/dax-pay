@@ -3,7 +3,7 @@ package cn.daxpay.multi.merchant.filter;
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.daxpay.multi.service.common.local.MchContextLocal;
-import cn.daxpay.multi.service.service.UserMerchantService;
+import cn.daxpay.multi.service.service.merchant.MerchantUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class MchContextLocalFilter extends OncePerRequestFilter {
-    private final UserMerchantService userMerchantService;
+    private final MerchantUserService merchantUserService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -36,7 +36,7 @@ public class MchContextLocalFilter extends OncePerRequestFilter {
             Optional<UserDetail> currentUser = SecurityUtil.getCurrentUser();
             currentUser.ifPresent(userDetail -> {
                 // 登录后获取关联商户号
-                String mchNo = userMerchantService.findByUserId(userDetail.getId());
+                String mchNo = merchantUserService.findByUserId(userDetail.getId());
                 MchContextLocal.setMchNo(mchNo);
             });
 

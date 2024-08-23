@@ -1,4 +1,4 @@
-package cn.bootx.platform.iam.param.user;
+package cn.daxpay.multi.service.param.merchant;
 
 import cn.bootx.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,17 +7,22 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
+ * 商户管理员参数
  * @author xxm
- * @since 2021/6/2
+ * @since 2024/8/23
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "用户信息参数")
-public class UserInfoParam {
+@Schema(title = "商户管理员参数")
+public class MerchantAdminParam {
 
     @Schema(description = "主键")
     @NotNull(groups = ValidationGroup.edit.class, message = "主键不可为空")
     private Long id;
+
+    @Schema(description = "商户id")
+    @NotNull(message = "商户id不可为空")
+    private Long merchantId;
 
     @Schema(description = "名称")
 
@@ -37,5 +42,4 @@ public class UserInfoParam {
 
     @Schema(description = "密码")
     private String password;
-
 }

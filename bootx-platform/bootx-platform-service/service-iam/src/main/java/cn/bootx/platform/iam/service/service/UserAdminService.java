@@ -94,7 +94,7 @@ public class UserAdminService {
      * 添加新用户
      */
     @Transactional(rollbackFor = Exception.class)
-    public void add(UserInfoParam userInfoParam) {
+    public UserInfo add(UserInfoParam userInfoParam) {
         if (userQueryService.existsAccount(userInfoParam.getAccount())) {
             throw new BizException("账号已存在");
         }
@@ -109,6 +109,7 @@ public class UserAdminService {
                 .setRegisterTime(LocalDateTime.now());
         userExpandInfo.setId(userInfo.getId());
         userExpandInfoManager.save(userExpandInfo);
+        return userInfo;
     }
 
     /**

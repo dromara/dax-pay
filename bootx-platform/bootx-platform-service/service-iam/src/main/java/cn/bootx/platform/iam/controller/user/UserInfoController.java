@@ -84,7 +84,7 @@ public class UserInfoController {
 
     @Operation(summary = "修改用户基础信息")
     @PostMapping("/updateBaseInfo")
-    public Result<Void> updateBaseInfo(@RequestBody UserBaseInfoParam param) {
+    public Result<Void> updateBaseInfo(@RequestBody @Validated UserBaseInfoParam param) {
         userInfoService.updateUserBaseInfo(param);
         return Res.ok();
     }

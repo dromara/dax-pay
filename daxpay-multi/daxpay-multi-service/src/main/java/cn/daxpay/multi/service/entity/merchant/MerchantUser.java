@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_user_merchant")
-public class UserMerchant extends MpCreateEntity {
+public class MerchantUser extends MpCreateEntity {
 
     /** 用户ID */
     private Long userId;

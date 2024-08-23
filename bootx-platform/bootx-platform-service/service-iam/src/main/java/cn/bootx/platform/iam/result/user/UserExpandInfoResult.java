@@ -21,7 +21,7 @@ public class UserExpandInfoResult {
     private Long id;
 
     @Schema(description = "性别")
-    private Integer sex;
+    private String sex;
 
     @Schema(description = "头像")
     private String avatar;

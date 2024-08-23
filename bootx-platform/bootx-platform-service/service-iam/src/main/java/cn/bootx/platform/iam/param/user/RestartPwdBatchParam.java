@@ -18,8 +18,10 @@ import java.util.List;
 @Schema(title = "批量用户密码重置")
 public class RestartPwdBatchParam {
 
+    @Schema(description = "用户主键集合集合")
     @NotEmpty(message = "用户不可为空")
     private List<Long> userIds;
+    @Schema(description = "新密码不可为空")
     @NotBlank(message = "新密码不能为空")
     private String newPassword;
 }

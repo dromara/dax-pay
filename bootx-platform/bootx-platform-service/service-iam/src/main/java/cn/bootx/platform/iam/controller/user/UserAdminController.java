@@ -7,6 +7,7 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.bootx.platform.core.validation.ValidationGroup;
 import cn.bootx.platform.iam.param.user.RestartPwdBatchParam;
 import cn.bootx.platform.iam.param.user.RestartPwdParam;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
@@ -50,7 +51,7 @@ public class UserAdminController {
     @RequestPath("添加用户")
     @Operation(summary = "添加用户")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody UserInfoParam userInfoParam) {
+    public Result<Void> add(@RequestBody @Validated UserInfoParam userInfoParam) {
         userAdminService.add(userInfoParam);
         return Res.ok();
     }
@@ -58,7 +59,7 @@ public class UserAdminController {
     @RequestPath("修改用户")
     @Operation(summary = "修改用户")
     @PostMapping("/update")
-    public Result<Void> update(@RequestBody UserInfoParam userInfoParam) {
+    public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) UserInfoParam userInfoParam) {
         userAdminService.update(userInfoParam);
         return Res.ok();
     }
