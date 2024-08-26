@@ -1,7 +1,7 @@
 package cn.bootx.platform.iam.auth.service;
 
 import cn.bootx.platform.core.exception.BizException;
-import cn.bootx.platform.iam.code.UserStatusCode;
+import cn.bootx.platform.iam.code.UserStatusEnum;
 import cn.bootx.platform.iam.dao.user.UserInfoManager;
 import cn.bootx.platform.iam.entity.user.UserInfo;
 import cn.bootx.platform.iam.exception.user.UserInfoNotExistsException;
@@ -34,7 +34,7 @@ public class AuthAssistService {
     public void sendSmsCaptcha(String phone) {
         // 判断用户是否存在
         UserInfo userInfo = userInfoManager.findByPhone(phone).orElseThrow(UserInfoNotExistsException::new);
-        if (!Objects.equals(userInfo.getStatus(), UserStatusCode.NORMAL)) {
+        if (!Objects.equals(userInfo.getStatus(), UserStatusEnum.NORMAL)) {
             throw new BizException("用户状态异常");
         }
     }

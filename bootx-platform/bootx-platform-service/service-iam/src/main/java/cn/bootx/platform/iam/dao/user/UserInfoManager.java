@@ -2,12 +2,13 @@ package cn.bootx.platform.iam.dao.user;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.iam.entity.user.UserInfo;
-import cn.bootx.platform.iam.param.user.UserInfoParam;
+import cn.bootx.platform.iam.param.user.UserInfoQuery;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
-import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -65,15 +66,11 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
     /**
      * 管理员用户不显示
      */
-    public Page<UserInfo> page(PageParam pageParam, UserInfoParam param) {
-
+    public Page<UserInfo> page(PageParam pageParam, UserInfoQuery query) {
         Page<UserInfo> mpPage = MpUtil.getMpPage(pageParam);
-        lambdaQuery()
-                .like(StrUtil.isNotBlank(param.getAccount()), UserInfo::getAccount, param.getAccount())
-                .like(StrUtil.isNotBlank(param.getName()), UserInfo::getName, param.getName())
-                .eq(UserInfo::isAdministrator, false)
-                .page(mpPage);
-        return mpPage;
+        QueryWrapper<UserInfo> generator = QueryGenerator.generator(query);
+        generator.eq(MpUtil.getColumnName(UserInfo::isAdministrator), false);
+        return this.page(mpPage, generator);
     }
 
     public void setUpStatus(Long userId, String status) {

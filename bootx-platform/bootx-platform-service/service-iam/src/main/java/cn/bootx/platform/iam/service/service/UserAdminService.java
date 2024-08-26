@@ -4,17 +4,22 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
-import cn.bootx.platform.iam.code.UserStatusCode;
+import cn.bootx.platform.iam.code.UserStatusEnum;
 import cn.bootx.platform.iam.dao.user.UserExpandInfoManager;
 import cn.bootx.platform.iam.dao.user.UserInfoManager;
 import cn.bootx.platform.iam.entity.user.UserExpandInfo;
 import cn.bootx.platform.iam.entity.user.UserInfo;
 import cn.bootx.platform.iam.exception.user.UserInfoNotExistsException;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
-import cn.bootx.platform.iam.result.user.UserInfoResult;
+import cn.bootx.platform.iam.param.user.UserInfoQuery;
+import cn.bootx.platform.iam.result.user.UserWholeInfoResult;
+import cn.bootx.platform.starter.auth.configuration.AuthProperties;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,54 +45,73 @@ public class UserAdminService {
 
     private final UserQueryService userQueryService;
 
+    private final AuthProperties authProperties;
+
 
     /**
      * 分页查询
      */
-    public PageResult<UserInfoResult> page(PageParam pageParam, UserInfoParam userInfoParam) {
-        return MpUtil.toPageResult(userInfoManager.page(pageParam, userInfoParam));
+    public PageResult<UserWholeInfoResult> page(PageParam pageParam, UserInfoQuery query) {
+
+        Page<UserWholeInfoResult> mpPage = MpUtil.getMpPage(pageParam);
+        MPJLambdaWrapper<UserInfo> wrapper = new MPJLambdaWrapper<>();
+        wrapper.innerJoin(UserExpandInfo.class,UserExpandInfo::getId, UserInfo::getId)
+                .selectAll(UserInfo.class)
+                .selectAll(UserExpandInfo.class)
+                // 是否允许显示管理员账号
+                .eq(!authProperties.isAdminInList(), UserInfo::isAdministrator, false)
+                .like(StrUtil.isNotBlank(query.getName()), UserInfo::getName, query.getName())
+                .like(StrUtil.isNotBlank(query.getAccount()), UserInfo::getAccount, query.getAccount())
+                .like(StrUtil.isNotBlank(query.getName()), UserInfo::getName, query.getName())
+                .like(StrUtil.isNotBlank(query.getName()), UserInfo::getName, query.getName());
+        Page<UserWholeInfoResult> page = userInfoManager.selectJoinListPage(mpPage, UserWholeInfoResult.class, wrapper);
+        return new PageResult<UserWholeInfoResult>()
+                .setRecords(page.getRecords())
+                .setCurrent(page.getCurrent())
+                .setSize(page.getSize())
+                .setTotal(page.getTotal());
     }
 
     /**
      * 封禁用户
      */
     public void ban(Long userId) {
-        userInfoManager.setUpStatus(userId, UserStatusCode.BAN);
+        userInfoManager.setUpStatus(userId, UserStatusEnum.BAN.getCode());
     }
 
     /**
      * 批量封禁用户
      */
     public void banBatch(List<Long> userIds) {
-        userInfoManager.setUpStatusBatch(userIds, UserStatusCode.BAN);
+        userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.BAN.getCode());
     }
 
     /**
      * 锁定用户
      */
     public void lock(Long userId) {
-        userInfoManager.setUpStatus(userId, UserStatusCode.LOCK);
+        userInfoManager.setUpStatus(userId, UserStatusEnum.LOCK.getCode());
     }
 
     /**
      * 批量锁定用户
      */
     public void lockBatch(List<Long> userIds) {
-        userInfoManager.setUpStatusBatch(userIds, UserStatusCode.LOCK);
+        userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.LOCK.getCode());
     }
 
     /**
      * 解锁用户
      */
     public void unlock(Long userId) {
-        userInfoManager.setUpStatus(userId, UserStatusCode.NORMAL);
+        userInfoManager.setUpStatus(userId, UserStatusEnum.NORMAL.getCode());
     }
 
     /**
      * 批量解锁用户
      */
     public void unlockBatch(List<Long> userIds) {
-        userInfoManager.setUpStatusBatch(userIds, UserStatusCode.NORMAL);
+        userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.NORMAL.getName());
     }
 
     /**
@@ -101,7 +125,7 @@ public class UserAdminService {
         // 注册时间
         UserInfo userInfo = UserInfo.init(userInfoParam);
         userInfo.setAdministrator(false)
-                .setStatus(UserStatusCode.NORMAL)
+                .setStatus(UserStatusEnum.NORMAL.getCode())
                 .setPassword(BCrypt.hashpw(userInfo.getPassword()));
         userInfoManager.save(userInfo);
         // 扩展信息

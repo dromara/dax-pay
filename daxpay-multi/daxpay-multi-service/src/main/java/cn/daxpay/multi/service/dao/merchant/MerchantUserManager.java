@@ -15,4 +15,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class MerchantUserManager extends BaseManager<MerchantUserMapper, MerchantUser> {
+
+    /**
+     * 判断用户是否存在
+     */
+    public boolean existsByUserId(Long userId){
+        return existedByField(MerchantUser::getUserId, userId);
+    }
+
+    /**
+     * 判断商户号是否存在
+     */
+    public boolean existsByMchNo(String mchNo){
+        return existedByField(MerchantUser::getMchNo, mchNo);
+    }
 }

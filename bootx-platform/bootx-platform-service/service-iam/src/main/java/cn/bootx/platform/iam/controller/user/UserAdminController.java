@@ -11,12 +11,13 @@ import cn.bootx.platform.core.validation.ValidationGroup;
 import cn.bootx.platform.iam.param.user.RestartPwdBatchParam;
 import cn.bootx.platform.iam.param.user.RestartPwdParam;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
+import cn.bootx.platform.iam.param.user.UserInfoQuery;
 import cn.bootx.platform.iam.result.user.UserInfoResult;
+import cn.bootx.platform.iam.result.user.UserWholeInfoResult;
 import cn.bootx.platform.iam.service.service.UserAdminService;
 import cn.bootx.platform.iam.service.service.UserQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,7 @@ public class UserAdminController {
     @RequestPath("添加用户")
     @Operation(summary = "添加用户")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody @Validated UserInfoParam userInfoParam) {
+    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) UserInfoParam userInfoParam) {
         userAdminService.add(userInfoParam);
         return Res.ok();
     }
@@ -68,7 +69,7 @@ public class UserAdminController {
     @Operation(summary = "重置密码")
     @OperateLog(title = "重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @PostMapping("/restartPassword")
-    public Result<Void> restartPassword(@RequestBody @Valid RestartPwdParam param) {
+    public Result<Void> restartPassword(@RequestBody @Validated RestartPwdParam param) {
         userAdminService.restartPassword(param.getUserId(), param.getNewPassword());
         return Res.ok();
     }
@@ -77,7 +78,7 @@ public class UserAdminController {
     @Operation(summary = "批量重置密码")
     @OperateLog(title = "批量重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @PostMapping("/restartPasswordBatch")
-    public Result<Void> restartPasswordBatch(@RequestBody @Valid RestartPwdBatchParam param) {
+    public Result<Void> restartPasswordBatch(@RequestBody @Validated RestartPwdBatchParam param) {
         userAdminService.restartPasswordBatch(param.getUserIds(), param.getNewPassword());
         return Res.ok();
     }
@@ -121,8 +122,8 @@ public class UserAdminController {
     @RequestPath("用户分页")
     @Operation(summary = "用户分页")
     @GetMapping("/page")
-    public Result<PageResult<UserInfoResult>> page(PageParam pageParam, UserInfoParam userInfoParam) {
-        return Res.ok(userAdminService.page(pageParam, userInfoParam));
+    public Result<PageResult<UserWholeInfoResult>> page(PageParam pageParam, UserInfoQuery query) {
+        return Res.ok(userAdminService.page(pageParam, query));
     }
 
 }

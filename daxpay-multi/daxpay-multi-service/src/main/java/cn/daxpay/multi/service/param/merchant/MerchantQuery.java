@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.param.merchant;
 
+import cn.bootx.platform.core.annotation.QueryParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -10,10 +11,10 @@ import lombok.experimental.Accessors;
  * @since 2024/6/24
  */
 @Data
+@QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "商户参数")
 public class MerchantQuery {
-
 
     /** 商户名称 */
     @Schema(description = "商户名称")
@@ -24,6 +25,7 @@ public class MerchantQuery {
     private String companyName;
 
     /** 证件类型 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "证件类型")
     private String idType;
 
@@ -42,4 +44,9 @@ public class MerchantQuery {
     /** 法人证件号码 */
     @Schema(description = "法人证件号码")
     private String legalPersonIdNo;
+
+    /** 是否有关联管理员 */
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "是否有关联管理员")
+    private Boolean administrator;
 }

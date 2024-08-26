@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * 用户扩展信息
+ * 用户扩展信息 whole
  * @author xxm
  * @since 2022/1/8
  */

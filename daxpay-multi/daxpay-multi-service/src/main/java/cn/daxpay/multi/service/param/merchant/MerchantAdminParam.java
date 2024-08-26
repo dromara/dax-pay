@@ -20,12 +20,11 @@ public class MerchantAdminParam {
     @NotNull(groups = ValidationGroup.edit.class, message = "主键不可为空")
     private Long id;
 
-    @Schema(description = "商户id")
-    @NotNull(message = "商户id不可为空")
-    private Long merchantId;
+    @Schema(description = "商户号")
+    @NotNull(message = "商户号不可为空")
+    private String mchNo;
 
     @Schema(description = "名称")
-
     private String name;
 
     @Schema(description = "登录账号")
@@ -36,9 +35,6 @@ public class MerchantAdminParam {
 
     @Schema(description = "邮箱")
     private String email;
-
-    @Schema(description = "头像")
-    private String avatar;
 
     @Schema(description = "密码")
     private String password;

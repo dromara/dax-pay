@@ -3,7 +3,7 @@ package cn.daxpay.multi.merchant.filter;
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.daxpay.multi.service.common.local.MchContextLocal;
-import cn.daxpay.multi.service.service.merchant.MerchantUserService;
+import cn.daxpay.multi.merchant.service.merchant.MerchantUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

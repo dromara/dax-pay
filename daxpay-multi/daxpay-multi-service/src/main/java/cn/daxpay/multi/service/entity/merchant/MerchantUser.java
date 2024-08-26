@@ -2,8 +2,10 @@ package cn.daxpay.multi.service.entity.merchant;
 
 import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -14,6 +16,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@AllArgsConstructor
+@RequiredArgsConstructor
 @TableName("pay_user_merchant")
 public class MerchantUser extends MpCreateEntity {
 

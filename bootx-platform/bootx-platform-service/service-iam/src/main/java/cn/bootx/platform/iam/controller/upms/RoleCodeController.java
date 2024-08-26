@@ -9,7 +9,6 @@ import cn.bootx.platform.iam.result.permission.PermCodeResult;
 import cn.bootx.platform.iam.service.upms.RoleCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,7 @@ public class RoleCodeController {
     @RequestPath("保存请求权限关系")
     @Operation(summary = "保存请求权限关系")
     @PostMapping("/save")
-    public Result<Boolean> save(@RequestBody @Valid PermCodeAssignParam param) {
+    public Result<Boolean> save(@RequestBody @Validated PermCodeAssignParam param) {
         roleCodeService.saveAssign(param);
         return Res.ok(true);
     }

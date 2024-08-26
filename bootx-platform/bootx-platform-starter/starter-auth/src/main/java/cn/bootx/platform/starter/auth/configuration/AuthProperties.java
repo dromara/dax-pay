@@ -27,4 +27,7 @@ public class AuthProperties {
     /** 开启超级管理员(生产模式推荐关闭) */
     private boolean enableAdmin = true;
 
+    /** 用户管理列表中是否显示 */
+    private boolean adminInList = true;
+
 }

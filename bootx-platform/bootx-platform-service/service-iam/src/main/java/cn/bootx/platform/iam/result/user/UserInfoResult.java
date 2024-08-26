@@ -2,7 +2,7 @@ package cn.bootx.platform.iam.result.user;
 
 import cn.bootx.platform.common.jackson.sensitive.SensitiveInfo;
 import cn.bootx.platform.core.entity.UserDetail;
-import cn.bootx.platform.iam.code.UserStatusCode;
+import cn.bootx.platform.iam.code.UserStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -39,7 +39,7 @@ public class UserInfoResult {
     private boolean administrator;
 
     /**
-     * @see UserStatusCode
+     * @see UserStatusEnum
      */
     @Schema(description = "账号状态")
     private String status;

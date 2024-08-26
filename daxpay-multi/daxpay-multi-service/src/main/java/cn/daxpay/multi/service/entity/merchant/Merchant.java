@@ -53,6 +53,12 @@ public class Merchant extends MpBaseEntity implements ToResult<MerchantResult> {
     /** 法人联系方式 */
     private String contact;
 
+    /** 是否有关联管理员 */
+    private boolean administrator;
+
+    /** 关联管理员用户 */
+    private Long adminUserId;
+
     /** 状态 */
     private String status;
 

@@ -8,6 +8,7 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.validation.ValidationGroup;
+import cn.daxpay.multi.service.param.merchant.MerchantAdminParam;
 import cn.daxpay.multi.service.param.merchant.MerchantParam;
 import cn.daxpay.multi.service.param.merchant.MerchantQuery;
 import cn.daxpay.multi.service.result.merchant.MerchantResult;
@@ -77,6 +78,14 @@ public class MerchantController {
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "id不可为空") Long id){
         merchantService.delete(id);
+        return Res.ok();
+    }
+
+    @RequestPath("创建商户管理员")
+    @Operation(summary = "创建商户管理员")
+    @PostMapping("/createAdmin")
+    public Result<Void> createAdmin(@RequestBody @Validated MerchantAdminParam param){
+        merchantService.createMerchantAdmin(param);
         return Res.ok();
     }
 

@@ -53,6 +53,14 @@ public class MerchantResult extends BaseResult {
     @Schema(description = "联系方式")
     private String contact;
 
+    /** 是否有关联管理员 */
+    @Schema(description = "是否有关联管理员")
+    private Boolean administrator;
+
+    /** 关联管理员用户 */
+    @Schema(description = "关联管理员用户")
+    private Long adminUserId;
+
     /** 状态 */
     @Schema(description = "状态")
     private String status;
