@@ -3,8 +3,10 @@ package cn.daxpay.multi.service.param.record;
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeFlowTypeEnum;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -12,11 +14,12 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/5/17
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "流水记录查询类")
-public class TradeFlowRecordQuery {
+public class TradeFlowRecordQuery extends MchQuery {
 
     /** 订单标题 */
     @Schema(description = "订单标题")
@@ -49,15 +52,4 @@ public class TradeFlowRecordQuery {
     /** 通道交易号 */
     @Schema(description = "通道交易号")
     private String outTradeNo;
-
-    /** 商户号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "商户号")
-    private String mchNo;
-
-    /** 应用号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "应用号")
-    private String appId;
-
 }

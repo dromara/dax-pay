@@ -1,9 +1,9 @@
 package cn.daxpay.multi.service.param.order.transfer;
 
-import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "转账订单查询参数")
-public class TransferOrderQuery extends SortParam {
+public class TransferOrderQuery extends MchQuery {
 
     /** 商户转账号 */
     @Schema(description = "商户转账号")
@@ -73,14 +73,4 @@ public class TransferOrderQuery extends SortParam {
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "状态")
     private String status;
-
-    /** 商户号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "商户号")
-    private String mchNo;
-
-    /** 应用号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "应用号")
-    private String appId;
 }

@@ -1,9 +1,11 @@
 package cn.daxpay.multi.service.param.notice.notify;
 
 import cn.bootx.platform.core.annotation.QueryParam;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import cn.daxpay.multi.service.enums.NotifyContentTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -11,11 +13,12 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/8/5
  */
+@EqualsAndHashCode(callSuper = true)
 @QueryParam
 @Data
 @Accessors(chain = true)
 @Schema(title = "客户订阅通知任务查询参数")
-public class MerchantNotifyTaskQuery {
+public class MerchantNotifyTaskQuery extends MchQuery {
 
     /** 平台交易号 */
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)

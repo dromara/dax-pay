@@ -1,4 +1,4 @@
-package cn.daxpay.multi.admin.controller.order;
+package cn.daxpay.multi.service.controller.order;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;

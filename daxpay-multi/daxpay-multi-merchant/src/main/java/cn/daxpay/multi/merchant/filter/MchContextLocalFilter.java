@@ -2,15 +2,15 @@ package cn.daxpay.multi.merchant.filter;
 
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
-import cn.daxpay.multi.service.common.local.MchContextLocal;
 import cn.daxpay.multi.merchant.service.merchant.MerchantUserService;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.core.annotation.Order;
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,12 +22,20 @@ import java.util.Optional;
  * @author xxm
  * @since 2024/7/17
  */
-@Order(value = Integer.MIN_VALUE+1000)
 @Component
 @RequiredArgsConstructor
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-public class MchContextLocalFilter extends OncePerRequestFilter {
+public class MchContextLocalFilter extends OncePerRequestFilter implements OrderedFilter {
     private final MerchantUserService merchantUserService;
+
+    /**
+     * 需要晚于 {@link org.springframework.web.filter.RequestContextFilter} 执行, 否则获取不到登录用户
+     * RequestContextFilter 默认加载优先级 为 - 150
+     */
+    @Override
+    public int getOrder() {
+        return 0;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

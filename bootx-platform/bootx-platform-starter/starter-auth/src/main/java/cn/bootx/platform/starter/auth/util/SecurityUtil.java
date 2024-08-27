@@ -10,6 +10,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.DesensitizedUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 
 import java.util.Objects;
@@ -21,6 +22,7 @@ import java.util.Optional;
  * @author xxm
  * @since 2021/8/2
  */
+@Slf4j
 @UtilityClass
 public class SecurityUtil {
 
@@ -91,6 +93,7 @@ public class SecurityUtil {
             }
             catch (SaTokenException e) {
                 userDetail = Optional.empty();
+                log.warn("获取当前用户失败", e);
             }
         }
         return userDetail;

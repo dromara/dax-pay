@@ -68,9 +68,9 @@ public class MerchantService {
      * 修改
      */
     public void update(MerchantParam param) {
-        Merchant Merchant = merchantManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
-        BeanUtil.copyProperties(param, Merchant, CopyOptions.create().ignoreNullValue());
-        merchantManager.updateById(Merchant);
+        Merchant merchant = merchantManager.findById(param.getId()).orElseThrow(DataNotExistException::new);
+        BeanUtil.copyProperties(param, merchant, CopyOptions.create().ignoreNullValue());
+        merchantManager.updateById(merchant);
     }
 
     /**
@@ -99,7 +99,6 @@ public class MerchantService {
     /**
      * 删除
      */
-
     public void delete(Long id) {
         Merchant merchant = merchantManager.findById(id).orElseThrow(DataNotExistException::new);
         // 创建管理员后不可以被删除

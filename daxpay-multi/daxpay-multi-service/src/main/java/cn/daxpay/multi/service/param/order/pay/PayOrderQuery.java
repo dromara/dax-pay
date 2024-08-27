@@ -1,11 +1,11 @@
 package cn.daxpay.multi.service.param.order.pay;
 
-import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
 import cn.daxpay.multi.core.enums.PayRefundStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "支付订单查询参数")
-public class PayOrderQuery extends SortParam {
+public class PayOrderQuery extends MchQuery {
 
     /** 商户订单号 */
     @Schema(description = "商户订单号")
@@ -92,15 +92,5 @@ public class PayOrderQuery extends SortParam {
     /** 错误码 */
     @Schema(description = "错误码")
     private String errorCode;
-
-    /** 商户号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "商户号")
-    private String mchNo;
-
-    /** 应用号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "应用号")
-    private String appId;
 
 }

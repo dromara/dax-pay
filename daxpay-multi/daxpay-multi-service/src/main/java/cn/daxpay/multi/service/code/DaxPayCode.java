@@ -27,4 +27,16 @@ public interface DaxPayCode {
         String MERCHANT_TRANSFER_SYNC = "TransferSync";
 
     }
+
+    /**
+     * 终端类型
+     */
+    interface Client {
+        /** 运营端 */
+        String ADMIN = "dax-pay-admin";
+        /** 支付网关 */
+        String GATEWAY = "dax-pay-gateway";
+        /** 商户端 */
+        String MERCHANT = "dax-pay-merchant";
+    }
 }

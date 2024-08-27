@@ -1,9 +1,9 @@
 package cn.daxpay.multi.service.param.order.refund;
 
-import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "支付退款查询参数")
-public class RefundOrderQuery extends SortParam {
+public class RefundOrderQuery extends MchQuery {
 
     @Schema(description = "退款号")
     private String refundNo;
@@ -65,13 +65,4 @@ public class RefundOrderQuery extends SortParam {
     /** 错误码 */
     @Schema(description = "错误码")
     private String errorCode;
-    /** 商户号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "商户号")
-    private String mchNo;
-
-    /** 应用号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "应用号")
-    private String appId;
 }

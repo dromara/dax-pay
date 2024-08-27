@@ -1,8 +1,8 @@
 package cn.daxpay.multi.service.param.reconcile;
 
-import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import cn.daxpay.multi.service.enums.ReconcileDiscrepancyTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @Data
 @Accessors(chain = true)
 @Schema(title = "对账差异记录查询参数")
-public class ReconcileDiscrepancyQuery extends SortParam {
+public class ReconcileDiscrepancyQuery extends MchQuery {
     /** 对账号 */
     @Schema(description = "对账号")
     private String reconcileNo;

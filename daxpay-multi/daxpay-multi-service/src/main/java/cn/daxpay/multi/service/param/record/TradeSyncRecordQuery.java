@@ -1,9 +1,9 @@
 package cn.daxpay.multi.service.param.record;
 
-import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "交易同步记录查询参数")
-public class TradeSyncRecordQuery extends SortParam {
+public class TradeSyncRecordQuery extends MchQuery {
 
     /** 平台交易号 */
     @Schema(description = "平台交易号")
@@ -61,14 +61,4 @@ public class TradeSyncRecordQuery extends SortParam {
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "是否进行调整")
     private Boolean adjust;
-
-    /** 商户号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "商户号")
-    private String mchNo;
-
-    /** 应用号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "应用号")
-    private String appId;
 }

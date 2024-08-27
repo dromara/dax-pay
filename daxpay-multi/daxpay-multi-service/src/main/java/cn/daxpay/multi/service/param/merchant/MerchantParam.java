@@ -59,8 +59,4 @@ public class MerchantParam {
     /** 法人联系方式 */
     @Schema(description = "联系方式")
     private String contact;
-
-    /** 状态 */
-    @Schema(description = "状态")
-    private String status;
 }

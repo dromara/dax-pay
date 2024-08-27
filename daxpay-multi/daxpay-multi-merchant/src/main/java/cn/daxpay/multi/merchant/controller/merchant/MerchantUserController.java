@@ -7,10 +7,11 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.validation.ValidationGroup;
+import cn.bootx.platform.iam.param.upms.UserRoleParam;
 import cn.bootx.platform.iam.param.user.UserInfoParam;
 import cn.bootx.platform.iam.param.user.UserInfoQuery;
-import cn.bootx.platform.iam.result.user.UserInfoResult;
 import cn.bootx.platform.iam.result.user.UserWholeInfoResult;
+import cn.daxpay.multi.merchant.service.merchant.MerchantUserPermService;
 import cn.daxpay.multi.merchant.service.merchant.MerchantUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 public class MerchantUserController {
 
     private final MerchantUserService merchantUserService;
+    private final MerchantUserPermService merchantUserPermService;
 
     @Operation(summary = "用户列表")
     @GetMapping("/page")
@@ -54,9 +56,10 @@ public class MerchantUserController {
         return Res.ok();
     }
 
-    @Operation(summary = "编辑用户")
-    @GetMapping("/edit")
-    public Result<Void> edit(UserInfoParam userInfo) {
+   @Operation(summary = "分配角色")
+   @PostMapping("/assignRole")
+    public Result<Void> assignRole(@Validated @RequestBody UserRoleParam param) {
+       merchantUserPermService.assignRole(param.getUserId(), param.getRoleIds());
         return Res.ok();
     }
 }

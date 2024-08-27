@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
-@TableName("pay_user_merchant")
+@TableName("pay_merchant_user")
 public class MerchantUser extends MpCreateEntity {
 
     /** 用户ID */

@@ -3,18 +3,20 @@ package cn.daxpay.multi.merchant.controller.merchant;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
+import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.validation.ValidationGroup;
+import cn.daxpay.multi.merchant.service.merchant.MerchantInfoService;
 import cn.daxpay.multi.service.param.merchant.MerchantParam;
+import cn.daxpay.multi.service.result.merchant.MerchantResult;
 import cn.daxpay.multi.service.service.merchant.MerchantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 商户控制器
@@ -28,13 +30,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestGroup(groupCode = "merchant", moduleCode = "PayConfig")
 @RequiredArgsConstructor
 public class MerchantController {
+    private final MerchantInfoService merchantInfoService;
     private final MerchantService merchantService;
+
+    @RequestPath("商户下拉列表")
+    @Operation(summary = "商户下拉列表")
+    @GetMapping("/dropdown")
+    public Result<List<LabelValue>> dropdown(){
+        return Res.ok(merchantService.dropdown());
+    }
+
+    @RequestPath("获取商户信息")
+    @Operation(summary = "获取商户信息")
+    @PostMapping("/get")
+    public Result<MerchantResult> getMerchant(){
+        return Res.ok(merchantInfoService.getMerchant());
+    }
 
     @RequestPath("修改商户信息")
     @Operation(summary = "修改商户")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MerchantParam param){
-        merchantService.update(param);
+        merchantInfoService.update(param);
         return Res.ok();
     }
 

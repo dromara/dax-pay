@@ -1,4 +1,4 @@
-package cn.daxpay.multi.admin.controller.config;
+package cn.daxpay.multi.service.controller.config;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;

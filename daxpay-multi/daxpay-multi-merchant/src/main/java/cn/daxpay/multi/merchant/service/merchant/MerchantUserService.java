@@ -63,6 +63,7 @@ public class MerchantUserService {
 
         Page<UserWholeInfoResult> mpPage = MpUtil.getMpPage(pageParam);
         MPJLambdaWrapper<MerchantUser> wrapper = new MPJLambdaWrapper<>();
+        // 连表: 商户用户表, 用户表、用户扩展信息表
         wrapper.innerJoin(UserInfo.class,UserInfo::getId, MerchantUser::getUserId)
                 .innerJoin(UserExpandInfo.class,UserExpandInfo::getId, UserInfo::getId)
                 .selectAll(UserInfo.class)
@@ -96,7 +97,7 @@ public class MerchantUserService {
     }
 
     /**
-     * 更新
+     * 更新用户信息
      */
     public void update(UserInfoParam userInfoParam) {
         // 判断用户是否属于该商户

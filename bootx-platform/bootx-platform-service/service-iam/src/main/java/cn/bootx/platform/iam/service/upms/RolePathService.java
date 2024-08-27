@@ -244,6 +244,7 @@ public class RolePathService {
                 .map(PermPath::getParentCode)
                 .distinct()
                 .map(pathCatalogMap::get)
+                .filter(Objects::nonNull)
                 .toList();
 
         // 获取模块
@@ -251,12 +252,14 @@ public class RolePathService {
                 .map(PermPath::getParentCode)
                 .distinct()
                 .map(pathCatalogMap::get)
+                .filter(Objects::nonNull)
                 .toList();
         // 进行合并并转为树状结构
         permPaths = new ArrayList<>(permPaths);
         permPaths.addAll(groupList);
         permPaths.addAll(moduleList);
         List<PermPathResult> list = permPaths.stream()
+                .filter(Objects::nonNull)
                 .map(PermPath::toResult)
                 .toList();
         return TreeBuildUtil.build(list, null, PermPathResult::getCode, PermPathResult::getParentCode, PermPathResult::setChildren);

@@ -1,4 +1,4 @@
-package cn.daxpay.multi.admin.controller.constant;
+package cn.daxpay.multi.service.controller.constant;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
@@ -6,9 +6,9 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import cn.daxpay.multi.service.param.constant.MethodConstQuery;
-import cn.daxpay.multi.service.result.constant.MethodConstResult;
-import cn.daxpay.multi.service.service.constant.MethodConstService;
+import cn.daxpay.multi.service.param.constant.ChannelConstQuery;
+import cn.daxpay.multi.service.result.constant.ChannelConstResult;
+import cn.daxpay.multi.service.service.constant.ChannelConstService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,22 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 支付方式常量控制器
+ * 支付通道常量控制器
  * @author xxm
  * @since 2024/7/14
  */
-@Tag(name = "支付方式常量控制器")
+@Tag(name = "支付通道常量控制器")
 @RestController
-@RequestMapping("/const/method")
+@RequestMapping("/const/channel")
 @RequiredArgsConstructor
 @RequestGroup(groupCode = "PayConst", moduleCode = "PayConfig")
-public class MethodConstController {
-    private final MethodConstService methodConstService;
+public class ChannelConstController {
+    private final ChannelConstService channelConstService;
 
-    @RequestPath("支付方式分页")
-    @Operation(summary = "支付方式分页")
+    @RequestPath("支付通道分页")
+    @Operation(summary = "支付通道分页")
     @GetMapping("/page")
-    public Result<PageResult<MethodConstResult>> page(PageParam pageParam, MethodConstQuery query) {
-        return Res.ok(methodConstService.page(pageParam, query));
+    public Result<PageResult<ChannelConstResult>> page(PageParam pageParam, ChannelConstQuery query) {
+        return Res.ok(channelConstService.page(pageParam, query));
     }
 }

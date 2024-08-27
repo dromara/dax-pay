@@ -1,9 +1,11 @@
 package cn.daxpay.multi.service.param.notice.callback;
 
 import cn.bootx.platform.core.annotation.QueryParam;
-import cn.daxpay.multi.service.enums.NotifyContentTypeEnum;
+import cn.daxpay.multi.core.enums.TradeTypeEnum;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -11,11 +13,12 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2024/8/5
  */
+@EqualsAndHashCode(callSuper = true)
 @QueryParam
 @Data
 @Accessors(chain = true)
 @Schema(title = "客户回调通知任务查询参数")
-public class MerchantCallbackTaskQuery {
+public class MerchantCallbackTaskQuery extends MchQuery {
 
     /** 平台交易号 */
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
@@ -24,10 +27,10 @@ public class MerchantCallbackTaskQuery {
 
     /**
      * 通知类型
-     * @see NotifyContentTypeEnum
+     * @see TradeTypeEnum
      */
     @Schema(description = "通知类型")
-    private String notifyType;
+    private String tradeType;
 
     /** 是否发送成功 */
     @Schema(description = "是否发送成功")

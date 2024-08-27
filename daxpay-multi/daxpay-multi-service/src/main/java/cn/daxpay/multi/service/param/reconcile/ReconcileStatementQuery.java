@@ -2,9 +2,11 @@ package cn.daxpay.multi.service.param.reconcile;
 
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.daxpay.multi.core.enums.ChannelEnum;
+import cn.daxpay.multi.service.common.param.MchQuery;
 import cn.daxpay.multi.service.enums.ReconcileResultEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
@@ -14,11 +16,12 @@ import java.time.LocalDate;
  * @author xxm
  * @since 2024/8/7
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "对账单查询参数")
-public class ReconcileStatementQuery {
+public class ReconcileStatementQuery extends MchQuery {
 
     /** 名称 */
     @Schema(description = "名称")
@@ -58,15 +61,5 @@ public class ReconcileStatementQuery {
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "交易对账结果")
     private String result;
-
-    /** 商户号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "商户号")
-    private String mchNo;
-
-    /** 应用号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "应用号")
-    private String appId;
 
 }

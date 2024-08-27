@@ -31,7 +31,7 @@ sa-token:
   is-share: true
   is-log: false
   is-print: false
-# 字段翻译
+# 字段翻译插件
 easy-trans:
   #启用平铺模式
   is-enable-tile: true

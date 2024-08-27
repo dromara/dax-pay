@@ -2,8 +2,10 @@ package cn.daxpay.multi.service.common.tenant;
 
 import cn.bootx.platform.common.config.BootxConfigProperties;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.multi.service.common.local.MchContextLocal;
+import cn.daxpay.multi.service.code.DaxPayCode;
 import cn.daxpay.multi.service.common.entity.MchBaseEntity;
+import cn.daxpay.multi.service.common.entity.MchRecordEntity;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import cn.hutool.core.util.ClassUtil;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
@@ -52,7 +54,7 @@ public class MchTenantLineHandler  implements TenantLineHandler {
     @Override
     public boolean ignoreTable(String tableName) {
         // 管理端运营人员不需要隔离数据
-        if (bootxConfigProperties.getClientCode().equals("dax-pay-admin")){
+        if (bootxConfigProperties.getClientCode().equals(DaxPayCode.Client.ADMIN)){
             return true;
         }
 
@@ -62,7 +64,10 @@ public class MchTenantLineHandler  implements TenantLineHandler {
             return true;
         }
         // 判断实体类上是否为 MchBaseEntity 子类
-        if (!ClassUtil.isAssignable(MchBaseEntity.class, tableInfo.getEntityType())){
+        if (!(ClassUtil.isAssignable(MchBaseEntity.class, tableInfo.getEntityType())
+                ||ClassUtil.isAssignable(MchRecordEntity.class, tableInfo.getEntityType())
+        )
+        ){
             return true;
         }
 

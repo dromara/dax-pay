@@ -12,6 +12,7 @@ import cn.bootx.platform.iam.service.upms.UserRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +33,7 @@ public class UserRoleController {
     @RequestPath("给用户分配角色")
     @Operation(summary = "给用户分配角色")
     @PostMapping(value = "/saveAssign")
-    public Result<Void> saveAssign(@RequestBody UserRoleParam param) {
-        ValidationUtil.validateParam(param);
+    public Result<Void> saveAssign(@Validated @RequestBody UserRoleParam param) {
         userRoleService.saveAssign(param.getUserId(), param.getRoleIds());
         return Res.ok();
     }
