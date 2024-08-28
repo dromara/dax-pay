@@ -1,6 +1,6 @@
 package cn.bootx.platform.iam.controller.role;
 
-import cn.bootx.platform.core.annotation.InternalPath;
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
@@ -33,7 +33,7 @@ public class RoleController {
 
     private final RoleQueryService roleQueryService;
 
-    @InternalPath
+    @IgnoreAuth
     @Operation(summary = "添加角色")
     @PostMapping(value = "/add")
     public Result<Void> add(@RequestBody RoleParam roleParam) {
@@ -42,7 +42,7 @@ public class RoleController {
         return Res.ok();
     }
 
-    @InternalPath
+    @IgnoreAuth
     @Operation(summary = "删除角色")
     @PostMapping(value = "/delete")
     public Result<Void> delete(Long id) {
@@ -50,7 +50,7 @@ public class RoleController {
         return Res.ok();
     }
 
-    @InternalPath
+    @IgnoreAuth
     @Operation(summary = "修改角色")
     @PostMapping(value = "/update")
     public Result<Void> update(@RequestBody RoleParam roleParam) {
@@ -59,6 +59,7 @@ public class RoleController {
         return Res.ok();
     }
 
+    @IgnoreAuth
     @Operation(summary = "角色树")
     @GetMapping("/tree")
     public Result<List<RoleResult>> tree(){

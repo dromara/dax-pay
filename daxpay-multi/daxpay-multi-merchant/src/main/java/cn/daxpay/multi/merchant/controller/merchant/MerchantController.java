@@ -9,7 +9,6 @@ import cn.bootx.platform.core.validation.ValidationGroup;
 import cn.daxpay.multi.merchant.service.merchant.MerchantInfoService;
 import cn.daxpay.multi.service.param.merchant.MerchantParam;
 import cn.daxpay.multi.service.result.merchant.MerchantResult;
-import cn.daxpay.multi.service.service.merchant.MerchantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +30,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MerchantController {
     private final MerchantInfoService merchantInfoService;
-    private final MerchantService merchantService;
 
     @RequestPath("商户下拉列表")
     @Operation(summary = "商户下拉列表")
     @GetMapping("/dropdown")
     public Result<List<LabelValue>> dropdown(){
-        return Res.ok(merchantService.dropdown());
+        return Res.ok(merchantInfoService.dropdown());
     }
 
     @RequestPath("获取商户信息")

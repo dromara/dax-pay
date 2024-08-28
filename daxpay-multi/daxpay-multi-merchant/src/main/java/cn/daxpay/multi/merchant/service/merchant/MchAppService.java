@@ -1,20 +1,18 @@
-package cn.daxpay.multi.service.service.merchant;
+package cn.daxpay.multi.merchant.service.merchant;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.BizException;
-import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.daxpay.multi.core.exception.ConfigNotExistException;
 import cn.daxpay.multi.core.exception.OperationFailException;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import cn.daxpay.multi.service.convert.merchant.MchAppConvert;
 import cn.daxpay.multi.service.dao.config.ChannelConfigManager;
 import cn.daxpay.multi.service.dao.merchant.MchAppManager;
-import cn.daxpay.multi.service.dao.merchant.MerchantManager;
 import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
-import cn.daxpay.multi.service.entity.merchant.Merchant;
 import cn.daxpay.multi.service.param.merchant.MchAppParam;
 import cn.daxpay.multi.service.param.merchant.MchAppQuery;
 import cn.daxpay.multi.service.result.merchant.MchAppResult;
@@ -29,28 +27,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 商户应用服务类
+ *
  * @author xxm
- * @since 2024/5/27
+ * @since 2024/8/28
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MchAppService {
-    private final MerchantManager merchantManager;
 
     private final MchAppManager mchAppManager;
 
     private final ChannelConfigManager channelConfigManager;
 
     /**
-     * 添加用户
+     * 添加应用
      */
     public void add(MchAppParam param) {
-        // 校验商户是否存在
-        if (!merchantManager.existedByField(Merchant::getMchNo, param.getMchNo())) {
-            throw new ValidationFailedException("该商户号不存在");
-        }
+        // 覆盖
+        param.setMchNo(MchContextLocal.getMchNo());
         MchApp entity = MchAppConvert.CONVERT.toEntity(param);
         // 生成应用号
         entity.setAppId(this.generateAppId());
@@ -60,7 +55,8 @@ public class MchAppService {
      * 修改
      */
     public void update(MchAppParam param) {
-        MchApp mchApp = mchAppManager.findById(param.getId()).orElseThrow(ConfigNotExistException::new);
+        MchApp mchApp = mchAppManager.findById(param.getId()).orElseThrow(()->new ConfigNotExistException("商户应用未找到"));
+        this.checkApp(mchApp);
         BeanUtil.copyProperties(param, mchApp, CopyOptions.create().ignoreNullValue());
         mchAppManager.updateById(mchApp);
     }
@@ -69,6 +65,7 @@ public class MchAppService {
      * 分页
      */
     public PageResult<MchAppResult> page(PageParam pageParam, MchAppQuery query) {
+        query.setMchNo(MchContextLocal.getMchNo());
         return MpUtil.toPageResult(mchAppManager.page(pageParam, query));
     }
 
@@ -76,14 +73,16 @@ public class MchAppService {
      * 获取单条
      */
     public MchAppResult findById(Long id) {
-        return mchAppManager.findById(id).map(MchApp::toResult).orElseThrow(ConfigNotExistException::new);
+        var mchApp = mchAppManager.findById(id).orElseThrow(()->new ConfigNotExistException("商户应用未找到"));
+        this.checkApp(mchApp);
+        return mchApp.toResult();
     }
 
     /**
      * 下拉列表
      */
-    public List<LabelValue> dropdown(String mchNo){
-        return mchAppManager.findAllByField(MchApp::getMchNo,mchNo).stream()
+    public List<LabelValue> dropdown(){
+        return mchAppManager.findAllByField(MchApp::getMchNo, MchContextLocal.getMchNo()).stream()
                 .map(o->new LabelValue(o.getAppName(),o.getAppId()))
                 .collect(Collectors.toList());
     }
@@ -93,13 +92,15 @@ public class MchAppService {
      */
     public void delete(Long id) {
         MchApp mchApp = mchAppManager.findById(id)
-                .orElseThrow(ConfigNotExistException::new);
-
+                .orElseThrow(()->new ConfigNotExistException("商户应用未找到"));
+        this.checkApp(mchApp);
         // 查看是否有配置的支付配置
         if (channelConfigManager.existedByField(ChannelConfig::getAppId, mchApp.getAppId())){
             throw new OperationFailException("该商户应用已绑定支付配置，请先删除支付配置");
         }
-
+        if (!mchApp.getMchNo().equals(MchContextLocal.getMchNo())){
+            throw new ConfigNotExistException();
+        }
         mchAppManager.deleteById(id);
     }
 
@@ -117,5 +118,19 @@ public class MchAppService {
         throw new BizException("应用号生成失败");
     }
 
+    /**
+     *
+     */
+    public void checkApp(String appId){
+        mchAppManager.findByAppId(appId).orElseThrow(()->new ConfigNotExistException("商户应用未找到"));
+    }
 
+    /**
+     * 如果和商户不匹配, 抛出错误
+     */
+    public void checkApp(MchApp mchApp){
+        if (!mchApp.getMchNo().equals(MchContextLocal.getMchNo())){
+            throw new ConfigNotExistException("商户应用未找到");
+        }
+    }
 }

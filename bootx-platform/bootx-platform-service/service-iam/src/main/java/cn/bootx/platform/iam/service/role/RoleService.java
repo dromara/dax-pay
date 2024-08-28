@@ -47,7 +47,7 @@ public class RoleService {
     @Transactional(rollbackFor = Exception.class)
     public void add(RoleParam roleParam) {
 
-        // 如果上级角色不为空, 判断是否有上级角色的权限
+        // 判断是否有权限修改
         if (!userRoleService.checkUserRole(roleParam.getPid())){
             throw new ValidationFailedException("你没有权限创建该角色");
         }
@@ -70,7 +70,7 @@ public class RoleService {
         Long id = roleParam.getId();
         Role role = roleManager.findById(id).orElseThrow(RoleNotExistedException::new);
 
-        // 如果上级角色不为空, 判断是否有上级角色的权限
+        // 判断是否有权限修改
         if (!userRoleService.checkUserRole(role.getPid())){
             throw new ValidationFailedException("你没有权限编辑该角色");
         }
@@ -95,8 +95,7 @@ public class RoleService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long roleId) {
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
-
-        // 如果上级角色不为空, 判断是否有上级角色的权限
+        //  判断是否有权限修改
         if (!userRoleService.checkUserRole(role.getPid())){
             throw new ValidationFailedException("你没有权限删除该角色");
         }

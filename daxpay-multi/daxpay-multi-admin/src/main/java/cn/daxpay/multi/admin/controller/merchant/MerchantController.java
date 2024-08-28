@@ -12,7 +12,7 @@ import cn.daxpay.multi.service.param.merchant.MerchantAdminParam;
 import cn.daxpay.multi.service.param.merchant.MerchantParam;
 import cn.daxpay.multi.service.param.merchant.MerchantQuery;
 import cn.daxpay.multi.service.result.merchant.MerchantResult;
-import cn.daxpay.multi.service.service.merchant.MerchantService;
+import cn.daxpay.multi.admin.service.merchant.MerchantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;

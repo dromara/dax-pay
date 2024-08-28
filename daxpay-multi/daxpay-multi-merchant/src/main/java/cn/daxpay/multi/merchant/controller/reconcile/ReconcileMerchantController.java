@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/reconcile/statement")
 @RequiredArgsConstructor
-public class ReconcileStatementMerchantController {
+public class ReconcileMerchantController {
     private final ReconcileStatementService statementService;
 
     @RequestPath("手动创建对账订单")

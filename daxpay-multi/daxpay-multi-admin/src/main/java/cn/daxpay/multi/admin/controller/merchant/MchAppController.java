@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.controller.merchant;
+package cn.daxpay.multi.admin.controller.merchant;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
@@ -12,7 +12,7 @@ import cn.bootx.platform.core.validation.ValidationGroup;
 import cn.daxpay.multi.service.param.merchant.MchAppParam;
 import cn.daxpay.multi.service.param.merchant.MchAppQuery;
 import cn.daxpay.multi.service.result.merchant.MchAppResult;
-import cn.daxpay.multi.service.service.merchant.MchAppService;
+import cn.daxpay.multi.admin.service.merchant.MchAppService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;

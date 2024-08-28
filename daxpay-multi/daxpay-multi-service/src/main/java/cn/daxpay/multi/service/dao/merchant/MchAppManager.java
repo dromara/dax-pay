@@ -26,7 +26,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MchAppManager extends BaseManager<MchAppMapper, MchApp> {
 
-
     /**
      * 根据id进行更新
      */

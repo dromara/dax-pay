@@ -1,4 +1,4 @@
-package cn.daxpay.multi.service.service.merchant;
+package cn.daxpay.multi.admin.service.merchant;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.BizException;
