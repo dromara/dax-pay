@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -22,11 +24,14 @@ public class MerchantUserManager extends BaseManager<MerchantUserMapper, Merchan
     public boolean existsByUserId(Long userId){
         return existedByField(MerchantUser::getUserId, userId);
     }
-
     /**
-     * 判断商户号是否存在
+     * 判断用户是否存在
      */
-    public boolean existsByMchNo(String mchNo){
-        return existedByField(MerchantUser::getMchNo, mchNo);
+    public boolean existsByUserIds(List<Long> userIds){
+        Long count = lambdaQuery().in(MerchantUser::getUserId, userIds)
+                .count();
+        return userIds.size() == count;
     }
+
+
 }

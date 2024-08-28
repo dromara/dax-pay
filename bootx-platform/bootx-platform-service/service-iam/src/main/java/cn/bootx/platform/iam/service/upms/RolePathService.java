@@ -1,6 +1,7 @@
 package cn.bootx.platform.iam.service.upms;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.TreeBuildUtil;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.dao.role.RoleManager;
@@ -49,6 +50,8 @@ public class RolePathService {
 
     private final RoleQueryService roleQueryService;
 
+    private final UserRoleService userRoleService;
+
     /**
      * 保存角色路径授权
      */
@@ -56,6 +59,13 @@ public class RolePathService {
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(PermPathAssignParam param) {
         Long roleId = param.getRoleId();
+        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
+
+        // 判断是否有上级角色的权限
+        if (!userRoleService.checkUserRole(role.getPid())){
+            throw new ValidationFailedException("你没有权限操作该角色");
+        }
+
         String clientCode = param.getClientCode();
         List<Long> pathIds = param.getPathIds();
 
@@ -72,7 +82,7 @@ public class RolePathService {
         rolePathManager.deleteByIds(deleteIds);
 
         // 需要新增的权限关系
-        List<RolePath> addRolePath = this.saveAddAssign(param, rolePathIds);
+        List<RolePath> addRolePath = this.saveAddAssign(param, rolePathIds, role);
 
 
         // 需要进行级联删除的权限码
@@ -94,11 +104,13 @@ public class RolePathService {
 
     /**
      * 保存并返回需要新增的权限关系
-     * @param param 分配参数
+     *
+     * @param param       分配参数
      * @param rolePathIds 已经保存的关联信息
+     * @param role        角色
      * @return 添加的权限关系
      */
-    private List<RolePath> saveAddAssign(PermPathAssignParam param, List<Long> rolePathIds){
+    private List<RolePath> saveAddAssign(PermPathAssignParam param, List<Long> rolePathIds, Role role){
 
         Long roleId = param.getRoleId();
         String clientCode = param.getClientCode();
@@ -110,7 +122,6 @@ public class RolePathService {
                 .map(permissionId -> new RolePath(roleId, param.getClientCode(), permissionId))
                 .collect(Collectors.toList());
         // 验证是否超过了父级角色所拥有的权限, 如果超过进行过滤
-        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         if (Objects.nonNull(role.getPid())){
             List<Long> collect = rolePathManager.findAllByRoleAndClient(role.getPid(), clientCode)
                     .stream()
@@ -179,16 +190,21 @@ public class RolePathService {
     /**
      * 获取当前用户角色下可见的请求权限信息(即上级菜单被分配的权限), 并转换成树返回, 分配时使用
      * 如果是顶级角色, 可以查看所有的权限
-     * 如果是子角色, 查询分配给自身的权限
+     * 如果是子角色, 查询父角色关联的权限
+     * 如果是子角色且用户不拥有子角色的上级角色, 返回空
      */
     public List<SimplePermPathResult> treeByRoleAssign(Long roleId, String clientCode) {
+        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
+        // 判断是否有上级角色的权限, 没有权限返回空
+        if (!userRoleService.checkUserRole(role.getPid())){
+            return new ArrayList<>(0);
+        }
         // 查询该终端全部的请求权限
         List<PermPath> allPermPaths = permPathManager.findAllByClient(clientCode);
         // 只保留叶子节点的数据, 如果是顶级角色, 直接可以使用, 不是的话需要进行过滤
         List<PermPath> permPaths = allPermPaths.stream()
                 .filter(PermPath::isLeaf)
                 .toList();
-        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         // 如果有有上级角色, 只可以显示分配给自身的权限
         if (Objects.nonNull(role.getPid())){
             List<Long> pathIds = rolePathManager.findAllByRoleAndClient(role.getPid(),clientCode)

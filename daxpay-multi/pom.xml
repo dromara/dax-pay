@@ -20,6 +20,8 @@
         <module>daxpay-multi-service</module>
         <module>daxpay-multi-admin</module>
         <module>daxpay-multi-gateway</module>
+        <module>daxpay-multi-merchant</module>
+        <module>daxpay-multi-service-controller</module>
     </modules>
 
     <properties>

@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>daxpay-multi-service</artifactId>
-    <description>支付服务实现类</description>
+    <description>支付服务实现模块</description>
 
     <dependencies>
         <!-- web框架 -->

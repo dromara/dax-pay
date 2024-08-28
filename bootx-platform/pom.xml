@@ -36,7 +36,7 @@
         <lock4j.version>2.2.7</lock4j.version>
         <x-file-storage.version>2.2.1</x-file-storage.version>
         <minio.version>8.5.4</minio.version>
-        <sa-token.version>1.38.0</sa-token.version>
+        <sa-token.version>1.39.0</sa-token.version>
         <justauth.version>1.16.6</justauth.version>
         <caffeine.version>3.1.8</caffeine.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>

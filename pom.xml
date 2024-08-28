@@ -16,7 +16,6 @@
         <module>daxpay-multi</module>
         <module>daxpay-multi-channel</module>
         <module>daxpay-multi-sdk</module>
-        <module>daxpay-multi/daxpay-multi-merchant</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

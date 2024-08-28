@@ -23,6 +23,13 @@ public class UserRoleManager extends BaseManager<UserRoleMapper, UserRole> {
         return existedByField(UserRole::getRoleId, roleId);
     }
 
+    public boolean existsByUserRole(Long userId, Long roleId) {
+        return lambdaQuery()
+                .eq(UserRole::getUserId,userId)
+                .eq(UserRole::getRoleId, roleId)
+                .exists();
+    }
+
     public void deleteByUser(Long userId) {
         deleteByField(UserRole::getUserId, userId);
     }

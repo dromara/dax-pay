@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -115,5 +116,24 @@ public class UserRoleService {
         } else {
             return findRoleIdsByUser(user.getId());
         }
+    }
+
+    /**
+     * 判断当前登录用户和指定角色是否为符合下列条件
+     * 1. 为超级管理员
+     * 2. 拥有当前角色
+     * 3. id为空, 说明是顶级角色, 只有超级管理员可以操作
+     */
+    public boolean checkUserRole(Long roleId){
+        // 为超级管理员
+        UserDetail user = SecurityUtil.getUser();
+        if (user.isAdmin()){
+            return true;
+        }
+        if (Objects.isNull(roleId)){
+            return false;
+        }
+        // 是否分配了该角色
+        return userRoleManager.existsByUserRole(user.getId(), roleId);
     }
 }

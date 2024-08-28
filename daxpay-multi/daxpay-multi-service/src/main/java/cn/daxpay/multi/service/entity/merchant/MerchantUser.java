@@ -26,4 +26,7 @@ public class MerchantUser extends MpCreateEntity {
 
     /** 商户号 */
     private String mchNo;
+
+    /** 是否为商户管理员 */
+    private boolean administrator;
 }

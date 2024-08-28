@@ -129,7 +129,7 @@ public class MerchantService {
         // 分配角色
         userRoleService.saveAssign(userInfo.getId(), Collections.singletonList(admin.getId()));
         // 创建商户绑定关系
-        merchantUserManager.save(new MerchantUser(userInfo.getId(), param.getMchNo()));
+        merchantUserManager.save(new MerchantUser(userInfo.getId(), param.getMchNo(),true));
     }
 
     /**

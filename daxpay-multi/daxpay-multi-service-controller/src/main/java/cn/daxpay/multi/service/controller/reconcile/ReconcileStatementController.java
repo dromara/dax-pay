@@ -1,4 +1,4 @@
-package cn.daxpay.multi.merchant.controller.reconcile;
+package cn.daxpay.multi.service.controller.reconcile;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
@@ -7,7 +7,6 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
-import cn.daxpay.multi.service.param.reconcile.ReconcileCreatParam;
 import cn.daxpay.multi.service.param.reconcile.ReconcileStatementQuery;
 import cn.daxpay.multi.service.param.reconcile.ReconcileUploadParam;
 import cn.daxpay.multi.service.result.reconcile.ReconcileStatementResult;
@@ -17,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author xxm
  * @since 2024/8/7
  */
+@Validated
 @RequestGroup(moduleCode = "reconcile",moduleName = "对账服务", groupCode = "ReconcileStatement", groupName = "对账单")
 @Tag(name = "对账服务控制器")
 @RestController
@@ -33,15 +34,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReconcileStatementController {
     private final ReconcileStatementService statementService;
     private final ReconcileStatementQueryService queryService;
-
-    @RequestPath("手动创建对账订单")
-    @Operation(summary = "手动创建对账订单")
-    @PostMapping("/create")
-    public Result<Void> create(@RequestBody ReconcileCreatParam param){
-        ValidationUtil.validateParam(param);
-        statementService.create(param);
-        return Res.ok();
-    }
 
     @RequestPath("手动触发对账文件下载")
     @Operation(summary = "手动触发对账文件下载")

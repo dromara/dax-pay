@@ -58,7 +58,7 @@ public class RoleQueryService {
             return tree;
         } else {
             // 普通用户, 查询已经分配的角色和下级角色,然后重新构建树
-            return this.recursiveBuildTree(this.findRoleByUser(userDetail.getId(),tree));
+            return this.findRoleByUser(userDetail.getId(),tree);
         }
     }
 
@@ -146,10 +146,21 @@ public class RoleQueryService {
                 .map(UserRole::getRoleId)
                 .toList();
         // 获取关联的角色和子角色
-        List<RoleResult> unfold = TreeBuildUtil.unfold(tree, RoleResult::getChildren);
-        return unfold.stream()
-               .filter(role -> roleIds.contains(role.getId()))
-               .collect(Collectors.toList());
+        List<RoleResult> unfold = TreeBuildUtil.unfold(tree, RoleResult::getChildren).stream()
+                .filter(role -> roleIds.contains(role.getId()))
+                .collect(Collectors.toList());;
+        var list = new ArrayList<>(unfold);
+        // 将子孙级别的角色移除, 只保留根角色
+        for (var out : unfold) {
+            for (var in : unfold) {
+                // out 是 in 的子级, 从list中移除, 并进行下一个元素的判断
+                if (this.isChildOf(unfold,out.getId(),in.getId())){
+                    list.remove(out);
+                    break;
+                }
+            }
+        }
+        return list;
     }
 
     /**
@@ -160,5 +171,23 @@ public class RoleQueryService {
         return TreeBuildUtil.build(roles, null, RoleResult::getId, RoleResult::getPid,
                 RoleResult::setChildren, Comparator.comparingLong(RoleResult::getId));
 
+    }
+
+    /**
+     * 判断是否是别的元素的子级
+     */
+    public boolean isChildOf(List<RoleResult> roles, Long id, Long pid) {
+        // 先找到id元素的上级元素
+        for (var e : roles) {
+            if (Objects.equals(e.getId(), id)) {
+                if (Objects.equals(e.getPid(), pid)) {
+                    return true;  // 找到直接父级
+                } else if (Objects.nonNull(e.getPid())) {
+                    // 递归查找id的上级是否为pid的子级
+                    return isChildOf(roles, e.getPid(), pid);
+                }
+            }
+        }
+        return false;  // 如果找不到id或者pid都不匹配，返回false
     }
 }

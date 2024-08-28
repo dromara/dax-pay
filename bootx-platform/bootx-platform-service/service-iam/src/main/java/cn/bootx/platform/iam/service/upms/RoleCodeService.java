@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.service.upms;
 
+import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.iam.dao.permission.PermCodeManager;
 import cn.bootx.platform.iam.dao.role.RoleManager;
 import cn.bootx.platform.iam.dao.upms.RoleCodeManager;
@@ -39,6 +40,7 @@ public class RoleCodeService {
     private final RoleQueryService roleQueryService;
     private final PermCodeManager permCodeManager;
     private final PermCodeService permCodeService;
+    private final UserRoleService userRoleService;
 
     /**
      * 保存角色路径授权
@@ -46,8 +48,12 @@ public class RoleCodeService {
     @Cacheable(value = "cache:permCode", key = "#param.roleId")
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(PermCodeAssignParam param) {
-
         Long roleId = param.getRoleId();
+        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
+        // 判断是否有上级角色的权限
+        if (!userRoleService.checkUserRole(role.getPid())){
+            throw new ValidationFailedException("你没有权限操作该角色");
+        }
         List<Long> codeIds = param.getCodeIds();
 
         // 先删后增
@@ -72,7 +78,6 @@ public class RoleCodeService {
                 .map(codeId -> new RoleCode(roleId, codeId))
                 .collect(Collectors.toList());
         // 新增时验证是否超过了父级角色所拥有的权限
-        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         if (Objects.nonNull(role.getPid())){
             List<Long> collect = roleCodeManager.findAllByRole(role.getPid())
                     .stream()
@@ -133,16 +138,21 @@ public class RoleCodeService {
     /**
      * 获取当前用户角色下可见的权限码信息(即上级菜单被分配的权限), 并转换成树返回, 分配时使用
      * 如果是顶级角色, 可以查看所有的权限
-     * 如果是子角色, 查询分配给自身的权限
+     * 如果是子角色, 查询父角色关联的权限
+     * 如果是子角色且用户不拥有子角色的上级角色, 返回空
      */
     public List<PermCodeResult> treeByRoleAssign(Long roleId) {
+        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
+        // 判断是否有上级角色的权限, 没有权限返回空
+        if (!userRoleService.checkUserRole(role.getPid())){
+            return new ArrayList<>(0);
+        }
         // 查询全部的权限码, 后续生成树时也会使用
         List<PermCode> allPermCodes = permCodeManager.findAll();
         // 权限码列表
         List<PermCode> permCodes = allPermCodes.stream()
                 .filter(PermCode::isLeaf)
                 .toList();;
-        Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         // 如果有有上级角色, 显示上级角色已分配的权限
         if (Objects.nonNull(role.getPid())){
             List<Long> codeIds = roleCodeManager.findAllByRole(role.getPid())
@@ -206,4 +216,5 @@ public class RoleCodeService {
                 .eq(RoleCode::getRoleId, roleId);
         return roleManager.selectJoinList(String.class, wrapper);
     }
+
 }

@@ -20,10 +20,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- 支付服务 -->
+        <!-- 支付服务和通用控制器 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>
-            <artifactId>daxpay-multi-service</artifactId>
+            <artifactId>daxpay-multi-service-controller</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
 
