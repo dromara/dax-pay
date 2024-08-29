@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -33,6 +35,17 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
         Page<TransferOrder> mpPage = MpUtil.getMpPage(pageParam, TransferOrder.class);
         QueryWrapper<TransferOrder> generator = QueryGenerator.generator(query);
         return page(mpPage,generator);
+    }
+
+    /**
+     * 查询退款中的支付订单
+     */
+    public List<TransferOrder> findAllByProgress() {
+        LocalDateTime now = LocalDateTime.now();
+        return lambdaQuery()
+                .le(TransferOrder::getCreateTime,now)
+                .eq(TransferOrder::getStatus, TransferStatusEnum.PROGRESS.getCode())
+                .list();
     }
 
     /**

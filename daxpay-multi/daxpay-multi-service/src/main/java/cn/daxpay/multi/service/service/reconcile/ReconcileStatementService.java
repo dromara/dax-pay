@@ -85,7 +85,6 @@ public class ReconcileStatementService {
     /**
      * 下载对账单并进行保存
      */
-    @Transactional(rollbackFor = Exception.class)
     public void downAndSave(Long reconcileOrderId) {
         ReconcileStatement statement = reconcileStatementManager.findById(reconcileOrderId)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));

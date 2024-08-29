@@ -69,3 +69,23 @@ bootx-platform:
 dax-pay:
   env: DEV_
   machine-no: 80
+dromara:
+  # 注意, 不要设置 domain 访问路径, 自行进行拼接访问路径, 来保证可迁移性
+  x-file-storage:
+    default-platform: minio
+    # 使用Nginx映射到存储路径, 然后将nginx的地址设置到 bootx-platform.starter.file-upload.file-server-url参数
+    local-plus:
+      - platform: local
+        enable-storage: true
+        base-path: /file/ # 基础路径
+        storage-path: D:/data/files # 存储路径
+    # 将 minio访问地址+桶名称 进行组合, 然后设置到 bootx-platform.starter.file-upload.file-server-url
+    # 例如 minio地址 http://127.0.0.1:9001  桶名称 daxpay, 拼接后的地址为 http://127.0.0.1:9001/daxpay/
+    minio:
+      - platform: minio
+        enable-storage: true
+        access-key: yDAArSoyQAligC2IGf7C
+        secret-key: vDgpt5R4kR2UCapMzx32Rb6qZegok21dRsU6XJ1j
+        end-point: http://127.0.0.1:9002  # minio访问地址
+        bucket-name: daxpay # 存储桶名称
+        base-path: /file/ # 基础存储路径
