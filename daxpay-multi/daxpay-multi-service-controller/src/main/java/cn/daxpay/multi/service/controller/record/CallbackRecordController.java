@@ -1,6 +1,7 @@
 package cn.daxpay.multi.service.controller.record;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -28,12 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class CallbackRecordController {
     private final TradeCallbackRecordService service;
 
+    @RequestPath("分页查询")
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<TradeCallbackRecordResult>> page(PageParam pageParam, TradeCallbackRecordQuery query){
         return Res.ok(service.page(pageParam, query));
     }
 
+    @RequestPath("查询单条")
     @Operation(summary = "查询单条")
     @GetMapping("/findById")
     public Result<TradeCallbackRecordResult> findById(Long id){

@@ -50,8 +50,6 @@ public class RoleMenuService {
 
     private final PermMenuManager permMenuManager;
 
-
-
     /**
      * 保存角色菜单授权
      * 如果删除角色关门的菜单关系, 将会级联删除子孙角色的菜单关系

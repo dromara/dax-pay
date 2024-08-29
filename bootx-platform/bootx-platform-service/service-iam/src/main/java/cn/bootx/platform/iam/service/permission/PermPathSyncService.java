@@ -10,6 +10,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
@@ -47,6 +48,7 @@ public class PermPathSyncService {
     /**
      * 同步
      */
+    @CacheEvict(value = "cache:permPath", allEntries = true)
     public void sync() {
         String clientCode = bootxConfigProperties.getClientCode();
         // 获取系统中的请求路径
@@ -54,7 +56,6 @@ public class PermPathSyncService {
 
         // 查询数据中的数据并转换为请求信息列表
         List<PermPath> permPaths = permPathManager.findAllByLeafAndClient(true,clientCode);
-
         var requestPathMap = requestPathBos.stream()
                 .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
         var permPathMap = permPaths.stream()
@@ -77,8 +78,8 @@ public class PermPathSyncService {
         // 删除关联关系
         rolePathManager.deleteByPathIds(deleteIds);
 
-        // 重建树结构 删除非子节点
-        permPathManager.deleteNotChild();
+        // 重建树结构 删除指定终端的非子节点
+        permPathManager.deleteNotChild(clientCode);
         // 生成模块信息
         var moduleMap = this.builderModule(requestPathBos);
         // 生成分组信息
@@ -189,8 +190,7 @@ public class PermPathSyncService {
      * 获取系统请求列表
      */
     public List<RequestPathBo> getRequestPath(){
-        RequestMappingHandlerMapping mapping = applicationContext.getBean(REQUEST_MAPPING_HANDLER_MAPPING,
-                RequestMappingHandlerMapping.class);
+        RequestMappingHandlerMapping mapping = applicationContext.getBean(REQUEST_MAPPING_HANDLER_MAPPING, RequestMappingHandlerMapping.class);
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 
         // 进行过滤, 只保留带有路径权限标识的映射

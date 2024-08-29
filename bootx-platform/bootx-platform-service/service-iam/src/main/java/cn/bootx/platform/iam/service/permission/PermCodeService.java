@@ -15,6 +15,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,7 @@ public class PermCodeService {
     /**
      * 更新
      */
+    @CacheEvict(value = "cache:permCode", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(PermCodeParam param) {
         PermCode permCode = permCodeManager.findById(param.getId()).orElseThrow(() -> new BizException("权限码信息不存在"));
@@ -105,6 +107,7 @@ public class PermCodeService {
     /**
      * 删除
      */
+    @CacheEvict(value = "cache:permCode", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         PermCode permCode = permCodeManager.findById(id).orElseThrow(() -> new BizException("权限码信息不存在"));

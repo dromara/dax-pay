@@ -40,7 +40,7 @@ public class MerchantController {
 
     @RequestPath("获取商户信息")
     @Operation(summary = "获取商户信息")
-    @PostMapping("/get")
+    @GetMapping("/get")
     public Result<MerchantResult> getMerchant(){
         return Res.ok(merchantInfoService.getMerchant());
     }

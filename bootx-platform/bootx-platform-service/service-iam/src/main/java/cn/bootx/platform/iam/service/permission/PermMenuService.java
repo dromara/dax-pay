@@ -13,6 +13,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +51,7 @@ public class PermMenuService {
     /**
      * 更新
      */
+    @CacheEvict(value = "cache:permMenu", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(PermMenuParam param) {
         PermMenu permMenu = permMenuManager.findById(param.getId()).orElseThrow(() -> new DataNotExistException("菜单不存在"));
@@ -94,6 +96,7 @@ public class PermMenuService {
     /**
      * 删除
      */
+    @CacheEvict(value = "cache:permMenu", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         // 有子菜单不可以删除

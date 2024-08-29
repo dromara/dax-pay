@@ -29,7 +29,7 @@ public class PermPathManager extends BaseManager<PermPathMapper, PermPath> {
     }
 
     /**
-     * 根据终端ID查询
+     * 根据终端类型查询
      */
     public List<PermPath> findAllByClient(String clientCode) {
         return lambdaQuery()
@@ -40,8 +40,11 @@ public class PermPathManager extends BaseManager<PermPathMapper, PermPath> {
     /**
      * 删除非子节点
      */
-    public void deleteNotChild() {
-        lambdaUpdate().eq(PermPath::isLeaf, false).remove();
+    public void deleteNotChild(String clientCode) {
+        lambdaUpdate()
+                .eq(PermPath::getClientCode, clientCode)
+                .eq(PermPath::isLeaf, false)
+                .remove();
     }
 
 

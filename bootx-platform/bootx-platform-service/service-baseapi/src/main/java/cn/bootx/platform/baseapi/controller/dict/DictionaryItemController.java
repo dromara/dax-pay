@@ -3,6 +3,7 @@ package cn.bootx.platform.baseapi.controller.dict;
 import cn.bootx.platform.baseapi.param.dict.DictionaryItemParam;
 import cn.bootx.platform.baseapi.result.dict.DictionaryItemResult;
 import cn.bootx.platform.baseapi.service.dict.DictionaryItemService;
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.validation.ValidationGroup;
@@ -86,7 +87,7 @@ public class DictionaryItemController {
         return Res.ok(dictionaryItemService.findAll());
     }
 
-    @RequestPath("获取启用的字典项列表")
+    @IgnoreAuth
     @Operation(summary = "获取启用的字典项列表")
     @GetMapping("/findAllByEnable")
     public Result<List<DictionaryItemResult>> findAllByEnable() {
