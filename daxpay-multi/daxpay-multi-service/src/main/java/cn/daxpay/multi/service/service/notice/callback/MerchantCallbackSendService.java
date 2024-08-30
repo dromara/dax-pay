@@ -71,7 +71,7 @@ public class MerchantCallbackSendService {
             record.setErrorMsg(e.getMessage());
         }
         // 如果响应值等于SUCCESS, 说明发送成功, 进行成功处理
-        if (Objects.equals(body, "SUCCESS")){
+        if (StrUtil.equalsIgnoreCase(body, "SUCCESS")){
             task.setSendCount(task.getSendCount() + 1)
                     .setLatestTime(sendTime)
                     .setSuccess(true);;

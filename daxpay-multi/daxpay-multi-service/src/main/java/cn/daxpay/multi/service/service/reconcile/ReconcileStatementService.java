@@ -88,6 +88,13 @@ public class ReconcileStatementService {
     public void downAndSave(Long reconcileOrderId) {
         ReconcileStatement statement = reconcileStatementManager.findById(reconcileOrderId)
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
+        this.downAndSave(statement);
+    }
+
+    /**
+     * 下载对账单并进行保存
+     */
+    public void downAndSave(ReconcileStatement statement) {
         // 如果对账单已经存在
         if (statement.isDownOrUpload()){
             throw new OperationFailException("对账单文件已经下载或上传");
@@ -166,10 +173,16 @@ public class ReconcileStatementService {
      * 数据比对
      */
     @Transactional(rollbackFor = Exception.class)
-    public void compare(Long id){
+    public void compare(Long id) {
         var statement = reconcileStatementManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("未找到对账单"));
-
+        this.compare(statement);
+    }
+    /**
+     * 数据比对
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void compare(ReconcileStatement statement){
         // 判断是否已经下载了对账单明细
         if (!statement.isDownOrUpload()){
             throw new OperationFailException("请先下载对账单");

@@ -1,17 +1,18 @@
 package cn.daxpay.multi.gateway.task;
 
-import cn.bootx.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.multi.service.dao.order.pay.PayOrderManager;
 import cn.daxpay.multi.service.dao.order.refund.RefundOrderManager;
 import cn.daxpay.multi.service.dao.order.transfer.TransferOrderManager;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
+import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.service.trade.pay.PaySyncService;
 import cn.daxpay.multi.service.service.trade.refund.RefundSyncService;
 import cn.daxpay.multi.service.service.trade.transfer.TransferSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,6 @@ import java.util.List;
  * @author xxm
  * @since 2024/8/29
  */
-@IgnoreTenant
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,53 +33,57 @@ public class OrderSyncTaskService {
     private final RefundSyncService refundSyncService;
     private final TransferOrderManager transferOrderManager;
     private final TransferSyncService transferSyncService;
-
+    private final PaymentAssistService paymentAssistService;
     /**
      * 支付单超时检测 一分钟一次, 查询支付
      */
+    @Scheduled(cron = "0 */1 * * * ?")
     public void queryExpiredTask(){
         // 从数据库查询获取超时的任务对象
         List<PayOrder> payOrders = payOrderManager.queryExpiredOrder();
         for (PayOrder order : payOrders) {
             try {
                 // 设置补偿来源为定时任务
+                paymentAssistService.initMchAndApp(order.getMchNo(),order.getAppId());
                 paySyncService.syncPayOrder(order);
             } catch (Exception e) {
-                log.error("超时取消任务 异常", e);
+                log.error("超时取消任务异常, ID: {}, 订单号: {}",order.getId(), order.getOrderNo(), e);
             }
         }
     }
 
 
     /**
-     * 退款定时同步任务 一分钟一次, 查询退款中的订单进行同步
+     * 退款定时同步任务 一分钟一次, 查询一分钟之前退款中的订单进行同步
      */
+    @Scheduled(cron = "0 */1 * * * ?")
     public void refundSyncTask(){
         // 查询退款中的退款订单
         List<RefundOrder> list = refundOrderManager.findAllByProgress();
         for (RefundOrder refundOrder : list) {
             try {
                 // 调用同步方法
+                paymentAssistService.initMchAndApp(refundOrder.getMchNo(),refundOrder.getAppId());
                 refundSyncService.syncRefundOrder(refundOrder);
             } catch (Exception e) {
-                log.warn("退款执行同步失败, ID: {}",refundOrder.getId());
-                log.warn("退款执行同步失败",e);
+                log.warn("退款执行同步失败, ID: {}, 退款号: {}",refundOrder.getId(), refundOrder.getRefundNo(), e);
             }
         }
     }
 
     /**
-     * 转账订单同步, 一分钟一次, 获取转账中的订单
+     * 转账订单同步, 一分钟一次, 获取一分钟之前转账中的订单
      */
+    @Scheduled(cron = "0 */1 * * * ?")
     public void transferSyncTask(){
         List<TransferOrder> list = transferOrderManager.findAllByProgress();
         for (var transferOrder : list) {
             try {
                 // 调用同步方法
+                paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
                 transferSyncService.syncTransferOrder(transferOrder);
             } catch (Exception e) {
-                log.warn("转账执行同步失败, ID: {}",transferOrder.getId());
-                log.warn("转账执行同步失败",e);
+                log.warn("转账执行同步失败, ID: {}, 转账号: {}",transferOrder.getId(),transferOrder.getTransferNo(), e);
             }
         }
     }

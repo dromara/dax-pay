@@ -29,4 +29,11 @@ public class AlipayParam implements ChannelParam {
      */
     private String openId;
 
+
+    /**
+     * 买家支付宝用户ID
+     * 新商户建议使用buyer_open_id替代该字段。对于新商户，buyer_id字段未来计划逐步回收，存量商户可继续使用
+     */
+    private String buyerId;
+
 }

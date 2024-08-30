@@ -1,8 +1,10 @@
 package cn.daxpay.multi.service.dao.order.transfer;
 
+import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.annotation.IgnoreTenant;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -38,13 +41,14 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
     }
 
     /**
-     * 查询退款中的支付订单
+     * 查询一分钟前转账中的订单
      */
+    @IgnoreTenant
     public List<TransferOrder> findAllByProgress() {
         LocalDateTime now = LocalDateTime.now();
         return lambdaQuery()
-                .le(TransferOrder::getCreateTime,now)
                 .eq(TransferOrder::getStatus, TransferStatusEnum.PROGRESS.getCode())
+                .le(MpCreateEntity::getCreateTime, now.plusMinutes(1L))
                 .list();
     }
 
@@ -65,7 +69,7 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
     /**
      * 查询汇总金额
      */
-    public Integer getTotalAmount(TransferOrderQuery query){
+    public BigDecimal getTotalAmount(TransferOrderQuery query){
         QueryWrapper<TransferOrderQuery> generator = QueryGenerator.generator(query);
         generator.eq(MpUtil.getColumnName(TransferOrder::getStatus), TransferStatusEnum.SUCCESS.getCode());
         return baseMapper.getTotalAmount(generator);

@@ -52,7 +52,7 @@ public class PayOrderTest {
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
-        param.setNotifyUrl("https://abc.com/callback");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
@@ -77,7 +77,7 @@ public class PayOrderTest {
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
-        param.setNotifyUrl("https://abc.com/callback");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
@@ -87,10 +87,71 @@ public class PayOrderTest {
      * 微信jsapi
      */
     @Test
-    public void aliPayJsApi() {
+    public void wxPayJsApi() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试微信公众号预支付");
+        param.setAmount(BigDecimal.valueOf(0.01));
+        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setMethod(PayMethodEnum.JSAPI.getCode());
+
+        WechatPayParam wechatPayParam = new WechatPayParam();
+        wechatPayParam.setOpenId("");
+        param.setExtraParam(JsonUtil.toJsonStr(wechatPayParam));
+
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
     }
 
+    /**
+     * 微信h5支付
+     */
+    @Test
+    public void wxPayH5Pay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试微信h5支付");
+        param.setAmount(BigDecimal.valueOf(0.01));
+        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setMethod(PayMethodEnum.WAP.getCode());
 
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
+    }
+
+    /**
+     * 微信APP支付
+     */
+    @Test
+    public void wxPayAppPay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试微信应用支付");
+        param.setDescription("这是备注");
+        param.setAmount(BigDecimal.valueOf(10));
+        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setMethod(PayMethodEnum.QRCODE.getCode());
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
+    }
 
     /**
      * 支付宝支付(二维码扫码)
@@ -108,7 +169,7 @@ public class PayOrderTest {
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
-        param.setNotifyUrl("https://abc.com/callback");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
@@ -130,7 +191,7 @@ public class PayOrderTest {
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
-        param.setNotifyUrl("https://abc.com/callback");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
@@ -157,7 +218,7 @@ public class PayOrderTest {
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
-        param.setNotifyUrl("https://abc.com/callback");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
@@ -173,13 +234,62 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试支付宝WEB支付");
         param.setDescription("这是支付宝WEB支付");
-        param.setAmount(BigDecimal.valueOf(50000));
+        param.setAmount(BigDecimal.valueOf(1.52));
         param.setChannel(PayChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.WEB.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
-        param.setNotifyUrl("https://abc.com/callback");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
+    }
+
+    /**
+     * 支付宝jsapi支付
+     */
+    @Test
+    public void aliPayJsApiPay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试支付宝JsApi支付");
+        param.setDescription("这是支付宝WEB支付");
+        param.setAmount(BigDecimal.valueOf(1.52));
+        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setMethod(PayMethodEnum.JSAPI.getCode());
+
+        AlipayParam alipayParam = new AlipayParam();
+        alipayParam.setOpAppId("9021000135649359");
+        alipayParam.setOpenId("06599D4kvsqTsdNkN1xG05ZACe29h4bm2hi78vsAEVnGCI2");
+        param.setExtraParam(JsonUtil.toJsonStr(alipayParam));
+
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
+    }
+
+    /**
+     * 支付宝应用支付
+     */
+    @Test
+    public void aliPayAppPay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试支付宝APP支付");
+        param.setAmount(BigDecimal.valueOf(1.52));
+        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setMethod(PayMethodEnum.APP.getCode());
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
 
         DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));

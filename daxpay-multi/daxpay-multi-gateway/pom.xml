@@ -38,6 +38,13 @@
             <version>${bootx-platform.version}</version>
         </dependency>
 
+        <!--文件存储 (minio方式)-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+        </dependency>
+
         <!-- 支付服务 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>

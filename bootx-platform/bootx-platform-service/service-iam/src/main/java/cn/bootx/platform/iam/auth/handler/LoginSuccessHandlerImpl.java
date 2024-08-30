@@ -30,8 +30,6 @@ public class LoginSuccessHandlerImpl implements LoginSuccessHandler {
 
     private final LoginLogService loginLogService;
 
-//    private final UserExpandInfoService userExpandInfoService;
-
     private final IpToRegionService ipToRegionService;
 
 

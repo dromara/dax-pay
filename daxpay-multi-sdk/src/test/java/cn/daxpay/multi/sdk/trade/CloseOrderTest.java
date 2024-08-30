@@ -16,7 +16,6 @@ import org.junit.Test;
  */
 public class CloseOrderTest {
 
-
     @Before
     public void init() {
         // 初始化支付配置

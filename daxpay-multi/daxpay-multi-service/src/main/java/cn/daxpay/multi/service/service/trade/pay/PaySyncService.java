@@ -51,6 +51,7 @@ public class PaySyncService {
     private final TradeSyncRecordService tradeSyncRecordService;
 
     private final LockTemplate lockTemplate;
+
     private final MerchantNoticeService merchantNoticeService;
 
     /**
@@ -193,6 +194,7 @@ public class PaySyncService {
         // 初始化调整参数
         AbsPayCloseStrategy strategy = PaymentStrategyFactory.create(order.getChannel(), AbsPayCloseStrategy.class);
         strategy.setOrder(order);
+        strategy.doBeforeCloseHandler();
         // 执行策略的关闭方法
         strategy.doCloseHandler();
         order.setStatus(CLOSE.getCode())

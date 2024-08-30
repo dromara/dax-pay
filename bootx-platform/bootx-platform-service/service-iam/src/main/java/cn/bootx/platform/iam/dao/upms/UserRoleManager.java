@@ -50,13 +50,4 @@ public class UserRoleManager extends BaseManager<UserRoleMapper, UserRole> {
         return findAllByFields(UserRole::getRoleId, roleIds);
     }
 
-    /**
-     * 批量保存
-     */
-//    public List<UserRole> saveAll(List<UserRole> userRoles) {
-//        MpUtil.initEntityList(userRoles, SecurityUtil.getUserIdOrDefaultId());
-//        MpUtil.executeBatch(userRoles, baseMapper::saveAll, this.DEFAULT_BATCH_SIZE);
-//        return userRoles;
-//    }
-
 }

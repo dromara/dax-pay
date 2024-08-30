@@ -55,6 +55,12 @@
             <artifactId>hutool-cache</artifactId>
             <version>${hutool.version}</version>
         </dependency>
+        <!-- hutool 请求工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
         <!-- 安全认证 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>

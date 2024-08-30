@@ -1,8 +1,10 @@
 package cn.daxpay.multi.service.dao.order.refund;
 
+import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.annotation.IgnoreTenant;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
@@ -60,13 +62,14 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     }
 
     /**
-     * 查询退款中的支付订单
+     * 查询一分钟之前的退款中的支付订单
      */
+    @IgnoreTenant
     public List<RefundOrder> findAllByProgress() {
         LocalDateTime now = LocalDateTime.now();
         return lambdaQuery()
-                .le(RefundOrder::getCreateTime,now)
                 .eq(RefundOrder::getStatus, RefundStatusEnum.PROGRESS.getCode())
+                .le(MpCreateEntity::getCreateTime, now.plusMinutes(1L))
                 .list();
     }
 

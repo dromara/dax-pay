@@ -56,8 +56,8 @@ public class AlipayConfigResult {
     @SensitiveInfo
     public String alipayPublicKey;
 
-    /** 私钥 */
-    @Schema(description = "私钥")
+    /** 应用私钥 */
+    @Schema(description = "应用私钥")
     @SensitiveInfo
     private String privateKey;
 

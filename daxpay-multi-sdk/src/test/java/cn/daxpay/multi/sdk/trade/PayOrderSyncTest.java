@@ -28,6 +28,11 @@ public class PayOrderSyncTest {
         DaxPayKit.initConfig(config);
     }
 
+    /**
+     * 支付订单同步
+     * 1. 微信
+     * 2. 支付宝
+     */
     @Test
     public void testPay() {
         PaySyncParam param = new PaySyncParam();

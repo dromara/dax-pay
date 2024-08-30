@@ -49,6 +49,16 @@ public class ChannelConfigManager extends BaseManager<ChannelConfigMapper, Chann
                 .eq(ChannelConfig::getAppId, appId)
                 .list();
     }
+    /**
+     * 根据应用号查询启用的配置
+     */
+    public List<ChannelConfig> findEnableByAppId(String appId) {
+        return lambdaQuery()
+                .select(this.getEntityClass (), MpUtil::excludeBigField)
+                .eq(ChannelConfig::isEnable, true)
+                .eq(ChannelConfig::getAppId, appId)
+                .list();
+    }
 
     /**
      * 根据应用号和通道查询

@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -92,7 +93,7 @@ public class PayOrderQueryService {
     /**
      * 查询支付总金额
      */
-    public Integer getTotalAmount(PayOrderQuery param) {
+    public BigDecimal getTotalAmount(PayOrderQuery param) {
         return payOrderManager.getTotalAmount(param);
     }
 }

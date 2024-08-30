@@ -3,14 +3,10 @@ package cn.daxpay.multi.service.common.cache;
 import cn.daxpay.multi.core.exception.ConfigNotEnableException;
 import cn.daxpay.multi.service.dao.merchant.MchAppManager;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
-import cn.hutool.cache.Cache;
-import cn.hutool.cache.CacheUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 /**
  * 商户应用缓存服务
@@ -21,7 +17,6 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class MchAppCacheService {
-    private final Cache<String, MchApp> cache = CacheUtil.newLRUCache(200,15 * 60 * 1000);
 
     private final MchAppManager mchAppManager;
 
@@ -30,20 +25,8 @@ public class MchAppCacheService {
      */
     @Cacheable(value = "cache:mchApp", key = "#appId")
     public MchApp get(String appId) {
-        var mchApp = cache.get(appId);
-        if (Objects.isNull(mchApp)) {
-            mchApp = mchAppManager.findByAppId(appId)
-                    .orElseThrow(() -> new ConfigNotEnableException("未找到指定的应用配置"));
-//            cache.put(appId, mchApp);
-        }
-        return mchApp;
-    }
-
-    /**
-     * 清楚并更新通道配置
-     */
-    public void remove(String appId) {
-        cache.remove(appId);
+        return mchAppManager.findByAppId(appId)
+                .orElseThrow(() -> new ConfigNotEnableException("未找到指定的应用配置"));
     }
 
 }

@@ -30,4 +30,11 @@ public class AlipayParam {
     @Schema(description = "买家支付宝用户唯一标识")
     private String openId;
 
+    /**
+     * 新商户建议使用buyer_open_id替代该字段。对于新商户，buyer_id字段未来计划逐步回收，存量商户可继续使用
+     */
+    @Schema(description = "买家支付宝用户ID")
+    private String buyerId;
+
+
 }

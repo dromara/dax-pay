@@ -5,6 +5,7 @@ import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
+import cn.daxpay.multi.service.enums.MchAppStautsEnum;
 import cn.daxpay.multi.service.param.merchant.MchAppQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,6 +15,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -65,5 +67,13 @@ public class MchAppManager extends BaseManager<MchAppMapper, MchApp> {
         Page<MchApp> mpPage = MpUtil.getMpPage(pageParam);
         QueryWrapper<MchApp> wrapper = QueryGenerator.generator(query);
         return this.page(mpPage, wrapper);
+    }
+
+    /**
+     * 根据状态查询所有
+     */
+    public List<MchApp> findAllByStatus(MchAppStautsEnum status) {
+        return findAllByField(MchApp::getStatus, status.getCode());
+
     }
 }

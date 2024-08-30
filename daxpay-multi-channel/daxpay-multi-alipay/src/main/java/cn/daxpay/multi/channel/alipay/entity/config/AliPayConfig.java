@@ -50,7 +50,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     /** 支付宝公钥 */
     public String alipayPublicKey;
 
-    /** 私钥 */
+    /** 应用私钥 */
     private String privateKey;
 
     /** 应用公钥证书 */

@@ -15,6 +15,7 @@ import cn.daxpay.multi.service.dao.merchant.MerchantManager;
 import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import cn.daxpay.multi.service.entity.merchant.MchApp;
 import cn.daxpay.multi.service.entity.merchant.Merchant;
+import cn.daxpay.multi.service.enums.MchAppStautsEnum;
 import cn.daxpay.multi.service.param.merchant.MchAppParam;
 import cn.daxpay.multi.service.param.merchant.MchAppQuery;
 import cn.daxpay.multi.service.result.merchant.MchAppResult;
@@ -53,7 +54,8 @@ public class MchAppService {
         }
         MchApp entity = MchAppConvert.CONVERT.toEntity(param);
         // 生成应用号
-        entity.setAppId(this.generateAppId());
+        entity.setAppId(this.generateAppId())
+                .setStatus(MchAppStautsEnum.ENABLE.getCode());
         mchAppManager.save(entity);
     }
     /**

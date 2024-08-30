@@ -9,10 +9,13 @@ import cn.daxpay.multi.channel.wechat.result.pay.WxPayCodepayResult;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.channel.wechat.util.WechatPayUtil;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
+import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.exception.TradeFailException;
+import cn.daxpay.multi.core.result.trade.pay.PaySyncResult;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.bo.trade.PayResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
+import cn.daxpay.multi.service.service.trade.pay.PaySyncService;
 import cn.hutool.extra.spring.SpringUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
@@ -47,6 +50,7 @@ public class WechatPayV3Service {
     private final WechatPayConfigService wechatPayConfigService;
 
     private static final Gson GSON = new GsonBuilder().create();
+    private final PaySyncService paySyncService;
 
     /**
      * 调起支付
@@ -270,11 +274,11 @@ public class WechatPayV3Service {
     @Async
     @Retryable(retryFor = RetryableException.class, maxAttempts = 10, backoff = @Backoff(value = 5000L))
     public void rotationSync(PayOrder payOrder) {
-//        PaySyncResult paySyncResult = paySyncService.syncPayOrder(payOrder);
-//        // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
-//        if (Objects.equals(PROGRESS.getCode(), paySyncResult.getStatus())) {
-//            throw new RetryableException();
-//        }
+        PaySyncResult paySyncResult = paySyncService.syncPayOrder(payOrder);
+        // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
+        if (Objects.equals(PayStatusEnum.PROGRESS.getCode(), paySyncResult.getOrderStatus())) {
+            throw new RetryableException();
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package cn.bootx.platform.baseapi.handler.mp;
 import cn.bootx.platform.common.mybatisplus.function.MetaObjectFill;
 import cn.bootx.platform.core.code.CommonCode;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
+import cn.hutool.core.util.DesensitizedUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -37,8 +38,11 @@ public class BaseMetaObjectHandler implements MetaObjectFill {
      * 获取用户Id
      */
     public Long getUserid() {
-//        return SecurityUtil.getCurrentUser().map(UserDetail::getId).orElse(DesensitizedUtil.userId());
-        return SecurityUtil.getUserIdOrDefaultId();
+        try {
+            return SecurityUtil.getUserIdOrDefaultId();
+        } catch (Exception e) {
+            return DesensitizedUtil.userId();
+        }
     }
 
 }

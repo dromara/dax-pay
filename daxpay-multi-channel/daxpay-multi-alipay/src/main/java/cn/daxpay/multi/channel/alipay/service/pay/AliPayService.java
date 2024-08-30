@@ -226,7 +226,14 @@ public class AliPayService {
         model.setOpAppId(aliPayParam.getOpAppId());
         model.setTotalAmount(amount);
         model.setSubject(payOrder.getTitle());
-        model.setOpBuyerOpenId(aliPayParam.getOpenId());
+
+        // 如果有openId则使用openId，否则使用支付宝用户ID
+        if (StrUtil.isNotEmpty(aliPayParam.getOpenId())){
+            model.setOpBuyerOpenId(aliPayParam.getOpenId());
+        } else {
+            model.setBuyerId(aliPayParam.getBuyerId());
+        }
+
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         // 是否分账
         if (payOrder.getAllocation()){

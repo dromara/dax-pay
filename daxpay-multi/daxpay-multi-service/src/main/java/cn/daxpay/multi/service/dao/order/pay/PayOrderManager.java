@@ -3,6 +3,7 @@ package cn.daxpay.multi.service.dao.order.pay;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.annotation.IgnoreTenant;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -77,7 +79,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     /**
      * 查询汇总金额
      */
-    public Integer getTotalAmount(PayOrderQuery query){
+    public BigDecimal getTotalAmount(PayOrderQuery query){
         QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
         // 商户和应用AppId
         generator.eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
@@ -87,6 +89,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     /**
      * 查询当前超时的未支付订单
      */
+    @IgnoreTenant
     public List<PayOrder> queryExpiredOrder() {
         return lambdaQuery()
                 .eq(PayOrder::getStatus, PayStatusEnum.PROGRESS.getCode())
