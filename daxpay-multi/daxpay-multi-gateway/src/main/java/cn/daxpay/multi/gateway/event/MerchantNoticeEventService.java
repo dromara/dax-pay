@@ -43,7 +43,7 @@ public class MerchantNoticeEventService {
     public void NotifyTaskReceiveJob(DelayJobEvent<Long> event){
         // 获取任务
         Long taskId = event.getMessage();
-        var taskOpt = merchantNotifyTaskManager.findById(taskId);
+        var taskOpt = merchantNotifyTaskManager.findByIdNotTenant(taskId);
         if (taskOpt.isPresent()){
             var task = taskOpt.get();
             paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
@@ -68,7 +68,7 @@ public class MerchantNoticeEventService {
     public void callbackReceiveJob(DelayJobEvent<Long> event){
         // 获取任务
         Long taskId = event.getMessage();
-        var taskOpt = merchantCallbackTaskManager.findById(taskId);
+        var taskOpt = merchantCallbackTaskManager.findByIdNotTenant(taskId);
         if (taskOpt.isPresent()){
             var task = taskOpt.get();
             paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());

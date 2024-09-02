@@ -93,7 +93,7 @@ public class SecurityUtil {
             }
             catch (SaTokenException e) {
                 userDetail = Optional.empty();
-                log.warn("获取当前用户失败", e);
+                log.warn("获取当前用户失败: {}", e.getMessage());
             }
         }
         return userDetail;

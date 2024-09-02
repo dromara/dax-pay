@@ -1,5 +1,6 @@
 package cn.daxpay.multi.channel.alipay.controller;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.channel.alipay.service.callback.AliPayCallbackService;
 import cn.daxpay.multi.channel.alipay.service.callback.AliPayRefundCallbackService;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/9/2
  */
+@IgnoreAuth
 @Tag(name = "支付宝回调通知")
 @RestController
 @RequestMapping("/unipay/callback/{mchNo}/{AppId}/alipay")

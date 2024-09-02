@@ -1,4 +1,4 @@
-package cn.daxpay.multi.channel.wechat.controller.config;
+package cn.daxpay.multi.channel.wechat.controller;
 
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;

@@ -3,6 +3,7 @@ package cn.daxpay.multi.service.dao.notice.callback;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.annotation.IgnoreTenant;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.notice.callback.MerchantCallbackTask;
 import cn.daxpay.multi.service.param.notice.callback.MerchantCallbackTaskQuery;
@@ -11,6 +12,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  *
@@ -32,4 +35,11 @@ public class MerchantCallbackTaskManager extends BaseManager<MerchantCallbackTas
         return this.page(mpPage, generator);
     }
 
+    /**
+     * 获取数据, 不过滤租户
+     */
+    @IgnoreTenant
+    public Optional<MerchantCallbackTask> findByIdNotTenant(Long taskId) {
+        return this.findById(taskId);
+    }
 }

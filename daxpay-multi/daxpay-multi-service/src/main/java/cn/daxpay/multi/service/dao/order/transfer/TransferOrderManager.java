@@ -74,4 +74,11 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
         generator.eq(MpUtil.getColumnName(TransferOrder::getStatus), TransferStatusEnum.SUCCESS.getCode());
         return baseMapper.getTotalAmount(generator);
     }
+
+    /**
+     * 查询订单, 不过滤租户
+     */
+    public Optional<TransferOrder> findByIdNotTenant(Long id) {
+        return findById(id);
+    }
 }

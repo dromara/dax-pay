@@ -45,7 +45,6 @@ public class DelayJobProcessor implements BeanPostProcessor {
                 if (!proxyBeans.containsKey(beanName)) {
                     proxyBeans.put(beanName, bean);
                 }
-                break;
             }
         }
         return bean;

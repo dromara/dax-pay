@@ -1,4 +1,4 @@
-package cn.daxpay.multi.channel.wechat.controller.callback;
+package cn.daxpay.multi.channel.wechat.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.channel.wechat.service.callback.WechatPayCallbackService;

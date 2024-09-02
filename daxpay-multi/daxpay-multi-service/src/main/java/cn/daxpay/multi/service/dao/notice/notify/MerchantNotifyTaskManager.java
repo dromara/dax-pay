@@ -3,6 +3,7 @@ package cn.daxpay.multi.service.dao.notice.notify;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
+import cn.bootx.platform.core.annotation.IgnoreTenant;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.daxpay.multi.service.entity.notice.notify.MerchantNotifyTask;
 import cn.daxpay.multi.service.param.notice.notify.MerchantNotifyTaskQuery;
@@ -11,6 +12,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  *
@@ -29,5 +32,13 @@ public class MerchantNotifyTaskManager extends BaseManager<MerchantNotifyTaskMap
         var mpPage = MpUtil.getMpPage(param, MerchantNotifyTask.class);
         QueryWrapper<MerchantNotifyTask> generator = QueryGenerator.generator(query);
         return this.page(mpPage, generator);
+    }
+
+    /**
+     * 获取数据, 不经过租户
+     */
+    @IgnoreTenant
+    public Optional<MerchantNotifyTask> findByIdNotTenant(Long taskId) {
+        return this.findById(taskId);
     }
 }

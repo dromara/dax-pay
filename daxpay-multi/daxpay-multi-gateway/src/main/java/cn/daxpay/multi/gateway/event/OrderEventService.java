@@ -46,7 +46,7 @@ public class OrderEventService {
      */
     @DelayEventListener(DaxPayCode.Event.MERCHANT_PAY_TIMEOUT)
     public void payExpired(DelayJobEvent<Long> event) {
-        Optional<PayOrder> orderOpt = payOrderManager.findById(event.getMessage());
+        Optional<PayOrder> orderOpt = payOrderManager.findByIdNotTenant(event.getMessage());
         if (orderOpt.isPresent()) {
             PayOrder payOrder = orderOpt.get();
             // 不是支付中不需要进行同步
@@ -61,7 +61,7 @@ public class OrderEventService {
      */
     @DelayEventListener(DaxPayCode.Event.MERCHANT_REFUND_SYNC)
     public void refundDelaySync(DelayJobEvent<Long> event) {
-        var orderOpt = refundOrderManager.findById(event.getMessage());
+        var orderOpt = refundOrderManager.findByIdNotTenant(event.getMessage());
         if (orderOpt.isPresent()) {
             var order = orderOpt.get();
             // 不是退款中不需要进行同步
@@ -78,7 +78,7 @@ public class OrderEventService {
      */
     @DelayEventListener(DaxPayCode.Event.MERCHANT_TRANSFER_SYNC)
     public void TransferDelaySync(DelayJobEvent<Long> event) {
-        var orderOpt = transferOrderManager.findById(event.getMessage());
+        var orderOpt = transferOrderManager.findByIdNotTenant(event.getMessage());
         if (orderOpt.isPresent()) {
             var order = orderOpt.get();
             // 不是退款中不需要进行同步

@@ -42,7 +42,7 @@ public class MerchantNotifyTaskService {
      * 注册支付通知
      */
     public void registerPayNotice(PayOrder order) {
-        if (this.nonRegister(NotifyContentTypeEnum.PAY)){
+         if (this.nonRegister(NotifyContentTypeEnum.PAY)){
             return;
         }
         var noticeResult = PayOrderConvert.CONVERT.toResult(order);
@@ -104,7 +104,7 @@ public class MerchantNotifyTaskService {
     private boolean nonRegister(NotifyContentTypeEnum notifyType) {
         // 判断是否开启消息通知功能
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        if (!Objects.equals(mchAppInfo.getNotifyType(), MerchantNotifyTypeEnum.HTTP)){
+        if (!Objects.equals(mchAppInfo.getNotifyType(), MerchantNotifyTypeEnum.HTTP.getCode())){
             return false;
         }
         // 判断是否订阅该类型的通知

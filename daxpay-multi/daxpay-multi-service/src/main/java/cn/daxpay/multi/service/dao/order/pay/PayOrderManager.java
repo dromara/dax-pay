@@ -96,4 +96,11 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
                 .lt(PayOrder::getExpiredTime, LocalDateTime.now())
                 .list();
     }
+
+    /**
+     * 查询订单, 不过滤租户
+     */
+    public Optional<PayOrder> findByIdNotTenant(Long id) {
+        return this.findById(id);
+    }
 }

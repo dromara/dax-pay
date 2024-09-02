@@ -31,7 +31,7 @@ public class MerchantCallbackTaskService {
     private final DelayJobService delayJobService;
 
     /**
-     * 注册支付通知
+     * 注册支付回调通知
      */
     public void registerPayNotice(PayOrder order) {
         // 判断是否需要进行通知
@@ -49,8 +49,8 @@ public class MerchantCallbackTaskService {
                 .setTradeId(order.getId())
                 .setTradeNo(order.getOrderNo());
         taskManager.save(task);
-        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
-        log.info("注册支付通知");
+        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
+        log.info("注册支付回调通知");
     }
 
     /**
@@ -72,7 +72,7 @@ public class MerchantCallbackTaskService {
                 .setTradeId(order.getId())
                 .setTradeNo(order.getRefundNo());
         taskManager.save(task);
-        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
+        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
         log.info("注册退款通知");
     }
 
@@ -95,7 +95,7 @@ public class MerchantCallbackTaskService {
                 .setTradeId(order.getId())
                 .setTradeNo(order.getTransferNo());
         taskManager.save(task);
-        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
+        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
         log.info("注册转账通知");
     }
 }

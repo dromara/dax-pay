@@ -92,4 +92,12 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         generator.eq(MpUtil.getColumnName(RefundOrder::getStatus), RefundStatusEnum.SUCCESS.getCode());
         return baseMapper.getTotalAmount(generator);
     }
+
+
+    /**
+     * 查询订单, 不过滤租户
+     */
+    public Optional<RefundOrder> findByIdNotTenant(Long id) {
+        return findById(id);
+    }
 }
