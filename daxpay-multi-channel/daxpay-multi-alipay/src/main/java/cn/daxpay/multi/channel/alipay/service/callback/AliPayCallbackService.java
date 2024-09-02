@@ -1,7 +1,5 @@
 package cn.daxpay.multi.channel.alipay.service.callback;
 
-import cn.bootx.platform.core.util.CertUtil;
-import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
@@ -10,13 +8,11 @@ import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.service.record.callback.TradeCallbackRecordService;
+import cn.daxpay.multi.service.service.trade.pay.PayCallbackService;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayConstants;
-import com.alipay.api.internal.util.AlipaySignature;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,23 +36,43 @@ import static cn.daxpay.multi.channel.alipay.code.AliPayCode.*;
 public class AliPayCallbackService {
 
     private final AliPayConfigService aliPayConfigService;
+    private final PayCallbackService payCallbackService;
+    private final TradeCallbackRecordService tradeCallbackRecordService;
+
+    /**
+     * 支付回调处理
+     */
+    public String payHandle(HttpServletRequest request) {
+        // 解析数据
+        if (this.resolve(request)){
+            // 执行回调业务处理
+            payCallbackService.payCallback();
+            // 保存记录
+            tradeCallbackRecordService.saveCallbackRecord();
+            return "success";
+        } else {
+            // 保存记录
+            tradeCallbackRecordService.saveCallbackRecord();
+            return "fail";
+        }
+    }
 
     /**
      * 支付回调处理, 解析数据
      */
-    public String pay(HttpServletRequest request) {
+    public boolean resolve(HttpServletRequest request) {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = PayUtil.toMap(request);
         callback.setCallbackData(callbackParam);
 
         // 通道和回调类型
-        callback.setChannel(ChannelEnum.ALI.getCode())
-                .setCallbackType(TradeTypeEnum.PAY);
+        callback.setChannel(ChannelEnum.ALI.getCode()).setCallbackType(TradeTypeEnum.PAY);
 
-        if (!verifyNotify(callbackParam)) {
+        // 验签
+        if (!aliPayConfigService.verifyNotify(callbackParam)) {
             log.error("支付宝回调报文验签失败");
-            callback.setCallbackStatus(CallbackStatusEnum.FAIL);
-            return "fail";
+            callback.setCallbackStatus(CallbackStatusEnum.FAIL).setCallbackErrorMsg("支付宝回调报文验签失败");
+            return false;
         }
 
         // 网关订单号
@@ -78,34 +94,6 @@ public class AliPayCallbackService {
         } else {
             callback.setFinishTime(LocalDateTime.now());
         }
-        // 进行退款的处理
-        return "success";
-    }
-
-    /**
-     * 验证信息格式是否合法
-     */
-    public boolean verifyNotify(Map<String, String> params) {
-        String appId = params.get(APP_ID);
-        if (StrUtil.isBlank(appId)) {
-            log.error("支付宝回调报文appId为空");
-            return false;
-        }
-        AliPayConfig alipayConfig = aliPayConfigService.getAliPayConfig();
-        if (Objects.isNull(alipayConfig)) {
-            log.error("支付宝支付配置不存在");
-            return false;
-        }
-        try {
-            if (Objects.equals(alipayConfig.getAuthType(), AUTH_TYPE_KEY)) {
-                return AlipaySignature.rsaCheckV1(params, alipayConfig.getAlipayPublicKey(), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
-            }
-            else {
-                return AlipaySignature.verifyV1(params, CertUtil.getCertByContent(alipayConfig.getAlipayCert()), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
-            }
-        } catch (AlipayApiException e) {
-            log.error("支付宝验签失败", e);
-            return false;
-        }
+        return true;
     }
 }

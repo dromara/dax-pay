@@ -1,4 +1,4 @@
-package cn.daxpay.multi.channel.alipay.controller.config;
+package cn.daxpay.multi.channel.alipay.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.annotation.RequestGroup;
@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/alipay/config")
 @RequiredArgsConstructor
 @RequestGroup(groupCode = "AlipayConfig", groupName = "支付宝配置", moduleCode = "alipay", moduleName = "支付宝支付")
-public class AlipayConfigController {
+public class AliPayConfigController {
     private final AliPayConfigService alipayConfigService;
 
     @RequestPath("获取配置")

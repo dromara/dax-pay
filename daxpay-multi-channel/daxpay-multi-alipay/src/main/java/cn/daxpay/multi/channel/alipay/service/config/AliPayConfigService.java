@@ -1,5 +1,7 @@
 package cn.daxpay.multi.channel.alipay.service.config;
 
+import cn.bootx.platform.core.util.CertUtil;
+import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.convert.config.AlipayConfigConvert;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
@@ -17,16 +19,17 @@ import cn.daxpay.multi.service.entity.config.ChannelConfig;
 import cn.daxpay.multi.service.service.config.PlatformConfigService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.AlipayConfig;
-import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.*;
+import com.alipay.api.internal.util.AlipaySignature;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -120,7 +123,7 @@ public class AliPayConfigService {
     public String getPayNotifyUrl() {
         var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/pay/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/{}/alipay/pay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 
     /**
@@ -129,7 +132,7 @@ public class AliPayConfigService {
     public String getRefundNotifyUrl() {
         var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/refund/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/{}/alipay/refund",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 
     /**
@@ -170,6 +173,35 @@ public class AliPayConfigService {
         }
 
         return new DefaultAlipayClient(config);
+    }
+
+    /**
+     * 校验消息通知
+     */
+    public boolean verifyNotify(Map<String, String> params) {
+        String callReq = JsonUtil.toJsonStr(params);
+        log.info("支付宝消息通知报文: {}", callReq);
+        String appId = params.get("app_id");
+        if (StrUtil.isBlank(appId)) {
+            log.error("支付宝消息通知报文appId为空");
+            return false;
+        }
+        AliPayConfig alipayConfig = this.getAliPayConfig();
+        if (Objects.isNull(alipayConfig)) {
+            log.error("支付宝支付配置不存在");
+            return false;
+        }
+        try {
+            if (Objects.equals(alipayConfig.getAuthType(), AliPayCode.AUTH_TYPE_KEY)) {
+                return AlipaySignature.rsaCheckV1(params, alipayConfig.getAlipayPublicKey(), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
+            }
+            else {
+                return AlipaySignature.verifyV1(params, CertUtil.getCertByContent(alipayConfig.getAlipayCert()), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
+            }
+        } catch (AlipayApiException e) {
+            log.error("支付宝验签失败", e);
+            return false;
+        }
     }
 
 }

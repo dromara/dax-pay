@@ -9,12 +9,12 @@ import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
-import cn.daxpay.multi.service.service.trade.transfer.TransferCallbackService;
 import cn.daxpay.multi.service.service.record.callback.TradeCallbackRecordService;
+import cn.daxpay.multi.service.service.trade.transfer.TransferCallbackService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
-import com.github.binarywang.wxpay.bean.notify.WxPayNotifyV3Response;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.wechat.pay.java.core.http.Constant;
@@ -34,7 +34,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WechatPayTransferCallbackService {
+public class WechatTransferCallbackService {
 
 
     private final WechatPayConfigService wechatPayConfigService;
@@ -45,19 +45,24 @@ public class WechatPayTransferCallbackService {
      * 回调处理
      */
     public String transferHandle(HttpServletRequest request) {
-        // 执行回调数据解析, 返回响应对象
-        String msg = this.callback(request);
-        // 执行回调业务处理
-        transferCallbackService.transferCallback();
-        // 保存记录
-        tradeCallbackRecordService.saveCallbackRecord();
-        return msg;
+        // 解析数据
+        if (this.resolve(request)){
+            // 执行回调业务处理
+            transferCallbackService.transferCallback();
+            // 保存记录
+            tradeCallbackRecordService.saveCallbackRecord();
+            return WxPayNotifyResponse.success("OK");
+        } else {
+            // 保存记录
+            tradeCallbackRecordService.saveCallbackRecord();
+            return WxPayNotifyResponse.fail("FAIL");
+        }
     }
 
     /**
      * 微信转账到零钱回调
      */
-    public String callback(HttpServletRequest request) {
+    public boolean resolve(HttpServletRequest request) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         callbackInfo.setChannel(ChannelEnum.WECHAT.getCode())
                 .setCallbackType(TradeTypeEnum.TRANSFER);
@@ -79,9 +84,9 @@ public class WechatPayTransferCallbackService {
         } catch (WxPayException e) {
             callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
             log.error("微信转账回调V3处理失败", e);
-            return WxPayNotifyV3Response.fail("FAIL");
+           return false;
         }
-        return WxPayNotifyV3Response.success("OK");
+        return true;
     }
 
     /**

@@ -1,4 +1,4 @@
-package cn.daxpay.multi.channel.alipay.controller.notice;
+package cn.daxpay.multi.channel.alipay.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.multi.channel.alipay.service.notice.AliPayNoticeReceiverService;

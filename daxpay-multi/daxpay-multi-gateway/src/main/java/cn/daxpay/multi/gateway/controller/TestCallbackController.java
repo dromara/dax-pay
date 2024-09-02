@@ -5,7 +5,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -15,7 +18,7 @@ import java.util.Map;
  * @since 2024/8/30
  */
 @Slf4j
-@Tag(name = "测试回调接受控制器")
+@Tag(name = "测试商户回调接收控制器")
 @RestController
 @RequestMapping("/test/callback")
 @RequiredArgsConstructor

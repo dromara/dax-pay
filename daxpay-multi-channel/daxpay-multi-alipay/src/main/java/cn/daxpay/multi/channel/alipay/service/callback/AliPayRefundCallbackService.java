@@ -1,10 +1,13 @@
 package cn.daxpay.multi.channel.alipay.service.callback;
 
+import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
+import cn.daxpay.multi.core.enums.CallbackStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TradeTypeEnum;
 import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.common.context.CallbackLocal;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
+import cn.daxpay.multi.service.service.record.callback.TradeCallbackRecordService;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -31,15 +34,41 @@ import static cn.daxpay.multi.channel.alipay.code.AliPayCode.*;
 @RequiredArgsConstructor
 public class AliPayRefundCallbackService {
 
+    private final AliPayConfigService aliPayConfigService;
+    private final TradeCallbackRecordService tradeCallbackRecordService;
+
+
+    /**
+     * 支付回调处理
+     */
+    public String refundHandle(HttpServletRequest request) {
+        // 解析数据
+        if (this.resolve(request)){
+            // 保存记录
+            tradeCallbackRecordService.saveCallbackRecord();
+            return "success";
+        } else {
+            // 保存记录
+            tradeCallbackRecordService.saveCallbackRecord();
+            return "fail";
+        }
+    }
+
     /**
      * 支付回调处理, 解析数据
      */
-    public String refund(HttpServletRequest request) {
+    public boolean resolve(HttpServletRequest request) {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> callbackParam = PayUtil.toMap(request);
         callback.setCallbackData(callbackParam);
         // 设置类型和通道
         callback.setCallbackType(TradeTypeEnum.REFUND).setChannel(ChannelEnum.ALI.getCode());
+        // 验签
+        if (!aliPayConfigService.verifyNotify(callbackParam)) {
+            log.error("支付宝回调报文验签失败");
+            callback.setCallbackStatus(CallbackStatusEnum.FAIL).setCallbackErrorMsg("支付宝回调报文验签失败");
+            return false;
+        }
         // 退款订单号
         callback.setTradeNo(callbackParam.get(OUT_BIZ_NO));
         // 退款状态
@@ -55,6 +84,6 @@ public class AliPayRefundCallbackService {
         } else {
             callback.setFinishTime(LocalDateTime.now());
         }
-        return "success";
+        return true;
     }
 }

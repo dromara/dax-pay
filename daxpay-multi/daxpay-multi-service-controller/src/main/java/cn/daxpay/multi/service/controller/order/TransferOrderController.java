@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 /**
  * 转账订单控制器
  * @author xxm
@@ -65,7 +67,7 @@ public class TransferOrderController {
     @RequestPath("查询金额汇总")
     @Operation(summary = "查询金额汇总")
     @GetMapping("/getTotalAmount")
-    public Result<Integer> getTotalAmount(TransferOrderQuery param){
+    public Result<BigDecimal> getTotalAmount(TransferOrderQuery param){
         return Res.ok(queryService.getTotalAmount(param));
     }
 
