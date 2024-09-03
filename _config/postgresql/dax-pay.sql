@@ -3542,7 +3542,6 @@ create table pay_callback_record
     callback_type   varchar(255),
     notify_info     text,
     status          varchar(255),
-    repair_order_no varchar(255),
     error_code      varchar(255),
     creator         bigint,
     create_time     timestamp(6),
