@@ -80,6 +80,9 @@ public class MerchantNotifyConfigService {
      * 开启或关闭订阅
      */
     public void subscribe(String appId, String notifyType, boolean subscribe){
+        // 查询应用
+        var mchApp = mchAppCacheService.get(appId);
+
         // 判断是否存在配置
         var notifyConfigOpt = configManager.findByAppIdAndType(appId, notifyType);
 
@@ -89,6 +92,7 @@ public class MerchantNotifyConfigService {
         } else {
             MerchantNotifyConfig merchantNotifyConfig = new MerchantNotifyConfig();
             merchantNotifyConfig.setAppId(appId);
+            merchantNotifyConfig.setMchNo(mchApp.getMchNo());
             merchantNotifyConfig.setCode(notifyType);
             merchantNotifyConfig.setSubscribe(subscribe);
             configManager.save(merchantNotifyConfig);

@@ -21,14 +21,14 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * 订单相关的延时事件
+ * 订单交易相关的延时事件
  * @author xxm
  * @since 2024/8/16
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OrderEventService {
+public class TradeOrderEventService {
     private final PaymentAssistService paymentAssistService;
 
     private final PayOrderManager payOrderManager;

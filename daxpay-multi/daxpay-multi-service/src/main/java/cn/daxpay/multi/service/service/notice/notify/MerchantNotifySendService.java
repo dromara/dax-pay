@@ -61,7 +61,7 @@ public class MerchantNotifySendService {
         // 创建发送记录
         MerchantNotifyRecord record = new MerchantNotifyRecord()
                 .setTaskId(task.getId())
-                .setSendType(NoticeSendTypeEnum.AUTO.getType())
+                .setSendType(autoSend?NoticeSendTypeEnum.AUTO.getType():NoticeSendTypeEnum.MANUAL.getType())
                 .setReqCount(task.getSendCount()+1);
         String body = null;
         try {
@@ -81,6 +81,9 @@ public class MerchantNotifySendService {
         // 如果响应值等于SUCCESS, 说明发送成功, 进行成功处理
         if (StrUtil.equalsIgnoreCase(body, "SUCCESS")){
             record.setSuccess(true);
+            task.setSendCount(task.getSendCount() + 1)
+                    .setLatestTime(sendTime)
+                    .setSuccess(true);;
         } else {
             // 失败处理
             this.failHandler(task,sendTime,autoSend);
@@ -90,8 +93,6 @@ public class MerchantNotifySendService {
                 record.setErrorMsg(StrUtil.sub(body,0,300));
             }
         }
-        task.setSendCount(task.getSendCount() + 1)
-                .setLatestTime(sendTime);
         // 保存请求记录更新任务
         recordManager.save(record);
         // 更新任务信息
@@ -107,7 +108,8 @@ public class MerchantNotifySendService {
             return;
         }
         // 次数+1
-        task.setSendCount(task.getSendCount() + 1).setLatestTime(sendTime);
+        task.setSendCount(task.getSendCount() + 1)
+                .setLatestTime(sendTime);
         // 任务完成了也不进行处理
         if (task.isSuccess()){
             return;
@@ -135,7 +137,7 @@ public class MerchantNotifySendService {
             // 判断通知方式是否为http并且订阅了该类型的通知
             boolean subscribe = notifyConfigService.getSubscribeByAppIdAndType(mchAppInfo.getAppId(), task.getNotifyType());
             if (Objects.equals(mchAppInfo.getNotifyType(), MerchantNotifyTypeEnum.HTTP.getCode()) && subscribe){
-                this.sendData(task, mchAppInfo.getNotifyUrl(), LocalDateTime.now(), true);
+                this.sendData(task, mchAppInfo.getNotifyUrl(), LocalDateTime.now(), false);
             } else {
                 log.info("商户消息通知未开启，任务ID：{}",taskId);
             }

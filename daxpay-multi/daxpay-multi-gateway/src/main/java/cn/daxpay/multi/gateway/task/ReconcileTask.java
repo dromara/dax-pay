@@ -63,9 +63,10 @@ public class ReconcileTask  {
             List<ChannelConfig> configs = channelConfigManager.findEnableByAppId(mchApp.getAppId());
             for (ChannelConfig config : configs) {
                 try {
+                    log.info("商户: {}, 应用: {} 通道: {} 执行对账任务任务 }", mchApp.getMchNo(), mchApp.getAppId(), config.getChannel());
                     this.reconcileTaskRun(mchApp, config, channelMap);
                 } catch (Exception e) {
-                    log.error("应用: {} 通道: {} 执行对账任务失败 }", mchApp.getAppId(), config.getChannel(), e);
+                    log.error("商户: {}, 应用: {} 通道: {} 执行对账任务失败 }", mchApp.getMchNo(), mchApp.getAppId(), config.getChannel(), e);
                 }
             }
         }

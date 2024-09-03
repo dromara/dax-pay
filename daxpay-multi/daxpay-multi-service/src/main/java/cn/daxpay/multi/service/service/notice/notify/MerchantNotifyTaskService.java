@@ -16,6 +16,7 @@ import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.daxpay.multi.service.enums.NotifyContentTypeEnum;
 import cn.daxpay.multi.service.service.config.MerchantNotifyConfigService;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class MerchantNotifyTaskService {
      * 注册支付通知
      */
     public void registerPayNotice(PayOrder order) {
-         if (this.nonRegister(NotifyContentTypeEnum.PAY)){
+        if (this.nonRegister(NotifyContentTypeEnum.PAY)){
             return;
         }
         var noticeResult = PayOrderConvert.CONVERT.toResult(order);
@@ -51,6 +52,7 @@ public class MerchantNotifyTaskService {
                 .setContent(JacksonUtil.toJson(noticeResult))
                 .setNotifyType(NotifyContentTypeEnum.PAY.getCode())
                 .setSendCount(0)
+                .setDelayCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getOrderNo());
         taskManager.save(task);
@@ -63,6 +65,7 @@ public class MerchantNotifyTaskService {
      */
     public void registerRefundNotice(RefundOrder order) {
         if (this.nonRegister(NotifyContentTypeEnum.REFUND)){
+            log.info("支付退款无需回调，订单号：{}",order.getRefundNo());
             return;
         }
         var noticeResult = RefundOrderConvert.CONVERT.toResult(order);
@@ -71,6 +74,7 @@ public class MerchantNotifyTaskService {
                 .setContent(JacksonUtil.toJson(noticeResult))
                 .setNotifyType(NotifyContentTypeEnum.REFUND.getCode())
                 .setSendCount(0)
+                .setDelayCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getRefundNo());
         taskManager.save(task);
@@ -91,6 +95,7 @@ public class MerchantNotifyTaskService {
                 .setContent(JacksonUtil.toJson(noticeResult))
                 .setNotifyType(NotifyContentTypeEnum.TRANSFER.getCode())
                 .setSendCount(0)
+                .setDelayCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getTransferNo());
         taskManager.save(task);
@@ -99,16 +104,24 @@ public class MerchantNotifyTaskService {
     }
 
     /**
-     * 判断是否需要注册通知
+     * 判断是否 不需要注册通知
+     * true 不需要
+     * false 需要
      */
     private boolean nonRegister(NotifyContentTypeEnum notifyType) {
-        // 判断是否开启消息通知功能
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+
+        // 判断是否开启消息通知功能, 不需要注册通知
         if (!Objects.equals(mchAppInfo.getNotifyType(), MerchantNotifyTypeEnum.HTTP.getCode())){
-            return false;
+            return true;
+        }
+
+        // http方式且地址
+        if (StrUtil.isBlank(mchAppInfo.getNotifyUrl())){
+            return true;
         }
         // 判断是否订阅该类型的通知
-        return notifyConfigService.getSubscribeByAppIdAndType(mchAppInfo.getAppId(), notifyType.getCode());
+        return !notifyConfigService.getSubscribeByAppIdAndType(mchAppInfo.getAppId(), notifyType.getCode());
     }
 
 }

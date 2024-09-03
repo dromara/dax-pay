@@ -90,7 +90,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
      * 查询当前超时的未支付订单
      */
     @IgnoreTenant
-    public List<PayOrder> queryExpiredOrder() {
+    public List<PayOrder> queryExpiredOrderNotTenant() {
         return lambdaQuery()
                 .eq(PayOrder::getStatus, PayStatusEnum.PROGRESS.getCode())
                 .lt(PayOrder::getExpiredTime, LocalDateTime.now())
@@ -100,6 +100,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     /**
      * 查询订单, 不过滤租户
      */
+    @IgnoreTenant
     public Optional<PayOrder> findByIdNotTenant(Long id) {
         return this.findById(id);
     }

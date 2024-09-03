@@ -36,7 +36,7 @@ public class MerchantCallbackTaskService {
     public void registerPayNotice(PayOrder order) {
         // 判断是否需要进行通知
         if (StrUtil.isBlank(order.getNotifyUrl())){
-            log.info("支付订单无需通知，订单号：{}",order.getOrderNo());
+            log.info("支付订单无需回调，订单号：{}",order.getOrderNo());
             return;
         }
         var noticeResult = PayOrderConvert.CONVERT.toResult(order);
@@ -46,6 +46,7 @@ public class MerchantCallbackTaskService {
                 .setTradeType(TradeTypeEnum.PAY.getCode())
                 .setUrl(order.getNotifyUrl())
                 .setSendCount(0)
+                .setDelayCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getOrderNo());
         taskManager.save(task);
@@ -59,7 +60,7 @@ public class MerchantCallbackTaskService {
     public void registerRefundNotice(RefundOrder order) {
         // 判断是否需要进行通知
         if (StrUtil.isBlank(order.getNotifyUrl())){
-            log.info("支付退款无需通知，订单号：{}",order.getRefundNo());
+            log.info("支付退款无需回调，订单号：{}",order.getRefundNo());
             return;
         }
         var noticeResult = RefundOrderConvert.CONVERT.toResult(order);
@@ -69,6 +70,7 @@ public class MerchantCallbackTaskService {
                 .setTradeType(TradeTypeEnum.REFUND.getCode())
                 .setUrl(order.getNotifyUrl())
                 .setSendCount(0)
+                .setDelayCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getRefundNo());
         taskManager.save(task);

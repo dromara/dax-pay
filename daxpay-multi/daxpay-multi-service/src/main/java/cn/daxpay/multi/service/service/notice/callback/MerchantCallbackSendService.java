@@ -53,7 +53,7 @@ public class MerchantCallbackSendService {
         // 创建发送记录
         MerchantCallbackRecord record = new MerchantCallbackRecord()
                 .setTaskId(task.getId())
-                .setSendType(NoticeSendTypeEnum.AUTO.getType())
+                .setSendType(autoSend?NoticeSendTypeEnum.AUTO.getType():NoticeSendTypeEnum.MANUAL.getType())
                 .setReqCount(task.getSendCount()+1);
         String body = null;
         try {

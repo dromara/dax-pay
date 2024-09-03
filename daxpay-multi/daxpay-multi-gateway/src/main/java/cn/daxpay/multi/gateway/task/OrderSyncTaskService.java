@@ -40,7 +40,7 @@ public class OrderSyncTaskService {
     @Scheduled(cron = "0 */1 * * * ?")
     public void queryExpiredTask(){
         // 从数据库查询获取超时的任务对象
-        List<PayOrder> payOrders = payOrderManager.queryExpiredOrder();
+        List<PayOrder> payOrders = payOrderManager.queryExpiredOrderNotTenant();
         for (PayOrder order : payOrders) {
             try {
                 // 设置补偿来源为定时任务

@@ -1,6 +1,7 @@
 package cn.daxpay.multi.gateway.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
+import cn.hutool.core.thread.ThreadUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class TestCallbackController {
     @PostMapping("/notify")
     public String notify(@RequestBody Map<String,Object> date){
         log.info("notify:{}",date);
+        ThreadUtil.sleep(10*1000L);
         return "success";
     }
 }
