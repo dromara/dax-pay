@@ -30,7 +30,7 @@ public class TestCallbackController {
     @PostMapping("/notify")
     public String notify(@RequestBody Map<String,Object> date){
         log.info("notify:{}",date);
-        ThreadUtil.sleep(10*1000L);
+        ThreadUtil.sleep(6*1000L);
         return "success";
     }
 }

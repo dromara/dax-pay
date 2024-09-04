@@ -52,7 +52,6 @@ public class MerchantNotifyTaskService {
                 .setContent(JacksonUtil.toJson(noticeResult))
                 .setNotifyType(NotifyContentTypeEnum.PAY.getCode())
                 .setSendCount(0)
-                .setDelayCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getOrderNo());
         taskManager.save(task);
@@ -74,7 +73,6 @@ public class MerchantNotifyTaskService {
                 .setContent(JacksonUtil.toJson(noticeResult))
                 .setNotifyType(NotifyContentTypeEnum.REFUND.getCode())
                 .setSendCount(0)
-                .setDelayCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getRefundNo());
         taskManager.save(task);
@@ -95,7 +93,6 @@ public class MerchantNotifyTaskService {
                 .setContent(JacksonUtil.toJson(noticeResult))
                 .setNotifyType(NotifyContentTypeEnum.TRANSFER.getCode())
                 .setSendCount(0)
-                .setDelayCount(0)
                 .setTradeId(order.getId())
                 .setTradeNo(order.getTransferNo());
         taskManager.save(task);

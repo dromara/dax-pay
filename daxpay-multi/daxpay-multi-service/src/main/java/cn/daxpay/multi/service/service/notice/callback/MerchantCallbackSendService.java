@@ -76,6 +76,10 @@ public class MerchantCallbackSendService {
                     .setLatestTime(sendTime)
                     .setSuccess(true);;
             record.setSuccess(true);
+            // 如果为自动发送且延迟次数, 延迟次数也+1
+            if (autoSend && Objects.nonNull(task.getDelayCount())){
+                task.setDelayCount(task.getDelayCount()+1);
+            }
         } else {
             // 失败处理
             this.failHandler(task,sendTime,autoSend);
@@ -105,13 +109,18 @@ public class MerchantCallbackSendService {
         if (task.isSuccess()){
             return;
         }
-
+        // 如果延迟次数为空, 先设置为-1
+        if (autoSend && Objects.isNull(task.getDelayCount())){
+            task.setDelayCount(-1);
+        }
         // 判断延迟次数是否未超过15次, 注册任务到redis中
         if (autoSend && task.getDelayCount() < 16){
-            // 根据当前延迟次数和计算出下次执行时间
-            task.setNextTime(sendTime.plusSeconds(merchantNoticeAssistService.getDelayTime(task.getDelayCount())));
+            // 添加延迟次数
+            task.setDelayCount(task.getDelayCount() + 1);
             // 下次偏移毫秒数
-            int delay = merchantNoticeAssistService.getDelayTime(task.getDelayCount());
+            int delay = merchantNoticeAssistService.getDelayTime(task.getDelayCount()+1);
+            // 根据当前延迟次数和计算出下次执行时间
+            task.setNextTime(sendTime.plusSeconds(delay/1000L));
             // 注册延时任务
             delayJobService.register(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, delay);
         }
