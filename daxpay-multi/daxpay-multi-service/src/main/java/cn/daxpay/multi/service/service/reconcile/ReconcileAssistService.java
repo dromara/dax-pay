@@ -76,7 +76,7 @@ public class ReconcileAssistService {
     }
 
     /**
-     * 获取通用对账对象, 将支付/退款订单转换为对账对象
+     * 获取通用对账对象, 将支付/退款订单转换为对账对象, 针对本地短单的交易进行二次查询
      */
     public List<PlatformReconcileTradeBo> getPlatformTradesByTradeNo(List<String> tradeNos){
         List<PlatformReconcileTradeBo> reconcileTradeBos = new ArrayList<>();
@@ -153,7 +153,6 @@ public class ReconcileAssistService {
                 .setOutTradeNo(localTrade.getOutTradeNo())
                 .setTradeType(localTrade.getTradeType())
                 .setTradeStatus(localTrade.getTradeStatus())
-                .setChannelTradeNo(localTrade.getOutTradeNo())
                 .setTradeAmount(localTrade.getAmount())
                 .setTradeTime(localTrade.getTradeTime());
     }

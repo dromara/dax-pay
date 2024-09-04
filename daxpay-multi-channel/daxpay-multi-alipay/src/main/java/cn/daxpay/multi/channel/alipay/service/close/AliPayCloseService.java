@@ -3,7 +3,11 @@ package cn.daxpay.multi.channel.alipay.service.close;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
+import cn.daxpay.multi.channel.alipay.service.sync.AliPaySyncService;
+import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
+import cn.daxpay.multi.core.exception.TradeStatusErrorException;
+import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeCancelModel;
@@ -29,6 +33,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AliPayCloseService {
     private final AliPayConfigService aliPayConfigService;
+    private final AliPaySyncService aliPaySyncService;
 
     /**
      * 关闭支付 此处使用交易关闭接口
@@ -103,19 +108,18 @@ public class AliPayCloseService {
      * 关闭失败后, 获取支付网关的状态, 如果是关闭返回true, 其他情况抛出异常
      */
     private boolean syncStatus(PayOrder payOrder, AliPayConfig config){
-//        PaySyncResultBo gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder,config);
-//        // 已经关闭
-//        if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncResultEnum.CLOSED)){
-//            return true;
-//        }
-//        // 同步错误
-//        else if (Objects.equals(gatewaySyncResult.getSyncStatus(), PaySyncResultEnum.FAIL)){
-//            throw new OperationFailException("关闭失败, 原因: "+gatewaySyncResult.getErrorMsg());
-//        }
-//        // 其他状态
-//        else {
-//            throw new TradeStatusErrorException("当前交易无法关闭操作, 请对订单同步状态后再进行操作");
-//        }
-        return false;
+        PaySyncResultBo gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder);
+        // 已经关闭
+        if (Objects.equals(gatewaySyncResult.getPayStatus(), PayStatusEnum.CLOSE)){
+            return true;
+        }
+        // 同步错误
+        else if (Objects.equals(gatewaySyncResult.getPayStatus(), PayStatusEnum.FAIL)){
+            throw new OperationFailException("关闭失败, 原因: "+gatewaySyncResult.getSyncErrorMsg());
+        }
+        // 其他状态
+        else {
+            throw new TradeStatusErrorException("当前交易无法关闭操作, 请对订单同步状态后再进行操作");
+        }
     }
 }

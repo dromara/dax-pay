@@ -378,6 +378,7 @@ public class ReconcileStatementService {
                             .setResult(ReconcileDiscrepancyTypeEnum.REMOTE_NOT_EXISTS.getName())
                             .setTradeNo(discrepancyTrade.getTradeNo())
                             .setBizTradeNo(discrepancyTrade.getBizTradeNo())
+                            .setOutTradeNo(discrepancyTrade.getOutTradeNo())
                             .setTradeType(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType()).getName())
                             .setTradeAmount(discrepancyTrade.getTradeAmount().toString())
                             .setTradeStatus(discrepancyTrade.getTradeStatus())
