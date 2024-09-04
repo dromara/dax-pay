@@ -53,18 +53,10 @@ public class AliPayTransferStrategy extends AbsTransferStrategy {
     }
 
     /**
-     * 转账前操作
-     */
-    @Override
-    public void doBeforeHandler() {
-        this.config = payConfigService.getAliPayConfig();
-    }
-
-    /**
      * 转账操作
      */
     @Override
     public TransferResultBo doTransferHandler() {
-        return aliPayTransferService.transfer(this.getTransferOrder(), this.config);
+        return aliPayTransferService.transfer(this.getTransferOrder());
     }
 }

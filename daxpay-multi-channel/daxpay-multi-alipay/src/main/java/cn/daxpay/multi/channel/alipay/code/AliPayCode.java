@@ -36,12 +36,16 @@ public interface AliPayCode {
         String REFUND = "REFUND";
     }
 
-    // 认证类型
-    /** 公钥 */
-    String AUTH_TYPE_KEY = "key";
+    /**
+     * 认证类型
+     */
+    interface AuthType{
+        /** 公钥 */
+        String AUTH_TYPE_KEY = "key";
 
-    /** 证书 */
-    String AUTH_TYPE_CART = "cart";
+        /** 证书 */
+        String AUTH_TYPE_CART = "cart";
+    }
 
 
     // 渠道枚举

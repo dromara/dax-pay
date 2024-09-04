@@ -1,6 +1,5 @@
 package cn.daxpay.multi.channel.alipay.strategy;
 
-import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.channel.alipay.service.reconcile.AliPayReconcileService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.service.bo.reconcile.ReconcileResolveResultBo;
@@ -29,8 +28,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class AlipayReconcileStrategy extends AbsReconcileStrategy {
 
     private final AliPayReconcileService reconcileService;
-
-    private final AliPayConfigService configService;
 
 
     /**

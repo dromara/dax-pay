@@ -1,7 +1,6 @@
 package cn.daxpay.multi.channel.alipay.service.refund;
 
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
-import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.exception.OperationFailException;
@@ -10,7 +9,6 @@ import cn.daxpay.multi.core.util.PayUtil;
 import cn.daxpay.multi.service.bo.trade.RefundResultBo;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
@@ -37,8 +35,7 @@ public class AliPayRefundService {
     /**
      * 退款, 调用支付宝退款
      */
-    public RefundResultBo refund(RefundOrder refundOrder, AliPayConfig config) {
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
+    public RefundResultBo refund(RefundOrder refundOrder) {
         RefundResultBo refundInfo = new RefundResultBo();
         AlipayTradeRefundModel model = new AlipayTradeRefundModel();
         model.setOutTradeNo(refundOrder.getOrderNo());
@@ -51,10 +48,8 @@ public class AliPayRefundService {
 
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizModel(model);
-        request.setNotifyUrl(aliPayConfigService.getRefundNotifyUrl());
-
         try {
-            AlipayTradeRefundResponse response = alipayClient.execute(request);
+            AlipayTradeRefundResponse response = aliPayConfigService.execute(request);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 TradeFailException operationFailException = new TradeFailException("支付宝退款失败: "+response.getSubMsg());
                 log.error("支付宝退款失败: {}", response.getSubMsg());

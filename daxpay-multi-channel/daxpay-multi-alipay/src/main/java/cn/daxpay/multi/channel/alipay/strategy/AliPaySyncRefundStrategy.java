@@ -59,8 +59,7 @@ public class AliPaySyncRefundStrategy extends AbsSyncRefundOrderStrategy {
      */
     @Override
     public RefundSyncResultBo doSync() {
-        AliPayConfig config = alipayConfigService.getAliPayConfig();
-        return alipaySyncService.syncRefundStatus(getRefundOrder(), config);
+        return alipaySyncService.syncRefundStatus(getRefundOrder());
     }
 
 }

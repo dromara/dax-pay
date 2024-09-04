@@ -31,7 +31,7 @@ public class PayOrderTest {
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .mchNo("M1723635576766")
-                .appId("M8088873888246277")
+                .appId("M7189826551600486")
                 .build();
         DaxPayKit.initConfig(config);
     }
@@ -175,27 +175,6 @@ public class PayOrderTest {
         System.out.println(JsonUtil.toJsonStr(execute));
     }
 
-    /**
-     * 支付宝h5支付
-     */
-    @Test
-    public void aliPayH5Pay() {
-        PayParam param = new PayParam();
-        param.setClientIp("127.0.0.1");
-        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
-        param.setTitle("测试支付宝H5支付");
-        param.setDescription("这是支付宝H5支付");
-        param.setAmount(BigDecimal.valueOf(1));
-        param.setChannel(PayChannelEnum.ALI.getCode());
-        param.setMethod(PayMethodEnum.QRCODE.getCode());
-        param.setAttach("{回调参数}");
-        param.setAllocation(false);
-        param.setReturnUrl("https://abc.com/returnurl");
-        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
-
-        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
-        System.out.println(JsonUtil.toJsonStr(execute));
-    }
 
     /**
      * 支付宝付款码
@@ -215,6 +194,28 @@ public class PayOrderTest {
         alipayParam.setAuthCode("287109871028487115");
         param.setExtraParam(JsonUtil.toJsonStr(alipayParam));
 
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
+
+        DaxPayResult<PayResult> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
+    }
+
+    /**
+     * 支付宝h5支付
+     */
+    @Test
+    public void aliPayH5Pay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试支付宝H5支付");
+        param.setDescription("这是支付宝H5支付");
+        param.setAmount(BigDecimal.valueOf(1.53));
+        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");

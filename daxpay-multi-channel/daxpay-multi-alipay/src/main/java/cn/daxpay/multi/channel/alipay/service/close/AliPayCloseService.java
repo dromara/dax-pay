@@ -6,7 +6,6 @@ import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.exception.OperationFailException;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeCancelModel;
 import com.alipay.api.domain.AlipayTradeCloseModel;
 import com.alipay.api.request.AlipayTradeCancelRequest;
@@ -29,8 +28,6 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class AliPayCloseService {
-//    private final AliPaySyncService aliPaySyncService;
-
     private final AliPayConfigService aliPayConfigService;
 
     /**
@@ -42,13 +39,12 @@ public class AliPayCloseService {
      *
      */
     public void close(PayOrder payOrder, AliPayConfig config) {
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
         AlipayTradeCloseModel model = new AlipayTradeCloseModel();
         model.setOutTradeNo(payOrder.getOrderNo());
         AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
         request.setBizModel(model);
         try {
-            AlipayTradeCloseResponse response = alipayClient.execute(request);
+            AlipayTradeCloseResponse response = aliPayConfigService.execute(request);
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 // 如果返回"当前交易状态不支持此操作", 查询网关支付状态, 判断网关是否已经被关闭
                 if (Objects.equals(response.getSubCode(),AliPayCode.ACQ_TRADE_STATUS_ERROR)){
@@ -74,14 +70,12 @@ public class AliPayCloseService {
      *
      */
     public void cancel(PayOrder payOrder, AliPayConfig config) {
-
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
         AlipayTradeCancelModel model = new AlipayTradeCancelModel();
         model.setOutTradeNo(payOrder.getOrderNo());
         AlipayTradeCancelRequest request = new AlipayTradeCancelRequest();
         request.setBizModel(model);
         try {
-            AlipayTradeCancelResponse response = alipayClient.execute(request);;
+            AlipayTradeCancelResponse response = aliPayConfigService.execute(request);;
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                     // 如果返回"当前交易状态不支持此操作", 查询网关支付状态, 判断网关是否已经被关闭

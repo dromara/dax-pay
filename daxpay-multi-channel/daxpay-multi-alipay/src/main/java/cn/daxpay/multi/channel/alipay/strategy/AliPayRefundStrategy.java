@@ -1,6 +1,5 @@
 package cn.daxpay.multi.channel.alipay.strategy;
 
-import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.channel.alipay.service.refund.AliPayRefundService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
@@ -22,11 +21,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class AliPayRefundStrategy extends AbsRefundStrategy {
 
-    private final AliPayConfigService alipayConfigService;
-
     private final AliPayRefundService aliRefundService;
-
-    private AliPayConfig config;
 
     /**
      * 策略标识
@@ -39,18 +34,10 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
 
 
     /**
-     * 退款前前操作
-     */
-    @Override
-    public void doBeforeRefundHandler() {
-        this.config = alipayConfigService.getAliPayConfig();
-    }
-
-    /**
      * 退款
      */
     @Override
     public RefundResultBo doRefundHandler() {
-        return aliRefundService.refund(this.getRefundOrder(),this.config);
+        return aliRefundService.refund(this.getRefundOrder());
     }
 }

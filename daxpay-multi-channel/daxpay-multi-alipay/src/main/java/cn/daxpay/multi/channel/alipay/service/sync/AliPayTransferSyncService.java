@@ -2,13 +2,11 @@ package cn.daxpay.multi.channel.alipay.service.sync;
 
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode.TransferStatus;
-import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.service.bo.sync.TransferSyncResultBo;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayFundTransCommonQueryModel;
 import com.alipay.api.request.AlipayFundTransCommonQueryRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +31,7 @@ public class AliPayTransferSyncService {
     /**
      * 转账同步
      */
-    public TransferSyncResultBo syncTransferStatus(TransferOrder transferOrder, AliPayConfig aliPayConfig){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
+    public TransferSyncResultBo syncTransferStatus(TransferOrder transferOrder){
         TransferSyncResultBo syncResult = new TransferSyncResultBo();
         // 构造请求参数以调用接口
         AlipayFundTransCommonQueryRequest request = new AlipayFundTransCommonQueryRequest();
@@ -47,7 +44,7 @@ public class AliPayTransferSyncService {
         model.setOutBizNo(transferOrder.getTransferNo());
         request.setBizModel(model);
         try {
-            var response = alipayClient.execute(request);
+            var response = aliPayConfigService.execute(request);
             // 设置网关订单号
             syncResult.setSyncData(JsonUtil.toJsonStr(response));
             // 设置网关订单号

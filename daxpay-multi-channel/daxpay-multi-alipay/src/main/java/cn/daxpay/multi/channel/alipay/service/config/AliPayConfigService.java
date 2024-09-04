@@ -118,21 +118,12 @@ public class AliPayConfigService {
     }
 
     /**
-     * 获取支付异步通知地址
+     * 获取支步通知地址
      */
-    public String getPayNotifyUrl() {
+    public String getNotifyUrl() {
         var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/alipay/pay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
-    }
-
-    /**
-     * 获取退款异步通知地址
-     */
-    public String getRefundNotifyUrl() {
-        var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/alipay/refund",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
     }
 
     /**
@@ -155,7 +146,7 @@ public class AliPayConfigService {
         config.setCharset("UTF-8");
         config.setSignType(aliPayConfig.getSignType());
         // 证书
-        if (Objects.equals(aliPayConfig.getAuthType(), AliPayCode.AUTH_TYPE_CART)){
+        if (Objects.equals(aliPayConfig.getAuthType(), AliPayCode.AuthType.AUTH_TYPE_CART)){
             config.setPrivateKey(aliPayConfig.getPrivateKey());
             config.setAppCertContent(aliPayConfig.getAppCert());
             config.setRootCertContent(aliPayConfig.getAlipayRootCert());
@@ -191,9 +182,10 @@ public class AliPayConfigService {
             log.error("支付宝支付配置不存在");
             return false;
         }
+        // 根据认证类型使用证书或公钥验签
         try {
-            if (Objects.equals(alipayConfig.getAuthType(), AliPayCode.AUTH_TYPE_KEY)) {
-                return AlipaySignature.rsaCheckV1(params, alipayConfig.getAlipayPublicKey(), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
+            if (Objects.equals(alipayConfig.getAuthType(), AliPayCode.AuthType.AUTH_TYPE_KEY)) {
+                return AlipaySignature.verifyV1(params, alipayConfig.getAlipayPublicKey(), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
             }
             else {
                 return AlipaySignature.verifyV1(params, CertUtil.getCertByContent(alipayConfig.getAlipayCert()), CharsetUtil.UTF_8, AlipayConstants.SIGN_TYPE_RSA2);
@@ -201,6 +193,19 @@ public class AliPayConfigService {
         } catch (AlipayApiException e) {
             log.error("支付宝验签失败", e);
             return false;
+        }
+    }
+
+    /**
+     * 接口调用
+     */
+    public <T extends AlipayResponse> T execute(AlipayRequest<T> request) throws AlipayApiException {
+        AliPayConfig aliPayConfig = this.getAliPayConfig();
+        AlipayClient alipayClient = this.getAlipayClient(aliPayConfig);
+        if (Objects.equals(aliPayConfig.getAuthType(), AliPayCode.AuthType.AUTH_TYPE_CART)){
+            return this.getAlipayClient().certificateExecute(request);
+        } else {
+            return alipayClient.execute(request);
         }
     }
 

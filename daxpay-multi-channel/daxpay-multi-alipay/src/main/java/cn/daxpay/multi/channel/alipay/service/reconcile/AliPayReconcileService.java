@@ -18,7 +18,6 @@ import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayDataDataserviceBillDownloadurlQueryModel;
 import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
 import com.alipay.api.response.AlipayDataDataserviceBillDownloadurlQueryResponse;
@@ -68,13 +67,12 @@ public class AliPayReconcileService {
     @Transactional(rollbackFor = Exception.class)
     public ReconcileResolveResultBo downAndResolve(String date, ReconcileStatement statement){
         try {
-            AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
             AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
             model.setBillDate(date);
             model.setBillType("trade");
             AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
             request.setBizModel(model);
-            AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient.execute(request);
+            AlipayDataDataserviceBillDownloadurlQueryResponse response = aliPayConfigService.execute(request);
             // 判断返回结果
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
                 log.error("获取支付宝对账单失败: {}", response.getSubMsg());

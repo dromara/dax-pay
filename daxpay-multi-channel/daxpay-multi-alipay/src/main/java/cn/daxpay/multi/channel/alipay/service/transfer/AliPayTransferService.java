@@ -11,7 +11,6 @@ import cn.daxpay.multi.service.bo.trade.TransferResultBo;
 import cn.daxpay.multi.service.entity.order.transfer.TransferOrder;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayFundAccountQueryModel;
 import com.alipay.api.domain.AlipayFundTransUniTransferModel;
 import com.alipay.api.domain.Participant;
@@ -41,13 +40,12 @@ public class AliPayTransferService {
      */
     @SneakyThrows
     public void queryAccountAmount(AliPayConfig config, AliPayConfig aliPayConfig){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
         AlipayFundAccountQueryModel model = new AlipayFundAccountQueryModel();
         model.setAccountType(QUERY_ACCOUNT_TYPE);
         model.setAlipayUserId(config.getAlipayUserId());
         AlipayFundAccountQueryRequest request = new AlipayFundAccountQueryRequest();
         request.setBizModel(model);
-        AlipayFundAccountQueryResponse response = alipayClient.execute(request);
+        AlipayFundAccountQueryResponse response = aliPayConfigService.execute(request);
         System.out.println(response);
     }
 
@@ -55,10 +53,8 @@ public class AliPayTransferService {
      * 转账接口
      */
     @SneakyThrows
-    public TransferResultBo transfer(TransferOrder order, AliPayConfig aliPayConfig){
+    public TransferResultBo transfer(TransferOrder order){
         TransferResultBo transferInfo = new TransferResultBo();
-
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
         // 构造请求参数以调用接口
         AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
         AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();
@@ -90,7 +86,7 @@ public class AliPayTransferService {
         model.setPayeeInfo(payeeInfo);
         model.setRemark(order.getReason());
         request.setBizModel(model);
-        AlipayFundTransUniTransferResponse response = alipayClient.execute(request);
+        AlipayFundTransUniTransferResponse response = aliPayConfigService.execute(request);
         if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
             log.error("支付宝转账失败: {}", response.getSubMsg());
             throw new TradeFailException("支付宝转账失败: "+response.getSubMsg());

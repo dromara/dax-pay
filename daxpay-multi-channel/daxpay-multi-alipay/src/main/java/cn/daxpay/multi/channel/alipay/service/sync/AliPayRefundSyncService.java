@@ -2,14 +2,12 @@ package cn.daxpay.multi.channel.alipay.service.sync;
 
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
-import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.service.bo.sync.RefundSyncResultBo;
 import cn.daxpay.multi.service.entity.order.refund.RefundOrder;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
 import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
@@ -37,8 +35,7 @@ public class AliPayRefundSyncService {
      * 退款同步查询
      * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
-    public RefundSyncResultBo syncRefundStatus(RefundOrder refundOrder, AliPayConfig config){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
+    public RefundSyncResultBo syncRefundStatus(RefundOrder refundOrder){
         RefundSyncResultBo syncResult = new RefundSyncResultBo();
         try {
             AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
@@ -50,7 +47,7 @@ public class AliPayRefundSyncService {
             model.setQueryOptions(Collections.singletonList(AliPayCode.GMT_REFUND_PAY));
             AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
             request.setBizModel(model);
-            AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
+            AlipayTradeFastpayRefundQueryResponse response = aliPayConfigService.execute(request);
             syncResult.setSyncData(JsonUtil.toJsonStr(response));
             // 失败
             if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {

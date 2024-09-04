@@ -1,6 +1,5 @@
 package cn.daxpay.multi.channel.alipay.strategy;
 
-import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.channel.alipay.service.sync.AliPayTransferSyncService;
 import cn.daxpay.multi.core.enums.ChannelEnum;
@@ -40,8 +39,7 @@ public class AliPaySyncTransferStrategy extends AbsSyncTransferOrderStrategy {
      */
     @Override
     public TransferSyncResultBo doSync() {
-        AliPayConfig config = aliPayConfigService.getAliPayConfig();
-        return syncTransferOrderStrategy.syncTransferStatus(getTransferOrder(),config);
+        return syncTransferOrderStrategy.syncTransferStatus(getTransferOrder());
     }
 
 }

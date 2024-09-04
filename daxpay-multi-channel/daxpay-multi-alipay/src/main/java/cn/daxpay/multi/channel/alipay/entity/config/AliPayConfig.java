@@ -35,7 +35,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
 
     /**
      * 认证类型 证书/公钥
-     * @see AliPayCode#AUTH_TYPE_KEY
+     * @see AliPayCode.AuthType
      */
     private String authType;
 

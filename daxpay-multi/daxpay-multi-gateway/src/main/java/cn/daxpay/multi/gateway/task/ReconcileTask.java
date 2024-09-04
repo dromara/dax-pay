@@ -78,8 +78,8 @@ public class ReconcileTask  {
     public void reconcileTaskRun(MchApp mchApp, ChannelConfig config, Map<String, String> channelMap){
         // 1. 创建订单
         // 标题 【日期】 - 应用 - 通道
-        String title = StrUtil.format("【{}】 - {} - {}",
-                DateUtil.format(DateUtil.yesterday(), DatePattern.NORM_DATE_PATTERN), mchApp.getAppName(), channelMap.get(config.getChannel()));
+        String title = StrUtil.format("【{}】{}-{}-{}",
+                DateUtil.format(DateUtil.yesterday(), DatePattern.NORM_DATE_PATTERN), mchApp.getMchNo(), mchApp.getAppId(), channelMap.get(config.getChannel()));
         ReconcileCreatParam param = new ReconcileCreatParam()
                 .setMchNo(mchApp.getMchNo())
                 .setAppId(mchApp.getAppId())

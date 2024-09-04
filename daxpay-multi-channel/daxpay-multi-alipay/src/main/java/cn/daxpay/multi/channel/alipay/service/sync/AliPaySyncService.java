@@ -3,14 +3,12 @@ package cn.daxpay.multi.channel.alipay.service.sync;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode;
 import cn.daxpay.multi.channel.alipay.code.AliPayCode.PayStatus;
-import cn.daxpay.multi.channel.alipay.entity.config.AliPayConfig;
 import cn.daxpay.multi.channel.alipay.service.config.AliPayConfigService;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.service.bo.sync.PaySyncResultBo;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
@@ -42,8 +40,7 @@ public class AliPaySyncService {
      * 4 查询不到
      * 5 查询失败
      */
-    public PaySyncResultBo syncPayStatus(PayOrder payOrder, AliPayConfig aliPayConfig){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
+    public PaySyncResultBo syncPayStatus(PayOrder payOrder){
         PaySyncResultBo syncResult = new PaySyncResultBo();
         // 查询
         try {
@@ -51,7 +48,7 @@ public class AliPaySyncService {
             model.setOutTradeNo(payOrder.getOrderNo());
             AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
             request.setBizModel(model);
-            AlipayTradeQueryResponse response = alipayClient.execute(request);
+            AlipayTradeQueryResponse response = aliPayConfigService.execute(request);
             String tradeStatus = response.getTradeStatus();
             syncResult.setSyncData(JsonUtil.toJsonStr(response));
             // 设置网关订单号
