@@ -47,7 +47,7 @@ public class WechatPayTransferV3Service {
         }
         // 明细
         var transferDetail = new TransferCreateRequest.TransferDetailList();
-        transferDetail.setOutDetailNo(order.getTransferNo())
+        transferDetail.setOutDetailNo(String.valueOf(order.getId()))
                 .setTransferAmount(PayUtil.convertCentAmount(order.getAmount()))
                 .setTransferRemark(reason)
                 .setOpenid(order.getPayeeAccount())
@@ -56,9 +56,10 @@ public class WechatPayTransferV3Service {
         var request = new TransferCreateV3Request()
                 .setNotifyUrl(wechatPayConfigService.getTransferNotifyUrl());
         request.setAppid(config.getWxAppId())
+                .setOutBatchNo(String.valueOf(order.getId()))
                 .setBatchName(order.getTitle())
-                .setOutBatchNo(order.getOutTransferNo())
                 .setBatchRemark(reason)
+                .setTotalNum(1)
                 .setTotalAmount(PayUtil.convertCentAmount(order.getAmount()))
                 .setTransferDetailList(Collections.singletonList(transferDetail));
         try {

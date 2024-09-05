@@ -40,7 +40,7 @@ public class AliPayConfigParam {
 
     /**
      * 认证类型 证书/公钥
-     * @see AliPayCode#AUTH_TYPE_KEY
+     * @see AliPayCode.AuthType
      */
     @Schema(description = "认证类型")
     @NotBlank(message = "认证类型不可为空")

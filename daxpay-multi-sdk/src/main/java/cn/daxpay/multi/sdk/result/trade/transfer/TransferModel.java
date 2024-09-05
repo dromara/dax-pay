@@ -22,4 +22,10 @@ public class TransferModel{
      * @see TransferStatusEnum
      */
     private String status;
+
+
+    /**
+     * 提示信息
+     */
+    private String errorMsg;
 }

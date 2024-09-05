@@ -92,6 +92,12 @@ public class WechatPayV3Service {
     private String wapPay(PayOrder payOrder, WechatPayConfig wechatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         var request = this.buildRequest(payOrder);
+        var sceneInfo = new WxPayUnifiedOrderV3Request.SceneInfo();
+        sceneInfo.setPayerClientIp(payOrder.getClientIp());
+        var h5Info = new WxPayUnifiedOrderV3Request.H5Info();
+        h5Info.setType("Wap");
+        sceneInfo.setH5Info(h5Info);
+        request.setSceneInfo(sceneInfo);
         try {
             // h5Url
             return wxPayService.createOrderV3(TradeTypeEnum.H5, request);
@@ -127,7 +133,6 @@ public class WechatPayV3Service {
         payer.setOpenid(openId);
         request.setPayer(payer);
         try {
-            // h5Url
             WxPayUnifiedOrderV3Result.JsapiResult result = wxPayService.createOrderV3(TradeTypeEnum.JSAPI, request);
             Map<String, String> map = this.buildJsapiResult(result);
             return JsonUtil.toJsonStr(map);

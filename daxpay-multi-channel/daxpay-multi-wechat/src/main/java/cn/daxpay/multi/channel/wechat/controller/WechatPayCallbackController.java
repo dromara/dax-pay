@@ -46,7 +46,7 @@ public class WechatPayCallbackController {
 
 
     @Operation(summary = "微信退款回调")
-    @PostMapping("/refund/wechat")
+    @PostMapping("/refund")
     public String wechatRefundNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
         paymentAssistService.initMchAndApp(mchNo, appId);
         return refundCallbackService.refundHandle(request);

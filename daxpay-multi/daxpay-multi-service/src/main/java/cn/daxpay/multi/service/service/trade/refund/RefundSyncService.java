@@ -163,7 +163,6 @@ public class RefundSyncService {
                 .setTradeNo(refundOrder.getRefundNo())
                 .setBizTradeNo(refundOrder.getBizRefundNo())
                 .setOutTradeNo(syncResult.getOutRefundNo())
-                .setOutTradeStatus(syncResult.getRefundStatus().getCode())
                 .setTradeType(TradeTypeEnum.REFUND.getCode())
                 .setChannel(refundOrder.getChannel())
                 .setSyncInfo(syncResult.getSyncData())
@@ -171,6 +170,9 @@ public class RefundSyncService {
                 .setErrorCode(syncResult.getSyncErrorCode())
                 .setErrorMsg(syncResult.getSyncErrorMsg())
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
+        if (syncResult.isSyncSuccess()){
+            tradeSyncRecord.setOutTradeStatus(syncResult.getRefundStatus().getCode());
+        }
         tradeSyncRecordService.saveRecord(tradeSyncRecord);
     }
 

@@ -29,7 +29,7 @@ public class TransferOrderTest {
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .mchNo("M1723635576766")
-                .appId("M8088873888246277")
+                .appId("M8207639754663343")
                 .build();
         DaxPayKit.initConfig(config);
     }
@@ -39,7 +39,7 @@ public class TransferOrderTest {
      * 发起转账操作(支付宝)
      */
     @Test
-    public void transfer() {
+    public void aliTransfer() {
         // 构建参数
         TransferParam param = new TransferParam();
         param.setBizTransferNo("T"+System.currentTimeMillis());
@@ -50,7 +50,28 @@ public class TransferOrderTest {
         param.setPayeeType(TransferPayeeTypeEnum.ALI_OPEN_ID.getCode());
         param.setClientIp("127.0.0.1");
         // 使用OpenId
-        param.setPayeeAccount("065a9aEjER9Fa__hxYyvgYDlkhUiw_6RINhYHB2oegpWAo5");
+        param.setPayeeAccount("-G8AkkjjVhUl_VAf");
+        // 发起请求
+        DaxPayResult<TransferModel> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
+    }
+
+    /**
+     * 发起转账操作(微信)
+     */
+    @Test
+    public void transfer() {
+        // 构建参数
+        TransferParam param = new TransferParam();
+        param.setBizTransferNo("T"+System.currentTimeMillis());
+        param.setTitle("测试微信转账");
+        param.setReason("我要转个账");
+        param.setAmount(BigDecimal.valueOf(0.01));
+        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setPayeeType(TransferPayeeTypeEnum.WX_PERSONAL.getCode());
+        param.setClientIp("127.0.0.1");
+        // 使用OpenId
+        param.setPayeeAccount("");
         // 发起请求
         DaxPayResult<TransferModel> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));

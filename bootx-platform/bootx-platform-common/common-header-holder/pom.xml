@@ -9,7 +9,7 @@
         <version>3.0.1.beta1</version>
     </parent>
 
-    <artifactId>header-holder</artifactId>
+    <artifactId>common-header-holder</artifactId>
     <description>请求头工具</description>
 
 <dependencies>

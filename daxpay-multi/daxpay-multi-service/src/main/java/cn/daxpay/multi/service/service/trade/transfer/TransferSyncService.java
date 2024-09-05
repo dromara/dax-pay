@@ -48,7 +48,6 @@ public class TransferSyncService {
     private final MerchantNoticeService merchantNoticeService;
     private final TransferAssistService transferAssistService;
     private final TradeFlowRecordService tradeFlowRecordService;
-    private final SpringUtil springUtil;
 
     /**
      * 转账同步接口
@@ -183,7 +182,6 @@ public class TransferSyncService {
                 .setBizTradeNo(order.getBizTransferNo())
                 .setTradeNo(order.getTransferNo())
                 .setOutTradeNo(order.getOutTransferNo())
-                .setOutTradeStatus(payRemoteSyncResult.getTransferStatus().getCode())
                 .setTradeType(TradeTypeEnum.TRANSFER.getCode())
                 .setChannel(order.getChannel())
                 .setSyncInfo(payRemoteSyncResult.getSyncData())
@@ -191,6 +189,9 @@ public class TransferSyncService {
                 .setErrorCode(payRemoteSyncResult.getSyncErrorCode())
                 .setErrorMsg(payRemoteSyncResult.getSyncErrorMsg())
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
+        if (payRemoteSyncResult.isSyncSuccess()){
+            tradeSyncRecord.setOutTradeStatus(payRemoteSyncResult.getTransferStatus().getCode());
+        }
         tradeSyncRecordService.saveRecord(tradeSyncRecord);
     }
 }

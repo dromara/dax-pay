@@ -32,7 +32,7 @@
         <!-- 请求头信息获取 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
-            <artifactId>header-holder</artifactId>
+            <artifactId>common-header-holder</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
         <!-- json库 -->

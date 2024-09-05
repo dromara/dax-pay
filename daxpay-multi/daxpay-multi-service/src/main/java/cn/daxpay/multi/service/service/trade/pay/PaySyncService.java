@@ -214,7 +214,6 @@ public class PaySyncService {
                 .setBizTradeNo(payOrder.getBizOrderNo())
                 .setTradeNo(payOrder.getOrderNo())
                 .setOutTradeNo(payOrder.getOutOrderNo())
-                .setOutTradeStatus(payRemoteSyncResult.getPayStatus().getCode())
                 .setTradeType(TradeTypeEnum.PAY.getCode())
                 .setChannel(payOrder.getChannel())
                 .setSyncInfo(payRemoteSyncResult.getSyncData())
@@ -222,6 +221,9 @@ public class PaySyncService {
                 .setErrorCode(payRemoteSyncResult.getSyncErrorCode())
                 .setErrorMsg(payRemoteSyncResult.getSyncErrorMsg())
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
+        if (payRemoteSyncResult.isSyncSuccess()){
+            tradeSyncRecord.setOutTradeStatus(payRemoteSyncResult.getPayStatus().getCode());
+        }
         tradeSyncRecordService.saveRecord(tradeSyncRecord);
     }
 

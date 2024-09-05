@@ -70,6 +70,7 @@ public class TransferAssistService {
         return new TransferResult()
                 .setTransferNo(order.getTransferNo())
                 .setBizTransferNo(order.getBizTransferNo())
-                .setStatus(order.getStatus());
+                .setStatus(order.getStatus())
+                .setErrorMsg(order.getErrorMsg());
     }
 }

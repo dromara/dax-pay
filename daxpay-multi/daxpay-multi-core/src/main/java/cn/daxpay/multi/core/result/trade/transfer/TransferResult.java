@@ -29,4 +29,10 @@ public class TransferResult {
      */
     @Schema(description = "状态")
     private String status;
+
+    /**
+     * 提示信息
+     */
+    @Schema(description = "提示信息")
+    private String errorMsg;
 }

@@ -4,10 +4,7 @@ import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.TransferPayeeTypeEnum;
 import cn.daxpay.multi.core.param.PaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -42,9 +39,10 @@ public class TransferParam extends PaymentCommonParam {
     private String channel;
 
     /** 转账金额 */
-    @NotNull(message = "转账金额必填")
-    @Min(value = 1, message = "转账金额至少为0.01元")
     @Schema(description = "转账金额")
+    @NotNull(message = "转账金额必填")
+    @DecimalMin(value = "0.01", message = "支付金额不可小于0.01元")
+    @Digits(integer = 8, fraction = 2, message = "支付金额精度到分, 且要小于一亿元")
     private BigDecimal amount;
 
     /** 标题 */

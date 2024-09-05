@@ -31,7 +31,7 @@ public class PayOrderTest {
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .mchNo("M1723635576766")
-                .appId("M7189826551600486")
+                .appId("M8207639754663343")
                 .build();
         DaxPayKit.initConfig(config);
     }
@@ -142,8 +142,8 @@ public class PayOrderTest {
         param.setTitle("测试微信应用支付");
         param.setDescription("这是备注");
         param.setAmount(BigDecimal.valueOf(10));
-        param.setChannel(PayChannelEnum.ALI.getCode());
-        param.setMethod(PayMethodEnum.QRCODE.getCode());
+        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setMethod(PayMethodEnum.APP.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
