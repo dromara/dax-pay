@@ -12,16 +12,14 @@
 
     <groupId>cn.daxpay.multi</groupId>
     <artifactId>daxpay-multi</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>3.0.1.beta1</version>
     <packaging>pom</packaging>
+    <description>多商户支付核心功能实现</description>
 
     <modules>
         <module>daxpay-multi-core</module>
         <module>daxpay-multi-service</module>
-        <module>daxpay-multi-admin</module>
-        <module>daxpay-multi-gateway</module>
-        <module>daxpay-multi-merchant</module>
-        <module>daxpay-multi-service-controller</module>
+        <module>daxpay-multi-controller</module>
     </modules>
 
     <properties>
@@ -34,8 +32,8 @@
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <minio.version>8.5.2</minio.version>
 
-        <bootx-platform.version>0.0.1-SNAPSHOT</bootx-platform.version>
-        <daxpay.version>0.0.1-SNAPSHOT</daxpay.version>
+        <bootx-platform.version>3.0.1.beta1</bootx-platform.version>
+        <daxpay.version>3.0.1.beta1</daxpay.version>
     </properties>
 
     <dependencies>

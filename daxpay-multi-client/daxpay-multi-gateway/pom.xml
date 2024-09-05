@@ -5,13 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.daxpay.multi</groupId>
-        <artifactId>daxpay-multi</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>daxpay-multi-client</artifactId>
+        <version>3.0.1.beta1</version>
     </parent>
 
-    <artifactId>daxpay-multi-merchant</artifactId>
-    <packaging>jar</packaging>
-    <description>商户端</description>
+    <artifactId>daxpay-multi-gateway</artifactId>
 
     <dependencies>
         <!-- web框架 -->
@@ -33,6 +31,13 @@
 <!--            <artifactId>mysql-connector-j</artifactId>-->
 <!--        </dependency>-->
 
+        <!-- 接口文档 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-swagger</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
         <!--文件存储 (minio方式)-->
         <dependency>
             <groupId>io.minio</groupId>
@@ -40,12 +45,13 @@
             <version>${minio.version}</version>
         </dependency>
 
-        <!-- 支付服务和通用控制器 -->
+        <!-- 支付服务 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>
-            <artifactId>daxpay-multi-service-controller</artifactId>
+            <artifactId>daxpay-multi-service</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
+
         <!-- 支付通道实现 -->
 
         <!-- 支付宝通道实现 -->
@@ -67,11 +73,10 @@
             <artifactId>daxpay-multi-union</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>daxpay-admin</finalName>
+        <finalName>daxpay-gateway</finalName>
         <plugins>
             <!-- spring-boot -->
             <plugin>

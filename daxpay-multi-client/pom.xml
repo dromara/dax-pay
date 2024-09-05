@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -12,15 +11,16 @@
     </parent>
 
     <groupId>cn.daxpay.multi</groupId>
-    <artifactId>daxpay-multi-channel</artifactId>
+    <artifactId>daxpay-multi-client</artifactId>
     <version>3.0.1.beta1</version>
-    <description>多商户支付通道功能实现</description>
-    <modules>
-        <module>daxpay-multi-alipay</module>
-        <module>daxpay-multi-wechat</module>
-        <module>daxpay-multi-union</module>
-    </modules>
     <packaging>pom</packaging>
+    <description>多商户启动终端</description>
+
+    <modules>
+        <module>daxpay-multi-admin</module>
+        <module>daxpay-multi-gateway</module>
+        <module>daxpay-multi-merchant</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -33,6 +33,7 @@
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <autopoi.version>1.4.8</autopoi.version>
         <easypoi.version>4.5.0</easypoi.version>
+        <minio.version>8.5.2</minio.version>
 
         <bootx-platform.version>3.0.1.beta1</bootx-platform.version>
         <daxpay.version>3.0.1.beta1</daxpay.version>
@@ -62,14 +63,7 @@
             <version>${mapstruct.version}</version>
         </dependency>
 
-        <!-- 支付服务实现类 -->
-        <dependency>
-            <groupId>cn.daxpay.multi</groupId>
-            <artifactId>daxpay-multi-service</artifactId>
-            <version>${daxpay.version}</version>
-        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <!-- 打包Excel等资源文件损坏问题 -->
@@ -111,4 +105,5 @@
             </resource>
         </resources>
     </build>
+
 </project>

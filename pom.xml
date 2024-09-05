@@ -5,7 +5,7 @@
 
     <groupId>cn.daxpay.multi</groupId>
     <artifactId>daxpay</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>3.0.1.beta1</version>
     <packaging>pom</packaging>
 
     <name>dax-pay-multi</name>
@@ -15,6 +15,7 @@
         <module>bootx-platform</module>
         <module>daxpay-multi</module>
         <module>daxpay-multi-channel</module>
+        <module>daxpay-multi-client</module>
         <module>daxpay-multi-sdk</module>
     </modules>
     <properties>

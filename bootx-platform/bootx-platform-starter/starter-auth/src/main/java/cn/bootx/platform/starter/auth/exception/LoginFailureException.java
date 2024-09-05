@@ -1,6 +1,6 @@
 package cn.bootx.platform.starter.auth.exception;
 
-import cn.bootx.platform.core.exception.BizException;
+import cn.bootx.platform.core.exception.BizInfoException;
 import lombok.Getter;
 
 /**
@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since 2021/8/13
  */
 @Getter
-public class LoginFailureException extends BizException {
+public class LoginFailureException extends BizInfoException {
 
     private final String account;
 

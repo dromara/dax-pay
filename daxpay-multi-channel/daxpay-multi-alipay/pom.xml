@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.daxpay.multi</groupId>
         <artifactId>daxpay-multi-channel</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>3.0.1.beta1</version>
     </parent>
 
     <artifactId>daxpay-multi-alipay</artifactId>

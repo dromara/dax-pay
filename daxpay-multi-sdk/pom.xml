@@ -6,7 +6,7 @@
 
     <groupId>cn.daxpay.multi</groupId>
     <artifactId>daxpay-multi-sdk</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>3.0.1.beta1</version>
     <packaging>jar</packaging>
 
     <!-- 项目信息 -->

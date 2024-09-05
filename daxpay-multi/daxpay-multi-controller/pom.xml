@@ -6,10 +6,10 @@
     <parent>
         <groupId>cn.daxpay.multi</groupId>
         <artifactId>daxpay-multi</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>3.0.1.beta1</version>
     </parent>
 
-    <artifactId>daxpay-multi-service-controller</artifactId>
+    <artifactId>daxpay-multi-controller</artifactId>
     <description>支付服务公共控制器服务</description>
 
    <dependencies>

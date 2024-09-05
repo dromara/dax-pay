@@ -5,17 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.daxpay.multi</groupId>
-        <artifactId>daxpay-multi</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>daxpay-multi-client</artifactId>
+        <version>3.0.1.beta1</version>
     </parent>
 
-    <artifactId>daxpay-multi-gateway</artifactId>
+    <artifactId>daxpay-multi-admin</artifactId>
+    <packaging>jar</packaging>
+    <description>运营管理端</description>
 
     <dependencies>
         <!-- web框架 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 支付服务和通用控制器 -->
+        <dependency>
+            <groupId>cn.daxpay.multi</groupId>
+            <artifactId>daxpay-multi-controller</artifactId>
+            <version>${daxpay.version}</version>
         </dependency>
 
         <!-- 数据库驱动 PG -->
@@ -31,13 +40,6 @@
 <!--            <artifactId>mysql-connector-j</artifactId>-->
 <!--        </dependency>-->
 
-        <!-- 接口文档 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-swagger</artifactId>
-            <version>${bootx-platform.version}</version>
-        </dependency>
-
         <!--文件存储 (minio方式)-->
         <dependency>
             <groupId>io.minio</groupId>
@@ -45,15 +47,7 @@
             <version>${minio.version}</version>
         </dependency>
 
-        <!-- 支付服务 -->
-        <dependency>
-            <groupId>cn.daxpay.multi</groupId>
-            <artifactId>daxpay-multi-service</artifactId>
-            <version>${daxpay.version}</version>
-        </dependency>
-
         <!-- 支付通道实现 -->
-
         <!-- 支付宝通道实现 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>
@@ -66,17 +60,17 @@
             <artifactId>daxpay-multi-wechat</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
-
         <!-- 云闪付通道实现 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>
             <artifactId>daxpay-multi-union</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
-        <finalName>daxpay-gateway</finalName>
+        <finalName>daxpay-admin</finalName>
         <plugins>
             <!-- spring-boot -->
             <plugin>

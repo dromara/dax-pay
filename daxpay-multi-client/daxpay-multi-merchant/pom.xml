@@ -5,26 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.daxpay.multi</groupId>
-        <artifactId>daxpay-multi</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>daxpay-multi-client</artifactId>
+        <version>3.0.1.beta1</version>
     </parent>
 
-    <artifactId>daxpay-multi-admin</artifactId>
+    <artifactId>daxpay-multi-merchant</artifactId>
     <packaging>jar</packaging>
-    <description>运营管理端</description>
+    <description>商户端</description>
 
     <dependencies>
         <!-- web框架 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- 支付服务和通用控制器 -->
-        <dependency>
-            <groupId>cn.daxpay.multi</groupId>
-            <artifactId>daxpay-multi-service-controller</artifactId>
-            <version>${daxpay.version}</version>
         </dependency>
 
         <!-- 数据库驱动 PG -->
@@ -47,7 +40,14 @@
             <version>${minio.version}</version>
         </dependency>
 
+        <!-- 支付服务和通用控制器 -->
+        <dependency>
+            <groupId>cn.daxpay.multi</groupId>
+            <artifactId>daxpay-multi-controller</artifactId>
+            <version>${daxpay.version}</version>
+        </dependency>
         <!-- 支付通道实现 -->
+
         <!-- 支付宝通道实现 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>
@@ -60,6 +60,7 @@
             <artifactId>daxpay-multi-wechat</artifactId>
             <version>${daxpay.version}</version>
         </dependency>
+
         <!-- 云闪付通道实现 -->
         <dependency>
             <groupId>cn.daxpay.multi</groupId>

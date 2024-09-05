@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-common</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>3.0.1.beta1</version>
     </parent>
 
     <artifactId>header-holder</artifactId>
