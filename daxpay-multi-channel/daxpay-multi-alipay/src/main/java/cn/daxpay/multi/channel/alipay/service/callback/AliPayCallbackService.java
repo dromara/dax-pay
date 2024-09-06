@@ -87,7 +87,7 @@ public class AliPayCallbackService {
         callback.setCallbackData(callbackParam);
         // 通道和回调类型
         callback.setChannel(ChannelEnum.ALI.getCode());
-        String refundFee = callbackParam.get(REFUND_FEE);
+        String refundFee = callbackParam.get(ResponseParams.REFUND_FEE);
         // 如果有退款金额，说明是退款回调
         if (StrUtil.isNotBlank(refundFee)){
             callback.setCallbackType(TradeTypeEnum.REFUND);
@@ -112,18 +112,18 @@ public class AliPayCallbackService {
         }
 
         // 网关订单号
-        callback.setOutTradeNo(callbackParam.get(TRADE_NO));
+        callback.setOutTradeNo(callbackParam.get(ResponseParams.TRADE_NO));
         // 支付订单ID
-        callback.setTradeNo(callbackParam.get(OUT_TRADE_NO));
+        callback.setTradeNo(callbackParam.get(ResponseParams.OUT_TRADE_NO));
         // 支付状态
-        PayStatusEnum payStatus = Objects.equals(callbackParam.get(TRADE_STATUS), PayStatus.TRADE_SUCCESS) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
+        PayStatusEnum payStatus = Objects.equals(callbackParam.get(ResponseParams.TRADE_STATUS), PayStatus.TRADE_SUCCESS) ? PayStatusEnum.SUCCESS : PayStatusEnum.FAIL;
         callback.setTradeStatus(payStatus.getCode());
         // 支付金额
-        String amountStr = callbackParam.get(TOTAL_AMOUNT);
+        String amountStr = callbackParam.get(ResponseParams.TOTAL_AMOUNT);
         callback.setAmount(new BigDecimal(amountStr));
 
         // 支付时间
-        String gmpTime = callbackParam.get(GMT_PAYMENT);
+        String gmpTime = callbackParam.get(ResponseParams.GMT_PAYMENT);
         if (StrUtil.isNotBlank(gmpTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(gmpTime, DatePattern.NORM_DATETIME_PATTERN);
             callback.setFinishTime(time);
@@ -145,14 +145,14 @@ public class AliPayCallbackService {
             return false;
         }
         // 退款订单号
-        callback.setTradeNo(callbackParam.get(OUT_BIZ_NO));
+        callback.setTradeNo(callbackParam.get(ResponseParams.OUT_BIZ_NO));
         // 退款状态
-        callback.setTradeStatus(callbackParam.get(TRADE_STATUS));
+        callback.setTradeStatus(callbackParam.get(ResponseParams.TRADE_STATUS));
         // 退款金额
-        callback.setAmount(new BigDecimal(callbackParam.get(REFUND_FEE)));
+        callback.setAmount(new BigDecimal(callbackParam.get(ResponseParams.REFUND_FEE)));
 
         // 退款时间
-        String gmpTime = callbackParam.get(GMT_REFUND);
+        String gmpTime = callbackParam.get(ResponseParams.GMT_REFUND);
         if (StrUtil.isNotBlank(gmpTime)) {
             LocalDateTime time = LocalDateTimeUtil.parse(gmpTime, DatePattern.NORM_DATETIME_PATTERN);
             callback.setFinishTime(time);

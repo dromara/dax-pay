@@ -69,7 +69,7 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         LocalDateTime now = LocalDateTime.now();
         return lambdaQuery()
                 .eq(RefundOrder::getStatus, RefundStatusEnum.PROGRESS.getCode())
-                .le(MpCreateEntity::getCreateTime, now.plusMinutes(1L))
+                .le(MpCreateEntity::getCreateTime, now.plusMinutes(-1L))
                 .list();
     }
 

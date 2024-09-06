@@ -107,7 +107,7 @@ public class AliPayService {
         model.setTotalAmount(amount);
         // 过期时间
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
-        model.setProductCode(AliPayCode.QUICK_WAP_PAY);
+        model.setProductCode(AliPayCode.Products.QUICK_WAP_PAY);
         // 是否分账
         if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();
@@ -140,7 +140,7 @@ public class AliPayService {
     public String appPay(String amount, PayOrder payOrder) {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setSubject(payOrder.getTitle());
-        model.setProductCode(AliPayCode.QUICK_MSECURITY_PAY);
+        model.setProductCode(AliPayCode.Products.QUICK_MSECURITY_PAY);
         model.setOutTradeNo(payOrder.getOrderNo());
         // 过期时间
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
@@ -180,7 +180,7 @@ public class AliPayService {
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(amount);
         // 目前仅支持FAST_INSTANT_TRADE_PAY
-        model.setProductCode(AliPayCode.FAST_INSTANT_TRADE_PAY);
+        model.setProductCode(AliPayCode.Products.FAST_INSTANT_TRADE_PAY);
 
         // 是否分账
         if (payOrder.getAllocation()){
@@ -215,7 +215,7 @@ public class AliPayService {
         AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
         AlipayTradeCreateModel model = new AlipayTradeCreateModel();
         model.setOutTradeNo(payOrder.getOrderNo());
-        model.setProductCode(AliPayCode.JSAPI_PAY);
+        model.setProductCode(AliPayCode.Products.JSAPI_PAY);
         model.setOpAppId(aliPayParam.getOpAppId());
         model.setTotalAmount(amount);
         model.setSubject(payOrder.getTitle());
@@ -285,7 +285,7 @@ public class AliPayService {
         AlipayTradePayModel model = new AlipayTradePayModel();
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
-        model.setScene(AliPayCode.BAR_CODE);
+        model.setScene(AliPayCode.Products.BAR_CODE);
         model.setAuthCode(aliPayParam.getAuthCode());
         // 是否分账
         if (payOrder.getAllocation()){
@@ -302,14 +302,14 @@ public class AliPayService {
         try {
             AlipayTradePayResponse response = aliPayConfigService.execute(request);
             // 支付成功处理 金额2000以下免密支付, 记录支付完成相关信息
-            if (Objects.equals(response.getCode(), AliPayCode.SUCCESS)) {
+            if (Objects.equals(response.getCode(), AliPayCode.ResponseCode.SUCCESS)) {
                 Date gmtPayment = response.getGmtPayment();
                 result.setOutOrderNo(response.getTradeNo())
                         .setComplete(true)
                         .setFinishTime(LocalDateTimeUtil.of(gmtPayment));
             }
             // 非支付中响应码, 进行错误处理
-            if (!Objects.equals(response.getCode(), AliPayCode.INPROCESS)) {
+            if (!Objects.equals(response.getCode(), AliPayCode.ResponseCode.INPROCESS)) {
                 this.verifyErrorMsg(response);
             }
         }
@@ -323,7 +323,7 @@ public class AliPayService {
      * 验证错误信息
      */
     private void verifyErrorMsg(AlipayResponse alipayResponse) {
-        if (!Objects.equals(alipayResponse.getCode(), AliPayCode.SUCCESS)) {
+        if (!Objects.equals(alipayResponse.getCode(), AliPayCode.ResponseCode.SUCCESS)) {
             String errorMsg = alipayResponse.getSubMsg();
             if (StrUtil.isBlank(errorMsg)) {
                 errorMsg = alipayResponse.getMsg();

@@ -158,9 +158,9 @@ public class AliPayConfigService {
         }
         // 沙箱
         if (aliPayConfig.isSandbox()){
-            config.setServerUrl("https://openapi-sandbox.dl.alipaydev.com/gateway.do");
+            config.setServerUrl(AliPayCode.ServerUrl.SANDBOX);
         } else {
-            config.setServerUrl("https://openapi.alipay.com/gateway.do");
+            config.setServerUrl(AliPayCode.ServerUrl.PRODUCTION);
         }
 
         return new DefaultAlipayClient(config);

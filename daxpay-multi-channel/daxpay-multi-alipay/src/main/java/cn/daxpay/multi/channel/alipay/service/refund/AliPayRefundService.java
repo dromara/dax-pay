@@ -50,7 +50,7 @@ public class AliPayRefundService {
         request.setBizModel(model);
         try {
             AlipayTradeRefundResponse response = aliPayConfigService.execute(request);
-            if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+            if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
                 TradeFailException operationFailException = new TradeFailException("支付宝退款失败: "+response.getSubMsg());
                 log.error("支付宝退款失败: {}", response.getSubMsg());
                 throw operationFailException;

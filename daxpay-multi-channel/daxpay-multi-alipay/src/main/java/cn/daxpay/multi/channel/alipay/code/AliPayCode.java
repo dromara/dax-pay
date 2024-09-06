@@ -9,7 +9,7 @@ package cn.daxpay.multi.channel.alipay.code;
 public interface AliPayCode {
 
     /**
-     *
+     * 支付网管地址
      */
     interface ServerUrl{
         /** 沙箱地址 */
@@ -48,58 +48,61 @@ public interface AliPayCode {
     }
 
 
-    // 渠道枚举
-    /** 目前PC支付必填 */
-    String FAST_INSTANT_TRADE_PAY = "FAST_INSTANT_TRADE_PAY";
+    /**
+     * 渠道和产品枚举
+     */
+    interface Products {
+        /** 目前PC支付必填 */
+        String FAST_INSTANT_TRADE_PAY = "FAST_INSTANT_TRADE_PAY";
 
-    /** WAP支付必填 手机网站支付产品 */
-    String QUICK_WAP_PAY = "QUICK_WAP_WAY";
+        /** WAP支付必填 手机网站支付产品 */
+        String QUICK_WAP_PAY = "QUICK_WAP_WAY";
 
-    /** APP支付必填 APP支付产品 */
-    String QUICK_MSECURITY_PAY = "QUICK_MSECURITY_PAY";
+        /** APP支付必填 APP支付产品 */
+        String QUICK_MSECURITY_PAY = "QUICK_MSECURITY_PAY";
 
-    /** 询余额账户类型 */
-    String QUERY_ACCOUNT_TYPE = "ACCTRANS_ACCOUNT";
+        /** 询余额账户类型 */
+        String QUERY_ACCOUNT_TYPE = "ACCTRANS_ACCOUNT";
 
-    /** jsapi */
-    String JSAPI_PAY ="JSAPI_PAY";
+        /** jsapi */
+        String JSAPI_PAY ="JSAPI_PAY";
 
-    /** 付款码支付 */
-    String BAR_CODE = "bar_code";
+        /** 付款码支付 */
+        String BAR_CODE = "bar_code";
+    }
 
-    // 响应字段
-    /** 交易状态 */
-    String TRADE_STATUS = "trade_status";
 
-    /** 公用回传参数 */
-    String PASS_BACK_PARAMS = "passback_params";
+    /**
+     * 响应字段
+     */
+    interface ResponseParams{
+        /** 交易状态 */
+        String TRADE_STATUS = "trade_status";
 
-    /** 对交易或商品的描述(在没有公用回传参数的时候, 这个作为公用回传参数) */
-    String BODY = "body";
+        /** 通道支付订单号 - 商户订单号 */
+        String OUT_TRADE_NO = "out_trade_no";
 
-    /** 通道支付订单号 - 商户订单号 */
-    String OUT_TRADE_NO = "out_trade_no";
+        /** 支付流水号 */
+        String TRADE_NO = "trade_no";
 
-    /** 支付流水号 */
-    String TRADE_NO = "trade_no";
+        /** 支付金额 */
+        String TOTAL_AMOUNT = "total_amount";
 
-    /** 支付金额 */
-    String TOTAL_AMOUNT = "total_amount";
+        /** 交易付款时间 yyyy-MM-dd HH:mm:ss */
+        String GMT_PAYMENT = "gmt_payment";
 
-    /** 交易付款时间 yyyy-MM-dd HH:mm:ss */
-    String GMT_PAYMENT = "gmt_payment";
+        /** 退款业务号 */
+        String OUT_BIZ_NO = "out_biz_no";
 
-    /** 退款业务号 */
-    String OUT_BIZ_NO = "out_biz_no";
+        /** 退款金额 */
+        String REFUND_FEE = "refund_fee";
 
-    /** 退款金额 */
-    String REFUND_FEE = "refund_fee";
+        /** 退款时间 yyyy-MM-dd HH:mm:ss */
+        String GMT_REFUND = "GMT_REFUND";
 
-    /** 退款时间 yyyy-MM-dd HH:mm:ss */
-    String GMT_REFUND = "GMT_REFUND";
-
-    /** appId */
-    String APP_ID = "app_id";
+        /** 返回退款时间 */
+        String GMT_REFUND_PAY = "gmt_refund_pay";
+    }
 
     /**
      *  支付交易状态说明
@@ -130,27 +133,25 @@ public interface AliPayCode {
         String REFUND_SUCCESS = "REFUND_SUCCESS";
     }
 
-    // 退款状态
+    /**
+     * 响应状态码
+     */
+    interface ResponseCode {
+        /** 转账成功 */
+        String TRANSFER_SUCCESS = "SUCCESS";
 
-    // 参数
-    /** 返回退款时间 */
-    String GMT_REFUND_PAY = "gmt_refund_pay";
+        // 错误提示
+        /** 交易不存在 */
+        String ACQ_TRADE_NOT_EXIST = "ACQ.TRADE_NOT_EXIST";
+        /** 交易不存在 */
+        String ACQ_TRADE_STATUS_ERROR = "ACQ.TRADE_STATUS_ERROR";
 
-    // 转账状态
-    /** 转账成功 */
-    String TRANSFER_SUCCESS = "SUCCESS";
+        // 网关返回码
+        String SUCCESS = "10000";
 
-    // 错误提示
-    /** 交易不存在 */
-    String ACQ_TRADE_NOT_EXIST = "ACQ.TRADE_NOT_EXIST";
-    /** 交易不存在 */
-    String ACQ_TRADE_STATUS_ERROR = "ACQ.TRADE_STATUS_ERROR";
-
-    // 网关返回码
-    String SUCCESS = "10000";
-
-    // 网关返回码 支付进行中 order success pay inprocess
-    String INPROCESS = "10003";
+        // 网关返回码 支付进行中 order success pay inprocess
+        String INPROCESS = "10003";
+    }
 
     /* 分账相关 */
     /** 分账接收方不存在 */

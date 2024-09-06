@@ -50,15 +50,15 @@ public class AliPayCloseService {
         request.setBizModel(model);
         try {
             AlipayTradeCloseResponse response = aliPayConfigService.execute(request);
-            if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+            if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
                 // 如果返回"当前交易状态不支持此操作", 查询网关支付状态, 判断网关是否已经被关闭
-                if (Objects.equals(response.getSubCode(),AliPayCode.ACQ_TRADE_STATUS_ERROR)){
+                if (Objects.equals(response.getSubCode(),AliPayCode.ResponseCode.ACQ_TRADE_STATUS_ERROR)){
                     if (this.syncStatus(payOrder, config)){
                         return;
                     }
                 }
                 // 返回"交易不存在"视同关闭成功
-                if (Objects.equals(response.getSubCode(),AliPayCode.ACQ_TRADE_NOT_EXIST)){
+                if (Objects.equals(response.getSubCode(),AliPayCode.ResponseCode.ACQ_TRADE_NOT_EXIST)){
                     return;
                 }
                 log.error("网关返回关闭失败: {}", response.getSubMsg());
@@ -81,16 +81,16 @@ public class AliPayCloseService {
         request.setBizModel(model);
         try {
             AlipayTradeCancelResponse response = aliPayConfigService.execute(request);;
-            if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
-                if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+            if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
+                if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
                     // 如果返回"当前交易状态不支持此操作", 查询网关支付状态, 判断网关是否已经被关闭
-                    if (Objects.equals(response.getSubCode(),AliPayCode.ACQ_TRADE_STATUS_ERROR)){
+                    if (Objects.equals(response.getSubCode(),AliPayCode.ResponseCode.ACQ_TRADE_STATUS_ERROR)){
                         if (this.syncStatus(payOrder, config)){
                             return;
                         }
                     }
                     // 返回"交易不存在"视同关闭成功
-                    if (Objects.equals(response.getSubCode(),AliPayCode.ACQ_TRADE_NOT_EXIST)){
+                    if (Objects.equals(response.getSubCode(),AliPayCode.ResponseCode.ACQ_TRADE_NOT_EXIST)){
                         return;
                     }
                     log.error("网关返回关闭失败: {}", response.getSubMsg());

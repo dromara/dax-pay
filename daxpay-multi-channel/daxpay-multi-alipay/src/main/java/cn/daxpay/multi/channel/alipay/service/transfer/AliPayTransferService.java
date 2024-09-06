@@ -26,8 +26,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static cn.daxpay.multi.channel.alipay.code.AliPayCode.QUERY_ACCOUNT_TYPE;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -41,7 +39,7 @@ public class AliPayTransferService {
     @SneakyThrows
     public void queryAccountAmount(AliPayConfig config, AliPayConfig aliPayConfig){
         AlipayFundAccountQueryModel model = new AlipayFundAccountQueryModel();
-        model.setAccountType(QUERY_ACCOUNT_TYPE);
+        model.setAccountType(AliPayCode.Products.QUERY_ACCOUNT_TYPE);
         model.setAlipayUserId(config.getAlipayUserId());
         AlipayFundAccountQueryRequest request = new AlipayFundAccountQueryRequest();
         request.setBizModel(model);
@@ -87,14 +85,14 @@ public class AliPayTransferService {
         model.setRemark(order.getReason());
         request.setBizModel(model);
         AlipayFundTransUniTransferResponse response = aliPayConfigService.execute(request);
-        if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+        if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
             log.error("支付宝转账失败: {}", response.getSubMsg());
             throw new TradeFailException("支付宝转账失败: "+response.getSubMsg());
         }
         // 通道转账号
         transferInfo.setOutTransferNo(response.getOrderId());
         // 有完成时间代表处理完成
-        if (Objects.equals(response.getStatus(), AliPayCode.TRANSFER_SUCCESS)){
+        if (Objects.equals(response.getStatus(), AliPayCode.ResponseCode.TRANSFER_SUCCESS)){
             // 时间
             String transDate = response.getTransDate();
             LocalDateTime time = LocalDateTimeUtil.parse(transDate, DatePattern.NORM_DATETIME_PATTERN);

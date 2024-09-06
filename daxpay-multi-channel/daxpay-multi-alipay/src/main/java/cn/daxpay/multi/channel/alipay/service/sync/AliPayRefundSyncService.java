@@ -44,13 +44,13 @@ public class AliPayRefundSyncService {
             // 商户订单号
             model.setOutTradeNo(String.valueOf(refundOrder.getOrderNo()));
             // 设置返回退款完成时间
-            model.setQueryOptions(Collections.singletonList(AliPayCode.GMT_REFUND_PAY));
+            model.setQueryOptions(Collections.singletonList(AliPayCode.ResponseParams.GMT_REFUND_PAY));
             AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
             request.setBizModel(model);
             AlipayTradeFastpayRefundQueryResponse response = aliPayConfigService.execute(request);
             syncResult.setSyncData(JsonUtil.toJsonStr(response));
             // 失败
-            if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+            if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
                 syncResult.setSyncSuccess(false)
                         .setSyncErrorCode(response.getSubCode())
                         .setRefundStatus(RefundStatusEnum.FAIL)

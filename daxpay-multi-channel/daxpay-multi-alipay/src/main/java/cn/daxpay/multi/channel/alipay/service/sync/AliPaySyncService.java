@@ -73,11 +73,11 @@ public class AliPaySyncService {
                 }
             }
             // 支付宝支付后, 客户未进行操作将不会创建出订单, 所以交易不存在约等于未查询订单
-            if (Objects.equals(response.getSubCode(), AliPayCode.ACQ_TRADE_NOT_EXIST)) {
+            if (Objects.equals(response.getSubCode(), AliPayCode.ResponseCode.ACQ_TRADE_NOT_EXIST)) {
                 return syncResult.setPayStatus(PayStatusEnum.PROGRESS);
             }
             // 查询失败
-            if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+            if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
                 return syncResult.setSyncSuccess(false)
                         .setSyncErrorCode(response.getSubCode())
                         .setSyncErrorMsg(response.getSubMsg());

@@ -74,7 +74,7 @@ public class AliPayReconcileService {
             request.setBizModel(model);
             AlipayDataDataserviceBillDownloadurlQueryResponse response = aliPayConfigService.execute(request);
             // 判断返回结果
-            if (!Objects.equals(AliPayCode.SUCCESS, response.getCode())) {
+            if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
                 log.error("获取支付宝对账单失败: {}", response.getSubMsg());
                 throw new ReconciliationFailException(response.getSubMsg());
             }

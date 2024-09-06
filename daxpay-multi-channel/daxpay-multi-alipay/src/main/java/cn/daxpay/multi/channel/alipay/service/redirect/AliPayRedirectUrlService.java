@@ -38,7 +38,7 @@ public class AliPayRedirectUrlService {
             throw new ValidationFailedException("支付宝同步通知消息验签失败");
         }
         // 获取订单号
-        String outTradeNo = map.get(AliPayCode.OUT_TRADE_NO);
+        String outTradeNo = map.get(AliPayCode.ResponseParams.OUT_TRADE_NO);
         PayOrder order = payOrderManager.findByOrderNo(outTradeNo)
                 .orElseThrow(() -> new DataNotExistException("订单不存在"));
         return StrUtil.format("{}?biz_trade_no={}&trade_no={}", order.getReturnUrl(),order.getBizOrderNo(),order.getOrderNo() );

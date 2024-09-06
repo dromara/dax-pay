@@ -55,6 +55,10 @@ public class OrderSyncTaskService {
 
     /**
      * 退款定时同步任务 一分钟一次, 查询一分钟之前退款中的订单进行同步
+     * 10分钟内一分钟一次
+     * 一天内一小时一次
+     * 超过一天一天一次
+     *
      */
     @Scheduled(cron = "0 */1 * * * ?")
     public void refundSyncTask(){
