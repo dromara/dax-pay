@@ -12,7 +12,7 @@
 </p>
 
 # DaxPay(多商户前期预览版)
-
+> 单商户版为DEV分支
 ## ❗使用须知
 
 `DaxPay`是一款基于`Apache License 2.0`协议分发的开源软件，受中华人民共和国相关法律法规的保护和限制，可以在符合[《用户授权使用协议》](用户授权使用协议.txt)和
@@ -47,7 +47,7 @@
 | 项目      | GITEE                                       | GITHUB                                          |GITCODE                                          |
 |---------|---------------------------------------------|-------------------------------------------------|---------------------------------------------|
 | 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    | [GITCODE](https://gitcode.com/dromara/dax-pay)    |
-| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) | [GITCODE](https://github.com/daxpay/dax-pay-ui) |
+| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |  |
 
 
 ## 🏬 系统演示
