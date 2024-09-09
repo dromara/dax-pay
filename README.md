@@ -33,6 +33,7 @@
 
 ## 基础环境
 - Java: 21
+- SDK Java版本: 1.8
 - Spring Boot 3.3.x
 - Maven: 3.9.x
 - 数据库: Postgresql 16 / MySQL 8.x (适配中)

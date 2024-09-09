@@ -26,9 +26,9 @@ public class UnionPayCallbackController {
 
     private final PaymentAssistService paymentAssistService;
 
-    @Operation(summary = "支付宝回调")
-    @PostMapping("/alipay")
-    public String aliPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
+    @Operation(summary = "银联回调")
+    @PostMapping("/union")
+    public String UnionPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
         paymentAssistService.initMchAndApp(mchNo, appId);
         return "";
     }
