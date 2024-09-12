@@ -96,7 +96,7 @@ public class UnionPayConfig implements ToResult<UnionPayConfigResult> {
         channelConfig.setAppId(this.getAppId());
         channelConfig.setMchNo(this.getMchNo());
         channelConfig.setEnable(this.getEnable());
-        channelConfig.setChannel(ChannelEnum.ALI.getCode());
+        channelConfig.setChannel(ChannelEnum.UNION_PAY.getCode());
         UnionPayConfig copy = UnionPayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
         copy.setId(null).setAppId(null).setEnable(null).setUnionMachId(null).setAppId(null).setMchNo(null);

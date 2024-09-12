@@ -48,12 +48,4 @@ public class AliPayConfigController {
         return Res.ok();
     }
 
-    @SneakyThrows
-    @IgnoreAuth
-    @Operation(summary = "读取证书文件内容")
-    @PostMapping("/readPem")
-    public Result<String> readPem(@RequestPart MultipartFile file){
-        return Res.ok(new String(file.getBytes(), StandardCharsets.UTF_8));
-    }
-
 }

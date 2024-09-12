@@ -68,7 +68,7 @@ public class UnionPayConfigService {
         MchContextLocal.setMchNo(channelConfig.getMchNo());
         // 判断商户和应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(channelConfig.getAppId(), channelConfig.getChannel())){
-            throw new DataErrorException("该应用下已存在支付宝配置, 请勿重新添加");
+            throw new DataErrorException("该应用下已存在云闪付配置, 请勿重新添加");
         }
         channelConfigManager.save(channelConfig);
     }
