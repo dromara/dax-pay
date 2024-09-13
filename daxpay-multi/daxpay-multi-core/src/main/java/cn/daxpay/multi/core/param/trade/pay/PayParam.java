@@ -50,7 +50,7 @@ public class PayParam extends PaymentCommonParam {
 
     /** 过期时间 */
     @Schema(description = "过期时间")
-    @JsonFormat(pattern = DatePattern.PURE_DATETIME_PATTERN)
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime expiredTime;
 
     /**

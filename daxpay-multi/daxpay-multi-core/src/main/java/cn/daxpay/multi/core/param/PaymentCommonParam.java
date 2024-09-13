@@ -48,7 +48,7 @@ public abstract class PaymentCommonParam {
     @Size(max = 64, message = "签名不可超过64位")
     private String sign;
 
-    /** 请求时间 格式yyyyMMddHHmmss */
+    /** 请求时间 格式yyyy-MM-dd HH:mm:ss */
     @Schema(description = "请求时间, 格式yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "请求时间必填")
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)

@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.trade;
 
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
@@ -47,7 +47,7 @@ public class PayOrderTest {
         param.setTitle("测试微信扫码支付");
         param.setDescription("这是支付备注");
         param.setAmount(BigDecimal.valueOf(0.01));
-        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
@@ -68,7 +68,7 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试微信条码支付");
         param.setAmount(BigDecimal.valueOf(0.01));
-        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.BARCODE.getCode());
 
         WechatPayParam wechatPayParam = new WechatPayParam();
@@ -93,7 +93,7 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试微信公众号预支付");
         param.setAmount(BigDecimal.valueOf(0.01));
-        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.JSAPI.getCode());
 
         WechatPayParam wechatPayParam = new WechatPayParam();
@@ -119,7 +119,7 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试微信h5支付");
         param.setAmount(BigDecimal.valueOf(0.01));
-        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.WAP.getCode());
 
         param.setAttach("{回调参数}");
@@ -142,7 +142,7 @@ public class PayOrderTest {
         param.setTitle("测试微信应用支付");
         param.setDescription("这是备注");
         param.setAmount(BigDecimal.valueOf(10));
-        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.APP.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
@@ -164,7 +164,7 @@ public class PayOrderTest {
         param.setTitle("测试支付宝扫码支付");
         param.setDescription("这是支付宝扫码支付");
         param.setAmount(BigDecimal.valueOf(10));
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
@@ -187,7 +187,7 @@ public class PayOrderTest {
         param.setTitle("测试支付宝付款码支付");
         param.setDescription("这是支付宝付款码支付");
         param.setAmount(BigDecimal.valueOf(1));
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.BARCODE.getCode());
 
         AlipayParam alipayParam = new AlipayParam();
@@ -214,7 +214,7 @@ public class PayOrderTest {
         param.setTitle("测试支付宝H5支付");
         param.setDescription("这是支付宝H5支付");
         param.setAmount(BigDecimal.valueOf(1.53));
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
@@ -236,7 +236,7 @@ public class PayOrderTest {
         param.setTitle("测试支付宝WEB支付");
         param.setDescription("这是支付宝WEB支付");
         param.setAmount(BigDecimal.valueOf(1.52));
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.WEB.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
@@ -258,7 +258,7 @@ public class PayOrderTest {
         param.setTitle("测试支付宝JsApi支付");
         param.setDescription("这是支付宝WEB支付");
         param.setAmount(BigDecimal.valueOf(1.52));
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.JSAPI.getCode());
 
         AlipayParam alipayParam = new AlipayParam();
@@ -285,7 +285,7 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试支付宝APP支付");
         param.setAmount(BigDecimal.valueOf(1.52));
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.APP.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);

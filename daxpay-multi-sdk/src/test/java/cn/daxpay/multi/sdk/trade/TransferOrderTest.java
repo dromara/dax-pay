@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.trade;
 
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
 import cn.daxpay.multi.sdk.code.TransferPayeeTypeEnum;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
@@ -46,7 +46,7 @@ public class TransferOrderTest {
         param.setTitle("测试支付宝转账");
         param.setReason("我要转个账");
         param.setAmount(BigDecimal.valueOf(5));
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setPayeeType(TransferPayeeTypeEnum.ALI_OPEN_ID.getCode());
         param.setClientIp("127.0.0.1");
         // 使用OpenId
@@ -67,7 +67,7 @@ public class TransferOrderTest {
         param.setTitle("测试微信转账");
         param.setReason("我要转个账");
         param.setAmount(BigDecimal.valueOf(0.01));
-        param.setChannel(PayChannelEnum.WECHAT.getCode());
+        param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setPayeeType(TransferPayeeTypeEnum.WX_PERSONAL.getCode());
         param.setClientIp("127.0.0.1");
         // 使用OpenId

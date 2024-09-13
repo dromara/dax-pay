@@ -2,7 +2,7 @@ package cn.daxpay.multi.sdk.result.notice;
 
 import cn.daxpay.multi.sdk.code.AllocOrderResultEnum;
 import cn.daxpay.multi.sdk.code.AllocOrderStatusEnum;
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -48,7 +48,7 @@ public class AllocNoticeModel{
 
     /**
      * 所属通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

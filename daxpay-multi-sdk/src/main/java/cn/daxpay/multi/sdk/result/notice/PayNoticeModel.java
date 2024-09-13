@@ -1,8 +1,8 @@
 package cn.daxpay.multi.sdk.result.notice;
 
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
-import cn.daxpay.multi.sdk.code.PayOrderAllocStatusEnum;
-import cn.daxpay.multi.sdk.code.PayOrderRefundStatusEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
+import cn.daxpay.multi.sdk.code.PayAllocStatusEnum;
+import cn.daxpay.multi.sdk.code.PayRefundStatusEnum;
 import cn.daxpay.multi.sdk.code.PayStatusEnum;
 import lombok.Data;
 
@@ -38,7 +38,7 @@ public class PayNoticeModel{
     private Boolean autoAllocation;
     /**
      * 支付通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 
@@ -57,13 +57,13 @@ public class PayNoticeModel{
 
     /**
      * 退款状态
-     * @see PayOrderRefundStatusEnum
+     * @see PayRefundStatusEnum
      */
     private String refundStatus;
 
     /**
      * 分账状态
-     * @see PayOrderAllocStatusEnum
+     * @see PayAllocStatusEnum
      */
     private String allocStatus;
 

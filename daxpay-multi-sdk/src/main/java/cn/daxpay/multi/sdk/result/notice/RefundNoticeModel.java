@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.result.notice;
 
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import cn.daxpay.multi.sdk.code.RefundStatusEnum;
 import lombok.Data;
 
@@ -37,7 +37,7 @@ public class RefundNoticeModel{
 
     /**
      * 退款通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

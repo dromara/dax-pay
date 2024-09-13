@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.param.trade.transfer;
 
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import cn.daxpay.multi.sdk.code.TransferPayeeTypeEnum;
 import cn.daxpay.multi.sdk.result.trade.transfer.TransferModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
@@ -28,7 +28,7 @@ public class TransferParam extends DaxPayRequest<TransferModel> {
 
     /**
      * 支付通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

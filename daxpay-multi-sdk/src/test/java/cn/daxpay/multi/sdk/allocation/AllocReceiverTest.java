@@ -2,7 +2,7 @@ package cn.daxpay.multi.sdk.allocation;
 
 import cn.daxpay.multi.sdk.code.AllocReceiverTypeEnum;
 import cn.daxpay.multi.sdk.code.AllocRelationTypeEnum;
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
 import cn.daxpay.multi.sdk.net.DaxPayKit;
@@ -41,7 +41,7 @@ public class AllocReceiverTest {
     @Test
     public void add() {
         AllocReceiverAddParam param = new AllocReceiverAddParam();
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setClientIp("127.0.0.1");
         param.setRelationType(AllocRelationTypeEnum.HEADQUARTER.getCode());
         param.setReceiverNo("123456");
@@ -69,7 +69,7 @@ public class AllocReceiverTest {
     @Test
     public void query() {
         QueryAllocReceiverParam param = new QueryAllocReceiverParam();
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setReceiverNo("1231");
         param.setClientIp("127.0.0.1");
         DaxPayResult<AllocReceiversModel> execute = DaxPayKit.execute(param);

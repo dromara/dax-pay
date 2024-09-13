@@ -2,7 +2,7 @@ package cn.daxpay.multi.sdk.param.allocation;
 
 import cn.daxpay.multi.sdk.code.AllocReceiverTypeEnum;
 import cn.daxpay.multi.sdk.code.AllocRelationTypeEnum;
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import cn.daxpay.multi.sdk.result.allocation.AllocReceiverAddModel;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.response.DaxPayResult;
@@ -27,7 +27,7 @@ public class AllocReceiverAddParam extends DaxPayRequest<AllocReceiverAddModel> 
 
     /**
      * 所属通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

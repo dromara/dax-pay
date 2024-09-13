@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.param.trade.pay;
 
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.net.DaxPayRequest;
 import cn.daxpay.multi.sdk.param.channel.AlipayParam;
@@ -44,7 +44,7 @@ public class PayParam extends DaxPayRequest<PayResult> {
 
     /**
      * 支付通道编码
-     * @see PayChannelEnum#getCode()
+     * @see ChannelEnum#getCode()
      */
     private String channel;
 

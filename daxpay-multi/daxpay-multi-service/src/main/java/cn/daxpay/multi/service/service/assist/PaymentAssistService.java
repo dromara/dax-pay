@@ -55,19 +55,8 @@ public class PaymentAssistService {
         if (!mchAppInfo.getReqSign()){
             return;
         }
-        // 参数转换为Map对象
-        String signType = mchAppInfo.getSignType();
-        if (Objects.equals(SignTypeEnum.HMAC_SHA256.getCode(), signType)){
-            boolean verified = PaySignUtil.verifyHmacSha256Sign(param, mchAppInfo.getSignSecret(), param.getSign());
-            if (!verified){
-                throw new VerifySignFailedException();
-            }
-        } else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
-            boolean verified = PaySignUtil.verifyMd5Sign(param, mchAppInfo.getSignSecret(), param.getSign());
-            if (!verified){
-                throw new VerifySignFailedException();
-            }
-        } else {
+        String sign = this.genSign(param);
+        if (!Objects.equals(sign,param.getSign())){
             throw new VerifySignFailedException();
         }
     }
@@ -98,7 +87,7 @@ public class PaymentAssistService {
     }
 
     /**
-     * 对对象进行签名
+     * 对响应对象进行签名
      */
     public void sign(DaxResult<?> result) {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
@@ -110,6 +99,25 @@ public class PaymentAssistService {
             result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
         } else if (Objects.equals(SignTypeEnum.SM3.getCode(), signType)){
             result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
+        }
+        else {
+            throw new ValidationFailedException("未获取到签名方式，请检查");
+        }
+    }
+
+    /**
+     * 获取请求参数的签名值
+     */
+    public String genSign(PaymentCommonParam param) {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        String signType = mchAppInfo.getSignType();
+        if (Objects.equals(SignTypeEnum.HMAC_SHA256.getCode(), signType)){
+           return PaySignUtil.hmacSha256Sign(param, mchAppInfo.getSignSecret());
+        }
+        else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
+            return PaySignUtil.md5Sign(param, mchAppInfo.getSignSecret());
+        } else if (Objects.equals(SignTypeEnum.SM3.getCode(), signType)){
+            return PaySignUtil.md5Sign(param, mchAppInfo.getSignSecret());
         }
         else {
             throw new ValidationFailedException("未获取到签名方式，请检查");

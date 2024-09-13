@@ -69,6 +69,7 @@ public class TransferOrderResult extends MchResult {
     @Schema(description = "收款人姓名")
     private String payeeName;
 
+
     /**
      * 状态
      * @see TransferStatusEnum
@@ -83,6 +84,10 @@ public class TransferOrderResult extends MchResult {
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
     @Schema(description = "商户扩展参数")
     private String attach;
+
+    /** 终端ip */
+    @Schema(description = "终端ip")
+    private String clientIp;
 
     /**
      * 错误原因

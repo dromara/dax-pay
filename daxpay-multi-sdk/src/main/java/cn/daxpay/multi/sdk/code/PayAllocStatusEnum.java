@@ -10,11 +10,11 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum PayOrderAllocStatusEnum {
+public enum PayAllocStatusEnum {
     WAITING("waiting", "待分账"),
     ALLOCATION("allocation", "已分账"),
     ;
 
-    final String code;
-    final String name;
+    private final String code;
+    private final String name;
 }

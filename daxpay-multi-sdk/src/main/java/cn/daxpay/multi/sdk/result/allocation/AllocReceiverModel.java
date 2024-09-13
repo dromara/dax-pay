@@ -2,7 +2,7 @@ package cn.daxpay.multi.sdk.result.allocation;
 
 import cn.daxpay.multi.sdk.code.AllocReceiverTypeEnum;
 import cn.daxpay.multi.sdk.code.AllocRelationTypeEnum;
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import lombok.Data;
 
 /**
@@ -18,7 +18,7 @@ public class AllocReceiverModel {
 
     /**
      * 所属通道
-     * @see PayChannelEnum
+     * @see ChannelEnum
      */
     private String channel;
 

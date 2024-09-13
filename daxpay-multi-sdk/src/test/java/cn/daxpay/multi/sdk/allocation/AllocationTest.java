@@ -1,6 +1,6 @@
 package cn.daxpay.multi.sdk.allocation;
 
-import cn.daxpay.multi.sdk.code.PayChannelEnum;
+import cn.daxpay.multi.sdk.code.ChannelEnum;
 import cn.daxpay.multi.sdk.code.PayMethodEnum;
 import cn.daxpay.multi.sdk.code.SignTypeEnum;
 import cn.daxpay.multi.sdk.net.DaxPayConfig;
@@ -52,7 +52,7 @@ public class AllocationTest {
         param.setTitle("测试手动分账");
         param.setDescription("这是支付备注");
         param.setAmount(BigDecimal.valueOf(10000));
-        param.setChannel(PayChannelEnum.ALI.getCode());
+        param.setChannel(ChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(true);
@@ -74,7 +74,7 @@ public class AllocationTest {
         param.setTitle("测试手动分账");
         param.setDescription("这是支付备注");
         param.setAmount(BigDecimal.valueOf(10000));
-        param.setChannel(PayChannelEnum.UNION_PAY.getCode());
+        param.setChannel(ChannelEnum.UNION_PAY.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(true);

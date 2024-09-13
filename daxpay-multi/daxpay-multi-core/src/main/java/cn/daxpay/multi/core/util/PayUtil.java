@@ -22,14 +22,6 @@ public class PayUtil {
     private static final BigDecimal HUNDRED = new BigDecimal(100);
 
     /**
-     * 获取支付宝的过期时间 yyyy-MM-dd HH:mm:ss
-     */
-    @Deprecated
-    public String getAliTimeExpire(LocalDateTime dateTime) {
-        return LocalDateTimeUtil.format(dateTime, DatePattern.NORM_DATETIME_PATTERN);
-    }
-
-    /**
      * 获取云闪付的过期时间 yyyyMMddHHmmss
      */
     @Deprecated
