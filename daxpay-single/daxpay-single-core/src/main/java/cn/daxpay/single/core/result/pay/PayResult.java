@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "统一下单响应参数")
+@Schema(title = "统一支付响应参数")
 public class PayResult extends PaymentCommonResult {
 
     /** 商户订单号 */

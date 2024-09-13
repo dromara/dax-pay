@@ -56,7 +56,7 @@
         <flyway.version>7.15.0</flyway.version>
         <xml-apis.version>1.4.01</xml-apis.version>
         <!-- 升级新版本会有兼容性问题 -->
-        <logback-classic.version>1.2.12</logback-classic.version>
+        <logback-classic.version>1.2.13</logback-classic.version>
         <!-- 3.5.3 滚动日志不可用 -->
         <plumelog.version>3.5.3</plumelog.version>
         <easyexcel.version>3.3.2</easyexcel.version>
@@ -80,9 +80,9 @@
         <kryo.serializers.version>0.41</kryo.serializers.version>
         <asyncTool.version>V1.4-SNAPSHOT</asyncTool.version>
         <velocity.version>2.3</velocity.version>
-        <wxjava.version>4.5.2.B</wxjava.version>
+        <wxjava.version>4.6.0</wxjava.version>
         <ding-talk.version>1.3.81</ding-talk.version>
-        <lock4j.version>2.2.5</lock4j.version>
+        <lock4j.version>2.2.7</lock4j.version>
         <ip2region.version>2.7.0</ip2region.version>
         <sms4j.version>2.2.0</sms4j.version>
         <table-modify.version>1.5.5</table-modify.version>

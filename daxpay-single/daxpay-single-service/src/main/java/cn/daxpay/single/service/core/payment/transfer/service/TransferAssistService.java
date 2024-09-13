@@ -7,7 +7,7 @@ import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.transfer.dao.TransferOrderManager;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class TransferAssistService {
     public TransferOrder createOrder(TransferParam param) {
         // 创建转账订单
         TransferOrder transferOrder = new TransferOrder()
-                .setTransferNo(OrderNoGenerateUtil.transfer())
+                .setTransferNo(TradeNoGenerateUtil.transfer())
                 .setAmount(param.getAmount())
                 .setBizTransferNo(param.getBizTransferNo())
                 .setChannel(param.getChannel())

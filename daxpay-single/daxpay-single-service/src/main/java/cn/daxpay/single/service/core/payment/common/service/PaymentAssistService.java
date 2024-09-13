@@ -104,7 +104,7 @@ public class PaymentAssistService {
     public void sign(PaymentCommonResult result) {
         PlatformLocal platformInfo = PaymentContextLocal.get().getPlatformInfo();
         // 如果平台配置所有属性为空, 进行初始化
-        if (BeanUtil.isEmpty(platformInfo)){
+        if (BeanUtil.isEmpty(platformInfo, "reqSign")){
             platformConfigService.initPlatform();
         }
         String signType = platformInfo.getSignType();

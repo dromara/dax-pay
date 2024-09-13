@@ -17,8 +17,11 @@
 `DaxPay`是一款基于`Apache License 2.0`协议分发的开源软件，受中华人民共和国相关法律法规的保护和限制，可以在符合[《用户授权使用协议》](用户授权使用协议.txt)和
 [《Apache License 2.0》](LICENSE)开源协议情况下进行免费使用、学习和交流。**在使用前请阅读上述协议，如果不同意请勿进行使用。**
 
-## ⚠️多商户版本建议征询
-近期将会开启多商户版本的开发，为了更好的听取大家的建议，特建立一个征集需求建议的issues，欢迎提出各种功能需求和建议，填写地址：[功能和建议填写](https://gitee.com/dromara/dax-pay/issues/I9F3EO)
+## ⚠️多商户版本开发中
+> 当前单商户各种BUG问题将不会做特意的修复，使用者可以自行进行debug进行修改，后续新版单商户将基于多商户相同架构进行实现。
+
+目前多商户版本已经进入开发中状态，为了更好的听取大家的建议，特建立一个征集需求建议的issues，欢迎提出各种功能需求和建议，填写地址：[功能和建议填写](https://gitee.com/dromara/dax-pay/issues/I9F3EO)
+
 
 ## 🍈项目介绍
 
@@ -42,11 +45,11 @@
 
 ### 项目地址
 
-| 项目      | GITEE                                       | GITHUB                                          |
-|---------|---------------------------------------------|-------------------------------------------------|
-| 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    |
-| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |
-| H5前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |
+| 项目      | GITEE                                       | GITHUB                                          |GITCODE                                          |
+|---------|---------------------------------------------|-------------------------------------------------|---------------------------------------------|
+| 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    | [GITCODE](https://gitcode.com/dromara/dax-pay)    |
+| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) | [GITCODE](https://github.com/daxpay/dax-pay-ui) |
+| H5前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) | [GITCODE](https://github.com/daxpay/dax-pay-h5) |
 
 
 ## 🏬 系统演示
@@ -141,15 +144,15 @@ public class PayOrderTest {
 
 ## 🍎 系统截图
 ### 收银台演示
-![微信截图_20240326141126](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
+![微信截图_20240326141126](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
 ### 驾驶舱
-![QQ截图20240326141912](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
+![QQ截图20240326141912](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
 ### H5收银台演示
-![h5](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
+![h5](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
 ### 支付通道配置
-![微信截图_20240326142208](https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
+![微信截图_20240326142208](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
 ## 🛣️ 路线图
-> gateway为开发分支，本地运行请使用master分支进行测试，当前正在进行整个系统的优化重构工作，各种功能都会有可能调整，
+> dev为开发分支，本地运行请使用master或dev分支进行测试，当前正在进行整个系统的优化重构工作，各种功能都会有可能调整，
 `V2.1.0`时将作为正式生产可用版本进行发布，之后会保证系统版本非大版本升级时，API接口和数据接口向前兼容。
 **请勿在生产环境中使用，请等待生产可用的版本发布。如在使用，需要自己来保证应用的安全**
 
@@ -166,24 +169,19 @@ public class PayOrderTest {
 
 扫码加入QQ交流群
 
-交流二群
+交流二群: 598644350
 <p>
-<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240513180310.2yy68aykip.webp" width = "330" height = "500"/>
+<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240513180310.2yy68aykip.webp" width = "330" height = "500"/>
 </p>
 
-扫码加入钉钉交流群
+扫码加入钉钉交流群: [加群连接](https://qr.dingtalk.com/action/joingroup?code=v1,k1,AzkcWLa8J/OHXi+nTWwNRc68IAJ0ckWXEEIvrJofq2A=&_dt_no_comment=1&origin=11)
 <p>
-<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/png-(1).7egk526qnp.webp" width = "400" height = "400"/>
+<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/png-(1).7egk526qnp.webp" width = "400" height = "400"/>
 </p>
 
-扫码加入飞书交流群
+微信扫码加小助手拉群: sdcit2020
 <p>
-<img src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240415124136.231noivcuz.webp" width = "390" height = "500"/>
-</p>
-
-微信扫码加小助手拉群
-<p>
-<img alt="微信图片_20240226144703" height="480" src="https://jsd.cdn.zzko.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
+<img alt="微信图片_20240226144703" height="480" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
 </p>
 
 ## Star History

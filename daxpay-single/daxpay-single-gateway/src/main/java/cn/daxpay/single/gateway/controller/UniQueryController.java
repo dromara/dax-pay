@@ -19,7 +19,7 @@ import cn.daxpay.single.service.annotation.InitPaymentContext;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.refund.service.RefundOrderQueryService;
 import cn.daxpay.single.service.core.order.transfer.service.TransferOrderQueryService;
-import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
+import cn.daxpay.single.service.core.payment.allocation.service.AllocReceiverService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.core.util.DaxRes;
 import cn.hutool.core.util.StrUtil;
@@ -46,7 +46,7 @@ public class UniQueryController {
     private final PayOrderQueryService payOrderQueryService;
     private final RefundOrderQueryService refundOrderQueryService;
     private final TransferOrderQueryService transferOrderQueryService;
-    private final AllocationReceiverService allocationReceiverService;
+    private final AllocReceiverService allocReceiverService;
     private final AllocationService allocationService;
 
     @PaymentVerify
@@ -89,7 +89,7 @@ public class UniQueryController {
         if (StrUtil.isAllBlank(param.getChannel(), param.getReceiverNo())){
             throw new ValidationFailedException("所属通道和接收方编号不可同时为空");
         }
-        return DaxRes.ok(allocationReceiverService.queryAllocReceive(param));
+        return DaxRes.ok(allocReceiverService.queryAllocReceive(param));
     }
 
 }

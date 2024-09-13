@@ -3,13 +3,13 @@ package cn.daxpay.single.service.core.payment.callback.service;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.PayRepairWayEnum;
 import cn.daxpay.single.service.common.context.CallbackLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
-import cn.daxpay.single.service.core.payment.repair.result.PayRepairResult;
-import cn.daxpay.single.service.core.payment.repair.service.PayRepairService;
+import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
+import cn.daxpay.single.service.core.payment.notice.service.ClientNoticeService;
+import cn.daxpay.single.service.core.record.flow.service.TradeFlowRecordService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +32,11 @@ public class PayCallbackService {
 
     private final PayOrderQueryService payOrderQueryService;
 
-    private final PayRepairService payRepairService;
-
     private final LockTemplate lockTemplate;
+
+    private final PayOrderService payOrderService;
+    private final TradeFlowRecordService tradeFlowRecordService;
+    private final ClientNoticeService clientNoticeService;
 
     /**
      * 支付统一回调处理
@@ -73,7 +75,7 @@ public class PayCallbackService {
     }
 
     /**
-     * 成功处理 使用修复策略将支付订单调整为支付成功状态
+     * 成功处理 将支付订单调整为支付成功状态
      */
     private void success(PayOrder payOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
@@ -93,15 +95,18 @@ public class PayCallbackService {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setErrorMsg("支付单不是待支付状态,记录回调记录");
             return;
         }
-        // 设置支付成功时间
-        PaymentContextLocal.get().getRepairInfo().setFinishTime(callbackInfo.getFinishTime());
-        // 执行支付完成修复逻辑
-        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.PAY_SUCCESS);
-        callbackInfo.setRepairNo(repair.getRepairNo());
+        // 修改订单支付状态为成功
+        payOrder.setStatus(PayStatusEnum.SUCCESS.getCode())
+                .setPayTime(callbackInfo.getFinishTime())
+                .setOutOrderNo(callbackInfo.getOutTradeNo())
+                .setCloseTime(null);
+        payOrderService.updateById(payOrder);
+        tradeFlowRecordService.savePay(payOrder);
+        clientNoticeService.registerPayNotice(payOrder);
     }
 
     /**
-     * 失败处理, 使用修复策略将支付订单调整为关闭状态
+     * 失败处理, 使用调整策略将支付订单调整为关闭状态
      */
     private void fail(PayOrder payOrder) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
@@ -115,9 +120,12 @@ public class PayCallbackService {
             callbackInfo.setCallbackStatus(PayCallbackStatusEnum.EXCEPTION).setErrorMsg("支付单状态非法,支付网关状态为失败,但支付单状态为已完成");
             return;
         }
-        // 执行支付关闭修复逻辑
-        PayRepairResult repair = payRepairService.repair(payOrder, PayRepairWayEnum.CLOSE_LOCAL);
-        callbackInfo.setRepairNo(repair.getRepairNo());
+        // 执行支付关闭的调整逻辑
+        // 执行策略的关闭方法
+        payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
+                .setCloseTime(LocalDateTime.now());
+        payOrderService.updateById(payOrder);
+        clientNoticeService.registerPayNotice(payOrder);
     }
 
 }

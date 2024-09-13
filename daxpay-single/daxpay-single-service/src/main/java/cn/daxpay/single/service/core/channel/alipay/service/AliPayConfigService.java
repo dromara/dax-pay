@@ -112,6 +112,7 @@ public class AliPayConfigService {
         config.setSignType(aliPayConfig.getSignType());
         // 证书
         if (Objects.equals(aliPayConfig.getAuthType(), AliPayCode.AUTH_TYPE_CART)){
+            config.setPrivateKey(aliPayConfig.getPrivateKey());
             config.setAppCertContent(aliPayConfig.getAppCert());
             config.setRootCertContent(aliPayConfig.getAlipayRootCert());
             config.setAlipayPublicCertContent(aliPayConfig.getAlipayCert());

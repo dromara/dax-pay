@@ -26,8 +26,6 @@ public class WeChatPaySyncStrategy extends AbsPaySyncStrategy {
 
     private final WeChatPaySyncService weChatPaySyncService;
 
-    private WeChatPayConfig weChatPayConfig;
-
     /**
      * 策略标识
      */
@@ -41,16 +39,7 @@ public class WeChatPaySyncStrategy extends AbsPaySyncStrategy {
      */
     @Override
     public PayRemoteSyncResult doSyncStatus() {
-        // 检查并获取微信支付配置
-        this.initWeChatPayConfig();
-        return weChatPaySyncService.syncPayStatus(this.getOrder(), this.weChatPayConfig);
-    }
-
-
-    /**
-     * 初始化微信支付
-     */
-    private void initWeChatPayConfig() {
-        this.weChatPayConfig = payConfigService.getConfig();
+        WeChatPayConfig config = payConfigService.getConfig();
+        return weChatPaySyncService.syncPayStatus(this.getOrder(), config);
     }
 }

@@ -325,7 +325,7 @@ public class AliPayService {
                 Date gmtPayment = response.getGmtPayment();
                 payInfo.setOutOrderNo(response.getTradeNo())
                         .setComplete(true)
-                        .setCompleteTime(LocalDateTimeUtil.of(gmtPayment));
+                        .setFinishTime(LocalDateTimeUtil.of(gmtPayment));
             }
             // 非支付中响应码, 进行错误处理
             if (!Objects.equals(response.getCode(), AliPayCode.INPROCESS)) {

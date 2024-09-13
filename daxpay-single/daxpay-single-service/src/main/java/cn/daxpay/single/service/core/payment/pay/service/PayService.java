@@ -1,5 +1,7 @@
 package cn.daxpay.single.service.core.payment.pay.service;
 
+import cn.daxpay.single.core.exception.PayFailureException;
+import cn.daxpay.single.core.exception.TradeProcessingException;
 import cn.daxpay.single.core.param.payment.pay.PayParam;
 import cn.daxpay.single.core.result.pay.PayResult;
 import cn.daxpay.single.service.common.context.PayLocal;
@@ -57,8 +59,8 @@ public class PayService {
         // 加锁
         LockInfo lock = lockTemplate.lock("payment:pay:" + bizOrderNo,10000,200);
         if (Objects.isNull(lock)){
-            payResult.setMsg("正在支付中，请勿重复支付");
-            return payResult;
+            log.warn("正在支付中，请勿重复支付");
+            throw new TradeProcessingException("正在支付中，请勿重复支付");
         }
         try {
             // 查询并检查订单
@@ -96,7 +98,12 @@ public class PayService {
             // 支付操作
             payStrategy.doPayHandler();
         } catch (Exception e) {
-            payOrder.setErrorMsg(e.getMessage());
+            // 记录错误原因, 此处没有事务, 所以可以正常更新
+            if (e instanceof PayFailureException){
+                payOrder.setErrorCode(e.getMessage());
+            } else {
+                payOrder.setErrorCode("支付出现异常");
+            }
             // 这个方法没有事务, 所以可以正常更新
             payOrderService.updateById(payOrder);
             throw e;
@@ -115,7 +122,7 @@ public class PayService {
         if (payInfo.isComplete()) {
             payOrder.setOutOrderNo(payInfo.getOutOrderNo())
                     .setStatus(SUCCESS.getCode())
-                    .setPayTime(payInfo.getCompleteTime());
+                    .setPayTime(payInfo.getFinishTime());
         }
         payOrderService.updateById(payOrder);
         // 扩展记录更新
@@ -148,7 +155,11 @@ public class PayService {
             payStrategy.doPayHandler();
         } catch (Exception e) {
             // 记录错误原因, 此处没有事务, 所以可以正常更新
-            payOrder.setErrorMsg(e.getMessage());
+            if (e instanceof PayFailureException){
+                payOrder.setErrorCode(e.getMessage());
+            } else {
+                payOrder.setErrorCode("支付出现异常");
+            }
             payOrderService.updateById(payOrder);
             throw e;
         }
@@ -166,7 +177,7 @@ public class PayService {
         if (payInfo.isComplete()) {
             payOrder.setOutOrderNo(payInfo.getOutOrderNo())
                     .setStatus(SUCCESS.getCode())
-                    .setPayTime(payInfo.getCompleteTime());
+                    .setPayTime(payInfo.getFinishTime());
         }
         payOrderService.updateById(payOrder);
         // 扩展记录更新

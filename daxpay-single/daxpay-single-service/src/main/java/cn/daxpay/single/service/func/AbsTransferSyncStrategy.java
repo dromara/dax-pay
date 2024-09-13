@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 转账修复策略
+ * 转账调整策略
  * @author xxm
  * @since 2024/6/17
  */
@@ -17,10 +17,6 @@ public abstract class AbsTransferSyncStrategy implements PayStrategy{
 
     private TransferOrder transferOrder;
 
-    /**
-     * 同步前处理
-     */
-    public void doBeforeHandler(){}
     /**
      * 异步支付单与支付网关进行状态比对后的结果
      * @see PaySyncStatusEnum

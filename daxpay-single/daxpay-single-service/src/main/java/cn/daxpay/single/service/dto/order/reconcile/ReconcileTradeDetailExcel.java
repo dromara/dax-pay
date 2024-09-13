@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.dto.order.reconcile;
 
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.handler.excel.AmountConverter;
 import cn.daxpay.single.service.handler.excel.PaymentTypeConvert;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
@@ -32,7 +32,7 @@ public class ReconcileTradeDetailExcel {
 
     /**
      * 交易类型
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @Schema(description = "交易类型")
     @ExcelProperty(value = "交易类型",converter = PaymentTypeConvert.class)

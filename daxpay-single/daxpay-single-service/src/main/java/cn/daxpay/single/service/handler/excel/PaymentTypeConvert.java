@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.handler.excel;
 
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.metadata.GlobalConfiguration;
 import com.alibaba.excel.metadata.data.WriteCellData;
@@ -17,7 +17,7 @@ public class PaymentTypeConvert implements Converter<String> {
         if (value == null){
             return new WriteCellData<>("");
         }
-        PaymentTypeEnum typeEnum = PaymentTypeEnum.findByCode(value);
+        TradeTypeEnum typeEnum = TradeTypeEnum.findByCode(value);
         return new WriteCellData<>(typeEnum.getName());
     }
 }

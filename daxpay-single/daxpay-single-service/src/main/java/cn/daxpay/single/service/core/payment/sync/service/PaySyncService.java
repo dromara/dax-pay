@@ -9,19 +9,15 @@ import cn.daxpay.single.core.code.PaySyncStatusEnum;
 import cn.daxpay.single.core.exception.*;
 import cn.daxpay.single.core.param.payment.pay.PaySyncParam;
 import cn.daxpay.single.core.result.sync.PaySyncResult;
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
-import cn.daxpay.single.service.code.PayRepairWayEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
-import cn.daxpay.single.service.common.context.RepairLocal;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderQueryService;
 import cn.daxpay.single.service.core.order.pay.service.PayOrderService;
-import cn.daxpay.single.service.core.payment.repair.result.PayRepairResult;
-import cn.daxpay.single.service.core.payment.repair.service.PayRepairService;
 import cn.daxpay.single.service.core.payment.sync.result.PayRemoteSyncResult;
-import cn.daxpay.single.service.core.record.sync.entity.PaySyncRecord;
-import cn.daxpay.single.service.core.record.sync.service.PaySyncRecordService;
+import cn.daxpay.single.service.core.record.sync.entity.TradeSyncRecord;
+import cn.daxpay.single.service.core.record.sync.service.TradeSyncRecordService;
+import cn.daxpay.single.service.func.AbsPayCloseStrategy;
 import cn.daxpay.single.service.func.AbsPaySyncStrategy;
 import cn.daxpay.single.service.util.PayStrategyFactory;
 import com.baomidou.lock.LockInfo;
@@ -52,9 +48,7 @@ public class PaySyncService {
 
     private final PayOrderService payOrderService;
 
-    private final PaySyncRecordService paySyncRecordService;
-
-    private final PayRepairService repairService;
+    private final TradeSyncRecordService tradeSyncRecordService;
 
     private final LockTemplate lockTemplate;
 
@@ -76,7 +70,7 @@ public class PaySyncService {
     /**
      * 同步支付状态, 开启一个新的事务, 不受外部抛出异常的影响
      * 1. 如果状态一致, 不进行处理
-     * 2. 如果状态不一致, 调用修复逻辑进行修复, 更新状态和完成时间
+     * 2. 如果状态不一致, 调用调整逻辑进行调整, 更新状态和完成时间
      * 3. 会更新关联网关订单号
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
@@ -93,9 +87,9 @@ public class PaySyncService {
             // 执行操作, 获取支付网关同步的结果
             PayRemoteSyncResult payRemoteSyncResult = syncPayStrategy.doSyncStatus();
             // 判断是否同步成功
-            if (Objects.equals(payRemoteSyncResult.getSyncStatus(), PaySyncStatusEnum.FAIL)){
+            if (Objects.equals(payRemoteSyncResult.getSyncStatus(), FAIL)){
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(payOrder, payRemoteSyncResult, false, null, payRemoteSyncResult.getErrorMsg());
+                this.saveRecord(payOrder, payRemoteSyncResult, false);
                 throw new OperationFailException(payRemoteSyncResult.getErrorMsg());
             }
             // 支付订单的网关订单号是否一致, 不一致进行更新
@@ -105,28 +99,19 @@ public class PaySyncService {
             }
             // 判断网关状态是否和支付单一致, 同时特定情况下更新网关同步状态
             boolean statusSync = this.checkAndAdjustSyncStatus(payRemoteSyncResult,payOrder);
-            PayRepairResult repairResult = new PayRepairResult();
             try {
-                // 状态不一致，执行支付单修复逻辑
+                // 状态不一致，执行支付单调整逻辑
                 if (!statusSync){
-                    // 如果没有修复触发来源, 设置修复触发来源为同步
-                    RepairLocal repairInfo = PaymentContextLocal.get().getRepairInfo();
-                    if (Objects.isNull(repairInfo.getSource())){
-                        repairInfo.setSource(PayRepairSourceEnum.SYNC);
-                    }
-                    // 设置支付单完成时间
-                    repairInfo.setFinishTime(payRemoteSyncResult.getPayTime());
-                    repairResult = this.repairHandler(payRemoteSyncResult, payOrder);
+                    this.adjustHandler(payRemoteSyncResult, payOrder);
                 }
             } catch (PayFailureException e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                payRemoteSyncResult.setSyncStatus(PaySyncStatusEnum.FAIL);
-                this.saveRecord(payOrder, payRemoteSyncResult, false, null, e.getMessage());
+                payRemoteSyncResult.setSyncStatus(FAIL);
+                this.saveRecord(payOrder, payRemoteSyncResult, false);
                 throw e;
             }
-
             // 同步成功记录日志
-            this.saveRecord( payOrder, payRemoteSyncResult, !statusSync, repairResult.getRepairNo(), null);
+            this.saveRecord( payOrder, payRemoteSyncResult, statusSync);
             return new PaySyncResult().setStatus(payRemoteSyncResult.getSyncStatus().getCode());
         } finally {
             lockTemplate.releaseLock(lock);
@@ -153,7 +138,7 @@ public class PaySyncService {
             // 判断支付单是否支付超时, 如果待支付状态下触发超时
             if (LocalDateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
                 // 将支付单同步状态状态调整为支付超时, 进行订单的关闭
-                payRemoteSyncResult.setSyncStatus(PaySyncStatusEnum.TIMEOUT);
+                payRemoteSyncResult.setSyncStatus(TIMEOUT);
                 return false;
             }
             return true;
@@ -171,43 +156,34 @@ public class PaySyncService {
 
         // 退款状态不做额外处理, 需要通过退款接口进行处理
         if (!Objects.equals(order.getRefundStatus(),PayOrderRefundStatusEnum.NO_REFUND.getCode())
-                || syncStatus.equals(PaySyncStatusEnum.REFUND)){
+                || syncStatus.equals(REFUND)){
             return true;
         }
         return false;
     }
 
     /**
-     * 根据同步的结果对支付单进行修复处理
+     * 根据同步的结果对支付单进行调整处理
      */
-    private PayRepairResult repairHandler(PayRemoteSyncResult payRemoteSyncResult, PayOrder payOrder){
+    private void adjustHandler(PayRemoteSyncResult payRemoteSyncResult, PayOrder payOrder){
         PaySyncStatusEnum syncStatusEnum = payRemoteSyncResult.getSyncStatus();
-        PayRepairResult repair = new PayRepairResult();
         // 对支付网关同步的结果进行处理
         switch (syncStatusEnum) {
             // 支付成功 支付宝退款时也是支付成功状态, 除非支付完成
             case SUCCESS: {
-                repair = repairService.repair(payOrder, PayRepairWayEnum.PAY_SUCCESS);
-                break;
-            }
-            // 待支付, 将订单状态重新设置为待支付
-            case PROGRESS: {
-                repair = repairService.repair(payOrder, PayRepairWayEnum.PROGRESS);
-                break;
+                this.success(payOrder, payRemoteSyncResult);
             }
             case REFUND:
                 throw new TradeStatusErrorException("支付订单为退款状态，请通过执行对应的退款订单进行同步，来更新具体为什么类型退款状态");
             // 交易关闭和未找到, 都对本地支付订单进行关闭, 不需要再调用网关进行关闭
             case CLOSED:
             case NOT_FOUND: {
-                repair = repairService.repair(payOrder, PayRepairWayEnum.CLOSE_LOCAL);
-                break;
+                this.closeLocal(payOrder);
             }
             // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
             case TIMEOUT:
+                this.closeRemote(payOrder);
             case NOT_FOUND_UNKNOWN:{
-                repair = repairService.repair(payOrder, PayRepairWayEnum.CLOSE_GATEWAY);
-                break;
             }
             // 调用出错
             case FAIL: {
@@ -219,32 +195,68 @@ public class PaySyncService {
                 throw new SystemUnknownErrorException("代码有问题");
             }
         }
-        return repair;
     }
 
+
+    /**
+     * 变更为已支付
+     * 同步: 将异步支付状态修改为成功
+     * 回调: 将异步支付状态修改为成功
+     */
+    private void success(PayOrder order, PayRemoteSyncResult param) {
+        // 修改订单支付状态为成功
+        order.setStatus(PayStatusEnum.SUCCESS.getCode())
+                .setPayTime(param.getFinishTime())
+                .setOutOrderNo(param.getOutOrderNo())
+                .setCloseTime(null);
+        payOrderService.updateById(order);
+    }
+
+    /**
+     * 关闭支付
+     * 同步/对账: 执行支付单所有的支付通道关闭支付逻辑, 不需要调用网关关闭,
+     */
+    private void closeLocal(PayOrder order) {
+        // 执行策略的关闭方法
+        order.setStatus(PayStatusEnum.CLOSE.getCode())
+                .setCloseTime(LocalDateTime.now());
+        payOrderService.updateById(order);
+    }
+    /**
+     * 关闭网关交易, 同时也会关闭本地支付
+     * 回调: 执行所有的支付通道关闭支付逻辑
+     */
+    private void closeRemote(PayOrder payOrder) {
+        // 初始化调整参数
+        AbsPayCloseStrategy strategy = PayStrategyFactory.create(payOrder.getChannel(), AbsPayCloseStrategy.class);
+        strategy.setOrder(payOrder);
+        // 执行策略的关闭方法
+        strategy.doCloseHandler();
+        payOrder.setStatus(PayStatusEnum.CLOSE.getCode())
+                .setCloseTime(LocalDateTime.now());
+        payOrderService.updateById(payOrder);
+    }
 
     /**
      * 保存同步记录
      * @param payOrder 支付单
      * @param payRemoteSyncResult 同步结果
-     * @param repair 是否修复
-     * @param repairOrderNo 修复号
-     * @param errorMsg 错误信息
+     * @param adjust 调整号
      */
-    private void saveRecord(PayOrder payOrder, PayRemoteSyncResult payRemoteSyncResult, boolean repair, String repairOrderNo, String errorMsg){
-        PaySyncRecord paySyncRecord = new PaySyncRecord()
+    private void saveRecord(PayOrder payOrder, PayRemoteSyncResult payRemoteSyncResult, boolean adjust){
+        TradeSyncRecord tradeSyncRecord = new TradeSyncRecord()
                 .setBizTradeNo(payOrder.getBizOrderNo())
                 .setTradeNo(payOrder.getOrderNo())
                 .setOutTradeNo(payOrder.getOutOrderNo())
                 .setOutTradeStatus(payRemoteSyncResult.getSyncStatus().getCode())
-                .setSyncType(PaymentTypeEnum.PAY.getCode())
+                .setType(TradeTypeEnum.PAY.getCode())
                 .setChannel(payOrder.getChannel())
                 .setSyncInfo(payRemoteSyncResult.getSyncInfo())
-                .setRepair(repair)
-                .setRepairNo(repairOrderNo)
-                .setErrorMsg(errorMsg)
+                .setAdjust(adjust)
+                .setErrorCode(payRemoteSyncResult.getErrorCode())
+                .setErrorMsg(payRemoteSyncResult.getErrorMsg())
                 .setClientIp(PaymentContextLocal.get().getClientInfo().getClientIp());
-        paySyncRecordService.saveRecord(paySyncRecord);
+        tradeSyncRecordService.saveRecord(tradeSyncRecord);
     }
 
 }

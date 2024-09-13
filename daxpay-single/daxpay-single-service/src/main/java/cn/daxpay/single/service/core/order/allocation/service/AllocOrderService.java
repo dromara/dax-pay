@@ -7,17 +7,17 @@ import cn.daxpay.single.core.code.AllocOrderStatusEnum;
 import cn.daxpay.single.core.code.PayOrderAllocStatusEnum;
 import cn.daxpay.single.core.param.payment.allocation.AllocReceiverParam;
 import cn.daxpay.single.core.param.payment.allocation.AllocationParam;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import cn.daxpay.single.service.core.order.allocation.dao.AllocOrderDetailManager;
-import cn.daxpay.single.service.core.order.allocation.dao.AllocationOrderManager;
+import cn.daxpay.single.service.core.order.allocation.dao.AllocOrderManager;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrder;
 import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.order.allocation.entity.OrderAndDetail;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
-import cn.daxpay.single.service.core.payment.allocation.dao.AllocationReceiverManager;
-import cn.daxpay.single.service.core.payment.allocation.entity.AllocationReceiver;
-import cn.daxpay.single.service.dto.allocation.AllocationGroupReceiverResult;
+import cn.daxpay.single.service.core.payment.allocation.dao.AllocReceiverManager;
+import cn.daxpay.single.service.core.payment.allocation.entity.AllocReceiver;
+import cn.daxpay.single.service.dto.allocation.AllocGroupReceiverResult;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +41,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AllocOrderService {
-    private final AllocationReceiverManager receiverManager;
+    private final AllocReceiverManager receiverManager;
 
-    private final AllocationOrderManager allocationOrderManager;
+    private final AllocOrderManager allocOrderManager;
 
     private final AllocOrderDetailManager allocOrderDetailManager;
 
@@ -54,7 +54,7 @@ public class AllocOrderService {
      * 生成分账订单, 根据分账组创建
      */
     @Transactional(rollbackFor = Exception.class)
-    public OrderAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder, List<AllocationGroupReceiverResult> receiversByGroups){
+    public OrderAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder, List<AllocGroupReceiverResult> receiversByGroups){
         // 订单明细
         List<AllocOrderDetail> details = receiversByGroups.stream()
                 .map(o -> {
@@ -103,7 +103,7 @@ public class AllocOrderService {
                 .stream()
                 .collect(Collectors.toMap(AllocReceiverParam::getReceiverNo, AllocReceiverParam::getAmount));
         // 查询分账接收方信息
-        List<AllocationReceiver> receivers = receiverManager.findAllByReceiverNos(receiverNos);
+        List<AllocReceiver> receivers = receiverManager.findAllByReceiverNos(receiverNos);
         if (receivers.size() != receiverNos.size()){
             throw new ValidationFailedException("分账接收方列表存在重复或无效的数据");
         }
@@ -159,7 +159,7 @@ public class AllocOrderService {
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setOutOrderNo(payOrder.getOutOrderNo())
                 .setTitle(payOrder.getTitle())
-                .setAllocNo(OrderNoGenerateUtil.allocation())
+                .setAllocNo(TradeNoGenerateUtil.allocation())
                 .setBizAllocNo(param.getBizAllocNo())
                 .setChannel(payOrder.getChannel())
                 .setDescription(param.getDescription())
@@ -182,7 +182,7 @@ public class AllocOrderService {
         payOrder.setAllocStatus(PayOrderAllocStatusEnum.ALLOCATION.getCode());
         payOrderManager.updateById(payOrder);
         allocOrderDetailManager.saveAll(details);
-        allocationOrderManager.save(allocOrder);
+        allocOrderManager.save(allocOrder);
         return new OrderAndDetail().setOrder(allocOrder).setDetails(details);
     }
 }

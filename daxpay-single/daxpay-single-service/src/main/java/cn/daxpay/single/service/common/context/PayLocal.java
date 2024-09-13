@@ -25,7 +25,7 @@ public class PayLocal {
     private boolean complete;
 
     /** 完成时间 */
-    private LocalDateTime completeTime;
+    private LocalDateTime finishTime;
 
     /** 支付参数体(通常用于发起支付的参数) */
     private String payBody;

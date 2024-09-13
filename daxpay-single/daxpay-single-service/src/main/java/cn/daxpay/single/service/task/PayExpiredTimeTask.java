@@ -1,8 +1,6 @@
 package cn.daxpay.single.service.task;
 
 import cn.daxpay.single.core.param.payment.pay.PaySyncParam;
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
-import cn.daxpay.single.service.common.local.PaymentContextLocal;
 import cn.daxpay.single.service.core.payment.pay.dao.PayExpiredTimeRepository;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
 import com.baomidou.lock.LockInfo;
@@ -47,8 +45,6 @@ public class PayExpiredTimeTask implements Job {
                 continue;
             }
             try {
-                // 设置补偿来源为定时任务
-                PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.TASK);
                 // 执行同步操作, 网关同步时会对支付的进行状态的处理
                 PaySyncParam paySyncParam = new PaySyncParam();
                 paySyncParam.setOrderNo(orderNo);

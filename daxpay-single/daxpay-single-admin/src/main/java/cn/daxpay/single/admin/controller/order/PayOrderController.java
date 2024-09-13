@@ -18,7 +18,7 @@ import cn.daxpay.single.service.core.payment.close.service.PayCloseService;
 import cn.daxpay.single.service.core.payment.sync.service.PaySyncService;
 import cn.daxpay.single.service.dto.order.pay.PayOrderDto;
 import cn.daxpay.single.service.param.order.PayOrderQuery;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -91,7 +91,7 @@ public class PayOrderController {
     public ResResult<Void> allocation(String orderNo){
         AllocationParam param = new AllocationParam();
         param.setOrderNo(orderNo);
-        param.setBizAllocNo(OrderNoGenerateUtil.allocation());
+        param.setBizAllocNo(TradeNoGenerateUtil.allocation());
         allocationService.allocation(param);
         return Res.ok();
     }

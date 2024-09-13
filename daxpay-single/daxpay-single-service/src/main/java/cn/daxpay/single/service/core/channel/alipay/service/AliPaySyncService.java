@@ -73,7 +73,7 @@ public class AliPaySyncService {
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_SUCCESS) || Objects.equals(tradeStatus, AliPayCode.NOTIFY_TRADE_FINISHED)) {
                 // 支付完成时间
                 LocalDateTime payTime = LocalDateTimeUtil.of(response.getSendPayDate());
-                return syncResult.setSyncStatus(PaySyncStatusEnum.SUCCESS).setPayTime(payTime);
+                return syncResult.setSyncStatus(PaySyncStatusEnum.SUCCESS).setFinishTime(payTime);
             }
             // 待支付
             if (Objects.equals(tradeStatus, AliPayCode.NOTIFY_WAIT_BUYER_PAY)) {
@@ -111,8 +111,8 @@ public class AliPaySyncService {
      * 退款同步查询
      * 注意: 支付宝退款没有网关订单号, 网关订单号是支付单的
      */
-    public RefundRemoteSyncResult syncRefundStatus(RefundOrder refundOrder){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
+    public RefundRemoteSyncResult syncRefundStatus(RefundOrder refundOrder, AliPayConfig config){
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(config);
         RefundRemoteSyncResult syncResult = new RefundRemoteSyncResult().setSyncStatus(RefundSyncStatusEnum.FAIL);
         try {
             AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
@@ -165,8 +165,6 @@ public class AliPaySyncService {
         model.setOutBizNo(transferOrder.getTransferNo());
         request.setBizModel(model);
         AlipayFundTransCommonQueryResponse response = alipayClient.execute(request);
-        System.out.println(response.getBody());
         return new TransferSyncResult().setStatus(TransferStatusEnum.FAIL.getCode());
     }
-
 }

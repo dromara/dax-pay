@@ -3,7 +3,7 @@ package cn.daxpay.single.service.common.context;
 import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 回调信息上下文
+ * 回调信息上下文 针对支付和退款的回调
  * @author xxm
  * @since 2024/1/24
  */
@@ -49,11 +49,8 @@ public class CallbackLocal {
     /** 完成时间(支付/退款) */
     private LocalDateTime finishTime;
 
-    /** 修复号 */
-    private String repairNo;
-
     /** 回调类型 */
-    private PaymentTypeEnum callbackType;
+    private TradeTypeEnum callbackType;
 
     /**
      * 回调处理状态

@@ -20,7 +20,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 
 /**
  * 支付宝支付
- * 注意: channelOrder对象需要单独处理, 直接获取会空指针
  * @author xxm
  * @since 2021/2/27
  */

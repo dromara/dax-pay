@@ -4,7 +4,7 @@ import cn.bootx.platform.common.core.function.CollectorsFunction;
 import cn.bootx.platform.common.core.util.CollUtil;
 import cn.bootx.platform.common.core.util.LocalDateTimeUtil;
 import cn.daxpay.single.core.code.ReconcileTradeEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.code.ReconcileDiffTypeEnum;
 import cn.daxpay.single.service.core.order.pay.dao.PayOrderManager;
 import cn.daxpay.single.service.core.order.pay.entity.PayOrder;
@@ -61,7 +61,7 @@ public class ReconcileAssistService {
                     .setTradeNo(payOrder.getOrderNo())
                     .setOutTradeNo(payOrder.getOutOrderNo())
                     .setFinishTime(payOrder.getPayTime())
-                    .setType(PaymentTypeEnum.PAY.getCode())
+                    .setType(TradeTypeEnum.PAY.getCode())
                     .setAmount(payOrder.getAmount())
             );
         }
@@ -71,7 +71,7 @@ public class ReconcileAssistService {
                     .setTradeNo(refundOrder.getRefundNo())
                     .setOutTradeNo(refundOrder.getOutRefundNo())
                     .setFinishTime(refundOrder.getFinishTime())
-                    .setType(PaymentTypeEnum.REFUND.getCode())
+                    .setType(TradeTypeEnum.REFUND.getCode())
                     .setAmount(refundOrder.getAmount()));
         }
         return generalTradeInfoList;
@@ -147,7 +147,7 @@ public class ReconcileAssistService {
             ReconcileOutTrade outDetail = outDetailMap.get(localTrade.getTradeNo());
             if (Objects.isNull(outDetail)){
                 ReconcileDiff diffRecord = new ReconcileDiff()
-                        .setDiffType(ReconcileDiffTypeEnum.LOCAL_NOT_EXISTS.getCode())
+                        .setDiffType(ReconcileDiffTypeEnum.REMOTE_NOT_EXISTS.getCode())
                         .setTradeNo(localTrade.getTradeNo())
                         .setReconcileId(reconcileOrder.getId())
                         .setReconcileNo(reconcileOrder.getReconcileNo())
@@ -176,12 +176,12 @@ public class ReconcileAssistService {
 
         // 判断类型是否相同
         if (Objects.equals(outDetail.getType(), ReconcileTradeEnum.PAY.getCode())
-                && !Objects.equals(localTrade.getType(), PaymentTypeEnum.PAY.getCode())){
+                && !Objects.equals(localTrade.getType(), TradeTypeEnum.PAY.getCode())){
             log.warn("订单类型不一致: {},{}", outDetail.getType(), localTrade.getType());
             diffs.add(new ReconcileDiffDetail().setFieldName("订单类型").setLocalValue(outDetail.getType()).setOutValue(localTrade.getType()));
         }
         if (Objects.equals(outDetail.getType(), ReconcileTradeEnum.REFUND.getCode())
-                && !Objects.equals(localTrade.getType(), PaymentTypeEnum.REFUND.getCode())){
+                && !Objects.equals(localTrade.getType(), TradeTypeEnum.REFUND.getCode())){
             log.warn("订单类型不一致: {},{}", outDetail.getType(), localTrade.getType());
             diffs.add(new ReconcileDiffDetail().setFieldName("订单类型").setLocalValue(outDetail.getType()).setOutValue(localTrade.getType()));
         }

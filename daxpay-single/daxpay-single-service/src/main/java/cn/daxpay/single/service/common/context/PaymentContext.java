@@ -30,14 +30,11 @@ public class PaymentContext {
     /** 回调相关信息 */
     private final CallbackLocal callbackInfo = new CallbackLocal();
 
-    /** 修复相关信息 */
-    private final RepairLocal repairInfo = new RepairLocal();
-
     /** 对账相关信息 */
     private final ReconcileLocal reconcileInfo = new ReconcileLocal();
 
     /** 分账相关信息 */
-    private final AllocationLocal allocationInfo = new AllocationLocal();
+    private final AllocLocal allocationInfo = new AllocLocal();
 
     /** 转账相关信息 */
     private final TransferLocal transferInfo = new TransferLocal();

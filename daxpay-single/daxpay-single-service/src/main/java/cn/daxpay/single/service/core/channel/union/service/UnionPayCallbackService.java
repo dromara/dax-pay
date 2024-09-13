@@ -5,8 +5,7 @@ import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.core.code.PayStatusEnum;
 import cn.daxpay.single.core.code.RefundStatusEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.PayRepairSourceEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.code.UnionPayCode;
 import cn.daxpay.single.service.common.context.CallbackLocal;
 import cn.daxpay.single.service.common.local.PaymentContextLocal;
@@ -58,7 +57,7 @@ public class UnionPayCallbackService {
             callbackInfo.getCallbackParam().putAll(params);
 
             // 判断并保存回调类型
-            PaymentTypeEnum callbackType = this.getCallbackType();
+            TradeTypeEnum callbackType = this.getCallbackType();
             callbackInfo.setCallbackType(callbackType)
                     .setChannel(PayChannelEnum.UNION_PAY.getCode());
 
@@ -69,10 +68,7 @@ public class UnionPayCallbackService {
                 callbackService.saveCallbackRecord();
                 return null;
             }
-            // 提前设置订单修复的来源
-            PaymentContextLocal.get().getRepairInfo().setSource(PayRepairSourceEnum.CALLBACK);
-
-            if (callbackType == PaymentTypeEnum.PAY){
+            if (callbackType == TradeTypeEnum.PAY){
                 // 解析支付数据并放处理
                 this.resolvePayData();
                 payCallbackService.payCallback();
@@ -112,16 +108,16 @@ public class UnionPayCallbackService {
     /**
      * 判断类型 支付回调/退款回调
      *
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
-    public PaymentTypeEnum getCallbackType() {
+    public TradeTypeEnum getCallbackType() {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         Map<String, String> params = callbackInfo.getCallbackParam();
         String txnType = params.get(TXN_TYPE);
         if (UnionPayCode.TXN_TYPE_PAY.equals(txnType)){
-            return PaymentTypeEnum.PAY;
+            return TradeTypeEnum.PAY;
         } else {
-            return PaymentTypeEnum.REFUND;
+            return TradeTypeEnum.REFUND;
         }
     }
 

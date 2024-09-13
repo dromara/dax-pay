@@ -72,7 +72,7 @@ public class UnionPaySyncService {
             String queryId = MapUtil.getStr(result, QUERY_ID);
             String timeEnd = MapUtil.getStr(result, TXN_TIME);
             LocalDateTime time = LocalDateTimeUtil.parse(timeEnd, DatePattern.PURE_DATETIME_PATTERN);
-            return syncResult.setOutOrderNo(queryId).setPayTime(time).setSyncStatus(PaySyncStatusEnum.SUCCESS);
+            return syncResult.setOutOrderNo(queryId).setFinishTime(time).setSyncStatus(PaySyncStatusEnum.SUCCESS);
         }
 
         // 支付超时  交易不在受理时间范围内

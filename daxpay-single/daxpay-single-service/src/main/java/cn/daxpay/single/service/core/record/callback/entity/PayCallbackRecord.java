@@ -9,7 +9,7 @@ import cn.bootx.table.modify.mysql.annotation.DbMySqlIndex;
 import cn.bootx.table.modify.mysql.constants.MySqlFieldTypeEnum;
 import cn.daxpay.single.core.code.PayChannelEnum;
 import cn.daxpay.single.service.code.PayCallbackStatusEnum;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.core.record.callback.convert.PayCallbackRecordConvert;
 import cn.daxpay.single.service.dto.record.callback.PayCallbackRecordDto;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -48,7 +48,7 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
 
     /**
      * 回调类型
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @DbColumn(comment = "回调类型", length = 20, isNull = false)
     private String callbackType;
@@ -59,14 +59,11 @@ public class PayCallbackRecord extends MpCreateEntity implements EntityBaseFunct
     private String notifyInfo;
 
     /**
+     * 回调处理状态
      * @see PayCallbackStatusEnum
      */
     @DbColumn(comment = "回调处理状态", length = 20, isNull = false)
     private String status;
-
-    /** 修复号 */
-    @DbColumn(comment = "修复号", length = 32, isNull = false)
-    private String repairOrderNo;
 
     /** 错误码 */
     @DbColumn(comment = "错误码", length = 10)

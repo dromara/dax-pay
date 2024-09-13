@@ -1,6 +1,6 @@
 package cn.daxpay.single.service.core.payment.reconcile.domain;
 
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.handler.excel.AmountConverter;
 import cn.daxpay.single.service.handler.excel.PaymentTypeConvert;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -27,7 +27,7 @@ public class GeneralTradeInfo {
 
     /**
      * 业务类型
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @ExcelProperty(value = "业务类型", converter = PaymentTypeConvert.class)
     private String type;

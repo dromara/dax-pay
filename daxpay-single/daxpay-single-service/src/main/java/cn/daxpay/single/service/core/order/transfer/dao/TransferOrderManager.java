@@ -4,8 +4,8 @@ import cn.bootx.platform.common.core.rest.param.PageParam;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.common.query.generator.QueryGenerator;
-import cn.daxpay.single.core.code.PayStatusEnum;
-import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
+import cn.daxpay.single.core.code.TransferStatusEnum;
+import cn.daxpay.single.core.result.order.TransferOrderResult;
 import cn.daxpay.single.service.core.order.transfer.entity.TransferOrder;
 import cn.daxpay.single.service.param.order.TransferOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -55,7 +55,7 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
      */
     public Integer getTalAmount(TransferOrderQuery query){
         QueryWrapper<TransferOrderQuery> generator = QueryGenerator.generator(query);
-        generator.eq(MpUtil.getColumnName(RefundOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
+        generator.eq(MpUtil.getColumnName(TransferOrder::getStatus), TransferStatusEnum.SUCCESS.getCode());
         return baseMapper.getTalAmount(generator);
     }
 }

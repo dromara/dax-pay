@@ -29,8 +29,8 @@ public class PayRemoteSyncResult {
      */
     private String outOrderNo;
 
-    /** 支付完成时间(通常用于接收异步支付返回的时间) */
-    private LocalDateTime payTime;
+    /** 支付完成时间 */
+    private LocalDateTime finishTime;
 
     /** 同步时网关返回的对象, 序列化为json字符串 */
     private String syncInfo;

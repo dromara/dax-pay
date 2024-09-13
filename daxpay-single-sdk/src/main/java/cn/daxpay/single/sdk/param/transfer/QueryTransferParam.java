@@ -30,7 +30,7 @@ public class QueryTransferParam extends DaxPayRequest<TransferOrderModel> {
      */
     @Override
     public String path() {
-        return "/unipay/query/transfer";
+        return "/unipay/query/transferOrder";
     }
 
     /**

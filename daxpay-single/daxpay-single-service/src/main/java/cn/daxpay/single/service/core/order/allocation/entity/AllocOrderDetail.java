@@ -9,7 +9,7 @@ import cn.daxpay.single.core.code.AllocDetailResultEnum;
 import cn.daxpay.single.core.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.service.common.typehandler.DecryptTypeHandler;
 import cn.daxpay.single.service.core.order.allocation.convert.AllocOrderConvert;
-import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
+import cn.daxpay.single.service.dto.order.allocation.AllocOrderDetailDto;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @DbTable(comment = "分账订单明细")
 @TableName(value = "pay_alloc_order_detail",autoResultMap = true)
-public class AllocOrderDetail extends MpBaseEntity implements EntityBaseFunction<AllocationOrderDetailDto> {
+public class AllocOrderDetail extends MpBaseEntity implements EntityBaseFunction<AllocOrderDetailDto> {
 
     /** 分账订单ID */
     @DbMySqlIndex(comment = "分账订单ID索引")
@@ -90,7 +90,7 @@ public class AllocOrderDetail extends MpBaseEntity implements EntityBaseFunction
      * 转换
      */
     @Override
-    public AllocationOrderDetailDto toDto() {
+    public AllocOrderDetailDto toDto() {
         return AllocOrderConvert.CONVERT.convert(this);
     }
 }

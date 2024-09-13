@@ -8,7 +8,7 @@ import cn.daxpay.single.service.core.order.refund.entity.RefundOrder;
 import cn.daxpay.single.service.core.payment.common.service.PaymentAssistService;
 import cn.daxpay.single.service.core.payment.refund.service.RefundService;
 import cn.daxpay.single.service.param.order.PayOrderRefundParam;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class RefundOrderService {
 
         RefundParam refundParam = new RefundParam();
         refundParam.setOrderNo(param.getOrderNo());
-        refundParam.setBizRefundNo(OrderNoGenerateUtil.refund());
+        refundParam.setBizRefundNo(TradeNoGenerateUtil.refund());
         refundParam.setAmount(param.getAmount());
         refundParam.setReason(param.getReason());
         refundParam.setReqTime(LocalDateTime.now());

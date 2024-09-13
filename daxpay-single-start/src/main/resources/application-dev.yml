@@ -41,16 +41,6 @@ spring:
     auto-startup: true
     #启动时更新己存在的Job
     overwrite-existing-jobs: true
-    properties:
-      org:
-        quartz:
-          scheduler:
-            instanceName: quartzScheduler
-            instanceId: AUTO
-          threadPool:
-            threadCount: 10
-            threadPriority: 5
-            threadsInheritContextClassLoaderOfInitializingThread: true
 # swagger openapi 接口文档配置
 springdoc:
   # 自动展开参数
@@ -60,12 +50,12 @@ logging:
   level:
     cn.daxpay.**: debug
     org.springframework.jdbc.core: debug
+
 # 项目配置
 bootx:
   common:
     # 接口文档
     swagger:
-      enabled: true
       author: bootx
       version: 2.0.8
       title: 开源支付平台-单商户
@@ -102,6 +92,7 @@ bootx:
   starter:
     # 认证
     auth:
+      # 开启超级管理员登录
       enable-admin: true
       default-password: 123456
       ignore-urls:
@@ -138,7 +129,7 @@ bootx:
       server-url: http://127.0.0.1:9000
 # 自动建表 生产环境关闭
 table-modify:
-  update-type: update
+  update-type: none
   database-type: mysql
   fail-fast: true
   scan-package: cn.daxpay.single

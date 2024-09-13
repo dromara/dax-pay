@@ -10,7 +10,7 @@ import cn.daxpay.single.core.exception.AmountExceedLimitException;
 import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.pay.PayParam;
 import cn.daxpay.single.core.result.pay.PayResult;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import cn.daxpay.single.core.util.PayUtil;
 import cn.daxpay.single.service.common.context.PayLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
@@ -60,7 +60,7 @@ public class PayAssistService {
         // 构建支付订单对象
         PayOrder order = new PayOrder()
                 .setBizOrderNo(payParam.getBizOrderNo())
-                .setOrderNo(OrderNoGenerateUtil.pay())
+                .setOrderNo(TradeNoGenerateUtil.pay())
                 .setTitle(payParam.getTitle())
                 .setDescription(payParam.getDescription())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())

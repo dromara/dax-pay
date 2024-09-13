@@ -70,4 +70,17 @@ public class JacksonConfiguration {
         return copy;
     }
 
+    /**
+     * 序列化时忽略空值
+     */
+    @Bean
+    public ObjectMapper ignoreNullObjectMapper(ObjectMapper objectMapper) {
+        // 对象映射器
+        ObjectMapper copy = objectMapper.copy()
+                // null 值不序列化
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        JacksonUtil.setIgnoreNullObjectMapper(copy);
+        return copy;
+    }
+
 }

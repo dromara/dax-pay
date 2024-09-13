@@ -80,6 +80,8 @@ public class CaptchaService {
 
     /**
      * 验证手机发送的验证码是否还在有效时间内
+     * @param phone 手机号
+     * @param type 业务类型, 用来区分不同业务的短信验证码
      */
     public boolean existsSmsCaptcha(String phone, String type) {
         return redisClient.exists(getSmsCaptchaPrefix(type) + phone);

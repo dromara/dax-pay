@@ -8,7 +8,7 @@ import cn.bootx.platform.common.core.exception.ValidationFailedException;
 import cn.daxpay.single.core.exception.TradeStatusErrorException;
 import cn.daxpay.single.core.param.payment.refund.RefundParam;
 import cn.daxpay.single.core.result.pay.RefundResult;
-import cn.daxpay.single.core.util.OrderNoGenerateUtil;
+import cn.daxpay.single.core.util.TradeNoGenerateUtil;
 import cn.daxpay.single.core.util.PaySignUtil;
 import cn.daxpay.single.service.common.context.ErrorInfoLocal;
 import cn.daxpay.single.service.common.context.PlatformLocal;
@@ -81,7 +81,7 @@ public class RefundAssistService {
                 .setOrderNo(payOrder.getOrderNo())
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setOutOrderNo(payOrder.getOutOrderNo())
-                .setRefundNo(OrderNoGenerateUtil.refund())
+                .setRefundNo(TradeNoGenerateUtil.refund())
                 .setBizRefundNo(refundParam.getBizRefundNo())
                 .setChannel(payOrder.getChannel())
                 .setStatus(RefundStatusEnum.PROGRESS.getCode())

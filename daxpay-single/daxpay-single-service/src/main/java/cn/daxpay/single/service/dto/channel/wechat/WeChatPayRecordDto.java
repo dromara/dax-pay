@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.dto.channel.wechat;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +30,7 @@ public class WeChatPayRecordDto extends BaseDto {
 
     /**
      * 业务类型
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @Schema(description = "业务类型")
     private String type;

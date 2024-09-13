@@ -27,7 +27,7 @@ public class RefundRemoteSyncResult {
     private String syncInfo;
 
     /**
-     * 外部三方支付网关生成的退款交易, 用与将记录关联起来
+     * 外部三方支付网关生成的退款交易号, 用与将记录关联起来
      */
     private String outRefundNo;
 

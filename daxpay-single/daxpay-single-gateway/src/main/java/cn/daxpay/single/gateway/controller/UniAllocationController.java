@@ -12,7 +12,7 @@ import cn.daxpay.single.core.result.allocation.AllocReceiverRemoveResult;
 import cn.daxpay.single.core.result.allocation.AllocationResult;
 import cn.daxpay.single.service.annotation.PaymentVerify;
 import cn.daxpay.single.service.annotation.InitPaymentContext;
-import cn.daxpay.single.service.core.payment.allocation.service.AllocationReceiverService;
+import cn.daxpay.single.service.core.payment.allocation.service.AllocReceiverService;
 import cn.daxpay.single.service.core.payment.allocation.service.AllocationService;
 import cn.daxpay.single.core.util.DaxRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class UniAllocationController {
 
     private final AllocationService allocationService;
 
-    private final AllocationReceiverService receiverService;
+    private final AllocReceiverService receiverService;
 
     @PaymentVerify
     @InitPaymentContext(PaymentApiCode.ALLOCATION)

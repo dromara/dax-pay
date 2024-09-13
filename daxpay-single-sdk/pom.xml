@@ -44,7 +44,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <logback-classic.version>1.2.7</logback-classic.version>
+        <logback-classic.version>1.2.13</logback-classic.version>
         <hutool.version>5.8.27</hutool.version>
         <lombok.version>1.18.30</lombok.version>
         <junit.version>4.13.2</junit.version>
@@ -54,7 +54,17 @@
         <!-- 工具类 -->
         <dependency>
             <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-json</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
             <version>${hutool.version}</version>
         </dependency>
         <!-- 日志框架 -->
@@ -84,12 +94,6 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>cn.daxpay.single</groupId>
-            <artifactId>daxpay-single-core</artifactId>
-            <version>2.0.8</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

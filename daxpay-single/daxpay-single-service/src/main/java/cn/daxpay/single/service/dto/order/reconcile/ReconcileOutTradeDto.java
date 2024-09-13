@@ -1,7 +1,7 @@
 package cn.daxpay.single.service.dto.order.reconcile;
 
 import cn.bootx.platform.common.core.rest.dto.BaseDto;
-import cn.daxpay.single.service.code.PaymentTypeEnum;
+import cn.daxpay.single.service.code.TradeTypeEnum;
 import cn.daxpay.single.service.handler.excel.AmountConverter;
 import cn.daxpay.single.service.handler.excel.PaymentTypeConvert;
 import com.alibaba.excel.annotation.ExcelIgnore;
@@ -43,7 +43,7 @@ public class ReconcileOutTradeDto extends BaseDto {
 
     /**
      * 交易类型
-     * @see PaymentTypeEnum
+     * @see TradeTypeEnum
      */
     @Schema(description = "交易类型")
     @ExcelProperty(value = "交易类型",converter = PaymentTypeConvert.class)

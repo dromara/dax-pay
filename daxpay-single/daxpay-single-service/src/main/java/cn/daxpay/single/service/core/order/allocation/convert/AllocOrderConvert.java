@@ -7,7 +7,7 @@ import cn.daxpay.single.service.core.order.allocation.entity.AllocOrderDetail;
 import cn.daxpay.single.service.core.payment.notice.result.AllocDetailNoticeResult;
 import cn.daxpay.single.service.core.payment.notice.result.AllocNoticeResult;
 import cn.daxpay.single.service.dto.order.allocation.AllocOrderDto;
-import cn.daxpay.single.service.dto.order.allocation.AllocationOrderDetailDto;
+import cn.daxpay.single.service.dto.order.allocation.AllocOrderDetailDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -26,7 +26,7 @@ public interface AllocOrderConvert {
 
     AllocOrderDetailResult toResult(AllocOrderDetail in);
 
-    AllocationOrderDetailDto convert(AllocOrderDetail in);
+    AllocOrderDetailDto convert(AllocOrderDetail in);
 
     AllocNoticeResult toNotice(AllocOrder in);
 
