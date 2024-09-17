@@ -53,12 +53,12 @@
 
 ## 🏬 系统演示
 ### 运营端
-> 搭建中
+> bootx/123456
 
 地址：https://admin.web.daxpay.cn/
 
 ### 商户端
-> 搭建中
+> daxpay/daxpay
 
 地址：https://merchant.web.daxpay.cn/
 
