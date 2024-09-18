@@ -75,14 +75,22 @@ public class TransferOrder extends MchBaseEntity implements ToResult<TransferOrd
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
 
+    /**
+     * 附加参数 以最后一次为准
+     */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String extraParam;
+
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String attach;
 
     /** 请求时间 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private LocalDateTime reqTime;
 
     /** 终端ip */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String clientIp;
 
     /** 错误码 */

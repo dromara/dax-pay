@@ -25,4 +25,7 @@ public class RefundResult {
     /** 退款状态 */
     @Schema(description = "退款状态")
     private String status;
+
+    @Schema(description = "错误提示")
+    private String errorMsg;
 }

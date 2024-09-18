@@ -31,7 +31,7 @@ public class PayOrderTest {
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .mchNo("M1723635576766")
-                .appId("M8207639754663343")
+                .appId("M8088873888246277")
                 .build();
         DaxPayKit.initConfig(config);
     }

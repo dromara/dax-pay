@@ -9,12 +9,10 @@ import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.core.result.trade.refund.RefundResult;
 import cn.daxpay.multi.core.result.trade.transfer.TransferResult;
 import cn.daxpay.multi.service.service.develop.DevelopTradeService;
-import cn.daxpay.multi.service.service.trade.pay.PayService;
-import cn.daxpay.multi.service.service.trade.refund.RefundService;
-import cn.daxpay.multi.service.service.trade.transfer.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,15 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/9/6
  */
+@Validated
 @Tag(name = "开发调试服务商")
 @RestController
 @RequestMapping("/develop/trade")
 @RequiredArgsConstructor
 public class DevelopTradeController {
     private final DevelopTradeService developTradeService;
-    private final PayService payService;
-    private final RefundService refundService;
-    private final TransferService transferService;
+
 
     @Operation(summary = "支付参数签名")
     @PostMapping("/sign/pay")
@@ -56,20 +53,20 @@ public class DevelopTradeController {
 
     @Operation(summary = "支付接口")
     @PostMapping("/pay")
-    public Result<PayResult> pay(@RequestBody PayParam payParam){
-        return Res.ok(payService.pay(payParam));
+    public Result<PayResult> pay(@RequestBody @Validated PayParam param){
+        return Res.ok(developTradeService.pay(param));
     }
 
     @Operation(summary = "退款接口")
     @PostMapping("/refund")
-    public Result<RefundResult> refund(@RequestBody RefundParam payParam){
-        return Res.ok(refundService.refund(payParam));
+    public Result<RefundResult> refund(@RequestBody @Validated RefundParam param){
+        return Res.ok(developTradeService.refund(param));
     }
 
     @Operation(summary = "转账接口")
     @PostMapping("/transfer")
-    public Result<TransferResult> transfer(@RequestBody TransferParam transferParam){
-        return Res.ok(transferService.transfer(transferParam));
+    public Result<TransferResult> transfer(@RequestBody @Validated TransferParam param){
+        return Res.ok(developTradeService.transfer(param));
     }
 
 }

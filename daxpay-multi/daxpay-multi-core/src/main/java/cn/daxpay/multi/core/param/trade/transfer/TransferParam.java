@@ -75,13 +75,21 @@ public class TransferParam extends PaymentCommonParam {
     @Schema(description = "收款人姓名")
     private String payeeName;
 
-    /** 回调通知地址 */
-    @Size(max = 200, message = "回调通知地址不可超过200位")
-    @Schema(description = "回调通知地址")
-    private String notifyUrl;
+    /**
+     * 预留的转账扩展参数
+     */
+    @Schema(description = "转账扩展参数")
+    @Size(max = 2048, message = "退转账扩展参数不可超过2048位")
+    private String extraParam;
 
     /** 商户扩展参数,回调时会原样返回 */
     @Size(max = 500, message = "商户扩展参数,回调时会原样返回不可超过500位")
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;
+
+    /** 回调通知地址 */
+    @Size(max = 200, message = "回调通知地址不可超过200位")
+    @Schema(description = "回调通知地址")
+    private String notifyUrl;
+
 }

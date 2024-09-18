@@ -193,6 +193,7 @@ public class RefundAssistService {
         return new RefundResult()
                 .setStatus(refundOrder.getStatus())
                 .setRefundNo(refundOrder.getRefundNo())
+                .setErrorMsg(refundOrder.getErrorMsg())
                 .setBizRefundNo(refundOrder.getBizRefundNo());
     }
 }

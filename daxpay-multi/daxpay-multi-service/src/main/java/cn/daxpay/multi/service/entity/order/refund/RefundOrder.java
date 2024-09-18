@@ -86,6 +86,7 @@ public class RefundOrder extends MchBaseEntity implements ToResult<RefundOrderVo
     private String notifyUrl;
 
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String attach;
 
     /**
@@ -95,9 +96,11 @@ public class RefundOrder extends MchBaseEntity implements ToResult<RefundOrderVo
     private String extraParam;
 
     /** 请求时间 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private LocalDateTime reqTime;
 
     /** 终端ip */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String clientIp;
 
     /**
