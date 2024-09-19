@@ -30,7 +30,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AliPayAuthService {
 
-    public static final String OPEN_ID_KEY_PREFIX = "daxpay:wechat:openId:";
+    public static final String OPEN_ID_KEY_PREFIX = "daxpay:alipay:openId:";
 
     private final AliPayConfigService aliPayConfigService;
 
