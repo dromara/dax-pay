@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/5/17
  */
+@PaymentVerify
 @IgnoreAuth
 @Tag(name = "分账控制器")
 @RestController
@@ -23,28 +24,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UniAllocationController {
 
-    @PaymentVerify
     @Operation(summary = "发起分账接口")
     @PostMapping("/start")
     public DaxResult<Void> start(){
         return DaxRes.ok();
     }
 
-    @PaymentVerify
     @Operation(summary = "分账完结接口")
     @PostMapping("/finish")
     public DaxResult<Void> finish(){
         return DaxRes.ok();
     }
 
-    @PaymentVerify
     @Operation(summary = "分账接收方添加接口")
     @PostMapping("/receiver/add")
     public DaxResult<Void> receiverAdd(){
         return DaxRes.ok();
     }
 
-    @PaymentVerify
     @Operation(summary = "分账接收方删除接口")
     @PostMapping("/receiver/remove")
     public DaxResult<Void> receiverRemove(){

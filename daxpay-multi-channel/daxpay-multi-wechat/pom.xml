@@ -26,11 +26,11 @@
             <version>${wxjava.version}</version>
         </dependency>
 
-        <!-- 微信支付官方SDK v3版本接入 -->
+        <!-- 微信工具包 -->
         <dependency>
-            <groupId>com.github.wechatpay-apiv3</groupId>
-            <artifactId>wechatpay-java</artifactId>
-            <version>${wxpay.version}</version>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>${wxjava.version}</version>
         </dependency>
 
         <!-- 表格工具 -->

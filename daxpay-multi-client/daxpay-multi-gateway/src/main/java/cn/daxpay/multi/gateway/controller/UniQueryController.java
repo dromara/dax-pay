@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/6/4
  */
+@PaymentVerify
 @IgnoreAuth
 @Tag(name = "统一查询接口")
 @RestController
@@ -37,21 +38,18 @@ public class UniQueryController {
     private final RefundOrderQueryService refundOrderQueryService;
     private final TransferOrderQueryService transferOrderQueryService;
 
-    @PaymentVerify
     @Operation(summary = "支付订单查询接口")
     @PostMapping("/payOrder")
     public DaxResult<PayOrderResult> queryPayOrder(@RequestBody QueryPayParam param){
         return DaxRes.ok(payOrderQueryService.queryPayOrder(param));
     }
 
-    @PaymentVerify
     @Operation(summary = "退款订单查询接口")
     @PostMapping("/refundOrder")
      public DaxResult<RefundOrderResult> queryRefundOrder(@RequestBody QueryRefundParam param){
         return DaxRes.ok(refundOrderQueryService.queryRefundOrder(param));
     }
 
-    @PaymentVerify
     @Operation(summary = "转账订单查询接口")
     @PostMapping("/transferOrder")
     public DaxResult<TransferOrderResult> transferOrder(@RequestBody QueryTransferParam param){

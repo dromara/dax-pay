@@ -9,6 +9,7 @@ import cn.daxpay.multi.core.result.trade.pay.PaySyncResult;
 import cn.daxpay.multi.core.result.trade.refund.RefundSyncResult;
 import cn.daxpay.multi.core.result.trade.transfer.TransferSyncResult;
 import cn.daxpay.multi.core.util.DaxRes;
+import cn.daxpay.multi.service.common.anno.PaymentVerify;
 import cn.daxpay.multi.service.service.trade.pay.PaySyncService;
 import cn.daxpay.multi.service.service.trade.refund.RefundSyncService;
 import cn.daxpay.multi.service.service.trade.transfer.TransferSyncService;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/6/4
  */
+@PaymentVerify
 @IgnoreAuth
 @Tag(name = "统一同步接口")
 @RestController
@@ -47,7 +49,7 @@ public class UniSyncController {
 
     @Operation(summary = "退款订单同步接口")
     @PostMapping("/refund")
-    public DaxResult<RefundSyncResult> refund(RefundSyncParam param){
+    public DaxResult<RefundSyncResult> refund(@RequestBody RefundSyncParam param){
         return DaxRes.ok(refundSyncService.sync(param));
     }
 

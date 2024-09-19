@@ -20,7 +20,6 @@ import com.github.binarywang.wxpay.bean.notify.*;
 import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.wechat.pay.java.core.http.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,10 +92,10 @@ public class WechatPayCallbackService {
             String body = JakartaServletUtil.getBody(request);
             Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
             SignatureHeader signatureHeader = new SignatureHeader();
-            signatureHeader.setNonce(headerMap.get(Constant.WECHAT_PAY_NONCE.toLowerCase()));
-            signatureHeader.setTimeStamp(headerMap.get(Constant.WECHAT_PAY_TIMESTAMP.toLowerCase()));
-            signatureHeader.setSerial(headerMap.get(Constant.WECHAT_PAY_SERIAL.toLowerCase()));
-            signatureHeader.setSignature(headerMap.get(Constant.WECHAT_PAY_SIGNATURE.toLowerCase()));
+            signatureHeader.setNonce(headerMap.get(WechatPayCode.WECHAT_PAY_NONCE.toLowerCase()));
+            signatureHeader.setTimeStamp(headerMap.get(WechatPayCode.WECHAT_PAY_TIMESTAMP.toLowerCase()));
+            signatureHeader.setSerial(headerMap.get(WechatPayCode.WECHAT_PAY_SERIAL.toLowerCase()));
+            signatureHeader.setSignature(headerMap.get(WechatPayCode.WECHAT_PAY_SIGNATURE.toLowerCase()));
             callbackInfo.setRawData(body);
             try {
                 // 转换请求

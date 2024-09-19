@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/6/4
  */
+@PaymentVerify
 @IgnoreAuth
 @Tag(name = "对账接口处理器")
 @RestController
@@ -29,14 +30,12 @@ public class UniReconcileController {
 
     private final ReconcileStatementQueryService statementQueryService;
 
-    @PaymentVerify
     @Operation(summary = "下载通道对账单链接")
     @PostMapping("/channelDownUrl")
     public DaxResult<ReconcileDownResult> channelDownUrl(@RequestBody ReconcileDownParam param){
         return DaxRes.ok(statementQueryService.getChannelDownUrl(param.getChannel(), param.getDate()));
     }
 
-    @PaymentVerify
     @Operation(summary = "下载平台对账单链接")
     @PostMapping("/platformDownUrl")
     public DaxResult<ReconcileDownResult> platformDownUrl(@RequestBody ReconcileDownParam param){

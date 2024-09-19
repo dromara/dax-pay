@@ -20,8 +20,6 @@ import cn.hutool.core.util.StrUtil;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
-import com.wechat.pay.java.core.Config;
-import com.wechat.pay.java.core.RSAConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -145,19 +143,5 @@ public class WechatPayConfigService {
         WxPayService wxPayService = new WxPayServiceImpl();
         wxPayService.setConfig(payConfig);
         return wxPayService;
-    }
-
-    /**
-     * 官方SDK
-     * 官方又不管不更新了, 后面看看是不是做一下官方SDK的视线
-     */
-    public Config wxv3Config(WechatPayConfig wechatPayConfig){
-        Config config = new RSAConfig.Builder()
-                        .merchantId(wechatPayConfig.getWxMchId())
-                        .privateKey(wechatPayConfig.getPrivateKey())
-                        .merchantSerialNumber(wechatPayConfig.getCertSerialNo())
-                        .wechatPayCertificates(wechatPayConfig.getPrivateCert())
-                        .build();
-        return config;
     }
 }
