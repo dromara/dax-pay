@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.service.notice.notify;
 
-import cn.bootx.platform.common.redis.delay.service.DelayJobService;
+import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
 import cn.daxpay.multi.core.result.DaxResult;

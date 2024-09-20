@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.service.trade.transfer;
 
-import cn.bootx.platform.common.redis.delay.service.DelayJobService;
+import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.util.ValidationUtil;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
 import cn.daxpay.multi.core.exception.TradeProcessingException;

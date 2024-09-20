@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.daxpay.multi</groupId>
         <artifactId>daxpay-multi</artifactId>
-        <version>3.0.1.beta1</version>
+        <version>3.0.0.beta1</version>
     </parent>
 
     <artifactId>daxpay-multi-service</artifactId>
@@ -38,7 +38,7 @@
         <!-- 延时任务 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-redis-delay-queue</artifactId>
+            <artifactId>starter-delay-queue</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
 

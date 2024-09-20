@@ -1,7 +1,7 @@
 package cn.daxpay.multi.gateway.event;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
+import cn.bootx.platform.starter.redis.delay.annotation.DelayEventListener;
+import cn.bootx.platform.starter.redis.delay.annotation.DelayJobEvent;
 import cn.daxpay.multi.core.enums.MerchantNotifyTypeEnum;
 import cn.daxpay.multi.service.code.DaxPayCode;
 import cn.daxpay.multi.service.common.context.MchAppLocal;

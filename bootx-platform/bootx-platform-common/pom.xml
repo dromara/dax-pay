@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform</artifactId>
-        <version>3.0.1.beta1</version>
+        <version>3.0.0.beta1</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -23,7 +23,6 @@
         <module>common-header-holder</module>
         <module>common-redis</module>
         <module>common-cache</module>
-        <module>common-redis-delay-queue</module>
     </modules>
 
     <dependencies>

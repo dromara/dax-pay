@@ -1,9 +1,9 @@
 package cn.daxpay.multi.admin.controller;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
-import cn.bootx.platform.common.redis.delay.bean.DelayJob;
-import cn.bootx.platform.common.redis.delay.service.DelayJobService;
+import cn.bootx.platform.starter.redis.delay.annotation.DelayEventListener;
+import cn.bootx.platform.starter.redis.delay.annotation.DelayJobEvent;
+import cn.bootx.platform.starter.redis.delay.bean.DelayJob;
+import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;

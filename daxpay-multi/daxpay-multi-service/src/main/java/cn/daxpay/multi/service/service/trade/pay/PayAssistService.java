@@ -1,6 +1,6 @@
 package cn.daxpay.multi.service.service.trade.pay;
 
-import cn.bootx.platform.common.redis.delay.service.DelayJobService;
+import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
 import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.bootx.platform.core.util.DateTimeUtil;
 import cn.daxpay.multi.core.enums.PayAllocStatusEnum;

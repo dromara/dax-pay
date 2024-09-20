@@ -1,7 +1,7 @@
 package cn.daxpay.multi.gateway.event;
 
-import cn.bootx.platform.common.redis.delay.annotation.DelayEventListener;
-import cn.bootx.platform.common.redis.delay.annotation.DelayJobEvent;
+import cn.bootx.platform.starter.redis.delay.annotation.DelayEventListener;
+import cn.bootx.platform.starter.redis.delay.annotation.DelayJobEvent;
 import cn.daxpay.multi.core.enums.PayStatusEnum;
 import cn.daxpay.multi.core.enums.RefundStatusEnum;
 import cn.daxpay.multi.core.enums.TransferStatusEnum;
