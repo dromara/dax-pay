@@ -1,6 +1,10 @@
 package cn.daxpay.multi.service.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.multi.service.convert.config.PlatformConfigConvert;
+import cn.daxpay.multi.service.result.config.PlatformConfigResult;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -13,11 +17,16 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class PlatformConfig extends MpBaseEntity {
-    /** 管理平台访问地址 */
-    private String adminServiceUrl = "http://abc.com";
+@TableName("pay_platform_config")
+public class PlatformConfig extends MpBaseEntity implements ToResult<PlatformConfigResult> {
     /** 支付网关地址 */
-    private String gatewayServiceUrl = "http://pay1.bootx.cn";
-    /** 商户平台地址 */
-    private String merchantServiceUrl = "http://abc.com";
+    private String gatewayServiceUrl;
+
+    /**
+     * 转换
+     */
+    @Override
+    public PlatformConfigResult toResult() {
+        return PlatformConfigConvert.CONVERT.toResult(this);
+    }
 }
