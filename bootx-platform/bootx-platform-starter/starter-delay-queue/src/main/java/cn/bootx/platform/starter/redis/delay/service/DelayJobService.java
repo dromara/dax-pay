@@ -39,7 +39,7 @@ public class DelayJobService {
      * @param topic 主题队列
      * @param delayTime 延迟时间(毫秒), 如果小于0则默认为0
      */
-    public String register(Object obj, String topic, long delayTime) {
+    public void register(Object obj, String topic, long delayTime) {
         if (delayTime < 0){
             delayTime = 0;
         }
@@ -52,16 +52,15 @@ public class DelayJobService {
         delayJobPool.addOrUpdateJob(delayJob);
         QueueJob queueJob = new QueueJob(delayJob);
         delayBucket.addDelayJob(queueJob);
-        return delayJob.getId();
     }
 
     /**
      * 注册任务
      */
-    public String register(Object obj, String topic, LocalDateTime dateTime) {
+    public void register(Object obj, String topic, LocalDateTime dateTime) {
         // 判断与当前相差的毫秒值
         long delayTime = DateTimeUtil.timestamp(dateTime) - DateTimeUtil.timestamp(LocalDateTime.now());
-        return this.register(obj, topic, delayTime);
+        this.register(obj, topic, delayTime);
     }
 
     /**

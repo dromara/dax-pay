@@ -27,7 +27,7 @@ public class DelayTopic {
     /**
      * 获得zset集合
      */
-    private BoundZSetOperations<String, String> getPool() {
+    public BoundZSetOperations<String, String> getPool() {
         String name = "delay:queue:topics";
         return redisTemplate.boundZSetOps(name);
     }
@@ -73,7 +73,7 @@ public class DelayTopic {
     /**
      * 获得死信zset集合
      */
-    private BoundZSetOperations<String, String> getDeadPool() {
+    public BoundZSetOperations<String, String> getDeadPool() {
         String name = "delay:queue:dead:topics";
         return redisTemplate.boundZSetOps(name);
     }

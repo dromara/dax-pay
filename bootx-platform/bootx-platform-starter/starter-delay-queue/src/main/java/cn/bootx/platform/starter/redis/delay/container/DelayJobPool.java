@@ -23,7 +23,7 @@ public class DelayJobPool {
     /**
      * 获取正常任务池
      */
-    private BoundHashOperations<String,String, DelayJob<?>> getPool () {
+    public BoundHashOperations<String,String, DelayJob<?>> getPool () {
         String name = "delay:queue:jobs";
         return redisTemplate.boundHashOps(name);
     }
@@ -53,7 +53,7 @@ public class DelayJobPool {
     /**
      * 获取死信任务池
      */
-    private BoundHashOperations<String,String, DelayJob<?>> getDeadPool () {
+    public BoundHashOperations<String,String, DelayJob<?>> getDeadPool () {
         String name = "delay:queue:dead:jobs";
         return redisTemplate.boundHashOps(name);
     }

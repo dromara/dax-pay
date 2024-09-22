@@ -22,14 +22,14 @@ public class DelayQueue {
     /**
      * 获取队列key
      */
-    private String getKey(String topic) {
+    public String getKey(String topic) {
         return "delay:queue:ready:topic" + topic;
     }
 
     /**
      * 获得队列
      */
-    private BoundListOperations<String, QueueJob> getQueue (String topic) {
+    public BoundListOperations<String, QueueJob> getQueue (String topic) {
         return redisTemplate.boundListOps(getKey(topic));
     }
 
@@ -52,21 +52,21 @@ public class DelayQueue {
     /**
      * 获取死信队列key
      */
-    private String getDeadKey(String topic) {
+    public String getDeadKey(String topic) {
         return "delay:queue:dead:"+topic;
     }
 
     /**
      * 获得死信队列
      */
-    private BoundListOperations<String, QueueJob> getDeadQueue(String topic) {
+    public BoundListOperations<String, QueueJob> getDeadQueue(String topic) {
         return redisTemplate.boundListOps(getDeadKey(topic));
     }
 
     /**
      * 设置死信任务
      */
-    public void  pushDeadJob(QueueJob queueJob) {
+    public void pushDeadJob(QueueJob queueJob) {
         var listOperations = getDeadQueue(queueJob.getTopic());
         listOperations.leftPush(queueJob);
     }

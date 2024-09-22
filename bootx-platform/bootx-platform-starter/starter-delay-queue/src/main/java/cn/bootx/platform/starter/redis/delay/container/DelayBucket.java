@@ -2,6 +2,7 @@ package cn.bootx.platform.starter.redis.delay.container;
 
 import cn.bootx.platform.starter.redis.delay.bean.QueueJob;
 import cn.bootx.platform.starter.redis.delay.configuration.DelayQueueProperties;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ public class DelayBucket {
 
     private final DelayQueueProperties delayQueueProperties;
 
+    @Getter
     private final List <String> bucketNames = new ArrayList <>();
 
     /**
@@ -56,7 +58,7 @@ public class DelayBucket {
     /**
      * 获得桶集合
      */
-    private BoundZSetOperations<String, QueueJob> getBucket(String bucketName) {
+    public BoundZSetOperations<String, QueueJob> getBucket(String bucketName) {
         return redisTemplate.boundZSetOps(bucketName);
     }
 
