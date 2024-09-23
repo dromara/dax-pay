@@ -1,14 +1,12 @@
 package cn.daxpay.multi.admin.controller;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
+import cn.bootx.platform.core.rest.Res;
+import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.starter.redis.delay.annotation.DelayEventListener;
 import cn.bootx.platform.starter.redis.delay.annotation.DelayJobEvent;
 import cn.bootx.platform.starter.redis.delay.bean.DelayJob;
 import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
-import cn.bootx.platform.core.annotation.IgnoreAuth;
-import cn.bootx.platform.core.rest.Res;
-import cn.bootx.platform.core.rest.result.Result;
-import cn.bootx.platform.iam.service.permission.PermPathSyncService;
-import cn.bootx.platform.starter.redis.delay.service.DelayQueueService;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.hutool.core.util.RandomUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,13 +34,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class TestController {
 
-    private final PermPathSyncService permPathSyncService;
-
     private final RedisTemplate<String, Object> redisTemplate;
 
     private final DelayJobService delayJobService;
-
-    private final DelayQueueService delayQueueService;
 
 
     @Operation(summary = "测试redis")
@@ -60,7 +54,7 @@ public class TestController {
     public Result<Void> addDefJobTest() {
         for (int i = 0; i < 100; i++){
             DelayJob<PayOrder> delayJob = new DelayJob<>();
-            delayJobService.register(delayJob, "hello", 1000);
+            delayJobService.register(delayJob, "hello", RandomUtil.randomInt(10000,90000));
             delayJobService.register(delayJob, "hello", LocalDateTime.now().plusSeconds(20));
         }
         return Res.ok();

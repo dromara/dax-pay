@@ -35,7 +35,7 @@ public class DelayJob<T> implements Serializable {
     private long delayTime;
 
     /**
-     * 任务的执行超时时间
+     * 再次投递时间
      */
     private long ttrTime;
 
