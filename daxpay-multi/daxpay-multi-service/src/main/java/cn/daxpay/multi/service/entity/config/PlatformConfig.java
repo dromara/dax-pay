@@ -4,6 +4,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.multi.service.convert.config.PlatformConfigConvert;
 import cn.daxpay.multi.service.result.config.PlatformConfigResult;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,8 +20,33 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("pay_platform_config")
 public class PlatformConfig extends MpBaseEntity implements ToResult<PlatformConfigResult> {
+
     /** 支付网关地址 */
     private String gatewayServiceUrl;
+
+    /** 网关移动端是否为嵌入式 */
+    private boolean mobileEmbedded;
+
+    /** 网关移动端地址 */
+    private String gatewayMobileUrl;
+
+    /** 网关PC端是否为嵌入式  */
+    private boolean pcEmbedded;
+
+    /** 网关PC端地址 */
+    private String gatewayPcUrl;
+
+    public String getGatewayServiceUrl() {
+        return StrUtil.removeSuffix(gatewayServiceUrl, "/");
+    }
+
+    public String getGatewayMobileUrl() {
+        return StrUtil.removeSuffix(gatewayMobileUrl, "/");
+    }
+
+    public String getGatewayPcUrl() {
+        return StrUtil.removeSuffix(gatewayPcUrl, "/");
+    }
 
     /**
      * 转换

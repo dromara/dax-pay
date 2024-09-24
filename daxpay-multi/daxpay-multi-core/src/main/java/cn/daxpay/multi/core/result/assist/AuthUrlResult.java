@@ -18,8 +18,8 @@ public class AuthUrlResult {
     @Schema(description = "授权访问链接")
     private String authUrl;
 
-    /** 标识码, 用于查询是否获取到了OpenId */
-    @Schema(description = "标识码")
-    private String code;
+    /** 查询标识码, 用于查询是否获取到了OpenId */
+    @Schema(description = "查询标识码")
+    private String queryCode;
 
 }

@@ -36,8 +36,8 @@
 - SDK Java版本: 1.8
 - Spring Boot 3.3.x
 - Maven: 3.9.x
-- 数据库: Postgresql 16 / MySQL 8.x (适配中)
-- 前端技术: Vite5 + Vue3 + Antd vue 4.x
+- 数据库: Postgresql 12+ / MySQL 8.x (适配中)
+- 前端技术: Vite5 + Vue3 + Antd vue 4.x / Vant 4.x
 
 ## 📃 文档和源码地址
 ### 文档地址
@@ -45,10 +45,11 @@
 
 ### 项目地址
 
-| 项目      | GITEE                                       | GITHUB                                          |GITCODE                                          |
-|---------|---------------------------------------------|-------------------------------------------------|---------------------------------------------|
-| 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    | [GITCODE](https://gitcode.com/dromara/dax-pay)    |
-| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |  |
+| 项目      | GITEE                                       | GITHUB                                          | GITCODE                                        |
+|---------|---------------------------------------------|-------------------------------------------------|------------------------------------------------|
+| 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    | [GITCODE](https://gitcode.com/dromara/dax-pay) |
+| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |                                                |
+| H5前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |                                                |
 
 
 ## 🏬 系统演示

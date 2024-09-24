@@ -118,7 +118,7 @@ public class AliPayConfigService {
     }
 
     /**
-     * 获取支步通知地址
+     * 获取异步通知地址
      */
     public String getNotifyUrl() {
         var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();

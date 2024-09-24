@@ -10,8 +10,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
@@ -52,12 +54,4 @@ public class WechatPayCallbackController {
         return refundCallbackService.refundHandle(request);
     }
 
-
-    @Operation(summary = "微信认证授权回调")
-    @GetMapping("/auth/{code}")
-    public ModelAndView wechatCallback(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, String authCode, @PathVariable("code") String code){
-        paymentAssistService.initMchAndApp(mchNo, appId);
-        wechatAuthService.authCallback(authCode, code);
-        return new ModelAndView("forward:/h5/openIdCallbackClose.html");
-    }
 }

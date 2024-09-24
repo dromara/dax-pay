@@ -29,6 +29,9 @@ public class ChannelConst extends MpIdEntity implements ToResult<ChannelConstRes
     /** 是否启用 */
     private boolean enable;
 
+    /** 渠道类型 */
+    private String channelType;
+
     /** 备注 */
     private String remark;
 

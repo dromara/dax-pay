@@ -1,6 +1,5 @@
 package cn.daxpay.multi.channel.alipay.controller;
 
-import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
@@ -12,12 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * 支付宝配置控制器
@@ -29,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("/alipay/config")
 @RequiredArgsConstructor
-@RequestGroup(groupCode = "AlipayConfig", groupName = "支付宝配置", moduleCode = "alipay", moduleName = "支付宝支付")
+@RequestGroup(groupCode = "AlipayConfig", groupName = "支付宝配置", moduleCode = "alipay", moduleName = "支付宝通道")
 public class AliPayConfigController {
     private final AliPayConfigService alipayConfigService;
 

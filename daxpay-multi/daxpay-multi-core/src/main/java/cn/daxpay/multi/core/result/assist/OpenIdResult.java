@@ -16,13 +16,4 @@ public class OpenIdResult {
 
     @Schema(description = "OpenId")
     private String openId;
-
-    /**
-     * 状态
-     * pending:查询中
-     * success:查询成功
-     * fail:查询失败
-     */
-    @Schema(description = "状态")
-    private String status;
 }
