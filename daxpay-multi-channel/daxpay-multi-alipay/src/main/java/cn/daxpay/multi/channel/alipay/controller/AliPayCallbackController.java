@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 支付宝回调通知
@@ -33,14 +35,5 @@ public class AliPayCallbackController {
     public String aliPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
         paymentAssistService.initMchAndApp(mchNo, appId);
         return payCallbackService.callbackHandle(request);
-    }
-
-
-    @Operation(summary = "支付宝认证授权回调")
-    @GetMapping("/alipay/auth/{code}")
-    public ModelAndView wechatCallback(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, String authCode, @PathVariable("code") String code){
-        paymentAssistService.initMchAndApp(mchNo, appId);
-        aliPayAuthService.authCallback(authCode, code);
-        return new ModelAndView("forward:/h5/openIdCallbackClose.html");
     }
 }

@@ -50,7 +50,7 @@ public class ChannelAuthController {
         return DaxRes.ok(channelAuthService.auth(param));
     }
 
-    @Operation(summary = "通过AuthCode设置认证结果")
+    @Operation(summary = "通过AuthCode获取并设置认证结果")
     @PostMapping("/authAndSet")
     public Result<Void> authAndSet(@RequestBody AuthCodeParam param){
         paymentAssistService.initMchAndApp(param.getAppId());

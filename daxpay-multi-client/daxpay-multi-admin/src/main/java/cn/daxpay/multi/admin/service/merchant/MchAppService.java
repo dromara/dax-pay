@@ -112,7 +112,7 @@ public class MchAppService {
         String mchNo = RandomUtil.randomNumbers(16);
         for (int i = 0; i < 10; i++){
             if (!mchAppManager.existedByField(MchApp::getAppId, mchNo)){
-                return "M"+mchNo;
+                return "A"+mchNo;
             }
             mchNo = String.valueOf(System.currentTimeMillis());
         }

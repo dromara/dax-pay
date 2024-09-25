@@ -7,6 +7,7 @@ import cn.bootx.platform.starter.redis.delay.annotation.DelayEventListener;
 import cn.bootx.platform.starter.redis.delay.annotation.DelayJobEvent;
 import cn.bootx.platform.starter.redis.delay.bean.DelayJob;
 import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
+import cn.daxpay.multi.core.result.assist.AuthResult;
 import cn.daxpay.multi.service.entity.order.pay.PayOrder;
 import cn.hutool.core.util.RandomUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -34,7 +36,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class TestController {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> objectRedisTemplate;
 
     private final DelayJobService delayJobService;
 
@@ -44,8 +46,10 @@ public class TestController {
     public Result<Object> redis(){
         PayOrder payOrder = new PayOrder();
         payOrder.setOrderNo("123");
-        redisTemplate.opsForValue().set("payOrder",payOrder);
-        var payOrder1 = redisTemplate.opsForValue().get("payOrder");
+//        redisTemplate.opsForValue().set("payOrder",new AuthResult().setStatus("123"),60000L);
+        objectRedisTemplate.opsForValue().set("payOrder",new AuthResult().setStatus("123"),600, TimeUnit.MILLISECONDS);
+//        objectRedisTemplate.opsForValue().set("payOrder",payOrder);
+        var payOrder1 = objectRedisTemplate.opsForValue().get("payOrder");
         return Res.ok(payOrder1);
     }
 

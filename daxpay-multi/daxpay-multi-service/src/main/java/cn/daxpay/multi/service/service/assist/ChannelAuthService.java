@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 通道认证服务, 用户获取OpenId或UserId等新鲜
@@ -36,7 +37,7 @@ public class ChannelAuthService {
         // 如果返回有查询Code值, 将结果写入Redis中
         if (StrUtil.isNotBlank(authUrlResult.getQueryCode())){
             AuthResult authResult = new AuthResult().setStatus(ChannelAuthStatusEnum.WAITING.getCode());
-            redisTemplate.opsForValue().set(CHANNEL_AUTH_KEY_PREFIX + authUrlResult.getQueryCode(), authResult, 5*60*1000L);
+            redisTemplate.opsForValue().set(CHANNEL_AUTH_KEY_PREFIX + authUrlResult.getQueryCode(), authResult, 5, TimeUnit.MINUTES);
         }
         return authUrlResult;
     }
@@ -48,7 +49,7 @@ public class ChannelAuthService {
         var strategy = PaymentStrategyFactory.create(param.getChannel(), AbsChannelAuthStrategy.class);
         AuthResult authResult = strategy.doAuth(param);
         if (StrUtil.isNotBlank(param.getQueryCode())){
-            redisTemplate.opsForValue().set(CHANNEL_AUTH_KEY_PREFIX + param.getQueryCode(), authResult, 5*60*1000L);
+            redisTemplate.opsForValue().set(CHANNEL_AUTH_KEY_PREFIX + param.getQueryCode(), authResult, 5, TimeUnit.MINUTES);
         }
         return authResult;
     }

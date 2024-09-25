@@ -49,15 +49,16 @@ public class WechatAuthService {
             // 判断是否独立部署前端
             String authUrl;
             if (platformConfig.isMobileEmbedded()){
+                // 嵌入式
+                String serverUrl = platformConfig.getGatewayMobileUrl();
+                String redirectUrl = StrUtil.format("{}/h5/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
+                authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
+            } else {
+                // 独立部署
                 String serverUrl = platformConfig.getGatewayMobileUrl();
                 String redirectUrl = StrUtil.format("{}/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
                 authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
-            } else {
-                // 读取平台配置
-                String serverUrl = platformConfig.getGatewayServiceUrl();
-                // 构建出授权后重定向页面链接
-                String redirectUrl = StrUtil.format("{}/h5/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
-                authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
+
             }
             return new AuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
         }

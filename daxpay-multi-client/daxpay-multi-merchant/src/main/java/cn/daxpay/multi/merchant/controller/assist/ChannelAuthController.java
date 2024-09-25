@@ -4,14 +4,16 @@ import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.daxpay.multi.core.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.multi.core.result.assist.AuthResult;
+import cn.daxpay.multi.core.result.assist.AuthUrlResult;
+import cn.daxpay.multi.service.common.local.MchContextLocal;
 import cn.daxpay.multi.service.service.assist.ChannelAuthService;
+import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 通道认证服务
@@ -26,6 +28,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChannelAuthController {
 
     private final ChannelAuthService channelAuthService;
+
+    private final PaymentAssistService paymentAssistService;
+
+    @RequestPath("获取授权链接")
+    @Operation(summary = "获取授权链接")
+    @PostMapping("/generateAuthUrl")
+    public Result<AuthUrlResult> generateAuthUrl(@RequestBody GenerateAuthUrlParam param){
+        paymentAssistService.initMchAndApp(param.getAppId(), MchContextLocal.getMchNo());
+        return Res.ok(channelAuthService.generateAuthUrl(param));
+    }
 
     @Operation(summary = "通过查询码获取认证结果")
     @RequestPath("通过查询码获取认证结果")
