@@ -52,14 +52,14 @@ public class AliPayAuthService {
             // 判断是否独立部署前端
             String authUrl;
             if (platformConfig.isMobileEmbedded()){
-                // 独立部署
-                String serverUrl = platformConfig.getGatewayMobileUrl();
-                authUrl = StrUtil.format("{}/h5/alipay/auth/{}/{}/{}/{}",
-                        serverUrl, param.getAppId(),param.getChannel(),aliPayConfig.getAliAppId());
-            } else {
                 // 嵌入式
                 String serverUrl = platformConfig.getGatewayMobileUrl();
-                authUrl = StrUtil.format("{}/alipay/auth/{}/{}/{}/{}/{}",
+                authUrl = StrUtil.format("{}/h5/alipay/auth/{}/{}/{}/{}",
+                        serverUrl, param.getAppId(),param.getChannel(),queryCode,aliPayConfig.getAliAppId());
+            } else {
+                // 独立部署
+                String serverUrl = platformConfig.getGatewayMobileUrl();
+                authUrl = StrUtil.format("{}/alipay/auth/{}/{}/{}/{}",
                         serverUrl, param.getAppId(),param.getChannel(),queryCode,aliPayConfig.getAliAppId());
             }
 

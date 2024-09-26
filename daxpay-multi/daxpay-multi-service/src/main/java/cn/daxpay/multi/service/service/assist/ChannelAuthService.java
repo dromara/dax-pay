@@ -48,6 +48,7 @@ public class ChannelAuthService {
     public AuthResult auth(AuthCodeParam param) {
         var strategy = PaymentStrategyFactory.create(param.getChannel(), AbsChannelAuthStrategy.class);
         AuthResult authResult = strategy.doAuth(param);
+        authResult.setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
         if (StrUtil.isNotBlank(param.getQueryCode())){
             redisTemplate.opsForValue().set(CHANNEL_AUTH_KEY_PREFIX + param.getQueryCode(), authResult, 5, TimeUnit.MINUTES);
         }

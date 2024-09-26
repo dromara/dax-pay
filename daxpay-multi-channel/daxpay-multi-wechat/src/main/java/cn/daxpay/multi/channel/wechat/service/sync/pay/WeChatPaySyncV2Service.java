@@ -65,7 +65,12 @@ public class WeChatPaySyncV2Service {
             }
         } catch (WxPayException e) {
             log.error("微信支付V2订单查询失败", e);
-            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncSuccess(false);
+            // 订单不存在
+            if (Objects.equals(e.getErrCode(), "ORDERNOTEXIST")){
+                syncResult.setPayStatus(PayStatusEnum.CLOSE);
+            } else {
+                syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncSuccess(false);
+            }
         }
         return syncResult;
     }
