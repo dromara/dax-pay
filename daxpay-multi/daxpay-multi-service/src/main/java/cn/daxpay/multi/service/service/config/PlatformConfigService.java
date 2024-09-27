@@ -27,7 +27,6 @@ public class PlatformConfigService {
        return platformConfigManager.findById(1L).orElseThrow(() -> new BizInfoException("平台配置不存在"));
     }
 
-
     /**
      * 更新
      */
