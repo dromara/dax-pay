@@ -285,6 +285,13 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     }
 
     /**
+     * 查询全部
+     */
+    public List<T> findAll(Wrapper<T> wrapper) {
+        return getBaseMapper().selectList(wrapper);
+    }
+
+    /**
      * 分页
      */
     public <E extends IPage<T>> E page(E page) {

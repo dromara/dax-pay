@@ -78,7 +78,6 @@ public class WechatPayV3Service {
         }
         // 付款码支付
         else if (payMethodEnum == PayMethodEnum.BARCODE) {
-//            wechatPayV2Service.barCodePay(payOrder, wechatPayParam.getAuthCode(), config, payResult);
             this.barCodePay(payOrder, wechatPayParam.getAuthCode(), config, payResult);
         }
         payResult.setPayBody(payBody);
