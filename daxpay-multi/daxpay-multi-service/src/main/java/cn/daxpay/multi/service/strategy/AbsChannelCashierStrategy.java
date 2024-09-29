@@ -1,5 +1,6 @@
 package cn.daxpay.multi.service.strategy;
 
+import cn.daxpay.multi.core.param.cashier.CashierAuthCodeParam;
 import cn.daxpay.multi.core.param.cashier.CashierPayParam;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
 
@@ -11,8 +12,16 @@ import cn.daxpay.multi.core.param.trade.pay.PayParam;
 public abstract class AbsChannelCashierStrategy implements PaymentStrategy{
 
     /**
+     * 生成授权链接, 主要是微信类通道使用, 用于获取OpenId
+     */
+    public String generateAuthUrl(CashierAuthCodeParam param) {
+        return "";
+    }
+
+    /**
      * 支付参数处理
      */
-    public abstract void handlePayParam(CashierPayParam cashierPayParam, PayParam payParam);
+    public void handlePayParam(CashierPayParam cashierPayParam, PayParam payParam) {
+    }
 
 }

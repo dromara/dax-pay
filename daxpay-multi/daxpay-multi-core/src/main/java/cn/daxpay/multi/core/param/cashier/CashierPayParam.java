@@ -28,6 +28,9 @@ public class CashierPayParam {
     @Schema(description = "收银台类型")
     private String cashierType;
 
-    @Schema(description = "查询Code")
-    private String queryCode;
+    @Schema(description = "授权码")
+    private String authCode;
+
+    @Schema(description = "描述")
+    private String description;
 }

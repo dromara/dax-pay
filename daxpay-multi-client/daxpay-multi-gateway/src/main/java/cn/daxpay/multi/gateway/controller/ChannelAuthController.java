@@ -3,6 +3,7 @@ package cn.daxpay.multi.gateway.controller;
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.bootx.platform.core.util.ValidationUtil;
 import cn.daxpay.multi.core.param.assist.AuthCodeParam;
 import cn.daxpay.multi.core.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.multi.core.result.DaxResult;
@@ -36,11 +37,12 @@ public class ChannelAuthController {
 
     private final PaymentAssistService paymentAssistService;
 
-    @PaymentVerify
     @Operation(summary = "获取授权链接")
     @PostMapping("/generateAuthUrl")
-    public DaxResult<AuthUrlResult> generateAuthUrl(@RequestBody GenerateAuthUrlParam param){
-        return DaxRes.ok(channelAuthService.generateAuthUrl(param));
+    public Result<AuthUrlResult> generateAuthUrl(@RequestBody GenerateAuthUrlParam param){
+        ValidationUtil.validateParam(param);
+        paymentAssistService.initMchAndApp(param.getAppId());
+        return Res.ok(channelAuthService.generateAuthUrl(param));
     }
 
     @PaymentVerify

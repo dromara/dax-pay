@@ -31,6 +31,11 @@ public class ChannelCashierConfig extends MchBaseEntity implements ToResult<Chan
     private String cashierType;
 
     /**
+     * 收银台名称
+     */
+    private String cashierName;
+
+    /**
      * 支付通道
      * @see ChannelEnum
      */

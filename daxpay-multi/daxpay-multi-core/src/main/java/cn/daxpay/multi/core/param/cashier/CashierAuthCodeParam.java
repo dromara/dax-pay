@@ -20,12 +20,6 @@ public class CashierAuthCodeParam {
     @Schema(description = "应用号")
     private String appId;
 
-    @Schema(description = "标识码")
-    private String authCode;
-
     @Schema(description = "收银台类型")
     private String cashierType;
-
-    @Schema(description = "查询Code")
-    private String queryCode;
 }

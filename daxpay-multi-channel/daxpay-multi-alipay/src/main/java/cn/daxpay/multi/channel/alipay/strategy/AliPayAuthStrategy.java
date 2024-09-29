@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * 支付宝授权策略
  * @author xxm
  * @since 2024/9/24
  */

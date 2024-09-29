@@ -33,6 +33,12 @@ public class ChannelCashierConfigResult extends MchResult {
     private String cashierType;
 
     /**
+     * 收银台名称
+     */
+    @Schema(description = "收银台名称")
+    private String cashierName;
+
+    /**
      * 支付通道
      * @see ChannelEnum
      */

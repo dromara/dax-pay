@@ -45,8 +45,9 @@ public class ChannelCashierConfigService {
     /**
      * 根据类型查询
      */
-    public ChannelCashierConfig findByCashierType(String cashierType) {
-        return cashierConfigManage.findByField(ChannelCashierConfig::getCashierType, cashierType)
+    public ChannelCashierConfigResult findByCashierType(String cashierType) {
+        return cashierConfigManage.findByCashierType(cashierType)
+                .map(ChannelCashierConfig::toResult)
                 .orElseThrow(() -> new DataNotExistException("通道支付收银台配置不存在"));
     }
 

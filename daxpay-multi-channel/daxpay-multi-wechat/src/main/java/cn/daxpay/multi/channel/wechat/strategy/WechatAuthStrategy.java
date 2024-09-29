@@ -9,10 +9,7 @@ import cn.daxpay.multi.core.result.assist.AuthUrlResult;
 import cn.daxpay.multi.service.strategy.AbsChannelAuthStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
  * 微信认证
@@ -20,7 +17,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
  * @since 2024/9/24
  */
 @Slf4j
-@Scope(SCOPE_PROTOTYPE)
 @Service
 @RequiredArgsConstructor
 public class WechatAuthStrategy extends AbsChannelAuthStrategy {

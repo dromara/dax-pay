@@ -2,11 +2,11 @@ package cn.daxpay.multi.service.service.cashier;
 
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.core.util.ValidationUtil;
+import cn.daxpay.multi.core.param.cashier.CashierAuthCodeParam;
 import cn.daxpay.multi.core.param.cashier.CashierPayParam;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
-import cn.daxpay.multi.service.entity.config.ChannelCashierConfig;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
 import cn.daxpay.multi.service.service.config.ChannelCashierConfigService;
 import cn.daxpay.multi.service.service.trade.pay.PayService;
@@ -36,17 +36,30 @@ public class ChannelCashierService {
 
     private final PayService payService;
 
+
+    /**
+     * 生成授权链接跳转链接, 主要是微信类通道使用, 用于获取OpenId
+     */
+    public String generateAuthUrl(CashierAuthCodeParam param){
+        // 查询配置
+        var cashierConfig = channelCashierConfigService.findByCashierType(param.getCashierType());
+        // 获取策略
+        AbsChannelCashierStrategy cashierStrategy = PaymentStrategyFactory.create(cashierConfig.getChannel(), AbsChannelCashierStrategy.class);
+        return  cashierStrategy.generateAuthUrl(param);
+    }
+
     /**
      * 支付处理
      */
     public PayResult cashierPay(CashierPayParam param){
         String clientIP = JakartaServletUtil.getClientIP(WebServletUtil.getRequest());
         // 查询配置
-        ChannelCashierConfig cashierConfig = channelCashierConfigService.findByCashierType(param.getCashierType());
+        var cashierConfig = channelCashierConfigService.findByCashierType(param.getCashierType());
         // 构建支付参数
         PayParam payParam = new PayParam();
         payParam.setBizOrderNo(TradeNoGenerateUtil.pay());
         payParam.setTitle(StrUtil.format("手机收银金额: {}元", param.getAmount()));
+        payParam.setDescription(param.getDescription());
         payParam.setChannel(cashierConfig.getChannel());
         payParam.setMethod(cashierConfig.getPayMethod());
         payParam.setAmount(param.getAmount());
@@ -61,7 +74,6 @@ public class ChannelCashierService {
         AbsChannelCashierStrategy cashierStrategy = PaymentStrategyFactory.create(cashierConfig.getChannel(), AbsChannelCashierStrategy.class);
         // 进行参数预处理
         cashierStrategy.handlePayParam(param, payParam);
-
         // 参数校验
         ValidationUtil.validateParam(payParam);
         // 发起支付

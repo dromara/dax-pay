@@ -26,8 +26,16 @@ public class ChannelCashierConfigParam {
      * 收银台类型
      * @see CashierTypeEnum
      */
+    @NotBlank(message = "收银台类型不可为空")
     @Schema(description = "收银台类型")
     private String cashierType;
+
+    /**
+     * 收银台名称
+     */
+    @NotBlank(message = "收银台名称不可为空")
+    @Schema(description = "收银台名称")
+    private String cashierName;
 
     /**
      * 支付通道
