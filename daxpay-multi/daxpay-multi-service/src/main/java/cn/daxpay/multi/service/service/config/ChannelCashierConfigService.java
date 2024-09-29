@@ -1,6 +1,5 @@
 package cn.daxpay.multi.service.service.config;
 
-import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.daxpay.multi.service.dao.config.ChannelCashierConfigManage;
@@ -9,7 +8,6 @@ import cn.daxpay.multi.service.param.config.ChannelCashierConfigParam;
 import cn.daxpay.multi.service.result.config.ChannelCashierConfigResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,9 +28,8 @@ public class ChannelCashierConfigService {
     /**
      * 分页
      */
-    public List<ChannelCashierConfigResult> list(ChannelCashierConfigParam param) {
-        QueryWrapper<ChannelCashierConfig> wrapper = QueryGenerator.generator(param);
-        return MpUtil.toListResult(cashierConfigManage.findAll(wrapper));
+    public List<ChannelCashierConfigResult> findByAppId(String appId) {
+        return MpUtil.toListResult(cashierConfigManage.findAll());
     }
 
     /**

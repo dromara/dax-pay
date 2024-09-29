@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,9 +32,9 @@ public class ChannelCashierConfigController {
 
     @RequestPath("配置列表")
     @Operation(summary = "配置列表")
-    @GetMapping("/list")
-    public Result<List<ChannelCashierConfigResult>> list(ChannelCashierConfigParam param) {
-        return Res.ok(channelCashierConfigService.list(param));
+    @GetMapping("/findByAppId")
+    public Result<List<ChannelCashierConfigResult>> findByAppId(String appId) {
+        return Res.ok(channelCashierConfigService.findByAppId(appId));
     }
 
     @RequestPath("配置详情")
@@ -46,7 +47,7 @@ public class ChannelCashierConfigController {
     @RequestPath("配置保存")
     @Operation(summary = "配置保存")
     @GetMapping("/save")
-    public Result<Void> save(ChannelCashierConfigParam param) {
+    public Result<Void> save(@RequestBody ChannelCashierConfigParam param) {
         channelCashierConfigService.save(param);
         return Res.ok();
     }
@@ -54,7 +55,7 @@ public class ChannelCashierConfigController {
     @RequestPath("配置更新")
     @Operation(summary = "配置更新")
     @GetMapping("/update")
-    public Result<Void> update(ChannelCashierConfigParam param) {
+    public Result<Void> update(@RequestBody ChannelCashierConfigParam param) {
         channelCashierConfigService.update(param);
         return Res.ok();
     }
