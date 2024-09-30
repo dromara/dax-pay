@@ -5,7 +5,9 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
 import cn.daxpay.multi.core.param.cashier.CashierAuthCodeParam;
+import cn.daxpay.multi.core.param.cashier.CashierAuthUrlParam;
 import cn.daxpay.multi.core.param.cashier.CashierPayParam;
+import cn.daxpay.multi.core.result.assist.AuthResult;
 import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.service.common.cache.MerchantCacheService;
 import cn.daxpay.multi.service.entity.merchant.Merchant;
@@ -55,10 +57,18 @@ public class ChannelCashierController {
 
     @Operation(summary = "获取收银台所需授权链接, 用于获取OpenId一类的信息")
     @PostMapping("/generateAuthUrl")
-    public Result<String> generateAuthUrl(@RequestBody CashierAuthCodeParam param){
+    public Result<String> generateAuthUrl(@RequestBody CashierAuthUrlParam param){
         ValidationUtil.validateParam(param);
         paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
         return Res.ok(channelCashierService.generateAuthUrl(param));
+    }
+
+    @Operation(summary = "获取授权结果")
+    @PostMapping("/auth")
+    public Result<AuthResult> auth(@RequestBody CashierAuthCodeParam param){
+        ValidationUtil.validateParam(param);
+        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        return Res.ok(channelCashierService.auth(param));
     }
 
     @Operation(summary = "发起支付")

@@ -1,10 +1,13 @@
 package cn.daxpay.multi.channel.wechat.strategy;
 
 import cn.daxpay.multi.channel.wechat.service.pay.WechatPayCashierService;
+import cn.daxpay.multi.core.enums.ChannelAuthStatusEnum;
 import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.param.cashier.CashierAuthCodeParam;
+import cn.daxpay.multi.core.param.cashier.CashierAuthUrlParam;
 import cn.daxpay.multi.core.param.cashier.CashierPayParam;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
+import cn.daxpay.multi.core.result.assist.AuthResult;
 import cn.daxpay.multi.service.strategy.AbsChannelCashierStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +28,19 @@ public class WechatPayCashierStrategy extends AbsChannelCashierStrategy {
      * 生成授权链接, 主要是微信类通道使用, 用于获取OpenId
      */
     @Override
-    public String generateAuthUrl(CashierAuthCodeParam param) {
+    public String generateAuthUrl(CashierAuthUrlParam param) {
         return wechatPayCashierService.generateAuthUrl(param);
+    }
+
+    /**
+     * 获取认证结果
+     *
+     * @param param
+     */
+    @Override
+    public AuthResult doAuth(CashierAuthCodeParam param) {
+        String openId = wechatPayCashierService.getOpenId(param);
+        return new AuthResult().setStatus(ChannelAuthStatusEnum.SUCCESS.getCode()).setOpenId(openId);
     }
 
     /**

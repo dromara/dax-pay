@@ -5,6 +5,7 @@ import cn.daxpay.multi.channel.wechat.param.pay.WechatPayParam;
 import cn.daxpay.multi.channel.wechat.service.config.WechatPayConfigService;
 import cn.daxpay.multi.core.exception.PayFailureException;
 import cn.daxpay.multi.core.param.cashier.CashierAuthCodeParam;
+import cn.daxpay.multi.core.param.cashier.CashierAuthUrlParam;
 import cn.daxpay.multi.core.param.cashier.CashierPayParam;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
 import cn.daxpay.multi.service.entity.config.PlatformConfig;
@@ -33,26 +34,25 @@ public class WechatPayCashierService {
 
     private final WechatPayConfigService weChatPayConfigService;
 
-    private final PlatformConfigService platformsConfigService;
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 生成授权链接, 主要是微信类通道使用, 用于获取OpenId
      */
-    public String generateAuthUrl(CashierAuthCodeParam param) {
+    public String generateAuthUrl(CashierAuthUrlParam param) {
         WxMpService wxMpService = this.getWxMpService();
-        PlatformConfig platformConfig = platformsConfigService.getConfig();
+        PlatformConfig platformConfig = platformConfigService.getConfig();
         // 判断是否独立部署前端
         if (platformConfig.isMobileEmbedded()){
             // 嵌入式
             String serverUrl = platformConfig.getGatewayMobileUrl();
-            String redirectUrl = StrUtil.format("{}/h5//wechat/cashier/{}/{}", serverUrl, param.getAppId());
+            String redirectUrl = StrUtil.format("{}/h5/wechat/cashier/{}/{}", serverUrl, param.getMchNo(), param.getAppId());
             return wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
         } else {
             // 独立部署
             String serverUrl = platformConfig.getGatewayMobileUrl();
-            String redirectUrl = StrUtil.format("{}//wechat/cashier/{}/{}", serverUrl, param.getAppId());
+            String redirectUrl = StrUtil.format("{}/wechat/cashier/{}/{}", serverUrl, param.getMchNo(), param.getAppId());
             return wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
-
         }
     }
 
@@ -62,15 +62,22 @@ public class WechatPayCashierService {
      * @param payParam 统一支付参数
      */
     public void handlePayParam(CashierPayParam cashierPayParam, PayParam payParam) {
+        WechatPayParam wechatPayParam = new WechatPayParam();
+        wechatPayParam.setOpenId(cashierPayParam.getOpenId());
+        payParam.setExtraParam(JSONUtil.toJsonStr(wechatPayParam));
+    }
+
+    /**
+     * 获取OpenId
+     */
+    public String getOpenId(CashierAuthCodeParam param){
         // 获取OpenId
         WxMpService wxMpService = this.getWxMpService();
         try {
-            WxOAuth2AccessToken accessToken = wxMpService.getOAuth2Service().getAccessToken(cashierPayParam.getAuthCode());
-            WechatPayParam wechatPayParam = new WechatPayParam();
-            wechatPayParam.setOpenId(accessToken.getOpenId());
-            payParam.setExtraParam(JSONUtil.toJsonStr(wechatPayParam));
+            WxOAuth2AccessToken accessToken = wxMpService.getOAuth2Service().getAccessToken(param.getAuthCode());
+            return accessToken.getOpenId();
         } catch (WxErrorException e) {
-            log.error("收银台支付获取OpenId失败, {}", cashierPayParam, e);
+            log.error("收银台支付获取OpenId失败, {}", param, e);
             throw new PayFailureException("收银台支付获取OpenId失败");
         }
     }

@@ -10,10 +10,7 @@ import cn.daxpay.multi.service.service.config.ChannelCashierConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,7 +43,7 @@ public class ChannelCashierConfigController {
 
     @RequestPath("配置保存")
     @Operation(summary = "配置保存")
-    @GetMapping("/save")
+    @PostMapping("/save")
     public Result<Void> save(@RequestBody ChannelCashierConfigParam param) {
         channelCashierConfigService.save(param);
         return Res.ok();
@@ -54,17 +51,38 @@ public class ChannelCashierConfigController {
 
     @RequestPath("配置更新")
     @Operation(summary = "配置更新")
-    @GetMapping("/update")
+    @PostMapping("/update")
     public Result<Void> update(@RequestBody ChannelCashierConfigParam param) {
         channelCashierConfigService.update(param);
         return Res.ok();
     }
 
+    @RequestPath("配置是否存在")
+    @Operation(summary = "配置是否存在")
+    @GetMapping("/existsByType")
+    public Result<Boolean> existsByType(String type, String appId) {
+        return Res.ok(channelCashierConfigService.existsByType(type, appId));
+    }
+
+    @RequestPath("配置是否存在(不包括自身)")
+    @Operation(summary = "配置是否存在(不包括自身)")
+    @GetMapping("/existsByTypeNotId")
+    public Result<Boolean> existsByTypeNotId(String type, String appId, Long id) {
+        return Res.ok(channelCashierConfigService.existsByType(type, appId, id));
+    }
+
     @RequestPath("配置删除")
     @Operation(summary = "配置删除")
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public Result<Void> delete(Long id) {
         channelCashierConfigService.delete(id);
         return Res.ok();
+    }
+
+    @RequestPath("获取码牌地址")
+    @Operation(summary = "获取码牌地址")
+    @GetMapping("/qrCodeUrl")
+    public Result<String> qrCodeUrl(String appId) {
+        return Res.ok(channelCashierConfigService.qrCodeUrl(appId));
     }
 }

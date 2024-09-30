@@ -2,6 +2,7 @@ package cn.daxpay.multi.service.dao.config;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.multi.service.common.context.MchAppLocal;
+import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.common.local.PaymentContextLocal;
 import cn.daxpay.multi.service.entity.config.ChannelCashierConfig;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,26 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class ChannelCashierConfigManage extends BaseManager<ChannelCashierConfigMapper, ChannelCashierConfig> {
+
+    /**
+     * 判断类型是否存在
+     */
+    public boolean existsByType(String type, String appId) {
+        return this.lambdaQuery()
+                .eq(ChannelCashierConfig::getCashierType, type)
+                .eq(MchBaseEntity::getAppId,appId)
+                .exists();
+    }
+    /**
+     * 判断类型是否存在
+     */
+    public boolean existsByType(String type, String appId, Long id) {
+        return this.lambdaQuery()
+                .eq(ChannelCashierConfig::getCashierType, type)
+                .eq(MchBaseEntity::getAppId,appId)
+                .ne(ChannelCashierConfig::getId,id)
+                .exists();
+    }
 
     /**
      * 根据类型查询

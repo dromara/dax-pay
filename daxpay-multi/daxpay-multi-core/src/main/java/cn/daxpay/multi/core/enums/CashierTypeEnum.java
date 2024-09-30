@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 收银台类型
+ * 字典: cashier_type
  * @author xxm
  * @since 2024/9/28
  */

@@ -20,11 +20,6 @@ import lombok.experimental.Accessors;
 @Schema(title = "通道收银台配置")
 public class ChannelCashierConfigResult extends MchResult {
 
-
-    /** 主健 */
-    @Schema(description = "主健")
-    private Long id;
-
     /**
      * 收银台类型
      * @see CashierTypeEnum
@@ -60,4 +55,8 @@ public class ChannelCashierConfigResult extends MchResult {
     /** 自动分账 */
     @Schema(description = "自动分账")
     private Boolean autoAllocation;
+
+    /** 备注 */
+    @Schema(description = "备注")
+    private String remark;
 }

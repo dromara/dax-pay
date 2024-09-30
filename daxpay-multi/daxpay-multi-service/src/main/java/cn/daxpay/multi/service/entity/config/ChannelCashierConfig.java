@@ -8,6 +8,7 @@ import cn.daxpay.multi.service.common.entity.MchBaseEntity;
 import cn.daxpay.multi.service.convert.config.ChannelCashierConfigConvert;
 import cn.daxpay.multi.service.param.config.ChannelCashierConfigParam;
 import cn.daxpay.multi.service.result.config.ChannelCashierConfigResult;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +22,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "通道收银台配置")
+@TableName("pay_channel_cashier_config")
 public class ChannelCashierConfig extends MchBaseEntity implements ToResult<ChannelCashierConfigResult> {
 
     /**
@@ -52,6 +53,10 @@ public class ChannelCashierConfig extends MchBaseEntity implements ToResult<Chan
 
     /** 自动分账 */
     private Boolean autoAllocation;
+
+    /** 备注 */
+    @Schema(description = "备注")
+    private String remark;
 
     public static ChannelCashierConfig init(ChannelCashierConfigParam param){
         return ChannelCashierConfigConvert.CONVERT.toEntity(param);

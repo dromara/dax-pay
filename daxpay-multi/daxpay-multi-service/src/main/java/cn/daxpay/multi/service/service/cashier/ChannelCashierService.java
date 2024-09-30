@@ -3,8 +3,10 @@ package cn.daxpay.multi.service.service.cashier;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.core.util.ValidationUtil;
 import cn.daxpay.multi.core.param.cashier.CashierAuthCodeParam;
+import cn.daxpay.multi.core.param.cashier.CashierAuthUrlParam;
 import cn.daxpay.multi.core.param.cashier.CashierPayParam;
 import cn.daxpay.multi.core.param.trade.pay.PayParam;
+import cn.daxpay.multi.core.result.assist.AuthResult;
 import cn.daxpay.multi.core.result.trade.pay.PayResult;
 import cn.daxpay.multi.core.util.TradeNoGenerateUtil;
 import cn.daxpay.multi.service.service.assist.PaymentAssistService;
@@ -36,16 +38,27 @@ public class ChannelCashierService {
 
     private final PayService payService;
 
-
     /**
      * 生成授权链接跳转链接, 主要是微信类通道使用, 用于获取OpenId
      */
-    public String generateAuthUrl(CashierAuthCodeParam param){
+    public String generateAuthUrl(CashierAuthUrlParam param){
         // 查询配置
         var cashierConfig = channelCashierConfigService.findByCashierType(param.getCashierType());
         // 获取策略
         AbsChannelCashierStrategy cashierStrategy = PaymentStrategyFactory.create(cashierConfig.getChannel(), AbsChannelCashierStrategy.class);
-        return  cashierStrategy.generateAuthUrl(param);
+        return cashierStrategy.generateAuthUrl(param);
+    }
+
+
+    /**
+     * 授权结果
+     */
+    public AuthResult auth(CashierAuthCodeParam param) {
+        // 查询配置
+        var cashierConfig = channelCashierConfigService.findByCashierType(param.getCashierType());
+        // 获取策略
+        AbsChannelCashierStrategy cashierStrategy = PaymentStrategyFactory.create(cashierConfig.getChannel(), AbsChannelCashierStrategy.class);
+        return cashierStrategy.doAuth(param);
     }
 
     /**
@@ -79,4 +92,5 @@ public class ChannelCashierService {
         // 发起支付
         return payService.pay(payParam);
     }
+
 }

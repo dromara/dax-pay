@@ -5,6 +5,7 @@ import cn.daxpay.multi.core.enums.ChannelEnum;
 import cn.daxpay.multi.core.enums.PayMethodEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -55,12 +56,18 @@ public class ChannelCashierConfigParam {
 
 
     /** 是否开启分账 */
+    @NotNull(message = "是否开启分账不可为空")
     @Schema(description = "是否开启分账")
     private Boolean allocation;
 
     /** 自动分账 */
+    @NotNull(message = "自动分账不可为空")
     @Schema(description = "自动分账")
     private Boolean autoAllocation;
+
+    /** 备注 */
+    @Schema(description = "备注")
+    private String remark;
 
     /** 商户号 */
     @NotBlank(message = "商户号不可为空")
