@@ -97,7 +97,7 @@
 ```xml
  <!-- 支付SDK -->
 <dependency>
-    <groupId>cn.daxpay.single</groupId>
+    <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-single-sdk</artifactId>
     <version>${latest.version}</version>
 </dependency>

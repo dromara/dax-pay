@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.bootx.platform</groupId>
+        <artifactId>bootx-platform-service</artifactId>
+        <version>3.0.0.beta1</version>
+    </parent>
+
+    <artifactId>service-iam</artifactId>
+    <description>身份识别与访问管理</description>
+
+    <dependencies>
+
+        <!-- 认证 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-auth</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 系统基础服务 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>service-baseapi</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

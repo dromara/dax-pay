@@ -4,131 +4,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay</artifactId>
+        <version>3.0.0.beta1</version>
     </parent>
 
-    <groupId>cn.daxpay.single</groupId>
     <artifactId>daxpay-single</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.8</version>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-
-        <!-- 二方库版本 -->
-        <bootx-platform.version>1.3.6.2</bootx-platform.version>
-        <daxpay.version>2.0.8</daxpay.version>
-        <!-- 三方库 -->
-        <slf4j.version>1.7.30</slf4j.version>
-        <redisson.version>3.16.8</redisson.version>
-        <xml-apis.version>1.4.01</xml-apis.version>
-        <spring.checkstyle.version>0.0.38</spring.checkstyle.version>
-        <plumelog.version>3.5.2</plumelog.version>
-        <alipay.version>4.39.104.ALL</alipay.version>
-        <IJPay.version>2.9.11</IJPay.version>
-        <egzosn-java.version>2.14.7</egzosn-java.version>
-        <knife4j.version>4.4.0</knife4j.version>
-        <mapstruct.version>1.5.3.Final</mapstruct.version>
-        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <table-modify.version>1.5.5</table-modify.version>
-        <wxjava.version>4.6.0</wxjava.version>
-        <rocketmq.version>2.2.3</rocketmq.version>
-        <lock4j.version>2.2.5</lock4j.version>
-    </properties>
-
     <modules>
         <module>daxpay-single-core</module>
-        <module>daxpay-single-service</module>
-        <module>daxpay-single-gateway</module>
-        <module>daxpay-single-admin</module>
     </modules>
-    <!-- 项目依赖版本管理 -->
-    <dependencyManagement>
-        <dependencies>
-            <!-- 使用Bootx-Platform的依赖管理 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>bootx-platform</artifactId>
-                <type>pom</type>
-                <scope>import</scope>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
-    <dependencies>
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!-- lombok 配合 mapstruct -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-mapstruct-binding</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- 类型转换处理器 -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <!--代码格式插件，默认使用spring 规则-->
-            <plugin>
-                <groupId>io.spring.javaformat</groupId>
-                <artifactId>spring-javaformat-maven-plugin</artifactId>
-                <version>${spring.checkstyle.version}</version>
-            </plugin>
-            <!-- 打包Excel等资源文件损坏问题 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>xls</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>docx</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>doc</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
-            </plugin>
-        </plugins>
-        <resources>
-            <!-- 指定打包资源路径 -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-            <!-- java类路径中会被打包的软件 -->
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.sql</include>
-                    <include>**/*.flt</include>
-                    <include>**/*.xlsx</include>
-                    <include>**/*.xls</include>
-                    <include>**/*.docx</include>
-                    <include>**/*.doc</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 </project>

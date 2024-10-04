@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.bootx.platform</groupId>
+        <artifactId>bootx-platform-starter</artifactId>
+        <version>3.0.0.beta1</version>
+    </parent>
+
+    <artifactId>starter-audit-log</artifactId>
+    <description>审计日志模块</description>
+
+    <dependencies>
+        <!-- web容器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 切面 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!-- 认证模块 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-auth</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 请求头信息获取 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-header-holder</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- json库 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-jackson</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 数据访问 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-mybatis-plus</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- ip库 -->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>${ip2region.version}</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

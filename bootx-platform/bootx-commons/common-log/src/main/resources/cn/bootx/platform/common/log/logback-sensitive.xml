@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<included>
-    <!-- 敏感数据脱敏 -->
-    <conversionRule conversionWord="msg" converterClass="cn.bootx.platform.common.log.handler.SensitiveDataLogConverter"/>
-    <conversionRule conversionWord="message" converterClass="cn.bootx.platform.common.log.handler.SensitiveDataLogConverter"/>
-</included>

@@ -4,25 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cn.daxpay.single</groupId>
+        <groupId>org.dromara.daxpay</groupId>
         <artifactId>daxpay-single</artifactId>
-        <version>2.0.8</version>
+        <version>3.0.0.beta1</version>
     </parent>
 
     <artifactId>daxpay-single-core</artifactId>
-    <description>支付核心依赖包</description>
 
-    <dependencies>
-        <!-- platform核心包 -->
-        <dependency>
-            <groupId>cn.bootx.platform</groupId>
-            <artifactId>bootx-common-core</artifactId>
-        </dependency>
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
 </project>

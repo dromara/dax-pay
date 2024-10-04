@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.bootx.platform</groupId>
+        <artifactId>bootx-platform-starter</artifactId>
+        <version>3.0.0.beta1</version>
+    </parent>
+
+    <artifactId>starter-delay-queue</artifactId>
+    <description>延迟队列-redis实现</description>
+
+    <dependencies>
+        <!-- redis -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- spring 封装 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-spring</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 分布式锁 若使用redisTemplate作为分布式锁底层，则需要引入-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
+            <version>${lock4j.version}</version>
+        </dependency>
+    </dependencies>
+</project>

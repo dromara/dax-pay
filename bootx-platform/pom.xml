@@ -2,343 +2,82 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>3.3.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-
     <groupId>cn.bootx.platform</groupId>
     <artifactId>bootx-platform</artifactId>
+    <version>3.0.0.beta1</version>
     <packaging>pom</packaging>
-    <version>1.3.6.2</version>
-
-    <!-- 许可证 -->
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+    <description>基础脚手架服务</description>
 
     <modules>
-        <module>bootx-common-core</module>
-        <module>bootx-common-starters</module>
-        <module>bootx-commons</module>
-        <module>bootx-services</module>
+        <module>bootx-platform-core</module>
+        <module>bootx-platform-common</module>
+        <module>bootx-platform-starter</module>
+        <module>bootx-platform-service</module>
     </modules>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-
-        <!-- 二方库版本 -->
-        <bootx-platform.version>1.3.6.2</bootx-platform.version>
-        <!-- 三方库 -->
-        <hutool.version>5.8.27</hutool.version>
-        <oshi.version>6.4.4</oshi.version>
-        <jackson.version>2.12.3</jackson.version>
-        <lang3.version>3.11</lang3.version>
-        <collections4.version>4.4</collections4.version>
-        <text.version>1.10.0</text.version>
-        <commons-io.version>2.11.0</commons-io.version>
-        <guava.version>32.1.1-jre</guava.version>
-        <servlet-api.version>4.0.1</servlet-api.version>
-        <spring.checkstyle.version>0.0.38</spring.checkstyle.version>
-        <slf4j.version>1.7.30</slf4j.version>
-        <ttl.version>2.14.3</ttl.version>
-        <flyway.version>7.15.0</flyway.version>
-        <xml-apis.version>1.4.01</xml-apis.version>
-        <!-- 升级新版本会有兼容性问题 -->
-        <logback-classic.version>1.2.13</logback-classic.version>
-        <!-- 3.5.3 滚动日志不可用 -->
-        <plumelog.version>3.5.3</plumelog.version>
-        <easyexcel.version>3.3.2</easyexcel.version>
-        <xxl-job.version>2.4.0</xxl-job.version>
-        <sa-token.version>1.36.0</sa-token.version>
-        <justauth.version>1.16.6</justauth.version>
-        <minio.version>8.5.4</minio.version>
-        <cos_api.version>5.6.155</cos_api.version>
-        <cos-sts_api.version>3.1.0</cos-sts_api.version>
-        <x-file-storage.version>2.0.0</x-file-storage.version>
-        <mybatis-plus.version>3.5.4</mybatis-plus.version>
-        <dynamic-datasource.version>3.6.1</dynamic-datasource.version>
-        <springdoc.version>1.7.0</springdoc.version>
-        <redisson.version>3.23.0</redisson.version>
-        <knife4j.version>4.4.0</knife4j.version>
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <easy-captcha.version>1.6.2</easy-captcha.version>
-        <logstash-logback.version>7.4</logstash-logback.version>
-        <fastjson.version>1.2.83_noneautotype</fastjson.version>
-        <kryo.serializers.version>0.41</kryo.serializers.version>
-        <asyncTool.version>V1.4-SNAPSHOT</asyncTool.version>
-        <velocity.version>2.3</velocity.version>
-        <wxjava.version>4.6.0</wxjava.version>
-        <ding-talk.version>1.3.81</ding-talk.version>
+        <bootx-platform.version>3.0.0.beta1</bootx-platform.version>
+        <!-- 再高的的新版本与会knife4j 4.5冲突 -->
+        <springdoc.version>2.5.0</springdoc.version>
+        <hutool.version>5.8.31</hutool.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <knife4j.version>4.5.0</knife4j.version>
+        <mybatis-plus.version>3.5.8</mybatis-plus.version>
+        <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
+        <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
         <lock4j.version>2.2.7</lock4j.version>
+        <x-file-storage.version>2.2.1</x-file-storage.version>
+        <minio.version>8.5.4</minio.version>
+        <sa-token.version>1.39.0</sa-token.version>
+        <justauth.version>1.16.6</justauth.version>
+        <caffeine.version>3.1.8</caffeine.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
         <ip2region.version>2.7.0</ip2region.version>
-        <sms4j.version>2.2.0</sms4j.version>
-        <table-modify.version>1.5.5</table-modify.version>
+        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
+        <ttl.version>2.14.5</ttl.version>
+        <kryo.version>5.6.0</kryo.version>
+        <autopoi.version>1.4.8</autopoi.version>
+        <easypoi.version>4.5.0</easypoi.version>
+        <easytrans.version>3.0.5</easytrans.version>
+
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
-    <!-- 项目依赖版本管理 -->
-    <dependencyManagement>
-        <dependencies>
-            <!-- 三方库 -->
-            <!-- TTL容器 -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>transmittable-thread-local</artifactId>
-                <version>${ttl.version}</version>
-            </dependency>
-
-            <!-- 日志 -->
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback-classic.version}</version>
-            </dependency>
-
-            <!-- EasyExcel 表格操作 -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>easyexcel</artifactId>
-                <version>${easyexcel.version}</version>
-            </dependency>
-
-            <!-- mp -->
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
-            </dependency>
-
-            <!-- lombok 配合 mapstruct -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok-mapstruct-binding</artifactId>
-                <version>${lombok-mapstruct.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <!-- 类型转换处理器 -->
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-processor</artifactId>
-                <version>${mapstruct.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <!-- 类型转换 -->
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId>
-                <version>${mapstruct.version}</version>
-            </dependency>
-
-            <!-- swagger-ui -->
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${springdoc.version}</version>
-            </dependency>
-
-            <!-- redis redisson -->
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>${redisson.version}</version>
-            </dependency>
-
-            <!-- 定时任务(XXL-JOB) -->
-            <dependency>
-                <groupId>com.xuxueli</groupId>
-                <artifactId>xxl-job-core</artifactId>
-                <version>${xxl-job.version}</version>
-            </dependency>
-
-            <!-- 模板引擎 -->
-            <dependency>
-                <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity-engine-core</artifactId>
-                <version>${velocity.version}</version>
-            </dependency>
-
-            <!-- 自动建表(MySQL) -->
-            <dependency>
-                <groupId>cn.bootx</groupId>
-                <artifactId>table-modify-mysql-boot-starter</artifactId>
-                <version>${table-modify.version}</version>
-            </dependency>
-
-
-            <!-- 二方库 -->
-            <!-- 基础公共包 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>bootx-common-core</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- swagger封装 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-swagger</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- spring 自定义配置 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-spring</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 定时任务(XXL) -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-xxl-job</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- redis客户端封装 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-redis-client</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- MP封装 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-mybatis-plus</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 查询构造器 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-super-query</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 请求头工具 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-header-holder</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- jackson序列化 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-jackson</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 异常处理 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-exception-handler</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 序列生成器 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-sequence</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 查询构造器 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-super-query</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 幂等处理器-->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-idempotency</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 日志工具 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-log</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 缓存 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-cache</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- websocket -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-websocket</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- rabbitmq消息队列 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-rabbitmq</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-
-            <!-- starters -->
-            <!-- 权限认证 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-auth</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 审计日志 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-audit-log</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 数据权限 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-data-perm</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 文件管理 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-file</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 定时任务(quartz) -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-quartz</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- 系统监控信息 -->
-            <dependency>
-                <groupId>cn.bootx.platform</groupId>
-                <artifactId>common-starter-monitor</artifactId>
-                <version>${bootx-platform.version}</version>
-            </dependency>
-            <!-- SMS4J 短信发送-->
-            <dependency>
-                <groupId>org.dromara.sms4j</groupId>
-                <artifactId>sms4j-spring-boot-starter</artifactId>
-                <version>${sms4j.version}</version>
-            </dependency>
-
-        </dependencies>
-
-    </dependencyManagement>
 
     <build>
         <plugins>
-            <!--代码格式插件，默认使用spring 规则-->
             <plugin>
-                <groupId>io.spring.javaformat</groupId>
-                <artifactId>spring-javaformat-maven-plugin</artifactId>
-                <version>${spring.checkstyle.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- 打包Excel等资源文件损坏问题 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -353,18 +92,7 @@
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
-            <!-- 编译插件，设置源码以及编译的jdk版本 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <compilerArgument>-parameters</compilerArgument>
-                </configuration>
-            </plugin>
         </plugins>
-
         <resources>
             <!-- 指定打包资源路径 -->
             <resource>

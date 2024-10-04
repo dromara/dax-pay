@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.bootx.platform</groupId>
+        <artifactId>bootx-platform-service</artifactId>
+        <version>3.0.0.beta1</version>
+    </parent>
+
+    <artifactId>service-baseapi</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- 数据持久层依赖 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-mybatis-plus</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 异常处理器 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-exception-handler</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- json 序列化配置 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-jackson</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- Spring 封装 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-spring</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- Redis配置-->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- Spring 缓存配置 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-cache</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- hutool 缓存 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-cache</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- hutool 请求工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- 安全认证 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-auth</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 审计日志 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-audit-log</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 文件存储 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>starter-file</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- 表格工具 -->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
+            <version>${easypoi.version}</version>
+        </dependency>
+    </dependencies>
+</project>
