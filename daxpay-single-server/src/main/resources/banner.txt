@@ -1,0 +1,15 @@
+${AnsiColor.CYAN}
+
+______            ______
+|  _  \           | ___ \
+| | | |__ ___  __ | |_/ /_ _ _   _
+| | | / _` \ \/ / |  __/ _` | | | |
+| |/ / (_| |>  <  | | | (_| | |_| |
+|___/ \__,_/_/\_\ \_|  \__,_|\__, |
+                              __/ |
+                             |___/
+${AnsiColor.MAGENTA}
+
+Service: DaxPay 单商户-服务端
+Spring Boot Version: ${spring-boot.version}
+${AnsiColor.BLACK}

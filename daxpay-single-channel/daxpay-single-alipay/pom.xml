@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-single-channel</artifactId>
+        <version>3.0.0.beta1</version>
+    </parent>
+
+    <artifactId>daxpay-single-alipay</artifactId>
+    <description>支付宝官方支付通道</description>
+
+    <properties>
+        <alipay.version>4.39.104.ALL</alipay.version>
+        <commons-compress.version>1.19</commons-compress.version>
+    </properties>
+
+    <dependencies>
+        <!-- 支付宝SDK -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>${alipay.version}</version>
+        </dependency>
+
+        <!-- 用于读取对账接口返回zip的解析 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>${commons-compress.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

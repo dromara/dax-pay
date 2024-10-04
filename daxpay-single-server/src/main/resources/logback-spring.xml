@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--
+    默认情况下，Spring Boot 不会 在 jar 文件之外寻找资源。
+    如果你想使用外部 logback 配置文件，你必须在启动 jar 时传递它的位置：$ java -jar -Dlogging.config=./logback-spring.xml app.jar
+    -->
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!--项目名称-->
+    <property name="appname" value="dax-pay-server"/>
+    <!--日志位置-->
+    <property name="logdir" value="logs"/>
+
+    <!-- 控制台 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%yellow(%date{yyyy-MM-dd HH:mm:ssS})| %highlight(%-5level[%X{traceId:-}]) %boldYellow(%thread) - %boldGreen(%logger{36})| %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <!-- 开发输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="console"/>
+    </root>
+
+</configuration>

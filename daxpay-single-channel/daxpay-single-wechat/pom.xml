@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-single-channel</artifactId>
+        <version>3.0.0.beta1</version>
+    </parent>
+
+    <artifactId>daxpay-single-wechat</artifactId>
+    <description>微信支付通道实现</description>
+
+    <properties>
+        <wxjava.version>4.6.0</wxjava.version>
+        <wxpay.version>0.2.12</wxpay.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- 微信支付三方SDK 同时支持 v2/v3版本接入-->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>${wxjava.version}</version>
+        </dependency>
+
+        <!-- 微信工具包 -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>${wxjava.version}</version>
+        </dependency>
+
+        <!-- 表格工具 -->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
+            <version>${easypoi.version}</version>
+        </dependency>
+    </dependencies>
+</project>

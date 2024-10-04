@@ -15,7 +15,7 @@
         <module>bootx-platform</module>
         <module>daxpay-single</module>
         <module>daxpay-single-channel</module>
-        <module>daxpay-single-client</module>
+        <module>daxpay-single-server</module>
         <module>daxpay-single-sdk</module>
     </modules>
     <properties>
