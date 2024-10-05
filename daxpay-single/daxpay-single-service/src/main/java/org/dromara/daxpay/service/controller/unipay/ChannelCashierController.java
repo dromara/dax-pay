@@ -9,8 +9,6 @@ import org.dromara.daxpay.core.param.cashier.CashierAuthUrlParam;
 import org.dromara.daxpay.core.param.cashier.CashierPayParam;
 import org.dromara.daxpay.core.result.assist.AuthResult;
 import org.dromara.daxpay.core.result.trade.pay.PayResult;
-import org.dromara.daxpay.service.common.cache.MerchantCacheService;
-import org.dromara.daxpay.service.entity.merchant.Merchant;
 import org.dromara.daxpay.service.result.config.ChannelCashierConfigResult;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.dromara.daxpay.service.service.cashier.ChannelCashierService;
@@ -38,19 +36,10 @@ public class ChannelCashierController {
 
     private final ChannelCashierConfigService cashierConfigService;
 
-    private final MerchantCacheService merchantCacheService;
-
-    @Operation(summary = "获取商户名称")
-    @GetMapping("/getMchName")
-    public Result<String> getMchName(String mchNo){
-        Merchant merchant = merchantCacheService.get(mchNo);
-        return Res.ok(merchant.getMchName());
-    }
-
     @Operation(summary = "获取收银台信息")
     @GetMapping("/getCashierType")
     public Result<ChannelCashierConfigResult> getCashierType(String cashierType,String appId){
-        paymentAssistService.initMchAndApp(appId);
+        paymentAssistService.initMchApp(appId);
         return Res.ok(cashierConfigService.findByCashierType(cashierType));
     }
 
@@ -59,7 +48,7 @@ public class ChannelCashierController {
     @PostMapping("/generateAuthUrl")
     public Result<String> generateAuthUrl(@RequestBody CashierAuthUrlParam param){
         ValidationUtil.validateParam(param);
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchApp(param.getAppId());
         return Res.ok(channelCashierService.generateAuthUrl(param));
     }
 
@@ -67,7 +56,7 @@ public class ChannelCashierController {
     @PostMapping("/auth")
     public Result<AuthResult> auth(@RequestBody CashierAuthCodeParam param){
         ValidationUtil.validateParam(param);
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchApp(param.getAppId());
         return Res.ok(channelCashierService.auth(param));
     }
 
@@ -75,7 +64,7 @@ public class ChannelCashierController {
     @PostMapping("/pay")
     public Result<PayResult> cashierPay(@RequestBody CashierPayParam param){
         ValidationUtil.validateParam(param);
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchApp(param.getAppId());
         return Res.ok(channelCashierService.cashierPay(param));
     }
 }

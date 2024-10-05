@@ -41,7 +41,7 @@ public class ChannelAuthController {
     @PostMapping("/generateAuthUrl")
     public Result<AuthUrlResult> generateAuthUrl(@RequestBody GenerateAuthUrlParam param){
         ValidationUtil.validateParam(param);
-        paymentAssistService.initMchAndApp(param.getAppId());
+        paymentAssistService.initMchApp(param.getAppId());
         return Res.ok(channelAuthService.generateAuthUrl(param));
     }
 
@@ -55,7 +55,7 @@ public class ChannelAuthController {
     @Operation(summary = "通过AuthCode获取并设置认证结果")
     @PostMapping("/authAndSet")
     public Result<Void> authAndSet(@RequestBody AuthCodeParam param){
-        paymentAssistService.initMchAndApp(param.getAppId());
+        paymentAssistService.initMchApp(param.getAppId());
         channelAuthService.auth(param);
         return Res.ok();
     }
