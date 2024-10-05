@@ -38,5 +38,4 @@ easy-trans:
 # 平台配置
 bootx-platform:
   config:
-    # 不可以进行更改, 内部会根据终端编码进行处理
     client-code: dax-pay-server

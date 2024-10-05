@@ -20,16 +20,16 @@ spring:
     redis:
       host: redis
       port: 6379
-      database: 4
+      database: 5
       password: bootx123
       lettuce:
         pool:
           max-wait: 1000ms
-# 开发时显示debug日志
+# 开发时显示debug日志 org.dromara.daxpay
 logging:
   level:
     cn.bootx.**: debug
-    cn.daxpay.**: debug
+    org.dromara.**: debug
     org.springframework.jdbc.core: debug
 # 接口文档配置
 springdoc:
@@ -41,8 +41,8 @@ bootx-platform:
     # swagger相关配置
     swagger:
       author: DaxPay
-      title: 开源支付平台-多商户版-管理端
-      description: 开源支付平台-多商户版-管理端
+      title: 开源支付平台-单商户服务端
+      description: 开源支付平台-单商户服务端
       version: 0.0.1
       base-packages:
         "[BootxPlatform接口]":
@@ -52,8 +52,7 @@ bootx-platform:
           - cn.bootx.platform.baseapi
           - cn.bootx.platform.notice
         "[支付管理平台接口]":
-          - org.dromara.daxpay.admin
-          - org.dromara.daxpay.channel
+          - org.dromara.daxpay
   starter:
     auth:
       enable-admin: true
@@ -77,7 +76,7 @@ bootx-platform:
       forward-server-url: http://127.0.0.1:9999
 dax-pay:
   env: DEV_
-  machine-no: 70
+  machine-no: 60
 dromara:
   # 注意, 不要设置 domain 访问路径, 自行进行拼接访问路径, 来保证可迁移性
   x-file-storage:
