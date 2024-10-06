@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/unipay/assist/channel/auth")
 @RequiredArgsConstructor
-public class ChannelAuthController {
+public class ChannelUniAuthController {
 
     private final ChannelAuthService channelAuthService;
 
