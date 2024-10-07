@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +21,15 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class ChannelCashierConfigManage extends BaseManager<ChannelCashierConfigMapper, ChannelCashierConfig> {
+
+    /**
+     * 根据AppId查询列表
+     */
+    public List<ChannelCashierConfig> findAllByAppId(String appId) {
+        return this.lambdaQuery()
+                .eq(ChannelCashierConfig::getAppId, appId)
+                .list();
+    }
 
     /**
      * 判断类型是否存在

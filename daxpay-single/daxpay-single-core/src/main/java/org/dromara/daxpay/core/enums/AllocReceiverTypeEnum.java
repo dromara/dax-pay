@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 分账接收方类型
@@ -14,17 +13,14 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public enum AllocReceiverTypeEnum {
-    /** 个人 */
-    WX_PERSONAL("wx_personal", "个人"),
-    /** 商户 */
-    WX_MERCHANT("wx_merchant", "商户"),
-
-    /** userId 以2088开头的纯16位数字 */
-    ALI_USER_ID("ali_user_id", "用户ID"),
+    /** 商户号 */
+    MERCHANT_NO("merchant_no", "商户号"),
+    /** userId */
+    USER_ID("user_id", "用户ID"),
     /** openId  */
-    ALI_OPEN_ID("ali_open_id", "openId"),
+    OPEN_ID("open_id", "openId"),
     /** 账号 */
-    ALI_LOGIN_NAME("ali_login_name", "账号");
+    LOGIN_NAME("login_name", "账号");
 
     /** 编码 */
     private final String code;
@@ -40,10 +36,5 @@ public enum AllocReceiverTypeEnum {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("未找到对应的分账接收方类型"));
     }
-
-    /** 微信支持类型 */
-    public static final List<AllocReceiverTypeEnum> WECHAT_LIST = List.of(WX_PERSONAL, WX_MERCHANT);
-    /** 支付宝支持类型 */
-    public static final List<AllocReceiverTypeEnum> ALI_LIST = List.of(ALI_OPEN_ID, ALI_USER_ID, ALI_LOGIN_NAME);
 
 }

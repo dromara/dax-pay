@@ -1,11 +1,15 @@
 package org.dromara.daxpay.service.entity.allocation.receiver;
 
-import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
+import org.dromara.daxpay.service.convert.allocation.AllocGroupConvert;
+import org.dromara.daxpay.service.result.allocation.AllocGroupResult;
 
 import java.math.BigDecimal;
 
@@ -17,7 +21,8 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class AllocGroup extends MchAppBaseEntity {
+@TableName("pay_alloc_group")
+public class AllocGroup extends MchAppBaseEntity implements ToResult<AllocGroupResult> {
 
     /** 分账组编码 */
     private String groupNo;
@@ -37,4 +42,9 @@ public class AllocGroup extends MchAppBaseEntity {
 
     /** 备注 */
     private String remark;
+
+    @Override
+    public AllocGroupResult toResult() {
+        return AllocGroupConvert.CONVERT.convert(this);
+    }
 }

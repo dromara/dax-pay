@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +53,7 @@ public class AllocOrderManager extends BaseManager<AllocOrderMapper, AllocOrder>
      * 查询待同步的分账单
      */
     public List<AllocOrder> findSyncOrder(){
-        List<String> statusList = List.of(AllocOrderStatusEnum.ALLOCATION_PROCESSING.getCode(), AllocOrderStatusEnum.ALLOCATION_END.getCode());
+        List<String> statusList = List.of(AllocOrderStatusEnum.ALLOC_PROCESSING.getCode(), AllocOrderStatusEnum.ALLOC_END.getCode());
         return lambdaQuery()
                 .in(AllocOrder::getStatus, statusList)
                 .list();

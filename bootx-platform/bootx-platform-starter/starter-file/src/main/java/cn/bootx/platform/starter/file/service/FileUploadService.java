@@ -10,7 +10,6 @@ import cn.bootx.platform.starter.file.dao.UploadFileManager;
 import cn.bootx.platform.starter.file.entity.UploadFileInfo;
 import cn.bootx.platform.starter.file.param.UploadFileQuery;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
@@ -99,7 +98,7 @@ public class FileUploadService {
         uploadPretreatment.setPath(LocalDateTimeUtil.format(LocalDateTime.now(), "yyyy/MM/dd/"));
 
         FileInfo upload = uploadPretreatment.upload();
-        return FileConvert.CONVERT.toDto(upload);
+        return FileConvert.CONVERT.toResult(upload);
     }
 
     /**

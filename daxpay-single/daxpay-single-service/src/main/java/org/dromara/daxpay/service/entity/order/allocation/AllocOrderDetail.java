@@ -31,8 +31,8 @@ public class AllocOrderDetail extends MchAppBaseEntity {
     /** 分账接收方编号 */
     private String receiverNo;
 
-    /** 分账比例 */
-    private Integer rate;
+    /** 分账比例(百分之多少) */
+    private BigDecimal rate;
 
     /** 分账金额 */
     private BigDecimal amount;

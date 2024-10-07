@@ -38,4 +38,4 @@ easy-trans:
 # 平台配置
 bootx-platform:
   config:
-    client-code: dax-pay-server
+    client-code: dax-pay

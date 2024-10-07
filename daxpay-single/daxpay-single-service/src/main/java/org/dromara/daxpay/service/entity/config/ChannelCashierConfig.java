@@ -1,6 +1,10 @@
 package org.dromara.daxpay.service.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.CashierTypeEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.enums.PayMethodEnum;
@@ -8,11 +12,6 @@ import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 import org.dromara.daxpay.service.convert.config.ChannelCashierConfigConvert;
 import org.dromara.daxpay.service.param.config.ChannelCashierConfigParam;
 import org.dromara.daxpay.service.result.config.ChannelCashierConfigResult;
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 /**
  * 通道收银台配置
@@ -55,7 +54,6 @@ public class ChannelCashierConfig extends MchAppBaseEntity implements ToResult<C
     private Boolean autoAllocation;
 
     /** 备注 */
-    @Schema(description = "备注")
     private String remark;
 
     public static ChannelCashierConfig init(ChannelCashierConfigParam param){

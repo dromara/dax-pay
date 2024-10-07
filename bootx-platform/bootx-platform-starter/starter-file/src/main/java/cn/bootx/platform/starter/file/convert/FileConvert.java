@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
  * @since 2022/1/12
  */
 @Mapper
-public interface    FileConvert {
+public interface FileConvert {
 
     FileConvert CONVERT = Mappers.getMapper(FileConvert.class);
 
@@ -21,7 +21,6 @@ public interface    FileConvert {
 
     FileInfo toFileInfo(UploadFileInfo in);
 
-    UploadFileResult toDto(FileInfo in);
-
+    UploadFileResult toResult(FileInfo in);
 
 }

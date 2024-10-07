@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
 @Schema(title = "商户应用查询参数")
-public class MchAppQuery {
+public final class MchAppQuery {
 
     /** 应用名称 */
     @Schema(description = "应用号")

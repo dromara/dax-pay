@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WechatAuthService {
 
-    private final WechatPayConfigService weChatPayConfigService;
+    private final WechatPayConfigService wechatPayConfigService;
 
     private final PlatformConfigService platformsConfigService;
 
@@ -80,7 +80,7 @@ public class WechatAuthService {
      * 获取微信公众号API的Service
      */
     private WxMpService getWxMpService() {
-        WechatPayConfig config = weChatPayConfigService.getWechatPayConfig();
+        WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpDefaultConfigImpl wxMpConfig = new WxMpDefaultConfigImpl();
         wxMpConfig.setAppId(config.getWxAppId()); // 设置微信公众号的appid

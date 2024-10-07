@@ -34,8 +34,6 @@ public class WechatPayCashierStrategy extends AbsChannelCashierStrategy {
 
     /**
      * 获取认证结果
-     *
-     * @param param
      */
     @Override
     public AuthResult doAuth(CashierAuthCodeParam param) {

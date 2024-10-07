@@ -12,9 +12,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AllocOrderStatusEnum {
 
-    ALLOCATION_PROCESSING("allocation_processing", "分账处理中"),
-    ALLOCATION_END("allocation_end", "分账完成"),
-    ALLOCATION_FAILED("allocation_failed", "分账失败"),
+    ALLOC_PROCESSING("alloc_processing", "分账处理中"),
+    ALLOC_END("alloc_end", "分账完成"),
+    ALLOC_FAILED("alloc_failed", "分账失败"),
     FINISH("finish", "完结"),
     FINISH_FAILED("finish_failed", "完结失败"),
     ;

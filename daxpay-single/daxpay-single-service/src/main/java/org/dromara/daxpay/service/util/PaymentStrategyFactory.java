@@ -27,4 +27,6 @@ public class PaymentStrategyFactory {
                 .findFirst()
                 .orElseThrow(() -> new UnsupportedAbilityException("不支持的能力"));
     }
+
+
 }

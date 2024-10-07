@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 @Schema(title = "商户应用")
-public class MchAppResult extends BaseResult {
+public final class MchAppResult extends BaseResult {
 
     /** 应用号 */
     @Schema(description = "应用号")

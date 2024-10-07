@@ -1,11 +1,10 @@
 package org.dromara.daxpay.channel.alipay.strategy;
 
-import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
+import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.channel.alipay.service.sync.AliPaySyncService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.bo.sync.PaySyncResultBo;
 import org.dromara.daxpay.service.strategy.AbsSyncPayOrderStrategy;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +19,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Component
 @RequiredArgsConstructor
 public class AliPaySyncOrderStrategy extends AbsSyncPayOrderStrategy {
-
-    private final AliPayConfigService alipayConfigService;
 
     private final AliPaySyncService alipaySyncService;
 

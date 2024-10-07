@@ -14,6 +14,8 @@ import lombok.Getter;
 public enum PayAllocStatusEnum {
     WAITING("waiting", "待分账"),
     ALLOCATION("allocation", "已分账"),
+    /** 部分通道不支持分账 */
+    IGNORE("ignore", "忽略分账"),
     ;
 
     private final String code;

@@ -26,7 +26,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class WechatRefundStrategy extends AbsRefundStrategy {
 
-    private final WechatPayConfigService weChatPayConfigService;
+    private final WechatPayConfigService wechatPayConfigService;
 
     private final WechatRefundV2Service wechatRefundV2Service;
 
@@ -49,7 +49,7 @@ public class WechatRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doBeforeRefundHandler() {
-        this.config = weChatPayConfigService.getWechatPayConfig();
+        this.config = wechatPayConfigService.getWechatPayConfig();
     }
 
 

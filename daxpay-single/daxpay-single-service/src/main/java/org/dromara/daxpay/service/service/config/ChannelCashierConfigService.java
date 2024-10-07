@@ -27,17 +27,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ChannelCashierConfigService {
-    private final ChannelCashierConfigManage cashierConfigManage;
-
     private final MchAppManager mchAppManager;
+
+    private final ChannelCashierConfigManage cashierConfigManage;
 
     private final PlatformConfigService platformConfigService;
 
     /**
-     * 分页
+     * 列表
      */
     public List<ChannelCashierConfigResult> findByAppId(String appId) {
-        return MpUtil.toListResult(cashierConfigManage.findAll());
+        return MpUtil.toListResult(cashierConfigManage.findAllByAppId(appId));
     }
 
     /**
