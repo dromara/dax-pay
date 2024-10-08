@@ -14,6 +14,7 @@ import org.dromara.daxpay.channel.union.result.UnionPayConfigResult;
 import org.dromara.daxpay.channel.union.sdk.api.UnionPayConfigStorage;
 import org.dromara.daxpay.channel.union.sdk.api.UnionPayKit;
 import org.dromara.daxpay.core.enums.ChannelEnum;
+import org.dromara.daxpay.core.exception.ChannelNotEnableException;
 import org.dromara.daxpay.core.exception.ConfigNotEnableException;
 import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.service.common.cache.ChannelConfigCacheService;
@@ -95,7 +96,18 @@ public class UnionPayConfigService {
     }
 
     /**
-     * 获取支付宝支付配置
+     * 获取并检查支付配置
+     */
+    public UnionPayConfig getAndCheckConfig() {
+        UnionPayConfig unionPayConfig = this.getUnionPayConfig();
+        if (!unionPayConfig.getEnable()){
+            throw new ChannelNotEnableException("云闪付支付未启用");
+        }
+        return unionPayConfig;
+    }
+
+    /**
+     * 获取云闪付支付配置
      */
     public UnionPayConfig getUnionPayConfig(){
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();

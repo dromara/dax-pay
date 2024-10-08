@@ -45,7 +45,7 @@ public enum CertStoreType implements CertStore {
          */
         @Override
         public InputStream getInputStream(Object cert) throws IOException {
-            return new FileInputStream(new File((String) cert));
+            return new FileInputStream((String) cert);
         }
     },
     /**
@@ -130,7 +130,7 @@ public enum CertStoreType implements CertStore {
         public InputStream getInputStream(Object beanClazz) throws IOException {
             try {
                 Class<?> clazz = Class.forName((String) beanClazz);
-                CertStore certStore =   (CertStore)clazz.newInstance();
+                CertStore certStore = (CertStore)clazz.getDeclaredConstructor().newInstance();
                 return certStore.getInputStream(beanClazz);
             } catch (ReflectiveOperationException e) {
                 throw new PayErrorException(new PayException("证书获取异常", e.getMessage()));

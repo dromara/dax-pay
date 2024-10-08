@@ -3,6 +3,8 @@ package org.dromara.daxpay.unisdk.common.http;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.unisdk.common.bean.MethodType;
 import org.dromara.daxpay.unisdk.common.bean.result.PayException;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
@@ -35,6 +37,7 @@ import static org.dromara.daxpay.unisdk.common.http.UriVariables.getMapToParamet
  * date 2017/3/4 17:56
  *  </pre>
  */
+@Slf4j
 public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase implements org.apache.http.client.ResponseHandler<T> {
     protected static final Logger LOG = LoggerFactory.getLogger(ClientHttpRequest.class);
     public static final ContentType APPLICATION_FORM_URLENCODED_UTF_8 = ContentType.create("application/x-www-form-urlencoded", Consts.UTF_8);
@@ -43,11 +46,19 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
 
     /**
      * http请求方式 get pos
+     * -- SETTER --
+     *  设置请求方式
+     *
+     * @param method 请求方式
+     *               {@link MethodType} 请求方式
+
      */
+    @Setter
     private MethodType method;
     /**
      * 默认使用的响应编码
      */
+    @Setter
     private Charset defaultCharset;
     /**
      * 响应类型
@@ -162,16 +173,6 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
     }
 
     /**
-     * 设置请求方式
-     *
-     * @param method 请求方式
-     *               {@link org.dromara.daxpay.unisdk.common.bean.MethodType} 请求方式
-     */
-    public void setMethod(MethodType method) {
-        this.method = method;
-    }
-
-    /**
      * 获取请求方式
      *
      * @return 请求方式
@@ -186,10 +187,6 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
             defaultCharset = Consts.UTF_8;
         }
         return defaultCharset;
-    }
-
-    public void setDefaultCharset(Charset defaultCharset) {
-        this.defaultCharset = defaultCharset;
     }
 
     /**
@@ -214,54 +211,57 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
      * @return 当前HTTP请求的客户端
      */
     public ClientHttpRequest setParameters(Object request) {
-        if (null == request) {
-            return this;
-        }
-        if (request instanceof HttpHeader) {
-            HttpHeader entity = (HttpHeader) request;
-            if (null != entity.getHeaders()) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("header : " + JSON.toJSONString(entity.getHeaders()));
-                }
-                for (Header header : entity.getHeaders()) {
-                    addHeader(header);
+        switch (request) {
+            case null -> {
+                return this;
+            }
+            case HttpHeader entity -> {
+                if (null != entity.getHeaders()) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("header : " + JSON.toJSONString(entity.getHeaders()));
+                    }
+                    for (Header header : entity.getHeaders()) {
+                        addHeader(header);
+                    }
                 }
             }
-        } else if (request instanceof HttpStringEntity) {
-            HttpStringEntity entity = (HttpStringEntity) request;
-            if (!entity.isEmpty()) {
+            case HttpStringEntity entity -> {
+                if (!entity.isEmpty()) {
+                    setEntity(entity);
+                }
+                if (null != entity.getHeaders()) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("header : " + JSON.toJSONString(entity.getHeaders()));
+                    }
+                    for (Header header : entity.getHeaders()) {
+                        addHeader(header);
+                    }
+                }
+            }
+            case HttpEntity httpEntity -> setEntity(httpEntity);
+            case Map map -> {
+                String parameters = getMapToParameters(map);
+                if (log.isDebugEnabled()) {
+                    log.debug("Parameter : " + parameters);
+                }
+                StringEntity entity = new StringEntity(parameters, APPLICATION_FORM_URLENCODED_UTF_8);
                 setEntity(entity);
             }
-            if (null != entity.getHeaders()) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("header : " + JSON.toJSONString(entity.getHeaders()));
+            case String s -> {
+                if (log.isDebugEnabled()) {
+                    log.debug("Parameter : " + request);
                 }
-                for (Header header : entity.getHeaders()) {
-                    addHeader(header);
+                StringEntity entity = new StringEntity(s, APPLICATION_FORM_URLENCODED_UTF_8);
+                setEntity(entity);
+            }
+            default -> {
+                String body = JSON.toJSONString(request);
+                if (log.isDebugEnabled()) {
+                    log.debug("body : " + request);
                 }
+                StringEntity entity = new StringEntity(body, ContentType.APPLICATION_JSON);
+                setEntity(entity);
             }
-        } else if (request instanceof HttpEntity) {
-            setEntity((HttpEntity) request);
-        } else if (request instanceof Map) {
-            String parameters = getMapToParameters((Map) request);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Parameter : " + parameters);
-            }
-            StringEntity entity = new StringEntity(parameters, APPLICATION_FORM_URLENCODED_UTF_8);
-            setEntity(entity);
-        } else if (request instanceof String) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Parameter : " + request);
-            }
-            StringEntity entity = new StringEntity((String) request, APPLICATION_FORM_URLENCODED_UTF_8);
-            setEntity(entity);
-        } else {
-            String body = JSON.toJSONString(request);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("body : " + request);
-            }
-            StringEntity entity = new StringEntity(body, ContentType.APPLICATION_JSON);
-            setEntity(entity);
         }
 
         return this;
@@ -351,8 +351,8 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
 
             //获取响应的文本内容
             String result = EntityUtils.toString(entity, getDefaultCharset());
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("请求响应内容：\r\n" + result);
+            if (log.isDebugEnabled()) {
+                log.debug("请求响应内容：\r\n{}", result);
             }
             if (responseType.isAssignableFrom(String.class)) {
                 return (T) result;
@@ -395,7 +395,7 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
      * @return 布尔型， true为json内容类型
      */
     private boolean isJson(String contentType, String textFirst) {
-        return (ContentType.APPLICATION_JSON.getMimeType().equals(contentType) || "{[".indexOf(textFirst) >= 0);
+        return (ContentType.APPLICATION_JSON.getMimeType().equals(contentType) || "{[".contains(textFirst));
     }
 
     /**
@@ -416,7 +416,7 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
      * @return 布尔型， true为xml内容类型
      */
     private boolean isXml(String contentType, String textFirst) {
-        return (ContentType.APPLICATION_XML.getMimeType().equals(contentType) || "<".indexOf(textFirst) >= 0);
+        return (ContentType.APPLICATION_XML.getMimeType().equals(contentType) || "<".contains(textFirst));
     }
 
 

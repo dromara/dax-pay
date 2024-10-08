@@ -1,9 +1,8 @@
 package org.dromara.daxpay.unisdk.common.util.sign.encrypt;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.unisdk.common.bean.result.PayException;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -17,8 +16,8 @@ import java.security.GeneralSecurityException;
  * email egzosn@gmail.com
  * date 2021/8/1
  */
+@Slf4j
 public class HmacSha256 {
-    private static final Logger LOG = LoggerFactory.getLogger(HmacSha256.class);
 
     /**
      * 签名
@@ -38,15 +37,12 @@ public class HmacSha256 {
             byte[] array = sha256HMAC.doFinal(content.getBytes(characterEncoding));
             StringBuilder sb = new StringBuilder();
             for (byte item : array) {
-                sb.append(Integer.toHexString((item & 0xFF) | 0x100).substring(1, 3));
+                sb.append(Integer.toHexString((item & 0xFF) | 0x100), 1, 3);
             }
             return sb.toString().toUpperCase();
         }
-        catch (UnsupportedEncodingException e) {
-            LOG.error("", e);
-        }
-        catch (GeneralSecurityException e) {
-            LOG.error("", e);
+        catch (UnsupportedEncodingException | GeneralSecurityException e) {
+            log.error("", e);
         }
 
         throw new PayErrorException(new PayException("fail", "HMACSHA256 签名异常"));

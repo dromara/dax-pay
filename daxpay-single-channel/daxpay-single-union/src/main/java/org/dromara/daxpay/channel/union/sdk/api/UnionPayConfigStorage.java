@@ -149,11 +149,6 @@ public class UnionPayConfigStorage extends BasePayConfigStorage {
         this.keyPrivateCertPwd = keyPrivateCertPwd;
     }
 
-    @Override
-    public String getAppid() {
-        return null;
-    }
-
     /**
      * 应用id
      * 纠正名称
@@ -165,26 +160,6 @@ public class UnionPayConfigStorage extends BasePayConfigStorage {
         return null;
     }
 
-    /**
-     * @return 合作者id
-     * @see #getPid()
-     */
-    @Deprecated
-    public String getPartner() {
-        return merId;
-    }
-
-
-    /**
-     * 设置合作者id
-     *
-     * @param partner 合作者id
-     * @see #setPid(String)
-     */
-    @Deprecated
-    public void setPartner(String partner) {
-        this.merId = partner;
-    }
 
     @Override
     public String getPid() {

@@ -1,6 +1,5 @@
 package org.dromara.daxpay.core.util;
 
-import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
@@ -20,14 +19,6 @@ import java.util.Map;
 @UtilityClass
 public class PayUtil {
     private static final BigDecimal HUNDRED = new BigDecimal(100);
-
-    /**
-     * 获取云闪付的过期时间 yyyyMMddHHmmss
-     */
-    @Deprecated
-    public String getUnionExpiredTime(LocalDateTime dateTime) {
-        return LocalDateTimeUtil.format(dateTime, DatePattern.PURE_DATETIME_PATTERN);
-    }
 
     /**
      * 获取支付单的超时时间

@@ -1,10 +1,10 @@
 package org.dromara.daxpay.unisdk.common.api;
 
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.unisdk.common.bean.PayMessage;
 import org.dromara.daxpay.unisdk.common.bean.PayOutMessage;
 import org.dromara.daxpay.unisdk.common.util.LogExceptionHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +42,8 @@ import java.util.concurrent.Future;
  *
  * @author egan
  */
+@Slf4j
 public class PayMessageRouter {
-    protected final Logger LOG = LoggerFactory.getLogger(PayMessageRouter.class);
 
     /**
      * 异步线程大小
@@ -59,11 +59,29 @@ public class PayMessageRouter {
     private final PayService payService;
     /**
      * 异步线程处理器
+     * -- SETTER --
+     *  <pre>
+     *  设置自定义的
+     *  如果不调用用该方法，默认使 Executors.newFixedThreadPool(100)
+     *  </pre>
+     *
+     * @param executorService 异步线程处理器
+
      */
+    @Setter
     private ExecutorService executorService;
     /**
      * 支付异常处理器
+     * -- SETTER --
+     *  <pre>
+     *  设置自定义的
+     *  如果不调用该方法，默认使用
+     *  </pre>
+     *
+     * @param exceptionHandler 异常处理器
+
      */
+    @Setter
     private PayErrorExceptionHandler exceptionHandler;
 
     /**
@@ -77,30 +95,6 @@ public class PayMessageRouter {
         this.exceptionHandler = new LogExceptionHandler();
     }
 
-    /**
-     * <pre>
-     * 设置自定义的 {@link ExecutorService}
-     * 如果不调用用该方法，默认使 Executors.newFixedThreadPool(100)
-     * </pre>
-     *
-     * @param executorService 异步线程处理器
-     */
-    public void setExecutorService(ExecutorService executorService) {
-        this.executorService = executorService;
-    }
-
-
-    /**
-     * <pre>
-     * 设置自定义的{@link PayErrorExceptionHandler}
-     * 如果不调用该方法，默认使用 {@link LogExceptionHandler}
-     * </pre>
-     *
-     * @param exceptionHandler 异常处理器
-     */
-    public void setExceptionHandler(PayErrorExceptionHandler exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
-    }
 
     /**
      * 获取所有的规则
@@ -163,39 +157,33 @@ public class PayMessageRouter {
             // 返回最后一个非异步的rule的执行结果
             if (rule.isAsync()) {
                 futures.add(
-                        executorService.submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                rule.service(payMessage, payService, exceptionHandler);
-                            }
+                        executorService.submit(() -> {
+                            rule.service(payMessage, payService, exceptionHandler);
                         })
                 );
             }
             else {
                 res = rule.service(payMessage, payService, exceptionHandler);
                 // 在同步操作结束，session访问结束
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("End session access: async=false, fromPay=" + payMessage.getFromPay());
+                if (log.isDebugEnabled()) {
+                    log.debug("End session access: async=false, fromPay=" + payMessage.getFromPay());
                 }
             }
         }
 
-        if (futures.size() > 0) {
-            executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    for (Future future : futures) {
-                        try {
-                            future.get();
-                            LOG.debug("End session access: async=true, fromPay=" + payMessage.getFromPay());
+        if (!futures.isEmpty()) {
+            executorService.submit(() -> {
+                for (Future future : futures) {
+                    try {
+                        future.get();
+                        log.debug("End session access: async=true, fromPay=" + payMessage.getFromPay());
 
-                        }
-                        catch (InterruptedException e) {
-                            LOG.error("Error happened when wait task finish", e);
-                        }
-                        catch (ExecutionException e) {
-                            LOG.error("Error happened when wait task finish", e);
-                        }
+                    }
+                    catch (InterruptedException e) {
+                        log.error("Error happened when wait task finish", e);
+                    }
+                    catch (ExecutionException e) {
+                        log.error("Error happened when wait task finish", e);
                     }
                 }
             });

@@ -1,5 +1,7 @@
 package org.dromara.daxpay.unisdk.common.http;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 
@@ -17,9 +19,21 @@ import java.util.Map;
 *               date 2018/01/30
 *           </pre>
  */
+@Setter
+@Getter
 public class HttpHeader{
     /**
      * 请求头
+     * -- GETTER --
+     *  获取请求头集
+     *
+     *
+     * -- SETTER --
+     *  设置请求头集
+     *
+     @return 请求头集
+      * @param headers 请求头集
+
      */
     private List<Header> headers;
 
@@ -40,15 +54,6 @@ public class HttpHeader{
     }
 
     /**
-     * 获取请求头集
-     *
-     * @return 请求头集
-     */
-    public List<Header> getHeaders() {
-        return headers;
-    }
-
-    /**
      * 添加请求头
      *
      * @param header 请求头
@@ -58,15 +63,6 @@ public class HttpHeader{
             this.headers = new ArrayList<>();
         }
         this.headers.add(header);
-    }
-
-    /**
-     * 设置请求头集
-     *
-     * @param headers 请求头集
-     */
-    public void setHeaders(List<Header> headers) {
-        this.headers = headers;
     }
 
     /**

@@ -187,20 +187,6 @@ public class UnionPayService extends BasePayService<UnionPayConfigStorage> {
     /**
      * 回调校验
      *
-     * @param result 回调回来的参数集
-     * @return 签名校验 true通过
-     */
-    @Deprecated
-    @Override
-    public boolean verify(Map<String, Object> result) {
-
-
-        return verify(new NoticeParams(result));
-    }
-
-    /**
-     * 回调校验
-     *
      * @param noticeParams 回调回来的参数集
      * @return 签名校验 true通过
      */
@@ -309,7 +295,6 @@ public class UnionPayService extends BasePayService<UnionPayConfigStorage> {
                 params.put("orderDesc", order.getSubject());
         }
         params.putAll(order.getAttrs());
-        params = preOrderHandler(params, order);
         return setSign(params);
     }
 
@@ -441,7 +426,7 @@ public class UnionPayService extends BasePayService<UnionPayConfigStorage> {
     public String getQrPay(PayOrder order) {
         order.setTransactionType(UnionTransactionType.APPLY_QR_CODE);
         JSONObject response = postOrder(order, getBackTransUrl());
-        if (this.verify(response)) {
+        if (this.verify(new NoticeParams(response))) {
             if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
                 //成功
                 return (String) response.get(SDKConstants.param_qrCode);
@@ -550,7 +535,7 @@ public class UnionPayService extends BasePayService<UnionPayConfigStorage> {
             order.setTransactionType(UnionTransactionType.APP);
         }
         JSONObject response = postOrder(order, getAppTransUrl());
-        if (this.verify(response)) {
+        if (this.verify(new NoticeParams(response))) {
             if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
 //                //成功,获取tn号
 //                String tn =  (String)response.get(SDKConstants.param_tn);
@@ -560,19 +545,6 @@ public class UnionPayService extends BasePayService<UnionPayConfigStorage> {
             throw new PayErrorException(new PayException((String) response.get(SDKConstants.param_respCode), (String) response.get(SDKConstants.param_respMsg), response.toJSONString()));
         }
         throw new PayErrorException(new PayException("failure", "验证签名失败", response.toJSONString()));
-    }
-
-    /**
-     * 交易查询接口
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @return 返回查询回来的结果集，支付方原值返回
-     */
-    @Override
-    public Map<String, Object> query(String tradeNo, String outTradeNo) {
-        return query(new AssistOrder(tradeNo, outTradeNo));
-
     }
 
     /**
@@ -649,18 +621,6 @@ public class UnionPayService extends BasePayService<UnionPayConfigStorage> {
     /**
      * 交易关闭接口
      *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @return 返回支付方交易关闭后的结果
-     */
-    @Override
-    public Map<String, Object> close(String tradeNo, String outTradeNo) {
-        return Collections.emptyMap();
-    }
-
-    /**
-     * 交易关闭接口
-     *
      * @param assistOrder 关闭订单
      * @return 返回支付方交易关闭后的结果
      */
@@ -718,7 +678,7 @@ public class UnionPayService extends BasePayService<UnionPayConfigStorage> {
         this.setSign(params);
         String responseStr = getHttpRequestTemplate().postForObject(this.getFileTransUrl(), params, String.class);
         JSONObject response = UriVariables.getParametersToMap(responseStr);
-        if (this.verify(response)) {
+        if (this.verify(new NoticeParams(response))) {
             if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
                 return response;
 

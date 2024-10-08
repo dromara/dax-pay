@@ -1,6 +1,8 @@
 package org.dromara.daxpay.channel.union.sdk.api;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.union.sdk.bean.*;
 import org.dromara.daxpay.unisdk.common.bean.*;
 import org.dromara.daxpay.unisdk.common.bean.outbuilder.PayTextOutMessage;
@@ -30,6 +32,7 @@ import java.util.*;
  * @author xxm
  * @since 2024/3/8
  */
+@Slf4j
 public class UnionPayKit extends UnionPayService {
     /**
      * 测试域名
@@ -90,7 +93,7 @@ public class UnionPayKit extends UnionPayService {
             certDescriptor.initRootCert(payConfigStorage.getAcpRootCertInputStream());
         }
         catch (IOException e) {
-            LOG.error("", e);
+            log.error("", e);
         }
 
 
@@ -185,18 +188,6 @@ public class UnionPayKit extends UnionPayService {
     /**
      * 回调校验
      *
-     * @param result 回调回来的参数集
-     * @return 签名校验 true通过
-     */
-    @Deprecated
-    @Override
-    public boolean verify(Map<String, Object> result) {
-        return verify(new NoticeParams(result));
-    }
-
-    /**
-     * 回调校验
-     *
      * @param noticeParams 回调回来的参数集
      * @return 签名校验 true通过
      */
@@ -204,7 +195,7 @@ public class UnionPayKit extends UnionPayService {
     public boolean verify(NoticeParams noticeParams) {
         final Map<String, Object> result = noticeParams.getBody();
         if (null == result || result.get(SDKConstants.param_signature) == null) {
-            LOG.debug("银联支付验签异常：params：" + result);
+            log.debug("银联支付验签异常：params：" + result);
             return false;
         }
         return this.signVerify(result, (String) result.get(SDKConstants.param_signature));
@@ -275,7 +266,7 @@ public class UnionPayKit extends UnionPayService {
 
         params.put(SDKConstants.param_orderId, order.getOutTradeNo());
 
-        if (StringUtils.isNotEmpty(order.getAddition())) {
+        if (StrUtil.isNotEmpty(order.getAddition())) {
             params.put(SDKConstants.param_reqReserved, order.getAddition());
         }
         switch (type) {
@@ -303,7 +294,6 @@ public class UnionPayKit extends UnionPayService {
                 params.put("orderDesc", order.getSubject());
         }
         params.putAll(order.getAttrs());
-        params = preOrderHandler(params, order);
         return setSign(params);
     }
 
@@ -384,10 +374,10 @@ public class UnionPayKit extends UnionPayService {
             return cert;
         }
         catch (CertPathBuilderException e) {
-            LOG.error("verify certificate chain fail.", e);
+            log.error("verify certificate chain fail.", e);
         }
         catch (GeneralSecurityException e) {
-            LOG.error("", e);
+            log.error("", e);
         }
         return null;
     }
@@ -432,7 +422,7 @@ public class UnionPayKit extends UnionPayService {
     public String getQrPay(PayOrder order) {
         order.setTransactionType(UnionTransactionType.APPLY_QR_CODE);
         JSONObject response = postOrder(order, getBackTransUrl());
-        if (this.verify(response)) {
+        if (this.verify(new NoticeParams(response))) {
             if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
                 //成功
                 return (String) response.get(SDKConstants.param_qrCode);
@@ -545,7 +535,7 @@ public class UnionPayKit extends UnionPayService {
             order.setTransactionType(UnionTransactionType.APP);
         }
         JSONObject response = postOrder(order, getAppTransUrl());
-        if (this.verify(response)) {
+        if (this.verify(new NoticeParams(response))) {
             if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
 //                //成功,获取tn号
 //                String tn =  (String)response.get(SDKConstants.param_tn);
@@ -554,19 +544,6 @@ public class UnionPayKit extends UnionPayService {
             throw new PayErrorException(new PayException((String) response.get(SDKConstants.param_respCode), (String) response.get(SDKConstants.param_respMsg), response.toJSONString()));
         }
         throw new PayErrorException(new PayException("failure", "验证签名失败", response.toJSONString()));
-    }
-
-    /**
-     * 交易查询接口
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @return 返回查询回来的结果集，支付方原值返回
-     */
-    @Override
-    public Map<String, Object> query(String tradeNo, String outTradeNo) {
-        return query(new AssistOrder(tradeNo, outTradeNo));
-
     }
 
     /**
@@ -627,19 +604,6 @@ public class UnionPayKit extends UnionPayService {
             throw new PayErrorException(new PayException(response.getString(SDKConstants.param_respCode), response.getString(SDKConstants.param_respMsg), response.toJSONString()));
         }
         throw new PayErrorException(new PayException("failure", "验证签名失败", response.toJSONString()));
-    }
-
-    /**
-     * 交易关闭接口
-     * 使用冲正接口
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @return 返回支付方交易关闭后的结果
-     */
-    @Override
-    public Map<String, Object> close(String tradeNo, String outTradeNo) {
-        return Collections.emptyMap();
     }
 
     /**

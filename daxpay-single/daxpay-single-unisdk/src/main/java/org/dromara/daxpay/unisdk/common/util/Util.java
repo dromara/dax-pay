@@ -2,6 +2,7 @@ package org.dromara.daxpay.unisdk.common.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Map;
 
@@ -63,7 +64,7 @@ public class Util {
      * @return 字节数组
      */
     public static byte[] byteConvert32Bytes(BigInteger n) {
-        byte[] tmpd = (byte[]) null;
+        byte[] tmpd = null;
         if (n == null) {
             return null;
         }
@@ -119,28 +120,15 @@ public class Util {
      * @return 转换后的字符串
      */
     public static String getHexString(byte[] bytes, boolean upperCase) {
-        String ret = "";
-        for (int i = 0; i < bytes.length; i++) {
-            ret += Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1);
+        StringBuilder ret = new StringBuilder();
+        for (byte aByte : bytes) {
+            ret.append(Integer.toString((aByte & 0xff) + 0x100, 16)
+                    .substring(1));
         }
-        return upperCase ? ret.toUpperCase() : ret;
+        return upperCase ? ret.toString()
+                .toUpperCase() : ret.toString();
     }
 
-    /**
-     * 打印十六进制字符串
-     *
-     * @param bytes 字节数组
-     */
-    public static void printHexString(byte[] bytes) {
-        for (int i = 0; i < bytes.length; i++) {
-            String hex = Integer.toHexString(bytes[i] & 0xFF);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
-            }
-            System.out.print("0x" + hex.toUpperCase() + ",");
-        }
-        System.out.println("");
-    }
 
     /**
      * Convert hex string to byte[]
@@ -149,7 +137,7 @@ public class Util {
      * @return byte[]
      */
     public static byte[] hexStringToBytes(String hexString) {
-        if (hexString == null || "".equals(hexString)) {
+        if (hexString == null || hexString.isEmpty()) {
             return null;
         }
 
@@ -370,13 +358,13 @@ public class Util {
     public static String hexStringToBinary(String hex) {
         hex = hex.toUpperCase();
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
         int max = hex.length();
         for (int i = 0; i < max; i++) {
             char c = hex.charAt(i);
-            result += Integer.toBinaryString(Character.digit(c, 16));
+            result.append(Integer.toBinaryString(Character.digit(c, 16)));
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -386,16 +374,16 @@ public class Util {
      * @return 字符串
      */
     public static String asciiStringToString(String content) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         int length = content.length() / 2;
         for (int i = 0; i < length; i++) {
             String c = content.substring(i * 2, i * 2 + 2);
             int a = hexStringToAlgorism(c);
             char b = (char) a;
             String d = String.valueOf(b);
-            result += d;
+            result.append(d);
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -422,15 +410,15 @@ public class Util {
      * @return String
      */
     public static String byteToString(byte[] bytearray) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         char temp;
 
         int length = bytearray.length;
-        for (int i = 0; i < length; i++) {
-            temp = (char) bytearray[i];
-            result += temp;
+        for (byte b : bytearray) {
+            temp = (char) b;
+            result.append(temp);
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -478,9 +466,7 @@ public class Util {
      */
     public static String patchHexString(String str, int maxLength) {
         StringBuilder temp = new StringBuilder();
-        for (int i = 0; i < maxLength - str.length(); i++) {
-            temp.append(0);
-        }
+        temp.append("0".repeat(Math.max(0, maxLength - str.length())));
         temp.append(str);
         return temp.toString();
     }
@@ -556,8 +542,8 @@ public class Util {
                     "Argument b ( byte array ) is null! ");
         }
         StringBuilder hs = new StringBuilder();
-        for (int n = 0; n < b.length; n++) {
-            String stmp = Integer.toHexString(b[n] & 0xff);
+        for (byte value : b) {
+            String stmp = Integer.toHexString(value & 0xff);
             if (stmp.length() == 1) {
                 hs.append(0);
 //                hs = hs + "0" + stmp;
@@ -571,9 +557,7 @@ public class Util {
 
     public static byte[] subByte(byte[] input, int startIndex, int length) {
         byte[] bt = new byte[length];
-        for (int i = 0; i < length; i++) {
-            bt[i] = input[i + startIndex];
-        }
+        System.arraycopy(input, 0 + startIndex, bt, 0, length);
         return bt;
     }
 
@@ -590,7 +574,7 @@ public class Util {
      * @return 分的金额
      */
     public static int conversionCentAmount(BigDecimal amount) {
-        return amount.multiply(HUNDRED).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+        return amount.multiply(HUNDRED).setScale(0, RoundingMode.HALF_UP).intValue();
     }
 
     /**
@@ -600,7 +584,7 @@ public class Util {
      * @return 元的金额 两位小数
      */
     public static BigDecimal conversionAmount(BigDecimal amount) {
-        return amount.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return amount.setScale(2, RoundingMode.HALF_UP);
     }
 
 

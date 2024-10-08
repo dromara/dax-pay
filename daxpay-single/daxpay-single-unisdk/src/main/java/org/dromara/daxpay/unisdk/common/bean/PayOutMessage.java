@@ -1,6 +1,8 @@
 package org.dromara.daxpay.unisdk.common.bean;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.Getter;
+import lombok.Setter;
 import org.dromara.daxpay.unisdk.common.bean.outbuilder.JsonBuilder;
 import org.dromara.daxpay.unisdk.common.bean.outbuilder.TextBuilder;
 import org.dromara.daxpay.unisdk.common.bean.outbuilder.XmlBuilder;
@@ -16,17 +18,11 @@ import java.io.Serializable;
  *     date 2016-6-1 11:40:30
  * </pre>
  */
+@Setter
+@Getter
 public abstract class PayOutMessage implements Serializable {
     protected String content;
 
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     /**
      * 获得文本消息builder

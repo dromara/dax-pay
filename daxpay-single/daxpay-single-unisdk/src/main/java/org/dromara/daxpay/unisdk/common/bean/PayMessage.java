@@ -1,5 +1,8 @@
 package org.dromara.daxpay.unisdk.common.bean;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -14,11 +17,16 @@ import java.util.Map;
  *     date 2017/3/7 16:37
  *  </pre>
  */
+@Getter
 public class PayMessage implements Serializable {
     private Map<String, Object> payMessage = null;
+    @Setter
     private String payType;
+    @Setter
     private String transactionType;
+    @Setter
     private String fromPay;
+    @Setter
     private String describe;
 
 
@@ -46,38 +54,6 @@ public class PayMessage implements Serializable {
     }
 
 
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
-    public String getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    public String getFromPay() {
-        return fromPay;
-    }
-
-    public void setFromPay(String fromPay) {
-        this.fromPay = fromPay;
-    }
-
-    public String getDescribe() {
-        return describe;
-    }
-
-    public void setDescribe(String describe) {
-        this.describe = describe;
-    }
-
     public String getDiscount() {
         return (String) payMessage.get("discount");
     }
@@ -98,7 +74,7 @@ public class PayMessage implements Serializable {
 
     public Number getTotalFee() {
         String totalFee = (String) payMessage.get("total_fee");
-        if (null == totalFee || "".equals(totalFee)) {
+        if (null == totalFee || totalFee.isEmpty()) {
             return 0;
         }
         if (isNumber(totalFee)) {
@@ -118,10 +94,6 @@ public class PayMessage implements Serializable {
     @Override
     public String toString() {
         return payMessage.toString();
-    }
-
-    public Map<String, Object> getPayMessage() {
-        return payMessage;
     }
 
 

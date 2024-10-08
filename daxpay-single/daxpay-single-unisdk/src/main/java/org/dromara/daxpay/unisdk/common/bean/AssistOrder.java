@@ -1,6 +1,8 @@
 package org.dromara.daxpay.unisdk.common.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,20 +21,48 @@ public class AssistOrder implements Order {
 
     /**
      * 支付平台订单号,交易号, 平台批次单号
+     * -- GETTER --
+     *  支付平台订单号,交易号
+     *
+     *
+     * -- SETTER --
+     *  支付平台订单号,交易号
+     *
+     @return 支付平台订单号, 交易号
+      * @param tradeNo 支付平台订单号,交易号
+
      */
+    @Setter
+    @Getter
     private String tradeNo;
     /**
      * 商户订单号,商家批次单号
+     * -- GETTER --
+     *  获取商户订单号,商家批次单号
+     *
+     *
+     * -- SETTER --
+     *  设置商户订单号,商家批次单号
+     *
+     @return 商户订单号, 商家批次单号
+      * @param outTradeNo 商户订单号,商家批次单号
+
      */
+    @Setter
+    @Getter
     private String outTradeNo;
     /**
      * 交易类型
      */
+    @Setter
+    @Getter
     private TransactionType transactionType;
 
     /**
      * 异步回调通知
      */
+    @Setter
+    @Getter
     private String notifyUrl;
 
     /**
@@ -55,50 +85,6 @@ public class AssistOrder implements Order {
 
     public AssistOrder(String tradeNo, TransactionType transactionType) {
         this.tradeNo = tradeNo;
-        this.transactionType = transactionType;
-    }
-
-    /**
-     * 支付平台订单号,交易号
-     *
-     * @return 支付平台订单号, 交易号
-     */
-    public String getTradeNo() {
-        return tradeNo;
-    }
-
-    /**
-     * 支付平台订单号,交易号
-     *
-     * @param tradeNo 支付平台订单号,交易号
-     */
-    public void setTradeNo(String tradeNo) {
-        this.tradeNo = tradeNo;
-    }
-
-    /**
-     * 获取商户订单号,商家批次单号
-     *
-     * @return 商户订单号, 商家批次单号
-     */
-    public String getOutTradeNo() {
-        return outTradeNo;
-    }
-
-    /**
-     * 设置商户订单号,商家批次单号
-     *
-     * @param outTradeNo 商户订单号,商家批次单号
-     */
-    public void setOutTradeNo(String outTradeNo) {
-        this.outTradeNo = outTradeNo;
-    }
-
-    public TransactionType getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
     }
 
@@ -128,11 +114,4 @@ public class AssistOrder implements Order {
         getAttrs().put(key, value);
     }
 
-    public String getNotifyUrl() {
-        return notifyUrl;
-    }
-
-    public void setNotifyUrl(String notifyUrl) {
-        this.notifyUrl = notifyUrl;
-    }
 }

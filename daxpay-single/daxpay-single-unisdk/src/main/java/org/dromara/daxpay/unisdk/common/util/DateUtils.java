@@ -1,8 +1,7 @@
 package org.dromara.daxpay.unisdk.common.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.util.Args;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.ref.SoftReference;
 import java.text.ParseException;
@@ -21,8 +20,8 @@ import java.util.TimeZone;
  *         date 2018-11-21 16:43:20
  *         </pre>
  */
+@Slf4j
 public final class DateUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(DateUtils.class);
 
     private DateUtils() {
     }
@@ -83,7 +82,7 @@ public final class DateUtils {
             return formatFor.parse(date);
         }
         catch (ParseException e) {
-            LOG.error("", e);
+            log.error("", e);
         }
         return null;
     }

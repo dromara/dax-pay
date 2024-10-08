@@ -1,6 +1,7 @@
 
 package org.dromara.daxpay.unisdk.common.util.sign.encrypt;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,7 @@ import java.security.spec.X509EncodedKeySpec;
  * email egzosn@gmail.com
  * </pre>
  */
+@Slf4j
 public class RSA {
     private static final Logger LOG = LoggerFactory.getLogger(RSA.class);
     private static final String ALGORITHM = "RSA";
@@ -54,11 +56,8 @@ public class RSA {
 
             return Base64.encode(signed);
         }
-        catch (GeneralSecurityException e) {
-            LOG.error("", e);
-        }
-        catch (UnsupportedEncodingException e) {
-            LOG.error("", e);
+        catch (GeneralSecurityException | UnsupportedEncodingException e) {
+            log.error("", e);
         }
 
         return null;
@@ -82,11 +81,8 @@ public class RSA {
             byte[] signed = signature.sign();
             return Base64.encode(signed);
         }
-        catch (GeneralSecurityException e) {
-            LOG.error("", e);
-        }
-        catch (UnsupportedEncodingException e) {
-            LOG.error("", e);
+        catch (GeneralSecurityException | UnsupportedEncodingException e) {
+            log.error("", e);
         }
 
         return null;
@@ -132,11 +128,8 @@ public class RSA {
             PublicKey pubKey = getPublicKey(publicKey, ALGORITHM);
             return verify(content, sign, pubKey, signAlgorithms, characterEncoding);
         }
-        catch (GeneralSecurityException e) {
-            LOG.error("", e);
-        }
-        catch (IOException e) {
-            LOG.error("", e);
+        catch (GeneralSecurityException | IOException e) {
+            log.error("", e);
         }
         return false;
     }
@@ -158,11 +151,8 @@ public class RSA {
             signature.update(content.getBytes(characterEncoding));
             return signature.verify(Base64.decode(sign));
         }
-        catch (GeneralSecurityException e) {
-            LOG.error("", e);
-        }
-        catch (IOException e) {
-            LOG.error("", e);
+        catch (GeneralSecurityException | IOException e) {
+            log.error("", e);
         }
         return false;
     }
@@ -238,14 +228,12 @@ public class RSA {
                 else {
                     block = new byte[bufl];
 
-                    for (int i = 0; i < bufl; i++) {
-                        block[i] = buf[i];
-                    }
+                    System.arraycopy(buf, 0, block, 0, bufl);
                 }
                 writer.write(cipher.doFinal(block));
             }
 
-            return new String(writer.toByteArray(), characterEncoding);
+            return writer.toString(characterEncoding);
         }
     }
 
@@ -263,8 +251,7 @@ public class RSA {
         keyBytes = Base64.decode(key);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
-        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-        return privateKey;
+        return keyFactory.generatePrivate(keySpec);
     }
 
     /**
@@ -309,8 +296,7 @@ public class RSA {
             }
             X509EncodedKeySpec pubX509 = new X509EncodedKeySpec(Base64.decode(sb.toString()));
             KeyFactory keyFactory = KeyFactory.getInstance(keyAlgorithm);
-            PublicKey publicKey = keyFactory.generatePublic(pubX509);
-            return publicKey;
+            return keyFactory.generatePublic(pubX509);
         }
     }
 

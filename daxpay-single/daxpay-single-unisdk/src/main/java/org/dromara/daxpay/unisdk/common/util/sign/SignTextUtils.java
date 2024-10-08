@@ -69,7 +69,7 @@ public final class SignTextUtils {
         if (null != ignoreKey) {
             Arrays.sort(ignoreKey);
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         // TODO 2016/11/11 10:14 author: egan 已经排序好处理
         if (parameters instanceof SortedMap) {
             for (Map.Entry<String, Object> entry : parameters.entrySet()) {
@@ -78,7 +78,7 @@ public final class SignTextUtils {
                     continue;
                 }
                 String valStr = v.toString().trim();
-                if ("".equals(valStr) || (null != ignoreKey && Arrays.binarySearch(ignoreKey, entry.getKey()) >= 0)) {
+                if (valStr.isEmpty() || (null != ignoreKey && Arrays.binarySearch(ignoreKey, entry.getKey()) >= 0)) {
                     continue;
                 }
                 sb.append(entry.getKey()).append("=").append(valStr).append(separator);
@@ -96,32 +96,31 @@ public final class SignTextUtils {
 
 
     private static String sortMapParameterText(Map<String, Object> parameters, String separator, boolean ignoreNullValue, String... ignoreKey) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         // TODO 2016/11/11 10:14 author: egan 未排序须处理
         List<String> keys = new ArrayList<String>(parameters.keySet());
         //排序
         Collections.sort(keys);
         for (String k : keys) {
-            String valueStr = "";
+            StringBuilder valueStr = new StringBuilder();
             Object o = parameters.get(k);
             if (ignoreNullValue && null == o) {
                 continue;
             }
-            if (o instanceof String[]) {
-                String[] values = (String[]) o;
+            if (o instanceof String[] values) {
 
                 for (int i = 0; i < values.length; i++) {
                     String value = values[i].trim();
-                    if ("".equals(value)) {
+                    if (value.isEmpty()) {
                         continue;
                     }
-                    valueStr += (i == values.length - 1) ? value : value + ",";
+                    valueStr.append((i == values.length - 1) ? value : value + ",");
                 }
             }
             else {
-                valueStr = o.toString();
+                valueStr = new StringBuilder(o.toString());
             }
-            if (StringUtils.isBlank(valueStr) || (null != ignoreKey && Arrays.binarySearch(ignoreKey, k) >= 0)) {
+            if (StringUtils.isBlank(valueStr.toString()) || (null != ignoreKey && Arrays.binarySearch(ignoreKey, k) >= 0)) {
                 continue;
             }
             sb.append(k).append("=").append(valueStr).append(separator);
@@ -141,7 +140,7 @@ public final class SignTextUtils {
      * @return 参数排序好的值
      */
     public static String parameters2Md5Str(Object parameters, String separator) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         if (parameters instanceof LinkedHashMap) {
             Set<String> keys = (Set<String>) ((LinkedHashMap) parameters).keySet();

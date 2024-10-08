@@ -1,14 +1,13 @@
 package org.dromara.daxpay.unisdk.common.api;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.dromara.daxpay.unisdk.common.bean.PayMessage;
 import org.dromara.daxpay.unisdk.common.bean.PayOutMessage;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 
@@ -24,6 +23,7 @@ import java.util.regex.Pattern;
  *  source chanjarster/weixin-java-tools
  *  </pre>
  */
+@Getter
 public class PayMessageRouterRule {
 
 
@@ -31,37 +31,47 @@ public class PayMessageRouterRule {
     /**
      * 默认同步
      */
+    @Setter
     private boolean async = false;
 
     /**
      * 支付类型
      */
+    @Setter
     private String payType;
     /**
      * 交易类型
      */
+    @Setter
     private String[] transactionType;
     /**
      * 简介
      */
+    @Setter
     private String subject;
     /**
      * 正则匹配
      */
+    @Setter
     private String rSubject;
     /**
      * 匹配的键名称
      */
+    @Setter
     private String key;
     /**
      * 匹配的键名称对应的值 正则
      */
+    @Setter
     private String rValue;
 
+    @Setter
     private boolean reEnter = false;
 
+    @Setter
     private List<PayMessageHandler> handlers = new ArrayList<PayMessageHandler>();
 
+    @Setter
     private List<PayMessageInterceptor> interceptors = new ArrayList<PayMessageInterceptor>();
 
     public PayMessageRouterRule(PayMessageRouter routerBuilder) {
@@ -159,9 +169,7 @@ public class PayMessageRouterRule {
     public PayMessageRouterRule interceptor(PayMessageInterceptor interceptor, PayMessageInterceptor... otherInterceptors) {
         this.interceptors.add(interceptor);
         if (otherInterceptors != null && otherInterceptors.length > 0) {
-            for (PayMessageInterceptor i : otherInterceptors) {
-                this.interceptors.add(i);
-            }
+            this.interceptors.addAll(Arrays.asList(otherInterceptors));
         }
         return this;
     }
@@ -186,9 +194,7 @@ public class PayMessageRouterRule {
     public PayMessageRouterRule handler(PayMessageHandler handler, PayMessageHandler... otherHandlers) {
         this.handlers.add(handler);
         if (otherHandlers != null && otherHandlers.length > 0) {
-            for (PayMessageHandler i : otherHandlers) {
-                this.handlers.add(i);
-            }
+            this.handlers.addAll(Arrays.asList(otherHandlers));
         }
         return this;
     }
@@ -250,7 +256,7 @@ public class PayMessageRouterRule {
         }
 
         for (String type : this.getTransactionType()) {
-            if (type.toLowerCase().equals((transactionType.toLowerCase()))) {
+            if (type.equalsIgnoreCase((transactionType))) {
                 return true;
             }
         }
@@ -297,87 +303,4 @@ public class PayMessageRouterRule {
 
     }
 
-    public PayMessageRouter getRouterBuilder() {
-        return routerBuilder;
-    }
-
-    public boolean isAsync() {
-        return async;
-    }
-
-    public void setAsync(boolean async) {
-        this.async = async;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
-    public String[] getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(String[] transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getrValue() {
-        return rValue;
-    }
-
-    public void setrValue(String rValue) {
-        this.rValue = rValue;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getrSubject() {
-        return rSubject;
-    }
-
-    public void setrSubject(String rSubject) {
-        this.rSubject = rSubject;
-    }
-
-    public boolean isReEnter() {
-        return reEnter;
-    }
-
-    public void setReEnter(boolean reEnter) {
-        this.reEnter = reEnter;
-    }
-
-    public List<PayMessageHandler> getHandlers() {
-        return handlers;
-    }
-
-    public void setHandlers(List<PayMessageHandler> handlers) {
-        this.handlers = handlers;
-    }
-
-    public List<PayMessageInterceptor> getInterceptors() {
-        return interceptors;
-    }
-
-    public void setInterceptors(List<PayMessageInterceptor> interceptors) {
-        this.interceptors = interceptors;
-    }
 }

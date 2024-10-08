@@ -1,9 +1,8 @@
 package org.dromara.daxpay.unisdk.common.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.unisdk.common.api.PayErrorExceptionHandler;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 
@@ -18,14 +17,14 @@ import org.slf4j.LoggerFactory;
  * source chanjarster/weixin-java-tools
  * </pre>
  */
+@Slf4j
 public class LogExceptionHandler implements PayErrorExceptionHandler {
 
-    protected final Logger LOGGER = LoggerFactory.getLogger(PayErrorExceptionHandler.class);
 
     @Override
     public void handle(PayErrorException e) {
 
-        LOGGER.error("Error happens", e);
+        log.error("Error happens", e);
 
     }
 

@@ -1,9 +1,7 @@
 package org.dromara.daxpay.unisdk.common.http;
 
-import org.dromara.daxpay.unisdk.common.bean.MethodType;
-import org.dromara.daxpay.unisdk.common.bean.result.PayException;
-import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -22,8 +20,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContexts;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.dromara.daxpay.unisdk.common.bean.MethodType;
+import org.dromara.daxpay.unisdk.common.bean.result.PayException;
+import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
+import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -44,28 +44,25 @@ import java.util.Map;
  * date 2017/3/3 21:33
  * </code>
  */
+@Slf4j
 public class HttpRequestTemplate {
-
-    protected static final Logger LOG = LoggerFactory.getLogger(HttpRequestTemplate.class);
 
     protected CloseableHttpClient httpClient;
 
     protected PoolingHttpClientConnectionManager connectionManager;
 
+    /**
+     * -- GETTER --
+     *  获取代理带代理地址的 HttpHost
+     *
+     * @return 获取代理带代理地址的 HttpHost
+     */
+    @Getter
     protected HttpHost httpProxy;
 
     protected HttpConfigStorage configStorage;
 
     private SSLConnectionSocketFactory sslsf;
-
-    /**
-     * 获取代理带代理地址的 HttpHost
-     *
-     * @return 获取代理带代理地址的 HttpHost
-     */
-    public HttpHost getHttpProxy() {
-        return httpProxy;
-    }
 
     public CloseableHttpClient getHttpClient() {
         if (null != httpClient) {
@@ -93,12 +90,12 @@ public class HttpRequestTemplate {
     }
 
     private RequestConfig createRequestConfig(HttpConfigStorage configStorage) {
-        RequestConfig requestConfig = RequestConfig.custom()
+        // .setConnectionRequestTimeout(1000)
+        return RequestConfig.custom()
                 .setSocketTimeout(configStorage.getSocketTimeout())
                 .setConnectTimeout(configStorage.getConnectTimeout())
 // .setConnectionRequestTimeout(1000)
                 .build();
-        return requestConfig;
     }
 
     /**
@@ -130,7 +127,7 @@ public class HttpRequestTemplate {
                 return sslsf = new SSLConnectionSocketFactory(SSLContext.getDefault());
             }
             catch (NoSuchAlgorithmException e) {
-                LOG.error("", e);
+                log.error("", e);
             }
         }
 
@@ -156,11 +153,8 @@ public class HttpRequestTemplate {
 
             return sslsf;
         }
-        catch (IOException e) {
-            LOG.error("", e);
-        }
-        catch (GeneralSecurityException e) {
-            LOG.error("", e);
+        catch (IOException | GeneralSecurityException e) {
+            log.error("", e);
         }
         return null;
 
@@ -202,8 +196,8 @@ public class HttpRequestTemplate {
         if (0 == configStorage.getMaxTotal() || 0 == configStorage.getDefaultMaxPerRoute()) {
             return null;
         }
-        if (LOG.isInfoEnabled()) {
-            LOG.info(String.format("Initialize the PoolingHttpClientConnectionManager -- maxTotal:%s, defaultMaxPerRoute:%s", configStorage.getMaxTotal(), configStorage.getDefaultMaxPerRoute()));
+        if (log.isInfoEnabled()) {
+            log.info(String.format("Initialize the PoolingHttpClientConnectionManager -- maxTotal:%s, defaultMaxPerRoute:%s", configStorage.getMaxTotal(), configStorage.getDefaultMaxPerRoute()));
         }
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("https", createSSL(configStorage))
@@ -429,8 +423,8 @@ public class HttpRequestTemplate {
      */
     public <T> ResponseEntity<T> doExecuteEntity(URI uri, Object request, Class<T> responseType, MethodType method) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(String.format("uri:%s, httpMethod:%s ", uri, method.name()));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("uri:%s, httpMethod:%s ", uri, method.name()));
         }
         ClientHttpRequest<T> httpRequest = new ClientHttpRequest<T>(uri, method, request, null == configStorage ? null : configStorage.getCharset());
         //判断是否有代理设置

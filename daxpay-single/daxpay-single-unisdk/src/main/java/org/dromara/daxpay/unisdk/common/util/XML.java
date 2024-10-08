@@ -153,8 +153,7 @@ public class XML {
                 if (null == json) {
                     json = new JSONObject();
                 }
-                if (json instanceof JSONObject) {
-                    JSONObject j = ((JSONObject) json);
+                if (json instanceof JSONObject j) {
                     if (j.containsKey(node.getNodeName())) {
                         JSONArray array = new JSONArray();
                         array.add(json);
@@ -299,8 +298,7 @@ public class XML {
             StringWriter writer = new StringWriter();
             StreamResult result = new StreamResult(writer);
             transformer.transform(source, result);
-            String output = writer.getBuffer().toString();
-            return output;
+            return writer.getBuffer().toString();
         }
         catch (TransformerException e) {
             throw new PayErrorException(new PayException("XML failure", "XML生成失败\n" + e.getMessage()));

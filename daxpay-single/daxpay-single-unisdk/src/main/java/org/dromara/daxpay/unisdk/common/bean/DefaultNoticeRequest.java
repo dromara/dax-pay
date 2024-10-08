@@ -48,7 +48,7 @@ public class DefaultNoticeRequest implements NoticeRequest {
     @Override
     public String getHeader(String name) {
         List<String> value = this.headers.get(name);
-        return (null == value || value.isEmpty()) ? null : value.get(0);
+        return (null == value || value.isEmpty()) ? null : value.getFirst();
     }
 
     /**

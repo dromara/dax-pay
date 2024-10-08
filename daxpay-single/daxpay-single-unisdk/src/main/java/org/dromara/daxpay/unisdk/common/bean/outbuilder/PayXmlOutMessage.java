@@ -1,5 +1,7 @@
 package org.dromara.daxpay.unisdk.common.bean.outbuilder;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.dromara.daxpay.unisdk.common.bean.PayOutMessage;
 
 /**
@@ -9,19 +11,13 @@ import org.dromara.daxpay.unisdk.common.bean.PayOutMessage;
  *     date 2016-6-1 13:53:3
  *  </pre>
  */
+@Setter
+@Getter
 public class PayXmlOutMessage extends PayOutMessage{
 
     private String code;
 
     public PayXmlOutMessage() {
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     @Override

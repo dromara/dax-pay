@@ -1,10 +1,11 @@
 package org.dromara.daxpay.unisdk.common.http;
 
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
+import lombok.Getter;
 import org.apache.http.Header;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
+import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -28,7 +29,18 @@ import static org.dromara.daxpay.unisdk.common.http.UriVariables.getMapToParamet
 public class HttpStringEntity extends StringEntity {
     /**
      * 请求头
+     * -- GETTER --
+     *  获取请求头集
+     *
+     *
+     * -- SETTER --
+     *  设置请求头集
+     *
+     @return 请求头集
+      * @param headers 请求头集
+
      */
+    @Getter
     private List<Header> headers;
     /**
      * 是否为空的请求实体
@@ -196,15 +208,6 @@ public class HttpStringEntity extends StringEntity {
     }
 
     /**
-     * 获取请求头集
-     *
-     * @return 请求头集
-     */
-    public List<Header> getHeaders() {
-        return headers;
-    }
-
-    /**
      * 添加请求头
      *
      * @param header 请求头
@@ -214,15 +217,6 @@ public class HttpStringEntity extends StringEntity {
             this.headers = new ArrayList<>();
         }
         this.headers.add(header);
-    }
-
-    /**
-     * 设置请求头集
-     *
-     * @param headers 请求头集
-     */
-    public void setHeaders(List<Header> headers) {
-        this.headers = headers;
     }
 
     /**

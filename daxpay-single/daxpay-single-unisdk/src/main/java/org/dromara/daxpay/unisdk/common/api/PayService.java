@@ -4,8 +4,6 @@ import org.dromara.daxpay.unisdk.common.bean.*;
 import org.dromara.daxpay.unisdk.common.http.HttpConfigStorage;
 import org.dromara.daxpay.unisdk.common.http.HttpRequestTemplate;
 
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.Map;
 
@@ -53,16 +51,6 @@ public interface PayService<PC extends PayConfigStorage> {
 
     /**
      * 回调校验
-     * 已过时方法，详情{@link #verify(NoticeParams)}
-     * @param params 回调回来的参数集
-     * @return 签名校验 true通过
-     * @see #verify(NoticeParams)
-     */
-    @Deprecated
-    boolean verify(Map<String, Object> params);
-
-    /**
-     * 回调校验
      *
      * @param params 回调回来的参数集
      * @return 签名校验 true通过
@@ -107,18 +95,6 @@ public interface PayService<PC extends PayConfigStorage> {
      */
     String createSign(String content, String characterEncoding);
 
-
-    /**
-     * 将请求参数或者请求流转化为 Map
-     *
-     * @param parameterMap 请求参数
-     * @param is           请求流
-     * @return 获得回调的请求参数
-     * @see #getNoticeParams(NoticeRequest)
-     */
-    @Deprecated
-    Map<String, Object> getParameter2Map(Map<String, String[]> parameterMap, InputStream is);
-
     /**
      * 将请求参数或者请求流转化为 Map
      *
@@ -157,15 +133,6 @@ public interface PayService<PC extends PayConfigStorage> {
 
 
     /**
-     * 获取输出二维码，用户返回给支付端,
-     *
-     * @param order 发起支付的订单信息
-     * @param <O>   预订单类型
-     * @return 返回图片信息，支付时需要的
-     */
-    <O extends PayOrder> BufferedImage genQrPay(O order);
-
-    /**
      * 获取输出二维码信息,
      *
      * @param order 发起支付的订单信息
@@ -192,29 +159,6 @@ public interface PayService<PC extends PayConfigStorage> {
      */
     <O extends PayOrder> Map<String, Object> microPay(O order);
 
-    /**
-     * 交易查询接口
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @return 返回查询回来的结果集，支付方原值返回
-     * @see #query(AssistOrder)
-     */
-    @Deprecated
-    Map<String, Object> query(String tradeNo, String outTradeNo);
-
-    /**
-     * 交易查询接口，带处理器
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @param callback   处理器
-     * @param <T>        返回类型
-     * @return 返回查询回来的结果集
-     */
-    @Deprecated
-    <T> T query(String tradeNo, String outTradeNo, Callback<T> callback);
-
 
     /**
      * 交易查询接口
@@ -225,16 +169,6 @@ public interface PayService<PC extends PayConfigStorage> {
     Map<String, Object> query(AssistOrder assistOrder);
 
 
-    /**
-     * 交易关闭接口
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @return 返回支付方交易关闭后的结果
-     * @see #close(AssistOrder)
-     */
-    @Deprecated
-    Map<String, Object> close(String tradeNo, String outTradeNo);
 
     /**
      * 交易关闭接口
@@ -246,19 +180,6 @@ public interface PayService<PC extends PayConfigStorage> {
 
 
     /**
-     * 交易关闭接口
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @param callback   处理器
-     * @param <T>        返回类型
-     * @return 返回支付方交易关闭后的结果
-     */
-    @Deprecated
-    <T> T close(String tradeNo, String outTradeNo, Callback<T> callback);
-
-
-    /**
      * 交易交易撤销
      *
      * @param tradeNo    支付平台订单号
@@ -266,18 +187,6 @@ public interface PayService<PC extends PayConfigStorage> {
      * @return 返回支付方交易撤销后的结果
      */
     Map<String, Object> cancel(String tradeNo, String outTradeNo);
-
-    /**
-     * 交易交易撤销
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @param callback   处理器
-     * @param <T>        返回类型
-     * @return 返回支付方交易撤销后的结果
-     */
-    @Deprecated
-    <T> T cancel(String tradeNo, String outTradeNo, Callback<T> callback);
 
 
     /**
@@ -288,17 +197,6 @@ public interface PayService<PC extends PayConfigStorage> {
      */
     RefundResult refund(RefundOrder refundOrder);
 
-    /**
-     * 申请退款接口
-     *
-     * @param refundOrder 退款订单信息
-     * @param callback    处理器
-     * @param <T>         返回类型
-     * @return 返回支付方申请退款后的结果
-     */
-    @Deprecated
-    <T> T refund(RefundOrder refundOrder, Callback<T> callback);
-
 
     /**
      * 查询退款
@@ -307,17 +205,6 @@ public interface PayService<PC extends PayConfigStorage> {
      * @return 返回支付方查询退款后的结果
      */
     Map<String, Object> refundquery(RefundOrder refundOrder);
-
-    /**
-     * 查询退款
-     *
-     * @param refundOrder 退款订单信息
-     * @param callback    处理器
-     * @param <T>         返回类型
-     * @return 返回支付方查询退款后的结果
-     */
-    @Deprecated
-    <T> T refundquery(RefundOrder refundOrder, Callback<T> callback);
 
     /**
      * 下载对账单
@@ -345,52 +232,6 @@ public interface PayService<PC extends PayConfigStorage> {
      * @return 对应的转账结果
      */
     Map<String, Object> transfer(TransferOrder order);
-
-    /**
-     * 转账
-     *
-     * @param order    转账订单
-     * @param callback 处理器
-     * @param <T>      返回类型
-     * @return 对应的转账结果
-     */
-    @Deprecated
-    <T> T transfer(TransferOrder order, Callback<T> callback);
-
-
-    /**
-     * 转账查询
-     *
-     * @param outNo   商户转账订单号
-     * @param tradeNo 支付平台转账订单号
-     * @return 对应的转账订单
-     * @deprecated 替代{@link TransferService#transferQuery(org.dromara.daxpay.unisdk.common.bean.AssistOrder)}
-     */
-    @Deprecated
-    Map<String, Object> transferQuery(String outNo, String tradeNo);
-
-    /**
-     * 转账查询
-     *
-     * @param outNo    商户转账订单号
-     * @param tradeNo  支付平台转账订单号
-     * @param callback 处理器
-     * @param <T>      返回类型
-     * @return 对应的转账订单
-     */
-    @Deprecated
-    <T> T transferQuery(String outNo, String tradeNo, Callback<T> callback);
-
-    /**
-     * 回调处理
-     *
-     * @param parameterMap 请求参数
-     * @param is           请求流
-     * @return 获得回调响应信息
-     * 过时方法，详情查看 {@link #payBack(NoticeRequest)}
-     */
-    @Deprecated
-    PayOutMessage payBack(Map<String, String[]> parameterMap, InputStream is);
 
     /**
      * 回调处理
@@ -436,18 +277,5 @@ public interface PayService<PC extends PayConfigStorage> {
      * @return 支付消息对象
      */
     PayMessage createMessage(Map<String, Object> message);
-
-    /**
-     * 预订单回调处理器，用于订单信息的扩展
-     * 签名之前使用
-     * 如果需要进行扩展请重写该方法即可
-     *
-     * @param orderInfo 商户平台预订单信息
-     * @param payOrder  订单信息
-     * @param <O>       预订单类型
-     * @return 处理后订单信息
-     */
-    @Deprecated
-    <O extends PayOrder> Map<String, Object> preOrderHandler(Map<String, Object> orderInfo, O payOrder);
 
 }

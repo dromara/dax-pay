@@ -15,6 +15,35 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <httpmime.version>4.5.4</httpmime.version>
+        <fastjson.version>1.2.83_noneautotype</fastjson.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>bootx-platform-core</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+        <!--httpcomponents-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>${httpmime.version}</version>
+        </dependency>
+        <!--json-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+        <!-- log4j 日志  -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

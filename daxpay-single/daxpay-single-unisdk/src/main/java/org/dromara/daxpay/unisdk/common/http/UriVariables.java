@@ -105,17 +105,16 @@ public final class UriVariables {
             if (o instanceof List) {
                 o = ((List) o).toArray();
             }
-            if (o instanceof Object[]) {
-                Object[] os = (Object[]) o;
-                String valueStr = "";
+            if (o instanceof Object[] os) {
+                StringBuilder valueStr = new StringBuilder();
                 for (int i = 0, len = os.length; i < len; i++) {
                     if (null == os[i]) {
                         continue;
                     }
                     String value = os[i].toString().trim();
-                    valueStr += (i == len - 1) ? value : value + ",";
+                    valueStr.append((i == len - 1) ? value : value + ",");
                 }
-                builder.append(entry.getKey()).append("=").append(urlEncoder(valueStr)).append("&");
+                builder.append(entry.getKey()).append("=").append(urlEncoder(valueStr.toString())).append("&");
                 continue;
             }
             builder.append(entry.getKey()).append("=").append(urlEncoder(entry.getValue().toString())).append("&");
@@ -216,7 +215,7 @@ public final class UriVariables {
             return URLEncoder.encode(str, enc);
         }
         catch (UnsupportedEncodingException e) {
-            LOG.error("", e);
+            log.error("", e);
         }
         return str;
     }

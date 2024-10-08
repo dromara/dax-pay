@@ -25,16 +25,6 @@ public interface PayConfigStorage extends Attrs {
      * 纠正名称
      *
      * @return 应用id
-     * @see #getAppId()
-     */
-    @Deprecated
-    String getAppid();
-
-    /**
-     * 应用id
-     * 纠正名称
-     *
-     * @return 应用id
      */
     String getAppId();
 

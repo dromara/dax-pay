@@ -23,7 +23,7 @@ public enum DefaultCurType implements CurType{
     /**
      * 币种名称
      */
-    private String name;
+    private final String name;
 
     /**
      * 构造函数

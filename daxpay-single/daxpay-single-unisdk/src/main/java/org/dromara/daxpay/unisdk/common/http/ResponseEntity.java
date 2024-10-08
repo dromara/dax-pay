@@ -1,5 +1,6 @@
 package org.dromara.daxpay.unisdk.common.http;
 
+import lombok.Getter;
 import org.apache.http.Header;
 
 /**
@@ -8,6 +9,7 @@ import org.apache.http.Header;
  * email egzosn@gmail.com
  * date 2021/8/1
  */
+@Getter
 public class ResponseEntity<T> {
     private final int statusCode;
     private final Header[] headers;
@@ -19,15 +21,4 @@ public class ResponseEntity<T> {
         this.body = body;
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public Header[] getHeaders() {
-        return headers;
-    }
-
-    public T getBody() {
-        return body;
-    }
 }

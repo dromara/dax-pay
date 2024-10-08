@@ -1,5 +1,7 @@
 package org.dromara.daxpay.unisdk.common.util.str;
 
+import cn.hutool.core.util.StrUtil;
+
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
@@ -64,7 +66,7 @@ public class StringUtils {
      * @return {@code true} if the CharSequence is not empty and not null
      */
     public static boolean isNotEmpty(CharSequence cs) {
-        return !StringUtils.isEmpty(cs);
+        return !StrUtil.isEmpty(cs);
     }
 
     /**
@@ -88,7 +90,7 @@ public class StringUtils {
             return true;
         }
         for (int i = 0; i < strLen; i++) {
-            if (Character.isWhitespace(cs.charAt(i)) == false) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
                 return false;
             }
         }

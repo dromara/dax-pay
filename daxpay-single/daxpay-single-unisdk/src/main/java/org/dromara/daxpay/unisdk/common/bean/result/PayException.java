@@ -26,8 +26,8 @@ package org.dromara.daxpay.unisdk.common.bean.result;
  *  </pre>
  */
 public class PayException implements PayError {
-    private String errorCode;
-    private String errorMsg;
+    private final String errorCode;
+    private final String errorMsg;
     private String content;
 
     @Override

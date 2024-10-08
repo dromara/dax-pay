@@ -1,5 +1,8 @@
 package org.dromara.daxpay.unisdk.common.bean;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -12,6 +15,8 @@ import java.util.Date;
  *      date 2018/1/15 21:40
  *   </pre>
  */
+@Setter
+@Getter
 public class RefundOrder extends AssistOrder {
     /**
      * 退款单号，每次进行退款的单号，此处唯一
@@ -49,62 +54,6 @@ public class RefundOrder extends AssistOrder {
      */
     private String refundUrl;
 
-    public String getRefundNo() {
-        return refundNo;
-    }
-
-    public void setRefundNo(String refundNo) {
-        this.refundNo = refundNo;
-    }
-
-    public BigDecimal getRefundAmount() {
-        return refundAmount;
-    }
-
-    public void setRefundAmount(BigDecimal refundAmount) {
-        this.refundAmount = refundAmount;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public CurType getCurType() {
-        return curType;
-    }
-
-    public void setCurType(CurType curType) {
-        this.curType = curType;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public RefundOrder() {
     }
 
@@ -129,11 +78,4 @@ public class RefundOrder extends AssistOrder {
         this.totalAmount = totalAmount;
     }
 
-    public String getRefundUrl() {
-        return refundUrl;
-    }
-
-    public void setRefundUrl(String refundUrl) {
-        this.refundUrl = refundUrl;
-    }
 }

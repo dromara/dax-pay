@@ -1,5 +1,7 @@
 package org.dromara.daxpay.unisdk.common.bean;
 
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ import java.util.Map;
  * date 2020/8/16 19:29
  * </pre>
  */
+@Setter
 public abstract class BaseRefundResult implements RefundResult {
 
     /**
@@ -36,10 +39,6 @@ public abstract class BaseRefundResult implements RefundResult {
     @Override
     public Map<String, Object> getAttrs() {
         return attrs;
-    }
-
-    public void setAttrs(Map<String, Object> attrs) {
-        this.attrs = attrs;
     }
 
     /**

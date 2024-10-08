@@ -1,6 +1,7 @@
 package org.dromara.daxpay.unisdk.common.api;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.unisdk.common.bean.PayMessage;
 import org.dromara.daxpay.unisdk.common.bean.PayOutMessage;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
@@ -19,6 +20,7 @@ import java.util.Map;
  *     date 2018-10-29 17:31:05
  * </pre>
  */
+@Slf4j
 public class DefaultPayMessageHandler implements PayMessageHandler<PayMessage, PayService> {
 
     protected final Logger LOG = LoggerFactory.getLogger(DefaultPayMessageHandler.class);
@@ -30,8 +32,8 @@ public class DefaultPayMessageHandler implements PayMessageHandler<PayMessage, P
      */
     @Override
     public PayOutMessage handle(PayMessage payMessage, Map<String, Object> context, PayService payService) throws PayErrorException {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("回调支付消息处理器，回调消息：" + JSON.toJSONString(payMessage));
+        if (log.isInfoEnabled()) {
+            log.info("回调支付消息处理器，回调消息：" + JSON.toJSONString(payMessage));
         }
         return payService.successPayOutMessage(payMessage);
     }

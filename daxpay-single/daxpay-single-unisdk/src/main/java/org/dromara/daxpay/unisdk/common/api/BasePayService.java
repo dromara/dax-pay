@@ -1,15 +1,14 @@
 package org.dromara.daxpay.unisdk.common.api;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.Consts;
 import org.dromara.daxpay.unisdk.common.bean.*;
 import org.dromara.daxpay.unisdk.common.http.HttpConfigStorage;
 import org.dromara.daxpay.unisdk.common.http.HttpRequestTemplate;
-import org.dromara.daxpay.unisdk.common.util.MatrixToImageWriter;
 import org.dromara.daxpay.unisdk.common.util.sign.SignUtils;
 import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
-import org.apache.http.Consts;
 
-import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -24,8 +23,8 @@ import java.util.*;
  *      date 2017/3/5 20:36
  *   </pre>
  */
+@Slf4j
 public abstract class BasePayService<PC extends PayConfigStorage> implements PayService<PC> {
-    protected final Logger LOG = LoggerFactory.getLogger(getClass());
     protected PC payConfigStorage;
 
     protected HttpRequestTemplate requestTemplate;
@@ -39,7 +38,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
     /**
      * 支付消息拦截器
      */
-    protected List<PayMessageInterceptor<PayMessage, PayService>> interceptors = new ArrayList<PayMessageInterceptor<PayMessage, PayService>>();
+    protected List<PayMessageInterceptor<PayMessage, PayService>> interceptors = new ArrayList<>();
 
     private Charset inputCharset = Consts.UTF_8;
 
@@ -105,7 +104,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
             base64ClientID = org.dromara.daxpay.unisdk.common.util.sign.encrypt.Base64.encode(String.format("%s:%s", user, password).getBytes("UTF-8"));
         }
         catch (UnsupportedEncodingException e) {
-            LOG.error("", e);
+            log.error("", e);
         }
 
         return base64ClientID;
@@ -166,16 +165,6 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
         return orderInfo(order);
     }
 
-    /**
-     * 生成二维码支付
-     *
-     * @param order 发起支付的订单信息
-     * @return 返回图片信息，支付时需要的
-     */
-    @Override
-    public <O extends PayOrder> BufferedImage genQrPay(O order) {
-        return MatrixToImageWriter.writeInfoToJpgBuff(getQrPay(order));
-    }
 
     /**
      * 小程序支付，返回小程序所需的订单构建信息
@@ -186,18 +175,6 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
     @Override
     public <O extends PayOrder> Map<String, Object> jsApi(O order) {
         return Collections.emptyMap();
-    }
-
-    /**
-     * 将请求参数或者请求流转化为 Map
-     *
-     * @param parameterMap 请求参数
-     * @param is           请求流
-     * @return 获得回调的请求参数
-     */
-    @Override
-    public Map<String, Object> getParameter2Map(Map<String, String[]> parameterMap, InputStream is) {
-        return getNoticeParams(new DefaultNoticeRequest(parameterMap, is)).getBody();
     }
 
     /**
@@ -230,50 +207,6 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
     }
 
     /**
-     * 交易查询接口，带处理器
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @param callback   处理器
-     * @param <T>        返回类型
-     * @return 返回查询回来的结果集
-     */
-    @Override
-    public <T> T query(String tradeNo, String outTradeNo, Callback<T> callback) {
-
-        return callback.perform(query(tradeNo, outTradeNo));
-    }
-
-    /**
-     * 交易关闭接口
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @param callback   处理器
-     * @param <T>        返回类型
-     * @return 返回支付方交易关闭后的结果
-     */
-    @Deprecated
-    @Override
-    public <T> T close(String tradeNo, String outTradeNo, Callback<T> callback) {
-        return callback.perform(close(tradeNo, outTradeNo));
-    }
-
-    /**
-     * 交易撤销
-     *
-     * @param tradeNo    支付平台订单号
-     * @param outTradeNo 商户单号
-     * @param callback   处理器
-     * @param <T>        返回类型
-     * @return 返回支付方交易撤销后的结果
-     */
-    @Override
-    public <T> T cancel(String tradeNo, String outTradeNo, Callback<T> callback) {
-        return callback.perform(cancel(tradeNo, outTradeNo));
-    }
-
-    /**
      * 交易交易撤销
      *
      * @param tradeNo    支付平台订单号
@@ -285,34 +218,6 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
         return Collections.emptyMap();
     }
 
-
-    /**
-     * 申请退款接口
-     *
-     * @param refundOrder 退款订单信息
-     * @param callback    处理器
-     * @param <T>         返回类型
-     * @return 返回支付方申请退款后的结果
-     */
-    @Override
-    public <T> T refund(RefundOrder refundOrder, Callback<T> callback) {
-
-        return callback.perform(refund(refundOrder).getAttrs());
-    }
-
-
-    /**
-     * 查询退款
-     *
-     * @param refundOrder 退款订单信息
-     * @param callback    处理器
-     * @param <T>         返回类型
-     * @return 返回支付方查询退款后的结果
-     */
-    @Override
-    public <T> T refundquery(RefundOrder refundOrder, Callback<T> callback) {
-        return callback.perform(refundquery(refundOrder));
-    }
 
     /**
      * 下载对账单
@@ -329,51 +234,12 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
     /**
      * 转账
      *
-     * @param order    转账订单
-     * @param callback 处理器
-     * @return 对应的转账结果
-     */
-    @Override
-    public <T> T transfer(TransferOrder order, Callback<T> callback) {
-        return callback.perform(transfer(order));
-    }
-
-
-    /**
-     * 转账
-     *
      * @param order 转账订单
      * @return 对应的转账结果
      */
     @Override
     public Map<String, Object> transfer(TransferOrder order) {
         return Collections.emptyMap();
-    }
-
-    /**
-     * 转账查询
-     *
-     * @param outNo   商户转账订单号
-     * @param tradeNo 支付平台转账订单号
-     * @return 对应的转账订单
-     */
-    @Override
-    public Map<String, Object> transferQuery(String outNo, String tradeNo) {
-        return Collections.emptyMap();
-    }
-
-    /**
-     * 转账查询
-     *
-     * @param outNo    商户转账订单号
-     * @param tradeNo  支付平台转账订单号
-     * @param callback 处理器
-     * @param <T>      返回类型
-     * @return 对应的转账订单
-     */
-    @Override
-    public <T> T transferQuery(String outNo, String tradeNo, Callback<T> callback) {
-        return callback.perform(transferQuery(outNo, tradeNo));
     }
 
     /**
@@ -416,19 +282,6 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
 
 
     /**
-     * 将请求参数或者请求流转化为 Map
-     *
-     * @param parameterMap 请求参数
-     * @param is           请求流
-     * @return 获得回调响应信息
-     */
-    @Deprecated
-    @Override
-    public PayOutMessage payBack(Map<String, String[]> parameterMap, InputStream is) {
-        return payBack(new DefaultNoticeRequest(parameterMap, is));
-    }
-
-    /**
      * 回调处理
      *
      * @param request 请求参数
@@ -437,8 +290,8 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
     @Override
     public PayOutMessage payBack(NoticeRequest request) {
         final NoticeParams noticeParams = getNoticeParams(request);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("回调响应:{}", JSON.toJSONString(noticeParams));
+        if (log.isDebugEnabled()) {
+            log.debug("回调响应:{}", JSON.toJSONString(noticeParams));
         }
         if (!verify(noticeParams)) {
             return getPayOutMessage("fail", "失败");
@@ -463,46 +316,5 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
     public PayMessage createMessage(Map<String, Object> message) {
         return new PayMessage(message);
     }
-
-    /**
-     * 预订单回调处理器，用于订单信息的扩展
-     * 签名之前使用
-     * 如果需要进行扩展请重写该方法即可
-     *
-     * @param orderInfo 预订单信息
-     * @param orderInfo 订单信息
-     * @return 处理后订单信息
-     */
-    @Override
-    public <O extends PayOrder> Map<String, Object> preOrderHandler(Map<String, Object> orderInfo, O payOrder) {
-        return orderInfo;
-    }
-
-    /**
-     * 过时
-     *
-     * @param parameters 参数map
-     * @param key        key
-     * @param value      值
-     * @return 返回订单参数
-     */
-    @Deprecated
-    protected Map<String, Object> setParameters(Map<String, Object> parameters, String key, String value) {
-        return OrderParaStructure.loadParameters(parameters, key, value);
-    }
-
-    /**
-     * 过时
-     *
-     * @param parameters 参数map
-     * @param key        key
-     * @param order      订单对象
-     * @return 返回订单参数
-     */
-    @Deprecated
-    protected Map<String, Object> setParameters(Map<String, Object> parameters, String key, Order order) {
-        return OrderParaStructure.loadParameters(parameters, key, order);
-    }
-
 
 }

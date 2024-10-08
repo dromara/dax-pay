@@ -14,6 +14,7 @@
  */
 package org.dromara.daxpay.unisdk.common.util.sign;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import java.util.Enumeration;
  * date 2016-7-22 下午2:46:20
  * 声明：以下代码只是为了方便接入方测试而提供的样例代码，商户可以根据自己需要，按照技术文档编写。该代码仅供参考，不提供编码，性能，规范性等方面的保障
  */
+@Slf4j
 public class CertDescriptor {
     protected static final Logger LOG = LoggerFactory.getLogger(CertDescriptor.class);
     /**
@@ -66,12 +68,13 @@ public class CertDescriptor {
             cf = CertificateFactory.getInstance("X.509");
             encryptCertTemp = (X509Certificate) cf.generateCertificate(certIn);
             // 打印证书加载信息,供测试阶段调试
-            if (LOG.isWarnEnabled()) {
-                LOG.warn("[CertId=" + encryptCertTemp.getSerialNumber().toString() + "]");
+            if (log.isWarnEnabled()) {
+                log.warn("[CertId={}]", encryptCertTemp.getSerialNumber()
+                        .toString());
             }
         }
         catch (CertificateException e) {
-            LOG.error("InitCert Error", e);
+            log.error("InitCert Error", e);
         }
         finally {
             if (null != certIn) {
@@ -79,7 +82,7 @@ public class CertDescriptor {
                     certIn.close();
                 }
                 catch (IOException e) {
-                    LOG.error(e.toString());
+                    log.error(e.toString());
                 }
             }
         }
@@ -101,7 +104,7 @@ public class CertDescriptor {
             encryptCertTemp = initCert(in);
         }
         catch (FileNotFoundException e) {
-            LOG.error("InitCert Error File Not Found", e);
+            log.error("InitCert Error File Not Found", e);
         }
         return encryptCertTemp;
     }
@@ -119,19 +122,10 @@ public class CertDescriptor {
             if (aliasenum.hasMoreElements()) {
                 keyAlias = aliasenum.nextElement();
             }
-            PrivateKey privateKey = (PrivateKey) keyStore.getKey(keyAlias, pwd.toCharArray());
-            return privateKey;
+            return (PrivateKey) keyStore.getKey(keyAlias, pwd.toCharArray());
         }
-        catch (KeyStoreException e) {
-            LOG.error("getSignCertPrivateKey Error", e);
-            return null;
-        }
-        catch (UnrecoverableKeyException e) {
-            LOG.error("getSignCertPrivateKey Error", e);
-            return null;
-        }
-        catch (NoSuchAlgorithmException e) {
-            LOG.error("getSignCertPrivateKey Error", e);
+        catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
+            log.error("getSignCertPrivateKey Error", e);
             return null;
         }
     }
@@ -153,7 +147,7 @@ public class CertDescriptor {
             return cert.getSerialNumber().toString();
         }
         catch (Exception e) {
-            LOG.error("getSignCertId Error", e);
+            log.error("getSignCertId Error", e);
             return null;
         }
     }
@@ -172,12 +166,12 @@ public class CertDescriptor {
         }
         try {
             keyStore = getKeyInfo(signCertPath, signCertPwd, signCertType);
-            if (LOG.isInfoEnabled()) {
-                LOG.info("InitSignCert Successful. CertId=[" + getSignCertId() + "]");
+            if (log.isInfoEnabled()) {
+                log.info("InitSignCert Successful. CertId=[{}]", getSignCertId());
             }
         }
         catch (IOException e) {
-            LOG.error("InitSignCert Error", e);
+            log.error("InitSignCert Error", e);
         }
     }
 
@@ -194,8 +188,8 @@ public class CertDescriptor {
             keyStore = null;
         }
         keyStore = getKeyInfo(signCert, signCertPwd, signCertType);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("InitSignCert Successful. CertId=[" + getSignCertId() + "]");
+        if (log.isInfoEnabled()) {
+            log.info("InitSignCert Successful. CertId=[{}]", getSignCertId());
         }
     }
 
@@ -209,8 +203,8 @@ public class CertDescriptor {
      * @throws IOException
      */
     private KeyStore getKeyInfo(String fxKeyFile, String keyPwd, String type) throws IOException {
-        if (LOG.isWarnEnabled()) {
-            LOG.warn("加载签名证书==>" + fxKeyFile);
+        if (log.isWarnEnabled()) {
+            log.warn("加载签名证书==>{}", fxKeyFile);
         }
         FileInputStream fis = new FileInputStream(fxKeyFile);
         return getKeyInfo(fis, keyPwd, type);
@@ -229,19 +223,18 @@ public class CertDescriptor {
 
         try {
             KeyStore ks = KeyStore.getInstance(type);
-            if (LOG.isWarnEnabled()) {
-                LOG.warn("Load RSA CertPath,Pwd=[" + keyPwd + "],type=[" + type + "]");
+            if (log.isWarnEnabled()) {
+                log.warn("Load RSA CertPath,Pwd=[{}],type=[{}]", keyPwd, type);
             }
 
             char[] nPassword = null;
-            nPassword = null == keyPwd || "".equals(keyPwd.trim()) ? null : keyPwd.toCharArray();
-            if (null != ks) {
-                ks.load(fxKeyFile, nPassword);
-            }
+            nPassword = null == keyPwd || keyPwd.trim()
+                    .isEmpty() ? null : keyPwd.toCharArray();
+            ks.load(fxKeyFile, nPassword);
             return ks;
         }
         catch (Exception e) {
-            LOG.error("getKeyInfo Error", e);
+            log.error("getKeyInfo Error", e);
             return null;
         }
         finally {
@@ -250,7 +243,7 @@ public class CertDescriptor {
                     fxKeyFile.close();
                 }
                 catch (IOException e) {
-                    LOG.error("getKeyInfo Error", e);
+                    log.error("getKeyInfo Error", e);
                 }
             }
         }
@@ -276,7 +269,7 @@ public class CertDescriptor {
             return cert.getSerialNumber().toString();
         }
         catch (KeyStoreException e) {
-            LOG.error("getCertIdIdByStore Error", e);
+            log.error("getCertIdIdByStore Error", e);
             return null;
         }
     }
@@ -290,12 +283,12 @@ public class CertDescriptor {
     public void initPublicCert(String certPath) {
         if (!StringUtils.isEmpty(certPath)) {
             publicKeyCert = initCert(certPath);
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Load PublicKeyCert Successful");
+            if (log.isInfoEnabled()) {
+                log.info("Load PublicKeyCert Successful");
             }
         }
-        else if (LOG.isInfoEnabled()) {
-            LOG.info("PublicKeyCert is empty");
+        else if (log.isInfoEnabled()) {
+            log.info("PublicKeyCert is empty");
         }
     }
 
@@ -307,12 +300,12 @@ public class CertDescriptor {
     public void initPublicCert(InputStream cert) {
         if (null != cert) {
             publicKeyCert = initCert(cert);
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Load PublicKeyCert Successful");
+            if (log.isInfoEnabled()) {
+                log.info("Load PublicKeyCert Successful");
             }
         }
-        else if (LOG.isInfoEnabled()) {
-            LOG.info("PublicKeyCert is empty");
+        else if (log.isInfoEnabled()) {
+            log.info("PublicKeyCert is empty");
         }
     }
 
@@ -327,12 +320,12 @@ public class CertDescriptor {
                 initRootCert(new FileInputStream(certPath));
             }
             catch (FileNotFoundException e) {
-                LOG.info("RootCert is empty");
+                log.info("RootCert is empty");
             }
 
         }
-        else if (LOG.isInfoEnabled()) {
-            LOG.info("RootCert is empty");
+        else if (log.isInfoEnabled()) {
+            log.info("RootCert is empty");
         }
     }
 
@@ -344,12 +337,12 @@ public class CertDescriptor {
     public void initRootCert(InputStream cert) {
         if (null != cert) {
             rootKeyCert = initCert(cert);
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Load RootCert Successful");
+            if (log.isInfoEnabled()) {
+                log.info("Load RootCert Successful");
             }
         }
-        else if (LOG.isInfoEnabled()) {
-            LOG.info("RootCert is empty");
+        else if (log.isInfoEnabled()) {
+            log.info("RootCert is empty");
         }
     }
 

@@ -17,6 +17,9 @@
 
 package org.dromara.daxpay.unisdk.common.bean;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -29,6 +32,8 @@ import java.util.Map;
  * email egzosn@gmail.com
  * date 2021/8/8
  */
+@Setter
+@Getter
 public class NoticeParams implements Attrs {
 
     /**
@@ -63,14 +68,6 @@ public class NoticeParams implements Attrs {
         this.headers = headers;
     }
 
-    public String getBodyStr() {
-        return bodyStr;
-    }
-
-    public void setBodyStr(String bodyStr) {
-        this.bodyStr = bodyStr;
-    }
-
     private <T> T getValueMatchingKey(Map<String, T> values, String key) {
         T value = values.get(key);
         if (null != value) {
@@ -88,7 +85,7 @@ public class NoticeParams implements Attrs {
 
     public String getHeader(String name) {
         List<String> value = getValueMatchingKey(headers, name);
-        return (null == value || value.isEmpty()) ? null : value.get(0);
+        return (null == value || value.isEmpty()) ? null : value.getFirst();
     }
 
     public Enumeration<String> getHeaders(String name) {
@@ -101,31 +98,6 @@ public class NoticeParams implements Attrs {
             return Collections.enumeration(Collections.emptySet());
         }
         return Collections.enumeration(this.headers.keySet());
-    }
-
-
-    public Map<String, Object> getBody() {
-        return body;
-    }
-
-    public void setBody(Map<String, Object> body) {
-        this.body = body;
-    }
-
-    public Map<String, List<String>> getHeaders() {
-        return headers;
-    }
-
-    public void setHeaders(Map<String, List<String>> headers) {
-        this.headers = headers;
-    }
-
-    public Map<String, Object> getAttr() {
-        return attr;
-    }
-
-    public void setAttr(Map<String, Object> attr) {
-        this.attr = attr;
     }
 
 

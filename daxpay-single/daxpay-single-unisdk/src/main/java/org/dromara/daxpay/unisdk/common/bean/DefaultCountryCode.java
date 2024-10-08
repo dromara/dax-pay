@@ -19,7 +19,7 @@ public enum  DefaultCountryCode implements CountryCode{
     /**
      * 国家名称
      */
-    private String name;
+    private final String name;
 
     DefaultCountryCode(String name) {
         this.name = name;

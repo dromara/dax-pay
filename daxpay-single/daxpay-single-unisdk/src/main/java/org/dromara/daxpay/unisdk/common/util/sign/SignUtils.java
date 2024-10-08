@@ -3,9 +3,7 @@ package org.dromara.daxpay.unisdk.common.util.sign;
 
 import org.dromara.daxpay.unisdk.common.bean.SignType;
 import org.dromara.daxpay.unisdk.common.util.sign.encrypt.HmacSha256;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import java.security.Security;
 import java.util.Map;
 
 import static org.dromara.daxpay.unisdk.common.util.sign.SignTextUtils.parameterText;
@@ -191,20 +189,5 @@ public enum SignUtils implements SignType {
         //判断是否一样
         return this.verify(parameterText(params), sign, key, characterEncoding);
     }
-
-    /**
-     * 初始化BC
-     */
-    public static void initBc() {
-        String javaVersion = System.getProperty("java.version");
-        if (javaVersion.contains("1.8") || javaVersion.startsWith("8")) {
-            if (null == Security.getProvider("BC")) {
-                Security.removeProvider("SunEC");
-                Security.addProvider(new BouncyCastleProvider());
-            }
-        }
-
-    }
-
 
 }

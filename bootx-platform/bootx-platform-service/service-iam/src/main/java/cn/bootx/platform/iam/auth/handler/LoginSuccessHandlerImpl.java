@@ -56,7 +56,7 @@ public class LoginSuccessHandlerImpl implements LoginSuccessHandler {
                 .setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getVersion())
                 .setLoginTime(LocalDateTime.now());
         loginLogService.add(loginLog);
-//        userExpandInfoService.updateLoginTime(loginLog.getUserId());
+//        userExpandInfoService.updateLoginTime(loginlog.getUserId());
     }
 
 }
