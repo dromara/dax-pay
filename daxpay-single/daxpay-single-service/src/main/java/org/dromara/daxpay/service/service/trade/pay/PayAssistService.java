@@ -94,9 +94,9 @@ public class PayAssistService {
     /**
      * 校验支付状态，支付成功则返回，支付失败则抛出对应的异常
      */
-    public PayOrder getOrderAndCheck(String bizOrderNo) {
+    public PayOrder getOrderAndCheck(PayParam param) {
         // 根据订单查询支付记录
-        PayOrder payOrder = payOrderQueryService.findByBizOrderNo(bizOrderNo)
+        PayOrder payOrder = payOrderQueryService.findByBizOrderNo(param.getBizOrderNo(), param.getAppId())
                 .orElse(null);
         if (Objects.nonNull(payOrder)) {
             // 待支付

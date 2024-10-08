@@ -55,7 +55,7 @@ public class PayService {
         }
         try {
             // 查询并检查订单
-            PayOrder payOrder = payAssistService.getOrderAndCheck(payParam.getBizOrderNo());
+            PayOrder payOrder = payAssistService.getOrderAndCheck(payParam);
             // 走首次下单逻辑还是重复下档逻辑
             if (Objects.isNull(payOrder)){
                 return this.firstPay(payParam);

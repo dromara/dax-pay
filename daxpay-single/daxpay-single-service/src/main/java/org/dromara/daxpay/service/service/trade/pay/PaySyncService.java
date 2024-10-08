@@ -59,7 +59,7 @@ public class PaySyncService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public PaySyncResult sync(PaySyncParam param) {
-        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo(), param.getAppId())
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
         // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);

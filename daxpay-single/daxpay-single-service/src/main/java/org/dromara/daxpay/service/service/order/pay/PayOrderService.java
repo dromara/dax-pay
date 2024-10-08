@@ -30,7 +30,7 @@ public class PayOrderService {
      */
     public void sync(Long id) {
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(payOrder.getAppId());
         paySyncService.syncPayOrder(payOrder);
     }
@@ -40,7 +40,7 @@ public class PayOrderService {
      */
     public void close(Long id) {
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(payOrder.getAppId());
         payCloseService.closeOrder(payOrder,false);
     }
@@ -50,7 +50,7 @@ public class PayOrderService {
      */
     public void cancel(Long id) {
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(payOrder.getAppId());
         payCloseService.closeOrder(payOrder,true);
     }

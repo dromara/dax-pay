@@ -40,8 +40,11 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     /**
      * 根据商户订单号查询
      */
-    public Optional<PayOrder> findByBizOrderNo(String bizOrderNo) {
-        return findByField(PayOrder::getBizOrderNo,bizOrderNo);
+    public Optional<PayOrder> findByBizOrderNo(String bizOrderNo, String appId) {
+        return lambdaQuery()
+                .eq(PayOrder::getBizOrderNo,bizOrderNo)
+                .eq(PayOrder::getAppId,appId)
+                .oneOpt();
     }
 
     /**
@@ -81,7 +84,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
      */
     public BigDecimal getTotalAmount(PayOrderQuery query){
         QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
-        // 商户和应用AppId
+        // 商户应用AppId
         generator.eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
         return baseMapper.getTotalAmount(generator);
     }
@@ -97,11 +100,4 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
                 .list();
     }
 
-    /**
-     * 查询订单, 不过滤租户
-     */
-    @IgnoreTenant
-    public Optional<PayOrder> findByIdNotTenant(Long id) {
-        return this.findById(id);
-    }
 }

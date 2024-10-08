@@ -52,7 +52,7 @@ public class RefundSyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public RefundSyncResult sync(RefundSyncParam param){
         // 先获取退款单
-        RefundOrder refundOrder = refundOrderQueryService.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())
+        RefundOrder refundOrder = refundOrderQueryService.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo(),param.getAppId())
                 .orElseThrow(() -> new TradeNotExistException("未查询到退款订单"));
         return this.syncRefundOrder(refundOrder);
     }

@@ -62,11 +62,11 @@ public class RefundOrderQueryService {
     /**
      * 根据退款号和商户退款号查询
      */
-    public Optional<RefundOrder> findByBizOrRefundNo(String refundNo, String bizRefundNo) {
+    public Optional<RefundOrder> findByBizOrRefundNo(String refundNo, String bizRefundNo, String appId) {
         if (StrUtil.isNotBlank(refundNo)){
             return refundOrderManager.findByRefundNo(refundNo);
         } else if (StrUtil.isNotBlank(bizRefundNo)){
-            return refundOrderManager.findByBizRefundNo(bizRefundNo);
+            return refundOrderManager.findByBizRefundNo(bizRefundNo,appId);
         } else {
             return Optional.empty();
         }
@@ -81,7 +81,7 @@ public class RefundOrderQueryService {
             throw new ValidationFailedException("退款号或商户退款号不能都为空");
         }
         // 查询退款单
-        RefundOrder refundOrder = this.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo())
+        RefundOrder refundOrder = this.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo(), param.getAppId())
                 .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
 
         return RefundOrderConvert.CONVERT.toResult(refundOrder);

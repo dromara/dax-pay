@@ -63,7 +63,7 @@ public class UnionPayConfigService {
     public void save(UnionPayConfigParam param) {
         UnionPayConfig entity = UnionPayConfigConvert.CONVERT.toEntity(param);
         ChannelConfig channelConfig = entity.toChannelConfig();
-        // 判断商户和应用下是否存在该配置
+        // 判断商户应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(channelConfig.getAppId(), channelConfig.getChannel())){
             throw new DataErrorException("该应用下已存在云闪付配置, 请勿重新添加");
         }

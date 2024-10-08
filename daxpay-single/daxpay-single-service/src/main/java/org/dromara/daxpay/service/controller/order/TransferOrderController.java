@@ -49,13 +49,6 @@ public class TransferOrderController {
         return Res.ok(queryService.findByTransferNo(transferNo));
     }
 
-    @RequestPath("根据商户转账号查询")
-    @Operation(summary = "根据商户转账号查询")
-    @GetMapping("/findByBizTransferNo")
-    public Result<TransferOrderVo> findByBizTransferNo(String bizTransferNo){
-        return Res.ok(queryService.findByBizTransferNo(bizTransferNo));
-    }
-
     @RequestPath("查询单条")
     @Operation(summary = "查询单条")
     @GetMapping("/findById")

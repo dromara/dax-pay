@@ -50,8 +50,11 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     /**
      * 根据商户退款号查询
      */
-    public Optional<RefundOrder> findByBizRefundNo(String bizRefundNo) {
-        return findByField(RefundOrder::getBizRefundNo, bizRefundNo);
+    public Optional<RefundOrder> findByBizRefundNo(String bizRefundNo, String appId) {
+        return lambdaQuery()
+                .eq(RefundOrder::getBizRefundNo,bizRefundNo)
+                .eq(RefundOrder::getAppId,appId)
+                .oneOpt();
     }
 
     /**
@@ -91,13 +94,5 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         QueryWrapper<RefundOrder> generator = QueryGenerator.generator(query);
         generator.eq(MpUtil.getColumnName(RefundOrder::getStatus), RefundStatusEnum.SUCCESS.getCode());
         return baseMapper.getTotalAmount(generator);
-    }
-
-
-    /**
-     * 查询订单, 不过滤租户
-     */
-    public Optional<RefundOrder> findByIdNotTenant(Long id) {
-        return findById(id);
     }
 }

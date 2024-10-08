@@ -41,7 +41,7 @@ public class TransferOrderService {
     public void sync(Long id) {
         var transferOrder = transferOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(transferOrder.getAppId());
         // 同步转账订单状态
         transferSyncService.syncTransferOrder(transferOrder);
@@ -53,7 +53,7 @@ public class TransferOrderService {
     public void retry(Long id) {
         var transferOrder = transferOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(transferOrder.getAppId());
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
@@ -77,7 +77,7 @@ public class TransferOrderService {
     public void close(Long id) {
         var transferOrder = transferOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(transferOrder.getAppId());
         // 更新订单状态
         if (!Objects.equals(TransferStatusEnum.FAIL.getCode(), transferOrder.getStatus())){

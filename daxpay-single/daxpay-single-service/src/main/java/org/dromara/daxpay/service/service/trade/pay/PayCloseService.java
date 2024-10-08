@@ -46,7 +46,7 @@ public class PayCloseService {
      * 关闭支付
      */
     public void close(PayCloseParam param){
-        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo(), param.getAppId())
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
         this.closeOrder(payOrder, param.isUseCancel());
 

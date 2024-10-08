@@ -99,7 +99,7 @@ public class ReconcileStatementService {
         if (statement.isDownOrUpload()){
             throw new OperationFailException("对账单文件已经下载或上传");
         }
-        // 初始化对商户和应用上下文
+        // 初始化对商户应用上下文
         paymentAssistService.initMchApp(statement.getAppId());
 
         // 构建对账策略

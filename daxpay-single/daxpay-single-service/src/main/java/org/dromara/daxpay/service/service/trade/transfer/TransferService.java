@@ -57,7 +57,7 @@ public class TransferService {
         }
         try {
             // 判断是否是首次发起转账
-            var transferOrder = transferOrderManager.findByBizTransferNo(param.getBizTransferNo());
+            var transferOrder = transferOrderManager.findByBizTransferNo(param.getBizTransferNo(), param.getAppId());
             if (transferOrder.isPresent()){
                 return this.repeatTransfer(transferOrder.get(),param);
             } else {

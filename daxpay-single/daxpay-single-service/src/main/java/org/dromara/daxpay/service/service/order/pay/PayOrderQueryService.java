@@ -58,19 +58,19 @@ public class PayOrderQueryService {
     /**
      * 根据商户订单号查询
      */
-    public Optional<PayOrder> findByBizOrderNo(String bizOrderNo) {
-        return payOrderManager.findByBizOrderNo(bizOrderNo);
+    public Optional<PayOrder> findByBizOrderNo(String bizOrderNo, String appId) {
+        return payOrderManager.findByBizOrderNo(bizOrderNo, appId);
     }
 
     /**
      * 根据订单号或商户订单号查询
      */
-    public Optional<PayOrder> findByBizOrOrderNo(String orderNo, String bizOrderNo) {
+    public Optional<PayOrder> findByBizOrOrderNo(String orderNo, String bizOrderNo, String appId) {
         if (Objects.nonNull(orderNo)){
             return this.findByOrderNo(orderNo);
         }
         if (Objects.nonNull(bizOrderNo)){
-            return this.findByBizOrderNo(bizOrderNo);
+            return this.findByBizOrderNo(bizOrderNo,appId);
         }
         return Optional.empty();
     }
@@ -84,7 +84,7 @@ public class PayOrderQueryService {
             throw new ValidationFailedException("业务号或支付单ID不能都为空");
         }
         // 查询支付单
-        return this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo())
+        return this.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNoeNo(),param.getAppId())
                 .map(PayOrderConvert.CONVERT::toResult)
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
     }

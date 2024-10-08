@@ -60,22 +60,13 @@ public class TransferOrderQueryService {
     }
 
     /**
-     * 根据转账号查询
-     */
-    public TransferOrderVo findByBizTransferNo(String bizTransferNo){
-        return transferOrderManager.findByBizTransferNo(bizTransferNo).map(TransferOrder::toResult)
-                .orElseThrow(() -> new DataNotExistException("转账订单信息不存在"));
-
-    }
-
-    /**
      * 根据转账号和商户转账号查询
      */
-    public Optional<TransferOrder> findByBizOrTransferNo(String transferNo, String bizTransferNo) {
+    public Optional<TransferOrder> findByBizOrTransferNo(String transferNo, String bizTransferNo,String appId) {
         if (StrUtil.isNotBlank(transferNo)){
             return transferOrderManager.findByTransferNo(transferNo);
         } else if (StrUtil.isNotBlank(bizTransferNo)){
-            return transferOrderManager.findByBizTransferNo(bizTransferNo);
+            return transferOrderManager.findByBizTransferNo(bizTransferNo,appId);
         } else {
             return Optional.empty();
         }
@@ -91,7 +82,7 @@ public class TransferOrderQueryService {
             throw new ValidationFailedException("转账号或商户转账号不能都为空");
         }
         // 查询转账单
-        TransferOrder transferOrder = this.findByBizOrTransferNo(param.getTransferNo(), param.getBizTransferNo())
+        TransferOrder transferOrder = this.findByBizOrTransferNo(param.getTransferNo(), param.getBizTransferNo(), param.getAppId())
                 .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
 
         return TransferOrderConvert.CONVERT.toResult(transferOrder);

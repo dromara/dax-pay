@@ -34,11 +34,4 @@ public class MerchantNotifyTaskManager extends BaseManager<MerchantNotifyTaskMap
         return this.page(mpPage, generator);
     }
 
-    /**
-     * 获取数据, 不经过租户
-     */
-    @IgnoreTenant
-    public Optional<MerchantNotifyTask> findByIdNotTenant(Long taskId) {
-        return this.findById(taskId);
-    }
 }

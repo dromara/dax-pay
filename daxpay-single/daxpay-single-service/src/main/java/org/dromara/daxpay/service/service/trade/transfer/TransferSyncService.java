@@ -53,7 +53,7 @@ public class TransferSyncService {
      * 转账同步接口
      */
     public TransferSyncResult sync(TransferSyncParam param) {
-        TransferOrder transferOrder = transferOrderService.findByBizOrTransferNo(param.getTransferNo(), param.getBizTransferNo())
+        TransferOrder transferOrder = transferOrderService.findByBizOrTransferNo(param.getTransferNo(), param.getBizTransferNo(),param.getAppId())
                 .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
         // 执行订单同步逻辑
         return this.syncTransferOrder(transferOrder);

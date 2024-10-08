@@ -76,7 +76,7 @@ public class RefundService {
         }
         try {
             // 判断是否是首次发起退款
-            Optional<RefundOrder> refund = refundOrderManager.findByBizRefundNo(param.getBizRefundNo());
+            Optional<RefundOrder> refund = refundOrderManager.findByBizRefundNo(param.getBizRefundNo(), param.getAppId());
             if (refund.isPresent()){
                 return this.repeatRefund(refund.get(),param);
             } else {
@@ -93,7 +93,7 @@ public class RefundService {
     private RefundResult firstRefund(RefundParam param) {
 
         // 获取支付订单
-        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo())
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(param.getOrderNo(), param.getBizOrderNo(), param.getAppId())
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         // 检查退款参数
         refundAssistService.checkAndParam(param, payOrder);
@@ -146,7 +146,7 @@ public class RefundService {
             throw new TradeStatusErrorException("只有失败状态的才可以重新发起退款");
         }
         // 获取支付订单
-        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(refundOrder.getOrderNo(), refundOrder.getBizOrderNo())
+        PayOrder payOrder = payOrderQueryService.findByBizOrOrderNo(refundOrder.getOrderNo(), refundOrder.getBizOrderNo(), refundOrder.getAppId())
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
         AbsRefundStrategy refundStrategy = PaymentStrategyFactory.create(refundOrder.getChannel(), AbsRefundStrategy.class);
         // 设置退款订单对象

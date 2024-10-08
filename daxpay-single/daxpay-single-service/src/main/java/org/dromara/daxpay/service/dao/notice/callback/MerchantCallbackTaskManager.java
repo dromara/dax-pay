@@ -34,12 +34,4 @@ public class MerchantCallbackTaskManager extends BaseManager<MerchantCallbackTas
         QueryWrapper<MerchantCallbackTask> generator = QueryGenerator.generator(query);
         return this.page(mpPage, generator);
     }
-
-    /**
-     * 获取数据, 不过滤租户
-     */
-    @IgnoreTenant
-    public Optional<MerchantCallbackTask> findByIdNotTenant(Long taskId) {
-        return this.findById(taskId);
-    }
 }

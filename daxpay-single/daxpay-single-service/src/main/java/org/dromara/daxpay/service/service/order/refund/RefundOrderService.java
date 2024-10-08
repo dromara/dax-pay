@@ -54,7 +54,7 @@ public class RefundOrderService {
         var payOrder = payOrderManager.findByOrderNo(param.getOrderNo())
                 .orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
 
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(payOrder.getAppId());
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
@@ -78,7 +78,7 @@ public class RefundOrderService {
     public void sync(Long id) {
         RefundOrder refundOrder = refundOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(refundOrder.getAppId());
         // 同步退款订单状态
         refundSyncService.syncRefundOrder(refundOrder);
@@ -90,7 +90,7 @@ public class RefundOrderService {
     public void retry(Long id) {
         RefundOrder refundOrder = refundOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(refundOrder.getAppId());
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
@@ -115,7 +115,7 @@ public class RefundOrderService {
     public void close(Long id) {
         RefundOrder refundOrder = refundOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
-        // 初始化商户和应用
+        // 初始化商户应用
         paymentAssistService.initMchApp(refundOrder.getAppId());
         if (!Objects.equals(refundOrder.getStatus(), RefundStatusEnum.FAIL.getCode())) {
             throw new TradeStatusErrorException("只有失败状态的才可以关闭退款");

@@ -62,8 +62,11 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
     /**
      * 根据商户转账号查询
      */
-    public Optional<TransferOrder> findByBizTransferNo(String bizTransferNo) {
-        return findByField(TransferOrder::getBizTransferNo, bizTransferNo);
+    public Optional<TransferOrder> findByBizTransferNo(String bizTransferNo, String appId) {
+        return lambdaQuery()
+                .eq(TransferOrder::getBizTransferNo, bizTransferNo)
+                .eq(TransferOrder::getAppId, appId)
+                .oneOpt();
     }
 
     /**
@@ -75,10 +78,4 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
         return baseMapper.getTotalAmount(generator);
     }
 
-    /**
-     * 查询订单, 不过滤租户
-     */
-    public Optional<TransferOrder> findByIdNotTenant(Long id) {
-        return findById(id);
-    }
 }
