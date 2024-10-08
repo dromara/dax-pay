@@ -46,20 +46,9 @@ public class WechatAuthService {
         } else {
             PlatformConfig platformConfig = platformsConfigService.getConfig();
             String queryCode = RandomUtil.randomString(10);
-            // 判断是否独立部署前端
-            String authUrl;
-            if (platformConfig.isMobileEmbedded()){
-                // 嵌入式
-                String serverUrl = platformConfig.getGatewayMobileUrl();
-                String redirectUrl = StrUtil.format("{}/h5/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
-                authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
-            } else {
-                // 独立部署
-                String serverUrl = platformConfig.getGatewayMobileUrl();
-                String redirectUrl = StrUtil.format("{}/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
-                authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
-
-            }
+            String serverUrl = platformConfig.getGatewayMobileUrl();
+            String redirectUrl = StrUtil.format("{}/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
+            String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
             return new AuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
         }
     }

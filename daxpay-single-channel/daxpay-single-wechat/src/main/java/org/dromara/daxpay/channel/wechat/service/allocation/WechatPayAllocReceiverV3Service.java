@@ -14,8 +14,8 @@ import org.dromara.daxpay.core.exception.OperationFailException;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.MERCHANT_NO;
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.OPEN_ID;
@@ -32,15 +32,6 @@ public class WechatPayAllocReceiverV3Service {
     private final WechatPayConfigService wechatPayConfigService;
 
     /**
-     * 校验参数是否合法
-     */
-    public boolean validation(AllocReceiver allocReceiver){
-        List<String> list = Arrays.asList(AllocReceiverTypeEnum.OPEN_ID.getCode(), AllocReceiverTypeEnum.MERCHANT_NO.getCode());
-        String receiverType = allocReceiver.getReceiverType();
-        return list.contains(receiverType);
-    }
-
-    /**
      * 绑定
      */
     public void bind(AllocReceiver allocReceiver, WechatPayConfig config){
@@ -54,7 +45,7 @@ public class WechatPayAllocReceiverV3Service {
         request.setType(receiverType);
         request.setAccount(allocReceiver.getReceiverAccount());
         request.setName(allocReceiver.getReceiverName());
-        request.setRelationType(allocReceiver.getRelationType());
+        request.setRelationType(getRelationType(allocReceiver.getRelationType()));
         request.setCustomRelation(allocReceiver.getRelationName());
         try {
             sharingService.addReceiverV3(request);
@@ -77,7 +68,7 @@ public class WechatPayAllocReceiverV3Service {
         request.setType(receiverType);
         request.setAccount(allocReceiver.getReceiverAccount());
         request.setName(allocReceiver.getReceiverName());
-        request.setRelationType(allocReceiver.getRelationType());
+        request.setRelationType(getRelationType(allocReceiver.getRelationType()));
         request.setCustomRelation(allocReceiver.getRelationName());
         try {
             sharingService.removeReceiverV3(request);
@@ -97,5 +88,14 @@ public class WechatPayAllocReceiverV3Service {
             return "MERCHANT_ID";
         }
         throw new ConfigErrorException("分账接收方类型错误");
+    }
+    /**
+     * 获取分账关系类型编码
+     */
+    private String getRelationType(String relationType){
+        if (Objects.isNull(relationType)){
+            return null;
+        }
+        return relationType.toUpperCase(Locale.ROOT);
     }
 }

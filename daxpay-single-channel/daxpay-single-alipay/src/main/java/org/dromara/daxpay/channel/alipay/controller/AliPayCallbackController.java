@@ -1,13 +1,12 @@
 package org.dromara.daxpay.channel.alipay.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
-import org.dromara.daxpay.channel.alipay.service.callback.AliPayCallbackService;
-import org.dromara.daxpay.channel.alipay.service.extra.AliPayAuthService;
-import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.dromara.daxpay.channel.alipay.service.callback.AliPayCallbackService;
+import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +27,6 @@ public class AliPayCallbackController {
 
     private final PaymentAssistService paymentAssistService;
     private final AliPayCallbackService payCallbackService;
-    private final AliPayAuthService aliPayAuthService;
 
     @Operation(summary = "支付宝回调")
     @PostMapping("/alipay")

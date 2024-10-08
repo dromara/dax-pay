@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 /**
  * 分账接收方类型
+ * alloc_receiver_type
  * @author xxm
  * @since 2024/4/1
  */
@@ -20,7 +21,7 @@ public enum AllocReceiverTypeEnum {
     /** openId  */
     OPEN_ID("open_id", "openId"),
     /** 账号 */
-    LOGIN_NAME("login_name", "账号");
+    LOGIN_NAME("login_name", "登录账号");
 
     /** 编码 */
     private final String code;

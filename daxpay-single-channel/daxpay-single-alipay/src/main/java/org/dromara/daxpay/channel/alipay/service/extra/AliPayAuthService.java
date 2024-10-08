@@ -1,13 +1,6 @@
 package org.dromara.daxpay.channel.alipay.service.extra;
 
 import cn.bootx.platform.core.exception.BizException;
-import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
-import org.dromara.daxpay.core.param.assist.GenerateAuthUrlParam;
-import org.dromara.daxpay.core.result.assist.AuthResult;
-import org.dromara.daxpay.core.result.assist.AuthUrlResult;
-import org.dromara.daxpay.service.entity.config.PlatformConfig;
-import org.dromara.daxpay.service.service.config.PlatformConfigService;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alipay.api.AlipayClient;
@@ -16,7 +9,13 @@ import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
+import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
+import org.dromara.daxpay.core.param.assist.GenerateAuthUrlParam;
+import org.dromara.daxpay.core.result.assist.AuthResult;
+import org.dromara.daxpay.core.result.assist.AuthUrlResult;
+import org.dromara.daxpay.service.entity.config.PlatformConfig;
+import org.dromara.daxpay.service.service.config.PlatformConfigService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,8 +32,6 @@ public class AliPayAuthService {
 
     private final PlatformConfigService platformsConfigService;
 
-    private final RedisTemplate<String, AuthResult> redisTemplate;
-
     /**
      * 生成一个用于授权页面的链接
      * 1. 如果手动传输授权回调地址, 不进行处理
@@ -49,19 +46,10 @@ public class AliPayAuthService {
             AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig();
             String queryCode = RandomUtil.randomString(10);
 
-            // 判断是否独立部署前端
-            String authUrl;
-            if (platformConfig.isMobileEmbedded()){
-                // 嵌入式
+            // 授权地址
                 String serverUrl = platformConfig.getGatewayMobileUrl();
-                authUrl = StrUtil.format("{}/h5/alipay/auth/{}/{}/{}/{}",
+            String authUrl = StrUtil.format("{}/alipay/auth/{}/{}/{}/{}",
                         serverUrl, param.getAppId(),param.getChannel(),queryCode,aliPayConfig.getAliAppId());
-            } else {
-                // 独立部署
-                String serverUrl = platformConfig.getGatewayMobileUrl();
-                authUrl = StrUtil.format("{}/alipay/auth/{}/{}/{}/{}",
-                        serverUrl, param.getAppId(),param.getChannel(),queryCode,aliPayConfig.getAliAppId());
-            }
 
             return new AuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
         }

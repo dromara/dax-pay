@@ -109,15 +109,7 @@ public class ChannelCashierConfigService {
     public String qrCodeUrl(String appId) {
         MchApp mchApp = mchAppManager.findByAppId(appId).orElseThrow(() -> new DataNotExistException("未找到指定的应用配置"));
         PlatformConfig platformConfig = platformConfigService.getConfig();
-        // 判断是否独立部署前端
-        if (platformConfig.isMobileEmbedded()){
-            // 嵌入式
-            String serverUrl = platformConfig.getGatewayMobileUrl();
-            return StrUtil.format("{}/h5/channel/cashier/{}/{}", serverUrl, mchApp.getAppId());
-        } else {
-            // 独立部署
-            String serverUrl = platformConfig.getGatewayMobileUrl();
-            return StrUtil.format("{}/channel/cashier/{}/{}", serverUrl, mchApp.getAppId());
-        }
+        String serverUrl = platformConfig.getGatewayMobileUrl();
+        return StrUtil.format("{}/channel/cashier/{}/{}", serverUrl, mchApp.getAppId());
     }
 }

@@ -88,7 +88,6 @@ public class MchAppService {
     public void delete(Long id) {
         MchApp mchApp = mchAppManager.findById(id)
                 .orElseThrow(ConfigNotExistException::new);
-
         // 查看是否有配置的支付配置
         if (channelConfigManager.existedByField(ChannelConfig::getAppId, mchApp.getAppId())){
             throw new OperationFailException("该商户应用已绑定支付配置，请先删除支付配置");

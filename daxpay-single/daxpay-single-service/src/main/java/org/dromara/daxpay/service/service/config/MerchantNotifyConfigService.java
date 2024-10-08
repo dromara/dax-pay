@@ -6,11 +6,9 @@ import org.dromara.daxpay.service.dao.config.MerchantNotifyConfigManager;
 import org.dromara.daxpay.service.dao.constant.MerchantNotifyConstManager;
 import org.dromara.daxpay.service.entity.config.MerchantNotifyConfig;
 import org.dromara.daxpay.service.entity.constant.MerchantNotifyConst;
-import org.dromara.daxpay.service.entity.merchant.MchApp;
 import org.dromara.daxpay.service.result.config.MerchantNotifyConfigResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.service.GenericResponseService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +30,8 @@ public class MerchantNotifyConfigService {
     private final MerchantNotifyConstManager constManagerAll;
 
     private final MerchantNotifyConfigManager configManager;
+
     private final MchAppCacheService mchAppCacheService;
-    private final GenericResponseService responseBuilder;
 
     /**
      * 显示列表
@@ -43,7 +41,6 @@ public class MerchantNotifyConfigService {
                 .stream()
                 .collect(Collectors.toMap(MerchantNotifyConfig::getCode, Function.identity(), (v1, v2) -> v1));
         List<MerchantNotifyConst> costs = constManagerAll.lambdaQuery().orderByAsc(MpIdEntity::getId).list();
-        MchApp mchApp = mchAppCacheService.get(appId);
 
         return costs.stream()
                 .map(o->{
@@ -79,8 +76,6 @@ public class MerchantNotifyConfigService {
      * 开启或关闭订阅
      */
     public void subscribe(String appId, String notifyType, boolean subscribe){
-        // 查询应用
-        var mchApp = mchAppCacheService.get(appId);
 
         // 判断是否存在配置
         var notifyConfigOpt = configManager.findByAppIdAndType(appId, notifyType);

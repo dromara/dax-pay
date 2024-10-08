@@ -18,6 +18,8 @@ import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.MERCHANT_NO;
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.OPEN_ID;
@@ -47,7 +49,7 @@ public class WechatPayAllocReceiverV2Service {
         ProfitSharingService sharingService = wxPayService.getProfitSharingService();
 
         ProfitSharingReceiverRequest request = new ProfitSharingReceiverRequest();
-        Receiver receiver = new Receiver(receiverType,allocReceiver.getReceiverAccount(),allocReceiver.getReceiverName(),allocReceiver.getRelationType(),allocReceiver.getRelationName());
+        Receiver receiver = new Receiver(receiverType,allocReceiver.getReceiverAccount(),allocReceiver.getReceiverName(),getRelationType(allocReceiver.getRelationType()),allocReceiver.getRelationName());
         List<Receiver> receivers = List.of(receiver);
         request.setReceiver(GSON.toJson(receivers));
 
@@ -91,5 +93,15 @@ public class WechatPayAllocReceiverV2Service {
             return "MERCHANT_ID";
         }
         throw new ConfigErrorException("分账接收方类型错误");
+    }
+
+    /**
+     * 获取分账关系类型编码
+     */
+    private String getRelationType(String relationType){
+        if (Objects.isNull(relationType)){
+            return null;
+        }
+        return relationType.toUpperCase(Locale.ROOT);
     }
 }

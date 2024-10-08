@@ -7,6 +7,7 @@ import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -27,6 +28,7 @@ import org.dromara.daxpay.service.strategy.AbsAllocReceiverStrategy;
 import org.dromara.daxpay.service.strategy.PaymentStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -75,6 +77,7 @@ public class AllocReceiverService {
     /**
      * 添加分账接收方并同步到三方支付系统中
      */
+    @Transactional(rollbackFor = Exception.class)
     public void addAndSync(AllocReceiverAddParam param) {
         // 判断是否已经添加
         LockInfo lock = lockTemplate.lock("payment:receiver:" + param.getReceiverNo(), 10000, 200);
@@ -87,6 +90,8 @@ public class AllocReceiverService {
                 throw new OperationFailException("该接收方已存在");
             }
             AllocReceiver receiver = AllocReceiverConvert.CONVERT.convert(param);
+            // 预先写入id, 部分通道需要使用外部请求号, 用id进行关联
+            receiver.setId(IdUtil.getSnowflakeNextId());
             // 获取策略
             AbsAllocReceiverStrategy receiverStrategy = PaymentStrategyFactory.create(param.getChannel(), AbsAllocReceiverStrategy.class);
             // 校验
@@ -106,6 +111,7 @@ public class AllocReceiverService {
     /**
      * 分账方删除
      */
+    @Transactional(rollbackFor = Exception.class)
     public void removeAndSync(AllocReceiverRemoveParam param) {
         // 判断是否存在
         AllocReceiver receiver = allocReceiverManager.findByReceiverNo(param.getReceiverNo(), param.getAppId())

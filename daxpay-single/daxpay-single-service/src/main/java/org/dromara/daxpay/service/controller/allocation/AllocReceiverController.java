@@ -14,6 +14,7 @@ import org.dromara.daxpay.service.param.allocation.receiver.AllocReceiverQuery;
 import org.dromara.daxpay.service.param.allocation.receiver.AllocReceiverRemoveParam;
 import org.dromara.daxpay.service.result.allocation.AllocReceiverResult;
 import org.dromara.daxpay.service.service.allocation.AllocReceiverService;
+import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,8 @@ import java.util.List;
 public class AllocReceiverController {
 
     private final AllocReceiverService receiverService;
+    private final PaymentAssistService paymentAssistService;
+
 
     @Operation(summary = "分页")
     @GetMapping("/page")
@@ -55,6 +58,7 @@ public class AllocReceiverController {
     @Operation(summary = "添加")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated AllocReceiverAddParam param){
+        paymentAssistService.initMchApp(param.getAppId());
         receiverService.addAndSync(param);
         return Res.ok();
     }
@@ -62,6 +66,7 @@ public class AllocReceiverController {
     @Operation(summary = "删除")
     @PostMapping("/delete")
     public Result<Void> delete(@RequestBody @Validated AllocReceiverRemoveParam param){
+        paymentAssistService.initMchApp(param.getAppId());
         receiverService.removeAndSync(param);
         return Res.ok();
     }

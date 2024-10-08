@@ -169,10 +169,14 @@ public class AllocGroupService {
 
         // 保存分账接收者
         List<AllocGroupReceiver> groupReceivers = receivers.stream()
-                .map(receiver -> new AllocGroupReceiver().setGroupId(group.getId())
-                        .setReceiverId(receiver.getId())
-                        .setRate(receiverParams.get(receivers.indexOf(receiver))
-                                .getRate()))
+                .map(receiver -> {
+                    var groupReceiver = new AllocGroupReceiver().setGroupId(group.getId())
+                            .setReceiverId(receiver.getId())
+                            .setRate(receiverParams.get(receivers.indexOf(receiver))
+                                    .getRate());
+                    groupReceiver.setAppId(group.getAppId());
+                    return groupReceiver;
+                })
                 .collect(Collectors.toList());
         groupReceiverManager.saveAll(groupReceivers);
         // 计算分账比例

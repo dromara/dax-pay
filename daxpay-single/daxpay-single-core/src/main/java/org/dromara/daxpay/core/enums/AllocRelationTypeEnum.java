@@ -5,23 +5,24 @@ import lombok.Getter;
 
 /**
  * 分账关系类型
+ * alloc_relation_typ
  * @author xxm
  * @since 2024/3/27
  */
 @Getter
 @AllArgsConstructor
 public enum AllocRelationTypeEnum {
-    SERVICE_PROVIDER("SERVICE_PROVIDER","服务商"),
-    STORE("STORE","门店"),
-    STAFF("STAFF","员工"),
-    STORE_OWNER("STORE_OWNER","店主"),
-    PARTNER("PARTNER","合作伙伴"),
-    HEADQUARTER("HEADQUARTER","总部"),
-    BRAND("BRAND","品牌方"),
-    DISTRIBUTOR("DISTRIBUTOR","分销商"),
-    USER("USER","用户"),
-    SUPPLIER("SUPPLIER","供应商"),
-    CUSTOM("CUSTOM","自定义");
+    SERVICE_PROVIDER("service_provider","服务商"),
+    STORE("store","门店"),
+    STAFF("staff","员工"),
+    STORE_OWNER("store_owner","店主"),
+    PARTNER("partner","合作伙伴"),
+    HEADQUARTER("headquarter","总部"),
+    BRAND("brand","品牌方"),
+    DISTRIBUTOR("distributor","分销商"),
+    USER("user","用户"),
+    SUPPLIER("supplier","供应商"),
+    CUSTOM("custom","自定义");
 
     private final String code;
     private final String name;

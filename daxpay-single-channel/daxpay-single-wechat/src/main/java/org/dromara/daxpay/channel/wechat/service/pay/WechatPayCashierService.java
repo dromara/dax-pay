@@ -42,18 +42,9 @@ public class WechatPayCashierService {
     public String generateAuthUrl(CashierAuthUrlParam param) {
         WxMpService wxMpService = this.getWxMpService();
         PlatformConfig platformConfig = platformConfigService.getConfig();
-        // 判断是否独立部署前端
-        if (platformConfig.isMobileEmbedded()){
-            // 嵌入式
-            String serverUrl = platformConfig.getGatewayMobileUrl();
-            String redirectUrl = StrUtil.format("{}/h5/wechat/cashier/{}/{}", serverUrl, param.getAppId());
-            return wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
-        } else {
-            // 独立部署
-            String serverUrl = platformConfig.getGatewayMobileUrl();
-            String redirectUrl = StrUtil.format("{}/wechat/cashier/{}/{}", serverUrl, param.getAppId());
-            return wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
-        }
+        String serverUrl = platformConfig.getGatewayMobileUrl();
+        String redirectUrl = StrUtil.format("{}/wechat/cashier/{}/{}", serverUrl, param.getAppId());
+        return wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
     }
 
     /**

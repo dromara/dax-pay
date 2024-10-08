@@ -49,17 +49,8 @@ public class AliPayRedirectUrlService {
             return StrUtil.format("{}?biz_trade_no={}&trade_no={}", order.getReturnUrl(),order.getBizOrderNo(),order.getOrderNo() );
         } else {
             PlatformConfig platformConfig = platformConfigService.getConfig();
-            if (platformConfig.isMobileEmbedded()){
-                // 嵌入式
-                String serverUrl = platformConfig.getGatewayMobileUrl();
-                return StrUtil.format("{}/h5/alipay/pay/finish", serverUrl);
-
-            } else {
-                // 独立部署
-                String serverUrl = platformConfig.getGatewayMobileUrl();
-                return StrUtil.format("{}/alipay/pay/finish", serverUrl);
-
-            }
+            String serverUrl = platformConfig.getGatewayMobileUrl();
+            return StrUtil.format("{}/alipay/pay/finish", serverUrl);
         }
     }
 }

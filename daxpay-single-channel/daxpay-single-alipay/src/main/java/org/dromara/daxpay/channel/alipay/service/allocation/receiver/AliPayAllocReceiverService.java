@@ -56,7 +56,6 @@ public class AliPayAllocReceiverService {
     public void bind(AllocReceiver allocReceiver){
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
         AlipayTradeRoyaltyRelationBindModel model = new AlipayTradeRoyaltyRelationBindModel();
-        model.setOutRequestNo(String.valueOf(allocReceiver.getId()));
 
         RoyaltyEntity entity = new RoyaltyEntity();
         AllocReceiverTypeEnum receiverTypeEnum = AllocReceiverTypeEnum.findByCode(allocReceiver.getReceiverType());
@@ -68,6 +67,7 @@ public class AliPayAllocReceiverService {
         // 不报错视为同步成功
         model.setReceiverList(Collections.singletonList(entity));
         AlipayTradeRoyaltyRelationBindRequest request = new AlipayTradeRoyaltyRelationBindRequest();
+        model.setOutRequestNo(String.valueOf(allocReceiver.getId()));
         request.setBizModel(model);
         AlipayTradeRoyaltyRelationBindResponse response = alipayClient.execute(request);
         this.verifyErrorMsg(response);
@@ -118,13 +118,13 @@ public class AliPayAllocReceiverService {
      */
     private String getReceiverType(AllocReceiverTypeEnum receiverTypeEnum){
         if (receiverTypeEnum == USER_ID){
-            return "ali_user_id";
+            return "userId";
         }
         if (receiverTypeEnum == OPEN_ID){
-            return "ali_open_id";
+            return "openId";
         }
         if (receiverTypeEnum == LOGIN_NAME){
-            return "ali_login_name";
+            return "loginName";
         }
         throw new ConfigErrorException("分账接收方类型错误");
     }
