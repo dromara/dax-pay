@@ -50,7 +50,7 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
     public void doValidateParam(TransferParam transferParam) {
         // 转账接收方类型校验
         String payeeType = transferParam.getPayeeType();
-        if (!Objects.equals(TransferPayeeTypeEnum.WX_PERSONAL.getCode(), payeeType)){
+        if (!Objects.equals(TransferPayeeTypeEnum.OPEN_ID.getCode(), payeeType)){
             throw new ValidationFailedException("微信不支持该类型收款人");
         }
         // 收款方真实姓名。支持标准RSA算法和国密算法，公钥由微信侧提供

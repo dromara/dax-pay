@@ -41,7 +41,7 @@ public class AliPayTransferStrategy extends AbsTransferStrategy {
     public void doValidateParam(TransferParam transferParam) {
         // 转账接收方类型校验
         String payeeType = transferParam.getPayeeType();
-        if (!List.of(ALI_USER_ID.getCode(), ALI_OPEN_ID.getCode(), ALI_LOGIN_NAME.getCode()).contains(payeeType)){
+        if (!List.of(USER_ID.getCode(), OPEN_ID.getCode(), LOGIN_NAME.getCode()).contains(payeeType)){
             throw new ValidationFailedException("支付宝不支持该类型收款人");
         }
     }

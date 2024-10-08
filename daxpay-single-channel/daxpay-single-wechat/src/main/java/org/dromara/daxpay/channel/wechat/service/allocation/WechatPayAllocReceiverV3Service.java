@@ -42,6 +42,7 @@ public class WechatPayAllocReceiverV3Service {
         ProfitSharingService sharingService = wxPayService.getProfitSharingService();
 
         ProfitSharingReceiverV3Request request = new ProfitSharingReceiverV3Request();
+        request.setAppid(config.getWxAppId());
         request.setType(receiverType);
         request.setAccount(allocReceiver.getReceiverAccount());
         request.setName(allocReceiver.getReceiverName());
@@ -65,6 +66,7 @@ public class WechatPayAllocReceiverV3Service {
         ProfitSharingService sharingService = wxPayService.getProfitSharingService();
 
         ProfitSharingReceiverV3Request request = new ProfitSharingReceiverV3Request();
+        request.setAppid(config.getAppId());
         request.setType(receiverType);
         request.setAccount(allocReceiver.getReceiverAccount());
         request.setName(allocReceiver.getReceiverName());

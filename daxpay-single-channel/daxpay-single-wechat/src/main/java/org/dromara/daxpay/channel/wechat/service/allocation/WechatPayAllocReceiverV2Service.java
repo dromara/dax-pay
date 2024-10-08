@@ -17,7 +17,6 @@ import org.dromara.daxpay.core.exception.OperationFailException;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -50,13 +49,12 @@ public class WechatPayAllocReceiverV2Service {
 
         ProfitSharingReceiverRequest request = new ProfitSharingReceiverRequest();
         Receiver receiver = new Receiver(receiverType,allocReceiver.getReceiverAccount(),allocReceiver.getReceiverName(),getRelationType(allocReceiver.getRelationType()),allocReceiver.getRelationName());
-        List<Receiver> receivers = List.of(receiver);
-        request.setReceiver(GSON.toJson(receivers));
+        request.setReceiver(GSON.toJson(receiver));
 
         try {
             sharingService.addReceiver(request);
         } catch (WxPayException e) {
-            throw new OperationFailException("微信添加分账方V3失败: "+e.getMessage());
+            throw new OperationFailException("微信添加分账方V2失败: "+e.getMessage());
         }
     }
 
@@ -72,12 +70,11 @@ public class WechatPayAllocReceiverV2Service {
 
         ProfitSharingReceiverRequest request = new ProfitSharingReceiverRequest();
         Receiver receiver = new Receiver(receiverType,allocReceiver.getReceiverAccount());
-        List<Receiver> receivers = List.of(receiver);
-        request.setReceiver(GSON.toJson(receivers));
+        request.setReceiver(GSON.toJson(receiver));
         try {
             sharingService.removeReceiver(request);
         } catch (WxPayException e) {
-            throw new OperationFailException("微信添加分账方V3失败: "+e.getMessage());
+            throw new OperationFailException("微信删除分账方V2失败: "+e.getMessage());
         }
     }
 

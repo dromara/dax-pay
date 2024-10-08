@@ -5,6 +5,7 @@ import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
 import org.dromara.daxpay.core.enums.TransferPayeeTypeEnum;
 import org.dromara.daxpay.core.enums.TransferStatusEnum;
+import org.dromara.daxpay.core.exception.OperationFailException;
 import org.dromara.daxpay.core.exception.TradeFailException;
 import org.dromara.daxpay.core.util.PayUtil;
 import org.dromara.daxpay.service.bo.trade.TransferResultBo;
@@ -78,8 +79,8 @@ public class AliPayTransferService {
         // 收款人姓名
         payeeInfo.setName(order.getPayeeName());
         // 收款人类型
-        String identityType = TransferPayeeTypeEnum.findByCode(order.getPayeeType())
-                .getOutCode();
+        TransferPayeeTypeEnum payeeType = TransferPayeeTypeEnum.findByCode(order.getPayeeType());
+        String identityType = this.getIdentityType(payeeType);
         payeeInfo.setIdentityType(identityType);
         model.setPayeeInfo(payeeInfo);
         model.setRemark(order.getReason());
@@ -99,5 +100,24 @@ public class AliPayTransferService {
             transferInfo.setFinishTime(time).setStatus(TransferStatusEnum.SUCCESS);
         }
         return transferInfo;
+    }
+
+    /**
+     *
+     */
+    public String getIdentityType(TransferPayeeTypeEnum payeeType){
+        switch (payeeType){
+            // 以2088开头的纯16位数字
+            case USER_ID -> {
+                return "ALIPAY_USER_ID";
+            }
+            case OPEN_ID -> {
+                return "ALIPAY_OPEN_ID";
+            }
+            case LOGIN_NAME -> {
+                return "ALIPAY_LOGON_ID";
+            }
+            default -> throw new OperationFailException("不支持的收款账号类型");
+        }
     }
 }
