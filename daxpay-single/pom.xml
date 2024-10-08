@@ -20,6 +20,7 @@
     <modules>
         <module>daxpay-single-core</module>
         <module>daxpay-single-service</module>
+        <module>daxpay-single-unisdk</module>
     </modules>
 
     <properties>

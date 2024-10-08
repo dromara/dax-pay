@@ -2,6 +2,8 @@ package org.dromara.daxpay.channel.union.service.config;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,8 @@ import org.dromara.daxpay.channel.union.convert.UnionPayConfigConvert;
 import org.dromara.daxpay.channel.union.entity.config.UnionPayConfig;
 import org.dromara.daxpay.channel.union.param.config.UnionPayConfigParam;
 import org.dromara.daxpay.channel.union.result.UnionPayConfigResult;
+import org.dromara.daxpay.channel.union.sdk.api.UnionPayConfigStorage;
+import org.dromara.daxpay.channel.union.sdk.api.UnionPayKit;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.exception.ConfigNotEnableException;
 import org.dromara.daxpay.core.exception.DataErrorException;
@@ -18,8 +22,12 @@ import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.dao.config.ChannelConfigManager;
 import org.dromara.daxpay.service.entity.config.ChannelConfig;
 import org.dromara.daxpay.service.service.config.PlatformConfigService;
+import org.dromara.daxpay.unisdk.common.bean.CertStoreType;
+import org.dromara.daxpay.unisdk.common.http.HttpConfigStorage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.ByteArrayInputStream;
 
 /**
  * 银联支付
@@ -111,6 +119,45 @@ public class UnionPayConfigService {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
         return StrUtil.format("{}/unipay/return/{}/{}/union",platformInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
+    }
+
+    /**
+     * 生成云闪付支付服务
+     */
+    public UnionPayKit initPayService(UnionPayConfig config){
+        UnionPayConfigStorage unionPayConfigStorage = new UnionPayConfigStorage();
+        unionPayConfigStorage.setInputCharset(CharsetUtil.UTF_8);
+        // 商户号
+        unionPayConfigStorage.setMerId(config.getUnionMachId());
+        // 云闪付必须使用证书才可以进行调用
+        unionPayConfigStorage.setCertSign(true);
+
+        // 中级证书 流
+        unionPayConfigStorage.setAcpMiddleCert(new ByteArrayInputStream(Base64.decode(config.getAcpMiddleCert())));
+        // 根证书 流
+        unionPayConfigStorage.setAcpRootCert(new ByteArrayInputStream(Base64.decode(config.getAcpRootCert())));
+        // 私钥证书 流
+        unionPayConfigStorage.setKeyPrivateCert(new ByteArrayInputStream(Base64.decode(config.getKeyPrivateCert())));
+
+        //私钥证书对应的密码 私钥证书对应的密码
+        unionPayConfigStorage.setKeyPrivateCertPwd(config.getKeyPrivateCertPwd());
+        //设置证书对应的存储方式，证书流
+        unionPayConfigStorage.setCertStoreType(CertStoreType.INPUT_STREAM);
+
+        unionPayConfigStorage.setSignType(config.getSignType());
+        //是否为测试账号，沙箱环境
+        unionPayConfigStorage.setTest(config.isSandbox());
+
+        // 网络请求配置
+        HttpConfigStorage httpConfigStorage = new HttpConfigStorage();
+        httpConfigStorage.setCertStoreType(CertStoreType.INPUT_STREAM);
+        //最大连接数
+        httpConfigStorage.setMaxTotal(20);
+        //默认的每个路由的最大连接数
+        httpConfigStorage.setDefaultMaxPerRoute(10);
+
+        // 创建支付服务
+        return new UnionPayKit(unionPayConfigStorage, httpConfigStorage);
     }
 
 }
