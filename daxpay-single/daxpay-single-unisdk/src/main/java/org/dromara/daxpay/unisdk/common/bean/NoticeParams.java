@@ -44,7 +44,7 @@ public class NoticeParams implements Attrs {
     /**
      * 为了获取request里面传过来的动态参数
      */
-    private Map<String, Object> body;
+    private Map<String, ?> body;
 
     /**
      * 存放请求头信息
@@ -54,16 +54,16 @@ public class NoticeParams implements Attrs {
     /**
      * 附加属性
      */
-    private Map<String, Object> attr;
+    private Map<String, ?> attr;
 
     public NoticeParams() {
     }
 
-    public NoticeParams(Map<String, Object> body) {
+    public NoticeParams(Map<String, ?> body) {
         this.body = body;
     }
 
-    public NoticeParams(Map<String, Object> body, Map<String, List<String>> headers) {
+    public NoticeParams(Map<String, ?> body, Map<String, List<String>> headers) {
         this.body = body;
         this.headers = headers;
     }
@@ -107,7 +107,7 @@ public class NoticeParams implements Attrs {
      * @return 属性
      */
     @Override
-    public Map<String, Object> getAttrs() {
+    public Map<String, ?> getAttrs() {
         return attr;
     }
 }

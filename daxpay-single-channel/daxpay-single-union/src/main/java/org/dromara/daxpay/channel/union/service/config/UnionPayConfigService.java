@@ -115,14 +115,6 @@ public class UnionPayConfigService {
         return UnionPayConfig.convertConfig(channelConfig);
     }
 
-    /**
-     * 获取异步通知地址
-     */
-    public String getNotifyUrl() {
-        var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/union",platformInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
-    }
 
     /**
      * 获取支付异步通知地址
@@ -130,7 +122,7 @@ public class UnionPayConfigService {
     public String getPayNotifyUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/pay",platformInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/union/pay",platformInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
     }
 
     /**
@@ -139,7 +131,7 @@ public class UnionPayConfigService {
     public String getRefundNotifyUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/refund",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/union/refund",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
     }
 
     /**

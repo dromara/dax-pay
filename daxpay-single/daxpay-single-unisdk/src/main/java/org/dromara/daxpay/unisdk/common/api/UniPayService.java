@@ -95,13 +95,6 @@ public interface UniPayService<PC extends PayConfigStorage> {
      */
     String createSign(String content, String characterEncoding);
 
-    /**
-     * 将请求参数或者请求流转化为 Map
-     *
-     * @param request 通知请求
-     * @return 获得回调的请求参数
-     */
-    NoticeParams getNoticeParams(NoticeRequest request);
 
     /**
      * 获取输出消息，用户返回给支付端
@@ -232,35 +225,6 @@ public interface UniPayService<PC extends PayConfigStorage> {
      * @return 对应的转账结果
      */
     Map<String, Object> transfer(UniTransferOrder order);
-
-    /**
-     * 回调处理
-     *
-     * @param request 请求参数
-     * @return 获得回调响应信息
-     */
-    PayOutMessage payBack(NoticeRequest request);
-
-
-    /**
-     * 设置支付消息处理器,这里用于处理具体的支付业务
-     *
-     * @param handler 消息处理器
-     *                配合{@link  UniPayService#payBack(NoticeRequest)}进行使用
-     *                <p>
-     *                默认使用{@link  org.dromara.daxpay.unisdk.common.api.DefaultPayMessageHandler }进行实现
-     */
-    void setPayMessageHandler(PayMessageHandler handler);
-
-    /**
-     * 设置支付消息处理器,这里用于处理具体的支付业务
-     *
-     * @param interceptor 消息拦截器
-     *                    配合{@link  UniPayService#payBack(NoticeRequest)}进行使用
-     *                    <p>
-     *                    默认使用{@link  org.dromara.daxpay.unisdk.common.api.DefaultPayMessageHandler }进行实现
-     */
-    void addPayMessageInterceptor(PayMessageInterceptor interceptor);
 
     /**
      * 获取支付请求地址

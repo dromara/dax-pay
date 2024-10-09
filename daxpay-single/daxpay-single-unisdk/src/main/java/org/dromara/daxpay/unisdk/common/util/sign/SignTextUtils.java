@@ -48,7 +48,7 @@ public final class SignTextUtils {
      * @param ignoreKey  需要忽略添加的key
      * @return 去掉空值与签名参数后的新签名，拼接后字符串
      */
-    public static String parameterText(Map<String, Object> parameters, String separator, String... ignoreKey) {
+    public static String parameterText(Map<String, ?> parameters, String separator, String... ignoreKey) {
         return parameterText(parameters, separator, true, ignoreKey);
     }
 
@@ -61,7 +61,7 @@ public final class SignTextUtils {
      * @param ignoreKey       需要忽略添加的key
      * @return 去掉空值与签名参数后的新签名，拼接后字符串
      */
-    public static String parameterText(Map<String, Object> parameters, String separator, boolean ignoreNullValue, String... ignoreKey) {
+    public static String parameterText(Map<String, ?> parameters, String separator, boolean ignoreNullValue, String... ignoreKey) {
         if (parameters == null) {
             return "";
         }
@@ -72,7 +72,7 @@ public final class SignTextUtils {
         StringBuilder sb = new StringBuilder();
         // TODO 2016/11/11 10:14 author: egan 已经排序好处理
         if (parameters instanceof SortedMap) {
-            for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+            for (Map.Entry<String, ?> entry : parameters.entrySet()) {
                 Object v = entry.getValue();
                 if (null == v) {
                     continue;
@@ -95,7 +95,7 @@ public final class SignTextUtils {
     }
 
 
-    private static String sortMapParameterText(Map<String, Object> parameters, String separator, boolean ignoreNullValue, String... ignoreKey) {
+    private static String sortMapParameterText(Map<String, ?> parameters, String separator, boolean ignoreNullValue, String... ignoreKey) {
         StringBuilder sb = new StringBuilder();
         // TODO 2016/11/11 10:14 author: egan 未排序须处理
         List<String> keys = new ArrayList<>(parameters.keySet());

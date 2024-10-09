@@ -21,7 +21,7 @@ public interface Attrs extends Serializable {
      *
      * @return 属性
      */
-    Map<String, Object> getAttrs();
+    Map<String, ?> getAttrs();
 
     /**
      * 获取属性 这里可用做覆盖已设置的订单信息属性，订单信息在签名前进行覆盖。

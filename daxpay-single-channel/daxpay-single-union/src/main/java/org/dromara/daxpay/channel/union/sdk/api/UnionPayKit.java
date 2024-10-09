@@ -23,7 +23,6 @@ import org.dromara.daxpay.unisdk.common.util.sign.encrypt.RSA2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.cert.*;
@@ -146,18 +145,15 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
     }
 
     /**
-     * 后台通知地址
+     * 初始化异步通知地址
      *
      * @param parameters 预订单信息
      * @param order      订单
-     * @return 预订单信息
      */
-    private Map<String, Object> initNotifyUrl(Map<String, Object> parameters, AssistOrder order) {
-        //后台通知地址
+    private void initNotifyUrl(Map<String, Object> parameters, AssistOrder order) {
         OrderParaStructure.loadParameters(parameters, SDKConstants.param_backUrl, payConfigStorage.getNotifyUrl());
         OrderParaStructure.loadParameters(parameters, SDKConstants.param_backUrl, order.getNotifyUrl());
         OrderParaStructure.loadParameters(parameters, SDKConstants.param_backUrl, order);
-        return parameters;
     }
 
 
@@ -178,8 +174,6 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
 
         //订单发送时间
         params.put(SDKConstants.param_txnTime, DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN));
-        //后台通知地址
-        params.put(SDKConstants.param_backUrl, payConfigStorage.getNotifyUrl());
 
         //交易币种
         params.put(SDKConstants.param_currencyCode, "156");
@@ -197,7 +191,7 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
      */
     @Override
     public boolean verify(NoticeParams noticeParams) {
-        final Map<String, Object> result = noticeParams.getBody();
+        final Map<String, ?> result = noticeParams.getBody();
         if (null == result || result.get(SDKConstants.param_signature) == null) {
             log.debug("银联支付验签异常：params：{}", result);
             return false;
@@ -212,7 +206,7 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
      * @param sign   签名原文
      * @return 签名校验 true通过
      */
-    public boolean signVerify(Map<String, Object> params, String sign) {
+    public boolean signVerify(Map<String, ?> params, String sign) {
         SignUtils signUtils = SignUtils.valueOf(payConfigStorage.getSignType());
 
         String data = SignTextUtils.parameterText(params, "&", "signature");
@@ -244,7 +238,6 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
      * @return 具体的时间字符串
      */
     private String getPayTimeout(Date expirationTime) {
-        //
         if (null != expirationTime) {
             return DateUtil.format(expirationTime, DatePattern.PURE_DATETIME_PATTERN);
         }
@@ -445,8 +438,7 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
     @Override
     public Map<String, Object> microPay(UniOrder order) {
         order.setTransactionType(UnionTransactionType.CONSUME);
-        JSONObject response = postOrder(order, getBackTransUrl());
-        return response;
+        return postOrder(order, getBackTransUrl());
     }
 
 
@@ -570,50 +562,6 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
         return UriVariables.getParametersToMap(responseStr);
     }
 
-
-    /**
-     * 消费撤销/退货接口
-     *
-     * @param origQryId    原交易查询流水号.
-     * @param orderId      退款单号
-     * @param refundAmount 退款金额
-     * @param type         UnionTransactionType.REFUND  或者UnionTransactionType.CONSUME_UNDO
-     * @return 返回支付方申请退款后的结果
-     */
-    public UnionRefundResult unionRefundOrConsumeUndo(String origQryId, String orderId, BigDecimal refundAmount, UnionTransactionType type) {
-        return unionRefundOrConsumeUndo(new UniRefundOrder(orderId, origQryId, refundAmount), type);
-
-    }
-
-    /**
-     * 消费撤销/退货接口
-     *
-     * @param refundOrder 退款订单信息
-     * @param type        UnionTransactionType.REFUND  或者UnionTransactionType.CONSUME_UNDO
-     * @return 返回支付方申请退款后的结果
-     */
-    public UnionRefundResult unionRefundOrConsumeUndo(UniRefundOrder refundOrder, UnionTransactionType type) {
-        Map<String, Object> params = this.getCommonParam();
-        type.convertMap(params);
-        params.put(SDKConstants.param_orderId, refundOrder.getRefundNo());
-        params.put(SDKConstants.param_txnAmt, Util.conversionCentAmount(refundOrder.getRefundAmount()));
-        params.put(SDKConstants.param_origQryId, refundOrder.getTradeNo());
-        params.putAll(refundOrder.getAttrs());
-        this.setSign(params);
-        String responseStr = getHttpRequestTemplate().postForObject(this.getBackTransUrl(), params, String.class);
-        JSONObject response = UriVariables.getParametersToMap(responseStr);
-
-        if (this.verify(new NoticeParams(response))) {
-            final UnionRefundResult refundResult = UnionRefundResult.create(response);
-            if (SDKConstants.OK_RESP_CODE.equals(refundResult.getRespCode())) {
-                return refundResult;
-
-            }
-            throw new PayErrorException(new PayException(response.getString(SDKConstants.param_respCode), response.getString(SDKConstants.param_respMsg), response.toJSONString()));
-        }
-        throw new PayErrorException(new PayException("failure", "验证签名失败", response.toJSONString()));
-    }
-
     /**
      * 交易关闭接口
      * TODO 这个是冲正接口, 后续进行迁移
@@ -639,9 +587,34 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
         return UriVariables.getParametersToMap(responseStr);
     }
 
+    /**
+     * 消费撤销/退货接口
+     *
+     * @param refundOrder 退款订单信息
+     * @return 返回支付方申请退款后的结果
+     */
     @Override
     public UnionRefundResult refund(UniRefundOrder refundOrder) {
-        return unionRefundOrConsumeUndo(refundOrder, UnionTransactionType.REFUND);
+        Map<String, Object> params = this.getCommonParam();
+        initNotifyUrl(params, refundOrder);
+        UnionTransactionType.REFUND.convertMap(params);
+        params.put(SDKConstants.param_orderId, refundOrder.getRefundNo());
+        params.put(SDKConstants.param_txnAmt, Util.conversionCentAmount(refundOrder.getRefundAmount()));
+        params.put(SDKConstants.param_origQryId, refundOrder.getTradeNo());
+        params.putAll(refundOrder.getAttrs());
+        this.setSign(params);
+        String responseStr = getHttpRequestTemplate().postForObject(this.getBackTransUrl(), params, String.class);
+        JSONObject response = UriVariables.getParametersToMap(responseStr);
+
+        if (this.verify(new NoticeParams(response))) {
+            final UnionRefundResult refundResult = UnionRefundResult.create(response);
+            if (SDKConstants.OK_RESP_CODE.equals(refundResult.getRespCode())) {
+                return refundResult;
+
+            }
+            throw new PayErrorException(new PayException(response.getString(SDKConstants.param_respCode), response.getString(SDKConstants.param_respMsg), response.toJSONString()));
+        }
+        throw new PayErrorException(new PayException("failure", "验证签名失败", response.toJSONString()));
     }
 
 
@@ -690,7 +663,7 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
         JSONObject response = UriVariables.getParametersToMap(responseStr);
 //        if (this.verify(response)) {
 //            if (SDKConstants.OK_RESP_CODE.equals(response.get(SDKConstants.param_respCode))) {
-                return response;
+        return response;
 //            }
 //            throw new PayErrorException(new PayException(response.get(SDKConstants.param_respCode).toString(), response.get(SDKConstants.param_respMsg).toString(), response.toString()));
 //        }

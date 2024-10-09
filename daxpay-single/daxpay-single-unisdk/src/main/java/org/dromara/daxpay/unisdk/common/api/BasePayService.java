@@ -2,18 +2,16 @@ package org.dromara.daxpay.unisdk.common.api;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.Consts;
 import org.dromara.daxpay.unisdk.common.bean.*;
 import org.dromara.daxpay.unisdk.common.http.HttpConfigStorage;
 import org.dromara.daxpay.unisdk.common.http.HttpRequestTemplate;
 import org.dromara.daxpay.unisdk.common.util.sign.SignUtils;
 
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 支付基础服务
@@ -29,16 +27,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Uni
     protected PC payConfigStorage;
 
     protected HttpRequestTemplate requestTemplate;
-    /**
-     * 支付消息处理器
-     */
-    protected PayMessageHandler handler;
-    /**
-     * 支付消息拦截器
-     */
-    protected List<PayMessageInterceptor<PayMessage, UniPayService>> interceptors = new ArrayList<>();
 
-    private Charset inputCharset = Consts.UTF_8;
 
     /**
      * 设置支付配置
@@ -48,10 +37,6 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Uni
     @Override
     public BasePayService setPayConfigStorage(PC payConfigStorage) {
         this.payConfigStorage = payConfigStorage;
-
-        if (StrUtil.isNotEmpty(payConfigStorage.getInputCharset())) {
-            this.inputCharset = Charset.forName(payConfigStorage.getInputCharset());
-        }
         return this;
     }
 
@@ -170,34 +155,6 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Uni
         return Collections.emptyMap();
     }
 
-    /**
-     * 将请求参数或者请求流转化为 Map
-     *
-     * @param request 通知请求
-     * @return 获得回调的请求参数
-     */
-    @Override
-    public NoticeParams getNoticeParams(NoticeRequest request) {
-        final Map<String, String[]> parameterMap = request.getParameterMap();
-
-        Map<String, Object> params = new TreeMap<>();
-        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
-            String name = entry.getKey();
-            String[] values = entry.getValue();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0, len = values.length; i < len; i++) {
-                sb.append(values[i]).append((i == len - 1) ? "" : ',');
-            }
-            String valueStr = sb.toString();
-            if (StrUtil.isNotEmpty(payConfigStorage.getInputCharset()) && !valueStr.matches("\\w+")) {
-                if (valueStr.equals(new String(valueStr.getBytes(Consts.ISO_8859_1), Consts.ISO_8859_1))) {
-                    valueStr = new String(valueStr.getBytes(Consts.ISO_8859_1), inputCharset);
-                }
-            }
-            params.put(name, valueStr);
-        }
-        return new NoticeParams(params);
-    }
 
     /**
      * 交易交易撤销
@@ -233,70 +190,6 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Uni
     @Override
     public Map<String, Object> transfer(UniTransferOrder order) {
         return Collections.emptyMap();
-    }
-
-    /**
-     * 设置支付消息处理器,这里用于处理具体的支付业务
-     *
-     * @param handler 消息处理器
-     *                配合{@link  UniPayService#payBack(Map, InputStream)}进行使用
-     *                <p>
-     *                默认使用{@link  DefaultPayMessageHandler }进行实现
-     */
-    @Override
-    public void setPayMessageHandler(PayMessageHandler handler) {
-        this.handler = handler;
-    }
-
-    /**
-     * 获取支付消息处理器,这里用于处理具体的支付业务
-     * 配合{@link  UniPayService#payBack(Map, InputStream)}进行使用
-     * <p>
-     *
-     * @return 默认使用{@link  DefaultPayMessageHandler }进行实现
-     */
-    public PayMessageHandler getPayMessageHandler() {
-        if (null == handler) {
-            setPayMessageHandler(new DefaultPayMessageHandler());
-        }
-        return handler;
-    }
-
-    /**
-     * 设置支付消息拦截器
-     *
-     * @param interceptor 消息拦截器
-     *                    配合{@link  UniPayService#payBack(Map, InputStream)}进行使用, 做一些预前处理
-     */
-    @Override
-    public void addPayMessageInterceptor(PayMessageInterceptor interceptor) {
-        interceptors.add(interceptor);
-    }
-
-
-    /**
-     * 回调处理
-     *
-     * @param request 请求参数
-     * @return 获得回调响应信息
-     */
-    @Override
-    public PayOutMessage payBack(NoticeRequest request) {
-        final NoticeParams noticeParams = getNoticeParams(request);
-        if (log.isDebugEnabled()) {
-            log.debug("回调响应:{}", JSON.toJSONString(noticeParams));
-        }
-        if (!verify(noticeParams)) {
-            return getPayOutMessage("fail", "失败");
-        }
-        PayMessage payMessage = this.createMessage(noticeParams.getBody());
-        Map<String, Object> context = new HashMap<>();
-        for (PayMessageInterceptor interceptor : interceptors) {
-            if (!interceptor.intercept(payMessage, context, this)) {
-                return successPayOutMessage(payMessage);
-            }
-        }
-        return getPayMessageHandler().handle(payMessage, context, this);
     }
 
     /**
