@@ -69,7 +69,7 @@ public class WechatPayCallbackService {
         // 设置类型和通道
         callbackInfo.setCallbackType(TradeTypeEnum.PAY).setChannel(ChannelEnum.WECHAT.getCode());
 
-        WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
+        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig();
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // v2 或 v3
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V2)) {

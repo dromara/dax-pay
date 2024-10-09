@@ -63,7 +63,7 @@ public class WechatPayAllocReceiverStrategy extends AbsAllocReceiverStrategy {
 
     @Override
     public void doBeforeHandler(){
-        this.config = wechatPayConfigService.getWechatPayConfig();
+        this.config = wechatPayConfigService.getAndCheckConfig();
     }
 
 

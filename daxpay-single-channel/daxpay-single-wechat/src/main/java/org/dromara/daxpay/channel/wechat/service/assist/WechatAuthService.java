@@ -69,7 +69,7 @@ public class WechatAuthService {
      * 获取微信公众号API的Service
      */
     private WxMpService getWxMpService() {
-        WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
+        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig();
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpDefaultConfigImpl wxMpConfig = new WxMpDefaultConfigImpl();
         wxMpConfig.setAppId(config.getWxAppId()); // 设置微信公众号的appid

@@ -47,7 +47,7 @@ public class WechatSyncRefundStrategy extends AbsSyncRefundOrderStrategy {
      */
     @Override
     public RefundSyncResultBo doSync() {
-        var wechatPayConfig = wechatPayConfigService.getWechatPayConfig();
+        var wechatPayConfig = wechatPayConfigService.getAndCheckConfig();
         if (Objects.equals(wechatPayConfig.getApiVersion(), WechatPayCode.API_V2)){
             return wechatRefundSyncV2Service.sync(this.getRefundOrder(), wechatPayConfig);
         } else {

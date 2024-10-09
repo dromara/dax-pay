@@ -52,7 +52,7 @@ public class WechatSyncPayStrategy extends AbsSyncPayOrderStrategy {
      */
     @Override
     public PaySyncResultBo doSync() {
-        var wechatPayConfig = wechatPayConfigService.getWechatPayConfig();
+        var wechatPayConfig = wechatPayConfigService.getAndCheckConfig();
         if (Objects.equals(wechatPayConfig.getApiVersion(), WechatPayCode.API_V2)){
             return weChatPaySyncV2Service.sync(getOrder(), wechatPayConfig);
         } else {

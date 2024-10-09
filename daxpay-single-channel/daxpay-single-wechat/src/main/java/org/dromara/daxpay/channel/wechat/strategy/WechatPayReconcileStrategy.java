@@ -1,16 +1,15 @@
 package org.dromara.daxpay.channel.wechat.strategy;
 
-import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
-import org.dromara.daxpay.channel.wechat.service.reconcile.WechatPayReconcileService;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.bo.reconcile.ReconcileResolveResultBo;
-import org.dromara.daxpay.service.enums.ReconcileFileTypeEnum;
-import org.dromara.daxpay.service.strategy.AbsReconcileStrategy;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.channel.wechat.service.reconcile.WechatPayReconcileService;
+import org.dromara.daxpay.core.enums.ChannelEnum;
+import org.dromara.daxpay.service.bo.reconcile.ReconcileResolveResultBo;
+import org.dromara.daxpay.service.enums.ReconcileFileTypeEnum;
+import org.dromara.daxpay.service.strategy.AbsReconcileStrategy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +28,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
 
     private final WechatPayReconcileService reconcileService;
-
-    private final WechatPayConfigService wechatPayConfigService;
 
     /**
      * 策略标识

@@ -1,6 +1,6 @@
 package org.dromara.daxpay.channel.wechat.service.reconcile;
 
-import org.dromara.daxpay.channel.wechat.bo.reconcile.WechatReconcileBillDetail;
+import org.dromara.daxpay.channel.wechat.entity.reconcile.WechatReconcileBillDetail;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.core.enums.TradeStatusEnum;
@@ -56,7 +56,7 @@ public class WechatPayReconcileService {
     @SneakyThrows
     @Transactional(rollbackFor = Exception.class)
     public ReconcileResolveResultBo downAndResolve(ReconcileStatement statement, String date) {
-        WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
+        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig();
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         var request = new WxPayApplyTradeBillV3Request();
         request.setBillDate(date);
@@ -124,7 +124,7 @@ public class WechatPayReconcileService {
         if (Objects.equals(billDetail.getTradeState(), WxPayConstants.WxpayTradeStatus.SUCCESS)) {
             tradeBo.setTradeType(TradeTypeEnum.PAY.getCode())
                     .setAmount(new BigDecimal(billDetail.getTotalFee()))
-           .setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
+                    .setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
         }
 
         // 退款覆盖更新对应的字段
@@ -133,7 +133,6 @@ public class WechatPayReconcileService {
                     .setTradeNo(billDetail.getRefundId())
                     .setAmount(new BigDecimal(billDetail.getRefundFee()))
                     .setTradeType(TradeTypeEnum.REFUND.getCode());
-            tradeBo.setTradeType(TradeTypeEnum.REFUND.getCode());
             // 状态
             switch (billDetail.getRefundStatus()) {
                 case WxPayConstants.RefundStatus.SUCCESS -> tradeBo.setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
@@ -145,8 +144,8 @@ public class WechatPayReconcileService {
         }
         // 撤销状态
         if (Objects.equals(billDetail.getTradeState(), WxPayConstants.WxpayTradeStatus.REVOKED)) {
-            tradeBo.setTradeType(TradeTypeEnum.PAY.getCode());
-            tradeBo.setTradeStatus(TradeStatusEnum.REVOKED.getCode());
+            tradeBo.setTradeType(TradeTypeEnum.PAY.getCode())
+                    .setTradeStatus(TradeStatusEnum.REVOKED.getCode());
         }
 
         return tradeBo;
@@ -155,8 +154,8 @@ public class WechatPayReconcileService {
     /**
      * 保存下载的原始对账文件
      */
-    private String saveOriginalFile(ReconcileStatement reconcileOrder, byte[] bytes) {
-        String date = LocalDateTimeUtil.format(reconcileOrder.getDate(), DatePattern.PURE_DATE_PATTERN);
+    private String saveOriginalFile(ReconcileStatement statement, byte[] bytes) {
+        String date = LocalDateTimeUtil.format(statement.getDate(), DatePattern.PURE_DATE_PATTERN);
         // 将原始文件进行保存 通道-日期
         String fileName = StrUtil.format("交易对账单-微信-{}.csv",date);
         var uploadPretreatment = fileStorageService.of(bytes);

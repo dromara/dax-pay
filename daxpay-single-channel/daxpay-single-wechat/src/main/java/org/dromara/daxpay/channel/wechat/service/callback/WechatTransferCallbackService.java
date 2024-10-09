@@ -66,7 +66,7 @@ public class WechatTransferCallbackService {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         callbackInfo.setChannel(ChannelEnum.WECHAT.getCode())
                 .setCallbackType(TradeTypeEnum.TRANSFER);
-        WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
+        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig();
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // V3 回调接收处理
         String body = JakartaServletUtil.getBody(request);

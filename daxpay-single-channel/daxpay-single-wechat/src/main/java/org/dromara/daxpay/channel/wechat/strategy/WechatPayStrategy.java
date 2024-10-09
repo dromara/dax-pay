@@ -59,7 +59,7 @@ public class WechatPayStrategy extends AbsPayStrategy {
         } else {
             this.wechatPayParam = new WechatPayParam();
         }
-        this.wechatPayConfig = aliPayConfigService.getWechatPayConfig();
+        this.wechatPayConfig = aliPayConfigService.getAndCheckConfig();
         wechatPayService.validation(this.getPayParam(), this.wechatPayParam, wechatPayConfig);
     }
 

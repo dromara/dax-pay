@@ -17,6 +17,7 @@ import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.param.config.AliPayConfigParam;
 import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
 import org.dromara.daxpay.core.enums.ChannelEnum;
+import org.dromara.daxpay.core.exception.ChannelNotEnableException;
 import org.dromara.daxpay.core.exception.ConfigNotEnableException;
 import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.service.common.cache.ChannelConfigCacheService;
@@ -105,12 +106,21 @@ public class AliPayConfigService {
     }
 
     /**
+     * 获取并检查支付配置
+     */
+    public AliPayConfig getAndCheckConfig() {
+        var payConfig = this.getAliPayConfig();
+        if (!payConfig.getEnable()){
+            throw new ChannelNotEnableException("支付宝支付通道未启用");
+        }
+        return payConfig;
+    }
+
+    /**
      * 获取支付宝SDK的配置
      */
     public AlipayClient getAlipayClient(){
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.ALI.getCode());
-        AliPayConfig aliPayConfig = AliPayConfig.convertConfig(channelConfig);
+        AliPayConfig aliPayConfig = this.getAndCheckConfig();
         return this.getAlipayClient(aliPayConfig);
     }
 

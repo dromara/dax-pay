@@ -49,7 +49,7 @@ public class WechatRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public void doBeforeRefundHandler() {
-        this.config = wechatPayConfigService.getWechatPayConfig();
+        this.config = wechatPayConfigService.getAndCheckConfig();
     }
 
 

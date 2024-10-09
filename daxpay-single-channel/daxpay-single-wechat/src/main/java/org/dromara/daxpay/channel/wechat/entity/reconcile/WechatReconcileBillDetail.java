@@ -1,12 +1,9 @@
-package org.dromara.daxpay.channel.wechat.bo.reconcile;
+package org.dromara.daxpay.channel.wechat.entity.reconcile;
 
 import cn.hutool.core.annotation.Alias;
-import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-
-import java.lang.reflect.Field;
 
 /**
  * 微信交易对账解析文件
@@ -129,23 +126,4 @@ public class WechatReconcileBillDetail {
     @Alias("费率备注")
     private String feeRemark;
 
-    /**
-     * 去除前缀的 ` 符号
-     */
-    public void removeStartSymbol() {
-        Field[] fields = this.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            if (field.getType() == String.class) {
-                field.setAccessible(true);
-                try {
-                    String value = (String) field.get(this);
-                    if (StrUtil.startWith(value, "`")) {
-                        field.set(this, StrUtil.replaceFirst(value, "`", ""));
-                    }
-                } catch (IllegalAccessException e) {
-                    log.warn("去除前缀错误错误", e);
-                }
-            }
-        }
-    }
 }

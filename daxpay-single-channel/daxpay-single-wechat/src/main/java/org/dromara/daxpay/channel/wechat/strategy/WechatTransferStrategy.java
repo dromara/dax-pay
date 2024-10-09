@@ -75,7 +75,7 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
      */
     @Override
     public void doBeforeHandler() {
-        this.weChatPayConfig = wechatPayConfigService.getWechatPayConfig();
+        this.weChatPayConfig = wechatPayConfigService.getAndCheckConfig();
     }
 
     /**

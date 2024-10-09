@@ -13,6 +13,7 @@ import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.param.config.WechatPayConfigParam;
 import org.dromara.daxpay.channel.wechat.result.config.WechatPayConfigResult;
 import org.dromara.daxpay.core.enums.ChannelEnum;
+import org.dromara.daxpay.core.exception.ChannelNotEnableException;
 import org.dromara.daxpay.core.exception.ConfigNotEnableException;
 import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.service.common.cache.ChannelConfigCacheService;
@@ -89,15 +90,6 @@ public class WechatPayConfigService {
     }
 
     /**
-     * 获取微信支付配置
-     */
-    public WechatPayConfig getWechatPayConfig(){
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.WECHAT.getCode());
-        return WechatPayConfig.convertConfig(channelConfig);
-    }
-
-    /**
      * 获取支付异步通知地址
      */
     public String getPayNotifyUrl() {
@@ -122,6 +114,27 @@ public class WechatPayConfigService {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
         return StrUtil.format("{}/unipay/callback/{}/{}/wechat/transfer",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
+    }
+
+
+    /**
+     * 获取并检查支付配置
+     */
+    public WechatPayConfig getAndCheckConfig(){
+        var payConfig = this.getWechatPayConfig();
+        if (!payConfig.getEnable()){
+            throw new ChannelNotEnableException("支付宝支付通道未启用");
+        }
+        return payConfig;
+    }
+
+    /**
+     * 获取微信支付配置
+     */
+    public WechatPayConfig getWechatPayConfig(){
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.WECHAT.getCode());
+        return WechatPayConfig.convertConfig(channelConfig);
     }
 
     /**

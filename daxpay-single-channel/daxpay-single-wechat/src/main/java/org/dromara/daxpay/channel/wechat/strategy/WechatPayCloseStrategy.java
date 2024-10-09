@@ -52,7 +52,7 @@ public class WechatPayCloseStrategy extends AbsPayCloseStrategy {
         if (this.isUseCancel() && !order.getMethod().equals(PayMethodEnum.BARCODE.getCode())){
             throw new ValidationFailedException("该订单不支持撤销操作");
         }
-        this.config = wechatPayConfigService.getWechatPayConfig();
+        this.config = wechatPayConfigService.getAndCheckConfig();
     }
 
     /**

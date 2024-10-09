@@ -41,7 +41,7 @@ public class WechatSyncTransferStrategy extends AbsSyncTransferOrderStrategy {
      */
     @Override
     public TransferSyncResultBo doSync() {
-        var wechatPayConfig = wechatPayConfigService.getWechatPayConfig();
+        var wechatPayConfig = wechatPayConfigService.getAndCheckConfig();
         return wechatTransferSyncV3Service.sync(this.getTransferOrder(), wechatPayConfig);
     }
 
