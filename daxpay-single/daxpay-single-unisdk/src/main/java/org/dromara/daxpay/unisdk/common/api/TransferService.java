@@ -1,7 +1,7 @@
 package org.dromara.daxpay.unisdk.common.api;
 
 import org.dromara.daxpay.unisdk.common.bean.AssistOrder;
-import org.dromara.daxpay.unisdk.common.bean.TransferOrder;
+import org.dromara.daxpay.unisdk.common.bean.UniTransferOrder;
 
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public interface TransferService {
      * @param transferOrder 转账订单
      * @return 结果
      */
-    Map<String, Object> transfer(TransferOrder transferOrder);
+    Map<String, Object> transfer(UniTransferOrder transferOrder);
 
     /**
      * 转账查询

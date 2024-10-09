@@ -572,6 +572,7 @@ public class WxPayCodepayResult implements Serializable {
     @Data
     @NoArgsConstructor
     public static class GoodsDetail implements Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         /**
          * <pre>

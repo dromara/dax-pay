@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 public class MchAppLocal {
 
     /** 应用号 */
-    private String appId;;
+    private String appId;
 
     /** 签名方式 */
     private String signType;

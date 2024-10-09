@@ -1,23 +1,22 @@
 package org.dromara.daxpay.unisdk.common.http;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.unisdk.common.bean.MethodType;
-import org.dromara.daxpay.unisdk.common.bean.result.PayException;
-import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
-import org.dromara.daxpay.unisdk.common.util.XML;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 import org.apache.http.*;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
+import org.dromara.daxpay.unisdk.common.bean.MethodType;
+import org.dromara.daxpay.unisdk.common.bean.result.PayException;
+import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
+import org.dromara.daxpay.unisdk.common.util.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +87,7 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
     public ClientHttpRequest(URI uri, MethodType method, Object request, String defaultCharset) {
         this(uri, method);
         setParameters(request);
-        if (StringUtils.isNotEmpty(defaultCharset)) {
+        if (StrUtil.isNotEmpty(defaultCharset)) {
             setDefaultCharset(Charset.forName(defaultCharset));
         }
 
@@ -218,7 +217,7 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
             case HttpHeader entity -> {
                 if (null != entity.getHeaders()) {
                     if (log.isDebugEnabled()) {
-                        log.debug("header : " + JSON.toJSONString(entity.getHeaders()));
+                        log.debug("header : {}", JSON.toJSONString(entity.getHeaders()));
                     }
                     for (Header header : entity.getHeaders()) {
                         addHeader(header);
@@ -231,7 +230,7 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
                 }
                 if (null != entity.getHeaders()) {
                     if (log.isDebugEnabled()) {
-                        log.debug("header : " + JSON.toJSONString(entity.getHeaders()));
+                        log.debug("header : {}", JSON.toJSONString(entity.getHeaders()));
                     }
                     for (Header header : entity.getHeaders()) {
                         addHeader(header);
@@ -242,14 +241,14 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
             case Map map -> {
                 String parameters = getMapToParameters(map);
                 if (log.isDebugEnabled()) {
-                    log.debug("Parameter : " + parameters);
+                    log.debug("Parameter : {}", parameters);
                 }
                 StringEntity entity = new StringEntity(parameters, APPLICATION_FORM_URLENCODED_UTF_8);
                 setEntity(entity);
             }
             case String s -> {
                 if (log.isDebugEnabled()) {
-                    log.debug("Parameter : " + request);
+                    log.debug("Parameter : {}", request);
                 }
                 StringEntity entity = new StringEntity(s, APPLICATION_FORM_URLENCODED_UTF_8);
                 setEntity(entity);
@@ -257,7 +256,7 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
             default -> {
                 String body = JSON.toJSONString(request);
                 if (log.isDebugEnabled()) {
-                    log.debug("body : " + request);
+                    log.debug("body : {}", request);
                 }
                 StringEntity entity = new StringEntity(body, ContentType.APPLICATION_JSON);
                 setEntity(entity);
@@ -270,14 +269,14 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
 
 
     @Override
-    public T handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+    public T handleResponse(HttpResponse response) throws IOException {
         final StatusLine statusLine = response.getStatusLine();
         final HttpEntity entity = response.getEntity();
 
         if (null == entity){
             return null;
         }
-        String[] value = null;
+        String[] value;
         if (null == entity.getContentType()) {
             value = new String[]{"application/x-www-form-urlencoded"};
         } else {

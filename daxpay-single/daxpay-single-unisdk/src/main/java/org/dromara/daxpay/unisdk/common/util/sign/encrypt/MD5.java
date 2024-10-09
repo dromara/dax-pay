@@ -1,10 +1,9 @@
 package org.dromara.daxpay.unisdk.common.util.sign.encrypt;
 
 
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
-import org.apache.commons.codec.digest.DigestUtils;
-
-import static org.dromara.daxpay.unisdk.common.util.str.StringUtils.getContentBytes;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.DigestUtil;
+import org.dromara.daxpay.unisdk.common.util.Util;
 
 /**
  * MD5签名工具
@@ -26,7 +25,7 @@ public class MD5 {
     public static String sign(String text, String key, String inputCharset) {
         //拼接key
         text = text + key;
-        return DigestUtils.md5Hex(getContentBytes(text, inputCharset));
+        return DigestUtil.md5Hex(Util.getContentBytes(text, inputCharset));
     }
 
     /**
@@ -40,7 +39,7 @@ public class MD5 {
      */
     public static boolean verify(String text, String sign, String key, String inputCharset) {
         //判断是否一样
-        return StringUtils.equals(sign(text, key, inputCharset).toUpperCase(), sign.toUpperCase());
+        return StrUtil.equals(sign(text, key, inputCharset).toUpperCase(), sign.toUpperCase());
     }
 
 

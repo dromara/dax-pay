@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class WxPayTransferBatchesNotifyV3Result implements Serializable, WxPayBaseNotifyV3Result<WxPayTransferBatchesNotifyV3Result.DecryptNotifyResult> {
+  @Serial
   private static final long serialVersionUID = -1L;
   /**
    * 源数据
@@ -30,6 +32,7 @@ public class WxPayTransferBatchesNotifyV3Result implements Serializable, WxPayBa
   @Data
   @NoArgsConstructor
   public static class DecryptNotifyResult implements Serializable {
+    @Serial
     private static final long serialVersionUID = -1L;
     /**
      * <pre>

@@ -1,10 +1,10 @@
 package org.dromara.daxpay.unisdk.common.http;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.unisdk.common.bean.result.PayException;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -193,13 +193,13 @@ public final class UriVariables {
     private static void putKeyValueToMap(StringBuilder temp, boolean isKey, String key, Map<String, Object> map) {
         if (isKey) {
             key = temp.toString();
-            if (key.length() == 0) {
+            if (key.isEmpty()) {
                 throw new PayErrorException(new PayException("QString format illegal", "内容格式有误"));
             }
             map.put(key, "");
         }
         else {
-            if (key.length() == 0) {
+            if (key.isEmpty()) {
                 throw new PayErrorException(new PayException("QString format illegal", "内容格式有误"));
             }
             map.put(key, temp.toString());
@@ -227,14 +227,14 @@ public final class UriVariables {
      * @return 去除域名的标准url
      */
     public static String getCanonicalUrl(String url) {
-        if (StringUtils.isEmpty(url)) {
+        if (StrUtil.isEmpty(url)) {
             return url;
         }
         try {
             URI uri = new URI(url);
             String path = uri.getPath();
             String encodedQuery = uri.getQuery();
-            if (StringUtils.isNotEmpty(encodedQuery)) {
+            if (StrUtil.isNotEmpty(encodedQuery)) {
                 path += QUESTION.concat(encodedQuery);
             }
             return path;

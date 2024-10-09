@@ -373,35 +373,31 @@ public class ReconcileStatementService {
                         .setChannelTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getChannelTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
                 );
                 // 处理远程短单
-                case REMOTE_NOT_EXISTS -> {
-                    tradeExcels.add(new ReconcileTradeExcel()
-                            .setResult(ReconcileDiscrepancyTypeEnum.REMOTE_NOT_EXISTS.getName())
-                            .setTradeNo(discrepancyTrade.getTradeNo())
-                            .setBizTradeNo(discrepancyTrade.getBizTradeNo())
-                            .setOutTradeNo(discrepancyTrade.getOutTradeNo())
-                            .setTradeType(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType()).getName())
-                            .setTradeAmount(discrepancyTrade.getTradeAmount().toString())
-                            .setTradeStatus(discrepancyTrade.getTradeStatus())
-                            .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
-                    );
-                }
+                case REMOTE_NOT_EXISTS -> tradeExcels.add(new ReconcileTradeExcel()
+                        .setResult(ReconcileDiscrepancyTypeEnum.REMOTE_NOT_EXISTS.getName())
+                        .setTradeNo(discrepancyTrade.getTradeNo())
+                        .setBizTradeNo(discrepancyTrade.getBizTradeNo())
+                        .setOutTradeNo(discrepancyTrade.getOutTradeNo())
+                        .setTradeType(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType()).getName())
+                        .setTradeAmount(discrepancyTrade.getTradeAmount().toString())
+                        .setTradeStatus(discrepancyTrade.getTradeStatus())
+                        .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                );
                 // 处理信息不一致订单
-                case NOT_MATCH -> {
-                    tradeExcels.add(new ReconcileTradeExcel()
-                            .setResult(ReconcileDiscrepancyTypeEnum.NOT_MATCH.getName())
-                            .setTradeNo(discrepancyTrade.getTradeNo())
-                            .setBizTradeNo(discrepancyTrade.getBizTradeNo())
-                            .setOutTradeNo(discrepancyTrade.getOutTradeNo())
-                            .setTradeType(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType()).getName())
-                            .setTradeAmount(discrepancyTrade.getTradeAmount().toString())
-                            .setTradeStatus(discrepancyTrade.getTradeStatus())
-                            .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
-                            .setChannelTradeNo(discrepancy.getChannelTradeNo())
-                            .setChannelTradeAmount(discrepancy.getChannelTradeAmount().toString())
-                            .setChannelTradeStatus(discrepancy.getChannelTradeStatus())
-                            .setChannelTradeTime(LocalDateTimeUtil.format(discrepancy.getChannelTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
-                    );
-                }
+                case NOT_MATCH -> tradeExcels.add(new ReconcileTradeExcel()
+                        .setResult(ReconcileDiscrepancyTypeEnum.NOT_MATCH.getName())
+                        .setTradeNo(discrepancyTrade.getTradeNo())
+                        .setBizTradeNo(discrepancyTrade.getBizTradeNo())
+                        .setOutTradeNo(discrepancyTrade.getOutTradeNo())
+                        .setTradeType(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType()).getName())
+                        .setTradeAmount(discrepancyTrade.getTradeAmount().toString())
+                        .setTradeStatus(discrepancyTrade.getTradeStatus())
+                        .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                        .setChannelTradeNo(discrepancy.getChannelTradeNo())
+                        .setChannelTradeAmount(discrepancy.getChannelTradeAmount().toString())
+                        .setChannelTradeStatus(discrepancy.getChannelTradeStatus())
+                        .setChannelTradeTime(LocalDateTimeUtil.format(discrepancy.getChannelTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                );
             }
         }
         return tradeExcels;

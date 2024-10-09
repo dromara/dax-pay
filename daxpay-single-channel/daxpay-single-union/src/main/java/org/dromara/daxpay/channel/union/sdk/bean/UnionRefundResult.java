@@ -318,7 +318,7 @@ public class UnionRefundResult extends BaseRefundResult {
         this.reserved = reserved;
     }
 
-    public static final UnionRefundResult create(Map<String, Object> result){
+    public static UnionRefundResult create(Map<String, Object> result){
         UnionRefundResult refundResult = new JSONObject(result).toJavaObject(UnionRefundResult.class);
         refundResult.setAttrs(result);
         return refundResult;

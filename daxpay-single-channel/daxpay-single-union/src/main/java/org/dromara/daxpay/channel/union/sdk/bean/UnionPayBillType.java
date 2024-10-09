@@ -1,7 +1,8 @@
 package org.dromara.daxpay.channel.union.sdk.bean;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.Setter;
 import org.dromara.daxpay.unisdk.common.bean.BillType;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 
 /**
  * 银联账单类型
@@ -12,6 +13,7 @@ import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
  * date 2021/2/23
  * </pre>
  */
+@Setter
 public class UnionPayBillType implements BillType {
 
     private String fileType = "00";
@@ -46,10 +48,6 @@ public class UnionPayBillType implements BillType {
         return fileType;
     }
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
-
     /**
      * 自定义属性
      *
@@ -64,7 +62,7 @@ public class UnionPayBillType implements BillType {
     }
 
     public UnionPayBillType(String fileType) {
-        if (StringUtils.isNotEmpty(fileType)) {
+        if (StrUtil.isNotEmpty(fileType)) {
             this.fileType = fileType;
         }
     }

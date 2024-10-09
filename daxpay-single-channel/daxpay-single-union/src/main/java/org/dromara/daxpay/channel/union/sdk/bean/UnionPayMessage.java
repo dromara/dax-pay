@@ -345,7 +345,7 @@ public class UnionPayMessage extends PayMessage {
         this.accSplitData = accSplitData;
     }
 
-    public static final UnionPayMessage create(Map<String, Object> message) {
+    public static UnionPayMessage create(Map<String, Object> message) {
         UnionPayMessage payMessage = new JSONObject(message).toJavaObject(UnionPayMessage.class);
         payMessage.setPayMessage(message);
         return payMessage;

@@ -18,7 +18,7 @@ import java.util.Map;
  *             source Daniel Qian
  *          </pre>
  */
-public interface PayMessageInterceptor<M extends PayMessage, S extends PayService> {
+public interface PayMessageInterceptor<M extends PayMessage, S extends UniPayService> {
 
     /**
      * 拦截微信消息

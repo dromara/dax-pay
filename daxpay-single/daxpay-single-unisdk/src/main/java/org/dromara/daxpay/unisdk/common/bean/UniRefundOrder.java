@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Setter
 @Getter
-public class RefundOrder extends AssistOrder {
+public class UniRefundOrder extends AssistOrder {
     /**
      * 退款单号，每次进行退款的单号，此处唯一
      */
@@ -54,23 +54,23 @@ public class RefundOrder extends AssistOrder {
      */
     private String refundUrl;
 
-    public RefundOrder() {
+    public UniRefundOrder() {
     }
 
-    public RefundOrder(String refundNo, String tradeNo, BigDecimal refundAmount) {
+    public UniRefundOrder(String refundNo, String tradeNo, BigDecimal refundAmount) {
         this.refundNo = refundNo;
         setTradeNo(tradeNo);
         this.refundAmount = refundAmount;
     }
 
-    public RefundOrder(String tradeNo, String outTradeNo, BigDecimal refundAmount, BigDecimal totalAmount) {
+    public UniRefundOrder(String tradeNo, String outTradeNo, BigDecimal refundAmount, BigDecimal totalAmount) {
         setTradeNo(tradeNo);
         setOutTradeNo(outTradeNo);
         this.refundAmount = refundAmount;
         this.totalAmount = totalAmount;
     }
 
-    public RefundOrder(String refundNo, String tradeNo, String outTradeNo, BigDecimal refundAmount, BigDecimal totalAmount) {
+    public UniRefundOrder(String refundNo, String tradeNo, String outTradeNo, BigDecimal refundAmount, BigDecimal totalAmount) {
         this.refundNo = refundNo;
         setTradeNo(tradeNo);
         setOutTradeNo(outTradeNo);

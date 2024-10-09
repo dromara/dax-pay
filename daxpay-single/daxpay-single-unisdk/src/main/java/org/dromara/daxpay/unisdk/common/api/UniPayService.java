@@ -16,7 +16,7 @@ import java.util.Map;
  *         date 2016-5-18 14:09:01
  *         </pre>
  */
-public interface PayService<PC extends PayConfigStorage> {
+public interface UniPayService<PC extends PayConfigStorage> {
 
 
     /**
@@ -25,7 +25,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param payConfigStorage 支付配置
      * @return 支付服务
      */
-    PayService setPayConfigStorage(PC payConfigStorage);
+    UniPayService<PC> setPayConfigStorage(PC payConfigStorage);
 
     /**
      * 获取支付配置
@@ -47,7 +47,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param configStorage http请求配置
      * @return 支付服务
      */
-    PayService setRequestTemplateConfigStorage(HttpConfigStorage configStorage);
+    UniPayService<PC> setRequestTemplateConfigStorage(HttpConfigStorage configStorage);
 
     /**
      * 回调校验
@@ -64,9 +64,9 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param order 支付订单
      * @param <O>   预订单类型
      * @return 订单信息
-     * @see PayOrder 支付订单信息
+     * @see UniOrder 支付订单信息
      */
-    <O extends PayOrder> Map<String, Object> orderInfo(O order);
+    <O extends UniOrder> Map<String, Object> orderInfo(O order);
 
     /**
      * 页面转跳支付， 返回对应页面重定向信息
@@ -75,7 +75,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param <O>   预订单类型
      * @return 对应页面重定向信息
      */
-    <O extends PayOrder> String toPay(O order);
+    <O extends UniOrder> String toPay(O order);
 
     /**
      * app支付
@@ -84,7 +84,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param <O>   预订单类型
      * @return 对应app所需参数信息
      */
-    <O extends PayOrder> Map<String, Object> app(O order);
+    <O extends UniOrder> Map<String, Object> app(O order);
 
     /**
      * 创建签名
@@ -139,7 +139,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param <O>   预订单类型
      * @return 返回二维码信息,，支付时需要的
      */
-    <O extends PayOrder> String getQrPay(O order);
+    <O extends UniOrder> String getQrPay(O order);
 
     /**
      * 小程序支付，返回小程序所需的订单构建信息
@@ -148,7 +148,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param <O>   预订单类型
      * @return 返回支付结果
      */
-    <O extends PayOrder> Map<String, Object> jsApi(O order);
+    <O extends UniOrder> Map<String, Object> jsApi(O order);
     /**
      * 刷卡付,pos主动扫码付款(条码付)
      * 刷脸付
@@ -157,7 +157,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param <O>   预订单类型
      * @return 返回支付结果
      */
-    <O extends PayOrder> Map<String, Object> microPay(O order);
+    <O extends UniOrder> Map<String, Object> microPay(O order);
 
 
     /**
@@ -195,7 +195,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param refundOrder 退款订单信息
      * @return 返回支付方申请退款后的结果
      */
-    RefundResult refund(RefundOrder refundOrder);
+    RefundResult refund(UniRefundOrder refundOrder);
 
 
     /**
@@ -204,7 +204,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param refundOrder 退款订单单号信息
      * @return 返回支付方查询退款后的结果
      */
-    Map<String, Object> refundquery(RefundOrder refundOrder);
+    Map<String, Object> refundquery(UniRefundOrder refundOrder);
 
     /**
      * 下载对账单
@@ -231,7 +231,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * @param order 转账订单
      * @return 对应的转账结果
      */
-    Map<String, Object> transfer(TransferOrder order);
+    Map<String, Object> transfer(UniTransferOrder order);
 
     /**
      * 回调处理
@@ -246,7 +246,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * 设置支付消息处理器,这里用于处理具体的支付业务
      *
      * @param handler 消息处理器
-     *                配合{@link  org.dromara.daxpay.unisdk.common.api.PayService#payBack(NoticeRequest)}进行使用
+     *                配合{@link  UniPayService#payBack(NoticeRequest)}进行使用
      *                <p>
      *                默认使用{@link  org.dromara.daxpay.unisdk.common.api.DefaultPayMessageHandler }进行实现
      */
@@ -256,7 +256,7 @@ public interface PayService<PC extends PayConfigStorage> {
      * 设置支付消息处理器,这里用于处理具体的支付业务
      *
      * @param interceptor 消息拦截器
-     *                    配合{@link  org.dromara.daxpay.unisdk.common.api.PayService#payBack(NoticeRequest)}进行使用
+     *                    配合{@link  UniPayService#payBack(NoticeRequest)}进行使用
      *                    <p>
      *                    默认使用{@link  org.dromara.daxpay.unisdk.common.api.DefaultPayMessageHandler }进行实现
      */

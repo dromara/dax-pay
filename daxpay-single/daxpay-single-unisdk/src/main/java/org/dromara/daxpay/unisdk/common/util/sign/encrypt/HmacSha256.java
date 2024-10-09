@@ -29,7 +29,7 @@ public class HmacSha256 {
      * @return 签名值
      */
     public static String createSign(String content, String key, String characterEncoding) {
-        Mac sha256HMAC = null;
+        Mac sha256HMAC;
         try {
             sha256HMAC = Mac.getInstance("HmacSHA256");
             SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(characterEncoding), "HmacSHA256");

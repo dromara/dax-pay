@@ -1,7 +1,8 @@
 package org.dromara.daxpay.unisdk.common.util.sign.encrypt;
 
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.dromara.daxpay.unisdk.common.util.Util;
 
 
 /**
@@ -28,7 +29,7 @@ public class SHA1 {
     public static String sign(String text, String key, String inputCharset) {
         //拼接key
         text = text + key;
-        return DigestUtils.sha1Hex(  StringUtils.getContentBytes(text, inputCharset));
+        return DigestUtils.sha1Hex(Util.getContentBytes(text, inputCharset));
     }
 
 
@@ -43,7 +44,7 @@ public class SHA1 {
      */
     public static boolean verify(String text, String sign, String key, String inputCharset) {
         //判断是否一样
-        return StringUtils.equals(sign(text, key, inputCharset).toUpperCase(), sign.toUpperCase());
+        return StrUtil.equals(sign(text, key, inputCharset).toUpperCase(), sign.toUpperCase());
     }
 
 }

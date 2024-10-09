@@ -16,7 +16,7 @@ import java.util.Map;
  * date 2018/1/31
  * </pre>
  */
-public class TransferOrder implements Order {
+public class UniTransferOrder implements Order {
 
     /**
      * 转账批次订单单号

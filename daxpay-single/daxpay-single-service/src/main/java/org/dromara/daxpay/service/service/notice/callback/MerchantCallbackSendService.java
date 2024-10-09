@@ -74,7 +74,7 @@ public class MerchantCallbackSendService {
         if (StrUtil.equalsIgnoreCase(body, "SUCCESS")){
             task.setSendCount(task.getSendCount() + 1)
                     .setLatestTime(sendTime)
-                    .setSuccess(true);;
+                    .setSuccess(true);
             record.setSuccess(true);
             // 如果为自动发送且延迟次数, 延迟次数也+1
             if (autoSend && Objects.nonNull(task.getDelayCount())){

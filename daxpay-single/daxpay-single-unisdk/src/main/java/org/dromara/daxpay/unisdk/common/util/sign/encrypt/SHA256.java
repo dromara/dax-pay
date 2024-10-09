@@ -1,5 +1,6 @@
 package org.dromara.daxpay.unisdk.common.util.sign.encrypt;
 
+import cn.hutool.core.util.StrUtil;
 import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -42,7 +43,7 @@ public class SHA256 {
      */
     public static boolean verify(String text, String sign, String key, String inputCharset) {
         //判断是否一样
-        return StringUtils.equals(sign(text, key, inputCharset).toUpperCase(), sign.toUpperCase());
+        return StrUtil.equals(sign(text, key, inputCharset).toUpperCase(), sign.toUpperCase());
     }
 
 }

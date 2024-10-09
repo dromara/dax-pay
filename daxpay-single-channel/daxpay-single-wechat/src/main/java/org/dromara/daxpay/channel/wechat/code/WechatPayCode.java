@@ -40,7 +40,7 @@ public interface WechatPayCode {
     String CONTENT_TYPE = "Content-Type";
 
     List<String> PRIMARY_API_DOMAIN =
-            Collections.unmodifiableList(Arrays.asList("api.mch.weixin.qq.com", "api.wechatpay.cn"));
+            List.of("api.mch.weixin.qq.com", "api.wechatpay.cn");
     String SECONDARY_API_DOMAIN = "api2.wechatpay.cn";
 
 }

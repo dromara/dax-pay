@@ -52,11 +52,11 @@ public class PayMessageRouter {
     /**
      * 规则集
      */
-    private final List<PayMessageRouterRule> rules = new ArrayList<PayMessageRouterRule>();
+    private final List<PayMessageRouterRule> rules = new ArrayList<>();
     /**
      * 支付服务
      */
-    private final PayService payService;
+    private final UniPayService payService;
     /**
      * 异步线程处理器
      * -- SETTER --
@@ -89,7 +89,7 @@ public class PayMessageRouter {
      *
      * @param payService 支付服务
      */
-    public PayMessageRouter(PayService payService) {
+    public PayMessageRouter(UniPayService payService) {
         this.payService = payService;
         this.executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
         this.exceptionHandler = new LogExceptionHandler();
@@ -136,7 +136,7 @@ public class PayMessageRouter {
      */
     public PayOutMessage route(final PayMessage payMessage) {
 
-        final List<PayMessageRouterRule> matchRules = new ArrayList<PayMessageRouterRule>();
+        final List<PayMessageRouterRule> matchRules = new ArrayList<>();
         // 收集匹配的规则
         for (final PayMessageRouterRule rule : rules) {
             if (rule.test(payMessage)) {
@@ -152,7 +152,7 @@ public class PayMessageRouter {
         }
 
         PayOutMessage res = null;
-        final List<Future> futures = new ArrayList<Future>();
+        final List<Future> futures = new ArrayList<>();
         for (final PayMessageRouterRule rule : matchRules) {
             // 返回最后一个非异步的rule的执行结果
             if (rule.isAsync()) {
@@ -166,7 +166,7 @@ public class PayMessageRouter {
                 res = rule.service(payMessage, payService, exceptionHandler);
                 // 在同步操作结束，session访问结束
                 if (log.isDebugEnabled()) {
-                    log.debug("End session access: async=false, fromPay=" + payMessage.getFromPay());
+                    log.debug("End session access: async=false, fromPay={}", payMessage.getFromPay());
                 }
             }
         }
@@ -176,13 +176,10 @@ public class PayMessageRouter {
                 for (Future future : futures) {
                     try {
                         future.get();
-                        log.debug("End session access: async=true, fromPay=" + payMessage.getFromPay());
+                        log.debug("End session access: async=true, fromPay={}", payMessage.getFromPay());
 
                     }
-                    catch (InterruptedException e) {
-                        log.error("Error happened when wait task finish", e);
-                    }
-                    catch (ExecutionException e) {
+                    catch (InterruptedException | ExecutionException e) {
                         log.error("Error happened when wait task finish", e);
                     }
                 }

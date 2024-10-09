@@ -6,6 +6,7 @@ import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
 import org.dromara.daxpay.unisdk.common.http.HttpRequestTemplate;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 证书存储类型
@@ -25,10 +26,9 @@ public enum CertStoreType implements CertStore {
          *
          * @param cert 证书信息
          * @return 输入流
-         * @throws IOException 找不到文件异常
          */
         @Override
-        public InputStream getInputStream(Object cert) throws IOException {
+        public InputStream getInputStream(Object cert) {
             return null;
         }
     },
@@ -73,11 +73,10 @@ public enum CertStoreType implements CertStore {
          *
          * @param cert 证书信息
          * @return 输入流
-         * @throws IOException 找不到文件异常
          */
         @Override
-        public InputStream getInputStream(Object cert) throws IOException {
-            return new ByteArrayInputStream(((String) cert).getBytes("ISO-8859-1"));
+        public InputStream getInputStream(Object cert) {
+            return new ByteArrayInputStream(((String) cert).getBytes(StandardCharsets.ISO_8859_1));
         }
     },
 
@@ -90,10 +89,9 @@ public enum CertStoreType implements CertStore {
          *
          * @param cert 证书信息
          * @return 输入流
-         * @throws IOException 找不到文件异常
          */
         @Override
-        public InputStream getInputStream(Object cert) throws IOException {
+        public InputStream getInputStream(Object cert) {
             return (InputStream) cert;
         }
     },
@@ -107,10 +105,9 @@ public enum CertStoreType implements CertStore {
          *
          * @param url 获取证书信息的URL
          * @return 输入流
-         * @throws IOException 找不到文件异常
          */
         @Override
-        public InputStream getInputStream(Object url) throws IOException {
+        public InputStream getInputStream(Object url) {
             return new HttpRequestTemplate().getForObject((String) url, InputStream.class);
         }
     },
@@ -137,8 +134,5 @@ public enum CertStoreType implements CertStore {
             }
 
         }
-    };
-
-
-
+    }
 }

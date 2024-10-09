@@ -16,5 +16,5 @@ public interface TransferType extends TransactionType{
      * @param order 转账订单
      * @return 属性对象
      */
-    Map<String, Object> setAttr(Map<String, Object> attr, TransferOrder order);
+    Map<String, Object> setAttr(Map<String, Object> attr, UniTransferOrder order);
 }

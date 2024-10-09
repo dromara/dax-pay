@@ -1,5 +1,8 @@
 package org.dromara.daxpay.unisdk.common.util;
 
+import cn.hutool.core.util.StrUtil;
+
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -15,7 +18,7 @@ public class Util {
      */
     public static byte[] intToBytes(int num) {
         byte[] bytes = new byte[4];
-        bytes[0] = (byte) (0xff & (num >> 0));
+        bytes[0] = (byte) (0xff & (num));
         bytes[1] = (byte) (0xff & (num >> 8));
         bytes[2] = (byte) (0xff & (num >> 16));
         bytes[3] = (byte) (0xff & (num >> 24));
@@ -31,7 +34,7 @@ public class Util {
     public static int byteToInt(byte[] bytes) {
         int num = 0;
         int temp;
-        temp = (0x000000ff & (bytes[0])) << 0;
+        temp = (0x000000ff & (bytes[0]));
         num = num | temp;
         temp = (0x000000ff & (bytes[1])) << 8;
         num = num | temp;
@@ -40,6 +43,23 @@ public class Util {
         temp = (0x000000ff & (bytes[3])) << 24;
         num = num | temp;
         return num;
+    }
+
+    /**
+     * @param content 需要加密串
+     * @param charset 字符集
+     * @return 加密后的字节数组
+     */
+    public static byte[] getContentBytes(String content, String charset) {
+        if (StrUtil.isEmpty(charset)) {
+            return content.getBytes();
+        }
+        try {
+            return content.getBytes(charset);
+        }
+        catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("转码过程中出现错误,指定的编码集不对,您目前指定的编码集是:" + charset);
+        }
     }
 
     /**
@@ -337,14 +357,14 @@ public class Util {
         int result = 0;
         for (int i = max; i > 0; i--) {
             char c = hex.charAt(i - 1);
-            int algorism = 0;
+            int algorism;
             if (c >= '0' && c <= '9') {
                 algorism = c - '0';
             }
             else {
                 algorism = c - 55;
             }
-            result += Math.pow(16, max - i) * algorism;
+            result += (int) (Math.pow(16, max - i) * algorism);
         }
         return result;
     }
@@ -433,7 +453,7 @@ public class Util {
         for (int i = max; i > 0; i--) {
             char c = binary.charAt(i - 1);
             int algorism = c - '0';
-            result += Math.pow(2, max - i) * algorism;
+            result += (int) (Math.pow(2, max - i) * algorism);
         }
         return result;
     }
@@ -465,10 +485,8 @@ public class Util {
      * @return 补充结果
      */
     public static String patchHexString(String str, int maxLength) {
-        StringBuilder temp = new StringBuilder();
-        temp.append("0".repeat(Math.max(0, maxLength - str.length())));
-        temp.append(str);
-        return temp.toString();
+        return "0".repeat(Math.max(0, maxLength - str.length())) +
+                str;
     }
 
 
@@ -557,7 +575,7 @@ public class Util {
 
     public static byte[] subByte(byte[] input, int startIndex, int length) {
         byte[] bt = new byte[length];
-        System.arraycopy(input, 0 + startIndex, bt, 0, length);
+        System.arraycopy(input, startIndex, bt, 0, length);
         return bt;
     }
 

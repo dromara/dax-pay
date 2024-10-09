@@ -21,7 +21,7 @@ import java.util.Map;
  * </pre>
  */
 @Slf4j
-public class DefaultPayMessageHandler implements PayMessageHandler<PayMessage, PayService> {
+public class DefaultPayMessageHandler implements PayMessageHandler<PayMessage, UniPayService> {
 
     protected final Logger LOG = LoggerFactory.getLogger(DefaultPayMessageHandler.class);
     /**
@@ -31,9 +31,9 @@ public class DefaultPayMessageHandler implements PayMessageHandler<PayMessage, P
      * @return xml, text格式的消息，如果在异步规则里处理的话，可以返回null
      */
     @Override
-    public PayOutMessage handle(PayMessage payMessage, Map<String, Object> context, PayService payService) throws PayErrorException {
+    public PayOutMessage handle(PayMessage payMessage, Map<String, Object> context, UniPayService payService) throws PayErrorException {
         if (log.isInfoEnabled()) {
-            log.info("回调支付消息处理器，回调消息：" + JSON.toJSONString(payMessage));
+            log.info("回调支付消息处理器，回调消息：{}", JSON.toJSONString(payMessage));
         }
         return payService.successPayOutMessage(payMessage);
     }

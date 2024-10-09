@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.union.sdk.bean;
 
+import cn.hutool.core.util.StrUtil;
 import org.dromara.daxpay.unisdk.common.bean.TransactionType;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 
 import java.util.Map;
 
@@ -102,7 +102,7 @@ public enum UnionTransactionType implements TransactionType{
         //业务类型
         contentData.put(SDKConstants.param_bizType,this.getBizType());
         //渠道类型
-        if(StringUtils.isNotBlank(this.getChannelType())){
+        if(StrUtil.isNotBlank(this.getChannelType())){
             contentData.put(SDKConstants.param_channelType,this.getChannelType());
         }
     }

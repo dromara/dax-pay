@@ -19,7 +19,7 @@ import java.util.Map;
  *     source Daniel Qian
  *  </pre>
  */
-public interface PayMessageHandler<M extends PayMessage, S extends PayService> {
+public interface PayMessageHandler<M extends PayMessage, S extends UniPayService> {
 
     /**
      * 处理支付回调消息的处理器接口

@@ -69,10 +69,10 @@ public class PayMessageRouterRule {
     private boolean reEnter = false;
 
     @Setter
-    private List<PayMessageHandler> handlers = new ArrayList<PayMessageHandler>();
+    private List<PayMessageHandler> handlers = new ArrayList<>();
 
     @Setter
-    private List<PayMessageInterceptor> interceptors = new ArrayList<PayMessageInterceptor>();
+    private List<PayMessageInterceptor> interceptors = new ArrayList<>();
 
     public PayMessageRouterRule(PayMessageRouter routerBuilder) {
         this.routerBuilder = routerBuilder;
@@ -274,12 +274,12 @@ public class PayMessageRouterRule {
      * @return 支付响应消息
      */
     protected PayOutMessage service(PayMessage payMessage,
-                                    PayService payService,
+                                    UniPayService payService,
                                     PayErrorExceptionHandler exceptionHandler) {
 
         try {
 
-            Map<String, Object> context = new HashMap<String, Object>();
+            Map<String, Object> context = new HashMap<>();
             // 如果拦截器不通过
             for (PayMessageInterceptor interceptor : this.interceptors) {
                 if (!interceptor.intercept(payMessage, context, payService)) {

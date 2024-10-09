@@ -1,7 +1,7 @@
 package org.dromara.daxpay.unisdk.common.bean;
 
-import org.dromara.daxpay.unisdk.common.util.DateUtils;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.Date;
 import java.util.Map;
@@ -20,7 +20,7 @@ public final class OrderParaStructure {
     }
 
     public static Map<String, Object> loadParameters(Map<String, Object> parameters, String key, String value) {
-        if (StringUtils.isNotEmpty(value)) {
+        if (StrUtil.isNotEmpty(value)) {
             parameters.put(key, value);
         }
         return parameters;
@@ -36,7 +36,7 @@ public final class OrderParaStructure {
     }
 
     public static Map<String, Object> loadDateParameters(Map<String, Object> parameters, String key, Order order, String datePattern) {
-        return OrderParaStructure.loadParameters(parameters, key, DateUtils.formatDate((Date) order.getAttr(key), datePattern));
+        return OrderParaStructure.loadParameters(parameters, key, DateUtil.format((Date) order.getAttr(key), datePattern));
     }
 
 

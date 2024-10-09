@@ -27,6 +27,9 @@ public class UnionPayConfigStorage extends BasePayConfigStorage {
      */
     private String seller;
 
+    /**
+     * API版本
+     */
     private String version = "5.1.0";
     /**
      * 0：普通商户直连接入

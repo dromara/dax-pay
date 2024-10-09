@@ -1,6 +1,8 @@
 
 package org.dromara.daxpay.unisdk.common.util.sign.encrypt;
 
+import cn.hutool.core.codec.Base64;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;

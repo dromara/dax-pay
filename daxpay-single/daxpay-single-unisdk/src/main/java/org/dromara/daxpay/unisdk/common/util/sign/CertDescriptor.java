@@ -14,8 +14,8 @@
  */
 package org.dromara.daxpay.unisdk.common.util.sign;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +63,7 @@ public class CertDescriptor {
      */
     private static X509Certificate initCert(InputStream certIn) {
         X509Certificate encryptCertTemp = null;
-        CertificateFactory cf = null;
+        CertificateFactory cf;
         try {
             cf = CertificateFactory.getInstance("X.509");
             encryptCertTemp = (X509Certificate) cf.generateCertificate(certIn);
@@ -97,8 +97,7 @@ public class CertDescriptor {
      */
     private static X509Certificate initCert(String path) {
         X509Certificate encryptCertTemp = null;
-        CertificateFactory cf = null;
-        FileInputStream in = null;
+        FileInputStream in;
         try {
             in = new FileInputStream(path);
             encryptCertTemp = initCert(in);
@@ -227,7 +226,7 @@ public class CertDescriptor {
                 log.warn("Load RSA CertPath,Pwd=[{}],type=[{}]", keyPwd, type);
             }
 
-            char[] nPassword = null;
+            char[] nPassword;
             nPassword = null == keyPwd || keyPwd.trim()
                     .isEmpty() ? null : keyPwd.toCharArray();
             ks.load(fxKeyFile, nPassword);
@@ -257,7 +256,7 @@ public class CertDescriptor {
      * @return
      */
     private String getCertIdIdByStore(KeyStore keyStore) {
-        Enumeration<String> aliasenum = null;
+        Enumeration<String> aliasenum;
         try {
             aliasenum = keyStore.aliases();
             String keyAlias = null;
@@ -281,7 +280,7 @@ public class CertDescriptor {
      * @param certPath 证书地址
      */
     public void initPublicCert(String certPath) {
-        if (!StringUtils.isEmpty(certPath)) {
+        if (!StrUtil.isEmpty(certPath)) {
             publicKeyCert = initCert(certPath);
             if (log.isInfoEnabled()) {
                 log.info("Load PublicKeyCert Successful");
@@ -315,7 +314,7 @@ public class CertDescriptor {
      * @param certPath 证书地址
      */
     public void initRootCert(String certPath) {
-        if (!StringUtils.isEmpty(certPath)) {
+        if (!StrUtil.isEmpty(certPath)) {
             try {
                 initRootCert(new FileInputStream(certPath));
             }

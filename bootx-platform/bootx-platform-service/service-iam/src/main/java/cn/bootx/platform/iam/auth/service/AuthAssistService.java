@@ -34,7 +34,7 @@ public class AuthAssistService {
     public void sendSmsCaptcha(String phone) {
         // 判断用户是否存在
         UserInfo userInfo = userInfoManager.findByPhone(phone).orElseThrow(UserInfoNotExistsException::new);
-        if (!Objects.equals(userInfo.getStatus(), UserStatusEnum.NORMAL)) {
+        if (!Objects.equals(userInfo.getStatus(), UserStatusEnum.NORMAL.getCode())) {
             throw new BizException("用户状态异常");
         }
     }

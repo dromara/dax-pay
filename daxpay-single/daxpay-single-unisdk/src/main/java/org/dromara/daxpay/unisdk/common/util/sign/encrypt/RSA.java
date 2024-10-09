@@ -1,6 +1,7 @@
 
 package org.dromara.daxpay.unisdk.common.util.sign.encrypt;
 
+import cn.hutool.core.codec.Base64;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -220,7 +221,7 @@ public class RSA {
             byte[] buf = new byte[128];
             int bufl;
             while ((bufl = ins.read(buf)) != -1) {
-                byte[] block = null;
+                byte[] block;
 
                 if (buf.length == bufl) {
                     block = buf;
@@ -286,7 +287,7 @@ public class RSA {
     public static PublicKey getPublicKey(InputStream inputStream, String keyAlgorithm) throws IOException, GeneralSecurityException {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));) {
             StringBuilder sb = new StringBuilder();
-            String readLine = null;
+            String readLine;
             while ((readLine = br.readLine()) != null) {
                 if (readLine.charAt(0) == '-') {
                     continue;

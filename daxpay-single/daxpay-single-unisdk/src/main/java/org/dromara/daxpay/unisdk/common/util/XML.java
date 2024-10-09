@@ -1,12 +1,12 @@
 package org.dromara.daxpay.unisdk.common.util;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.dromara.daxpay.unisdk.common.bean.result.PayException;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +88,7 @@ public class XML {
      */
     public static JSONObject toJSONObject(String content, Charset charset) {
 
-        if (StringUtils.isEmpty(content)) {
+        if (StrUtil.isEmpty(content)) {
             return null;
         }
         return toJSONObject(content.getBytes(charset));
@@ -123,10 +124,10 @@ public class XML {
      */
     public static <T> T toBean(String content, Class<T> clazz) {
 
-        if (StringUtils.isEmpty(content)) {
+        if (StrUtil.isEmpty(content)) {
             return null;
         }
-        try (InputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"))) {
+        try (InputStream in = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8))) {
             return inputStream2Bean(in, clazz);
         }
         catch (IOException e) {
@@ -220,28 +221,26 @@ public class XML {
         if (null == m) {
             m = new JSONObject();
         }
-        try {
+        try (in) {
             DocumentBuilder documentBuilder = newDocumentBuilder();
             Document doc = documentBuilder.parse(in);
-            doc.getDocumentElement().normalize();
-            NodeList children = doc.getDocumentElement().getChildNodes();
+            doc.getDocumentElement()
+                    .normalize();
+            NodeList children = doc.getDocumentElement()
+                    .getChildNodes();
             for (int idx = 0; idx < children.getLength(); ++idx) {
                 Node node = children.item(idx);
                 NodeList nodeList = node.getChildNodes();
                 int length = nodeList.getLength();
-                if (node.getNodeType() == Node.ELEMENT_NODE && (length > 1 || length == 1 && nodeList.item(0).hasChildNodes())) {
+                if (node.getNodeType() == Node.ELEMENT_NODE && (length > 1 || length == 1 && nodeList.item(0)
+                        .hasChildNodes())) {
                     m.put(node.getNodeName(), getChildren(nodeList));
-                }
-                else if (node.getNodeType() == Node.ELEMENT_NODE) {
+                } else if (node.getNodeType() == Node.ELEMENT_NODE) {
                     m.put(node.getNodeName(), node.getTextContent());
                 }
             }
-        }
-        catch (ParserConfigurationException | SAXException e) {
+        } catch (ParserConfigurationException | SAXException e) {
             throw new PayErrorException(new PayException("XML failure", "XML解析失败\n" + e.getMessage()));
-        }
-        finally {
-            in.close();
         }
         return m;
     }

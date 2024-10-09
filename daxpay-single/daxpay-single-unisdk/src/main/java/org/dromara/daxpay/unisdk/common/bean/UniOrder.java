@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Setter
 @Getter
-public class PayOrder extends AssistOrder {
+public class UniOrder extends AssistOrder {
     /**
      * 商品名称
      */

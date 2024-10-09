@@ -14,7 +14,7 @@ public class SM3Digest {
     /**
      * 缓冲区长度
      */
-    private static final int BUFFER_LENGTH = BLOCK_LENGTH * 1;
+    private static final int BUFFER_LENGTH = BLOCK_LENGTH;
 
     /**
      * 缓冲区

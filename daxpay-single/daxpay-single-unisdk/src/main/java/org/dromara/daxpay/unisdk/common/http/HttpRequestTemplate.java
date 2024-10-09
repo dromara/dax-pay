@@ -1,5 +1,6 @@
 package org.dromara.daxpay.unisdk.common.http;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
@@ -23,7 +24,6 @@ import org.apache.http.ssl.SSLContexts;
 import org.dromara.daxpay.unisdk.common.bean.MethodType;
 import org.dromara.daxpay.unisdk.common.bean.result.PayException;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -169,7 +169,7 @@ public class HttpRequestTemplate {
     public CredentialsProvider createCredentialsProvider(HttpConfigStorage configStorage) {
 
 
-        if (StringUtils.isBlank(configStorage.getAuthUsername())) {
+        if (StrUtil.isBlank(configStorage.getAuthUsername())) {
             return null;
         }
 
@@ -197,7 +197,7 @@ public class HttpRequestTemplate {
             return null;
         }
         if (log.isInfoEnabled()) {
-            log.info(String.format("Initialize the PoolingHttpClientConnectionManager -- maxTotal:%s, defaultMaxPerRoute:%s", configStorage.getMaxTotal(), configStorage.getDefaultMaxPerRoute()));
+            log.info("Initialize the PoolingHttpClientConnectionManager -- maxTotal:{}, defaultMaxPerRoute:{}", configStorage.getMaxTotal(), configStorage.getDefaultMaxPerRoute());
         }
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("https", createSSL(configStorage))
@@ -219,7 +219,7 @@ public class HttpRequestTemplate {
     public HttpRequestTemplate setHttpConfigStorage(HttpConfigStorage configStorage) {
         this.configStorage = configStorage;
 
-        if (null != configStorage && StringUtils.isNotBlank(configStorage.getHttpProxyHost())) {
+        if (null != configStorage && StrUtil.isNotBlank(configStorage.getHttpProxyHost())) {
             //http代理地址设置
             httpProxy = new HttpHost(configStorage.getHttpProxyHost(), configStorage.getHttpProxyPort());
             ;
@@ -424,9 +424,9 @@ public class HttpRequestTemplate {
     public <T> ResponseEntity<T> doExecuteEntity(URI uri, Object request, Class<T> responseType, MethodType method) {
 
         if (log.isDebugEnabled()) {
-            log.debug(String.format("uri:%s, httpMethod:%s ", uri, method.name()));
+            log.debug("uri:{}, httpMethod:{} ", uri, method.name());
         }
-        ClientHttpRequest<T> httpRequest = new ClientHttpRequest<T>(uri, method, request, null == configStorage ? null : configStorage.getCharset());
+        ClientHttpRequest<T> httpRequest = new ClientHttpRequest<>(uri, method, request, null == configStorage ? null : configStorage.getCharset());
         //判断是否有代理设置
         if (null != httpProxy) {
             httpRequest.setProxy(httpProxy);

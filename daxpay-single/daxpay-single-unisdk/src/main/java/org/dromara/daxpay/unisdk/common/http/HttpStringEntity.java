@@ -1,11 +1,11 @@
 package org.dromara.daxpay.unisdk.common.http;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import org.apache.http.Header;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -64,7 +64,7 @@ public class HttpStringEntity extends StringEntity {
     }
 
     public void requestIsEmpty(String request) {
-        if (StringUtils.isEmpty(request)) {
+        if (StrUtil.isEmpty(request)) {
             this.isEmpty = true;
         }
 

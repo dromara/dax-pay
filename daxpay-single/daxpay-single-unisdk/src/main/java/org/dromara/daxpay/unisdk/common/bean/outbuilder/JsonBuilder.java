@@ -14,7 +14,7 @@ import org.dromara.daxpay.unisdk.common.bean.PayOutMessage;
  */
 @Getter
 public class JsonBuilder  extends BaseBuilder<JsonBuilder, PayOutMessage>{
-    JSONObject json = null;
+    JSONObject json;
 
     public JsonBuilder(JSONObject json) {
         this.json = json;

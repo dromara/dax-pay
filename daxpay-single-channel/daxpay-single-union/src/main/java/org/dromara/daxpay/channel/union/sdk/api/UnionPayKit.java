@@ -1,16 +1,18 @@
 package org.dromara.daxpay.channel.union.sdk.api;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.union.sdk.bean.*;
+import org.dromara.daxpay.unisdk.common.api.BasePayService;
 import org.dromara.daxpay.unisdk.common.bean.*;
 import org.dromara.daxpay.unisdk.common.bean.outbuilder.PayTextOutMessage;
 import org.dromara.daxpay.unisdk.common.bean.result.PayException;
 import org.dromara.daxpay.unisdk.common.exception.PayErrorException;
 import org.dromara.daxpay.unisdk.common.http.HttpConfigStorage;
 import org.dromara.daxpay.unisdk.common.http.UriVariables;
-import org.dromara.daxpay.unisdk.common.util.DateUtils;
 import org.dromara.daxpay.unisdk.common.util.Util;
 import org.dromara.daxpay.unisdk.common.util.sign.CertDescriptor;
 import org.dromara.daxpay.unisdk.common.util.sign.SignTextUtils;
@@ -22,9 +24,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.cert.*;
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -33,7 +37,7 @@ import java.util.*;
  * @since 2024/3/8
  */
 @Slf4j
-public class UnionPayKit extends UnionPayService {
+public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
     /**
      * 测试域名
      */
@@ -76,7 +80,7 @@ public class UnionPayKit extends UnionPayService {
      * @param payConfigStorage 支付配置
      */
     @Override
-    public UnionPayService setPayConfigStorage(UnionPayConfigStorage payConfigStorage) {
+    public UnionPayKit setPayConfigStorage(UnionPayConfigStorage payConfigStorage) {
         this.payConfigStorage = payConfigStorage;
         if (null != certDescriptor) {
             return this;
@@ -173,7 +177,7 @@ public class UnionPayKit extends UnionPayService {
         params.put(SDKConstants.param_merId, payConfigStorage.getPid());
 
         //订单发送时间
-        params.put(SDKConstants.param_txnTime, DateUtils.formatDate(new Date(), DateUtils.YYYYMMDDHHMMSS));
+        params.put(SDKConstants.param_txnTime, DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN));
         //后台通知地址
         params.put(SDKConstants.param_backUrl, payConfigStorage.getNotifyUrl());
 
@@ -195,7 +199,7 @@ public class UnionPayKit extends UnionPayService {
     public boolean verify(NoticeParams noticeParams) {
         final Map<String, Object> result = noticeParams.getBody();
         if (null == result || result.get(SDKConstants.param_signature) == null) {
-            log.debug("银联支付验签异常：params：" + result);
+            log.debug("银联支付验签异常：params：{}", result);
             return false;
         }
         return this.signVerify(result, (String) result.get(SDKConstants.param_signature));
@@ -212,21 +216,21 @@ public class UnionPayKit extends UnionPayService {
         SignUtils signUtils = SignUtils.valueOf(payConfigStorage.getSignType());
 
         String data = SignTextUtils.parameterText(params, "&", "signature");
-        switch (signUtils) {
-            case RSA:
+        return switch (signUtils) {
+            case RSA -> {
                 data = SignUtils.SHA1.createSign(data, "", payConfigStorage.getInputCharset());
-                return RSA.verify(data, sign, verifyCertificate(genCertificateByStr((String) params.get(SDKConstants.param_signPubKeyCert))).getPublicKey(), payConfigStorage.getInputCharset());
-            case RSA2:
+                yield RSA.verify(data, sign, verifyCertificate(genCertificateByStr((String) params.get(SDKConstants.param_signPubKeyCert))).getPublicKey(), payConfigStorage.getInputCharset());
+            }
+            case RSA2 -> {
                 data = SignUtils.SHA256.createSign(data, "", payConfigStorage.getInputCharset());
-                return RSA2.verify(data, sign, verifyCertificate(genCertificateByStr((String) params.get(SDKConstants.param_signPubKeyCert))).getPublicKey(), payConfigStorage.getInputCharset());
-            case SHA1:
-            case SHA256:
-            case SM3:
+                yield RSA2.verify(data, sign, verifyCertificate(genCertificateByStr((String) params.get(SDKConstants.param_signPubKeyCert))).getPublicKey(), payConfigStorage.getInputCharset());
+            }
+            case SHA1, SHA256, SM3 -> {
                 String before = signUtils.createSign(payConfigStorage.getKeyPublic(), "", payConfigStorage.getInputCharset());
-                return signUtils.verify(data, sign, "&" + before, payConfigStorage.getInputCharset());
-            default:
-                return false;
-        }
+                yield signUtils.verify(data, sign, "&" + before, payConfigStorage.getInputCharset());
+            }
+            default -> false;
+        };
     }
 
 
@@ -242,9 +246,9 @@ public class UnionPayKit extends UnionPayService {
     private String getPayTimeout(Date expirationTime) {
         //
         if (null != expirationTime) {
-            return DateUtils.formatDate(expirationTime, DateUtils.YYYYMMDDHHMMSS);
+            return DateUtil.format(expirationTime, DatePattern.PURE_DATETIME_PATTERN);
         }
-        return DateUtils.formatDate(new Timestamp(System.currentTimeMillis() + 30 * 60 * 1000), DateUtils.YYYYMMDDHHMMSS);
+        return DateUtil.format(new Timestamp(System.currentTimeMillis() + 30 * 60 * 1000), DatePattern.PURE_DATETIME_PATTERN);
     }
 
     /**
@@ -252,10 +256,10 @@ public class UnionPayKit extends UnionPayService {
      *
      * @param order 支付订单
      * @return 订单信息
-     * @see PayOrder 支付订单信息
+     * @see UniOrder 支付订单信息
      */
     @Override
-    public Map<String, Object> orderInfo(PayOrder order) {
+    public Map<String, Object> orderInfo(UniOrder order) {
         Map<String, Object> params = this.getCommonParam();
 
         UnionTransactionType type = (UnionTransactionType) order.getTransactionType();
@@ -389,7 +393,7 @@ public class UnionPayKit extends UnionPayService {
      * @return 返回支付结果
      */
 
-    public JSONObject postOrder(PayOrder order, String url) {
+    public JSONObject postOrder(UniOrder order, String url) {
         Map<String, Object> params = orderInfo(order);
         String responseStr = getHttpRequestTemplate().postForObject(url, params, String.class);
         JSONObject response = UriVariables.getParametersToMap(responseStr);
@@ -400,7 +404,7 @@ public class UnionPayKit extends UnionPayService {
     }
 
     @Override
-    public String toPay(PayOrder order) {
+    public String toPay(UniOrder order) {
 
         if (null == order.getTransactionType()) {
             order.setTransactionType(UnionTransactionType.WEB);
@@ -419,7 +423,7 @@ public class UnionPayKit extends UnionPayService {
      * @return 返回图片信息，支付时需要的
      */
     @Override
-    public String getQrPay(PayOrder order) {
+    public String getQrPay(UniOrder order) {
         order.setTransactionType(UnionTransactionType.APPLY_QR_CODE);
         JSONObject response = postOrder(order, getBackTransUrl());
         if (this.verify(new NoticeParams(response))) {
@@ -439,7 +443,7 @@ public class UnionPayKit extends UnionPayService {
      * @return 返回支付结果
      */
     @Override
-    public Map<String, Object> microPay(PayOrder order) {
+    public Map<String, Object> microPay(UniOrder order) {
         order.setTransactionType(UnionTransactionType.CONSUME);
         JSONObject response = postOrder(order, getBackTransUrl());
         return response;
@@ -453,10 +457,10 @@ public class UnionPayKit extends UnionPayService {
      * @return X509Certificate
      */
     public static X509Certificate genCertificateByStr(String x509CertString) {
-        X509Certificate x509Cert = null;
+        X509Certificate x509Cert;
         try {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            InputStream tIn = new ByteArrayInputStream(x509CertString.getBytes("ISO-8859-1"));
+            InputStream tIn = new ByteArrayInputStream(x509CertString.getBytes(StandardCharsets.ISO_8859_1));
             x509Cert = (X509Certificate) cf.generateCertificate(tIn);
         }
         catch (Exception e) {
@@ -499,18 +503,22 @@ public class UnionPayKit extends UnionPayService {
      */
     @Override
     public String buildRequest(Map<String, Object> orderInfo, MethodType method) {
-        StringBuffer sf = new StringBuffer();
-        sf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=")
+        StringBuilder sf = new StringBuilder();
+        sf.append("""
+                        <html><head><meta http-equiv="Content-Type" content="text/html; charset=""")
                 .append(payConfigStorage.getInputCharset())
-                .append("\"/></head><body>");
-        sf.append("<form id = \"pay_form\" action=\"")
+                .append("""
+                        "/></head><body>
+                        <form id = "pay_form" action=\"""")
                 .append(getFrontTransUrl())
-                .append("\" method=\"post\">");
+                .append("""
+                        " method="post">""");
         if (null != orderInfo && !orderInfo.isEmpty()) {
             for (Map.Entry<String, Object> entry : orderInfo.entrySet()) {
                 String key = entry.getKey();
                 Object value = entry.getValue();
-                sf.append("<input type=\"hidden\" name=\"" + key + "\" id=\"" + key + "\" value=\"" + value + "\"/>");
+                sf.append(MessageFormat.format("""
+                        <input type="hidden" name="{0}" id="{1}" value="{2}"/>""", key, key, value));
             }
         }
         sf.append("</form>");
@@ -530,7 +538,7 @@ public class UnionPayKit extends UnionPayService {
      * @return 成功：返回支付结果  失败：返回
      */
     @Override
-    public Map<String, Object> app(PayOrder order) {
+    public Map<String, Object> app(UniOrder order) {
         if (null == order.getTransactionType()) {
             order.setTransactionType(UnionTransactionType.APP);
         }
@@ -573,7 +581,7 @@ public class UnionPayKit extends UnionPayService {
      * @return 返回支付方申请退款后的结果
      */
     public UnionRefundResult unionRefundOrConsumeUndo(String origQryId, String orderId, BigDecimal refundAmount, UnionTransactionType type) {
-        return unionRefundOrConsumeUndo(new RefundOrder(orderId, origQryId, refundAmount), type);
+        return unionRefundOrConsumeUndo(new UniRefundOrder(orderId, origQryId, refundAmount), type);
 
     }
 
@@ -584,7 +592,7 @@ public class UnionPayKit extends UnionPayService {
      * @param type        UnionTransactionType.REFUND  或者UnionTransactionType.CONSUME_UNDO
      * @return 返回支付方申请退款后的结果
      */
-    public UnionRefundResult unionRefundOrConsumeUndo(RefundOrder refundOrder, UnionTransactionType type) {
+    public UnionRefundResult unionRefundOrConsumeUndo(UniRefundOrder refundOrder, UnionTransactionType type) {
         Map<String, Object> params = this.getCommonParam();
         type.convertMap(params);
         params.put(SDKConstants.param_orderId, refundOrder.getRefundNo());
@@ -632,7 +640,7 @@ public class UnionPayKit extends UnionPayService {
     }
 
     @Override
-    public UnionRefundResult refund(RefundOrder refundOrder) {
+    public UnionRefundResult refund(UniRefundOrder refundOrder) {
         return unionRefundOrConsumeUndo(refundOrder, UnionTransactionType.REFUND);
     }
 
@@ -644,7 +652,7 @@ public class UnionPayKit extends UnionPayService {
      * @return 返回支付方查询退款后的结果
      */
     @Override
-    public Map<String, Object> refundquery(RefundOrder refundOrder) {
+    public Map<String, Object> refundquery(UniRefundOrder refundOrder) {
         return this.query(refundOrder);
     }
 
@@ -673,7 +681,7 @@ public class UnionPayKit extends UnionPayService {
         Map<String, Object> params = this.getCommonParam();
         UnionTransactionType.FILE_TRANSFER.convertMap(params);
 
-        params.put(SDKConstants.param_settleDate, DateUtils.formatDate(billDate, DateUtils.MMDD));
+        params.put(SDKConstants.param_settleDate, DateUtil.format(billDate, "MMdd"));
         params.put(SDKConstants.param_fileType, billType.getFileType());
         params.remove(SDKConstants.param_backUrl);
         params.remove(SDKConstants.param_currencyCode);

@@ -80,7 +80,7 @@ public class AliPayCloseService {
         AlipayTradeCancelRequest request = new AlipayTradeCancelRequest();
         request.setBizModel(model);
         try {
-            AlipayTradeCancelResponse response = aliPayConfigService.execute(request);;
+            AlipayTradeCancelResponse response = aliPayConfigService.execute(request);
             if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
                 if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
                     // 如果返回"当前交易状态不支持此操作", 查询网关支付状态, 判断网关是否已经被关闭

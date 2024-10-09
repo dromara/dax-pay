@@ -1,6 +1,6 @@
 package org.dromara.daxpay.unisdk.common.util.sign;
 
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.*;
@@ -83,7 +83,7 @@ public final class SignTextUtils {
                 }
                 sb.append(entry.getKey()).append("=").append(valStr).append(separator);
             }
-            if (sb.length() > 0 && !"".equals(separator)) {
+            if (!sb.isEmpty() && !"".equals(separator)) {
                 sb.deleteCharAt(sb.length() - 1);
             }
             return sb.toString();
@@ -98,7 +98,7 @@ public final class SignTextUtils {
     private static String sortMapParameterText(Map<String, Object> parameters, String separator, boolean ignoreNullValue, String... ignoreKey) {
         StringBuilder sb = new StringBuilder();
         // TODO 2016/11/11 10:14 author: egan 未排序须处理
-        List<String> keys = new ArrayList<String>(parameters.keySet());
+        List<String> keys = new ArrayList<>(parameters.keySet());
         //排序
         Collections.sort(keys);
         for (String k : keys) {
@@ -120,12 +120,12 @@ public final class SignTextUtils {
             else {
                 valueStr = new StringBuilder(o.toString());
             }
-            if (StringUtils.isBlank(valueStr.toString()) || (null != ignoreKey && Arrays.binarySearch(ignoreKey, k) >= 0)) {
+            if (StrUtil.isBlank(valueStr.toString()) || (null != ignoreKey && Arrays.binarySearch(ignoreKey, k) >= 0)) {
                 continue;
             }
             sb.append(k).append("=").append(valueStr).append(separator);
         }
-        if (sb.length() > 0) {
+        if (!sb.isEmpty()) {
             sb.deleteCharAt(sb.length() - 1);
         }
         return sb.toString();
@@ -156,18 +156,9 @@ public final class SignTextUtils {
             }
         }
 
-        return StringUtils.isBlank(sb.toString()) ? "" : sb.deleteCharAt(sb.length() - 1).toString();
+        return StrUtil.isBlank(sb.toString()) ? "" : sb.deleteCharAt(sb.length() - 1).toString();
     }
 
-
-    /**
-     * 获取随机字符串
-     *
-     * @return 随机字符串
-     */
-    public static String randomStr() {
-        return StringUtils.randomStr();
-    }
 
 
 }

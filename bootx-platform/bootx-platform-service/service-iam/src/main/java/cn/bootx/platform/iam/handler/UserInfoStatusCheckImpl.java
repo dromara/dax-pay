@@ -45,7 +45,7 @@ public class UserInfoStatusCheckImpl implements UserInfoStatusCheck {
             return;
         }
         //  判断用户是否被禁用
-        if (Objects.equals(userDetail.getStatus(), UserStatusEnum.BAN)){
+        if (Objects.equals(userDetail.getStatus(), UserStatusEnum.BAN.getCode())){
             throw new LoginFailureException("该用户已被禁用");
         }
     }

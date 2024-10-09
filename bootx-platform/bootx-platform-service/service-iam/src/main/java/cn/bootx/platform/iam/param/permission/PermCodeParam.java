@@ -30,6 +30,6 @@ public class PermCodeParam {
     private String remark;
 
     @Schema(description = "是否为子节点")
-    private boolean leaf;;
+    private boolean leaf;
 
 }

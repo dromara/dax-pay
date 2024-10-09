@@ -1,5 +1,7 @@
 package org.dromara.daxpay.unisdk.common.api;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Consts;
@@ -7,11 +9,10 @@ import org.dromara.daxpay.unisdk.common.bean.*;
 import org.dromara.daxpay.unisdk.common.http.HttpConfigStorage;
 import org.dromara.daxpay.unisdk.common.http.HttpRequestTemplate;
 import org.dromara.daxpay.unisdk.common.util.sign.SignUtils;
-import org.dromara.daxpay.unisdk.common.util.str.StringUtils;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -24,13 +25,10 @@ import java.util.*;
  *   </pre>
  */
 @Slf4j
-public abstract class BasePayService<PC extends PayConfigStorage> implements PayService<PC> {
+public abstract class BasePayService<PC extends PayConfigStorage> implements UniPayService<PC> {
     protected PC payConfigStorage;
 
     protected HttpRequestTemplate requestTemplate;
-    protected int retrySleepMillis = 1000;
-
-    protected int maxRetryTimes = 5;
     /**
      * 支付消息处理器
      */
@@ -38,7 +36,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
     /**
      * 支付消息拦截器
      */
-    protected List<PayMessageInterceptor<PayMessage, PayService>> interceptors = new ArrayList<>();
+    protected List<PayMessageInterceptor<PayMessage, UniPayService>> interceptors = new ArrayList<>();
 
     private Charset inputCharset = Consts.UTF_8;
 
@@ -51,7 +49,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
     public BasePayService setPayConfigStorage(PC payConfigStorage) {
         this.payConfigStorage = payConfigStorage;
 
-        if (StringUtils.isNotEmpty(payConfigStorage.getInputCharset())) {
+        if (StrUtil.isNotEmpty(payConfigStorage.getInputCharset())) {
             this.inputCharset = Charset.forName(payConfigStorage.getInputCharset());
         }
         return this;
@@ -100,12 +98,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
      */
     protected String authorizationString(String user, String password) {
         String base64ClientID = null;
-        try {
-            base64ClientID = org.dromara.daxpay.unisdk.common.util.sign.encrypt.Base64.encode(String.format("%s:%s", user, password).getBytes("UTF-8"));
-        }
-        catch (UnsupportedEncodingException e) {
-            log.error("", e);
-        }
+        base64ClientID = Base64.encode(String.format("%s:%s", user, password).getBytes(StandardCharsets.UTF_8));
 
         return base64ClientID;
     }
@@ -142,11 +135,11 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
      * @return 对应页面重定向信息
      */
     @Override
-    public <O extends PayOrder> String toPay(O order) {
-        if (StringUtils.isNotEmpty(order.getSubject()) && order.getSubject().contains("'")) {
+    public <O extends UniOrder> String toPay(O order) {
+        if (StrUtil.isNotEmpty(order.getSubject()) && order.getSubject().contains("'")) {
             order.setSubject(order.getSubject().replace("'", ""));
         }
-        if (StringUtils.isNotEmpty(order.getBody()) && order.getBody().contains("'")) {
+        if (StrUtil.isNotEmpty(order.getBody()) && order.getBody().contains("'")) {
             order.setBody(order.getBody().replace("'", ""));
         }
         Map<String, Object> orderInfo = orderInfo(order);
@@ -161,7 +154,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
      * @return 对应app所需参数信息
      */
     @Override
-    public <O extends PayOrder> Map<String, Object> app(O order) {
+    public <O extends UniOrder> Map<String, Object> app(O order) {
         return orderInfo(order);
     }
 
@@ -173,7 +166,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
      * @return 返回支付结果
      */
     @Override
-    public <O extends PayOrder> Map<String, Object> jsApi(O order) {
+    public <O extends UniOrder> Map<String, Object> jsApi(O order) {
         return Collections.emptyMap();
     }
 
@@ -196,7 +189,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
                 sb.append(values[i]).append((i == len - 1) ? "" : ',');
             }
             String valueStr = sb.toString();
-            if (StringUtils.isNotEmpty(payConfigStorage.getInputCharset()) && !valueStr.matches("\\w+")) {
+            if (StrUtil.isNotEmpty(payConfigStorage.getInputCharset()) && !valueStr.matches("\\w+")) {
                 if (valueStr.equals(new String(valueStr.getBytes(Consts.ISO_8859_1), Consts.ISO_8859_1))) {
                     valueStr = new String(valueStr.getBytes(Consts.ISO_8859_1), inputCharset);
                 }
@@ -238,7 +231,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
      * @return 对应的转账结果
      */
     @Override
-    public Map<String, Object> transfer(TransferOrder order) {
+    public Map<String, Object> transfer(UniTransferOrder order) {
         return Collections.emptyMap();
     }
 
@@ -246,7 +239,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
      * 设置支付消息处理器,这里用于处理具体的支付业务
      *
      * @param handler 消息处理器
-     *                配合{@link  PayService#payBack(Map, InputStream)}进行使用
+     *                配合{@link  UniPayService#payBack(Map, InputStream)}进行使用
      *                <p>
      *                默认使用{@link  DefaultPayMessageHandler }进行实现
      */
@@ -257,7 +250,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
 
     /**
      * 获取支付消息处理器,这里用于处理具体的支付业务
-     * 配合{@link  PayService#payBack(Map, InputStream)}进行使用
+     * 配合{@link  UniPayService#payBack(Map, InputStream)}进行使用
      * <p>
      *
      * @return 默认使用{@link  DefaultPayMessageHandler }进行实现
@@ -273,7 +266,7 @@ public abstract class BasePayService<PC extends PayConfigStorage> implements Pay
      * 设置支付消息拦截器
      *
      * @param interceptor 消息拦截器
-     *                    配合{@link  PayService#payBack(Map, InputStream)}进行使用, 做一些预前处理
+     *                    配合{@link  UniPayService#payBack(Map, InputStream)}进行使用, 做一些预前处理
      */
     @Override
     public void addPayMessageInterceptor(PayMessageInterceptor interceptor) {
