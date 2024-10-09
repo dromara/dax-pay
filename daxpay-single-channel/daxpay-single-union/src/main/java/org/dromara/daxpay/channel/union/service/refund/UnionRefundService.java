@@ -6,6 +6,7 @@ import org.dromara.daxpay.channel.union.code.UnionPayCode;
 import org.dromara.daxpay.channel.union.sdk.api.UnionPayKit;
 import org.dromara.daxpay.channel.union.sdk.bean.UnionRefundOrder;
 import org.dromara.daxpay.channel.union.sdk.bean.UnionRefundResult;
+import org.dromara.daxpay.channel.union.service.config.UnionPayConfigService;
 import org.dromara.daxpay.core.enums.RefundStatusEnum;
 import org.dromara.daxpay.service.bo.trade.RefundResultBo;
 import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
@@ -21,14 +22,14 @@ import java.math.BigDecimal;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UnionPayRefundService {
+public class UnionRefundService {
+    private final UnionPayConfigService unionPayConfigService;
 
     /**
      * 退款方法
      */
     public RefundResultBo refund(RefundOrder refundOrder, UnionPayKit unionPayKit) {
 
-        // 金额转换
         BigDecimal refundAmount = refundOrder.getAmount();
         BigDecimal orderAmount = refundOrder.getOrderAmount();
 
@@ -37,6 +38,7 @@ public class UnionPayRefundService {
         unionRefundOrder.setTradeNo(refundOrder.getOutOrderNo());
         unionRefundOrder.setRefundAmount(refundAmount);
         unionRefundOrder.setTotalAmount(orderAmount);
+        unionRefundOrder.setNotifyUrl(unionPayConfigService.getRefundNotifyUrl());
         UnionRefundResult refund = unionPayKit.refund(unionRefundOrder);
 
         String outRefundNo = (String) refund.getAttr(UnionPayCode.QUERY_ID);

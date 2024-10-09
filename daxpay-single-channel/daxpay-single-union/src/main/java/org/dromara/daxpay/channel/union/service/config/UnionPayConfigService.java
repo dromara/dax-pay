@@ -51,7 +51,7 @@ public class UnionPayConfigService {
         return channelConfigManager.findById(id)
                 .map(UnionPayConfig::convertConfig)
                 .map(UnionPayConfig::toResult)
-                .orElseThrow(() -> new ConfigNotEnableException("支付宝配置不存在"));
+                .orElseThrow(() -> new ConfigNotEnableException("云闪付配置不存在"));
     }
 
     /**
@@ -84,8 +84,8 @@ public class UnionPayConfigService {
      */
     public void update(UnionPayConfigParam param){
         ChannelConfig channelConfig = channelConfigManager.findById(param.getId())
-                .orElseThrow(() -> new ConfigNotEnableException("支付宝配置不存在"));
-        // 通道配置 --转换--> 支付宝配置  ----> 从更新参数赋值  --转换-->  通道配置 ----> 保存更新
+                .orElseThrow(() -> new ConfigNotEnableException("云闪付配置不存在"));
+        // 通道配置 --转换--> 云闪付配置  ----> 从更新参数赋值  --转换-->  通道配置 ----> 保存更新
         UnionPayConfig unionPayConfig = UnionPayConfig.convertConfig(channelConfig);
         BeanUtil.copyProperties(param, unionPayConfig, CopyOptions.create().ignoreNullValue());
         ChannelConfig channelConfigParam = unionPayConfig.toChannelConfig();
@@ -116,12 +116,30 @@ public class UnionPayConfigService {
     }
 
     /**
-     * 获取支步通知地址
+     * 获取异步通知地址
      */
     public String getNotifyUrl() {
         var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
         return StrUtil.format("{}/unipay/callback/{}/{}/union",platformInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
+    }
+
+    /**
+     * 获取支付异步通知地址
+     */
+    public String getPayNotifyUrl() {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        var platformInfo = platformConfigService.getConfig();
+        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/pay",platformInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
+    }
+
+    /**
+     * 获取退款异步通知地址
+     */
+    public String getRefundNotifyUrl() {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        var platformInfo = platformConfigService.getConfig();
+        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/refund",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
     }
 
     /**
@@ -136,14 +154,14 @@ public class UnionPayConfigService {
     /**
      * 生成云闪付支付接口
      */
-    public UnionPayKit initPayService(){
-        UnionPayConfig config = this.getUnionPayConfig();
-        return this.initPayService(config);
+    public UnionPayKit initPayKit(){
+        UnionPayConfig config = this.getAndCheckConfig();
+        return this.initPayKit(config);
     }
     /**
      * 生成云闪付支付接口
      */
-    public UnionPayKit initPayService(UnionPayConfig config){
+    public UnionPayKit initPayKit(UnionPayConfig config){
 
         UnionPayConfigStorage unionPayConfigStorage = new UnionPayConfigStorage();
         unionPayConfigStorage.setInputCharset(CharsetUtil.UTF_8);
@@ -167,8 +185,6 @@ public class UnionPayConfigService {
         unionPayConfigStorage.setSignType(config.getSignType());
         //是否为测试账号，沙箱环境
         unionPayConfigStorage.setTest(config.isSandbox());
-        // 回调地址
-        unionPayConfigStorage.setNotifyUrl(getNotifyUrl());
 
         // 网络请求配置
         HttpConfigStorage httpConfigStorage = new HttpConfigStorage();

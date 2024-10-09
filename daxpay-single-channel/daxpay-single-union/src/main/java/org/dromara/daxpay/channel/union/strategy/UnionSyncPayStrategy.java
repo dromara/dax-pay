@@ -1,6 +1,9 @@
 package org.dromara.daxpay.channel.union.strategy;
 
 import lombok.RequiredArgsConstructor;
+import org.dromara.daxpay.channel.union.sdk.api.UnionPayKit;
+import org.dromara.daxpay.channel.union.service.config.UnionPayConfigService;
+import org.dromara.daxpay.channel.union.service.sync.UnionPaySyncService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.bo.sync.PaySyncResultBo;
 import org.dromara.daxpay.service.strategy.AbsSyncPayOrderStrategy;
@@ -19,9 +22,14 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class UnionSyncPayStrategy extends AbsSyncPayOrderStrategy {
 
+    private final UnionPayConfigService unionPayConfigService;
+
+    private final UnionPaySyncService unionPaySyncService;
+
     @Override
     public PaySyncResultBo doSync() {
-        return null;
+        UnionPayKit unionPayKit = unionPayConfigService.initPayKit();
+        return unionPaySyncService.sync(this.getOrder(),unionPayKit);
     }
 
     @Override

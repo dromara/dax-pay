@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * 云闪付
+ * 云闪付支付
  *
  * @author xxm
  * @since 2022/3/8
@@ -71,7 +71,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
      */
     @Override
     public PayResultBo doPayHandler() {
-        UnionPayKit unionPayKit = unionPayConfigService.initPayService();
+        UnionPayKit unionPayKit = unionPayConfigService.initPayKit(unionPayConfig);
         return unionPayService.pay(this.getOrder(), this.unionPayParam, unionPayKit);
     }
 }

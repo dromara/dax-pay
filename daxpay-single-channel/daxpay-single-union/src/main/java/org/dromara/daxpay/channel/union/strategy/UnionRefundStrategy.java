@@ -3,7 +3,7 @@ package org.dromara.daxpay.channel.union.strategy;
 import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.channel.union.sdk.api.UnionPayKit;
 import org.dromara.daxpay.channel.union.service.config.UnionPayConfigService;
-import org.dromara.daxpay.channel.union.service.refund.UnionPayRefundService;
+import org.dromara.daxpay.channel.union.service.refund.UnionRefundService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.bo.trade.RefundResultBo;
 import org.dromara.daxpay.service.strategy.AbsRefundStrategy;
@@ -22,7 +22,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @RequiredArgsConstructor
 public class UnionRefundStrategy extends AbsRefundStrategy {
 
-    private final UnionPayRefundService unionPayRefundService;
+    private final UnionRefundService unionRefundService;
 
     private final UnionPayConfigService unionPayConfigService;
 
@@ -41,7 +41,7 @@ public class UnionRefundStrategy extends AbsRefundStrategy {
      */
     @Override
     public RefundResultBo doRefundHandler() {
-        UnionPayKit unionPayKit = unionPayConfigService.initPayService();
-        return unionPayRefundService.refund(this.getRefundOrder(), unionPayKit);
+        UnionPayKit unionPayKit = unionPayConfigService.initPayKit();
+        return unionRefundService.refund(this.getRefundOrder(), unionPayKit);
     }
 }

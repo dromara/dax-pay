@@ -12,6 +12,7 @@ import org.dromara.daxpay.channel.union.param.pay.UnionPayParam;
 import org.dromara.daxpay.channel.union.sdk.api.UnionPayKit;
 import org.dromara.daxpay.channel.union.sdk.bean.UnionPayOrder;
 import org.dromara.daxpay.channel.union.sdk.bean.UnionTransactionType;
+import org.dromara.daxpay.channel.union.service.config.UnionPayConfigService;
 import org.dromara.daxpay.core.enums.PayMethodEnum;
 import org.dromara.daxpay.core.exception.AmountExceedLimitException;
 import org.dromara.daxpay.core.exception.TradeFailException;
@@ -35,6 +36,8 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class UnionPayService {
+
+    private final UnionPayConfigService configService;
 
     /**
      * 支付前检查支付方式是否可用
@@ -91,23 +94,10 @@ public class UnionPayService {
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
         unionPayOrder.setTransactionType(type);
+        unionPayOrder.setNotifyUrl(configService.getPayNotifyUrl());
         return unionPayKit.toPay(unionPayOrder);
     }
 
-    /**
-     * jsapi支付
-     */
-    private String b2bPay(BigDecimal amount, PayOrder payOrder, UnionPayKit unionPayKit) {
-        Date expiredTime = DateUtil.date(payOrder.getExpiredTime());
-
-        UnionPayOrder unionPayOrder = new UnionPayOrder();
-        unionPayOrder.setOutTradeNo(payOrder.getOrderNo());
-        unionPayOrder.setSubject(payOrder.getTitle());
-        unionPayOrder.setPrice(amount);
-        unionPayOrder.setExpirationTime(expiredTime);
-        unionPayOrder.setTransactionType(UnionTransactionType.B2B);
-        return unionPayKit.toPay(unionPayOrder);
-    }
 
     /**
      * APP支付
@@ -122,6 +112,7 @@ public class UnionPayService {
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
+        unionPayOrder.setNotifyUrl(configService.getPayNotifyUrl());
 
         Map<String, Object> result = unionPayKit.app(unionPayOrder);
         String resultCode = MapUtil.getStr(result, UnionPayCode.RESP_CODE);
@@ -147,6 +138,7 @@ public class UnionPayService {
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
+        unionPayOrder.setNotifyUrl(configService.getPayNotifyUrl());
         return unionPayKit.getQrPay(unionPayOrder);
     }
 
@@ -162,6 +154,7 @@ public class UnionPayService {
         unionPayOrder.setSubject(payOrder.getTitle());
         unionPayOrder.setPrice(amount);
         unionPayOrder.setExpirationTime(expiredTime);
+        unionPayOrder.setNotifyUrl(configService.getPayNotifyUrl());
         Map<String, Object> result = unionPayKit.microPay(unionPayOrder);
 
         if (!unionPayKit.verify(new NoticeParams(result))) {
