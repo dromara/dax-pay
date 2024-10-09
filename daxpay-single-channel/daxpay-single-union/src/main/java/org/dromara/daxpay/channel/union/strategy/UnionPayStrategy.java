@@ -71,7 +71,7 @@ public class UnionPayStrategy extends AbsPayStrategy {
      */
     @Override
     public PayResultBo doPayHandler() {
-        UnionPayKit unionPayKit = unionPayConfigService.initPayService(unionPayConfig);
+        UnionPayKit unionPayKit = unionPayConfigService.initPayService();
         return unionPayService.pay(this.getOrder(), this.unionPayParam, unionPayKit);
     }
 }

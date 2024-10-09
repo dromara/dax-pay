@@ -75,7 +75,7 @@ bootx-platform:
       # 使用后端代理访问, 线上请使用 Nginx 配置或者直连方式，效率更高
       forward-server-url: http://127.0.0.1:9999
 dax-pay:
-  env: DEV_
+  env: DEV
   machine-no: 60
 dromara:
   # 注意, 不要设置 domain 访问路径, 自行进行拼接访问路径, 来保证可迁移性

@@ -1,7 +1,6 @@
 package org.dromara.daxpay.channel.union.strategy;
 
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.channel.union.entity.config.UnionPayConfig;
 import org.dromara.daxpay.channel.union.sdk.api.UnionPayKit;
 import org.dromara.daxpay.channel.union.service.config.UnionPayConfigService;
 import org.dromara.daxpay.channel.union.service.refund.UnionPayRefundService;
@@ -27,8 +26,6 @@ public class UnionRefundStrategy extends AbsRefundStrategy {
 
     private final UnionPayConfigService unionPayConfigService;
 
-    private UnionPayConfig unionPayConfig;
-
     /**
      * 策略标识
      *
@@ -40,20 +37,11 @@ public class UnionRefundStrategy extends AbsRefundStrategy {
     }
 
     /**
-     * 退款前对处理, 初始化微信支付配置
-     */
-    @Override
-    public void doBeforeRefundHandler() {
-        this.unionPayConfig = unionPayConfigService.getAndCheckConfig();
-    }
-
-
-    /**
      * 退款操作
      */
     @Override
     public RefundResultBo doRefundHandler() {
-        UnionPayKit unionPayKit = unionPayConfigService.initPayService(unionPayConfig);
+        UnionPayKit unionPayKit = unionPayConfigService.initPayService();
         return unionPayRefundService.refund(this.getRefundOrder(), unionPayKit);
     }
 }

@@ -111,7 +111,7 @@ public class UnionPayConfigService {
      */
     public UnionPayConfig getUnionPayConfig(){
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.ALI.getCode());
+        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.UNION_PAY.getCode());
         return UnionPayConfig.convertConfig(channelConfig);
     }
 
@@ -134,9 +134,17 @@ public class UnionPayConfigService {
     }
 
     /**
-     * 生成云闪付支付服务
+     * 生成云闪付支付接口
+     */
+    public UnionPayKit initPayService(){
+        UnionPayConfig config = this.getUnionPayConfig();
+        return this.initPayService(config);
+    }
+    /**
+     * 生成云闪付支付接口
      */
     public UnionPayKit initPayService(UnionPayConfig config){
+
         UnionPayConfigStorage unionPayConfigStorage = new UnionPayConfigStorage();
         unionPayConfigStorage.setInputCharset(CharsetUtil.UTF_8);
         // 商户号
@@ -155,10 +163,12 @@ public class UnionPayConfigService {
         unionPayConfigStorage.setKeyPrivateCertPwd(config.getKeyPrivateCertPwd());
         //设置证书对应的存储方式，证书流
         unionPayConfigStorage.setCertStoreType(CertStoreType.INPUT_STREAM);
-
+        // 签名方式
         unionPayConfigStorage.setSignType(config.getSignType());
         //是否为测试账号，沙箱环境
         unionPayConfigStorage.setTest(config.isSandbox());
+        // 回调地址
+        unionPayConfigStorage.setNotifyUrl(getNotifyUrl());
 
         // 网络请求配置
         HttpConfigStorage httpConfigStorage = new HttpConfigStorage();
