@@ -1,8 +1,13 @@
 package org.dromara.daxpay.service.service.trade.pay;
 
-import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
+import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.bootx.platform.core.util.DateTimeUtil;
+import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.PayAllocStatusEnum;
 import org.dromara.daxpay.core.enums.PayRefundStatusEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
@@ -19,10 +24,6 @@ import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.service.order.pay.PayOrderQueryService;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -175,5 +176,15 @@ public class PayAssistService {
         }
         // 根据商户应用配置计算出时间
         return PayUtil.getPaymentExpiredTime(mchAppLocal.getOrderTimeout());
+    }
+
+    /**
+     * 校验订单超时时间是否正常
+     */
+    public void validationExpiredTime(PayParam payParam) {
+        LocalDateTime expiredTime = this.getExpiredTime(payParam);
+        if (Objects.nonNull(expiredTime) && DateTimeUtil.lt(LocalDateTime.now(), expiredTime)) {
+            throw new ValidationFailedException("支付超时时间设置有误, 请检查!");
+        }
     }
 }

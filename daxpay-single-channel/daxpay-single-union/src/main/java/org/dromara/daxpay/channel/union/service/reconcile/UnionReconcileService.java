@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 /**
  * 云闪付对账
+ * TODO 目前默认账单除了 S30外都是支付成功状态, 后期需要根据账单类型进行完善
  * @author xxm
  * @since 2024/3/7
  */

@@ -45,6 +45,8 @@ public class PayService {
     public PayResult pay(PayParam payParam){
         // 校验支付限额
         payAssistService.validationLimitAmount(payParam);
+        // 校验超时时间, 不可早于当前
+        payAssistService.validationExpiredTime(payParam);
         // 获取商户订单号
         String bizOrderNo = payParam.getBizOrderNo();
         // 加锁
