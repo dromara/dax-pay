@@ -47,8 +47,7 @@ public class AliPayService {
      * 支付前检查支付方式是否可用
      */
     public void validation(PayParam payParam) {
-        AliPayConfig alipayConfig = aliPayConfigService.getAliPayConfig();
-
+        AliPayConfig alipayConfig = aliPayConfigService.getAndCheckConfig();
         // 验证订单金额是否超限
         if(BigDecimalUtil.isGreaterThan(payParam.getAmount(), alipayConfig.getLimitAmount())){
             throw new AmountExceedLimitException("支付宝支付金额超过限额");

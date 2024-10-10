@@ -97,6 +97,24 @@ public class AliPayConfigService {
     }
 
     /**
+     * 获取异步通知地址
+     */
+    public String getNotifyUrl() {
+        var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        var platformInfo = platformConfigService.getConfig();
+        return StrUtil.format("{}/unipay/callback/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
+    }
+
+    /**
+     * 获取同步通知地址
+     */
+    public String getReturnUrl() {
+        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
+        var platformInfo = platformConfigService.getConfig();
+        return StrUtil.format("{}/unipay/return/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
+    }
+
+    /**
      * 获取支付宝支付配置
      */
     public AliPayConfig getAliPayConfig(){
@@ -122,24 +140,6 @@ public class AliPayConfigService {
     public AlipayClient getAlipayClient(){
         AliPayConfig aliPayConfig = this.getAndCheckConfig();
         return this.getAlipayClient(aliPayConfig);
-    }
-
-    /**
-     * 获取异步通知地址
-     */
-    public String getNotifyUrl() {
-        var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
-    }
-
-    /**
-     * 获取同步通知地址
-     */
-    public String getReturnUrl() {
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/return/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
     }
 
     /**

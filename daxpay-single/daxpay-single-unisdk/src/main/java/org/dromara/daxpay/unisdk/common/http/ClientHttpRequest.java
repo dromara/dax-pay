@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.*;
 import org.apache.http.client.HttpResponseException;
@@ -308,6 +309,7 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
      * @return 对应的响应对象
      * @throws IOException 响应类型文本转换时抛出异常
      */
+    @SneakyThrows
     private T toBean(HttpEntity entity, String[] contentType) throws IOException {
 
 
@@ -330,7 +332,7 @@ public class ClientHttpRequest<T> extends HttpEntityEnclosingRequestBase impleme
                 if (responseType == OutputStream.class){
                     t= new ByteArrayOutputStream();
                 }else {
-                    t = (OutputStream) responseType.newInstance();
+                    t = (OutputStream) responseType.getDeclaredConstructor().newInstance();
                 }
                 entity.writeTo( t);
                 return (T) t;

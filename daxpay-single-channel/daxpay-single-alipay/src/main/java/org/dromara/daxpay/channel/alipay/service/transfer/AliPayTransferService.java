@@ -103,7 +103,7 @@ public class AliPayTransferService {
     }
 
     /**
-     *
+     * 转换收款人类型
      */
     public String getIdentityType(TransferPayeeTypeEnum payeeType){
         switch (payeeType){

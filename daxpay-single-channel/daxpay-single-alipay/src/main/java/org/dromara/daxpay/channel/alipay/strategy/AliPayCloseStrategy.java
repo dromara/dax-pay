@@ -35,7 +35,7 @@ public class AliPayCloseStrategy extends AbsPayCloseStrategy {
      */
     @Override
     public void doBeforeCloseHandler() {
-        this.alipayConfig = alipayConfigService.getAliPayConfig();
+        this.alipayConfig = alipayConfigService.getAndCheckConfig();
     }
 
     /**

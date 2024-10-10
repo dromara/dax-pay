@@ -43,7 +43,7 @@ public class AliPayAuthService {
             return new AuthUrlResult();
         } else {
             PlatformConfig platformConfig = platformsConfigService.getConfig();
-            AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig();
+            AliPayConfig aliPayConfig = aliPayConfigService.getAndCheckConfig();
             String queryCode = RandomUtil.randomString(10);
 
             // 授权地址
