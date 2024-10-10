@@ -49,7 +49,10 @@ bootx-platform:
           - org.dromara.daxpay.channel
   starter:
     auth:
-      enable-admin: true
+      # 是否启用超级管理员登录
+      enable-admin: false
+      # 用户管理列表中是否显示超级管理员
+      admin-in-list: false
       ignore-urls:
         - '/actuator/**'
         - '/swagger-resources/**'

@@ -106,7 +106,7 @@
     </dependencies>
 
     <build>
-        <finalName>daxpay-admin</finalName>
+        <finalName>daxpay-server</finalName>
         <plugins>
             <!-- spring-boot -->
             <plugin>

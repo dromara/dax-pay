@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ import java.time.Duration;
 @EnableConfigurationProperties(CachingProperties.class)
 @ConditionalOnClass(CacheManager.class)
 @ConditionalOnProperty(prefix = "bootx-platform.cache", value = "enabled", havingValue = "true", matchIfMissing = true)
-public class CachingConfiguration extends CachingConfigurerSupport {
+public class CachingConfiguration implements CachingConfigurer {
 
     private final CachingProperties cachingProperties;
 
