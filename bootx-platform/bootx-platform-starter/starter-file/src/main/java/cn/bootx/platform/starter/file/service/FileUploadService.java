@@ -94,7 +94,7 @@ public class FileUploadService {
         if (StrUtil.isNotBlank(fileName)){
             uploadPretreatment.setOriginalFilename(fileName);
         }
-        // 按年月日进行分目录
+        // 按年月日进行分目录, 因为目录拼接的情况, 所以开头不可以为 /
         uploadPretreatment.setPath(LocalDateTimeUtil.format(LocalDateTime.now(), "yyyy/MM/dd/"));
 
         FileInfo upload = uploadPretreatment.upload();
