@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.InvocationTargetException;

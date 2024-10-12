@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

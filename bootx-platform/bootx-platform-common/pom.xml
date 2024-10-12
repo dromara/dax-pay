@@ -23,6 +23,7 @@
         <module>common-header-holder</module>
         <module>common-redis</module>
         <module>common-cache</module>
+        <module>common-log</module>
     </modules>
 
     <dependencies>

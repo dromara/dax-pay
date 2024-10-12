@@ -95,6 +95,13 @@
             <version>${bootx-platform.version}</version>
         </dependency>
 
+        <!-- 日志模块 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-log</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
     </dependencies>
 
 

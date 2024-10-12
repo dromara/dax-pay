@@ -11,7 +11,7 @@ import cn.hutool.core.util.DesensitizedUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;

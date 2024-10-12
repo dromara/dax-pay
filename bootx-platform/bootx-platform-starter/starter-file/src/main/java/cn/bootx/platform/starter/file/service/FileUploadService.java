@@ -27,6 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -89,7 +90,7 @@ public class FileUploadService {
      * @param fileName 文件名称
      */
     @Transactional(rollbackFor = Exception.class)
-    public UploadFileResult upload(MultipartFile file, String fileName) {
+    public UploadFileResult upload(@RequestPart MultipartFile file, String fileName) {
         UploadPretreatment uploadPretreatment = fileStorageService.of(file);
         if (StrUtil.isNotBlank(fileName)){
             uploadPretreatment.setOriginalFilename(fileName);

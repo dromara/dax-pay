@@ -6,7 +6,7 @@ import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.time.Duration;
 import java.util.Map;

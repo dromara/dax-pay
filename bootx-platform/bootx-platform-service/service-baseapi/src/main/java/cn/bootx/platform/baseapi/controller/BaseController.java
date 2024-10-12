@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +22,7 @@ import java.nio.charset.StandardCharsets;
  * @author xxm
  * @since 2023/10/14
  */
+@Slf4j
 @Tag(name = "系统基础接口")
 @RestController
 @RequiredArgsConstructor
@@ -43,7 +46,7 @@ public class BaseController {
     @IgnoreAuth
     @Operation(summary = "读取文件文本内容")
     @PostMapping("/readText")
-    public Result<String> readText(MultipartFile file){
+    public Result<String> readText(@RequestPart MultipartFile file){
         return Res.ok(new String(file.getBytes(), StandardCharsets.UTF_8));
     }
 
