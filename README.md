@@ -11,8 +11,7 @@
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
 </p>
 
-# Dromara Dax-Pay(开源支付系统-单商户版)
-> **`multi-xxx` 相关分支为多商户版本, `single-xxx` 相关分支为单商户版本**, **目前都在最后阶段的开发中, 尽请期待**
+# Dromara Dax-Pay(单商户多应用版)
 
 ## ❗使用须知
 
@@ -27,10 +26,11 @@
 ## 🧭 特色功能
 - 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
 - 已对接`微信支付`、`支付宝`和`云闪付`相关的接口，并以扩展包的方式支持更多类型的通道
+- 支持多应用配置，可以同时对接多个支付通道账号，方便多个业务系统对接
 - 支持支付、退款、对账、分账等支付相关的能力
 - 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
 - 接口请求和响应数据支持启用签名机制，保证交易安全可靠
-- 提供管理端，方便运营人员进行管理和操作，不需要懂IT技术也可以轻松使用
+- 提供管理端，方便运营人员进行管理和操作
 
 ## 📃 文档和源码地址
 ### 文档地址
@@ -76,60 +76,25 @@
 ```xml
  <!-- 支付SDK -->
 <dependency>
-    <groupId>org.dromara.daxpay</groupId>
+    <groupId>cn.daxpay.single</groupId>
     <artifactId>daxpay-single-sdk</artifactId>
     <version>${latest.version}</version>
 </dependency>
 ```
 ### SDK调用示例
-> 此处以支付接口为例，演示业务系统如何调用支付网关进行支付，其他接口的调用方式类似，具体请参考[支付对接](https://doc.daxpay.cn/single/gateway/overview/接口清单.html)。
-
-```java
-/**
- * 统一支付接口
- * @author xxm
- * @since 2024/2/5
- */
-public class PayOrderTest {
-
-    @Before
-    public void init() {
-        // 初始化支付配置
-        DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:9000")
-                .signSecret("123456")
-                .signType(SignTypeEnum.HMAC_SHA256)
-                .build();
-        DaxPayKit.initConfig(config);
-    }
-
-    /**
-     * 支付
-     */
-    @Test
-    public void pay() {
-        PayParam param = new PayParam();
-        param.setClientIp("127.0.0.1");
-        param.setBizOrderNo("P0004");
-        param.setTitle("测试接口支付");
-        param.setChannel(PayChannelEnum.ALI.getCode());
-
-        DaxPayResult<PayModel> execute = DaxPayKit.execute(param);
-        System.out.println(JSONUtil.toJsonStr(execute));
-        
-    }
-}
-```
+> 待补充
 
 ## 🍎 系统截图
-### 收银台演示
-![微信截图_20240326141126](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
-### 驾驶舱
-![QQ截图20240326141912](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/QQ截图20240326141912.60u0cpvjg5.webp)
-### H5收银台演示
-![h5](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/h5.839t0s61xr.webp)
+### PC收银台演示(旧版)
+![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
+### 移动端收银演示
+![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信图片_20241012172346.41y1kcemrf.webp)
 ### 支付通道配置
-![微信截图_20240326142208](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240326142208.6bgu5vdv60.webp)
+![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012170024.5tr0f8xzn9.webp)
+### 开发联调功能
+![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012165858.231uu094fm.webp)
+### 对账单文件
+[](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012170315.6wqpq4ttix.webp)
 ## 🛣️ 路线图
 
 [**当前开发进度和任务池**](/_doc/Task.md)

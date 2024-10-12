@@ -47,7 +47,7 @@ public class WechatAuthService {
             PlatformConfig platformConfig = platformsConfigService.getConfig();
             String queryCode = RandomUtil.randomString(10);
             String serverUrl = platformConfig.getGatewayMobileUrl();
-            String redirectUrl = StrUtil.format("{}/wechat/auth/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
+            String redirectUrl = StrUtil.format("{}/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
             String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
             return new AuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
         }
