@@ -48,7 +48,7 @@ public class AliPayAuthService {
 
             // 授权地址
                 String serverUrl = platformConfig.getGatewayMobileUrl();
-            String authUrl = StrUtil.format("{}/alipay/auth/{}/{}/{}/{}",
+            String authUrl = StrUtil.format("{}/alipay/auth/{}/{}/{}",
                         serverUrl, param.getAppId(),param.getChannel(),queryCode,aliPayConfig.getAliAppId());
 
             return new AuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);

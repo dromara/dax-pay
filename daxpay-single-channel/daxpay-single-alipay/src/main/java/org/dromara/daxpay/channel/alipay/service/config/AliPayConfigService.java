@@ -111,7 +111,7 @@ public class AliPayConfigService {
     public String getReturnUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/return/{}/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/return/{}/alipay",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
     }
 
     /**

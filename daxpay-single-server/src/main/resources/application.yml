@@ -4,7 +4,7 @@ spring:
   application:
     name: dax-pay-server
   profiles:
-    active: demo
+    active: dev
   task:
     scheduling:
       pool:

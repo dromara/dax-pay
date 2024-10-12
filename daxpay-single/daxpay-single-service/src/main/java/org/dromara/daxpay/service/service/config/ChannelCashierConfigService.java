@@ -110,6 +110,6 @@ public class ChannelCashierConfigService {
         MchApp mchApp = mchAppManager.findByAppId(appId).orElseThrow(() -> new DataNotExistException("未找到指定的应用配置"));
         PlatformConfig platformConfig = platformConfigService.getConfig();
         String serverUrl = platformConfig.getGatewayMobileUrl();
-        return StrUtil.format("{}/channel/cashier/{}/{}", serverUrl, mchApp.getAppId());
+        return StrUtil.format("{}/channel/cashier/{}", serverUrl, mchApp.getAppId());
     }
 }

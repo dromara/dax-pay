@@ -95,7 +95,7 @@ public class WechatPayConfigService {
     public String getPayNotifyUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/pay",platformInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/wechat/pay",platformInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
     }
 
     /**
@@ -104,7 +104,7 @@ public class WechatPayConfigService {
     public String getRefundNotifyUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/refund",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{/wechat/refund",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
     }
 
     /**
@@ -113,7 +113,7 @@ public class WechatPayConfigService {
     public String getTransferNotifyUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         var platformInfo = platformConfigService.getConfig();
-        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/transfer",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/wechat/transfer",platformInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
     }
 
 
