@@ -94,7 +94,7 @@
 ### 开发联调功能
 ![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012165858.231uu094fm.webp)
 ### 对账单文件
-[](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012170315.6wqpq4ttix.webp)
+![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012170315.6wqpq4ttix.webp)
 ## 🛣️ 路线图
 
 [**当前开发进度和任务池**](/_doc/Task.md)
