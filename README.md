@@ -82,13 +82,15 @@
 </dependency>
 ```
 ### SDK调用示例
-> 待补充
+> 待补充j
 
 ## 🍎 系统截图
 ### PC收银台演示(旧版)
 ![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
 ### 移动端收银演示
-![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信图片_20241012172346.41y1kcemrf.webp)
+
+<img height="900" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信图片_20241012172346.41y1kcemrf.webp" width="390"/>
+
 ### 支付通道配置
 ![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012170024.5tr0f8xzn9.webp)
 ### 开发联调功能

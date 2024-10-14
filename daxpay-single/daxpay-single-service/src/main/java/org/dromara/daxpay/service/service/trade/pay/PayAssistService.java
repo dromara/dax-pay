@@ -183,7 +183,7 @@ public class PayAssistService {
      */
     public void validationExpiredTime(PayParam payParam) {
         LocalDateTime expiredTime = this.getExpiredTime(payParam);
-        if (Objects.nonNull(expiredTime) && DateTimeUtil.lt(LocalDateTime.now(), expiredTime)) {
+        if (Objects.nonNull(expiredTime) && DateTimeUtil.lt(expiredTime,LocalDateTime.now())) {
             throw new ValidationFailedException("支付超时时间设置有误, 请检查!");
         }
     }
