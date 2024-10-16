@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 前端转发配置
+ * PC前端转发配置
  * @author xxm
  * @since 2024/10/6
  */

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
- *                                                                                                                                                                                                                           移动端前端转发
+ * 移动端前端转发
  * @author xxm
  * @since 2024/10/6
  */
