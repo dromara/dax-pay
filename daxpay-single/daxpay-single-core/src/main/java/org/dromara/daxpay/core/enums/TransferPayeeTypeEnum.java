@@ -16,11 +16,11 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum TransferPayeeTypeEnum {
     /** userId  */
-    USER_ID("ali_user_id", "用户ID"),
+    USER_ID("user_id", "用户ID"),
     /** openId  */
-    OPEN_ID("ali_open_id", "OpenId"),
+    OPEN_ID("open_id", "OpenId"),
     /** 用户账号 */
-    LOGIN_NAME("ali_login_name", "用户账号");
+    LOGIN_NAME("login_name", "用户账号");
 
     /** 编码 */
     private final String code;
