@@ -19,9 +19,6 @@ import org.dromara.daxpay.core.result.MchAppResult;
 @Schema(title = "分账接收方")
 public class AllocReceiverResult extends MchAppResult {
 
-    @Schema(description = "账号别名")
-    private String name;
-
     @Schema(description = "接收方编号")
     private String receiverNo;
 

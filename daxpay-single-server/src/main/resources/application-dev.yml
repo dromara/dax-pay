@@ -13,7 +13,7 @@ spring:
 #          driver-class-name: com.mysql.cj.jdbc.Driver
 #          url: jdbc:mysql://mysql/dax-pay-single?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
 #          username: root
-#          password: bootx123
+#          password: root
       hikari:
         keepalive-time: 300000
   data:

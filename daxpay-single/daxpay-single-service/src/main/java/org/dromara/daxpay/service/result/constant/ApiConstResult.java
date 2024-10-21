@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 public class ApiConstResult {
     /** 接口编码 */
     @Schema(description = "编码")
-    private String channel;
+    private String code;
 
     /** 接口名称 */
     @Schema(description = "接口名称")

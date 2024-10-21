@@ -53,8 +53,8 @@ public class UniSyncController {
         return DaxRes.ok(refundSyncService.sync(param));
     }
 
-    @Operation(summary = "分账订单同步接口")
-    @PostMapping("/allocation")
+    @Operation(summary = "转账订单同步接口")
+    @PostMapping("/transfer")
     public DaxResult<TransferSyncResult> allocation(@RequestBody TransferSyncParam param){
         return DaxRes.ok(transferSyncService.sync(param));
     }

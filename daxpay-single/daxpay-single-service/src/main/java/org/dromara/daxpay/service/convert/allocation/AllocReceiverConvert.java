@@ -1,7 +1,7 @@
 package org.dromara.daxpay.service.convert.allocation;
 
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
-import org.dromara.daxpay.service.param.allocation.receiver.AllocReceiverAddParam;
+import org.dromara.daxpay.core.param.allocation.AllocReceiverAddParam;
 import org.dromara.daxpay.service.result.allocation.AllocReceiverResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

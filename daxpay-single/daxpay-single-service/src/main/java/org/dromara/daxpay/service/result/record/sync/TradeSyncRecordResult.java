@@ -1,11 +1,11 @@
 package org.dromara.daxpay.service.result.record.sync;
 
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.result.MchAppResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.core.enums.ChannelEnum;
+import org.dromara.daxpay.core.result.MchAppResult;
 
 /**
  * 支付同步记录
@@ -61,10 +61,6 @@ public class TradeSyncRecordResult extends MchAppResult {
      */
     @Schema(description = "是否进行调整")
     private boolean adjust;
-
-    /** 调整单号 */
-    @Schema(description = "调整单号")
-    private String adjustNo;
 
     /** 错误码 */
     @Schema(description = "错误码")

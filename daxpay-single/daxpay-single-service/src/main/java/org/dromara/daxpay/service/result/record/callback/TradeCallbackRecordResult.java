@@ -50,12 +50,14 @@ public class TradeCallbackRecordResult extends MchAppResult {
     @Schema(description = "回调处理状态")
     private String status;
 
-    @Schema(description = "调整号")
-    private String adjustNo;
+    /** 错误码 */
+    @Schema(description = "错误码")
+    private String errorCode;
 
     /** 提示信息 */
     @Schema(description = "提示信息")
     private String errorMsg;
+
 
 }
 

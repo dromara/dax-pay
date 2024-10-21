@@ -1,24 +1,27 @@
-package org.dromara.daxpay.service.param.allocation.receiver;
+package org.dromara.daxpay.core.param.allocation;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
 import org.dromara.daxpay.core.enums.AllocRelationTypeEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
+import org.dromara.daxpay.core.param.PaymentCommonParam;
 
-import javax.validation.constraints.Size;
 
 /**
  * 分账接收者添加参数
  * @author xxm
  * @since 2024/5/20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "分账接收者添加参数")
-public class AllocReceiverAddParam{
+public class AllocReceiverAddParam extends PaymentCommonParam {
 
     @Schema(description = "接收者编号, 需要保证唯一")
     @NotBlank(message = "接收者编号必填")
@@ -68,8 +71,4 @@ public class AllocReceiverAddParam{
     @Size(max = 50, message = "关系名称不可超过50位")
     private String relationName;
 
-    @Schema(description = "商户应用ID")
-    @NotBlank(message = "商户应用ID必填")
-    @Size(max = 32, message = "商户应用ID不可超过32位")
-    private String appId;
 }

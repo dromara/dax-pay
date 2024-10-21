@@ -37,8 +37,8 @@ public class ChannelCashierController {
     private final ChannelCashierConfigService cashierConfigService;
 
     @Operation(summary = "获取收银台信息")
-    @GetMapping("/getCashierType")
-    public Result<ChannelCashierConfigResult> getCashierType(String cashierType,String appId){
+    @GetMapping("/getCashierInfo")
+    public Result<ChannelCashierConfigResult> getCashierInfo(String cashierType,String appId){
         paymentAssistService.initMchApp(appId);
         return Res.ok(cashierConfigService.findByCashierType(cashierType));
     }
@@ -52,7 +52,7 @@ public class ChannelCashierController {
         return Res.ok(channelCashierService.generateAuthUrl(param));
     }
 
-    @Operation(summary = "获取授权结果")
+    @Operation(summary = "授权获取结果")
     @PostMapping("/auth")
     public Result<AuthResult> auth(@RequestBody CashierAuthCodeParam param){
         ValidationUtil.validateParam(param);

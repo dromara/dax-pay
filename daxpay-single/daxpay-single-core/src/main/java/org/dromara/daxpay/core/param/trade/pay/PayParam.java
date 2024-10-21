@@ -48,7 +48,6 @@ public class PayParam extends PaymentCommonParam {
     @Schema(description = "自动分账")
     private Boolean autoAllocation;
 
-
     /** 过期时间 */
     @Schema(description = "过期时间")
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
