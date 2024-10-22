@@ -85,10 +85,6 @@ public class TransferOrderResult extends MchAppResult {
     @Schema(description = "商户扩展参数")
     private String attach;
 
-    /** 终端ip */
-    @Schema(description = "终端ip")
-    private String clientIp;
-
     /**
      * 错误原因
      */

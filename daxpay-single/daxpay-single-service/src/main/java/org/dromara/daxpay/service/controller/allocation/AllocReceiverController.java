@@ -11,10 +11,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.core.param.allocation.AllocReceiverAddParam;
+import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
+import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverRemoveParam;
+import org.dromara.daxpay.service.bo.allocation.AllocReceiverResultBo;
 import org.dromara.daxpay.service.param.allocation.receiver.AllocReceiverQuery;
-import org.dromara.daxpay.core.param.allocation.AllocReceiverRemoveParam;
-import org.dromara.daxpay.service.result.allocation.AllocReceiverResult;
 import org.dromara.daxpay.service.service.allocation.AllocReceiverService;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.springframework.validation.annotation.Validated;
@@ -41,14 +41,14 @@ public class AllocReceiverController {
     @RequestPath("分页")
     @Operation(summary = "分页")
     @GetMapping("/page")
-    public Result<PageResult<AllocReceiverResult>> page(PageParam pageParam, AllocReceiverQuery query){
+    public Result<PageResult<AllocReceiverResultBo>> page(PageParam pageParam, AllocReceiverQuery query){
         return Res.ok(receiverService.page(pageParam, query));
     }
 
     @RequestPath("查询详情")
     @Operation(summary = "查询详情")
     @GetMapping("/findById")
-    public Result<AllocReceiverResult> findById(Long id){
+    public Result<AllocReceiverResultBo> findById(Long id){
         return Res.ok(receiverService.findById(id));
     }
 

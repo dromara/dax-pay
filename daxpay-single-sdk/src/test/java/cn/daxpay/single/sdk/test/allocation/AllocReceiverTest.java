@@ -34,6 +34,15 @@ public class AllocReceiverTest {
     }
 
     /**
+     * 查询
+     */
+    @Test
+    public void query() {
+        AllocReceiverAddParam param = new AllocReceiverAddParam();
+        param.setChannel(ChannelEnum.ALI.getCode());
+    }
+
+    /**
      * 添加
      */
     @Test

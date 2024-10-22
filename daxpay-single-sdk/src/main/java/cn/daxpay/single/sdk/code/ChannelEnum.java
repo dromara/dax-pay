@@ -15,12 +15,8 @@ public enum ChannelEnum {
 
     /** 支付宝 - 直连商户 */
     ALI("ali_pay"),
-    /** 支付宝 - 服务商商户 */
-    ALI_SERVICE("ali_service"),
     /** 微信支付 */
     WECHAT("wechat_pay"),
-    /** 微信支付服务商 */
-    WECHAT_SERVICE("wechat_service"),
     /** 云闪付 */
     UNION_PAY("union_pay"),
     ;

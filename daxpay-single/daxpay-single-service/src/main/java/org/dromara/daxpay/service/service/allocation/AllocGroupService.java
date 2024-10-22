@@ -10,6 +10,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.service.bo.allocation.AllocGroupReceiverResultBo;
 import org.dromara.daxpay.service.convert.allocation.AllocGroupConvert;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupManager;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupReceiverManager;
@@ -18,8 +19,7 @@ import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroup;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroupReceiver;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
 import org.dromara.daxpay.service.param.allocation.group.*;
-import org.dromara.daxpay.service.result.allocation.AllocGroupReceiverResult;
-import org.dromara.daxpay.service.result.allocation.AllocGroupResult;
+import org.dromara.daxpay.service.bo.allocation.AllocGroupResultBo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,21 +46,21 @@ public class AllocGroupService {
     /**
      * 分页
      */
-    public PageResult<AllocGroupResult> page(PageParam pageParam, AllocGroupQuery query){
+    public PageResult<AllocGroupResultBo> page(PageParam pageParam, AllocGroupQuery query){
         return MpUtil.toPageResult(groupManager.page(pageParam, query));
     }
 
     /**
      * 查询详情
      */
-    public AllocGroupResult findById(Long id){
+    public AllocGroupResultBo findById(Long id){
         return groupManager.findById(id).map(AllocGroup::toResult).orElseThrow(()->new DataNotExistException("分账组不存在"));
     }
 
     /**
      * 查询分账接收方
      */
-    public List<AllocGroupReceiverResult> findReceiversByGroups(Long groupId){
+    public List<AllocGroupReceiverResultBo> findReceiversByGroups(Long groupId){
         List<AllocGroupReceiver> groupReceivers = groupReceiverManager.findByGroupId(groupId);
         List<Long> receiverIds = groupReceivers.stream()
                 .map(AllocGroupReceiver::getReceiverId)
@@ -73,7 +73,7 @@ public class AllocGroupService {
         return groupReceivers.stream()
                 .map(o -> {
                     AllocReceiver receiver = receiverMap.get(o.getReceiverId());
-                    AllocGroupReceiverResult result = new AllocGroupReceiverResult()
+                    AllocGroupReceiverResultBo result = new AllocGroupReceiverResultBo()
                             .setReceiverId(receiver.getId())
                             .setReceiverNo(receiver.getReceiverNo())
                             .setReceiverAccount(receiver.getReceiverAccount())

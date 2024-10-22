@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.result.allocation;
+package org.dromara.daxpay.service.bo.allocation;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 @Schema(title = "分账组")
-public class AllocGroupResult extends MchAppResult {
+public class AllocGroupResultBo extends MchAppResult {
 
     @Schema(description = "分账组编号")
     private String groupNo;

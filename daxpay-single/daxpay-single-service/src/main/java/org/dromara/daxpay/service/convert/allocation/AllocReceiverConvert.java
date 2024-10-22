@@ -1,10 +1,13 @@
 package org.dromara.daxpay.service.convert.allocation;
 
+import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
+import org.dromara.daxpay.core.result.allocation.receiver.AllocReceiverResult;
+import org.dromara.daxpay.service.bo.allocation.AllocReceiverResultBo;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
-import org.dromara.daxpay.core.param.allocation.AllocReceiverAddParam;
-import org.dromara.daxpay.service.result.allocation.AllocReceiverResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  *
@@ -17,5 +20,9 @@ public interface AllocReceiverConvert {
 
     AllocReceiver convert(AllocReceiverAddParam in);
 
+    AllocReceiverResultBo toBo(AllocReceiver in);
+
     AllocReceiverResult toResult(AllocReceiver in);
+
+    List<AllocReceiverResult> toList(List<AllocReceiver> in);
 }

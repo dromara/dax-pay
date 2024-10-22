@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.service.bo.allocation.AllocGroupReceiverResultBo;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 import org.dromara.daxpay.service.convert.allocation.AllocGroupReceiverConvert;
-import org.dromara.daxpay.service.result.allocation.AllocGroupReceiverResult;
 
 import java.math.BigDecimal;
 
@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 @TableName("pay_alloc_group_receiver")
-public class AllocGroupReceiver extends MchAppBaseEntity implements ToResult<AllocGroupReceiverResult> {
+public class AllocGroupReceiver extends MchAppBaseEntity implements ToResult<AllocGroupReceiverResultBo> {
 
     /** 分账组ID */
     private Long groupId;
@@ -32,7 +32,7 @@ public class AllocGroupReceiver extends MchAppBaseEntity implements ToResult<All
     private BigDecimal rate;
 
     @Override
-    public AllocGroupReceiverResult toResult() {
+    public AllocGroupReceiverResultBo toResult() {
         return AllocGroupReceiverConvert.CONVERT.convert(this);
     }
 }

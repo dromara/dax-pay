@@ -22,21 +22,17 @@ import java.time.LocalDateTime;
 @Schema(title = "退款订单数据")
 public class RefundOrderResult extends MchAppResult {
 
-    /** 支付订单ID */
-    @Schema(description = "支付订单ID")
-    private Long orderId;
-
     /** 支付订单号 */
     @Schema(description = "支付订单号")
     private String orderNo;
 
-    /** 通道支付订单号 */
-    @Schema(description = "通道支付订单号")
-    private String outOrderNo;
-
     /** 商户支付订单号 */
     @Schema(description = "商户支付订单号")
     private String bizOrderNo;
+
+    /** 通道支付订单号 */
+    @Schema(description = "通道支付订单号")
+    private String outOrderNo;
 
     /** 支付标题 */
     @Schema(description = "支付标题")
@@ -58,12 +54,12 @@ public class RefundOrderResult extends MchAppResult {
      * 退款通道
      * @see ChannelEnum
      */
-    @Schema(description = "支付通道")
+    @Schema(description = "退款通道")
     private String channel;
 
     /** 订单金额 */
     @Schema(description = "订单金额")
-    private Integer orderAmount;
+    private BigDecimal orderAmount;
 
     /** 退款金额 */
     @Schema(description = "退款金额")
@@ -87,10 +83,6 @@ public class RefundOrderResult extends MchAppResult {
     /** 商户扩展参数,回调时会原样返回, 以最后一次为准 */
     @Schema(description = "商户扩展参数,回调时会原样返回, 以最后一次为准")
     private String attach;
-
-    /** 终端ip */
-    @Schema(description = "终端ip")
-    private String clientIp;
 
     /** 错误信息 */
     @Schema(description = "错误信息")

@@ -1,4 +1,4 @@
-package org.dromara.daxpay.core.param.allocation;
+package org.dromara.daxpay.core.param.allocation.receiver;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

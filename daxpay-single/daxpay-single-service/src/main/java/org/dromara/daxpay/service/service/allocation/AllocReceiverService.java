@@ -16,14 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.core.exception.OperationFailException;
 import org.dromara.daxpay.core.exception.OperationProcessingException;
+import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
+import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverQueryParam;
+import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverRemoveParam;
+import org.dromara.daxpay.core.result.allocation.receiver.AllocReceiverResult;
+import org.dromara.daxpay.service.bo.allocation.AllocReceiverResultBo;
 import org.dromara.daxpay.service.convert.allocation.AllocReceiverConvert;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupReceiverManager;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocReceiverManager;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
-import org.dromara.daxpay.core.param.allocation.AllocReceiverAddParam;
 import org.dromara.daxpay.service.param.allocation.receiver.AllocReceiverQuery;
-import org.dromara.daxpay.core.param.allocation.AllocReceiverRemoveParam;
-import org.dromara.daxpay.service.result.allocation.AllocReceiverResult;
 import org.dromara.daxpay.service.strategy.AbsAllocReceiverStrategy;
 import org.dromara.daxpay.service.strategy.PaymentStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
@@ -54,14 +56,14 @@ public class AllocReceiverService {
     /**
      * 分页
      */
-    public PageResult<AllocReceiverResult> page(PageParam pageParam, AllocReceiverQuery query) {
+    public PageResult<AllocReceiverResultBo> page(PageParam pageParam, AllocReceiverQuery query) {
         return MpUtil.toPageResult(allocReceiverManager.page(pageParam, query));
     }
 
     /**
      * 查询详情
      */
-    public AllocReceiverResult findById(Long id) {
+    public AllocReceiverResultBo findById(Long id) {
         return allocReceiverManager.findById(id)
                 .map(AllocReceiver::toResult)
                 .orElseThrow(() -> new DataNotExistException("分账接收方不存在"));
@@ -73,6 +75,16 @@ public class AllocReceiverService {
     public boolean existsByReceiverNo(String receiverNo, String appId) {
         return allocReceiverManager.existedByReceiverNo(receiverNo, appId);
     }
+
+
+    /**
+     * 分账接收方列表
+     */
+    public List<AllocReceiverResult> list(AllocReceiverQueryParam param){
+        List<AllocReceiver> allocReceivers = allocReceiverManager.findAllByChannel(param.getChannel(), param.getAppId());
+        return AllocReceiverConvert.CONVERT.toList(allocReceivers);
+    }
+
 
     /**
      * 添加分账接收方并同步到三方支付系统中
