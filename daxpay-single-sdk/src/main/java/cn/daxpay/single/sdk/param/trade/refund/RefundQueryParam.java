@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class QueryRefundParam extends DaxPayRequest<RefundOrderModel> {
+public class RefundQueryParam extends DaxPayRequest<RefundOrderModel> {
 
 
     /** 退款号 */

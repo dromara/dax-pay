@@ -28,7 +28,7 @@ public class PaySyncParam extends DaxPayRequest<PaySyncModel> {
      */
     @Override
     public String path() {
-        return "/unipay/sync/pay";
+        return "/unipay/sync/order/pay";
     }
 
     /**

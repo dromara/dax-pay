@@ -4,6 +4,9 @@ import cn.daxpay.single.sdk.code.AllocReceiverTypeEnum;
 import cn.daxpay.single.sdk.code.AllocRelationTypeEnum;
 import cn.daxpay.single.sdk.code.ChannelEnum;
 import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * 分账接收方
@@ -13,34 +16,44 @@ import lombok.Data;
 @Data
 public class AllocReceiverModel {
 
-    /** 分账接收方编号, 需要保证唯一 */
-    private String receiverNo;
+    /** 分账接收方列表 */
+    private List<Receiver> receivers;
 
     /**
-     * 所属通道
-     * @see ChannelEnum
+     * 分账接收方
      */
-    private String channel;
+    @Data
+    @Accessors(chain = true)
+    public static class Receiver{
+        /** 分账接收方编号, 需要保证唯一 */
+        private String receiverNo;
 
-    /**
-     * 分账接收方类型
-     * @see AllocReceiverTypeEnum
-     */
-    private String receiverType;
+        /**
+         * 所属通道
+         * @see ChannelEnum
+         */
+        private String channel;
 
-    /** 接收方账号 */
-    private String receiverAccount;
+        /**
+         * 分账接收方类型
+         * @see AllocReceiverTypeEnum
+         */
+        private String receiverType;
 
-    /** 接收方姓名 */
-    private String receiverName;
+        /** 接收方账号 */
+        private String receiverAccount;
 
-    /**
-     * 分账关系类型
-     * @see AllocRelationTypeEnum
-     */
-    private String relationType;
+        /** 接收方姓名 */
+        private String receiverName;
 
-    /** 关系名称 */
-    private String relationName;
+        /**
+         * 分账关系类型
+         * @see AllocRelationTypeEnum
+         */
+        private String relationType;
+
+        /** 关系名称 */
+        private String relationName;
+    }
 
 }

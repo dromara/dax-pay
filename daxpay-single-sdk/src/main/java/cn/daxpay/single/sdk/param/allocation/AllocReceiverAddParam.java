@@ -57,7 +57,7 @@ public class AllocReceiverAddParam extends DaxPayRequest<AllocReceiverAddModel> 
      */
     @Override
     public String path() {
-        return "/unipay/allocation/receiver/add";
+        return "/unipay/alloc/receiver/add";
     }
 
     /**

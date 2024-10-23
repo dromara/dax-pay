@@ -4,7 +4,7 @@ import cn.daxpay.single.sdk.code.SignTypeEnum;
 import cn.daxpay.single.sdk.model.trade.pay.PayOrderModel;
 import cn.daxpay.single.sdk.net.DaxPayConfig;
 import cn.daxpay.single.sdk.net.DaxPayKit;
-import cn.daxpay.single.sdk.param.trade.pay.QueryPayParam;
+import cn.daxpay.single.sdk.param.trade.pay.PayQueryParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
 import cn.daxpay.single.sdk.util.JsonUtil;
 import org.junit.Before;
@@ -21,8 +21,9 @@ public class QueryPayOrderTest {
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:10880")
+                .serviceUrl("http://127.0.0.1:9999")
                 .signSecret("123456")
+                .appId("M7934041241299655")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .build();
         DaxPayKit.initConfig(config);
@@ -30,7 +31,7 @@ public class QueryPayOrderTest {
 
     @Test
     public void testPay() {
-        QueryPayParam param = new QueryPayParam();
+        PayQueryParam param = new PayQueryParam();
 
         param.setBizOrderNoeNo("P17141882417921");
         param.setClientIp("127.0.0.1");

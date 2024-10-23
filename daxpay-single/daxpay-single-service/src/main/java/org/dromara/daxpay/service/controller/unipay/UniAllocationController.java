@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 /**
  * 分账控制器
  * @author xxm
@@ -47,7 +45,7 @@ public class UniAllocationController {
 
     @Operation(summary = "分账接收方查询接口")
     @PostMapping("/receiver/list")
-    public DaxResult<List<AllocReceiverResult>> receiverList(@RequestBody AllocReceiverQueryParam param){
+    public DaxResult<AllocReceiverResult> receiverList(@RequestBody AllocReceiverQueryParam param){
         return DaxRes.ok(allocReceiverService.list(param));
     }
 

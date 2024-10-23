@@ -80,9 +80,10 @@ public class AllocReceiverService {
     /**
      * 分账接收方列表
      */
-    public List<AllocReceiverResult> list(AllocReceiverQueryParam param){
+    public AllocReceiverResult list(AllocReceiverQueryParam param){
         List<AllocReceiver> allocReceivers = allocReceiverManager.findAllByChannel(param.getChannel(), param.getAppId());
-        return AllocReceiverConvert.CONVERT.toList(allocReceivers);
+        List<AllocReceiverResult.Receiver> list = AllocReceiverConvert.CONVERT.toList(allocReceivers);
+        return new AllocReceiverResult().setReceivers(list);
     }
 
 

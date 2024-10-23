@@ -25,10 +25,10 @@ public class TransferOrderTest {
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:10880")
+                .serviceUrl("http://127.0.0.1:9999")
                 .signSecret("123456")
+                .appId("M7934041241299655")
                 .signType(SignTypeEnum.HMAC_SHA256)
-                .appId("M8207639754663343")
                 .build();
         DaxPayKit.initConfig(config);
     }

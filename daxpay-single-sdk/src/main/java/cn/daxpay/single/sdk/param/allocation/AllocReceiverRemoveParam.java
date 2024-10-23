@@ -27,7 +27,7 @@ public class AllocReceiverRemoveParam extends DaxPayRequest<AllocReceiverRemoveM
      */
     @Override
     public String path() {
-        return "/unipay/allocation/receiver/remove";
+        return "/unipay/alloc/receiver/remove";
     }
 
     /**

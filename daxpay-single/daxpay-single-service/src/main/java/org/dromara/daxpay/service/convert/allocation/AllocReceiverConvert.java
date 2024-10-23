@@ -24,5 +24,5 @@ public interface AllocReceiverConvert {
 
     AllocReceiverResult toResult(AllocReceiver in);
 
-    List<AllocReceiverResult> toList(List<AllocReceiver> in);
+    List<AllocReceiverResult.Receiver> toList(List<AllocReceiver> in);
 }

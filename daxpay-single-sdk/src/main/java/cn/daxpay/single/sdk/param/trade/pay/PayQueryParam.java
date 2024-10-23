@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class QueryPayParam extends DaxPayRequest<PayOrderModel> {
+public class PayQueryParam extends DaxPayRequest<PayOrderModel> {
 
     /** 订单号 */
     private String orderNo;

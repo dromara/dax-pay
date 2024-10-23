@@ -1,5 +1,6 @@
 package org.dromara.daxpay.service.aop;
 
+import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.dromara.daxpay.core.exception.PayFailureException;
 import org.dromara.daxpay.core.param.PaymentCommonParam;
 import org.dromara.daxpay.core.result.DaxResult;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
@@ -38,25 +38,24 @@ public class PaymentVerifyAspect {
             throw new ValidationFailedException("支付方法至少有一个参数，并且需要签名的支付参数放在第一位");
         }
         Object param = args[0];
-        if (param instanceof PaymentCommonParam paymentParam){
-            // 参数校验
-            ValidationUtil.validateParam(paymentParam);
-            // 应用信息初始化
-            paymentAssistService.initMchApp(paymentParam.getAppId());
-            // 终端信息初始化
-            paymentAssistService.initClient(paymentParam);
-            // 参数签名校验
-            paymentAssistService.signVerify(paymentParam);
-            // 参数请求时间校验
-            paymentAssistService.reqTimeoutVerify(paymentParam);
-
-        } else {
+        if (!(param instanceof PaymentCommonParam paymentParam)) {
             throw new ValidationFailedException("参数需要继承PayCommonParam");
         }
         Object proceed;
+        // 应用信息初始化
+        paymentAssistService.initMchApp(paymentParam.getAppId());
         try {
+            // 参数签名校验
+            paymentAssistService.signVerify(paymentParam);
+            // 参数校验
+            ValidationUtil.validateParam(paymentParam);
+            // 终端信息初始化
+            paymentAssistService.initClient(paymentParam);
+            // 参数请求时间校验
+            paymentAssistService.reqTimeoutVerify(paymentParam);
+
             proceed = pjp.proceed();
-        } catch (PayFailureException ex) {
+        } catch (BizException ex) {
             DaxResult<Void> result = new DaxResult<>(ex.getCode(), ex.getMessage());
             paymentAssistService.sign(result);
             return result;

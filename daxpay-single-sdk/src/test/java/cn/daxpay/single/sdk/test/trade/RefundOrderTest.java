@@ -27,10 +27,10 @@ public class RefundOrderTest {
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:10880")
+                .serviceUrl("http://127.0.0.1:9999")
                 .signSecret("123456")
+                .appId("M7934041241299655")
                 .signType(SignTypeEnum.HMAC_SHA256)
-                .appId("M8088873888246277")
                 .build();
         DaxPayKit.initConfig(config);
     }
@@ -49,6 +49,6 @@ public class RefundOrderTest {
 
         DaxPayResult<RefundModel> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
-        System.out.println(PaySignUtil.verifyHmacSha256Sign(execute.getData(), "123456", execute.getSign()));
+        System.out.println(PaySignUtil.verifyHmacSha256Sign(execute, "123456", execute.getSign()));
     }
 }

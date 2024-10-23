@@ -81,7 +81,61 @@
 </dependency>
 ```
 ### SDK调用示例
-> 待补充j
+```java
+package org.dromara.daxpay.test;
+
+import cn.daxpay.single.sdk.code.SignTypeEnum;
+import cn.daxpay.single.sdk.model.trade.pay.PayOrderModel;
+import cn.daxpay.single.sdk.net.DaxPayConfig;
+import cn.daxpay.single.sdk.net.DaxPayKit;
+import cn.daxpay.single.sdk.param.trade.pay.PayQueryParam;
+import cn.daxpay.single.sdk.response.DaxPayResult;
+import cn.daxpay.single.sdk.util.JsonUtil;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * 统一支付接口
+ * @author xxm
+ * @since 2024/2/5
+ */
+public class PayOrderTest {
+
+    @Before
+    public void init() {
+        // 初始化支付配置
+        DaxPayConfig config = DaxPayConfig.builder()
+                .serviceUrl("http://127.0.0.1:9999")
+                .signSecret("123456")
+                .appId("M7934041241299655")
+                .signType(SignTypeEnum.HMAC_SHA256)
+                .build();
+        DaxPayKit.initConfig(config);
+    }
+
+     /**
+     * 支付宝支付(二维码扫码)
+     */
+    @Test
+    public void aliPayQrPay() {
+        PayParam param = new PayParam();
+        param.setClientIp("127.0.0.1");
+        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
+        param.setTitle("测试支付宝扫码支付");
+        param.setDescription("这是支付宝扫码支付");
+        param.setAmount(BigDecimal.valueOf(10));
+        param.setChannel(ChannelEnum.ALI.getCode());
+        param.setMethod(PayMethodEnum.QRCODE.getCode());
+        param.setAttach("{回调参数}");
+        param.setAllocation(false);
+        param.setReturnUrl("https://abc.com/returnurl");
+        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
+
+        DaxPayResult<PayResultModel> execute = DaxPayKit.execute(param);
+        System.out.println(JsonUtil.toJsonStr(execute));
+    }
+}
+```
 
 ## 🍎 系统截图
 ### PC收银台演示(旧版)

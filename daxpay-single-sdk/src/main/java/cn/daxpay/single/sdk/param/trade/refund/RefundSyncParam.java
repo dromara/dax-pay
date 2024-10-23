@@ -28,7 +28,7 @@ public class RefundSyncParam extends DaxPayRequest<RefundSyncModel> {
      */
     @Override
     public String path() {
-        return "/unipay/sync/refund";
+        return "/unipay/sync/order/refund";
     }
 
     /**

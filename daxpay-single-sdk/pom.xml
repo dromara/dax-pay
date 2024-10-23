@@ -186,10 +186,6 @@
                 </includes>
                 <filtering>true</filtering>
             </resource>
-            <!-- java类路径中会被打包的软件 -->
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
         </resources>
     </build>
 
