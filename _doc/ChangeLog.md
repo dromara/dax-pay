@@ -1,4 +1,8 @@
 # CHANGELOG
+## [v3.0.0.beta2] 2024-11-08
+- fix: 系统参数使用到MySQL8保留字
+- fix: Mysql 脚本缺少 缺失 表pay_api_const
+- fix: H5构建版本限制错误, 限制为最低为node20+
 ## [v3.0.0.beta1] 2024-10-24 
 - 重构: JDK版本升级为21+, Spring Boot 版本升级为3.3.x, 前端组件升级为Antd Vue 4.x + Vite5
 - 重构: 数据库更新为PostgreSQL + MySQL8.x 双版本支持

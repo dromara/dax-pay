@@ -38,6 +38,10 @@ public class WechatPayConfigParam {
     @Schema(description = "是否启用")
     private Boolean enable;
 
+    /** 授权认证地址 */
+    @Schema(description = "授权认证地址")
+    private String authUrl;
+
     /** 支付限额 */
     @NotNull(message = "支付限额不可为空")
     @Schema(description = "支付限额")

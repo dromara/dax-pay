@@ -37,16 +37,21 @@ public class WechatAuthService {
      * 构建微信oauth2授权的url连接
      */
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
-        WxMpService wxMpService = this.getWxMpService();
+        WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
+        WxMpService wxMpService = this.getWxMpService(config);
         // 手段传输回调地址, 直接拼接不做处理
         if (StrUtil.isNotBlank(param.getAuthRedirectUrl())){
             String url = wxMpService.getOAuth2Service()
                     .buildAuthorizationUrl(param.getAuthRedirectUrl(), WxConsts.OAuth2Scope.SNSAPI_BASE, "");
             return new AuthUrlResult().setAuthUrl(url);
         } else {
-            PlatformConfig platformConfig = platformsConfigService.getConfig();
+            String serverUrl = platformsConfigService.getConfig().getGatewayMobileUrl();
+            // 如果配置中有地址配置则使用, 没有的话使用平台地址进行拼接
+            if (StrUtil.isNotBlank(config.getAuthUrl())){
+                PlatformConfig platformConfig = platformsConfigService.getConfig();
+                serverUrl = platformConfig.getGatewayMobileUrl();
+            }
             String queryCode = RandomUtil.randomString(10);
-            String serverUrl = platformConfig.getGatewayMobileUrl();
             String redirectUrl = StrUtil.format("{}/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(),queryCode);
             String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
             return new AuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
@@ -70,6 +75,12 @@ public class WechatAuthService {
      */
     private WxMpService getWxMpService() {
         WechatPayConfig config = wechatPayConfigService.getAndCheckConfig();
+        return getWxMpService(config);
+    }
+    /**
+     * 获取微信公众号API的Service
+     */
+    private WxMpService getWxMpService(WechatPayConfig config) {
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpDefaultConfigImpl wxMpConfig = new WxMpDefaultConfigImpl();
         wxMpConfig.setAppId(config.getWxAppId()); // 设置微信公众号的appid

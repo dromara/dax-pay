@@ -33,6 +33,10 @@ public class WechatPayConfigResult {
     @Schema(description = "是否启用")
     private Boolean enable;
 
+    /** 授权认证地址 */
+    @Schema(description = "授权认证地址")
+    private String authUrl;
+
     /** 支付限额 */
     @Schema(description = "支付限额")
     private BigDecimal limitAmount;

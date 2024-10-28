@@ -34,6 +34,9 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
     /** 是否启用 */
     private Boolean enable;
 
+    /** 授权认证地址 */
+    private String authUrl;
+
     /** 支付限额 */
     private BigDecimal limitAmount;
 
