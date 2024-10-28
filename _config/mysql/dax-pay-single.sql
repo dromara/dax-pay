@@ -885,6 +885,20 @@ INSERT INTO `pay_channel_const` VALUES (20000, 'wechat_pay', '微信支付(直�
 INSERT INTO `pay_channel_const` VALUES (30000, 'union_pay', '云闪付', 1, NULL);
 
 -- ----------------------------
+-- Table structure for pay_api_const
+-- ----------------------------
+DROP TABLE IF EXISTS `pay_api_const`;
+CREATE TABLE `pay_api_const`  (
+                                  `id` bigint NOT NULL COMMENT '主键',
+                                  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '编码',
+                                  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '接口名称',
+                                  `api` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '接口地址',
+                                  `enable` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用',
+                                  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
+                                  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '支付接口常量' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for pay_channel_reconcile_trade
 -- ----------------------------
 DROP TABLE IF EXISTS `pay_channel_reconcile_trade`;
