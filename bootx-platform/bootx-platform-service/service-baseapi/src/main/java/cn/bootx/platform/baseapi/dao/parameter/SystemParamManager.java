@@ -30,21 +30,21 @@ public class SystemParamManager extends BaseManager<SystemParamMapper, SystemPar
      * 根据键名获取键值
      */
     public Optional<SystemParameter> findByKey(String key) {
-        return this.findByField(SystemParameter::getKey, key);
+        return this.findByField(SystemParameter::getParamKey, key);
     }
 
     /**
      * key重复检查
      */
     public boolean existsByKey(String key) {
-        return existedByField(SystemParameter::getKey, key);
+        return existedByField(SystemParameter::getParamKey, key);
     }
 
     /**
      * key重复检查
      */
     public boolean existsByKey(String key, Long id) {
-        return existedByField(SystemParameter::getKey, key, id);
+        return existedByField(SystemParameter::getParamKey, key, id);
     }
 
     /**
@@ -54,7 +54,7 @@ public class SystemParamManager extends BaseManager<SystemParamMapper, SystemPar
         Page<SystemParameter> mpPage = MpUtil.getMpPage(pageParam);
         return lambdaQuery().orderByDesc(MpIdEntity::getId)
             .like(StrUtil.isNotBlank(param.getName()), SystemParameter::getName, param.getName())
-            .like(StrUtil.isNotBlank(param.getKey()), SystemParameter::getKey, param.getKey())
+            .like(StrUtil.isNotBlank(param.getParamKey()), SystemParameter::getParamKey, param.getParamKey())
             .page(mpPage);
     }
 

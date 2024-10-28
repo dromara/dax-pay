@@ -31,7 +31,7 @@ public class SystemParameterParam {
 
     @NotEmpty(message = "参数键名不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "参数键名")
-    private String key;
+    private String paramKey;
 
     @NotEmpty(message = "参数值不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "参数值")

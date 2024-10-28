@@ -24,7 +24,7 @@ public class SystemParameterResult {
     private String name;
 
     @Schema(description = "参数键名")
-    private String key;
+    private String getParamKey;
 
     @Schema(description = "参数值")
     private String value;
