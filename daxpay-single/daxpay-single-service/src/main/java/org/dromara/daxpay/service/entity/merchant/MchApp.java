@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import org.dromara.daxpay.core.enums.SignTypeEnum;
 import org.dromara.daxpay.core.enums.MerchantNotifyTypeEnum;
 import org.dromara.daxpay.service.convert.merchant.MchAppConvert;
-import org.dromara.daxpay.service.enums.MchAppStautsEnum;
+import org.dromara.daxpay.service.enums.MchAppStatusEnum;
 import org.dromara.daxpay.service.result.merchant.MchAppResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -56,7 +56,7 @@ public class MchApp extends MpBaseEntity implements ToResult<MchAppResult> {
 
     /**
      * 应用状态
-     * @see MchAppStautsEnum
+     * @see MchAppStatusEnum
      */
     private String status;
 

@@ -5,7 +5,7 @@ import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
 import org.dromara.daxpay.service.entity.merchant.MchApp;
-import org.dromara.daxpay.service.enums.MchAppStautsEnum;
+import org.dromara.daxpay.service.enums.MchAppStatusEnum;
 import org.dromara.daxpay.service.param.merchant.MchAppQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -65,7 +65,7 @@ public class MchAppManager extends BaseManager<MchAppMapper, MchApp> {
     /**
      * 根据状态查询所有
      */
-    public List<MchApp> findAllByStatus(MchAppStautsEnum status) {
+    public List<MchApp> findAllByStatus(MchAppStatusEnum status) {
         return findAllByField(MchApp::getStatus, status.getCode());
 
     }

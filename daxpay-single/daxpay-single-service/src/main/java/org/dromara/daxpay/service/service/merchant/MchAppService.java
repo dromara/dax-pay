@@ -17,7 +17,7 @@ import org.dromara.daxpay.service.dao.config.ChannelConfigManager;
 import org.dromara.daxpay.service.dao.merchant.MchAppManager;
 import org.dromara.daxpay.service.entity.config.ChannelConfig;
 import org.dromara.daxpay.service.entity.merchant.MchApp;
-import org.dromara.daxpay.service.enums.MchAppStautsEnum;
+import org.dromara.daxpay.service.enums.MchAppStatusEnum;
 import org.dromara.daxpay.service.param.merchant.MchAppParam;
 import org.dromara.daxpay.service.param.merchant.MchAppQuery;
 import org.dromara.daxpay.service.result.merchant.MchAppResult;
@@ -47,7 +47,7 @@ public class MchAppService {
         MchApp entity = MchAppConvert.CONVERT.toEntity(param);
         // 生成应用号
         entity.setAppId(this.generateAppId())
-                .setStatus(MchAppStautsEnum.ENABLE.getCode());
+                .setStatus(MchAppStatusEnum.ENABLE.getCode());
         mchAppManager.save(entity);
     }
     /**

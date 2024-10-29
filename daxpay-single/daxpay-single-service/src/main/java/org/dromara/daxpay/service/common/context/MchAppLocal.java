@@ -1,7 +1,7 @@
 package org.dromara.daxpay.service.common.context;
 
 import org.dromara.daxpay.core.enums.MerchantNotifyTypeEnum;
-import org.dromara.daxpay.service.enums.MchAppStautsEnum;
+import org.dromara.daxpay.service.enums.MchAppStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -43,7 +43,7 @@ public class MchAppLocal {
 
     /**
      * 应用状态
-     * @see MchAppStautsEnum
+     * @see MchAppStatusEnum
      */
     private String status;
 

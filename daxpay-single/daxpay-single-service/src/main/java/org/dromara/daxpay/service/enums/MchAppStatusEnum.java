@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum MchAppStautsEnum {
+public enum MchAppStatusEnum {
     /**
      * 禁用
      */

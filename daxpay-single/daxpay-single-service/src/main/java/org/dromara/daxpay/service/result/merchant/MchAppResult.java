@@ -3,7 +3,7 @@ package org.dromara.daxpay.service.result.merchant;
 import cn.bootx.platform.core.result.BaseResult;
 import org.dromara.daxpay.core.enums.MerchantNotifyTypeEnum;
 import org.dromara.daxpay.core.enums.SignTypeEnum;
-import org.dromara.daxpay.service.enums.MchAppStautsEnum;
+import org.dromara.daxpay.service.enums.MchAppStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,7 +55,7 @@ public final class MchAppResult extends BaseResult {
 
     /**
      * 状态
-     * @see MchAppStautsEnum
+     * @see MchAppStatusEnum
      */
     @Schema(description = "状态")
     private String status;
