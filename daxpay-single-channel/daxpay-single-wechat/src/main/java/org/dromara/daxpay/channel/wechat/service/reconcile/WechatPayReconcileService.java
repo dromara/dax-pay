@@ -140,14 +140,12 @@ public class WechatPayReconcileService {
                 case WxPayConstants.ResultCode.FAIL -> tradeBo.setTradeStatus(TradeStatusEnum.FAIL.getCode());
                 case WxPayConstants.RefundStatus.CHANGE -> tradeBo.setTradeStatus(TradeStatusEnum.EXCEPTION.getCode());
             }
-            tradeBo.setTradeStatus(TradeStatusEnum.SUCCESS.getCode());
         }
         // 撤销状态
         if (Objects.equals(billDetail.getTradeState(), WxPayConstants.WxpayTradeStatus.REVOKED)) {
             tradeBo.setTradeType(TradeTypeEnum.PAY.getCode())
                     .setTradeStatus(TradeStatusEnum.REVOKED.getCode());
         }
-
         return tradeBo;
     }
 
