@@ -1,6 +1,7 @@
 package org.dromara.daxpay.channel.wechat.service.sync.pay;
 
 import cn.bootx.platform.core.util.JsonUtil;
+import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryV3Result;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 微信支付信息同步 v3
@@ -37,9 +39,16 @@ public class WeChatPaySyncV3Service {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         try {
             var result = wxPayService.queryOrderV3(null, order.getOrderNo());
+
+            // 获取支付金额
+            var payerTotal = Optional.ofNullable(result.getAmount())
+                    .map(WxPayOrderQueryV3Result.Amount::getPayerTotal)
+                    .map(PayUtil::conversionAmount)
+                    .orElse(null);
+
             syncResult.setSyncData(JsonUtil.toJsonStr(result))
                     .setOutOrderNo(result.getTransactionId())
-                    .setAmount(PayUtil.conversionAmount(result.getAmount().getPayerTotal()));
+                    .setAmount(payerTotal);
             // 支付状态 - 成功 SUCCESS：支付成功  REFUND：转入退款
             if (List.of(WxpayTradeStatus.SUCCESS, WxpayTradeStatus.REFUND).contains(result.getTradeState())){
                 syncResult.setPayStatus(PayStatusEnum.SUCCESS)
