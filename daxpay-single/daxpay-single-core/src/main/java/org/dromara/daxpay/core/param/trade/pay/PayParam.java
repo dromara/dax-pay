@@ -64,6 +64,7 @@ public class PayParam extends PaymentCommonParam {
 
     /**
      * 支付方式编码
+     * @see org.dromara.daxpay.core.enums.PayMethodEnum
      */
     @Schema(description = "支付方式编码")
     @NotBlank(message = "支付方式不可为空")

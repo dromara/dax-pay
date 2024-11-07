@@ -2,20 +2,6 @@ package org.dromara.daxpay.channel.wechat.service.pay;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.platform.core.util.JsonUtil;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
-import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
-import org.dromara.daxpay.channel.wechat.param.pay.WxPayCodepayRequest;
-import org.dromara.daxpay.channel.wechat.result.pay.WxPayCodepayResult;
-import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
-import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
-import org.dromara.daxpay.core.enums.PayMethodEnum;
-import org.dromara.daxpay.core.enums.PayStatusEnum;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
-import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
-import org.dromara.daxpay.service.service.trade.pay.PaySyncService;
 import cn.hutool.extra.spring.SpringUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
@@ -29,6 +15,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
+import org.dromara.daxpay.channel.wechat.param.pay.WxPayCodepayRequest;
+import org.dromara.daxpay.channel.wechat.result.pay.WxPayCodepayResult;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
+import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
+import org.dromara.daxpay.core.enums.PayMethodEnum;
+import org.dromara.daxpay.core.enums.PayStatusEnum;
+import org.dromara.daxpay.core.exception.MethodNotExistException;
+import org.dromara.daxpay.core.exception.TradeFailException;
+import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
+import org.dromara.daxpay.core.util.PayUtil;
+import org.dromara.daxpay.service.bo.trade.PayResultBo;
+import org.dromara.daxpay.service.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.service.trade.pay.PaySyncService;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
@@ -79,6 +80,8 @@ public class WechatPayV3Service {
         // 付款码支付
         else if (payMethodEnum == PayMethodEnum.BARCODE) {
             this.barCodePay(payOrder, wechatPayParam.getAuthCode(), config, payResult);
+        } else {
+            throw new MethodNotExistException("不支持的支付方式");
         }
         payResult.setPayBody(payBody);
         return payResult;

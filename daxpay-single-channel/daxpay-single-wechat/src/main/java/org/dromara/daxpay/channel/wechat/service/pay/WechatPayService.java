@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,6 +27,14 @@ public class WechatPayService {
      * 校验
      */
     public void validation(PayParam payParam, WechatPayParam wechatPayParam, WechatPayConfig weChatPayConfig) {
+        // 判断是否是支持的支付方式
+        String method = payParam.getMethod();
+        PayMethodEnum methodEnum = PayMethodEnum.findByCode(method);
+        if (List.of(PayMethodEnum.APP,PayMethodEnum.BARCODE,PayMethodEnum.WAP,PayMethodEnum.QRCODE,PayMethodEnum.JSAPI).contains(methodEnum)) {
+            throw new ValidationFailedException("不支持的支付方式");
+        }
+
+
         // 支付金额是否超限
         if (BigDecimalUtil.isGreaterThan(payParam.getAmount(),weChatPayConfig.getLimitAmount())) {
             throw new AmountExceedLimitException("微信支付金额超限");
