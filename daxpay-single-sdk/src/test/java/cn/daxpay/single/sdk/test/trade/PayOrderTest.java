@@ -11,6 +11,7 @@ import cn.daxpay.single.sdk.param.channel.WechatPayParam;
 import cn.daxpay.single.sdk.param.trade.pay.PayParam;
 import cn.daxpay.single.sdk.response.DaxPayResult;
 import cn.daxpay.single.sdk.util.JsonUtil;
+import cn.daxpay.single.sdk.util.PaySignUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class PayOrderTest {
         DaxPayConfig config = DaxPayConfig.builder()
                 .serviceUrl("http://127.0.0.1:9999")
                 .signSecret("123456")
-                .appId("M7934041241299655")
+                .appId("M8207639754663343")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .build();
         DaxPayKit.initConfig(config);
@@ -45,7 +46,7 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试微信扫码支付");
         param.setDescription("这是支付备注");
-        param.setAmount(BigDecimal.valueOf(0.01));
+        param.setAmount(BigDecimal.valueOf(1.00));
         param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
@@ -55,6 +56,7 @@ public class PayOrderTest {
 
         DaxPayResult<PayResultModel> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
+        System.out.println(PaySignUtil.hmacSha256Sign(execute, "123456"));
     }
 
     /**

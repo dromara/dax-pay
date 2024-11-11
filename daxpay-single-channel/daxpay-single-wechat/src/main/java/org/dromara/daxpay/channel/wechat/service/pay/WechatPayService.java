@@ -30,7 +30,7 @@ public class WechatPayService {
         // 判断是否是支持的支付方式
         String method = payParam.getMethod();
         PayMethodEnum methodEnum = PayMethodEnum.findByCode(method);
-        if (List.of(PayMethodEnum.APP,PayMethodEnum.BARCODE,PayMethodEnum.WAP,PayMethodEnum.QRCODE,PayMethodEnum.JSAPI).contains(methodEnum)) {
+        if (!List.of(PayMethodEnum.APP,PayMethodEnum.BARCODE,PayMethodEnum.WAP,PayMethodEnum.QRCODE,PayMethodEnum.JSAPI).contains(methodEnum)) {
             throw new ValidationFailedException("不支持的支付方式");
         }
 

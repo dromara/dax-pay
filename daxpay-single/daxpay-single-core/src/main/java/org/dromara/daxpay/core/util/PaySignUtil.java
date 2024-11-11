@@ -78,7 +78,7 @@ public class PaySignUtil {
                     // BigDecimal类型
                     else if (field.getType().equals(BigDecimal.class)) {
                         BigDecimal bigDecimal = (BigDecimal) fieldValue;
-                        String decimalString = bigDecimal.toString();
+                        String decimalString = bigDecimal.stripTrailingZeros().toPlainString();
                         map.put(fieldName, decimalString);
                     }
                     // 集合类型
