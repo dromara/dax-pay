@@ -1,29 +1,27 @@
-package org.dromara.daxpay.service.entity.order.allocation;
+package org.dromara.daxpay.service.entity.allocation.transaction;
 
-import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
-import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
-import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
+import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
+import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 分账订单明细
+ * 分账明细
  * @author xxm
- * @since 2024/6/1
+ * @since 2024/11/14
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_alloc_order_detail")
-public class AllocOrderDetail extends MchAppBaseEntity {
+public class AllocDetail extends MchAppBaseEntity {
 
     /** 分账订单ID */
-    private Long allocId;
+    private Long allocationId;
 
     /** 接收者ID */
     private Long receiverId;
@@ -31,7 +29,7 @@ public class AllocOrderDetail extends MchAppBaseEntity {
     /** 分账接收方编号 */
     private String receiverNo;
 
-    /** 分账比例(百分之多少) */
+    /** 分账比例 */
     private BigDecimal rate;
 
     /** 分账金额 */

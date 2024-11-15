@@ -17,7 +17,6 @@ import lombok.experimental.UtilityClass;
 public class JsonUtil {
     private final JSONConfig JSON_CONFIG = JSONConfig.create()
             .setDateFormat(DatePattern.NORM_DATETIME_PATTERN);
-//            .setStripTrailingZeros(false);
 
     /**
      * 转换为实体

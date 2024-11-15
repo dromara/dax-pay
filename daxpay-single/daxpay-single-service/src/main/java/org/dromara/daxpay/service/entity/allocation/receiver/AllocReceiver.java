@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.service.convert.allocation.AllocReceiverConvert;
-import org.dromara.daxpay.service.bo.allocation.AllocReceiverResultBo;
+import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
 
 /**
  * 分账接收方

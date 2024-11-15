@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.dromara.daxpay.service.bo.allocation.AllocGroupReceiverResultBo;
+import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupReceiverResultBo;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 import org.dromara.daxpay.service.convert.allocation.AllocGroupReceiverConvert;
 

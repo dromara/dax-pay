@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.allocation;
+package org.dromara.daxpay.service.service.allocation.receiver;
 
 import cn.bootx.platform.baseapi.service.dict.DictionaryItemService;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -20,7 +20,7 @@ import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverQueryParam;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverRemoveParam;
 import org.dromara.daxpay.core.result.allocation.receiver.AllocReceiverResult;
-import org.dromara.daxpay.service.bo.allocation.AllocReceiverResultBo;
+import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
 import org.dromara.daxpay.service.convert.allocation.AllocReceiverConvert;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupReceiverManager;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocReceiverManager;

@@ -7,11 +7,17 @@ import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverQueryParam;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverRemoveParam;
+import org.dromara.daxpay.core.param.allocation.transaction.AllocFinishParam;
+import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
+import org.dromara.daxpay.core.param.allocation.transaction.QueryAllocTransactionParam;
 import org.dromara.daxpay.core.result.DaxResult;
 import org.dromara.daxpay.core.result.allocation.receiver.AllocReceiverResult;
+import org.dromara.daxpay.core.result.allocation.transaction.AllocResult;
+import org.dromara.daxpay.core.result.allocation.transaction.AllocTransactionResult;
 import org.dromara.daxpay.core.util.DaxRes;
 import org.dromara.daxpay.service.common.anno.PaymentVerify;
-import org.dromara.daxpay.service.service.allocation.AllocReceiverService;
+import org.dromara.daxpay.service.service.allocation.AllocationService;
+import org.dromara.daxpay.service.service.allocation.receiver.AllocReceiverService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,17 +36,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UniAllocationController {
     private final AllocReceiverService allocReceiverService;
+    private final AllocationService allocationService;
 
     @Operation(summary = "发起分账接口")
     @PostMapping("/start")
-    public DaxResult<Void> start(){
-        return DaxRes.ok();
+    public DaxResult<AllocResult> start(@RequestBody AllocationParam param){
+        return DaxRes.ok(allocationService.allocation(param));
     }
 
     @Operation(summary = "分账完结接口")
     @PostMapping("/finish")
-    public DaxResult<Void> finish(){
-        return DaxRes.ok();
+    public DaxResult<AllocResult> finish(AllocFinishParam param){
+        return DaxRes.ok(allocationService.finish(param));
+    }
+
+    @Operation(summary = "分账写你查询接口")
+    @PostMapping("/query")
+    public DaxResult<AllocTransactionResult> query(@RequestBody QueryAllocTransactionParam param){
+        return DaxRes.ok(allocationService.queryAllocTransaction(param));
     }
 
     @Operation(summary = "分账接收方查询接口")

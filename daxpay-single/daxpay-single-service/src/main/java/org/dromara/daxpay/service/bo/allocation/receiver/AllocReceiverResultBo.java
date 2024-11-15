@@ -1,41 +1,40 @@
-package org.dromara.daxpay.service.bo.allocation;
+package org.dromara.daxpay.service.bo.allocation.receiver;
 
 import cn.bootx.platform.common.jackson.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.dromara.daxpay.core.enums.AllocRelationTypeEnum;
+import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.result.MchAppResult;
 
-import java.math.BigDecimal;
-
 /**
- * 分账组接收方信息
+ * 分账接收方
  * @author xxm
- * @since 2024/4/1
+ * @since 2024/3/28
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "分账组接收方信息")
-public class AllocGroupReceiverResultBo extends MchAppResult {
-
-    @Schema(description = "接收方ID")
-    private Long receiverId;
+@Schema(title = "分账接收方")
+public class AllocReceiverResultBo extends MchAppResult {
 
     @Schema(description = "接收方编号")
     private String receiverNo;
 
-    @Schema(description = "分账比例(百分之多少)")
-    private BigDecimal rate;
+    /**
+     * @see ChannelEnum
+     */
+    @Schema(description = "所属通道")
+    private String channel;
 
     /**
-     * 分账接收方类型
+     * 分账接收方类型 个人/商户
      * @see org.dromara.daxpay.core.enums.AllocReceiverTypeEnum
      */
     @Schema(description = "分账接收方类型")
     private String receiverType;
+
 
     @Schema(description = "接收方账号")
     @SensitiveInfo
@@ -48,7 +47,7 @@ public class AllocGroupReceiverResultBo extends MchAppResult {
 
     /**
      * 分账关系类型
-     * @see AllocRelationTypeEnum
+     * @see org.dromara.daxpay.core.enums.AllocRelationTypeEnum
      */
     @Schema(description = "分账关系类型")
     private String relationType;

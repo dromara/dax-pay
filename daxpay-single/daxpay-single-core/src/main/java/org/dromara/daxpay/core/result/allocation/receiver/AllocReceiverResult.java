@@ -2,10 +2,8 @@ package org.dromara.daxpay.core.result.allocation.receiver;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.result.MchAppResult;
 
 import java.util.List;
 
@@ -14,11 +12,10 @@ import java.util.List;
  * @author xxm
  * @since 2024/3/28
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "分账接收方")
-public class AllocReceiverResult extends MchAppResult {
+public class AllocReceiverResult {
 
     @Schema(description = "接收方列表")
     private List<Receiver> receivers;

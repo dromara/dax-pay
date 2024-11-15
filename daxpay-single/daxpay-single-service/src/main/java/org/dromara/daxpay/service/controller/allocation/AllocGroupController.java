@@ -10,13 +10,13 @@ import cn.bootx.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.service.bo.allocation.AllocGroupResultBo;
+import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupResultBo;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupBindParam;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupParam;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupQuery;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupUnbindParam;
-import org.dromara.daxpay.service.bo.allocation.AllocGroupReceiverResultBo;
-import org.dromara.daxpay.service.service.allocation.AllocGroupService;
+import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupReceiverResultBo;
+import org.dromara.daxpay.service.service.allocation.receiver.AllocGroupService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

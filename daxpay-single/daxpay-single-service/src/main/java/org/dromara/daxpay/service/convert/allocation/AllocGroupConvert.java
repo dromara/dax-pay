@@ -2,7 +2,7 @@ package org.dromara.daxpay.service.convert.allocation;
 
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroup;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupParam;
-import org.dromara.daxpay.service.bo.allocation.AllocGroupResultBo;
+import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupResultBo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

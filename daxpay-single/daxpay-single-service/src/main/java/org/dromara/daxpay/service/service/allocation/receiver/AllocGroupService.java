@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.allocation;
+package org.dromara.daxpay.service.service.allocation.receiver;
 
 import cn.bootx.platform.common.mybatisplus.function.CollectorsFunction;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -10,7 +10,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.bo.allocation.AllocGroupReceiverResultBo;
+import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupReceiverResultBo;
 import org.dromara.daxpay.service.convert.allocation.AllocGroupConvert;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupManager;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupReceiverManager;
@@ -19,7 +19,7 @@ import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroup;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroupReceiver;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
 import org.dromara.daxpay.service.param.allocation.group.*;
-import org.dromara.daxpay.service.bo.allocation.AllocGroupResultBo;
+import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupResultBo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

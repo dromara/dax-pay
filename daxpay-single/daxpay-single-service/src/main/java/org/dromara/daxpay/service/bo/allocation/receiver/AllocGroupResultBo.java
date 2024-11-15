@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.bo.allocation;
+package org.dromara.daxpay.service.bo.allocation.receiver;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
