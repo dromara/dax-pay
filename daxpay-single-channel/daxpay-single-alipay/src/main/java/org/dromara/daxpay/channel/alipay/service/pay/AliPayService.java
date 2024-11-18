@@ -66,7 +66,7 @@ public class AliPayService {
         if (Objects.equals(payOrder.getMethod(), PayMethodEnum.WAP.getCode())) {
             payBody = this.wapPay(amount, payOrder);
         }
-        // 程序支付
+        // APP支付
         else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.APP.getCode())) {
             payBody = this.appPay(amount, payOrder);
         }

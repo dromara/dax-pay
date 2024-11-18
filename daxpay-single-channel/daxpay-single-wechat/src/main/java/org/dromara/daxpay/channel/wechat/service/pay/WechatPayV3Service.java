@@ -184,7 +184,7 @@ public class WechatPayV3Service {
         packageParams.put("package", result.getPackageValue());
         String signType = result.getSignType();
         if (result.getSignType() == null) {
-            signType = "MD5";
+            signType = "RSA";
         }
         packageParams.put("signType", signType);
         packageParams.put("paySign", result.getPaySign());
