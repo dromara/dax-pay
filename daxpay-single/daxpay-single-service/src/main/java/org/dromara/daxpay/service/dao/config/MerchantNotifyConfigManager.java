@@ -1,12 +1,14 @@
 package org.dromara.daxpay.service.dao.config;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
-import org.dromara.daxpay.service.entity.config.MerchantNotifyConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
+import org.dromara.daxpay.service.entity.config.MerchantNotifyConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -36,5 +38,12 @@ public class MerchantNotifyConfigManager extends BaseManager<MerchantNotifyConfi
                 .eq(MerchantNotifyConfig::getAppId, appId)
                 .eq(MerchantNotifyConfig::getCode, notifyType)
                 .oneOpt();
+    }
+
+    /**
+     * 根据appId查询
+     */
+    public List<MerchantNotifyConfig> findAllByAppId(String appId) {
+        return findAllByField(MchAppBaseEntity::getAppId, appId);
     }
 }

@@ -67,7 +67,7 @@ public class MerchantCallbackSendService {
                     .execute();
             body = execute.body();
         } catch (Exception e) {
-            log.error("发送通知失败，数据错误，任务ID：{}",task.getTradeId(),e);
+            log.error("发送回调失败，数据错误，任务ID：{}",task.getTradeId(),e);
             record.setErrorMsg(e.getMessage());
         }
         // 如果响应值等于SUCCESS, 说明发送成功, 进行成功处理

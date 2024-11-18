@@ -1,14 +1,14 @@
 package org.dromara.daxpay.service.service.config;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.service.common.cache.MchAppCacheService;
 import org.dromara.daxpay.service.dao.config.MerchantNotifyConfigManager;
 import org.dromara.daxpay.service.dao.constant.MerchantNotifyConstManager;
 import org.dromara.daxpay.service.entity.config.MerchantNotifyConfig;
 import org.dromara.daxpay.service.entity.constant.MerchantNotifyConst;
 import org.dromara.daxpay.service.result.config.MerchantNotifyConfigResult;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class MerchantNotifyConfigService {
      * 显示列表
      */
     public List<MerchantNotifyConfigResult> findAllByAppId(String appId) {
-        var map = configManager.findAll()
+        var map = configManager.findAllByAppId(appId)
                 .stream()
                 .collect(Collectors.toMap(MerchantNotifyConfig::getCode, Function.identity(), (v1, v2) -> v1));
         List<MerchantNotifyConst> costs = constManagerAll.lambdaQuery().orderByAsc(MpIdEntity::getId).list();

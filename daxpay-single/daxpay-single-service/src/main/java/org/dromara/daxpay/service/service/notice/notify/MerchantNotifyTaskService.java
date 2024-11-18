@@ -44,6 +44,7 @@ public class MerchantNotifyTaskService {
      */
     public void registerPayNotice(PayOrder order) {
         if (this.nonRegister(NotifyContentTypeEnum.PAY)){
+            log.info("支付通知无需回调，订单号：{}",order.getOrderNo());
             return;
         }
         var noticeResult = PayOrderConvert.CONVERT.toResult(order);
@@ -85,6 +86,7 @@ public class MerchantNotifyTaskService {
      */
     public void registerTransferNotice(TransferOrder order) {
         if (this.nonRegister(NotifyContentTypeEnum.TRANSFER)){
+            log.info("转账无需回调，订单号：{}",order.getTransferNo());
             return;
         }
         var noticeResult = TransferOrderConvert.CONVERT.toResult(order);
