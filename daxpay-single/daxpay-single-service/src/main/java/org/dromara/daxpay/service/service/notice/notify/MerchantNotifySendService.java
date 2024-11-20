@@ -47,6 +47,7 @@ public class MerchantNotifySendService {
     private final PaymentAssistService paymentAssistService;
 
     private final DelayJobService delayJobService;
+
     private final MerchantNotifyConfigService notifyConfigService;
 
 
@@ -82,6 +83,7 @@ public class MerchantNotifySendService {
         if (StrUtil.equalsIgnoreCase(body, "SUCCESS")){
             record.setSuccess(true);
             task.setSendCount(task.getSendCount() + 1)
+                    .setDelayCount(0)
                     .setLatestTime(sendTime)
                     .setSuccess(true);
             // 如果为自动发送且延迟次数, 延迟次数也+1
@@ -119,14 +121,14 @@ public class MerchantNotifySendService {
         }
         // 如果延迟次数为空, 先设置为-1
         if (autoSend && Objects.isNull(task.getDelayCount())){
-            task.setDelayCount(-1);
+            task.setDelayCount(0);
         }
         // 判断延迟次数是否未超过15次, 注册任务到redis中
         if (autoSend && task.getDelayCount() < 16){
             // 添加延迟次数
             task.setDelayCount(task.getDelayCount() + 1);
             // 下次偏移毫秒数
-            int delay = merchantNoticeAssistService.getDelayTime(task.getDelayCount()+1);
+            int delay = merchantNoticeAssistService.getDelayTime(task.getDelayCount());
             // 根据当前延迟次数和计算出下次执行时间
             task.setNextTime(sendTime.plusSeconds(delay/1000));
             // 注册延时任务

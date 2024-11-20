@@ -73,6 +73,7 @@ public class MerchantCallbackSendService {
         // 如果响应值等于SUCCESS, 说明发送成功, 进行成功处理
         if (StrUtil.equalsIgnoreCase(body, "SUCCESS")){
             task.setSendCount(task.getSendCount() + 1)
+                    .setDelayCount(0)
                     .setLatestTime(sendTime)
                     .setSuccess(true);
             record.setSuccess(true);
@@ -103,7 +104,7 @@ public class MerchantCallbackSendService {
         if (Objects.isNull(task)){
             return;
         }
-        // 次数+1
+        // 发送次数+1
         task.setSendCount(task.getSendCount() + 1).setLatestTime(sendTime);
         // 任务完成了也不进行处理
         if (task.isSuccess()){
@@ -111,14 +112,14 @@ public class MerchantCallbackSendService {
         }
         // 如果延迟次数为空, 先设置为-1
         if (autoSend && Objects.isNull(task.getDelayCount())){
-            task.setDelayCount(-1);
+            task.setDelayCount(0);
         }
         // 判断延迟次数是否未超过15次, 注册任务到redis中
         if (autoSend && task.getDelayCount() < 16){
             // 添加延迟次数
             task.setDelayCount(task.getDelayCount() + 1);
             // 下次偏移毫秒数
-            int delay = merchantNoticeAssistService.getDelayTime(task.getDelayCount()+1);
+            int delay = merchantNoticeAssistService.getDelayTime(task.getDelayCount());
             // 根据当前延迟次数和计算出下次执行时间
             task.setNextTime(sendTime.plusSeconds(delay/1000L));
             // 注册延时任务
