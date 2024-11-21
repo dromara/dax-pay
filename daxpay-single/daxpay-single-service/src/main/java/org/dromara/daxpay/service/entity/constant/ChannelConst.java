@@ -29,6 +29,9 @@ public class ChannelConst extends MpIdEntity implements ToResult<ChannelConstRes
     /** 是否启用 */
     private boolean enable;
 
+    /** 是否支持分账 */
+    private boolean allocatable;
+
     /** 备注 */
     private String remark;
 

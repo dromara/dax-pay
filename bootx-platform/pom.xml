@@ -31,7 +31,7 @@
         <hutool.version>5.8.31</hutool.version>
         <bouncycastle.version>1.78.1</bouncycastle.version>
         <knife4j.version>4.5.0</knife4j.version>
-        <mybatis-plus.version>3.5.8</mybatis-plus.version>
+        <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
         <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
         <lock4j.version>2.2.7</lock4j.version>

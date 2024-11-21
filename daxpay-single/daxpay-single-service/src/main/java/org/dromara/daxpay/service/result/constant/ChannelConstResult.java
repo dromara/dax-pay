@@ -25,6 +25,10 @@ public class ChannelConstResult {
     @Schema(description = "是否启用")
     private boolean enable;
 
+    /** 是否支持分账 */
+    @Schema(description = "是否支持分账")
+    private boolean allocatable;
+
     /** 备注 */
     @Schema(description = "备注")
     private String remark;

@@ -1,37 +1,35 @@
 package org.dromara.daxpay.service.result.config;
 
-import org.dromara.daxpay.core.enums.CashierTypeEnum;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.enums.PayMethodEnum;
-import org.dromara.daxpay.core.result.MchAppResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.core.enums.CashierCodeTypeEnum;
+import org.dromara.daxpay.core.enums.ChannelEnum;
+import org.dromara.daxpay.core.enums.PayMethodEnum;
+import org.dromara.daxpay.core.result.MchAppResult;
 
 /**
- * 通道收银台配置
+ * 特定类型码牌配置
  * @author xxm
- * @since 2024/9/28
+ * @since 2024/11/20
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "通道收银台配置")
-public class ChannelCashierConfigResult extends MchAppResult {
+@Schema(title = "特定类型码牌配置")
+public class CashierCodeTypeConfigResult extends MchAppResult {
+
+    /** 码牌ID */
+    @Schema(description = "主键ID")
+    private Long cashierCodeId;
 
     /**
-     * 收银台类型
-     * @see CashierTypeEnum
+     * 码牌类型
+     * @see CashierCodeTypeEnum
      */
     @Schema(description = "收银台类型")
-    private String cashierType;
-
-    /**
-     * 收银台名称
-     */
-    @Schema(description = "收银台名称")
-    private String cashierName;
+    private String type;
 
     /**
      * 支付通道
@@ -50,11 +48,11 @@ public class ChannelCashierConfigResult extends MchAppResult {
 
     /** 是否开启分账 */
     @Schema(description = "是否开启分账")
-    private Boolean allocation;
+    private boolean allocation;
 
     /** 自动分账 */
     @Schema(description = "自动分账")
-    private Boolean autoAllocation;
+    private boolean autoAllocation;
 
     /** 备注 */
     @Schema(description = "备注")

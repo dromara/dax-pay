@@ -16,6 +16,7 @@ import java.util.Objects;
 @Getter
 @RequiredArgsConstructor
 public enum PayStatusEnum {
+    WAIT("wait","待支付"),
     PROGRESS("progress","支付中"),
     SUCCESS("success","成功"),
     CLOSE("close","支付关闭"),
