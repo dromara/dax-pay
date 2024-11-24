@@ -1,6 +1,7 @@
 package org.dromara.daxpay.service.entity.allocation.transaction;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@TableName("pay_alloc_detail")
 public class AllocDetail extends MchAppBaseEntity implements ToResult<AllocDetailResult> {
 
     /** 分账订单ID */

@@ -1,14 +1,13 @@
 package org.dromara.daxpay.service.param.allocation.group;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.Min;
 import java.math.BigDecimal;
 
 /**
@@ -27,9 +26,8 @@ public class AllocGroupReceiverParam {
 
     @Schema(description = "分账比例(百分之多少)")
     @NotNull(message = "分账比例不可为空")
-    @Min(value = 0,message = "分账比例不可为负数")
     @DecimalMax(value = "100",message = "分账比例不可大于100%")
-    @DecimalMin(value = "0.01", message = "分账比例不可小于0.01%")
+    @DecimalMin(value = "0.00", message = "分账比例不可为负数")
     @Digits(integer = 3, fraction = 2, message = "分账比例最多只允许两位小数")
     private BigDecimal rate;
 }

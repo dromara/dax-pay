@@ -97,4 +97,12 @@ public class PayOrderController {
         payOrderService.cancel(id);
         return Res.ok();
     }
+
+    @RequestPath("分账")
+    @Operation(summary = "分账")
+    @PostMapping("/allocation")
+    public Result<Void> allocation(@NotNull(message = "支付订单id不能为空") Long id){
+        payOrderService.allocation(id);
+        return Res.ok();
+    }
 }

@@ -76,24 +76,31 @@
 ```xml
  <!-- 支付SDK -->
 <dependency>
-    <groupId>cn.daxpay.single</groupId>
+    <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-single-sdk</artifactId>
     <version>${latest.version}</version>
 </dependency>
 ```
 ### SDK调用示例
 ```java
-package org.dromara.daxpay.test;
+package org.dromara.daxpay.single.sdk.test.trade;
 
-import cn.daxpay.single.sdk.code.SignTypeEnum;
-import cn.daxpay.single.sdk.model.trade.pay.PayOrderModel;
-import cn.daxpay.single.sdk.net.DaxPayConfig;
-import cn.daxpay.single.sdk.net.DaxPayKit;
-import cn.daxpay.single.sdk.param.trade.pay.PayQueryParam;
-import cn.daxpay.single.sdk.response.DaxPayResult;
-import cn.daxpay.single.sdk.util.JsonUtil;
+import org.dromara.daxpay.single.sdk.code.ChannelEnum;
+import org.dromara.daxpay.single.sdk.code.PayMethodEnum;
+import org.dromara.daxpay.single.sdk.code.SignTypeEnum;
+import org.dromara.daxpay.single.sdk.model.trade.pay.PayResultModel;
+import org.dromara.daxpay.single.sdk.net.DaxPayConfig;
+import org.dromara.daxpay.single.sdk.net.DaxPayKit;
+import org.dromara.daxpay.single.sdk.param.channel.AlipayParam;
+import org.dromara.daxpay.single.sdk.param.channel.WechatPayParam;
+import org.dromara.daxpay.single.sdk.param.trade.pay.PayParam;
+import org.dromara.daxpay.single.sdk.response.DaxPayResult;
+import org.dromara.daxpay.single.sdk.util.JsonUtil;
+import org.dromara.daxpay.single.sdk.util.PaySignUtil;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.math.BigDecimal;
 
 /**
  * 统一支付接口
@@ -108,24 +115,24 @@ public class PayOrderTest {
         DaxPayConfig config = DaxPayConfig.builder()
                 .serviceUrl("http://127.0.0.1:9999")
                 .signSecret("123456")
-                .appId("M7934041241299655")
+                .appId("123")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .build();
         DaxPayKit.initConfig(config);
     }
 
-     /**
-     * 支付宝支付(二维码扫码)
+    /**
+     * 微信支付(二维码扫码)
      */
     @Test
-    public void aliPayQrPay() {
+    public void wxQrPay() {
         PayParam param = new PayParam();
         param.setClientIp("127.0.0.1");
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
-        param.setTitle("测试支付宝扫码支付");
-        param.setDescription("这是支付宝扫码支付");
-        param.setAmount(BigDecimal.valueOf(10));
-        param.setChannel(ChannelEnum.ALI.getCode());
+        param.setTitle("测试微信扫码支付");
+        param.setDescription("这是支付备注");
+        param.setAmount(BigDecimal.valueOf(1.00));
+        param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
@@ -134,8 +141,10 @@ public class PayOrderTest {
 
         DaxPayResult<PayResultModel> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
+        System.out.println(PaySignUtil.hmacSha256Sign(execute, "123456"));
     }
 }
+
 ```
 
 ## 🍎 系统截图

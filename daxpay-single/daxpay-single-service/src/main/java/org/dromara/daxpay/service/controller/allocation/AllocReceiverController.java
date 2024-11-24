@@ -7,6 +7,7 @@ import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.bootx.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -62,7 +63,8 @@ public class AllocReceiverController {
     @RequestPath("添加")
     @Operation(summary = "添加")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody @Validated AllocReceiverAddParam param){
+    public Result<Void> add(@RequestBody AllocReceiverAddParam param){
+        ValidationUtil.validateParam(param);
         paymentAssistService.initMchApp(param.getAppId());
         receiverService.addAndSync(param);
         return Res.ok();
@@ -71,7 +73,8 @@ public class AllocReceiverController {
     @RequestPath("删除")
     @Operation(summary = "删除")
     @PostMapping("/delete")
-    public Result<Void> delete(@RequestBody @Validated AllocReceiverRemoveParam param){
+    public Result<Void> delete(@RequestBody AllocReceiverRemoveParam param){
+        ValidationUtil.validateParam(param);
         paymentAssistService.initMchApp(param.getAppId());
         receiverService.removeAndSync(param);
         return Res.ok();

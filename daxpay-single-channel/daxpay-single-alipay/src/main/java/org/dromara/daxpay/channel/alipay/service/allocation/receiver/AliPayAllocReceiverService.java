@@ -1,7 +1,6 @@
 package org.dromara.daxpay.channel.alipay.service.allocation.receiver;
 
 import cn.hutool.core.util.StrUtil;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.AlipayTradeRoyaltyRelationBindModel;
 import com.alipay.api.domain.AlipayTradeRoyaltyRelationUnbindModel;
@@ -54,7 +53,6 @@ public class AliPayAllocReceiverService {
      */
     @SneakyThrows
     public void bind(AllocReceiver allocReceiver){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
         AlipayTradeRoyaltyRelationBindModel model = new AlipayTradeRoyaltyRelationBindModel();
 
         RoyaltyEntity entity = new RoyaltyEntity();
@@ -69,7 +67,7 @@ public class AliPayAllocReceiverService {
         AlipayTradeRoyaltyRelationBindRequest request = new AlipayTradeRoyaltyRelationBindRequest();
         model.setOutRequestNo(String.valueOf(allocReceiver.getId()));
         request.setBizModel(model);
-        AlipayTradeRoyaltyRelationBindResponse response = alipayClient.execute(request);
+        AlipayTradeRoyaltyRelationBindResponse response = aliPayConfigService.execute(request);
         this.verifyErrorMsg(response);
     }
 
@@ -78,7 +76,6 @@ public class AliPayAllocReceiverService {
      */
     @SneakyThrows
     public void unbind(AllocReceiver allocReceiver){
-        AlipayClient alipayClient = aliPayConfigService.getAlipayClient();
         AlipayTradeRoyaltyRelationUnbindModel model = new AlipayTradeRoyaltyRelationUnbindModel();
         model.setOutRequestNo(String.valueOf(allocReceiver.getId()));
 
@@ -90,7 +87,7 @@ public class AliPayAllocReceiverService {
         model.setReceiverList(Collections.singletonList(entity));
         AlipayTradeRoyaltyRelationUnbindRequest request = new AlipayTradeRoyaltyRelationUnbindRequest();
         request.setBizModel(model);
-        AlipayTradeRoyaltyRelationUnbindResponse response =  alipayClient.execute(request);
+        AlipayTradeRoyaltyRelationUnbindResponse response =  aliPayConfigService.execute(request);
         System.out.println(response);
         // 如果出现分账方不存在也视为成功
         if (Objects.equals(response.getSubCode(), AliPayCode.USER_NOT_EXIST)) {
