@@ -40,10 +40,16 @@ public class WechatPayCashierService {
      * 生成授权链接, 主要是微信类通道使用, 用于获取OpenId
      */
     public String generateAuthUrl(CashierAuthUrlParam param) {
-        WxMpService wxMpService = this.getWxMpService();
-        PlatformConfig platformConfig = platformConfigService.getConfig();
-        String serverUrl = platformConfig.getGatewayMobileUrl();
-        String redirectUrl = StrUtil.format("{}/wechat/cashier/{}", serverUrl, param.getAppId());
+        WechatPayConfig config = wechatPayConfigService.getWechatPayConfig();
+        WxMpService wxMpService = this.getWxMpService(config);
+
+        // 如果配置中有地址配置则使用, 没有的话使用平台地址进行拼接
+        String serverUrl = config.getAuthUrl();
+        if (StrUtil.isBlank(serverUrl)){
+            PlatformConfig platformConfig = platformConfigService.getConfig();
+            serverUrl = platformConfig.getGatewayMobileUrl();
+        }
+        String redirectUrl = StrUtil.format("{}/cashier/wechat/{}", serverUrl, param.getCashierCode());
         return wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
     }
 
@@ -78,6 +84,12 @@ public class WechatPayCashierService {
      */
     private WxMpService getWxMpService() {
         WechatPayConfig config = wechatPayConfigService.getAndCheckConfig();
+        return getWxMpService(config);
+    }
+    /**
+     * 获取微信公众号API的Service
+     */
+    private WxMpService getWxMpService(WechatPayConfig config) {
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpDefaultConfigImpl wxMpConfig = new WxMpDefaultConfigImpl();
         wxMpConfig.setAppId(config.getWxAppId()); // 设置微信公众号的appid

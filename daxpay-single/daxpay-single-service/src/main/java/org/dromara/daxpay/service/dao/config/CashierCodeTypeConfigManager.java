@@ -3,8 +3,6 @@ package org.dromara.daxpay.service.dao.config;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.common.context.MchAppLocal;
-import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.entity.config.CashierCodeTypeConfig;
 import org.springframework.stereotype.Repository;
 
@@ -54,11 +52,9 @@ public class CashierCodeTypeConfigManager extends BaseManager<CashierCodeTypeCon
      * 根据类型查询
      */
     public Optional<CashierCodeTypeConfig> findByCashierType(Long cashierCodeId, String cashierType) {
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         return lambdaQuery()
                 .eq(CashierCodeTypeConfig::getCashierCodeId, cashierCodeId)
                 .eq(CashierCodeTypeConfig::getType, cashierType)
-                .eq(CashierCodeTypeConfig::getAppId, mchAppInfo.getAppId())
                 .oneOpt();
     }
 

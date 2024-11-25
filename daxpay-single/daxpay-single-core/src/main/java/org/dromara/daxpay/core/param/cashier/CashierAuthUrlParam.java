@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 public class CashierAuthUrlParam {
 
     @Schema(description = "应用号")
-    private String appId;
+    private String cashierCode;
 
     @Schema(description = "收银台类型")
     private String cashierType;

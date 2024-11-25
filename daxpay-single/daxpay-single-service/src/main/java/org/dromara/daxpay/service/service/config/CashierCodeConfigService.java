@@ -93,7 +93,7 @@ public class CashierCodeConfigService {
                 .orElseThrow(() -> new DataNotExistException("收银码牌配置不存在"));
         PlatformConfig platformConfig = platformConfigService.getConfig();
         String serverUrl = platformConfig.getGatewayMobileUrl();
-        return StrUtil.format("{}/cashier/code/{}", serverUrl, codeConfig.getCode());
+        return StrUtil.format("{}/cashier/{}", serverUrl, codeConfig.getCode());
     }
 
     /**
@@ -110,10 +110,11 @@ public class CashierCodeConfigService {
         CashierCodeTypeConfig codeTypeConfig = cashierCodeTypeConfigManager.findByCashierType(codeConfig.getId(), cashierType)
                 .orElseThrow(() -> new DataNotExistException("收银码牌配置不存在"));
         return new CashierCodeResult()
+                .setAppId(codeConfig.getAppId())
+                .setAllocation(codeTypeConfig.isAllocation())
                 .setChannel(codeTypeConfig.getChannel())
                 .setPayMethod(codeTypeConfig.getPayMethod())
                 .setName(codeConfig.getName())
                 .setTemplateCode(codeConfig.getTemplateCode());
     }
-
 }

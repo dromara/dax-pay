@@ -37,4 +37,13 @@ public class CashierCodeResult {
      */
     @Schema(description = "支付方式")
     private String payMethod;
+
+    /** 应用号 */
+    @Schema(description = "应用号")
+    private String appId;
+
+    /** 是否分账 */
+    @Schema(description = "是否分账")
+    private boolean allocation;
+
 }

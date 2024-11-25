@@ -2,6 +2,7 @@ package org.dromara.daxpay.channel.wechat.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.util.JsonUtil;
+import cn.hutool.core.util.StrUtil;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.convert.config.WechatPayConfigConvert;
 import org.dromara.daxpay.channel.wechat.result.config.WechatPayConfigResult;
@@ -107,6 +108,10 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
                 .setAppId(channelConfig.getAppId())
                 .setEnable(channelConfig.isEnable());
         return config;
+    }
+
+    public String getAuthUrl() {
+        return StrUtil.removeSuffix(authUrl, "/");
     }
 
     @Override

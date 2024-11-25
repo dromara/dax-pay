@@ -31,7 +31,7 @@ public class WechatAuthService {
 
     private final WechatPayConfigService wechatPayConfigService;
 
-    private final PlatformConfigService platformsConfigService;
+    private final PlatformConfigService platformConfigService;
 
     /**
      * 构建微信oauth2授权的url连接
@@ -45,10 +45,10 @@ public class WechatAuthService {
                     .buildAuthorizationUrl(param.getAuthRedirectUrl(), WxConsts.OAuth2Scope.SNSAPI_BASE, "");
             return new AuthUrlResult().setAuthUrl(url);
         } else {
-            String serverUrl = platformsConfigService.getConfig().getGatewayMobileUrl();
             // 如果配置中有地址配置则使用, 没有的话使用平台地址进行拼接
-            if (StrUtil.isNotBlank(config.getAuthUrl())){
-                PlatformConfig platformConfig = platformsConfigService.getConfig();
+            String serverUrl = config.getAuthUrl();
+            if (StrUtil.isBlank(serverUrl)){
+                PlatformConfig platformConfig = platformConfigService.getConfig();
                 serverUrl = platformConfig.getGatewayMobileUrl();
             }
             String queryCode = RandomUtil.randomString(10);

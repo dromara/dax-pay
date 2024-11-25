@@ -16,8 +16,8 @@ import java.math.BigDecimal;
 @Schema(title = "通道收银支付参数")
 public class CashierPayParam {
 
-    @Schema(description = "应用号")
-    private String appId;
+    @Schema(description = "收银码牌Code")
+    private String cashierCode;
 
     @Schema(description = "支付金额")
     private BigDecimal amount;
