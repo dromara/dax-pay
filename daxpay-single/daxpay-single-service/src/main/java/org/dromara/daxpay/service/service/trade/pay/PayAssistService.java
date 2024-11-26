@@ -85,6 +85,7 @@ public class PayAssistService {
                 .setReqTime(payParam.getReqTime())
                 .setChannel(payParam.getChannel())
                 .setMethod(payParam.getMethod())
+                .setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setExtraParam(payParam.getExtraParam());
         if (!order.getAllocation()) {
             order.setAllocStatus(null);

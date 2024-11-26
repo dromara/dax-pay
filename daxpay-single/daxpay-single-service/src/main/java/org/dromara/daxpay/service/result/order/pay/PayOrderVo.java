@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 支付订单
+ * 支付订单显示对象, 不与 PayOrderResult重名
  * @author xxm
  * @since 2021/2/25
  */
