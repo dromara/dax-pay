@@ -1,8 +1,8 @@
-package org.dromara.daxpay.service.dao.config;
+package org.dromara.daxpay.service.dao.config.cashier;
 
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import org.dromara.daxpay.service.entity.config.CashierCodeConfig;
+import org.dromara.daxpay.service.entity.config.cashier.CashierCodeConfig;
 
 /**
  * 收银台码牌配置

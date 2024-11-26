@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.param.config;
+package org.dromara.daxpay.service.param.config.cashier;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -1,9 +1,9 @@
-package org.dromara.daxpay.service.dao.config;
+package org.dromara.daxpay.service.dao.config.cashier;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.entity.config.CashierCodeConfig;
+import org.dromara.daxpay.service.entity.config.cashier.CashierCodeConfig;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

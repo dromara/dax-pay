@@ -6,12 +6,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.dao.config.CashierCodeConfigManager;
-import org.dromara.daxpay.service.dao.config.CashierCodeTypeConfigManager;
-import org.dromara.daxpay.service.entity.config.CashierCodeConfig;
-import org.dromara.daxpay.service.entity.config.CashierCodeTypeConfig;
-import org.dromara.daxpay.service.param.config.CashierCodeTypeConfigParam;
-import org.dromara.daxpay.service.result.config.CashierCodeTypeConfigResult;
+import org.dromara.daxpay.service.dao.config.cashier.CashierCodeConfigManager;
+import org.dromara.daxpay.service.dao.config.cashier.CashierCodeTypeConfigManager;
+import org.dromara.daxpay.service.entity.config.cashier.CashierCodeConfig;
+import org.dromara.daxpay.service.entity.config.cashier.CashierCodeTypeConfig;
+import org.dromara.daxpay.service.param.config.cashier.CashierCodeTypeConfigParam;
+import org.dromara.daxpay.service.result.config.cashier.CashierCodeTypeConfigResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

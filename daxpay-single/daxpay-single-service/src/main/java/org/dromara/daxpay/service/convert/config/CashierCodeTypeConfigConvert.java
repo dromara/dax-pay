@@ -1,8 +1,8 @@
 package org.dromara.daxpay.service.convert.config;
 
-import org.dromara.daxpay.service.entity.config.CashierCodeTypeConfig;
-import org.dromara.daxpay.service.param.config.CashierCodeTypeConfigParam;
-import org.dromara.daxpay.service.result.config.CashierCodeTypeConfigResult;
+import org.dromara.daxpay.service.entity.config.cashier.CashierCodeTypeConfig;
+import org.dromara.daxpay.service.param.config.cashier.CashierCodeTypeConfigParam;
+import org.dromara.daxpay.service.result.config.cashier.CashierCodeTypeConfigResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

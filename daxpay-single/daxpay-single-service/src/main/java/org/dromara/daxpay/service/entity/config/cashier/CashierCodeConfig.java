@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.entity.config;
+package org.dromara.daxpay.service.entity.config.cashier;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -9,8 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 import org.dromara.daxpay.service.convert.config.CashierCodeConfigConvert;
-import org.dromara.daxpay.service.param.config.CashierCodeConfigParam;
-import org.dromara.daxpay.service.result.config.CashierCodeConfigResult;
+import org.dromara.daxpay.service.param.config.cashier.CashierCodeConfigParam;
+import org.dromara.daxpay.service.result.config.cashier.CashierCodeConfigResult;
 
 /**
  * 收银码牌配置

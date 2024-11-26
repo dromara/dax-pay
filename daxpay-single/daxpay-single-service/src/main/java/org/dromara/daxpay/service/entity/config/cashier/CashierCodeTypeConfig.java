@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.entity.config;
+package org.dromara.daxpay.service.entity.config.cashier;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -10,8 +10,8 @@ import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.enums.PayMethodEnum;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 import org.dromara.daxpay.service.convert.config.CashierCodeTypeConfigConvert;
-import org.dromara.daxpay.service.param.config.CashierCodeTypeConfigParam;
-import org.dromara.daxpay.service.result.config.CashierCodeTypeConfigResult;
+import org.dromara.daxpay.service.param.config.cashier.CashierCodeTypeConfigParam;
+import org.dromara.daxpay.service.result.config.cashier.CashierCodeTypeConfigResult;
 
 /**
  * 特定类型码牌配置
