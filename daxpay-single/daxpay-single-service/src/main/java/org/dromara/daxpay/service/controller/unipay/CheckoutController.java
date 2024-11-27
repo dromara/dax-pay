@@ -8,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.core.param.cashier.CheckoutParam;
 import org.dromara.daxpay.core.param.cashier.CheckoutPayParam;
 import org.dromara.daxpay.core.result.DaxResult;
-import org.dromara.daxpay.core.result.cashier.CheckoutUrlResult;
+import org.dromara.daxpay.core.result.checkout.CheckoutOrderAndConfigResult;
+import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.util.DaxRes;
 import org.dromara.daxpay.service.common.anno.PaymentVerify;
+import org.dromara.daxpay.service.service.cashier.CheckoutQueryService;
 import org.dromara.daxpay.service.service.cashier.CheckoutService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CheckoutController {
     private final CheckoutService checkoutService;
+    private final CheckoutQueryService checkoutQueryService;
 
     @PaymentVerify
     @Operation(summary = "创建一个收银台链接")
@@ -33,10 +36,16 @@ public class CheckoutController {
         return DaxRes.ok(checkoutService.creat(checkoutParam));
     }
 
-    @Operation(summary = "获取收银台订单信息")
-    @GetMapping("/info")
-    public Result<Void> getInfo(){
-        return Res.ok();
+    @Operation(summary = "获取收银台订单和配置信息")
+    @GetMapping("/getOrderAndConfig")
+    public Result<CheckoutOrderAndConfigResult> getOrderAndConfig(String orderNo, String checkoutType){
+        return Res.ok(checkoutQueryService.getOrderAndConfig(orderNo, checkoutType));
+    }
+
+    @Operation(summary = "获取聚合支付配置")
+    @GetMapping("/getOrderAndConfig")
+    public Result<String> getCheckoutUrl(String orderNo, String checkoutType){
+        return Res.ok(checkoutService.getCheckoutUrl(orderNo, checkoutType));
     }
 
     @Operation(summary = "发起支付")

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.service.entity.config.checkout.CheckoutGroupConfig;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 收银台类目配置
  * @author xxm
@@ -15,4 +17,25 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class CheckoutGroupConfigManager extends BaseManager<CheckoutGroupConfigMapper, CheckoutGroupConfig> {
+
+    /**
+     * 查询指定类型的分组, 并进行排序
+     */
+    public List<CheckoutGroupConfig> findAllSortByAppIdAndType(String appId, String type){
+        return lambdaQuery()
+                .eq(CheckoutGroupConfig::getAppId, appId)
+                .eq(CheckoutGroupConfig::getType, type)
+                .orderByDesc(CheckoutGroupConfig::getSort)
+                .list();
+    }
+    /**
+     * 查询指定类型的分组, 不进行排序
+     */
+    public List<CheckoutGroupConfig> findAllByAppIdAndType(String appId, String type){
+        return lambdaQuery()
+                .eq(CheckoutGroupConfig::getAppId, appId)
+                .eq(CheckoutGroupConfig::getType, type)
+                .list();
+    }
+
 }

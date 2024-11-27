@@ -1,37 +1,28 @@
-package org.dromara.daxpay.service.param.config.checkout;
+package org.dromara.daxpay.service.result.config.checkout;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.enums.CheckoutCallTypeEnum;
 import org.dromara.daxpay.core.enums.PayMethodEnum;
+import org.dromara.daxpay.core.result.MchAppResult;
 
 /**
- * 收银台配置项参数
+ *
  * @author xxm
- * @since 2024/11/26
+ * @since 2024/11/27
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "收银台配置项参数")
-public class CheckoutItemConfigParam {
-
-    /** 主键 */
-    @Schema(description = "主键")
-    private Long id;
+@Schema(title = "收银台配置项")
+public class CheckoutItemConfigVo extends MchAppResult {
 
     /** 类目配置Id */
     @Schema(description = "类目配置Id")
     private Long groupId;
-
-    /** 名称 */
-    @Schema(description = "名称")
-    private String name;
-
-    /** 图标 */
-    @Schema(description = "图标")
-    private String icon;
 
     /** 排序 */
     @Schema(description = "排序")
@@ -62,7 +53,4 @@ public class CheckoutItemConfigParam {
     @Schema(description = "是否开启分账")
     private boolean allocation;
 
-    /** 应用号 */
-    @Schema(description = "应用号")
-    private String appId;
 }

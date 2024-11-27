@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.config;
+package org.dromara.daxpay.service.service.config.cashier;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;
@@ -17,6 +17,7 @@ import org.dromara.daxpay.service.entity.config.cashier.CashierCodeTypeConfig;
 import org.dromara.daxpay.service.entity.config.PlatformConfig;
 import org.dromara.daxpay.service.param.config.cashier.CashierCodeConfigParam;
 import org.dromara.daxpay.service.result.config.cashier.CashierCodeConfigResult;
+import org.dromara.daxpay.service.service.config.PlatformConfigService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

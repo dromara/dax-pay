@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.config;
+package org.dromara.daxpay.service.service.config.cashier;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;

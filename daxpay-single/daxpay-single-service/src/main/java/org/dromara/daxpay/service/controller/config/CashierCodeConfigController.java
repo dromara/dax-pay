@@ -11,8 +11,8 @@ import org.dromara.daxpay.service.param.config.cashier.CashierCodeConfigParam;
 import org.dromara.daxpay.service.param.config.cashier.CashierCodeTypeConfigParam;
 import org.dromara.daxpay.service.result.config.cashier.CashierCodeConfigResult;
 import org.dromara.daxpay.service.result.config.cashier.CashierCodeTypeConfigResult;
-import org.dromara.daxpay.service.service.config.CashierCodeConfigService;
-import org.dromara.daxpay.service.service.config.CashierCodeTypeConfigService;
+import org.dromara.daxpay.service.service.config.cashier.CashierCodeConfigService;
+import org.dromara.daxpay.service.service.config.cashier.CashierCodeTypeConfigService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

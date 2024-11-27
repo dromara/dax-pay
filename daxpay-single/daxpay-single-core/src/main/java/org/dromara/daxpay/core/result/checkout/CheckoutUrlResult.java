@@ -1,4 +1,4 @@
-package org.dromara.daxpay.core.result.cashier;
+package org.dromara.daxpay.core.result.checkout;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

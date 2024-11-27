@@ -7,13 +7,13 @@ import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.result.MchAppResult;
 
 /**
- * 收银台配置项
+ * 收银台配置
  * @author xxm
- * @since 2024/11/26
+ * @since 2024/11/27
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "收银台配置项")
-public class CheckoutItemConfigResult extends MchAppResult {
+@Schema(title = "收银台配置")
+public class CheckoutConfigVo extends MchAppResult {
 }

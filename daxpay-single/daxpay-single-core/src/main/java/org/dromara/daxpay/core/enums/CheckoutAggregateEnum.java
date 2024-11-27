@@ -8,28 +8,25 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * 收银台类型
+ * 收银台聚合支付类型
  * @author xxm
- * @since 2024/11/26
+ * @since 2024/11/27
  */
 @Getter
 @AllArgsConstructor
-public enum CheckoutTypeEnum {
+public enum CheckoutAggregateEnum {
 
-    H5("h5", "H5"),
-    PC("pc", "PC"),
-    MINI_APP("mini_app", "小程序"),
-    AGGREGATE("aggregate", "聚合扫码"),
+    WECHAT("wechat", "微信聚合支付"),
+    ALIPAY("alipay", "支付宝聚合支付"),
     ;
 
     private final String code;
     private final String name;
 
-    public static CheckoutTypeEnum findBuyCode(String code){
+    public CheckoutAggregateEnum findByCode(String code) {
         return Arrays.stream(values())
                 .filter(value -> Objects.equals(value.getCode(), code))
                 .findFirst()
-                .orElseThrow(() -> new ConfigNotExistException("不支持的收银台类型"));
-
+                .orElseThrow(() -> new ConfigNotExistException("未找到对应的聚合支付类型"));
     }
 }

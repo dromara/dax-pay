@@ -4,10 +4,11 @@ import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.core.enums.CheckoutTypeEnum;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 import org.dromara.daxpay.service.convert.config.CheckoutGroupConfigConvert;
 import org.dromara.daxpay.service.param.config.checkout.CheckoutGroupConfigParam;
-import org.dromara.daxpay.service.result.config.checkout.CheckoutGroupConfigResult;
+import org.dromara.daxpay.service.result.config.checkout.CheckoutGroupConfigVo;
 
 /**
  * 收银台类目配置
@@ -17,13 +18,19 @@ import org.dromara.daxpay.service.result.config.checkout.CheckoutGroupConfigResu
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class CheckoutGroupConfig extends MchAppBaseEntity implements ToResult<CheckoutGroupConfigResult> {
+public class CheckoutGroupConfig extends MchAppBaseEntity implements ToResult<CheckoutGroupConfigVo> {
 
-    /** 类型 web/h5/小程序 */
+    /**
+     * 类型 web/h5/小程序
+     * @see CheckoutTypeEnum
+     */
     private String type;
 
     /** 名称 */
     private String name;
+
+    /** 图标 */
+    private String icon;
 
     /** 排序 */
     private Double sort;
@@ -36,7 +43,7 @@ public class CheckoutGroupConfig extends MchAppBaseEntity implements ToResult<Ch
      * 转换
      */
     @Override
-    public CheckoutGroupConfigResult toResult() {
-        return CheckoutGroupConfigConvert.CONVERT.toResult(this);
+    public CheckoutGroupConfigVo toResult() {
+        return CheckoutGroupConfigConvert.CONVERT.toVo(this);
     }
 }

@@ -15,13 +15,16 @@ import lombok.experimental.Accessors;
 public class CheckoutPayParam {
 
     @Schema(description = "要支付的订单号")
-    private String bizOrderNo;
+    private String orderNo;
 
     @Schema(description = "支付配置项ID")
     private Long itemId;
 
     @Schema(description = "唯一标识")
     private String openId;
+
+    @Schema(description = "付款码")
+    private String barCode;
 
     @Schema(description = "描述")
     private String description;

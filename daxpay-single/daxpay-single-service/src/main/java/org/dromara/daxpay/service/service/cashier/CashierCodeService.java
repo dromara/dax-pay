@@ -15,7 +15,7 @@ import org.dromara.daxpay.core.result.trade.pay.PayResult;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
 import org.dromara.daxpay.service.param.cashier.CashierCodeAuthCodeParam;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
-import org.dromara.daxpay.service.service.config.CashierCodeConfigService;
+import org.dromara.daxpay.service.service.config.cashier.CashierCodeConfigService;
 import org.dromara.daxpay.service.service.trade.pay.PayService;
 import org.dromara.daxpay.service.strategy.AbsChannelCashierStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
@@ -50,7 +50,6 @@ public class CashierCodeService {
         AbsChannelCashierStrategy cashierStrategy = PaymentStrategyFactory.create(cashierConfig.getChannel(), AbsChannelCashierStrategy.class);
         return cashierStrategy.generateAuthUrl(param);
     }
-
 
     /**
      * 授权结果
@@ -99,5 +98,4 @@ public class CashierCodeService {
         // 发起支付
         return payService.pay(payParam);
     }
-
 }
