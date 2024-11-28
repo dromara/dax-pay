@@ -43,7 +43,7 @@ public class CheckoutItemConfigManager extends BaseManager<CheckoutItemConfigMap
     public List<CheckoutItemConfig> findAllByGroupIds(List<Long> groupIds) {
         return lambdaQuery()
                 .in(CheckoutItemConfig::getGroupId, groupIds)
-                .orderByDesc(CheckoutItemConfig::getSort)
+                .orderByDesc(CheckoutItemConfig::getSortNo)
                 .list();
     }
 

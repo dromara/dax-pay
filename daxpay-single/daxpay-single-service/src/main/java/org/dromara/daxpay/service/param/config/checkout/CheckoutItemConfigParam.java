@@ -35,7 +35,7 @@ public class CheckoutItemConfigParam {
 
     /** 排序 */
     @Schema(description = "排序")
-    private Double sort;
+    private Double sortNo;
 
     /**
      * 发起调用的类型
@@ -57,10 +57,6 @@ public class CheckoutItemConfigParam {
      */
     @Schema(description = "支付方式")
     private String payMethod;
-
-    /** 是否开启分账 */
-    @Schema(description = "是否开启分账")
-    private boolean allocation;
 
     /** 应用号 */
     @Schema(description = "应用号")

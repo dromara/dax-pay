@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.core.param.cashier.CheckoutParam;
 import org.dromara.daxpay.core.param.cashier.CheckoutPayParam;
 import org.dromara.daxpay.core.result.DaxResult;
+import org.dromara.daxpay.core.result.checkout.CheckoutAggregateResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutOrderAndConfigResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.util.DaxRes;
@@ -43,9 +44,9 @@ public class CheckoutController {
     }
 
     @Operation(summary = "获取聚合支付配置")
-    @GetMapping("/getOrderAndConfig")
-    public Result<String> getCheckoutUrl(String orderNo, String checkoutType){
-        return Res.ok(checkoutService.getCheckoutUrl(orderNo, checkoutType));
+    @GetMapping("/getAggregateConfig")
+    public Result<CheckoutAggregateResult> getAggregateConfig(String orderNo, String checkoutType){
+        return Res.ok(checkoutQueryService.getAggregateConfig(orderNo, checkoutType));
     }
 
     @Operation(summary = "发起支付")

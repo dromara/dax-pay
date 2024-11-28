@@ -38,8 +38,8 @@ public class CheckoutConfigController {
     @RequestPath("获取收银台配置")
     @Operation(summary = "获取收银台配置")
     @GetMapping("/get")
-    public Result<CheckoutConfigVo> getConfig(String appid) {
-        return Res.ok(checkoutConfigQueryService.getConfig(appid));
+    public Result<CheckoutConfigVo> getConfig(String appId) {
+        return Res.ok(checkoutConfigQueryService.getConfig(appId));
     }
 
     @RequestPath("保存收银台配置")
@@ -58,12 +58,18 @@ public class CheckoutConfigController {
         return Res.ok();
     }
 
+    @RequestPath("获取分组配置列表")
+    @Operation(summary = "获取分组配置列表")
+    @GetMapping("/group/list")
+    public Result<List<CheckoutGroupConfigVo>> getGroupConfigs(String appId, String checkoutType) {
+        return Res.ok(checkoutConfigQueryService.getGroupConfigs(appId,checkoutType));
+    }
 
     @RequestPath("获取分组配置")
     @Operation(summary = "获取分组配置")
     @GetMapping("/group/get")
-    public Result<List<CheckoutGroupConfigVo>> getGroupConfigs(String appid, String checkoutType) {
-        return Res.ok(checkoutConfigQueryService.getGroupConfigs(appid,checkoutType));
+    public Result<CheckoutGroupConfigVo> getGroupConfig(Long id) {
+        return Res.ok(checkoutConfigQueryService.getGroupConfig(id));
     }
 
     @RequestPath("保存分组配置")
@@ -90,12 +96,20 @@ public class CheckoutConfigController {
         return Res.ok();
     }
 
-    @RequestPath("获取配置项配置")
-    @Operation(summary = "获取配置项配置")
-    @GetMapping("/item/get")
+    @RequestPath("获取配置项列表")
+    @Operation(summary = "获取配置项列表")
+    @GetMapping("/item/list")
     public Result<List<CheckoutItemConfigVo>> getItemConfigs(Long groupId) {
         return Res.ok(checkoutConfigQueryService.getItemConfigs(groupId));
     }
+
+    @RequestPath("获取配置项")
+    @Operation(summary = "获取配置项")
+    @GetMapping("/item/get")
+    public Result<CheckoutItemConfigVo> getItemConfig(Long id) {
+        return Res.ok(checkoutConfigQueryService.getItemConfig(id));
+    }
+
 
     @RequestPath("保存配置项配置")
     @Operation(summary = "保存配置项配置")
@@ -121,11 +135,18 @@ public class CheckoutConfigController {
         return Res.ok();
     }
 
+    @RequestPath("获取聚合支付配置列表")
+    @Operation(summary = "获取聚合支付配置列表")
+    @GetMapping("/aggregate/list")
+    public Result<List<CheckoutAggregateConfigVo>> getAggregateConfigs(String appId) {
+        return Res.ok(checkoutConfigQueryService.getAggregateConfigs(appId));
+    }
+
     @RequestPath("获取聚合支付配置")
     @Operation(summary = "获取聚合支付配置")
     @GetMapping("/aggregate/get")
-    public Result<List<CheckoutAggregateConfigVo>> getAggregateConfigs(String appid) {
-        return Res.ok(checkoutConfigQueryService.getAggregateConfigs(appid));
+    public Result<CheckoutAggregateConfigVo> getAggregateConfig(Long id) {
+        return Res.ok(checkoutConfigQueryService.getAggregateConfig(id));
     }
 
     @RequestPath("聚合支付配置是否存在")
@@ -135,8 +156,8 @@ public class CheckoutConfigController {
         return Res.ok(checkoutConfigQueryService.existsByAppIdAndType(appId,type));
     }
 
-    @RequestPath("聚合支付配置是否存在")
-    @Operation(summary = "聚合支付配置是否存在")
+    @RequestPath("聚合支付配置是否存在(不包含自身)")
+    @Operation(summary = "聚合支付配置是否存在(不包含自身)")
     @GetMapping("/aggregate/existsNotId")
     public Result<Boolean> existsAggregateConfig(String appId, String type, Long id) {
         return Res.ok(checkoutConfigQueryService.existsByAppIdAndType(appId,type,id));

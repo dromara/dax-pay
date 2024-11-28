@@ -1,6 +1,7 @@
 package org.dromara.daxpay.service.entity.config.checkout;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -18,10 +19,11 @@ import org.dromara.daxpay.service.result.config.checkout.CheckoutGroupConfigVo;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@TableName(value = "pay_checkout_group_config")
 public class CheckoutGroupConfig extends MchAppBaseEntity implements ToResult<CheckoutGroupConfigVo> {
 
     /**
-     * 类型 web/h5/小程序
+     * 类型 web/h5/小程序 不包含聚合支付
      * @see CheckoutTypeEnum
      */
     private String type;
@@ -33,7 +35,7 @@ public class CheckoutGroupConfig extends MchAppBaseEntity implements ToResult<Ch
     private String icon;
 
     /** 排序 */
-    private Double sort;
+    private Double sortNo;
 
     public static CheckoutGroupConfig init(CheckoutGroupConfigParam param){
         return CheckoutGroupConfigConvert.CONVERT.toEntity(param);

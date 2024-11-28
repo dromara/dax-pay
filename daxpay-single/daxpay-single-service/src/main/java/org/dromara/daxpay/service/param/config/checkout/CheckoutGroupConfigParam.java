@@ -36,7 +36,7 @@ public class CheckoutGroupConfigParam {
 
     /** 排序 */
     @Schema(description = "排序")
-    private Double sort;
+    private Double sortNo;
 
     /** 应用号 */
     @Schema(description = "应用号")

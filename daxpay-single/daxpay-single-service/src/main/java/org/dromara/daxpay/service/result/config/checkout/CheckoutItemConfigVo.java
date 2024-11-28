@@ -26,7 +26,15 @@ public class CheckoutItemConfigVo extends MchAppResult {
 
     /** 排序 */
     @Schema(description = "排序")
-    private Double sort;
+    private Double sortNo;
+
+    /** 名称 */
+    @Schema(description = "名称")
+    private String name;
+
+    /** 图标 */
+    @Schema(description = "图标")
+    private String icon;
 
     /**
      * 发起调用的类型
@@ -48,9 +56,5 @@ public class CheckoutItemConfigVo extends MchAppResult {
      */
     @Schema(description = "支付方式")
     private String payMethod;
-
-    /** 是否开启分账 */
-    @Schema(description = "是否开启分账")
-    private boolean allocation;
 
 }

@@ -1,6 +1,7 @@
 package org.dromara.daxpay.service.entity.config.checkout;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -13,17 +14,18 @@ import org.dromara.daxpay.service.param.config.checkout.CheckoutAggregateConfigP
 import org.dromara.daxpay.service.result.config.checkout.CheckoutAggregateConfigVo;
 
 /**
- * 收银台聚合扫码支付配置
+ * 收银台聚合支付配置
  * @author xxm
  * @since 2024/11/27
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@TableName(value = "pay_checkout_aggregate_config")
 public class CheckoutAggregateConfig extends MchAppBaseEntity implements ToResult<CheckoutAggregateConfigVo> {
 
     /**
-     * 支付类型
+     * 聚合支付类型
      * @see CheckoutAggregateEnum
      */
     private String type;

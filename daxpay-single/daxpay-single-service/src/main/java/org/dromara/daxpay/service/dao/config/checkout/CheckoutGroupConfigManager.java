@@ -25,7 +25,7 @@ public class CheckoutGroupConfigManager extends BaseManager<CheckoutGroupConfigM
         return lambdaQuery()
                 .eq(CheckoutGroupConfig::getAppId, appId)
                 .eq(CheckoutGroupConfig::getType, type)
-                .orderByDesc(CheckoutGroupConfig::getSort)
+                .orderByDesc(CheckoutGroupConfig::getSortNo)
                 .list();
     }
     /**

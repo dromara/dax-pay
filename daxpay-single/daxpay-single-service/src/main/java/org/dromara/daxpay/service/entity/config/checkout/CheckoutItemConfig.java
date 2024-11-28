@@ -1,6 +1,7 @@
 package org.dromara.daxpay.service.entity.config.checkout;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,6 +21,7 @@ import org.dromara.daxpay.service.result.config.checkout.CheckoutItemConfigVo;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@TableName(value = "pay_checkout_item_config")
 public class CheckoutItemConfig extends MchAppBaseEntity implements ToResult<CheckoutItemConfigVo> {
 
     /** 类目配置Id */
@@ -32,7 +34,7 @@ public class CheckoutItemConfig extends MchAppBaseEntity implements ToResult<Che
     private String icon;
 
     /** 排序 */
-    private Double sort;
+    private Double sortNo;
 
     /**
      * 发起调用的类型
@@ -51,9 +53,6 @@ public class CheckoutItemConfig extends MchAppBaseEntity implements ToResult<Che
      * @see PayMethodEnum
      */
     private String payMethod;
-
-    /** 是否开启分账 */
-    private boolean allocation;
 
     /**
      * 构造

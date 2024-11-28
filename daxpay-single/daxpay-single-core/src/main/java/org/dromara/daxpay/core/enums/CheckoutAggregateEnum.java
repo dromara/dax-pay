@@ -9,6 +9,7 @@ import java.util.Objects;
 
 /**
  * 收银台聚合支付类型
+ * 字典: checkout_aggregate
  * @author xxm
  * @since 2024/11/27
  */
@@ -16,8 +17,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum CheckoutAggregateEnum {
 
-    WECHAT("wechat", "微信聚合支付"),
-    ALIPAY("alipay", "支付宝聚合支付"),
+    WECHAT("wechat", "微信支付"),
+    ALIPAY("alipay", "支付宝"),
     ;
 
     private final String code;
