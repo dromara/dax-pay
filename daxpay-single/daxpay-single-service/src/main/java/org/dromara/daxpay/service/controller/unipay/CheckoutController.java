@@ -5,10 +5,10 @@ import cn.bootx.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.core.param.cashier.CheckoutParam;
-import org.dromara.daxpay.core.param.cashier.CheckoutPayParam;
+import org.dromara.daxpay.core.param.checkout.CheckoutParam;
+import org.dromara.daxpay.core.param.checkout.CheckoutPayParam;
 import org.dromara.daxpay.core.result.DaxResult;
-import org.dromara.daxpay.core.result.checkout.CheckoutAggregateResult;
+import org.dromara.daxpay.core.result.checkout.CheckoutAggregateOrderAndConfigResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutOrderAndConfigResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.util.DaxRes;
@@ -45,7 +45,7 @@ public class CheckoutController {
 
     @Operation(summary = "获取聚合支付配置")
     @GetMapping("/getAggregateConfig")
-    public Result<CheckoutAggregateResult> getAggregateConfig(String orderNo, String checkoutType){
+    public Result<CheckoutAggregateOrderAndConfigResult> getAggregateConfig(String orderNo, String checkoutType){
         return Res.ok(checkoutQueryService.getAggregateConfig(orderNo, checkoutType));
     }
 

@@ -2,12 +2,13 @@ package org.dromara.daxpay.service.service.trade.pay;
 
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
 import cn.bootx.platform.core.util.DateTimeUtil;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.enums.TradeTypeEnum;
-import org.dromara.daxpay.core.exception.OperationFailException;
-import org.dromara.daxpay.core.exception.PayFailureException;
-import org.dromara.daxpay.core.exception.SystemUnknownErrorException;
-import org.dromara.daxpay.core.exception.TradeNotExistException;
+import org.dromara.daxpay.core.exception.*;
 import org.dromara.daxpay.core.param.trade.pay.PaySyncParam;
 import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
 import org.dromara.daxpay.service.bo.sync.PaySyncResultBo;
@@ -21,10 +22,6 @@ import org.dromara.daxpay.service.service.record.sync.TradeSyncRecordService;
 import org.dromara.daxpay.service.strategy.AbsPayCloseStrategy;
 import org.dromara.daxpay.service.strategy.AbsSyncPayOrderStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,6 +68,11 @@ public class PaySyncService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public PaySyncResult syncPayOrder(PayOrder payOrder) {
+        // 待支付状态不允许同步
+        if (Objects.equals(payOrder.getStatus(), WAIT.getCode())){
+            throw new TradeStatusErrorException("订单未开始支付, 请重新确认支付状态");
+        }
+
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:pay" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){

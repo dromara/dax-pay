@@ -1,4 +1,4 @@
-package org.dromara.daxpay.core.param.cashier;
+package org.dromara.daxpay.core.param.checkout;
 
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;

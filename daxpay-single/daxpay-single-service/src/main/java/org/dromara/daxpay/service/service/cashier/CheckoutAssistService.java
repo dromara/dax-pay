@@ -12,7 +12,7 @@ import org.dromara.daxpay.core.enums.PayRefundStatusEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.exception.AmountExceedLimitException;
 import org.dromara.daxpay.core.exception.TradeStatusErrorException;
-import org.dromara.daxpay.core.param.cashier.CheckoutParam;
+import org.dromara.daxpay.core.param.checkout.CheckoutParam;
 import org.dromara.daxpay.core.util.PayUtil;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
 import org.dromara.daxpay.service.code.DaxPayCode;

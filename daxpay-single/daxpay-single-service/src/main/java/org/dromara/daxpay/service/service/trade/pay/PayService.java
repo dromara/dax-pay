@@ -73,6 +73,28 @@ public class PayService {
     }
 
     /**
+     * 支付入口, 内部调用时使用
+     */
+    public PayResult pay(PayParam payParam, PayOrder payOrder){
+        // 获取商户订单号
+        String bizOrderNo = payOrder.getBizOrderNo();
+        // 加锁
+        LockInfo lock = lockTemplate.lock("payment:pay:" + bizOrderNo,10000,200);
+        if (Objects.isNull(lock)){
+            log.warn("正在支付中，请勿重复支付");
+            throw new TradeProcessingException("正在支付中，请勿重复支付");
+        }
+        try {
+            return this.repeatPay(payParam,payOrder);
+        } catch (Exception e) {
+            log.error("支付异常",e);
+            throw e;
+        } finally {
+            lockTemplate.releaseLock(lock);
+        }
+    }
+
+    /**
      * 首次支付 无事务
      * 拆分为多阶段，1. 保存订单记录信息 2 调起支付 3. 支付成功后操作
      */

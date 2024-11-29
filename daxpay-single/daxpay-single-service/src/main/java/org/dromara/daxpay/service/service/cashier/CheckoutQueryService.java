@@ -100,8 +100,8 @@ public class CheckoutQueryService {
     /**
      * 收银台聚合支付配置
      */
-    public CheckoutAggregateResult getAggregateConfig(String orderNo, String aggregateType){
-        var checkoutInfoResult = new CheckoutAggregateResult();
+    public CheckoutAggregateOrderAndConfigResult getAggregateConfig(String orderNo, String aggregateType){
+        var checkoutInfoResult = new CheckoutAggregateOrderAndConfigResult();
         // 订单信息
         PayOrder payOrder = checkoutAssistService.getOrderAndCheck(orderNo);
         CheckoutOrderResult order = new CheckoutOrderResult()

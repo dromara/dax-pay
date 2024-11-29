@@ -22,10 +22,10 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum CheckoutCallTypeEnum {
 
-    SCAN("scan", "扫码支付"),
-    BAR_CODE("barCode", "条码支付"),
+    QR_CODE("qr_code", "扫码支付"),
+    BAR_CODE("bar_code", "条码支付"),
     LINK("link", "跳转链接"),
-    MINI_APP("miniApp", "小程序支付"),
+    MINI_APP("mini_app", "小程序支付"),
     AGGREGATE("aggregate", "聚合支付"),
     APP("app", "APP支付"),
     ;
