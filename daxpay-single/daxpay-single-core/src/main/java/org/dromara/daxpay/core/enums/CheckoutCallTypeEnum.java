@@ -9,12 +9,7 @@ import java.util.Objects;
 
 /**
  * 收银台支付调起方式
- * 1. 扫码支付
- * 2. 条码支付
- * 3. 跳转链接
- * 4. 小程序支付
- * 5. 聚合支付
- * 6. APP支付
+ * 字典: checkout_call_type
  * @author xxm
  * @since 2024/11/27
  */
