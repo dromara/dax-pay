@@ -1,7 +1,6 @@
 package org.dromara.daxpay.service.strategy;
 
 import org.dromara.daxpay.core.param.assist.AuthCodeParam;
-import org.dromara.daxpay.core.param.cashier.CashierCodeAuthUrlParam;
 import org.dromara.daxpay.core.param.checkout.CheckoutPayParam;
 import org.dromara.daxpay.core.param.trade.pay.PayParam;
 import org.dromara.daxpay.core.result.assist.AuthResult;
@@ -16,7 +15,7 @@ public abstract class AbsCheckoutStrategy implements PaymentStrategy{
     /**
      * 生成授权链接, 主要是微信类通道使用, 用于获取OpenId
      */
-    public String generateAuthUrl(CashierCodeAuthUrlParam param) {
+    public String generateAuthUrl(String orderNo) {
         return "";
     }
 

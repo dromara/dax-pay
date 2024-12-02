@@ -19,7 +19,7 @@ public class CheckoutAggregateOrderAndConfigResult {
     private CheckoutOrderResult order;
 
     /** 收银台配置信息 */
-    @Schema(description = "配置信息")
+    @Schema(description = "收银台配置信息")
     private CheckoutConfigResult config;
 
     /** 收银台聚合配置信息 */

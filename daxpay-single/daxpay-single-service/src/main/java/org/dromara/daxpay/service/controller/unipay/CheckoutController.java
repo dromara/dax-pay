@@ -1,15 +1,21 @@
 package org.dromara.daxpay.service.controller.unipay;
 
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.bootx.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.dromara.daxpay.core.param.checkout.CheckoutAuthCodeParam;
+import org.dromara.daxpay.core.param.checkout.CheckoutAuthUrlParam;
 import org.dromara.daxpay.core.param.checkout.CheckoutCreatParam;
 import org.dromara.daxpay.core.param.checkout.CheckoutPayParam;
 import org.dromara.daxpay.core.result.DaxResult;
+import org.dromara.daxpay.core.result.assist.AuthResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutAggregateOrderAndConfigResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutOrderAndConfigResult;
+import org.dromara.daxpay.core.result.checkout.CheckoutPayResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.util.DaxRes;
 import org.dromara.daxpay.service.common.anno.PaymentVerify;
@@ -37,22 +43,42 @@ public class CheckoutController {
         return DaxRes.ok(checkoutService.creat(checkoutParam));
     }
 
+    @IgnoreAuth
     @Operation(summary = "获取收银台订单和配置信息")
     @GetMapping("/getOrderAndConfig")
     public Result<CheckoutOrderAndConfigResult> getOrderAndConfig(String orderNo, String checkoutType){
         return Res.ok(checkoutQueryService.getOrderAndConfig(orderNo, checkoutType));
     }
 
+    @IgnoreAuth
     @Operation(summary = "获取聚合支付配置")
     @GetMapping("/getAggregateConfig")
-    public Result<CheckoutAggregateOrderAndConfigResult> getAggregateConfig(String orderNo, String checkoutType){
-        return Res.ok(checkoutQueryService.getAggregateConfig(orderNo, checkoutType));
+    public Result<CheckoutAggregateOrderAndConfigResult> getAggregateConfig(String orderNo, String aggregateType){
+        return Res.ok(checkoutQueryService.getAggregateConfig(orderNo, aggregateType));
     }
 
+    @IgnoreAuth
+    @Operation(summary = "获取收银台所需授权链接, 用于获取OpenId一类的信息")
+    @PostMapping("/generateAuthUrl")
+    public Result<String> generateAuthUrl(@RequestBody CheckoutAuthUrlParam param){
+        ValidationUtil.validateParam(param);
+        return Res.ok(checkoutService.generateAuthUrl(param));
+    }
+
+    @IgnoreAuth
+    @Operation(summary = "获取授权结果")
+    @PostMapping("/auth")
+    public Result<AuthResult> auth(@RequestBody CheckoutAuthCodeParam param){
+        ValidationUtil.validateParam(param);
+        return Res.ok(checkoutService.auth(param));
+    }
+
+
+    @IgnoreAuth
     @Operation(summary = "发起支付")
     @PostMapping("/pay")
-    public Result<Void> pay(@RequestBody CheckoutPayParam checkoutParam){
-        return Res.ok();
+    public Result<CheckoutPayResult> pay(@RequestBody CheckoutPayParam checkoutParam){
+        return Res.ok(checkoutService.pay(checkoutParam));
     }
 
 }

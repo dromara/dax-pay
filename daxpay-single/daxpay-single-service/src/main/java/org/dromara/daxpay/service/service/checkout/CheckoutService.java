@@ -13,10 +13,10 @@ import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.exception.ConfigNotExistException;
 import org.dromara.daxpay.core.exception.TradeProcessingException;
 import org.dromara.daxpay.core.exception.UnsupportedAbilityException;
-import org.dromara.daxpay.core.param.checkout.CheckoutAggregatePayParam;
-import org.dromara.daxpay.core.param.checkout.CheckoutCreatParam;
-import org.dromara.daxpay.core.param.checkout.CheckoutPayParam;
+import org.dromara.daxpay.core.param.assist.AuthCodeParam;
+import org.dromara.daxpay.core.param.checkout.*;
 import org.dromara.daxpay.core.param.trade.pay.PayParam;
+import org.dromara.daxpay.core.result.assist.AuthResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutPayResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.result.trade.pay.PayResult;
@@ -195,34 +195,35 @@ public class CheckoutService {
         return payService.pay(payParam, payOrder);
     }
 
-//    /**
-//     * 生成授权链接跳转链接, 主要是微信类通道使用, 用于获取OpenId
-//     */
-//    public String generateAuthUrl(CheckoutAggregatePayParam param){
-//        // 订单信息
-//        PayOrder payOrder = checkoutAssistService.getOrderAndCheck(param.getOrderNo());
-//        // 获取聚合类型
-//        CheckoutAggregateConfig aggregateConfig = checkoutAggregateConfigManager.findByAppIdAndType(payOrder.getAppId(), param.getAggregateType())
-//                .orElseThrow(() -> new ConfigNotExistException("聚合支付配置项不存在"));
-//        paymentAssistService.initMchApp(aggregateConfig.getAppId());
-//        // 获取策略
-//        var cashierStrategy = PaymentStrategyFactory.create(aggregateConfig.getChannel(), AbsCheckoutStrategy.class);
-//        return cashierStrategy.generateAuthUrl(param);
-//    }
-//
-//    /**
-//     * 授权结果
-//     */
-//    public AuthResult auth(org.dromara.daxpay.service.param.cashier.AuthCodeParam param) {
-//        // 查询配置
-//        var cashierConfig = codeConfigService.findByCashierType(param.getCode(),param.getType());
-//        paymentAssistService.initMchApp(cashierConfig.getAppId());
-//        // 获取策略
-//        AbsCashierCodeStrategy cashierStrategy = PaymentStrategyFactory.create(cashierConfig.getChannel(), AbsCashierCodeStrategy.class);
-//        AuthCodeParam authCodeParam = new AuthCodeParam()
-//                .setCashierType(param.getType())
-//                .setAuthCode(param.getAuthCode())
-//                .setAppId(cashierConfig.getAppId());
-//        return cashierStrategy.doAuth(authCodeParam);
-//    }
+    /**
+     * 生成授权链接跳转链接, 主要是微信类通道使用, 用于获取OpenId
+     */
+    public String generateAuthUrl(CheckoutAuthUrlParam param){
+        // 订单信息
+        PayOrder payOrder = checkoutAssistService.getOrderAndCheck(param.getOrderNo());
+        // 获取聚合类型
+        var aggregateConfig = checkoutAggregateConfigManager.findByAppIdAndType(payOrder.getAppId(), param.getAggregateType())
+                .orElseThrow(() -> new ConfigNotExistException("聚合支付配置项不存在"));
+        paymentAssistService.initMchApp(aggregateConfig.getAppId());
+        // 获取策略
+        var checkoutStrategy = PaymentStrategyFactory.create(aggregateConfig.getChannel(), AbsCheckoutStrategy.class);
+        return checkoutStrategy.generateAuthUrl(param.getOrderNo());
+    }
+
+    /**
+     * 授权结果
+     */
+    public AuthResult auth(CheckoutAuthCodeParam param) {
+        // 订单信息
+        PayOrder payOrder = checkoutAssistService.getOrderAndCheck(param.getOrderNo());
+        // 获取聚合类型
+        var aggregateConfig = checkoutAggregateConfigManager.findByAppIdAndType(payOrder.getAppId(), param.getAggregateType())
+                .orElseThrow(() -> new ConfigNotExistException("聚合支付配置项不存在"));
+        paymentAssistService.initMchApp(payOrder.getAppId());
+        // 获取策略
+        var checkoutStrategy = PaymentStrategyFactory.create(aggregateConfig.getChannel(), AbsCheckoutStrategy.class);
+        AuthCodeParam authCodeParam = new AuthCodeParam()
+                .setAuthCode(param.getAuthCode());
+        return checkoutStrategy.doAuth(authCodeParam);
+    }
 }

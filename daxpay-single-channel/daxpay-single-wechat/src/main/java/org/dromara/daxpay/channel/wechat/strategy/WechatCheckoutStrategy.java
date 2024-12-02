@@ -9,7 +9,6 @@ import org.dromara.daxpay.channel.wechat.service.assist.WechatAuthService;
 import org.dromara.daxpay.core.enums.ChannelAuthStatusEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.param.assist.AuthCodeParam;
-import org.dromara.daxpay.core.param.cashier.CashierCodeAuthUrlParam;
 import org.dromara.daxpay.core.param.checkout.CheckoutPayParam;
 import org.dromara.daxpay.core.param.trade.pay.PayParam;
 import org.dromara.daxpay.core.result.assist.AuthResult;
@@ -41,8 +40,8 @@ public class WechatCheckoutStrategy extends AbsCheckoutStrategy {
      * 生成授权链接, 主要是微信类通道使用, 用于获取OpenId
      */
     @Override
-    public String generateAuthUrl(CashierCodeAuthUrlParam param) {
-        String redirectUrl = StrUtil.format("/checkout/wechat/{}", param.getCashierCode());
+    public String generateAuthUrl(String orderNo) {
+        String redirectUrl = StrUtil.format("/checkout/wechat/{}", orderNo);
         return wechatAuthService.generateInnerAuthUrl(redirectUrl);
     }
 

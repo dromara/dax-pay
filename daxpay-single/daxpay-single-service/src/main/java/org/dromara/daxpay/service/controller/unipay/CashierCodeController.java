@@ -48,7 +48,7 @@ public class CashierCodeController {
         return Res.ok(cashierCodeService.generateAuthUrl(param));
     }
 
-    @Operation(summary = "授权获取结果")
+    @Operation(summary = "获取授权结果")
     @PostMapping("/auth")
     public Result<AuthResult> auth(@RequestBody CashierCodeAuthCodeParam param){
         ValidationUtil.validateParam(param);
