@@ -7,14 +7,14 @@ import lombok.experimental.Accessors;
 import java.math.BigDecimal;
 
 /**
- * 通道收银支付参数
+ * 收银码牌支付参数
  * @author xxm
  * @since 2024/9/28
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "通道收银支付参数")
-public class CashierPayParam {
+@Schema(title = "收银码牌支付参数")
+public class CashierCodePayParam {
 
     @Schema(description = "收银码牌Code")
     private String cashierCode;

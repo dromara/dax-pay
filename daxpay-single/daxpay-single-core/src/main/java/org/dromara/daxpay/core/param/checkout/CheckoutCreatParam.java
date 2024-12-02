@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "收银台创建参数")
-public class CheckoutParam extends PaymentCommonParam {
+public class CheckoutCreatParam extends PaymentCommonParam {
 
     /**
      * 收银台类型

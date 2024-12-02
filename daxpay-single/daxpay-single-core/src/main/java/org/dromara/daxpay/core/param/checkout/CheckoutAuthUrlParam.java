@@ -6,17 +6,14 @@ import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.CheckoutAggregateEnum;
 
 /**
- * 收银台聚合支付参数
+ * 获取通道收银认证url参数
  * @author xxm
- * @since 2024/11/26
+ * @since 2024/9/28
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "收银台聚合支付参数")
-public class CheckoutAggregatePayParam {
-
-    @Schema(description = "要支付的订单号")
-    private String orderNo;
+@Schema(title = "通道收银认证参数")
+public class CheckoutAuthUrlParam {
 
     /**
      * 聚合支付类型
@@ -25,7 +22,6 @@ public class CheckoutAggregatePayParam {
     @Schema(description = "聚合支付类型")
     private String aggregateType;
 
-    @Schema(description = "唯一标识")
-    private String openId;
-
+    @Schema(description = "收银台类型")
+    private String cashierType;
 }

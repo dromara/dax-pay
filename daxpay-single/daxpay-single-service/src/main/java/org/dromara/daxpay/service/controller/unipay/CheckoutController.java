@@ -5,7 +5,7 @@ import cn.bootx.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.core.param.checkout.CheckoutParam;
+import org.dromara.daxpay.core.param.checkout.CheckoutCreatParam;
 import org.dromara.daxpay.core.param.checkout.CheckoutPayParam;
 import org.dromara.daxpay.core.result.DaxResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutAggregateOrderAndConfigResult;
@@ -13,8 +13,8 @@ import org.dromara.daxpay.core.result.checkout.CheckoutOrderAndConfigResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.util.DaxRes;
 import org.dromara.daxpay.service.common.anno.PaymentVerify;
-import org.dromara.daxpay.service.service.cashier.CheckoutQueryService;
-import org.dromara.daxpay.service.service.cashier.CheckoutService;
+import org.dromara.daxpay.service.service.checkout.CheckoutQueryService;
+import org.dromara.daxpay.service.service.checkout.CheckoutService;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,7 +33,7 @@ public class CheckoutController {
     @PaymentVerify
     @Operation(summary = "创建一个收银台链接")
     @PostMapping("/creat")
-    public DaxResult<CheckoutUrlResult> creat(@RequestBody CheckoutParam checkoutParam){
+    public DaxResult<CheckoutUrlResult> creat(@RequestBody CheckoutCreatParam checkoutParam){
         return DaxRes.ok(checkoutService.creat(checkoutParam));
     }
 

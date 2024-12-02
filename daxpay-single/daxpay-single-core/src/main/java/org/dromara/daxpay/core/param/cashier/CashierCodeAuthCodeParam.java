@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.param.cashier;
+package org.dromara.daxpay.core.param.cashier;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -15,10 +15,10 @@ import lombok.experimental.Accessors;
 public class CashierCodeAuthCodeParam {
 
     @Schema(description = "码牌Code")
-    private String code;
+    private String cashierCode;
 
     @Schema(description = "收银台类型")
-    private String type;
+    private String cashierType;
 
     @Schema(description = "认证Code")
     private String authCode;

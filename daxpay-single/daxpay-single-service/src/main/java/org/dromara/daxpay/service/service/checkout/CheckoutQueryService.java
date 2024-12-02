@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.cashier;
+package org.dromara.daxpay.service.service.checkout;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.core.exception.DataNotExistException;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *
+ * 收银码牌查询服务
  * @author xxm
  * @since 2024/11/27
  */

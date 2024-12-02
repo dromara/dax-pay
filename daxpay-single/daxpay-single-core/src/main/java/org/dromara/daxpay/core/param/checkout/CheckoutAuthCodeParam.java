@@ -1,4 +1,4 @@
-package org.dromara.daxpay.core.param.cashier;
+package org.dromara.daxpay.core.param.checkout;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -11,8 +11,8 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "通道收银认证参数")
-public class CashierAuthCodeParam {
+@Schema(title = "收银台认证参数")
+public class CheckoutAuthCodeParam {
 
     @Schema(description = "应用号")
     private String appId;

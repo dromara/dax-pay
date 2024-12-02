@@ -28,7 +28,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @Scope(SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class WechatPayAllocReceiverStrategy extends AbsAllocReceiverStrategy {
+public class WechatAllocReceiverStrategy extends AbsAllocReceiverStrategy {
 
     private final WechatPayAllocReceiverV2Service receiverV2Service;
 

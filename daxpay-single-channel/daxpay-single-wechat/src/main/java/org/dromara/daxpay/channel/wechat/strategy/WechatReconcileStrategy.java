@@ -25,7 +25,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Scope(SCOPE_PROTOTYPE)
 @Service
 @RequiredArgsConstructor
-public class WechatPayReconcileStrategy extends AbsReconcileStrategy {
+public class WechatReconcileStrategy extends AbsReconcileStrategy {
 
     private final WechatPayReconcileService reconcileService;
 

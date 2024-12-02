@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.cashier;
+package org.dromara.daxpay.service.service.checkout;
 
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.hutool.core.util.StrUtil;
@@ -10,22 +10,27 @@ import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.CheckoutCallTypeEnum;
 import org.dromara.daxpay.core.enums.CheckoutTypeEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
+import org.dromara.daxpay.core.exception.ConfigNotExistException;
 import org.dromara.daxpay.core.exception.TradeProcessingException;
 import org.dromara.daxpay.core.exception.UnsupportedAbilityException;
 import org.dromara.daxpay.core.param.checkout.CheckoutAggregatePayParam;
-import org.dromara.daxpay.core.param.checkout.CheckoutParam;
+import org.dromara.daxpay.core.param.checkout.CheckoutCreatParam;
 import org.dromara.daxpay.core.param.checkout.CheckoutPayParam;
 import org.dromara.daxpay.core.param.trade.pay.PayParam;
 import org.dromara.daxpay.core.result.checkout.CheckoutPayResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.result.trade.pay.PayResult;
+import org.dromara.daxpay.service.dao.config.checkout.CheckoutAggregateConfigManager;
 import org.dromara.daxpay.service.dao.config.checkout.CheckoutItemConfigManager;
 import org.dromara.daxpay.service.entity.config.PlatformConfig;
+import org.dromara.daxpay.service.entity.config.checkout.CheckoutAggregateConfig;
 import org.dromara.daxpay.service.entity.config.checkout.CheckoutItemConfig;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.dromara.daxpay.service.service.config.PlatformConfigService;
 import org.dromara.daxpay.service.service.trade.pay.PayService;
+import org.dromara.daxpay.service.strategy.AbsCheckoutStrategy;
+import org.dromara.daxpay.service.util.PaymentStrategyFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,11 +51,12 @@ public class CheckoutService {
     private final PaymentAssistService paymentAssistService;
     private final CheckoutItemConfigManager checkoutItemConfigManager;
     private final PayService payService;
+    private final CheckoutAggregateConfigManager checkoutAggregateConfigManager;
 
     /**
      * 生成收银台链接
      */
-    public CheckoutUrlResult creat(CheckoutParam checkoutParam){
+    public CheckoutUrlResult creat(CheckoutCreatParam checkoutParam){
         // 校验支付限额
         checkoutAssistService.validationLimitAmount(checkoutParam);
         // 校验超时时间, 不可早于当前
@@ -149,15 +155,14 @@ public class CheckoutService {
         payParam.setReqTime(LocalDateTime.now());
 
         // 获取策略
-//        AbsChannelCashierStrategy cashierStrategy = PaymentStrategyFactory.create(itemConfig.getChannel(), AbsChannelCashierStrategy.class);
+        var cashierStrategy = PaymentStrategyFactory.create(itemConfig.getChannel(), AbsCheckoutStrategy.class);
         // 进行参数预处理
-//        cashierStrategy.handlePayParam(param, payParam);
+        cashierStrategy.handlePayParam(param, payParam);
         // 发起支付
         PayResult payResult = payService.pay(payParam, payOrder);
         return new CheckoutPayResult()
                 .setUrl(payResult.getPayBody())
                 .setPayStatus(payResult.getStatus());
-
     }
 
     /**
@@ -167,7 +172,57 @@ public class CheckoutService {
         // 订单信息
         PayOrder payOrder = checkoutAssistService.getOrderAndCheck(param.getOrderNo());
 
-        return new PayResult();
+        // 获取聚合类型
+        CheckoutAggregateConfig aggregateConfig = checkoutAggregateConfigManager.findByAppIdAndType(payOrder.getAppId(), param.getAggregateType())
+                .orElseThrow(() -> new ConfigNotExistException("聚合支付配置项不存在"));
+
+        // 构建支付参数
+        String clientIP = JakartaServletUtil.getClientIP(WebServletUtil.getRequest());
+        PayParam payParam = new PayParam();
+        payParam.setChannel(aggregateConfig.getChannel());
+        payParam.setMethod(aggregateConfig.getPayMethod());
+        payParam.setAppId(aggregateConfig.getAppId());
+        payParam.setClientIp(clientIP);
+        payParam.setReqTime(LocalDateTime.now());
+
+        // 获取策略
+        var cashierStrategy = PaymentStrategyFactory.create(aggregateConfig.getChannel(), AbsCheckoutStrategy.class);
+        // 进行参数预处理
+        CheckoutPayParam cashierPayParam = new CheckoutPayParam()
+                .setOpenId(param.getOpenId());
+        cashierStrategy.handlePayParam(cashierPayParam, payParam);
+        // 发起支付
+        return payService.pay(payParam, payOrder);
     }
 
+//    /**
+//     * 生成授权链接跳转链接, 主要是微信类通道使用, 用于获取OpenId
+//     */
+//    public String generateAuthUrl(CheckoutAggregatePayParam param){
+//        // 订单信息
+//        PayOrder payOrder = checkoutAssistService.getOrderAndCheck(param.getOrderNo());
+//        // 获取聚合类型
+//        CheckoutAggregateConfig aggregateConfig = checkoutAggregateConfigManager.findByAppIdAndType(payOrder.getAppId(), param.getAggregateType())
+//                .orElseThrow(() -> new ConfigNotExistException("聚合支付配置项不存在"));
+//        paymentAssistService.initMchApp(aggregateConfig.getAppId());
+//        // 获取策略
+//        var cashierStrategy = PaymentStrategyFactory.create(aggregateConfig.getChannel(), AbsCheckoutStrategy.class);
+//        return cashierStrategy.generateAuthUrl(param);
+//    }
+//
+//    /**
+//     * 授权结果
+//     */
+//    public AuthResult auth(org.dromara.daxpay.service.param.cashier.AuthCodeParam param) {
+//        // 查询配置
+//        var cashierConfig = codeConfigService.findByCashierType(param.getCode(),param.getType());
+//        paymentAssistService.initMchApp(cashierConfig.getAppId());
+//        // 获取策略
+//        AbsCashierCodeStrategy cashierStrategy = PaymentStrategyFactory.create(cashierConfig.getChannel(), AbsCashierCodeStrategy.class);
+//        AuthCodeParam authCodeParam = new AuthCodeParam()
+//                .setCashierType(param.getType())
+//                .setAuthCode(param.getAuthCode())
+//                .setAppId(cashierConfig.getAppId());
+//        return cashierStrategy.doAuth(authCodeParam);
+//    }
 }

@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.cashier;
+package org.dromara.daxpay.service.service.checkout;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
@@ -12,7 +12,7 @@ import org.dromara.daxpay.core.enums.PayRefundStatusEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.exception.AmountExceedLimitException;
 import org.dromara.daxpay.core.exception.TradeStatusErrorException;
-import org.dromara.daxpay.core.param.checkout.CheckoutParam;
+import org.dromara.daxpay.core.param.checkout.CheckoutCreatParam;
 import org.dromara.daxpay.core.util.PayUtil;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
 import org.dromara.daxpay.service.code.DaxPayCode;
@@ -52,7 +52,7 @@ public class CheckoutAssistService {
     /**
      * 校验支付状态，支付成功则返回，支付失败则抛出对应的异常
      */
-    public PayOrder getOrderAndCheck(CheckoutParam param) {
+    public PayOrder getOrderAndCheck(CheckoutCreatParam param) {
         // 根据订单查询支付记录
         PayOrder payOrder = payOrderQueryService.findByBizOrderNo(param.getBizOrderNo(), param.getAppId()).orElse(null);
         return getOrderAndCheck(payOrder);
@@ -87,7 +87,7 @@ public class CheckoutAssistService {
     /**
      * 检验订单是否超过限额
      */
-    public void validationLimitAmount(CheckoutParam checkoutParam) {
+    public void validationLimitAmount(CheckoutCreatParam checkoutParam) {
         MchAppLocal mchAppInfo = PaymentContextLocal.get()
                 .getMchAppInfo();
         // 总额校验
@@ -100,7 +100,7 @@ public class CheckoutAssistService {
     /**
      * 校验订单超时时间是否正常
      */
-    public void validationExpiredTime(CheckoutParam payParam) {
+    public void validationExpiredTime(CheckoutCreatParam payParam) {
         LocalDateTime expiredTime = this.getExpiredTime(payParam);
         if (Objects.nonNull(expiredTime) && DateTimeUtil.lt(expiredTime,LocalDateTime.now())) {
             throw new ValidationFailedException("支付超时时间设置有误, 请检查!");
@@ -113,7 +113,7 @@ public class CheckoutAssistService {
      * 创建支付订单并保存, 返回支付订单
      */
     @Transactional(rollbackFor = Exception.class)
-    public PayOrder createPayOrder(CheckoutParam checkoutParam) {
+    public PayOrder createPayOrder(CheckoutCreatParam checkoutParam) {
         // 订单超时时间
         LocalDateTime expiredTime = this.getExpiredTime(checkoutParam);
         // 构建支付订单对象
@@ -138,7 +138,7 @@ public class CheckoutAssistService {
     /**
      * 获取支付订单超时时间
      */
-    private LocalDateTime getExpiredTime(CheckoutParam payParam) {
+    private LocalDateTime getExpiredTime(CheckoutCreatParam payParam) {
         MchAppLocal mchAppLocal = PaymentContextLocal.get().getMchAppInfo();
         // 支付参数传入
         if (Objects.nonNull(payParam.getExpiredTime())) {

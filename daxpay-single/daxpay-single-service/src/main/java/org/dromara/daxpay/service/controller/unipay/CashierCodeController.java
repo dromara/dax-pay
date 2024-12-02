@@ -8,12 +8,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.core.param.cashier.CashierAuthUrlParam;
-import org.dromara.daxpay.core.param.cashier.CashierPayParam;
+import org.dromara.daxpay.core.param.cashier.CashierCodeAuthUrlParam;
+import org.dromara.daxpay.core.param.cashier.CashierCodePayParam;
 import org.dromara.daxpay.core.result.assist.AuthResult;
 import org.dromara.daxpay.core.result.cashier.CashierCodeResult;
 import org.dromara.daxpay.core.result.trade.pay.PayResult;
-import org.dromara.daxpay.service.param.cashier.CashierCodeAuthCodeParam;
+import org.dromara.daxpay.core.param.cashier.CashierCodeAuthCodeParam;
 import org.dromara.daxpay.service.service.cashier.CashierCodeService;
 import org.dromara.daxpay.service.service.config.cashier.CashierCodeConfigService;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +43,7 @@ public class CashierCodeController {
 
     @Operation(summary = "获取码牌所需授权链接, 用于获取OpenId一类的信息")
     @PostMapping("/generateAuthUrl")
-    public Result<String> generateAuthUrl(@RequestBody CashierAuthUrlParam param){
+    public Result<String> generateAuthUrl(@RequestBody CashierCodeAuthUrlParam param){
         ValidationUtil.validateParam(param);
         return Res.ok(cashierCodeService.generateAuthUrl(param));
     }
@@ -57,7 +57,7 @@ public class CashierCodeController {
 
     @Operation(summary = "发起支付")
     @PostMapping("/pay")
-    public Result<PayResult> cashierPay(@RequestBody CashierPayParam param){
+    public Result<PayResult> cashierPay(@RequestBody CashierCodePayParam param){
         ValidationUtil.validateParam(param);
         return Res.ok(cashierCodeService.cashierPay(param));
     }

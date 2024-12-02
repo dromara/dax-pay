@@ -1,7 +1,6 @@
 package org.dromara.daxpay.channel.wechat.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
-import org.dromara.daxpay.channel.wechat.service.assist.WechatAuthService;
 import org.dromara.daxpay.channel.wechat.service.callback.WechatPayCallbackService;
 import org.dromara.daxpay.channel.wechat.service.callback.WechatRefundCallbackService;
 import org.dromara.daxpay.channel.wechat.service.callback.WechatTransferCallbackService;
