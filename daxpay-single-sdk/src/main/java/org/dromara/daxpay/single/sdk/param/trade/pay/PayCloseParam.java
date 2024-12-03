@@ -1,19 +1,21 @@
 package org.dromara.daxpay.single.sdk.param.trade.pay;
 
+import cn.hutool.core.lang.TypeReference;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
 import org.dromara.daxpay.single.sdk.util.JsonUtil;
-import cn.hutool.core.lang.TypeReference;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 支付关闭参数
  * @author xxm
  * @since 2023/12/17
  */
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
 public class PayCloseParam extends DaxPayRequest<Void> {
 
     /**

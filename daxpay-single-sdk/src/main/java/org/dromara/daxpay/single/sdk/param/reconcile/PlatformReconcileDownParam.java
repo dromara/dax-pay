@@ -1,5 +1,8 @@
 package org.dromara.daxpay.single.sdk.param.reconcile;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
 import org.dromara.daxpay.single.sdk.model.reconcile.ReconcileDownModel;
@@ -14,6 +17,9 @@ import java.time.LocalDate;
  * @author xxm
  * @since 2024/8/21
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
 public class PlatformReconcileDownParam extends DaxPayRequest<ReconcileDownModel> {
     @Schema(description = "通道")
     private String channel;

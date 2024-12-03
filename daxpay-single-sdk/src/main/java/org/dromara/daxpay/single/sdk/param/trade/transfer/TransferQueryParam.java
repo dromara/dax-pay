@@ -1,22 +1,22 @@
 package org.dromara.daxpay.single.sdk.param.trade.transfer;
 
+import cn.hutool.core.lang.TypeReference;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import org.dromara.daxpay.single.sdk.model.trade.transfer.TransferOrderModel;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
-import org.dromara.daxpay.single.sdk.model.trade.transfer.TransferOrderModel;
 import org.dromara.daxpay.single.sdk.util.JsonUtil;
-import cn.hutool.core.lang.TypeReference;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  *
  * @author xxm
  * @since 2024/6/20
  */
-@Getter
-@Setter
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
 public class TransferQueryParam extends DaxPayRequest<TransferOrderModel> {
 
     /** 商户转账号 */

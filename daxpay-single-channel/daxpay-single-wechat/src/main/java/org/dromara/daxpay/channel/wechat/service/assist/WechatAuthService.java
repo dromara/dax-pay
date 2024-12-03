@@ -55,7 +55,7 @@ public class WechatAuthService {
             }
             // 生产链接, 授权成功后重定向h5段用于获取授权码的页面, 获取成功后页面自动关闭
             String queryCode = RandomUtil.randomString(10);
-            String redirectUrl = StrUtil.format("{}/wechat/auth/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(), queryCode);
+            String redirectUrl = StrUtil.format("{}/auth/wechat/{}/{}/{}", serverUrl, param.getAppId(), param.getChannel(), queryCode);
             String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
             return new AuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
         }

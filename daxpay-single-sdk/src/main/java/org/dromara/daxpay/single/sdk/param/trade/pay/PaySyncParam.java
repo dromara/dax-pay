@@ -1,20 +1,22 @@
 package org.dromara.daxpay.single.sdk.param.trade.pay;
 
+import cn.hutool.core.lang.TypeReference;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import org.dromara.daxpay.single.sdk.model.trade.pay.PaySyncModel;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
-import org.dromara.daxpay.single.sdk.model.trade.pay.PaySyncModel;
 import org.dromara.daxpay.single.sdk.util.JsonUtil;
-import cn.hutool.core.lang.TypeReference;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *支付同步参数
  * @author xxm
  * @since 2024/2/5
  */
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
 public class PaySyncParam extends DaxPayRequest<PaySyncModel> {
 
     /** 订单号 */

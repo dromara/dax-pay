@@ -1,16 +1,16 @@
 package org.dromara.daxpay.single.sdk.param.channel;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.dromara.daxpay.single.sdk.param.ChannelParam;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 微信支付参数
  * @author xxm
  * @since 2021/6/21
  */
-@Getter
-@Setter
+@Data
+@Accessors(chain = true)
 public class WechatPayParam implements ChannelParam {
 
     /** 微信openId */

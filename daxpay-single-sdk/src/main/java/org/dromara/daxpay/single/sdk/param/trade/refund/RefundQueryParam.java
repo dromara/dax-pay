@@ -1,5 +1,6 @@
 package org.dromara.daxpay.single.sdk.param.trade.refund;
 
+import lombok.experimental.Accessors;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
 import org.dromara.daxpay.single.sdk.model.trade.refund.RefundOrderModel;
@@ -15,6 +16,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public class RefundQueryParam extends DaxPayRequest<RefundOrderModel> {
 
 

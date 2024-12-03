@@ -1,16 +1,16 @@
 package org.dromara.daxpay.single.sdk.param.channel;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.dromara.daxpay.single.sdk.param.ChannelParam;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 支付宝支付参数
  * @author xxm
  * @since 2021/2/27
  */
-@Getter
-@Setter
+@Data
+@Accessors(chain = true)
 public class AlipayParam implements ChannelParam {
 
     /**

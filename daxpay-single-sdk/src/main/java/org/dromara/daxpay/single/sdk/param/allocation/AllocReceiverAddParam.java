@@ -1,16 +1,16 @@
 package org.dromara.daxpay.single.sdk.param.allocation;
 
-import org.dromara.daxpay.single.sdk.code.AllocReceiverTypeEnum;
-import org.dromara.daxpay.single.sdk.code.AllocRelationTypeEnum;
-import org.dromara.daxpay.single.sdk.code.ChannelEnum;
-import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
-import org.dromara.daxpay.single.sdk.response.DaxPayResult;
-import org.dromara.daxpay.single.sdk.model.allocation.AllocReceiverAddModel;
-import org.dromara.daxpay.single.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.single.sdk.code.AllocReceiverTypeEnum;
+import org.dromara.daxpay.single.sdk.code.AllocRelationTypeEnum;
+import org.dromara.daxpay.single.sdk.code.ChannelEnum;
+import org.dromara.daxpay.single.sdk.model.allocation.AllocReceiverAddModel;
+import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
+import org.dromara.daxpay.single.sdk.response.DaxPayResult;
+import org.dromara.daxpay.single.sdk.util.JsonUtil;
 
 /**
  * 分账接收者添加参数
