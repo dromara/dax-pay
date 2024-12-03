@@ -17,7 +17,6 @@ import org.dromara.daxpay.core.param.assist.AuthCodeParam;
 import org.dromara.daxpay.core.param.checkout.*;
 import org.dromara.daxpay.core.param.trade.pay.PayParam;
 import org.dromara.daxpay.core.result.assist.AuthResult;
-import org.dromara.daxpay.core.result.checkout.CheckoutPayResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.result.trade.pay.PayResult;
 import org.dromara.daxpay.service.dao.config.checkout.CheckoutAggregateConfigManager;
@@ -114,7 +113,7 @@ public class CheckoutService {
     /**
      * 支付调用
      */
-    public CheckoutPayResult pay(CheckoutPayParam param){
+    public PayResult pay(CheckoutPayParam param){
         // 订单信息
         PayOrder payOrder = checkoutAssistService.getOrderAndCheck(param.getOrderNo());
         paymentAssistService.initMchApp(payOrder.getAppId());
@@ -124,14 +123,17 @@ public class CheckoutService {
         // 判断支付调用类型
         CheckoutCallTypeEnum callTypeEnum = CheckoutCallTypeEnum.findBuyCode(itemConfig.getCallType());
         switch (callTypeEnum) {
-            case QR_CODE, LINK, BAR_CODE -> {
+            case QR_CODE, LINK, BAR_CODE,JSAPI -> {
                 return this.checkoutPay(param, payOrder);
             }
             case AGGREGATE -> {
                 PlatformConfig config = platformConfigService.getConfig();
                 // 直接返回手机端的聚合收银台链接
                 String url = StrUtil.format("{}/aggregate/{}", config.getGatewayPcUrl(), payOrder.getOrderNo());
-                return new CheckoutPayResult().setUrl(url).setPayStatus(PayStatusEnum.WAIT.getCode());
+                PayResult payResult = new PayResult();
+                payResult.setPayBody(url);
+                payResult.setStatus(PayStatusEnum.WAIT.getCode());
+                return payResult;
             }
             default -> throw new UnsupportedAbilityException("不支持的支付调用类型");
         }
@@ -140,7 +142,7 @@ public class CheckoutService {
     /**
      * 处理参数使用通用支付接口调起支付
      */
-    private CheckoutPayResult checkoutPay(CheckoutPayParam param, PayOrder payOrder){
+    private PayResult checkoutPay(CheckoutPayParam param, PayOrder payOrder){
         // 查询配置
         CheckoutItemConfig itemConfig = checkoutItemConfigManager.findByIdAndAppId(param.getItemId(),payOrder.getAppId())
                 .orElseThrow(() -> new TradeProcessingException("支付配置项不存在"));
@@ -159,10 +161,7 @@ public class CheckoutService {
         // 进行参数预处理
         cashierStrategy.handlePayParam(param, payParam);
         // 发起支付
-        PayResult payResult = payService.pay(payParam, payOrder);
-        return new CheckoutPayResult()
-                .setUrl(payResult.getPayBody())
-                .setPayStatus(payResult.getStatus());
+        return payService.pay(payParam, payOrder);
     }
 
     /**

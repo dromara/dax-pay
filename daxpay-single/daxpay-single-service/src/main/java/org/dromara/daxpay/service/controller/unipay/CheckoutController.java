@@ -12,7 +12,6 @@ import org.dromara.daxpay.core.result.DaxResult;
 import org.dromara.daxpay.core.result.assist.AuthResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutAggregateOrderAndConfigResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutOrderAndConfigResult;
-import org.dromara.daxpay.core.result.checkout.CheckoutPayResult;
 import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.result.trade.pay.PayResult;
 import org.dromara.daxpay.core.util.DaxRes;
@@ -71,7 +70,7 @@ public class CheckoutController {
 
     @Operation(summary = "发起支付(普通)")
     @PostMapping("/pay")
-    public Result<CheckoutPayResult> pay(@RequestBody CheckoutPayParam param){
+    public Result<PayResult> pay(@RequestBody CheckoutPayParam param){
         ValidationUtil.validateParam(param);
         return Res.ok(checkoutService.pay(param));
     }

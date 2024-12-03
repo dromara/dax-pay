@@ -78,6 +78,10 @@ public class CheckoutAssistService {
             if (Objects.equals(payOrder.getRefundStatus(), PayRefundStatusEnum.REFUNDING.getCode())) {
                 throw new TradeStatusErrorException("该订单处于退款状态");
             }
+            // 待支付和支付中返回订单对象
+            if (List.of(PayStatusEnum.WAIT.getCode(), PayStatusEnum.PROGRESS.getCode()).contains(payOrder.getStatus())){
+                return payOrder;
+            }
             // 其他状态直接抛出兜底异常
             throw new TradeStatusErrorException("订单不是待支付状态，请重新确认订单状态");
         }

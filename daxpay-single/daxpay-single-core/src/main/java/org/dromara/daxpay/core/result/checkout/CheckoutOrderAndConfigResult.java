@@ -21,11 +21,10 @@ public class CheckoutOrderAndConfigResult {
     private CheckoutOrderResult order;
 
     /** 收银台配置信息 */
-    @Schema(description = "配置信息")
+    @Schema(description = "收银台配置信息")
     private CheckoutConfigResult config;
 
     /** 收银台分类配置信息 */
     @Schema(description = "分类配置信息")
     private List<CheckoutGroupConfigResult> groupConfigs;
-
 }
