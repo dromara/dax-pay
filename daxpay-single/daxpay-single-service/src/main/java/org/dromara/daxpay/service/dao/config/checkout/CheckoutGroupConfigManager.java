@@ -25,16 +25,7 @@ public class CheckoutGroupConfigManager extends BaseManager<CheckoutGroupConfigM
         return lambdaQuery()
                 .eq(CheckoutGroupConfig::getAppId, appId)
                 .eq(CheckoutGroupConfig::getType, type)
-                .orderByDesc(CheckoutGroupConfig::getSortNo)
-                .list();
-    }
-    /**
-     * 查询指定类型的分组, 不进行排序
-     */
-    public List<CheckoutGroupConfig> findAllByAppIdAndType(String appId, String type){
-        return lambdaQuery()
-                .eq(CheckoutGroupConfig::getAppId, appId)
-                .eq(CheckoutGroupConfig::getType, type)
+                .orderByAsc(CheckoutGroupConfig::getSortNo)
                 .list();
     }
 

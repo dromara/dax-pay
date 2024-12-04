@@ -41,7 +41,7 @@ public class WechatCheckoutStrategy extends AbsCheckoutStrategy {
      */
     @Override
     public String generateAuthUrl(String orderNo) {
-        String redirectUrl = StrUtil.format("/checkout/wechat/{}", orderNo);
+        String redirectUrl = StrUtil.format("/aggregate/wechat/{}", orderNo);
         return wechatAuthService.generateInnerAuthUrl(redirectUrl);
     }
 

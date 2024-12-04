@@ -4,16 +4,18 @@ import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.dromara.daxpay.core.param.checkout.CheckoutCreatParam;
 import org.dromara.daxpay.core.param.trade.pay.PayParam;
 import org.dromara.daxpay.core.param.trade.refund.RefundParam;
 import org.dromara.daxpay.core.param.trade.transfer.TransferParam;
+import org.dromara.daxpay.core.result.checkout.CheckoutUrlResult;
 import org.dromara.daxpay.core.result.trade.pay.PayResult;
 import org.dromara.daxpay.core.result.trade.refund.RefundResult;
 import org.dromara.daxpay.core.result.trade.transfer.TransferResult;
 import org.dromara.daxpay.service.service.develop.DevelopTradeService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DevelopTradeController {
     private final DevelopTradeService developTradeService;
-
 
     @Operation(summary = "支付参数签名")
     @RequestPath("支付参数签名")
@@ -56,6 +57,13 @@ public class DevelopTradeController {
         return  Res.ok(developTradeService.genSign(param));
     }
 
+    @Operation(summary = "收银台签名")
+    @RequestPath("收银台签名")
+    @PostMapping("/sign/checkout")
+    public Result<String> checkoutSign(@RequestBody CheckoutCreatParam param){
+        return Res.ok(developTradeService.genSign(param));
+    }
+
 
     @Operation(summary = "支付接口")
     @RequestPath("支付接口")
@@ -76,6 +84,13 @@ public class DevelopTradeController {
     @PostMapping("/transfer")
     public Result<TransferResult> transfer(@RequestBody @Validated TransferParam param){
         return Res.ok(developTradeService.transfer(param));
+    }
+
+    @Operation(summary = "收银台链接创建接口")
+    @RequestPath("收银台链接创建接口")
+    @PostMapping("/checkoutUrl")
+    public Result<CheckoutUrlResult> checkoutUrl(@RequestBody @Validated CheckoutCreatParam param){
+        return Res.ok(developTradeService.checkoutUrl(param));
     }
 
 }

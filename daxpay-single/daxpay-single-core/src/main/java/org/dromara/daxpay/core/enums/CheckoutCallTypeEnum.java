@@ -20,9 +20,10 @@ public enum CheckoutCallTypeEnum {
     QR_CODE("qr_code", "扫码支付"),
     BAR_CODE("bar_code", "条码支付"),
     LINK("link", "跳转链接"),
-    JSAPI("jsapi", "JSAPI"),
+    MINI_APP("mini_app", "小程序"),
     AGGREGATE("aggregate", "聚合支付"),
     APP("app", "APP支付"),
+    JSAPI("jsapi", "JSAPI"),
     ;
 
     private final String code;

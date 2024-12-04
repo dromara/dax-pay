@@ -103,7 +103,7 @@ public class CheckoutService {
                 return StrUtil.format("{}/checkout/{}",config.getGatewayPcUrl(), orderNo);
             }
             case AGGREGATE -> {
-                return StrUtil.format("{}/aggregate/{}",config.getGatewayPcUrl(), orderNo);
+                return StrUtil.format("{}/aggregate/{}",config.getGatewayMobileUrl(), orderNo);
             }
             case MINI_APP -> throw new UnsupportedAbilityException("暂不支持小程序收银台");
             default -> throw new UnsupportedAbilityException("不支持的收银台类型");
@@ -170,11 +170,10 @@ public class CheckoutService {
     public PayResult aggregatePay(CheckoutAggregatePayParam param){
         // 订单信息
         PayOrder payOrder = checkoutAssistService.getOrderAndCheck(param.getOrderNo());
-
         // 获取聚合类型
         CheckoutAggregateConfig aggregateConfig = checkoutAggregateConfigManager.findByAppIdAndType(payOrder.getAppId(), param.getAggregateType())
                 .orElseThrow(() -> new ConfigNotExistException("聚合支付配置项不存在"));
-
+        paymentAssistService.initMchApp(payOrder.getAppId());
         // 构建支付参数
         String clientIP = JakartaServletUtil.getClientIP(WebServletUtil.getRequest());
         PayParam payParam = new PayParam();
