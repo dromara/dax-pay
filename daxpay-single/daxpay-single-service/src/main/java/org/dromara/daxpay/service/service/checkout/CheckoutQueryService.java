@@ -90,6 +90,7 @@ public class CheckoutQueryService {
                 .setAmount(payOrder.getAmount())
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setOrderNo(payOrder.getOrderNo());
+        checkoutInfoResult.setOrder(order);
         // 获取收银台配置
         checkoutInfoResult.setConfig(this.getConfig(payOrder.getAppId()));
         // 获取分组和明细配置

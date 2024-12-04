@@ -16,6 +16,9 @@ import java.util.List;
 @Accessors(chain = true)
 @Schema(title = "收银台分类配置")
 public class CheckoutGroupConfigResult{
+    /** 主键 */
+    @Schema(description = "主键")
+    private Long id;
 
     /**
      * 类型 web/h5/小程序
