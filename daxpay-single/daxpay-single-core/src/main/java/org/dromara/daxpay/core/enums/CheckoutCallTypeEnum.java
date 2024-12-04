@@ -21,9 +21,9 @@ public enum CheckoutCallTypeEnum {
     BAR_CODE("bar_code", "条码支付"),
     LINK("link", "跳转链接"),
     MINI_APP("mini_app", "小程序"),
-    AGGREGATE("aggregate", "聚合支付"),
     APP("app", "APP支付"),
     JSAPI("jsapi", "JSAPI"),
+    FROM("from", "表单方式"),
     ;
 
     private final String code;

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.CheckoutCallTypeEnum;
 import org.dromara.daxpay.core.enums.CheckoutTypeEnum;
-import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.exception.ConfigNotExistException;
 import org.dromara.daxpay.core.exception.TradeProcessingException;
 import org.dromara.daxpay.core.exception.UnsupportedAbilityException;
@@ -75,13 +74,9 @@ public class CheckoutService {
             if (Objects.isNull(payOrder)){
                 // 执行支付前的保存动作, 保存支付订单和扩展记录
                 payOrder = checkoutAssistService.createPayOrder(checkoutParam);
-                String checkoutUrl = this.getCheckoutUrl(payOrder.getOrderNo(), checkoutParam.getCheckoutType());
-                return new CheckoutUrlResult().setUrl(checkoutUrl);
-            } else {
-                // 直接返回收银台链接
-                String checkoutUrl = this.getCheckoutUrl(payOrder.getOrderNo(), checkoutParam.getCheckoutType());
-                return new CheckoutUrlResult().setUrl(checkoutUrl);
             }
+            String checkoutUrl = this.getCheckoutUrl(payOrder.getOrderNo(), checkoutParam.getCheckoutType());
+            return new CheckoutUrlResult().setUrl(checkoutUrl);
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -92,9 +87,7 @@ public class CheckoutService {
      */
     public String getCheckoutUrl(String orderNo, String checkoutType){
         CheckoutTypeEnum checkoutTypeEnum = CheckoutTypeEnum.findBuyCode(checkoutType);
-
         PlatformConfig config = platformConfigService.getConfig();
-
         switch (checkoutTypeEnum) {
             case H5 -> {
                 return StrUtil.format("{}/checkout/{}",config.getGatewayMobileUrl(), orderNo);
@@ -123,17 +116,8 @@ public class CheckoutService {
         // 判断支付调用类型
         CheckoutCallTypeEnum callTypeEnum = CheckoutCallTypeEnum.findBuyCode(itemConfig.getCallType());
         switch (callTypeEnum) {
-            case QR_CODE, LINK, BAR_CODE,JSAPI -> {
+            case QR_CODE, LINK, BAR_CODE,JSAPI,FROM -> {
                 return this.checkoutPay(param, payOrder);
-            }
-            case AGGREGATE -> {
-                PlatformConfig config = platformConfigService.getConfig();
-                // 直接返回手机端的聚合收银台链接
-                String url = StrUtil.format("{}/aggregate/{}", config.getGatewayPcUrl(), payOrder.getOrderNo());
-                PayResult payResult = new PayResult();
-                payResult.setPayBody(url);
-                payResult.setStatus(PayStatusEnum.WAIT.getCode());
-                return payResult;
             }
             default -> throw new UnsupportedAbilityException("不支持的支付调用类型");
         }

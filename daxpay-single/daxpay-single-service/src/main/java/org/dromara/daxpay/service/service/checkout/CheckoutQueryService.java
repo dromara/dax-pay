@@ -70,7 +70,11 @@ public class CheckoutQueryService {
         return groups.stream()
                 .map(o->{
                     var result = CheckoutGroupConfigConvert.CONVERT.toResult(o);
-                    result.setItems(itemGroupMap.get(o.getId()).stream().map(CheckoutItemConfigConvert.CONVERT::toResult).toList());
+                    List<CheckoutItemConfigResult> list = itemGroupMap.getOrDefault(o.getId(), new ArrayList<>())
+                            .stream()
+                            .map(CheckoutItemConfigConvert.CONVERT::toResult)
+                            .toList();
+                    result.setItems(list);
                     return result;
                 })
                 .toList();

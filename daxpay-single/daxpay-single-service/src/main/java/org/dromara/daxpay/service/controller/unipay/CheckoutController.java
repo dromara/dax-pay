@@ -41,6 +41,14 @@ public class CheckoutController {
         return DaxRes.ok(checkoutService.creat(checkoutParam));
     }
 
+    @Operation(summary = "根据订单号和收银台方式获取收银台链接")
+    @GetMapping("/getCheckoutUrl")
+    public Result<String> getCheckoutUrl(String orderNo, String checkoutType){
+        return Res.ok(checkoutService.getCheckoutUrl(orderNo, checkoutType));
+
+    }
+
+
     @Operation(summary = "获取收银台订单和配置信息")
     @GetMapping("/getOrderAndConfig")
     public Result<CheckoutOrderAndConfigResult> getOrderAndConfig(String orderNo, String checkoutType){
