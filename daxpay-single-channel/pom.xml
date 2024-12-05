@@ -13,7 +13,7 @@
 
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-single-channel</artifactId>
-    <version>3.0.0.beta1</version>
+    <version>3.0.0.beta2</version>
     <packaging>pom</packaging>
     <description>单商户支付通道功能实现</description>
 
@@ -35,8 +35,8 @@
         <autopoi.version>1.4.8</autopoi.version>
         <easypoi.version>4.5.0</easypoi.version>
 
-        <bootx-platform.version>3.0.0.beta1</bootx-platform.version>
-        <daxpay.version>3.0.0.beta1</daxpay.version>
+        <bootx-platform.version>3.0.0.beta2</bootx-platform.version>
+        <daxpay.version>3.0.0.beta2</daxpay.version>
     </properties>
 
     <dependencies>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
             <artifactId>daxpay-single-service</artifactId>
-            <version>3.0.0.beta1</version>
+            <version>3.0.0.beta2</version>
         </dependency>
     </dependencies>
 

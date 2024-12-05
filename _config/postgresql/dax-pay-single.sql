@@ -1235,7 +1235,7 @@ CREATE TABLE "public"."pay_checkout_group_config" (
   "last_modifier" int8,
   "last_modified_time" timestamp(6),
   "version" int4 NOT NULL,
-  "deleted" varchar(1) COLLATE "pg_catalog"."default" NOT NULL,
+  "deleted" bool NOT NULL,
   "app_id" varchar(32) COLLATE "pg_catalog"."default",
   "type" varchar(32) COLLATE "pg_catalog"."default",
   "name" varchar(50) COLLATE "pg_catalog"."default",
