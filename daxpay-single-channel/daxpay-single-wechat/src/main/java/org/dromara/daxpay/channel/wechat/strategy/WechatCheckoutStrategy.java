@@ -46,6 +46,14 @@ public class WechatCheckoutStrategy extends AbsCheckoutStrategy {
     }
 
     /**
+     * 检测付款码
+     */
+    @Override
+    public boolean checkBarCode(String barCode){
+        String[] wx = { "10", "11", "12", "13", "14", "15" };
+        return StrUtil.startWithAny(barCode.substring(0, 2), wx);
+    }
+    /**
      * 获取认证结果
      */
     @Override

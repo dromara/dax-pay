@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.CheckoutCallTypeEnum;
 import org.dromara.daxpay.core.enums.CheckoutTypeEnum;
+import org.dromara.daxpay.core.enums.PayMethodEnum;
+import org.dromara.daxpay.core.exception.ChannelNotExistException;
 import org.dromara.daxpay.core.exception.ConfigNotExistException;
 import org.dromara.daxpay.core.exception.TradeProcessingException;
 import org.dromara.daxpay.core.exception.UnsupportedAbilityException;
@@ -149,7 +151,7 @@ public class CheckoutService {
     }
 
     /**
-     * 聚合支付
+     * 聚合支付(扫码)
      */
     public PayResult aggregatePay(CheckoutAggregatePayParam param){
         // 订单信息
@@ -172,6 +174,38 @@ public class CheckoutService {
         // 进行参数预处理
         CheckoutPayParam cashierPayParam = new CheckoutPayParam()
                 .setOpenId(param.getOpenId());
+        cashierStrategy.handlePayParam(cashierPayParam, payParam);
+        // 发起支付
+        return payService.pay(payParam, payOrder);
+    }
+
+    /**
+     * 聚合支付(条码支付)
+     */
+    public PayResult aggregateBarPay(CheckoutAggregateBarPayParam param){
+        // 订单信息
+        PayOrder payOrder = checkoutAssistService.getOrderAndCheck(param.getOrderNo());
+        var cashierStrategies = PaymentStrategyFactory.createGroup(AbsCheckoutStrategy.class);
+        // 获取策略
+        var cashierStrategy = cashierStrategies.stream()
+                .filter(strategy -> strategy.checkBarCode(param.getBarCode()))
+                .findFirst()
+                .orElseThrow(() -> new ChannelNotExistException("未找到支持该付款码的支付通道"));
+
+        // 获取聚合类型
+        paymentAssistService.initMchApp(payOrder.getAppId());
+        // 构建支付参数
+        String clientIP = JakartaServletUtil.getClientIP(WebServletUtil.getRequest());
+        PayParam payParam = new PayParam();
+        payParam.setChannel(cashierStrategy.getChannel());
+        payParam.setMethod(PayMethodEnum.BARCODE.getCode());
+        payParam.setAppId(payOrder.getAppId());
+        payParam.setClientIp(clientIP);
+        payParam.setReqTime(LocalDateTime.now());
+
+        // 进行参数预处理
+        CheckoutPayParam cashierPayParam = new CheckoutPayParam()
+                .setBarCode(param.getBarCode());
         cashierStrategy.handlePayParam(cashierPayParam, payParam);
         // 发起支付
         return payService.pay(payParam, payOrder);

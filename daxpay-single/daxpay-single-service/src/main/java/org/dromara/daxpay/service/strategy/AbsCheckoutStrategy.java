@@ -20,6 +20,13 @@ public abstract class AbsCheckoutStrategy implements PaymentStrategy{
     }
 
     /**
+     * 检测付款码
+     */
+    public boolean checkBarCode(String barCode){
+        return false;
+    }
+
+    /**
      * 获取认证结果
      */
     public AuthResult doAuth(AuthCodeParam param) {

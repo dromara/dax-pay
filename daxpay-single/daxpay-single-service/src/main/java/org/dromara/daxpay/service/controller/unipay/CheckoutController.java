@@ -6,6 +6,7 @@ import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.core.param.checkout.*;
 import org.dromara.daxpay.core.result.DaxResult;
@@ -18,6 +19,7 @@ import org.dromara.daxpay.core.util.DaxRes;
 import org.dromara.daxpay.service.common.anno.PaymentVerify;
 import org.dromara.daxpay.service.service.checkout.CheckoutQueryService;
 import org.dromara.daxpay.service.service.checkout.CheckoutService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
  * @author xxm
  * @since 2024/11/26
  */
+@Validated
 @IgnoreAuth
 @Tag(name = "收银台服务")
 @RestController
@@ -47,7 +50,6 @@ public class CheckoutController {
         return Res.ok(checkoutService.getCheckoutUrl(orderNo, checkoutType));
 
     }
-
 
     @Operation(summary = "获取收银台订单和配置信息")
     @GetMapping("/getOrderAndConfig")
@@ -84,13 +86,27 @@ public class CheckoutController {
     }
 
 
-    @Operation(summary = "发起支付(聚合)")
+    @Operation(summary = "发起支付(聚合扫码)")
     @PostMapping("/aggregatePay")
     public Result<PayResult> aggregatePay(@RequestBody CheckoutAggregatePayParam param){
         ValidationUtil.validateParam(param);
         return Res.ok(checkoutService.aggregatePay(param));
     }
 
+
+    @Operation(summary = "发起支付(聚合条码)")
+    @PostMapping("/aggregateBarPay")
+    public Result<PayResult> aggregateBarPay(@RequestBody CheckoutAggregateBarPayParam param){
+        ValidationUtil.validateParam(param);
+        return Res.ok(checkoutService.aggregateBarPay(param));
+    }
+
+
+    @Operation(summary = "查询订单状态")
+    @GetMapping("/findStatusByOrderNo")
+    public Result<Boolean> findStatusByOrderNo(@NotBlank(message = "订单号不能为空") String orderNo){
+        return Res.ok(checkoutQueryService.findStatusByOrderNo(orderNo));
+    }
 
 
 }

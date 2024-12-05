@@ -4,6 +4,7 @@ import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.result.checkout.*;
 import org.dromara.daxpay.service.convert.config.CheckoutAggregateConfigConvert;
 import org.dromara.daxpay.service.convert.config.CheckoutConfigConvert;
@@ -13,6 +14,7 @@ import org.dromara.daxpay.service.dao.config.checkout.CheckoutAggregateConfigMan
 import org.dromara.daxpay.service.dao.config.checkout.CheckoutConfigManager;
 import org.dromara.daxpay.service.dao.config.checkout.CheckoutGroupConfigManager;
 import org.dromara.daxpay.service.dao.config.checkout.CheckoutItemConfigManager;
+import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
 import org.dromara.daxpay.service.entity.config.checkout.CheckoutAggregateConfig;
 import org.dromara.daxpay.service.entity.config.checkout.CheckoutItemConfig;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +40,7 @@ public class CheckoutQueryService {
     private final CheckoutItemConfigManager checkoutItemConfigManager;
     private final CheckoutAggregateConfigManager checkoutAggregateConfigManager;
     private final CheckoutAssistService checkoutAssistService;
+    private final PayOrderManager payOrderManager;
 
     /**
      * 获取收银台配置
@@ -123,5 +127,15 @@ public class CheckoutQueryService {
                 .orElseThrow(() -> new DataNotExistException("聚合支付配置"));
         checkoutInfoResult.setAggregateConfig(CheckoutAggregateConfigConvert.CONVERT.toResult(aggregateConfig));
         return checkoutInfoResult;
+    }
+
+    /**
+     * 查询订单状态
+     */
+    public Boolean findStatusByOrderNo(String orderNo) {
+        String status = payOrderManager.findByOrderNo(orderNo)
+                .map(PayOrder::getStatus)
+                .orElse(null);
+        return Objects.equals(status, PayStatusEnum.SUCCESS.getCode());
     }
 }
