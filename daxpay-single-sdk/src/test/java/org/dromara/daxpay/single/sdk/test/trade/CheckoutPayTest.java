@@ -27,7 +27,7 @@ public class CheckoutPayTest {
         DaxPayConfig config = DaxPayConfig.builder()
                 .serviceUrl("http://127.0.0.1:9999")
                 .signSecret("123456")
-                .appId("M7934041241299655")
+                .appId("M8207639754663343")
                 .signType(SignTypeEnum.HMAC_SHA256)
                 .build();
         DaxPayKit.initConfig(config);
@@ -43,7 +43,7 @@ public class CheckoutPayTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试收银台支付");
         param.setDescription("这是支付备注");
-        param.setCheckoutType(CheckoutTypeEnum.AGGREGATE.getCode());
+        param.setCheckoutType(CheckoutTypeEnum.PC.getCode());
         param.setAmount(BigDecimal.valueOf(1.00));
         param.setAttach("{回调参数}");
         param.setAllocation(false);
