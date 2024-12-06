@@ -4,19 +4,19 @@ spring:
       primary: master
       datasource:
         master:
-          # Postgresql连接
-          driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://127.0.0.1:5432/dax-pay-single-demo?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
-          username: bootx
-          password: bootx123
+          # MySQL连接
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: ${MYSQL_URL}
+          username: ${MYSQL_USERNAME}
+          password: ${MYSQL_PASSWORD}
       hikari:
         keepalive-time: 300000
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
-      database: 14
-      password: bootx123
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      database: ${REDIS_DATABASE}
+      password: ${REDIS_PASSWORD}
       lettuce:
         pool:
           max-wait: 1000ms
@@ -26,8 +26,8 @@ springdoc:
   default-flat-param-object: true
 knife4j:
   enable: true
-  # 关闭swagger接口
-  production: true
+  # 为true 关闭swagger接口
+  production: ${KNIFE4J_PRODUCTION:false}
 # 基础脚手架配置
 bootx-platform:
   common:
@@ -50,26 +50,32 @@ bootx-platform:
   starter:
     auth:
       # 是否启用超级管理员登录
-      enable-admin: false
+      enable-admin: ${DAXPAY_ENABLE_ADMIN:true}
       # 用户管理列表中是否显示超级管理员
-      admin-in-list: false
+      admin-in-list: ${DAXPAY_ADMIN-IN-LIST:true}
       ignore-urls:
         - '/actuator/**'
-        - '/swagger-resources/**'
         - '/token/**'
         - '/ws/**'
+        - '/v3/api-docs/**'
+        - '/doc.html'
+        - '/swagger-resources/**'
         - '/webjars/**'
+        - '/storage/**'
         - '/web/**'
         - '/h5/**'
         - '/css/**'
         - '/error'
         - '/favicon.ico'
-    file-upload:
-      # 使用后端代理访问, 线上请使用 Nginx 配置或者直连方式，效率更高
-      forward-server-url: http://127.0.0.1:9999
+    audit-log:
+      ip2region:
+        # 默认使用索引模式
+        search-type: vector_index
+        # 文件存储地址
+        file-path: /data/ip2region/ip2region.xdb
 dax-pay:
   # 推荐只使用字母和数字, 特殊符号会导致部分通道出问题
-  env: DEMO
+  env: DAX
   machine-no: 70
 dromara:
   # 注意, 不要设置 domain 访问路径, 自行进行拼接访问路径, 来保证可迁移性
@@ -82,12 +88,3 @@ dromara:
         enable-storage: true
         base-path: /file/ # 基基础存储路径 前缀和结尾都必须为 /
         storage-path: /data/files/ # 存储路径, 结尾必须为 /
-    # 例如 minio地址 http://127.0.0.1:9002  桶名称 daxpay, 拼接后的地址为 http://127.0.0.1:9002/daxpay/
-    minio:
-      - platform: minio
-        enable-storage: true
-        access-key: yDAArSoyQAligC2IGf7C
-        secret-key: vDgpt5R4kR2UCapMzx32Rb6qZegok21dRsU6XJ1j
-        end-point: http://127.0.0.1:9002  # minio访问地址
-        bucket-name: daxpay # 存储桶名称
-        base-path: /file/ # 基础存储路径 前缀和结尾都必须为 /

@@ -5,15 +5,15 @@ spring:
       datasource:
         master:
           # Postgresql连接
-          driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://postgresql:5432/dax-pay-single?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
-          username: bootx
-          password: bootx123
+#          driver-class-name: org.postgresql.Driver
+#          url: jdbc:postgresql://postgresql:5432/daxpay?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+#          username: bootx
+#          password: bootx123
           # MySQL连接
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-#          url: jdbc:mysql://mysql/dax-pay-single?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
-#          username: root
-#          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://mysql:3306/dax-pay-single?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+          username: root
+          password: root
       hikari:
         keepalive-time: 300000
   data:
@@ -55,7 +55,10 @@ bootx-platform:
           - org.dromara.daxpay
   starter:
     auth:
+      # 是否启用超级管理员登录
       enable-admin: true
+      # 用户管理列表中是否显示超级管理员
+      admin-in-list: true
       ignore-urls:
         - '/actuator/**'
         - '/v3/api-docs/**'
@@ -71,9 +74,6 @@ bootx-platform:
         - '/css/**'
         - '/error'
         - '/favicon.ico'
-    file-upload:
-      # 使用后端代理访问, 线上请使用 Nginx 配置或者直连方式，效率更高
-      forward-server-url: http://127.0.0.1:9999
 dax-pay:
   # 推荐只使用字母和数字, 特殊符号会导致部分通道出问题
   env: DEV

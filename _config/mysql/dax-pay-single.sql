@@ -1532,8 +1532,8 @@ CREATE TABLE `starter_file_platform`  (
 -- ----------------------------
 -- Records of starter_file_platform
 -- ----------------------------
-INSERT INTO `starter_file_platform` VALUES (1000, 'local', '本地存储', 'http://127.0.0.1:9999', 0, 1811365615815487488, '2024-08-13 12:32:37', 1811365615815487488, '2024-10-06 17:17:39', 0);
-INSERT INTO `starter_file_platform` VALUES (2000, 'minio', 'minio存储', 'http://127.0.0.1:9002/daxpay', 1, 1811365615815487488, '2024-08-13 12:32:40', 1811365615815487488, '2024-10-06 17:17:39', 3);
+INSERT INTO `starter_file_platform` VALUES (1000, 'local', '本地存储', 'http://127.0.0.1:9999/storage', 1, 1811365615815487488, '2024-08-13 12:32:37', 1811365615815487488, '2024-10-06 17:17:39', 0);
+INSERT INTO `starter_file_platform` VALUES (2000, 'minio', 'minio存储', 'http://127.0.0.1:9002/daxpay', 0, 1811365615815487488, '2024-08-13 12:32:40', 1811365615815487488, '2024-10-06 17:17:39', 3);
 
 -- ----------------------------
 -- Table structure for starter_file_upload_info

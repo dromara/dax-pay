@@ -127,6 +127,10 @@ public class CheckoutAssistService {
                 .setStatus(PayStatusEnum.WAIT.getCode())
                 .setRefundStatus(PayRefundStatusEnum.NO_REFUND.getCode())
                 .setExpiredTime(expiredTime)
+                .setAttach(checkoutParam.getAttach())
+                .setReqTime(checkoutParam.getReqTime())
+                .setNotifyUrl(checkoutParam.getNotifyUrl())
+                .setReturnUrl(checkoutParam.getReturnUrl())
                 .setRefundableBalance(checkoutParam.getAmount());
         // 如果支持分账, 设置分账状态为待分账
         if (order.getAllocation()) {

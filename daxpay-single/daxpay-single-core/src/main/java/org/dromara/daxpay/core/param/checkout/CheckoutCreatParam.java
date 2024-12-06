@@ -69,13 +69,6 @@ public class CheckoutCreatParam extends PaymentCommonParam {
     @Digits(integer = 8, fraction = 2, message = "支付金额精度到分, 且要小于一亿元")
     private BigDecimal amount;
 
-    /**
-     * 支付扩展参数
-     */
-    @Schema(description = "支付扩展参数")
-    @Size(max = 2048, message = "支付扩展参数不可超过2048位")
-    private String extraParam;
-
     /** 商户扩展参数,回调时会原样返回 */
     @Schema(description = "商户扩展参数")
     @Size(max = 500, message = "商户扩展参数不可超过500位")

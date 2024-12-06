@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 通道认证状态
+ * 认证结果状态
  * @author xxm
  * @since 2024/9/24
  */
