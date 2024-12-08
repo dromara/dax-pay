@@ -238,10 +238,8 @@ public class UnionPayKit extends BasePayService<UnionPayConfigStorage> {
      * @return 具体的时间字符串
      */
     private String getPayTimeout(Date expirationTime) {
-        if (null != expirationTime) {
-            return DateUtil.format(expirationTime, DatePattern.PURE_DATETIME_PATTERN);
-        }
-        return DateUtil.format(new Timestamp(System.currentTimeMillis() + 30 * 60 * 1000), DatePattern.PURE_DATETIME_PATTERN);
+        Date date = Objects.requireNonNullElseGet(expirationTime, () -> new Timestamp(System.currentTimeMillis() + 30 * 60 * 1000));
+        return DateUtil.format(date,DatePattern.PURE_DATETIME_PATTERN);
     }
 
     /**

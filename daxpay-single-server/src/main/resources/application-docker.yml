@@ -25,8 +25,9 @@ springdoc:
   # 默认展开对象类型的属性, 主要用在get类型的参数中
   default-flat-param-object: true
 knife4j:
+  # 开启接口文档增强特性
   enable: true
-  # 为true 关闭swagger接口
+  # 是否为生产环境, 为true关闭swagger接口
   production: ${KNIFE4J_PRODUCTION:false}
 # 基础脚手架配置
 bootx-platform:

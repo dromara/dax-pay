@@ -252,7 +252,7 @@ CREATE TABLE "public"."base_param" (
   "version" int4 NOT NULL,
   "deleted" bool NOT NULL,
   "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "key" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+  "param_key" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "value" varchar(500) COLLATE "pg_catalog"."default" NOT NULL,
   "type" varchar(20) COLLATE "pg_catalog"."default",
   "enable" bool NOT NULL,
@@ -268,7 +268,7 @@ COMMENT ON COLUMN "public"."base_param"."last_modified_time" IS '最后修改时
 COMMENT ON COLUMN "public"."base_param"."version" IS '版本号';
 COMMENT ON COLUMN "public"."base_param"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."base_param"."name" IS '参数名称';
-COMMENT ON COLUMN "public"."base_param"."key" IS '参数键名';
+COMMENT ON COLUMN "public"."base_param"."param_key" IS '参数键名';
 COMMENT ON COLUMN "public"."base_param"."value" IS '参数值';
 COMMENT ON COLUMN "public"."base_param"."type" IS '参数类型';
 COMMENT ON COLUMN "public"."base_param"."enable" IS '启用状态';
