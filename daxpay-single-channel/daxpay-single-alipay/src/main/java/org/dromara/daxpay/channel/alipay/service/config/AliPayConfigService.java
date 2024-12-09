@@ -12,10 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.alipay.code.AliPayCode;
-import org.dromara.daxpay.channel.alipay.convert.config.AlipayConfigConvert;
+import org.dromara.daxpay.channel.alipay.convert.config.AliPayConfigConvert;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.param.config.AliPayConfigParam;
-import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
+import org.dromara.daxpay.channel.alipay.result.config.AliPayConfigResult;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.exception.ChannelNotEnableException;
 import org.dromara.daxpay.core.exception.ConfigNotEnableException;
@@ -48,7 +48,7 @@ public class AliPayConfigService {
     /**
      * 查询
      */
-    public AlipayConfigResult findById(Long id) {
+    public AliPayConfigResult findById(Long id) {
         return channelConfigManager.findById(id)
                 .map(AliPayConfig::convertConfig)
                 .map(AliPayConfig::toResult)
@@ -71,7 +71,7 @@ public class AliPayConfigService {
      * 添加
      */
     public void save(AliPayConfigParam param) {
-        AliPayConfig entity = AlipayConfigConvert.CONVERT.toEntity(param);
+        AliPayConfig entity = AliPayConfigConvert.CONVERT.toEntity(param);
         ChannelConfig channelConfig = entity.toChannelConfig();
         // 判断商户应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(channelConfig.getAppId(), channelConfig.getChannel())){

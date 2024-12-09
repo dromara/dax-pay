@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.channel.alipay.param.config.AliPayConfigParam;
-import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
+import org.dromara.daxpay.channel.alipay.result.config.AliPayConfigResult;
 import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class AliPayConfigController {
     @RequestPath("获取配置")
     @Operation(summary = "获取配置")
     @GetMapping("/findById")
-    public Result<AlipayConfigResult> findById(@NotNull(message = "ID不可为空") Long id) {
+    public Result<AliPayConfigResult> findById(@NotNull(message = "ID不可为空") Long id) {
         return Res.ok(alipayConfigService.findById(id));
     }
 

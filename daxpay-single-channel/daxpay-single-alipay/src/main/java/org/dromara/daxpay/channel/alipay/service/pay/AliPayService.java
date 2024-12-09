@@ -3,7 +3,7 @@ package org.dromara.daxpay.channel.alipay.service.pay;
 import cn.bootx.platform.core.util.BigDecimalUtil;
 import org.dromara.daxpay.channel.alipay.code.AliPayCode;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.param.pay.AlipayParam;
+import org.dromara.daxpay.channel.alipay.param.pay.AliPayParam;
 import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
 import org.dromara.daxpay.core.enums.PayMethodEnum;
 import org.dromara.daxpay.core.exception.AmountExceedLimitException;
@@ -57,7 +57,7 @@ public class AliPayService {
     /**
      * 调起支付
      */
-    public PayResultBo pay(PayOrder payOrder, AlipayParam aliPayParam) {
+    public PayResultBo pay(PayOrder payOrder, AliPayParam aliPayParam) {
         String amount = PayUtil.toDecimal(payOrder.getAmount()).toString();
         String payBody = null;
         // 异步线程存储
@@ -209,7 +209,7 @@ public class AliPayService {
      * jsapi支付
      */
     @SneakyThrows
-    public String jsapiPay(String amount, PayOrder payOrder, AlipayParam aliPayParam) {
+    public String jsapiPay(String amount, PayOrder payOrder, AliPayParam aliPayParam) {
         // 构造请求参数以调用接口
         AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
         AlipayTradeCreateModel model = new AlipayTradeCreateModel();
@@ -280,7 +280,7 @@ public class AliPayService {
      * 付款码支付
      */
     @SneakyThrows
-    public void barCode(String amount, PayOrder payOrder, AlipayParam aliPayParam, PayResultBo result) {
+    public void barCode(String amount, PayOrder payOrder, AliPayParam aliPayParam, PayResultBo result) {
         AlipayTradePayModel model = new AlipayTradePayModel();
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());

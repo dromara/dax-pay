@@ -18,25 +18,27 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class AbsAllocationStrategy implements PaymentStrategy{
-    private AllocOrder transaction;
+    private AllocOrder order;
 
     private List<AllocDetail> details;
 
     /**
      * 初始化参数
      */
-    public void initParam(AllocOrder transaction, List<AllocDetail> details) {
-        this.transaction = transaction;
+    public void initParam(AllocOrder order, List<AllocDetail> details) {
+        this.order = order;
         this.details = details;
     }
 
     /**
      * 操作前处理, 校验和初始化支付配置
      */
-    public abstract void doBeforeHandler();
+    public void doBeforeHandler(){
+
+    };
 
     /**
-     * 分账启动
+     * 开始分账
      */
     public abstract AllocStartResultBo start();
 

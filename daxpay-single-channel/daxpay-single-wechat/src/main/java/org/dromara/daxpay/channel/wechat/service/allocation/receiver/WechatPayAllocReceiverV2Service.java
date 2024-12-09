@@ -1,4 +1,4 @@
-package org.dromara.daxpay.channel.wechat.service.allocation;
+package org.dromara.daxpay.channel.wechat.service.allocation.receiver;
 
 import com.github.binarywang.wxpay.bean.profitsharing.Receiver;
 import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingReceiverRequest;

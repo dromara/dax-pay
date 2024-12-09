@@ -2,7 +2,7 @@ package org.dromara.daxpay.channel.alipay.strategy;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.JsonUtil;
-import org.dromara.daxpay.channel.alipay.param.pay.AlipayParam;
+import org.dromara.daxpay.channel.alipay.param.pay.AliPayParam;
 import org.dromara.daxpay.channel.alipay.service.pay.AliPayService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.bo.trade.PayResultBo;
@@ -27,7 +27,7 @@ public class AliPayStrategy extends AbsPayStrategy {
 
     private final AliPayService aliPayService;
 
-    private AlipayParam aliPayParam;
+    private AliPayParam aliPayParam;
 
      @Override
     public String getChannel() {
@@ -43,10 +43,10 @@ public class AliPayStrategy extends AbsPayStrategy {
             // 支付宝参数验证
             String channelParam = this.getPayParam().getExtraParam();
             if (StrUtil.isNotBlank(channelParam)) {
-                this.aliPayParam = JsonUtil.toBean(channelParam, AlipayParam.class);
+                this.aliPayParam = JsonUtil.toBean(channelParam, AliPayParam.class);
             }
             else {
-                this.aliPayParam = new AlipayParam();
+                this.aliPayParam = new AliPayParam();
             }
         }
         catch (JSONException e) {

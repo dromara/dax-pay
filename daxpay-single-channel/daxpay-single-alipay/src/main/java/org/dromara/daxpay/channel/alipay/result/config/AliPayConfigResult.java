@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付宝配置")
-public class AlipayConfigResult {
+public class AliPayConfigResult {
 
     /** 主键 */
     @Schema(description = "主键")

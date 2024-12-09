@@ -25,7 +25,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @Scope(SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class AlipayReconcileStrategy extends AbsReconcileStrategy {
+public class AliPayReconcileStrategy extends AbsReconcileStrategy {
 
     private final AliPayReconcileService reconcileService;
 

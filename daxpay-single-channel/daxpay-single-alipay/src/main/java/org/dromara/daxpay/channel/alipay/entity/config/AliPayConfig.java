@@ -3,8 +3,8 @@ package org.dromara.daxpay.channel.alipay.entity.config;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.util.JsonUtil;
 import org.dromara.daxpay.channel.alipay.code.AliPayCode;
-import org.dromara.daxpay.channel.alipay.convert.config.AlipayConfigConvert;
-import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
+import org.dromara.daxpay.channel.alipay.convert.config.AliPayConfigConvert;
+import org.dromara.daxpay.channel.alipay.result.config.AliPayConfigResult;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.entity.config.ChannelConfig;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
  */
 @Data
 @Accessors(chain = true)
-public class AliPayConfig implements ToResult<AlipayConfigResult> {
+public class AliPayConfig implements ToResult<AliPayConfigResult> {
 
     /** 主键 */
     private Long id;
@@ -78,7 +78,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
         channelConfig.setAppId(this.getAppId());
         channelConfig.setEnable(this.getEnable());
         channelConfig.setChannel(ChannelEnum.ALI.getCode());
-        AliPayConfig copy = AlipayConfigConvert.CONVERT.copy(this);
+        AliPayConfig copy = AliPayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
         copy.setId(null).setAppId(null).setEnable(null).setAliAppId(null).setAppId(null);
         String jsonStr = JsonUtil.toJsonStr(copy);
@@ -99,7 +99,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     }
 
     @Override
-    public AlipayConfigResult toResult() {
-        return AlipayConfigConvert.CONVERT.toResult(this);
+    public AliPayConfigResult toResult() {
+        return AliPayConfigConvert.CONVERT.toResult(this);
     }
 }
