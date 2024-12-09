@@ -56,7 +56,7 @@ public class CheckoutService {
     /**
      * 生成收银台链接
      */
-    public CheckoutUrlResult creat(CheckoutCreatParam checkoutParam){
+    public CheckoutUrlResult create(CheckoutCreatParam checkoutParam){
         // 校验支付限额
         checkoutAssistService.validationLimitAmount(checkoutParam);
         // 校验超时时间, 不可早于当前

@@ -11,7 +11,7 @@ import cn.bootx.platform.core.exception.BizInfoException;
 public class RouterCheckException extends BizInfoException {
 
     public RouterCheckException() {
-        super("没有对应请求路径的权限");
+        super("未登录或不拥有改请求路径的请求权限");
     }
 
 }

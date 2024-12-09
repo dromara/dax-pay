@@ -39,9 +39,9 @@ public class CheckoutController {
 
     @PaymentVerify
     @Operation(summary = "创建一个收银台链接")
-    @PostMapping("/creat")
-    public DaxResult<CheckoutUrlResult> creat(@RequestBody CheckoutCreatParam checkoutParam){
-        return DaxRes.ok(checkoutService.creat(checkoutParam));
+    @PostMapping("/create")
+    public DaxResult<CheckoutUrlResult> create(@RequestBody CheckoutCreatParam checkoutParam){
+        return DaxRes.ok(checkoutService.create(checkoutParam));
     }
 
     @Operation(summary = "根据订单号和收银台方式获取收银台链接")
