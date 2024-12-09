@@ -10,12 +10,12 @@ import cn.bootx.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupVo;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupBindParam;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupParam;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupQuery;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupUnbindParam;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupReceiverResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupReceiverVo;
 import org.dromara.daxpay.service.service.allocation.receiver.AllocGroupService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,14 +40,14 @@ public class AllocGroupController {
     @RequestPath("分页")
     @Operation(summary = "分页")
     @GetMapping("/page")
-    public Result<PageResult<AllocGroupResultBo>> page(PageParam pageParam, AllocGroupQuery query){
+    public Result<PageResult<AllocGroupVo>> page(PageParam pageParam, AllocGroupQuery query){
         return Res.ok(allocGroupService.page(pageParam,query));
     }
 
     @RequestPath("查询详情")
     @Operation(summary = "查询详情")
     @GetMapping("/findById")
-    public Result<AllocGroupResultBo> findById(Long id){
+    public Result<AllocGroupVo> findById(Long id){
         return Res.ok(allocGroupService.findById(id));
     }
 
@@ -61,7 +61,7 @@ public class AllocGroupController {
     @RequestPath("查询分账接收方信息")
     @Operation(summary = "查询分账接收方信息")
     @GetMapping("/findReceiversByGroups")
-    public Result<List<AllocGroupReceiverResultBo>> findReceiversByGroups(Long groupId){
+    public Result<List<AllocGroupReceiverVo>> findReceiversByGroups(Long groupId){
         return Res.ok(allocGroupService.findReceiversByGroups(groupId));
     }
 

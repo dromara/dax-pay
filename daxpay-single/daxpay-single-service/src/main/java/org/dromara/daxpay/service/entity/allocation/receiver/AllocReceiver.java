@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.service.convert.allocation.AllocReceiverConvert;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocReceiverVo;
 
 /**
  * 分账接收方
@@ -23,7 +23,7 @@ import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
 @Data
 @Accessors(chain = true)
 @TableName("pay_alloc_receiver")
-public class AllocReceiver extends MchAppBaseEntity implements ToResult<AllocReceiverResultBo> {
+public class AllocReceiver extends MchAppBaseEntity implements ToResult<AllocReceiverVo> {
 
     /** 分账接收方编号, 需要保证唯一 */
     private String receiverNo;
@@ -58,7 +58,7 @@ public class AllocReceiver extends MchAppBaseEntity implements ToResult<AllocRec
     private String relationName;
 
     @Override
-    public AllocReceiverResultBo toResult() {
+    public AllocReceiverVo toResult() {
         return AllocReceiverConvert.CONVERT.toBo(this);
     }
 }

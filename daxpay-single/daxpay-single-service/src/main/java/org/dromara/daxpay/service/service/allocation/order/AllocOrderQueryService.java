@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.allocation.transaction;
+package org.dromara.daxpay.service.service.allocation.order;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;
@@ -6,12 +6,12 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.core.result.allocation.transaction.AllocDetailResult;
-import org.dromara.daxpay.core.result.allocation.transaction.AllocTransactionResult;
+import org.dromara.daxpay.core.result.allocation.order.AllocDetailResult;
+import org.dromara.daxpay.core.result.allocation.order.AllocOrderResult;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocDetailManager;
-import org.dromara.daxpay.service.dao.allocation.transaction.AllocTransactionManager;
+import org.dromara.daxpay.service.dao.allocation.transaction.AllocOrderManager;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocTransaction;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
 import org.dromara.daxpay.service.param.order.allocation.AllocOrderQuery;
 import org.springframework.stereotype.Service;
 
@@ -25,24 +25,24 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AllocQueryService {
+public class AllocOrderQueryService {
 
     private final AllocDetailManager allocOrderDetailManager;
 
-    private final AllocTransactionManager allocationOrderManager;
+    private final AllocOrderManager allocationOrderManager;
 
     /**
      * 分页查询
      */
-    public PageResult<AllocTransactionResult> page(PageParam pageParam, AllocOrderQuery param){
+    public PageResult<AllocOrderResult> page(PageParam pageParam, AllocOrderQuery param){
         return MpUtil.toPageResult(allocationOrderManager.page(pageParam, param));
     }
 
     /**
      * 查询详情
      */
-    public AllocTransactionResult findById(Long id) {
-        return allocationOrderManager.findById(id).map(AllocTransaction::toResult).orElseThrow(() -> new DataNotExistException("分账订单不存在"));
+    public AllocOrderResult findById(Long id) {
+        return allocationOrderManager.findById(id).map(AllocOrder::toResult).orElseThrow(() -> new DataNotExistException("分账订单不存在"));
     }
 
     /**

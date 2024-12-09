@@ -9,11 +9,11 @@ import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverQueryParam
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverRemoveParam;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocFinishParam;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
-import org.dromara.daxpay.core.param.allocation.transaction.QueryAllocTransactionParam;
+import org.dromara.daxpay.core.param.allocation.transaction.QueryAllocOrderParam;
 import org.dromara.daxpay.core.result.DaxResult;
+import org.dromara.daxpay.core.result.allocation.order.AllocOrderResult;
+import org.dromara.daxpay.core.result.allocation.order.AllocationResult;
 import org.dromara.daxpay.core.result.allocation.receiver.AllocReceiverResult;
-import org.dromara.daxpay.core.result.allocation.transaction.AllocResult;
-import org.dromara.daxpay.core.result.allocation.transaction.AllocTransactionResult;
 import org.dromara.daxpay.core.util.DaxRes;
 import org.dromara.daxpay.service.common.anno.PaymentVerify;
 import org.dromara.daxpay.service.service.allocation.AllocationService;
@@ -40,20 +40,20 @@ public class UniAllocationController {
 
     @Operation(summary = "发起分账接口")
     @PostMapping("/start")
-    public DaxResult<AllocResult> start(@RequestBody AllocationParam param){
+    public DaxResult<AllocationResult> start(@RequestBody AllocationParam param){
         return DaxRes.ok(allocationService.allocation(param));
     }
 
     @Operation(summary = "分账完结接口")
     @PostMapping("/finish")
-    public DaxResult<AllocResult> finish(AllocFinishParam param){
+    public DaxResult<AllocationResult> finish(AllocFinishParam param){
         return DaxRes.ok(allocationService.finish(param));
     }
 
     @Operation(summary = "分账写你查询接口")
     @PostMapping("/query")
-    public DaxResult<AllocTransactionResult> query(@RequestBody QueryAllocTransactionParam param){
-        return DaxRes.ok(allocationService.queryAllocTransaction(param));
+    public DaxResult<AllocOrderResult> query(@RequestBody QueryAllocOrderParam param){
+        return DaxRes.ok(allocationService.queryAllocOrder(param));
     }
 
     @Operation(summary = "分账接收方查询接口")

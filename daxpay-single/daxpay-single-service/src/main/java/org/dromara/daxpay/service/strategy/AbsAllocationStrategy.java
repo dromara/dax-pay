@@ -3,9 +3,9 @@ package org.dromara.daxpay.service.strategy;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocStartResultBo;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocTransaction;
+import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
 
 import java.util.List;
 
@@ -18,14 +18,14 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class AbsAllocationStrategy implements PaymentStrategy{
-    private AllocTransaction transaction;
+    private AllocOrder transaction;
 
     private List<AllocDetail> details;
 
     /**
      * 初始化参数
      */
-    public void initParam(AllocTransaction transaction, List<AllocDetail> details) {
+    public void initParam(AllocOrder transaction, List<AllocDetail> details) {
         this.transaction = transaction;
         this.details = details;
     }

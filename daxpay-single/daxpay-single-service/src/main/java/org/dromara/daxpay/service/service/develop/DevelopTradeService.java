@@ -82,6 +82,6 @@ public class DevelopTradeService {
         paymentAssistService.initMchApp(param.getAppId());
         // 签名校验
         paymentAssistService.signVerify(param);
-        return checkoutService.creat(param);
+        return checkoutService.create(param);
     }
 }

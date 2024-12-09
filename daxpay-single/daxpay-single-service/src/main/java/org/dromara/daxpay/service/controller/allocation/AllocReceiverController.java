@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverRemoveParam;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocReceiverVo;
 import org.dromara.daxpay.service.param.allocation.receiver.AllocReceiverQuery;
 import org.dromara.daxpay.service.service.allocation.receiver.AllocReceiverService;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
@@ -42,14 +42,14 @@ public class AllocReceiverController {
     @RequestPath("分页")
     @Operation(summary = "分页")
     @GetMapping("/page")
-    public Result<PageResult<AllocReceiverResultBo>> page(PageParam pageParam, AllocReceiverQuery query){
+    public Result<PageResult<AllocReceiverVo>> page(PageParam pageParam, AllocReceiverQuery query){
         return Res.ok(receiverService.page(pageParam, query));
     }
 
     @RequestPath("查询详情")
     @Operation(summary = "查询详情")
     @GetMapping("/findById")
-    public Result<AllocReceiverResultBo> findById(Long id){
+    public Result<AllocReceiverVo> findById(Long id){
         return Res.ok(receiverService.findById(id));
     }
 

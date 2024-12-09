@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.allocation.transaction;
+package org.dromara.daxpay.service.service.allocation.order;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.hutool.core.collection.CollUtil;
@@ -13,11 +13,11 @@ import org.dromara.daxpay.core.exception.TradeStatusErrorException;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupManager;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocDetailManager;
-import org.dromara.daxpay.service.dao.allocation.transaction.AllocTransactionManager;
+import org.dromara.daxpay.service.dao.allocation.transaction.AllocOrderManager;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroup;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocTransaction;
-import org.dromara.daxpay.service.entity.allocation.transaction.TransactionAndDetail;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocAndDetail;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.service.allocation.receiver.AllocGroupService;
 import org.dromara.daxpay.service.service.order.pay.PayOrderQueryService;
@@ -36,9 +36,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AllocAssistService {
+public class AllocationAssistService {
 
-    private final AllocTransactionManager transactionManager;
+    private final AllocOrderManager transactionManager;
 
     private final PayOrderQueryService payOrderQueryService;
 
@@ -46,7 +46,7 @@ public class AllocAssistService {
 
     private final AllocGroupService allocationGroupService;
 
-    private final AllocTransactionService allocOrderService;
+    private final AllocOrderService allocOrderService;
 
     private final AllocDetailManager allocOrderDetailManager;
 
@@ -55,7 +55,7 @@ public class AllocAssistService {
      * 根据新传入的分账订单更新订单信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updateOrder(AllocationParam allocationParam, AllocTransaction orderExtra) {
+    public void updateOrder(AllocationParam allocationParam, AllocOrder orderExtra) {
         // 扩展信息
         orderExtra.setClientIp(allocationParam.getClientIp())
                 .setNotifyUrl(allocationParam.getNotifyUrl())
@@ -85,9 +85,9 @@ public class AllocAssistService {
     /**
      * 构建分账订单相关信息
      */
-    public TransactionAndDetail checkAndCreateAlloc(AllocationParam param, PayOrder payOrder){
+    public AllocAndDetail checkAndCreateAlloc(AllocationParam param, PayOrder payOrder){
         // 创建分账单和明细并保存, 同时更新支付订单状态 使用事务
-        TransactionAndDetail orderAndDetail;
+        AllocAndDetail orderAndDetail;
         // 判断是否传输了分账接收方列表
         if (CollUtil.isNotEmpty(param.getReceivers())) {
             orderAndDetail = allocOrderService.createAndUpdate(param, payOrder);

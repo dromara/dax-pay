@@ -7,5 +7,4 @@ import java.util.List;
  * @author xxm
  * @since 2024/11/14
  */
-public record TransactionAndDetail(AllocTransaction transaction,
-List<AllocDetail> details) {}
+public record AllocAndDetail(AllocOrder transaction, List<AllocDetail> details) {}

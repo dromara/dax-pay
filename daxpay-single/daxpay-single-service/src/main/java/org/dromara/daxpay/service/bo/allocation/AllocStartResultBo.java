@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.bo.allocation.receiver;
+package org.dromara.daxpay.service.bo.allocation;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

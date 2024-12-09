@@ -2,7 +2,7 @@ package org.dromara.daxpay.service.dao.config;
 
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import org.dromara.daxpay.service.entity.config.AllocConfig;
+import org.dromara.daxpay.service.entity.allocation.AllocConfig;
 
 /**
  *

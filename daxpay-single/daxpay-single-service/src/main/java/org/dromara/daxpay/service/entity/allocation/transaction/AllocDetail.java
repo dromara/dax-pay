@@ -7,9 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
-import org.dromara.daxpay.core.result.allocation.transaction.AllocDetailResult;
+import org.dromara.daxpay.core.result.allocation.order.AllocDetailResult;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
-import org.dromara.daxpay.service.convert.allocation.AllocTransactionConvert;
+import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -72,6 +72,6 @@ public class AllocDetail extends MchAppBaseEntity implements ToResult<AllocDetai
      */
     @Override
     public AllocDetailResult toResult() {
-        return AllocTransactionConvert.CONVERT.toResult(this);
+        return AllocOrderConvert.CONVERT.toResult(this);
     }
 }

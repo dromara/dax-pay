@@ -7,12 +7,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.dromara.daxpay.core.enums.AllocTransactionResultEnum;
-import org.dromara.daxpay.core.enums.AllocTransactionStatusEnum;
+import org.dromara.daxpay.core.enums.AllocationResultEnum;
+import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.result.allocation.transaction.AllocTransactionResult;
+import org.dromara.daxpay.core.result.allocation.order.AllocOrderResult;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
-import org.dromara.daxpay.service.convert.allocation.AllocTransactionConvert;
+import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_alloc_transaction")
-public class AllocTransaction extends MchAppBaseEntity implements ToResult<AllocTransactionResult> {
+public class AllocOrder extends MchAppBaseEntity implements ToResult<AllocOrderResult> {
 
     /** 分账单号 */
     private String allocNo;
@@ -70,13 +70,13 @@ public class AllocTransaction extends MchAppBaseEntity implements ToResult<Alloc
 
     /**
      * 状态
-     * @see AllocTransactionStatusEnum
+     * @see AllocationStatusEnum
      */
     private String status;
 
     /**
      * 处理结果
-     * @see AllocTransactionResultEnum
+     * @see AllocationResultEnum
      */
     private String result;
 
@@ -106,7 +106,7 @@ public class AllocTransaction extends MchAppBaseEntity implements ToResult<Alloc
      * 转换
      */
     @Override
-    public AllocTransactionResult toResult() {
-        return AllocTransactionConvert.CONVERT.toResult(this);
+    public AllocOrderResult toResult() {
+        return AllocOrderConvert.CONVERT.toResult(this);
     }
 }

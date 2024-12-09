@@ -1,24 +1,24 @@
-package org.dromara.daxpay.core.result.allocation.transaction;
+package org.dromara.daxpay.core.result.allocation.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.dromara.daxpay.core.enums.AllocTransactionResultEnum;
-import org.dromara.daxpay.core.enums.AllocTransactionStatusEnum;
+import org.dromara.daxpay.core.enums.AllocationResultEnum;
+import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 分账订单返回结果
+ * 分账订单
  * @author xxm
  * @since 2024/5/21
  */
 @Data
 @Accessors(chain = true)
-@Schema(title = "分账订单返回结果")
-public class AllocTransactionResult {
+@Schema(title = "分账订单")
+public class AllocOrderResult {
 
     /** 分账单号 */
     @Schema(description = "分账单号")
@@ -73,14 +73,14 @@ public class AllocTransactionResult {
 
     /**
      * 状态
-     * @see AllocTransactionStatusEnum
+     * @see AllocationStatusEnum
      */
     @Schema(description = "状态")
     private String status;
 
     /**
      * 处理结果
-     * @see AllocTransactionResultEnum
+     * @see AllocationResultEnum
      */
     @Schema(description = "处理结果")
     private String result;

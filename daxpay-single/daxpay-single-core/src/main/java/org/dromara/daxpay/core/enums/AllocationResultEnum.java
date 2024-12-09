@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AllocTransactionResultEnum {
+public enum AllocationResultEnum {
 
     ALL_PENDING("all_pending", "处理中"),
     ALL_SUCCESS("all_success", "全部成功"),

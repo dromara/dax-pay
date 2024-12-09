@@ -13,7 +13,7 @@ import org.dromara.daxpay.core.param.PaymentCommonParam;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付订单查询参数")
-public class QueryAllocTransactionParam extends PaymentCommonParam {
+public class QueryAllocOrderParam extends PaymentCommonParam {
 
     @Schema(description = "分账单号")
     private String allocNo;

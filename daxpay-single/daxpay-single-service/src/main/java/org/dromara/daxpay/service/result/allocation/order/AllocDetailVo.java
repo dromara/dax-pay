@@ -1,10 +1,12 @@
-package org.dromara.daxpay.core.result.allocation.transaction;
+package org.dromara.daxpay.service.result.allocation.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
+import org.dromara.daxpay.core.result.MchAppResult;
 
 import java.time.LocalDateTime;
 
@@ -13,10 +15,11 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/5/21
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @Schema(title = "分账订单明细")
-public class AllocDetailResult {
+public class AllocDetailVo extends MchAppResult {
 
     @Schema(description = "分账接收方编号")
     private String receiverNo;

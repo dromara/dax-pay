@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.service.allocation.transaction;
+package org.dromara.daxpay.service.service.allocation.order;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
@@ -6,20 +6,20 @@ import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
-import org.dromara.daxpay.core.enums.AllocTransactionResultEnum;
-import org.dromara.daxpay.core.enums.AllocTransactionStatusEnum;
+import org.dromara.daxpay.core.enums.AllocationResultEnum;
+import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 import org.dromara.daxpay.core.enums.PayAllocStatusEnum;
 import org.dromara.daxpay.core.param.allocation.transaction.ReceiverParam;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupReceiverResultBo;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupReceiverVo;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocReceiverManager;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocDetailManager;
-import org.dromara.daxpay.service.dao.allocation.transaction.AllocTransactionManager;
+import org.dromara.daxpay.service.dao.allocation.transaction.AllocOrderManager;
 import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocTransaction;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
-import org.dromara.daxpay.service.entity.allocation.transaction.TransactionAndDetail;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocAndDetail;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,11 +39,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AllocTransactionService {
+public class AllocOrderService {
 
     private final AllocReceiverManager receiverManager;
 
-    private final AllocTransactionManager transactionManager;
+    private final AllocOrderManager transactionManager;
 
     private final AllocDetailManager transactionDetailManager;
 
@@ -53,7 +53,7 @@ public class AllocTransactionService {
      * 生成分账订单, 根据分账组创建
      */
     @Transactional(rollbackFor = Exception.class)
-    public TransactionAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder, List<AllocGroupReceiverResultBo> receiversByGroups) {
+    public AllocAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder, List<AllocGroupReceiverVo> receiversByGroups) {
         // 订单明细
         List<AllocDetail> details = receiversByGroups.stream()
                 .map(o -> {
@@ -88,7 +88,7 @@ public class AllocTransactionService {
      * 生成分账订单, 通过传入的分账方创建
      */
     @Transactional(rollbackFor = Exception.class)
-    public TransactionAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder) {
+    public AllocAndDetail createAndUpdate(AllocationParam param, PayOrder payOrder) {
         List<String> receiverNos = param.getReceivers()
                 .stream()
                 .map(ReceiverParam::getReceiverNo)
@@ -140,7 +140,7 @@ public class AllocTransactionService {
     /**
      * 保存分账相关订单信息
      */
-    private TransactionAndDetail saveAllocOrder(AllocationParam param, PayOrder payOrder, List<AllocDetail> details) {
+    private AllocAndDetail saveAllocOrder(AllocationParam param, PayOrder payOrder, List<AllocDetail> details) {
         long allocId = IdUtil.getSnowflakeNextId();
         // 分账明细设置ID
         details.forEach(o -> o.setAllocationId(allocId));
@@ -149,7 +149,7 @@ public class AllocTransactionService {
                 .map(AllocDetail::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         // 分账订单
-        var allocOrder = new AllocTransaction()
+        var allocOrder = new AllocOrder()
                 .setOrderId(payOrder.getId())
                 .setOrderNo(payOrder.getOrderNo())
                 .setBizOrderNo(payOrder.getBizOrderNo())
@@ -159,17 +159,17 @@ public class AllocTransactionService {
                 .setBizAllocNo(param.getBizAllocNo())
                 .setChannel(payOrder.getChannel())
                 .setDescription(param.getDescription())
-                .setStatus(AllocTransactionStatusEnum.ALLOC_PROCESSING.getCode())
-                .setResult(AllocTransactionResultEnum.ALL_PENDING.getCode())
+                .setStatus(AllocationStatusEnum.PROCESSING.getCode())
+                .setResult(AllocationResultEnum.ALL_PENDING.getCode())
                 .setAmount(sumAmount)
                 .setNotifyUrl(param.getNotifyUrl())
                 .setAttach(param.getAttach())
                 .setClientIp(param.getClientIp());
         // 如果分账订单金额为0, 设置为忽略状态
         if (BigDecimalUtil.isEqual(sumAmount, BigDecimal.ZERO)) {
-            allocOrder.setStatus(AllocTransactionStatusEnum.IGNORE.getCode())
+            allocOrder.setStatus(AllocationStatusEnum.IGNORE.getCode())
                     .setFinishTime(LocalDateTime.now())
-                    .setResult(AllocTransactionStatusEnum.ALLOC_FAILED.getCode())
+                    .setResult(AllocationStatusEnum.ALLOC_FAILED.getCode())
                     .setErrorMsg("分账比例有误或金额太小, 无法进行分账");
         }
 
@@ -179,7 +179,7 @@ public class AllocTransactionService {
         payOrderManager.updateById(payOrder);
         transactionDetailManager.saveAll(details);
         transactionManager.save(allocOrder);
-        return new TransactionAndDetail(allocOrder,details);
+        return new AllocAndDetail(allocOrder,details);
     }
 }
 

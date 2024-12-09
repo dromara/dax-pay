@@ -1,9 +1,9 @@
-package org.dromara.daxpay.core.result.allocation.transaction;
+package org.dromara.daxpay.core.result.allocation.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.dromara.daxpay.core.enums.AllocTransactionStatusEnum;
+import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 
 /**
  * 分账请求结果
@@ -13,7 +13,7 @@ import org.dromara.daxpay.core.enums.AllocTransactionStatusEnum;
 @Data
 @Accessors(chain = true)
 @Schema(title = "分账请求结果")
-public class AllocResult  {
+public class AllocationResult {
     /** 分账订单号 */
     @Schema(description = "分账订单号")
     private String allocNo;
@@ -24,7 +24,7 @@ public class AllocResult  {
 
     /**
      * 分账状态
-     * @see AllocTransactionStatusEnum
+     * @see AllocationStatusEnum
      */
     @Schema(description = "分账状态")
     private String status;

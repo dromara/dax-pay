@@ -10,12 +10,12 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AllocTransactionStatusEnum {
+public enum AllocationStatusEnum {
 
-    ALLOC_PROCESSING("alloc_processing", "分账处理中"),
-    ALLOC_END("alloc_end", "分账完成"),
+    PROCESSING("processing", "分账处理中"),
+    ALLOC_END("alloc_end", "分账处理完成"),
     ALLOC_FAILED("alloc_failed", "分账失败"),
-    FINISH("finish", "完结"),
+    FINISH("finish", "分账完结"),
     FINISH_FAILED("finish_failed", "完结失败"),
     IGNORE("ignore", "忽略"),
     ;
