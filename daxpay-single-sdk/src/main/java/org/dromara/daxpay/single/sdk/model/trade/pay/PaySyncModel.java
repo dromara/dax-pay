@@ -1,7 +1,7 @@
 package org.dromara.daxpay.single.sdk.model.trade.pay;
 
-import org.dromara.daxpay.single.sdk.code.PaySyncStatusEnum;
 import lombok.Data;
+import org.dromara.daxpay.single.sdk.code.PayStatusEnum;
 
 /**
  * 交易同步结果
@@ -12,9 +12,14 @@ import lombok.Data;
 public class PaySyncModel{
 
     /**
-     * 同步结果
-     * @see PaySyncStatusEnum
+     * 退款订单同步后的状态状态
+     * @see PayStatusEnum
      */
-    private String status;
+    private String orderStatus;
+
+    /**
+     * 是否触发了调整
+     */
+    private boolean adjust;
 
 }
