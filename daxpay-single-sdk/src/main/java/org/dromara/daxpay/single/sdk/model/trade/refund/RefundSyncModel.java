@@ -1,7 +1,8 @@
 package org.dromara.daxpay.single.sdk.model.trade.refund;
 
-import org.dromara.daxpay.single.sdk.code.RefundSyncStatusEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.dromara.daxpay.single.sdk.code.RefundStatusEnum;
 
 /**
  * 交易同步结果
@@ -12,9 +13,16 @@ import lombok.Data;
 public class RefundSyncModel{
 
     /**
-     * 同步结果
-     * @see RefundSyncStatusEnum
+     * 退款订单同步后的状态状态
+     * @see RefundStatusEnum
      */
-    private String status;
+    @Schema(description = "同步状态")
+    private String orderStatus;
+
+    /**
+     * 是否触发了调整
+     */
+    @Schema(description = "是否触发了调整")
+    private boolean adjust;
 
 }

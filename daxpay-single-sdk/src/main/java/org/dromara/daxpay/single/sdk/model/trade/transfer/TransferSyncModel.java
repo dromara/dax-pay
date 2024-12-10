@@ -1,23 +1,21 @@
-package org.dromara.daxpay.core.result.trade.pay;
+
+package org.dromara.daxpay.single.sdk.model.trade.transfer;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.experimental.Accessors;
-
+import org.dromara.daxpay.single.sdk.code.RefundStatusEnum;
 
 /**
- * 支付同步结果
+ * 交易同步结果
  * @author xxm
  * @since 2023/12/27
  */
 @Data
-@Accessors(chain = true)
-@Schema(title = "支付同步结果")
-public class PaySyncResult  {
+public class TransferSyncModel {
 
     /**
-     * 订单同步后的状态状态
-     * @see org.dromara.daxpay.core.enums.PayStatusEnum
+     * 转账订单同步后的状态状态
+     * @see RefundStatusEnum
      */
     @Schema(description = "同步状态")
     private String orderStatus;

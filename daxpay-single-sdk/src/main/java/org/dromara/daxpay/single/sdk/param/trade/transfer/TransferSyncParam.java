@@ -4,7 +4,7 @@ import cn.hutool.core.lang.TypeReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.dromara.daxpay.single.sdk.model.trade.refund.RefundSyncModel;
+import org.dromara.daxpay.single.sdk.model.trade.transfer.TransferSyncModel;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
 import org.dromara.daxpay.single.sdk.util.JsonUtil;
@@ -17,7 +17,7 @@ import org.dromara.daxpay.single.sdk.util.JsonUtil;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class TransferSyncParam extends DaxPayRequest<RefundSyncModel> {
+public class TransferSyncParam extends DaxPayRequest<TransferSyncModel> {
 
     /** 商户转账号 */
     private String bizTransferNo;
@@ -37,7 +37,7 @@ public class TransferSyncParam extends DaxPayRequest<RefundSyncModel> {
      * 将请求返回结果反序列化为实体类
      */
     @Override
-    public DaxPayResult<RefundSyncModel> toModel(String json) {
-        return JsonUtil.toBean(json, new TypeReference<DaxPayResult<RefundSyncModel>>() {});
+    public DaxPayResult<TransferSyncModel> toModel(String json) {
+        return JsonUtil.toBean(json, new TypeReference<DaxPayResult<TransferSyncModel>>() {});
     }
 }
