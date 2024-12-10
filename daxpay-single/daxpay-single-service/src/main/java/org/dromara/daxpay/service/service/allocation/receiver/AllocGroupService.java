@@ -8,6 +8,7 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.lang.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupReceiverVo;
@@ -76,6 +77,7 @@ public class AllocGroupService {
                     AllocGroupReceiverVo result = new AllocGroupReceiverVo()
                             .setReceiverId(receiver.getId())
                             .setReceiverNo(receiver.getReceiverNo())
+                            .setName(receiver.getName())
                             .setReceiverAccount(receiver.getReceiverAccount())
                             .setReceiverName(receiver.getReceiverName())
                             .setRate(o.getRate())
@@ -92,8 +94,11 @@ public class AllocGroupService {
      * 创建分账组
      */
     public void create(AllocGroupParam param){
+        String uuid = UUID.fastUUID().toString(true);
         AllocGroup group = AllocGroupConvert.CONVERT.toEntity(param);
         group.setTotalRate(BigDecimal.ZERO);
+        // 默认设置分账组编号
+        group.setGroupNo(uuid);
         groupManager.save(group);
     }
 
@@ -240,12 +245,5 @@ public class AllocGroupService {
         groupReceiver.setRate(rate);
         groupReceiverManager.updateById(groupReceiver);
         groupManager.updateById(group);
-    }
-
-    /**
-     * 判断分账组编号是否存在
-     */
-    public boolean existsByGroupNo(String groupNo, String appId) {
-        return groupManager.existedByGroupNo(groupNo, appId);
     }
 }

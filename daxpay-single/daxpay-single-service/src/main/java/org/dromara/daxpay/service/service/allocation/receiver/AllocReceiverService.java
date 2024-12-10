@@ -6,6 +6,7 @@ import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -84,6 +85,17 @@ public class AllocReceiverService {
         List<AllocReceiver> allocReceivers = allocReceiverManager.findAllByChannel(param.getChannel(), param.getAppId());
         List<AllocReceiverResult.Receiver> list = AllocReceiverConvert.CONVERT.toList(allocReceivers);
         return new AllocReceiverResult().setReceivers(list);
+    }
+
+    /**
+     * 添加. 通过界面操作
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void add(AllocReceiverAddParam param){
+        // 生成编码
+        String uuid = UUID.fastUUID().toString(true);
+        param.setReceiverNo(uuid);
+        this.addAndSync(param);
     }
 
 

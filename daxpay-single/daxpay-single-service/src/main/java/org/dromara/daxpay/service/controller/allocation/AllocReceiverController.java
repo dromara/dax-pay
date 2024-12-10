@@ -10,12 +10,11 @@ import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverRemoveParam;
-import org.dromara.daxpay.service.result.allocation.receiver.AllocReceiverVo;
 import org.dromara.daxpay.service.param.allocation.receiver.AllocReceiverQuery;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocReceiverVo;
 import org.dromara.daxpay.service.service.allocation.receiver.AllocReceiverService;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.springframework.validation.annotation.Validated;
@@ -53,20 +52,13 @@ public class AllocReceiverController {
         return Res.ok(receiverService.findById(id));
     }
 
-    @RequestPath("编码是否存在")
-    @Operation(summary = "编码是否存在")
-    @GetMapping("/existsByReceiverNo")
-    public Result<Boolean> existsByReceiverNo(@NotBlank(message = "接收者编号必填") String receiverNo,@NotBlank(message = "商户应用ID必填") String appId){
-        return Res.ok(receiverService.existsByReceiverNo(receiverNo, appId));
-    }
-
     @RequestPath("添加")
     @Operation(summary = "添加")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody AllocReceiverAddParam param){
         ValidationUtil.validateParam(param);
         paymentAssistService.initMchApp(param.getAppId());
-        receiverService.addAndSync(param);
+        receiverService.add(param);
         return Res.ok();
     }
 

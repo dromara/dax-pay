@@ -22,6 +22,9 @@ public class AllocReceiverVo extends MchAppResult {
     @Schema(description = "接收方编号")
     private String receiverNo;
 
+    /** 名称 */
+    private String name;
+
     /**
      * @see ChannelEnum
      */

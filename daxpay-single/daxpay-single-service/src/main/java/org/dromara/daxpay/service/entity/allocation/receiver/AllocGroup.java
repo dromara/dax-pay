@@ -41,6 +41,7 @@ public class AllocGroup extends MchAppBaseEntity implements ToResult<AllocGroupV
     private BigDecimal totalRate;
 
     /** 备注 */
+    @Deprecated
     private String remark;
 
     @Override

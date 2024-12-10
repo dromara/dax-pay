@@ -27,6 +27,9 @@ public class AllocGroupReceiverVo extends MchAppResult {
     @Schema(description = "接收方编号")
     private String receiverNo;
 
+    @Schema(description = "接收方名称")
+    private String name;
+
     @Schema(description = "分账比例(百分之多少)")
     private BigDecimal rate;
 

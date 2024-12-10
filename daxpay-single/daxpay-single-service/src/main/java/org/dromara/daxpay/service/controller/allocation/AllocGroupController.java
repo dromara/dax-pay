@@ -51,13 +51,6 @@ public class AllocGroupController {
         return Res.ok(allocGroupService.findById(id));
     }
 
-    @RequestPath("编码是否存在")
-    @Operation(summary = "编码是否存在")
-    @GetMapping("/existsByGroupNo")
-    public Result<Boolean> existsByGroupNo(String groupNo, String appId){
-        return Res.ok(allocGroupService.existsByGroupNo(groupNo, appId));
-    }
-
     @RequestPath("查询分账接收方信息")
     @Operation(summary = "查询分账接收方信息")
     @GetMapping("/findReceiversByGroups")

@@ -28,6 +28,9 @@ public class AllocReceiver extends MchAppBaseEntity implements ToResult<AllocRec
     /** 分账接收方编号, 需要保证唯一 */
     private String receiverNo;
 
+    /** 接收方名称 */
+    private String name;
+
     /**
      * 所属通道
      * @see ChannelEnum

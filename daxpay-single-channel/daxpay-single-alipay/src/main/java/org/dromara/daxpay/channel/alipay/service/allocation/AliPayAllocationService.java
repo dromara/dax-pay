@@ -148,11 +148,11 @@ public class AliPayAllocationService {
     /**
      * 验证错误信息
      */
-    private void verifyErrorMsg(AlipayResponse alipayResponse) {
-        if (alipayResponse.isSuccess()) {
-            String errorMsg = alipayResponse.getSubMsg();
+    private void verifyErrorMsg(AlipayResponse response) {
+        if (!response.isSuccess()) {
+            String errorMsg = response.getSubMsg();
             if (StrUtil.isBlank(errorMsg)) {
-                errorMsg = alipayResponse.getMsg();
+                errorMsg = response.getMsg();
             }
             log.error("分账处理失败 {}", errorMsg);
             throw new TradeFailException(errorMsg);

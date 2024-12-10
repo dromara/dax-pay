@@ -142,6 +142,8 @@ public class WechatPayV2Service {
     private String qrCodePay(PayOrder payOrder, WechatPayConfig wechatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         WxPayUnifiedOrderRequest request = this.buildRequest(payOrder);
+        // NATIVE此参数必传。此id为二维码中包含的商品Id，商户自行定义。
+        request.setProductId(payOrder.getOrderNo());
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.NATIVE, request);
             return  result.getCodeUrl();

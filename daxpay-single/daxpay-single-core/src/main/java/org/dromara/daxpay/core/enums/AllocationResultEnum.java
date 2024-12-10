@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 分账订单处理结果
+ * 字典: allocation_result
  * @author xxm
  * @since 2024/4/16
  */

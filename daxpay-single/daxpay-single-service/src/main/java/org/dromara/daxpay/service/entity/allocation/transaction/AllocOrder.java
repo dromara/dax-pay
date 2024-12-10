@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_alloc_transaction")
+@TableName("pay_alloc_order")
 public class AllocOrder extends MchAppBaseEntity implements ToResult<AllocOrderResult> {
 
     /** 分账单号 */
