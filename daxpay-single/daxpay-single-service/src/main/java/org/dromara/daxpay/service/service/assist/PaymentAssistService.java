@@ -94,7 +94,7 @@ public class PaymentAssistService {
         else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
             result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
         } else if (Objects.equals(SignTypeEnum.SM3.getCode(), signType)){
-            result.setSign(PaySignUtil.md5Sign(result, mchAppInfo.getSignSecret()));
+            result.setSign(PaySignUtil.sm3Sign(result, mchAppInfo.getSignSecret()));
         }
         else {
             throw new ValidationFailedException("未获取到签名方式，请检查");
@@ -113,7 +113,7 @@ public class PaymentAssistService {
         else if (Objects.equals(SignTypeEnum.MD5.getCode(), signType)){
             return PaySignUtil.md5Sign(param, mchAppInfo.getSignSecret());
         } else if (Objects.equals(SignTypeEnum.SM3.getCode(), signType)){
-            return PaySignUtil.md5Sign(param, mchAppInfo.getSignSecret());
+            return PaySignUtil.sm3Sign(param, mchAppInfo.getSignSecret());
         }
         else {
             throw new ValidationFailedException("未获取到签名方式，请检查");
