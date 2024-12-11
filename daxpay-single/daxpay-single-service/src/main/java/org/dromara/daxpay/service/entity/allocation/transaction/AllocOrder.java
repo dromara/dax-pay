@@ -10,9 +10,9 @@ import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.AllocationResultEnum;
 import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.result.allocation.order.AllocOrderResult;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
+import org.dromara.daxpay.service.result.allocation.order.AllocOrderVo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_alloc_order")
-public class AllocOrder extends MchAppBaseEntity implements ToResult<AllocOrderResult> {
+public class AllocOrder extends MchAppBaseEntity implements ToResult<AllocOrderVo> {
 
     /** 分账单号 */
     private String allocNo;
@@ -106,7 +106,7 @@ public class AllocOrder extends MchAppBaseEntity implements ToResult<AllocOrderR
      * 转换
      */
     @Override
-    public AllocOrderResult toResult() {
-        return AllocOrderConvert.CONVERT.toResult(this);
+    public AllocOrderVo toResult() {
+        return AllocOrderConvert.CONVERT.toVo(this);
     }
 }

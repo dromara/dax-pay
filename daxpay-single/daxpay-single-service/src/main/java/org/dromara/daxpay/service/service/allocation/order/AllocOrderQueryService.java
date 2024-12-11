@@ -6,13 +6,13 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.core.result.allocation.order.AllocDetailResult;
-import org.dromara.daxpay.core.result.allocation.order.AllocOrderResult;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocDetailManager;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocOrderManager;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
 import org.dromara.daxpay.service.param.order.allocation.AllocOrderQuery;
+import org.dromara.daxpay.service.result.allocation.order.AllocDetailVo;
+import org.dromara.daxpay.service.result.allocation.order.AllocOrderVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,28 +34,28 @@ public class AllocOrderQueryService {
     /**
      * 分页查询
      */
-    public PageResult<AllocOrderResult> page(PageParam pageParam, AllocOrderQuery param){
+    public PageResult<AllocOrderVo> page(PageParam pageParam, AllocOrderQuery param){
         return MpUtil.toPageResult(allocationOrderManager.page(pageParam, param));
     }
 
     /**
      * 查询详情
      */
-    public AllocOrderResult findById(Long id) {
+    public AllocOrderVo findById(Long id) {
         return allocationOrderManager.findById(id).map(AllocOrder::toResult).orElseThrow(() -> new DataNotExistException("分账订单不存在"));
     }
 
     /**
      * 查询订单明细列表
      */
-    public List<AllocDetailResult> findDetailsByOrderId(Long orderId){
+    public List<AllocDetailVo> findDetailsByOrderId(Long orderId){
         return MpUtil.toListResult(allocOrderDetailManager.findAllByOrderId(orderId));
     }
 
     /**
      * 查询订单明细详情
      */
-    public AllocDetailResult findDetailById(Long id){
+    public AllocDetailVo findDetailById(Long id){
         return allocOrderDetailManager.findById(id).map(AllocDetail::toResult).orElseThrow(() -> new DataNotExistException("分账订单明细不存在"));
     }
 

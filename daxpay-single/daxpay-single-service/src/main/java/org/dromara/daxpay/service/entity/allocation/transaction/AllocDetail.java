@@ -7,9 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
-import org.dromara.daxpay.core.result.allocation.order.AllocDetailResult;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
 import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
+import org.dromara.daxpay.service.result.allocation.order.AllocDetailVo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_alloc_detail")
-public class AllocDetail extends MchAppBaseEntity implements ToResult<AllocDetailResult> {
+public class AllocDetail extends MchAppBaseEntity implements ToResult<AllocDetailVo> {
 
     /** 分账订单ID */
     private Long allocationId;
@@ -71,7 +71,7 @@ public class AllocDetail extends MchAppBaseEntity implements ToResult<AllocDetai
      * 转换
      */
     @Override
-    public AllocDetailResult toResult() {
-        return AllocOrderConvert.CONVERT.toResult(this);
+    public AllocDetailVo toResult() {
+        return AllocOrderConvert.CONVERT.toVo(this);
     }
 }
