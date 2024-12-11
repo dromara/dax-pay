@@ -5,6 +5,7 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
+import com.fhs.core.trans.anno.TransMethodResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class AllocOrderController {
         return Res.ok(queryService.page(pageParam,param));
     }
 
+    @TransMethodResult
     @Operation(summary = "分账明细列表")
     @GetMapping("/detail/findAll")
     public Result<List<AllocDetailVo>> findDetailsByOrderId(Long orderId){
@@ -55,6 +57,7 @@ public class AllocOrderController {
         return Res.ok(queryService.findById(id));
     }
 
+    @TransMethodResult
     @Operation(summary = "查询明细详情")
     @GetMapping("/detail/findById")
     public Result<AllocDetailVo> findDetailById(Long id){

@@ -9,8 +9,8 @@ import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.result.MchAppResult;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * 分账订单
@@ -66,7 +66,7 @@ public class AllocOrderVo extends MchAppResult {
      * 总分账金额
      */
     @Schema(description = "总分账金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /**
      * 分账描述
@@ -103,9 +103,5 @@ public class AllocOrderVo extends MchAppResult {
     /** 分账订单完成时间 */
     @Schema(description = "分账订单完成时间")
     private LocalDateTime finishTime;
-
-    /** 分账明细 */
-    @Schema(description = "分账明细")
-    private List<AllocDetailVo> details;
 
 }

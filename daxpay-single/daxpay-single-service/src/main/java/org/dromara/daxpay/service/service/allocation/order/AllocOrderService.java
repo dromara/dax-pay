@@ -65,10 +65,10 @@ public class AllocOrderService {
 
                     AllocDetail detail = new AllocDetail()
                             .setReceiverNo(o.getReceiverNo())
-                            .setReceiverId(o.getId())
+                            .setReceiverId(o.getReceiverId())
                             .setAmount(amount)
                             .setResult(AllocDetailResultEnum.PENDING.getCode())
-                            .setRate(amount)
+                            .setRate(o.getRate())
                             .setReceiverType(o.getReceiverType())
                             .setReceiverName(o.getReceiverName())
                             .setReceiverAccount(o.getReceiverAccount());

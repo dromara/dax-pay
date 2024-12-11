@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 分账明细处理结果
+ * 字典: alloc_detail_result
  * @author xxm
  * @since 2024/4/16
  */

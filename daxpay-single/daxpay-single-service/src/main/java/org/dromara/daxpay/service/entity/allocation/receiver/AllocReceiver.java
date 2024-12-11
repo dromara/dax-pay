@@ -2,6 +2,7 @@ package org.dromara.daxpay.service.entity.allocation.receiver;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.experimental.FieldNameConstants;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
 import org.dromara.daxpay.core.enums.AllocRelationTypeEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
@@ -21,6 +22,7 @@ import org.dromara.daxpay.service.result.allocation.receiver.AllocReceiverVo;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@FieldNameConstants
 @Accessors(chain = true)
 @TableName("pay_alloc_receiver")
 public class AllocReceiver extends MchAppBaseEntity implements ToResult<AllocReceiverVo> {

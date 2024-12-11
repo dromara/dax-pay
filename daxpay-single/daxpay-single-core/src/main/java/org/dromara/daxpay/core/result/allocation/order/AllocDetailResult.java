@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -23,11 +24,11 @@ public class AllocDetailResult {
 
     /** 分账金额 */
     @Schema(description = "分账金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /** 分账比例 */
-    @Schema(description = "分账比例(万分之多少)")
-    private Integer rate;
+    @Schema(description = "分账比例(百分之多少)")
+    private BigDecimal rate;
 
     /**
      * 分账接收方类型
