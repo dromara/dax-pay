@@ -1,4 +1,4 @@
-package org.dromara.daxpay.core.result.allocation.order;
+package org.dromara.daxpay.core.result.allocation;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

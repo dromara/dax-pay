@@ -13,17 +13,19 @@ import org.dromara.daxpay.core.exception.TradeStatusErrorException;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocFinishParam;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
 import org.dromara.daxpay.core.param.allocation.transaction.QueryAllocOrderParam;
+import org.dromara.daxpay.core.result.allocation.AllocationResult;
 import org.dromara.daxpay.core.result.allocation.order.AllocOrderResult;
-import org.dromara.daxpay.core.result.allocation.order.AllocationResult;
 import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
 import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocDetailManager;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocOrderManager;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocAndDetail;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocAndDetail;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
-import org.dromara.daxpay.service.service.allocation.order.AllocationAssistService;
+import org.dromara.daxpay.service.service.allocation.order.AllocOrderQueryService;
+import org.dromara.daxpay.service.service.allocation.order.AllocOrderService;
+import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.dromara.daxpay.service.strategy.AbsAllocationStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
 import org.springframework.stereotype.Service;
@@ -51,9 +53,14 @@ public class AllocationService {
 
     private final AllocDetailManager allocOrderDetailManager;
 
-    private final AllocationAssistService allocationAssistService;
 
     private final LockTemplate lockTemplate;
+
+    private final PaymentAssistService paymentAssistService;
+
+    private final AllocOrderQueryService allocOrderQueryService;
+
+    private final AllocOrderService allocOrderService;
 
     /**
      * 开启分账 多次请求只会分账一次
@@ -67,7 +74,7 @@ public class AllocationService {
             return this.retryAlloc(param, allocOrder);
         } else {
             // 首次分账
-            PayOrder payOrder = allocationAssistService.getAndCheckPayOrder(param);
+            PayOrder payOrder = allocOrderQueryService.getAndCheckPayOrder(param);
             return this.allocation(param, payOrder);
         }
     }
@@ -82,7 +89,7 @@ public class AllocationService {
         }
         try {
             // 构建分账订单相关信息
-            AllocAndDetail orderAndDetail = allocationAssistService.checkAndCreateAlloc(param, payOrder);
+            AllocAndDetail orderAndDetail = allocOrderService.checkAndCreateAlloc(param, payOrder);
             // 检查是否需要进行分账
             var order = orderAndDetail.transaction();
             List<AllocDetail> details = orderAndDetail.details();
@@ -124,6 +131,19 @@ public class AllocationService {
     }
 
     /**
+     * 分账重试
+     */
+    public AllocationResult retryAlloc(Long id){
+        var allocOrder = allocationOrderManager.findById(id).orElseThrow(() -> new DataNotExistException("分账单不存在"));
+        AllocationParam param = new AllocationParam();
+        param.setNotifyUrl(allocOrder.getNotifyUrl())
+                .setAttach(allocOrder.getAttach())
+                .setReqTime(allocOrder.getReqTime());
+        param.setClientIp(allocOrder.getClientIp());
+        return retryAlloc(param, allocOrder);
+    }
+
+    /**
      * 重新分账
      */
     private AllocationResult retryAlloc(AllocationParam param, AllocOrder order){
@@ -139,14 +159,14 @@ public class AllocationService {
             if (!list.contains(order.getStatus())){
                 throw new TradeStatusErrorException("分账单状态错误，无法重试");
             }
-            List<AllocDetail> details = allocationAssistService.getDetails(order.getId());
+            List<AllocDetail> details = allocOrderQueryService.getDetails(order.getId());
             // 创建分账策略并初始化
             var allocationStrategy =  PaymentStrategyFactory.create(order.getChannel(),AbsAllocationStrategy.class);
             allocationStrategy.initParam(order, details);
             // 分账预处理
             allocationStrategy.doBeforeHandler();
             //  更新分账单信息
-            allocationAssistService.updateOrder(param, order);
+            allocOrderService.updateOrder(param, order);
             try {
                 // 重复分账处理
                 allocationStrategy.start();
@@ -166,6 +186,17 @@ public class AllocationService {
         } finally {
             lockTemplate.releaseLock(lock);
         }
+    }
+
+
+    /**
+     * 分账完结
+     */
+    public AllocationResult finish(Long id) {
+        AllocOrder allocOrder = allocationOrderManager.findById(id)
+                .orElseThrow(() -> new DataNotExistException("未查询到分账单信息"));
+        paymentAssistService.initMchApp(allocOrder.getAppId());
+        return this.finish(allocOrder);
     }
 
     /**
@@ -191,7 +222,7 @@ public class AllocationService {
         if (!Arrays.asList(ALLOC_END.getCode(),FINISH_FAILED.getCode()).contains(allocOrder.getStatus())) {
             throw new TradeStatusErrorException("分账单状态错误");
         }
-        List<AllocDetail> details = allocationAssistService.getDetails(allocOrder.getId());
+        List<AllocDetail> details = allocOrderQueryService.getDetails(allocOrder.getId());
 
         // 创建分账策略并初始化
         AbsAllocationStrategy allocationStrategy =  PaymentStrategyFactory.create(allocOrder.getChannel(),AbsAllocationStrategy.class);

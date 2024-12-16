@@ -2,6 +2,7 @@ package org.dromara.daxpay.service.service.allocation.order;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,18 +10,22 @@ import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
 import org.dromara.daxpay.core.enums.AllocationResultEnum;
 import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 import org.dromara.daxpay.core.enums.PayAllocStatusEnum;
-import org.dromara.daxpay.core.param.allocation.transaction.ReceiverParam;
+import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
+import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam.ReceiverParam;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
-import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupReceiverVo;
+import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupManager;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocReceiverManager;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocDetailManager;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocOrderManager;
 import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
+import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroup;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocAndDetail;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupReceiverVo;
+import org.dromara.daxpay.service.service.allocation.receiver.AllocGroupService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +49,10 @@ public class AllocOrderService {
     private final AllocReceiverManager receiverManager;
 
     private final AllocOrderManager transactionManager;
+
+    private final AllocGroupManager groupManager;
+
+    private final AllocGroupService allocGroupService;
 
     private final AllocDetailManager transactionDetailManager;
 
@@ -180,6 +189,50 @@ public class AllocOrderService {
         transactionDetailManager.saveAll(details);
         transactionManager.save(allocOrder);
         return new AllocAndDetail(allocOrder,details);
+    }
+
+    /**
+     * 根据新传入的分账订单更新订单信息
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateOrder(AllocationParam allocationParam, AllocOrder orderExtra) {
+        // 扩展信息
+        orderExtra.setClientIp(allocationParam.getClientIp())
+                .setNotifyUrl(allocationParam.getNotifyUrl())
+                .setAttach(allocationParam.getAttach())
+                .setReqTime(allocationParam.getReqTime());
+        transactionManager.updateById(orderExtra);
+    }
+
+
+    /**
+     * 检查并构建分账订单相关信息
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public AllocAndDetail checkAndCreateAlloc(AllocationParam param, PayOrder payOrder){
+        // 创建分账单和明细并保存, 同时更新支付订单状态 使用事务
+        AllocAndDetail orderAndDetail;
+        // 判断是否传输了分账接收方列表
+        if (CollUtil.isNotEmpty(param.getReceivers())) {
+            orderAndDetail = this.createAndUpdate(param, payOrder);
+        } else {
+            AllocGroup allocationGroup;
+            if (Objects.nonNull(param.getGroupNo())){
+                // 指定分账组
+                allocationGroup = groupManager.findByGroupNo(param.getGroupNo(),param.getAppId()).orElseThrow(() -> new DataErrorException("未查询到分账组"));
+            } else {
+                // 默认分账组
+                allocationGroup = groupManager.findDefaultGroup(payOrder.getChannel(),param.getAppId()).orElseThrow(() -> new DataErrorException("未查询到默认分账组"));
+            }
+            // 判断通道类型是否一致
+            if (!Objects.equals(allocationGroup.getChannel(), payOrder.getChannel())){
+                throw new ValidationFailedException("分账接收方列表存在非本通道的数据");
+            }
+
+            var receiversByGroups = allocGroupService.findReceiversByGroups(allocationGroup.getId());
+            orderAndDetail = this.createAndUpdate(param ,payOrder, receiversByGroups);
+        }
+        return orderAndDetail;
     }
 }
 

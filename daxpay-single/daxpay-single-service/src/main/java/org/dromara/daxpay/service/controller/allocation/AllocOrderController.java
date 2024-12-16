@@ -8,13 +8,15 @@ import cn.bootx.platform.core.rest.result.Result;
 import com.fhs.core.trans.anno.TransMethodResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.core.param.allocation.transaction.AllocFinishParam;
 import org.dromara.daxpay.service.param.order.allocation.AllocOrderQuery;
 import org.dromara.daxpay.service.result.allocation.order.AllocDetailVo;
 import org.dromara.daxpay.service.result.allocation.order.AllocOrderVo;
 import org.dromara.daxpay.service.service.allocation.AllocationService;
+import org.dromara.daxpay.service.service.allocation.AllocationSyncService;
 import org.dromara.daxpay.service.service.allocation.order.AllocOrderQueryService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,7 @@ import java.util.List;
  * @author xxm
  * @since 2024/4/7
  */
+@Validated
 @Tag(name = "分账订单控制器")
 @RestController
 @RequestGroup(groupCode = "AllocOrder", groupName = "分账订单", moduleCode = "Alloc", moduleName = "分账管理" )
@@ -37,6 +40,8 @@ public class AllocOrderController {
     private final AllocOrderQueryService queryService;
 
     private final AllocationService allocationService;
+
+    private final AllocationSyncService allocationSyncService;
 
     @Operation(summary = "分页")
     @GetMapping("/page")
@@ -64,13 +69,23 @@ public class AllocOrderController {
         return Res.ok(queryService.findDetailById(id));
     }
 
+    @Operation(summary = "分账重试")
+    @PostMapping("/retry")
+    public Result<Void> retry(@NotNull(message = "分账单ID不可为空") Long id){
+        return Res.ok();
+    }
 
     @Operation(summary = "分账完结")
     @PostMapping("/finish")
-    public Result<Void> finish(String allocNo){
-        AllocFinishParam param = new AllocFinishParam();
-        param.setAllocNo(allocNo);
-        allocationService.finish(param);
+    public Result<Void> finish(@NotNull(message = "分账单ID不可为空")Long id){
+        allocationService.finish(id);
+        return Res.ok();
+    }
+
+    @Operation(summary = "分账同步")
+    @PostMapping("/sync")
+    public Result<Void> sync(@NotNull(message = "分账单ID不可为空") Long id){
+        allocationSyncService.sync(id);
         return Res.ok();
     }
 }

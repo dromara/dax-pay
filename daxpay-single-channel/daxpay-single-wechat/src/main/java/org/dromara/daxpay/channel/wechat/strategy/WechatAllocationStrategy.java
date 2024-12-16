@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
+import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
 import org.dromara.daxpay.service.strategy.AbsAllocationStrategy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,14 @@ public class WechatAllocationStrategy extends AbsAllocationStrategy {
     @Override
     public void finish() {
 
+    }
+
+    /**
+     * 同步状态
+     */
+    @Override
+    public AllocSyncResultBo doSync() {
+        return null;
     }
 
 }

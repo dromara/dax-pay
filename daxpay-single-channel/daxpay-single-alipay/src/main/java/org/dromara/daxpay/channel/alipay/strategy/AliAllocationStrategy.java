@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.alipay.service.allocation.AliPayAllocationService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
+import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
 import org.dromara.daxpay.service.strategy.AbsAllocationStrategy;
 import org.springframework.stereotype.Component;
 
@@ -42,5 +43,13 @@ public class AliAllocationStrategy extends AbsAllocationStrategy {
     @Override
     public void finish() {
         aliPayAllocationService.finish(getOrder(), getDetails());
+    }
+
+    /**
+     * 同步状态
+     */
+    @Override
+    public AllocSyncResultBo doSync() {
+        return aliPayAllocationService.sync(getOrder(), getDetails());
     }
 }

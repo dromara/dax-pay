@@ -3,6 +3,7 @@ package org.dromara.daxpay.service.strategy;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
 import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
@@ -46,5 +47,11 @@ public abstract class AbsAllocationStrategy implements PaymentStrategy{
      * 分账完结
      */
     public abstract void finish();
+
+
+    /**
+     * 同步状态
+     */
+    public abstract AllocSyncResultBo doSync();
 
 }
