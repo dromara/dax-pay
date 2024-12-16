@@ -1,5 +1,6 @@
 package org.dromara.daxpay.channel.wechat.service.allocation;
 
+import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingQueryV3Request;
 import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingUnfreezeV3Request;
 import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingV3Request;
 import com.github.binarywang.wxpay.bean.profitsharing.result.ProfitSharingV3Result;
@@ -36,7 +37,7 @@ public class WeChatPayAllocationV3Service {
     private final WechatPayConfigService wechatPayConfigService;
 
     /**
-     * 发起分账
+     * 发起分账 使用分账号作为请求号4
      */
     public AllocStartResultBo start(AllocOrder allocOrder, List<AllocDetail> orderDetails, WechatPayConfig config){
 
@@ -44,9 +45,10 @@ public class WeChatPayAllocationV3Service {
         ProfitSharingService sharingService = wxPayService.getProfitSharingService();
 
         ProfitSharingV3Request request = new ProfitSharingV3Request();
+        request.setAppid(config.getWxAppId());
         request.setOutOrderNo(allocOrder.getAllocNo());
         request.setTransactionId(allocOrder.getOutOrderNo());
-        request.setUnfreezeUnsplit(true);
+        request.setUnfreezeUnsplit(false);
 
         // 分账接收方信息
         var receivers = orderDetails.stream()
@@ -67,7 +69,6 @@ public class WeChatPayAllocationV3Service {
         request.setReceivers(receivers);
         try {
             ProfitSharingV3Result result = sharingService.profitSharingV3(request);
-
             return new AllocStartResultBo().setOutAllocNo(result.getOrderId());
         } catch (WxPayException e) {
             throw new OperationFailException("微信分账V3失败: "+e.getMessage());
@@ -75,19 +76,37 @@ public class WeChatPayAllocationV3Service {
     }
 
     /**
-     * 分账完结
+     * 分账完结 使用ID作为请求号
      */
-    public void finish(AllocOrder allocOrder, List<AllocDetail> orderDetails, WechatPayConfig config){
+    public void finish(AllocOrder allocOrder, List<AllocDetail> details, WechatPayConfig config){
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         ProfitSharingService sharingService = wxPayService.getProfitSharingService();
         var request = new ProfitSharingUnfreezeV3Request();
-        request.setOutOrderNo(allocOrder.getAllocNo());
+        request.setOutOrderNo(String.valueOf(allocOrder.getId()));
         request.setTransactionId(allocOrder.getOutOrderNo());
         request.setDescription("分账完结");
         try {
-            sharingService.profitSharingUnfreeze(request);
+            var result = sharingService.profitSharingUnfreeze(request);
         } catch (WxPayException e) {
             throw new OperationFailException("微信分账V3失败: "+e.getMessage());
+        }
+    }
+
+    /**
+     * 同步
+     */
+    public void sync(AllocOrder allocOrder, List<AllocDetail> details, WechatPayConfig config){
+        WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
+        ProfitSharingService sharingService = wxPayService.getProfitSharingService();
+        ProfitSharingQueryV3Request request = new ProfitSharingQueryV3Request();
+        request.setOutOrderNo(allocOrder.getAllocNo());
+        // 根据订单状态判断
+
+        request.setTransactionId(allocOrder.getOutOrderNo());
+        try {
+            var result = sharingService.profitSharingQueryV3(request);
+        } catch (WxPayException e) {
+            throw new OperationFailException("微信分账订单查询V3失败: "+e.getMessage());
         }
     }
 
@@ -103,4 +122,5 @@ public class WeChatPayAllocationV3Service {
         }
         throw new ConfigErrorException("分账接收方类型错误");
     }
+
 }

@@ -24,10 +24,19 @@ public class AllocConfigParam {
     @Schema(description = "是否自动分账")
     private Boolean autoAlloc;
 
+    /** 自动完结 */
+    @Schema(description = "自动完结")
+    private Boolean autoFinish;
+
     /** 分账起始额 */
     @Schema(description = "分账起始额")
     private BigDecimal minAmount;
 
+    /** 分账延迟时长(分钟) */
+    @Schema(description = "分账延迟时长(分钟)")
+    private Integer delayTime;
+
+    /** 应用AppId */
     @Schema(description = "应用AppId")
     private String appId;
 

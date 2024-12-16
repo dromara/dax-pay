@@ -2,12 +2,19 @@ package org.dromara.daxpay.channel.wechat.strategy;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.service.allocation.WeChatPayAllocationV2Service;
+import org.dromara.daxpay.channel.wechat.service.allocation.WeChatPayAllocationV3Service;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
 import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
 import org.dromara.daxpay.service.strategy.AbsAllocationStrategy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -21,7 +28,11 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Component
 @RequiredArgsConstructor
 public class WechatAllocationStrategy extends AbsAllocationStrategy {
+    private final WeChatPayAllocationV3Service weChatPayAllocationV3Service;
+    private final WeChatPayAllocationV2Service weChatPayAllocationV2Service;
+    private final WechatPayConfigService wechatPayConfigService;
 
+    private WechatPayConfig config;
 
     /**
      * 分账通道
@@ -31,20 +42,33 @@ public class WechatAllocationStrategy extends AbsAllocationStrategy {
         return ChannelEnum.WECHAT.getCode();
     }
 
+    @Override
+    public void doBeforeHandler(){
+        this.config = wechatPayConfigService.getAndCheckConfig();
+    }
+
     /**
      * 开始分账
      */
     @Override
     public AllocStartResultBo start() {
-        return null;
+        if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V3)){
+           return weChatPayAllocationV3Service.start(getOrder(), getDetails(), this.config);
+        } else {
+            return weChatPayAllocationV2Service.start(getOrder(), getDetails(), this.config);
+        }
     }
 
     /**
-     *
+     * 完结
      */
     @Override
     public void finish() {
-
+        if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V3)){
+            weChatPayAllocationV3Service.finish(getOrder(), this.getDetails(), this.config);
+        } else {
+            weChatPayAllocationV2Service.finish(getOrder(), this.getDetails(), this.config);
+        }
     }
 
     /**
@@ -52,6 +76,13 @@ public class WechatAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public AllocSyncResultBo doSync() {
+        if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V3)){
+            weChatPayAllocationV3Service.finish(getOrder(), this.getDetails(), this.config);
+
+            weChatPayAllocationV3Service.sync(getOrder(), this.getDetails(), this.config);
+        } else {
+            weChatPayAllocationV2Service.sync(getOrder(), this.getDetails(), this.config);
+        }
         return null;
     }
 

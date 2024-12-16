@@ -142,7 +142,6 @@ public class AliPayAllocationService {
             var detail = detailMap.get(receiver.getTransIn());
             if (Objects.nonNull(detail)) {
                 detail.setResult(this.getDetailResultEnum(receiver.getState()).getCode());
-                detail.setErrorCode(receiver.getErrorCode());
                 detail.setErrorMsg(receiver.getErrorDesc());
                 // 如果是完成, 更新时间
                 if (AllocDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){

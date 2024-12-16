@@ -24,4 +24,12 @@ public class AllocConfigResult extends MchAppResult {
 
     @Schema(description = "分账起始额")
     private BigDecimal minAmount;
+
+    /** 自动完结 */
+    @Schema(description = "是否自动完结")
+    private Boolean autoFinish;
+
+    /** 分账延迟时长(分钟) */
+    @Schema(description = "分账延迟时长(分钟)")
+    private Integer delayTime;
 }
