@@ -32,6 +32,10 @@ public class AllocDetailVo extends MchAppResult implements TransPojo {
     @Schema(description = "分账订单ID")
     private Long allocationId;
 
+    /** 外部明细ID */
+    @Schema(description = "外部明细ID")
+    private String outDetailId;
+
     @Schema(description = "分账接收方编号")
     private String receiverNo;
 

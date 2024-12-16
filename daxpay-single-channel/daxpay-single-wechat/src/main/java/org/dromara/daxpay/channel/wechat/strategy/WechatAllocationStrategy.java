@@ -65,9 +65,9 @@ public class WechatAllocationStrategy extends AbsAllocationStrategy {
     @Override
     public void finish() {
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V3)){
-            weChatPayAllocationV3Service.finish(getOrder(), this.getDetails(), this.config);
+            weChatPayAllocationV3Service.finish(getOrder(), this.config);
         } else {
-            weChatPayAllocationV2Service.finish(getOrder(), this.getDetails(), this.config);
+            weChatPayAllocationV2Service.finish(getOrder(), this.config);
         }
     }
 
@@ -77,13 +77,10 @@ public class WechatAllocationStrategy extends AbsAllocationStrategy {
     @Override
     public AllocSyncResultBo doSync() {
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V3)){
-            weChatPayAllocationV3Service.finish(getOrder(), this.getDetails(), this.config);
-
-            weChatPayAllocationV3Service.sync(getOrder(), this.getDetails(), this.config);
+            return weChatPayAllocationV3Service.sync(getOrder(), this.getDetails(), this.config);
         } else {
-            weChatPayAllocationV2Service.sync(getOrder(), this.getDetails(), this.config);
+            return weChatPayAllocationV2Service.sync(getOrder(), this.getDetails(), this.config);
         }
-        return null;
     }
 
 }

@@ -28,6 +28,9 @@ public class AllocDetail extends MchAppBaseEntity implements ToResult<AllocDetai
     /** 分账订单ID */
     private Long allocationId;
 
+    /** 外部明细ID */
+    private String outDetailId;
+
     /** 接收者ID */
     private Long receiverId;
 

@@ -143,6 +143,7 @@ public class AliPayAllocationService {
             if (Objects.nonNull(detail)) {
                 detail.setResult(this.getDetailResultEnum(receiver.getState()).getCode());
                 detail.setErrorMsg(receiver.getErrorDesc());
+                detail.setOutDetailId(receiver.getDetailId());
                 // 如果是完成, 更新时间
                 if (AllocDetailResultEnum.SUCCESS.getCode().equals(detail.getResult())){
                     LocalDateTime finishTime = LocalDateTimeUtil.of(receiver.getExecuteDt());

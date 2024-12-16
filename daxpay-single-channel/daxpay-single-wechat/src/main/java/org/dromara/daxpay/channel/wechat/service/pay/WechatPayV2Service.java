@@ -165,7 +165,7 @@ public class WechatPayV2Service {
         request.setSpbillCreateIp(payOrder.getClientIp());
         request.setDetail(payOrder.getDescription());
         request.setBody(payOrder.getTitle());
-        request.setProfitSharing(payOrder.getAutoAllocation()?"Y":"N");
+        request.setProfitSharing(payOrder.getAllocation()?"Y":"N");
         try {
             WxPayMicropayResult result = wxPayService.micropay(request);
             // 支付成功处理, 如果不成功会走异常流
@@ -232,6 +232,7 @@ public class WechatPayV2Service {
         request.setTotalFee(PayUtil.convertCentAmount(payOrder.getAmount()));
         request.setNotifyUrl(wechatPayConfigService.getPayNotifyUrl());
         request.setSpbillCreateIp(payOrder.getClientIp());
+        request.setProfitSharing(payOrder.getAllocation()?"Y":"N");
         return request;
     }
 

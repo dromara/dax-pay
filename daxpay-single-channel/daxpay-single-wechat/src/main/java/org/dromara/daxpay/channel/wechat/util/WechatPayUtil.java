@@ -119,14 +119,14 @@ public class WechatPayUtil {
     }
 
     /**
-     * v3接口时间序列画
+     * v2接口时间序列化
      */
     public LocalDateTime parseV2(String date) {
         return LocalDateTimeUtil.parse(date, DatePattern.PURE_DATETIME_PATTERN);
     }
 
     /**
-     * v3接口时间序列画
+     * v3接口时间序列化
      */
     public LocalDateTime parseV3(String dateStr) {
         return LocalDateTimeUtil.parse(dateStr, "yyyy-MM-dd'T'HH:mm:ss+08:00");
