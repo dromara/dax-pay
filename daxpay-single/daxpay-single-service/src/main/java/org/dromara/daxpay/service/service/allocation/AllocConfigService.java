@@ -43,7 +43,7 @@ public class AllocConfigService {
     public void update(AllocConfigParam param) {
         AllocConfig config = allocConfigManger.findById(param.getId())
                 .orElseThrow(() -> new DataNotExistException("分账配置不存在"));
-        BeanUtil.copyProperties(config, param, CopyOptions.create().ignoreNullValue());
+        BeanUtil.copyProperties(param, config, CopyOptions.create().ignoreNullValue());
         allocConfigManger.updateById(config);
     }
 

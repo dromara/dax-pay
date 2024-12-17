@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestGroup(groupCode = "AllocConfig", groupName = "分账配置", moduleCode = "Alloc", moduleName = "分账管理" )
 @RequestMapping("/allocation/config")
 @RequiredArgsConstructor
-public class AllocController {
+public class AllocConfigController {
     private final AllocConfigService allocConfigService;
 
     @RequestPath("保存")

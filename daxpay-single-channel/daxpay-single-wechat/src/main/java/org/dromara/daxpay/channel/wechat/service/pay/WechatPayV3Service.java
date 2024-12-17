@@ -191,32 +191,32 @@ public class WechatPayV3Service {
      */
     private void barCodePay(PayOrder payOrder, String authCode, WechatPayConfig config, PayResultBo payResult) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
-            WxPayCodepayRequest request = new WxPayCodepayRequest();
-            request.setDescription(payOrder.getTitle());
-            request.setOutTradeNo(payOrder.getOrderNo());
-            // 金额
-            var amount = new WxPayCodepayRequest.Amount();
-            amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
-            request.setAmount(amount);
+        WxPayCodepayRequest request = new WxPayCodepayRequest();
+        request.setDescription(payOrder.getTitle());
+        request.setOutTradeNo(payOrder.getOrderNo());
+        // 金额
+        var amount = new WxPayCodepayRequest.Amount();
+        amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
+        request.setAmount(amount);
 
-            // 场景信息
-            var sceneInfo = new WxPayCodepayRequest.SceneInfo();
-            var storeInfo = new WxPayCodepayRequest.StoreInfo();
-            storeInfo.setOutId("1");
-            sceneInfo.setStoreInfo(storeInfo);
-            request.setSceneInfo(sceneInfo);
+        // 场景信息
+        var sceneInfo = new WxPayCodepayRequest.SceneInfo();
+        var storeInfo = new WxPayCodepayRequest.StoreInfo();
+        storeInfo.setOutId("1");
+        sceneInfo.setStoreInfo(storeInfo);
+        request.setSceneInfo(sceneInfo);
 
-            // 条码参数
-            var payer = new WxPayCodepayRequest.Payer();
-            payer.setAuthCode(authCode);
-            request.setPayer(payer);
+        // 条码参数
+        var payer = new WxPayCodepayRequest.Payer();
+        payer.setAuthCode(authCode);
+        request.setPayer(payer);
 
-            // 分账参数
-            if (payOrder.getAllocation()){
-                var settleInfo = new WxPayCodepayRequest.SettleInfo();
-                settleInfo.setProfitSharing(true);
-                request.setSettleInfo(settleInfo);
-            }
+        // 分账参数
+        if (payOrder.getAllocation()){
+            var settleInfo = new WxPayCodepayRequest.SettleInfo();
+            settleInfo.setProfitSharing(true);
+            request.setSettleInfo(settleInfo);
+        }
         try {
             // 发送请求
             var result = wxPayService.codepay(request);

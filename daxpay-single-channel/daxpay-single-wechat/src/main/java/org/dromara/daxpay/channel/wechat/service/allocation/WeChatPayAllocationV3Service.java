@@ -28,8 +28,10 @@ import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -124,7 +126,7 @@ public class WeChatPayAllocationV3Service {
         }
         var detailMap = details.stream()
                 .collect(Collectors.toMap(AllocDetail::getReceiverAccount, Function.identity(), CollectorsFunction::retainLatest));
-        var royaltyDetailList = result.getReceivers();
+        var royaltyDetailList = Optional.ofNullable(result.getReceivers()).orElse(new ArrayList<>(0));
         for (var receiver : royaltyDetailList) {
             var detail = detailMap.get(receiver.getAccount());
             if (Objects.nonNull(detail)) {

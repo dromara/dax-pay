@@ -2,6 +2,7 @@ package org.dromara.daxpay.channel.wechat.service.config;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -146,10 +147,11 @@ public class WechatPayConfigService {
         payConfig.setAppId(wechatPayConfig.getWxAppId());
         payConfig.setMchKey(wechatPayConfig.getApiKeyV2());
         payConfig.setApiV3Key(wechatPayConfig.getApiKeyV3());
-        payConfig.setPrivateKeyString(wechatPayConfig.getPrivateKey());
-        payConfig.setPrivateCertString(wechatPayConfig.getPrivateCert());
+        // 注意不要使用base64的方式进行配置, 因为wxjava 是直接读取文本并不会进行解码
+        payConfig.setPrivateKeyContent(Base64.decode(wechatPayConfig.getPrivateKey()));
+        payConfig.setPrivateCertContent(Base64.decode(wechatPayConfig.getPrivateCert()));
         payConfig.setCertSerialNo(wechatPayConfig.getCertSerialNo());
-        payConfig.setKeyString(wechatPayConfig.getP12());
+        payConfig.setKeyContent(Base64.decode(wechatPayConfig.getP12()));
         WxPayService wxPayService = new WxPayServiceImpl();
         wxPayService.setConfig(payConfig);
         return wxPayService;
