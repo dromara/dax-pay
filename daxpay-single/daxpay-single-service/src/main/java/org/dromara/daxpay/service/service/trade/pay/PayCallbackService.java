@@ -7,6 +7,7 @@ import org.dromara.daxpay.service.common.context.CallbackLocal;
 import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.service.allocation.AllocationService;
 import org.dromara.daxpay.service.service.notice.MerchantNoticeService;
 import org.dromara.daxpay.service.service.order.pay.PayOrderQueryService;
 import org.dromara.daxpay.service.service.record.flow.TradeFlowRecordService;
@@ -39,6 +40,7 @@ public class PayCallbackService {
     private final TradeFlowRecordService tradeFlowRecordService;
 
     private final MerchantNoticeService merchantNoticeService;
+    private final AllocationService allocationService;
 
     /**
      * 支付统一回调处理
@@ -105,6 +107,7 @@ public class PayCallbackService {
         payOrderManager.updateById(payOrder);
         tradeFlowRecordService.savePay(payOrder);
         merchantNoticeService.registerPayNotice(payOrder);
+        allocationService.registerAutoAlloc(payOrder);
     }
 
     /**

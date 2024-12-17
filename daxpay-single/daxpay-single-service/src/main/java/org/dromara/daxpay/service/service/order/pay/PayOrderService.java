@@ -1,18 +1,22 @@
 package org.dromara.daxpay.service.service.order.pay;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.exception.TradeNotExistException;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
+import org.dromara.daxpay.service.dao.config.AllocConfigManager;
 import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
+import org.dromara.daxpay.service.entity.allocation.AllocConfig;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.service.allocation.AllocationService;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.dromara.daxpay.service.service.trade.pay.PayCloseService;
 import org.dromara.daxpay.service.service.trade.pay.PaySyncService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * 支付订单服务
@@ -24,11 +28,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PayOrderService {
     private final PayOrderManager payOrderManager;
+
     private final PaySyncService paySyncService;
 
     private final PaymentAssistService paymentAssistService;
+
     private final PayCloseService payCloseService;
+
     private final AllocationService allocationService;
+
+    private final AllocConfigManager allocConfigManager;
 
     /**
      * 同步
@@ -69,7 +78,22 @@ public class PayOrderService {
         AllocationParam param = new AllocationParam()
                 .setBizAllocNo("B"+TradeNoGenerateUtil.allocation());
         param.setAppId(payOrder.getAppId());
-        allocationService.allocation(param, payOrder);
+        allocationService.start(param, payOrder);
+    }
 
+    /**
+     * 自动分账
+     */
+    public void autoAllocation(Long id){
+        PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
+        // 是否开启自动完结
+        AllocConfig allocConfig = allocConfigManager.findByAppId(payOrder.getAppId()).orElse(null);
+        if (Objects.nonNull(allocConfig)){
+            paymentAssistService.initMchApp(payOrder.getAppId());
+            AllocationParam param = new AllocationParam()
+                    .setBizAllocNo("B"+TradeNoGenerateUtil.allocation());
+            param.setAppId(payOrder.getAppId());
+            allocationService.start(param, payOrder);
+        }
     }
 }

@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class AllocConfigManger extends BaseManager<AllocConfigMapper, AllocConfig> {
+public class AllocConfigManager extends BaseManager<AllocConfigMapper, AllocConfig> {
 
     /**
      * 判断是都已经存在数据

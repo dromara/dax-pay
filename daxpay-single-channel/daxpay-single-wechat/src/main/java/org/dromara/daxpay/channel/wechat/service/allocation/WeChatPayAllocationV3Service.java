@@ -17,7 +17,6 @@ import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
 import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
-import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 import org.dromara.daxpay.core.exception.ConfigErrorException;
 import org.dromara.daxpay.core.exception.OperationFailException;
 import org.dromara.daxpay.core.util.PayUtil;
@@ -37,6 +36,7 @@ import java.util.stream.Collectors;
 
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.MERCHANT_NO;
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.OPEN_ID;
+import static org.dromara.daxpay.core.enums.AllocationStatusEnum.*;
 
 /**
  * 微信分账V3版本接口
@@ -112,7 +112,7 @@ public class WeChatPayAllocationV3Service {
         ProfitSharingService sharingService = wxPayService.getProfitSharingService();
         // 根据订单状态判断 使用ID还是分账号
         String outOrderNo;
-        if (Objects.equals(AllocationStatusEnum.PROCESSING.getCode(), allocOrder.getStatus())){
+        if (List.of(PROCESSING.getCode(),ALLOC_FAILED.getCode(), ALLOC_END.getCode()).contains(allocOrder.getStatus())){
             outOrderNo = allocOrder.getAllocNo();
         } else {
             outOrderNo = String.valueOf(allocOrder.getId());

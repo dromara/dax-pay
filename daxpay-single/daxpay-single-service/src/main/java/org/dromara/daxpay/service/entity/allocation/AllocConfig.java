@@ -11,6 +11,7 @@ import org.dromara.daxpay.service.param.allocation.AllocConfigParam;
 import org.dromara.daxpay.service.result.allocation.AllocConfigResult;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * 分账配置
@@ -35,6 +36,14 @@ public class AllocConfig extends MchAppBaseEntity implements ToResult<AllocConfi
     /** 分账延迟时长(分钟) */
     private Integer delayTime;
 
+
+    public Boolean getAutoFinish() {
+        return Objects.equals(autoFinish, true);
+    }
+
+    public Boolean getAutoAlloc() {
+        return Objects.equals(autoAlloc, true);
+    }
 
     /**
      * 创建对象

@@ -49,8 +49,8 @@ public class TradeOrderEventService {
         Optional<PayOrder> orderOpt = payOrderManager.findById(event.getMessage());
         if (orderOpt.isPresent()) {
             PayOrder payOrder = orderOpt.get();
-            // 不是支付中不需要进行同步
-            if (payOrder.getStatus().equals(PayStatusEnum.PROGRESS.getCode())|| payOrder.getStatus().equals(PayStatusEnum.TIMEOUT.getCode())) {
+            // 不是支付中和支付超时不需要进行同步
+            if (payOrder.getStatus().equals(PayStatusEnum.PROGRESS.getCode()) || payOrder.getStatus().equals(PayStatusEnum.TIMEOUT.getCode())) {
                 paymentAssistService.initMchApp(payOrder.getAppId());
                 paySyncService.syncPayOrder(payOrder);
             }

@@ -2,12 +2,14 @@ package org.dromara.daxpay.service.service.allocation;
 
 import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
+import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.AllocationResultEnum;
 import org.dromara.daxpay.core.enums.AllocationStatusEnum;
+import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.core.exception.TradeStatusErrorException;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocFinishParam;
@@ -16,9 +18,12 @@ import org.dromara.daxpay.core.param.allocation.transaction.QueryAllocOrderParam
 import org.dromara.daxpay.core.result.allocation.AllocationResult;
 import org.dromara.daxpay.core.result.allocation.order.AllocOrderResult;
 import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
+import org.dromara.daxpay.service.code.DaxPayCode;
 import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocDetailManager;
 import org.dromara.daxpay.service.dao.allocation.transaction.AllocOrderManager;
+import org.dromara.daxpay.service.dao.config.AllocConfigManager;
+import org.dromara.daxpay.service.entity.allocation.AllocConfig;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocAndDetail;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
@@ -35,6 +40,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.dromara.daxpay.core.enums.AllocationStatusEnum.ALLOC_END;
@@ -54,7 +60,6 @@ public class AllocationService {
 
     private final AllocDetailManager allocOrderDetailManager;
 
-
     private final LockTemplate lockTemplate;
 
     private final PaymentAssistService paymentAssistService;
@@ -62,13 +67,18 @@ public class AllocationService {
     private final AllocOrderQueryService allocOrderQueryService;
 
     private final AllocOrderService allocOrderService;
+
     private final MerchantNoticeService merchantNoticeService;
+
+    private final DelayJobService delayJobService;
+
+    private final AllocConfigManager allocConfigManager;
 
     /**
      * 开启分账 多次请求只会分账一次
      * 优先级 分账接收方列表 > 分账组编号 > 默认分账组
      */
-    public AllocationResult allocation(AllocationParam param) {
+    public AllocationResult start(AllocationParam param) {
         // 判断是否已经有分账订单
         var allocOrder = allocationOrderManager.findByBizAllocNo(param.getBizAllocNo(), param.getAppId()).orElse(null);
         if (Objects.nonNull(allocOrder)){
@@ -77,14 +87,14 @@ public class AllocationService {
         } else {
             // 首次分账
             PayOrder payOrder = allocOrderQueryService.getAndCheckPayOrder(param);
-            return this.allocation(param, payOrder);
+            return this.start(param, payOrder);
         }
     }
 
     /**
      * 开启分账  优先级 分账接收方列表 > 分账组编号 > 默认分账组
      */
-    public AllocationResult allocation(AllocationParam param, PayOrder payOrder) {
+    public AllocationResult start(AllocationParam param, PayOrder payOrder) {
         LockInfo lock = lockTemplate.lock("payment:allocation:" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){
             throw new RepetitiveOperationException("分账发起处理中，请勿重复操作");
@@ -120,15 +130,35 @@ public class AllocationService {
                 // 失败
                 order.setStatus(AllocationStatusEnum.ALLOC_FAILED.getCode())
                         .setErrorMsg(e.getMessage());
-                // TODO 返回异常处理
             }
             allocationOrderManager.updateById(order);
+            // 注册两分钟后的分账同步事件
+            delayJobService.registerByTransaction(order.getId(), DaxPayCode.Event.ORDER_ALLOC_SYNC, 2*60*1000L);
             return new AllocationResult()
                     .setAllocNo(order.getAllocNo())
                     .setBizAllocNo(order.getBizAllocNo())
                     .setStatus(order.getStatus());
         } finally {
             lockTemplate.releaseLock(lock);
+        }
+    }
+
+    /**
+     * 注册自动分账事件
+     */
+    public void registerAutoAlloc(PayOrder payOrder) {
+        // 订单是否完成
+        if (!Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())){
+            return;
+        }
+        // 是否开启自动分账
+        if (payOrder.getAllocation() && payOrder.getAutoAllocation()){
+            AllocConfig allocConfig = allocConfigManager.findByAppId(payOrder.getAppId()).orElse(null);
+            if (Objects.nonNull(allocConfig)&&allocConfig.getAutoAlloc()){
+                // 注册定时执行的分账完结任务, 如果未设置默认为一天后进行分账
+                Integer delayTime = Optional.ofNullable(allocConfig.getDelayTime()).orElse(24*60);
+                delayJobService.registerByTransaction(payOrder.getId(), DaxPayCode.Event.ORDER_ALLOC_START, delayTime*60*1000L);
+            }
         }
     }
 
@@ -190,6 +220,22 @@ public class AllocationService {
         }
     }
 
+    /**
+     * 自动分账完结
+     */
+    public void autoFinish(Long id) {
+        AllocOrder allocOrder = allocationOrderManager.findById(id).orElse(null);
+        if (Objects.isNull(allocOrder)){
+            log.warn("分账完结自动处理失败，分账单不存在:{}", id);
+            return;
+        }
+        if (!Arrays.asList(ALLOC_END.getCode(),FINISH_FAILED.getCode()).contains(allocOrder.getStatus())) {
+            log.warn("忽略分账完结自动处理，分账单状态不正确:{}", allocOrder.getStatus());
+            return;
+        }
+        paymentAssistService.initMchApp(allocOrder.getAppId());
+        this.finish(allocOrder);
+    }
 
     /**
      * 分账完结

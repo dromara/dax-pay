@@ -45,7 +45,7 @@ public class UniAllocationController {
     @Operation(summary = "发起分账接口")
     @PostMapping("/start")
     public DaxResult<AllocationResult> start(@RequestBody AllocationParam param){
-        return DaxRes.ok(allocationService.allocation(param));
+        return DaxRes.ok(allocationService.start(param));
     }
 
     @Operation(summary = "分账完结接口")

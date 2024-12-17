@@ -8,6 +8,7 @@ import org.dromara.daxpay.core.result.trade.pay.PayResult;
 import org.dromara.daxpay.service.bo.trade.PayResultBo;
 import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.service.allocation.AllocationService;
 import org.dromara.daxpay.service.service.notice.MerchantNoticeService;
 import org.dromara.daxpay.service.service.record.flow.TradeFlowRecordService;
 import org.dromara.daxpay.service.strategy.AbsPayStrategy;
@@ -38,6 +39,7 @@ public class PayService {
     private final PayOrderManager payOrderManager;
     private final TradeFlowRecordService tradeFlowRecordService;
     private final MerchantNoticeService merchantNoticeService;
+    private final AllocationService allocationService;
 
     /**
      * 支付入口
@@ -145,6 +147,7 @@ public class PayService {
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())){
             tradeFlowRecordService.savePay(payOrder);
             merchantNoticeService.registerPayNotice(payOrder);
+            allocationService.registerAutoAlloc(payOrder);
         }
         return payAssistService.buildResult(payOrder,result);
     }
@@ -197,6 +200,7 @@ public class PayService {
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())){
             tradeFlowRecordService.savePay(payOrder);
             merchantNoticeService.registerPayNotice(payOrder);
+            allocationService.registerAutoAlloc(payOrder);
         }
         return payAssistService.buildResult(payOrder, payResultBo);
     }
