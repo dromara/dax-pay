@@ -3,13 +3,17 @@ package org.dromara.daxpay.service.service.notice.notify;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
 import org.dromara.daxpay.core.enums.MerchantNotifyTypeEnum;
+import org.dromara.daxpay.core.result.allocation.order.AllocDetailResult;
 import org.dromara.daxpay.service.code.DaxPayCode;
 import org.dromara.daxpay.service.common.context.MchAppLocal;
 import org.dromara.daxpay.service.common.local.PaymentContextLocal;
+import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
 import org.dromara.daxpay.service.convert.order.pay.PayOrderConvert;
 import org.dromara.daxpay.service.convert.order.refund.RefundOrderConvert;
 import org.dromara.daxpay.service.convert.order.transfer.TransferOrderConvert;
 import org.dromara.daxpay.service.dao.notice.notify.MerchantNotifyTaskManager;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
 import org.dromara.daxpay.service.entity.notice.notify.MerchantNotifyTask;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
@@ -21,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -100,6 +105,29 @@ public class MerchantNotifyTaskService {
         taskManager.save(task);
         delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
         log.info("注册转账通知");
+    }
+
+    /**
+     * 注册分账通知
+     */
+    public void registerAllocNotice(AllocOrder order, List<AllocDetail> details) {
+        if (this.nonRegister(NotifyContentTypeEnum.ALLOCATION)){
+            log.info("分账无需回调，订单号：{}",order.getAllocNo());
+            return;
+        }
+        var noticeResult = AllocOrderConvert.CONVERT.toResult(order);
+        List<AllocDetailResult> detailResults = AllocOrderConvert.CONVERT.toList(details);
+        noticeResult.setDetails(detailResults);
+        var task = new MerchantNotifyTask()
+                // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
+                .setContent(JacksonUtil.toJson(noticeResult))
+                .setNotifyType(NotifyContentTypeEnum.ALLOCATION.getCode())
+                .setSendCount(0)
+                .setTradeId(order.getId())
+                .setTradeNo(order.getAllocNo());
+        taskManager.save(task);
+        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_NOTIFY_SENDER, 0);
+        log.info("注册分账通知");
     }
 
     /**

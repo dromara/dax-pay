@@ -147,7 +147,7 @@ public class WechatPayConfigService {
         payConfig.setAppId(wechatPayConfig.getWxAppId());
         payConfig.setMchKey(wechatPayConfig.getApiKeyV2());
         payConfig.setApiV3Key(wechatPayConfig.getApiKeyV3());
-        // 注意不要使用base64的方式进行配置, 因为wxjava 是直接读取文本并不会进行解码
+        // 注意不要使用base64的方式进行配置, 因为wxjava 是直接读取文本并不会进行解码, 会导致证书异常
         payConfig.setPrivateKeyContent(Base64.decode(wechatPayConfig.getPrivateKey()));
         payConfig.setPrivateCertContent(Base64.decode(wechatPayConfig.getPrivateCert()));
         payConfig.setCertSerialNo(wechatPayConfig.getCertSerialNo());

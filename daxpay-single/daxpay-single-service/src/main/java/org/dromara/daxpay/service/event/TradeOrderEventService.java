@@ -44,7 +44,7 @@ public class TradeOrderEventService {
     /**
      * 接收订单超时事件, 发起同步
      */
-    @DelayEventListener(DaxPayCode.Event.MERCHANT_PAY_TIMEOUT)
+    @DelayEventListener(DaxPayCode.Event.ORDER_PAY_TIMEOUT)
     public void payExpired(DelayJobEvent<Long> event) {
         Optional<PayOrder> orderOpt = payOrderManager.findById(event.getMessage());
         if (orderOpt.isPresent()) {
@@ -59,7 +59,7 @@ public class TradeOrderEventService {
     /**
      * 接收退款订单同步事件
      */
-    @DelayEventListener(DaxPayCode.Event.MERCHANT_REFUND_SYNC)
+    @DelayEventListener(DaxPayCode.Event.ORDER_REFUND_SYNC)
     public void refundDelaySync(DelayJobEvent<Long> event) {
         var orderOpt = refundOrderManager.findById(event.getMessage());
         if (orderOpt.isPresent()) {
@@ -76,7 +76,7 @@ public class TradeOrderEventService {
     /**
      * 接收转账订单超时事件
      */
-    @DelayEventListener(DaxPayCode.Event.MERCHANT_TRANSFER_SYNC)
+    @DelayEventListener(DaxPayCode.Event.ORDER_TRANSFER_SYNC)
     public void TransferDelaySync(DelayJobEvent<Long> event) {
         var orderOpt = transferOrderManager.findById(event.getMessage());
         if (orderOpt.isPresent()) {

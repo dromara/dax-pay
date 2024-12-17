@@ -17,14 +17,22 @@ public interface DaxPayCode {
         /** 商户回调通知 */
         String MERCHANT_CALLBACK_SENDER = "CallbackSender";
 
-        /** 支付任务超时 */
-        String MERCHANT_PAY_TIMEOUT = "PayTimeout";
+        /** 支付订单超时关闭 */
+        String ORDER_PAY_TIMEOUT = "PayTimeout";
 
         /** 退款任务同步 默认两分钟后查询 */
-        String MERCHANT_REFUND_SYNC = "RefundSync";
+        String ORDER_REFUND_SYNC = "RefundSync";
 
         /** 转账任务同步 默认两分钟后查询 */
-        String MERCHANT_TRANSFER_SYNC = "TransferSync";
+        String ORDER_TRANSFER_SYNC = "TransferSync";
 
+        /** 自动分账 */
+        String ORDER_ALLOC_START = "AllocStart";
+
+        /** 分账同步 */
+        String ORDER_ALLOC_SYNC = "AllocSync";
+
+        /** 分账完结 */
+        String ORDER_ALLOC_FINISH = "AllocFinish";
     }
 }

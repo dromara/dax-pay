@@ -9,6 +9,8 @@ import org.dromara.daxpay.service.result.allocation.order.AllocOrderVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  *
  * @author xxm
@@ -21,6 +23,8 @@ public interface AllocOrderConvert {
     AllocOrderResult toResult(AllocOrder in);
 
     AllocDetailResult toResult(AllocDetail in);
+
+    List<AllocDetailResult> toList(List<AllocDetail> in);
 
     AllocOrderVo toVo(AllocOrder in);
 

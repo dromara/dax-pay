@@ -20,6 +20,7 @@ import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
 import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
 import org.dromara.daxpay.service.entity.record.sync.TradeSyncRecord;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
+import org.dromara.daxpay.service.service.notice.MerchantNoticeService;
 import org.dromara.daxpay.service.service.record.sync.TradeSyncRecordService;
 import org.dromara.daxpay.service.strategy.AbsAllocationStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
@@ -48,6 +49,7 @@ public class AllocationSyncService {
 
     private final LockTemplate lockTemplate;
     private final PaymentAssistService paymentAssistService;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 分账同步
@@ -120,12 +122,10 @@ public class AllocationSyncService {
 
     /**
      * 根据订单明细更新订单的状态和处理结果, 如果订单是分账结束或失败, 不更新状态
-     * TODO 是否多次同步会产生多次变动, 注意处理多次推送通知的问题, 目前是
      */
     private void updateOrderStatus(AllocOrder allocOrder, List<AllocDetail> details){
         // 如果是分账结束或失败, 不更新状态
         String status = allocOrder.getStatus();
-
         // 如果是分账结束或失败, 不进行对订单进行处理
         List<String> list = Arrays.asList(AllocationStatusEnum.FINISH.getCode(), AllocationStatusEnum.FINISH_FAILED.getCode());
         if (!list.contains(status)){
@@ -162,10 +162,10 @@ public class AllocationSyncService {
         allocOrderDetailManager.updateAllById(details);
         allocationOrderManager.updateById(allocOrder);
 
-        // 如果状态为完成, 发送通知
-        if (Objects.equals(AllocationStatusEnum.ALLOC_END.getCode(), allocOrder.getStatus())){
-            // 发送通知
-//            clientNoticeService.registerAllocNotice(allocOrder, details);
+        // 如果状态为分账完成, 发送通知
+        if (Objects.equals(AllocationStatusEnum.FINISH.getCode(), allocOrder.getStatus())){
+            // 注册通知 多次同步会产生多次变动, 注意处理多次推送通知的问题
+            merchantNoticeService.registerAllocNotice(allocOrder, details);
         }
     }
 

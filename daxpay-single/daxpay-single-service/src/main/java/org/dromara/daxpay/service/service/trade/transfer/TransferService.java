@@ -142,7 +142,7 @@ public class TransferService {
             tradeFlowRecordService.saveTransfer(order);
         } else {
             // 注册延时同步事件
-            delayJobService.registerByTransaction(order.getId(), DaxPayCode.Event.MERCHANT_TRANSFER_SYNC, 2*60*1000L);
+            delayJobService.registerByTransaction(order.getId(), DaxPayCode.Event.ORDER_TRANSFER_SYNC, 2*60*1000L);
         }
         transferOrderManager.updateById(order);
     }

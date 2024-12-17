@@ -26,6 +26,7 @@ import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.service.allocation.order.AllocOrderQueryService;
 import org.dromara.daxpay.service.service.allocation.order.AllocOrderService;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
+import org.dromara.daxpay.service.service.notice.MerchantNoticeService;
 import org.dromara.daxpay.service.strategy.AbsAllocationStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,7 @@ public class AllocationService {
     private final AllocOrderQueryService allocOrderQueryService;
 
     private final AllocOrderService allocOrderService;
+    private final MerchantNoticeService merchantNoticeService;
 
     /**
      * 开启分账 多次请求只会分账一次
@@ -244,6 +246,7 @@ public class AllocationService {
                     .setErrorMsg(e.getMessage());
         }
         allocationOrderManager.updateById(allocOrder);
+        merchantNoticeService.registerAllocNotice(allocOrder, details);
         return new AllocationResult()
                 .setAllocNo(allocOrder.getAllocNo())
                 .setBizAllocNo(allocOrder.getBizAllocNo())
@@ -266,6 +269,4 @@ public class AllocationService {
         result.setDetails(details);
         return result;
     }
-
-
 }

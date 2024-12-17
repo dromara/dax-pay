@@ -21,6 +21,9 @@ public enum NotifyContentTypeEnum {
 
     /** 支付订单变动通知 */
     TRANSFER("transfer", "转账订单变动通知"),
+
+    /** 分账订单变动通知 */
+    ALLOCATION("allocation", "分账订单变动通知"),
     ;
     private final String code;
     private final String name;
