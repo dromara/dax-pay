@@ -13,6 +13,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.enums.WechatAllocReceiverEnum;
 import org.dromara.daxpay.channel.wechat.enums.WechatAllocStatusEnum;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
@@ -149,10 +150,10 @@ public class WeChatPayAllocationV2Service {
      */
     private String getReceiverType(AllocReceiverTypeEnum receiverTypeEnum){
         if (receiverTypeEnum == OPEN_ID){
-            return "PERSONAL_OPENID";
+            return WechatAllocReceiverEnum.PERSONAL_OPENID.getCode();
         }
         if (receiverTypeEnum == MERCHANT_NO){
-            return "MERCHANT_ID";
+            return WechatAllocReceiverEnum.MERCHANT_ID.getCode();
         }
         throw new ConfigErrorException("分账接收方类型错误");
     }

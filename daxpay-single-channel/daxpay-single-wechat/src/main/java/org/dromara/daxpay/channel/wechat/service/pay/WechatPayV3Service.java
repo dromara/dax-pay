@@ -3,22 +3,18 @@ package org.dromara.daxpay.channel.wechat.service.pay;
 import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
-import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.constant.WxPayErrorCode;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
-import org.dromara.daxpay.channel.wechat.param.pay.WxPayCodepayRequest;
-import org.dromara.daxpay.channel.wechat.result.pay.WxPayCodepayResult;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
 import org.dromara.daxpay.core.enums.PayMethodEnum;
@@ -50,7 +46,6 @@ import java.util.Objects;
 public class WechatPayV3Service {
     private final WechatPayConfigService wechatPayConfigService;
 
-    private static final Gson GSON = new GsonBuilder().create();
     private final PaySyncService paySyncService;
 
     /**
@@ -196,16 +191,9 @@ public class WechatPayV3Service {
      */
     private void barCodePay(PayOrder payOrder, String authCode, WechatPayConfig config, PayResultBo payResult) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
-        try {
             WxPayCodepayRequest request = new WxPayCodepayRequest();
-            // 设置公共属性
-            WxPayConfig wxPayConfig = wxPayService.getConfig();
-            request.setMchid(wxPayConfig.getMchId())
-                    .setAppid(wxPayConfig.getAppId());
-
             request.setDescription(payOrder.getTitle());
             request.setOutTradeNo(payOrder.getOrderNo());
-
             // 金额
             var amount = new WxPayCodepayRequest.Amount();
             amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
@@ -229,11 +217,9 @@ public class WechatPayV3Service {
                 settleInfo.setProfitSharing(true);
                 request.setSettleInfo(settleInfo);
             }
-            // 拼接和发送请求
-            String url = String.format("%s/v3/pay/transactions/codepay", wxPayService.getPayBaseUrl());
-            String body = wxPayService.postV3(url, GSON.toJson(request));
-            var result = GSON.fromJson(body, WxPayCodepayResult.class);
-
+        try {
+            // 发送请求
+            var result = wxPayService.codepay(request);
             // 支付成功处理, 如果不成功会走异常流
             payResult.setComplete(true)
                     .setFinishTime(WechatPayUtil.parseV3(result.getSuccessTime()))

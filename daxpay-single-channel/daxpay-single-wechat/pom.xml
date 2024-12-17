@@ -14,12 +14,11 @@
     <description>微信支付通道实现</description>
 
     <properties>
-        <wxjava.version>4.6.0</wxjava.version>
+        <wxjava.version>4.6.9.B</wxjava.version>
         <wxpay.version>0.2.12</wxpay.version>
     </properties>
 
     <dependencies>
-
         <!-- 微信支付三方SDK 同时支持 v2/v3版本接入-->
         <dependency>
             <groupId>com.github.binarywang</groupId>
