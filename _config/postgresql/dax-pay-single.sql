@@ -1808,7 +1808,7 @@ COMMENT ON TABLE "public"."pay_platform_config" IS '管理平台配置';
 -- ----------------------------
 -- Records of pay_platform_config
 -- ----------------------------
-INSERT INTO "public"."pay_platform_config" VALUES (1, 1, '2024-09-20 10:54:44', 1811365615815487488, '2024-12-10 19:05:26.524338', 16, 'f', 'https://pay1.bootx.cn/server', 'https://pay1.bootx.cn/h5', 'https://pay1.bootx.cn/web');
+INSERT INTO "public"."pay_platform_config" VALUES (1, 1, '2024-09-20 10:54:44', 1811365615815487488, '2024-12-10 19:05:26.524338', 16, 'f', 'https://127.0.0.1/server', 'https://127.0.0.1/h5', 'https://127.0.0.1/web');
 
 -- ----------------------------
 -- Table structure for pay_reconcile_discrepancy

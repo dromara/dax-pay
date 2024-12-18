@@ -1265,7 +1265,7 @@ CREATE TABLE `pay_platform_config`  (
 -- ----------------------------
 -- Records of pay_platform_config
 -- ----------------------------
-INSERT INTO `pay_platform_config` VALUES (1, 1, '2024-09-20 10:54:44', 1811365615815487488, '2024-12-04 09:27:23', 14, 0, 'https://pay1.bootx.cn/server', 'https://pay1.bootx.cn/h5', 'http://pay1.bootx.cn/web');
+INSERT INTO `pay_platform_config` VALUES (1, 1, '2024-09-20 10:54:44', 1811365615815487488, '2024-12-04 09:27:23', 14, 0, 'https://127.0.0.1/server', 'https://127.0.0.1/h5', 'http://127.0.0.1/web');
 
 -- ----------------------------
 -- Table structure for pay_reconcile_discrepancy
