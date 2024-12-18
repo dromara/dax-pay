@@ -80,6 +80,9 @@ INSERT INTO "public"."base_dict" VALUES (1840650057641713664, '码牌类型', '�
 INSERT INTO "public"."base_dict" VALUES (1862094405423972352, '收银台聚合支付类型', '支付', 'checkout_aggregate', '', 1811365615815487488, '2024-11-28 19:21:17', 1811365615815487488, '2024-11-28 19:22:05', 1, 't', 'f');
 INSERT INTO "public"."base_dict" VALUES (1862784043394342912, '收银台支付调起方式', '支付', 'checkout_call_type', '', 1811365615815487488, '2024-11-30 17:01:39', 1811365615815487488, '2024-11-30 17:01:39', 0, 't', 'f');
 INSERT INTO "public"."base_dict" VALUES (1864134865629839360, '收银台类型', '支付', 'checkout_type', '', 1811365615815487488, '2024-12-04 10:29:21', 1811365615815487488, '2024-12-04 10:29:21', 0, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1866464725509451776, '分账订单处理结果', '支付', 'allocation_result', '', 1811365615815487488, '2024-12-10 20:47:22.458399', 1811365615815487488, '2024-12-10 20:47:22.512079', 0, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1866464929205825536, '分账状态', '', 'allocation_status', '', 1811365615815487488, '2024-12-10 20:48:11.021238', 1811365615815487488, '2024-12-10 20:48:11.071674', 0, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1866861372363571200, '分账明细处理结果', '支付', 'alloc_detail_result', '', 1811365615815487488, '2024-12-11 23:03:30.437127', 1811365615815487488, '2024-12-11 23:03:30.629127', 0, 't', 'f');
 
 -- ----------------------------
 -- Table structure for base_dict_item
@@ -238,6 +241,22 @@ INSERT INTO "public"."base_dict_item" VALUES (1864134981908529152, 1864134865629
 INSERT INTO "public"."base_dict_item" VALUES (1864135083783979008, 1864134865629839360, 'checkout_type', 'aggregate', '聚合支付', 4, 't', '', 1811365615815487488, '2024-12-04 10:30:13', 1811365615815487488, '2024-12-04 10:30:13', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1864140869360779264, 1862784043394342912, 'checkout_call_type', 'jsapi', 'JSAPI', 7, 't', '', 1811365615815487488, '2024-12-04 10:53:12', 1811365615815487488, '2024-12-04 10:53:12', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1864182908966182912, 1824050661785407488, 'pay_status', 'wait', '待支付', 0, 't', '', 1811365615815487488, '2024-12-04 13:40:15', 1811365615815487488, '2024-12-04 13:40:15', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464774637334528, 1866464725509451776, 'allocation_result', 'all_pending', '处理中', 1, 't', '', 1811365615815487488, '2024-12-10 20:47:34.169368', 1811365615815487488, '2024-12-10 20:47:34.218803', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464805046038528, 1866464725509451776, 'allocation_result', 'all_success', '全部成功', 2, 't', '', 1811365615815487488, '2024-12-10 20:47:41.420831', 1811365615815487488, '2024-12-10 20:47:41.470313', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464833135292416, 1866464725509451776, 'allocation_result', 'part_success', '部分成功', 3, 't', '', 1811365615815487488, '2024-12-10 20:47:48.116111', 1811365615815487488, '2024-12-10 20:47:48.166469', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464863468498944, 1866464725509451776, 'allocation_result', 'all_failed', '全部失败', 4, 't', '', 1811365615815487488, '2024-12-10 20:47:55.348417', 1811365615815487488, '2024-12-10 20:47:55.398755', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464981567516672, 1866464929205825536, 'allocation_status', 'processing', '分账处理中', 0, 't', '', 1811365615815487488, '2024-12-10 20:48:23.505353', 1811365615815487488, '2024-12-10 20:48:23.556234', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465026735976448, 1866464929205825536, 'allocation_status', 'alloc_end', '分账处理完成', 1, 't', '', 1811365615815487488, '2024-12-10 20:48:34.274079', 1811365615815487488, '2024-12-10 20:48:34.325865', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465201684590592, 1866464929205825536, 'allocation_status', 'finish_failed', '完结失败', 4, 't', '', 1811365615815487488, '2024-12-10 20:49:15.985582', 1811365615815487488, '2024-12-10 20:49:16.037116', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465123091722240, 1866464929205825536, 'allocation_status', 'finish', '分账完结', 3, 't', '', 1811365615815487488, '2024-12-10 20:48:57.247403', 1811365615815487488, '2024-12-10 20:48:57.299907', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465071711498240, 1866464929205825536, 'allocation_status', 'alloc_failed', '分账失败', 2, 't', '', 1811365615815487488, '2024-12-10 20:48:44.997816', 1811365615815487488, '2024-12-10 20:49:06.16083', 1, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465239626264576, 1866464929205825536, 'allocation_status', 'ignore', '忽略', 55, 't', '', 1811365615815487488, '2024-12-10 20:49:25.031927', 1811365615815487488, '2024-12-10 20:49:25.082125', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866861458925617152, 1866861372363571200, 'alloc_detail_result', 'pending', '待分账', 1, 't', '', 1811365615815487488, '2024-12-11 23:03:51.073647', 1811365615815487488, '2024-12-11 23:03:51.127245', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866861495659331584, 1866861372363571200, 'alloc_detail_result', 'success', '分账成功', 2, 't', '', 1811365615815487488, '2024-12-11 23:03:59.831758', 1811365615815487488, '2024-12-11 23:03:59.873336', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866861545068232704, 1866861372363571200, 'alloc_detail_result', 'fail', '分账失败', 3, 't', '', 1811365615815487488, '2024-12-11 23:04:11.611702', 1811365615815487488, '2024-12-11 23:04:11.656702', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866861581097304064, 1866861372363571200, 'alloc_detail_result', 'ignore', '忽略分账', 4, 't', '', 1811365615815487488, '2024-12-11 23:04:20.201202', 1811365615815487488, '2024-12-11 23:04:20.243202', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1868487333327204352, 1824791500966486016, 'trade_type', 'allocation', '分账', 4, 't', '', 1811365615815487488, '2024-12-16 10:44:29.738737', 1811365615815487488, '2024-12-16 21:01:28.961731', 1, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1868946985244528640, 1823969170598400000, 'notify_content_type', 'allocation', '分账订单变动通知', 4, 't', '', 1811365615815487488, '2024-12-17 17:10:59.295517', 1811365615815487488, '2024-12-17 17:10:59.352198', 0, 'f');
 
 -- ----------------------------
 -- Table structure for base_param
@@ -431,7 +450,6 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1812114959231938560, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1812115247342874624, 1811365615815487488, '2024-07-13 21:21:57.096469', 1811365615815487488, '2024-07-13 21:25:06.069746', 4, 'f', NULL, 'dax-pay', '关于', '', 'ant-design:info-circle-outlined', 'f', 'f', 'Layout', '/about', '/about/index', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812113823376666624, 1811365615815487488, '2024-07-13 21:16:17.597391', 1811365615815487488, '2024-07-13 21:27:13.912267', 2, 'f', NULL, 'dax-pay', '支付配置', 'PayConfig', 'ant-design:property-safety-twotone', 'f', 'f', 'Layout', '/pay/config', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812116972585938944, 1811365615815487488, '2024-07-13 21:28:48.426928', 1811365615815487488, '2024-07-13 21:28:48.429631', 0, 'f', 1812113823376666624, 'dax-pay', '商户管理', '', '', 'f', 'f', 'Layout', '/pay/config/merchant', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1812114725651148800, 1811365615815487488, '2024-07-13 21:19:52.715548', 1811365615815487488, '2024-10-07 17:29:38.645989', 2, 'f', NULL, 'dax-pay', '分账管理', 'Allocation', 'ant-design:sliders-twotone', 'f', 'f', 'Layout', '/pay/allocation', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812116779807338496, 1811365615815487488, '2024-07-13 21:28:02.464593', 1811365615815487488, '2024-07-17 14:13:02.263915', 1, 'f', 1812113823376666624, 'dax-pay', '基础数据', '', '', 'f', 'f', 'Layout', '/pay/config/base', '', -2, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812114347454951424, 1811365615815487488, '2024-07-13 21:18:22.547038', 1811365615815487488, '2024-07-24 18:53:38.947244', 2, 'f', NULL, 'dax-pay', '交易记录', 'PayRecord', 'ant-design:container-outlined', 'f', 'f', 'Layout', '/pay/record', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812114603047448576, 1811365615815487488, '2024-07-13 21:19:23.484406', 1811365615815487488, '2024-07-24 19:28:09.132339', 1, 'f', NULL, 'dax-pay', '商户通知', 'PayNotic', 'ant-design:notification-twotone', 'f', 'f', 'Layout', '/pay/notice', '', 0, 't', 't', 'f', 'f', NULL);
@@ -451,7 +469,6 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1822975425229004800, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1813456708833087488, 1811365615815487488, '2024-07-17 14:12:26.440633', 1811365615815487488, '2024-09-20 11:05:46.469139', 4, 'f', 1812113823376666624, 'dax-pay', '基础配置', '', '', 'f', 'f', 'Layout', '/pay/config/basic', '', -1, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1822975777026252800, 1811365615815487488, '2024-08-12 20:37:49.152472', 1811365615815487488, '2024-08-12 20:37:49.154031', 0, 'f', 1822975425229004800, 'dax-pay', '存储平台', 'FilePlatformList', '', 'f', 'f', '/baseapi/file/platform/FilePlatformList', '/system/file/platform', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1822975970266226688, 1811365615815487488, '2024-08-12 20:38:35.224183', 1811365615815487488, '2024-08-12 20:38:35.226288', 0, 'f', 1822975425229004800, 'dax-pay', '文件管理', 'FileUploadList', '', 'f', 'f', '/baseapi/file/upload/FileUploadList', '/system/file/info', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1824779750208679936, 1811365615815487488, '2024-08-17 20:06:09.875297', 1811365615815487488, '2024-10-08 19:25:43.362002', 2, 'f', 1812114725651148800, 'dax-pay', '分账单', '', '', 'f', 'f', '', '/pay/reconcile/order', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812118306328473600, 1811365615815487488, '2024-07-13 21:34:06.415311', 1811365615815487488, '2024-08-27 16:13:34.678515', 4, 'f', 1812116779807338496, 'dax-pay', '支付通道', 'ChannelConstList', '', 'f', 'f', '/daxpay/common/constant/channel/ChannelConstList', '/pay/config/base/channel', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1816064593371066368, 1811365615815487488, '2024-07-24 18:55:14.565671', 1811365615815487488, '2024-08-27 19:11:47.317719', 4, 'f', 1812114347454951424, 'dax-pay', '关闭记录(支付)', 'PayCloseRecordList', '', 'f', 'f', '/daxpay/common/record/close/PayCloseRecordList', '/pay/record/close', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1824779945365450752, 1811365615815487488, '2024-08-17 20:06:56.404481', 1811365615815487488, '2024-08-27 19:11:51.292144', 2, 'f', 1812114347454951424, 'dax-pay', '同步记录', 'TradeSyncRecordList', '', 'f', 'f', '/daxpay/common/record/sync/TradeSyncRecordList', '/pay/record/sync', '', 0, 'f', 't', 'f', 'f', NULL);
@@ -462,8 +479,7 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1812115119471128576, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1837381440350912512, 1811365615815487488, '2024-09-21 14:40:46.934676', 1811365615815487488, '2024-09-21 14:40:46.934676', 0, 'f', 1810910433264762880, 'dax-pay', '延时队列', 'DelayQuery', '', 'f', 'f', '/baseapi/delay/DelayQuery', '/system/config/delay', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1836248839544733696, 1811365615815487488, '2024-09-18 11:40:13.861746', 1811365615815487488, '2024-09-25 14:46:38.017375', 1, 'f', 1812115119471128576, 'dax-pay', '交易调试', 'DevelopTrade', '', 'f', 'f', '/daxpay/common/develop/trade/DevelopTrade', '/pay/demo/develop', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1838832057238274048, 1811365615815487488, '2024-09-25 14:45:00.952476', 1811365615815487488, '2024-09-25 14:46:49.48474', 1, 'f', 1812115119471128576, 'dax-pay', '认证调试', 'ChannelAuth', '', 'f', 'f', '/daxpay/common/develop/auth/ChannelAuth', '/pay/demo/channelAuth', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1824779695900831744, 1811365615815487488, '2024-08-17 20:05:56.927619', 1811365615815487488, '2024-10-08 19:21:37.604842', 2, 'f', 1812114725651148800, 'dax-pay', '分账组管理', 'AllocationGroupList', '', 't', 'f', '/daxpay/common/allocation/group/AllocationGroupList', '/pay/allocation/group', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1824779660136001536, 1811365615815487488, '2024-08-17 20:05:48.400494', 1811365615815487488, '2024-10-08 19:21:44.305611', 5, 'f', 1812114725651148800, 'dax-pay', '接收方', 'AllocationReceiverList', '', 't', 'f', '/daxpay/common/allocation/receiver/AllocationReceiverList', '/pay/allocation/receiver', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1824779750208679936, 1811365615815487488, '2024-08-17 20:06:09.875297', 1811365615815487488, '2024-12-16 10:22:59.343388', 7, 'f', 1812114224679284736, 'dax-pay', '分账订单', 'AllocOrderList', '', 'f', 'f', '/daxpay/common/allocation/order/AllocOrderList', '/pay/order/allocation', '', 0, 'f', 't', 'f', 'f', NULL);
 
 -- ----------------------------
 -- Table structure for iam_perm_path
@@ -705,6 +721,43 @@ COMMENT ON TABLE "public"."iam_user_role" IS '用户角色关联关系';
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for pay_alloc_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_alloc_config";
+CREATE TABLE "public"."pay_alloc_config" (
+  "id" int8 NOT NULL,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "min_amount" numeric(10,2),
+  "auto_alloc" bool,
+  "deleted" bool NOT NULL,
+  "delay_time" int8,
+  "auto_finish" bool
+)
+;
+COMMENT ON COLUMN "public"."pay_alloc_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_alloc_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_alloc_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_alloc_config"."last_modifier" IS '最后修改ID';
+COMMENT ON COLUMN "public"."pay_alloc_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_alloc_config"."version" IS '版本号';
+COMMENT ON COLUMN "public"."pay_alloc_config"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_alloc_config"."min_amount" IS '分账起始额';
+COMMENT ON COLUMN "public"."pay_alloc_config"."auto_alloc" IS '开启自动分账';
+COMMENT ON COLUMN "public"."pay_alloc_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_alloc_config"."delay_time" IS '分账延迟时长(分钟)';
+COMMENT ON COLUMN "public"."pay_alloc_config"."auto_finish" IS '自动完结';
+COMMENT ON TABLE "public"."pay_alloc_config" IS '分账配置参数';
+
+-- ----------------------------
+-- Records of pay_alloc_config
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for pay_alloc_detail
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_detail";
@@ -712,9 +765,9 @@ CREATE TABLE "public"."pay_alloc_detail" (
   "id" int8 NOT NULL,
   "allocation_id" int8 NOT NULL,
   "receiver_id" int8 NOT NULL,
-  "receiver_no" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "rate" int4 NOT NULL,
-  "amount" int4 NOT NULL,
+  "receiver_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "rate" numeric(8,2) NOT NULL,
+  "amount" numeric(10,2) NOT NULL,
   "receiver_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
   "receiver_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "receiver_name" varchar(100) COLLATE "pg_catalog"."default",
@@ -728,14 +781,15 @@ CREATE TABLE "public"."pay_alloc_detail" (
   "last_modified_time" timestamp(6),
   "version" int4 NOT NULL,
   "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+  "out_detail_id" varchar(64) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_alloc_detail"."id" IS '主键';
 COMMENT ON COLUMN "public"."pay_alloc_detail"."allocation_id" IS '分账订单ID';
 COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_id" IS '接收者ID';
 COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_no" IS '分账接收方编号';
-COMMENT ON COLUMN "public"."pay_alloc_detail"."rate" IS '分账比例(万分之多少)';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."rate" IS '分账比例(百分之多少)';
 COMMENT ON COLUMN "public"."pay_alloc_detail"."amount" IS '分账金额';
 COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_type" IS '分账接收方类型';
 COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_account" IS '接收方账号';
@@ -751,6 +805,7 @@ COMMENT ON COLUMN "public"."pay_alloc_detail"."last_modified_time" IS '最后修
 COMMENT ON COLUMN "public"."pay_alloc_detail"."version" IS '乐观锁';
 COMMENT ON COLUMN "public"."pay_alloc_detail"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."pay_alloc_detail"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."out_detail_id" IS '外部关联明细';
 COMMENT ON TABLE "public"."pay_alloc_detail" IS '分账订单明细';
 
 -- ----------------------------
@@ -763,7 +818,7 @@ COMMENT ON TABLE "public"."pay_alloc_detail" IS '分账订单明细';
 DROP TABLE IF EXISTS "public"."pay_alloc_group";
 CREATE TABLE "public"."pay_alloc_group" (
   "id" int8 NOT NULL,
-  "group_no" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "group_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "name" varchar(50) COLLATE "pg_catalog"."default",
   "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
   "default_group" bool,
@@ -834,53 +889,10 @@ COMMENT ON TABLE "public"."pay_alloc_group_receiver" IS '分账接收组关系';
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for pay_alloc_receiver
+-- Table structure for pay_alloc_order
 -- ----------------------------
-DROP TABLE IF EXISTS "public"."pay_alloc_receiver";
-CREATE TABLE "public"."pay_alloc_receiver" (
-  "id" int8 NOT NULL,
-  "receiver_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_name" varchar(100) COLLATE "pg_catalog"."default",
-  "relation_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "relation_name" varchar(50) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "deleted" bool NOT NULL
-)
-;
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."id" IS '主键';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."receiver_no" IS '分账接收方编号';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."channel" IS '所属通道';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."receiver_type" IS '分账接收方类型';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."receiver_account" IS '接收方账号';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."receiver_name" IS '接收方姓名';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."relation_type" IS '分账关系类型';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."relation_name" IS '关系名称';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."creator" IS '创建者ID';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."last_modifier" IS '最后修改ID';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."version" IS '版本号';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."app_id" IS '应用号';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."deleted" IS '删除标志';
-COMMENT ON TABLE "public"."pay_alloc_receiver" IS '分账接收方';
-
--- ----------------------------
--- Records of pay_alloc_receiver
--- ----------------------------
-
--- ----------------------------
--- Table structure for pay_alloc_transaction
--- ----------------------------
-DROP TABLE IF EXISTS "public"."pay_alloc_transaction";
-CREATE TABLE "public"."pay_alloc_transaction" (
+DROP TABLE IF EXISTS "public"."pay_alloc_order";
+CREATE TABLE "public"."pay_alloc_order" (
   "id" int8 NOT NULL,
   "alloc_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "biz_alloc_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
@@ -891,7 +903,7 @@ CREATE TABLE "public"."pay_alloc_transaction" (
   "out_order_no" varchar(150) COLLATE "pg_catalog"."default" NOT NULL,
   "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "amount" int4 NOT NULL,
+  "amount" numeric(10,2) NOT NULL,
   "description" varchar(150) COLLATE "pg_catalog"."default",
   "status" varchar(30) COLLATE "pg_catalog"."default" NOT NULL,
   "result" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
@@ -911,38 +923,83 @@ CREATE TABLE "public"."pay_alloc_transaction" (
   "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."id" IS '主键';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."alloc_no" IS '分账单号';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."biz_alloc_no" IS '商户分账单号';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."out_alloc_no" IS '通道分账号';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."order_id" IS '支付订单ID';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."order_no" IS '支付订单号';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."biz_order_no" IS '商户支付订单号';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."out_order_no" IS '通道支付订单号';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."title" IS '支付标题';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."channel" IS '所属通道';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."amount" IS '总分账金额';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."description" IS '分账描述';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."status" IS '状态';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."result" IS '处理结果';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."finish_time" IS '分账完成时间';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."notify_url" IS '异步通知地址';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."attach" IS '商户扩展参数';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."req_time" IS '请求时间，传输时间戳';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."client_ip" IS '支付终端ip';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."error_code" IS '错误码';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."error_msg" IS '错误信息';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."creator" IS '创建者ID';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."last_modifier" IS '最后修者ID';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."version" IS '乐观锁';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."deleted" IS '删除标志';
-COMMENT ON COLUMN "public"."pay_alloc_transaction"."app_id" IS '应用号';
-COMMENT ON TABLE "public"."pay_alloc_transaction" IS '分账订单';
+COMMENT ON COLUMN "public"."pay_alloc_order"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_alloc_order"."alloc_no" IS '分账单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."biz_alloc_no" IS '商户分账单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."out_alloc_no" IS '通道分账号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."order_id" IS '支付订单ID';
+COMMENT ON COLUMN "public"."pay_alloc_order"."order_no" IS '支付订单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."biz_order_no" IS '商户支付订单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."out_order_no" IS '通道支付订单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."title" IS '支付标题';
+COMMENT ON COLUMN "public"."pay_alloc_order"."channel" IS '所属通道';
+COMMENT ON COLUMN "public"."pay_alloc_order"."amount" IS '总分账金额';
+COMMENT ON COLUMN "public"."pay_alloc_order"."description" IS '分账描述';
+COMMENT ON COLUMN "public"."pay_alloc_order"."status" IS '状态';
+COMMENT ON COLUMN "public"."pay_alloc_order"."result" IS '处理结果';
+COMMENT ON COLUMN "public"."pay_alloc_order"."finish_time" IS '分账完成时间';
+COMMENT ON COLUMN "public"."pay_alloc_order"."notify_url" IS '异步通知地址';
+COMMENT ON COLUMN "public"."pay_alloc_order"."attach" IS '商户扩展参数';
+COMMENT ON COLUMN "public"."pay_alloc_order"."req_time" IS '请求时间，传输时间戳';
+COMMENT ON COLUMN "public"."pay_alloc_order"."client_ip" IS '支付终端ip';
+COMMENT ON COLUMN "public"."pay_alloc_order"."error_code" IS '错误码';
+COMMENT ON COLUMN "public"."pay_alloc_order"."error_msg" IS '错误信息';
+COMMENT ON COLUMN "public"."pay_alloc_order"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_alloc_order"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_alloc_order"."last_modifier" IS '最后修者ID';
+COMMENT ON COLUMN "public"."pay_alloc_order"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_alloc_order"."version" IS '乐观锁';
+COMMENT ON COLUMN "public"."pay_alloc_order"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_alloc_order"."app_id" IS '应用号';
+COMMENT ON TABLE "public"."pay_alloc_order" IS '分账订单';
 
 -- ----------------------------
--- Records of pay_alloc_transaction
+-- Records of pay_alloc_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pay_alloc_receiver
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_alloc_receiver";
+CREATE TABLE "public"."pay_alloc_receiver" (
+  "id" int8 NOT NULL,
+  "receiver_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_name" varchar(100) COLLATE "pg_catalog"."default",
+  "relation_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "relation_name" varchar(50) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+  "deleted" bool NOT NULL,
+  "name" varchar(50) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."receiver_no" IS '分账接收方编号';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."channel" IS '所属通道';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."receiver_type" IS '分账接收方类型';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."receiver_account" IS '接收方账号';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."receiver_name" IS '接收方姓名';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."relation_type" IS '分账关系类型';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."relation_name" IS '关系名称';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."last_modifier" IS '最后修改ID';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."version" IS '版本号';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."name" IS '名称';
+COMMENT ON TABLE "public"."pay_alloc_receiver" IS '分账接收方';
+
+-- ----------------------------
+-- Records of pay_alloc_receiver
 -- ----------------------------
 
 -- ----------------------------
@@ -1526,8 +1583,9 @@ COMMENT ON TABLE "public"."pay_merchant_notify_const" IS '商户订阅通知类�
 -- Records of pay_merchant_notify_const
 -- ----------------------------
 INSERT INTO "public"."pay_merchant_notify_const" VALUES (10000, 'pay', '支付订单变动通知', '支付订单变动通知', 't');
-INSERT INTO "public"."pay_merchant_notify_const" VALUES (20000, 'refund', '退款订单变动通知', '退款订单变动通知', 't');
 INSERT INTO "public"."pay_merchant_notify_const" VALUES (30000, 'transfer', '转账订单变动通知', '转账订单变动通知', 't');
+INSERT INTO "public"."pay_merchant_notify_const" VALUES (40000, 'allocation', '分账订单变动通知', '分账订单变动通知', 't');
+INSERT INTO "public"."pay_merchant_notify_const" VALUES (20000, 'refund', '退款订单变动通知', '退款订单变动通知', 't');
 
 -- ----------------------------
 -- Table structure for pay_merchant_notify_record
@@ -1750,7 +1808,7 @@ COMMENT ON TABLE "public"."pay_platform_config" IS '管理平台配置';
 -- ----------------------------
 -- Records of pay_platform_config
 -- ----------------------------
-INSERT INTO "public"."pay_platform_config" VALUES (1, 1, '2024-09-20 10:54:44', 1811365615815487488, '2024-10-08 17:24:12.679758', 13, 'f', 'https://pay.daxpay.com', 'https://pay.daxpay.com/h5', 'http://pay.daxpay.com');
+INSERT INTO "public"."pay_platform_config" VALUES (1, 1, '2024-09-20 10:54:44', 1811365615815487488, '2024-12-10 19:05:26.524338', 16, 'f', 'https://pay1.bootx.cn/server', 'https://pay1.bootx.cn/h5', 'https://pay1.bootx.cn/web');
 
 -- ----------------------------
 -- Table structure for pay_reconcile_discrepancy
@@ -2304,138 +2362,6 @@ COMMENT ON TABLE "public"."starter_file_upload_info" IS '文件记录表';
 -- ----------------------------
 -- Records of starter_file_upload_info
 -- ----------------------------
-INSERT INTO "public"."starter_file_upload_info" VALUES (1821097013954715648, '/file/66b32c610d41ab408c70e774.png', 216374, '66b32c610d41ab408c70e774.png', '微信截图_20240514205633.png', '/file/', '', 'png', 'image/png', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-07 08:12:17.079');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822969544408014848, 'file/66b9fc4fa1fa0bba28d38189.png', 321611, '66b9fc4fa1fa0bba28d38189.png', '微信截图_20240514202144.png', 'file/', '', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:13:03.035');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822969908121280512, 'file/aaa/66b9fca5a1fa0bba28d3818a.png', 321611, '66b9fca5a1fa0bba28d3818a.png', '微信截图_20240514202144.png', 'file/', 'aaa/', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:14:29.892');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971444570333184, 'file/2024/08/1266b9fe14a1fa0bba28d3818b.png', 321611, '66b9fe14a1fa0bba28d3818b.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:20:36.211');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971456683483136, 'file/2024/08/1266b9fe17a1fa0bba28d3818c.png', 321611, '66b9fe17a1fa0bba28d3818c.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:20:39.098');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971459174899712, 'file/2024/08/1266b9fe17a1fa0bba28d3818d.png', 321611, '66b9fe17a1fa0bba28d3818d.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:20:39.693');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971462438068224, 'file/2024/08/1266b9fe18a1fa0bba28d3818e.png', 321611, '66b9fe18a1fa0bba28d3818e.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:20:40.471');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971464799461376, 'file/2024/08/1266b9fe19a1fa0bba28d3818f.png', 321611, '66b9fe19a1fa0bba28d3818f.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:20:41.034');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971465835454464, 'file/2024/08/1266b9fe19a1fa0bba28d38190.png', 321611, '66b9fe19a1fa0bba28d38190.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:20:41.28');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971466686898176, 'file/2024/08/1266b9fe19a1fa0bba28d38191.png', 321611, '66b9fe19a1fa0bba28d38191.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:20:41.484');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971467467038720, 'file/2024/08/1266b9fe19a1fa0bba28d38192.png', 321611, '66b9fe19a1fa0bba28d38192.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:20:41.671');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971667761831936, 'file/2024/08/1266b9fe49a1fa0bba28d38193.png', 321611, '66b9fe49a1fa0bba28d38193.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:21:29.424');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822971796644405248, 'file/2024/08/1266b9fe68a1fa0bba28d38194.png', 321611, '66b9fe68a1fa0bba28d38194.png', '微信截图_20240514202144.png', 'file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:22:00.149');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1822976328996659200, '/file/2024/08/1266ba02a0a1faf26c0c033991.png', 216374, '66ba02a0a1faf26c0c033991.png', '微信截图_20240514205633.png', '/file/', '2024/08/12', 'png', 'image/png', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-12 12:40:00.707');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1823203227169546240, '/file//2024/08/13/66bad5f061236ef74fc35d2f.png', 822076, '66bad5f061236ef74fc35d2f.png', '微信截图_20240514202014.png', '/file/', '/2024/08/13/', 'png', 'image/png', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-13 03:41:36.828');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1823204644156456960, '/file/2024/08/13/66bad7426123c55acd645891.png', 209410, '66bad7426123c55acd645891.png', 'QQ图片20240531181517.png', '/file/', '2024/08/13/', 'png', 'image/png', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-13 03:47:14.767');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1823210440613294080, '/file/2024/08/13/66badca8612381f3dab8b659.sql', 484222, '66badca8612381f3dab8b659.sql', 'dax-pay.sql', '/file/', '2024/08/13/', 'sql', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-13 04:10:16.775');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1824779093602971648, '/file/2024/08/17/66c09194fb5fa7f335dbd1e7.jpg', 107464, '66c09194fb5fa7f335dbd1e7.jpg', '微信图片_20220522132928.jpg', '/file/', '2024/08/17/', 'jpg', 'image/jpeg', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-17 12:03:32.838');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825718211879563264, '/file/66c3fc341f35f424dba37510.csv', 775, '66c3fc341f35f424dba37510.csv', '交易对账单-支付宝-20240818.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 02:15:16.078');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825718295480430592, '/file/66c3fc481f35f424dba37511.csv', 775, '66c3fc481f35f424dba37511.csv', '交易对账单-支付宝-20240818.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 02:15:36.48');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825720111223992320, '/file/66c3fdf91f35f424dba37512.csv', 775, '66c3fdf91f35f424dba37512.csv', '交易对账单-支付宝-20240818.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 02:22:49.392');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825753217356218368, '/file/2024/08/20/66c41cce1f352f391eadba3e.xlsx', 9614, '66c41cce1f352f391eadba3e.xlsx', '消息订阅.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 04:34:22.055');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825753283894657024, '/file/2024/08/20/66c41cde1f352f391eadba3f.xlsx', 9614, '66c41cde1f352f391eadba3f.xlsx', '消息订阅.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 04:34:38.355');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825793692494667776, '/file/2024/08/20/66c442801f35438ca96741b3.xlsx', 9627, '66c442801f35438ca96741b3.xlsx', '消息订阅.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 07:15:12.039');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825795353548103680, '/file/2024/08/20/66c4440c1f35438ca96741b4.png', 56704, '66c4440c1f35438ca96741b4.png', 'DD94AFCB-E1EA-403a-A5BB-606CF977034C.png', '/file/', '2024/08/20/', 'png', 'image/png', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 07:21:48.536');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825795565142351872, '/file/2024/08/20/66c4443e1f35438ca96741b5.png', 56704, '66c4443e1f35438ca96741b5.png', 'DD94AFCB-E1EA-403a-A5BB-606CF977034C.png', '/file/', '2024/08/20/', 'png', 'image/png', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 07:22:38.992');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825795861373460480, '/file/2024/08/20/66c444851f35438ca96741b6.png', 56704, '66c444851f35438ca96741b6.png', 'DD94AFCB-E1EA-403a-A5BB-606CF977034C.png', '/file/', '2024/08/20/', 'png', 'image/png', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 07:23:49.53');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825796076641959936, '/file/2024/08/20/66c444b21f35453b8057d0fb.png', 56704, '66c444b21f35453b8057d0fb.png', 'DD94AFCB-E1EA-403a-A5BB-606CF977034C.png', '/file/', '2024/08/20/', 'png', 'image/png', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 07:24:18.784');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825799359162990592, '/file/2024/08/20/66c447c71f35453b8057d0fc.xlsx', 9614, '66c447c71f35453b8057d0fc.xlsx', '消息订阅.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 15:37:43.593469');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825799570165841920, '/file/66c447f91f35453b8057d0fd.csv', 775, '66c447f91f35453b8057d0fd.csv', '交易对账单-支付宝-20240816.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 15:38:33.899827');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825799577078054912, '/file/2024/08/20/66c447fb1f35453b8057d0fe.xlsx', 9614, '66c447fb1f35453b8057d0fe.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 15:38:35.546999');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825799590139117568, '/file/66c447fe1f35453b8057d0ff.csv', 1189, '66c447fe1f35453b8057d0ff.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 15:38:38.662392');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825799613258121216, '/file/2024/08/20/66c448041f35453b8057d100.xlsx', 9614, '66c448041f35453b8057d100.xlsx', '消息订阅.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 15:38:44.173717');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825808183974379520, '/file/2024/08/20/66c44ffc1f35fa1c978ea54c.xlsx', 9613, '66c44ffc1f35fa1c978ea54c.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 16:12:47.587103');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825808183991156736, '/file/2024/08/20/66c44ffc1f35fa1c978ea54d.xlsx', 9612, '66c44ffc1f35fa1c978ea54d.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 16:12:47.588101');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825808257634746368, '/file/2024/08/20/66c450111f35fa1c978ea54e.xlsx', 9613, '66c450111f35fa1c978ea54e.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 16:13:05.154672');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826528037253439488, '/file/66c6ee69c76387d97684a0d3.csv', 4873, '66c6ee69c76387d97684a0d3.csv', '交易对账单-微信-20240821.csv', '/file/', '', 'csv', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 15:53:13.985807');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825808277838708736, '/file/2024/08/20/66c450151f35fa1c978ea54f.xlsx', 9613, '66c450151f35fa1c978ea54f.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 16:13:09.971531');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825813275939119104, '/file/66c454bd1f35808c73fcb4f9.csv', 775, '66c454bd1f35808c73fcb4f9.csv', '交易对账单-支付宝-20240816.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 16:33:01.603346');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825816007903223808, '/file/66c457481f35808c73fcb4fa.csv', 1189, '66c457481f35808c73fcb4fa.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 16:43:52.960613');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825820562539880448, '/file/66c45b861f35808c73fcb4fb.csv', 1189, '66c45b861f35808c73fcb4fb.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:01:58.872311');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825820967122440192, '/file/66c45be61f3570ed83b5deda.csv', 1189, '66c45be61f3570ed83b5deda.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:03:35.323328');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825821293732888576, '/file/66c45c341f35156de355269c.csv', 1189, '66c45c341f35156de355269c.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:04:53.19356');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825821723045068800, '/file/66c45c9b1f35156de355269d.csv', 1189, '66c45c9b1f35156de355269d.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:06:35.557476');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825821752279367680, '/file/2024/08/20/66c45ca21f35156de355269e.xlsx', 9786, '66c45ca21f35156de355269e.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:06:42.527505');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825830633537777664, '/file/2024/08/20/66c464e71f35b610eeff97b1.xlsx', 9795, '66c464e71f35b610eeff97b1.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:41:59.981496');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825831496863911936, '/file/66c465b51f3576080962d6c3.csv', 1189, '66c465b51f3576080962d6c3.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:45:25.809379');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825834316396695552, '/file/2024/08/20/66c468551f3576080962d6c4.xlsx', 9796, '66c468551f3576080962d6c4.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:56:38.046761');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825834800268382208, '/file/2024/08/20/66c468c91f3576080962d6c5.xlsx', 9796, '66c468c91f3576080962d6c5.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 17:58:33.411027');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825835210064465920, '/file/2024/08/20/66c4692a1f3576080962d6c6.xlsx', 9795, '66c4692a1f3576080962d6c6.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 18:00:11.113848');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825843546990252032, '/file/66c470ee1f3576080962d6c7.csv', 1189, '66c470ee1f3576080962d6c7.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 18:33:18.791522');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825844129692323840, '/file/2024/08/20/66c471791f3576080962d6c8.xlsx', 9811, '66c471791f3576080962d6c8.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 18:35:37.719031');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825844629024182272, '/file/66c471f01f35aed981cc6a59.csv', 1189, '66c471f01f35aed981cc6a59.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 18:37:36.758077');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825844842937880576, '/file/2024/08/20/66c472231f35aed981cc6a5a.xlsx', 9819, '66c472231f35aed981cc6a5a.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 18:38:27.770051');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825847210479955968, '/file/66c474571f357b60c1a2b78a.csv', 1189, '66c474571f357b60c1a2b78a.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 18:47:52.223284');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1825847359704903680, '/file/2024/08/20/66c4747b1f357b60c1a2b78b.xlsx', 9840, '66c4747b1f357b60c1a2b78b.xlsx', '测试对账.xlsx', '/file/', '2024/08/20/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-20 18:48:27.813444');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826097618230136832, '/file/66c55d8d0d41b292dd16e301.csv', 1189, '66c55d8d0d41b292dd16e301.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-21 11:22:54.093713');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826097630125182976, '/file/2024/08/21/66c55d900d41b292dd16e302.xlsx', 9823, '66c55d900d41b292dd16e302.xlsx', '测试对账.xlsx', '/file/', '2024/08/21/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-21 11:22:56.932144');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826104071162494976, '/file/66c563900d413c77079c09f3.csv', 1189, '66c563900d413c77079c09f3.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-21 11:48:32.583252');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826104244588576768, '/file/2024/08/21/66c563b90d413c77079c09f4.xlsx', 9823, '66c563b90d413c77079c09f4.xlsx', '外部交易明细.xlsx', '/file/', '2024/08/21/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-21 11:49:13.942925');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826108050550398976, '/file/66c567440d41d39e503adbf7.csv', 1189, '66c567440d41d39e503adbf7.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-21 12:04:21.352012');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826108060998410240, '/file/2024/08/21/66c567470d41d39e503adbf8.xlsx', 9823, '66c567470d41d39e503adbf8.xlsx', '外部交易明细.xlsx', '/file/', '2024/08/21/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-21 12:04:23.846222');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826144377513820160, '/file/66c589190d41534805a9a0c5.csv', 1189, '66c589190d41534805a9a0c5.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-21 14:28:42.375373');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826144389043961856, '/file/2024/08/21/66c5891d0d41534805a9a0c6.xlsx', 9819, '66c5891d0d41534805a9a0c6.xlsx', '测试对账.xlsx', '/file/', '2024/08/21/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-21 14:28:45.126552');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826454887404781568, '/file/66c6aa49c763a99769caae79.xlsx', 2564, '66c6aa49c763a99769caae79.xlsx', '交易对账单-微信-20240820.xlsx', '/file/', '', 'xlsx', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 11:02:33.686962');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826454907948482560, '/file/2024/08/22/66c6aa4ec763a99769caae7a.xlsx', 9620, '66c6aa4ec763a99769caae7a.xlsx', '测试对账.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 11:02:38.603264');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826455432215511040, '/file/66c6aacbc763a99769caae7b.xlsx', 2564, '66c6aacbc763a99769caae7b.xlsx', '交易对账单-微信-20240820.xlsx', '/file/', '', 'xlsx', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 11:04:43.594394');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826455601317265408, '/file/66c6aaf3c763a99769caae7c.xlsx', 4873, '66c6aaf3c763a99769caae7c.xlsx', '交易对账单-微信-20240821.xlsx', '/file/', '', 'xlsx', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 11:05:23.911901');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826455623035371520, '/file/2024/08/22/66c6aaf8c763a99769caae7d.xlsx', 9619, '66c6aaf8c763a99769caae7d.xlsx', '测试对账.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 11:05:29.093238');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826455963705131008, '/file/66c6ab4ac763a99769caae7e.xlsx', 2564, '66c6ab4ac763a99769caae7e.xlsx', '交易对账单-微信-20240820.xlsx', '/file/', '', 'xlsx', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 11:06:50.312192');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826456479956758528, '/file/66c6abc4c7633375f8725b9b.xlsx', 4873, '66c6abc4c7633375f8725b9b.xlsx', '交易对账单-微信-20240821.xlsx', '/file/', '', 'xlsx', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 11:08:53.391935');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826456537934622720, '/file/2024/08/22/66c6abd3c7633375f8725b9c.xlsx', 10486, '66c6abd3c7633375f8725b9c.xlsx', '测试对账.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 11:09:07.222795');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826528050088009728, '/file/2024/08/22/66c6ee6dc76387d97684a0d4.xlsx', 10587, '66c6ee6dc76387d97684a0d4.xlsx', '订阅消息.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 15:53:17.048532');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826532233684037632, '/file/66c6f252c76353f70eacf1de.csv', 4873, '66c6f252c76353f70eacf1de.csv', '交易对账单-微信-20240821.csv', '/file/', '', 'csv', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 16:09:54.492768');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826532244555673600, '/file/2024/08/22/66c6f254c76353f70eacf1df.xlsx', 10587, '66c6f254c76353f70eacf1df.xlsx', '外部交易明细.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 16:09:57.086142');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826534025192910848, '/file/66c6f3fdc76353f70eacf1e0.csv', 4873, '66c6f3fdc76353f70eacf1e0.csv', '交易对账单-微信-20240821.csv', '/file/', '', 'csv', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 16:17:01.624309');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826534549581574144, '/file/66c6f47ac76353f70eacf1e1.csv', 4873, '66c6f47ac76353f70eacf1e1.csv', '交易对账单-微信-20240821.csv', '/file/', '', 'csv', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 16:19:06.648517');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826535790386720768, '/file/66c6f5a2c76353f70eacf1e2.csv', 4873, '66c6f5a2c76353f70eacf1e2.csv', '交易对账单-微信-20240821.csv', '/file/', '', 'csv', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 16:24:02.478931');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826535798624333824, '/file/2024/08/22/66c6f5a4c76353f70eacf1e3.xlsx', 10599, '66c6f5a4c76353f70eacf1e3.xlsx', '测试对账.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 16:24:04.442922');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826547489412079616, '/file/66c70087c763e807cbf7de4c.csv', 641, '66c70087c763e807cbf7de4c.csv', '交易对账单-支付宝-20240821.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 17:10:31.742535');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826547501512646656, '/file/2024/08/22/66c7008ac763e807cbf7de4d.xlsx', 9769, '66c7008ac763e807cbf7de4d.xlsx', '外部交易明细.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 17:10:34.629401');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826548693462540288, '/file/66c701a6c763e807cbf7de4e.csv', 4873, '66c701a6c763e807cbf7de4e.csv', '交易对账单-微信-20240821.csv', '/file/', '', 'csv', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 17:15:18.81236');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826548700915818496, '/file/2024/08/22/66c701a8c763e807cbf7de4f.xlsx', 10859, '66c701a8c763e807cbf7de4f.xlsx', '测试对账.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 17:15:20.589063');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826550241479413760, '/file/66c70317c763d39942d0f55c.csv', 1189, '66c70317c763d39942d0f55c.csv', '交易对账单-支付宝-20240819.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 17:21:27.886652');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1826550253630312448, '/file/2024/08/22/66c7031ac763d39942d0f55d.xlsx', 9951, '66c7031ac763d39942d0f55d.xlsx', '测试对账.xlsx', '/file/', '2024/08/22/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-22 17:21:30.785225');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1829092824449552384, '/file/66d0430e2725ea0e6dd63e99.csv', 975, '66d0430e2725ea0e6dd63e99.csv', '交易对账单-支付宝-20240825.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-29 17:44:46.899974');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1829092838819237888, '/file/2024/08/29/66d043122725ea0e6dd63e9a.xlsx', 9879, '66d043122725ea0e6dd63e9a.xlsx', '分账单.xlsx', '/file/', '2024/08/29/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-29 17:44:50.332586');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1829376511166722048, '/file/66d14b42e537e3f57615df0e.csv', 773, '66d14b42e537e3f57615df0e.csv', '交易对账单-支付宝-20240829.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-08-30 12:32:03.082505');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830432967571877888, '/file/66d523299b65f788a54f4345.csv', 588, '66d523299b65f788a54f4345.csv', '交易对账单-支付宝-20240901.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-02 10:30:01.924318');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830432971883622400, '/file/2024/09/02/66d5232a9b65f788a54f4346.xlsx', 9725, '66d5232a9b65f788a54f4346.xlsx', '【2024-09-01】 - 测试应用2 - 支付宝(直连商户).xlsx', '/file/', '2024/09/02/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-02 10:30:02.953727');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830432978368016384, '/file/66d5232c9b65f788a54f4347.csv', 1152, '66d5232c9b65f788a54f4347.csv', '交易对账单-微信-20240901.csv', '/file/', '', 'csv', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-02 10:30:04.500493');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830432979357872128, '/file/2024/09/02/66d5232c9b65f788a54f4348.xlsx', 9964, '66d5232c9b65f788a54f4348.xlsx', '【2024-09-01】 - 正式测试环境 - 微信支付(直连商户).xlsx', '/file/', '2024/09/02/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-02 10:30:04.736091');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830432980876210176, '/file/66d5232d9b65f788a54f4349.csv', 588, '66d5232d9b65f788a54f4349.csv', '交易对账单-支付宝-20240901.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-02 10:30:05.097887');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830432981224337408, '/file/2024/09/02/66d5232d9b65f788a54f434a.xlsx', 9725, '66d5232d9b65f788a54f434a.xlsx', '【2024-09-01】 - 正式测试环境 - 支付宝(直连商户).xlsx', '/file/', '2024/09/02/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-02 10:30:05.180424');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830432989017354240, '/file/66d5232f9b65f788a54f434b.csv', 773, '66d5232f9b65f788a54f434b.csv', '交易对账单-支付宝-20240901.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-02 10:30:07.0389');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830432989638111232, '/file/2024/09/02/66d5232f9b65f788a54f434c.xlsx', 9726, '66d5232f9b65f788a54f434c.xlsx', '【2024-09-01】 - 秘钥测试账户(支付宝沙箱) - 支付宝(直连商户).xlsx', '/file/', '2024/09/02/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-02 10:30:07.187076');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830795357480173568, '/file/66d674a91f358abb94988653.csv', 775, '66d674a91f358abb94988653.csv', '交易对账单-支付宝-20240902.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-03 10:30:02.410984');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830795361926135808, '/file/2024/09/03/66d674ab1f358abb94988654.xlsx', 10927, '66d674ab1f358abb94988654.xlsx', '【2024-09-02】 - 测试应用2 - 支付宝(直连商户).xlsx', '/file/', '2024/09/03/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-03 10:30:03.47317');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830795369018703872, '/file/66d674ad1f358abb94988655.csv', 1148, '66d674ad1f358abb94988655.csv', '交易对账单-微信-20240902.csv', '/file/', '', 'csv', 'text/plain', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-03 10:30:05.163827');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830795369673015296, '/file/2024/09/03/66d674ad1f358abb94988656.xlsx', 9965, '66d674ad1f358abb94988656.xlsx', '【2024-09-02】 - 正式测试环境 - 微信支付(直连商户).xlsx', '/file/', '2024/09/03/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-03 10:30:05.320186');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830795372088934400, '/file/66d674ad1f358abb94988657.csv', 775, '66d674ad1f358abb94988657.csv', '交易对账单-支付宝-20240902.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-03 10:30:05.896053');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830795373271728128, '/file/2024/09/03/66d674ae1f358abb94988658.xlsx', 10926, '66d674ae1f358abb94988658.xlsx', '【2024-09-02】 - 正式测试环境 - 支付宝(直连商户).xlsx', '/file/', '2024/09/03/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-03 10:30:06.178188');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830795379219251200, '/file/66d674af1f358abb94988659.csv', 773, '66d674af1f358abb94988659.csv', '交易对账单-支付宝-20240902.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-03 10:30:07.596269');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1830795379978420224, '/file/2024/09/03/66d674af1f358abb9498865a.xlsx', 10927, '66d674af1f358abb9498865a.xlsx', '【2024-09-02】 - 秘钥测试账户(支付宝沙箱) - 支付宝(直连商户).xlsx', '/file/', '2024/09/03/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-03 10:30:07.777158');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1831233989211004928, '/file/66d80d2b0d4141300044fc44.csv', 775, '66d80d2b0d4141300044fc44.csv', '交易对账单-支付宝-20240903.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:33:00.365017');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1831233993724076032, '/file/2024/09/04/66d80d2d0d4141300044fc45.xlsx', 9726, '66d80d2d0d4141300044fc45.xlsx', '【2024-09-03】-M1723635576766-M7934041241299655-支付宝(直连商户).xlsx', '/file/', '2024/09/04/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:33:01.443352');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1831234003706519552, '/file/66d80d2f0d4141300044fc46.csv', 775, '66d80d2f0d4141300044fc46.csv', '交易对账单-支付宝-20240903.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:33:03.822384');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1831234004142727168, '/file/2024/09/04/66d80d2f0d4141300044fc47.xlsx', 9726, '66d80d2f0d4141300044fc47.xlsx', '【2024-09-03】-M1723635576766-M8207639754663343-支付宝(直连商户).xlsx', '/file/', '2024/09/04/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:33:03.926613');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1831234013055623168, '/file/66d80d320d4141300044fc48.csv', 773, '66d80d320d4141300044fc48.csv', '交易对账单-支付宝-20240903.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:33:06.051702');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1831234013588299776, '/file/2024/09/04/66d80d320d4141300044fc49.xlsx', 9726, '66d80d320d4141300044fc49.xlsx', '【2024-09-03】-M1723635576766-M8088873888246277-支付宝(直连商户).xlsx', '/file/', '2024/09/04/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:33:06.179445');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1831245328214020096, '/file/66d817bb0d4118c2cf4a8e72.csv', 773, '66d817bb0d4118c2cf4a8e72.csv', '交易对账单-支付宝-20240903.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-04 16:18:03.788286');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1831245352838778880, '/file/2024/09/04/66d817c10d4118c2cf4a8e73.xlsx', 9726, '66d817c10d4118c2cf4a8e73.xlsx', '【2024-09-03】-M1723635576766-M7189826551600486-支付宝(直连商户).xlsx', '/file/', '2024/09/04/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-04 16:18:09.666814');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1838767893975228416, '/file/66f375aac76333160bc4e4ca.csv', 773, '66f375aac76333160bc4e4ca.csv', '交易对账单-支付宝-20240924.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25 10:30:03.234173');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1838767897783656448, '/file/2024/09/25/66f375acc76333160bc4e4cb.xlsx', 9725, '66f375acc76333160bc4e4cb.xlsx', '【2024-09-24】M1723635576766-M7189826551600486-支付宝(直连商户).xlsx', '/file/', '2024/09/25/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25 10:30:04.143105');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1838767901315260416, '/file/66f375acc76333160bc4e4cc.csv', 588, '66f375acc76333160bc4e4cc.csv', '交易对账单-支付宝-20240924.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25 10:30:04.986');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1838767901684359168, '/file/2024/09/25/66f375adc76333160bc4e4cd.xlsx', 9725, '66f375adc76333160bc4e4cd.xlsx', '【2024-09-24】M1723635576766-M7934041241299655-支付宝(直连商户).xlsx', '/file/', '2024/09/25/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25 10:30:05.074329');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1838767906600083456, '/file/66f375aec76333160bc4e4ce.csv', 588, '66f375aec76333160bc4e4ce.csv', '交易对账单-支付宝-20240924.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25 10:30:06.246034');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1838767907405389824, '/file/2024/09/25/66f375aec76333160bc4e4cf.xlsx', 9726, '66f375aec76333160bc4e4cf.xlsx', '【2024-09-24】M1723635576766-M8207639754663343-支付宝(直连商户).xlsx', '/file/', '2024/09/25/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25 10:30:06.438419');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1838767913310969856, '/file/66f375afc76333160bc4e4d0.csv', 773, '66f375afc76333160bc4e4d0.csv', '交易对账单-支付宝-20240924.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25 10:30:07.845724');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1838767913768148992, '/file/2024/09/25/66f375afc76333160bc4e4d1.xlsx', 9726, '66f375afc76333160bc4e4d1.xlsx', '【2024-09-24】M1723635576766-M8088873888246277-支付宝(直连商户).xlsx', '/file/', '2024/09/25/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-25 10:30:07.955428');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1839130282750988288, '/file/66f4c72ba2e5db5ec8f6d8c4.csv', 773, '66f4c72ba2e5db5ec8f6d8c4.csv', '交易对账单-支付宝-20240925.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-26 10:30:03.451004');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1839130286337118208, '/file/2024/09/26/66f4c72ca2e5db5ec8f6d8c5.xlsx', 9726, '66f4c72ca2e5db5ec8f6d8c5.xlsx', '【2024-09-25】M1723635576766-M7189826551600486-支付宝(直连商户).xlsx', '/file/', '2024/09/26/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-26 10:30:04.308822');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1839130289847750656, '/file/66f4c72da2e5db5ec8f6d8c6.csv', 588, '66f4c72da2e5db5ec8f6d8c6.csv', '交易对账单-支付宝-20240925.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-26 10:30:05.144483');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1839130290191683584, '/file/2024/09/26/66f4c72da2e5db5ec8f6d8c7.xlsx', 9725, '66f4c72da2e5db5ec8f6d8c7.xlsx', '【2024-09-25】M1723635576766-M7934041241299655-支付宝(直连商户).xlsx', '/file/', '2024/09/26/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-26 10:30:05.22687');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1839130295765913600, '/file/66f4c72ea2e5db5ec8f6d8c8.csv', 588, '66f4c72ea2e5db5ec8f6d8c8.csv', '交易对账单-支付宝-20240925.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-26 10:30:06.55616');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1839130296114040832, '/file/2024/09/26/66f4c72ea2e5db5ec8f6d8c9.xlsx', 9725, '66f4c72ea2e5db5ec8f6d8c9.xlsx', '【2024-09-25】M1723635576766-M8207639754663343-支付宝(直连商户).xlsx', '/file/', '2024/09/26/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-26 10:30:06.639039');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1839130304922079232, '/file/66f4c730a2e5db5ec8f6d8ca.csv', 773, '66f4c730a2e5db5ec8f6d8ca.csv', '交易对账单-支付宝-20240925.csv', '/file/', '', 'csv', 'application/octet-stream', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-26 10:30:08.739167');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1839130305433784320, '/file/2024/09/26/66f4c730a2e5db5ec8f6d8cb.xlsx', 9725, '66f4c730a2e5db5ec8f6d8cb.xlsx', '【2024-09-25】M1723635576766-M8088873888246277-支付宝(直连商户).xlsx', '/file/', '2024/09/26/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'minio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-26 10:30:08.861025');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1845026949664677888, '/file/670a3ade27257f956fb37432.csv', 1218, '670a3ade27257f956fb37432.csv', '交易对账单-云闪付-20241008.csv', '/file/', '', 'csv', 'text/plain', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-10-12 17:01:18.398618');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1845026982594158592, '/file/2024/10/12/670a3ae627257f956fb37433.xlsx', 9929, '670a3ae627257f956fb37433.xlsx', '订阅通知.xlsx', '/file/', '2024/10/12/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-10-12 17:01:26.251311');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1845027095811006464, '/file/670a3b0127257f956fb37434.csv', 588, '670a3b0127257f956fb37434.csv', '交易对账单-支付宝-20241007.csv', '/file/', '', 'csv', 'application/octet-stream', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-10-12 17:01:53.243283');
-INSERT INTO "public"."starter_file_upload_info" VALUES (1845027103906013184, '/file/2024/10/12/670a3b0327257f956fb37435.xlsx', 9725, '670a3b0327257f956fb37435.xlsx', '订阅通知.xlsx', '/file/', '2024/10/12/', 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'local', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-10-12 17:01:55.174477');
 
 -- ----------------------------
 -- Primary Key structure for table base_dict
@@ -2503,6 +2429,11 @@ ALTER TABLE "public"."iam_user_info" ADD CONSTRAINT "iam_user_info_pkey" PRIMARY
 ALTER TABLE "public"."iam_user_role" ADD CONSTRAINT "iam_user_role_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
+-- Primary Key structure for table pay_alloc_config
+-- ----------------------------
+ALTER TABLE "public"."pay_alloc_config" ADD CONSTRAINT "pay_alloc_config_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
 -- Indexes structure for table pay_alloc_detail
 -- ----------------------------
 CREATE INDEX "allocation_id" ON "public"."pay_alloc_detail" USING btree (
@@ -2526,29 +2457,29 @@ ALTER TABLE "public"."pay_alloc_group" ADD CONSTRAINT "pay_allocation_group_pkey
 ALTER TABLE "public"."pay_alloc_group_receiver" ADD CONSTRAINT "pay_allocation_group_receiver_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table pay_alloc_receiver
+-- Indexes structure for table pay_alloc_order
 -- ----------------------------
-ALTER TABLE "public"."pay_alloc_receiver" ADD CONSTRAINT "pay_alloc_receiver_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Indexes structure for table pay_alloc_transaction
--- ----------------------------
-CREATE INDEX "alloc_no" ON "public"."pay_alloc_transaction" USING btree (
+CREATE INDEX "alloc_no" ON "public"."pay_alloc_order" USING btree (
   "alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 );
 COMMENT ON INDEX "public"."alloc_no" IS '分账单号索引';
-CREATE INDEX "biz_alloc_no" ON "public"."pay_alloc_transaction" USING btree (
+CREATE INDEX "biz_alloc_no" ON "public"."pay_alloc_order" USING btree (
   "biz_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 );
 COMMENT ON INDEX "public"."biz_alloc_no" IS '商户分账单号索引';
-CREATE INDEX "order_id" ON "public"."pay_alloc_transaction" USING btree (
+CREATE INDEX "order_id" ON "public"."pay_alloc_order" USING btree (
   "order_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 COMMENT ON INDEX "public"."order_id" IS '支付订单ID索引';
-CREATE INDEX "out_alloc_no" ON "public"."pay_alloc_transaction" USING btree (
+CREATE INDEX "out_alloc_no" ON "public"."pay_alloc_order" USING btree (
   "out_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 );
 COMMENT ON INDEX "public"."out_alloc_no" IS '通道分账号索引';
+
+-- ----------------------------
+-- Primary Key structure for table pay_alloc_receiver
+-- ----------------------------
+ALTER TABLE "public"."pay_alloc_receiver" ADD CONSTRAINT "pay_alloc_receiver_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table pay_api_const
