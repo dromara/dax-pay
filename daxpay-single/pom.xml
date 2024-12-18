@@ -13,7 +13,7 @@
 
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-single</artifactId>
-    <version>3.0.0.beta2</version>
+    <version>3.0.0.beta3</version>
     <packaging>pom</packaging>
     <description>单商户支付核心功能实现</description>
 
@@ -33,8 +33,8 @@
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <minio.version>8.5.2</minio.version>
 
-        <bootx-platform.version>3.0.0.beta2</bootx-platform.version>
-        <daxpay.version>3.0.0.beta2</daxpay.version>
+        <bootx-platform.version>3.0.0.beta3</bootx-platform.version>
+        <daxpay.version>3.0.0.beta3</daxpay.version>
     </properties>
 
     <dependencies>

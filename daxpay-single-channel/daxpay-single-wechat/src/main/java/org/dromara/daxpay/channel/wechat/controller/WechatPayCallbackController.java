@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ * 微信回调通知控制器
  * @author xxm
  * @since 2024/7/29
  */
@@ -43,7 +43,6 @@ public class WechatPayCallbackController {
         paymentAssistService.initMchApp(appId);
         return payCallbackService.payHandle(request);
     }
-
 
     @Operation(summary = "微信退款回调")
     @PostMapping("/refund")

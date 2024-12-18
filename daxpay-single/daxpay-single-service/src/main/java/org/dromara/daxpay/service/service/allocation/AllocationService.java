@@ -110,7 +110,8 @@ public class AllocationService {
                 return new AllocationResult()
                         .setAllocNo(order.getAllocNo())
                         .setBizAllocNo(order.getBizAllocNo())
-                        .setStatus(order.getStatus());
+                        .setStatus(order.getStatus())
+                        .setResult(order.getResult());
             }
             // 创建分账策略并初始化
             var allocationStrategy = PaymentStrategyFactory.create(payOrder.getChannel(),AbsAllocationStrategy.class);
@@ -137,7 +138,8 @@ public class AllocationService {
             return new AllocationResult()
                     .setAllocNo(order.getAllocNo())
                     .setBizAllocNo(order.getBizAllocNo())
-                    .setStatus(order.getStatus());
+                    .setStatus(order.getStatus())
+                    .setResult(order.getResult());
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -214,7 +216,8 @@ public class AllocationService {
             return new AllocationResult()
                     .setAllocNo(order.getAllocNo())
                     .setBizAllocNo(order.getBizAllocNo())
-                    .setStatus(order.getStatus());
+                    .setStatus(order.getStatus())
+                    .setResult(order.getResult());
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -296,7 +299,8 @@ public class AllocationService {
         return new AllocationResult()
                 .setAllocNo(allocOrder.getAllocNo())
                 .setBizAllocNo(allocOrder.getBizAllocNo())
-                .setStatus(allocOrder.getStatus());
+                .setStatus(allocOrder.getStatus())
+                .setResult(allocOrder.getResult());
     }
 
 

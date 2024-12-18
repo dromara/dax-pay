@@ -95,7 +95,7 @@ public class AllocationSyncService {
 
         // 调用同步逻辑
         this.sync(allocOrder);
-        return new AllocSyncResult();
+        return new AllocSyncResult().setResult(allocOrder.getResult()).setStatus(allocOrder.getStatus());
     }
 
     /**

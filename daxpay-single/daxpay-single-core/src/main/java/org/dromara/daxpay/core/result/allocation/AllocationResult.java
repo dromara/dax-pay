@@ -3,6 +3,7 @@ package org.dromara.daxpay.core.result.allocation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.core.enums.AllocationResultEnum;
 import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 
 /**
@@ -28,4 +29,11 @@ public class AllocationResult {
      */
     @Schema(description = "分账状态")
     private String status;
+
+    /**
+     * 分账结果
+     * @see AllocationResultEnum
+     */
+    @Schema(description = "分账结果")
+    private String result;
 }

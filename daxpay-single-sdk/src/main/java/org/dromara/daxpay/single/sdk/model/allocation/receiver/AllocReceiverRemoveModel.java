@@ -1,4 +1,4 @@
-package org.dromara.daxpay.single.sdk.model.allocation;
+package org.dromara.daxpay.single.sdk.model.allocation.receiver;
 
 import lombok.Data;
 

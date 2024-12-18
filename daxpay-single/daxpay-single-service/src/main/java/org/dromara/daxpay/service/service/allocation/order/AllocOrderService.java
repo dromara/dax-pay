@@ -4,6 +4,7 @@ import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
@@ -163,10 +164,10 @@ public class AllocOrderService {
                 .setOrderNo(payOrder.getOrderNo())
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setOutOrderNo(payOrder.getOutOrderNo())
-                .setTitle(payOrder.getTitle())
                 .setAllocNo(TradeNoGenerateUtil.allocation())
                 .setBizAllocNo(param.getBizAllocNo())
                 .setChannel(payOrder.getChannel())
+                .setTitle(param.getTitle())
                 .setDescription(param.getDescription())
                 .setStatus(AllocationStatusEnum.PROCESSING.getCode())
                 .setResult(AllocationResultEnum.ALL_PENDING.getCode())
@@ -174,6 +175,10 @@ public class AllocOrderService {
                 .setNotifyUrl(param.getNotifyUrl())
                 .setAttach(param.getAttach())
                 .setClientIp(param.getClientIp());
+        // 订单标题为空, 则使用支付订单标题
+        if (StrUtil.isBlank(allocOrder.getTitle())){
+            allocOrder.setTitle(payOrder.getTitle());
+        }
         // 如果分账订单金额为0, 设置为忽略状态
         if (BigDecimalUtil.isEqual(sumAmount, BigDecimal.ZERO)) {
             allocOrder.setStatus(AllocationStatusEnum.IGNORE.getCode())

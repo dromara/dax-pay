@@ -7,6 +7,7 @@ import org.dromara.daxpay.core.enums.AllocationResultEnum;
 import org.dromara.daxpay.core.enums.AllocationStatusEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class AllocOrderResult {
      * 总分账金额
      */
     @Schema(description = "总分账金额")
-    private Integer amount;
+    private BigDecimal amount;
 
     /**
      * 分账描述

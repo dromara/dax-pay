@@ -40,6 +40,11 @@ public class AllocationParam extends PaymentCommonParam {
     @Schema(description = "商户支付订单号")
     private String bizOrderNo;
 
+    /** 分账标题 */
+    @Size(max = 100, message = "分账描述不可超过100位")
+    @Schema(description = "分账标题")
+    private String title;
+
     /** 分账描述 */
     @Size(max = 150, message = "分账描述不可超过150位")
     @Schema(description = "分账描述")

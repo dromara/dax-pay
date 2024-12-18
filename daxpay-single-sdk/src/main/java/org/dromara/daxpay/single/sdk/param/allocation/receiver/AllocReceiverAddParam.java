@@ -1,4 +1,4 @@
-package org.dromara.daxpay.single.sdk.param.allocation;
+package org.dromara.daxpay.single.sdk.param.allocation.receiver;
 
 import cn.hutool.core.lang.TypeReference;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import org.dromara.daxpay.single.sdk.code.AllocReceiverTypeEnum;
 import org.dromara.daxpay.single.sdk.code.AllocRelationTypeEnum;
 import org.dromara.daxpay.single.sdk.code.ChannelEnum;
-import org.dromara.daxpay.single.sdk.model.allocation.AllocReceiverAddModel;
+import org.dromara.daxpay.single.sdk.model.allocation.receiver.AllocReceiverAddModel;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
 import org.dromara.daxpay.single.sdk.util.JsonUtil;

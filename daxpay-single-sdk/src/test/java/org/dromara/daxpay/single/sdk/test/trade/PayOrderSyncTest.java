@@ -40,7 +40,6 @@ public class PayOrderSyncTest {
         param.setBizOrderNo("SDK_1715341621498");
         DaxPayResult<PaySyncModel> execute = DaxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
-
     }
 
 }

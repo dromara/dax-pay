@@ -1,8 +1,8 @@
-package org.dromara.daxpay.single.sdk.param.allocation;
+package org.dromara.daxpay.single.sdk.param.allocation.receiver;
 
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
-import org.dromara.daxpay.single.sdk.model.allocation.AllocReceiverRemoveModel;
+import org.dromara.daxpay.single.sdk.model.allocation.receiver.AllocReceiverRemoveModel;
 import org.dromara.daxpay.single.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import lombok.Data;

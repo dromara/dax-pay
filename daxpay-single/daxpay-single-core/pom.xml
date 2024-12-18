@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.dromara.daxpay</groupId>
         <artifactId>daxpay-single</artifactId>
-        <version>3.0.0.beta2</version>
+        <version>3.0.0.beta3</version>
     </parent>
 
     <artifactId>daxpay-single-core</artifactId>
