@@ -22,7 +22,7 @@ import org.dromara.daxpay.service.code.DaxPayCode;
 import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
 import org.dromara.daxpay.service.dao.allocation.order.AllocDetailManager;
 import org.dromara.daxpay.service.dao.allocation.order.AllocOrderManager;
-import org.dromara.daxpay.service.dao.config.AllocConfigManager;
+import org.dromara.daxpay.service.dao.allocation.AllocConfigManager;
 import org.dromara.daxpay.service.entity.allocation.AllocConfig;
 import org.dromara.daxpay.service.entity.allocation.order.AllocAndDetail;
 import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;

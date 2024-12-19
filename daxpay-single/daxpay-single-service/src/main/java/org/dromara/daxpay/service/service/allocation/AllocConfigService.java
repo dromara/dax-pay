@@ -7,7 +7,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.service.convert.allocation.AllocConfigConvert;
-import org.dromara.daxpay.service.dao.config.AllocConfigManager;
+import org.dromara.daxpay.service.dao.allocation.AllocConfigManager;
 import org.dromara.daxpay.service.entity.allocation.AllocConfig;
 import org.dromara.daxpay.service.param.allocation.AllocConfigParam;
 import org.dromara.daxpay.service.result.allocation.AllocConfigResult;

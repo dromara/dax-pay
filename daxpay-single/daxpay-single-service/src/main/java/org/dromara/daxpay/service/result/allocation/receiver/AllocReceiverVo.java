@@ -38,7 +38,6 @@ public class AllocReceiverVo extends MchAppResult {
     @Schema(description = "分账接收方类型")
     private String receiverType;
 
-
     @Schema(description = "接收方账号")
     @SensitiveInfo
     private String receiverAccount;

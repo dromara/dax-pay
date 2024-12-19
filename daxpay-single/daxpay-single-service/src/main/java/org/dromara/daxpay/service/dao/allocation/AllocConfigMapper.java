@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.dao.config;
+package org.dromara.daxpay.service.dao.allocation;
 
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;

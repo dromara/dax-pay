@@ -18,7 +18,7 @@ import org.dromara.daxpay.service.code.DaxPayCode;
 import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.dao.allocation.order.AllocDetailManager;
 import org.dromara.daxpay.service.dao.allocation.order.AllocOrderManager;
-import org.dromara.daxpay.service.dao.config.AllocConfigManager;
+import org.dromara.daxpay.service.dao.allocation.AllocConfigManager;
 import org.dromara.daxpay.service.entity.allocation.AllocConfig;
 import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
 import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;

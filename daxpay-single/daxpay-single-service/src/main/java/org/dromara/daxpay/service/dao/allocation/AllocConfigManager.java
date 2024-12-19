@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.dao.config;
+package org.dromara.daxpay.service.dao.allocation;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import lombok.RequiredArgsConstructor;

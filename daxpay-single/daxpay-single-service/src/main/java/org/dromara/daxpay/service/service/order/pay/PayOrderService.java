@@ -7,7 +7,7 @@ import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.core.exception.TradeNotExistException;
 import org.dromara.daxpay.core.param.allocation.order.AllocationParam;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
-import org.dromara.daxpay.service.dao.config.AllocConfigManager;
+import org.dromara.daxpay.service.dao.allocation.AllocConfigManager;
 import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
 import org.dromara.daxpay.service.entity.allocation.AllocConfig;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
