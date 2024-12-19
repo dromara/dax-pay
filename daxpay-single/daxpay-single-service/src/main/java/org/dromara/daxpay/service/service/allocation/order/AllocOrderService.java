@@ -224,10 +224,12 @@ public class AllocOrderService {
             AllocGroup allocationGroup;
             if (Objects.nonNull(param.getGroupNo())){
                 // 指定分账组
-                allocationGroup = groupManager.findByGroupNo(param.getGroupNo(),param.getAppId()).orElseThrow(() -> new DataErrorException("未查询到分账组"));
+                allocationGroup = groupManager.findByGroupNo(payOrder.getChannel(), param.getGroupNo(),param.getAppId())
+                        .orElseThrow(() -> new DataErrorException("未查询到分账组"));
             } else {
                 // 默认分账组
-                allocationGroup = groupManager.findDefaultGroup(payOrder.getChannel(),param.getAppId()).orElseThrow(() -> new DataErrorException("未查询到默认分账组"));
+                allocationGroup = groupManager.findDefaultGroup(payOrder.getChannel(),param.getAppId())
+                        .orElseThrow(() -> new DataErrorException("未查询到默认分账组"));
             }
             // 判断通道类型是否一致
             if (!Objects.equals(allocationGroup.getChannel(), payOrder.getChannel())){

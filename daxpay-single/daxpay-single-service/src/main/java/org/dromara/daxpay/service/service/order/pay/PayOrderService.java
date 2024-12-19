@@ -3,6 +3,7 @@ package org.dromara.daxpay.service.service.order.pay;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.core.exception.TradeNotExistException;
 import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
@@ -85,15 +86,20 @@ public class PayOrderService {
      * 自动分账
      */
     public void autoAllocation(Long id){
-        PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
-        // 是否开启自动完结
-        AllocConfig allocConfig = allocConfigManager.findByAppId(payOrder.getAppId()).orElse(null);
-        if (Objects.nonNull(allocConfig)){
-            paymentAssistService.initMchApp(payOrder.getAppId());
-            AllocationParam param = new AllocationParam()
-                    .setBizAllocNo("B"+TradeNoGenerateUtil.allocation());
-            param.setAppId(payOrder.getAppId());
-            allocationService.start(param, payOrder);
+        try {
+            PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
+            // 是否开启自动完结
+            AllocConfig allocConfig = allocConfigManager.findByAppId(payOrder.getAppId()).orElse(null);
+            if (Objects.nonNull(allocConfig)){
+                paymentAssistService.initMchApp(payOrder.getAppId());
+                AllocationParam param = new AllocationParam()
+                        .setBizAllocNo("B"+TradeNoGenerateUtil.allocation());
+                param.setAppId(payOrder.getAppId());
+                allocationService.start(param, payOrder);
+            }
+        } catch (DataErrorException e) {
+            // 如果没有默认分账组, 会触发分账失败, 并不需要额外处理
+            log.warn("自动分账失败", e);
         }
     }
 }
