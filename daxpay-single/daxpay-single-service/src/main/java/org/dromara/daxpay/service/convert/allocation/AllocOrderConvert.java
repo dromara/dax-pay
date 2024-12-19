@@ -2,8 +2,8 @@ package org.dromara.daxpay.service.convert.allocation;
 
 import org.dromara.daxpay.core.result.allocation.order.AllocDetailResult;
 import org.dromara.daxpay.core.result.allocation.order.AllocOrderResult;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
+import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 import org.dromara.daxpay.service.result.allocation.order.AllocDetailVo;
 import org.dromara.daxpay.service.result.allocation.order.AllocOrderVo;
 import org.mapstruct.Mapper;

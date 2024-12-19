@@ -2,8 +2,8 @@ package org.dromara.daxpay.service.service.notice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
+import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
 import org.dromara.daxpay.service.entity.order.transfer.TransferOrder;

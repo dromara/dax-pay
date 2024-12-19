@@ -1,4 +1,4 @@
-package org.dromara.daxpay.core.param.allocation.transaction;
+package org.dromara.daxpay.core.param.allocation.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;

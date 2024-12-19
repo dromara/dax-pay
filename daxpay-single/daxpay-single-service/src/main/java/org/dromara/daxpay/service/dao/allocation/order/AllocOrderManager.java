@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.dao.allocation.transaction;
+package org.dromara.daxpay.service.dao.allocation.order;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.service.common.entity.MchAppBaseEntity;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 import org.dromara.daxpay.service.param.order.allocation.AllocOrderQuery;
 import org.springframework.stereotype.Repository;
 

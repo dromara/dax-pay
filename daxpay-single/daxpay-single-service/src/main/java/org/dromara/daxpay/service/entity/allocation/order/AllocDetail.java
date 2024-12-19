@@ -1,4 +1,4 @@
-package org.dromara.daxpay.service.entity.allocation.transaction;
+package org.dromara.daxpay.service.entity.allocation.order;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;

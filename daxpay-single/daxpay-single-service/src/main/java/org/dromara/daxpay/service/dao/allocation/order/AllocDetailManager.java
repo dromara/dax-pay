@@ -1,9 +1,9 @@
-package org.dromara.daxpay.service.dao.allocation.transaction;
+package org.dromara.daxpay.service.dao.allocation.order;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

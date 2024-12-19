@@ -1,8 +1,8 @@
-package org.dromara.daxpay.service.dao.allocation.transaction;
+package org.dromara.daxpay.service.dao.allocation.order;
 
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 
 /**
  *

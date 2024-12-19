@@ -5,8 +5,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
 import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocOrder;
+import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.exception.DataErrorException;
 import org.dromara.daxpay.core.exception.TradeNotExistException;
-import org.dromara.daxpay.core.param.allocation.transaction.AllocationParam;
+import org.dromara.daxpay.core.param.allocation.order.AllocationParam;
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
 import org.dromara.daxpay.service.dao.config.AllocConfigManager;
 import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
