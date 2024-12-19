@@ -1,5 +1,7 @@
 package org.dromara.daxpay.channel.wechat.service.callback;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
@@ -28,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -143,7 +146,8 @@ public class WechatRefundCallbackService {
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getRefundFee()));
         String timeEnd = result.getSuccessTime();
         if (StrUtil.isNotBlank(timeEnd)){
-            callbackInfo.setFinishTime(WechatPayUtil.parseV2(timeEnd));
+            LocalDateTime finishTime = LocalDateTimeUtil.parse(timeEnd, DatePattern.NORM_DATETIME_PATTERN);
+            callbackInfo.setFinishTime(finishTime);
         }
 
     }
