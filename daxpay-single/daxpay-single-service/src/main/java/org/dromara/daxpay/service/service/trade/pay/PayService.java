@@ -190,7 +190,6 @@ public class PayService {
                     .setStatus(PayStatusEnum.SUCCESS.getCode())
                     .setPayTime(payResultBo.getFinishTime());
         }
-        payOrderManager.updateById(payOrder);
         // 扩展记录更新
         payOrder.setErrorMsg(null);
         payOrder.setErrorCode(null);
