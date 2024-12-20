@@ -29,7 +29,7 @@ public class AliPayAuthStrategy extends AbsChannelAuthStrategy {
      */
     @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 
     /**

@@ -21,6 +21,6 @@ public class AliPayCashierCodeStrategy extends AbsCashierCodeStrategy {
      */
     @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 }

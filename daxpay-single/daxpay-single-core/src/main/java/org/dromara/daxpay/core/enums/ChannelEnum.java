@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public enum ChannelEnum {
 
     /** 支付宝 - 直连商户 */
-    ALI("ali_pay"),
+    ALIPAY("ali_pay"),
     /** 微信支付 */
     WECHAT("wechat_pay"),
     /** 云闪付 */

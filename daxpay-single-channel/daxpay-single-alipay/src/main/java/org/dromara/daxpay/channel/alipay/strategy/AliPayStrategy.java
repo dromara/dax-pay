@@ -31,7 +31,7 @@ public class AliPayStrategy extends AbsPayStrategy {
 
      @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 
     /**

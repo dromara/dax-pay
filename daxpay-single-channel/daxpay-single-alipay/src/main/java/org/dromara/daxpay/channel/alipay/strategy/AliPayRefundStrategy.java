@@ -28,7 +28,7 @@ public class AliPayRefundStrategy extends AbsRefundStrategy {
      */
      @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 
 

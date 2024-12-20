@@ -27,7 +27,7 @@ public class AliPaySyncOrderStrategy extends AbsSyncPayOrderStrategy {
      */
      @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 
     /**

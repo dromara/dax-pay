@@ -26,7 +26,7 @@ public class AliAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 
     /**

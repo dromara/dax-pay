@@ -24,7 +24,7 @@ public class AliPayCheckoutStrategy extends AbsCheckoutStrategy {
      */
     @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 
     /**

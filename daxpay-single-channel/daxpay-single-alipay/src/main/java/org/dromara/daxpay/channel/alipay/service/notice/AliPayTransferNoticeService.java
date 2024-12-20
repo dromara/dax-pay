@@ -51,7 +51,7 @@ public class AliPayTransferNoticeService {
     public String callback(Map<String, String> map) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         callbackInfo.setRawData(JsonUtil.toJsonStr(map))
-                .setChannel(ChannelEnum.ALI.getCode())
+                .setChannel(ChannelEnum.ALIPAY.getCode())
                 .setCallbackType(TradeTypeEnum.TRANSFER);
 
         // 通过 biz_content 获取值

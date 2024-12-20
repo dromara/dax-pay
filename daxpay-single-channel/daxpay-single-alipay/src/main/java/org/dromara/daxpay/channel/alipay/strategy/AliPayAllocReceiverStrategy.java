@@ -32,7 +32,7 @@ public class AliPayAllocReceiverStrategy extends AbsAllocReceiverStrategy {
      */
     @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 
     @Override

@@ -86,7 +86,7 @@ public class AliPayCallbackService {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         callback.setCallbackData(callbackParam);
         // 通道和回调类型
-        callback.setChannel(ChannelEnum.ALI.getCode());
+        callback.setChannel(ChannelEnum.ALIPAY.getCode());
         String refundFee = callbackParam.get(ResponseParams.REFUND_FEE);
         // 如果有退款金额，说明是退款回调
         if (StrUtil.isNotBlank(refundFee)){

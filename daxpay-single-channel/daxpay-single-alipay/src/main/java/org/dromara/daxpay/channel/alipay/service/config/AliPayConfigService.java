@@ -119,7 +119,7 @@ public class AliPayConfigService {
      */
     public AliPayConfig getAliPayConfig(){
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.ALI.getCode());
+        ChannelConfig channelConfig = channelConfigCacheService.get(mchAppInfo.getAppId(), ChannelEnum.ALIPAY.getCode());
         return AliPayConfig.convertConfig(channelConfig);
     }
 

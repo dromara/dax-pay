@@ -33,7 +33,7 @@ public class AliPaySyncRefundStrategy extends AbsSyncRefundOrderStrategy {
      */
     @Override
     public String getChannel() {
-        return ChannelEnum.ALI.getCode();
+        return ChannelEnum.ALIPAY.getCode();
     }
 
 

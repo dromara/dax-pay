@@ -77,7 +77,7 @@ public class AliPayConfig implements ToResult<AliPayConfigResult> {
         channelConfig.setOutAppId(this.getAliAppId());
         channelConfig.setAppId(this.getAppId());
         channelConfig.setEnable(this.getEnable());
-        channelConfig.setChannel(ChannelEnum.ALI.getCode());
+        channelConfig.setChannel(ChannelEnum.ALIPAY.getCode());
         AliPayConfig copy = AliPayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
         copy.setId(null).setAppId(null).setEnable(null).setAliAppId(null).setAppId(null);
