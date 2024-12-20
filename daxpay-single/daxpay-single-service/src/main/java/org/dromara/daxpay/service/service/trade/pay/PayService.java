@@ -139,7 +139,6 @@ public class PayService {
                     .setStatus(PayStatusEnum.SUCCESS.getCode())
                     .setPayTime(result.getFinishTime());
         }
-        payOrderManager.updateById(payOrder);
         payOrder.setErrorCode(null);
         payOrder.setErrorMsg(null);
         payOrderManager.updateById(payOrder);
