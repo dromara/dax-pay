@@ -72,7 +72,6 @@ public class PaySyncService {
         if (Objects.equals(payOrder.getStatus(), WAIT.getCode())){
             throw new TradeStatusErrorException("订单未开始支付, 请重新确认支付状态");
         }
-
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:pay" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){

@@ -1,4 +1,4 @@
-package org.dromara.daxpay.channel.alipay.service.allocation.receiver;
+package org.dromara.daxpay.channel.alipay.service.allocation;
 
 import cn.hutool.core.util.StrUtil;
 import com.alipay.api.AlipayResponse;
@@ -88,7 +88,6 @@ public class AliPayAllocReceiverService {
         AlipayTradeRoyaltyRelationUnbindRequest request = new AlipayTradeRoyaltyRelationUnbindRequest();
         request.setBizModel(model);
         AlipayTradeRoyaltyRelationUnbindResponse response =  aliPayConfigService.execute(request);
-        System.out.println(response);
         // 如果出现分账方不存在也视为成功
         if (Objects.equals(response.getSubCode(), AliPayCode.USER_NOT_EXIST)) {
             return;

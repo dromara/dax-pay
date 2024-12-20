@@ -3,7 +3,7 @@ package org.dromara.daxpay.channel.alipay.strategy;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.alipay.service.allocation.receiver.AliPayAllocReceiverService;
+import org.dromara.daxpay.channel.alipay.service.allocation.AliPayAllocReceiverService;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.strategy.AbsAllocReceiverStrategy;

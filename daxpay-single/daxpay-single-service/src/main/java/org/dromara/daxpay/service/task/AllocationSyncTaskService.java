@@ -14,8 +14,4 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AllocationSyncTaskService {
 
-    /**
-     * 分账同步
-     */
-
 }

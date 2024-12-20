@@ -85,7 +85,7 @@ public class PayOrderService {
     /**
      * 自动分账
      */
-    public void autoAllocation(Long id){
+    public void autoAllocation(@NotNull(message = "支付订单id不能为空") Long id){
         try {
             PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("支付订单不存在"));
             // 是否开启自动完结

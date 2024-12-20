@@ -45,7 +45,6 @@ public class AliPayTransferService {
         AlipayFundAccountQueryRequest request = new AlipayFundAccountQueryRequest();
         request.setBizModel(model);
         AlipayFundAccountQueryResponse response = aliPayConfigService.execute(request);
-        System.out.println(response);
     }
 
     /**
