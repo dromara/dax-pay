@@ -33,10 +33,10 @@
 
 ## 📃 文档和源码地址
 ### 文档地址
-在 [DaxPay文档站](https://doc.daxpay.cn/) 下的支付网关(DaxPay)模块下可以进行查阅相关文档，具体链接地址如下：
-[快速指南](https://doc.daxpay.cn/single/guides/overview/项目介绍.html)、
-[支付对接](https://doc.daxpay.cn/single/gateway/overview/接口清单.html)、
-[操作手册](https://doc.daxpay.cn/single/admin/config/平台配置.html)
+在 [DaxPay文档站](https://daxpay.dromara.org/) 下的支付网关(DaxPay)模块下可以进行查阅相关文档，具体链接地址如下：
+[快速指南](https://daxpay.dromara.org/single/guides/overview/项目介绍.html)、
+[支付对接](https://daxpay.dromara.org/single/gateway/overview/接口清单.html)、
+[操作手册](https://daxpay.dromara.org/single/admin/config/平台配置.html)
 
 ### 项目地址
 
@@ -71,7 +71,7 @@
 不会对原业务系统的架构产生影响。如果是Java项目，可以使用SDK简化接入流程， 其他语言可以参照中的说明使用HTTP接口方式接入。
 
 ### Java客户端SDK
-> SDK版本号与支付网关的版本保持一致，如果需要使用，请在pom.xml中添加如下依赖。SDK使用方式参考[SDK使用说明](https://doc.daxpay.cn/single/gateway/overview/SDK使用说明.html)。
+> SDK版本号与支付网关的版本保持一致，如果需要使用，请在pom.xml中添加如下依赖。SDK使用方式参考[SDK使用说明](https://daxpay.dromara.org/single/gateway/overview/SDK使用说明.html)。
 
 ```xml
  <!-- 支付SDK -->
