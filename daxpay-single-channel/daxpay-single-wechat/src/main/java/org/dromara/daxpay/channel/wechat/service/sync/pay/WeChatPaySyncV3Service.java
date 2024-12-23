@@ -42,7 +42,7 @@ public class WeChatPaySyncV3Service {
 
             // 获取支付金额
             var payerTotal = Optional.ofNullable(result.getAmount())
-                    .map(WxPayOrderQueryV3Result.Amount::getPayerTotal)
+                    .map(WxPayOrderQueryV3Result.Amount::getTotal)
                     .map(PayUtil::conversionAmount)
                     .orElse(null);
 
