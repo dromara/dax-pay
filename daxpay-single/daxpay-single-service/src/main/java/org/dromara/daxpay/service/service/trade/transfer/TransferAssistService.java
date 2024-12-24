@@ -53,6 +53,16 @@ public class TransferAssistService {
     }
 
     /**
+     * 更新转账错误信息
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateOrderByError(TransferOrder transferOrder, String message){
+        transferOrder.setErrorMsg(message);
+        transferOrder.setStatus(TransferStatusEnum.FAIL.getCode());
+        transferOrderManager.updateById(transferOrder);
+    }
+
+    /**
      *  转账关闭
      */
     public void close(TransferOrder order, LocalDateTime finishTime) {

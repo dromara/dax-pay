@@ -111,7 +111,7 @@ public class RefundService {
         } catch (Exception e) {
             log.error("退款出现错误", e);
             // 更新退款失败的记录
-            refundAssistService.updateOrderByError(refundOrder, e);
+            refundAssistService.updateOrderByError(refundOrder, e.getMessage());
             return refundAssistService.buildResult(refundOrder);
         }
         SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder, refundResultBo);
@@ -163,7 +163,7 @@ public class RefundService {
         } catch (Exception e) {
             log.error("重新退款失败:", e);
             // 记录退款失败的记录
-            refundAssistService.updateOrderByError(refundOrder, e);
+            refundAssistService.updateOrderByError(refundOrder, e.getMessage());
             // 返回错误响应对象
             return refundAssistService.buildResult(refundOrder);
         }

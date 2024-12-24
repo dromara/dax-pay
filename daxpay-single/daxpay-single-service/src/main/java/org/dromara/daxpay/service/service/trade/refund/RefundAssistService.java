@@ -3,6 +3,9 @@ package org.dromara.daxpay.service.service.trade.refund;
 import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.BigDecimalUtil;
+import cn.hutool.core.util.StrUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.PayRefundStatusEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.enums.RefundStatusEnum;
@@ -17,11 +20,7 @@ import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
 import org.dromara.daxpay.service.service.notice.MerchantNoticeService;
 import org.dromara.daxpay.service.service.record.flow.TradeFlowRecordService;
-import cn.hutool.core.util.StrUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -116,9 +115,9 @@ public class RefundAssistService {
     /**
      * 更新退款错误信息
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void updateOrderByError(RefundOrder refundOrder, Exception e){
-        refundOrder.setErrorMsg(e.getMessage());
+    @Transactional(rollbackFor = Exception.class)
+    public void updateOrderByError(RefundOrder refundOrder,  String message){
+        refundOrder.setErrorMsg(message);
         refundOrder.setStatus(RefundStatusEnum.FAIL.getCode());
         refundOrderManager.updateById(refundOrder);
     }

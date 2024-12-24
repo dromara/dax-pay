@@ -2,10 +2,14 @@ package org.dromara.daxpay.service.service.trade.transfer;
 
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.TradeTypeEnum;
 import org.dromara.daxpay.core.enums.TransferStatusEnum;
-import org.dromara.daxpay.core.exception.OperationFailException;
-import org.dromara.daxpay.core.exception.PayFailureException;
 import org.dromara.daxpay.core.exception.TradeNotExistException;
 import org.dromara.daxpay.core.param.trade.transfer.TransferSyncParam;
 import org.dromara.daxpay.core.result.trade.transfer.TransferSyncResult;
@@ -20,16 +24,12 @@ import org.dromara.daxpay.service.service.record.flow.TradeFlowRecordService;
 import org.dromara.daxpay.service.service.record.sync.TradeSyncRecordService;
 import org.dromara.daxpay.service.strategy.AbsSyncTransferOrderStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+
+import static org.dromara.daxpay.core.enums.TradeStatusEnum.FAIL;
 
 /**
  * 转账同步接口
@@ -54,7 +54,7 @@ public class TransferSyncService {
      */
     public TransferSyncResult sync(TransferSyncParam param) {
         TransferOrder transferOrder = transferOrderService.findByBizOrTransferNo(param.getTransferNo(), param.getBizTransferNo(),param.getAppId())
-                .orElseThrow(() -> new TradeNotExistException("退款订单不存在"));
+                .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
         // 执行订单同步逻辑
         return this.syncTransferOrder(transferOrder);
     }
@@ -76,12 +76,6 @@ public class TransferSyncService {
         try {
             // 执行操作, 获取支付网关同步的结果
             var syncResult = syncPayStrategy.doSync();
-            // 判断是否同步成功
-            if (!syncResult.isSyncSuccess()){
-                // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(transferOrder, syncResult, false);
-                throw new OperationFailException(syncResult.getSyncErrorMsg());
-            }
             // 转账订单的网关订单号是否一致, 不一致进行更新
             if (!Objects.equals(syncResult.getOutTransferNo(), transferOrder.getOutTransferNo())){
                 transferOrder.setOutTransferNo(syncResult.getOutTransferNo());
@@ -94,14 +88,20 @@ public class TransferSyncService {
                 if (!statusSync){
                     this.adjustHandler(syncResult, transferOrder);
                 }
-            } catch (PayFailureException e) {
+            } catch (Exception e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
                 syncResult.setSyncSuccess(false);
                 this.saveRecord(transferOrder, syncResult, false);
                 throw e;
             }
-            // 同步成功记录日志
-            this.saveRecord(transferOrder, syncResult, statusSync);
+            // 判断是否同步成功
+            if (syncResult.isSyncSuccess()){
+                // 同步成功
+                this.saveRecord(transferOrder, syncResult, statusSync);
+            } else {
+                // 同步失败, 返回失败响应, 同时记录失败的日志
+                this.saveRecord(transferOrder, syncResult, true);
+            }
             return new TransferSyncResult()
                     .setOrderStatus(transferOrder.getStatus())
                     .setAdjust(statusSync);
@@ -113,13 +113,16 @@ public class TransferSyncService {
 
     /**
      * 检查状态是否一致
-     * @see TransferStatusEnum 退款单状态
+     * @see TransferStatusEnum 转账单状态
      */
     private boolean checkStatus(TransferSyncResultBo syncResult, TransferOrder order){
         var syncStatus = syncResult.getTransferStatus();
         String orderStatus = order.getStatus();
-
-        // 如果订单为退款中, 对状态进行比较
+        // 如果本地订单为失败时, 直接返回需要进行调整
+        if (orderStatus.equals(FAIL.getCode())){
+            return false;
+        }
+        // 如果订单为转账中, 对状态进行比较
         if (Objects.equals(orderStatus, TransferStatusEnum.SUCCESS.getCode())){
             // 转账完成
             if (Objects.equals(syncStatus, TransferStatusEnum.SUCCESS)) {
@@ -138,7 +141,7 @@ public class TransferSyncService {
     }
 
     /**
-     * 进行退款订单和支付订单的调整
+     * 进行转账订单和支付订单的调整
      */
     private void adjustHandler(TransferSyncResultBo syncResult, TransferOrder order){
         var syncStatusEnum = syncResult.getTransferStatus();
@@ -146,14 +149,15 @@ public class TransferSyncService {
         switch (syncStatusEnum) {
             case SUCCESS -> SpringUtil.getBean(this.getClass()).success(order, syncResult);
             case PROGRESS -> {}
-            case FAIL,CLOSE -> transferAssistService.close(order,syncResult.getFinishTime());
+            case CLOSE -> transferAssistService.close(order,syncResult.getFinishTime());
+            case FAIL -> transferAssistService.updateOrderByError(order,syncResult.getSyncErrorMsg());
             default -> throw new BizException("代码有问题");
         }
     }
 
 
     /**
-     * 退款成功, 更新退款单和支付单
+     * 转账成功, 更新转账单和支付单
      */
     @Transactional(rollbackFor = Exception.class)
     public void success(TransferOrder order, TransferSyncResultBo syncResult) {
