@@ -1,4 +1,4 @@
-package org.dromara.daxpay.channel.alipay.bo.reconcile;
+package org.dromara.daxpay.channel.alipay.bo;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.hutool.core.annotation.Alias;

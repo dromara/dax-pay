@@ -1,5 +1,7 @@
-package org.dromara.daxpay.channel.alipay.strategy.merchant;
+package org.dromara.daxpay.channel.alipay.strategy.isv;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.alipay.entity.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.service.allocation.AlipayAllocationService;
 import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
@@ -7,8 +9,6 @@ import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
 import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
 import org.dromara.daxpay.service.strategy.AbsAllocationStrategy;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AlipayAllocationStrategy extends AbsAllocationStrategy {
+public class AlipayIsvAllocationStrategy extends AbsAllocationStrategy {
 
     private final AlipayAllocationService aliPayAllocationService;
 
@@ -30,7 +30,7 @@ public class AlipayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public String getChannel() {
-        return ChannelEnum.ALIPAY.getCode();
+        return ChannelEnum.ALIPAY_ISV.getCode();
     }
 
     /**
@@ -38,7 +38,7 @@ public class AlipayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public AllocStartResultBo start() {
-        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(false);
+        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(true);
         return aliPayAllocationService.start(getOrder(), getDetails(), aliPayConfig);
     }
 
@@ -47,7 +47,7 @@ public class AlipayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public void finish() {
-        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(false);
+        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(true);
         aliPayAllocationService.finish(getOrder(), getDetails(), aliPayConfig);
     }
 
@@ -56,7 +56,7 @@ public class AlipayAllocationStrategy extends AbsAllocationStrategy {
      */
     @Override
     public AllocSyncResultBo doSync() {
-        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(false);
+        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(true);
         return aliPayAllocationService.sync(getOrder(), getDetails(), aliPayConfig);
     }
 }

@@ -36,7 +36,7 @@ import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AliPayAllocReceiverService {
+public class AlipayAllocReceiverService {
     private final AlipayConfigService aliPayConfigService;
 
     /**

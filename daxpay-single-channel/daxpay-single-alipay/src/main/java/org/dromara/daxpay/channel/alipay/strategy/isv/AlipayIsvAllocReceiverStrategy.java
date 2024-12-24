@@ -1,4 +1,4 @@
-package org.dromara.daxpay.channel.alipay.strategy.merchant;
+package org.dromara.daxpay.channel.alipay.strategy.isv;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Service
 @Scope(SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class AlipayAllocReceiverStrategy extends AbsAllocReceiverStrategy {
+public class AlipayIsvAllocReceiverStrategy extends AbsAllocReceiverStrategy {
 
     private final AlipayAllocReceiverService receiverService;
 
@@ -36,7 +36,7 @@ public class AlipayAllocReceiverStrategy extends AbsAllocReceiverStrategy {
      */
     @Override
     public String getChannel() {
-        return ChannelEnum.ALIPAY.getCode();
+        return ChannelEnum.ALIPAY_ISV.getCode();
     }
 
     @Override
@@ -49,7 +49,6 @@ public class AlipayAllocReceiverStrategy extends AbsAllocReceiverStrategy {
      */
     @Override
     public boolean validation(){
-        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(false);
         return receiverService.validation(this.getAllocReceiver());
     }
 
@@ -58,7 +57,7 @@ public class AlipayAllocReceiverStrategy extends AbsAllocReceiverStrategy {
      */
     @Override
     public void bind() {
-        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(false);
+        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(true);
         if (!receiverService.validation(this.getAllocReceiver())){
             throw new ValidationFailedException("分账接收者参数未通过校验");
         }
@@ -70,7 +69,7 @@ public class AlipayAllocReceiverStrategy extends AbsAllocReceiverStrategy {
      */
     @Override
     public void unbind() {
-        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(false);
+        AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(true);
         if (!receiverService.validation(this.getAllocReceiver())){
             throw new ValidationFailedException("分账参数未通过校验");
         }

@@ -2,7 +2,7 @@ package org.dromara.daxpay.channel.alipay.entity;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.util.JsonUtil;
-import org.dromara.daxpay.channel.alipay.convert.config.AlipayConfigConvert;
+import org.dromara.daxpay.channel.alipay.convert.AlipayConfigConvert;
 import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.entity.config.ChannelConfig;

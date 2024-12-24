@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
-import org.dromara.daxpay.channel.alipay.convert.config.AlipayConfigConvert;
+import org.dromara.daxpay.channel.alipay.convert.AlipayConfigConvert;
 import org.dromara.daxpay.channel.alipay.entity.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.param.config.AlipayConfigParam;
 import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;

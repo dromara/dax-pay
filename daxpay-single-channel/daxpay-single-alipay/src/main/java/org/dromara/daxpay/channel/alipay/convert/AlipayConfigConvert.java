@@ -1,4 +1,4 @@
-package org.dromara.daxpay.channel.alipay.convert.config;
+package org.dromara.daxpay.channel.alipay.convert;
 
 import org.dromara.daxpay.channel.alipay.entity.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.param.config.AlipayConfigParam;
