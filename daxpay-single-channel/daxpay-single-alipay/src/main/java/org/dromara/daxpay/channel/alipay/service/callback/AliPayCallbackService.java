@@ -1,6 +1,14 @@
 package org.dromara.daxpay.channel.alipay.service.callback;
 
-import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.StrUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.channel.alipay.code.AlipayCode.PayStatus;
+import org.dromara.daxpay.channel.alipay.code.AlipayCode.ResponseParams;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
 import org.dromara.daxpay.core.enums.CallbackStatusEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
@@ -11,20 +19,12 @@ import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.service.record.callback.TradeCallbackRecordService;
 import org.dromara.daxpay.service.service.trade.pay.PayCallbackService;
 import org.dromara.daxpay.service.service.trade.refund.RefundCallbackService;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.util.StrUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
-
-import static org.dromara.daxpay.channel.alipay.code.AliPayCode.*;
 
 /**
  * 支付宝回调服务
@@ -35,9 +35,9 @@ import static org.dromara.daxpay.channel.alipay.code.AliPayCode.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AliPayCallbackService {
+public class AlipayCallbackService {
 
-    private final AliPayConfigService aliPayConfigService;
+    private final AlipayConfigService aliPayConfigService;
     private final PayCallbackService payCallbackService;
     private final TradeCallbackRecordService tradeCallbackRecordService;
     private final RefundCallbackService refundCallbackService;
@@ -45,14 +45,14 @@ public class AliPayCallbackService {
     /**
      * 回调处理
      */
-    public String callbackHandle(HttpServletRequest request) {
+    public String callbackHandle(HttpServletRequest request, boolean isv) {
         Map<String, String> callbackParam = PayUtil.toMap(request);
 
         // 判断为支付还是退款
-        TradeTypeEnum tradeTypeEnum = this.resolveAndGetType(callbackParam);
+        TradeTypeEnum tradeTypeEnum = this.resolveAndGetType(callbackParam,isv);
         if (tradeTypeEnum == TradeTypeEnum.PAY){
             // 支付回调处理
-            if (this.payHandler(callbackParam)){
+            if (this.payHandler(callbackParam,isv)){
                 // 执行回调业务处理
                 payCallbackService.payCallback();
                 // 保存记录
@@ -65,7 +65,7 @@ public class AliPayCallbackService {
             }
         } else {
             // 解析数据
-            if (this.refundHandle(callbackParam)){
+            if (this.refundHandle(callbackParam,isv)){
                 // 执行退款回调处理
                 refundCallbackService.refundCallback();
                 // 保存记录
@@ -82,11 +82,11 @@ public class AliPayCallbackService {
     /**
      * 解析回调内容并返回类型
      */
-    public TradeTypeEnum resolveAndGetType(Map<String, String> callbackParam){
+    public TradeTypeEnum resolveAndGetType(Map<String, String> callbackParam, boolean isv){
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         callback.setCallbackData(callbackParam);
         // 通道和回调类型
-        callback.setChannel(ChannelEnum.ALIPAY.getCode());
+        callback.setChannel(isv? ChannelEnum.ALIPAY_ISV.getCode():ChannelEnum.ALIPAY.getCode());
         String refundFee = callbackParam.get(ResponseParams.REFUND_FEE);
         // 如果有退款金额，说明是退款回调
         if (StrUtil.isNotBlank(refundFee)){
@@ -102,15 +102,14 @@ public class AliPayCallbackService {
     /**
      * 支付回调处理, 解析数据
      */
-    public boolean payHandler(Map<String, String> callbackParam) {
+    public boolean payHandler(Map<String, String> callbackParam, boolean isv) {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
 
-        if (!aliPayConfigService.verifyNotify(callbackParam)) {
+        if (!aliPayConfigService.verifyNotify(callbackParam,isv)) {
             log.error("支付宝回调报文验签失败");
             callback.setCallbackStatus(CallbackStatusEnum.FAIL).setCallbackErrorMsg("支付宝回调报文验签失败");
             return false;
         }
-
         // 网关订单号
         callback.setOutTradeNo(callbackParam.get(ResponseParams.TRADE_NO));
         // 支付订单ID
@@ -136,10 +135,10 @@ public class AliPayCallbackService {
     /**
      * 退款回调处理
      */
-    public boolean refundHandle(Map<String, String> callbackParam ) {
+    public boolean refundHandle(Map<String, String> callbackParam, boolean isv) {
         CallbackLocal callback = PaymentContextLocal.get().getCallbackInfo();
         // 验签
-        if (!aliPayConfigService.verifyNotify(callbackParam)) {
+        if (!aliPayConfigService.verifyNotify(callbackParam, isv)) {
             log.error("支付宝回调报文验签失败");
             callback.setCallbackStatus(CallbackStatusEnum.FAIL).setCallbackErrorMsg("支付宝回调报文验签失败");
             return false;

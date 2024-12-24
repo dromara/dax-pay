@@ -53,7 +53,7 @@ public class WeChatPayAllocationV2Service {
     private final WechatPayConfigService wechatPayConfigService;
 
     /**
-     * 分账
+     * 发起分账 使用分账号作为请求号
      */
     public AllocStartResultBo start(AllocOrder allocOrder, List<AllocDetail> details, WechatPayConfig config) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
@@ -89,7 +89,7 @@ public class WeChatPayAllocationV2Service {
     }
 
     /**
-     * 完结
+     * 分账完结 使用ID作为请求号
      */
     public void finish(AllocOrder allocOrder, WechatPayConfig config) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);

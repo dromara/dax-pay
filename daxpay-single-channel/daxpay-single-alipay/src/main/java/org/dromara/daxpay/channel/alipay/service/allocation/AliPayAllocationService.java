@@ -2,6 +2,17 @@ package org.dromara.daxpay.channel.alipay.service.allocation;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.function.CollectorsFunction;
+import org.dromara.daxpay.channel.alipay.code.AlipayCode;
+import org.dromara.daxpay.channel.alipay.entity.AliPayConfig;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
+import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
+import org.dromara.daxpay.core.exception.OperationFailException;
+import org.dromara.daxpay.core.exception.TradeFailException;
+import org.dromara.daxpay.core.util.PayUtil;
+import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
+import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
+import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -14,16 +25,6 @@ import com.alipay.api.response.AlipayTradeOrderSettleQueryResponse;
 import com.alipay.api.response.AlipayTradeOrderSettleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.alipay.code.AliPayCode;
-import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
-import org.dromara.daxpay.core.enums.AllocDetailResultEnum;
-import org.dromara.daxpay.core.exception.OperationFailException;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
-import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
-import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
-import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -43,17 +44,17 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AliPayAllocationService {
-    private final AliPayConfigService aliPayConfigService;
+    private final AlipayConfigService aliPayConfigService;
 
     /**
      * 发起分账
      */
-    public AllocStartResultBo start(AllocOrder allocOrder, List<AllocDetail> orderDetails){
+    public AllocStartResultBo start(AllocOrder allocOrder, List<AllocDetail> orderDetails, AliPayConfig aliPayConfig){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(allocOrder.getAllocNo());
         model.setTradeNo(allocOrder.getOutOrderNo());
-        model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
+        model.setRoyaltyMode(AlipayCode.ALLOC_ASYNC);
 
         // 分账子参数 根据Id排序
         orderDetails.sort(Comparator.comparing(MpIdEntity::getId));
@@ -70,7 +71,7 @@ public class AliPayAllocationService {
         request.setBizModel(model);
         AlipayTradeOrderSettleResponse response;
         try {
-            response = aliPayConfigService.execute(request);
+            response = aliPayConfigService.execute(request,aliPayConfig);
             this.verifyErrorMsg(response);
         } catch (AlipayApiException e) {
             log.error("网关返回分账失败: {}", e.getMessage());
@@ -84,12 +85,12 @@ public class AliPayAllocationService {
     /**
      * 分账完结
      */
-    public void finish(AllocOrder allocOrder, List<AllocDetail> orderDetails){
+    public void finish(AllocOrder allocOrder, List<AllocDetail> orderDetails, AliPayConfig aliPayConfig){
         // 分账主体参数
         AlipayTradeOrderSettleModel model = new AlipayTradeOrderSettleModel();
         model.setOutRequestNo(allocOrder.getAllocNo());
         model.setTradeNo(allocOrder.getOutOrderNo());
-        model.setRoyaltyMode(AliPayCode.ALLOC_ASYNC);
+        model.setRoyaltyMode(AlipayCode.ALLOC_ASYNC);
         // 分账完结参数
         SettleExtendParams extendParams = new SettleExtendParams();
         extendParams.setRoyaltyFinish(Boolean.TRUE.toString());
@@ -110,7 +111,7 @@ public class AliPayAllocationService {
         request.setBizModel(model);
         AlipayTradeOrderSettleResponse response = null;
         try {
-            response = aliPayConfigService.execute(request);
+            response = aliPayConfigService.execute(request,aliPayConfig);
         } catch (AlipayApiException e) {
             log.error("网关返回分账失败: {}", e.getMessage());
             throw new TradeFailException(e.getMessage());
@@ -121,7 +122,7 @@ public class AliPayAllocationService {
     /**
      * 分账状态同步
      */
-    public AllocSyncResultBo sync(AllocOrder allocOrder, List<AllocDetail> allocOrderDetails){
+    public AllocSyncResultBo sync(AllocOrder allocOrder, List<AllocDetail> allocOrderDetails, AliPayConfig aliPayConfig){
         AlipayTradeOrderSettleQueryModel model = new AlipayTradeOrderSettleQueryModel();
         model.setOutRequestNo(allocOrder.getAllocNo());
         model.setTradeNo(allocOrder.getOutOrderNo());
@@ -129,7 +130,7 @@ public class AliPayAllocationService {
         request.setBizModel(model);
         AlipayTradeOrderSettleQueryResponse response;
         try {
-            response = aliPayConfigService.execute(request);
+            response = aliPayConfigService.execute(request,aliPayConfig);
         } catch (AlipayApiException e) {
             throw new OperationFailException(e.getMessage());
         }
@@ -175,11 +176,11 @@ public class AliPayAllocationService {
      */
     private AllocDetailResultEnum getDetailResultEnum (String result){
         // 进行中
-        if(Objects.equals(AliPayCode.ALLOC_PROCESSING, result)){
+        if(Objects.equals(AlipayCode.ALLOC_PROCESSING, result)){
             return AllocDetailResultEnum.PENDING;
         }
         // 成功
-        if(Objects.equals(AliPayCode.ALLOC_SUCCESS, result)){
+        if(Objects.equals(AlipayCode.ALLOC_SUCCESS, result)){
             return AllocDetailResultEnum.SUCCESS;
         }
         // 失败
