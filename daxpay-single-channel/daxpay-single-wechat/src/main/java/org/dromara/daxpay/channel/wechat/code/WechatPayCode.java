@@ -1,7 +1,5 @@
 package org.dromara.daxpay.channel.wechat.code;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,6 +14,12 @@ public interface WechatPayCode {
     String API_V2 = "apiV2";
 
     String API_V3 = "apiV3";
+
+    // OpenId类型
+    // 服务商应用
+    String SP_OPENID = "sp";
+    // 子商户应用
+    String SUB_OPENID = "sub";
 
 
     /**

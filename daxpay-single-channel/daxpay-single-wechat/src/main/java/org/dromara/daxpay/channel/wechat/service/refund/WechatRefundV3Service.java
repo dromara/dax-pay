@@ -1,5 +1,12 @@
 package org.dromara.daxpay.channel.wechat.service.refund;
 
+import com.github.binarywang.wxpay.bean.request.WxPayRefundV3Request;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundV3Result;
+import com.github.binarywang.wxpay.constant.WxPayConstants;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.enums.WechatRefundStatusEnum;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
@@ -8,13 +15,6 @@ import org.dromara.daxpay.core.exception.TradeFailException;
 import org.dromara.daxpay.core.util.PayUtil;
 import org.dromara.daxpay.service.bo.trade.RefundResultBo;
 import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
-import com.github.binarywang.wxpay.bean.request.WxPayRefundV3Request;
-import com.github.binarywang.wxpay.bean.result.WxPayRefundV3Result;
-import com.github.binarywang.wxpay.constant.WxPayConstants;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.WxPayService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -42,7 +42,7 @@ public class WechatRefundV3Service {
                 .setTotal(PayUtil.convertCentAmount(refundOrder.getOrderAmount()));
         WxPayRefundV3Request request = new WxPayRefundV3Request()
                 .setOutRefundNo(refundOrder.getRefundNo())
-                .setNotifyUrl(wechatPayConfigService.getRefundNotifyUrl())
+                .setNotifyUrl(wechatPayConfigService.getRefundNotifyUrl(true))
                 .setReason(refundOrder.getReason())
                 .setOutTradeNo(refundOrder.getOrderNo())
                 .setAmount(amount);

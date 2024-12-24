@@ -1,17 +1,6 @@
 package org.dromara.daxpay.channel.wechat.service.allocation;
 
 import cn.bootx.platform.common.mybatisplus.function.CollectorsFunction;
-import cn.hutool.json.JSONUtil;
-import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingQueryRequest;
-import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingRequest;
-import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingUnfreezeRequest;
-import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingV3Request;
-import com.github.binarywang.wxpay.bean.profitsharing.result.ProfitSharingQueryResult;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.ProfitSharingService;
-import com.github.binarywang.wxpay.service.WxPayService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.enums.WechatAllocReceiverEnum;
 import org.dromara.daxpay.channel.wechat.enums.WechatAllocStatusEnum;
@@ -27,6 +16,17 @@ import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
 import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
 import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
 import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
+import cn.hutool.json.JSONUtil;
+import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingQueryRequest;
+import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingRequest;
+import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingUnfreezeRequest;
+import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingV3Request;
+import com.github.binarywang.wxpay.bean.profitsharing.result.ProfitSharingQueryResult;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.ProfitSharingService;
+import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.MERCHANT_NO;
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.OPEN_ID;
+
 
 /**
  * 微信分账V2版本接口
@@ -53,7 +54,7 @@ public class WeChatPayAllocationV2Service {
     private final WechatPayConfigService wechatPayConfigService;
 
     /**
-     * 发起分账 使用分账号作为请求号
+     * 分账
      */
     public AllocStartResultBo start(AllocOrder allocOrder, List<AllocDetail> details, WechatPayConfig config) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
@@ -89,7 +90,7 @@ public class WeChatPayAllocationV2Service {
     }
 
     /**
-     * 分账完结 使用ID作为请求号
+     * 完结
      */
     public void finish(AllocOrder allocOrder, WechatPayConfig config) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);

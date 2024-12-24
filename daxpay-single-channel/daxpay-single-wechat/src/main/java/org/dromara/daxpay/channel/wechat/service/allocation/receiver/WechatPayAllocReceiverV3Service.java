@@ -1,17 +1,17 @@
 package org.dromara.daxpay.channel.wechat.service.allocation.receiver;
 
-import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingReceiverV3Request;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.ProfitSharingService;
-import com.github.binarywang.wxpay.service.WxPayService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
 import org.dromara.daxpay.core.exception.ConfigErrorException;
 import org.dromara.daxpay.core.exception.OperationFailException;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
+import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingReceiverV3Request;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.ProfitSharingService;
+import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;

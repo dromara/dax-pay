@@ -1,15 +1,6 @@
 package org.dromara.daxpay.channel.wechat.service.allocation;
 
 import cn.bootx.platform.common.mybatisplus.function.CollectorsFunction;
-import cn.hutool.json.JSONUtil;
-import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingUnfreezeV3Request;
-import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingV3Request;
-import com.github.binarywang.wxpay.bean.profitsharing.result.ProfitSharingV3Result;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.ProfitSharingService;
-import com.github.binarywang.wxpay.service.WxPayService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.enums.WechatAllocReceiverEnum;
 import org.dromara.daxpay.channel.wechat.enums.WechatAllocStatusEnum;
@@ -24,6 +15,15 @@ import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
 import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
 import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
 import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
+import cn.hutool.json.JSONUtil;
+import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingUnfreezeV3Request;
+import com.github.binarywang.wxpay.bean.profitsharing.request.ProfitSharingV3Request;
+import com.github.binarywang.wxpay.bean.profitsharing.result.ProfitSharingV3Result;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.ProfitSharingService;
+import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.MERCHANT_NO;
 import static org.dromara.daxpay.core.enums.AllocReceiverTypeEnum.OPEN_ID;
 import static org.dromara.daxpay.core.enums.AllocationStatusEnum.*;
+
 
 /**
  * 微信分账V3版本接口
@@ -112,7 +113,7 @@ public class WeChatPayAllocationV3Service {
         ProfitSharingService sharingService = wxPayService.getProfitSharingService();
         // 根据订单状态判断 使用ID还是分账号
         String outOrderNo;
-        if (List.of(PROCESSING.getCode(),ALLOC_FAILED.getCode(), ALLOC_END.getCode()).contains(allocOrder.getStatus())){
+        if (List.of(PROCESSING.getCode(), ALLOC_FAILED.getCode(), ALLOC_END.getCode()).contains(allocOrder.getStatus())){
             outOrderNo = allocOrder.getAllocNo();
         } else {
             outOrderNo = String.valueOf(allocOrder.getId());

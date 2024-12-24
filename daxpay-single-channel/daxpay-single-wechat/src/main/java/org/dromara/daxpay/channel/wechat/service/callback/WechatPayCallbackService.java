@@ -1,5 +1,18 @@
 package org.dromara.daxpay.channel.wechat.service.callback;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
+import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyV3Result;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
@@ -13,16 +26,6 @@ import org.dromara.daxpay.service.common.context.CallbackLocal;
 import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.service.record.callback.TradeCallbackRecordService;
 import org.dromara.daxpay.service.service.trade.pay.PayCallbackService;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.JakartaServletUtil;
-import com.github.binarywang.wxpay.bean.notify.*;
-import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.WxPayService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,9 +49,9 @@ public class WechatPayCallbackService {
     /**
      * 支付回调处理
      */
-    public String payHandle(HttpServletRequest request){
+    public String payHandle(HttpServletRequest request, boolean isv){
         // 解析数据
-        if (this.resolve(request)){
+        if (this.resolve(request,isv)){
             // 执行回调业务处理
             payCallbackService.payCallback();
             // 保存记录
@@ -64,12 +67,13 @@ public class WechatPayCallbackService {
     /**
      * 支付回调处理, 解析数据
      */
-    public boolean resolve(HttpServletRequest request){
+    public boolean resolve(HttpServletRequest request, boolean isv){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 设置类型和通道
-        callbackInfo.setCallbackType(TradeTypeEnum.PAY).setChannel(ChannelEnum.WECHAT.getCode());
+        callbackInfo.setCallbackType(TradeTypeEnum.PAY)
+                .setChannel(isv? ChannelEnum.WECHAT_ISV.getCode():ChannelEnum.WECHAT.getCode());
 
-        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig();
+        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig(false);
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // v2 或 v3
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V2)) {
@@ -80,7 +84,7 @@ public class WechatPayCallbackService {
                 // 转换请求
                 WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(xml);
                 // 解析数据
-                this.resolveV2Data(wxPayOrderNotifyResult);
+                this.resolveV2Data(wxPayOrderNotifyResult,isv);
                 return true;
             } catch (WxPayException e) {
                 log.error("微信支付回调V2处理失败", e);
@@ -101,7 +105,7 @@ public class WechatPayCallbackService {
                 // 转换请求
                 WxPayNotifyV3Result wxPayNotifyV3Result = wxPayService.parseOrderNotifyV3Result(body, signatureHeader);
                 // 解析数据
-                this.resolvePayData(wxPayNotifyV3Result);
+                this.resolvePayData(wxPayNotifyV3Result,isv);
             } catch (WxPayException e) {
                 callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
                 log.error("微信支付回调V3处理失败", e);
@@ -114,7 +118,7 @@ public class WechatPayCallbackService {
     /**
      * 解析数据 v2
      */
-    private void resolveV2Data(WxPayOrderNotifyResult result){
+    private void resolveV2Data(WxPayOrderNotifyResult result, boolean isv){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 回调数据
         Map<String, String> map = result.toMap();
@@ -137,7 +141,7 @@ public class WechatPayCallbackService {
     /**
      * 解析数据 v3
      */
-    private void resolvePayData(WxPayNotifyV3Result v3Result){
+    private void resolvePayData(WxPayNotifyV3Result v3Result, boolean isv){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         var result = v3Result.getResult();
         // 回调数据

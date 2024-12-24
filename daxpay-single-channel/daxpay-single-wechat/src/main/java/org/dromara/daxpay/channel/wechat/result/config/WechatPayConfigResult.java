@@ -29,13 +29,25 @@ public class WechatPayConfigResult {
     @Schema(description = "微信应用appId")
     private String wxAppId;
 
-    /** 是否启用 */
-    @Schema(description = "是否启用")
-    private Boolean enable;
+    /** 子商户号 */
+    @Schema(description = "子商户号")
+    private String subMchId;
+
+    /** 子应用号 */
+    @Schema(description = "子应用号")
+    private String subAppId;
+
+    /** 是否为ISV商户(特约商户) */
+    @Schema(description = "是否为ISV商户(特约商户)")
+    private boolean isv;
 
     /** 授权认证地址 */
     @Schema(description = "授权认证地址")
     private String authUrl;
+
+    /** 是否启用 */
+    @Schema(description = "是否启用")
+    private Boolean enable;
 
     /** 支付限额 */
     @Schema(description = "支付限额")
@@ -63,28 +75,35 @@ public class WechatPayConfigResult {
     @SensitiveInfo
     private String appSecret;
 
-    /** apiclient_key.pem证书base64编码 */
+    /** 支付公钥(pub_key.pem) */
+    @Schema(description = "支付公钥(pub_key.pem)")
     @SensitiveInfo
-    @Schema(description = "私钥Key的base64编码")
-    private String privateKey;
+    private String publicKey;
 
-    /** apiclient_cert.pem证书base64编码 */
+    /** 支付公钥ID */
+    @Schema(description = "支付公钥ID")
     @SensitiveInfo
-    @Schema(description = "私钥证书base64编码")
+    private String publicKeyId;
+
+    /** 商户API证书(apiclient_cert.pem)base64编码 */
+    @Schema(description = "商户API证书(apiclient_cert.pem)base64编码")
+    @SensitiveInfo
     private String privateCert;
 
-    /** 证书序列号 */
+    /** 商户API证书私钥(apiclient_key.pem)证书base64编码 */
+    @Schema(description = "商户API证书私钥(apiclient_key.pem)证书base64编码")
+    @SensitiveInfo
+    private String privateKey;
+
+    /** 商户API证书序列号 */
     @Schema(description = "证书序列号")
+    @SensitiveInfo
     private String certSerialNo;
 
     /** apiclient_cert.p12证书Base64 */
     @Schema(description = "API证书中p12证书")
     @SensitiveInfo
     private String p12;
-
-    /** 是否沙箱环境 */
-    @Schema(description = "是否沙箱环境")
-    private boolean sandbox;
 
     /** 备注 */
     @Schema(description = "备注")
