@@ -6,6 +6,7 @@ import org.dromara.daxpay.core.enums.SignTypeEnum;
 import org.dromara.daxpay.core.enums.MerchantNotifyTypeEnum;
 import org.dromara.daxpay.service.convert.merchant.MchAppConvert;
 import org.dromara.daxpay.service.enums.MchAppStatusEnum;
+import org.dromara.daxpay.service.param.merchant.MchAppParam;
 import org.dromara.daxpay.service.result.merchant.MchAppResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -71,6 +72,13 @@ public class MchApp extends MpBaseEntity implements ToResult<MchAppResult> {
      */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String notifyUrl;
+
+    /**
+     * 初始化
+     */
+    public static MchApp init(MchAppParam param){
+        return MchAppConvert.CONVERT.toEntity(param);
+    }
 
     @Override
     public MchAppResult toResult() {
