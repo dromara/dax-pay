@@ -128,9 +128,9 @@ public class WechatRefundCallbackService {
         // 回调数据
         callbackInfo.setCallbackData(BeanUtil.beanToMap(result));
         // 网关退款号
-        callbackInfo.setOutTradeNo(result.getTransactionId());
+        callbackInfo.setOutTradeNo(result.getRefundId());
         // 退款号
-        callbackInfo.setTradeNo(result.getRefundId());
+        callbackInfo.setTradeNo(result.getOutRefundNo());
         // 退款状态 - 成功
         if (Objects.equals(RefundStatus.SUCCESS, result.getRefundStatus())){
             callbackInfo.setTradeStatus(RefundStatusEnum.SUCCESS.getCode());
