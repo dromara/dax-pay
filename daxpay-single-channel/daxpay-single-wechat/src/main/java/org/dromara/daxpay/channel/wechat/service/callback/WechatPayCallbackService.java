@@ -84,7 +84,7 @@ public class WechatPayCallbackService {
                 // 转换请求
                 WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(xml);
                 // 解析数据
-                this.resolveV2Data(wxPayOrderNotifyResult,isv);
+                this.resolveV2Data(wxPayOrderNotifyResult);
                 return true;
             } catch (WxPayException e) {
                 log.error("微信支付回调V2处理失败", e);
@@ -105,7 +105,7 @@ public class WechatPayCallbackService {
                 // 转换请求
                 WxPayNotifyV3Result wxPayNotifyV3Result = wxPayService.parseOrderNotifyV3Result(body, signatureHeader);
                 // 解析数据
-                this.resolvePayData(wxPayNotifyV3Result,isv);
+                this.resolvePayData(wxPayNotifyV3Result);
             } catch (WxPayException e) {
                 callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
                 log.error("微信支付回调V3处理失败", e);
@@ -118,7 +118,7 @@ public class WechatPayCallbackService {
     /**
      * 解析数据 v2
      */
-    private void resolveV2Data(WxPayOrderNotifyResult result, boolean isv){
+    private void resolveV2Data(WxPayOrderNotifyResult result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 回调数据
         Map<String, String> map = result.toMap();
@@ -141,7 +141,7 @@ public class WechatPayCallbackService {
     /**
      * 解析数据 v3
      */
-    private void resolvePayData(WxPayNotifyV3Result v3Result, boolean isv){
+    private void resolvePayData(WxPayNotifyV3Result v3Result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         var result = v3Result.getResult();
         // 回调数据

@@ -86,7 +86,7 @@ public class WechatRefundCallbackService {
                 // 转换请求
                 var result = wxPayService.parseRefundNotifyResult(xml);
                 // 解析数据
-                resolveV2Data(result,isv);
+                resolveV2Data(result);
                 return true;
             } catch (WxPayException e) {
                 callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
@@ -107,7 +107,7 @@ public class WechatRefundCallbackService {
                 // 转换请求
                 var result = wxPayService.parseRefundNotifyV3Result(body, signatureHeader);
                 // 解析数据
-                this.resolveV3Data(result,isv);
+                this.resolveV3Data(result);
                 return true;
             } catch (WxPayException e) {
                 callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
@@ -120,7 +120,7 @@ public class WechatRefundCallbackService {
     /**
      * 解析数据 v2
      */
-    public void resolveV2Data(WxPayRefundNotifyResult notifyResult, boolean isv){
+    public void resolveV2Data(WxPayRefundNotifyResult notifyResult){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 解密的数据
         var result = notifyResult.getReqInfo();
@@ -155,7 +155,7 @@ public class WechatRefundCallbackService {
     /**
      * 解析数据 v3
      */
-    public void resolveV3Data(WxPayRefundNotifyV3Result v3Result, boolean isv){
+    public void resolveV3Data(WxPayRefundNotifyV3Result v3Result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         var result = v3Result.getResult();
         // 回调数据

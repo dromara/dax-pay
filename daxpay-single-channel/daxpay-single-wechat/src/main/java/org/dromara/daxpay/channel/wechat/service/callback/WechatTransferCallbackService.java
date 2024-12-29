@@ -64,7 +64,7 @@ public class WechatTransferCallbackService {
      */
     public boolean resolve(HttpServletRequest request, boolean isv) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        callbackInfo.setChannel(ChannelEnum.WECHAT.getCode())
+        callbackInfo.setChannel(isv? ChannelEnum.WECHAT_ISV.getCode():ChannelEnum.WECHAT.getCode())
                 .setCallbackType(TradeTypeEnum.TRANSFER);
         WechatPayConfig config = wechatPayConfigService.getAndCheckConfig(false);
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
@@ -80,7 +80,7 @@ public class WechatTransferCallbackService {
         try {
             var notifyV3Result = wxPayService.baseParseOrderNotifyV3Result(body, signatureHeader, WxPayTransferBatchesNotifyV3Result.class, WxPayTransferBatchesNotifyV3Result.DecryptNotifyResult.class);
             // 解析数据
-            this.resolveData(notifyV3Result,isv);
+            this.resolveData(notifyV3Result);
         } catch (WxPayException e) {
             callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
             log.error("微信转账回调V3处理失败", e);
@@ -92,14 +92,10 @@ public class WechatTransferCallbackService {
     /**
      * 微信转账到零钱回调
      */
-    public void resolveData(WxPayTransferBatchesNotifyV3Result notifyV3Result, boolean isv) {
+    public void resolveData(WxPayTransferBatchesNotifyV3Result notifyV3Result) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 解析数据
         var result = notifyV3Result.getResult();
-
-        // 设置类型和通道
-        callbackInfo.setCallbackType(TradeTypeEnum.TRANSFER)
-                .setChannel(ChannelEnum.WECHAT.getCode());
         // 回调数据
         callbackInfo.setCallbackData(BeanUtil.beanToMap(result));
         // 网关转账批次号
