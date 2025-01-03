@@ -141,6 +141,7 @@ public class AliPayService {
      */
     @SneakyThrows
     public String appPay(String amount, PayOrder payOrder, AliPayConfig aliPayConfig) {
+        AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setSubject(payOrder.getTitle());
         model.setProductCode(AlipayCode.Products.QUICK_MSECURITY_PAY);
@@ -163,7 +164,7 @@ public class AliPayService {
         request.setNotifyUrl(aliPayConfigService.getNotifyUrl(aliPayConfig.isIsv()));
         try {
             // 异步回调必须到当前系统中
-            AlipayTradeAppPayResponse response = aliPayConfigService.execute(request,aliPayConfig);
+            AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
             return response.getBody();
         }
         catch (AlipayApiException e) {
