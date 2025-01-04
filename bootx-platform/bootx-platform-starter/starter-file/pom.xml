@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-starter</artifactId>
-        <version>3.0.0.beta3</version>
+        <version>3.0.0.beta4</version>
     </parent>
 
     <artifactId>starter-file</artifactId>
