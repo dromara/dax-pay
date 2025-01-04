@@ -72,7 +72,6 @@ public class PaySyncService {
         if (Objects.equals(payOrder.getStatus(), WAIT.getCode())){
             throw new TradeStatusErrorException("订单未开始支付, 请重新确认支付状态");
         }
-
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:pay" + payOrder.getId(),10000,200);
         if (Objects.isNull(lock)){
@@ -84,12 +83,6 @@ public class PaySyncService {
         try {
             // 执行操作, 获取支付网关同步的结果
             PaySyncResultBo syncResult = syncPayStrategy.doSync();
-            // 判断是否同步成功
-            if (!syncResult.isSyncSuccess()){
-                // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(payOrder, syncResult, false);
-                throw new OperationFailException(syncResult.getSyncErrorMsg());
-            }
             // 支付订单的网关订单号是否一致, 不一致进行更新
             if (!Objects.equals(syncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
                 payOrder.setOutOrderNo(syncResult.getOutOrderNo());
@@ -102,14 +95,17 @@ public class PaySyncService {
                 if (!statusSync){
                     this.adjustHandler(syncResult, payOrder);
                 }
-            } catch (PayFailureException e) {
+            } catch (Exception e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResult.setSyncSuccess(false);
-                this.saveRecord(payOrder, syncResult, false);
-                throw e;
+                syncResult.setSyncSuccess(false).setSyncErrorMsg(e.getMessage());
             }
-            // 同步成功记录日志
-            this.saveRecord(payOrder, syncResult, !statusSync);
+            if (syncResult.isSyncSuccess()){
+                // 同步成功记录日志
+                this.saveRecord(payOrder, syncResult, !statusSync);
+            } else {
+                // 同步失败记录日志
+                this.saveRecord(payOrder, syncResult, true);
+            }
             return new PaySyncResult()
                     .setOrderStatus(payOrder.getStatus())
                     .setAdjust(statusSync);
@@ -126,7 +122,10 @@ public class PaySyncService {
     private boolean checkAndAdjust(PaySyncResultBo payRemoteSyncResult, PayOrder order){
         var payStatus = payRemoteSyncResult.getPayStatus();
         String orderStatus = order.getStatus();
-
+        // 如果本地订单为失败时, 直接返回需要进行调整
+        if (orderStatus.equals(FAIL.getCode())){
+            return false;
+        }
         // 本地订单为支付中时, 对状态进行比较,
         if (orderStatus.equals(PROGRESS.getCode())){
             // 如果返回订单也是支付中
@@ -158,6 +157,8 @@ public class PaySyncService {
             case CLOSE, CANCEL -> this.closeLocal(payOrder);
             // 超时关闭和交易不存在(特殊) 关闭本地支付订单, 同时调用网关进行关闭, 确保后续这个订单不能被支付
             case TIMEOUT -> this.closeRemote(payOrder);
+            // 同步失败处理
+            case FAIL -> this.failLocal(payOrder,payRemoteSyncResult);
             default -> throw new SystemUnknownErrorException("代码有问题");
         }
     }
@@ -188,6 +189,17 @@ public class PaySyncService {
         payOrderManager.updateById(order);
         merchantNoticeService.registerPayNotice(order);
     }
+
+    /**
+     * 同步失败
+     * 同步失败后, 讲订单设置为失败状态, 预防无限重试, 失败不会触发消息通知
+     */
+    private void failLocal(PayOrder order, PaySyncResultBo syncResult) {
+        // 执行策略的关闭方法
+        order.setStatus(FAIL.getCode()).setErrorMsg(syncResult.getSyncErrorMsg());
+        payOrderManager.updateById(order);
+    }
+
     /**
      * 关闭网关交易, 同时也会关闭本地支付
      * 回调: 执行所有的支付通道关闭支付逻辑

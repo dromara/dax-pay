@@ -18,7 +18,9 @@ public enum TradeTypeEnum {
 
     PAY("pay","支付"),
     REFUND("refund","退款"),
-    TRANSFER("transfer","转账"),;
+    TRANSFER("transfer","转账"),
+    ALLOCATION("allocation","分账"),
+    ;
 
     private final String code;
     private final String name;

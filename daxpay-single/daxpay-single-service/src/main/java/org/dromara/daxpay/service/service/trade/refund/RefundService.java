@@ -111,7 +111,7 @@ public class RefundService {
         } catch (Exception e) {
             log.error("退款出现错误", e);
             // 更新退款失败的记录
-            refundAssistService.updateOrderByError(refundOrder, e);
+            refundAssistService.updateOrderByError(refundOrder, e.getMessage());
             return refundAssistService.buildResult(refundOrder);
         }
         SpringUtil.getBean(this.getClass()).successHandler(refundOrder, payOrder, refundResultBo);
@@ -159,11 +159,11 @@ public class RefundService {
             // 执行退款策略
             refundResultBo = refundStrategy.doRefundHandler();
             // 注册一个两分钟后执行的同步任务, 作为接不到回调任务的兜底
-            delayJobService.registerByTransaction(refundOrder.getId(), DaxPayCode.Event.MERCHANT_PAY_TIMEOUT, 2*60*1000L);
+            delayJobService.registerByTransaction(refundOrder.getId(), DaxPayCode.Event.ORDER_PAY_TIMEOUT, 2*60*1000L);
         } catch (Exception e) {
             log.error("重新退款失败:", e);
             // 记录退款失败的记录
-            refundAssistService.updateOrderByError(refundOrder, e);
+            refundAssistService.updateOrderByError(refundOrder, e.getMessage());
             // 返回错误响应对象
             return refundAssistService.buildResult(refundOrder);
         }
@@ -217,7 +217,7 @@ public class RefundService {
             merchantNoticeService.registerRefundNotice(refundOrder);
         } else {
             // 注册延时同步事件
-            delayJobService.registerByTransaction(refundOrder.getId(), DaxPayCode.Event.MERCHANT_REFUND_SYNC, 2*60*1000L);
+            delayJobService.registerByTransaction(refundOrder.getId(), DaxPayCode.Event.ORDER_REFUND_SYNC, 2*60*1000L);
         }
         refundOrderManager.updateById(refundOrder);
     }

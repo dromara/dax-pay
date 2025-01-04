@@ -2,6 +2,7 @@ package org.dromara.daxpay.service.entity.allocation.receiver;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.experimental.FieldNameConstants;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
 import org.dromara.daxpay.core.enums.AllocRelationTypeEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
@@ -12,7 +13,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.service.convert.allocation.AllocReceiverConvert;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocReceiverVo;
 
 /**
  * 分账接收方
@@ -21,12 +22,16 @@ import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@FieldNameConstants
 @Accessors(chain = true)
 @TableName("pay_alloc_receiver")
-public class AllocReceiver extends MchAppBaseEntity implements ToResult<AllocReceiverResultBo> {
+public class AllocReceiver extends MchAppBaseEntity implements ToResult<AllocReceiverVo> {
 
     /** 分账接收方编号, 需要保证唯一 */
     private String receiverNo;
+
+    /** 接收方名称 */
+    private String name;
 
     /**
      * 所属通道
@@ -58,7 +63,7 @@ public class AllocReceiver extends MchAppBaseEntity implements ToResult<AllocRec
     private String relationName;
 
     @Override
-    public AllocReceiverResultBo toResult() {
+    public AllocReceiverVo toResult() {
         return AllocReceiverConvert.CONVERT.toBo(this);
     }
 }

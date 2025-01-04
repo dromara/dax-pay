@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.service.enums.MchAppStatusEnum;
 
 import java.math.BigDecimal;
 
@@ -28,7 +29,7 @@ public class MchAppParam {
 
     /** 应用名称 */
     @Schema(description = "应用名称")
-    @NotNull(message = "应用名称不可为空", groups = ValidationGroup.add.class)
+    @NotNull(message = "应用名称不可为空")
     private String appName;
 
     /**
@@ -36,13 +37,21 @@ public class MchAppParam {
      * @see SignTypeEnum
      */
     @Schema(description = "签名方式")
-    @NotNull(message = "签名方式不可为空", groups = ValidationGroup.add.class)
+    @NotNull(message = "签名方式不可为空")
     private String signType;
+
+    /**
+     * 应用状态
+     * @see MchAppStatusEnum
+     */
+    @Schema(description = "应用状态")
+    @NotNull(message = "应用状态不可为空")
+    private String status;
 
 
     /** 签名秘钥 */
     @Schema(description = "签名秘钥")
-    @NotNull(message = "签名秘钥不可为空", groups = ValidationGroup.add.class)
+    @NotNull(message = "签名秘钥不可为空")
     private String signSecret;
 
     /** 是否对请求进行验签 */
@@ -51,12 +60,12 @@ public class MchAppParam {
 
     /** 支付限额 */
     @Schema(description = "支付限额")
-    @NotNull(message = "支付限额不可为空", groups = ValidationGroup.add.class)
+    @NotNull(message = "支付限额不可为空")
     private BigDecimal limitAmount;
 
     /** 订单默认超时时间(分钟) */
     @Schema(description = "订单默认超时时间(分钟)")
-    @NotNull(message = "订单默认超时时间(分钟)不可为空", groups = ValidationGroup.add.class)
+    @NotNull(message = "订单默认超时时间(分钟)不可为空")
     @Min(value = 5, message = "订单默认超时时间(分钟)不可小于5分钟")
     private Integer orderTimeout;
 

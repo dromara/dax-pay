@@ -17,6 +17,9 @@ import org.dromara.daxpay.core.enums.PayMethodEnum;
 @Schema(title = "收银台配置项")
 public class CheckoutItemConfigResult {
 
+    /** 主键 */
+    @Schema(description = "主键")
+    private Long id;
     /**
      * 发起调用的类型
      * @see CheckoutCallTypeEnum

@@ -1,8 +1,7 @@
 package org.dromara.daxpay.single.sdk.net;
 
+import lombok.Data;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -11,8 +10,7 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/2/2
  */
-@Getter
-@Setter
+@Data
 public abstract class DaxPayRequest<T> {
 
     /** 应用号 */

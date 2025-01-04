@@ -18,10 +18,10 @@ import org.dromara.daxpay.core.enums.PayMethodEnum;
 public class CheckoutAggregateConfigResult {
 
     /**
-     * 支付类型
+     * 聚合支付类型
      * @see CheckoutAggregateEnum
      */
-    @Schema(description = "支付类型")
+    @Schema(description = "聚合支付类型")
     private String type;
 
     /**

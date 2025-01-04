@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 @Schema(title = "微信支付配置")
 public class WechatPayConfigParam {
-
     /** 主键 */
     @Schema(description = "主键")
     private Long id;
@@ -32,6 +31,18 @@ public class WechatPayConfigParam {
     @NotBlank(message = "微信应用appId不可为空")
     @Schema(description = "微信应用appId")
     private String wxAppId;
+
+    /** 子商户号 */
+    @Schema(description = "子商户号")
+    private String subMchId;
+
+    /** 子应用号 */
+    @Schema(description = "子应用号")
+    private String subAppId;
+
+    /** 是否为ISV商户(特约商户) */
+    @Schema(description = "是否为ISV商户(特约商户)")
+    private boolean isv;
 
     /** 是否启用 */
     @NotNull(message = "是否启用不可为空")
@@ -67,15 +78,23 @@ public class WechatPayConfigParam {
     @Schema(description = "APPID对应的接口密码，用于获取微信公众号jsapi支付时使用")
     private String appSecret;
 
-    /** apiclient_key.pem证书base64编码 */
-    @Schema(description = "私钥证书base64编码")
-    private String privateKey;
+    /** 支付公钥(pub_key.pem) */
+    @Schema(description = "支付公钥(pub_key.pem)")
+    private String publicKey;
 
-    /** apiclient_cert.pem证书base64编码 */
-    @Schema(description = "私钥Key的base64编码")
+    /** 支付公钥ID */
+    @Schema(description = "支付公钥ID")
+    private String publicKeyId;
+
+    /** 商户API证书(apiclient_cert.pem)base64编码 */
+    @Schema(description = "商户API证书(apiclient_cert.pem)base64编码")
     private String privateCert;
 
-    /** 证书序列号 */
+    /** 商户API证书私钥(apiclient_key.pem)证书base64编码 */
+    @Schema(description = "商户API证书私钥(apiclient_key.pem)证书base64编码")
+    private String privateKey;
+
+    /** 商户API证书序列号 */
     @Schema(description = "证书序列号")
     private String certSerialNo;
 
@@ -83,14 +102,9 @@ public class WechatPayConfigParam {
     @Schema(description = "API证书中p12证书")
     private String p12;
 
-    /** 是否沙箱环境 */
-    @Schema(description = "是否沙箱环境")
-    private boolean sandbox;
-
     /** 备注 */
     @Schema(description = "备注")
     private String remark;
-
 
     /** 商户AppId */
     @Schema(description = "商户AppId")

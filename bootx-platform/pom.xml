@@ -13,7 +13,7 @@
 
     <groupId>cn.bootx.platform</groupId>
     <artifactId>bootx-platform</artifactId>
-    <version>3.0.0.beta1</version>
+    <version>3.0.0.beta3</version>
     <packaging>pom</packaging>
     <description>基础脚手架服务</description>
 
@@ -25,7 +25,7 @@
     </modules>
 
     <properties>
-        <bootx-platform.version>3.0.0.beta1</bootx-platform.version>
+        <bootx-platform.version>3.0.0.beta3</bootx-platform.version>
         <!-- 再高的的新版本与会knife4j 4.5冲突 -->
         <springdoc.version>2.5.0</springdoc.version>
         <hutool.version>5.8.31</hutool.version>

@@ -17,7 +17,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum CheckoutAggregateEnum {
 
-    WECHAT("wechat", "微信支付"),
+    WECHAT("wechat_pay", "微信支付"),
     ALIPAY("alipay", "支付宝"),
     ;
 

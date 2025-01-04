@@ -25,7 +25,4 @@ public class CheckoutPayParam {
 
     @Schema(description = "付款码")
     private String barCode;
-
-    @Schema(description = "描述")
-    private String description;
 }

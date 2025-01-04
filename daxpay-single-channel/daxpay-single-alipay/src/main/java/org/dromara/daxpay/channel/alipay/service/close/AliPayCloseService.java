@@ -1,15 +1,16 @@
 package org.dromara.daxpay.channel.alipay.service.close;
 
-import org.dromara.daxpay.channel.alipay.code.AliPayCode;
-import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.service.config.AliPayConfigService;
-import org.dromara.daxpay.channel.alipay.service.sync.AliPaySyncService;
+import org.dromara.daxpay.channel.alipay.code.AlipayCode;
+import org.dromara.daxpay.channel.alipay.entity.AliPayConfig;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
+import org.dromara.daxpay.channel.alipay.service.sync.AlipaySyncService;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.exception.OperationFailException;
 import org.dromara.daxpay.core.exception.TradeStatusErrorException;
 import org.dromara.daxpay.service.bo.sync.PaySyncResultBo;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayConstants;
 import com.alipay.api.domain.AlipayTradeCancelModel;
 import com.alipay.api.domain.AlipayTradeCloseModel;
 import com.alipay.api.request.AlipayTradeCancelRequest;
@@ -32,8 +33,8 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class AliPayCloseService {
-    private final AliPayConfigService aliPayConfigService;
-    private final AliPaySyncService aliPaySyncService;
+    private final AlipayConfigService aliPayConfigService;
+    private final AlipaySyncService aliPaySyncService;
 
     /**
      * 关闭支付 此处使用交易关闭接口
@@ -43,22 +44,26 @@ public class AliPayCloseService {
      * 2. 如果返回"当前交易状态不支持此操作", 同步网关支付状态, 判断网关是否已经被关闭
      *
      */
-    public void close(PayOrder payOrder, AliPayConfig config) {
+    public void close(PayOrder payOrder, AliPayConfig aliPayConfig) {
         AlipayTradeCloseModel model = new AlipayTradeCloseModel();
         model.setOutTradeNo(payOrder.getOrderNo());
         AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+        // 特约商户调用
+        if (aliPayConfig.isIsv()){
+            request.putOtherTextParam(AlipayConstants.APP_AUTH_TOKEN, aliPayConfig.getAppAuthToken());
+        }
         request.setBizModel(model);
         try {
-            AlipayTradeCloseResponse response = aliPayConfigService.execute(request);
-            if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
+            AlipayTradeCloseResponse response = aliPayConfigService.execute(request,aliPayConfig);
+            if (!response.isSuccess()) {
                 // 如果返回"当前交易状态不支持此操作", 查询网关支付状态, 判断网关是否已经被关闭
-                if (Objects.equals(response.getSubCode(),AliPayCode.ResponseCode.ACQ_TRADE_STATUS_ERROR)){
-                    if (this.syncStatus(payOrder, config)){
+                if (Objects.equals(response.getSubCode(), AlipayCode.ResponseCode.ACQ_TRADE_STATUS_ERROR)){
+                    if (this.syncStatus(payOrder, aliPayConfig)){
                         return;
                     }
                 }
                 // 返回"交易不存在"视同关闭成功
-                if (Objects.equals(response.getSubCode(),AliPayCode.ResponseCode.ACQ_TRADE_NOT_EXIST)){
+                if (Objects.equals(response.getSubCode(), AlipayCode.ResponseCode.ACQ_TRADE_NOT_EXIST)){
                     return;
                 }
                 log.error("网关返回关闭失败: {}", response.getSubMsg());
@@ -74,28 +79,30 @@ public class AliPayCloseService {
      * 可以视为一个特殊的接口, 需要专门签约这个接口的权限
      *
      */
-    public void cancel(PayOrder payOrder, AliPayConfig config) {
+    public void cancel(PayOrder payOrder, AliPayConfig aliPayConfig) {
         AlipayTradeCancelModel model = new AlipayTradeCancelModel();
         model.setOutTradeNo(payOrder.getOrderNo());
         AlipayTradeCancelRequest request = new AlipayTradeCancelRequest();
+        // 特约商户调用
+        if (aliPayConfig.isIsv()){
+            request.putOtherTextParam(AlipayConstants.APP_AUTH_TOKEN, aliPayConfig.getAppAuthToken());
+        }
         request.setBizModel(model);
         try {
-            AlipayTradeCancelResponse response = aliPayConfigService.execute(request);
-            if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
-                if (!Objects.equals(AliPayCode.ResponseCode.SUCCESS, response.getCode())) {
+            AlipayTradeCancelResponse response = aliPayConfigService.execute(request,aliPayConfig);
+            if (!response.isSuccess()) {
                     // 如果返回"当前交易状态不支持此操作", 查询网关支付状态, 判断网关是否已经被关闭
-                    if (Objects.equals(response.getSubCode(),AliPayCode.ResponseCode.ACQ_TRADE_STATUS_ERROR)){
-                        if (this.syncStatus(payOrder, config)){
+                    if (Objects.equals(response.getSubCode(), AlipayCode.ResponseCode.ACQ_TRADE_STATUS_ERROR)){
+                        if (this.syncStatus(payOrder, aliPayConfig)){
                             return;
                         }
                     }
                     // 返回"交易不存在"视同关闭成功
-                    if (Objects.equals(response.getSubCode(),AliPayCode.ResponseCode.ACQ_TRADE_NOT_EXIST)){
+                    if (Objects.equals(response.getSubCode(), AlipayCode.ResponseCode.ACQ_TRADE_NOT_EXIST)){
                         return;
                     }
                     log.error("网关返回关闭失败: {}", response.getSubMsg());
                     throw new OperationFailException(response.getSubMsg());
-                }
             }
         } catch (AlipayApiException e) {
             log.error("关闭订单失败:", e);
@@ -108,7 +115,7 @@ public class AliPayCloseService {
      * 关闭失败后, 获取支付网关的状态, 如果是关闭返回true, 其他情况抛出异常
      */
     private boolean syncStatus(PayOrder payOrder, AliPayConfig config){
-        PaySyncResultBo gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder);
+        PaySyncResultBo gatewaySyncResult = aliPaySyncService.syncPayStatus(payOrder,config);
         // 已经关闭
         if (Objects.equals(gatewaySyncResult.getPayStatus(), PayStatusEnum.CLOSE)){
             return true;

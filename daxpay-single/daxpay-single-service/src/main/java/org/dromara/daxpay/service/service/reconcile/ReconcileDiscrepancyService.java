@@ -117,16 +117,16 @@ public class ReconcileDiscrepancyService {
 
         // 判断类型是否相同
         if (!Objects.equals(outDetail.getTradeType(), localTrade.getTradeType())){
-            return false;
+            return true;
         }
         // 判断金额是否一致
         if (!Objects.equals(outDetail.getAmount(), localTrade.getAmount())){
-            return false;
+            return true;
         }
         // 判断状态是否一致
         if (!Objects.equals(outDetail.getTradeStatus(), localTrade.getTradeStatus())){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }

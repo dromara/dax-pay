@@ -1,10 +1,12 @@
 package org.dromara.daxpay.service.service.trade.refund;
 
 import cn.bootx.platform.core.exception.RepetitiveOperationException;
+import com.baomidou.lock.LockInfo;
+import com.baomidou.lock.LockTemplate;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.RefundStatusEnum;
 import org.dromara.daxpay.core.enums.TradeTypeEnum;
-import org.dromara.daxpay.core.exception.OperationFailException;
-import org.dromara.daxpay.core.exception.PayFailureException;
 import org.dromara.daxpay.core.exception.TradeNotExistException;
 import org.dromara.daxpay.core.param.trade.refund.RefundSyncParam;
 import org.dromara.daxpay.core.result.trade.refund.RefundSyncResult;
@@ -17,15 +19,13 @@ import org.dromara.daxpay.service.service.order.refund.RefundOrderQueryService;
 import org.dromara.daxpay.service.service.record.sync.TradeSyncRecordService;
 import org.dromara.daxpay.service.strategy.AbsSyncRefundOrderStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+
+import static org.dromara.daxpay.core.enums.TradeStatusEnum.FAIL;
 
 /**
  * 支付退款同步服务类
@@ -75,35 +75,33 @@ public class RefundSyncService {
         try {
 
             // 执行操作, 获取支付网关同步的结果
-            RefundSyncResultBo syncResultBo = syncPayStrategy.doSync();
+            RefundSyncResultBo syncResult = syncPayStrategy.doSync();
 
-            // 判断是否同步成功
-            if (!syncResultBo.isSyncSuccess()) {
-                // 同步失败, 返回失败响应, 同时记录失败的日志
-                this.saveRecord(refundOrder, syncResultBo, false);
-                throw new OperationFailException(syncResultBo.getSyncErrorMsg());
-            }
             // 订单的通道交易号是否一致, 不一致进行更新
-            if (Objects.nonNull(syncResultBo.getOutRefundNo()) && !Objects.equals(syncResultBo.getOutRefundNo(), refundOrder.getOutRefundNo())){
-                refundOrder.setOutRefundNo(syncResultBo.getOutRefundNo());
+            if (Objects.nonNull(syncResult.getOutRefundNo()) && !Objects.equals(syncResult.getOutRefundNo(), refundOrder.getOutRefundNo())){
+                refundOrder.setOutRefundNo(syncResult.getOutRefundNo());
                 refundOrderManager.updateById(refundOrder);
             }
             // 判断网关状态是否和支付单一致
-            boolean statusSync = this.checkStatus(syncResultBo, refundOrder);
+            boolean statusSync = this.checkStatus(syncResult, refundOrder);
             try {
                 // 状态不一致，执行退款单调整逻辑
                 if (!statusSync) {
                     // 如果没有支付来源, 设置支付来源为同步
-                    this.adjustHandler(syncResultBo, refundOrder);
+                    this.adjustHandler(syncResult, refundOrder);
                 }
-            } catch (PayFailureException e) {
+            } catch (Exception e) {
                 // 同步失败, 返回失败响应, 同时记录失败的日志
-                syncResultBo.setSyncSuccess(false);
-                this.saveRecord(refundOrder, syncResultBo, false);
-                throw e;
+                syncResult.setSyncSuccess(false).setSyncErrorMsg(e.getMessage());
             }
-            // 同步成功记录日志
-            this.saveRecord(refundOrder, syncResultBo, !statusSync);
+            // 判断是否同步成功
+            if (!syncResult.isSyncSuccess()) {
+                // 同步成功记录日志
+                this.saveRecord(refundOrder, syncResult, !statusSync);
+            } else {
+                // 同步失败, 返回失败响应, 同时记录失败的日志
+                this.saveRecord(refundOrder, syncResult, true);
+            }
             return new RefundSyncResult()
                     .setOrderStatus(refundOrder.getStatus())
                     .setAdjust(statusSync);
@@ -120,6 +118,10 @@ public class RefundSyncService {
     private boolean checkStatus(RefundSyncResultBo syncResult, RefundOrder order){
         var syncStatus = syncResult.getRefundStatus();
         String orderStatus = order.getStatus();
+        // 如果本地订单为失败时, 直接返回需要进行调整
+        if (orderStatus.equals(FAIL.getCode())){
+            return false;
+        }
 
         // 如果订单为退款中, 对状态进行比较
         if (Objects.equals(orderStatus, RefundStatusEnum.SUCCESS.getCode())){
@@ -148,7 +150,8 @@ public class RefundSyncService {
         switch (refundStatus) {
             case SUCCESS -> refundAssistService.success(order, syncResult.getFinishTime());
             case PROGRESS -> {}
-            case FAIL, CLOSE-> refundAssistService.close(order);
+            case CLOSE-> refundAssistService.close(order);
+            case FAIL -> refundAssistService.updateOrderByError(order, syncResult.getSyncErrorMsg());
             default -> log.error("退款同步结果未知, 退款单号:{}, 错误信息:{}", order.getRefundNo(), syncResult.getSyncErrorMsg());
         }
     }

@@ -17,6 +17,13 @@ public class WechatPayParam {
     @Schema(description = "微信openId")
     private String openId;
 
+    /**
+     * 服务商模式下分为 1、sp用户服务标识 2、sub用户子标识
+     * @see org.dromara.daxpay.channel.wechat.code.WechatPayCode#SP_OPENID
+     */
+    @Schema(description = "openid类型")
+    private String openIdType;
+
     @Schema(description = "授权码(主动扫描用户的付款码)")
     private String authCode;
 

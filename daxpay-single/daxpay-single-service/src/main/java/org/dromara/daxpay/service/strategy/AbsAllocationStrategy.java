@@ -3,9 +3,10 @@ package org.dromara.daxpay.service.strategy;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocStartResultBo;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocTransaction;
-import org.dromara.daxpay.service.entity.allocation.transaction.AllocDetail;
+import org.dromara.daxpay.service.bo.allocation.AllocSyncResultBo;
+import org.dromara.daxpay.service.bo.allocation.AllocStartResultBo;
+import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 
 import java.util.List;
 
@@ -18,25 +19,27 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class AbsAllocationStrategy implements PaymentStrategy{
-    private AllocTransaction transaction;
+    private AllocOrder order;
 
     private List<AllocDetail> details;
 
     /**
      * 初始化参数
      */
-    public void initParam(AllocTransaction transaction, List<AllocDetail> details) {
-        this.transaction = transaction;
+    public void initParam(AllocOrder order, List<AllocDetail> details) {
+        this.order = order;
         this.details = details;
     }
 
     /**
      * 操作前处理, 校验和初始化支付配置
      */
-    public abstract void doBeforeHandler();
+    public void doBeforeHandler(){
+
+    };
 
     /**
-     * 分账启动
+     * 开始分账
      */
     public abstract AllocStartResultBo start();
 
@@ -44,5 +47,11 @@ public abstract class AbsAllocationStrategy implements PaymentStrategy{
      * 分账完结
      */
     public abstract void finish();
+
+
+    /**
+     * 同步状态
+     */
+    public abstract AllocSyncResultBo doSync();
 
 }

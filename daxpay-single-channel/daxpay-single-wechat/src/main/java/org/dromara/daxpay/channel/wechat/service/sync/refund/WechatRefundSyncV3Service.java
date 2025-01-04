@@ -1,5 +1,10 @@
 package org.dromara.daxpay.channel.wechat.service.sync.refund;
 
+import com.github.binarywang.wxpay.constant.WxPayConstants.RefundStatus;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
@@ -7,11 +12,6 @@ import org.dromara.daxpay.core.enums.RefundStatusEnum;
 import org.dromara.daxpay.core.util.PayUtil;
 import org.dromara.daxpay.service.bo.sync.RefundSyncResultBo;
 import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
-import com.github.binarywang.wxpay.constant.WxPayConstants.RefundStatus;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.WxPayService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -50,11 +50,13 @@ public class WechatRefundSyncV3Service {
             }
             // 退款状态 - 失败
             if (Objects.equals(RefundStatus.ABNORMAL, result.getStatus())){
-                syncResult.setRefundStatus(RefundStatusEnum.FAIL);
+                syncResult.setRefundStatus(RefundStatusEnum.CLOSE);
             }
         } catch (WxPayException e) {
             log.error("微信退款订单查询V3失败", e);
-            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncSuccess(false);
+            syncResult.setSyncErrorMsg(e.getCustomErrorMsg())
+                    .setSyncSuccess(false)
+                    .setRefundStatus(RefundStatusEnum.FAIL);
         }
         return syncResult;
     }

@@ -4,13 +4,14 @@
  Source Server         : 本地PG
  Source Server Type    : PostgreSQL
  Source Server Version : 140005 (140005)
+ Source Host           : localhost:5432
+ Source Catalog        : daxpay
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
  Target Server Version : 140005 (140005)
  File Encoding         : 65001
 
- Date: 10/10/2024 18:41:07
 */
 
 
@@ -75,8 +76,13 @@ INSERT INTO "public"."base_dict" VALUES (1826061072412135424, '对账结果', '�
 INSERT INTO "public"."base_dict" VALUES (1826143914542350336, '交易状态', '支付', 'trade_status', '', 1811365615815487488, '2024-08-21 14:26:52.000272', 1811365615815487488, '2024-08-21 14:26:52.005675', 0, 't', 'f');
 INSERT INTO "public"."base_dict" VALUES (1843536439208931328, '分账接收方类型', '支付', 'alloc_receiver_type', '', 1811365615815487488, '2024-10-08 14:18:33.016439', 1811365615815487488, '2024-10-08 14:18:33.017572', 0, 't', 'f');
 INSERT INTO "public"."base_dict" VALUES (1843536733108006912, '分账关系类型', '支付', 'alloc_relation_type', '', 1811365615815487488, '2024-10-08 14:19:43.086847', 1811365615815487488, '2024-10-08 14:29:32.826875', 1, 't', 'f');
-INSERT INTO "public"."base_dict" VALUES (1840650057641713664, '收银台类型', '支付', 'cashier_type', '', 1811365615815487488, '2024-09-30 15:09:06.025286', 1811365615815487488, '2024-10-08 16:23:30.298502', 1, 't', 'f');
-INSERT INTO "public"."base_dict" VALUES (1843935232479731712, '123', '', '123', '', 1811365615815487488, '2024-10-09 16:43:12.743272', 1811365615815487488, '2024-10-09 17:02:12.206911', 0, 't', 't');
+INSERT INTO "public"."base_dict" VALUES (1840650057641713664, '码牌类型', '支付', 'cashier_code_type', '', 1811365615815487488, '2024-09-30 15:09:06', 1811365615815487488, '2024-11-21 09:09:19', 2, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1862094405423972352, '收银台聚合支付类型', '支付', 'checkout_aggregate', '', 1811365615815487488, '2024-11-28 19:21:17', 1811365615815487488, '2024-11-28 19:22:05', 1, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1862784043394342912, '收银台支付调起方式', '支付', 'checkout_call_type', '', 1811365615815487488, '2024-11-30 17:01:39', 1811365615815487488, '2024-11-30 17:01:39', 0, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1864134865629839360, '收银台类型', '支付', 'checkout_type', '', 1811365615815487488, '2024-12-04 10:29:21', 1811365615815487488, '2024-12-04 10:29:21', 0, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1866464725509451776, '分账订单处理结果', '支付', 'allocation_result', '', 1811365615815487488, '2024-12-10 20:47:22.458399', 1811365615815487488, '2024-12-10 20:47:22.512079', 0, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1866464929205825536, '分账状态', '', 'allocation_status', '', 1811365615815487488, '2024-12-10 20:48:11.021238', 1811365615815487488, '2024-12-10 20:48:11.071674', 0, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1866861372363571200, '分账明细处理结果', '支付', 'alloc_detail_result', '', 1811365615815487488, '2024-12-11 23:03:30.437127', 1811365615815487488, '2024-12-11 23:03:30.629127', 0, 't', 'f');
 
 -- ----------------------------
 -- Table structure for base_dict_item
@@ -118,7 +124,6 @@ COMMENT ON TABLE "public"."base_dict_item" IS '字典项';
 -- ----------------------------
 -- Records of base_dict_item
 -- ----------------------------
-INSERT INTO "public"."base_dict_item" VALUES (1824050515865571328, 1823688398549360640, 'channel', 'pay_status', '支付状态', 0, 't', '', 0, '2024-08-15 19:48:26.861144', 0, '2024-08-15 19:48:32.569552', 0, 't');
 INSERT INTO "public"."base_dict_item" VALUES (1823688758965903360, 1823688398549360640, 'channel', 'union_pay', '云闪付', 5, 't', '', 1811365615815487488, '2024-08-14 19:50:57.293338', 1811365615815487488, '2024-08-14 19:50:57.294914', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823696988228100096, 1823696159936946176, 'id_type', 'IDCard', '身份证', 1, 't', '', 1811365615815487488, '2024-08-14 20:23:39.302492', 1811365615815487488, '2024-08-14 20:23:39.304061', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823697045249662976, 1823696159936946176, 'id_type', 'passport', '护照', 2, 't', '', 1811365615815487488, '2024-08-14 20:23:52.897578', 1811365615815487488, '2024-08-14 20:23:52.89914', 0, 'f');
@@ -148,9 +153,7 @@ INSERT INTO "public"."base_dict_item" VALUES (1823992894504570880, 1823991280205
 INSERT INTO "public"."base_dict_item" VALUES (1823992935814270976, 1823991280205041664, 'log_business_type', 'clean', '清空数据', 8, 't', '', 0, '2024-08-15 15:59:38.705444', 0, '2024-08-15 15:59:38.706503', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823992995331444736, 1823991280205041664, 'log_business_type', 'other', '其它', 9, 't', '', 0, '2024-08-15 15:59:52.895664', 0, '2024-08-15 15:59:52.896179', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823688520268062720, 1823688398549360640, 'channel', 'ali_pay', '支付宝(直连)', 1, 't', '支付宝 - 直连商户', 1811365615815487488, '2024-08-14 19:50:00.383209', 0, '2024-08-15 19:45:52.133311', 1, 'f');
-INSERT INTO "public"."base_dict_item" VALUES (1823688577201545216, 1823688398549360640, 'channel', 'ali_service', '支付宝(服务商)', 2, 't', '支付宝 - 服务商商户', 1811365615815487488, '2024-08-14 19:50:13.957732', 0, '2024-08-15 19:46:14.070089', 1, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823688680352063488, 1823688398549360640, 'channel', 'wechat_pay', '微信支付(直连)', 3, 't', '', 1811365615815487488, '2024-08-14 19:50:38.551335', 0, '2024-08-15 19:46:22.364663', 1, 'f');
-INSERT INTO "public"."base_dict_item" VALUES (1823688722165080064, 1823688398549360640, 'channel', 'wechat_service', '微信支付(服务商)', 4, 't', '', 1811365615815487488, '2024-08-14 19:50:48.519498', 0, '2024-08-15 19:46:30.624402', 1, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824277977388027904, 1824277928167870464, 'pay_refund_status', 'no_refund', '未退款', 1, 't', '', 1811365615815487488, '2024-08-16 10:52:17.912141', 1811365615815487488, '2024-08-16 10:52:17.913687', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824278014436315136, 1824277928167870464, 'pay_refund_status', 'refunding', '退款中', 2, 't', '', 1811365615815487488, '2024-08-16 10:52:26.745134', 1811365615815487488, '2024-08-16 10:52:26.746691', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824278055448219648, 1824277928167870464, 'pay_refund_status', 'partial_refund', '部分退款', 3, 't', '', 1811365615815487488, '2024-08-16 10:52:36.523227', 1811365615815487488, '2024-08-16 10:52:36.525303', 0, 'f');
@@ -160,7 +163,7 @@ INSERT INTO "public"."base_dict_item" VALUES (1824285656248487936, 1824285303885
 INSERT INTO "public"."base_dict_item" VALUES (1824285688691429376, 1824285303885008896, 'pay_method', 'web', 'web支付', 3, 't', '', 1811365615815487488, '2024-08-16 11:22:56.430664', 1811365615815487488, '2024-08-16 11:22:56.431781', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824285724460453888, 1824285303885008896, 'pay_method', 'qrcode', '扫码支付', 4, 't', '', 1811365615815487488, '2024-08-16 11:23:04.958598', 1811365615815487488, '2024-08-16 11:23:04.95963', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824285781570097152, 1824285303885008896, 'pay_method', 'barcode', '付款码', 5, 't', '', 1811365615815487488, '2024-08-16 11:23:18.575096', 1811365615815487488, '2024-08-16 11:23:18.576136', 0, 'f');
-INSERT INTO "public"."base_dict_item" VALUES (1824285824247140352, 1824285303885008896, 'pay_method', 'jsapi', '小程序支付', 6, 't', '', 1811365615815487488, '2024-08-16 11:23:28.74936', 1811365615815487488, '2024-08-16 11:23:28.750936', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1824285824247140352, 1824285303885008896, 'pay_method', 'jsapi', 'JSAPI', 6, 't', '', 1811365615815487488, '2024-08-16 11:23:28.74936', 1811365615815487488, '2024-08-16 11:23:28.750936', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824050709768245248, 1824050661785407488, 'pay_status', 'progress', '支付中', 1, 't', '', 0, '2024-08-15 19:49:13.08964', 0, '2024-08-15 19:49:13.090167', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824050788306587648, 1824050661785407488, 'pay_status', 'close', '支付关闭', 3, 't', '', 0, '2024-08-15 19:49:31.814754', 0, '2024-08-15 19:49:31.815791', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824050865460809728, 1824050661785407488, 'pay_status', 'cancel', '支付撤销', 4, 't', '', 0, '2024-08-15 19:49:50.209986', 0, '2024-08-15 19:49:50.211016', 0, 'f');
@@ -219,12 +222,41 @@ INSERT INTO "public"."base_dict_item" VALUES (1843538204528570368, 1843536733108
 INSERT INTO "public"."base_dict_item" VALUES (1843538242730291200, 1843536733108006912, 'alloc_relation_type', 'supplier', '供应商', 10, 't', '', 1811365615815487488, '2024-10-08 14:25:43.008972', 1811365615815487488, '2024-10-08 14:25:43.008972', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1843538293854662656, 1843536733108006912, 'alloc_relation_type', 'custom', '自定义', 11, 't', '', 1811365615815487488, '2024-10-08 14:25:55.19713', 1811365615815487488, '2024-10-08 14:25:55.19713', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1825171779002728448, 1825135068277334016, 'transfer_payee_type', 'login_name', '登录账号', 4, 't', '', 1811365615815487488, '2024-08-18 22:03:56.823151', 1811365615815487488, '2024-10-08 17:52:07.717985', 3, 'f');
-INSERT INTO "public"."base_dict_item" VALUES (1840650104185905152, 1840650057641713664, 'cashier_type', 'wechat_pay', '微信收银台', 1, 't', '', 1811365615815487488, '2024-09-30 15:09:17.120403', 1811365615815487488, '2024-09-30 15:09:17.120403', 0, 'f');
-INSERT INTO "public"."base_dict_item" VALUES (1840650136427520000, 1840650057641713664, 'cashier_type', 'alipay', '支付宝收银台', 2, 't', '', 1811365615815487488, '2024-09-30 15:09:24.807694', 1811365615815487488, '2024-09-30 15:09:24.807694', 0, 'f');
-INSERT INTO "public"."base_dict_item" VALUES (1825171620147658752, 1825135068277334016, 'transfer_payee_type', 'wx_personal', 'OpenId(微信)', 1, 't', '', 1811365615815487488, '2024-08-18 22:03:18.9509', 1811365615815487488, '2024-10-08 17:50:13.061585', 1, 't');
+INSERT INTO "public"."base_dict_item" VALUES (1840650104185905152, 1840650057641713664, 'cashier_code_type', 'wechat_pay', '微信码牌', 1, 't', '', 1811365615815487488, '2024-09-30 15:09:17.120403', 1811365615815487488, '2024-09-30 15:09:17.120403', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1840650136427520000, 1840650057641713664, 'cashier_code_type', 'alipay', '支付宝码牌', 2, 't', '', 1811365615815487488, '2024-09-30 15:09:24.807694', 1811365615815487488, '2024-09-30 15:09:24.807694', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1825171656562606080, 1825135068277334016, 'transfer_payee_type', 'user_id', '用户ID', 2, 't', '', 1811365615815487488, '2024-08-18 22:03:27.631478', 1811365615815487488, '2024-10-08 17:50:20.130589', 2, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1825171693782859776, 1825135068277334016, 'transfer_payee_type', 'open_id', 'OpenId', 1, 't', '', 1811365615815487488, '2024-08-18 22:03:36.505827', 1811365615815487488, '2024-10-08 17:51:28.00028', 3, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1843536564304048128, 1843536439208931328, 'alloc_receiver_type', 'open_id', 'OpenId', 0, 't', '', 1811365615815487488, '2024-10-08 14:19:02.84085', 1811365615815487488, '2024-10-08 17:51:46.206937', 3, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1862094703940976640, 1862094405423972352, 'checkout_aggregate', 'wechat_pay', '微信支付', 1, 't', '', 1811365615815487488, '2024-11-28 19:22:28', 1811365615815487488, '2024-12-04 11:36:17', 1, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1862094738430738432, 1862094405423972352, 'checkout_aggregate', 'alipay', '支付宝', 2, 't', '', 1811365615815487488, '2024-11-28 19:22:36', 1811365615815487488, '2024-11-28 19:22:36', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1862784096733306880, 1862784043394342912, 'checkout_call_type', 'qr_code', '扫码支付', 1, 't', '', 1811365615815487488, '2024-11-30 17:01:52', 1811365615815487488, '2024-11-30 17:02:56', 1, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1862784137904594944, 1862784043394342912, 'checkout_call_type', 'bar_code', '条码支付', 2, 't', '', 1811365615815487488, '2024-11-30 17:02:02', 1811365615815487488, '2024-11-30 17:02:53', 1, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1862784218108076032, 1862784043394342912, 'checkout_call_type', 'link', '跳转链接', 3, 't', '', 1811365615815487488, '2024-11-30 17:02:21', 1811365615815487488, '2024-11-30 17:02:21', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1862784251175968768, 1862784043394342912, 'checkout_call_type', 'mini_app', '小程序支付', 4, 't', '', 1811365615815487488, '2024-11-30 17:02:29', 1811365615815487488, '2024-11-30 17:02:29', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1862784292565360640, 1862784043394342912, 'checkout_call_type', 'aggregate', '聚合支付', 5, 't', '', 1811365615815487488, '2024-11-30 17:02:39', 1811365615815487488, '2024-11-30 17:02:39', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1862784325809414144, 1862784043394342912, 'checkout_call_type', 'app', 'APP支付', 6, 't', '', 1811365615815487488, '2024-11-30 17:02:47', 1811365615815487488, '2024-11-30 17:02:47', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1864134907958755328, 1864134865629839360, 'checkout_type', 'h5', 'H5', 0, 't', '', 1811365615815487488, '2024-12-04 10:29:31', 1811365615815487488, '2024-12-04 10:29:31', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1864134948614144000, 1864134865629839360, 'checkout_type', 'pc', 'PC', 1, 't', '', 1811365615815487488, '2024-12-04 10:29:40', 1811365615815487488, '2024-12-04 10:29:40', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1864134981908529152, 1864134865629839360, 'checkout_type', 'mini_app', '小程序', 3, 't', '', 1811365615815487488, '2024-12-04 10:29:48', 1811365615815487488, '2024-12-04 10:29:48', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1864135083783979008, 1864134865629839360, 'checkout_type', 'aggregate', '聚合支付', 4, 't', '', 1811365615815487488, '2024-12-04 10:30:13', 1811365615815487488, '2024-12-04 10:30:13', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1864140869360779264, 1862784043394342912, 'checkout_call_type', 'jsapi', 'JSAPI', 7, 't', '', 1811365615815487488, '2024-12-04 10:53:12', 1811365615815487488, '2024-12-04 10:53:12', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1864182908966182912, 1824050661785407488, 'pay_status', 'wait', '待支付', 0, 't', '', 1811365615815487488, '2024-12-04 13:40:15', 1811365615815487488, '2024-12-04 13:40:15', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464774637334528, 1866464725509451776, 'allocation_result', 'all_pending', '处理中', 1, 't', '', 1811365615815487488, '2024-12-10 20:47:34.169368', 1811365615815487488, '2024-12-10 20:47:34.218803', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464805046038528, 1866464725509451776, 'allocation_result', 'all_success', '全部成功', 2, 't', '', 1811365615815487488, '2024-12-10 20:47:41.420831', 1811365615815487488, '2024-12-10 20:47:41.470313', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464833135292416, 1866464725509451776, 'allocation_result', 'part_success', '部分成功', 3, 't', '', 1811365615815487488, '2024-12-10 20:47:48.116111', 1811365615815487488, '2024-12-10 20:47:48.166469', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464863468498944, 1866464725509451776, 'allocation_result', 'all_failed', '全部失败', 4, 't', '', 1811365615815487488, '2024-12-10 20:47:55.348417', 1811365615815487488, '2024-12-10 20:47:55.398755', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866464981567516672, 1866464929205825536, 'allocation_status', 'processing', '分账处理中', 0, 't', '', 1811365615815487488, '2024-12-10 20:48:23.505353', 1811365615815487488, '2024-12-10 20:48:23.556234', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465026735976448, 1866464929205825536, 'allocation_status', 'alloc_end', '分账处理完成', 1, 't', '', 1811365615815487488, '2024-12-10 20:48:34.274079', 1811365615815487488, '2024-12-10 20:48:34.325865', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465201684590592, 1866464929205825536, 'allocation_status', 'finish_failed', '完结失败', 4, 't', '', 1811365615815487488, '2024-12-10 20:49:15.985582', 1811365615815487488, '2024-12-10 20:49:16.037116', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465123091722240, 1866464929205825536, 'allocation_status', 'finish', '分账完结', 3, 't', '', 1811365615815487488, '2024-12-10 20:48:57.247403', 1811365615815487488, '2024-12-10 20:48:57.299907', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465071711498240, 1866464929205825536, 'allocation_status', 'alloc_failed', '分账失败', 2, 't', '', 1811365615815487488, '2024-12-10 20:48:44.997816', 1811365615815487488, '2024-12-10 20:49:06.16083', 1, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866465239626264576, 1866464929205825536, 'allocation_status', 'ignore', '忽略', 55, 't', '', 1811365615815487488, '2024-12-10 20:49:25.031927', 1811365615815487488, '2024-12-10 20:49:25.082125', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866861458925617152, 1866861372363571200, 'alloc_detail_result', 'pending', '待分账', 1, 't', '', 1811365615815487488, '2024-12-11 23:03:51.073647', 1811365615815487488, '2024-12-11 23:03:51.127245', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866861495659331584, 1866861372363571200, 'alloc_detail_result', 'success', '分账成功', 2, 't', '', 1811365615815487488, '2024-12-11 23:03:59.831758', 1811365615815487488, '2024-12-11 23:03:59.873336', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866861545068232704, 1866861372363571200, 'alloc_detail_result', 'fail', '分账失败', 3, 't', '', 1811365615815487488, '2024-12-11 23:04:11.611702', 1811365615815487488, '2024-12-11 23:04:11.656702', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1866861581097304064, 1866861372363571200, 'alloc_detail_result', 'ignore', '忽略分账', 4, 't', '', 1811365615815487488, '2024-12-11 23:04:20.201202', 1811365615815487488, '2024-12-11 23:04:20.243202', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1868487333327204352, 1824791500966486016, 'trade_type', 'allocation', '分账', 4, 't', '', 1811365615815487488, '2024-12-16 10:44:29.738737', 1811365615815487488, '2024-12-16 21:01:28.961731', 1, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1868946985244528640, 1823969170598400000, 'notify_content_type', 'allocation', '分账订单变动通知', 4, 't', '', 1811365615815487488, '2024-12-17 17:10:59.295517', 1811365615815487488, '2024-12-17 17:10:59.352198', 0, 'f');
 
 -- ----------------------------
 -- Table structure for base_param
@@ -412,15 +444,12 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1810871795650891776, 0, '2024-07-10
 INSERT INTO "public"."iam_perm_menu" VALUES (1810909853691641856, 0, '2024-07-10 13:32:08.855417', 0, '2024-07-10 13:35:45.759284', 1, 'f', 1810864706127790080, 'dax-pay', '用户信息', 'UserAuth', '', 'f', 'f', 'Layout', '/system/user', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1810910433264762880, 0, '2024-07-10 13:34:27.036666', 0, '2024-07-10 13:35:56.758501', 1, 'f', 1810864706127790080, 'dax-pay', '系统配置', 'SystemConfig', '', 'f', 'f', 'Layout', '/system/config', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1810911232921423872, 0, '2024-07-10 13:37:37.692104', 0, '2024-07-10 13:37:37.693108', 0, 'f', 1810909511121862656, 'dax-pay', '角色管理', 'RoleList', '', 'f', 'f', 'iam/role/RoleList.vue', '/system/permission/role', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1810878374534152192, 0, '2024-07-10 11:27:03.641433', 1811365615815487488, '2024-07-13 21:16:24.212477', 5, 't', NULL, 'dax-pay', '测试Iframe', 'Iframe', '', 't', 'f', 'Iframe', '/Iframe', 'https://www.antdv.com/components/overview-cn', 0, 't', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1812113986291822592, 1811365615815487488, '2024-07-13 21:16:56.438162', 1811365615815487488, '2024-07-13 21:17:06.34038', 0, 't', NULL, 'dax-pay', '系统管理', 'System', 'ant-design:setting-outlined', 'f', 'f', 'Layout', '/system', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1810864706127790080, 0, '2024-07-10 10:32:44.838967', 1811365615815487488, '2024-07-13 21:17:09.975339', 5, 'f', NULL, 'dax-pay', '系统管理', 'System', 'ant-design:setting-outlined', 'f', 'f', 'Layout', '/system', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812114224679284736, 1811365615815487488, '2024-07-13 21:17:53.274452', 1811365615815487488, '2024-07-13 21:18:00.886679', 1, 'f', NULL, 'dax-pay', '订单管理', 'PayOrder', 'ant-design:wallet-outlined', 'f', 'f', 'Layout', '/pay/order', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812114959231938560, 1811365615815487488, '2024-07-13 21:20:48.405236', 1811365615815487488, '2024-07-13 21:20:48.407298', 0, 'f', NULL, 'dax-pay', '对账管理', 'Reconcile', 'ant-design:arrows-alt-outlined', 'f', 'f', 'Layout', '/pay/reconcile', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812115247342874624, 1811365615815487488, '2024-07-13 21:21:57.096469', 1811365615815487488, '2024-07-13 21:25:06.069746', 4, 'f', NULL, 'dax-pay', '关于', '', 'ant-design:info-circle-outlined', 'f', 'f', 'Layout', '/about', '/about/index', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812113823376666624, 1811365615815487488, '2024-07-13 21:16:17.597391', 1811365615815487488, '2024-07-13 21:27:13.912267', 2, 'f', NULL, 'dax-pay', '支付配置', 'PayConfig', 'ant-design:property-safety-twotone', 'f', 'f', 'Layout', '/pay/config', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812116972585938944, 1811365615815487488, '2024-07-13 21:28:48.426928', 1811365615815487488, '2024-07-13 21:28:48.429631', 0, 'f', 1812113823376666624, 'dax-pay', '商户管理', '', '', 'f', 'f', 'Layout', '/pay/config/merchant', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1812114725651148800, 1811365615815487488, '2024-07-13 21:19:52.715548', 1811365615815487488, '2024-10-07 17:29:38.645989', 2, 'f', NULL, 'dax-pay', '分账管理', 'Allocation', 'ant-design:sliders-twotone', 'f', 'f', 'Layout', '/pay/allocation', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812116779807338496, 1811365615815487488, '2024-07-13 21:28:02.464593', 1811365615815487488, '2024-07-17 14:13:02.263915', 1, 'f', 1812113823376666624, 'dax-pay', '基础数据', '', '', 'f', 'f', 'Layout', '/pay/config/base', '', -2, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812114347454951424, 1811365615815487488, '2024-07-13 21:18:22.547038', 1811365615815487488, '2024-07-24 18:53:38.947244', 2, 'f', NULL, 'dax-pay', '交易记录', 'PayRecord', 'ant-design:container-outlined', 'f', 'f', 'Layout', '/pay/record', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812114603047448576, 1811365615815487488, '2024-07-13 21:19:23.484406', 1811365615815487488, '2024-07-24 19:28:09.132339', 1, 'f', NULL, 'dax-pay', '商户通知', 'PayNotic', 'ant-design:notification-twotone', 'f', 'f', 'Layout', '/pay/notice', '', 0, 't', 't', 'f', 'f', NULL);
@@ -439,9 +468,7 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1820467523628474368, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1822975425229004800, 1811365615815487488, '2024-08-12 20:36:25.279489', 1811365615815487488, '2024-08-12 20:36:25.282711', 0, 'f', 1810864706127790080, 'dax-pay', '文件存储', '', '', 'f', 'f', 'Layout', '/system/file', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1813456708833087488, 1811365615815487488, '2024-07-17 14:12:26.440633', 1811365615815487488, '2024-09-20 11:05:46.469139', 4, 'f', 1812113823376666624, 'dax-pay', '基础配置', '', '', 'f', 'f', 'Layout', '/pay/config/basic', '', -1, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1822975777026252800, 1811365615815487488, '2024-08-12 20:37:49.152472', 1811365615815487488, '2024-08-12 20:37:49.154031', 0, 'f', 1822975425229004800, 'dax-pay', '存储平台', 'FilePlatformList', '', 'f', 'f', '/baseapi/file/platform/FilePlatformList', '/system/file/platform', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1812117366246535168, 1811365615815487488, '2024-07-13 21:30:22.282442', 1811365615815487488, '2024-10-05 21:59:31.640637', 0, 't', 1812116972585938944, 'dax-pay', '商户信息', 'MerchantList', '', 'f', 'f', '/daxpay/admin/merchant/info/MerchantList', '/pay/config/merchant/info', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1822975970266226688, 1811365615815487488, '2024-08-12 20:38:35.224183', 1811365615815487488, '2024-08-12 20:38:35.226288', 0, 'f', 1822975425229004800, 'dax-pay', '文件管理', 'FileUploadList', '', 'f', 'f', '/baseapi/file/upload/FileUploadList', '/system/file/info', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1824779750208679936, 1811365615815487488, '2024-08-17 20:06:09.875297', 1811365615815487488, '2024-10-08 19:25:43.362002', 2, 'f', 1812114725651148800, 'dax-pay', '分账单', '', '', 'f', 'f', '', '/pay/reconcile/order', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812118306328473600, 1811365615815487488, '2024-07-13 21:34:06.415311', 1811365615815487488, '2024-08-27 16:13:34.678515', 4, 'f', 1812116779807338496, 'dax-pay', '支付通道', 'ChannelConstList', '', 'f', 'f', '/daxpay/common/constant/channel/ChannelConstList', '/pay/config/base/channel', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1816064593371066368, 1811365615815487488, '2024-07-24 18:55:14.565671', 1811365615815487488, '2024-08-27 19:11:47.317719', 4, 'f', 1812114347454951424, 'dax-pay', '关闭记录(支付)', 'PayCloseRecordList', '', 'f', 'f', '/daxpay/common/record/close/PayCloseRecordList', '/pay/record/close', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1824779945365450752, 1811365615815487488, '2024-08-17 20:06:56.404481', 1811365615815487488, '2024-08-27 19:11:51.292144', 2, 'f', 1812114347454951424, 'dax-pay', '同步记录', 'TradeSyncRecordList', '', 'f', 'f', '/daxpay/common/record/sync/TradeSyncRecordList', '/pay/record/sync', '', 0, 'f', 't', 'f', 'f', NULL);
@@ -452,8 +479,7 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1812115119471128576, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1837381440350912512, 1811365615815487488, '2024-09-21 14:40:46.934676', 1811365615815487488, '2024-09-21 14:40:46.934676', 0, 'f', 1810910433264762880, 'dax-pay', '延时队列', 'DelayQuery', '', 'f', 'f', '/baseapi/delay/DelayQuery', '/system/config/delay', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1836248839544733696, 1811365615815487488, '2024-09-18 11:40:13.861746', 1811365615815487488, '2024-09-25 14:46:38.017375', 1, 'f', 1812115119471128576, 'dax-pay', '交易调试', 'DevelopTrade', '', 'f', 'f', '/daxpay/common/develop/trade/DevelopTrade', '/pay/demo/develop', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1838832057238274048, 1811365615815487488, '2024-09-25 14:45:00.952476', 1811365615815487488, '2024-09-25 14:46:49.48474', 1, 'f', 1812115119471128576, 'dax-pay', '认证调试', 'ChannelAuth', '', 'f', 'f', '/daxpay/common/develop/auth/ChannelAuth', '/pay/demo/channelAuth', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1824779695900831744, 1811365615815487488, '2024-08-17 20:05:56.927619', 1811365615815487488, '2024-10-08 19:21:37.604842', 2, 'f', 1812114725651148800, 'dax-pay', '分账组管理', 'AllocationGroupList', '', 't', 'f', '/daxpay/common/allocation/group/AllocationGroupList', '/pay/allocation/group', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1824779660136001536, 1811365615815487488, '2024-08-17 20:05:48.400494', 1811365615815487488, '2024-10-08 19:21:44.305611', 5, 'f', 1812114725651148800, 'dax-pay', '接收方', 'AllocationReceiverList', '', 't', 'f', '/daxpay/common/allocation/receiver/AllocationReceiverList', '/pay/allocation/receiver', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1824779750208679936, 1811365615815487488, '2024-08-17 20:06:09.875297', 1811365615815487488, '2024-12-16 10:22:59.343388', 7, 'f', 1812114224679284736, 'dax-pay', '分账订单', 'AllocOrderList', '', 'f', 'f', '/daxpay/common/allocation/order/AllocOrderList', '/pay/order/allocation', '', 0, 'f', 't', 'f', 'f', NULL);
 
 -- ----------------------------
 -- Table structure for iam_perm_path
@@ -487,234 +513,6 @@ COMMENT ON TABLE "public"."iam_perm_path" IS '请求权限(url)';
 -- ----------------------------
 -- Records of iam_perm_path
 -- ----------------------------
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458889641984, 1811365615815487488, '2024-10-10 17:10:23.178819', 'AllocGroup', 'dax-pay', '', '修改分账比例', 't', '/allocation/group/updateRate', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458919002112, 1811365615815487488, '2024-10-10 17:10:23.183818', 'operateLog', 'dax-pay', '', '清除指定天数的操作日志', 't', '/log/operate/deleteByDay', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458923196416, 1811365615815487488, '2024-10-10 17:10:23.184819', 'AllocGroup', 'dax-pay', '', '批量取消绑定接收者', 't', '/allocation/group/unbindReceivers', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458923196417, 1811365615815487488, '2024-10-10 17:10:23.184819', 'ChannelAuth', 'dax-pay', '', '通过查询码获取认证结果', 't', '/assist/channel/auth/queryAuthResult', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458923196418, 1811365615815487488, '2024-10-10 17:10:23.184819', 'merchant', 'dax-pay', '', '新增商户应用', 't', '/mch/app/add', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458923196419, 1811365615815487488, '2024-10-10 17:10:23.184819', 'dict', 'dax-pay', '', '添加字典', 't', '/dict/add', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458927390720, 1811365615815487488, '2024-10-10 17:10:23.185818', 'PayConst', 'dax-pay', '', '商户订阅通知类型分页', 't', '/const/merchant/notify/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458927390721, 1811365615815487488, '2024-10-10 17:10:23.185818', 'MerchantCallback', 'dax-pay', '', '发送回调消息', 't', '/merchant/notice/callback/send', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458927390722, 1811365615815487488, '2024-10-10 17:10:23.185818', 'PlatformConfig', 'dax-pay', '', '获取配置', 't', '/platform/config/get', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458931585024, 1811365615815487488, '2024-10-10 17:10:23.186324', 'RefundOrder', 'dax-pay', '', '退款关闭', 't', '/order/refund/close', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458931585025, 1811365615815487488, '2024-10-10 17:10:23.186324', 'merchant', 'dax-pay', '', '商户应用分页', 't', '/mch/app/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458931585026, 1811365615815487488, '2024-10-10 17:10:23.186827', 'dict', 'dax-pay', '', '字典分页', 't', '/dict/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458931585027, 1811365615815487488, '2024-10-10 17:10:23.186827', 'client', 'dax-pay', '', '编码是否被使用', 't', '/client/existsByCode', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458935779328, 1811365615815487488, '2024-10-10 17:10:23.187297', 'MerchantNotifyConfig', 'dax-pay', '', '查询列表', 't', '/merchant/notify/config/findAllByAppId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458935779329, 1811365615815487488, '2024-10-10 17:10:23.187297', 'params', 'dax-pay', '', '判断编码是否存在', 't', '/system/param/existsByKey', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458935779330, 1811365615815487488, '2024-10-10 17:10:23.187841', 'MerchantNotify', 'dax-pay', '', '任务分页', 't', '/merchant/notice/notify/task/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458935779331, 1811365615815487488, '2024-10-10 17:10:23.187841', 'AllocGroup', 'dax-pay', '', '编码是否存在', 't', '/allocation/group/existsByGroupNo', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458935779332, 1811365615815487488, '2024-10-10 17:10:23.187841', 'AllocReceiver', 'dax-pay', '', '删除', 't', '/allocation/receiver/delete', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458935779333, 1811365615815487488, '2024-10-10 17:10:23.187841', 'upms', 'dax-pay', '', '指定角色下的请求权限树(分配时用)', 't', '/role/path/treeByRole', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458939973632, 1811365615815487488, '2024-10-10 17:10:23.188834', 'upms', 'dax-pay', '', '根据用户ID获取到角色id集合', 't', '/user/role/findRoleIdsByUser', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458939973633, 1811365615815487488, '2024-10-10 17:10:23.188834', 'TradeSync', 'dax-pay', '', '分页查询', 't', '/record/sync/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458939973634, 1811365615815487488, '2024-10-10 17:10:23.188834', 'loginLog', 'dax-pay', '', '登录日志分页', 't', '/log/login/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458939973635, 1811365615815487488, '2024-10-10 17:10:23.188834', 'role', 'dax-pay', '', '角色下拉框', 't', '/role/dropdown', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458944167936, 1811365615815487488, '2024-10-10 17:10:23.189835', 'upms', 'dax-pay', '', '根据用户ID获取到角色集合', 't', '/user/role/findRolesByUser', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458944167937, 1811365615815487488, '2024-10-10 17:10:23.189835', 'RefundOrder', 'dax-pay', '', '根据ID查询', 't', '/order/refund/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458944167938, 1811365615815487488, '2024-10-10 17:10:23.189835', 'AlipayConfig', 'dax-pay', '', '获取配置', 't', '/alipay/config/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458944167939, 1811365615815487488, '2024-10-10 17:10:23.189835', 'dict', 'dax-pay', '', '字典编码是否被使用', 't', '/dict/existsByCode', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458948362240, 1811365615815487488, '2024-10-10 17:10:23.190833', 'dict', 'dax-pay', '', '添加字典项', 't', '/dict/item/add', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458948362241, 1811365615815487488, '2024-10-10 17:10:23.190833', 'operateLog', 'dax-pay', '', '获取日志分页', 't', '/log/operate/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458948362242, 1811365615815487488, '2024-10-10 17:10:23.190833', 'AllocReceiver', 'dax-pay', '', '编码是否存在', 't', '/allocation/receiver/existsByReceiverNo', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458948362243, 1811365615815487488, '2024-10-10 17:10:23.190833', 'AllocGroup', 'dax-pay', '', '查询分账接收方信息', 't', '/allocation/group/findReceiversByGroups', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458952556544, 1811365615815487488, '2024-10-10 17:10:23.191833', 'PlatformConfig', 'dax-pay', '', '更新配置', 't', '/platform/config/update', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458952556545, 1811365615815487488, '2024-10-10 17:10:23.191833', 'MerchantNotify', 'dax-pay', '', '发送订阅消息', 't', '/merchant/notice/notify/send', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458952556546, 1811365615815487488, '2024-10-10 17:10:23.191833', 'DevelopTrade', 'dax-pay', '', '支付接口', 't', '/develop/trade/pay', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458952556547, 1811365615815487488, '2024-10-10 17:10:23.192832', 'RefundOrder', 'dax-pay', '', '查询金额汇总', 't', '/order/refund/getTotalAmount', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458956750848, 1811365615815487488, '2024-10-10 17:10:23.192832', 'dict', 'dax-pay', '', '编码是否被使用(不包含自己)', 't', '/dict/existsByCodeNotId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458956750849, 1811365615815487488, '2024-10-10 17:10:23.192832', 'RefundOrder', 'dax-pay', '', '退款订单分页查询', 't', '/order/refund/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458956750850, 1811365615815487488, '2024-10-10 17:10:23.192832', 'perm', 'dax-pay', '', '权限码目录树', 't', '/perm/code/catalogTree', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458956750851, 1811365615815487488, '2024-10-10 17:10:23.192832', 'role', 'dax-pay', '', '名称是否被使用(不包含自己)', 't', '/role/existsByNameNotId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458960945152, 1811365615815487488, '2024-10-10 17:10:23.193835', 'PayOrder', 'dax-pay', '', '关闭支付订单', 't', '/order/pay/close', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458960945153, 1811365615815487488, '2024-10-10 17:10:23.193835', 'dict', 'dax-pay', '', '获取全部字典项', 't', '/dict/item/findAll', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458960945154, 1811365615815487488, '2024-10-10 17:10:23.193835', 'perm', 'dax-pay', '', '编码是否被使用', 't', '/perm/code/existsByCode', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458965139456, 1811365615815487488, '2024-10-10 17:10:23.194833', 'ReconcileStatement', 'dax-pay', '', '手动触发交易对账单比对', 't', '/reconcile/statement/compare', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458969333760, 1811365615815487488, '2024-10-10 17:10:23.195832', 'TradeCallback', 'dax-pay', '', '分页查询', 't', '/record/callback/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458969333761, 1811365615815487488, '2024-10-10 17:10:23.195832', 'ReconcileDiscrepancy', 'dax-pay', '', '对账差异记录分页', 't', '/reconcile/discrepancy/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458973528064, 1811365615815487488, '2024-10-10 17:10:23.196778', 'DevelopTrade', 'dax-pay', '', '退款接口', 't', '/develop/trade/refund', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458973528065, 1811365615815487488, '2024-10-10 17:10:23.196778', 'AllocReceiver', 'dax-pay', '', '添加', 't', '/allocation/receiver/add', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458973528066, 1811365615815487488, '2024-10-10 17:10:23.196778', 'loginLog', 'dax-pay', '', '清除指定天数之前的登录日志', 't', '/log/login/deleteByDay', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458973528067, 1811365615815487488, '2024-10-10 17:10:23.196778', 'TransferOrder', 'dax-pay', '', '根据转账号查询', 't', '/order/transfer/findByTransferNo', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458973528068, 1811365615815487488, '2024-10-10 17:10:23.196778', 'MerchantCallback', 'dax-pay', '', '任务详情', 't', '/merchant/notice/callback/task/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458977722368, 1811365615815487488, '2024-10-10 17:10:23.197787', 'TradeFlow', 'dax-pay', '', '查询各类金额汇总', 't', '/record/flow/summary', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458977722369, 1811365615815487488, '2024-10-10 17:10:23.197787', 'MerchantNotify', 'dax-pay', '', '任务详情', 't', '/merchant/notice/notify/task/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458977722370, 1811365615815487488, '2024-10-10 17:10:23.197787', 'params', 'dax-pay', '', '获取单条', 't', '/system/param/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458977722371, 1811365615815487488, '2024-10-10 17:10:23.197787', 'client', 'dax-pay', '', '编码是否被使用(不包含自己)', 't', '/client/existsByCodeNotId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458977722372, 1811365615815487488, '2024-10-10 17:10:23.197787', 'AlipayConfig', 'dax-pay', '', '新增或更新', 't', '/alipay/config/saveOrUpdate', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458977722373, 1811365615815487488, '2024-10-10 17:10:23.197787', 'AllocReceiver', 'dax-pay', '', '查询详情', 't', '/allocation/receiver/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458981916672, 1811365615815487488, '2024-10-10 17:10:23.198788', 'user', 'dax-pay', '', '修改用户', 't', '/user/admin/update', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458981916673, 1811365615815487488, '2024-10-10 17:10:23.198788', 'file', 'dax-pay', '', '更新文件存储平台地址', 't', '/file/platform/updateUrl', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458981916674, 1811365615815487488, '2024-10-10 17:10:23.198788', 'RefundOrder', 'dax-pay', '', '发起退款', 't', '/order/refund/create', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458981916675, 1811365615815487488, '2024-10-10 17:10:23.198788', 'AllocGroup', 'dax-pay', '', '批量绑定接收者', 't', '/allocation/group/bindReceivers', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458981916676, 1811365615815487488, '2024-10-10 17:10:23.198788', 'ChannelCashierConfig', 'dax-pay', '', '配置详情', 't', '/channel/cashier/config/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458981916677, 1811365615815487488, '2024-10-10 17:10:23.198788', 'upms', 'dax-pay', '', '保存请求权限关系', 't', '/role/menu/save', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458981916678, 1811365615815487488, '2024-10-10 17:10:23.198788', 'ChannelCashierConfig', 'dax-pay', '', '配置列表', 't', '/channel/cashier/config/findByAppId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458986110976, 1811365615815487488, '2024-10-10 17:10:23.199783', 'AllocReceiver', 'dax-pay', '', '分页', 't', '/allocation/receiver/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458990305280, 1811365615815487488, '2024-10-10 17:10:23.200784', 'upms', 'dax-pay', '', '指定角色下的菜单权限树(分配时用)', 't', '/role/menu/treeByRole', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458990305281, 1811365615815487488, '2024-10-10 17:10:23.200784', 'params', 'dax-pay', '', '分页', 't', '/system/param/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458990305282, 1811365615815487488, '2024-10-10 17:10:23.200784', 'ChannelCashierConfig', 'dax-pay', '', '配置是否存在(不包括自身)', 't', '/channel/cashier/config/existsByTypeNotId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458990305283, 1811365615815487488, '2024-10-10 17:10:23.200784', 'CloseRecord', 'dax-pay', '', '查询单条', 't', '/record/close/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458990305284, 1811365615815487488, '2024-10-10 17:10:23.200784', 'user', 'dax-pay', '', '根据用户id查询用户 ', 't', '/user/admin/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458990305285, 1811365615815487488, '2024-10-10 17:10:23.200784', 'ReconcileStatement', 'dax-pay', '', '手动创建对账订单', 't', '/reconcile/statement/create', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499584, 1811365615815487488, '2024-10-10 17:10:23.201782', 'upms', 'dax-pay', '', '指定角色下的请求权限树(分配时用)', 't', '/role/code/treeByRole', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499585, 1811365615815487488, '2024-10-10 17:10:23.201782', 'DevelopTrade', 'dax-pay', '', '退款参数签名', 't', '/develop/trade/sign/refund', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499586, 1811365615815487488, '2024-10-10 17:10:23.201782', 'AllocGroup', 'dax-pay', '', '取消绑定接收者', 't', '/allocation/group/unbindReceiver', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499587, 1811365615815487488, '2024-10-10 17:10:23.201782', 'dict', 'dax-pay', '', '查询全部字典', 't', '/dict/findAll', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499588, 1811365615815487488, '2024-10-10 17:10:23.201782', 'role', 'dax-pay', '', '查询所有的角色', 't', '/role/findAll', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499589, 1811365615815487488, '2024-10-10 17:10:23.201782', 'ChannelAuth', 'dax-pay', '', '获取授权链接', 't', '/assist/channel/auth/generateAuthUrl', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499590, 1811365615815487488, '2024-10-10 17:10:23.201782', 'AllocGroup', 'dax-pay', '', '修改', 't', '/allocation/group/update', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499591, 1811365615815487488, '2024-10-10 17:10:23.201782', 'MerchantCallback', 'dax-pay', '', '发送记录分页', 't', '/merchant/notice/callback/record/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458994499592, 1811365615815487488, '2024-10-10 17:10:23.201782', 'user', 'dax-pay', '', '批量解锁用户', 't', '/user/admin/unlockBatch', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458998693888, 1811365615815487488, '2024-10-10 17:10:23.202783', 'PayOrder', 'dax-pay', '', '撤销支付订单', 't', '/order/pay/cancel', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458998693889, 1811365615815487488, '2024-10-10 17:10:23.202783', 'dict', 'dax-pay', '', '删除字典项', 't', '/dict/item/delete', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458998693890, 1811365615815487488, '2024-10-10 17:10:23.202783', 'PayOrder', 'dax-pay', '', '查询订单详情', 't', '/order/pay/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458998693891, 1811365615815487488, '2024-10-10 17:10:23.202783', 'TradeCallback', 'dax-pay', '', '查询单条', 't', '/record/callback/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304458998693892, 1811365615815487488, '2024-10-10 17:10:23.202783', 'AllocGroup', 'dax-pay', '', '清除默认分账组', 't', '/allocation/group/clearDefault', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459002888192, 1811365615815487488, '2024-10-10 17:10:23.203785', 'params', 'dax-pay', '', '更新', 't', '/system/param/update', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459002888193, 1811365615815487488, '2024-10-10 17:10:23.203785', 'UnionPayConfig', 'dax-pay', '', '获取配置', 't', '/union/pay/config/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459002888194, 1811365615815487488, '2024-10-10 17:10:23.203785', 'ReconcileStatement', 'dax-pay', '', '手动上传交易对账单文件', 't', '/reconcile/statement/upload', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459002888195, 1811365615815487488, '2024-10-10 17:10:23.203785', 'perm', 'dax-pay', '', '编码是否被使用(不包含自己)', 't', '/perm/code/existsByCodeNotId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459002888196, 1811365615815487488, '2024-10-10 17:10:23.203785', 'client', 'dax-pay', '', '查询所有终端', 't', '/client/findAll', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459007082496, 1811365615815487488, '2024-10-10 17:10:23.204784', 'PayOrder', 'dax-pay', '', '根据订单号查询详情', 't', '/order/pay/findByOrderNo', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459007082497, 1811365615815487488, '2024-10-10 17:10:23.204784', 'perm', 'dax-pay', '', '根据id查询菜单', 't', '/perm/menu/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459007082498, 1811365615815487488, '2024-10-10 17:10:23.204784', 'ReconcileStatement', 'dax-pay', '', '手动触发对账文件下载', 't', '/reconcile/statement/downAndSave', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459007082499, 1811365615815487488, '2024-10-10 17:10:23.204784', 'params', 'dax-pay', '', '添加', 't', '/system/param/add', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459007082500, 1811365615815487488, '2024-10-10 17:10:23.204784', 'upms', 'dax-pay', '', '给用户分配角色', 't', '/user/role/saveAssign', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459011276800, 1811365615815487488, '2024-10-10 17:10:23.205786', 'user', 'dax-pay', '', '重置密码', 't', '/user/admin/restartPassword', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459011276801, 1811365615815487488, '2024-10-10 17:10:23.205786', 'upms', 'dax-pay', '', '给用户分配角色(批量)', 't', '/user/role/saveAssignBatch', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459011276802, 1811365615815487488, '2024-10-10 17:10:23.206567', 'loginLog', 'dax-pay', '', '获取登录日志', 't', '/log/login/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459015471104, 1811365615815487488, '2024-10-10 17:10:23.206567', 'PayOrder', 'dax-pay', '', '分页查询', 't', '/order/pay/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459019665408, 1811365615815487488, '2024-10-10 17:10:23.207031', 'user', 'dax-pay', '', '封禁用户', 't', '/user/admin/ban', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459019665409, 1811365615815487488, '2024-10-10 17:10:23.207031', 'role', 'dax-pay', '', '编码是否被使用', 't', '/role/existsByCode', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459019665410, 1811365615815487488, '2024-10-10 17:10:23.207031', 'RefundOrder', 'dax-pay', '', '根据商户退款号查询', 't', '/order/refund/findByRefundNo', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459019665411, 1811365615815487488, '2024-10-10 17:10:23.207575', 'TransferOrder', 'dax-pay', '', '转账关闭', 't', '/order/transfer/close', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459019665412, 1811365615815487488, '2024-10-10 17:10:23.207575', 'AllocGroup', 'dax-pay', '', '查询详情', 't', '/allocation/group/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459019665413, 1811365615815487488, '2024-10-10 17:10:23.207575', 'ChannelCashierConfig', 'dax-pay', '', '配置删除', 't', '/channel/cashier/config/delete', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459019665414, 1811365615815487488, '2024-10-10 17:10:23.207575', 'ReconcileStatement', 'dax-pay', '', '对账单分页', 't', '/reconcile/statement/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459023859712, 1811365615815487488, '2024-10-10 17:10:23.208575', 'params', 'dax-pay', '', '删除', 't', '/system/param/delete', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459023859713, 1811365615815487488, '2024-10-10 17:10:23.208575', 'UnionPayConfig', 'dax-pay', '', '新增或更新', 't', '/union/pay/config/saveOrUpdate', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459023859714, 1811365615815487488, '2024-10-10 17:10:23.208575', 'ChannelCashierConfig', 'dax-pay', '', '配置是否存在', 't', '/channel/cashier/config/existsByType', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459023859715, 1811365615815487488, '2024-10-10 17:10:23.209575', 'merchant', 'dax-pay', '', '删除商户应用', 't', '/mch/app/delete', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459028054016, 1811365615815487488, '2024-10-10 17:10:23.209575', 'PayOrder', 'dax-pay', '', '同步支付订单状态', 't', '/order/pay/sync', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459028054017, 1811365615815487488, '2024-10-10 17:10:23.209575', 'WechatPayConfig', 'dax-pay', '', '获取配置', 't', '/wechat/pay/config/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459028054018, 1811365615815487488, '2024-10-10 17:10:23.209575', 'user', 'dax-pay', '', '用户分页', 't', '/user/admin/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459032248320, 1811365615815487488, '2024-10-10 17:10:23.210575', 'dict', 'dax-pay', '', '根据主键删除字典', 't', '/dict/delete', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459032248321, 1811365615815487488, '2024-10-10 17:10:23.210575', 'ChannelCashierConfig', 'dax-pay', '', '配置更新', 't', '/channel/cashier/config/update', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459032248322, 1811365615815487488, '2024-10-10 17:10:23.210575', 'TradeSync', 'dax-pay', '', '查询单条', 't', '/record/sync/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459036442624, 1811365615815487488, '2024-10-10 17:10:23.211576', 'TransferOrder', 'dax-pay', '', '分页查询', 't', '/order/transfer/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459036442625, 1811365615815487488, '2024-10-10 17:10:23.211576', 'TradeFlow', 'dax-pay', '', '查询单条', 't', '/record/flow/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459036442626, 1811365615815487488, '2024-10-10 17:10:23.211576', 'dict', 'dax-pay', '', '根据主键获取字典', 't', '/dict/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459040636928, 1811365615815487488, '2024-10-10 17:10:23.212577', 'user', 'dax-pay', '', '解锁用户', 't', '/user/admin/unlock', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459040636929, 1811365615815487488, '2024-10-10 17:10:23.212577', 'dict', 'dax-pay', '', '添加字典项', 't', '/dict/item/update', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459040636930, 1811365615815487488, '2024-10-10 17:10:23.212577', 'role', 'dax-pay', '', '编码是否被使用(不包含自己)', 't', '/role/existsByCodeNotId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459040636931, 1811365615815487488, '2024-10-10 17:10:23.212577', 'perm', 'dax-pay', '', '权限码详情', 't', '/perm/code/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459040636932, 1811365615815487488, '2024-10-10 17:10:23.212577', 'MerchantCallback', 'dax-pay', '', '发送记录详情', 't', '/merchant/notice/callback/record/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459040636933, 1811365615815487488, '2024-10-10 17:10:23.213578', 'dict', 'dax-pay', '', '更新字典', 't', '/dict/update', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459044831232, 1811365615815487488, '2024-10-10 17:10:23.213578', 'CloseRecord', 'dax-pay', '', '分页查询', 't', '/record/close/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459044831233, 1811365615815487488, '2024-10-10 17:10:23.213578', 'upms', 'dax-pay', '', '查询当前角色已经选择的菜单id', 't', '/role/menu/findIdsByRole', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459049025536, 1811365615815487488, '2024-10-10 17:10:23.214574', 'role', 'dax-pay', '', '通过ID查询角色', 't', '/role/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459053219840, 1811365615815487488, '2024-10-10 17:10:23.215573', 'user', 'dax-pay', '', '添加用户', 't', '/user/admin/add', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459057414144, 1811365615815487488, '2024-10-10 17:10:23.216623', 'merchant', 'dax-pay', '', '根据商户号查询商户应用下拉列表', 't', '/mch/app/dropdown', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459061608448, 1811365615815487488, '2024-10-10 17:10:23.217631', 'TransferOrder', 'dax-pay', '', '查询单条', 't', '/order/transfer/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459061608449, 1811365615815487488, '2024-10-10 17:10:23.217631', 'MerchantNotify', 'dax-pay', '', '发送记录分页', 't', '/merchant/notice/notify/record/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459061608450, 1811365615815487488, '2024-10-10 17:10:23.217631', 'MerchantNotifyConfig', 'dax-pay', '', '商户消息订阅配置', 't', '/merchant/notify/config/subscribe', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459061608451, 1811365615815487488, '2024-10-10 17:10:23.217631', 'merchant', 'dax-pay', '', '根据id查询商户应用', 't', '/mch/app/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459061608452, 1811365615815487488, '2024-10-10 17:10:23.217631', 'ChannelCashierConfig', 'dax-pay', '', '获取码牌地址', 't', '/channel/cashier/config/qrCodeUrl', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459061608453, 1811365615815487488, '2024-10-10 17:10:23.217631', 'client', 'dax-pay', '', '通过ID查询终端', 't', '/client/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802752, 1811365615815487488, '2024-10-10 17:10:23.21863', 'upms', 'dax-pay', '', '查询当前角色已经选择的请求路径', 't', '/role/path/findIdsByRole', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802753, 1811365615815487488, '2024-10-10 17:10:23.21863', 'RefundOrder', 'dax-pay', '', '退款同步', 't', '/order/refund/sync', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802754, 1811365615815487488, '2024-10-10 17:10:23.21863', 'AllocGroup', 'dax-pay', '', '添加', 't', '/allocation/group/create', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802755, 1811365615815487488, '2024-10-10 17:10:23.21863', 'TransferOrder', 'dax-pay', '', '查询金额汇总', 't', '/order/transfer/getTotalAmount', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802756, 1811365615815487488, '2024-10-10 17:10:23.21863', 'TransferOrder', 'dax-pay', '', '转账重试', 't', '/order/transfer/retry', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802757, 1811365615815487488, '2024-10-10 17:10:23.21863', 'PayOrder', 'dax-pay', '', '查询金额汇总', 't', '/order/pay/getTotalAmount', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802758, 1811365615815487488, '2024-10-10 17:10:23.21863', 'operateLog', 'dax-pay', '', '操作日志分页', 't', '/log/operate/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802759, 1811365615815487488, '2024-10-10 17:10:23.21863', 'ReconcileStatement', 'dax-pay', '', '查询对账单', 't', '/reconcile/statement/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459065802760, 1811365615815487488, '2024-10-10 17:10:23.21863', 'RefundOrder', 'dax-pay', '', '退款重试', 't', '/order/refund/retry', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459069997056, 1811365615815487488, '2024-10-10 17:10:23.219631', 'PayConst', 'dax-pay', '', '支付方式分页', 't', '/const/method/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459069997057, 1811365615815487488, '2024-10-10 17:10:23.219631', 'client', 'dax-pay', '', '分页查询终端', 't', '/client/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459069997058, 1811365615815487488, '2024-10-10 17:10:23.219631', 'role', 'dax-pay', '', '名称是否被使用', 't', '/role/existsByName', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459069997059, 1811365615815487488, '2024-10-10 17:10:23.219631', 'AllocReceiver', 'dax-pay', '', '根据通道获取分账接收方类型', 't', '/allocation/receiver/findReceiverTypeByChannel', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459069997060, 1811365615815487488, '2024-10-10 17:10:23.219631', 'perm', 'dax-pay', '', '获取请求权限详情', 't', '/perm/path/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459074191360, 1811365615815487488, '2024-10-10 17:10:23.220629', 'MerchantCallback', 'dax-pay', '', '任务分页', 't', '/merchant/notice/callback/task/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459074191361, 1811365615815487488, '2024-10-10 17:10:23.220629', 'PayConst', 'dax-pay', '', '支付开放接口分页', 't', '/const/api/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459074191362, 1811365615815487488, '2024-10-10 17:10:23.220629', 'PayConst', 'dax-pay', '', '支付通道分页', 't', '/const/channel/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459074191363, 1811365615815487488, '2024-10-10 17:10:23.220629', 'dict', 'dax-pay', '', '查询字典项', 't', '/dict/item/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459074191364, 1811365615815487488, '2024-10-10 17:10:23.220629', 'upms', 'dax-pay', '', '保存请求权限关系', 't', '/role/code/save', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459078385664, 1811365615815487488, '2024-10-10 17:10:23.221633', 'perm', 'dax-pay', '', '请求权限树', 't', '/perm/path/tree', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459078385665, 1811365615815487488, '2024-10-10 17:10:23.221633', 'AllocGroup', 'dax-pay', '', '删除', 't', '/allocation/group/delete', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459078385666, 1811365615815487488, '2024-10-10 17:10:23.221633', 'WechatPayConfig', 'dax-pay', '', '新增或更新', 't', '/wechat/pay/config/saveOrUpdate', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459082579968, 1811365615815487488, '2024-10-10 17:10:23.222633', 'ChannelCashierConfig', 'dax-pay', '', '配置保存', 't', '/channel/cashier/config/save', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459082579969, 1811365615815487488, '2024-10-10 17:10:23.222633', 'user', 'dax-pay', '', '批量封禁用户', 't', '/user/admin/banBatch', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459082579970, 1811365615815487488, '2024-10-10 17:10:23.222633', 'channelConfig', 'dax-pay', '', '根据应用AppId查询配置列表', 't', '/channel/config/findAllByAppId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459082579971, 1811365615815487488, '2024-10-10 17:10:23.222633', 'dict', 'dax-pay', '', '查询字典项列表', 't', '/dict/item/findByDictionaryId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459082579972, 1811365615815487488, '2024-10-10 17:10:23.222633', 'DevelopTrade', 'dax-pay', '', '转账参数签名', 't', '/develop/trade/sign/transfer', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459086774272, 1811365615815487488, '2024-10-10 17:10:23.22363', 'AllocReceiver', 'dax-pay', '', '可分账的通道列表', 't', '/allocation/receiver/findChannels', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459086774273, 1811365615815487488, '2024-10-10 17:10:23.22363', 'params', 'dax-pay', '', '判断编码是否存在(不包含自己)', 't', '/system/param/existsByKeyNotId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459086774274, 1811365615815487488, '2024-10-10 17:10:23.22363', 'dict', 'dax-pay', '', '字典项编码是否被使用', 't', '/dict/item/existsByCode', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459086774275, 1811365615815487488, '2024-10-10 17:10:23.22363', 'DevelopTrade', 'dax-pay', '', '支付参数签名', 't', '/develop/trade/sign/pay', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459090968576, 1811365615815487488, '2024-10-10 17:10:23.224632', 'file', 'dax-pay', '', '设置默认存储平台地址', 't', '/file/platform/setDefault', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459090968577, 1811365615815487488, '2024-10-10 17:10:23.224632', 'dict', 'dax-pay', '', '字典项编码是否被使用(不包含自己)', 't', '/dict/item/existsByCodeNotId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459090968578, 1811365615815487488, '2024-10-10 17:10:23.224632', 'dict', 'dax-pay', '', '字典项分页', 't', '/dict/item/pageByDictionaryId', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459090968579, 1811365615815487488, '2024-10-10 17:10:23.224632', 'TransferOrder', 'dax-pay', '', '转账同步', 't', '/order/transfer/sync', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459090968580, 1811365615815487488, '2024-10-10 17:10:23.224632', 'DevelopTrade', 'dax-pay', '', '转账接口', 't', '/develop/trade/transfer', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459090968581, 1811365615815487488, '2024-10-10 17:10:23.224632', 'TradeFlow', 'dax-pay', '', '分页查询', 't', '/record/flow/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459095162880, 1811365615815487488, '2024-10-10 17:10:23.225631', 'MerchantNotify', 'dax-pay', '', '发送记录详情', 't', '/merchant/notice/notify/record/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459095162881, 1811365615815487488, '2024-10-10 17:10:23.225631', 'upms', 'dax-pay', '', '保存角色请求权限关联关系', 't', '/role/path/save', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459095162882, 1811365615815487488, '2024-10-10 17:10:23.225631', 'upms', 'dax-pay', '', '查询当前角色已经选择的菜单id', 't', '/role/code/findIdsByRole', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459095162883, 1811365615815487488, '2024-10-10 17:10:23.225631', 'user', 'dax-pay', '', '批量重置密码', 't', '/user/admin/restartPasswordBatch', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459099357184, 1811365615815487488, '2024-10-10 17:10:23.226852', 'AllocGroup', 'dax-pay', '', '设置默认分账组', 't', '/allocation/group/setDefault', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459103551488, 1811365615815487488, '2024-10-10 17:10:23.227357', 'AllocGroup', 'dax-pay', '', '分页', 't', '/allocation/group/page', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459103551489, 1811365615815487488, '2024-10-10 17:10:23.227357', 'merchant', 'dax-pay', '', '修改商户应用', 't', '/mch/app/update', 'POST');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459103551490, 1811365615815487488, '2024-10-10 17:10:23.227357', 'ReconcileDiscrepancy', 'dax-pay', '', '查询对账差异记录', 't', '/reconcile/discrepancy/findById', 'GET');
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459996938240, 1811365615815487488, '2024-10-10 17:10:23.440208', NULL, 'dax-pay', 'PayConfig', '支付配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459996938241, 1811365615815487488, '2024-10-10 17:10:23.440716', NULL, 'dax-pay', 'alipay', '支付宝通道', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459996938242, 1811365615815487488, '2024-10-10 17:10:23.440716', NULL, 'dax-pay', 'starter', 'starter模块', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459996938243, 1811365615815487488, '2024-10-10 17:10:23.440716', NULL, 'dax-pay', 'baseapi', '基础API', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304459996938244, 1811365615815487488, '2024-10-10 17:10:23.440716', NULL, 'dax-pay', 'develop', '开发调试功能', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460001132544, 1811365615815487488, '2024-10-10 17:10:23.441723', NULL, 'dax-pay', 'TradeOrder', '交易订单', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460001132545, 1811365615815487488, '2024-10-10 17:10:23.441723', NULL, 'dax-pay', 'reconcile', '对账服务', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460001132546, 1811365615815487488, '2024-10-10 17:10:23.441723', NULL, 'dax-pay', 'Alloc', '分账管理', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460001132547, 1811365615815487488, '2024-10-10 17:10:23.441723', NULL, 'dax-pay', 'iam', '身份识别与访问管理', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460001132548, 1811365615815487488, '2024-10-10 17:10:23.441723', NULL, 'dax-pay', 'UnionPay', '云闪付', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460001132549, 1811365615815487488, '2024-10-10 17:10:23.441723', NULL, 'dax-pay', 'TradeRecord', '交易记录', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460001132550, 1811365615815487488, '2024-10-10 17:10:23.441723', NULL, 'dax-pay', 'wechatPay', '微信支付', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460005326848, 1811365615815487488, '2024-10-10 17:10:23.442721', NULL, 'dax-pay', 'MerchantNotice', '商户通知', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460005326849, 1811365615815487488, '2024-10-10 17:10:23.442721', NULL, 'dax-pay', 'assist', '辅助功能', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460005326850, 1811365615815487488, '2024-10-10 17:10:23.442721', 'PayConfig', 'dax-pay', 'PayConst', '支付常量', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460005326851, 1811365615815487488, '2024-10-10 17:10:23.442721', 'iam', 'dax-pay', 'role', '角色管理', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460005326852, 1811365615815487488, '2024-10-10 17:10:23.442721', 'Alloc', 'dax-pay', 'AllocReceiver', '分账接收方', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460009521152, 1811365615815487488, '2024-10-10 17:10:23.443723', 'iam', 'dax-pay', 'perm', '权限管理', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460009521153, 1811365615815487488, '2024-10-10 17:10:23.443723', 'TradeOrder', 'dax-pay', 'PayOrder', '支付订单', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460009521154, 1811365615815487488, '2024-10-10 17:10:23.443723', 'starter', 'dax-pay', 'loginLog', '登录日志', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460009521155, 1811365615815487488, '2024-10-10 17:10:23.443723', 'Alloc', 'dax-pay', 'AllocGroup', '分账组', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460009521156, 1811365615815487488, '2024-10-10 17:10:23.443723', 'PayConfig', 'dax-pay', 'PlatformConfig', '平台配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460009521157, 1811365615815487488, '2024-10-10 17:10:23.443723', 'starter', 'dax-pay', 'file', '文件存储管理', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715456, 1811365615815487488, '2024-10-10 17:10:23.444722', 'assist', 'dax-pay', 'ChannelAuth', '通道认证', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715457, 1811365615815487488, '2024-10-10 17:10:23.444722', 'MerchantNotice', 'dax-pay', 'MerchantCallback', '商户回调通知', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715458, 1811365615815487488, '2024-10-10 17:10:23.444722', 'baseapi', 'dax-pay', 'dict', '字典管理', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715459, 1811365615815487488, '2024-10-10 17:10:23.444722', 'iam', 'dax-pay', 'client', '终端管理', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715460, 1811365615815487488, '2024-10-10 17:10:23.444722', 'reconcile', 'dax-pay', 'ReconcileDiscrepancy', '对账差异记录', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715461, 1811365615815487488, '2024-10-10 17:10:23.444722', 'PayConfig', 'dax-pay', 'MerchantNotifyConfig', '商户通知配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715462, 1811365615815487488, '2024-10-10 17:10:23.444722', 'starter', 'dax-pay', 'operateLog', '操作日志', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715463, 1811365615815487488, '2024-10-10 17:10:23.444722', 'TradeRecord', 'dax-pay', 'TradeFlow', '交易流水记录', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715464, 1811365615815487488, '2024-10-10 17:10:23.444722', 'reconcile', 'dax-pay', 'ReconcileStatement', '对账单', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460013715465, 1811365615815487488, '2024-10-10 17:10:23.444722', 'TradeOrder', 'dax-pay', 'RefundOrder', '退款订单', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909760, 1811365615815487488, '2024-10-10 17:10:23.445722', 'TradeRecord', 'dax-pay', 'TradeCallback', '交易回调记录', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909761, 1811365615815487488, '2024-10-10 17:10:23.445722', 'alipay', 'dax-pay', 'AlipayConfig', '支付宝配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909762, 1811365615815487488, '2024-10-10 17:10:23.445722', 'TradeRecord', 'dax-pay', 'CloseRecord', '支付关闭记录', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909763, 1811365615815487488, '2024-10-10 17:10:23.445722', 'wechatPay', 'dax-pay', 'WechatPayConfig', '微信支付配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909764, 1811365615815487488, '2024-10-10 17:10:23.445722', 'PayConfig', 'dax-pay', 'ChannelCashierConfig', '通道支付收银台配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909765, 1811365615815487488, '2024-10-10 17:10:23.445722', 'MerchantNotice', 'dax-pay', 'MerchantNotify', '商户订阅通知', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909766, 1811365615815487488, '2024-10-10 17:10:23.445722', 'PayConfig', 'dax-pay', 'merchant', '商户配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909767, 1811365615815487488, '2024-10-10 17:10:23.445722', 'UnionPay', 'dax-pay', 'UnionPayConfig', '云闪付配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460017909768, 1811365615815487488, '2024-10-10 17:10:23.445722', 'baseapi', 'dax-pay', 'params', '系统参数', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460022104064, 1811365615815487488, '2024-10-10 17:10:23.446753', 'TradeRecord', 'dax-pay', 'TradeSync', '交易同步记录', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460022104065, 1811365615815487488, '2024-10-10 17:10:23.446753', 'develop', 'dax-pay', 'DevelopTrade', '交易开发调试服务', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460022104066, 1811365615815487488, '2024-10-10 17:10:23.446753', 'TradeOrder', 'dax-pay', 'TransferOrder', '转账订单', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460022104067, 1811365615815487488, '2024-10-10 17:10:23.446753', 'PayConfig', 'dax-pay', 'channelConfig', '通道配置', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460022104068, 1811365615815487488, '2024-10-10 17:10:23.446753', 'iam', 'dax-pay', 'upms', '权限分配管理', 'f', NULL, NULL);
-INSERT INTO "public"."iam_perm_path" VALUES (1844304460022104069, 1811365615815487488, '2024-10-10 17:10:23.446753', 'iam', 'dax-pay', 'user', '用户管理', 'f', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for iam_role
@@ -752,8 +550,7 @@ COMMENT ON TABLE "public"."iam_role" IS '角色';
 -- ----------------------------
 -- Records of iam_role
 -- ----------------------------
-INSERT INTO "public"."iam_role" VALUES (1810203792869191680, 0, '2024-07-08 14:46:30.838451', 0, '2024-07-08 14:46:30.838451', 0, 'f', NULL, 'admin', '管理员', 't', '');
-INSERT INTO "public"."iam_role" VALUES (1844320575938973696, 1811689994080333824, '2024-10-10 18:14:25.780682', 1811689994080333824, '2024-10-10 18:14:25.780682', 0, 'f', 1810203792869191680, 'demo', '演示角色', 'f', '');
+INSERT INTO "public"."iam_role" VALUES (1810203792869191680, 0, '2024-07-08 14:46:30.838451', 0, '2024-07-08 14:46:30.838451', 0, 'f', NULL, 'admin', '管理员', 'f', '');
 
 -- ----------------------------
 -- Table structure for iam_role_code
@@ -794,89 +591,6 @@ COMMENT ON TABLE "public"."iam_role_menu" IS '角色菜单关联关系';
 -- ----------------------------
 -- Records of iam_role_menu
 -- ----------------------------
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765623058432, 1810203792869191680, 'dax-pay', 1810864706127790080);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765623058433, 1810203792869191680, 'dax-pay', 1810871795650891776);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765623058434, 1810203792869191680, 'dax-pay', 1810909511121862656);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765623058435, 1810203792869191680, 'dax-pay', 1810911232921423872);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765623058436, 1810203792869191680, 'dax-pay', 1810914501286580224);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765623058437, 1810203792869191680, 'dax-pay', 1810915172140339200);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252736, 1810203792869191680, 'dax-pay', 1810909853691641856);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252737, 1810203792869191680, 'dax-pay', 1811360392644521984);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252738, 1810203792869191680, 'dax-pay', 1810910433264762880);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252739, 1810203792869191680, 'dax-pay', 1811283512855629824);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252740, 1810203792869191680, 'dax-pay', 1811283778967441408);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252741, 1810203792869191680, 'dax-pay', 1811336128809766912);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252742, 1810203792869191680, 'dax-pay', 1837381440350912512);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252743, 1810203792869191680, 'dax-pay', 1811667984159715328);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252744, 1810203792869191680, 'dax-pay', 1811671741266243584);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252745, 1810203792869191680, 'dax-pay', 1811672495767007232);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252746, 1810203792869191680, 'dax-pay', 1822975425229004800);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252747, 1810203792869191680, 'dax-pay', 1822975777026252800);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252748, 1810203792869191680, 'dax-pay', 1822975970266226688);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252749, 1810203792869191680, 'dax-pay', 1812113823376666624);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252750, 1810203792869191680, 'dax-pay', 1812116779807338496);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252751, 1810203792869191680, 'dax-pay', 1812118306328473600);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252752, 1810203792869191680, 'dax-pay', 1812118417951485952);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252753, 1810203792869191680, 'dax-pay', 1812118635229016064);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252754, 1810203792869191680, 'dax-pay', 1820432075829538816);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252755, 1810203792869191680, 'dax-pay', 1813456708833087488);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765627252756, 1810203792869191680, 'dax-pay', 1813782811271446528);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447040, 1810203792869191680, 'dax-pay', 1812116972585938944);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447041, 1810203792869191680, 'dax-pay', 1812117498400665600);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447042, 1810203792869191680, 'dax-pay', 1812114224679284736);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447043, 1810203792869191680, 'dax-pay', 1814602527895957504);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447044, 1810203792869191680, 'dax-pay', 1814602684720984064);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447045, 1810203792869191680, 'dax-pay', 1814602840971390976);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447046, 1810203792869191680, 'dax-pay', 1812114347454951424);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447047, 1810203792869191680, 'dax-pay', 1816064154722365440);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447048, 1810203792869191680, 'dax-pay', 1816064344661422080);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765631447049, 1810203792869191680, 'dax-pay', 1816064593371066368);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641344, 1810203792869191680, 'dax-pay', 1824779945365450752);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641345, 1810203792869191680, 'dax-pay', 1812114603047448576);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641346, 1810203792869191680, 'dax-pay', 1820467440233127936);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641347, 1810203792869191680, 'dax-pay', 1820467523628474368);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641348, 1810203792869191680, 'dax-pay', 1812114725651148800);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641349, 1810203792869191680, 'dax-pay', 1824779660136001536);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641350, 1810203792869191680, 'dax-pay', 1824779695900831744);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641351, 1810203792869191680, 'dax-pay', 1824779750208679936);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641352, 1810203792869191680, 'dax-pay', 1812114959231938560);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641353, 1810203792869191680, 'dax-pay', 1820467934552825856);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641354, 1810203792869191680, 'dax-pay', 1820468413097746432);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641355, 1810203792869191680, 'dax-pay', 1812115119471128576);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641356, 1810203792869191680, 'dax-pay', 1836248839544733696);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641357, 1810203792869191680, 'dax-pay', 1838832057238274048);
-INSERT INTO "public"."iam_role_menu" VALUES (1844311765635641358, 1810203792869191680, 'dax-pay', 1812115247342874624);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799986110464, 1844320575938973696, 'dax-pay', 1812113823376666624);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799990304768, 1844320575938973696, 'dax-pay', 1812116779807338496);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799990304769, 1844320575938973696, 'dax-pay', 1812118306328473600);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799990304770, 1844320575938973696, 'dax-pay', 1812118417951485952);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799990304771, 1844320575938973696, 'dax-pay', 1812118635229016064);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799990304772, 1844320575938973696, 'dax-pay', 1820432075829538816);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499072, 1844320575938973696, 'dax-pay', 1812116972585938944);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499073, 1844320575938973696, 'dax-pay', 1812117498400665600);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499074, 1844320575938973696, 'dax-pay', 1812114224679284736);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499075, 1844320575938973696, 'dax-pay', 1814602527895957504);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499076, 1844320575938973696, 'dax-pay', 1814602684720984064);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499077, 1844320575938973696, 'dax-pay', 1814602840971390976);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499078, 1844320575938973696, 'dax-pay', 1812114347454951424);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499079, 1844320575938973696, 'dax-pay', 1816064154722365440);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499080, 1844320575938973696, 'dax-pay', 1816064344661422080);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799994499081, 1844320575938973696, 'dax-pay', 1816064593371066368);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799998693376, 1844320575938973696, 'dax-pay', 1824779945365450752);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799998693377, 1844320575938973696, 'dax-pay', 1812114603047448576);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320799998693378, 1844320575938973696, 'dax-pay', 1820467440233127936);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800002887680, 1844320575938973696, 'dax-pay', 1820467523628474368);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800002887681, 1844320575938973696, 'dax-pay', 1812114725651148800);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800002887682, 1844320575938973696, 'dax-pay', 1824779660136001536);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800002887683, 1844320575938973696, 'dax-pay', 1824779695900831744);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800002887684, 1844320575938973696, 'dax-pay', 1824779750208679936);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800002887685, 1844320575938973696, 'dax-pay', 1812114959231938560);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800002887686, 1844320575938973696, 'dax-pay', 1820467934552825856);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800007081984, 1844320575938973696, 'dax-pay', 1820468413097746432);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800007081985, 1844320575938973696, 'dax-pay', 1812115119471128576);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800007081986, 1844320575938973696, 'dax-pay', 1836248839544733696);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800007081987, 1844320575938973696, 'dax-pay', 1838832057238274048);
-INSERT INTO "public"."iam_role_menu" VALUES (1844320800007081988, 1844320575938973696, 'dax-pay', 1812115247342874624);
 
 -- ----------------------------
 -- Table structure for iam_role_path
@@ -898,300 +612,6 @@ COMMENT ON TABLE "public"."iam_role_path" IS '角色路径关联关系';
 -- ----------------------------
 -- Records of iam_role_path
 -- ----------------------------
-INSERT INTO "public"."iam_role_path" VALUES (1844316892790599680, 1810203792869191680, 'dax-pay', 1844304459103551490);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793984, 1810203792869191680, 'dax-pay', 1844304458969333761);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793985, 1810203792869191680, 'dax-pay', 1844304459065802759);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793986, 1810203792869191680, 'dax-pay', 1844304459019665414);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793987, 1810203792869191680, 'dax-pay', 1844304459007082498);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793988, 1810203792869191680, 'dax-pay', 1844304459002888194);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793989, 1810203792869191680, 'dax-pay', 1844304458990305285);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793990, 1810203792869191680, 'dax-pay', 1844304458965139456);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793991, 1810203792869191680, 'dax-pay', 1844304459103551489);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793992, 1810203792869191680, 'dax-pay', 1844304459061608451);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793993, 1810203792869191680, 'dax-pay', 1844304459057414144);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793994, 1810203792869191680, 'dax-pay', 1844304459023859715);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793995, 1810203792869191680, 'dax-pay', 1844304458931585025);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793996, 1810203792869191680, 'dax-pay', 1844304458923196418);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793997, 1810203792869191680, 'dax-pay', 1844304459082579970);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793998, 1810203792869191680, 'dax-pay', 1844304459082579968);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794793999, 1810203792869191680, 'dax-pay', 1844304459061608452);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794000, 1810203792869191680, 'dax-pay', 1844304459032248321);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794001, 1810203792869191680, 'dax-pay', 1844304459023859714);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794002, 1810203792869191680, 'dax-pay', 1844304459019665413);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794003, 1810203792869191680, 'dax-pay', 1844304458990305282);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794004, 1810203792869191680, 'dax-pay', 1844304458981916678);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794005, 1810203792869191680, 'dax-pay', 1844304458981916676);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794006, 1810203792869191680, 'dax-pay', 1844304459074191362);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794007, 1810203792869191680, 'dax-pay', 1844304459074191361);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794008, 1810203792869191680, 'dax-pay', 1844304459069997056);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794009, 1810203792869191680, 'dax-pay', 1844304458927390720);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794010, 1810203792869191680, 'dax-pay', 1844304459061608450);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794011, 1810203792869191680, 'dax-pay', 1844304458935779328);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794012, 1810203792869191680, 'dax-pay', 1844304458952556544);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794013, 1810203792869191680, 'dax-pay', 1844304458927390722);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794014, 1810203792869191680, 'dax-pay', 1844304459103551488);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794015, 1810203792869191680, 'dax-pay', 1844304459099357184);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794016, 1810203792869191680, 'dax-pay', 1844304459078385665);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794017, 1810203792869191680, 'dax-pay', 1844304459065802754);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794018, 1810203792869191680, 'dax-pay', 1844304459019665412);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794019, 1810203792869191680, 'dax-pay', 1844304458998693892);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794020, 1810203792869191680, 'dax-pay', 1844304458994499590);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794021, 1810203792869191680, 'dax-pay', 1844304458994499586);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892794794022, 1810203792869191680, 'dax-pay', 1844304458981916675);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988288, 1810203792869191680, 'dax-pay', 1844304458948362243);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988289, 1810203792869191680, 'dax-pay', 1844304458935779331);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988290, 1810203792869191680, 'dax-pay', 1844304458923196416);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988291, 1810203792869191680, 'dax-pay', 1844304458889641984);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988292, 1810203792869191680, 'dax-pay', 1844304459086774272);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988293, 1810203792869191680, 'dax-pay', 1844304459069997059);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988294, 1810203792869191680, 'dax-pay', 1844304458986110976);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988295, 1810203792869191680, 'dax-pay', 1844304458977722373);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988296, 1810203792869191680, 'dax-pay', 1844304458973528065);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988297, 1810203792869191680, 'dax-pay', 1844304458948362242);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988298, 1810203792869191680, 'dax-pay', 1844304458935779332);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988299, 1810203792869191680, 'dax-pay', 1844304459095162883);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988300, 1810203792869191680, 'dax-pay', 1844304459082579969);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988301, 1810203792869191680, 'dax-pay', 1844304459053219840);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892798988302, 1810203792869191680, 'dax-pay', 1844304459040636928);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182592, 1810203792869191680, 'dax-pay', 1844304459028054018);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182593, 1810203792869191680, 'dax-pay', 1844304459019665408);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182594, 1810203792869191680, 'dax-pay', 1844304459011276800);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182595, 1810203792869191680, 'dax-pay', 1844304458994499592);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182596, 1810203792869191680, 'dax-pay', 1844304458990305284);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182597, 1810203792869191680, 'dax-pay', 1844304458981916672);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182598, 1810203792869191680, 'dax-pay', 1844304459095162882);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182599, 1810203792869191680, 'dax-pay', 1844304459095162881);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182600, 1810203792869191680, 'dax-pay', 1844304459074191364);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182601, 1810203792869191680, 'dax-pay', 1844304459065802752);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182602, 1810203792869191680, 'dax-pay', 1844304459044831233);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182603, 1810203792869191680, 'dax-pay', 1844304459011276801);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182604, 1810203792869191680, 'dax-pay', 1844304459007082500);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182605, 1810203792869191680, 'dax-pay', 1844304458994499584);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182606, 1810203792869191680, 'dax-pay', 1844304458990305280);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182607, 1810203792869191680, 'dax-pay', 1844304458981916677);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182608, 1810203792869191680, 'dax-pay', 1844304458944167936);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182609, 1810203792869191680, 'dax-pay', 1844304458939973632);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182610, 1810203792869191680, 'dax-pay', 1844304458935779333);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182611, 1810203792869191680, 'dax-pay', 1844304459078385664);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182612, 1810203792869191680, 'dax-pay', 1844304459069997060);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182613, 1810203792869191680, 'dax-pay', 1844304459040636931);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182614, 1810203792869191680, 'dax-pay', 1844304459007082497);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182615, 1810203792869191680, 'dax-pay', 1844304459002888195);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182616, 1810203792869191680, 'dax-pay', 1844304458960945154);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182617, 1810203792869191680, 'dax-pay', 1844304458956750850);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892803182618, 1810203792869191680, 'dax-pay', 1844304459069997058);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376896, 1810203792869191680, 'dax-pay', 1844304459049025536);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376897, 1810203792869191680, 'dax-pay', 1844304459040636930);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376898, 1810203792869191680, 'dax-pay', 1844304459019665409);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376899, 1810203792869191680, 'dax-pay', 1844304458994499588);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376900, 1810203792869191680, 'dax-pay', 1844304458956750851);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376901, 1810203792869191680, 'dax-pay', 1844304458939973635);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376902, 1810203792869191680, 'dax-pay', 1844304459069997057);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376903, 1810203792869191680, 'dax-pay', 1844304459061608453);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376904, 1810203792869191680, 'dax-pay', 1844304459002888196);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376905, 1810203792869191680, 'dax-pay', 1844304458977722371);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376906, 1810203792869191680, 'dax-pay', 1844304458931585027);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376907, 1810203792869191680, 'dax-pay', 1844304459095162880);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376908, 1810203792869191680, 'dax-pay', 1844304459061608449);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376909, 1810203792869191680, 'dax-pay', 1844304458977722369);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376910, 1810203792869191680, 'dax-pay', 1844304458952556545);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376911, 1810203792869191680, 'dax-pay', 1844304458935779330);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376912, 1810203792869191680, 'dax-pay', 1844304459074191360);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376913, 1810203792869191680, 'dax-pay', 1844304459040636932);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376914, 1810203792869191680, 'dax-pay', 1844304458994499591);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376915, 1810203792869191680, 'dax-pay', 1844304458973528068);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376916, 1810203792869191680, 'dax-pay', 1844304458927390721);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376917, 1810203792869191680, 'dax-pay', 1844304459090968581);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376918, 1810203792869191680, 'dax-pay', 1844304459036442625);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376919, 1810203792869191680, 'dax-pay', 1844304458977722368);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376920, 1810203792869191680, 'dax-pay', 1844304459044831232);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892807376921, 1810203792869191680, 'dax-pay', 1844304458990305283);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571200, 1810203792869191680, 'dax-pay', 1844304459032248322);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571201, 1810203792869191680, 'dax-pay', 1844304458939973633);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571202, 1810203792869191680, 'dax-pay', 1844304458998693891);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571203, 1810203792869191680, 'dax-pay', 1844304458969333760);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571204, 1810203792869191680, 'dax-pay', 1844304459090968580);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571205, 1810203792869191680, 'dax-pay', 1844304459086774275);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571206, 1810203792869191680, 'dax-pay', 1844304459082579972);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571207, 1810203792869191680, 'dax-pay', 1844304458994499585);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571208, 1810203792869191680, 'dax-pay', 1844304458973528064);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571209, 1810203792869191680, 'dax-pay', 1844304458952556546);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571210, 1810203792869191680, 'dax-pay', 1844304459090968579);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571211, 1810203792869191680, 'dax-pay', 1844304459065802756);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571212, 1810203792869191680, 'dax-pay', 1844304459065802755);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571213, 1810203792869191680, 'dax-pay', 1844304459061608448);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571214, 1810203792869191680, 'dax-pay', 1844304459036442624);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571215, 1810203792869191680, 'dax-pay', 1844304459019665411);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571216, 1810203792869191680, 'dax-pay', 1844304458973528067);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571217, 1810203792869191680, 'dax-pay', 1844304459065802760);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571218, 1810203792869191680, 'dax-pay', 1844304459065802753);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571219, 1810203792869191680, 'dax-pay', 1844304459019665410);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571220, 1810203792869191680, 'dax-pay', 1844304458981916674);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571221, 1810203792869191680, 'dax-pay', 1844304458956750849);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571222, 1810203792869191680, 'dax-pay', 1844304458952556547);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571223, 1810203792869191680, 'dax-pay', 1844304458944167937);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892811571224, 1810203792869191680, 'dax-pay', 1844304458931585024);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765504, 1810203792869191680, 'dax-pay', 1844304459065802757);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765505, 1810203792869191680, 'dax-pay', 1844304459028054016);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765506, 1810203792869191680, 'dax-pay', 1844304459015471104);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765507, 1810203792869191680, 'dax-pay', 1844304459007082496);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765508, 1810203792869191680, 'dax-pay', 1844304458998693890);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765509, 1810203792869191680, 'dax-pay', 1844304458998693888);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765510, 1810203792869191680, 'dax-pay', 1844304458960945152);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765511, 1810203792869191680, 'dax-pay', 1844304459090968578);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765512, 1810203792869191680, 'dax-pay', 1844304459090968577);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765513, 1810203792869191680, 'dax-pay', 1844304459086774274);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765514, 1810203792869191680, 'dax-pay', 1844304459082579971);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765515, 1810203792869191680, 'dax-pay', 1844304459074191363);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765516, 1810203792869191680, 'dax-pay', 1844304459040636933);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765517, 1810203792869191680, 'dax-pay', 1844304459040636929);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765518, 1810203792869191680, 'dax-pay', 1844304459036442626);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765519, 1810203792869191680, 'dax-pay', 1844304459032248320);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765520, 1810203792869191680, 'dax-pay', 1844304458998693889);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765521, 1810203792869191680, 'dax-pay', 1844304458994499587);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765522, 1810203792869191680, 'dax-pay', 1844304458960945153);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765523, 1810203792869191680, 'dax-pay', 1844304458956750848);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765524, 1810203792869191680, 'dax-pay', 1844304458948362240);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765525, 1810203792869191680, 'dax-pay', 1844304458944167939);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765526, 1810203792869191680, 'dax-pay', 1844304458931585026);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765527, 1810203792869191680, 'dax-pay', 1844304458923196419);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765528, 1810203792869191680, 'dax-pay', 1844304459086774273);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765529, 1810203792869191680, 'dax-pay', 1844304459023859712);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765530, 1810203792869191680, 'dax-pay', 1844304459007082499);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892815765531, 1810203792869191680, 'dax-pay', 1844304459002888192);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959808, 1810203792869191680, 'dax-pay', 1844304458990305281);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959809, 1810203792869191680, 'dax-pay', 1844304458977722370);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959810, 1810203792869191680, 'dax-pay', 1844304458935779329);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959811, 1810203792869191680, 'dax-pay', 1844304459090968576);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959812, 1810203792869191680, 'dax-pay', 1844304458981916673);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959813, 1810203792869191680, 'dax-pay', 1844304459065802758);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959814, 1810203792869191680, 'dax-pay', 1844304458948362241);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959815, 1810203792869191680, 'dax-pay', 1844304458919002112);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959816, 1810203792869191680, 'dax-pay', 1844304459011276802);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959817, 1810203792869191680, 'dax-pay', 1844304458973528066);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959818, 1810203792869191680, 'dax-pay', 1844304458939973634);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959819, 1810203792869191680, 'dax-pay', 1844304459078385666);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959820, 1810203792869191680, 'dax-pay', 1844304459028054017);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959821, 1810203792869191680, 'dax-pay', 1844304459023859713);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959822, 1810203792869191680, 'dax-pay', 1844304459002888193);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959823, 1810203792869191680, 'dax-pay', 1844304458994499589);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959824, 1810203792869191680, 'dax-pay', 1844304458923196417);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959825, 1810203792869191680, 'dax-pay', 1844304458977722372);
-INSERT INTO "public"."iam_role_path" VALUES (1844316892819959826, 1810203792869191680, 'dax-pay', 1844304458944167938);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923361562624, 1844320575938973696, 'dax-pay', 1844304459103551490);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756928, 1844320575938973696, 'dax-pay', 1844304458969333761);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756929, 1844320575938973696, 'dax-pay', 1844304459065802759);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756930, 1844320575938973696, 'dax-pay', 1844304459019665414);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756931, 1844320575938973696, 'dax-pay', 1844304459007082498);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756932, 1844320575938973696, 'dax-pay', 1844304459002888194);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756933, 1844320575938973696, 'dax-pay', 1844304458990305285);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756934, 1844320575938973696, 'dax-pay', 1844304458965139456);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756935, 1844320575938973696, 'dax-pay', 1844304459103551489);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756936, 1844320575938973696, 'dax-pay', 1844304459061608451);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756937, 1844320575938973696, 'dax-pay', 1844304459057414144);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756938, 1844320575938973696, 'dax-pay', 1844304459023859715);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756939, 1844320575938973696, 'dax-pay', 1844304458931585025);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756940, 1844320575938973696, 'dax-pay', 1844304458923196418);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756941, 1844320575938973696, 'dax-pay', 1844304459082579970);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756942, 1844320575938973696, 'dax-pay', 1844304459082579968);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756943, 1844320575938973696, 'dax-pay', 1844304459061608452);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756944, 1844320575938973696, 'dax-pay', 1844304459032248321);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756945, 1844320575938973696, 'dax-pay', 1844304459023859714);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756946, 1844320575938973696, 'dax-pay', 1844304459019665413);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923365756947, 1844320575938973696, 'dax-pay', 1844304458990305282);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951232, 1844320575938973696, 'dax-pay', 1844304458981916678);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951233, 1844320575938973696, 'dax-pay', 1844304458981916676);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951234, 1844320575938973696, 'dax-pay', 1844304459074191362);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951235, 1844320575938973696, 'dax-pay', 1844304459074191361);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951236, 1844320575938973696, 'dax-pay', 1844304459069997056);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951237, 1844320575938973696, 'dax-pay', 1844304458927390720);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951238, 1844320575938973696, 'dax-pay', 1844304459061608450);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951239, 1844320575938973696, 'dax-pay', 1844304458935779328);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951240, 1844320575938973696, 'dax-pay', 1844304458952556544);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951241, 1844320575938973696, 'dax-pay', 1844304458927390722);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951242, 1844320575938973696, 'dax-pay', 1844304459103551488);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951243, 1844320575938973696, 'dax-pay', 1844304459099357184);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923369951244, 1844320575938973696, 'dax-pay', 1844304459078385665);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923374145536, 1844320575938973696, 'dax-pay', 1844304459065802754);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923374145537, 1844320575938973696, 'dax-pay', 1844304459019665412);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923374145538, 1844320575938973696, 'dax-pay', 1844304458998693892);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923374145539, 1844320575938973696, 'dax-pay', 1844304458994499590);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923374145540, 1844320575938973696, 'dax-pay', 1844304458994499586);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923374145541, 1844320575938973696, 'dax-pay', 1844304458981916675);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923374145542, 1844320575938973696, 'dax-pay', 1844304458948362243);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923374145543, 1844320575938973696, 'dax-pay', 1844304458935779331);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339840, 1844320575938973696, 'dax-pay', 1844304458923196416);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339841, 1844320575938973696, 'dax-pay', 1844304458889641984);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339842, 1844320575938973696, 'dax-pay', 1844304459086774272);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339843, 1844320575938973696, 'dax-pay', 1844304459069997059);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339844, 1844320575938973696, 'dax-pay', 1844304458986110976);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339845, 1844320575938973696, 'dax-pay', 1844304458977722373);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339846, 1844320575938973696, 'dax-pay', 1844304458973528065);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339847, 1844320575938973696, 'dax-pay', 1844304458948362242);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339848, 1844320575938973696, 'dax-pay', 1844304458935779332);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339849, 1844320575938973696, 'dax-pay', 1844304459095162880);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339850, 1844320575938973696, 'dax-pay', 1844304459061608449);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339851, 1844320575938973696, 'dax-pay', 1844304458977722369);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339852, 1844320575938973696, 'dax-pay', 1844304458952556545);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339853, 1844320575938973696, 'dax-pay', 1844304458935779330);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923378339854, 1844320575938973696, 'dax-pay', 1844304459074191360);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534144, 1844320575938973696, 'dax-pay', 1844304459040636932);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534145, 1844320575938973696, 'dax-pay', 1844304458994499591);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534146, 1844320575938973696, 'dax-pay', 1844304458973528068);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534147, 1844320575938973696, 'dax-pay', 1844304458927390721);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534148, 1844320575938973696, 'dax-pay', 1844304459090968581);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534149, 1844320575938973696, 'dax-pay', 1844304459036442625);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534150, 1844320575938973696, 'dax-pay', 1844304458977722368);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534151, 1844320575938973696, 'dax-pay', 1844304459044831232);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534152, 1844320575938973696, 'dax-pay', 1844304458990305283);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534153, 1844320575938973696, 'dax-pay', 1844304459032248322);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534154, 1844320575938973696, 'dax-pay', 1844304458939973633);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534155, 1844320575938973696, 'dax-pay', 1844304458998693891);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534156, 1844320575938973696, 'dax-pay', 1844304458969333760);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534157, 1844320575938973696, 'dax-pay', 1844304459090968580);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534158, 1844320575938973696, 'dax-pay', 1844304459086774275);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534159, 1844320575938973696, 'dax-pay', 1844304459082579972);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534160, 1844320575938973696, 'dax-pay', 1844304458994499585);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534161, 1844320575938973696, 'dax-pay', 1844304458973528064);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534162, 1844320575938973696, 'dax-pay', 1844304458952556546);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534163, 1844320575938973696, 'dax-pay', 1844304459090968579);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534164, 1844320575938973696, 'dax-pay', 1844304459065802756);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534165, 1844320575938973696, 'dax-pay', 1844304459065802755);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923382534166, 1844320575938973696, 'dax-pay', 1844304459061608448);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728448, 1844320575938973696, 'dax-pay', 1844304459036442624);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728449, 1844320575938973696, 'dax-pay', 1844304459019665411);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728450, 1844320575938973696, 'dax-pay', 1844304458973528067);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728451, 1844320575938973696, 'dax-pay', 1844304459065802760);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728452, 1844320575938973696, 'dax-pay', 1844304459065802753);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728453, 1844320575938973696, 'dax-pay', 1844304459019665410);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728454, 1844320575938973696, 'dax-pay', 1844304458981916674);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728455, 1844320575938973696, 'dax-pay', 1844304458956750849);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728456, 1844320575938973696, 'dax-pay', 1844304458952556547);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728457, 1844320575938973696, 'dax-pay', 1844304458944167937);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728458, 1844320575938973696, 'dax-pay', 1844304458931585024);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728459, 1844320575938973696, 'dax-pay', 1844304459065802757);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728460, 1844320575938973696, 'dax-pay', 1844304459028054016);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728461, 1844320575938973696, 'dax-pay', 1844304459015471104);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728462, 1844320575938973696, 'dax-pay', 1844304459007082496);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923386728463, 1844320575938973696, 'dax-pay', 1844304458998693890);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922752, 1844320575938973696, 'dax-pay', 1844304458998693888);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922753, 1844320575938973696, 'dax-pay', 1844304458960945152);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922754, 1844320575938973696, 'dax-pay', 1844304459090968576);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922755, 1844320575938973696, 'dax-pay', 1844304458981916673);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922756, 1844320575938973696, 'dax-pay', 1844304459065802758);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922757, 1844320575938973696, 'dax-pay', 1844304458948362241);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922758, 1844320575938973696, 'dax-pay', 1844304458919002112);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922759, 1844320575938973696, 'dax-pay', 1844304459011276802);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923390922760, 1844320575938973696, 'dax-pay', 1844304458973528066);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117056, 1844320575938973696, 'dax-pay', 1844304458939973634);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117057, 1844320575938973696, 'dax-pay', 1844304459078385666);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117058, 1844320575938973696, 'dax-pay', 1844304459028054017);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117059, 1844320575938973696, 'dax-pay', 1844304459023859713);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117060, 1844320575938973696, 'dax-pay', 1844304459002888193);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117061, 1844320575938973696, 'dax-pay', 1844304458994499589);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117062, 1844320575938973696, 'dax-pay', 1844304458923196417);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117063, 1844320575938973696, 'dax-pay', 1844304458977722372);
-INSERT INTO "public"."iam_role_path" VALUES (1844320923395117064, 1844320575938973696, 'dax-pay', 1844304458944167938);
 
 -- ----------------------------
 -- Table structure for iam_user_expand_info
@@ -1238,8 +658,6 @@ COMMENT ON TABLE "public"."iam_user_expand_info" IS '用户扩展信息';
 -- Records of iam_user_expand_info
 -- ----------------------------
 INSERT INTO "public"."iam_user_expand_info" VALUES (1811365615815487488, 0, '2024-07-11 19:43:11.023201', 0, '2024-07-11 19:43:11.023201', 0, 'f', NULL, NULL, NULL, NULL, '2024-07-11 19:43:11.021597', NULL, 'f', 'f', NULL);
-INSERT INTO "public"."iam_user_expand_info" VALUES (1811689994080333824, 1811365615815487488, '2024-07-12 17:12:08.833139', 1811365615815487488, '2024-07-12 17:12:08.833139', 0, 'f', NULL, NULL, NULL, NULL, '2024-07-12 17:12:08.829981', NULL, 'f', 'f', NULL);
-INSERT INTO "public"."iam_user_expand_info" VALUES (1811690440006152192, 1811365615815487488, '2024-07-12 17:13:55.143576', 1811365615815487488, '2024-07-12 17:13:55.143576', 0, 'f', NULL, NULL, NULL, NULL, '2024-07-12 17:13:55.143064', NULL, 'f', 'f', NULL);
 
 -- ----------------------------
 -- Table structure for iam_user_info
@@ -1281,9 +699,7 @@ COMMENT ON TABLE "public"."iam_user_info" IS '用户核心信息';
 -- ----------------------------
 -- Records of iam_user_info
 -- ----------------------------
-INSERT INTO "public"."iam_user_info" VALUES (1811365615815487488, 0, '2024-07-11 19:43:11.013754', 1811365615815487488, '2024-10-10 17:13:37.987245', 3, 'f', '超级管理员', 'bootx', '$2a$10$q.GlM9TmQ.tBEUnIJC7ubOlLUpK8nUsrnQCTf0AC6j9GDeXdQuOBC', '13333333333', 'bootx@bootx.cn', 't', 'normal');
-INSERT INTO "public"."iam_user_info" VALUES (1811690440006152192, 1811365615815487488, '2024-07-12 17:13:55.135004', 1811689994080333824, '2024-10-10 18:29:54.67657', 2, 'f', 'daxpay', 'daxpay', '$2a$10$QQg1dWcgK5XwojjmBsNYP.OLmoiVhKZfnZ275f/E52UWc83HuRsxi', '', '', 'f', 'normal');
-INSERT INTO "public"."iam_user_info" VALUES (1811689994080333824, 1811365615815487488, '2024-07-12 17:12:08.819164', 1811689994080333824, '2024-10-10 18:31:30.597042', 2, 'f', 'daxpay管理员', 'daxpayadmin', '$2a$10$oeO0ipXqgFlW6NqTEvCNlOMW16uWB8mbYTwtlNSphSOjTC29QTTtK', '', '', 'f', 'normal');
+INSERT INTO "public"."iam_user_info" VALUES (1811365615815487488, 0, '2024-07-11 19:43:11.013754', 0, '2024-07-11 19:43:32.925167', 1, 'f', '超级管理员', 'bootx', '$2a$10$knt/I7FYX9YpWYfjv4ChhuOhiYGf3/fCvrHxm51pis.OnNPBDvSeC', '13333333333', 'bootx@bootx.cn', 't', 'normal');
 
 -- ----------------------------
 -- Table structure for iam_user_role
@@ -1303,8 +719,98 @@ COMMENT ON TABLE "public"."iam_user_role" IS '用户角色关联关系';
 -- ----------------------------
 -- Records of iam_user_role
 -- ----------------------------
-INSERT INTO "public"."iam_user_role" VALUES (1844305323314724864, 1811689994080333824, 1810203792869191680);
-INSERT INTO "public"."iam_user_role" VALUES (1844324394932461568, 1811690440006152192, 1844320575938973696);
+
+-- ----------------------------
+-- Table structure for pay_alloc_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_alloc_config";
+CREATE TABLE "public"."pay_alloc_config" (
+  "id" int8 NOT NULL,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "min_amount" numeric(10,2),
+  "auto_alloc" bool,
+  "deleted" bool NOT NULL,
+  "delay_time" int8,
+  "auto_finish" bool
+)
+;
+COMMENT ON COLUMN "public"."pay_alloc_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_alloc_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_alloc_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_alloc_config"."last_modifier" IS '最后修改ID';
+COMMENT ON COLUMN "public"."pay_alloc_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_alloc_config"."version" IS '版本号';
+COMMENT ON COLUMN "public"."pay_alloc_config"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_alloc_config"."min_amount" IS '分账起始额';
+COMMENT ON COLUMN "public"."pay_alloc_config"."auto_alloc" IS '开启自动分账';
+COMMENT ON COLUMN "public"."pay_alloc_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_alloc_config"."delay_time" IS '分账延迟时长(分钟)';
+COMMENT ON COLUMN "public"."pay_alloc_config"."auto_finish" IS '自动完结';
+COMMENT ON TABLE "public"."pay_alloc_config" IS '分账配置参数';
+
+-- ----------------------------
+-- Records of pay_alloc_config
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pay_alloc_detail
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_alloc_detail";
+CREATE TABLE "public"."pay_alloc_detail" (
+  "id" int8 NOT NULL,
+  "allocation_id" int8 NOT NULL,
+  "receiver_id" int8 NOT NULL,
+  "receiver_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "rate" numeric(8,2) NOT NULL,
+  "amount" numeric(10,2) NOT NULL,
+  "receiver_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_name" varchar(100) COLLATE "pg_catalog"."default",
+  "result" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "error_code" varchar(10) COLLATE "pg_catalog"."default",
+  "error_msg" varchar(150) COLLATE "pg_catalog"."default",
+  "finish_time" timestamp(6),
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "deleted" bool NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+  "out_detail_id" varchar(64) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."pay_alloc_detail"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."allocation_id" IS '分账订单ID';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_id" IS '接收者ID';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_no" IS '分账接收方编号';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."rate" IS '分账比例(百分之多少)';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."amount" IS '分账金额';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_type" IS '分账接收方类型';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_account" IS '接收方账号';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."receiver_name" IS '接收方姓名';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."result" IS '分账结果';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."error_code" IS '错误代码';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."error_msg" IS '错误原因';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."finish_time" IS '分账完成时间';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."last_modifier" IS '最后修者ID';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."version" IS '乐观锁';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_alloc_detail"."out_detail_id" IS '外部关联明细';
+COMMENT ON TABLE "public"."pay_alloc_detail" IS '分账订单明细';
+
+-- ----------------------------
+-- Records of pay_alloc_detail
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for pay_alloc_group
@@ -1312,7 +818,7 @@ INSERT INTO "public"."iam_user_role" VALUES (1844324394932461568, 18116904400061
 DROP TABLE IF EXISTS "public"."pay_alloc_group";
 CREATE TABLE "public"."pay_alloc_group" (
   "id" int8 NOT NULL,
-  "group_no" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "group_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "name" varchar(50) COLLATE "pg_catalog"."default",
   "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
   "default_group" bool,
@@ -1346,7 +852,6 @@ COMMENT ON TABLE "public"."pay_alloc_group" IS '分账组';
 -- ----------------------------
 -- Records of pay_alloc_group
 -- ----------------------------
-INSERT INTO "public"."pay_alloc_group" VALUES (1843552721174097920, '123', '123', 'ali_pay', 't', 18.30, NULL, 1811365615815487488, '2024-10-08 15:23:14.938198', 1811365615815487488, '2024-10-08 16:13:52.239032', 11, 'f', 'M8207639754663343');
 
 -- ----------------------------
 -- Table structure for pay_alloc_group_receiver
@@ -1384,6 +889,75 @@ COMMENT ON TABLE "public"."pay_alloc_group_receiver" IS '分账接收组关系';
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for pay_alloc_order
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_alloc_order";
+CREATE TABLE "public"."pay_alloc_order" (
+  "id" int8 NOT NULL,
+  "alloc_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "biz_alloc_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "out_alloc_no" varchar(150) COLLATE "pg_catalog"."default",
+  "order_id" int8 NOT NULL,
+  "order_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "biz_order_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "out_order_no" varchar(150) COLLATE "pg_catalog"."default" NOT NULL,
+  "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "amount" numeric(10,2) NOT NULL,
+  "description" varchar(150) COLLATE "pg_catalog"."default",
+  "status" varchar(30) COLLATE "pg_catalog"."default" NOT NULL,
+  "result" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+  "finish_time" timestamp(6),
+  "notify_url" varchar(200) COLLATE "pg_catalog"."default",
+  "attach" varchar(500) COLLATE "pg_catalog"."default",
+  "req_time" timestamp(6),
+  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+  "error_code" varchar(10) COLLATE "pg_catalog"."default",
+  "error_msg" varchar(2048) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "deleted" bool NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."pay_alloc_order"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_alloc_order"."alloc_no" IS '分账单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."biz_alloc_no" IS '商户分账单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."out_alloc_no" IS '通道分账号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."order_id" IS '支付订单ID';
+COMMENT ON COLUMN "public"."pay_alloc_order"."order_no" IS '支付订单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."biz_order_no" IS '商户支付订单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."out_order_no" IS '通道支付订单号';
+COMMENT ON COLUMN "public"."pay_alloc_order"."title" IS '支付标题';
+COMMENT ON COLUMN "public"."pay_alloc_order"."channel" IS '所属通道';
+COMMENT ON COLUMN "public"."pay_alloc_order"."amount" IS '总分账金额';
+COMMENT ON COLUMN "public"."pay_alloc_order"."description" IS '分账描述';
+COMMENT ON COLUMN "public"."pay_alloc_order"."status" IS '状态';
+COMMENT ON COLUMN "public"."pay_alloc_order"."result" IS '处理结果';
+COMMENT ON COLUMN "public"."pay_alloc_order"."finish_time" IS '分账完成时间';
+COMMENT ON COLUMN "public"."pay_alloc_order"."notify_url" IS '异步通知地址';
+COMMENT ON COLUMN "public"."pay_alloc_order"."attach" IS '商户扩展参数';
+COMMENT ON COLUMN "public"."pay_alloc_order"."req_time" IS '请求时间，传输时间戳';
+COMMENT ON COLUMN "public"."pay_alloc_order"."client_ip" IS '支付终端ip';
+COMMENT ON COLUMN "public"."pay_alloc_order"."error_code" IS '错误码';
+COMMENT ON COLUMN "public"."pay_alloc_order"."error_msg" IS '错误信息';
+COMMENT ON COLUMN "public"."pay_alloc_order"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_alloc_order"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_alloc_order"."last_modifier" IS '最后修者ID';
+COMMENT ON COLUMN "public"."pay_alloc_order"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_alloc_order"."version" IS '乐观锁';
+COMMENT ON COLUMN "public"."pay_alloc_order"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_alloc_order"."app_id" IS '应用号';
+COMMENT ON TABLE "public"."pay_alloc_order" IS '分账订单';
+
+-- ----------------------------
+-- Records of pay_alloc_order
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for pay_alloc_receiver
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_receiver";
@@ -1401,8 +975,9 @@ CREATE TABLE "public"."pay_alloc_receiver" (
   "last_modifier" int8,
   "last_modified_time" timestamp(6),
   "version" int4 NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
   "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+  "name" varchar(50) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_alloc_receiver"."id" IS '主键';
@@ -1418,8 +993,9 @@ COMMENT ON COLUMN "public"."pay_alloc_receiver"."create_time" IS '创建时间';
 COMMENT ON COLUMN "public"."pay_alloc_receiver"."last_modifier" IS '最后修改ID';
 COMMENT ON COLUMN "public"."pay_alloc_receiver"."last_modified_time" IS '最后修改时间';
 COMMENT ON COLUMN "public"."pay_alloc_receiver"."version" IS '版本号';
-COMMENT ON COLUMN "public"."pay_alloc_receiver"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."pay_alloc_receiver"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_alloc_receiver"."name" IS '名称';
 COMMENT ON TABLE "public"."pay_alloc_receiver" IS '分账接收方';
 
 -- ----------------------------
@@ -1452,46 +1028,83 @@ COMMENT ON TABLE "public"."pay_api_const" IS '支付接口常量';
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for pay_channel_cashier_config
+-- Table structure for pay_cashier_code_config
 -- ----------------------------
-DROP TABLE IF EXISTS "public"."pay_channel_cashier_config";
-CREATE TABLE "public"."pay_channel_cashier_config" (
+DROP TABLE IF EXISTS "public"."pay_cashier_code_config";
+CREATE TABLE "public"."pay_cashier_code_config" (
   "id" int8 NOT NULL,
   "creator" int8,
   "create_time" timestamp(6),
   "last_modifier" int8,
   "last_modified_time" timestamp(6),
   "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
   "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "cashier_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "cashier_name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "pay_method" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "allocation" bool NOT NULL,
-  "auto_allocation" bool NOT NULL,
-  "remark" varchar(300) COLLATE "pg_catalog"."default"
+  "name" varchar(50) COLLATE "pg_catalog"."default",
+  "code" varchar(32) COLLATE "pg_catalog"."default",
+  "template_code" varchar(32) COLLATE "pg_catalog"."default",
+  "remark" varchar(200) COLLATE "pg_catalog"."default",
+  "enable" bool NOT NULL,
+  "deleted" bool NOT NULL
 )
 ;
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."id" IS '主键';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."creator" IS '创建者ID';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."last_modifier" IS '最后修改ID';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."version" IS '版本号';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."deleted" IS '删除标志';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."app_id" IS '应用号';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."cashier_type" IS '收银台类型';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."cashier_name" IS '收银台名称';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."channel" IS '支付通道';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."pay_method" IS '支付方式';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."allocation" IS '是否开启分账';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."auto_allocation" IS '自动分账';
-COMMENT ON COLUMN "public"."pay_channel_cashier_config"."remark" IS '备注';
-COMMENT ON TABLE "public"."pay_channel_cashier_config" IS '通道收银台配置';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."last_modifier" IS '最后修改ID';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."version" IS '版本号';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."name" IS '码牌名称';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."code" IS '码牌code';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."template_code" IS '模板编号';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."remark" IS '备注';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."enable" IS '是否启用';
+COMMENT ON COLUMN "public"."pay_cashier_code_config"."deleted" IS '删除标志';
+COMMENT ON TABLE "public"."pay_cashier_code_config" IS '收银码牌配置';
 
 -- ----------------------------
--- Records of pay_channel_cashier_config
+-- Records of pay_cashier_code_config
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pay_cashier_code_type_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_cashier_code_type_config";
+CREATE TABLE "public"."pay_cashier_code_type_config" (
+  "id" int8 NOT NULL,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "cashier_code_id" int8 NOT NULL,
+  "type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel" varchar(32) COLLATE "pg_catalog"."default",
+  "pay_method" varchar(32) COLLATE "pg_catalog"."default",
+  "allocation" bool NOT NULL,
+  "auto_allocation" bool NOT NULL,
+  "deleted" bool NOT NULL
+)
+;
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."last_modifier" IS '最后修改ID';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."version" IS '版本号';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."cashier_code_id" IS '码牌ID';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."type" IS '收银台类型';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."channel" IS '支付通道';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."pay_method" IS '支付方式';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."allocation" IS '是否开启分账';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."auto_allocation" IS '自动分账';
+COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."deleted" IS '删除标志';
+COMMENT ON TABLE "public"."pay_cashier_code_type_config" IS '各类型码牌配置';
+
+-- ----------------------------
+-- Records of pay_cashier_code_type_config
 -- ----------------------------
 
 -- ----------------------------
@@ -1542,7 +1155,8 @@ CREATE TABLE "public"."pay_channel_const" (
   "code" varchar(255) COLLATE "pg_catalog"."default",
   "name" varchar(255) COLLATE "pg_catalog"."default",
   "enable" bool,
-  "remark" varchar(255) COLLATE "pg_catalog"."default"
+  "remark" varchar(255) COLLATE "pg_catalog"."default",
+  "allocatable" bool
 )
 ;
 COMMENT ON COLUMN "public"."pay_channel_const"."id" IS '主键';
@@ -1550,14 +1164,15 @@ COMMENT ON COLUMN "public"."pay_channel_const"."code" IS '通道编码';
 COMMENT ON COLUMN "public"."pay_channel_const"."name" IS '通道名称';
 COMMENT ON COLUMN "public"."pay_channel_const"."enable" IS '是否启用';
 COMMENT ON COLUMN "public"."pay_channel_const"."remark" IS '备注';
+COMMENT ON COLUMN "public"."pay_channel_const"."allocatable" IS '是否支持分账';
 COMMENT ON TABLE "public"."pay_channel_const" IS '支付通道常量';
 
 -- ----------------------------
 -- Records of pay_channel_const
 -- ----------------------------
-INSERT INTO "public"."pay_channel_const" VALUES (30000, 'union_pay', '云闪付', 't', NULL);
-INSERT INTO "public"."pay_channel_const" VALUES (10000, 'ali_pay', '支付宝(直连商户)', 't', NULL);
-INSERT INTO "public"."pay_channel_const" VALUES (20000, 'wechat_pay', '微信支付(直连商户)', 't', NULL);
+INSERT INTO "public"."pay_channel_const" VALUES (30000, 'union_pay', '云闪付', 't', NULL, 't');
+INSERT INTO "public"."pay_channel_const" VALUES (10000, 'ali_pay', '支付宝(直连商户)', 't', NULL, 't');
+INSERT INTO "public"."pay_channel_const" VALUES (20000, 'wechat_pay', '微信支付(直连商户)', 't', NULL, 't');
 
 -- ----------------------------
 -- Table structure for pay_channel_reconcile_trade
@@ -1592,6 +1207,158 @@ COMMENT ON TABLE "public"."pay_channel_reconcile_trade" IS '通道对账交易�
 
 -- ----------------------------
 -- Records of pay_channel_reconcile_trade
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pay_checkout_aggregate_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_checkout_aggregate_config";
+CREATE TABLE "public"."pay_checkout_aggregate_config" (
+  "id" int8 NOT NULL,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "deleted" bool NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+  "type" varchar(32) COLLATE "pg_catalog"."default",
+  "channel" varchar(32) COLLATE "pg_catalog"."default",
+  "pay_method" varchar(32) COLLATE "pg_catalog"."default",
+  "auto_launch" bool
+)
+;
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."last_modifier" IS '最后修者ID';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."version" IS '乐观锁';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."type" IS '聚合支付类型';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."channel" IS '通道';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."pay_method" IS '支付方式';
+COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."auto_launch" IS '自动拉起支付';
+COMMENT ON TABLE "public"."pay_checkout_aggregate_config" IS '收银台聚合支付配置';
+
+-- ----------------------------
+-- Records of pay_checkout_aggregate_config
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pay_checkout_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_checkout_config";
+CREATE TABLE "public"."pay_checkout_config" (
+  "id" int8 NOT NULL,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "deleted" bool NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+  "name" varchar(55) COLLATE "pg_catalog"."default",
+  "aggregate_show" bool,
+  "h5_auto_upgrade" bool
+)
+;
+COMMENT ON COLUMN "public"."pay_checkout_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_checkout_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_checkout_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_checkout_config"."last_modifier" IS '最后修者ID';
+COMMENT ON COLUMN "public"."pay_checkout_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_checkout_config"."version" IS '乐观锁';
+COMMENT ON COLUMN "public"."pay_checkout_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_checkout_config"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_checkout_config"."name" IS '收银台名称';
+COMMENT ON COLUMN "public"."pay_checkout_config"."aggregate_show" IS 'PC收银台是否同时显示聚合收银码';
+COMMENT ON COLUMN "public"."pay_checkout_config"."h5_auto_upgrade" IS 'h5收银台自动升级聚合支付';
+COMMENT ON TABLE "public"."pay_checkout_config" IS '收银台配置';
+
+-- ----------------------------
+-- Records of pay_checkout_config
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pay_checkout_group_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_checkout_group_config";
+CREATE TABLE "public"."pay_checkout_group_config" (
+  "id" int8 NOT NULL,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "deleted" bool NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+  "type" varchar(32) COLLATE "pg_catalog"."default",
+  "name" varchar(50) COLLATE "pg_catalog"."default",
+  "icon" varchar(100) COLLATE "pg_catalog"."default",
+  "sort_no" numeric(10,2)
+)
+;
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."last_modifier" IS '最后修者ID';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."version" IS '乐观锁';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."type" IS '类型';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."name" IS '名称';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."icon" IS '图标';
+COMMENT ON COLUMN "public"."pay_checkout_group_config"."sort_no" IS '排序';
+COMMENT ON TABLE "public"."pay_checkout_group_config" IS '收银台类目配置';
+
+-- ----------------------------
+-- Records of pay_checkout_group_config
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pay_checkout_item_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_checkout_item_config";
+CREATE TABLE "public"."pay_checkout_item_config" (
+  "id" int8 NOT NULL,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL,
+  "deleted" bool NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+  "group_id" int8,
+  "channel" varchar(32) COLLATE "pg_catalog"."default",
+  "pay_method" varchar(32) COLLATE "pg_catalog"."default",
+  "name" varchar(50) COLLATE "pg_catalog"."default",
+  "icon" varchar(100) COLLATE "pg_catalog"."default",
+  "sort_no" numeric(10,2),
+  "call_type" varchar(32) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."last_modifier" IS '最后修者ID';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."version" IS '乐观锁';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."group_id" IS '分组配置ID';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."channel" IS '通道';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."pay_method" IS '支付方式';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."name" IS '名称';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."icon" IS '图标';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."sort_no" IS '排序';
+COMMENT ON COLUMN "public"."pay_checkout_item_config"."call_type" IS '调用方式';
+COMMENT ON TABLE "public"."pay_checkout_item_config" IS '收银台配置项';
+
+-- ----------------------------
+-- Records of pay_checkout_item_config
 -- ----------------------------
 
 -- ----------------------------
@@ -1816,8 +1583,9 @@ COMMENT ON TABLE "public"."pay_merchant_notify_const" IS '商户订阅通知类�
 -- Records of pay_merchant_notify_const
 -- ----------------------------
 INSERT INTO "public"."pay_merchant_notify_const" VALUES (10000, 'pay', '支付订单变动通知', '支付订单变动通知', 't');
-INSERT INTO "public"."pay_merchant_notify_const" VALUES (20000, 'refund', '退款订单变动通知', '退款订单变动通知', 't');
 INSERT INTO "public"."pay_merchant_notify_const" VALUES (30000, 'transfer', '转账订单变动通知', '转账订单变动通知', 't');
+INSERT INTO "public"."pay_merchant_notify_const" VALUES (40000, 'allocation', '分账订单变动通知', '分账订单变动通知', 't');
+INSERT INTO "public"."pay_merchant_notify_const" VALUES (20000, 'refund', '退款订单变动通知', '退款订单变动通知', 't');
 
 -- ----------------------------
 -- Table structure for pay_merchant_notify_record
@@ -1921,13 +1689,13 @@ COMMENT ON TABLE "public"."pay_method_const" IS '支付方式常量';
 -- ----------------------------
 -- Records of pay_method_const
 -- ----------------------------
-INSERT INTO "public"."pay_method_const" VALUES (10000, 'normal', '常规支付', 't', NULL);
 INSERT INTO "public"."pay_method_const" VALUES (20000, 'wap', 'wap支付', 't', NULL);
 INSERT INTO "public"."pay_method_const" VALUES (30000, 'app', '应用支付', 't', NULL);
 INSERT INTO "public"."pay_method_const" VALUES (40000, 'web', 'web支付', 't', NULL);
 INSERT INTO "public"."pay_method_const" VALUES (50000, 'qrcode', '扫码支付', 't', NULL);
 INSERT INTO "public"."pay_method_const" VALUES (60000, 'barcode', '付款码', 't', NULL);
-INSERT INTO "public"."pay_method_const" VALUES (70000, 'jsapi', '小程序支付', 't', NULL);
+INSERT INTO "public"."pay_method_const" VALUES (70000, 'jsapi', 'JSAPI', 't', NULL);
+INSERT INTO "public"."pay_method_const" VALUES (10000, 'normal', '常规支付', 'f', NULL);
 
 -- ----------------------------
 -- Table structure for pay_order
@@ -2040,7 +1808,7 @@ COMMENT ON TABLE "public"."pay_platform_config" IS '管理平台配置';
 -- ----------------------------
 -- Records of pay_platform_config
 -- ----------------------------
-INSERT INTO "public"."pay_platform_config" VALUES (1, 1, '2024-09-20 10:54:44', 1811365615815487488, '2024-10-08 17:24:12.679758', 13, 'f', 'https://127.0.0.1', 'https://127.0.0.1', 'https://127.0.0.1');
+INSERT INTO "public"."pay_platform_config" VALUES (1, 1, '2024-09-20 10:54:44', 1811365615815487488, '2024-12-10 19:05:26.524338', 16, 'f', 'https://127.0.0.1/server', 'https://127.0.0.1/h5', 'https://127.0.0.1/web');
 
 -- ----------------------------
 -- Table structure for pay_reconcile_discrepancy
@@ -2455,13 +2223,6 @@ COMMENT ON TABLE "public"."starter_audit_login_log" IS '登录日志';
 -- ----------------------------
 -- Records of starter_audit_login_log
 -- ----------------------------
-INSERT INTO "public"."starter_audit_login_log" VALUES (1844305540139270144, 1811689994080333824, 'daxpayadmin', 't', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'MSEdge 129.0.0.0', 'Windows 10 or Windows Server 2016', NULL, '2024-10-10 17:14:40.96512');
-INSERT INTO "public"."starter_audit_login_log" VALUES (1844319677221253120, 1811365615815487488, 'bootx', 't', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'MSEdge 129.0.0.0', 'Windows 10 or Windows Server 2016', NULL, '2024-10-10 18:10:51.506417');
-INSERT INTO "public"."starter_audit_login_log" VALUES (1844319978389065728, NULL, '未知', 'f', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'MSEdge 129.0.0.0', 'Windows 10 or Windows Server 2016', '未开启超级管理员权限', '2024-10-10 18:12:03.302468');
-INSERT INTO "public"."starter_audit_login_log" VALUES (1844319995774455808, NULL, '未知', 'f', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'MSEdge 129.0.0.0', 'Windows 10 or Windows Server 2016', '未开启超级管理员权限', '2024-10-10 18:12:07.457692');
-INSERT INTO "public"."starter_audit_login_log" VALUES (1844320113818947584, 1811689994080333824, 'daxpayadmin', 't', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'MSEdge 129.0.0.0', 'Windows 10 or Windows Server 2016', NULL, '2024-10-10 18:12:35.60174');
-INSERT INTO "public"."starter_audit_login_log" VALUES (1844324531951984640, 1811690440006152192, 'daxpay', 't', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'MSEdge 129.0.0.0', 'Windows 10 or Windows Server 2016', NULL, '2024-10-10 18:30:08.965914');
-INSERT INTO "public"."starter_audit_login_log" VALUES (1844325067979841536, 1811689994080333824, 'daxpayadmin', 't', 'dax-pay', 'password', '0:0:0:0:0:0:0:1', '未知', 'MSEdge 129.0.0.0', 'Windows 10 or Windows Server 2016', NULL, '2024-10-10 18:32:16.765654');
 
 -- ----------------------------
 -- Table structure for starter_audit_operate_log
@@ -2538,8 +2299,8 @@ COMMENT ON TABLE "public"."starter_file_platform" IS '文件存储平台';
 -- ----------------------------
 -- Records of starter_file_platform
 -- ----------------------------
+INSERT INTO "public"."starter_file_platform" VALUES (1000, 'local', '本地存储', 'http://127.0.0.1:9999', 'f', 1811365615815487488, '2024-08-13 12:32:37', 1811365615815487488, '2024-10-06 17:17:39.422003', 0);
 INSERT INTO "public"."starter_file_platform" VALUES (2000, 'minio', 'minio存储', 'http://127.0.0.1:9002/daxpay', 't', 1811365615815487488, '2024-08-13 12:32:40', 1811365615815487488, '2024-10-06 17:17:39.428101', 3);
-INSERT INTO "public"."starter_file_platform" VALUES (1000, 'local', '本地存储', 'http://127.0.0.1:8899', 'f', 1811365615815487488, '2024-08-13 12:32:37', 1811365615815487488, '2024-10-10 15:08:55.098487', 1);
 
 -- ----------------------------
 -- Table structure for starter_file_upload_info
@@ -2668,6 +2429,24 @@ ALTER TABLE "public"."iam_user_info" ADD CONSTRAINT "iam_user_info_pkey" PRIMARY
 ALTER TABLE "public"."iam_user_role" ADD CONSTRAINT "iam_user_role_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
+-- Primary Key structure for table pay_alloc_config
+-- ----------------------------
+ALTER TABLE "public"."pay_alloc_config" ADD CONSTRAINT "pay_alloc_config_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table pay_alloc_detail
+-- ----------------------------
+CREATE INDEX "allocation_id" ON "public"."pay_alloc_detail" USING btree (
+  "allocation_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."allocation_id" IS '分账订单ID索引';
+
+-- ----------------------------
+-- Primary Key structure for table pay_alloc_detail
+-- ----------------------------
+ALTER TABLE "public"."pay_alloc_detail" ADD CONSTRAINT "pay_alloc_detail_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
 -- Primary Key structure for table pay_alloc_group
 -- ----------------------------
 ALTER TABLE "public"."pay_alloc_group" ADD CONSTRAINT "pay_allocation_group_pkey" PRIMARY KEY ("id");
@@ -2678,9 +2457,29 @@ ALTER TABLE "public"."pay_alloc_group" ADD CONSTRAINT "pay_allocation_group_pkey
 ALTER TABLE "public"."pay_alloc_group_receiver" ADD CONSTRAINT "pay_allocation_group_receiver_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
+-- Indexes structure for table pay_alloc_order
+-- ----------------------------
+CREATE INDEX "alloc_no" ON "public"."pay_alloc_order" USING btree (
+  "alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."alloc_no" IS '分账单号索引';
+CREATE INDEX "biz_alloc_no" ON "public"."pay_alloc_order" USING btree (
+  "biz_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."biz_alloc_no" IS '商户分账单号索引';
+CREATE INDEX "order_id" ON "public"."pay_alloc_order" USING btree (
+  "order_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."order_id" IS '支付订单ID索引';
+CREATE INDEX "out_alloc_no" ON "public"."pay_alloc_order" USING btree (
+  "out_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."out_alloc_no" IS '通道分账号索引';
+
+-- ----------------------------
 -- Primary Key structure for table pay_alloc_receiver
 -- ----------------------------
-ALTER TABLE "public"."pay_alloc_receiver" ADD CONSTRAINT "pay_allocation_receiver_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."pay_alloc_receiver" ADD CONSTRAINT "pay_alloc_receiver_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table pay_api_const
@@ -2688,9 +2487,14 @@ ALTER TABLE "public"."pay_alloc_receiver" ADD CONSTRAINT "pay_allocation_receive
 ALTER TABLE "public"."pay_api_const" ADD CONSTRAINT "pay_channel_const_copy1_pkey1" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table pay_channel_cashier_config
+-- Primary Key structure for table pay_cashier_code_config
 -- ----------------------------
-ALTER TABLE "public"."pay_channel_cashier_config" ADD CONSTRAINT "pay_channel_cashier_config_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."pay_cashier_code_config" ADD CONSTRAINT "pay_cashier_code_config_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table pay_cashier_code_type_config
+-- ----------------------------
+ALTER TABLE "public"."pay_cashier_code_type_config" ADD CONSTRAINT "pay_cashier_code_type_config_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table pay_channel_config
@@ -2706,6 +2510,26 @@ ALTER TABLE "public"."pay_channel_const" ADD CONSTRAINT "pay_channel_const_pkey"
 -- Primary Key structure for table pay_channel_reconcile_trade
 -- ----------------------------
 ALTER TABLE "public"."pay_channel_reconcile_trade" ADD CONSTRAINT "pay_channel_reconcile_trade_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table pay_checkout_aggregate_config
+-- ----------------------------
+ALTER TABLE "public"."pay_checkout_aggregate_config" ADD CONSTRAINT "pay_checkout_aggregate_config_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table pay_checkout_config
+-- ----------------------------
+ALTER TABLE "public"."pay_checkout_config" ADD CONSTRAINT "pay_checkout_config_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table pay_checkout_group_config
+-- ----------------------------
+ALTER TABLE "public"."pay_checkout_group_config" ADD CONSTRAINT "pay_checkout_group_config_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table pay_checkout_item_config
+-- ----------------------------
+ALTER TABLE "public"."pay_checkout_item_config" ADD CONSTRAINT "pay_checkout_item_config_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Indexes structure for table pay_close_record

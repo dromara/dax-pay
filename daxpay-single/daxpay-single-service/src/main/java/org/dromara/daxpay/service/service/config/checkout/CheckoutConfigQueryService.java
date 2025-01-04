@@ -46,7 +46,7 @@ public class CheckoutConfigQueryService {
      * 获取指定类型收银台分组列表
      */
     public List<CheckoutGroupConfigVo> getGroupConfigs(String appId, String checkoutType){
-        return MpUtil.toListResult(checkoutGroupConfigManager.findAllByAppIdAndType(appId, checkoutType));
+        return MpUtil.toListResult(checkoutGroupConfigManager.findAllSortByAppIdAndType(appId, checkoutType));
     }
 
     /**

@@ -1,14 +1,13 @@
 package org.dromara.daxpay.service.service.allocation.receiver;
 
-import cn.bootx.platform.baseapi.service.dict.DictionaryItemService;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +19,15 @@ import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverQueryParam;
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverRemoveParam;
 import org.dromara.daxpay.core.result.allocation.receiver.AllocReceiverResult;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
 import org.dromara.daxpay.service.convert.allocation.AllocReceiverConvert;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupReceiverManager;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocReceiverManager;
+import org.dromara.daxpay.service.dao.constant.ChannelConstManager;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
+import org.dromara.daxpay.service.entity.constant.ChannelConst;
 import org.dromara.daxpay.service.param.allocation.receiver.AllocReceiverQuery;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocReceiverVo;
 import org.dromara.daxpay.service.strategy.AbsAllocReceiverStrategy;
-import org.dromara.daxpay.service.strategy.PaymentStrategy;
 import org.dromara.daxpay.service.util.PaymentStrategyFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,20 +50,21 @@ public class AllocReceiverService {
 
     private final AllocReceiverManager allocReceiverManager;
 
+    private final ChannelConstManager channelConstManager;
+
     private final LockTemplate lockTemplate;
-    private final DictionaryItemService dictionaryItemService;
 
     /**
      * 分页
      */
-    public PageResult<AllocReceiverResultBo> page(PageParam pageParam, AllocReceiverQuery query) {
+    public PageResult<AllocReceiverVo> page(PageParam pageParam, AllocReceiverQuery query) {
         return MpUtil.toPageResult(allocReceiverManager.page(pageParam, query));
     }
 
     /**
      * 查询详情
      */
-    public AllocReceiverResultBo findById(Long id) {
+    public AllocReceiverVo findById(Long id) {
         return allocReceiverManager.findById(id)
                 .map(AllocReceiver::toResult)
                 .orElseThrow(() -> new DataNotExistException("分账接收方不存在"));
@@ -84,6 +85,17 @@ public class AllocReceiverService {
         List<AllocReceiver> allocReceivers = allocReceiverManager.findAllByChannel(param.getChannel(), param.getAppId());
         List<AllocReceiverResult.Receiver> list = AllocReceiverConvert.CONVERT.toList(allocReceivers);
         return new AllocReceiverResult().setReceivers(list);
+    }
+
+    /**
+     * 添加. 通过界面操作
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void add(AllocReceiverAddParam param){
+        // 生成编码
+        String uuid = UUID.fastUUID().toString(true);
+        param.setReceiverNo(uuid);
+        this.addAndSync(param);
     }
 
 
@@ -156,15 +168,9 @@ public class AllocReceiverService {
      * 可分账的通道列表
      */
     public List<LabelValue> findChannels() {
-        // 先查询策略, 然后查询通道并进行过滤
-        List<String> channelCodes = SpringUtil.getBeansOfType(AbsAllocReceiverStrategy.class)
-                .values()
-                .stream()
-                .map(PaymentStrategy::getChannel)
-                .toList();
-        return dictionaryItemService.findEnableByDictCode("channel").stream()
-                .filter(item -> channelCodes.contains(item.getCode()))
-                .map(item -> new LabelValue(item.getName(), item.getCode()))
+        return channelConstManager.findAllByEnable().stream()
+                .filter(ChannelConst::isAllocatable)
+                .map(item->new LabelValue(item.getName(), item.getCode()))
                 .toList();
     }
 

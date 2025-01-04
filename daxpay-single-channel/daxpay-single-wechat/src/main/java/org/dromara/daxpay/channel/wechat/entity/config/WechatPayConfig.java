@@ -3,13 +3,13 @@ package org.dromara.daxpay.channel.wechat.entity.config;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.convert.config.WechatPayConfigConvert;
 import org.dromara.daxpay.channel.wechat.result.config.WechatPayConfigResult;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.service.entity.config.ChannelConfig;
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 
@@ -32,11 +32,20 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
     /** 微信应用appId */
     private String wxAppId;
 
+    /** 子商户号 */
+    private String subMchId;
+
+    /** 子应用号 */
+    private String subAppId;
+
     /** 是否启用 */
     private Boolean enable;
 
     /** 授权认证地址 */
     private String authUrl;
+
+    /** 是否为ISV商户(特约商户) */
+    private boolean isv;
 
     /** 支付限额 */
     private BigDecimal limitAmount;
@@ -56,20 +65,23 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
     /** APPID对应的接口密码，用于获取微信公众号jsapi支付时使用 */
     private String appSecret;
 
-    /** apiclient_key. pem证书base64编码 */
-    private String privateKey;
+    /** 支付公钥(pub_key.pem) */
+    private String publicKey;
 
-    /** apiclient_cert. pem证书base64编码 */
+    /** 支付公钥ID */
+    private String publicKeyId;
+
+    /** 商户API证书(apiclient_cert.pem)base64编码 */
     private String privateCert;
 
-    /** 证书序列号 */
+    /** 商户API证书私钥(apiclient_key.pem)证书base64编码 */
+    private String privateKey;
+
+    /** 商户API证书序列号 */
     private String certSerialNo;
 
-    /** API证书中p12证书Base64 */
+    /** p12证书Base64 */
     private String p12;
-
-    /** 是否沙箱环境 */
-    private boolean sandbox;
 
     /** 备注 */
     private String remark;
@@ -87,10 +99,10 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
         channelConfig.setOutMchNo(this.getWxMchId());
         channelConfig.setAppId(this.getAppId());
         channelConfig.setEnable(this.getEnable());
-        channelConfig.setChannel(ChannelEnum.WECHAT.getCode());
+        channelConfig.setChannel(this.isv? ChannelEnum.WECHAT_ISV.getCode():ChannelEnum.WECHAT.getCode());
         WechatPayConfig copy = WechatPayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
-        copy.setId(null).setAppId(null).setEnable(null).setWxMchId(null).setAppId(null).setAppId(null);
+        copy.setId(null).setAppId(null).setEnable(null).setWxMchId(null).setWxAppId(null);
         String jsonStr = JsonUtil.toJsonStr(copy);
         channelConfig.setExt(jsonStr);
         return channelConfig;
@@ -109,6 +121,7 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
                 .setEnable(channelConfig.isEnable());
         return config;
     }
+
 
     public String getAuthUrl() {
         return StrUtil.removeSuffix(authUrl, "/");

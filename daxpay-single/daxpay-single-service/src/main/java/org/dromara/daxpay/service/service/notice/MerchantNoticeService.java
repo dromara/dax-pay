@@ -1,14 +1,18 @@
 package org.dromara.daxpay.service.service.notice;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
 import org.dromara.daxpay.service.entity.order.transfer.TransferOrder;
 import org.dromara.daxpay.service.service.notice.callback.MerchantCallbackTaskService;
 import org.dromara.daxpay.service.service.notice.notify.MerchantNotifyTaskService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 客户通知服务
@@ -44,8 +48,18 @@ public class MerchantNoticeService {
     /**
      * 注册转账通知
      */
+    @Transactional(rollbackFor = Exception.class)
     public void registerTransferNotice(TransferOrder order) {
         merchantNotifyService.registerTransferNotice(order);
         merchantCallbackService.registerTransferNotice(order);
+    }
+
+    /**
+     * 注册分账通知
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void registerAllocNotice(AllocOrder order, List<AllocDetail> details) {
+        merchantNotifyService.registerAllocNotice(order,details);
+        merchantCallbackService.registerAllocNotice(order,details);
     }
 }

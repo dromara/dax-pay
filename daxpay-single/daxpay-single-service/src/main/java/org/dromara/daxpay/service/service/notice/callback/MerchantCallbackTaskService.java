@@ -3,11 +3,15 @@ package org.dromara.daxpay.service.service.notice.callback;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
 import org.dromara.daxpay.core.enums.TradeTypeEnum;
+import org.dromara.daxpay.core.result.allocation.order.AllocDetailResult;
 import org.dromara.daxpay.service.code.DaxPayCode;
+import org.dromara.daxpay.service.convert.allocation.AllocOrderConvert;
 import org.dromara.daxpay.service.convert.order.pay.PayOrderConvert;
 import org.dromara.daxpay.service.convert.order.refund.RefundOrderConvert;
 import org.dromara.daxpay.service.convert.order.transfer.TransferOrderConvert;
 import org.dromara.daxpay.service.dao.notice.callback.MerchantCallbackTaskManager;
+import org.dromara.daxpay.service.entity.allocation.order.AllocDetail;
+import org.dromara.daxpay.service.entity.allocation.order.AllocOrder;
 import org.dromara.daxpay.service.entity.notice.callback.MerchantCallbackTask;
 import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
@@ -16,6 +20,8 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 商户回调消息服务类
@@ -99,5 +105,30 @@ public class MerchantCallbackTaskService {
         taskManager.save(task);
         delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
         log.info("注册转账通知");
+    }
+
+    /**
+     * 注册分账通知
+     */
+    public void registerAllocNotice(AllocOrder order, List<AllocDetail> details) {
+        // 判断是否需要进行通知
+        if (StrUtil.isBlank(order.getNotifyUrl())){
+            log.info("分账订单无需通知，订单号：{}",order.getAllocNo());
+            return;
+        }
+        var noticeResult = AllocOrderConvert.CONVERT.toResult(order);
+        List<AllocDetailResult> detailResults = AllocOrderConvert.CONVERT.toList(details);
+        noticeResult.setDetails(detailResults);
+        var task = new MerchantCallbackTask()
+                // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
+                .setContent(JacksonUtil.toJson(noticeResult))
+                .setTradeType(TradeTypeEnum.ALLOCATION.getCode())
+                .setUrl(order.getNotifyUrl())
+                .setSendCount(0)
+                .setTradeId(order.getId())
+                .setTradeNo(order.getAllocNo());
+        taskManager.save(task);
+        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
+        log.info("注册分账通知");
     }
 }

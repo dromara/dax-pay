@@ -39,7 +39,7 @@ public class RefundOrder extends MchAppBaseEntity implements ToResult<RefundOrde
     /** 通道支付订单号 */
     private String outOrderNo;
 
-    /** 支付标题 */
+    /** 退款标题 */
     private String title;
 
     /** 退款号 */

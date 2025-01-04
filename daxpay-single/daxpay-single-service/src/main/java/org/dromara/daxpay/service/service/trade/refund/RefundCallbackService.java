@@ -108,7 +108,6 @@ public class RefundCallbackService {
         // 更新订单和退款相关订单
         payOrderManager.updateById(payOrder);
         refundOrderManager.updateById(refundOrder);
-
         // 记录流水
         tradeFlowRecordService.saveRefund(refundOrder);
         // 发送通知

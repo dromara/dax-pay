@@ -1,7 +1,6 @@
 package org.dromara.daxpay.channel.alipay.result.config;
 
 import cn.bootx.platform.common.jackson.sensitive.SensitiveInfo;
-import org.dromara.daxpay.channel.alipay.code.AliPayCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -34,9 +33,13 @@ public class AlipayConfigResult {
     @Schema(description = "支付限额")
     private BigDecimal limitAmount;
 
+    /** 支付宝特约商户Token */
+    @Schema(description = "支付宝特约商户Token")
+    private String appAuthToken;
+
     /**
      * 认证类型 证书/公钥
-     * @see AliPayCode#AUTH_TYPE_KEY
+     * @see org.dromara.daxpay.channel.alipay.code.AlipayCode.AuthType
      */
     @Schema(description = "认证类型")
     private String authType;
@@ -79,6 +82,10 @@ public class AlipayConfigResult {
     /** 是否沙箱环境 */
     @Schema(description = "是否沙箱环境")
     private boolean sandbox;
+
+    /** 商户号 */
+    @Schema(description = "商户号")
+    private String mchNo;
 
     /** 商户AppId */
     @Schema(description = "商户AppId")

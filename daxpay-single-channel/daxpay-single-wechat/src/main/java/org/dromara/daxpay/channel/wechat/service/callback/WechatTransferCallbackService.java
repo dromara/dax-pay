@@ -1,5 +1,14 @@
 package org.dromara.daxpay.channel.wechat.service.callback;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
+import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.result.transfer.WxPayTransferBatchesNotifyV3Result;
@@ -12,15 +21,6 @@ import org.dromara.daxpay.service.common.context.CallbackLocal;
 import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.service.record.callback.TradeCallbackRecordService;
 import org.dromara.daxpay.service.service.trade.transfer.TransferCallbackService;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.extra.servlet.JakartaServletUtil;
-import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
-import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.WxPayService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,9 +44,9 @@ public class WechatTransferCallbackService {
     /**
      * 回调处理
      */
-    public String transferHandle(HttpServletRequest request) {
+    public String transferHandle(HttpServletRequest request, boolean isv) {
         // 解析数据
-        if (this.resolve(request)){
+        if (this.resolve(request,isv)){
             // 执行回调业务处理
             transferCallbackService.transferCallback();
             // 保存记录
@@ -62,11 +62,11 @@ public class WechatTransferCallbackService {
     /**
      * 微信转账到零钱回调
      */
-    public boolean resolve(HttpServletRequest request) {
+    public boolean resolve(HttpServletRequest request, boolean isv) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        callbackInfo.setChannel(ChannelEnum.WECHAT.getCode())
+        callbackInfo.setChannel(isv? ChannelEnum.WECHAT_ISV.getCode():ChannelEnum.WECHAT.getCode())
                 .setCallbackType(TradeTypeEnum.TRANSFER);
-        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig();
+        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig(false);
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // V3 回调接收处理
         String body = JakartaServletUtil.getBody(request);
@@ -96,10 +96,6 @@ public class WechatTransferCallbackService {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         // 解析数据
         var result = notifyV3Result.getResult();
-
-        // 设置类型和通道
-        callbackInfo.setCallbackType(TradeTypeEnum.TRANSFER)
-                .setChannel(ChannelEnum.WECHAT.getCode());
         // 回调数据
         callbackInfo.setCallbackData(BeanUtil.beanToMap(result));
         // 网关转账批次号

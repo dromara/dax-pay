@@ -3,7 +3,9 @@ package org.dromara.daxpay.service.controller.unipay;
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
-import cn.bootx.platform.core.util.ValidationUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.core.param.assist.AuthCodeParam;
 import org.dromara.daxpay.core.param.assist.GenerateAuthUrlParam;
 import org.dromara.daxpay.core.result.DaxResult;
@@ -13,9 +15,6 @@ import org.dromara.daxpay.core.util.DaxRes;
 import org.dromara.daxpay.service.common.anno.PaymentVerify;
 import org.dromara.daxpay.service.service.assist.ChannelAuthService;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,10 +36,10 @@ public class ChannelUniAuthController {
 
     private final PaymentAssistService paymentAssistService;
 
+    @PaymentVerify
     @Operation(summary = "获取授权链接")
     @PostMapping("/generateAuthUrl")
     public Result<AuthUrlResult> generateAuthUrl(@RequestBody GenerateAuthUrlParam param){
-        ValidationUtil.validateParam(param);
         paymentAssistService.initMchApp(param.getAppId());
         return Res.ok(channelAuthService.generateAuthUrl(param));
     }

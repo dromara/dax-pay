@@ -9,6 +9,7 @@ import java.util.Objects;
 
 /**
  * 收银台类型
+ * 字典 checkout_type
  * @author xxm
  * @since 2024/11/26
  */
@@ -19,7 +20,7 @@ public enum CheckoutTypeEnum {
     H5("h5", "H5"),
     PC("pc", "PC"),
     MINI_APP("mini_app", "小程序"),
-    AGGREGATE("aggregate", "聚合扫码"),
+    AGGREGATE("aggregate", "聚合支付"),
     ;
 
     private final String code;

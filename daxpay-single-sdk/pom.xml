@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-single-sdk</artifactId>
-    <version>3.0.0.beta1</version>
+    <version>3.0.0.beta3</version>
     <packaging>jar</packaging>
 
     <!-- 项目信息 -->
     <name>daxpay-single-sdk</name>
-    <description>daxpay-multi-sdk 是 daxpay单商户版的JavaSDK，用于业务系统快速接入到支付网关中</description>
+    <description>daxpay-single-sdk 是 daxpay单商户版的JavaSDK，用于业务系统快速接入到支付网关中</description>
     <url>https://github.com/dromara/dax-pay</url>
 
     <!-- 许可证 -->

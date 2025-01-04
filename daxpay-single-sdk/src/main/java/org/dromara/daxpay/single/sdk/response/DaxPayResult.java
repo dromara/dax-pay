@@ -1,9 +1,7 @@
 package org.dromara.daxpay.single.sdk.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -12,9 +10,7 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/2/2
  */
-@Getter
-@Setter
-@ToString
+@Data
 public class DaxPayResult<T> {
 
     /** 状态码 */

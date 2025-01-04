@@ -1,6 +1,6 @@
 package org.dromara.daxpay.service.convert.allocation;
 
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupReceiverResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupReceiverVo;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroupReceiver;
 import org.dromara.daxpay.service.param.allocation.group.AllocGroupReceiverParam;
 import org.mapstruct.Mapper;
@@ -15,7 +15,7 @@ import org.mapstruct.factory.Mappers;
 public interface AllocGroupReceiverConvert {
     AllocGroupReceiverConvert CONVERT = Mappers.getMapper(AllocGroupReceiverConvert.class);
 
-    AllocGroupReceiverResultBo convert(AllocGroupReceiver in);
+    AllocGroupReceiverVo toVo(AllocGroupReceiver in);
 
-    AllocGroupReceiver convert(AllocGroupReceiverParam in);
+    AllocGroupReceiver toEntity(AllocGroupReceiverParam in);
 }

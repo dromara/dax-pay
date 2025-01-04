@@ -51,7 +51,7 @@ public class WechatTransferSyncV3Service {
             }
             // FAIL:转账失败。需要确认失败原因后，再决定是否重新发起对该笔明细单的转账（并非整个转账批次单）
             if ("FAIL".equals(result.getDetailStatus())){
-                syncResult.setTransferStatus(TransferStatusEnum.FAIL);
+                syncResult.setTransferStatus(TransferStatusEnum.CLOSE);
             }
             // INIT: 初始态。 系统转账校验中 WAIT_PAY: 待确认。待商户确认, 符合免密条件时, 系统会自动扭转为转账中
             // PROCESSING:转账中。正在处理中，转账结果尚未明确
@@ -61,7 +61,9 @@ public class WechatTransferSyncV3Service {
 
         } catch (WxPayException e) {
             log.error("微信转账订单查询V3失败", e);
-            syncResult.setSyncErrorMsg(e.getCustomErrorMsg()).setSyncSuccess(false);
+            syncResult.setSyncErrorMsg(e.getCustomErrorMsg())
+                    .setSyncSuccess(false)
+                    .setTransferStatus(TransferStatusEnum.FAIL);
         }
         return syncResult;
     }

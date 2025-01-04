@@ -2,7 +2,7 @@ package org.dromara.daxpay.service.convert.allocation;
 
 import org.dromara.daxpay.core.param.allocation.receiver.AllocReceiverAddParam;
 import org.dromara.daxpay.core.result.allocation.receiver.AllocReceiverResult;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocReceiverResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocReceiverVo;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -20,7 +20,7 @@ public interface AllocReceiverConvert {
 
     AllocReceiver convert(AllocReceiverAddParam in);
 
-    AllocReceiverResultBo toBo(AllocReceiver in);
+    AllocReceiverVo toBo(AllocReceiver in);
 
     AllocReceiverResult toResult(AllocReceiver in);
 

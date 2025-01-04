@@ -1,16 +1,17 @@
 package org.dromara.daxpay.single.sdk.param.trade.pay;
 
+import cn.hutool.core.lang.TypeReference;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.dromara.daxpay.single.sdk.code.ChannelEnum;
 import org.dromara.daxpay.single.sdk.code.PayMethodEnum;
+import org.dromara.daxpay.single.sdk.model.trade.pay.PayResultModel;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.param.channel.AlipayParam;
 import org.dromara.daxpay.single.sdk.param.channel.WechatPayParam;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
-import org.dromara.daxpay.single.sdk.model.trade.pay.PayResultModel;
 import org.dromara.daxpay.single.sdk.util.JsonUtil;
-import cn.hutool.core.lang.TypeReference;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,8 +21,9 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/2/2
  */
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
 public class PayParam extends DaxPayRequest<PayResultModel> {
 
     /** 商户订单号 */

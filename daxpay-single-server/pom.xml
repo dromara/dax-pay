@@ -13,7 +13,7 @@
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-single-server</artifactId>
     <packaging>jar</packaging>
-    <version>3.0.0.beta1</version>
+    <version>3.0.0.beta3</version>
     <description>daxpay服务端</description>
 
     <properties>
@@ -29,8 +29,8 @@
         <easypoi.version>4.5.0</easypoi.version>
         <minio.version>8.5.2</minio.version>
 
-        <bootx-platform.version>3.0.0.beta1</bootx-platform.version>
-        <daxpay.version>3.0.0.beta1</daxpay.version>
+        <bootx-platform.version>3.0.0.beta3</bootx-platform.version>
+        <daxpay.version>3.0.0.beta3</daxpay.version>
     </properties>
 
     <dependencies>
@@ -124,6 +124,8 @@
                         <nonFilteredFileExtension>xls</nonFilteredFileExtension>
                         <nonFilteredFileExtension>docx</nonFilteredFileExtension>
                         <nonFilteredFileExtension>doc</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>woff</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>

@@ -28,6 +28,10 @@ public class AllocReceiverAddParam extends PaymentCommonParam {
     @Size(max = 32, message = "接收者编号不可超过32位")
     private String receiverNo;
 
+    @Schema(description = "接收方名称")
+    @Size(max = 50, message = "接收方名称不可超过50位")
+    private String name;
+
     /**
      * 所属通道
      * @see ChannelEnum

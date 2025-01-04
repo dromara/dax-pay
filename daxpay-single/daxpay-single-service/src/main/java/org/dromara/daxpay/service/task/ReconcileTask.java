@@ -44,9 +44,8 @@ public class ReconcileTask  {
     private final PaymentAssistService paymentAssistService;
 
 
-
     /**
-     * 任务实现, 上午10.30执行
+     * 对账任务实现, 上午10.30执行
      */
     @Scheduled(cron = "0 30 10 * * ?")
     public void reconcileTask() {

@@ -7,6 +7,7 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.enums.SignTypeEnum;
+import org.dromara.daxpay.core.exception.ConfigNotEnableException;
 import org.dromara.daxpay.core.exception.VerifySignFailedException;
 import org.dromara.daxpay.core.param.PaymentCommonParam;
 import org.dromara.daxpay.core.result.DaxResult;
@@ -16,6 +17,7 @@ import org.dromara.daxpay.service.common.context.ClientLocal;
 import org.dromara.daxpay.service.common.context.MchAppLocal;
 import org.dromara.daxpay.service.common.local.PaymentContextLocal;
 import org.dromara.daxpay.service.entity.merchant.MchApp;
+import org.dromara.daxpay.service.enums.MchAppStatusEnum;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -131,6 +133,9 @@ public class PaymentAssistService {
     public void initMchApp(String appId) {
         // 获取应用信息
         MchApp mchApp = mchAppCacheService.get(appId);
+        if (!Objects.equals(mchApp.getStatus(), MchAppStatusEnum.ENABLE.getCode())){
+            throw new ConfigNotEnableException("商户应用未启用");
+        }
         // 初始化支付上下文信息
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
         BeanUtil.copyProperties(mchApp, mchAppInfo);

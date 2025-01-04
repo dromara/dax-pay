@@ -8,9 +8,10 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.lang.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupReceiverResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupReceiverVo;
 import org.dromara.daxpay.service.convert.allocation.AllocGroupConvert;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupManager;
 import org.dromara.daxpay.service.dao.allocation.receiver.AllocGroupReceiverManager;
@@ -19,7 +20,7 @@ import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroup;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocGroupReceiver;
 import org.dromara.daxpay.service.entity.allocation.receiver.AllocReceiver;
 import org.dromara.daxpay.service.param.allocation.group.*;
-import org.dromara.daxpay.service.bo.allocation.receiver.AllocGroupResultBo;
+import org.dromara.daxpay.service.result.allocation.receiver.AllocGroupVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,21 +47,21 @@ public class AllocGroupService {
     /**
      * 分页
      */
-    public PageResult<AllocGroupResultBo> page(PageParam pageParam, AllocGroupQuery query){
+    public PageResult<AllocGroupVo> page(PageParam pageParam, AllocGroupQuery query){
         return MpUtil.toPageResult(groupManager.page(pageParam, query));
     }
 
     /**
      * 查询详情
      */
-    public AllocGroupResultBo findById(Long id){
+    public AllocGroupVo findById(Long id){
         return groupManager.findById(id).map(AllocGroup::toResult).orElseThrow(()->new DataNotExistException("分账组不存在"));
     }
 
     /**
      * 查询分账接收方
      */
-    public List<AllocGroupReceiverResultBo> findReceiversByGroups(Long groupId){
+    public List<AllocGroupReceiverVo> findReceiversByGroups(Long groupId){
         List<AllocGroupReceiver> groupReceivers = groupReceiverManager.findByGroupId(groupId);
         List<Long> receiverIds = groupReceivers.stream()
                 .map(AllocGroupReceiver::getReceiverId)
@@ -73,9 +74,10 @@ public class AllocGroupService {
         return groupReceivers.stream()
                 .map(o -> {
                     AllocReceiver receiver = receiverMap.get(o.getReceiverId());
-                    AllocGroupReceiverResultBo result = new AllocGroupReceiverResultBo()
+                    AllocGroupReceiverVo result = new AllocGroupReceiverVo()
                             .setReceiverId(receiver.getId())
                             .setReceiverNo(receiver.getReceiverNo())
+                            .setName(receiver.getName())
                             .setReceiverAccount(receiver.getReceiverAccount())
                             .setReceiverName(receiver.getReceiverName())
                             .setRate(o.getRate())
@@ -92,8 +94,11 @@ public class AllocGroupService {
      * 创建分账组
      */
     public void create(AllocGroupParam param){
-        AllocGroup group = AllocGroupConvert.CONVERT.convert(param);
+        String uuid = UUID.fastUUID().toString(true);
+        AllocGroup group = AllocGroupConvert.CONVERT.toEntity(param);
         group.setTotalRate(BigDecimal.ZERO);
+        // 默认设置分账组编号
+        group.setGroupNo(uuid);
         groupManager.save(group);
     }
 
@@ -240,12 +245,5 @@ public class AllocGroupService {
         groupReceiver.setRate(rate);
         groupReceiverManager.updateById(groupReceiver);
         groupManager.updateById(group);
-    }
-
-    /**
-     * 判断分账组编号是否存在
-     */
-    public boolean existsByGroupNo(String groupNo, String appId) {
-        return groupManager.existedByGroupNo(groupNo, appId);
     }
 }

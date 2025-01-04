@@ -1,0 +1,91 @@
+spring:
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          # MySQL连接
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: ${MYSQL_URL}
+          username: ${MYSQL_USERNAME}
+          password: ${MYSQL_PASSWORD}
+      hikari:
+        keepalive-time: 300000
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      database: ${REDIS_DATABASE}
+      password: ${REDIS_PASSWORD}
+      lettuce:
+        pool:
+          max-wait: 1000ms
+# 接口文档配置
+springdoc:
+  # 默认展开对象类型的属性, 主要用在get类型的参数中
+  default-flat-param-object: true
+knife4j:
+  # 开启接口文档增强特性
+  enable: true
+  # 是否为生产环境, 为true关闭swagger接口
+  production: ${KNIFE4J_PRODUCTION:false}
+# 基础脚手架配置
+bootx-platform:
+  common:
+    # swagger相关配置
+    swagger:
+      author: DaxPay
+      title: 开源支付平台-多商户版-管理端
+      description: 开源支付平台-多商户版-管理端
+      version: 0.0.1
+      base-packages:
+        "[BootxPlatform接口]":
+          - cn.bootx.platform.common
+          - cn.bootx.platform.starter
+          - cn.bootx.platform.iam
+          - cn.bootx.platform.baseapi
+          - cn.bootx.platform.notice
+        "[支付管理平台接口]":
+          - org.dromara.daxpay.admin
+          - org.dromara.daxpay.channel
+  starter:
+    auth:
+      # 是否启用超级管理员登录
+      enable-admin: ${DAXPAY_ENABLE_ADMIN:true}
+      # 用户管理列表中是否显示超级管理员
+      admin-in-list: ${DAXPAY_ADMIN-IN-LIST:true}
+      ignore-urls:
+        - '/actuator/**'
+        - '/token/**'
+        - '/ws/**'
+        - '/v3/api-docs/**'
+        - '/doc.html'
+        - '/swagger-resources/**'
+        - '/webjars/**'
+        - '/storage/**'
+        - '/web/**'
+        - '/h5/**'
+        - '/css/**'
+        - '/error'
+        - '/favicon.ico'
+    audit-log:
+      ip2region:
+        # 默认使用索引模式
+        search-type: vector_index
+        # 文件存储地址
+        file-path: /data/ip2region/ip2region.xdb
+dax-pay:
+  # 推荐只使用字母和数字, 特殊符号会导致部分通道出问题
+  env: DAX
+  machine-no: 70
+dromara:
+  # 注意, 不要设置 domain 访问路径, 自行进行拼接访问路径, 来保证可迁移性
+  x-file-storage:
+    default-platform: local
+    # 使用Nginx映射到存储路径
+    # 实际存储地址为 storage-path(存储路径) + base-path(基础路径) + 自动生成的路径(年月日) + 文件名
+    local-plus:
+      - platform: local
+        enable-storage: true
+        base-path: /file/ # 基基础存储路径 前缀和结尾都必须为 /
+        storage-path: /data/files/ # 存储路径, 结尾必须为 /

@@ -36,10 +36,11 @@ public class AllocGroupManager extends BaseManager<AllocGroupMapper, AllocGroup>
     /**
      * 根据分账组编号查询
      */
-    public Optional<AllocGroup> findByGroupNo(String groupNo, String appId) {
+    public Optional<AllocGroup> findByGroupNo(String channel, String groupNo, String appId) {
         return this.lambdaQuery()
                 .eq(AllocGroup::getGroupNo,groupNo)
                 .eq(AllocGroup::getAppId,appId)
+                .eq(AllocGroup::getChannel,channel)
                 .oneOpt();
     }
 

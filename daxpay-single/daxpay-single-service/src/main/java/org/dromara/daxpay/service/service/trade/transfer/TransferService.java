@@ -89,8 +89,7 @@ public class TransferService {
         } catch (Exception e) {
             log.error("转账出现错误", e);
             // 更新转账失败的记录
-            order.setStatus(TransferStatusEnum.FAIL.getCode()).setErrorMsg(e.getMessage());
-            transferOrderManager.updateById(order);
+            transferAssistService.updateOrderByError(order,e.getMessage());
             return transferAssistService.buildResult(order);
         }
         SpringUtil.getBean(this.getClass()).successHandler(order, transferResultBo);
@@ -119,8 +118,7 @@ public class TransferService {
         } catch (Exception e) {
             log.error("重现转账出现错误", e);
             // 更新转账失败的记录
-            order.setStatus(TransferStatusEnum.FAIL.getCode()).setErrorMsg(e.getMessage());
-            transferOrderManager.updateById(order);
+            transferAssistService.updateOrderByError(order,e.getMessage());
             return transferAssistService.buildResult(order);
         }
         SpringUtil.getBean(this.getClass()).successHandler(order, transferResultBo);
@@ -142,7 +140,7 @@ public class TransferService {
             tradeFlowRecordService.saveTransfer(order);
         } else {
             // 注册延时同步事件
-            delayJobService.registerByTransaction(order.getId(), DaxPayCode.Event.MERCHANT_TRANSFER_SYNC, 2*60*1000L);
+            delayJobService.registerByTransaction(order.getId(), DaxPayCode.Event.ORDER_TRANSFER_SYNC, 2*60*1000L);
         }
         transferOrderManager.updateById(order);
     }

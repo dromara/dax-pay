@@ -4,7 +4,6 @@
     默认情况下，Spring Boot 不会 在 jar 文件之外寻找资源。
     如果你想使用外部 logback 配置文件，你必须在启动 jar 时传递它的位置：$ java -jar -Dlogging.config=./logback-spring.xml app.jar
     -->
-
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <!--项目名称-->
     <property name="appname" value="dax-pay-server"/>
@@ -18,9 +17,24 @@
         </layout>
     </appender>
 
+    <!-- log格式日志收集 -->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${logdir}/${appname}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logdir}/${appname}.log.%d{yyyy-MM-dd}.gz</FileNamePattern>
+            <!-- 保存30天 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%date{yyyy-MM-dd HH:mm:ssS} | %-5level[%X{traceId:-}] %thread - %logger{36}| %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <!-- 开发输出级别 -->
     <root level="INFO">
         <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
     </root>
 
 </configuration>
