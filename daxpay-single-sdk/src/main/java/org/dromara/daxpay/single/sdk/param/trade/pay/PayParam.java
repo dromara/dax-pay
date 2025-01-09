@@ -9,6 +9,7 @@ import org.dromara.daxpay.single.sdk.code.PayMethodEnum;
 import org.dromara.daxpay.single.sdk.model.trade.pay.PayResultModel;
 import org.dromara.daxpay.single.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.single.sdk.param.channel.AlipayParam;
+import org.dromara.daxpay.single.sdk.param.channel.UnionPayParam;
 import org.dromara.daxpay.single.sdk.param.channel.WechatPayParam;
 import org.dromara.daxpay.single.sdk.response.DaxPayResult;
 import org.dromara.daxpay.single.sdk.util.JsonUtil;
@@ -63,6 +64,7 @@ public class PayParam extends DaxPayRequest<PayResultModel> {
      * 支付扩展参数, json字符串格式
      * @see AlipayParam
      * @see WechatPayParam
+     * @see UnionPayParam
      */
     private String extraParam;
 

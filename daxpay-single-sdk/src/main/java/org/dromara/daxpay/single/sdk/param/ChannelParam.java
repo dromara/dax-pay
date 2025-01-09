@@ -8,7 +8,7 @@ import org.dromara.daxpay.single.sdk.util.JsonUtil;
  * @author xxm
  * @since 2023/12/17
  */
-public interface ChannelParam extends SortMapParam {
+public interface ChannelParam {
 
     /**
      * 转换成字符串
