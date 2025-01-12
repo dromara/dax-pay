@@ -172,6 +172,7 @@ public class RefundAssistService {
         }
         // 设置退款为完成状态和完成时间
         refundOrder.setStatus(RefundStatusEnum.SUCCESS.getCode())
+                .setErrorMsg(null)
                 .setFinishTime(finishTime);
         payOrder.setRefundStatus(afterPayRefundStatus.getCode());
 

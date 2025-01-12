@@ -102,7 +102,8 @@ public class RefundCallbackService {
         }
         // 设置退款为完成状态和完成时间
         refundOrder.setStatus(RefundStatusEnum.SUCCESS.getCode())
-                .setFinishTime(callbackInfo.getFinishTime());
+                .setFinishTime(callbackInfo.getFinishTime())
+                .setErrorMsg(null);
         payOrder.setRefundStatus(payRefundStatusEnum.getCode());
 
         // 更新订单和退款相关订单
