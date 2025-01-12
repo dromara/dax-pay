@@ -5,7 +5,7 @@
  Source Server Type    : PostgreSQL
  Source Server Version : 140005 (140005)
  Source Host           : localhost:5432
- Source Catalog        : daxpay
+ Source Catalog        : dax-pay-single
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
@@ -20,18 +20,18 @@
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."base_dict";
 CREATE TABLE "public"."base_dict" (
-  "id" int8 NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "group_tag" varchar(50) COLLATE "pg_catalog"."default",
-  "code" varchar(50) COLLATE "pg_catalog"."default",
-  "remark" varchar(50) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "enable" bool,
-  "deleted" bool NOT NULL
+                                      "id" int8 NOT NULL,
+                                      "name" varchar(50) COLLATE "pg_catalog"."default",
+                                      "group_tag" varchar(50) COLLATE "pg_catalog"."default",
+                                      "code" varchar(50) COLLATE "pg_catalog"."default",
+                                      "remark" varchar(50) COLLATE "pg_catalog"."default",
+                                      "creator" int8,
+                                      "create_time" timestamp(6),
+                                      "last_modifier" int8,
+                                      "last_modified_time" timestamp(6),
+                                      "version" int4 NOT NULL,
+                                      "enable" bool,
+                                      "deleted" bool NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."base_dict"."id" IS '主键';
@@ -81,28 +81,28 @@ INSERT INTO "public"."base_dict" VALUES (1862094405423972352, '收银台聚合�
 INSERT INTO "public"."base_dict" VALUES (1862784043394342912, '收银台支付调起方式', '支付', 'checkout_call_type', '', 1811365615815487488, '2024-11-30 17:01:39', 1811365615815487488, '2024-11-30 17:01:39', 0, 't', 'f');
 INSERT INTO "public"."base_dict" VALUES (1864134865629839360, '收银台类型', '支付', 'checkout_type', '', 1811365615815487488, '2024-12-04 10:29:21', 1811365615815487488, '2024-12-04 10:29:21', 0, 't', 'f');
 INSERT INTO "public"."base_dict" VALUES (1866464725509451776, '分账订单处理结果', '支付', 'allocation_result', '', 1811365615815487488, '2024-12-10 20:47:22.458399', 1811365615815487488, '2024-12-10 20:47:22.512079', 0, 't', 'f');
-INSERT INTO "public"."base_dict" VALUES (1866464929205825536, '分账状态', '', 'allocation_status', '', 1811365615815487488, '2024-12-10 20:48:11.021238', 1811365615815487488, '2024-12-10 20:48:11.071674', 0, 't', 'f');
 INSERT INTO "public"."base_dict" VALUES (1866861372363571200, '分账明细处理结果', '支付', 'alloc_detail_result', '', 1811365615815487488, '2024-12-11 23:03:30.437127', 1811365615815487488, '2024-12-11 23:03:30.629127', 0, 't', 'f');
+INSERT INTO "public"."base_dict" VALUES (1866464929205825536, '分账状态', '支付', 'allocation_status', '', 1811365615815487488, '2024-12-10 20:48:11.021238', 1811365615815487488, '2024-12-10 20:48:11.071674', 0, 't', 'f');
 
 -- ----------------------------
 -- Table structure for base_dict_item
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."base_dict_item";
 CREATE TABLE "public"."base_dict_item" (
-  "id" int8 NOT NULL,
-  "dict_id" int8 NOT NULL,
-  "dict_code" varchar(50) COLLATE "pg_catalog"."default",
-  "code" varchar(50) COLLATE "pg_catalog"."default",
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "sort_no" int4,
-  "enable" bool,
-  "remark" varchar(50) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL
+                                           "id" int8 NOT NULL,
+                                           "dict_id" int8 NOT NULL,
+                                           "dict_code" varchar(50) COLLATE "pg_catalog"."default",
+                                           "code" varchar(50) COLLATE "pg_catalog"."default",
+                                           "name" varchar(50) COLLATE "pg_catalog"."default",
+                                           "sort_no" int4,
+                                           "enable" bool,
+                                           "remark" varchar(50) COLLATE "pg_catalog"."default",
+                                           "creator" int8,
+                                           "create_time" timestamp(6),
+                                           "last_modifier" int8,
+                                           "last_modified_time" timestamp(6),
+                                           "version" int4 NOT NULL,
+                                           "deleted" bool NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."base_dict_item"."id" IS '主键';
@@ -124,7 +124,6 @@ COMMENT ON TABLE "public"."base_dict_item" IS '字典项';
 -- ----------------------------
 -- Records of base_dict_item
 -- ----------------------------
-INSERT INTO "public"."base_dict_item" VALUES (1823688758965903360, 1823688398549360640, 'channel', 'union_pay', '云闪付', 5, 't', '', 1811365615815487488, '2024-08-14 19:50:57.293338', 1811365615815487488, '2024-08-14 19:50:57.294914', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823696988228100096, 1823696159936946176, 'id_type', 'IDCard', '身份证', 1, 't', '', 1811365615815487488, '2024-08-14 20:23:39.302492', 1811365615815487488, '2024-08-14 20:23:39.304061', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823697045249662976, 1823696159936946176, 'id_type', 'passport', '护照', 2, 't', '', 1811365615815487488, '2024-08-14 20:23:52.897578', 1811365615815487488, '2024-08-14 20:23:52.89914', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823697185523965952, 1823696159936946176, 'id_type', 'ForeignGreenCard', '外国人绿卡', 4, 't', '', 1811365615815487488, '2024-08-14 20:24:26.341242', 1811365615815487488, '2024-08-14 20:24:26.342281', 0, 'f');
@@ -153,7 +152,6 @@ INSERT INTO "public"."base_dict_item" VALUES (1823992894504570880, 1823991280205
 INSERT INTO "public"."base_dict_item" VALUES (1823992935814270976, 1823991280205041664, 'log_business_type', 'clean', '清空数据', 8, 't', '', 0, '2024-08-15 15:59:38.705444', 0, '2024-08-15 15:59:38.706503', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823992995331444736, 1823991280205041664, 'log_business_type', 'other', '其它', 9, 't', '', 0, '2024-08-15 15:59:52.895664', 0, '2024-08-15 15:59:52.896179', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1823688520268062720, 1823688398549360640, 'channel', 'ali_pay', '支付宝(直连)', 1, 't', '支付宝 - 直连商户', 1811365615815487488, '2024-08-14 19:50:00.383209', 0, '2024-08-15 19:45:52.133311', 1, 'f');
-INSERT INTO "public"."base_dict_item" VALUES (1823688680352063488, 1823688398549360640, 'channel', 'wechat_pay', '微信支付(直连)', 3, 't', '', 1811365615815487488, '2024-08-14 19:50:38.551335', 0, '2024-08-15 19:46:22.364663', 1, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824277977388027904, 1824277928167870464, 'pay_refund_status', 'no_refund', '未退款', 1, 't', '', 1811365615815487488, '2024-08-16 10:52:17.912141', 1811365615815487488, '2024-08-16 10:52:17.913687', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824278014436315136, 1824277928167870464, 'pay_refund_status', 'refunding', '退款中', 2, 't', '', 1811365615815487488, '2024-08-16 10:52:26.745134', 1811365615815487488, '2024-08-16 10:52:26.746691', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1824278055448219648, 1824277928167870464, 'pay_refund_status', 'partial_refund', '部分退款', 3, 't', '', 1811365615815487488, '2024-08-16 10:52:36.523227', 1811365615815487488, '2024-08-16 10:52:36.525303', 0, 'f');
@@ -187,6 +185,7 @@ INSERT INTO "public"."base_dict_item" VALUES (1825135567118491648, 1825134996013
 INSERT INTO "public"."base_dict_item" VALUES (1825135606624641024, 1825134996013670400, 'transfer_status', 'close', '转账关闭', 3, 't', '', 1811365615815487488, '2024-08-18 19:40:12.656436', 1811365615815487488, '2024-08-18 19:40:12.658005', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1825135653311438848, 1825134996013670400, 'transfer_status', 'fail', '转账失败', 4, 't', '', 1811365615815487488, '2024-08-18 19:40:23.787206', 1811365615815487488, '2024-08-18 19:40:23.788928', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1825174775472226304, 1825174702763966464, 'callback_status', 'success', '成功', 1, 't', '', 1811365615815487488, '2024-08-18 22:15:51.237972', 1811365615815487488, '2024-08-18 22:15:51.239535', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1823688758965903360, 1823688398549360640, 'channel', 'union_pay', '云闪付', 3, 't', '', 1811365615815487488, '2024-08-14 19:50:57.293338', 1811365615815487488, '2024-12-24 20:17:17.336804', 1, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1825174809592889344, 1825174702763966464, 'callback_status', 'fail', '失败', 2, 't', '', 1811365615815487488, '2024-08-18 22:15:59.372735', 1811365615815487488, '2024-08-18 22:15:59.374281', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1825174854148980736, 1825174702763966464, 'callback_status', 'ignore', '忽略', 3, 't', '', 1811365615815487488, '2024-08-18 22:16:09.995547', 1811365615815487488, '2024-08-18 22:16:09.997194', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1825174898629574656, 1825174702763966464, 'callback_status', 'exception', '异常', 4, 't', '', 1811365615815487488, '2024-08-18 22:16:20.600541', 1811365615815487488, '2024-08-18 22:16:20.602111', 0, 'f');
@@ -257,26 +256,29 @@ INSERT INTO "public"."base_dict_item" VALUES (1866861545068232704, 1866861372363
 INSERT INTO "public"."base_dict_item" VALUES (1866861581097304064, 1866861372363571200, 'alloc_detail_result', 'ignore', '忽略分账', 4, 't', '', 1811365615815487488, '2024-12-11 23:04:20.201202', 1811365615815487488, '2024-12-11 23:04:20.243202', 0, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1868487333327204352, 1824791500966486016, 'trade_type', 'allocation', '分账', 4, 't', '', 1811365615815487488, '2024-12-16 10:44:29.738737', 1811365615815487488, '2024-12-16 21:01:28.961731', 1, 'f');
 INSERT INTO "public"."base_dict_item" VALUES (1868946985244528640, 1823969170598400000, 'notify_content_type', 'allocation', '分账订单变动通知', 4, 't', '', 1811365615815487488, '2024-12-17 17:10:59.295517', 1811365615815487488, '2024-12-17 17:10:59.352198', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1871477618911043584, 1823688398549360640, 'channel', 'alipay_isv', '支付宝(服务商)', 4, 't', '', 1811365615815487488, '2024-12-24 16:46:49.378165', 1811365615815487488, '2024-12-24 16:46:49.492274', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1871477674766589952, 1823688398549360640, 'channel', 'wechat_pay_isv', '微信支付(服务商)', 5, 't', '', 1811365615815487488, '2024-12-24 16:47:02.695117', 1811365615815487488, '2024-12-24 16:47:02.743162', 0, 'f');
+INSERT INTO "public"."base_dict_item" VALUES (1823688680352063488, 1823688398549360640, 'channel', 'wechat_pay', '微信支付(直连)', 2, 't', '', 1811365615815487488, '2024-08-14 19:50:38.551335', 1811365615815487488, '2024-12-24 20:17:13.119198', 2, 'f');
 
 -- ----------------------------
 -- Table structure for base_param
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."base_param";
 CREATE TABLE "public"."base_param" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "param_key" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "value" varchar(500) COLLATE "pg_catalog"."default" NOT NULL,
-  "type" varchar(20) COLLATE "pg_catalog"."default",
-  "enable" bool NOT NULL,
-  "internal" bool NOT NULL,
-  "remark" varchar(255) COLLATE "pg_catalog"."default"
+                                       "id" int8 NOT NULL,
+                                       "creator" int8,
+                                       "create_time" timestamp(6),
+                                       "last_modifier" int8,
+                                       "last_modified_time" timestamp(6),
+                                       "version" int4 NOT NULL,
+                                       "deleted" bool NOT NULL,
+                                       "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                       "param_key" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                       "value" varchar(500) COLLATE "pg_catalog"."default" NOT NULL,
+                                       "type" varchar(20) COLLATE "pg_catalog"."default",
+                                       "enable" bool NOT NULL,
+                                       "internal" bool NOT NULL,
+                                       "remark" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."base_param"."id" IS '主键';
@@ -305,17 +307,17 @@ INSERT INTO "public"."base_param" VALUES (1811338448851234812, 0, '2024-07-11 17
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_client";
 CREATE TABLE "public"."iam_client" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "internal" bool NOT NULL,
-  "remark" varchar(250) COLLATE "pg_catalog"."default"
+                                       "id" int8 NOT NULL,
+                                       "creator" int8,
+                                       "create_time" timestamp(6),
+                                       "last_modifier" int8,
+                                       "last_modified_time" timestamp(6),
+                                       "version" int4 NOT NULL,
+                                       "deleted" bool NOT NULL,
+                                       "code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                       "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                       "internal" bool NOT NULL,
+                                       "remark" varchar(250) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."iam_client"."id" IS '主键';
@@ -335,24 +337,25 @@ COMMENT ON TABLE "public"."iam_client" IS '认证终端';
 -- Records of iam_client
 -- ----------------------------
 INSERT INTO "public"."iam_client" VALUES (1810614511481892864, 0, '2024-07-09 17:58:33.786446', 0, '2024-07-09 17:58:33.788447', 0, 'f', 'dax-pay', '管理端', 't', NULL);
+INSERT INTO "public"."iam_client" VALUES (1871531431965601792, 1811365615815487488, '2024-12-24 20:20:39.410044', 1811365615815487488, '2024-12-24 20:22:02.368649', 0, 't', 'h5', 'h5移动端', 'f', NULL);
 
 -- ----------------------------
 -- Table structure for iam_perm_code
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_perm_code";
 CREATE TABLE "public"."iam_perm_code" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "pid" int8,
-  "code" varchar(50) COLLATE "pg_catalog"."default",
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "remark" varchar(300) COLLATE "pg_catalog"."default",
-  "leaf" bool NOT NULL
+                                          "id" int8 NOT NULL,
+                                          "creator" int8,
+                                          "create_time" timestamp(6),
+                                          "last_modifier" int8,
+                                          "last_modified_time" timestamp(6),
+                                          "version" int4 NOT NULL,
+                                          "deleted" bool NOT NULL,
+                                          "pid" int8,
+                                          "code" varchar(50) COLLATE "pg_catalog"."default",
+                                          "name" varchar(50) COLLATE "pg_catalog"."default",
+                                          "remark" varchar(300) COLLATE "pg_catalog"."default",
+                                          "leaf" bool NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."iam_perm_code"."id" IS '主键';
@@ -378,29 +381,29 @@ COMMENT ON TABLE "public"."iam_perm_code" IS '权限码';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_perm_menu";
 CREATE TABLE "public"."iam_perm_menu" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "pid" int8,
-  "client_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "title" varchar(100) COLLATE "pg_catalog"."default",
-  "name" varchar(100) COLLATE "pg_catalog"."default",
-  "icon" varchar(100) COLLATE "pg_catalog"."default",
-  "hidden" bool NOT NULL,
-  "hide_children_menu" bool NOT NULL,
-  "component" varchar(300) COLLATE "pg_catalog"."default",
-  "path" varchar(300) COLLATE "pg_catalog"."default",
-  "redirect" varchar(300) COLLATE "pg_catalog"."default",
-  "sort_no" float4,
-  "root" bool NOT NULL,
-  "keep_alive" bool,
-  "target_outside" bool,
-  "full_screen" bool,
-  "remark" varchar(200) COLLATE "pg_catalog"."default"
+                                          "id" int8 NOT NULL,
+                                          "creator" int8,
+                                          "create_time" timestamp(6),
+                                          "last_modifier" int8,
+                                          "last_modified_time" timestamp(6),
+                                          "version" int4 NOT NULL,
+                                          "deleted" bool NOT NULL,
+                                          "pid" int8,
+                                          "client_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "title" varchar(100) COLLATE "pg_catalog"."default",
+                                          "name" varchar(100) COLLATE "pg_catalog"."default",
+                                          "icon" varchar(100) COLLATE "pg_catalog"."default",
+                                          "hidden" bool NOT NULL,
+                                          "hide_children_menu" bool NOT NULL,
+                                          "component" varchar(300) COLLATE "pg_catalog"."default",
+                                          "path" varchar(300) COLLATE "pg_catalog"."default",
+                                          "redirect" varchar(300) COLLATE "pg_catalog"."default",
+                                          "sort_no" float4,
+                                          "root" bool NOT NULL,
+                                          "keep_alive" bool,
+                                          "target_outside" bool,
+                                          "full_screen" bool,
+                                          "remark" varchar(200) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."iam_perm_menu"."id" IS '主键';
@@ -472,6 +475,7 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1822975970266226688, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1812118306328473600, 1811365615815487488, '2024-07-13 21:34:06.415311', 1811365615815487488, '2024-08-27 16:13:34.678515', 4, 'f', 1812116779807338496, 'dax-pay', '支付通道', 'ChannelConstList', '', 'f', 'f', '/daxpay/common/constant/channel/ChannelConstList', '/pay/config/base/channel', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1816064593371066368, 1811365615815487488, '2024-07-24 18:55:14.565671', 1811365615815487488, '2024-08-27 19:11:47.317719', 4, 'f', 1812114347454951424, 'dax-pay', '关闭记录(支付)', 'PayCloseRecordList', '', 'f', 'f', '/daxpay/common/record/close/PayCloseRecordList', '/pay/record/close', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1824779945365450752, 1811365615815487488, '2024-08-17 20:06:56.404481', 1811365615815487488, '2024-08-27 19:11:51.292144', 2, 'f', 1812114347454951424, 'dax-pay', '同步记录', 'TradeSyncRecordList', '', 'f', 'f', '/daxpay/common/record/sync/TradeSyncRecordList', '/pay/record/sync', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1812114725651148800, 1811365615815487488, '2024-07-13 21:19:52.715548', 1811365615815487488, '2024-12-11 17:46:42.411854', 3, 'f', NULL, 'dax-pay', '分账管理', 'Allocation', 'ant-design:sliders-twotone', 't', 'f', 'Layout', '/pay/allocation', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1820468413097746432, 1811365615815487488, '2024-08-05 22:34:27.007057', 1811365615815487488, '2024-08-27 19:12:34.654805', 2, 'f', 1812114959231938560, 'dax-pay', '差异记录', 'ReconcileDiscrepancyList', '', 'f', 'f', '/daxpay/common/reconcile/discrepancy/ReconcileDiscrepancyList', '/pay/reconcile/discrepancy', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1820467934552825856, 1811365615815487488, '2024-08-05 22:32:32.913035', 1811365615815487488, '2024-08-27 19:12:40.133331', 2, 'f', 1812114959231938560, 'dax-pay', '对账单', 'ReconcileStatementList', '', 'f', 'f', '/daxpay/common/reconcile/statement/ReconcileStatementList', '/pay/reconcile/statement', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1810909511121862656, 0, '2024-07-10 13:30:47.186592', 0, '2024-07-10 13:48:12.256695', 6, 'f', 1810864706127790080, 'dax-pay', '权限管理', 'Permission', '', 'f', 'f', 'Layout', '/system/permission', '', 0, 'f', 't', 'f', 'f', NULL);
@@ -479,6 +483,8 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1812115119471128576, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1837381440350912512, 1811365615815487488, '2024-09-21 14:40:46.934676', 1811365615815487488, '2024-09-21 14:40:46.934676', 0, 'f', 1810910433264762880, 'dax-pay', '延时队列', 'DelayQuery', '', 'f', 'f', '/baseapi/delay/DelayQuery', '/system/config/delay', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1836248839544733696, 1811365615815487488, '2024-09-18 11:40:13.861746', 1811365615815487488, '2024-09-25 14:46:38.017375', 1, 'f', 1812115119471128576, 'dax-pay', '交易调试', 'DevelopTrade', '', 'f', 'f', '/daxpay/common/develop/trade/DevelopTrade', '/pay/demo/develop', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1838832057238274048, 1811365615815487488, '2024-09-25 14:45:00.952476', 1811365615815487488, '2024-09-25 14:46:49.48474', 1, 'f', 1812115119471128576, 'dax-pay', '认证调试', 'ChannelAuth', '', 'f', 'f', '/daxpay/common/develop/auth/ChannelAuth', '/pay/demo/channelAuth', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1824779695900831744, 1811365615815487488, '2024-08-17 20:05:56.927619', 1811365615815487488, '2024-10-08 19:21:37.604842', 2, 'f', 1812114725651148800, 'dax-pay', '分账组管理', 'AllocationGroupList', '', 't', 'f', '/daxpay/common/allocation/group/AllocationGroupList', '/pay/allocation/group', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1824779660136001536, 1811365615815487488, '2024-08-17 20:05:48.400494', 1811365615815487488, '2024-10-08 19:21:44.305611', 5, 'f', 1812114725651148800, 'dax-pay', '接收方', 'AllocationReceiverList', '', 't', 'f', '/daxpay/common/allocation/receiver/AllocationReceiverList', '/pay/allocation/receiver', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1824779750208679936, 1811365615815487488, '2024-08-17 20:06:09.875297', 1811365615815487488, '2024-12-16 10:22:59.343388', 7, 'f', 1812114224679284736, 'dax-pay', '分账订单', 'AllocOrderList', '', 'f', 'f', '/daxpay/common/allocation/order/AllocOrderList', '/pay/order/allocation', '', 0, 'f', 't', 'f', 'f', NULL);
 
 -- ----------------------------
@@ -486,16 +492,16 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1824779750208679936, 18113656158154
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_perm_path";
 CREATE TABLE "public"."iam_perm_path" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "parent_code" varchar(50) COLLATE "pg_catalog"."default",
-  "client_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "leaf" bool NOT NULL,
-  "path" varchar(200) COLLATE "pg_catalog"."default",
-  "method" varchar(10) COLLATE "pg_catalog"."default"
+                                          "id" int8 NOT NULL,
+                                          "creator" int8,
+                                          "create_time" timestamp(6),
+                                          "parent_code" varchar(50) COLLATE "pg_catalog"."default",
+                                          "client_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "name" varchar(50) COLLATE "pg_catalog"."default",
+                                          "leaf" bool NOT NULL,
+                                          "path" varchar(200) COLLATE "pg_catalog"."default",
+                                          "method" varchar(10) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."iam_perm_path"."id" IS '主键';
@@ -519,18 +525,18 @@ COMMENT ON TABLE "public"."iam_perm_path" IS '请求权限(url)';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_role";
 CREATE TABLE "public"."iam_role" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "pid" int8,
-  "code" varchar(50) COLLATE "pg_catalog"."default",
-  "name" varchar(100) COLLATE "pg_catalog"."default",
-  "internal" bool,
-  "remark" varchar(255) COLLATE "pg_catalog"."default"
+                                     "id" int8 NOT NULL,
+                                     "creator" int8,
+                                     "create_time" timestamp(6),
+                                     "last_modifier" int8,
+                                     "last_modified_time" timestamp(6),
+                                     "version" int4 NOT NULL,
+                                     "deleted" bool NOT NULL,
+                                     "pid" int8,
+                                     "code" varchar(50) COLLATE "pg_catalog"."default",
+                                     "name" varchar(100) COLLATE "pg_catalog"."default",
+                                     "internal" bool,
+                                     "remark" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."iam_role"."id" IS '主键';
@@ -557,9 +563,9 @@ INSERT INTO "public"."iam_role" VALUES (1810203792869191680, 0, '2024-07-08 14:4
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_role_code";
 CREATE TABLE "public"."iam_role_code" (
-  "id" int8 NOT NULL,
-  "role_id" int8 NOT NULL,
-  "code_id" int8 NOT NULL
+                                          "id" int8 NOT NULL,
+                                          "role_id" int8 NOT NULL,
+                                          "code_id" int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."iam_role_code"."id" IS '主键';
@@ -576,10 +582,10 @@ COMMENT ON TABLE "public"."iam_role_code" IS '角色权限码关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_role_menu";
 CREATE TABLE "public"."iam_role_menu" (
-  "id" int8 NOT NULL,
-  "role_id" int8 NOT NULL,
-  "client_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "menu_id" int8 NOT NULL
+                                          "id" int8 NOT NULL,
+                                          "role_id" int8 NOT NULL,
+                                          "client_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "menu_id" int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."iam_role_menu"."id" IS '主键';
@@ -597,10 +603,10 @@ COMMENT ON TABLE "public"."iam_role_menu" IS '角色菜单关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_role_path";
 CREATE TABLE "public"."iam_role_path" (
-  "id" int8 NOT NULL,
-  "role_id" int8 NOT NULL,
-  "client_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "path_id" int8 NOT NULL
+                                          "id" int8 NOT NULL,
+                                          "role_id" int8 NOT NULL,
+                                          "client_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "path_id" int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."iam_role_path"."id" IS '主键';
@@ -618,22 +624,22 @@ COMMENT ON TABLE "public"."iam_role_path" IS '角色路径关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_user_expand_info";
 CREATE TABLE "public"."iam_user_expand_info" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "sex" varchar(10) COLLATE "pg_catalog"."default",
-  "avatar" varchar(300) COLLATE "pg_catalog"."default",
-  "birthday" date,
-  "last_login_time" timestamp(0),
-  "register_time" timestamp(6),
-  "current_login_time" timestamp(6),
-  "initial_password" bool,
-  "expire_password" bool,
-  "last_change_password_time" timestamp(6)
+                                                 "id" int8 NOT NULL,
+                                                 "creator" int8,
+                                                 "create_time" timestamp(6),
+                                                 "last_modifier" int8,
+                                                 "last_modified_time" timestamp(6),
+                                                 "version" int4 NOT NULL,
+                                                 "deleted" bool NOT NULL,
+                                                 "sex" varchar(10) COLLATE "pg_catalog"."default",
+                                                 "avatar" varchar(300) COLLATE "pg_catalog"."default",
+                                                 "birthday" date,
+                                                 "last_login_time" timestamp(0),
+                                                 "register_time" timestamp(6),
+                                                 "current_login_time" timestamp(6),
+                                                 "initial_password" bool,
+                                                 "expire_password" bool,
+                                                 "last_change_password_time" timestamp(6)
 )
 ;
 COMMENT ON COLUMN "public"."iam_user_expand_info"."id" IS '主键';
@@ -664,20 +670,20 @@ INSERT INTO "public"."iam_user_expand_info" VALUES (1811365615815487488, 0, '202
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_user_info";
 CREATE TABLE "public"."iam_user_info" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "account" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "password" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "phone" varchar(50) COLLATE "pg_catalog"."default",
-  "email" varchar(50) COLLATE "pg_catalog"."default",
-  "administrator" bool NOT NULL,
-  "status" varchar(50) COLLATE "pg_catalog"."default"
+                                          "id" int8 NOT NULL,
+                                          "creator" int8,
+                                          "create_time" timestamp(6),
+                                          "last_modifier" int8,
+                                          "last_modified_time" timestamp(6),
+                                          "version" int4 NOT NULL,
+                                          "deleted" bool NOT NULL,
+                                          "name" varchar(50) COLLATE "pg_catalog"."default",
+                                          "account" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "password" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "phone" varchar(50) COLLATE "pg_catalog"."default",
+                                          "email" varchar(50) COLLATE "pg_catalog"."default",
+                                          "administrator" bool NOT NULL,
+                                          "status" varchar(50) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."iam_user_info"."id" IS '主键';
@@ -706,9 +712,9 @@ INSERT INTO "public"."iam_user_info" VALUES (1811365615815487488, 0, '2024-07-11
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."iam_user_role";
 CREATE TABLE "public"."iam_user_role" (
-  "id" int8 NOT NULL,
-  "user_id" int8 NOT NULL,
-  "role_id" int8 NOT NULL
+                                          "id" int8 NOT NULL,
+                                          "user_id" int8 NOT NULL,
+                                          "role_id" int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."iam_user_role"."id" IS '主键';
@@ -725,18 +731,18 @@ COMMENT ON TABLE "public"."iam_user_role" IS '用户角色关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_config";
 CREATE TABLE "public"."pay_alloc_config" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "min_amount" numeric(10,2),
-  "auto_alloc" bool,
-  "deleted" bool NOT NULL,
-  "delay_time" int8,
-  "auto_finish" bool
+                                             "id" int8 NOT NULL,
+                                             "creator" int8,
+                                             "create_time" timestamp(6),
+                                             "last_modifier" int8,
+                                             "last_modified_time" timestamp(6),
+                                             "version" int4 NOT NULL,
+                                             "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "min_amount" numeric(10,2),
+                                             "auto_alloc" bool,
+                                             "deleted" bool NOT NULL,
+                                             "delay_time" int8,
+                                             "auto_finish" bool
 )
 ;
 COMMENT ON COLUMN "public"."pay_alloc_config"."id" IS '主键';
@@ -762,27 +768,27 @@ COMMENT ON TABLE "public"."pay_alloc_config" IS '分账配置参数';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_detail";
 CREATE TABLE "public"."pay_alloc_detail" (
-  "id" int8 NOT NULL,
-  "allocation_id" int8 NOT NULL,
-  "receiver_id" int8 NOT NULL,
-  "receiver_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "rate" numeric(8,2) NOT NULL,
-  "amount" numeric(10,2) NOT NULL,
-  "receiver_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_name" varchar(100) COLLATE "pg_catalog"."default",
-  "result" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "error_code" varchar(10) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(150) COLLATE "pg_catalog"."default",
-  "finish_time" timestamp(6),
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "out_detail_id" varchar(64) COLLATE "pg_catalog"."default"
+                                             "id" int8 NOT NULL,
+                                             "allocation_id" int8 NOT NULL,
+                                             "receiver_id" int8 NOT NULL,
+                                             "receiver_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "rate" numeric(8,2) NOT NULL,
+                                             "amount" numeric(10,2) NOT NULL,
+                                             "receiver_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "receiver_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "receiver_name" varchar(100) COLLATE "pg_catalog"."default",
+                                             "result" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "error_code" varchar(10) COLLATE "pg_catalog"."default",
+                                             "error_msg" varchar(150) COLLATE "pg_catalog"."default",
+                                             "finish_time" timestamp(6),
+                                             "creator" int8,
+                                             "create_time" timestamp(6),
+                                             "last_modifier" int8,
+                                             "last_modified_time" timestamp(6),
+                                             "version" int4 NOT NULL,
+                                             "deleted" bool NOT NULL,
+                                             "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                             "out_detail_id" varchar(64) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_alloc_detail"."id" IS '主键';
@@ -817,20 +823,20 @@ COMMENT ON TABLE "public"."pay_alloc_detail" IS '分账订单明细';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_group";
 CREATE TABLE "public"."pay_alloc_group" (
-  "id" int8 NOT NULL,
-  "group_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "default_group" bool,
-  "total_rate" numeric(5,2),
-  "remark" varchar(200) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                            "id" int8 NOT NULL,
+                                            "group_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "name" varchar(50) COLLATE "pg_catalog"."default",
+                                            "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "default_group" bool,
+                                            "total_rate" numeric(5,2),
+                                            "remark" varchar(200) COLLATE "pg_catalog"."default",
+                                            "creator" int8,
+                                            "create_time" timestamp(6),
+                                            "last_modifier" int8,
+                                            "last_modified_time" timestamp(6),
+                                            "version" int4 NOT NULL,
+                                            "deleted" bool NOT NULL,
+                                            "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_alloc_group"."id" IS '主键';
@@ -858,17 +864,17 @@ COMMENT ON TABLE "public"."pay_alloc_group" IS '分账组';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_group_receiver";
 CREATE TABLE "public"."pay_alloc_group_receiver" (
-  "id" int8 NOT NULL,
-  "group_id" int8 NOT NULL,
-  "receiver_id" int8 NOT NULL,
-  "rate" numeric(5,2),
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                                     "id" int8 NOT NULL,
+                                                     "group_id" int8 NOT NULL,
+                                                     "receiver_id" int8 NOT NULL,
+                                                     "rate" numeric(5,2),
+                                                     "creator" int8,
+                                                     "create_time" timestamp(6),
+                                                     "last_modifier" int8,
+                                                     "last_modified_time" timestamp(6),
+                                                     "version" int4 NOT NULL,
+                                                     "deleted" bool NOT NULL,
+                                                     "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_alloc_group_receiver"."id" IS '主键';
@@ -893,34 +899,34 @@ COMMENT ON TABLE "public"."pay_alloc_group_receiver" IS '分账接收组关系';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_order";
 CREATE TABLE "public"."pay_alloc_order" (
-  "id" int8 NOT NULL,
-  "alloc_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "biz_alloc_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "out_alloc_no" varchar(150) COLLATE "pg_catalog"."default",
-  "order_id" int8 NOT NULL,
-  "order_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "biz_order_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "out_order_no" varchar(150) COLLATE "pg_catalog"."default" NOT NULL,
-  "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "amount" numeric(10,2) NOT NULL,
-  "description" varchar(150) COLLATE "pg_catalog"."default",
-  "status" varchar(30) COLLATE "pg_catalog"."default" NOT NULL,
-  "result" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "finish_time" timestamp(6),
-  "notify_url" varchar(200) COLLATE "pg_catalog"."default",
-  "attach" varchar(500) COLLATE "pg_catalog"."default",
-  "req_time" timestamp(6),
-  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
-  "error_code" varchar(10) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(2048) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                            "id" int8 NOT NULL,
+                                            "alloc_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "biz_alloc_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "out_alloc_no" varchar(150) COLLATE "pg_catalog"."default",
+                                            "order_id" int8 NOT NULL,
+                                            "order_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "biz_order_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "out_order_no" varchar(150) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "amount" numeric(10,2) NOT NULL,
+                                            "description" varchar(150) COLLATE "pg_catalog"."default",
+                                            "status" varchar(30) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "result" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "finish_time" timestamp(6),
+                                            "notify_url" varchar(200) COLLATE "pg_catalog"."default",
+                                            "attach" varchar(500) COLLATE "pg_catalog"."default",
+                                            "req_time" timestamp(6),
+                                            "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+                                            "error_code" varchar(10) COLLATE "pg_catalog"."default",
+                                            "error_msg" varchar(2048) COLLATE "pg_catalog"."default",
+                                            "creator" int8,
+                                            "create_time" timestamp(6),
+                                            "last_modifier" int8,
+                                            "last_modified_time" timestamp(6),
+                                            "version" int4 NOT NULL,
+                                            "deleted" bool NOT NULL,
+                                            "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_alloc_order"."id" IS '主键';
@@ -962,22 +968,22 @@ COMMENT ON TABLE "public"."pay_alloc_order" IS '分账订单';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_receiver";
 CREATE TABLE "public"."pay_alloc_receiver" (
-  "id" int8 NOT NULL,
-  "receiver_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_name" varchar(100) COLLATE "pg_catalog"."default",
-  "relation_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "relation_name" varchar(50) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "deleted" bool NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default"
+                                               "id" int8 NOT NULL,
+                                               "receiver_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "receiver_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "receiver_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "receiver_name" varchar(100) COLLATE "pg_catalog"."default",
+                                               "relation_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "relation_name" varchar(50) COLLATE "pg_catalog"."default",
+                                               "creator" int8,
+                                               "create_time" timestamp(6),
+                                               "last_modifier" int8,
+                                               "last_modified_time" timestamp(6),
+                                               "version" int4 NOT NULL,
+                                               "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                               "deleted" bool NOT NULL,
+                                               "name" varchar(50) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_alloc_receiver"."id" IS '主键';
@@ -1007,12 +1013,12 @@ COMMENT ON TABLE "public"."pay_alloc_receiver" IS '分账接收方';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_api_const";
 CREATE TABLE "public"."pay_api_const" (
-  "id" int8 NOT NULL,
-  "code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "api" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "enable" bool,
-  "remark" varchar(255) COLLATE "pg_catalog"."default"
+                                          "id" int8 NOT NULL,
+                                          "code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "api" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "enable" bool,
+                                          "remark" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_api_const"."id" IS '主键';
@@ -1032,19 +1038,19 @@ COMMENT ON TABLE "public"."pay_api_const" IS '支付接口常量';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_cashier_code_config";
 CREATE TABLE "public"."pay_cashier_code_config" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "code" varchar(32) COLLATE "pg_catalog"."default",
-  "template_code" varchar(32) COLLATE "pg_catalog"."default",
-  "remark" varchar(200) COLLATE "pg_catalog"."default",
-  "enable" bool NOT NULL,
-  "deleted" bool NOT NULL
+                                                    "id" int8 NOT NULL,
+                                                    "creator" int8,
+                                                    "create_time" timestamp(6),
+                                                    "last_modifier" int8,
+                                                    "last_modified_time" timestamp(6),
+                                                    "version" int4 NOT NULL,
+                                                    "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                                    "name" varchar(50) COLLATE "pg_catalog"."default",
+                                                    "code" varchar(32) COLLATE "pg_catalog"."default",
+                                                    "template_code" varchar(32) COLLATE "pg_catalog"."default",
+                                                    "remark" varchar(200) COLLATE "pg_catalog"."default",
+                                                    "enable" bool NOT NULL,
+                                                    "deleted" bool NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."pay_cashier_code_config"."id" IS '主键';
@@ -1063,28 +1069,24 @@ COMMENT ON COLUMN "public"."pay_cashier_code_config"."deleted" IS '删除标志'
 COMMENT ON TABLE "public"."pay_cashier_code_config" IS '收银码牌配置';
 
 -- ----------------------------
--- Records of pay_cashier_code_config
--- ----------------------------
-
--- ----------------------------
 -- Table structure for pay_cashier_code_type_config
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_cashier_code_type_config";
 CREATE TABLE "public"."pay_cashier_code_type_config" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "cashier_code_id" int8 NOT NULL,
-  "type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel" varchar(32) COLLATE "pg_catalog"."default",
-  "pay_method" varchar(32) COLLATE "pg_catalog"."default",
-  "allocation" bool NOT NULL,
-  "auto_allocation" bool NOT NULL,
-  "deleted" bool NOT NULL
+                                                         "id" int8 NOT NULL,
+                                                         "creator" int8,
+                                                         "create_time" timestamp(6),
+                                                         "last_modifier" int8,
+                                                         "last_modified_time" timestamp(6),
+                                                         "version" int4 NOT NULL,
+                                                         "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                                         "cashier_code_id" int8 NOT NULL,
+                                                         "type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                                         "channel" varchar(32) COLLATE "pg_catalog"."default",
+                                                         "pay_method" varchar(32) COLLATE "pg_catalog"."default",
+                                                         "allocation" bool NOT NULL,
+                                                         "auto_allocation" bool NOT NULL,
+                                                         "deleted" bool NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."pay_cashier_code_type_config"."id" IS '主键';
@@ -1112,19 +1114,19 @@ COMMENT ON TABLE "public"."pay_cashier_code_type_config" IS '各类型码牌配�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_channel_config";
 CREATE TABLE "public"."pay_channel_config" (
-  "id" int8 NOT NULL,
-  "channel" varchar(255) COLLATE "pg_catalog"."default",
-  "out_mch_no" varchar(32) COLLATE "pg_catalog"."default",
-  "out_app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "enable" bool,
-  "ext" text COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL
+                                               "id" int8 NOT NULL,
+                                               "channel" varchar(255) COLLATE "pg_catalog"."default",
+                                               "out_mch_no" varchar(32) COLLATE "pg_catalog"."default",
+                                               "out_app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                               "enable" bool,
+                                               "ext" text COLLATE "pg_catalog"."default",
+                                               "creator" int8,
+                                               "create_time" timestamp(6),
+                                               "last_modifier" int8,
+                                               "last_modified_time" timestamp(6),
+                                               "version" int4 NOT NULL,
+                                               "deleted" bool NOT NULL,
+                                               "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."pay_channel_config"."id" IS '主键';
@@ -1142,21 +1144,18 @@ COMMENT ON COLUMN "public"."pay_channel_config"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."pay_channel_config"."app_id" IS '应用号';
 COMMENT ON TABLE "public"."pay_channel_config" IS '通道支付配置';
 
--- ----------------------------
--- Records of pay_channel_config
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for pay_channel_const
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_channel_const";
 CREATE TABLE "public"."pay_channel_const" (
-  "id" int8 NOT NULL,
-  "code" varchar(255) COLLATE "pg_catalog"."default",
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "enable" bool,
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "allocatable" bool
+                                              "id" int8 NOT NULL,
+                                              "code" varchar(255) COLLATE "pg_catalog"."default",
+                                              "name" varchar(255) COLLATE "pg_catalog"."default",
+                                              "enable" bool,
+                                              "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                              "allocatable" bool
 )
 ;
 COMMENT ON COLUMN "public"."pay_channel_const"."id" IS '主键';
@@ -1170,26 +1169,28 @@ COMMENT ON TABLE "public"."pay_channel_const" IS '支付通道常量';
 -- ----------------------------
 -- Records of pay_channel_const
 -- ----------------------------
-INSERT INTO "public"."pay_channel_const" VALUES (30000, 'union_pay', '云闪付', 't', NULL, 't');
-INSERT INTO "public"."pay_channel_const" VALUES (10000, 'ali_pay', '支付宝(直连商户)', 't', NULL, 't');
-INSERT INTO "public"."pay_channel_const" VALUES (20000, 'wechat_pay', '微信支付(直连商户)', 't', NULL, 't');
+INSERT INTO "public"."pay_channel_const" VALUES (20000, 'wechat_pay', '微信支付(官方商户)', 't', NULL, 'f');
+INSERT INTO "public"."pay_channel_const" VALUES (50000, 'wechat_pay_isv', '微信支付(服务商)', 't', NULL, 't');
+INSERT INTO "public"."pay_channel_const" VALUES (10000, 'ali_pay', '支付宝(官方商户)', 't', NULL, 'f');
+INSERT INTO "public"."pay_channel_const" VALUES (40000, 'alipay_isv', '支付宝(服务商)', 't', NULL, 't');
+INSERT INTO "public"."pay_channel_const" VALUES (30000, 'union_pay', '云闪付', 't', NULL, 'f');
 
 -- ----------------------------
 -- Table structure for pay_channel_reconcile_trade
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_channel_reconcile_trade";
 CREATE TABLE "public"."pay_channel_reconcile_trade" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "reconcile_id" int8,
-  "trade_type" varchar(32) COLLATE "pg_catalog"."default",
-  "trade_no" varchar(32) COLLATE "pg_catalog"."default",
-  "out_trade_no" varchar(100) COLLATE "pg_catalog"."default",
-  "amount" numeric(13,2),
-  "trade_status" varchar(32) COLLATE "pg_catalog"."default",
-  "trade_time" timestamp(6)
+                                                        "id" int8 NOT NULL,
+                                                        "creator" int8,
+                                                        "create_time" timestamp(6),
+                                                        "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                        "reconcile_id" int8,
+                                                        "trade_type" varchar(32) COLLATE "pg_catalog"."default",
+                                                        "trade_no" varchar(32) COLLATE "pg_catalog"."default",
+                                                        "out_trade_no" varchar(100) COLLATE "pg_catalog"."default",
+                                                        "amount" numeric(13,2),
+                                                        "trade_status" varchar(32) COLLATE "pg_catalog"."default",
+                                                        "trade_time" timestamp(6)
 )
 ;
 COMMENT ON COLUMN "public"."pay_channel_reconcile_trade"."id" IS '主键';
@@ -1214,18 +1215,18 @@ COMMENT ON TABLE "public"."pay_channel_reconcile_trade" IS '通道对账交易�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_checkout_aggregate_config";
 CREATE TABLE "public"."pay_checkout_aggregate_config" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "type" varchar(32) COLLATE "pg_catalog"."default",
-  "channel" varchar(32) COLLATE "pg_catalog"."default",
-  "pay_method" varchar(32) COLLATE "pg_catalog"."default",
-  "auto_launch" bool
+                                                          "id" int8 NOT NULL,
+                                                          "creator" int8,
+                                                          "create_time" timestamp(6),
+                                                          "last_modifier" int8,
+                                                          "last_modified_time" timestamp(6),
+                                                          "version" int4 NOT NULL,
+                                                          "deleted" bool NOT NULL,
+                                                          "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                          "type" varchar(32) COLLATE "pg_catalog"."default",
+                                                          "channel" varchar(32) COLLATE "pg_catalog"."default",
+                                                          "pay_method" varchar(32) COLLATE "pg_catalog"."default",
+                                                          "auto_launch" bool
 )
 ;
 COMMENT ON COLUMN "public"."pay_checkout_aggregate_config"."id" IS '主键';
@@ -1251,17 +1252,17 @@ COMMENT ON TABLE "public"."pay_checkout_aggregate_config" IS '收银台聚合支
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_checkout_config";
 CREATE TABLE "public"."pay_checkout_config" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "name" varchar(55) COLLATE "pg_catalog"."default",
-  "aggregate_show" bool,
-  "h5_auto_upgrade" bool
+                                                "id" int8 NOT NULL,
+                                                "creator" int8,
+                                                "create_time" timestamp(6),
+                                                "last_modifier" int8,
+                                                "last_modified_time" timestamp(6),
+                                                "version" int4 NOT NULL,
+                                                "deleted" bool NOT NULL,
+                                                "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                "name" varchar(55) COLLATE "pg_catalog"."default",
+                                                "aggregate_show" bool,
+                                                "h5_auto_upgrade" bool
 )
 ;
 COMMENT ON COLUMN "public"."pay_checkout_config"."id" IS '主键';
@@ -1278,26 +1279,22 @@ COMMENT ON COLUMN "public"."pay_checkout_config"."h5_auto_upgrade" IS 'h5收银�
 COMMENT ON TABLE "public"."pay_checkout_config" IS '收银台配置';
 
 -- ----------------------------
--- Records of pay_checkout_config
--- ----------------------------
-
--- ----------------------------
 -- Table structure for pay_checkout_group_config
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_checkout_group_config";
 CREATE TABLE "public"."pay_checkout_group_config" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "type" varchar(32) COLLATE "pg_catalog"."default",
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "icon" varchar(100) COLLATE "pg_catalog"."default",
-  "sort_no" numeric(10,2)
+                                                      "id" int8 NOT NULL,
+                                                      "creator" int8,
+                                                      "create_time" timestamp(6),
+                                                      "last_modifier" int8,
+                                                      "last_modified_time" timestamp(6),
+                                                      "version" int4 NOT NULL,
+                                                      "deleted" bool NOT NULL,
+                                                      "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                      "type" varchar(32) COLLATE "pg_catalog"."default",
+                                                      "name" varchar(50) COLLATE "pg_catalog"."default",
+                                                      "icon" varchar(100) COLLATE "pg_catalog"."default",
+                                                      "sort_no" numeric(10,2)
 )
 ;
 COMMENT ON COLUMN "public"."pay_checkout_group_config"."id" IS '主键';
@@ -1323,21 +1320,21 @@ COMMENT ON TABLE "public"."pay_checkout_group_config" IS '收银台类目配置'
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_checkout_item_config";
 CREATE TABLE "public"."pay_checkout_item_config" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "group_id" int8,
-  "channel" varchar(32) COLLATE "pg_catalog"."default",
-  "pay_method" varchar(32) COLLATE "pg_catalog"."default",
-  "name" varchar(50) COLLATE "pg_catalog"."default",
-  "icon" varchar(100) COLLATE "pg_catalog"."default",
-  "sort_no" numeric(10,2),
-  "call_type" varchar(32) COLLATE "pg_catalog"."default"
+                                                     "id" int8 NOT NULL,
+                                                     "creator" int8,
+                                                     "create_time" timestamp(6),
+                                                     "last_modifier" int8,
+                                                     "last_modified_time" timestamp(6),
+                                                     "version" int4 NOT NULL,
+                                                     "deleted" bool NOT NULL,
+                                                     "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "group_id" int8,
+                                                     "channel" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "pay_method" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "name" varchar(50) COLLATE "pg_catalog"."default",
+                                                     "icon" varchar(100) COLLATE "pg_catalog"."default",
+                                                     "sort_no" numeric(10,2),
+                                                     "call_type" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_checkout_item_config"."id" IS '主键';
@@ -1366,18 +1363,18 @@ COMMENT ON TABLE "public"."pay_checkout_item_config" IS '收银台配置项';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_close_record";
 CREATE TABLE "public"."pay_close_record" (
-  "id" int8 NOT NULL,
-  "order_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "biz_order_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "close_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "closed" bool NOT NULL,
-  "error_code" varchar(10) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                             "id" int8 NOT NULL,
+                                             "order_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "biz_order_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "close_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "closed" bool NOT NULL,
+                                             "error_code" varchar(10) COLLATE "pg_catalog"."default",
+                                             "error_msg" varchar(500) COLLATE "pg_catalog"."default",
+                                             "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+                                             "creator" int8,
+                                             "create_time" timestamp(6),
+                                             "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_close_record"."id" IS '主键';
@@ -1395,31 +1392,27 @@ COMMENT ON COLUMN "public"."pay_close_record"."app_id" IS '应用号';
 COMMENT ON TABLE "public"."pay_close_record" IS '支付关闭记录';
 
 -- ----------------------------
--- Records of pay_close_record
--- ----------------------------
-
--- ----------------------------
 -- Table structure for pay_mch_app
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_mch_app";
 CREATE TABLE "public"."pay_mch_app" (
-  "id" int8 NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "app_name" varchar(255) COLLATE "pg_catalog"."default",
-  "sign_type" varchar(255) COLLATE "pg_catalog"."default",
-  "sign_secret" varchar(255) COLLATE "pg_catalog"."default",
-  "req_sign" bool,
-  "limit_amount" numeric(10,4),
-  "status" varchar(255) COLLATE "pg_catalog"."default",
-  "notify_type" varchar(255) COLLATE "pg_catalog"."default",
-  "notify_url" varchar(255) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "order_timeout" int2
+                                        "id" int8 NOT NULL,
+                                        "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                        "app_name" varchar(255) COLLATE "pg_catalog"."default",
+                                        "sign_type" varchar(255) COLLATE "pg_catalog"."default",
+                                        "sign_secret" varchar(255) COLLATE "pg_catalog"."default",
+                                        "req_sign" bool,
+                                        "limit_amount" numeric(10,4),
+                                        "status" varchar(255) COLLATE "pg_catalog"."default",
+                                        "notify_type" varchar(255) COLLATE "pg_catalog"."default",
+                                        "notify_url" varchar(255) COLLATE "pg_catalog"."default",
+                                        "creator" int8,
+                                        "create_time" timestamp(6),
+                                        "last_modifier" int8,
+                                        "last_modified_time" timestamp(6),
+                                        "version" int4 NOT NULL,
+                                        "deleted" bool NOT NULL,
+                                        "order_timeout" int2
 )
 ;
 COMMENT ON COLUMN "public"."pay_mch_app"."id" IS '主键';
@@ -1441,25 +1434,22 @@ COMMENT ON COLUMN "public"."pay_mch_app"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."pay_mch_app"."order_timeout" IS '订单默认超时时间(分钟)';
 COMMENT ON TABLE "public"."pay_mch_app" IS '商户应用';
 
--- ----------------------------
--- Records of pay_mch_app
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for pay_merchant_callback_record
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_merchant_callback_record";
 CREATE TABLE "public"."pay_merchant_callback_record" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "task_id" int8,
-  "req_count" int4,
-  "success" bool,
-  "send_type" varchar(30) COLLATE "pg_catalog"."default",
-  "error_code" varchar(50) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default"
+                                                         "id" int8 NOT NULL,
+                                                         "creator" int8,
+                                                         "create_time" timestamp(6),
+                                                         "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                         "task_id" int8,
+                                                         "req_count" int4,
+                                                         "success" bool,
+                                                         "send_type" varchar(30) COLLATE "pg_catalog"."default",
+                                                         "error_code" varchar(50) COLLATE "pg_catalog"."default",
+                                                         "error_msg" varchar(500) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_merchant_callback_record"."id" IS '主键';
@@ -1483,24 +1473,24 @@ COMMENT ON TABLE "public"."pay_merchant_callback_record" IS '客户回调消息�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_merchant_callback_task";
 CREATE TABLE "public"."pay_merchant_callback_task" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "trade_id" int8,
-  "trade_no" varchar(32) COLLATE "pg_catalog"."default",
-  "trade_type" varchar(20) COLLATE "pg_catalog"."default",
-  "content" text COLLATE "pg_catalog"."default",
-  "success" bool,
-  "next_time" timestamp(6),
-  "send_count" int4,
-  "delay_count" int4,
-  "latest_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "url" varchar(200) COLLATE "pg_catalog"."default"
+                                                       "id" int8 NOT NULL,
+                                                       "creator" int8,
+                                                       "create_time" timestamp(6),
+                                                       "last_modifier" int8,
+                                                       "last_modified_time" timestamp(6),
+                                                       "version" int4 NOT NULL,
+                                                       "deleted" bool NOT NULL,
+                                                       "trade_id" int8,
+                                                       "trade_no" varchar(32) COLLATE "pg_catalog"."default",
+                                                       "trade_type" varchar(20) COLLATE "pg_catalog"."default",
+                                                       "content" text COLLATE "pg_catalog"."default",
+                                                       "success" bool,
+                                                       "next_time" timestamp(6),
+                                                       "send_count" int4,
+                                                       "delay_count" int4,
+                                                       "latest_time" timestamp(6),
+                                                       "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                       "url" varchar(200) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_merchant_callback_task"."id" IS '主键';
@@ -1523,25 +1513,22 @@ COMMENT ON COLUMN "public"."pay_merchant_callback_task"."app_id" IS '应用号';
 COMMENT ON COLUMN "public"."pay_merchant_callback_task"."url" IS '发送地址';
 COMMENT ON TABLE "public"."pay_merchant_callback_task" IS '客户回调通知消息任务';
 
--- ----------------------------
--- Records of pay_merchant_callback_task
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for pay_merchant_notify_config
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_merchant_notify_config";
 CREATE TABLE "public"."pay_merchant_notify_config" (
-  "id" int8 NOT NULL,
-  "code" varchar(50) COLLATE "pg_catalog"."default",
-  "subscribe" bool,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                                       "id" int8 NOT NULL,
+                                                       "code" varchar(50) COLLATE "pg_catalog"."default",
+                                                       "subscribe" bool,
+                                                       "creator" int8,
+                                                       "create_time" timestamp(6),
+                                                       "last_modifier" int8,
+                                                       "last_modified_time" timestamp(6),
+                                                       "version" int4 NOT NULL,
+                                                       "deleted" bool NOT NULL,
+                                                       "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_merchant_notify_config"."id" IS '主键';
@@ -1565,11 +1552,11 @@ COMMENT ON TABLE "public"."pay_merchant_notify_config" IS '商户应用消息通
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_merchant_notify_const";
 CREATE TABLE "public"."pay_merchant_notify_const" (
-  "id" int8 NOT NULL,
-  "code" varchar(60) COLLATE "pg_catalog"."default",
-  "name" varchar(80) COLLATE "pg_catalog"."default",
-  "description" varchar(300) COLLATE "pg_catalog"."default",
-  "enable" bool
+                                                      "id" int8 NOT NULL,
+                                                      "code" varchar(60) COLLATE "pg_catalog"."default",
+                                                      "name" varchar(80) COLLATE "pg_catalog"."default",
+                                                      "description" varchar(300) COLLATE "pg_catalog"."default",
+                                                      "enable" bool
 )
 ;
 COMMENT ON COLUMN "public"."pay_merchant_notify_const"."id" IS '主键';
@@ -1592,16 +1579,16 @@ INSERT INTO "public"."pay_merchant_notify_const" VALUES (20000, 'refund', '退�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_merchant_notify_record";
 CREATE TABLE "public"."pay_merchant_notify_record" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "task_id" int8,
-  "req_count" int4,
-  "success" bool,
-  "send_type" varchar(30) COLLATE "pg_catalog"."default",
-  "error_code" varchar(50) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default"
+                                                       "id" int8 NOT NULL,
+                                                       "creator" int8,
+                                                       "create_time" timestamp(6),
+                                                       "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                       "task_id" int8,
+                                                       "req_count" int4,
+                                                       "success" bool,
+                                                       "send_type" varchar(30) COLLATE "pg_catalog"."default",
+                                                       "error_code" varchar(50) COLLATE "pg_catalog"."default",
+                                                       "error_msg" varchar(500) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_merchant_notify_record"."id" IS '主键';
@@ -1625,23 +1612,23 @@ COMMENT ON TABLE "public"."pay_merchant_notify_record" IS '客户订阅通知发
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_merchant_notify_task";
 CREATE TABLE "public"."pay_merchant_notify_task" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "trade_id" int8,
-  "trade_no" varchar(32) COLLATE "pg_catalog"."default",
-  "notify_type" varchar(20) COLLATE "pg_catalog"."default",
-  "content" text COLLATE "pg_catalog"."default",
-  "success" bool,
-  "next_time" timestamp(6),
-  "send_count" int4,
-  "delay_count" int4,
-  "latest_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                                     "id" int8 NOT NULL,
+                                                     "creator" int8,
+                                                     "create_time" timestamp(6),
+                                                     "last_modifier" int8,
+                                                     "last_modified_time" timestamp(6),
+                                                     "version" int4 NOT NULL,
+                                                     "deleted" bool NOT NULL,
+                                                     "trade_id" int8,
+                                                     "trade_no" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "notify_type" varchar(20) COLLATE "pg_catalog"."default",
+                                                     "content" text COLLATE "pg_catalog"."default",
+                                                     "success" bool,
+                                                     "next_time" timestamp(6),
+                                                     "send_count" int4,
+                                                     "delay_count" int4,
+                                                     "latest_time" timestamp(6),
+                                                     "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_merchant_notify_task"."id" IS '主键';
@@ -1672,11 +1659,11 @@ COMMENT ON TABLE "public"."pay_merchant_notify_task" IS '客户订阅通知消�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_method_const";
 CREATE TABLE "public"."pay_method_const" (
-  "id" int8 NOT NULL,
-  "code" varchar(60) COLLATE "pg_catalog"."default",
-  "name" varchar(80) COLLATE "pg_catalog"."default",
-  "enable" bool,
-  "remark" varchar(300) COLLATE "pg_catalog"."default"
+                                             "id" int8 NOT NULL,
+                                             "code" varchar(60) COLLATE "pg_catalog"."default",
+                                             "name" varchar(80) COLLATE "pg_catalog"."default",
+                                             "enable" bool,
+                                             "remark" varchar(300) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_method_const"."id" IS '主键';
@@ -1702,39 +1689,39 @@ INSERT INTO "public"."pay_method_const" VALUES (10000, 'normal', '常规支付',
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_order";
 CREATE TABLE "public"."pay_order" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "biz_order_no" varchar(32) COLLATE "pg_catalog"."default",
-  "order_no" varchar(100) COLLATE "pg_catalog"."default",
-  "out_order_no" varchar(150) COLLATE "pg_catalog"."default",
-  "title" varchar(100) COLLATE "pg_catalog"."default",
-  "description" varchar(500) COLLATE "pg_catalog"."default",
-  "allocation" bool,
-  "auto_allocation" bool,
-  "channel" varchar(20) COLLATE "pg_catalog"."default",
-  "method" varchar(20) COLLATE "pg_catalog"."default",
-  "amount" numeric(12,2),
-  "refundable_balance" numeric(12,2),
-  "status" varchar(32) COLLATE "pg_catalog"."default",
-  "refund_status" varchar(32) COLLATE "pg_catalog"."default",
-  "alloc_status" varchar(32) COLLATE "pg_catalog"."default",
-  "return_url" varchar(200) COLLATE "pg_catalog"."default",
-  "notify_url" varchar(200) COLLATE "pg_catalog"."default",
-  "extra_param" varchar(2048) COLLATE "pg_catalog"."default",
-  "attach" varchar(500) COLLATE "pg_catalog"."default",
-  "req_time" timestamp(6),
-  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
-  "error_code" varchar(50) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "expired_time" timestamp(6),
-  "pay_time" timestamp(6),
-  "close_time" timestamp(6)
+                                      "id" int8 NOT NULL,
+                                      "creator" int8,
+                                      "create_time" timestamp(6),
+                                      "last_modifier" int8,
+                                      "last_modified_time" timestamp(6),
+                                      "version" int4 NOT NULL,
+                                      "deleted" bool NOT NULL,
+                                      "biz_order_no" varchar(32) COLLATE "pg_catalog"."default",
+                                      "order_no" varchar(100) COLLATE "pg_catalog"."default",
+                                      "out_order_no" varchar(150) COLLATE "pg_catalog"."default",
+                                      "title" varchar(100) COLLATE "pg_catalog"."default",
+                                      "description" varchar(500) COLLATE "pg_catalog"."default",
+                                      "allocation" bool,
+                                      "auto_allocation" bool,
+                                      "channel" varchar(20) COLLATE "pg_catalog"."default",
+                                      "method" varchar(20) COLLATE "pg_catalog"."default",
+                                      "amount" numeric(12,2),
+                                      "refundable_balance" numeric(12,2),
+                                      "status" varchar(32) COLLATE "pg_catalog"."default",
+                                      "refund_status" varchar(32) COLLATE "pg_catalog"."default",
+                                      "alloc_status" varchar(32) COLLATE "pg_catalog"."default",
+                                      "return_url" varchar(200) COLLATE "pg_catalog"."default",
+                                      "notify_url" varchar(200) COLLATE "pg_catalog"."default",
+                                      "extra_param" varchar(2048) COLLATE "pg_catalog"."default",
+                                      "attach" varchar(500) COLLATE "pg_catalog"."default",
+                                      "req_time" timestamp(6),
+                                      "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+                                      "error_code" varchar(50) COLLATE "pg_catalog"."default",
+                                      "error_msg" varchar(500) COLLATE "pg_catalog"."default",
+                                      "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                      "expired_time" timestamp(6),
+                                      "pay_time" timestamp(6),
+                                      "close_time" timestamp(6)
 )
 ;
 COMMENT ON COLUMN "public"."pay_order"."id" IS '主键';
@@ -1781,16 +1768,16 @@ COMMENT ON TABLE "public"."pay_order" IS '支付订单';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_platform_config";
 CREATE TABLE "public"."pay_platform_config" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "gateway_service_url" varchar(300) COLLATE "pg_catalog"."default",
-  "gateway_mobile_url" varchar(300) COLLATE "pg_catalog"."default",
-  "gateway_pc_url" varchar(300) COLLATE "pg_catalog"."default"
+                                                "id" int8 NOT NULL,
+                                                "creator" int8,
+                                                "create_time" timestamp(6),
+                                                "last_modifier" int8,
+                                                "last_modified_time" timestamp(6),
+                                                "version" int4 NOT NULL,
+                                                "deleted" bool NOT NULL,
+                                                "gateway_service_url" varchar(300) COLLATE "pg_catalog"."default",
+                                                "gateway_mobile_url" varchar(300) COLLATE "pg_catalog"."default",
+                                                "gateway_pc_url" varchar(300) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_platform_config"."id" IS '主键';
@@ -1815,28 +1802,28 @@ INSERT INTO "public"."pay_platform_config" VALUES (1, 1, '2024-09-20 10:54:44', 
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_reconcile_discrepancy";
 CREATE TABLE "public"."pay_reconcile_discrepancy" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "reconcile_id" int8,
-  "reconcile_no" varchar(32) COLLATE "pg_catalog"."default",
-  "reconcile_date" date,
-  "channel" varchar(20) COLLATE "pg_catalog"."default",
-  "discrepancy_type" varchar(20) COLLATE "pg_catalog"."default",
-  "trade_no" varchar(32) COLLATE "pg_catalog"."default",
-  "biz_trade_no" varchar(100) COLLATE "pg_catalog"."default",
-  "trade_type" varchar(100) COLLATE "pg_catalog"."default",
-  "trade_amount" numeric(13,2),
-  "trade_status" varchar(32) COLLATE "pg_catalog"."default",
-  "trade_time" timestamp(0),
-  "channel_trade_no" varchar COLLATE "pg_catalog"."default",
-  "channel_trade_type" varchar(32) COLLATE "pg_catalog"."default",
-  "channel_trade_amount" numeric(13,2),
-  "channel_trade_status" varchar(32) COLLATE "pg_catalog"."default",
-  "channel_trade_time" timestamp(6),
-  "out_trade_no" varchar(100) COLLATE "pg_catalog"."default",
-  "channel_out_trade_no" varchar(100) COLLATE "pg_catalog"."default"
+                                                      "id" int8 NOT NULL,
+                                                      "creator" int8,
+                                                      "create_time" timestamp(6),
+                                                      "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                      "reconcile_id" int8,
+                                                      "reconcile_no" varchar(32) COLLATE "pg_catalog"."default",
+                                                      "reconcile_date" date,
+                                                      "channel" varchar(20) COLLATE "pg_catalog"."default",
+                                                      "discrepancy_type" varchar(20) COLLATE "pg_catalog"."default",
+                                                      "trade_no" varchar(32) COLLATE "pg_catalog"."default",
+                                                      "biz_trade_no" varchar(100) COLLATE "pg_catalog"."default",
+                                                      "trade_type" varchar(100) COLLATE "pg_catalog"."default",
+                                                      "trade_amount" numeric(13,2),
+                                                      "trade_status" varchar(32) COLLATE "pg_catalog"."default",
+                                                      "trade_time" timestamp(0),
+                                                      "channel_trade_no" varchar COLLATE "pg_catalog"."default",
+                                                      "channel_trade_type" varchar(32) COLLATE "pg_catalog"."default",
+                                                      "channel_trade_amount" numeric(13,2),
+                                                      "channel_trade_status" varchar(32) COLLATE "pg_catalog"."default",
+                                                      "channel_trade_time" timestamp(6),
+                                                      "out_trade_no" varchar(100) COLLATE "pg_catalog"."default",
+                                                      "channel_out_trade_no" varchar(100) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."id" IS '主键';
@@ -1872,33 +1859,33 @@ COMMENT ON TABLE "public"."pay_reconcile_discrepancy" IS '对账差异记录';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_reconcile_statement";
 CREATE TABLE "public"."pay_reconcile_statement" (
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "reconcile_no" varchar(32) COLLATE "pg_catalog"."default",
-  "date" date,
-  "channel" varchar(32) COLLATE "pg_catalog"."default",
-  "down_or_upload" bool,
-  "compare" bool,
-  "order_count" varchar(8) COLLATE "pg_catalog"."default",
-  "order_amount" numeric(13,2),
-  "refund_count" varchar(8) COLLATE "pg_catalog"."default",
-  "refund_amount" numeric(13,2),
-  "channel_order_count" varchar(8) COLLATE "pg_catalog"."default",
-  "channel_order_amount" numeric(13,2),
-  "channel_refund_count" varchar(8) COLLATE "pg_catalog"."default",
-  "channel_refund_amount" numeric(13,2),
-  "result" varchar(32) COLLATE "pg_catalog"."default",
-  "channel_file_url" varchar(500) COLLATE "pg_catalog"."default",
-  "platform_file_url" varchar(500) COLLATE "pg_catalog"."default",
-  "error_code" varchar(100) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "id" int8 NOT NULL
+                                                    "creator" int8,
+                                                    "create_time" timestamp(6),
+                                                    "last_modifier" int8,
+                                                    "last_modified_time" timestamp(6),
+                                                    "version" int4 NOT NULL,
+                                                    "deleted" bool NOT NULL,
+                                                    "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                    "name" varchar(255) COLLATE "pg_catalog"."default",
+                                                    "reconcile_no" varchar(32) COLLATE "pg_catalog"."default",
+                                                    "date" date,
+                                                    "channel" varchar(32) COLLATE "pg_catalog"."default",
+                                                    "down_or_upload" bool,
+                                                    "compare" bool,
+                                                    "order_count" varchar(8) COLLATE "pg_catalog"."default",
+                                                    "order_amount" numeric(13,2),
+                                                    "refund_count" varchar(8) COLLATE "pg_catalog"."default",
+                                                    "refund_amount" numeric(13,2),
+                                                    "channel_order_count" varchar(8) COLLATE "pg_catalog"."default",
+                                                    "channel_order_amount" numeric(13,2),
+                                                    "channel_refund_count" varchar(8) COLLATE "pg_catalog"."default",
+                                                    "channel_refund_amount" numeric(13,2),
+                                                    "result" varchar(32) COLLATE "pg_catalog"."default",
+                                                    "channel_file_url" varchar(500) COLLATE "pg_catalog"."default",
+                                                    "platform_file_url" varchar(500) COLLATE "pg_catalog"."default",
+                                                    "error_code" varchar(100) COLLATE "pg_catalog"."default",
+                                                    "error_msg" varchar(500) COLLATE "pg_catalog"."default",
+                                                    "id" int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."pay_reconcile_statement"."creator" IS '创建者ID';
@@ -1939,35 +1926,35 @@ COMMENT ON TABLE "public"."pay_reconcile_statement" IS '对账报告';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_refund_order";
 CREATE TABLE "public"."pay_refund_order" (
-  "id" int8 NOT NULL,
-  "order_id" int8 NOT NULL,
-  "order_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "biz_order_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "out_order_no" varchar(150) COLLATE "pg_catalog"."default" NOT NULL,
-  "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "refund_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "biz_refund_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "out_refund_no" varchar(150) COLLATE "pg_catalog"."default",
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "order_amount" numeric(32,2) NOT NULL,
-  "amount" numeric(32,2) NOT NULL,
-  "reason" varchar(150) COLLATE "pg_catalog"."default",
-  "finish_time" timestamp(6),
-  "status" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "notify_url" varchar(200) COLLATE "pg_catalog"."default",
-  "attach" varchar(500) COLLATE "pg_catalog"."default",
-  "extra_param" varchar(2048) COLLATE "pg_catalog"."default",
-  "req_time" timestamp(6),
-  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
-  "error_code" varchar(10) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                             "id" int8 NOT NULL,
+                                             "order_id" int8 NOT NULL,
+                                             "order_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "biz_order_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "out_order_no" varchar(150) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "refund_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "biz_refund_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "out_refund_no" varchar(150) COLLATE "pg_catalog"."default",
+                                             "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "order_amount" numeric(32,2) NOT NULL,
+                                             "amount" numeric(32,2) NOT NULL,
+                                             "reason" varchar(150) COLLATE "pg_catalog"."default",
+                                             "finish_time" timestamp(6),
+                                             "status" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                             "notify_url" varchar(200) COLLATE "pg_catalog"."default",
+                                             "attach" varchar(500) COLLATE "pg_catalog"."default",
+                                             "extra_param" varchar(2048) COLLATE "pg_catalog"."default",
+                                             "req_time" timestamp(6),
+                                             "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+                                             "error_code" varchar(10) COLLATE "pg_catalog"."default",
+                                             "error_msg" varchar(500) COLLATE "pg_catalog"."default",
+                                             "creator" int8,
+                                             "create_time" timestamp(6),
+                                             "last_modifier" int8,
+                                             "last_modified_time" timestamp(6),
+                                             "version" int4 NOT NULL,
+                                             "deleted" bool NOT NULL,
+                                             "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_refund_order"."id" IS '主键';
@@ -2010,18 +1997,18 @@ COMMENT ON TABLE "public"."pay_refund_order" IS '退款订单';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_trade_callback_record";
 CREATE TABLE "public"."pay_trade_callback_record" (
-  "id" int8 NOT NULL,
-  "trade_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "out_trade_no" varchar(150) COLLATE "pg_catalog"."default",
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "callback_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "notify_info" text COLLATE "pg_catalog"."default" NOT NULL,
-  "status" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "error_code" varchar(10) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                                      "id" int8 NOT NULL,
+                                                      "trade_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "out_trade_no" varchar(150) COLLATE "pg_catalog"."default",
+                                                      "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "callback_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "notify_info" text COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "status" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "error_code" varchar(10) COLLATE "pg_catalog"."default",
+                                                      "error_msg" varchar(500) COLLATE "pg_catalog"."default",
+                                                      "creator" int8,
+                                                      "create_time" timestamp(6),
+                                                      "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_trade_callback_record"."id" IS '主键';
@@ -2047,17 +2034,17 @@ COMMENT ON TABLE "public"."pay_trade_callback_record" IS '网关回调通知';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_trade_flow_record";
 CREATE TABLE "public"."pay_trade_flow_record" (
-  "id" int8 NOT NULL,
-  "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "amount" numeric(12,2) NOT NULL,
-  "type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "trade_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "biz_trade_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "out_trade_no" varchar(150) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default"
+                                                  "id" int8 NOT NULL,
+                                                  "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                                  "amount" numeric(12,2) NOT NULL,
+                                                  "type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                                  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                                  "trade_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                                  "biz_trade_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                                  "out_trade_no" varchar(150) COLLATE "pg_catalog"."default",
+                                                  "creator" int8,
+                                                  "create_time" timestamp(6),
+                                                  "app_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_trade_flow_record"."id" IS '主键';
@@ -2082,21 +2069,21 @@ COMMENT ON TABLE "public"."pay_trade_flow_record" IS '资金流水记录';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_trade_sync_record";
 CREATE TABLE "public"."pay_trade_sync_record" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "trade_no" varchar(32) COLLATE "pg_catalog"."default",
-  "biz_trade_no" varchar(100) COLLATE "pg_catalog"."default",
-  "out_trade_no" varchar(150) COLLATE "pg_catalog"."default",
-  "out_trade_status" varchar(32) COLLATE "pg_catalog"."default",
-  "trade_type" varchar(32) COLLATE "pg_catalog"."default",
-  "channel" varchar(32) COLLATE "pg_catalog"."default",
-  "sync_info" text COLLATE "pg_catalog"."default",
-  "adjust" bool NOT NULL,
-  "error_code" varchar(50) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "client_ip" varchar(64) COLLATE "pg_catalog"."default"
+                                                  "id" int8 NOT NULL,
+                                                  "creator" int8,
+                                                  "create_time" timestamp(6),
+                                                  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                  "trade_no" varchar(32) COLLATE "pg_catalog"."default",
+                                                  "biz_trade_no" varchar(100) COLLATE "pg_catalog"."default",
+                                                  "out_trade_no" varchar(150) COLLATE "pg_catalog"."default",
+                                                  "out_trade_status" varchar(32) COLLATE "pg_catalog"."default",
+                                                  "trade_type" varchar(32) COLLATE "pg_catalog"."default",
+                                                  "channel" varchar(32) COLLATE "pg_catalog"."default",
+                                                  "sync_info" text COLLATE "pg_catalog"."default",
+                                                  "adjust" bool NOT NULL,
+                                                  "error_code" varchar(50) COLLATE "pg_catalog"."default",
+                                                  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
+                                                  "client_ip" varchar(64) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_trade_sync_record"."id" IS '主键';
@@ -2125,33 +2112,33 @@ COMMENT ON TABLE "public"."pay_trade_sync_record" IS '交易同步记录';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_transfer_order";
 CREATE TABLE "public"."pay_transfer_order" (
-  "id" int8 NOT NULL,
-  "biz_transfer_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "transfer_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
-  "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "amount" numeric(32,2) NOT NULL,
-  "title" varchar(100) COLLATE "pg_catalog"."default",
-  "reason" varchar(150) COLLATE "pg_catalog"."default",
-  "payee_type" varchar(20) COLLATE "pg_catalog"."default",
-  "payee_account" varchar(100) COLLATE "pg_catalog"."default",
-  "payee_name" varchar(50) COLLATE "pg_catalog"."default",
-  "status" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "finish_time" timestamp(6),
-  "notify_url" varchar(200) COLLATE "pg_catalog"."default",
-  "attach" varchar(500) COLLATE "pg_catalog"."default",
-  "req_time" timestamp(6),
-  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
-  "error_code" varchar(10) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "extra_param" varchar(2048) COLLATE "pg_catalog"."default"
+                                               "id" int8 NOT NULL,
+                                               "biz_transfer_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "transfer_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
+                                               "channel" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "amount" numeric(32,2) NOT NULL,
+                                               "title" varchar(100) COLLATE "pg_catalog"."default",
+                                               "reason" varchar(150) COLLATE "pg_catalog"."default",
+                                               "payee_type" varchar(20) COLLATE "pg_catalog"."default",
+                                               "payee_account" varchar(100) COLLATE "pg_catalog"."default",
+                                               "payee_name" varchar(50) COLLATE "pg_catalog"."default",
+                                               "status" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                               "finish_time" timestamp(6),
+                                               "notify_url" varchar(200) COLLATE "pg_catalog"."default",
+                                               "attach" varchar(500) COLLATE "pg_catalog"."default",
+                                               "req_time" timestamp(6),
+                                               "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+                                               "error_code" varchar(10) COLLATE "pg_catalog"."default",
+                                               "error_msg" varchar(500) COLLATE "pg_catalog"."default",
+                                               "creator" int8,
+                                               "create_time" timestamp(6),
+                                               "last_modifier" int8,
+                                               "last_modified_time" timestamp(6),
+                                               "version" int4 NOT NULL,
+                                               "deleted" bool NOT NULL,
+                                               "app_id" varchar(32) COLLATE "pg_catalog"."default",
+                                               "extra_param" varchar(2048) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_transfer_order"."id" IS '主键';
@@ -2192,18 +2179,18 @@ COMMENT ON TABLE "public"."pay_transfer_order" IS '转账订单';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."starter_audit_login_log";
 CREATE TABLE "public"."starter_audit_login_log" (
-  "id" int8 NOT NULL,
-  "user_id" int8,
-  "account" varchar(100) COLLATE "pg_catalog"."default",
-  "login" bool,
-  "client" varchar(20) COLLATE "pg_catalog"."default",
-  "login_type" varchar(20) COLLATE "pg_catalog"."default",
-  "ip" varchar(80) COLLATE "pg_catalog"."default",
-  "login_location" varchar(100) COLLATE "pg_catalog"."default",
-  "browser" varchar(200) COLLATE "pg_catalog"."default",
-  "os" varchar(100) COLLATE "pg_catalog"."default",
-  "msg" text COLLATE "pg_catalog"."default",
-  "login_time" timestamp(6)
+                                                    "id" int8 NOT NULL,
+                                                    "user_id" int8,
+                                                    "account" varchar(100) COLLATE "pg_catalog"."default",
+                                                    "login" bool,
+                                                    "client" varchar(20) COLLATE "pg_catalog"."default",
+                                                    "login_type" varchar(20) COLLATE "pg_catalog"."default",
+                                                    "ip" varchar(80) COLLATE "pg_catalog"."default",
+                                                    "login_location" varchar(100) COLLATE "pg_catalog"."default",
+                                                    "browser" varchar(200) COLLATE "pg_catalog"."default",
+                                                    "os" varchar(100) COLLATE "pg_catalog"."default",
+                                                    "msg" text COLLATE "pg_catalog"."default",
+                                                    "login_time" timestamp(6)
 )
 ;
 COMMENT ON COLUMN "public"."starter_audit_login_log"."id" IS '主键';
@@ -2229,21 +2216,21 @@ COMMENT ON TABLE "public"."starter_audit_login_log" IS '登录日志';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."starter_audit_operate_log";
 CREATE TABLE "public"."starter_audit_operate_log" (
-  "id" int8 NOT NULL,
-  "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "operate_id" int8,
-  "account" varchar(100) COLLATE "pg_catalog"."default",
-  "business_type" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "method" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "request_method" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
-  "operate_url" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "operate_ip" varchar(80) COLLATE "pg_catalog"."default",
-  "operate_location" varchar(50) COLLATE "pg_catalog"."default",
-  "operate_param" text COLLATE "pg_catalog"."default",
-  "operate_return" text COLLATE "pg_catalog"."default",
-  "success" bool,
-  "error_msg" text COLLATE "pg_catalog"."default",
-  "operate_time" timestamp(6) NOT NULL
+                                                      "id" int8 NOT NULL,
+                                                      "title" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "operate_id" int8,
+                                                      "account" varchar(100) COLLATE "pg_catalog"."default",
+                                                      "business_type" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "method" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "request_method" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "operate_url" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
+                                                      "operate_ip" varchar(80) COLLATE "pg_catalog"."default",
+                                                      "operate_location" varchar(50) COLLATE "pg_catalog"."default",
+                                                      "operate_param" text COLLATE "pg_catalog"."default",
+                                                      "operate_return" text COLLATE "pg_catalog"."default",
+                                                      "success" bool,
+                                                      "error_msg" text COLLATE "pg_catalog"."default",
+                                                      "operate_time" timestamp(6) NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."starter_audit_operate_log"."id" IS '主键';
@@ -2272,16 +2259,16 @@ COMMENT ON TABLE "public"."starter_audit_operate_log" IS '操作日志';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."starter_file_platform";
 CREATE TABLE "public"."starter_file_platform" (
-  "id" int8 NOT NULL,
-  "type" varchar(50) COLLATE "pg_catalog"."default",
-  "name" varchar(200) COLLATE "pg_catalog"."default",
-  "url" varchar(255) COLLATE "pg_catalog"."default",
-  "default_platform" bool,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL DEFAULT 0
+                                                  "id" int8 NOT NULL,
+                                                  "type" varchar(50) COLLATE "pg_catalog"."default",
+                                                  "name" varchar(200) COLLATE "pg_catalog"."default",
+                                                  "url" varchar(255) COLLATE "pg_catalog"."default",
+                                                  "default_platform" bool,
+                                                  "creator" int8,
+                                                  "create_time" timestamp(6),
+                                                  "last_modifier" int8,
+                                                  "last_modified_time" timestamp(6),
+                                                  "version" int4 NOT NULL DEFAULT 0
 )
 ;
 COMMENT ON COLUMN "public"."starter_file_platform"."id" IS '文件id';
@@ -2307,30 +2294,30 @@ INSERT INTO "public"."starter_file_platform" VALUES (2000, 'minio', 'minio存储
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."starter_file_upload_info";
 CREATE TABLE "public"."starter_file_upload_info" (
-  "id" int8 NOT NULL,
-  "url" varchar(512) COLLATE "pg_catalog"."default" NOT NULL,
-  "size" int8,
-  "filename" varchar(256) COLLATE "pg_catalog"."default",
-  "original_filename" varchar(256) COLLATE "pg_catalog"."default",
-  "base_path" varchar(256) COLLATE "pg_catalog"."default",
-  "path" varchar(256) COLLATE "pg_catalog"."default",
-  "ext" varchar(32) COLLATE "pg_catalog"."default",
-  "content_type" varchar(128) COLLATE "pg_catalog"."default",
-  "platform" varchar(32) COLLATE "pg_catalog"."default",
-  "th_url" varchar(512) COLLATE "pg_catalog"."default",
-  "th_filename" varchar(256) COLLATE "pg_catalog"."default",
-  "th_size" int8,
-  "th_content_type" varchar(128) COLLATE "pg_catalog"."default",
-  "object_id" varchar(32) COLLATE "pg_catalog"."default",
-  "object_type" varchar(32) COLLATE "pg_catalog"."default",
-  "metadata" text COLLATE "pg_catalog"."default",
-  "user_metadata" text COLLATE "pg_catalog"."default",
-  "th_metadata" text COLLATE "pg_catalog"."default",
-  "th_user_metadata" text COLLATE "pg_catalog"."default",
-  "attr" text COLLATE "pg_catalog"."default",
-  "file_acl" varchar(32) COLLATE "pg_catalog"."default",
-  "th_file_acl" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6)
+                                                     "id" int8 NOT NULL,
+                                                     "url" varchar(512) COLLATE "pg_catalog"."default" NOT NULL,
+                                                     "size" int8,
+                                                     "filename" varchar(256) COLLATE "pg_catalog"."default",
+                                                     "original_filename" varchar(256) COLLATE "pg_catalog"."default",
+                                                     "base_path" varchar(256) COLLATE "pg_catalog"."default",
+                                                     "path" varchar(256) COLLATE "pg_catalog"."default",
+                                                     "ext" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "content_type" varchar(128) COLLATE "pg_catalog"."default",
+                                                     "platform" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "th_url" varchar(512) COLLATE "pg_catalog"."default",
+                                                     "th_filename" varchar(256) COLLATE "pg_catalog"."default",
+                                                     "th_size" int8,
+                                                     "th_content_type" varchar(128) COLLATE "pg_catalog"."default",
+                                                     "object_id" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "object_type" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "metadata" text COLLATE "pg_catalog"."default",
+                                                     "user_metadata" text COLLATE "pg_catalog"."default",
+                                                     "th_metadata" text COLLATE "pg_catalog"."default",
+                                                     "th_user_metadata" text COLLATE "pg_catalog"."default",
+                                                     "attr" text COLLATE "pg_catalog"."default",
+                                                     "file_acl" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "th_file_acl" varchar(32) COLLATE "pg_catalog"."default",
+                                                     "create_time" timestamp(6)
 )
 ;
 COMMENT ON COLUMN "public"."starter_file_upload_info"."id" IS '文件id';
@@ -2437,8 +2424,8 @@ ALTER TABLE "public"."pay_alloc_config" ADD CONSTRAINT "pay_alloc_config_pkey" P
 -- Indexes structure for table pay_alloc_detail
 -- ----------------------------
 CREATE INDEX "allocation_id" ON "public"."pay_alloc_detail" USING btree (
-  "allocation_id" "pg_catalog"."int8_ops" ASC NULLS LAST
-);
+                                                                         "allocation_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."allocation_id" IS '分账订单ID索引';
 
 -- ----------------------------
@@ -2460,20 +2447,20 @@ ALTER TABLE "public"."pay_alloc_group_receiver" ADD CONSTRAINT "pay_allocation_g
 -- Indexes structure for table pay_alloc_order
 -- ----------------------------
 CREATE INDEX "alloc_no" ON "public"."pay_alloc_order" USING btree (
-  "alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                   "alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."alloc_no" IS '分账单号索引';
 CREATE INDEX "biz_alloc_no" ON "public"."pay_alloc_order" USING btree (
-  "biz_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                       "biz_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."biz_alloc_no" IS '商户分账单号索引';
 CREATE INDEX "order_id" ON "public"."pay_alloc_order" USING btree (
-  "order_id" "pg_catalog"."int8_ops" ASC NULLS LAST
-);
+                                                                   "order_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."order_id" IS '支付订单ID索引';
 CREATE INDEX "out_alloc_no" ON "public"."pay_alloc_order" USING btree (
-  "out_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                       "out_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."out_alloc_no" IS '通道分账号索引';
 
 -- ----------------------------
@@ -2535,12 +2522,12 @@ ALTER TABLE "public"."pay_checkout_item_config" ADD CONSTRAINT "pay_checkout_ite
 -- Indexes structure for table pay_close_record
 -- ----------------------------
 CREATE INDEX "biz_order_no" ON "public"."pay_close_record" USING btree (
-  "biz_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                        "biz_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."biz_order_no" IS '商户支付订单号索引';
 CREATE INDEX "order_no" ON "public"."pay_close_record" USING btree (
-  "order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                    "order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."order_no" IS '支付订单号索引';
 
 -- ----------------------------
@@ -2592,14 +2579,14 @@ ALTER TABLE "public"."pay_method_const" ADD CONSTRAINT "pay_channel_const_copy1_
 -- Indexes structure for table pay_order
 -- ----------------------------
 CREATE INDEX "order_biz_order_order_no_idx" ON "public"."pay_order" USING btree (
-  "biz_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                 "biz_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 CREATE INDEX "order_pay_order_order_no_idx" ON "public"."pay_order" USING btree (
-  "order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                 "order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 CREATE INDEX "order_pay_order_out_order_no_idx" ON "public"."pay_order" USING btree (
-  "out_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                     "out_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 
 -- ----------------------------
 -- Primary Key structure for table pay_order
@@ -2625,32 +2612,32 @@ ALTER TABLE "public"."pay_reconcile_statement" ADD CONSTRAINT "pay_reconcile_sta
 -- Indexes structure for table pay_refund_order
 -- ----------------------------
 CREATE INDEX "refund_biz_order_no" ON "public"."pay_refund_order" USING btree (
-  "biz_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                               "biz_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."refund_biz_order_no" IS '商户支付订单号索引';
 CREATE INDEX "refund_biz_refund_no" ON "public"."pay_refund_order" USING btree (
-  "biz_refund_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                "biz_refund_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."refund_biz_refund_no" IS '商户退款号索引';
 CREATE INDEX "refund_order_id" ON "public"."pay_refund_order" USING btree (
-  "order_id" "pg_catalog"."int8_ops" ASC NULLS LAST
-);
+                                                                           "order_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."refund_order_id" IS '支付订单ID索引';
 CREATE INDEX "refund_order_no" ON "public"."pay_refund_order" USING btree (
-  "order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                           "order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."refund_order_no" IS '支付订单号索引';
 CREATE INDEX "refund_out_order_no" ON "public"."pay_refund_order" USING btree (
-  "out_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                               "out_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."refund_out_order_no" IS '通道支付订单号索引';
 CREATE INDEX "refund_out_refund_no" ON "public"."pay_refund_order" USING btree (
-  "out_refund_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                "out_refund_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."refund_out_refund_no" IS '通道退款交易号索引';
 CREATE INDEX "refund_refund_no" ON "public"."pay_refund_order" USING btree (
-  "refund_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                            "refund_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."refund_refund_no" IS '退款号索引';
 
 -- ----------------------------
@@ -2662,12 +2649,12 @@ ALTER TABLE "public"."pay_refund_order" ADD CONSTRAINT "pay_refund_order_pkey" P
 -- Indexes structure for table pay_trade_callback_record
 -- ----------------------------
 CREATE INDEX "out_trade_no" ON "public"."pay_trade_callback_record" USING btree (
-  "out_trade_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                 "out_trade_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."out_trade_no" IS '通道交易号索引';
 CREATE INDEX "trade_no" ON "public"."pay_trade_callback_record" USING btree (
-  "trade_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                             "trade_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."trade_no" IS '本地交易号索引';
 
 -- ----------------------------
@@ -2689,16 +2676,16 @@ ALTER TABLE "public"."pay_trade_sync_record" ADD CONSTRAINT "pay_trade_sync_reco
 -- Indexes structure for table pay_transfer_order
 -- ----------------------------
 CREATE INDEX "transfer_biz_transfer_no" ON "public"."pay_transfer_order" USING btree (
-  "biz_transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                      "biz_transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."transfer_biz_transfer_no" IS '商户转账号索引';
 CREATE INDEX "transfer_out_transfer_no" ON "public"."pay_transfer_order" USING btree (
-  "out_transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                      "out_transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."transfer_out_transfer_no" IS '通道转账号索引';
 CREATE INDEX "transfer_transfer_no" ON "public"."pay_transfer_order" USING btree (
-  "transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+                                                                                  "transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+    );
 COMMENT ON INDEX "public"."transfer_transfer_no" IS '转账号索引';
 
 -- ----------------------------
