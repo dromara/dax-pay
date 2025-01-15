@@ -2,6 +2,7 @@ package org.dromara.daxpay.channel.wechat.service.pay.isv;
 
 import cn.bootx.platform.common.spring.exception.RetryableException;
 import cn.bootx.platform.core.util.JsonUtil;
+import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
@@ -69,7 +70,7 @@ public class WechatPaySubV2Service {
         }
         // 微信公众号支付或者小程序支付
         else if (payMethodEnum == PayMethodEnum.JSAPI) {
-            payBody = this.jsPay(payOrder, wechatPayParam.getOpenId(), config);
+            payBody = this.jsPay(payOrder, wechatPayParam, config);
         }
         // 二维码支付
         else if (payMethodEnum == PayMethodEnum.QRCODE) {
@@ -121,10 +122,15 @@ public class WechatPaySubV2Service {
     /**
      * 微信公众号支付或者小程序支付
      */
-    private String jsPay(PayOrder payOrder, String openId, WechatPayConfig wechatPayConfig) {
+    private String jsPay(PayOrder payOrder, WechatPayParam wechatPayParam, WechatPayConfig wechatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         WxPayUnifiedOrderRequest request = this.buildRequest(payOrder, wechatPayConfig);
-        request.setOpenid(openId);
+
+        if (Objects.equals(wechatPayParam.getOpenIdType(), WechatPayCode.SUB_OPENID)){
+            request.setSubOpenid(wechatPayParam.getOpenId());
+        } else {
+            request.setOpenid(wechatPayParam.getOpenId());
+        }
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.JSAPI, request);
             Map<String, String> map = this.buildJsapiResult(result);
