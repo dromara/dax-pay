@@ -28,8 +28,8 @@
         <bootx-platform.version>3.0.0.beta4</bootx-platform.version>
         <!-- 再高的的新版本与会knife4j 4.5冲突 -->
         <springdoc.version>2.5.0</springdoc.version>
-        <hutool.version>5.8.31</hutool.version>
-        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <hutool.version>5.8.35</hutool.version>
+        <bouncycastle.version>1.79</bouncycastle.version>
         <knife4j.version>4.5.0</knife4j.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>

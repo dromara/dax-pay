@@ -43,8 +43,8 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback-classic.version>1.5.6</logback-classic.version>
-        <hutool.version>5.8.31</hutool.version>
-        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <hutool.version>5.8.35</hutool.version>
+        <bouncycastle.version>1.79</bouncycastle.version>
         <springdoc.version>2.5.0</springdoc.version>
         <lombok.version>1.18.30</lombok.version>
         <junit.version>4.13.2</junit.version>

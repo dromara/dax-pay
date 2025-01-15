@@ -46,7 +46,7 @@ public class PayOrderTest {
         param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
         param.setTitle("测试微信扫码支付");
         param.setDescription("这是支付备注");
-        param.setAmount(BigDecimal.valueOf(1.00));
+        param.setAmount(BigDecimal.valueOf(200.00));
         param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
