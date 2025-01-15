@@ -32,7 +32,7 @@ public class WechatPaySubCloseV3Service {
     public void close(PayOrder payOrder, WechatPayConfig weChatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(weChatPayConfig);
         try {
-            wxPayService.closeOrderV3(payOrder.getOrderNo());
+            wxPayService.closePartnerOrderV3(payOrder.getOrderNo());
         } catch (WxPayException e) {
             log.error("微信关闭支付V3失败", e);
             throw new TradeFailException("微信退款V3失败: "+e.getMessage());
