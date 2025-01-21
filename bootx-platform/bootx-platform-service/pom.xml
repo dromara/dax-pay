@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>cn.bootx.platform</groupId>
+        <artifactId>bootx-platform</artifactId>
+        <version>3.0.0.beta4</version>
+    </parent>
+    <modules>
+        <module>service-baseapi</module>
+        <module>service-iam</module>
+    </modules>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>bootx-platform-service</artifactId>
+    <packaging>pom</packaging>
+
+    <dependencies>
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- lombok 配合 mapstruct -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <scope>provided</scope>
+            <version>${lombok-mapstruct.version}</version>
+        </dependency>
+
+        <!-- 类型转换处理器 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <scope>provided</scope>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!-- 类型转换 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!-- web框架 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 监控端点 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- 框架核心包 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>bootx-platform-core</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
+        <!-- Spring 扩展 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-extra</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+
+        <!-- Spring Boot 校验包 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- 分布式锁 若使用redisTemplate作为分布式锁底层，则需要引入-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
+            <version>${lock4j.version}</version>
+        </dependency>
+
+        <!-- 平台配置 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-config</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
+        <!-- 日志模块 -->
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-log</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

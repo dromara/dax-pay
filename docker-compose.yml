@@ -1,15 +1,38 @@
 version: '3'
 services:
-  platform:
-    image: dax-start:latest
+  daxpay-single:
+    image: daxpay/daxpay-single:3.0.0.beta4
     restart: always
-    ports:
-      - "9000:9000"
+    # window上不支持host网络模式, 需要更改为 bridge 网络模式, 然后走端口映射
+    network_mode: host
+    # 如果不可以使用host网络模式时使用这个, 此时数据库相关的连接地址将不可以使用 127.0.0.1
+#    ports:
+      # 端口映射 外部端口:容器端口
+#      - "9999:9999"
+    # 读取外部化配置文件(根据实际服务器环境做修改), 宿主机目录:容器目录
     volumes:
-      # 读取外部化配置文件(根据实际服务器环境做修改), 宿主机目录:容器目录
-      - ./logs/:/logs # 日志
-      - ./files/:/data/files # 上传文件目录
-      - ./application.yml:/application.yml # 启动配置文件
-      - ./application-demo.yml:/application-demo.yml
-      - ./logback-spring.xml:/logback-spring.xml # 日志框架配置
-      - ./ip2region/ip2region.xdb :/data/ip2region/ip2region.xdb # ip归属地数据库
+      # 日志
+      - ./data/logs/:/logs
+      # 上传文件目录
+      - ./data/files/:/data/files
+    environment:
+      # mysql数据库连接地址
+      - MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dax-pay-single?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+      # mysql数据库账号
+      - MYSQL_USERNAME=root
+      # mysql数据库密码
+      - MYSQL_PASSWORD=root
+      # Redis 连接地址
+      - REDIS_HOST=127.0.0.1
+      # Redis 端口
+      - REDIS_PORT=6379
+      # Redis 库号
+      - REDIS_DATABASE=5
+      # Redis 密码, 如果不设置密码则留空
+      - REDIS_PASSWORD=daxpay
+      # 是否关闭swagger接口
+      - KNIFE4J_PRODUCTION=false
+      # 是否启用超级管理员登录, 正式环境不要开启
+      - DAXPAY_ENABLE_ADMIN=true
+      # 用户管理列表中是否显示超级管理员
+      - DAXPAY_ADMIN-IN-LIST=true

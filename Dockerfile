@@ -1,8 +1,8 @@
-# java8基础镜像
-FROM registry.cn-beijing.aliyuncs.com/xxm1995/java8
+# java21基础镜像
+FROM m.daocloud.io/docker.io/eclipse-temurin:21.0.4_7-jdk-alpine
 
 # 作者信息
-MAINTAINER xxm1995@outlook.com
+MAINTAINER daxpay@daxpay.cn
 
 # 时区设置
 ENV TZ=Asia/Shanghai
@@ -20,10 +20,10 @@ ENV JAVA_ARGS=""
 WORKDIR /
 
 # 端口暴露
-EXPOSE 9000
+EXPOSE 9999
 
 # 添加执行jar包
-ADD daxpay-single-start/target/daxpay-start.jar dax-start.jar
+ADD daxpay-single-server/target/daxpay-server.jar daxpay-server.jar
 
 # 执行启动命令
-CMD java $JAVA_OPTS -jar dax-start.jar
+CMD java $JAVA_OPTS -jar daxpay-server.jar

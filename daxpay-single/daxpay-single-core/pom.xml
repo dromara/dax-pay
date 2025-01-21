@@ -4,25 +4,32 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cn.daxpay.single</groupId>
+        <groupId>org.dromara.daxpay</groupId>
         <artifactId>daxpay-single</artifactId>
-        <version>2.0.8</version>
+        <version>3.0.0.beta4</version>
     </parent>
 
     <artifactId>daxpay-single-core</artifactId>
-    <description>支付核心依赖包</description>
+
 
     <dependencies>
         <!-- platform核心包 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
-            <artifactId>bootx-common-core</artifactId>
+            <artifactId>bootx-platform-core</artifactId>
+            <version>${bootx-platform.version}</version>
         </dependency>
-        <!-- lombok -->
+        <!-- javaEE web相关 -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.20</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
+
 </project>

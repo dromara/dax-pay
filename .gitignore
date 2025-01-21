@@ -14,3 +14,5 @@ target/
 build/
 logs/
 rebel.xml
+/daxpay-single-server/src/main/resources/static/web/
+/daxpay-single-server/src/main/resources/static/h5/
