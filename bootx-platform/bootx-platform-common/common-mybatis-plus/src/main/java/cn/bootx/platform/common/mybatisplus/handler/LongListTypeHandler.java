@@ -8,6 +8,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -19,13 +20,14 @@ import java.util.List;
 @MappedJdbcTypes({JdbcType.VARCHAR,JdbcType.LONGVARCHAR})
 public class LongListTypeHandler  extends AbstractJsonTypeHandler<List<Long>> {
 
-    /**
-     * 默认初始化
-     */
+
     public LongListTypeHandler(Class<?> type) {
         super(type);
     }
 
+    public LongListTypeHandler(Class<?> type, Field field) {
+        super(type, field);
+    }
     @Override
     public List<Long> parse(String json) {
         if (StrUtil.isNotBlank(json)){
