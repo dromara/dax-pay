@@ -575,7 +575,7 @@ CREATE TABLE `pay_alloc_config`  (
                                      `auto_alloc` tinyint(1) NULL DEFAULT NULL COMMENT '开启自动分账',
                                      `auto_finish` tinyint(1) NULL DEFAULT NULL COMMENT '开启自动完结',
                                      `min_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '分账起始额',
-                                     `delay_time` datetime NULL DEFAULT NULL COMMENT '分账延迟时长(分钟)',
+                                     `delay_time` int NULL DEFAULT NULL COMMENT '分账延迟时长(分钟)',
                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '分账配置参数' ROW_FORMAT = DYNAMIC;
 
