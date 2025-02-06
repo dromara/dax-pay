@@ -27,7 +27,7 @@ public class AllocConfig extends MchAppBaseEntity implements ToResult<AllocConfi
     /** 是否自动分账 */
     private Boolean autoAlloc;
 
-    /** 自动完结 */
+    /** 是否自动完结 */
     private Boolean autoFinish;
 
     /** 分账起始额 */

@@ -573,6 +573,7 @@ CREATE TABLE `pay_alloc_config`  (
                                      `deleted` tinyint(1) NOT NULL COMMENT '删除标志',
                                      `app_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '应用号',
                                      `auto_alloc` tinyint(1) NULL DEFAULT NULL COMMENT '开启自动分账',
+                                     `auto_finish` tinyint(1) NULL DEFAULT NULL COMMENT '开启自动完结',
                                      `min_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '分账起始额',
                                      `delay_time` datetime NULL DEFAULT NULL COMMENT '分账延迟时长(分钟)',
                                      PRIMARY KEY (`id`) USING BTREE
