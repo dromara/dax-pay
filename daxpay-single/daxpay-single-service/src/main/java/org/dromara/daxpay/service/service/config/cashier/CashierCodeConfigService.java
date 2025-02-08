@@ -78,7 +78,7 @@ public class CashierCodeConfigService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        if (cashierCodeConfigManager.existedById(id)){
+        if (!cashierCodeConfigManager.existedById(id)){
             throw new DataNotExistException("收银码牌配置不存在");
         }
         // 删除类型配置

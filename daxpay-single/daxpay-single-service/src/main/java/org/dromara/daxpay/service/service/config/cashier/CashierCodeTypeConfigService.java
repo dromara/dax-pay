@@ -91,7 +91,7 @@ public class CashierCodeTypeConfigService {
      * 删除
      */
     public void delete(Long id) {
-          if (codeTypeConfigManager.existedById(id)){
+          if (!codeTypeConfigManager.existedById(id)){
             throw new DataNotExistException("该码牌类型配置不存在");
         }
         codeTypeConfigManager.deleteById(id);
