@@ -152,12 +152,20 @@ public class WechatPayConfigService {
         payConfig.setMchKey(wechatPayConfig.getApiKeyV2());
         payConfig.setApiV3Key(wechatPayConfig.getApiKeyV3());
         // 注意不要使用base64的方式进行配置, 因为wxjava 是直接读取文本并不会进行解码, 会导致证书异常
-        payConfig.setPublicKeyContent(Base64.decode(wechatPayConfig.getPublicKey()));
+        if (StrUtil.isNotBlank(wechatPayConfig.getPublicKey())){
+            payConfig.setPublicKeyContent(Base64.decode(wechatPayConfig.getPublicKey()));
+        }
         payConfig.setPublicKeyId(wechatPayConfig.getPublicKeyId());
-        payConfig.setPrivateCertContent(Base64.decode(wechatPayConfig.getPrivateCert()));
-        payConfig.setPrivateKeyContent(Base64.decode(wechatPayConfig.getPrivateKey()));
+        if (StrUtil.isNotBlank(wechatPayConfig.getPrivateCert())){
+            payConfig.setPrivateCertContent(Base64.decode(wechatPayConfig.getPrivateCert()));
+        }
+        if (StrUtil.isNotBlank(wechatPayConfig.getPrivateKey())){
+            payConfig.setPrivateKeyContent(Base64.decode(wechatPayConfig.getPrivateKey()));
+        }
         payConfig.setCertSerialNo(wechatPayConfig.getCertSerialNo());
-        payConfig.setKeyContent(Base64.decode(wechatPayConfig.getP12()));
+        if (StrUtil.isNotBlank(wechatPayConfig.getP12())){
+            payConfig.setKeyContent(Base64.decode(wechatPayConfig.getP12()));
+        }
         WxPayService wxPayService = new WxPayServiceImpl();
         wxPayService.setConfig(payConfig);
         return wxPayService;
