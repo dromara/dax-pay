@@ -11,6 +11,7 @@ import cn.bootx.platform.iam.param.permission.PermMenuParam;
 import cn.bootx.platform.iam.result.permission.PermMenuResult;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 菜单权限
@@ -55,13 +57,17 @@ public class PermMenuService {
     @Transactional(rollbackFor = Exception.class)
     public void update(PermMenuParam param) {
         PermMenu permMenu = permMenuManager.findById(param.getId()).orElseThrow(() -> new DataNotExistException("菜单不存在"));
-        BeanUtil.copyProperties(param, permMenu, CopyOptions.create().ignoreNullValue());
 
         // 判断是否是一级菜单，是的话清空父菜单ID
         if (param.isRoot()) {
             permMenu.setPid(null);
         }
-        // TODO 检查上级菜单是否出现了循环依赖
+        // 检查上级菜单是否出现了循环依赖
+        List<PermMenuResult> tree = this.tree(param.getClientCode());
+        if (this.isDescendant(permMenu.toResult(), param.getPid())) {
+            throw new BizException("上级菜单不能是自身或下级菜单");
+        }
+        BeanUtil.copyProperties(param, permMenu, CopyOptions.create().ignoreNullValue());
         permMenuManager.updateById(permMenu);
     }
 
@@ -105,6 +111,33 @@ public class PermMenuService {
         }
         roleMenuManager.deleteByMenuId(id);
         permMenuManager.deleteById(id);
+    }
+
+    /**
+     * 判断某个菜单是否是另一个菜单的下级菜单
+     *
+     * @param menu 当前菜单
+     * @param pid 要设置的父菜单
+     * @return 是否为下级菜单
+     */
+    private boolean isDescendant(PermMenuResult menu, Long pid) {
+        if (CollUtil.isEmpty(menu.getChildren())) {
+            return false;
+        }
+        // 如果是否为自身
+        if (Objects.equals(menu.getId(), pid)) {
+            return true;
+        }
+        // 检测是否为子孙菜单
+        for (var child : menu.getChildren()) {
+            if (child.getId().equals(pid)) {
+                return true;
+            }
+            if (this.isDescendant(child, pid)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
