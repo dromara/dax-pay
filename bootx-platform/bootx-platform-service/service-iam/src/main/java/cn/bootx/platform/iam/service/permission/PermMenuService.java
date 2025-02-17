@@ -121,12 +121,12 @@ public class PermMenuService {
      * @return 是否为下级菜单
      */
     private boolean isDescendant(PermMenuResult menu, Long pid) {
-        if (CollUtil.isEmpty(menu.getChildren())) {
-            return false;
-        }
         // 如果是否为自身
         if (Objects.equals(menu.getId(), pid)) {
             return true;
+        }
+        if (CollUtil.isEmpty(menu.getChildren())) {
+            return false;
         }
         // 检测是否为子孙菜单
         for (var child : menu.getChildren()) {
