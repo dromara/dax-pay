@@ -1,8 +1,8 @@
 package cn.bootx.platform.iam.handler;
 
-import cn.bootx.platform.common.config.BootxConfigProperties;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.core.entity.UserDetail;
+import cn.bootx.platform.iam.service.client.ClientCodeService;
 import cn.bootx.platform.iam.service.upms.UserRolePremService;
 import cn.bootx.platform.starter.auth.service.RouterCheck;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
@@ -25,7 +25,7 @@ public class UserPathRouterCheck implements RouterCheck {
 
     private final UserRolePremService userRoleService;
 
-    private final BootxConfigProperties configProperties;
+    private final ClientCodeService clientCodeService;
 
     private final AntPathMatcher matcher = new AntPathMatcher();
 
@@ -45,7 +45,7 @@ public class UserPathRouterCheck implements RouterCheck {
         }
         UserDetail userDetail = UserDetailOpt.get();
         // 获取用户拥有的请求路径权限
-        List<String> paths = userRoleService.findPathByUser(userDetail.getId(), method, configProperties.getClientCode());
+        List<String> paths = userRoleService.findPathByUser(userDetail.getId(), method, clientCodeService.getClientCode());
         return paths.stream().anyMatch(pattern -> matcher.match(pattern, path));
     }
 

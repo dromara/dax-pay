@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @author xxm
  * @since 2021/11/2
  */
+@Validated
 @Tag(name = "定时任务")
 @RestController
 @RequestMapping("/quartz")
@@ -49,7 +51,7 @@ public class QuartzJobController {
 
     @Operation(summary = "单条")
     @GetMapping("/findById")
-    public Result<QuartzJobResult> findById(Long id) {
+    public Result<QuartzJobResult> findById(@NotNull(message = "主键不可为空") Long id) {
         return Res.ok(quartzJobService.findById(id));
     }
 
@@ -76,7 +78,7 @@ public class QuartzJobController {
 
     @Operation(summary = "删除")
     @PostMapping("/delete")
-    public Result<Void> delete(Long id) {
+    public Result<Void> delete(@NotNull(message = "主键不可为空") Long id) {
         quartzJobService.delete(id);
         return Res.ok();
     }

@@ -40,7 +40,7 @@ public class JobLogAspectHandler {
     @Around("logPointCut()")
     public Object doAfterReturning(ProceedingJoinPoint pjp) throws Throwable {
 //        Class<?> clazz = pjp.getTarget().getClass();
-//        JobLog jobLog = clazz.getAnnotation(Joblog.class);
+//        JobLog jobLog = clazz.getAnnotation(JobLog.class);
 //        LocalDateTime start = LocalDateTime.now();
 //        try {
             Object result = pjp.proceed();

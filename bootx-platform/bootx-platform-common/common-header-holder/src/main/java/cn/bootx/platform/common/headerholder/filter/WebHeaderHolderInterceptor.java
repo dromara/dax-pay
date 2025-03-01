@@ -8,20 +8,26 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Enumeration;
 
 /**
- * 请求头保存
+ * 请求头数据保存, 放在过滤链最前方
  *
  * @author xxm
  * @since 2021/4/20
  */
 @RequiredArgsConstructor
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-public class WebHeaderHolderInterceptor extends OncePerRequestFilter {
+public class WebHeaderHolderInterceptor extends OncePerRequestFilter implements OrderedFilter {
+
+    @Override
+    public int getOrder() {
+        return HIGHEST_PRECEDENCE;
+    }
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -36,7 +42,8 @@ public class WebHeaderHolderInterceptor extends OncePerRequestFilter {
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
                 String header = headerNames.nextElement();
-                HolderContextHolder.put(header, request.getHeader(header));
+                // key值统一转换为小写
+                HolderContextHolder.put(header.toLowerCase(), request.getHeader(header));
             }
             chain.doFilter(request, response);
         }
@@ -44,5 +51,4 @@ public class WebHeaderHolderInterceptor extends OncePerRequestFilter {
             HolderContextHolder.clear();
         }
     }
-
 }

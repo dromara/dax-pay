@@ -1,6 +1,9 @@
 package cn.bootx.platform.starter.file.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
+import cn.bootx.platform.core.annotation.OperateLog;
+import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
@@ -12,8 +15,11 @@ import com.fhs.core.trans.anno.TransMethodResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,16 +29,18 @@ import org.springframework.web.multipart.MultipartFile;
  * @author xxm
  * @since 2022/1/12
  */
+@Validated
 @Tag(name = "文件上传")
 @RestController
+@RequestGroup(groupCode = "FIleUpLoad", groupName = "文件上传管理", moduleCode = "starter")
 @RequestMapping("/file")
 @RequiredArgsConstructor
 public class FIleUpLoadController {
 
     private final FileUploadService uploadService;
 
-    @IgnoreAuth
     @TransMethodResult
+    @RequestPath("分页")
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<UploadFileResult>> page(PageParam pageParam, UploadFileQuery param) {
@@ -40,22 +48,25 @@ public class FIleUpLoadController {
     }
 
     @TransMethodResult
+    @RequestPath("获取单条详情")
     @Operation(summary = "获取单条详情")
     @GetMapping("/findById")
-    public Result<UploadFileResult> findById(Long id) {
+    public Result<UploadFileResult> findById(@NotNull(message = "主键不可为空") Long id) {
         return Res.ok(uploadService.findById(id));
     }
 
     @IgnoreAuth
     @Operation(summary = "根据URL获取单条详情")
     @GetMapping("/findByUrl")
-    public Result<UploadFileResult> findById(String url) {
+    public Result<UploadFileResult> findById(@NotBlank(message = "文件URL不可为空") String url) {
         return Res.ok(uploadService.findById(url));
     }
 
     @Operation(summary = "删除")
+    @RequestPath("删除")
     @PostMapping("/delete")
-    public Result<Void> delete(Long id) {
+    @OperateLog(title = "删除文件", businessType = OperateLog.BusinessType.DELETE, saveParam = true)
+    public Result<Void> delete(@NotNull(message = "主键不可为空") Long id) {
         uploadService.delete(id);
         return Res.ok();
     }

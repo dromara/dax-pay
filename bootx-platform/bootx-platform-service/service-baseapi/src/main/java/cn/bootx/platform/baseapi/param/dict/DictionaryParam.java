@@ -2,7 +2,7 @@ package cn.bootx.platform.baseapi.param.dict;
 
 import cn.bootx.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
@@ -24,11 +24,11 @@ public class DictionaryParam implements Serializable {
     @Schema(description = "主键")
     private Long id;
 
-    @NotEmpty(message = "编码不可以为空", groups = ValidationGroup.add.class)
+    @NotBlank(message = "编码不可以为空", groups = ValidationGroup.add.class)
     @Schema(description = "编码")
     private String code;
 
-    @NotEmpty(message = "编码不可以为空", groups = ValidationGroup.add.class)
+    @NotBlank(message = "编码不可以为空", groups = ValidationGroup.add.class)
     @Schema(description = "名称")
     private String name;
 

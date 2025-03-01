@@ -36,7 +36,7 @@ public class IpToRegionService {
     private Searcher getSearcherByFile(){
         try {
             return Searcher.newWithFileOnly(auditLogProperties.getIp2region().getFilePath());
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -52,7 +52,7 @@ public class IpToRegionService {
                 XDB_INDEX = Searcher.loadVectorIndexFromFile(filePath);
             }
             return Searcher.newWithVectorIndex(filePath, XDB_INDEX);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -68,7 +68,7 @@ public class IpToRegionService {
                 XDB_BUFF = Searcher.loadContentFromFile(filePath);
             }
             return Searcher.newWithBuffer(XDB_BUFF);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -100,7 +100,7 @@ public class IpToRegionService {
         };
         // 无法进行查询
         if (Objects.isNull(searcher)){
-            log.warn("");
+            log.warn("无法进行查询");
             return null;
         }
 

@@ -7,13 +7,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>cn.bootx.platform</groupId>
     <artifactId>bootx-platform</artifactId>
-    <version>3.0.0.beta4</version>
+    <version>3.0.0.beta5</version>
     <packaging>pom</packaging>
     <description>基础脚手架服务</description>
 
@@ -25,12 +25,12 @@
     </modules>
 
     <properties>
-        <bootx-platform.version>3.0.0.beta4</bootx-platform.version>
-        <!-- 再高的的新版本与会knife4j 4.5冲突 -->
-        <springdoc.version>2.5.0</springdoc.version>
-        <hutool.version>5.8.35</hutool.version>
-        <bouncycastle.version>1.79</bouncycastle.version>
-        <knife4j.version>4.5.0</knife4j.version>
+        <bootx-platform.version>3.0.0.beta5</bootx-platform.version>
+        <!-- 再高的的新版本与会knife4j 4.5冲突, 目前使用三方的knife4j依赖 -->
+        <springdoc.version>2.7.0</springdoc.version>
+        <hutool.version>5.8.31</hutool.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <knife4j.version>4.6.0</knife4j.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
         <dynamic-datasource.version>4.3.1</dynamic-datasource.version>

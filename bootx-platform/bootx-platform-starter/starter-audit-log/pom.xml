@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-starter</artifactId>
-        <version>3.0.0.beta4</version>
+        <version>3.0.0.beta5</version>
     </parent>
 
     <artifactId>starter-audit-log</artifactId>
@@ -52,6 +52,12 @@
             <groupId>org.lionsoul</groupId>
             <artifactId>ip2region</artifactId>
             <version>${ip2region.version}</version>
+        </dependency>
+        <!-- hutool 请求工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
         </dependency>
     </dependencies>
 

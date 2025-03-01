@@ -1,7 +1,6 @@
 package cn.bootx.platform.common.mybatisplus.interceptor;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -32,14 +31,6 @@ public class MpInterceptorConfiguration {
     @Bean
     public MpInterceptor optimisticLockerInnerInterceptor() {
         return new MpInterceptor(new OptimisticLockerInnerInterceptor(), 1);
-    }
-
-    /**
-     * 防止全表更新与删除
-     */
-    @Bean
-    public MpInterceptor blockAttackInnerInterceptor() {
-        return new MpInterceptor(new BlockAttackInnerInterceptor(), 2);
     }
 
 }

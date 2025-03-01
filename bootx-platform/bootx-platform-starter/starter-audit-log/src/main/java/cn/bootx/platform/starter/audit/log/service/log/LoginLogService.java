@@ -8,6 +8,7 @@ import cn.bootx.platform.starter.audit.log.convert.LogConvert;
 import cn.bootx.platform.starter.audit.log.dao.LoginLogDbManager;
 import cn.bootx.platform.starter.audit.log.entity.LoginLogDb;
 import cn.bootx.platform.starter.audit.log.param.LoginLogParam;
+import cn.bootx.platform.starter.audit.log.param.LoginLogQuery;
 import cn.bootx.platform.starter.audit.log.result.LoginLogResult;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +51,8 @@ public class LoginLogService {
     /**
      * 分页
      */
-    public PageResult<LoginLogResult> page(PageParam pageParam, LoginLogParam loginLogParam) {
-        return MpUtil.toPageResult(loginLogManager.page(pageParam, loginLogParam));
+    public PageResult<LoginLogResult> page(PageParam pageParam, LoginLogQuery query) {
+        return MpUtil.toPageResult(loginLogManager.page(pageParam, query));
     }
 
     /**

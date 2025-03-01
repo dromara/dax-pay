@@ -1,6 +1,8 @@
-package org.dromara.daxpay;
+package org.dromara.daxpay.start.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.dromara.daxpay.start.handler.FrontH5Interceptor;
+import org.dromara.daxpay.start.handler.FrontWebInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

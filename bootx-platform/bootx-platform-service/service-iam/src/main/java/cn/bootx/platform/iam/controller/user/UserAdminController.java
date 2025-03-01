@@ -14,8 +14,8 @@ import cn.bootx.platform.iam.param.user.UserInfoParam;
 import cn.bootx.platform.iam.param.user.UserInfoQuery;
 import cn.bootx.platform.iam.result.user.UserInfoResult;
 import cn.bootx.platform.iam.result.user.UserWholeInfoResult;
-import cn.bootx.platform.iam.service.service.UserAdminService;
-import cn.bootx.platform.iam.service.service.UserQueryService;
+import cn.bootx.platform.iam.service.user.UserAdminService;
+import cn.bootx.platform.iam.service.user.UserQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotEmpty;
@@ -45,13 +45,14 @@ public class UserAdminController {
     @RequestPath("根据用户id查询用户 ")
     @Operation(summary = "根据用户id查询用户")
     @GetMapping("/findById")
-    public Result<UserInfoResult> findById(Long id) {
+    public Result<UserInfoResult> findById(@NotNull(message = "主键不可为空") Long id) {
         return Res.ok(userQueryService.findById(id));
     }
 
     @RequestPath("添加用户")
     @Operation(summary = "添加用户")
     @PostMapping("/add")
+    @OperateLog(title = "添加用户", businessType = OperateLog.BusinessType.ADD, saveParam = true)
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) UserInfoParam userInfoParam) {
         userAdminService.add(userInfoParam);
         return Res.ok();
@@ -60,6 +61,7 @@ public class UserAdminController {
     @RequestPath("修改用户")
     @Operation(summary = "修改用户")
     @PostMapping("/update")
+    @OperateLog(title = "修改用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) UserInfoParam userInfoParam) {
         userAdminService.update(userInfoParam);
         return Res.ok();
@@ -67,8 +69,8 @@ public class UserAdminController {
 
     @RequestPath("重置密码")
     @Operation(summary = "重置密码")
-    @OperateLog(title = "重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @PostMapping("/restartPassword")
+    @OperateLog(title = "重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     public Result<Void> restartPassword(@RequestBody @Validated RestartPwdParam param) {
         userAdminService.restartPassword(param.getUserId(), param.getNewPassword());
         return Res.ok();
@@ -76,44 +78,44 @@ public class UserAdminController {
 
     @RequestPath("批量重置密码")
     @Operation(summary = "批量重置密码")
-    @OperateLog(title = "批量重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @PostMapping("/restartPasswordBatch")
+    @OperateLog(title = "批量重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     public Result<Void> restartPasswordBatch(@RequestBody @Validated RestartPwdBatchParam param) {
         userAdminService.restartPasswordBatch(param.getUserIds(), param.getNewPassword());
         return Res.ok();
     }
 
     @RequestPath("封禁用户")
-    @OperateLog(title = "封禁用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @Operation(summary = "封禁用户")
     @PostMapping("/ban")
-    public Result<Void> ban(Long userId) {
+    @OperateLog(title = "封禁用户", businessType = OperateLog.BusinessType.GRANT, saveParam = true)
+    public Result<Void> ban(@NotNull(message = "用户不可为空") Long userId) {
         userAdminService.ban(userId);
         return Res.ok();
     }
 
     @RequestPath("批量封禁用户")
-    @OperateLog(title = "批量封禁用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @Operation(summary = "批量封禁用户")
     @PostMapping("/banBatch")
+    @OperateLog(title = "批量封禁用户", businessType = OperateLog.BusinessType.GRANT, saveParam = true)
     public Result<Void> banBatch(@RequestBody @NotEmpty(message = "用户集合不可为空") List<Long> userIds) {
         userAdminService.banBatch(userIds);
         return Res.ok();
     }
 
     @RequestPath("解锁用户")
-    @OperateLog(title = "解锁用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @Operation(summary = "解锁用户")
     @PostMapping("/unlock")
+    @OperateLog(title = "解锁用户", businessType = OperateLog.BusinessType.GRANT, saveParam = true)
     public Result<Void> unlock(@NotNull(message = "用户不可为空") Long userId) {
         userAdminService.unlock(userId);
         return Res.ok();
     }
 
     @RequestPath("批量解锁用户")
-    @OperateLog(title = "批量解锁用户", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
     @Operation(summary = "批量解锁用户")
     @PostMapping("/unlockBatch")
+    @OperateLog(title = "批量解锁用户", businessType = OperateLog.BusinessType.GRANT, saveParam = true)
     public Result<Void> unlockBatch(@RequestBody @NotEmpty(message = "用户集合不可为空") List<Long> userIds) {
         userAdminService.unlockBatch(userIds);
         return Res.ok();
@@ -125,5 +127,4 @@ public class UserAdminController {
     public Result<PageResult<UserWholeInfoResult>> page(PageParam pageParam, UserInfoQuery query) {
         return Res.ok(userAdminService.page(pageParam, query));
     }
-
 }

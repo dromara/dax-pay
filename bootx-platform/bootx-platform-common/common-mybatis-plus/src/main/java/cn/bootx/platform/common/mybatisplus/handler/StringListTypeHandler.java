@@ -28,10 +28,11 @@ public class StringListTypeHandler extends AbstractJsonTypeHandler<List<String>>
     public StringListTypeHandler(Class<?> type, Field field) {
         super(type, field);
     }
+
     @Override
     public List<String> parse(String json) {
         if (StrUtil.isNotBlank(json)){
-            return JsonUtil.toBean(json, new TypeReference<>() {}, false);
+            return JSONUtil.toBean(json, new TypeReference<>() {}, false);
         }
         return List.of();
     }

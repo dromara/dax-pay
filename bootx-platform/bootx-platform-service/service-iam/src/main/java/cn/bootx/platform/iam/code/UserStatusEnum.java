@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 用户状态码
- *
+ * 用户状态
+ * 字典 user_status
  * @author xxm
  * @since 2021/9/9
  */

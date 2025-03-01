@@ -1,4 +1,4 @@
-package cn.bootx.platform.iam.service.service;
+package cn.bootx.platform.iam.service.user;
 
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.exception.BizException;
@@ -111,7 +111,7 @@ public class UserAdminService {
      * 批量解锁用户
      */
     public void unlockBatch(List<Long> userIds) {
-        userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.NORMAL.getName());
+        userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.NORMAL.getCode());
     }
 
     /**
@@ -122,7 +122,6 @@ public class UserAdminService {
         if (userQueryService.existsAccount(userInfoParam.getAccount())) {
             throw new BizException("账号已存在");
         }
-        // 注册时间
         UserInfo userInfo = UserInfo.init(userInfoParam);
         userInfo.setAdministrator(false)
                 .setStatus(UserStatusEnum.NORMAL.getCode())

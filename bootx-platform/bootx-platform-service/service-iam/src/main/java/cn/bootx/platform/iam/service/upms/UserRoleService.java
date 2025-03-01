@@ -4,14 +4,13 @@ import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.ValidationFailedException;
-import cn.bootx.platform.core.util.TreeBuildUtil;
 import cn.bootx.platform.iam.dao.role.RoleManager;
 import cn.bootx.platform.iam.dao.upms.UserRoleManager;
 import cn.bootx.platform.iam.dao.user.UserInfoManager;
+import cn.bootx.platform.iam.entity.role.Role;
 import cn.bootx.platform.iam.entity.upms.UserRole;
 import cn.bootx.platform.iam.entity.user.UserInfo;
 import cn.bootx.platform.iam.result.role.RoleResult;
-import cn.bootx.platform.iam.service.role.RoleQueryService;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +36,6 @@ public class UserRoleService {
 
     private final RoleManager roleManager;
 
-    private final RoleQueryService roleQueryService;
-
     private final UserInfoManager userInfoManager;
 
     private final UserRoleManager userRoleManager;
@@ -49,12 +46,7 @@ public class UserRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(Long userId, List<Long> roleIds) {
         // 判断是否越权
-        List<RoleResult> roleTree = roleQueryService.tree();
-        List<Long> roleIdsByUser = TreeBuildUtil.unfold(roleTree, RoleResult::getChildren)
-                .stream()
-                .distinct()
-                .map(RoleResult::getId)
-                .toList();
+        List<Long> roleIdsByUser = this.findRoleIdsByUser();
         if (!CollUtil.containsAll(roleIdsByUser, roleIds)){
             throw new ValidationFailedException("角色分配超出了可分配的范围");
         }
@@ -71,13 +63,7 @@ public class UserRoleService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void saveAssignBatch(List<Long> userIds, List<Long> roleIds) {
-        // 判断是否越权
-        List<RoleResult> roleTree = roleQueryService.tree();
-        List<Long> roleIdsByUser = TreeBuildUtil.unfold(roleTree, RoleResult::getChildren)
-                .stream()
-                .distinct()
-                .map(RoleResult::getId)
-                .toList();
+        List<Long> roleIdsByUser = this.findRoleIdsByUser();
         if (!CollUtil.containsAll(roleIdsByUser, roleIds)){
             throw new ValidationFailedException("角色分配超出了可分配的范围");
         }
@@ -118,6 +104,18 @@ public class UserRoleService {
         return roleIds.stream()
             .map(roleId -> new UserRole(userId, roleId))
             .toList();
+    }
+
+    /**
+     * 查询用户关联的角色, 超级管理员返回全部
+     */
+    private List<Long> findRoleIdsByUser() {
+        UserDetail user = SecurityUtil.getUser();
+        if (user.isAdmin()){
+            return roleManager.findAll().stream().map(Role::getId).toList();
+        } else {
+            return findRoleIdsByUser(user.getId());
+        }
     }
 
     /**

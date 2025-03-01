@@ -53,6 +53,9 @@ public interface CommonCode {
     /** 追踪Id */
     String TRACE_ID = "traceId";
 
+    /** 终端 */
+    String CLIENT = "x-client-code";
+
     /** 用户 */
     String USER = "user";
 

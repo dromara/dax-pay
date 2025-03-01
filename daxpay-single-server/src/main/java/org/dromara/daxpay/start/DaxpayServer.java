@@ -1,4 +1,4 @@
-package org.dromara.daxpay;
+package org.dromara.daxpay.start;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;

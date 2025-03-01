@@ -1,6 +1,7 @@
 package cn.bootx.platform.iam.controller.permission;
 
 import cn.bootx.platform.core.annotation.InternalPath;
+import cn.bootx.platform.core.annotation.OperateLog;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.entity.UserDetail;
@@ -12,7 +13,10 @@ import cn.bootx.platform.iam.service.permission.PermPathSyncService;
 import cn.bootx.platform.iam.service.upms.UserRolePremService;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,16 +45,16 @@ public class PermPathController {
     private final PermPathSyncService permPathSyncService;
 
     @RequestPath("获取请求权限详情")
-    @Operation(summary = "获取详情")
+    @Operation(summary = "获取请求权限详情")
     @GetMapping("/findById")
-    public Result<PermPathResult> findById(Long id) {
+    public Result<PermPathResult> findById(@NotNull(message = "主键不可为空") Long id) {
         return Res.ok(pathService.findById(id));
     }
 
     @RequestPath("请求权限树")
     @Operation(summary = "请求权限树")
     @GetMapping("/tree")
-    public Result<List<PermPathResult>> tree(String clientCode) {
+    public Result<List<PermPathResult>> tree(@NotBlank(message = "终端编码不可为空") @Parameter(description = "终端编码") String clientCode) {
         UserDetail user = SecurityUtil.getUser();
         if (user.isAdmin()){
             return Res.ok(pathService.tree(clientCode));
@@ -61,6 +65,7 @@ public class PermPathController {
     @InternalPath
     @Operation(summary = "根据系统配置同步请求权限数据")
     @PostMapping("/sync")
+    @OperateLog(title = "根据系统配置同步请求权限数据", businessType = OperateLog.BusinessType.SYNC, saveParam = true)
     public Result<Void> sync() {
         permPathSyncService.sync();
         return Res.ok();

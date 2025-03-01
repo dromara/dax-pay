@@ -26,6 +26,15 @@ public class OperateLogParam {
     @Schema(description = "操作人员账号")
     private String account;
 
+    @Schema(description = "终端编码")
+    private String client;
+
+    @Schema(description = "浏览器类型")
+    private String browser;
+
+    @Schema(description = "操作系统")
+    private String os;
+
     @Schema(description = "业务类型")
     private String businessType;
 

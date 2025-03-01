@@ -156,11 +156,11 @@ public class UploadFileResult extends BaseResult implements TransPojo {
      * owner.setId("ownerid");
      * acl.setOwner(owner);
      * // 保留Owner的完全控制权限（注：如果不设置该权限，该对象Owner自身将没有访问权限）
-     * acl.grantPermission(new CanonicalGrantee("ownerid"), Permission.PERMISSION_FULL_CONTROL);
+     * acl.grantPermission(new CanonicalGrantee("ownerid"), DataPermScope.PERMISSION_FULL_CONTROL);
      * // 为指定用户设置完全控制权限
-     * acl.grantPermission(new CanonicalGrantee("userid"), Permission.PERMISSION_FULL_CONTROL);
+     * acl.grantPermission(new CanonicalGrantee("userid"), DataPermScope.PERMISSION_FULL_CONTROL);
      * // 为所有用户设置读权限
-     * acl.grantPermission(GroupGrantee.ALL_USERS, Permission.PERMISSION_READ);
+     * acl.grantPermission(GroupGrantee.ALL_USERS, DataPermScope.PERMISSION_READ);
      * setFileAcl(acl);
      * <pre/>
      */

@@ -5,8 +5,11 @@ import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.*;
 import lombok.experimental.UtilityClass;
 
+import java.util.Collection;
+
 /**
- * json工具类, 基于hutool的进行封装, 对java8的LocalDateTime时间格式进行转换, 但无法处理LocalDate, LocalTime格式, 需要使用JacksonUtil进行处理
+ * json工具类, 基于hutool的进行封装,
+ * 对java8的LocalDateTime时间格式进行转换, 但无法处理LocalDate, LocalTime格式, 需要使用JacksonUtil进行处理
  * @author xxm
  * @since 2024/6/28
  */
@@ -46,6 +49,14 @@ public class JsonUtil {
      */
     public String toJsonStr(Object object){
         JSONObject jsonObject = new JSONObject(object, JSON_CONFIG);
+        return JSONUtil.toJsonStr(jsonObject);
+    }
+
+    /**
+     * 序列化为字符串
+     */
+    public String toJsonStr(Collection<?> object){
+        JSONArray jsonObject = new JSONArray(object, JSON_CONFIG);
         return JSONUtil.toJsonStr(jsonObject);
     }
 

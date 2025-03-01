@@ -6,14 +6,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-single-server</artifactId>
     <packaging>jar</packaging>
-    <version>3.0.0.beta4</version>
+    <version>3.0.0.beta5</version>
     <description>daxpay服务端</description>
 
     <properties>
@@ -29,8 +29,8 @@
         <easypoi.version>4.5.0</easypoi.version>
         <minio.version>8.5.2</minio.version>
 
-        <bootx-platform.version>3.0.0.beta4</bootx-platform.version>
-        <daxpay.version>3.0.0.beta4</daxpay.version>
+        <bootx-platform.version>3.0.0.beta5</bootx-platform.version>
+        <daxpay.version>3.0.0.beta5</daxpay.version>
     </properties>
 
     <dependencies>

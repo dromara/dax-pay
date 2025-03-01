@@ -1,4 +1,4 @@
-package cn.bootx.platform.iam.service.service;
+package cn.bootx.platform.iam.service.user;
 
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.iam.dao.user.UserExpandInfoManager;

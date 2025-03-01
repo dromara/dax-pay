@@ -18,6 +18,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -82,6 +83,19 @@ public class RestExceptionHandler {
         StringBuilder message = new StringBuilder();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             message.append(violation.getMessage()).append(System.lineSeparator());
+        }
+        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message.toString(), MDC.get(CommonCode.TRACE_ID));
+    }
+
+    /**
+     * 请求参数校验未通过
+     */
+    @ExceptionHandler({ MethodArgumentNotValidException.class })
+    public Result<Void> handleBusinessException(MethodArgumentNotValidException ex) {
+        log.info(ex.getMessage(), ex);
+        StringBuilder message = new StringBuilder();
+        for (var violation : ex.getAllErrors()) {
+            message.append(violation.getDefaultMessage()).append(System.lineSeparator());
         }
         return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message.toString(), MDC.get(CommonCode.TRACE_ID));
     }

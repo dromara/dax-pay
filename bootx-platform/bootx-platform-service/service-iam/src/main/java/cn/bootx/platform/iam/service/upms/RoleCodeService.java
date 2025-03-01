@@ -152,7 +152,7 @@ public class RoleCodeService {
         // 权限码列表
         List<PermCode> permCodes = allPermCodes.stream()
                 .filter(PermCode::isLeaf)
-                .toList();
+                .toList();;
         // 如果有有上级角色, 显示上级角色已分配的权限
         if (Objects.nonNull(role.getPid())){
             List<Long> codeIds = roleCodeManager.findAllByRole(role.getPid())

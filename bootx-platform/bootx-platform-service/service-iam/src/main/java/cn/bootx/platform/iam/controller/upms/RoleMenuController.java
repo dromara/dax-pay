@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.controller.upms;
 
+import cn.bootx.platform.core.annotation.OperateLog;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
@@ -9,8 +10,12 @@ import cn.bootx.platform.iam.param.permission.PermMenuAssignParam;
 import cn.bootx.platform.iam.result.permission.PermMenuResult;
 import cn.bootx.platform.iam.service.upms.RoleMenuService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +26,7 @@ import java.util.List;
  * @author xxm
  * @since 2021/7/12
  */
+@Validated
 @Tag(name = "角色菜单权限关系")
 @RestController
 @RequestMapping("/role/menu")
@@ -33,7 +39,8 @@ public class RoleMenuController {
     @RequestPath("保存请求权限关系")
     @Operation(summary = "保存请求权限关系")
     @PostMapping("/save")
-    public Result<Boolean> save(@RequestBody PermMenuAssignParam param) {
+    @OperateLog(title = "保存请求权限关系", businessType = OperateLog.BusinessType.GRANT, saveParam = true)
+    public Result<Boolean> save(@RequestBody @Validated PermMenuAssignParam param) {
         ValidationUtil.validateParam(param);
         rolePermService.saveAssign(param);
         return Res.ok(true);
@@ -43,14 +50,18 @@ public class RoleMenuController {
     @RequestPath("指定角色下的菜单权限树(分配时用)")
     @Operation(summary = "指定角色下的菜单权限树(分配时用)")
     @GetMapping("/treeByRole")
-    public Result<List<PermMenuResult>> treeByRole(Long roleId, String clientCode) {
+    public Result<List<PermMenuResult>> treeByRole(
+            @NotNull(message = "角色id不可为空") @Parameter(description = "角色id") Long roleId,
+            @NotBlank(message = "终端编码不可为空") @Parameter(description = "终端编码") String clientCode) {
         return Res.ok(rolePermService.treeByRoleAssign(roleId,clientCode));
     }
 
     @RequestPath("查询当前角色已经选择的菜单id")
     @Operation(summary = "查询当前角色已经选择的菜单id")
     @GetMapping("/findIdsByRole")
-    public Result<List<Long>> findIdsByRole(Long roleId, String clientCode) {
+    public Result<List<Long>> findIdsByRole(
+            @NotNull(message = "角色id不可为空") @Parameter(description = "角色id") Long roleId,
+            @NotBlank(message = "终端编码不可为空") @Parameter(description = "终端编码") String clientCode) {
         return Res.ok(rolePermService.findIdsByRoleAndClient(roleId,clientCode));
     }
 

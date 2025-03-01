@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  * @author xxm
  * @since 2023/10/14
  */
-@Slf4j
+@Validated
 @Tag(name = "系统基础接口")
 @RestController
 @RequiredArgsConstructor
@@ -54,7 +54,7 @@ public class BaseController {
     @IgnoreAuth
     @Operation(summary = "将文件转换成base64")
     @PostMapping("/readBase64")
-    public Result<String> readBase64(MultipartFile file){
+    public Result<String> readBase64(@RequestPart MultipartFile file){
         return Res.ok(Base64.encode(file.getBytes()));
     }
 

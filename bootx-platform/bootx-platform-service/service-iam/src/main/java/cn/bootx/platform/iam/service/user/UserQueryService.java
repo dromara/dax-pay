@@ -1,4 +1,4 @@
-package cn.bootx.platform.iam.service.service;
+package cn.bootx.platform.iam.service.user;
 
 import cn.bootx.platform.iam.dao.user.UserInfoManager;
 import cn.bootx.platform.iam.entity.user.UserInfo;

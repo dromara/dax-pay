@@ -2,7 +2,7 @@ package cn.bootx.platform.iam.handler;
 
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.iam.code.UserStatusEnum;
-import cn.bootx.platform.iam.service.service.UserAdminService;
+import cn.bootx.platform.iam.service.user.UserAdminService;
 import cn.bootx.platform.starter.auth.authentication.UserInfoStatusCheck;
 import cn.bootx.platform.starter.auth.configuration.AuthProperties;
 import cn.bootx.platform.starter.auth.entity.AuthClient;
@@ -45,7 +45,7 @@ public class UserInfoStatusCheckImpl implements UserInfoStatusCheck {
             return;
         }
         //  判断用户是否被禁用
-        if (Objects.equals(userDetail.getStatus(), UserStatusEnum.BAN.getCode())){
+        if (Objects.equals(userDetail.getStatus(), UserStatusEnum.BAN)){
             throw new LoginFailureException("该用户已被禁用");
         }
     }

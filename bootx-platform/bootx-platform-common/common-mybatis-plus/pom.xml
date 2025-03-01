@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-common</artifactId>
-        <version>3.0.0.beta4</version>
+        <version>3.0.0.beta5</version>
     </parent>
 
     <artifactId>common-mybatis-plus</artifactId>
@@ -22,9 +22,8 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
         </dependency>
-       <!-- jdk 11+ 引入可选模块 -->
+        <!-- jdk 11+ 引入可选模块 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-jsqlparser</artifactId>
@@ -59,8 +58,12 @@
             <artifactId>easy-trans-mybatis-plus-extend</artifactId>
             <version>${easytrans.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.bootx.platform</groupId>
+            <artifactId>common-spring</artifactId>
+            <version>${bootx-platform.version}</version>
+        </dependency>
     </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <dependency>

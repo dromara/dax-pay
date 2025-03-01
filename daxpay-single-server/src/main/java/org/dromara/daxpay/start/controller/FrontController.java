@@ -1,4 +1,4 @@
-package org.dromara.daxpay;
+package org.dromara.daxpay.start.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -20,10 +20,13 @@ import java.util.List;
 @MappedJdbcTypes({JdbcType.VARCHAR,JdbcType.LONGVARCHAR})
 public class IntegerListTypeHandler extends AbstractJsonTypeHandler<List<Integer>> {
 
-
+    /**
+     * 默认初始化
+     */
     public IntegerListTypeHandler(Class<?> type) {
         super(type);
     }
+
 
     public IntegerListTypeHandler(Class<?> type, Field field) {
         super(type, field);

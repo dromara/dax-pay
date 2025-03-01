@@ -1,5 +1,6 @@
 package cn.bootx.platform.core.util;
 
+import cn.hutool.core.date.DatePattern;
 import lombok.experimental.UtilityClass;
 
 import java.time.Instant;
@@ -80,6 +81,13 @@ public class DateTimeUtil {
         ZoneId zone = ZoneId.systemDefault();
         Instant instant = localDateTime.atZone(zone).toInstant();
         return instant.toEpochMilli();
+    }
+
+    /**
+     * 格式化为标准时间日期
+     */
+    public String formatDateTime(LocalDateTime localDateTime) {
+        return localDateTime.format(DatePattern.NORM_DATETIME_FORMATTER);
     }
 
 }

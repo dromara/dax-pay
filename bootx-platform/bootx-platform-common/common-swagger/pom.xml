@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-common</artifactId>
-        <version>3.0.0.beta4</version>
+        <version>3.0.0.beta5</version>
     </parent>
 
     <artifactId>common-swagger</artifactId>
@@ -14,8 +14,9 @@
     <description>接口文档</description>
 
     <dependencies>
+        <!-- 官方4.5.0 与 最新Spring boot 3.4.x不兼容, 暂时使用第三方的包 -->
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
+            <groupId>com.github.xingfudeshi</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
         </dependency>

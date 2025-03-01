@@ -1,5 +1,6 @@
-package cn.bootx.platform.common.mybatisplus.handler;
+package cn.bootx.platform.common.mybatisplus.aspect;
 
+import cn.bootx.platform.core.annotation.IgnoreTenant;
 import com.baomidou.mybatisplus.core.plugins.IgnoreStrategy;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 /**
- * 商户租户切面
+ * 忽略租户(商户)数据权限切面服务商
  * @author xxm
  * @since 2024/6/25
  */
@@ -20,8 +21,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class IgnoreTenantAspectHandler {
 
-    @Around("@annotation(cn.bootx.platform.core.annotation.IgnoreTenant)||within(@cn.bootx.platform.core.annotation.IgnoreTenant *)")
-    public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+    @Around("@annotation(ignoreTenant)||@within(ignoreTenant)")
+    public Object doAround(ProceedingJoinPoint pjp, IgnoreTenant ignoreTenant) throws Throwable {
         // 设置忽略租户插件
         InterceptorIgnoreHelper.handle(IgnoreStrategy.builder().tenantLine(true).build());
         try {

@@ -8,6 +8,7 @@ import cn.bootx.platform.starter.audit.log.convert.LogConvert;
 import cn.bootx.platform.starter.audit.log.dao.OperateLogDbManager;
 import cn.bootx.platform.starter.audit.log.entity.OperateLogDb;
 import cn.bootx.platform.starter.audit.log.param.OperateLogParam;
+import cn.bootx.platform.starter.audit.log.param.OperateLogQuery;
 import cn.bootx.platform.starter.audit.log.result.OperateLogResult;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class OperateLogService {
     /**
      * 分页
      */
-    public PageResult<OperateLogResult> page(PageParam pageParam, OperateLogParam operateLogParam) {
+    public PageResult<OperateLogResult> page(PageParam pageParam, OperateLogQuery operateLogParam) {
         return MpUtil.toPageResult(operateLogManager.page(pageParam, operateLogParam));
     }
 

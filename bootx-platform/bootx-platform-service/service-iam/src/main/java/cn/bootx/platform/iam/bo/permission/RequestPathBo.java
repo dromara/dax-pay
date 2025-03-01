@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * 请求路径信息类
  * @author xxm
@@ -15,6 +17,12 @@ public class RequestPathBo {
 
     /** 主键, 只有通过数据库数据生成的才会有值 */
     private Long id;
+
+    /** 是否归属所有终端 */
+    private boolean allClient;
+
+    /** 终端编码 */
+    private List<String> clientCodes;
 
     /** 功能模块编码 */
     private String moduleCode;

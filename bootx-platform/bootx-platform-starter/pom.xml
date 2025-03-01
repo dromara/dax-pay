@@ -6,11 +6,12 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform</artifactId>
-        <version>3.0.0.beta4</version>
+        <version>3.0.0.beta5</version>
     </parent>
     <modules>
         <module>starter-auth</module>
-        <module>starter-quartz</module>
+        <!-- 暂时没用到, 后续可能用, 待定 -->
+<!--        <module>starter-quartz</module>-->
         <module>starter-audit-log</module>
         <module>starter-file</module>
         <module>starter-delay-queue</module>
@@ -25,7 +26,7 @@
         <dependency>
             <groupId>cn.bootx.platform</groupId>
             <artifactId>bootx-platform-core</artifactId>
-            <version>3.0.0.beta4</version>
+            <version>3.0.0.beta5</version>
         </dependency>
         <!-- lombok -->
         <dependency>

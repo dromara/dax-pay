@@ -1,11 +1,15 @@
 package cn.bootx.platform.iam.service.permission;
 
 import cn.bootx.platform.common.config.BootxConfigProperties;
+import cn.bootx.platform.common.config.enums.DeployMode;
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
+import cn.bootx.platform.iam.bo.permission.RequestPathBo;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.dao.upms.RolePathManager;
-import cn.bootx.platform.iam.bo.permission.RequestPathBo;
 import cn.bootx.platform.iam.entity.permission.PermPath;
+import cn.bootx.platform.iam.service.client.ClientCodeService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +47,8 @@ public class PermPathSyncService {
 
     private final BootxConfigProperties bootxConfigProperties;
 
+    private final ClientCodeService clientCodeService;
+
     private final static String REQUEST_MAPPING_HANDLER_MAPPING = "requestMappingHandlerMapping";
 
     /**
@@ -50,11 +56,30 @@ public class PermPathSyncService {
      */
     @CacheEvict(value = "cache:permPath", allEntries = true)
     public void sync() {
-        String clientCode = bootxConfigProperties.getClientCode();
-        // 获取系统中的请求路径
-        List<RequestPathBo> requestPathBos = this.getRequestPath();
+        // 判断使用融合部署模式还是分模块模式同步
+        if (bootxConfigProperties.getDeployMode() == DeployMode.FUSION){
+            // 融合同步
+            List<String> clientCodes = bootxConfigProperties.getClientCodes();
+            // 查询数据中的数据并转换为请求信息列表
+            for (String clientCode : clientCodes) {
+                sync(clientCode);
+            }
+        } else {
+            // 分模块模式同步
+            String clientCode = clientCodeService.getClientCode();
+            sync(clientCode);
+        }
+    }
 
-        // 查询数据中的数据并转换为请求信息列表
+    /**
+     * 数据同步
+     */
+    private void sync(String clientCode){
+        // 获取系统中的请求路径
+        List<RequestPathBo> requestPathBos = this.getRequestPath().stream()
+                // 查询是否包含所有
+                .filter(o -> o.isAllClient() || CollUtil.contains(o.getClientCodes(),clientCode))
+                .toList();
         List<PermPath> permPaths = permPathManager.findAllByLeafAndClient(true,clientCode);
         var requestPathMap = requestPathBos.stream()
                 .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
@@ -91,7 +116,6 @@ public class PermPathSyncService {
         // 设置终端编码
         list.forEach(o -> o.setClientCode(clientCode));
         permPathManager.saveAll(list);
-
     }
 
     /**
@@ -198,7 +222,7 @@ public class PermPathSyncService {
                 .stream()
                 .filter(pathKey -> {
                     HandlerMethod handlerMethod = map.get(pathKey);
-                    return Objects.nonNull(handlerMethod.getMethodAnnotation(cn.bootx.platform.core.annotation.RequestPath.class))
+                    return Objects.nonNull(handlerMethod.getMethodAnnotation(RequestPath.class))
                             &&Objects.nonNull(handlerMethod.getBeanType().getAnnotation(RequestGroup.class));
                 }).toList();
 
@@ -240,15 +264,23 @@ public class PermPathSyncService {
                 .toList();
 
         // 读取控制器注解和请求方法注解
-        RequestGroup requestGroup = beanClass.getAnnotation(RequestGroup.class);
-        cn.bootx.platform.core.annotation.RequestPath requestPath = method.getAnnotation(cn.bootx.platform.core.annotation.RequestPath.class);
+        var requestGroup = beanClass.getAnnotation(RequestGroup.class);
+        var requestPath = method.getAnnotation(RequestPath.class);
 
+        // 判断所属的终端, 如果有@ClientCode注解说明该请求只属于部分终端
+        var clientCodes = Optional.ofNullable(method.getAnnotation(ClientCode.class))
+                .or(()-> Optional.ofNullable(beanClass.getAnnotation(ClientCode.class)))
+                .map(ClientCode::value)
+                .map(CollUtil::newArrayList)
+                .orElse(null);
         // 设置通用属性
         for (RequestPathBo path : list) {
             path.setModuleCode(requestGroup.moduleCode())
                     .setModuleName(requestGroup.moduleName())
                     .setGroupCode(requestGroup.groupCode())
                     .setGroupName(requestGroup.groupName())
+                    .setAllClient(Objects.isNull(clientCodes))
+                    .setClientCodes(clientCodes)
                     .setName(requestPath.value());
         }
         return list;

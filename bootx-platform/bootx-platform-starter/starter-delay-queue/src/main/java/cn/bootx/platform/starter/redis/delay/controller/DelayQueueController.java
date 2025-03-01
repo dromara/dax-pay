@@ -1,5 +1,6 @@
 package cn.bootx.platform.starter.redis.delay.controller;
 
+import cn.bootx.platform.core.annotation.OperateLog;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
@@ -12,7 +13,9 @@ import cn.bootx.platform.starter.redis.delay.result.TopicResult;
 import cn.bootx.platform.starter.redis.delay.service.DelayQueueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +28,9 @@ import java.util.List;
  * @author xxm
  * @since 2024/9/20
  */
+@Validated
 @Tag(name = "延时队列管理")
-@RequestGroup(groupCode = "delay", groupName = "延时队列管理", moduleCode = "starter", moduleName = "starter模块")
+@RequestGroup(groupCode = "delay", groupName = "延时队列管理", moduleCode = "starter")
 @RestController
 @RequestMapping("/delay/queue")
 @RequiredArgsConstructor
@@ -41,9 +45,9 @@ public class DelayQueueController {
     }
 
     @RequestPath("获取死信主题列表")
-    @Operation(summary = "获取桶任务分页")
+    @Operation(summary = "获取死信主题列表")
     @GetMapping("/pageBucketJob")
-    public Result<PageResult<DelayJobResult>> pageBucketJob(String bucketName, PageParam pageParam) {
+    public Result<PageResult<DelayJobResult>> pageBucketJob(@NotBlank(message = "死信主题不可为空") String bucketName, PageParam pageParam) {
         return Res.ok(delayQueueService.pageBucketJob(bucketName, pageParam));
     }
 
@@ -57,14 +61,14 @@ public class DelayQueueController {
     @RequestPath("获取就绪主题任务分页")
     @Operation(summary = "获取就绪任务分页")
     @GetMapping("/pageReadyJob")
-    public Result<PageResult<DelayJobResult>> pageReadyJob(String topic, PageParam pageParam) {
+    public Result<PageResult<DelayJobResult>> pageReadyJob(@NotBlank(message = "就绪主题不可为空") String topic, PageParam pageParam) {
         return Res.ok(delayQueueService.pageReadyJob(topic, pageParam));
     }
 
     @RequestPath("获取任务详情")
     @Operation(summary = "获取任务详情")
     @PostMapping("/getJobDetail")
-    public Result<DelayJobResult> getJobDetail(String jobId) {
+    public Result<DelayJobResult> getJobDetail(@NotBlank(message = "任务ID不可为空") String jobId) {
         return Res.ok(delayQueueService.getJobDetail(jobId));
     }
 
@@ -78,21 +82,22 @@ public class DelayQueueController {
     @RequestPath("获取死信主题任务分页")
     @Operation(summary = "获取死信主题任务分页")
     @GetMapping("/pageDeadJob")
-    public Result<PageResult<DelayJobResult>> pageDeadJob(String topic, PageParam pageParam) {
+    public Result<PageResult<DelayJobResult>> pageDeadJob(@NotBlank(message = "主题不可为空") String topic, PageParam pageParam) {
         return Res.ok(delayQueueService.pageDeadJob(topic, pageParam));
     }
 
     @RequestPath("获取死信任务详情")
     @Operation(summary = "获取死信任务详情")
     @PostMapping("/getDeadJobDetail")
-    public Result<DelayJobResult> resetDeadJob(String jobId) {
+    public Result<DelayJobResult> resetDeadJob(@NotBlank(message = "死信任务Id不可为空") String jobId) {
         return Res.ok(delayQueueService.getDeadJobDetail(jobId));
     }
 
     @RequestPath("删除死信任务")
     @Operation(summary = "删除死信任务")
     @PostMapping("/removeDeadJob")
-    public Result<Object> removeDeadJob(String jobId) {
+    @OperateLog(title = "删除死信任务", businessType = OperateLog.BusinessType.DELETE, saveParam = true)
+    public Result<Object> removeDeadJob(@NotBlank(message = "死信任务Id不可为空") String jobId) {
         delayQueueService.removeDeadJob(jobId);
         return Res.ok();
     }

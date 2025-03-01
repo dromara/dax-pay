@@ -19,12 +19,20 @@ import java.util.List;
 public class PermPathManager extends BaseManager<PermPathMapper, PermPath> {
 
     /**
-     * 根据节点类型查询查询
+     * 根据节点类型和终端编码查询
      */
     public List<PermPath> findAllByLeafAndClient(boolean isLeaf, String clientCode) {
         return lambdaQuery()
                 .eq(PermPath::isLeaf, isLeaf)
                 .eq(PermPath::getClientCode, clientCode)
+                .list();
+    }
+    /**
+     * 根据节点类型查询
+     */
+    public List<PermPath> findAllByLeafAndClient(boolean isLeaf) {
+        return lambdaQuery()
+                .eq(PermPath::isLeaf, isLeaf)
                 .list();
     }
 

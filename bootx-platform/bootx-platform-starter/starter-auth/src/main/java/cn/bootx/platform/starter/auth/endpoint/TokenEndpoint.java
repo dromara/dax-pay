@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2021/7/30
  */
+@Validated
 @Tag(name = "认证相关")
 @RestController
 @RequestMapping("/token")
@@ -29,7 +31,6 @@ public class TokenEndpoint {
     @Operation(summary = "普通登录")
     @PostMapping("/login")
     public Result<String> login(HttpServletRequest request, HttpServletResponse response) {
-//        return Res.ok("cs");
         return Res.ok(tokenService.login(request, response));
     }
 
