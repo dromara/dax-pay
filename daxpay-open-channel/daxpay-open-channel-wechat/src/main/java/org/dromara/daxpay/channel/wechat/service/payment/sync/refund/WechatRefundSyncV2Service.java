@@ -44,7 +44,6 @@ public class WechatRefundSyncV2Service {
             var result = wxPayService.refundQuery(request);
             // 网关退款号
             syncResult.setOutRefundNo(result.getTransactionId())
-
                     .setAmount(PayUtil.conversionAmount(result.getRefundFee()));
             // 交易不存在
             if (CollUtil.isEmpty(result.getRefundRecords())){
@@ -66,7 +65,7 @@ public class WechatRefundSyncV2Service {
                 syncResult.setRefundStatus(RefundStatusEnum.CLOSE);
             }
         } catch (WxPayException e) {
-            log.error("微信退款订单查询V3失败", e);
+            log.error("微信退款订单查询V2失败", e);
             syncResult.setSyncErrorMsg(e.getCustomErrorMsg())
                     .setSyncSuccess(false)
                     .setRefundStatus(RefundStatusEnum.FAIL);
