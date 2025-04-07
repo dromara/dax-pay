@@ -135,6 +135,7 @@ public class PaySignUtil {
         String s = content.toString();
         s = StrUtil.replace(s,"\\","");
         s = StrUtil.replace(s,"\"","");
+        s = s.toUpperCase();
         return s;
     }
 
