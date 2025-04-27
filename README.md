@@ -21,12 +21,14 @@
 ## 🍈项目介绍
 
 > DaxPay是一套开源支付网关系统，已经对接支付宝、微信支付、云闪付相关的接口。可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响。
+> 同时与商业版使用同样的底层代码，可以方便的升级为商业版。
 
 ## 🧭 特色功能
 - 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
 - 已对接`微信支付`、`支付宝`和`云闪付`相关的接口，并以扩展包的方式支持更多类型的通道
 - 支持多应用配置，可以同时对接多个支付通道账号，方便多个业务系统对接
 - 支持支付、退款、对账、分账等支付相关的能力
+- 提供网关支付功能：收银台、聚合支付、收款码牌等功能
 - 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
 - 接口请求和响应数据支持启用签名机制，保证交易安全可靠
 - 提供管理端，方便运营人员进行管理和操作
@@ -44,11 +46,11 @@
 |---------|---------------------------------------------|-------------------------------------------------|------------------------------------------------|
 | 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    | [GITCODE](https://gitcode.com/dromara/dax-pay) |
 | Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |                                                |
-| H5前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |                                                |
+| 网关前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |                                                |
 
 
 ## 🏬 系统演示
-### 管理平台:
+### 开源版:
 > 注：演示账号部分功能权限未开放。
 
 地址：https://single.web.daxpay.cn
@@ -57,14 +59,27 @@
 
 密码：daxpay123
 
+### 商业版
+
+商户端: https://merchant.dax-pay.test.yibeiguangnian.cn/
+
+运营端: https://daxpay-web.test.yibeiguangnian.cn/
+
+运营端测试: csadmin/123123
+
+商户端普通商户测试: cspt/123123
+
+商户端特约商户测试: csty/123123
+
+
 ## 🥞 核心技术栈
-| 名称               | 描述     | 版本要求                         |
-|------------------|--------|------------------------------|
-| Jdk              | Java环境 | 21+                          |
-| Spring Boot      | 开发框架   | 3.3.x                        |
-| Redis            | 分布式缓存  | 5.x版本及以上                     |
-| MySQL/Postgresql | 数据     | MySQL8.x及以上/Postgresql 10及以上 |
-| Vue              | 前端框架   | 3.x                          |
+| 名称          | 描述     | 版本要求             |
+|-------------|--------|------------------|
+| Jdk         | Java环境 | 21+              |
+| Spring Boot | 开发框架   | 3.4.x            |
+| Redis       | 分布式缓存  | 5.x版本及以上         |
+| Postgresql  | 数据库    | Postgresql 12及以上 |
+| Vue         | 前端框架   | 3.x              |
 
 ## 🛠️ 业务系统接入
 > 业务系统想接入支付网关的话，不需要集成到业务系统里，只需要单独部署一份支付系统，然后业务系统通过接口调用即可拥有对应的支付能力，
@@ -77,7 +92,7 @@
  <!-- 支付SDK -->
 <dependency>
     <groupId>org.dromara.daxpay</groupId>
-    <artifactId>daxpay-single-sdk</artifactId>
+    <artifactId>daxpay-sdk</artifactId>
     <version>${latest.version}</version>
 </dependency>
 ```
@@ -148,22 +163,20 @@ public class PayOrderTest {
 ```
 
 ## 🍎 系统截图
-### PC收银台演示(旧版)
-![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20240513192801.2ruycydkl6.webp)
-### 移动端收银演示
+### 通道配置
+![wechat_2025-04-27_204334_543](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204334_543.lvxlxz86a.webp)
+### 收银台
+![wechat_2025-04-27_203920_863](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_203920_863.7phv2q931.webp)
 
-<img height="900" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信图片_20241012172346.41y1kcemrf.webp" width="390"/>
+![wechat_2025-04-27_204208_069](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204208_069.6bh9xisxha.webp)
+### 聚合码牌
+![7604af26dde4add3ff9aaea7a7d3be84](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/7604af26dde4add3ff9aaea7a7d3be84.7axdaovomy.webp)
 
-### 支付通道配置
-![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012170024.5tr0f8xzn9.webp)
-### 开发联调功能
-![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012165858.231uu094fm.webp)
-### 对账单文件
-![](https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/daxpay/微信截图_20241012170315.6wqpq4ttix.webp)
+![1b7671d183f279751460d42234c6eadb](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/1b7671d183f279751460d42234c6eadb.2rvc7pq7p4.webp)
+### 小程序快捷收银
+![cbe6e332c55b241215787254951dc7ec](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/cbe6e332c55b241215787254951dc7ec.969y3b848r.webp)
+
 ## 🛣️ 路线图
-
-[**当前开发进度和任务池**](/_doc/Task.md)
-
 [**历史更新记录**](/_doc/Changelog.md)
 
 ##  🥪 关于我们
@@ -191,9 +204,6 @@ public class PayOrderTest {
 
 
 ## 🍻 鸣谢
-感谢 JetBrains 提供的免费开源 License：
-
-[![JetBrains](_doc/images/jetbrains.png)](https://www.jetbrains.com/?from=bootx)
 
 感谢其他提供灵感和思路的开源项目
 

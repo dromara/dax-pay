@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <artifactId>daxpay-open-server</artifactId>
+    <packaging>jar</packaging>
+    <description>启动端</description>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <bootx-platform.version>3.0.0.beta5</bootx-platform.version>
+        <daxpay.version>3.0.0.beta5</daxpay.version>
+        <minio.version>8.5.2</minio.version>
+    </properties>
+
+    <dependencies>
+        <!-- web框架 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 支付服务和通用控制器 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-open-controller</artifactId>
+            <version>${daxpay.version}</version>
+        </dependency>
+
+        <!-- 数据库驱动 PG -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- 数据库驱动 MySQL -->
+<!--        <dependency>-->
+<!--            <groupId>com.mysql</groupId>-->
+<!--            <artifactId>mysql-connector-j</artifactId>-->
+<!--        </dependency>-->
+
+        <!--文件存储 (minio方式)-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+        </dependency>
+
+        <!-- 支付通道 -->
+        <!-- 支付宝通道 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-open-channel-alipay</artifactId>
+            <version>${daxpay.version}</version>
+        </dependency>
+        <!-- 微信通道 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-open-channel-wechat</artifactId>
+            <version>${daxpay.version}</version>
+        </dependency>
+        <!-- 云闪付通道 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-open-channel-union</artifactId>
+            <version>${daxpay.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>daxpay-open-server</finalName>
+        <plugins>
+            <!-- spring-boot -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

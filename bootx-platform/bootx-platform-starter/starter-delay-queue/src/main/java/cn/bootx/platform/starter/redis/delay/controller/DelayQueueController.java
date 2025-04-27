@@ -12,6 +12,7 @@ import cn.bootx.platform.starter.redis.delay.result.DelayJobResult;
 import cn.bootx.platform.starter.redis.delay.result.TopicResult;
 import cn.bootx.platform.starter.redis.delay.service.DelayQueueService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class DelayQueueController {
     @RequestPath("获取死信主题列表")
     @Operation(summary = "获取死信主题列表")
     @GetMapping("/pageBucketJob")
-    public Result<PageResult<DelayJobResult>> pageBucketJob(@NotBlank(message = "死信主题不可为空") String bucketName, PageParam pageParam) {
+    public Result<PageResult<DelayJobResult>> pageBucketJob(@NotBlank(message = "死信主题不可为空") @Parameter(description = "死信主题") String bucketName, PageParam pageParam) {
         return Res.ok(delayQueueService.pageBucketJob(bucketName, pageParam));
     }
 
@@ -58,17 +59,17 @@ public class DelayQueueController {
         return Res.ok(delayQueueService.getDelayTopic());
     }
 
-    @RequestPath("获取就绪主题任务分页")
+    @RequestPath("获取就绪任务分页")
     @Operation(summary = "获取就绪任务分页")
     @GetMapping("/pageReadyJob")
-    public Result<PageResult<DelayJobResult>> pageReadyJob(@NotBlank(message = "就绪主题不可为空") String topic, PageParam pageParam) {
+    public Result<PageResult<DelayJobResult>> pageReadyJob(@NotBlank(message = "就绪主题不可为空") @Parameter(description = "就绪主题") String topic, PageParam pageParam) {
         return Res.ok(delayQueueService.pageReadyJob(topic, pageParam));
     }
 
     @RequestPath("获取任务详情")
     @Operation(summary = "获取任务详情")
     @PostMapping("/getJobDetail")
-    public Result<DelayJobResult> getJobDetail(@NotBlank(message = "任务ID不可为空") String jobId) {
+    public Result<DelayJobResult> getJobDetail(@NotBlank(message = "任务ID不可为空") @Parameter(description = "任务ID") String jobId) {
         return Res.ok(delayQueueService.getJobDetail(jobId));
     }
 
@@ -79,17 +80,17 @@ public class DelayQueueController {
         return Res.ok(delayQueueService.getDeadTopic());
     }
 
-    @RequestPath("获取死信主题任务分页")
-    @Operation(summary = "获取死信主题任务分页")
+    @RequestPath("获取死信任务分页")
+    @Operation(summary = "获取主题任务分页")
     @GetMapping("/pageDeadJob")
-    public Result<PageResult<DelayJobResult>> pageDeadJob(@NotBlank(message = "主题不可为空") String topic, PageParam pageParam) {
+    public Result<PageResult<DelayJobResult>> pageDeadJob(@NotBlank(message = "主题不可为空") @Parameter(description = "主题") String topic, PageParam pageParam) {
         return Res.ok(delayQueueService.pageDeadJob(topic, pageParam));
     }
 
     @RequestPath("获取死信任务详情")
     @Operation(summary = "获取死信任务详情")
     @PostMapping("/getDeadJobDetail")
-    public Result<DelayJobResult> resetDeadJob(@NotBlank(message = "死信任务Id不可为空") String jobId) {
+    public Result<DelayJobResult> resetDeadJob(@NotBlank(message = "死信任务Id不可为空") @Parameter(description = "死信任务Id") String jobId) {
         return Res.ok(delayQueueService.getDeadJobDetail(jobId));
     }
 

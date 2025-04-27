@@ -11,7 +11,7 @@ import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.starter.file.param.UploadFileQuery;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
 import cn.bootx.platform.starter.file.service.FileUploadService;
-import com.fhs.core.trans.anno.TransMethodResult;
+import org.dromara.core.trans.anno.TransMethodResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;

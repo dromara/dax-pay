@@ -14,6 +14,7 @@
 <!--        <module>starter-quartz</module>-->
         <module>starter-audit-log</module>
         <module>starter-file</module>
+        <module>starter-cache</module>
         <module>starter-delay-queue</module>
     </modules>
 

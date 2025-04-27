@@ -30,7 +30,6 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class LoginLogService {
 
-
     private final LoginLogDbManager loginLogManager;
 
     /**

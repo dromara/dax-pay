@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.dromara.daxpay</groupId>
+    <artifactId>daxpay-open-sdk</artifactId>
+    <version>3.0.0.beta5</version>
+    <packaging>jar</packaging>
+
+    <!-- 项目信息 -->
+    <name>daxpay-open-sdk</name>
+    <description>daxpay-open-sdk 是 daxpay开源版的JavaSDK，用于业务系统快速接入到支付网关中</description>
+    <url>https://github.com/dromara/dax-pay</url>
+
+    <!-- 许可证 -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <!-- 开发者信息 -->
+    <developers>
+        <developer>
+            <name>daxpay</name>
+            <email>xxm1995@outlook.com</email>
+            <organization>daxpay</organization>
+            <url>https://gitee.com/dromara/dax-pay</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:dromara/daxpay.git</connection>
+        <developerConnection>scm:git:git@github.com:dromara/daxpay.git</developerConnection>
+        <url>https://github.com/dromara/dax-pay</url>
+    </scm>
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <logback-classic.version>1.5.6</logback-classic.version>
+        <hutool.version>5.8.35</hutool.version>
+        <bouncycastle.version>1.79</bouncycastle.version>
+        <springdoc.version>2.7.0</springdoc.version>
+        <lombok.version>1.18.30</lombok.version>
+        <junit.version>4.13.2</junit.version>
+    </properties>
+
+    <dependencies>
+        <!-- 工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-json</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- 国密扩展 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+        <!-- swagger 依赖 -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-common</artifactId>
+            <version>${springdoc.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 日志框架 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-classic.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 测试类 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 编译插件，设置源码以及编译的jdk版本 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerArgument>-parameters</compilerArgument>
+                </configuration>
+            </plugin>
+            <!--打包源码的插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Javadoc 文档生成插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <doclint>none</doclint>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--公钥私钥插件，也就是上传需要进行验证用户名和密码过程中需要用到的插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--新账号的配置：将组件部署到OSSRH并将其发布到Central Repository-->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>daxpay</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <!-- 指定打包资源路径 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+
+    <distributionManagement>
+        <snapshotRepository>
+            <!-- 与settings.xml的server.id保持一致 -->
+            <id>daxpay</id>
+            <url>https://central.sonatype.com/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

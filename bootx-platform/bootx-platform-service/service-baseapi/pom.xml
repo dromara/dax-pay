@@ -46,7 +46,7 @@
         <!-- Spring 缓存配置 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-cache</artifactId>
+            <artifactId>starter-cache</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
         <!-- hutool 缓存 -->

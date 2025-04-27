@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Validated
 @Tag(name = "字典项")
-@RequestGroup(groupCode = "dict", groupName = "字典管理", moduleCode = "baseapi", moduleName = "(Bootx)基础模块API" )
+@RequestGroup(groupCode = "dict", moduleCode = "baseapi", moduleName = "(Bootx)基础模块API" )
 @RestController
 @RequestMapping("/dict/item")
 @AllArgsConstructor

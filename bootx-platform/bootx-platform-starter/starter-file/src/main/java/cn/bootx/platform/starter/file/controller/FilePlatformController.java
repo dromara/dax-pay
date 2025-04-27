@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2024/8/12
  */
 @Validated
-@RequestGroup(groupCode = "FilePlatfor", groupName = "文件存储平台管理", moduleCode = "starter")
+@RequestGroup(groupCode = "FilePlatform", groupName = "文件存储平台管理", moduleCode = "starter")
 @Tag(name = "文件存储平台")
 @RestController
 @RequestMapping("/file/platform")

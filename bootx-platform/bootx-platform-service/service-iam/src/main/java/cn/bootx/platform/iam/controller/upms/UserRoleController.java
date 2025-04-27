@@ -38,7 +38,7 @@ public class UserRoleController {
     @PostMapping(value = "/saveAssign")
     @OperateLog(title = "给用户分配角色", businessType = OperateLog.BusinessType.GRANT, saveParam = true)
     public Result<Void> saveAssign(@Validated @RequestBody UserRoleParam param) {
-        userRoleService.saveAssign(param.getUserId(), param.getRoleIds());
+        userRoleService.saveAssign(param.getUserId(), param.getRoleIds(),false);
         return Res.ok();
     }
 

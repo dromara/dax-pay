@@ -37,6 +37,7 @@
         <lock4j.version>2.2.7</lock4j.version>
         <x-file-storage.version>2.2.1</x-file-storage.version>
         <minio.version>8.5.4</minio.version>
+        <qcloud.version>5.6.137</qcloud.version>
         <sa-token.version>1.39.0</sa-token.version>
         <justauth.version>1.16.6</justauth.version>
         <caffeine.version>3.1.8</caffeine.version>
@@ -47,7 +48,7 @@
         <kryo.version>5.6.0</kryo.version>
         <autopoi.version>1.4.8</autopoi.version>
         <easypoi.version>4.5.0</easypoi.version>
-        <easytrans.version>3.0.5</easytrans.version>
+        <easytrans.version>3.1.2</easytrans.version>
 
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>

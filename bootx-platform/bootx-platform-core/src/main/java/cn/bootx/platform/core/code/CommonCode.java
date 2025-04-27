@@ -46,6 +46,11 @@ public interface CommonCode {
     int SUCCESS_CODE = 0;
 
     /**
+     * 响应成功
+     */
+    String SUCCESS_MSG = "success";
+
+    /**
      * 响应失败码
      */
     int FAIL_CODE = 1;

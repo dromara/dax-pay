@@ -48,13 +48,13 @@
         </dependency>
         <!-- 翻译组件 -->
         <dependency>
-            <groupId>com.fhs-opensource</groupId>
+            <groupId>org.dromara</groupId>
             <artifactId>easy-trans-spring-boot-starter</artifactId>
             <version>${easytrans.version}</version>
         </dependency>
         <!-- 翻译组件 MP扩展 -->
         <dependency>
-            <groupId>com.fhs-opensource</groupId>
+            <groupId>org.dromara</groupId>
             <artifactId>easy-trans-mybatis-plus-extend</artifactId>
             <version>${easytrans.version}</version>
         </dependency>

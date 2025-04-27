@@ -112,7 +112,6 @@ public class DelayQueueService {
                 .map(rangeWithScore -> new TopicResult().setName(rangeWithScore.getValue()).setCount(Optional.ofNullable(rangeWithScore.getScore()).map(Double::intValue).orElse(0))).toList();
     }
 
-
     /**
      * 获取死信主题任务分页
      */

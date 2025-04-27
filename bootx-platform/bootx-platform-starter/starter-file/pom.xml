@@ -24,6 +24,12 @@
             <artifactId>x-file-storage-spring</artifactId>
             <version>${x-file-storage.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>${qcloud.version}</version>
+        </dependency>
+
         <!-- 数据库 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
@@ -35,6 +41,12 @@
             <groupId>cn.bootx.platform</groupId>
             <artifactId>starter-auth</artifactId>
             <version>${bootx-platform.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>5.8.31</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

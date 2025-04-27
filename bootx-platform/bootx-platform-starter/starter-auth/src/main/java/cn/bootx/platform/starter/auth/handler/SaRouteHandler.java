@@ -3,6 +3,7 @@ package cn.bootx.platform.starter.auth.handler;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.starter.auth.exception.RouterCheckException;
 import cn.bootx.platform.starter.auth.service.RouterCheck;
+import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.dev33.satoken.fun.SaFunction;
 import cn.dev33.satoken.router.SaRouter;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,9 @@ public class SaRouteHandler implements InitializingBean {
                 SaRouter.stop();
             }
             else {
+                // 如果未登录, 提示未登录
+                SecurityUtil.getUserId();
+                // 已经登录提示没有权限
                 log.warn("{} 没有对应的权限", WebServletUtil.getPath());
                 throw new RouterCheckException();
             }
