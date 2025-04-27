@@ -96,85 +96,24 @@
     <version>${latest.version}</version>
 </dependency>
 ```
-### SDK调用示例
-```java
-package org.dromara.daxpay.single.sdk.test.trade;
-
-import org.dromara.daxpay.single.sdk.code.ChannelEnum;
-import org.dromara.daxpay.single.sdk.code.PayMethodEnum;
-import org.dromara.daxpay.single.sdk.code.SignTypeEnum;
-import org.dromara.daxpay.single.sdk.model.trade.pay.PayResultModel;
-import org.dromara.daxpay.single.sdk.net.DaxPayConfig;
-import org.dromara.daxpay.single.sdk.net.DaxPayKit;
-import org.dromara.daxpay.single.sdk.param.channel.AlipayParam;
-import org.dromara.daxpay.single.sdk.param.channel.WechatPayParam;
-import org.dromara.daxpay.single.sdk.param.trade.pay.PayParam;
-import org.dromara.daxpay.single.sdk.response.DaxPayResult;
-import org.dromara.daxpay.single.sdk.util.JsonUtil;
-import org.dromara.daxpay.single.sdk.util.PaySignUtil;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.math.BigDecimal;
-
-/**
- * 统一支付接口
- * @author xxm
- * @since 2024/2/5
- */
-public class PayOrderTest {
-
-    @Before
-    public void init() {
-        // 初始化支付配置
-        DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:9999")
-                .signSecret("123456")
-                .appId("123")
-                .signType(SignTypeEnum.HMAC_SHA256)
-                .build();
-        DaxPayKit.initConfig(config);
-    }
-
-    /**
-     * 微信支付(二维码扫码)
-     */
-    @Test
-    public void wxQrPay() {
-        PayParam param = new PayParam();
-        param.setClientIp("127.0.0.1");
-        param.setBizOrderNo("SDK_"+ System.currentTimeMillis());
-        param.setTitle("测试微信扫码支付");
-        param.setDescription("这是支付备注");
-        param.setAmount(BigDecimal.valueOf(1.00));
-        param.setChannel(ChannelEnum.WECHAT.getCode());
-        param.setMethod(PayMethodEnum.QRCODE.getCode());
-        param.setAttach("{回调参数}");
-        param.setAllocation(false);
-        param.setReturnUrl("https://abc.com/returnurl");
-        param.setNotifyUrl("http://127.0.0.1:10880/test/callback/notify");
-
-        DaxPayResult<PayResultModel> execute = DaxPayKit.execute(param);
-        System.out.println(JsonUtil.toJsonStr(execute));
-        System.out.println(PaySignUtil.hmacSha256Sign(execute, "123456"));
-    }
-}
-
-```
 
 ## 🍎 系统截图
 ### 通道配置
-![wechat_2025-04-27_204334_543](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204334_543.lvxlxz86a.webp)
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204334_543.lvxlxz86a.webp" alt="wechat_2025-04-27_204334_543" style="zoom:67%;" />
+
 ### 收银台
-![wechat_2025-04-27_203920_863](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_203920_863.7phv2q931.webp)
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_203920_863.7phv2q931.webp" alt="wechat_2025-04-27_203920_863" style="zoom:67%;" />
 
-![wechat_2025-04-27_204208_069](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204208_069.6bh9xisxha.webp)
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204208_069.6bh9xisxha.webp" alt="wechat_2025-04-27_204208_069" style="zoom:50%;" />
+
 ### 聚合码牌
-![7604af26dde4add3ff9aaea7a7d3be84](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/7604af26dde4add3ff9aaea7a7d3be84.7axdaovomy.webp)
 
-![1b7671d183f279751460d42234c6eadb](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/1b7671d183f279751460d42234c6eadb.2rvc7pq7p4.webp)
+<img alt="7604af26dde4add3ff9aaea7a7d3be84" src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/7604af26dde4add3ff9aaea7a7d3be84.7axdaovomy.webp" style="zoom: 33%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/1b7671d183f279751460d42234c6eadb.2rvc7pq7p4.webp" alt="1b7671d183f279751460d42234c6eadb" style="zoom:33%;" />
+
 ### 小程序快捷收银
-![cbe6e332c55b241215787254951dc7ec](https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/cbe6e332c55b241215787254951dc7ec.969y3b848r.webp)
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/cbe6e332c55b241215787254951dc7ec.969y3b848r.webp" alt="cbe6e332c55b241215787254951dc7ec" style="zoom:33%;" />
 
 ## 🛣️ 路线图
 [**历史更新记录**](/_doc/Changelog.md)
