@@ -99,24 +99,24 @@
 
 ## 🍎 系统截图
 ### 通道配置
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204334_543.lvxlxz86a.webp" alt="wechat_2025-04-27_204334_543" style="zoom:67%;" />
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204334_543.lvxlxz86a.webp" alt="wechat_2025-04-27_204334_543"  />
 
 ### 收银台
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_203920_863.7phv2q931.webp" alt="wechat_2025-04-27_203920_863" style="zoom:67%;" />
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_203920_863.7phv2q931.webp" alt="wechat_2025-04-27_203920_863" />
 
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204208_069.6bh9xisxha.webp" alt="wechat_2025-04-27_204208_069" style="zoom:50%;" />
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204208_069.6bh9xisxha.webp" alt="wechat_2025-04-27_204208_069" width = "270" height = "570" />
 
 ### 聚合码牌
 
-<img alt="7604af26dde4add3ff9aaea7a7d3be84" src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/7604af26dde4add3ff9aaea7a7d3be84.7axdaovomy.webp" style="zoom: 33%;" />
+<img alt="7604af26dde4add3ff9aaea7a7d3be84" src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/7604af26dde4add3ff9aaea7a7d3be84.7axdaovomy.webp"  width = "270" height = "570" />
 
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/1b7671d183f279751460d42234c6eadb.2rvc7pq7p4.webp" alt="1b7671d183f279751460d42234c6eadb" style="zoom:33%;" />
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/1b7671d183f279751460d42234c6eadb.2rvc7pq7p4.webp" alt="1b7671d183f279751460d42234c6eadb"  width = "270" height = "570" />
 
 ### 小程序快捷收银
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/cbe6e332c55b241215787254951dc7ec.969y3b848r.webp" alt="cbe6e332c55b241215787254951dc7ec" style="zoom:33%;" />
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/cbe6e332c55b241215787254951dc7ec.969y3b848r.webp" alt="cbe6e332c55b241215787254951dc7ec" width = "270" height = "570" />
 
 ## 🛣️ 路线图
-[**历史更新记录**](/_doc/Changelog.md)
+[**历史更新记录**](/_doc/ChangeLog.md)
 
 ##  🥪 关于我们
 
