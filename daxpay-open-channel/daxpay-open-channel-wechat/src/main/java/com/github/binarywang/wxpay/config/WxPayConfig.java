@@ -15,6 +15,7 @@ import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.ssl.SSLContexts;
+import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 
 import javax.net.ssl.SSLContext;
 import java.io.*;
@@ -41,6 +42,12 @@ public class WxPayConfig {
     private static final String DEFAULT_PAY_BASE_URL = "https://api.mch.weixin.qq.com";
     private static final String PROBLEM_MSG = "证书文件【%s】有问题，请核实！";
     private static final String NOT_FOUND_MSG = "证书文件【%s】不存在，请核实！";
+
+    /**
+     * 接口版本, 使用v2还是v3接口
+     * @see WechatPayCode#API_V2
+     */
+    private String apiVersion;
 
     /**
      * 微信支付接口请求地址域名部分.
@@ -277,7 +284,6 @@ public class WxPayConfig {
      * 初始化api v3请求头 自动签名验签
      * 方法参照 <a href="https://github.com/wechatpay-apiv3/wechatpay-apache-httpclient">微信支付官方api项目</a>
      *
-     * @return org.apache.http.impl.client.CloseableHttpClient
      * @author doger.wang
      **/
     public CloseableHttpClient initApiV3HttpClient() throws WxPayException {
@@ -353,16 +359,19 @@ public class WxPayConfig {
         boolean pathC = this.getPrivateCertContent() != null && this.getPrivateKeyContent() != null;
         boolean pathS = this.getPrivateCertString() != null && this.getPrivateKeyString() != null;
 
-        if (pathB || pathC || pathS) {
-            certificatesVerifier = new AutoUpdateCertificatesVerifier(
-                    new WxPayCredentials(mchId, new PrivateKeySigner(certSerialNo, merchantPrivateKey)),
-                    this.getApiV3Key().getBytes(StandardCharsets.UTF_8), this.getCertAutoUpdateTime(),
-                    this.getPayBaseUrl(), wxPayHttpProxy);
-        }
-        if (publicKey != null) {
-            Verifier publicCertificatesVerifier = new PublicCertificateVerifier(publicKey, publicKeyId);
-            publicCertificatesVerifier.setOtherVerifier(certificatesVerifier);
-            certificatesVerifier = publicCertificatesVerifier;
+        if(WechatPayCode.API_V2.equals(this.getApiVersion())){
+            if (pathB || pathC || pathS) {
+                certificatesVerifier = new AutoUpdateCertificatesVerifier(
+                        new WxPayCredentials(mchId, new PrivateKeySigner(certSerialNo, merchantPrivateKey)),
+                        this.getApiV3Key().getBytes(StandardCharsets.UTF_8), this.getCertAutoUpdateTime(),
+                        this.getPayBaseUrl(), wxPayHttpProxy);
+            }
+        }else{
+            if (publicKey != null) {
+                Verifier publicCertificatesVerifier = new PublicCertificateVerifier(publicKey, publicKeyId);
+                publicCertificatesVerifier.setOtherVerifier(certificatesVerifier);
+                certificatesVerifier = publicCertificatesVerifier;
+            }
         }
         return certificatesVerifier;
     }
