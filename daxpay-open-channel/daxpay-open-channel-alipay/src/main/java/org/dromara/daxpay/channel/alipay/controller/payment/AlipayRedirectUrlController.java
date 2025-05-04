@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 @IgnoreAuth
 @Tag(name = "支付宝同步通知")
 @RestController
-@RequestMapping("/unipay/return/{mchNo}/{AppId}")
+@RequestMapping("/unipay/return/{AppId}")
 @RequiredArgsConstructor
 public class AlipayRedirectUrlController {
     private final AlipayRedirectUrlService redirectUrlService;
@@ -31,15 +31,15 @@ public class AlipayRedirectUrlController {
 
     @Operation(summary = "支付宝同步跳转通知")
     @GetMapping("/alipay")
-    public ModelAndView alipay(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request){
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public ModelAndView alipay(@PathVariable("AppId") String appId, HttpServletRequest request){
+        paymentAssistService.initMchAndApp(appId);
         String redirect = redirectUrlService.redirect(request,false);
         return new ModelAndView("redirect:"+redirect);
     }
     @Operation(summary = "支付宝同步跳转通知")
     @GetMapping("/alipay/isv")
-    public ModelAndView alipayIsv(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request){
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public ModelAndView alipayIsv(@PathVariable("AppId") String appId, HttpServletRequest request){
+        paymentAssistService.initMchAndApp(appId);
         String redirect = redirectUrlService.redirect(request, true);
         return new ModelAndView("redirect:"+redirect);
     }

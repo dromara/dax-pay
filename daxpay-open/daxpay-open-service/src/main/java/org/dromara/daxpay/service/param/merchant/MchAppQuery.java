@@ -19,10 +19,6 @@ import lombok.experimental.Accessors;
 @Schema(title = "商户应用查询参数")
 public class MchAppQuery {
 
-    /** 商户号 */
-    @Schema(description = "商户号")
-    private String mchNo;
-
     /** 应用名称 */
     @Schema(description = "应用号")
     private String appId;

@@ -20,10 +20,6 @@ public class DaxNoticeResult<T> extends DaxResult<T>{
     @Schema(description = "通知类型")
     private String noticeType;
 
-    /** 商户号 */
-    @Schema(description = "商户号")
-    private String mchNo;
-
     /** 应用ID */
     @Schema(description = "应用ID")
     private String appId;

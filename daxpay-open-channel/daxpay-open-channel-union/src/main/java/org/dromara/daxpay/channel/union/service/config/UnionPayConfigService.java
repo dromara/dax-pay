@@ -64,8 +64,6 @@ public class UnionPayConfigService {
     public void save(UnionPayConfigParam param) {
         UnionPayConfig entity = UnionPayConfigConvert.CONVERT.toEntity(param);
         ChannelConfig channelConfig = entity.toChannelConfig();
-        // 如果运营端使用, 商户号写入上下文中
-        MchContextLocal.setMchNo(channelConfig.getMchNo());
         // 判断商户和应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(channelConfig.getAppId(), channelConfig.getChannel())){
             throw new DataErrorException("该应用下已存在云闪付配置, 请勿重新添加");
@@ -103,7 +101,7 @@ public class UnionPayConfigService {
      */
     public String getNotifyUrl() {
         var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format("{}/unipay/callback/{}/{}/union",mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/callback/{}/union",mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
     }
 
     /**
@@ -111,7 +109,7 @@ public class UnionPayConfigService {
      */
     public String getReturnUrl() {
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format("{}/unipay/return/{}/{}/union",mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format("{}/unipay/return/{}/union",mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
     }
 
 }

@@ -61,7 +61,6 @@ public class WechatAllocReceiverService {
         paymentAssistService.initMchAndApp(param.getAppId());
         var mchApp = PaymentContextLocal.get().getMchAppInfo();
         var entity = WechatAllocReceiverConvert.CONVERT.toEntity(param);
-        entity.setMchNo(mchApp.getMchNo());
         AllocReceiver receiver = entity.toReceiver(param.isIsv());
         String uuid = UUID.fastUUID().toString(true);
         receiver.setReceiverNo(uuid);

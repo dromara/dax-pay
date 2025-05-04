@@ -79,8 +79,6 @@ public class WechatPayConfigService {
         }
         WechatPayConfig entity = WechatPayConfigConvert.CONVERT.toEntity(param);
         ChannelConfig channelConfig = entity.toChannelConfig();
-        // 如果运营端使用, 商户号写入上下文中
-        MchContextLocal.setMchNo(channelConfig.getMchNo());
         // 判断商户和应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(channelConfig.getAppId(), channelConfig.getChannel())){
             throw new DataErrorException("该应用下已存在微信配置, 请勿重新添加");
@@ -114,27 +112,27 @@ public class WechatPayConfigService {
      * 获取支付异步通知地址
      */
     public String getPayNotifyUrl(boolean isv) {
-        String url = isv ? "{}/unipay/callback/{}/{}/wechat/isv/pay":"{}/unipay/callback/{}/{}/wechat/pay";
+        String url = isv ? "{}/unipay/callback/{}/wechat/isv/pay":"{}/unipay/callback/{}/wechat/pay";
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
     }
 
     /**
      * 获取退款异步通知地址
      */
     public String getRefundNotifyUrl(boolean isv) {
-        String url = isv ? "{}/unipay/callback/{}/{}/wechat/isv/refund":"{}/unipay/callback/{}/{}/wechat/refund";
+        String url = isv ? "{}/unipay/callback/{}/wechat/isv/refund":"{}/unipay/callback/{}/wechat/refund";
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
     }
 
     /**
      * 转账回调地址
      */
     public String getTransferNotifyUrl(boolean isv) {
-        String url = isv ? "{}/unipay/callback/{}/{}/wechat/isv/transfer":"{}/unipay/callback/{}/{}/wechat/transfer";
+        String url = isv ? "{}/unipay/callback/{}/wechat/isv/transfer":"{}/unipay/callback/{}/wechat/transfer";
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
     }
 
     /**

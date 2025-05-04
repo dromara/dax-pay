@@ -26,9 +26,6 @@ import java.math.BigDecimal;
 @Schema(title = "商户应用")
 public class MchAppResult extends BaseResult implements TransPojo {
 
-    @Schema(description = "商户号")
-    private String mchNo;
-
     @Schema(description = "商户名称")
     private String mchName;
 

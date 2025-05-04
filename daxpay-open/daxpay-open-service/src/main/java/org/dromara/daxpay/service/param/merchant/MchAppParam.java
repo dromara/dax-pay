@@ -26,10 +26,6 @@ public class MchAppParam {
     @NotNull(message = "主键ID不可为空", groups = ValidationGroup.edit.class)
     private Long id;
 
-    /** 商户号 */
-    @Schema(description = "商户号")
-    private String mchNo;
-
     /** 应用名称 */
     @Schema(description = "应用名称")
     @NotNull(message = "应用名称不可为空")

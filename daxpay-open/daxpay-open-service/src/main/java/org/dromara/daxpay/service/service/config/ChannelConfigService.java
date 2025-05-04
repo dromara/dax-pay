@@ -62,12 +62,10 @@ public class ChannelConfigService {
                 return new ChannelConfigResult()
                         .setChannel(o.getCode())
                         .setName(o.getName())
-                        .setMchNo(mchApp.getMchNo())
                         .setAppId(mchApp.getAppId());
             } else {
                 return channelConfig.toResult()
                         .setName(o.getName())
-                        .setMchNo(mchApp.getMchNo())
                         .setAppId(mchApp.getAppId());
             }
         }).toList();

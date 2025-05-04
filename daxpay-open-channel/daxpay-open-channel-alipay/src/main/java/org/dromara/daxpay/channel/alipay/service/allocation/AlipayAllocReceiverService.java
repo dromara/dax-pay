@@ -62,7 +62,6 @@ public class AlipayAllocReceiverService {
         paymentAssistService.initMchAndApp(param.getAppId());
         var mchApp = PaymentContextLocal.get().getMchAppInfo();
         AlipayAllocReceiver entity = AlipayAllocReceiverConvert.CONVERT.toEntity(param);
-        entity.setMchNo(mchApp.getMchNo());
         AllocReceiver receiver = entity.toReceiver(param.isIsv());
         String uuid = UUID.fastUUID().toString(true);
         receiver.setReceiverNo(uuid);

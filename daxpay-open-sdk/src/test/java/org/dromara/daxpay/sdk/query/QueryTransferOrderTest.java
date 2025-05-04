@@ -25,7 +25,6 @@ public class QueryTransferOrderTest {
                 .serviceUrl("http://127.0.0.1:19999")
                 .signSecret("123456")
                 .signType(SignTypeEnum.MD5)
-                .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();
         DaxPayKit.initConfig(config);

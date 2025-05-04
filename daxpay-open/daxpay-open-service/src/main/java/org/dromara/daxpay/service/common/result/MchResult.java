@@ -23,9 +23,6 @@ import org.dromara.core.trans.vo.TransPojo;
 @Schema(title = "商户应用基础返回结果")
 public class MchResult extends BaseResult implements TransPojo {
 
-    @Schema(description = "商户号")
-    private String mchNo;
-
     @Schema(description = "商户名称")
     private String mchName;
 

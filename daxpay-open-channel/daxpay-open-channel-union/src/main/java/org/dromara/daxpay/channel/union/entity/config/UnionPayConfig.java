@@ -71,9 +71,6 @@ public class UnionPayConfig implements ToResult<UnionPayConfigResult> {
     /** 是否沙箱环境 */
     private boolean sandbox;
 
-    /** 商户号 */
-    private String mchNo;
-
     /** 商户AppId */
     private String appId;
 
@@ -90,12 +87,11 @@ public class UnionPayConfig implements ToResult<UnionPayConfigResult> {
         channelConfig.setId(this.getId());
         channelConfig.setOutMchNo(this.getUnionMachId());
         channelConfig.setAppId(this.getAppId());
-        channelConfig.setMchNo(this.getMchNo());
         channelConfig.setEnable(this.getEnable());
         channelConfig.setChannel(ChannelEnum.UNION_PAY.getCode());
         UnionPayConfig copy = UnionPayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
-        copy.setId(null).setAppId(null).setEnable(null).setUnionMachId(null).setAppId(null).setMchNo(null);
+        copy.setId(null).setAppId(null).setEnable(null).setUnionMachId(null).setAppId(null);
         String jsonStr = JsonUtil.toJsonStr(copy);
         channelConfig.setExt(jsonStr);
         return channelConfig;

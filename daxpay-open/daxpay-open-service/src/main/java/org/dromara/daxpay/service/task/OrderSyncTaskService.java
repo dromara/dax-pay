@@ -52,7 +52,7 @@ public class OrderSyncTaskService {
         List<PayOrder> payOrders = payOrderManager.queryExpiredOrderNotTenant();
         for (PayOrder order : payOrders) {
             try {
-                paymentAssistService.initMchAndApp(order.getMchNo(),order.getAppId());
+                paymentAssistService.initMchAndApp(order.getAppId());
                 if (!List.of(PayStatusEnum.WAIT.getCode(),PayStatusEnum.TIMEOUT.getCode()).contains(order.getStatus())){
                     paySyncService.syncPayOrder(order);
                 } else {
@@ -84,7 +84,7 @@ public class OrderSyncTaskService {
         for (RefundOrder refundOrder : list) {
             try {
                 // 调用同步方法
-                paymentAssistService.initMchAndApp(refundOrder.getMchNo(),refundOrder.getAppId());
+                paymentAssistService.initMchAndApp(refundOrder.getAppId());
                 refundSyncService.syncRefundOrder(refundOrder);
             } catch (Exception e) {
                 log.warn("退款执行同步失败, ID: {}, 退款号: {}",refundOrder.getId(), refundOrder.getRefundNo(), e);
@@ -101,7 +101,7 @@ public class OrderSyncTaskService {
         for (var transferOrder : list) {
             try {
                 // 调用同步方法
-                paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
+                paymentAssistService.initMchAndApp(transferOrder.getAppId());
                 transferSyncService.syncTransferOrder(transferOrder);
             } catch (Exception e) {
                 log.warn("转账执行同步失败, ID: {}, 转账号: {}",transferOrder.getId(),transferOrder.getTransferNo(), e);

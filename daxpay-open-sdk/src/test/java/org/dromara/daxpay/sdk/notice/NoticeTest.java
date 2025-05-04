@@ -31,7 +31,6 @@ public class NoticeTest {
                 .serviceUrl("http://127.0.0.1:19999")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
-                .mchNo("M1723635576766")
                 .appId("M8088873888246277")
                 .build();
         DaxPayKit.initConfig(config);

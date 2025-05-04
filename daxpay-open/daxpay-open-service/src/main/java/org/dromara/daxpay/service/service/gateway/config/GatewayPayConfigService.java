@@ -44,7 +44,6 @@ public class GatewayPayConfigService {
         paymentAssistService.initMchAndApp(param.getAppId());
         var mchApp = PaymentContextLocal.get().getMchAppInfo();
         var entity = GatewayPayConfig.init(param);
-        entity.setMchNo(mchApp.getMchNo());
         gatewayPayConfigManager.save(entity);
     }
 

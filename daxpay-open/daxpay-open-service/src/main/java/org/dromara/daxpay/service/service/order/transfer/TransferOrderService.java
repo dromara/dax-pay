@@ -42,7 +42,7 @@ public class TransferOrderService {
         var transferOrder = transferOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
         // 初始化商户和应用
-        paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
+        paymentAssistService.initMchAndApp(transferOrder.getAppId());
         // 同步转账订单状态
         transferSyncService.syncTransferOrder(transferOrder);
     }
@@ -54,7 +54,7 @@ public class TransferOrderService {
         var transferOrder = transferOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
         // 初始化商户和应用
-        paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
+        paymentAssistService.initMchAndApp(transferOrder.getAppId());
 
         String ip = Optional.ofNullable(WebServletUtil.getRequest())
                 .map(JakartaServletUtil::getClientIP)
@@ -62,7 +62,6 @@ public class TransferOrderService {
 
         // 构建转账参数并发起
         var transferParam = new TransferParam();
-        transferParam.setMchNo(transferOrder.getMchNo());
         transferParam.setAppId(transferOrder.getAppId());
         transferParam.setClientIp(ip);
         transferParam.setReqTime(LocalDateTime.now());
@@ -79,7 +78,7 @@ public class TransferOrderService {
         var transferOrder = transferOrderManager.findById(id)
                 .orElseThrow(() -> new TradeNotExistException("转账订单不存在"));
         // 初始化商户和应用
-        paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
+        paymentAssistService.initMchAndApp(transferOrder.getAppId());
         // 更新订单状态
         if (!Objects.equals(TransferStatusEnum.FAIL.getCode(), transferOrder.getStatus())){
             throw new TradeProcessingException("只有失败状态的才可以关闭");

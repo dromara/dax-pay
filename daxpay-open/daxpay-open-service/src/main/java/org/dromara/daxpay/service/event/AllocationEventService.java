@@ -42,7 +42,7 @@ public class AllocationEventService {
         var payOrderOpt = payOrderManager.findByIdNotTenant(event.getMessage());
         if (payOrderOpt.isPresent()){
             var payOrder = payOrderOpt.get();
-            paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+            paymentAssistService.initMchAndApp(payOrder.getAppId());
             payOrderService.autoAllocation(payOrder);
             log.info("分账开始，订单号：{}", event.getMessage());
         } else {
@@ -58,7 +58,7 @@ public class AllocationEventService {
         Optional<AllocOrder> opt = allocOrderManager.findByIdNotTenant(event.getMessage());
         if (opt.isPresent()){
             var allocOrder = opt.get();
-            paymentAssistService.initMchAndApp(allocOrder.getMchNo(),allocOrder.getAppId());
+            paymentAssistService.initMchAndApp(allocOrder.getAppId());
             syncService.autoSync(allocOrder);
             log.info("分账同步，订单号：{}", event.getMessage());
         } else {
@@ -74,7 +74,7 @@ public class AllocationEventService {
         Optional<AllocOrder> opt = allocOrderManager.findByIdNotTenant(event.getMessage());
         if (opt.isPresent()){
             var allocOrder = opt.get();
-            paymentAssistService.initMchAndApp(allocOrder.getMchNo(),allocOrder.getAppId());
+            paymentAssistService.initMchAndApp(allocOrder.getAppId());
             allocationService.autoFinish(allocOrder);
             log.info("分账完结，订单号：{}", event.getMessage());
         } else {

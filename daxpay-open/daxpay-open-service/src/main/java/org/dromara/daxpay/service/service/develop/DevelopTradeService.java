@@ -37,7 +37,7 @@ public class DevelopTradeService {
      * 生成签名
      */
     public String genSign(PaymentCommonParam param){
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchAndApp(param.getAppId());
         return paymentAssistService.genSign(param);
     }
 
@@ -46,7 +46,7 @@ public class DevelopTradeService {
      */
     public PayResult pay(PayParam param) {
         // 初始化
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchAndApp(param.getAppId());
         // 签名校验
         paymentAssistService.signVerify(param);
         return payService.pay(param);
@@ -57,7 +57,7 @@ public class DevelopTradeService {
      */
     public RefundResult refund(RefundParam param) {
         // 初始化
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchAndApp(param.getAppId());
         // 签名校验
         paymentAssistService.signVerify(param);
         return refundService.refund(param);
@@ -68,7 +68,7 @@ public class DevelopTradeService {
      */
     public TransferResult transfer(TransferParam param) {
         // 初始化
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchAndApp(param.getAppId());
         // 签名校验
         paymentAssistService.signVerify(param);
         return transferService.transfer(param);
@@ -79,7 +79,7 @@ public class DevelopTradeService {
      */
     public GatewayPayUrlResult checkoutUrl(GatewayPayParam param) {
         // 初始化
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchAndApp(param.getAppId());
         // 签名校验
         paymentAssistService.signVerify(param);
         return gatewayPayService.prePay(param);

@@ -99,7 +99,7 @@ public class WechatAllocReceiverBindService {
      */
     public void bind(Long id) {
         var receiverBind = receiverBindManager.findById(id).orElseThrow(() -> new DataNotExistException("微信分账接收方数据不存在"));
-        paymentAssistService.initMchAndApp(receiverBind.getMchNo(),receiverBind.getAppId());
+        paymentAssistService.initMchAndApp(receiverBind.getAppId());
         if (receiverBind.isBind()){
             throw new DataErrorException("分账接收方已绑定");
         }
@@ -131,7 +131,7 @@ public class WechatAllocReceiverBindService {
      */
     public void unbind(Long id) {
         var receiverBind = receiverBindManager.findById(id).orElseThrow(() -> new DataNotExistException("微信分账接收方数据不存在"));
-        paymentAssistService.initMchAndApp(receiverBind.getMchNo(),receiverBind.getAppId());
+        paymentAssistService.initMchAndApp(receiverBind.getAppId());
         if (!receiverBind.isBind()){
             throw new DataErrorException("分账接收方已解绑");
         }

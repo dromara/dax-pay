@@ -88,9 +88,6 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
     /** 备注 */
     private String remark;
 
-    /** 商户号 */
-    private String mchNo;
-
     /** 商户AppId */
     private String appId;
 
@@ -103,12 +100,11 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
         channelConfig.setOutAppId(this.getWxAppId());
         channelConfig.setOutMchNo(this.getWxMchId());
         channelConfig.setAppId(this.getAppId());
-        channelConfig.setMchNo(this.getMchNo());
         channelConfig.setEnable(this.getEnable());
         channelConfig.setChannel(this.isv?ChannelEnum.WECHAT_ISV.getCode():ChannelEnum.WECHAT.getCode());
         WechatPayConfig copy = WechatPayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
-        copy.setId(null).setMchNo(null).setAppId(null).setEnable(null).setWxMchId(null).setWxAppId(null);
+        copy.setId(null).setAppId(null).setEnable(null).setWxMchId(null).setWxAppId(null);
         String jsonStr = JsonUtil.toJsonStr(copy);
         channelConfig.setExt(jsonStr);
         return channelConfig;
@@ -124,7 +120,6 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
                 .setWxAppId(channelConfig.getOutAppId())
                 .setWxMchId(channelConfig.getOutMchNo())
                 .setAppId(channelConfig.getAppId())
-                .setMchNo(channelConfig.getMchNo())
                 .setEnable(channelConfig.isEnable());
         return config;
     }

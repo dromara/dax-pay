@@ -54,8 +54,7 @@ public class MerchantNotifyConfigService {
                             .setName(o.getName())
                             .setDescription(o.getDescription())
                             .setSubscribe(subscribe);
-                    result.setAppId(appId)
-                            .setMchNo(mchApp.getMchNo());
+                    result.setAppId(appId);
                     return result;
                 }).toList();
     }
@@ -91,7 +90,6 @@ public class MerchantNotifyConfigService {
         } else {
             MerchantNotifyConfig merchantNotifyConfig = new MerchantNotifyConfig();
             merchantNotifyConfig.setAppId(appId);
-            merchantNotifyConfig.setMchNo(mchApp.getMchNo());
             merchantNotifyConfig.setCode(notifyType);
             merchantNotifyConfig.setSubscribe(subscribe);
             configManager.save(merchantNotifyConfig);

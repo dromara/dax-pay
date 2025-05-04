@@ -43,7 +43,7 @@ public class PaymentVerifyAspect {
             // 参数校验
             ValidationUtil.validateParam(paymentParam);
             // 商户和应用信息初始化
-            paymentAssistService.initMchAndApp(paymentParam.getMchNo(), paymentParam.getAppId());
+            paymentAssistService.initMchAndApp(paymentParam.getAppId());
             // 状态判断
             paymentAssistService.checkStatus();
             // 终端信息初始化

@@ -61,7 +61,6 @@ public class MerchantCallbackSendService {
         try {
             // 构造通知消息并签名
             var daxResult = new DaxNoticeResult<Map<String, Object>>(SUCCESS_CODE, JsonUtil.parseObj(task.getContent()), SUCCESS_MSG)
-                    .setMchNo(task.getMchNo())
                     .setAppId(task.getAppId());
             paymentAssistService.sign(daxResult);
             HttpResponse execute = HttpUtil.createPost(task.getUrl())
@@ -136,7 +135,7 @@ public class MerchantCallbackSendService {
         var taskOpt = taskManager.findById(taskId);
         if (taskOpt.isPresent()){
             var task = taskOpt.get();
-            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+            paymentAssistService.initMchAndApp(task.getAppId());
             this.sendData(task,false);
         } else {
             log.error("发送任务不存在，任务ID：{}",taskId);

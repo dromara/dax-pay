@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @IgnoreAuth
 @Tag(name = "银联回调通知")
 @RestController
-@RequestMapping("/unipay/callback/{mchNo}/{AppId}")
+@RequestMapping("/unipay/callback/{AppId}")
 @RequiredArgsConstructor
 public class UnionPayCallbackController {
 
@@ -30,8 +30,8 @@ public class UnionPayCallbackController {
 
     @Operation(summary = "银联回调")
     @PostMapping("/union")
-    public String UnionPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String UnionPayNotify(@PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return "";
     }
 }

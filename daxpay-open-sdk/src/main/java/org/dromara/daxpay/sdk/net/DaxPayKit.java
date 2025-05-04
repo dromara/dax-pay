@@ -46,10 +46,6 @@ public class DaxPayKit {
      * @return DaxResult 响应类
      */
     public <T> DaxResult<T> execute(DaxPayRequest<T> request, boolean sign) {
-        // 判断是否需要填充商户号和应用号
-        if (Objects.isNull(request.getMchNo())) {
-            request.setMchNo(config.getMchNo());
-        }
         if (Objects.isNull(request.getAppId())) {
             request.setAppId(config.getAppId());
         }

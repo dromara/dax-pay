@@ -63,7 +63,7 @@ public class CashierPayService {
     @IgnoreTenant
     public PayResult cashierBarPay(GatewayCashierBarPayParam param) {
         var payOrder = gatewayPayAssistService.getOrderAndCheck(param.getOrderNo());
-        paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+        paymentAssistService.initMchAndApp(payOrder.getAppId());
         // 识别付款码类型
         var aggregatePayType = PayUtil.getBarCodeType(param.getAuthCode());
         // 获取聚合付款码支付配置
@@ -79,7 +79,6 @@ public class CashierPayService {
         payParam.setOtherMethod(barPayConfig.getOtherMethod());
         payParam.setAuthCode(param.getAuthCode());
         payParam.setAppId(barPayConfig.getAppId());
-        payParam.setMchNo(barPayConfig.getMchNo());
         // 设置IP
         if (Objects.isNull(payParam.getClientIp())){
             String ip = Optional.ofNullable(WebServletUtil.getRequest())
@@ -97,7 +96,7 @@ public class CashierPayService {
     public PayResult cashierPay(GatewayCashierPayParam param){
         // 订单信息
         PayOrder payOrder = gatewayPayAssistService.getOrderAndCheck(param.getOrderNo());
-        paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+        paymentAssistService.initMchAndApp(payOrder.getAppId());
         // 获取配置项
         var itemConfig = cashierItemConfigManager.findByIdAndAppId(param.getItemId(),payOrder.getAppId())
                 .orElseThrow(() -> new TradeProcessingException("支付配置项不存在"));
@@ -118,7 +117,7 @@ public class CashierPayService {
         // 查询配置
         var itemConfig = cashierItemConfigManager.findByIdAndAppId(param.getItemId(),payOrder.getAppId())
                 .orElseThrow(() -> new TradeProcessingException("支付配置项不存在"));
-        paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+        paymentAssistService.initMchAndApp(payOrder.getAppId());
         // 构建支付参数
         var payParam = new PayParam();
         payParam.setChannel(itemConfig.getChannel());
@@ -127,7 +126,6 @@ public class CashierPayService {
         payParam.setAuthCode(param.getAuthCode());
         payParam.setOpenId(param.getOpenId());
         payParam.setAppId(itemConfig.getAppId());
-        payParam.setMchNo(payOrder.getMchNo());
         // 设置IP
         if (Objects.isNull(payParam.getClientIp())){
             String ip = Optional.ofNullable(WebServletUtil.getRequest())
@@ -156,7 +154,7 @@ public class CashierPayService {
         if (!codeConfig.getEnable()) {
             throw new ConfigNotEnableException("支付码牌已禁用");
         }
-        paymentAssistService.initMchAndApp(codeConfig.getMchNo(), codeConfig.getAppId());
+        paymentAssistService.initMchAndApp(codeConfig.getAppId());
         var itemConfig = cashierCodeItemConfigManager.findByCodeAndType(codeConfig.getId(), param.getCashierType())
                 .orElseThrow(() -> new DataNotExistException("码牌配置不存在"));
         // 构建支付参数
@@ -196,7 +194,7 @@ public class CashierPayService {
         if (!codeConfig.getEnable()) {
             throw new ConfigNotEnableException("支付码牌已禁用");
         }
-        paymentAssistService.initMchAndApp(codeConfig.getMchNo(), codeConfig.getAppId());
+        paymentAssistService.initMchAndApp(codeConfig.getAppId());
         var codeItemConfig = cashierCodeItemConfigManager.findByCodeAndType(codeConfig.getId(), param.getCashierType())
                 .orElseThrow(() -> new DataNotExistException("码牌配置不存在"));
         // 获取认证策略
@@ -226,7 +224,7 @@ public class CashierPayService {
         if (!codeConfig.getEnable()) {
             throw new ConfigNotEnableException("支付码牌已禁用");
         }
-        paymentAssistService.initMchAndApp(codeConfig.getMchNo(), codeConfig.getAppId());
+        paymentAssistService.initMchAndApp(codeConfig.getAppId());
         var codeItemConfig = cashierCodeItemConfigManager.findByCodeAndType(codeConfig.getId(), param.getCashierType())
                 .orElseThrow(() -> new DataNotExistException("码牌配置不存在"));
         // 获取认证策略

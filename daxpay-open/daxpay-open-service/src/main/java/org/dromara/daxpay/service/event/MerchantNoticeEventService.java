@@ -46,7 +46,7 @@ public class MerchantNoticeEventService {
         var taskOpt = merchantNotifyTaskManager.findByIdNotTenant(taskId);
         if (taskOpt.isPresent()){
             var task = taskOpt.get();
-            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+            paymentAssistService.initMchAndApp(task.getAppId());
             MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
             // 判断通知方式是否为http并且订阅了该类型的通知
             boolean subscribe = merchantNotifyConfigService.getSubscribeByAppIdAndType(mchAppInfo.getAppId(), task.getNotifyType());
@@ -71,7 +71,7 @@ public class MerchantNoticeEventService {
         var taskOpt = merchantCallbackTaskManager.findByIdNotTenant(taskId);
         if (taskOpt.isPresent()){
             var task = taskOpt.get();
-            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+            paymentAssistService.initMchAndApp(task.getAppId());
             merchantCallbackSendService.sendData(task,true);
         } else {
             log.error("商户回调发送任务不存在，任务ID：{}",taskId);

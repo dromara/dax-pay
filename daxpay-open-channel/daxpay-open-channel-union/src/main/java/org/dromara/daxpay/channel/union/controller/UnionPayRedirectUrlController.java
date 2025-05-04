@@ -22,15 +22,15 @@ import org.springframework.web.servlet.ModelAndView;
 @IgnoreAuth
 @Tag(name = "同步通知跳转控制器")
 @RestController
-@RequestMapping("/unipay/return/{mchNo}/{AppId}")
+@RequestMapping("/unipay/return/{AppId}")
 @RequiredArgsConstructor
 public class UnionPayRedirectUrlController {
     private final PaymentAssistService paymentAssistService;
 
     @Operation(summary = "银联同步跳转通知")
     @GetMapping("/union")
-    public ModelAndView alipay(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request){
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public ModelAndView alipay(@PathVariable("AppId") String appId, HttpServletRequest request){
+        paymentAssistService.initMchAndApp(appId);
         String redirect = "";
         return new ModelAndView("redirect:"+redirect);
     }

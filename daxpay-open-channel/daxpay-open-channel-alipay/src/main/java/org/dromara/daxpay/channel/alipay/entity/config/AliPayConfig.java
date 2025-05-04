@@ -68,9 +68,6 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     /** 是否沙箱环境 */
     private boolean sandbox;
 
-    /** 商户号 */
-    private String mchNo;
-
     /** 商户AppId */
     private String appId;
 
@@ -86,12 +83,11 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
         channelConfig.setId(this.getId());
         channelConfig.setOutAppId(this.getAliAppId());
         channelConfig.setAppId(this.getAppId());
-        channelConfig.setMchNo(this.getMchNo());
         channelConfig.setEnable(this.getEnable());
         channelConfig.setChannel(this.isv?ChannelEnum.ALIPAY_ISV.getCode():ChannelEnum.ALIPAY.getCode());
         var copy = AlipayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
-        copy.setId(null).setAppId(null).setEnable(null).setAliAppId(null).setMchNo(null);
+        copy.setId(null).setAppId(null).setEnable(null).setAliAppId(null);
         String jsonStr = JsonUtil.toJsonStr(copy);
         channelConfig.setExt(jsonStr);
         return channelConfig;
@@ -105,7 +101,6 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
         config.setId(channelConfig.getId())
                 .setAliAppId(channelConfig.getOutAppId())
                 .setAppId(channelConfig.getAppId())
-                .setMchNo(channelConfig.getMchNo())
                 .setEnable(channelConfig.isEnable());
         return config;
     }

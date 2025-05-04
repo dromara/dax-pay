@@ -43,9 +43,6 @@ public class AlipayAllocReceiver implements ToResult<AlipayAllocReceiverResult> 
     /** 分账关系名称 */
     private String relationName;
 
-    /** 商户号 */
-    private String mchNo;
-
     /** 商户AppId */
     private String appId;
 
@@ -57,7 +54,6 @@ public class AlipayAllocReceiver implements ToResult<AlipayAllocReceiverResult> 
         var receiver = new AllocReceiver();
         receiver.setId(this.getId());
         receiver.setAppId(this.getAppId());
-        receiver.setMchNo(this.getMchNo());
         receiver.setReceiverType(this.getReceiverType());
         receiver.setReceiverNo(this.getReceiverNo());
         receiver.setReceiverName(this.getReceiverName());

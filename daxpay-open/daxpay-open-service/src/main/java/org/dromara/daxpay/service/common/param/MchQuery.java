@@ -23,22 +23,9 @@ import java.util.Objects;
 @Schema(title = "商户查询参数")
 public class MchQuery extends SortParam {
 
-    /** 商户号 */
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "商户号")
-    private String mchNo;
-
     /** 应用号 */
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "应用号")
     private String appId;
 
-    public String getMchNo() {
-        // 判断是否管理端, 如果不是管理端将值设置为null, 防止越权
-        var clientCodeService = SpringUtil.getBean(ClientCodeService.class);
-        if (!Objects.equals(clientCodeService.getClientCode(), DaxPayCode.Client.ADMIN)){
-            return null;
-        }
-        return mchNo;
-    }
 }

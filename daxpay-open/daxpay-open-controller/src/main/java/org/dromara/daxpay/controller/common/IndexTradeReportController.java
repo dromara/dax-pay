@@ -36,7 +36,6 @@ public class IndexTradeReportController {
     @Operation(summary = "支付交易信息统计")
     @GetMapping("/pay")
     public Result<TradeReportResult> pryTradeReport(TradeReportQuery query){
-        query.setMchNo(null);
         return Res.ok(tradeReportService.pryTradeReport(query));
     }
 
@@ -44,7 +43,6 @@ public class IndexTradeReportController {
     @Operation(summary = "退款交易信息统计")
     @GetMapping("/refund")
     public Result<TradeReportResult> refundTradeReport(TradeReportQuery query){
-        query.setMchNo(null);
         return Res.ok(tradeReportService.refundTradeReport(query));
     }
 
@@ -52,7 +50,6 @@ public class IndexTradeReportController {
     @Operation(summary = "支付交易通道统计")
     @GetMapping("/payChannel")
     public Result<List<TradeReportResult>> payChannelReport(TradeReportQuery query){
-        query.setMchNo(null);
         return Res.ok(tradeReportService.payChannelReport(query));
     }
 
@@ -60,7 +57,6 @@ public class IndexTradeReportController {
     @Operation(summary = "退款交易通道统计")
     @GetMapping("/refundChannel")
     public Result<List<TradeReportResult>> refundChannelReport(TradeReportQuery query){
-        query.setMchNo(null);
         return Res.ok(tradeReportService.refundChannelReport(query));
     }
 
@@ -68,7 +64,6 @@ public class IndexTradeReportController {
     @Operation(summary = "支付交易方式统计")
     @GetMapping("/payMethod")
     public Result<List<TradeReportResult>> payMethodReport(TradeReportQuery query){
-        query.setMchNo(null);
         return Res.ok(tradeReportService.payMethodReport(query));
     }
 

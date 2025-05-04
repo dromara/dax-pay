@@ -23,8 +23,4 @@ public class TradeReportQuery {
     /** 结束日期 */
     @Schema(description = "结束日期")
     private LocalDate endDate;
-
-    /** 商户号 */
-    @Schema(description = "商户号")
-    private String mchNo;
 }

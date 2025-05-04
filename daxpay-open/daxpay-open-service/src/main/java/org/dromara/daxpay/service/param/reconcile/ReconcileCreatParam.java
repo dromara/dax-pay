@@ -33,11 +33,6 @@ public class ReconcileCreatParam {
     @NotNull(message = "日期不可为空")
     private LocalDate date;
 
-    /** 商户号 */
-    @Schema(description = "商户号")
-    @NotBlank(message = "商户号不可为空")
-    private String mchNo;
-
     /** 应用Appid */
     @Schema(description = "应用Appid")
     @NotBlank(message = "应用Appid不可为空")

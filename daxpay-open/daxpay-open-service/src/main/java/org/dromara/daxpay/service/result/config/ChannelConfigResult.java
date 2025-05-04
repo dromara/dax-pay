@@ -41,10 +41,6 @@ public class ChannelConfigResult{
     @Schema(description = "是否启用")
     private Boolean enable;
 
-    /** 商户号 */
-    @Schema(description = "商户号")
-    private String mchNo;
-
     /** 应用号 */
     @Schema(description = "应用号")
     private String appId;

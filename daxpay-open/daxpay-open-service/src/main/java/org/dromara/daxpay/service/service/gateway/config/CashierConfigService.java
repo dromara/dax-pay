@@ -80,7 +80,6 @@ public class CashierConfigService {
         paymentAssistService.initMchAndApp(param.getAppId());
         var mchApp = PaymentContextLocal.get().getMchAppInfo();
         var entity = CashierGroupConfig.init(param);
-        entity.setMchNo(mchApp.getMchNo());
         cashierGroupConfigManager.save(entity);
     }
 
@@ -117,7 +116,6 @@ public class CashierConfigService {
         paymentAssistService.initMchAndApp(param.getAppId());
         var mchApp = PaymentContextLocal.get().getMchAppInfo();
         var entity = CashierItemConfig.init(param);
-        entity.setMchNo(mchApp.getMchNo());
         cashierItemConfigManager.save(entity);
 
     }

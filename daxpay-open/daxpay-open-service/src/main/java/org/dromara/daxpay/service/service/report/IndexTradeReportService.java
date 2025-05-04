@@ -40,7 +40,6 @@ public class IndexTradeReportService {
         var endTime = LocalDateTimeUtil.endOfDay(query.getEndDate());
 
         param.between(MpUtil.getColumnName(PayOrder::getPayTime), startTime, endTime)
-                .eq(Objects.nonNull(query.getMchNo()), MpUtil.getColumnName(PayOrder::getMchNo), query.getMchNo())
                 .eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode());
         return tradeReportMapper.payTradeReport(param);
     }
@@ -55,7 +54,6 @@ public class IndexTradeReportService {
         var endTime = LocalDateTimeUtil.endOfDay(query.getEndDate());
 
         param.between(MpUtil.getColumnName(RefundOrder::getFinishTime),startTime, endTime)
-                .eq(Objects.nonNull(query.getMchNo()), MpUtil.getColumnName(RefundOrder::getMchNo), query.getMchNo())
                 .eq(MpUtil.getColumnName(RefundOrder::getStatus), RefundStatusEnum.SUCCESS.getCode());
         return tradeReportMapper.refundTradeReport(param);
     }
@@ -70,7 +68,6 @@ public class IndexTradeReportService {
         var endTime = LocalDateTimeUtil.endOfDay(query.getEndDate());
 
         queryWrapper.between(MpUtil.getColumnName(PayOrder::getPayTime),startTime, endTime)
-                .eq(Objects.nonNull(query.getMchNo()), MpUtil.getColumnName(PayOrder::getMchNo), query.getMchNo())
                 .eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode())
                 .groupBy(MpUtil.getColumnName(PayOrder::getChannel));
         var list = tradeReportMapper.payChannelReport(queryWrapper);
@@ -90,7 +87,6 @@ public class IndexTradeReportService {
 
         param.between(MpUtil.getColumnName(RefundOrder::getFinishTime),startTime, endTime)
                 .groupBy(MpUtil.getColumnName(RefundOrder::getChannel))
-                .eq(Objects.nonNull(query.getMchNo()), MpUtil.getColumnName(RefundOrder::getMchNo), query.getMchNo())
                 .eq(MpUtil.getColumnName(RefundOrder::getStatus), RefundStatusEnum.SUCCESS.getCode());
 
         var list = tradeReportMapper.refundChannelReport(param);
@@ -110,7 +106,6 @@ public class IndexTradeReportService {
 
         param.between(MpUtil.getColumnName(PayOrder::getPayTime),startTime, endTime)
                 .eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode())
-                .eq(Objects.nonNull(query.getMchNo()), MpUtil.getColumnName(PayOrder::getMchNo), query.getMchNo())
                 .groupBy(MpUtil.getColumnName(PayOrder::getMethod));
         var list = tradeReportMapper.payMethodReport(param);
         var dictMap = dictionaryItemService.findEnableByDictCode("pay_method");

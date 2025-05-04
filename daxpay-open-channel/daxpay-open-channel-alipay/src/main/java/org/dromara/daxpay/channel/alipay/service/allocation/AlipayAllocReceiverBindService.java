@@ -102,7 +102,7 @@ public class AlipayAllocReceiverBindService {
         if (receiverBind.isBind()){
             throw new DataErrorException("分账接收方已绑定");
         }
-        paymentAssistService.initMchAndApp(receiverBind.getMchNo(),receiverBind.getAppId());
+        paymentAssistService.initMchAndApp(receiverBind.getAppId());
         var aliPayConfig = alipayConfigService.getAndCheckConfig(receiverBind.isIsv());
         var model = new AlipayTradeRoyaltyRelationBindModel();
         RoyaltyEntity entity = new RoyaltyEntity();
@@ -144,7 +144,7 @@ public class AlipayAllocReceiverBindService {
         if (!receiverBind.isBind()){
             throw new DataErrorException("分账接收方已解绑");
         }
-        paymentAssistService.initMchAndApp(receiverBind.getMchNo(),receiverBind.getAppId());
+        paymentAssistService.initMchAndApp(receiverBind.getAppId());
         var aliPayConfig = alipayConfigService.getAndCheckConfig(receiverBind.isIsv());
 
         AlipayTradeRoyaltyRelationUnbindModel model = new AlipayTradeRoyaltyRelationUnbindModel();

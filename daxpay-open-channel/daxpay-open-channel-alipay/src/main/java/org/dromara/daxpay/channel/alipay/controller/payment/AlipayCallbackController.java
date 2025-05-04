@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @IgnoreAuth
 @Tag(name = "支付宝回调通知")
 @RestController
-@RequestMapping("/unipay/callback/{mchNo}/{AppId}")
+@RequestMapping("/unipay/callback/{AppId}")
 @RequiredArgsConstructor
 public class AlipayCallbackController {
 
@@ -32,14 +32,14 @@ public class AlipayCallbackController {
 
     @Operation(summary = "支付宝回调(普通商户)")
     @PostMapping("/alipay")
-    public String aliPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String aliPayNotify(@PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return payCallbackService.callbackHandle(request,false);
     }
     @Operation(summary = "支付宝回调(特约商户)")
     @PostMapping("/alipay/isv")
-    public String aliPayIsvNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String aliPayIsvNotify(@PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return payCallbackService.callbackHandle(request, true);
     }
 }

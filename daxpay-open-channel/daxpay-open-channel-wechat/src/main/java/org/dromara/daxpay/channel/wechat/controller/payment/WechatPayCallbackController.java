@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @IgnoreAuth
 @Tag(name = "微信回调通知控制器")
 @RestController
-@RequestMapping("/unipay/callback/{mchNo}/{AppId}/wechat")
+@RequestMapping("/unipay/callback/{AppId}/wechat")
 @RequiredArgsConstructor
 public class WechatPayCallbackController {
     private final WechatTransferCallbackService transferCallbackService;
@@ -35,44 +35,44 @@ public class WechatPayCallbackController {
 
     @Operation(summary = "微信支付回调(普通商户)")
     @PostMapping("/pay")
-    public String wechatPayNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String wechatPayNotify(@PathVariable("AppId") String appId,HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return payCallbackService.payHandle(request,false);
     }
 
     @Operation(summary = "微信支付回调(特约商户)")
     @PostMapping("/isv/pay")
-    public String wechatPayIsvNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String wechatPayIsvNotify(@PathVariable("AppId") String appId,HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return payCallbackService.payHandle(request,true);
     }
 
     @Operation(summary = "微信退款回调(普通商户)")
     @PostMapping("/refund")
-    public String wechatRefundNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String wechatRefundNotify(@PathVariable("AppId") String appId,HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return refundCallbackService.refundHandle(request,false);
     }
 
     @Operation(summary = "微信退款回调(特约商户)")
     @PostMapping("/isv/refund")
-    public String wechatIsvRefundNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId,HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String wechatIsvRefundNotify(@PathVariable("AppId") String appId,HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return refundCallbackService.refundHandle(request,true);
     }
 
 
     @Operation(summary = "微信转账回调(普通商户)")
     @PostMapping("/transfer")
-    public String wechatTransferNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String wechatTransferNotify(@PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return transferCallbackService.transferHandle(request,false);
     }
 
     @Operation(summary = "微信转账回调(特约商户)")
     @PostMapping("/isv/transfer")
-    public String wechatIsvTransferNotify(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String wechatIsvTransferNotify(@PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return transferCallbackService.transferHandle(request,true);
     }
 }

@@ -50,8 +50,7 @@ public class CashierCodeConfigService {
         paymentAssistService.initMchAndApp(param.getAppId());
         String uuid = UUID.fastUUID().toString(true);
         CashierCodeConfig config = CashierCodeConfig.init(param);
-        config.setCode(uuid)
-                .setMchNo(MchContextLocal.getMchNo());
+        config.setCode(uuid);
         cashierCodeConfigManager.save(config);
     }
 
@@ -143,8 +142,7 @@ public class CashierCodeConfigService {
         }
 
         CashierCodeItemConfig entity = CashierCodeItemConfig.init(param);
-        entity.setAppId(codeConfig.getAppId())
-                .setMchNo(codeConfig.getMchNo());
+        entity.setAppId(codeConfig.getAppId());
         codeItemConfigManager.save(entity);
     }
 

@@ -68,7 +68,6 @@ public class MerchantNotifySendService {
         try {
             // 构造通知消息并签名
             var daxResult = new DaxNoticeResult<Map<String, Object>>(SUCCESS_CODE, JsonUtil.parseObj(task.getContent()), SUCCESS_MSG)
-                    .setMchNo(task.getMchNo())
                     .setAppId(task.getAppId())
                     .setNoticeType(task.getNotifyType());
             paymentAssistService.sign(daxResult);
@@ -145,7 +144,7 @@ public class MerchantNotifySendService {
         var taskOpt = taskManager.findById(taskId);
         if (taskOpt.isPresent()){
             var task = taskOpt.get();
-            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+            paymentAssistService.initMchAndApp(task.getAppId());
             var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
             // 判断通知方式是否为http并且订阅了该类型的通知
             boolean subscribe = notifyConfigService.getSubscribeByAppIdAndType(mchAppInfo.getAppId(), task.getNotifyType());

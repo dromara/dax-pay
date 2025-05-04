@@ -126,7 +126,7 @@ public class GatewayPayService {
         // 获取聚合类型
         var aggregateConfig = aggregatePayConfigManager.findByAppIdAndType(payOrder.getAppId(), param.getAggregateType())
                 .orElseThrow(() -> new ConfigNotExistException("聚合支付配置项不存在"));
-        paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+        paymentAssistService.initMchAndApp(payOrder.getAppId());
         // 构建支付参数
         var payParam = new PayParam();
         payParam.setChannel(aggregateConfig.getChannel());
@@ -134,7 +134,6 @@ public class GatewayPayService {
         payParam.setOtherMethod(aggregateConfig.getOtherMethod());
         payParam.setOpenId(param.getOpenId());
         payParam.setAppId(aggregateConfig.getAppId());
-        payParam.setMchNo(payOrder.getMchNo());
         // 设置IP
         if (Objects.isNull(payParam.getClientIp())){
             String ip = Optional.ofNullable(WebServletUtil.getRequest())
@@ -173,7 +172,6 @@ public class GatewayPayService {
         payParam.setAuthCode(param.getAuthCode());
         payParam.setTerminalNo(param.getTerminalNo());
         payParam.setAppId(barPayConfig.getAppId());
-        payParam.setMchNo(barPayConfig.getMchNo());
         // 设置IP
         if (Objects.isNull(payParam.getClientIp())){
             String ip = Optional.ofNullable(WebServletUtil.getRequest())

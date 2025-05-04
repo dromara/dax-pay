@@ -21,12 +21,6 @@ import java.time.LocalDateTime;
 @Setter
 public abstract class DaxPayRequest<T> {
 
-    /** 商户号 */
-    @Schema(description = "商户号")
-    @NotBlank(message = "商户号不可为空")
-    @Size(max = 32, message = "商户号不可超过32位")
-    private String mchNo;
-
     /** 应用号 */
     @Schema(description = "应用号")
     @NotBlank(message = "应用号不可为空")

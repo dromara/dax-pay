@@ -55,12 +55,12 @@ public class TradeOrderEventService {
             PayOrder payOrder = orderOpt.get();
             // 不是支付中不需要进行同步
             if (payOrder.getStatus().equals(PayStatusEnum.PROGRESS.getCode())) {
-                paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+                paymentAssistService.initMchAndApp(payOrder.getAppId());
                 paySyncService.syncPayOrder(payOrder);
             }
             // 待支付走超时关闭
             if (payOrder.getStatus().equals(PayStatusEnum.WAIT.getCode()) ) {
-                paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+                paymentAssistService.initMchAndApp(payOrder.getAppId());
                 payCloseService.closeOrder(payOrder,false);
             }
         }
@@ -75,7 +75,7 @@ public class TradeOrderEventService {
             var order = orderOpt.get();
             // 不是退款中不需要进行同步
             if (order.getStatus().equals(RefundStatusEnum.PROGRESS.getCode())) {
-                paymentAssistService.initMchAndApp(order.getMchNo(), order.getAppId());
+                paymentAssistService.initMchAndApp(order.getAppId());
                 refundSyncService.syncRefundOrder(order);
             }
         }
@@ -91,7 +91,7 @@ public class TradeOrderEventService {
             var order = orderOpt.get();
             // 不是退款中不需要进行同步
             if (order.getStatus().equals(TransferStatusEnum.PROGRESS.getCode())) {
-                paymentAssistService.initMchAndApp(order.getMchNo(), order.getAppId());
+                paymentAssistService.initMchAndApp(order.getAppId());
                 transferSyncService.syncTransferOrder(order);
             }
         }

@@ -174,7 +174,6 @@ public class PaymentAssistService {
                 mchAppInfo.setLimitAmount(mchAppInfo.getLimitAmount().min(platformConfig.getLimitAmount()));
             }
         }
-
         // 初始化商户上下文信息
         MchContextLocal.setMchNo(mchAppInfo.getMchNo());
     }

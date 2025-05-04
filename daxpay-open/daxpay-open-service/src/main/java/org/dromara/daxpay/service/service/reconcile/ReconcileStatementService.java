@@ -73,7 +73,7 @@ public class ReconcileStatementService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public ReconcileStatement create(ReconcileCreatParam param) {
         // 初始化上下文
-        paymentAssistService.initMchAndApp(param.getMchNo(), param.getAppId());
+        paymentAssistService.initMchAndApp(param.getAppId());
         ReconcileStatement statement = new ReconcileStatement()
                 .setName(param.getTitle())
                 .setReconcileNo(TradeNoGenerateUtil.reconciliation())
@@ -101,7 +101,7 @@ public class ReconcileStatementService {
             throw new OperationFailException("对账单文件已经下载或上传");
         }
         // 初始化对商户和应用上下文
-        paymentAssistService.initMchAndApp(statement.getMchNo(), statement.getAppId());
+        paymentAssistService.initMchAndApp(statement.getAppId());
 
         // 构建对账策略
         AbsReconcileStrategy reconcileStrategy = PaymentStrategyFactory.create(statement.getChannel(), AbsReconcileStrategy.class);
@@ -129,7 +129,7 @@ public class ReconcileStatementService {
         var statement = reconcileStatementManager.findById(param.getId())
                 .orElseThrow(() -> new DataNotExistException("未找到对账订单"));
 
-        paymentAssistService.initMchAndApp(statement.getMchNo(), statement.getAppId());
+        paymentAssistService.initMchAndApp(statement.getAppId());
 
         // 将对账订单写入到上下文中
         AbsReconcileStrategy reconcileStrategy = PaymentStrategyFactory.create(statement.getChannel(), AbsReconcileStrategy.class);
@@ -192,7 +192,7 @@ public class ReconcileStatementService {
         if (statement.isCompare()){
             throw new OperationFailException("对账单比对已经完成");
         }
-        paymentAssistService.initMchAndApp(statement.getMchNo(), statement.getAppId());
+        paymentAssistService.initMchAndApp(statement.getAppId());
 
         // 获取通道交易记录
         var channelTrades = reconcileTradeManage.findAllByReconcileId(statement.getId());

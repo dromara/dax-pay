@@ -39,9 +39,6 @@ public class WechatAllocReceiver implements ToResult<WechatAllocReceiverResult> 
     /** 分账关系名称 */
     private String relationName;
 
-    /** 商户号 */
-    private String mchNo;
-
     /** 商户AppId */
     private String appId;
 
@@ -52,7 +49,6 @@ public class WechatAllocReceiver implements ToResult<WechatAllocReceiverResult> 
         var receiver = new AllocReceiver();
         receiver.setId(this.getId());
         receiver.setAppId(this.getAppId());
-        receiver.setMchNo(this.getMchNo());
         receiver.setReceiverNo(this.getReceiverNo());
         receiver.setReceiverType(this.getReceiverType());
         receiver.setReceiverName(this.getReceiverName());

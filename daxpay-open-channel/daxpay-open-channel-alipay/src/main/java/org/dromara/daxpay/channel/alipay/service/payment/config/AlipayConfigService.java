@@ -82,7 +82,6 @@ public class AlipayConfigService {
         }
         // 转换类型
         var entity = AlipayConfigConvert.CONVERT.toEntity(param);
-        entity.setMchNo(mchApp.getMchNo());
         ChannelConfig channelConfig = entity.toChannelConfig();
         // 判断商户和应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(param.getAppId(), channelConfig.getChannel())){
@@ -117,18 +116,18 @@ public class AlipayConfigService {
      * 获取异步通知地址
      */
     public String getNotifyUrl(boolean isv) {
-        String url = isv?"{}/unipay/callback/{}/{}/alipay/isv":"{}/unipay/callback/{}/{}/alipay";
+        String url = isv?"{}/unipay/callback/{}/alipay/isv":"{}/unipay/callback/{}/alipay";
         var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
     }
 
     /**
      * 获取同步通知地址
      */
     public String getReturnUrl(boolean isv) {
-        String url = isv?"{}/unipay/return/{}/{}/alipay/isv":"{}/unipay/return/{}/{}/alipay";
+        String url = isv?"{}/unipay/return/{}/alipay/isv":"{}/unipay/return/{}/alipay";
         MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getMchNo(),mchAppInfo.getAppId());
+        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
     }
 
     /**

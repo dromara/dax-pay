@@ -116,12 +116,12 @@ public class MchAppService {
      * 生成应用号
      */
     private String generateAppId() {
-        String mchNo = RandomUtil.randomNumbers(16);
+        String appId = RandomUtil.randomNumbers(16);
         for (int i = 0; i < 10; i++){
-            if (!mchAppManager.existedByField(MchApp::getAppId, mchNo)){
-                return "A"+mchNo;
+            if (!mchAppManager.existedByField(MchApp::getAppId, appId)){
+                return "A"+ appId;
             }
-            mchNo = String.valueOf(System.currentTimeMillis());
+            appId = String.valueOf(System.currentTimeMillis());
         }
         throw new BizException("应用号生成失败");
     }

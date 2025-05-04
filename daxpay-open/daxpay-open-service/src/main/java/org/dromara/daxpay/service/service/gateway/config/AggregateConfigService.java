@@ -73,7 +73,6 @@ public class AggregateConfigService {
             throw new OperationFailException("聚合支付配置已存在");
         }
         var entity = AggregatePayConfig.init(param);
-        entity.setMchNo(mchApp.getMchNo());
         aggregatePayConfigManager.save(entity);
     }
 

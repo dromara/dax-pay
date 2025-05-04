@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @IgnoreAuth
 @Tag(name = "支付宝消息通知")
 @RestController
-@RequestMapping("/unipay/notice/{mchNo}/{AppId}")
+@RequestMapping("/unipay/notice/{AppId}")
 @RequiredArgsConstructor
 public class AlipayNoticeReceiverController {
 
@@ -32,14 +32,14 @@ public class AlipayNoticeReceiverController {
 
     @Operation(summary = "支付宝消息通知(普通商户)")
     @PostMapping("/alipay")
-    public String aliPay(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String aliPay(@PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return aliPayNoticeReceiverService.noticeReceiver(request,false);
     }
     @Operation(summary = "支付宝消息通知(特约商户)")
     @PostMapping("/alipay/isv")
-    public String aliPayIsv(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request) {
-        paymentAssistService.initMchAndApp(mchNo, appId);
+    public String aliPayIsv(@PathVariable("AppId") String appId, HttpServletRequest request) {
+        paymentAssistService.initMchAndApp(appId);
         return aliPayNoticeReceiverService.noticeReceiver(request,true);
     }
 }
