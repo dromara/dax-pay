@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 对账同步
+ * 分账同步
  * @author xxm
  * @since 2024/5/23
  */
