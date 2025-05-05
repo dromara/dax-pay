@@ -54,10 +54,6 @@ public class GatewayPayConfigParam {
     @Size(max = 128, message = "限制用户支付类型不能超过128位")
     private String miniAppLimitPay;
 
-    /** 小程序关联终端号 */
-    @Schema(description = "小程序关联终端号")
-    private String miniAppTerminalNo;
-
     /** 应用号 */
     @NotBlank(message = "应用号不可为空")
     @Size(max = 32, message = "应用号不可超过32位")

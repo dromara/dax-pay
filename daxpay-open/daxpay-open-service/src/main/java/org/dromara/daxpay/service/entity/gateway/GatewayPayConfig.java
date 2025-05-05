@@ -47,10 +47,6 @@ public class GatewayPayConfig extends MchAppBaseEntity implements ToResult<Gatew
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String miniAppLimitPay;
 
-    /** 小程序关联终端号 */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String miniAppTerminalNo;
-
     public Boolean getAggregateShow() {
         return Objects.equals(aggregateShow, true);
     }

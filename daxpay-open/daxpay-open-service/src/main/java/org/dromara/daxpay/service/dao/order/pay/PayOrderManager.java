@@ -84,17 +84,6 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     }
 
     /**
-     * 查询对账用订单记录(指定时间和状态的订单)
-     */
-    public List<PayOrder> findReconcile(String channel, LocalDateTime startTime, LocalDateTime endTime) {
-        return this.lambdaQuery()
-                .eq(PayOrder::getChannel, channel)
-                .between(PayOrder::getPayTime, startTime, endTime)
-                .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())
-                .list();
-    }
-
-    /**
      * 查询自动分账的订单记录(指定时间和状态的订单)
      */
     public List<PayOrder> findAutoAllocation() {

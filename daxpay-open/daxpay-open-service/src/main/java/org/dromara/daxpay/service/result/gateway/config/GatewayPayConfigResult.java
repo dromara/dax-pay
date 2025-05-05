@@ -50,7 +50,4 @@ public class GatewayPayConfigResult {
     @Schema(description = "限制用户支付类型")
     private String miniAppLimitPay;
 
-    /** 小程序关联终端号 */
-    @Schema(description = "小程序关联终端号")
-    private String miniAppTerminalNo;
 }

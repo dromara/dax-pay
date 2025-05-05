@@ -76,17 +76,6 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     }
 
     /**
-     * 查询对账用订单记录(指定时间和状态的订单)
-     */
-    public List<RefundOrder> findSuccessReconcile(String channel, LocalDateTime startTime, LocalDateTime endTime) {
-        return this.lambdaQuery()
-                .eq(RefundOrder::getChannel, channel)
-                .between(RefundOrder::getFinishTime, startTime, endTime)
-                .eq(RefundOrder::getStatus, RefundStatusEnum.SUCCESS.getCode())
-                .list();
-    }
-
-    /**
      * 查询汇总金额
      */
     public BigDecimal getTotalAmount(RefundOrderQuery query){
