@@ -16,12 +16,12 @@ services:
       # 上传文件目录
       - ./data/files/:/data/files
     environment:
-      # mysql数据库连接地址
-      - MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dax-pay-single?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
-      # mysql数据库账号
-      - MYSQL_USERNAME=root
-      # mysql数据库密码
-      - MYSQL_PASSWORD=root
+      # pgsql数据库连接地址
+      - DB_URL=jdbc:pgsql://127.0.0.1:3306/dax-pay-single?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+      # pgsql数据库账号
+      - DB_USER=root
+      # pgsql数据库密码
+      - DB_PASSWORD=root
       # Redis 连接地址
       - REDIS_HOST=127.0.0.1
       # Redis 端口
@@ -35,4 +35,4 @@ services:
       # 是否启用超级管理员登录, 正式环境不要开启
       - DAXPAY_ENABLE_ADMIN=true
       # 用户管理列表中是否显示超级管理员
-      - DAXPAY_ADMIN-IN-LIST=true
+      - DAXPAY_ADMIN_IN_LIST=true

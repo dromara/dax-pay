@@ -6,7 +6,7 @@ spring:
         master:
           # Postgresql连接
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/dax-pay-plus-test?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+          url: ${DB_URL}
           username: ${DB_USER}
           password: ${DB_PASSWORD}
       hikari:
@@ -30,6 +30,12 @@ logging:
 springdoc:
   # 默认展开对象类型的属性, 主要用在get类型的参数中
   default-flat-param-object: true
+knife4j:
+  # 开启接口文档增强特性
+  enable: true
+  # 是否为生产环境, 为true关闭swagger接口
+  production: ${KNIFE4J_PRODUCTION:false}
+# 基础脚手架配置
 # 基础脚手架配置
 bootx-platform:
   common:
@@ -53,7 +59,10 @@ bootx-platform:
           - org.dromara.daxpay.channel
   starter:
     auth:
-      enable-admin: true
+      # 是否启用超级管理员登录
+      enable-admin: ${DAXPAY_ENABLE_ADMIN:true}
+      # 用户管理列表中是否显示超级管理员
+      admin-in-list: ${DAXPAY_ADMIN_IN_LIST:true}
       ignore-urls:
         - '/actuator/**'
         - '/v3/api-docs/**'
@@ -80,13 +89,10 @@ dax-pay:
 dromara:
   # 注意, 不要设置 domain 访问路径, 自行进行拼接访问路径, 来保证可迁移性
   x-file-storage:
-    default-platform: tencent-cos-1
-    tencent-cos:
-      - platform: tencent-cos-1 # 存储平台标识
-        enable-storage: true  # 启用存储
-        secret-id: ${OSS_SECRET_ID}
-        secret-key: ${OSS_SECRET_KEY}
-        region: ${OSS_REGION} #存仓库所在地域
-        bucket-name: ${OSS_BUCKET}
-        domain: ${OSS_DOMAIN} # 访问域名，注意“/”结尾，例如：https://abc.cos.ap-nanjing.myqcloud.com/
-        base-path: dax-pay/
+    default-platform: local
+    # 使用Nginx映射到存储路径, 然后将nginx的地址设置到 bootx-platform.starter.file-upload.file-server-url参数
+    local-plus:
+      - platform: local
+        enable-storage: true
+        base-path: /file/ # 基础路径
+        storage-path: /data/files # 存储路径
