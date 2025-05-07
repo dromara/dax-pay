@@ -9,10 +9,7 @@ import cn.bootx.platform.starter.cache.service.CacheClearService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,7 +27,6 @@ public class CacheClearController {
     private final CacheClearProcessor cacheClearProcessor;
     private final CacheClearService cacheClearService;
 
-
     @RequestPath("查询所有缓存前缀")
     @Operation(summary = "查询所有缓存前缀")
     @GetMapping("/getCachePrefix")
@@ -41,7 +37,7 @@ public class CacheClearController {
     @RequestPath("清除指定前缀的缓存")
     @Operation(summary = "清除指定前缀的缓存")
     @PostMapping("/prefix")
-    public Result<Void> clearCacheByPrefix(List<String> prefix) {
+    public Result<Void> clearCacheByPrefix(@RequestBody List<String> prefix) {
         cacheClearService.clearCacheByPrefix(prefix);
         return Res.ok();
     }

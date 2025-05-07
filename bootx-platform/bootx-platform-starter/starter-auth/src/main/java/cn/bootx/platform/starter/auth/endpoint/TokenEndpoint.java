@@ -37,6 +37,7 @@ public class TokenEndpoint {
     @Operation(summary = "退出")
     @PostMapping("/logout")
     public Result<Void> logout() {
+
         tokenService.logout();
         return Res.ok();
     }

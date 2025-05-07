@@ -36,8 +36,8 @@ bootx-platform:
     # swagger相关配置
     swagger:
       author: DaxPay
-      title: DaxPay支付平台-融合端
-      description: DaxPay支付平台-多商户版-融合端
+      title: DaxPay支付平台
+      description: DaxPay支付平台-开源版
       version: 0.0.1
       base-packages:
         "[BootxPlatform接口]":
@@ -47,7 +47,6 @@ bootx-platform:
           - cn.bootx.platform.baseapi
           - cn.bootx.platform.notice
         "[支付平台接口]":
-          - org.dromara.daxpay.union
           - org.dromara.daxpay.controller
         "[支付通道接口]":
           - org.dromara.daxpay.channel

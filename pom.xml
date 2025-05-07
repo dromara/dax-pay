@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
 
     <name>dax-pay-plus</name>
-    <description>DaxPay多商户版支付系统</description>
+    <description>DaxPay开源版支付系统</description>
 
     <modules>
         <module>bootx-platform</module>
