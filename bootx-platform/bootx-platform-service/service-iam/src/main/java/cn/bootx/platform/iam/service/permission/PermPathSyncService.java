@@ -12,6 +12,7 @@ import cn.bootx.platform.iam.entity.permission.PermPath;
 import cn.bootx.platform.iam.service.client.ClientCodeService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -106,15 +108,18 @@ public class PermPathSyncService {
         // 重建树结构 删除指定终端的非子节点
         permPathManager.deleteNotChild(clientCode);
         // 生成模块信息
-        var moduleMap = this.builderModule(requestPathBos);
+        var moduleList = this.builderModule(requestPathBos);
         // 生成分组信息
-        var groupMap = this.builderGroup(requestPathBos);
+        var groupList = this.builderGroup(requestPathBos);
         // 合并进行保存
         ArrayList<PermPath> list = new ArrayList<>();
-        list.addAll(moduleMap);
-        list.addAll(groupMap);
+        list.addAll(moduleList);
+        list.addAll(groupList);
         // 设置终端编码
         list.forEach(o -> o.setClientCode(clientCode));
+        // 根据编码生成ID, 保证每次同步时的模块和分组ID不变
+        list.forEach(o -> o.setId(this.genPathId(o.getParentCode()+o.getClientCode()+o.getCode())));
+        // 保存
         permPathManager.saveAll(list);
     }
 
@@ -222,7 +227,7 @@ public class PermPathSyncService {
                 .stream()
                 .filter(pathKey -> {
                     HandlerMethod handlerMethod = map.get(pathKey);
-                    return Objects.nonNull(handlerMethod.getMethodAnnotation(RequestPath.class))
+                    return Objects.nonNull(handlerMethod.getMethodAnnotation(cn.bootx.platform.core.annotation.RequestPath.class))
                             &&Objects.nonNull(handlerMethod.getBeanType().getAnnotation(RequestGroup.class));
                 }).toList();
 
@@ -295,6 +300,21 @@ public class PermPathSyncService {
                         .setPath(path)
                         .setMethod(requestMethod))
                 .collect(toList());
+    }
+
+    /**
+     * 给分组和模块生成ID, 防止每次更新ID都会发生变化
+     */
+    private long genPathId(String str) {
+        String s = SecureUtil.sha256(str);
+        byte[] hashBytes = s.getBytes(StandardCharsets.UTF_8);
+        // 将前8个字节转换为 long
+        long result = 0;
+        for (int i = 0; i < 8; i++) {
+            result = (result << 8) | (hashBytes[i] & 0xFF);
+        }
+        // 取绝对值，避免负数
+        return Math.abs(result);
     }
 
 }
