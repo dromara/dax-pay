@@ -15,7 +15,7 @@
     <version>3.0.0.beta5</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
-    <description>多商户支付通道功能实现</description>
+    <description>开源版支付通道功能实现</description>
 
     <modules>
         <module>daxpay-open-channel-alipay</module>

@@ -2,7 +2,7 @@ server:
   port: 9999
 spring:
   application:
-    name: dax-pay-union
+    name: dax-pay-admin
   profiles:
     active: dev
   task:
@@ -45,4 +45,3 @@ bootx-platform:
     deploy-mode: fusion
     client-codes:
       - dax-pay-admin
-      - dax-pay-merchant

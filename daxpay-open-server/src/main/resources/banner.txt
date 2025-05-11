@@ -10,6 +10,6 @@ ______            ______
                              |___/
 ${AnsiColor.MAGENTA}
 
-Service: DaxPay 多商户版本-融合端
+Service: DaxPay 开源版
 Spring Boot Version: ${spring-boot.version}
 ${AnsiColor.BLACK}

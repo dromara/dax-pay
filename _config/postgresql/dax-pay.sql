@@ -1,4 +1,5 @@
 
+
 -- ----------------------------
 -- Table structure for base_area
 -- ----------------------------
@@ -629,14 +630,12 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1822975425229004800, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1813456708833087488, 1811365615815487488, '2024-07-17 14:12:26.440633', 1811365615815487488, '2024-09-20 11:05:46.469139', 4, 'f', 1812113823376666624, 'dax-pay-admin', '基础配置', '', '', 'f', 'f', 'Layout', '/pay/config/basic', '', -1, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1822975777026252800, 1811365615815487488, '2024-08-12 20:37:49.152472', 1811365615815487488, '2024-08-12 20:37:49.154031', 0, 'f', 1822975425229004800, 'dax-pay-admin', '存储平台', 'FilePlatformList', '', 'f', 'f', '/baseapi/file/platform/FilePlatformList', '/system/file/platform', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1822975970266226688, 1811365615815487488, '2024-08-12 20:38:35.224183', 1811365615815487488, '2024-08-12 20:38:35.226288', 0, 'f', 1822975425229004800, 'dax-pay-admin', '文件管理', 'FileUploadList', '', 'f', 'f', '/baseapi/file/upload/FileUploadList', '/system/file/info', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1812114959231938560, 1811365615815487488, '2024-07-13 21:20:48.405236', 1811365615815487488, '2025-01-04 15:43:45.730211', 1, 'f', NULL, 'dax-pay-admin', '对账管理', 'Reconcile', 'ant-design:arrows-alt-outlined', 'f', 'f', 'Layout', '/pay/reconcile', '', 80, 't', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1812114725651148800, 1811365615815487488, '2024-07-13 21:19:52.715548', 1811365615815487488, '2025-01-04 15:43:51.978676', 2, 'f', NULL, 'dax-pay-admin', '分账管理', 'Allocation', 'ant-design:sliders-twotone', 't', 'f', 'Layout', '/pay/allocation', '', 70, 't', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1824779660136001536, 1811365615815487488, '2024-08-17 20:05:48.400494', 1811365615815487488, '2024-08-17 20:05:48.402062', 0, 'f', 1812114725651148800, 'dax-pay-admin', '分账接收者', '', '', 'f', 'f', '', '/pay/allocation', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1824779695900831744, 1811365615815487488, '2024-08-17 20:05:56.927619', 1811365615815487488, '2024-08-17 20:05:56.928667', 0, 'f', 1812114725651148800, 'dax-pay-admin', '分账组', '', '', 'f', 'f', '', '/pay/allocation', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828321321655308288, 1811365615815487488, '2024-08-27 14:39:06.307149', 1811365615815487488, '2024-08-27 14:39:06.309784', 0, 'f', NULL, 'dax-pay-merchant', '系统管理', 'System', 'ant-design:setting-outlined', 'f', 'f', 'Layout', '/system', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828329559561965568, 1811365615815487488, '2024-08-27 15:11:50.377235', 1811365615815487488, '2024-08-27 15:11:50.378788', 0, 'f', NULL, 'dax-pay-merchant', '支付配置', 'PayConfig', 'ant-design:property-safety-twotone', 'f', 'f', 'Layout', '/pay/config', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828329734523162624, 1811365615815487488, '2024-08-27 15:12:32.091286', 1811365615815487488, '2024-08-27 15:12:32.093374', 0, 'f', NULL, 'dax-pay-merchant', '订单管理', 'PayOrder', 'ant-design:wallet-outlined', 'f', 'f', 'Layout', '/pay/order', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828329876961726464, 1811365615815487488, '2024-08-27 15:13:06.051401', 1811365615815487488, '2024-08-27 15:13:06.053461', 0, 'f', NULL, 'dax-pay-merchant', '交易记录', 'PayRecord', 'ant-design:container-outlined', 'f', 'f', 'Layout', '/pay/record', '', 0, 't', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1824779660136001536, 1811365615815487488, '2024-08-17 20:05:48.400494', 1811365615815487488, '2025-05-07 08:54:32.042177', 0, 't', 1812114725651148800, 'dax-pay-admin', '分账接收者', '', '', 'f', 'f', '', '/pay/allocation', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1812114959231938560, 1811365615815487488, '2024-07-13 21:20:48.405236', 1811365615815487488, '2025-05-07 08:54:49.424734', 1, 't', NULL, 'dax-pay-admin', '对账管理', 'Reconcile', 'ant-design:arrows-alt-outlined', 'f', 'f', 'Layout', '/pay/reconcile', '', 80, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828330011066208256, 1811365615815487488, '2024-08-27 15:13:38.024196', 1811365615815487488, '2024-08-27 15:13:38.026907', 0, 'f', NULL, 'dax-pay-merchant', '商户通知', 'PayNotic', 'ant-design:notification-twotone', 'f', 'f', 'Layout', '/pay/notice', '', 0, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828341845420773376, 1811365615815487488, '2024-08-27 16:00:39.554398', 1811365615815487488, '2024-08-27 16:00:39.557168', 0, 'f', 1828321321655308288, 'dax-pay-merchant', '请求权限', 'PermPathList', '', 'f', 'f', 'iam/perm/path/PermPathList', '/system/path', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828329089900580864, 1811365615815487488, '2024-08-27 15:09:58.401939', 1811365615815487488, '2024-08-27 16:01:05.442085', 1, 'f', 1828321321655308288, 'dax-pay-merchant', '角色管理', 'RoleList', '', 'f', 'f', 'iam/role/RoleList.vue', '/system/role', '', 0, 'f', 't', 'f', 'f', NULL);
@@ -649,8 +648,6 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1828345482972860416, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1828345770836332544, 1811365615815487488, '2024-08-27 16:16:15.446234', 1811365615815487488, '2024-08-27 16:16:15.448516', 0, 'f', 1828343958704066560, 'dax-pay-merchant', '订阅通知', 'NotifyConstList', '', 'f', 'f', '/daxpay/common/constant/notify/NotifyConstList', '/pay/config/base/notify', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1816064593371066368, 1811365615815487488, '2024-07-24 18:55:14.565671', 1811365615815487488, '2024-08-27 19:11:47.317719', 4, 'f', 1812114347454951424, 'dax-pay-admin', '关闭记录(支付)', 'PayCloseRecordList', '', 'f', 'f', '/daxpay/common/record/close/PayCloseRecordList', '/pay/record/close', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1824779945365450752, 1811365615815487488, '2024-08-17 20:06:56.404481', 1811365615815487488, '2024-08-27 19:11:51.292144', 2, 'f', 1812114347454951424, 'dax-pay-admin', '同步记录', 'TradeSyncRecordList', '', 'f', 'f', '/daxpay/common/record/sync/TradeSyncRecordList', '/pay/record/sync', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1820468413097746432, 1811365615815487488, '2024-08-05 22:34:27.007057', 1811365615815487488, '2024-08-27 19:12:34.654805', 2, 'f', 1812114959231938560, 'dax-pay-admin', '差异记录', 'ReconcileDiscrepancyList', '', 'f', 'f', '/daxpay/common/reconcile/discrepancy/ReconcileDiscrepancyList', '/pay/reconcile/discrepancy', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1820467934552825856, 1811365615815487488, '2024-08-05 22:32:32.913035', 1811365615815487488, '2024-08-27 19:12:40.133331', 2, 'f', 1812114959231938560, 'dax-pay-admin', '对账单', 'ReconcileStatementList', '', 'f', 'f', '/daxpay/common/reconcile/statement/ReconcileStatementList', '/pay/reconcile/statement', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828391238714904576, 1811365615815487488, '2024-08-27 19:16:55.833768', 1811365615815487488, '2024-08-27 19:16:55.835858', 0, 'f', 1828329734523162624, 'dax-pay-merchant', '支付订单', 'PayOrderList', '', 'f', 'f', '/daxpay/common/order/pay/PayOrderList', '/pay/order/pay', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828391326023536640, 1811365615815487488, '2024-08-27 19:17:16.649616', 1811365615815487488, '2024-08-27 19:17:16.652853', 0, 'f', 1828329734523162624, 'dax-pay-merchant', '退款订单', 'RefundOrderList', '', 'f', 'f', '/daxpay/common/order/refund/RefundOrderList', '/pay/order/refund', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1828391418604408832, 1811365615815487488, '2024-08-27 19:17:38.723375', 1811365615815487488, '2024-08-27 19:17:38.726373', 0, 'f', 1828329734523162624, 'dax-pay-merchant', '转账订单', 'TransferOrderList', '', 'f', 'f', '/daxpay/common/order/transfer/TransferOrderList', '/pay/order/transfer', '', 0, 'f', 't', 'f', 'f', NULL);
@@ -675,6 +672,8 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1836248839544733696, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1838832057238274048, 1811365615815487488, '2024-09-25 14:45:00.952476', 1811365615815487488, '2024-09-25 14:46:49.48474', 1, 'f', 1812115119471128576, 'dax-pay-admin', '认证调试', 'ChannelAuth', '', 'f', 'f', '/daxpay/common/develop/auth/ChannelAuth', '/pay/demo/channelAuth', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1856162201900429312, 1811365615815487488, '2024-11-12 10:28:49.417797', 1811365615815487488, '2024-11-12 10:28:49.419797', 0, 'f', 1810910433264762880, 'dax-pay-admin', '行政区划', 'ChinaRegion', '', 'f', 'f', '/baseapi/region/ChinaRegion', '/system/config/region', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1824779750208679936, 1811365615815487488, '2024-08-17 20:06:09.875297', 1811365615815487488, '2024-12-21 11:55:37.943795', 2, 'f', 1812114224679284736, 'dax-pay-admin', '分账单', 'AllocOrderList', '', 'f', 'f', '/daxpay/common/allocation/order/AllocOrderList', '/pay/order/allocation', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1820468413097746432, 1811365615815487488, '2024-08-05 22:34:27.007057', 1811365615815487488, '2025-05-07 08:54:40.919178', 2, 't', 1812114959231938560, 'dax-pay-admin', '差异记录', 'ReconcileDiscrepancyList', '', 'f', 'f', '/daxpay/common/reconcile/discrepancy/ReconcileDiscrepancyList', '/pay/reconcile/discrepancy', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1820467934552825856, 1811365615815487488, '2024-08-05 22:32:32.913035', 1811365615815487488, '2025-05-07 08:54:45.843714', 2, 't', 1812114959231938560, 'dax-pay-admin', '对账单', 'ReconcileStatementList', '', 'f', 'f', '/daxpay/common/reconcile/statement/ReconcileStatementList', '/pay/reconcile/statement', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1812115119471128576, 1811365615815487488, '2024-07-13 21:21:26.609834', 1811365615815487488, '2025-01-04 15:43:37.546388', 4, 'f', NULL, 'dax-pay-admin', '演示模块', 'Demo', 'ant-design:appstore-twotone', 'f', 'f', 'Layout', '/pay/demo', '', 98, 't', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1883149346789183488, 1811365615815487488, '2025-01-25 21:46:06.154587', 1811365615815487488, '2025-01-25 21:46:06.154587', 0, 'f', 1883148939727785984, 'dax-pay-admin', '微信', '', '', 'f', 'f', 'Layout', '/pay/channel/wechat', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1883149275196608512, 1811365615815487488, '2025-01-25 21:45:49.086541', 1811365615815487488, '2025-01-25 21:46:24.127782', 1, 'f', 1883148939727785984, 'dax-pay-admin', '支付宝', '', '', 'f', 'f', 'Layout', '/pay/channel/alipay', '', 0, 'f', 't', 'f', 'f', NULL);
@@ -685,7 +684,6 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1812118635229016064, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1883722667859677184, 1811365615815487488, '2025-01-27 11:44:16.551262', 1811365615815487488, '2025-02-17 20:40:18.405954', 1, 'f', 1883149275196608512, 'dax-pay-admin', '分账接收方管理', 'AlipayReceiverBindList', '', 'f', 'f', '/daxpay/common/channel/alipay/receiver/bind/AlipayReceiverBindList', '/pay/channel/alipay/alloc/receiver', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1883149475705311232, 1811365615815487488, '2025-01-25 21:46:36.890326', 1811365615815487488, '2025-02-19 19:07:13.981572', 1, 'f', 1883148939727785984, 'dax-pay-admin', '云闪付', '', '', 't', 'f', 'Layout', '/pay/channel/union', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1883722723325153280, 1811365615815487488, '2025-01-27 11:44:29.7731', 1811365615815487488, '2025-02-19 19:08:03.568342', 1, 'f', 1883149346789183488, 'dax-pay-admin', '分账接收方管理', 'WechatReceiverBindList', '', 'f', 'f', '/daxpay/common/channel/wechat/receiver/bind/WechatReceiverBindList', '/pay/channel/wechat/alloc/receiver', '', 0, 'f', 't', 'f', 'f', NULL);
-INSERT INTO "public"."iam_perm_menu" VALUES (1899771948020867072, 1811365615815487488, '2025-03-12 18:38:23.121945', 1811365615815487488, '2025-03-12 18:38:23.121945', 0, 'f', 1812116779807338496, 'dax-pay-admin', '终端报送类型', 'TerminalConstList', '', 'f', 'f', '/daxpay/common/constant/terminal/TerminalConstList', '/pay/config/base/terminal', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1907420295485571072, 1811365615815487488, '2025-04-02 21:10:11.259186', 1811365615815487488, '2025-04-02 21:10:11.259186', 0, 'f', 1828392717093818368, 'dax-pay-merchant', '交易调试', 'DevelopTrade', '', 'f', 'f', '/daxpay/common/develop/trade/DevelopTrade', '/pay/demo/develop', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1907421058936979456, 1811365615815487488, '2025-04-02 21:13:13.277956', 1811365615815487488, '2025-04-02 21:13:13.277956', 0, 'f', 1828392717093818368, 'dax-pay-merchant', '认证调试', 'ChannelAuth', '', 'f', 'f', '/daxpay/common/develop/auth/ChannelAuth', '/pay/demo/channelAuth', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1911706396408745984, 1811365615815487488, '2025-04-14 17:01:37.348397', 1811365615815487488, '2025-04-14 17:01:37.348397', 0, 'f', 1828343958704066560, 'dax-pay-merchant', '终端报送类型', 'TerminalConstList', '', 'f', 'f', '/daxpay/common/constant/terminal/TerminalConstList', '/pay/config/base/terminal', '', 0, 'f', 't', 'f', 'f', NULL);
@@ -702,10 +700,14 @@ INSERT INTO "public"."iam_perm_menu" VALUES (1911720890363088896, 18113656158154
 INSERT INTO "public"."iam_perm_menu" VALUES (1911720990229467136, 1811365615815487488, '2025-04-14 17:59:36.786069', 1811365615815487488, '2025-04-14 17:59:36.786069', 0, 'f', 1911714157901189120, 'dax-pay-merchant', '分账接收方管理', 'WechatReceiverBindList', '', 'f', 'f', '/daxpay/common/channel/wechat/receiver/bind/WechatReceiverBindList', '/pay/channel/wechat/alloc/receiver', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1911721140293275648, 1811365615815487488, '2025-04-14 18:00:12.564897', 1811365615815487488, '2025-04-14 18:00:12.564897', 0, 'f', 1911714477968527360, 'dax-pay-merchant', '分账接收方管理', 'LeshuaReceiverBindList', '', 'f', 'f', '/daxpay/common/channel/leshua/receiver/bind/LeshuaReceiverBindList', '/pay/channel/leshua/alloc/receiver/bind', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1911721245096349696, 1811365615815487488, '2025-04-14 18:00:37.551624', 1811365615815487488, '2025-04-14 18:00:37.551624', 0, 'f', 1911714643085692928, 'dax-pay-merchant', '分账接收方管理', '', '', 'f', 'f', '', '/pay/channel/vbill/alloc/receiver', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1899771948020867072, 1811365615815487488, '2025-03-12 18:38:23.121945', 1811365615815487488, '2025-05-07 14:39:35.226925', 0, 't', 1812116779807338496, 'dax-pay-admin', '终端报送类型', 'TerminalConstList', '', 'f', 'f', '/daxpay/common/constant/terminal/TerminalConstList', '/pay/config/base/terminal', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1911721379628650496, 1811365615815487488, '2025-04-14 18:01:09.626762', 1811365615815487488, '2025-04-14 18:01:09.626762', 0, 'f', 1911714710303608832, 'dax-pay-merchant', '分账接收方(个人)', 'AdapayAllocPersonReceiverList', '', 'f', 'f', '/daxpay/common/channel/adapay/receiver/perso/AdapayAllocPersonReceiverList', '/pay/channel/adapay/alloc/receiver/person', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1911721480505856000, 1811365615815487488, '2025-04-14 18:01:33.677943', 1811365615815487488, '2025-04-14 18:01:47.51821', 1, 'f', 1911714710303608832, 'dax-pay-merchant', '分账接收方(企业)', 'AdaPayAllocCorpReceiverList', '', 'f', 'f', '/daxpay/common/channel/adapay/receiver/corp/AdapayAllocCorpReceiverList', '/pay/channel/adapay/alloc/receiver/corp', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1911721663163600896, 1811365615815487488, '2025-04-14 18:02:17.226079', 1811365615815487488, '2025-04-14 18:02:17.226079', 0, 'f', 1911714710303608832, 'dax-pay-merchant', '分账结算账户', 'AdapaySettleAccountList', '', 'f', 'f', '/daxpay/common/channel/adapay/settle/AdapaySettleAccountList', '/pay/channel/adapay/alloc/settle', '', 0, 'f', 't', 'f', 'f', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (1911708592894447616, 1811365615815487488, '2025-04-14 17:10:21.031024', 1811365615815487488, '2025-04-14 18:03:16.596981', 1, 'f', NULL, 'dax-pay-merchant', '支付通道', 'Channel', 'ant-design:transaction-outlined', 'f', 'f', 'Layout', '/pay/channel', '', 0, 't', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1824779695900831744, 1811365615815487488, '2024-08-17 20:05:56.927619', 1811365615815487488, '2025-05-07 08:54:27.399456', 0, 't', 1812114725651148800, 'dax-pay-admin', '分账组', '', '', 'f', 'f', '', '/pay/allocation', '', 0, 'f', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1812114725651148800, 1811365615815487488, '2024-07-13 21:19:52.715548', 1811365615815487488, '2025-05-07 08:54:36.157514', 2, 't', NULL, 'dax-pay-admin', '分账管理', 'Allocation', 'ant-design:sliders-twotone', 't', 'f', 'Layout', '/pay/allocation', '', 70, 't', 't', 'f', 'f', NULL);
+INSERT INTO "public"."iam_perm_menu" VALUES (1917045943678099456, 1811365615815487488, '2025-04-29 10:39:04.623467', 1811365615815487488, '2025-04-29 10:39:04.624466', 0, 'f', 1810910433264762880, 'dax-pay-admin', '缓存管理', 'CacheClear', '', 'f', 'f', '/baseapi/cache/CacheClear', '/system/config/cache', '', 0, 'f', 't', 'f', 'f', NULL);
 
 -- ----------------------------
 -- Table structure for iam_perm_path
@@ -1717,55 +1719,6 @@ COMMENT ON TABLE "public"."pay_channel_reconcile_trade" IS '通道对账交易�
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for pay_channel_terminal
--- ----------------------------
-DROP TABLE IF EXISTS "public"."pay_channel_terminal";
-CREATE TABLE "public"."pay_channel_terminal" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "name" varchar(64) COLLATE "pg_catalog"."default",
-  "terminal_id" int8,
-  "terminal_no" varchar(64) COLLATE "pg_catalog"."default",
-  "channel" varchar(32) COLLATE "pg_catalog"."default",
-  "status" varchar(32) COLLATE "pg_catalog"."default",
-  "out_terminal_no" varchar(64) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "extra" varchar(5000) COLLATE "pg_catalog"."default",
-  "type" varchar(32) COLLATE "pg_catalog"."default"
-)
-;
-COMMENT ON COLUMN "public"."pay_channel_terminal"."id" IS '主键';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."creator" IS '创建者ID';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."last_modifier" IS '最后修者ID';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."version" IS '乐观锁';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."deleted" IS '删除标志';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."app_id" IS '应用号';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."name" IS '终端名称';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."terminal_id" IS '终端ID';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."terminal_no" IS '终端编码';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."channel" IS '通道';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."status" IS '状态';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."out_terminal_no" IS '通道终端号';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."error_msg" IS '错误信息';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."extra" IS '扩展信息';
-COMMENT ON COLUMN "public"."pay_channel_terminal"."type" IS '报送类型';
-COMMENT ON TABLE "public"."pay_channel_terminal" IS '通道终端设备上报记录';
-
--- ----------------------------
--- Records of pay_channel_terminal
--- ----------------------------
-
--- ----------------------------
 -- Table structure for pay_close_record
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_close_record";
@@ -2368,143 +2321,6 @@ COMMENT ON TABLE "public"."pay_platform_config" IS '管理平台配置';
 -- ----------------------------
 -- Records of pay_platform_config
 -- ----------------------------
-INSERT INTO "public"."pay_platform_config" VALUES (1, 1811365615815487488, '2025-04-27 19:35:43.283482', 1811365615815487488, '2025-04-27 19:35:43.283482', 0, 'f', 'http://127.0.0.1:19999', NULL, 'http://127.0.0.1:9100', NULL, 200.00);
-
--- ----------------------------
--- Records of pay_platform_config
--- ----------------------------
-
--- ----------------------------
--- Table structure for pay_reconcile_discrepancy
--- ----------------------------
-DROP TABLE IF EXISTS "public"."pay_reconcile_discrepancy";
-CREATE TABLE "public"."pay_reconcile_discrepancy" (
-  "id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "reconcile_id" int8,
-  "reconcile_no" varchar(32) COLLATE "pg_catalog"."default",
-  "reconcile_date" date,
-  "channel" varchar(20) COLLATE "pg_catalog"."default",
-  "discrepancy_type" varchar(20) COLLATE "pg_catalog"."default",
-  "trade_no" varchar(32) COLLATE "pg_catalog"."default",
-  "biz_trade_no" varchar(100) COLLATE "pg_catalog"."default",
-  "trade_type" varchar(100) COLLATE "pg_catalog"."default",
-  "trade_amount" numeric(13,2),
-  "trade_status" varchar(32) COLLATE "pg_catalog"."default",
-  "trade_time" timestamp(0),
-  "channel_trade_no" varchar COLLATE "pg_catalog"."default",
-  "channel_trade_type" varchar(32) COLLATE "pg_catalog"."default",
-  "channel_trade_amount" numeric(13,2),
-  "channel_trade_status" varchar(32) COLLATE "pg_catalog"."default",
-  "channel_trade_time" timestamp(6),
-  "out_trade_no" varchar(100) COLLATE "pg_catalog"."default",
-  "channel_out_trade_no" varchar(100) COLLATE "pg_catalog"."default",
-  "isv_no" varchar(64) COLLATE "pg_catalog"."default"
-)
-;
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."id" IS '主键';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."creator" IS '创建者ID';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."app_id" IS '应用号';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."reconcile_id" IS '对账单ID';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."reconcile_no" IS '对账号';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."reconcile_date" IS '对账日期';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."channel" IS '支付通道';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."discrepancy_type" IS '差异类型';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."trade_no" IS '平台交易号';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."biz_trade_no" IS '商户订单号';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."trade_type" IS '交易类型';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."trade_amount" IS '交易金额';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."trade_status" IS '交易状态';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."trade_time" IS '交易时间';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."channel_trade_no" IS '通道交易号';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."channel_trade_type" IS '通道交易类型';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."channel_trade_amount" IS '通道交易金额';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."channel_trade_status" IS '通道交易状态';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."channel_trade_time" IS '通道交易时间';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."out_trade_no" IS '平台订单关联通道订单号';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."channel_out_trade_no" IS '通道关联订单号';
-COMMENT ON COLUMN "public"."pay_reconcile_discrepancy"."isv_no" IS '所属服务商';
-COMMENT ON TABLE "public"."pay_reconcile_discrepancy" IS '对账差异记录';
-
--- ----------------------------
--- Records of pay_reconcile_discrepancy
--- ----------------------------
-
--- ----------------------------
--- Table structure for pay_reconcile_statement
--- ----------------------------
-DROP TABLE IF EXISTS "public"."pay_reconcile_statement";
-CREATE TABLE "public"."pay_reconcile_statement" (
-  "creator" int8,
-  "create_time" timestamp(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamp(6),
-  "version" int4 NOT NULL,
-  "deleted" bool NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
-  "app_id" varchar(32) COLLATE "pg_catalog"."default",
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "reconcile_no" varchar(32) COLLATE "pg_catalog"."default",
-  "date" date,
-  "channel" varchar(32) COLLATE "pg_catalog"."default",
-  "down_or_upload" bool,
-  "compare" bool,
-  "order_count" varchar(8) COLLATE "pg_catalog"."default",
-  "order_amount" numeric(13,2),
-  "refund_count" varchar(8) COLLATE "pg_catalog"."default",
-  "refund_amount" numeric(13,2),
-  "channel_order_count" varchar(8) COLLATE "pg_catalog"."default",
-  "channel_order_amount" numeric(13,2),
-  "channel_refund_count" varchar(8) COLLATE "pg_catalog"."default",
-  "channel_refund_amount" numeric(13,2),
-  "result" varchar(32) COLLATE "pg_catalog"."default",
-  "channel_file_url" varchar(500) COLLATE "pg_catalog"."default",
-  "platform_file_url" varchar(500) COLLATE "pg_catalog"."default",
-  "error_code" varchar(100) COLLATE "pg_catalog"."default",
-  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
-  "id" int8 NOT NULL,
-  "isv_no" varchar(64) COLLATE "pg_catalog"."default"
-)
-;
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."creator" IS '创建者ID';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."last_modifier" IS '最后修改ID';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."version" IS '版本号';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."deleted" IS '删除标志';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."app_id" IS '应用号';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."name" IS '名称';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."reconcile_no" IS '对账号';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."date" IS '日期';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."channel" IS '通道';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."down_or_upload" IS '交易对账文件是否下载或上传成功';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."compare" IS '交易对账文件是否比对完成';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."order_count" IS '支付订单数';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."order_amount" IS '支付交易金额';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."refund_count" IS '退款订单数';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."refund_amount" IS '退款交易金额';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."channel_order_count" IS '通道支付订单数';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."channel_order_amount" IS '通道支付交易金额';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."channel_refund_count" IS '通道退款订单数';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."channel_refund_amount" IS '通道退款交易金额';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."result" IS '交易对账结果';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."channel_file_url" IS '原始通道对账单文件url';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."platform_file_url" IS '生成平台对账单文件url';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."error_code" IS '错误码';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."error_msg" IS '错误信息';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."id" IS '主键';
-COMMENT ON COLUMN "public"."pay_reconcile_statement"."isv_no" IS '所属服务商';
-COMMENT ON TABLE "public"."pay_reconcile_statement" IS '对账报告';
-
--- ----------------------------
--- Records of pay_reconcile_statement
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for pay_refund_order
@@ -2579,31 +2395,6 @@ COMMENT ON TABLE "public"."pay_refund_order" IS '退款订单';
 
 -- ----------------------------
 -- Records of pay_refund_order
--- ----------------------------
-
--- ----------------------------
--- Table structure for pay_terminal_const
--- ----------------------------
-DROP TABLE IF EXISTS "public"."pay_terminal_const";
-CREATE TABLE "public"."pay_terminal_const" (
-  "id" int8 NOT NULL,
-  "channel" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "enable" bool NOT NULL,
-  "remark" varchar(200) COLLATE "pg_catalog"."default"
-)
-;
-COMMENT ON COLUMN "public"."pay_terminal_const"."id" IS '主键';
-COMMENT ON COLUMN "public"."pay_terminal_const"."channel" IS '通道编码';
-COMMENT ON COLUMN "public"."pay_terminal_const"."type" IS '终端报送类型';
-COMMENT ON COLUMN "public"."pay_terminal_const"."name" IS '终端报送名称';
-COMMENT ON COLUMN "public"."pay_terminal_const"."enable" IS '是否启用';
-COMMENT ON COLUMN "public"."pay_terminal_const"."remark" IS '备注';
-COMMENT ON TABLE "public"."pay_terminal_const" IS '通道终端报送类型';
-
--- ----------------------------
--- Records of pay_terminal_const
 -- ----------------------------
 
 -- ----------------------------
@@ -3299,11 +3090,6 @@ ALTER TABLE "public"."pay_channel_const" ADD CONSTRAINT "pay_channel_const_pkey"
 ALTER TABLE "public"."pay_channel_reconcile_trade" ADD CONSTRAINT "pay_channel_reconcile_trade_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table pay_channel_terminal
--- ----------------------------
-ALTER TABLE "public"."pay_channel_terminal" ADD CONSTRAINT "pay_channel_terminal_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
 -- Indexes structure for table pay_close_record
 -- ----------------------------
 CREATE INDEX "biz_order_no" ON "public"."pay_close_record" USING btree (
@@ -3394,16 +3180,6 @@ ALTER TABLE "public"."pay_order" ADD CONSTRAINT "pay_order_pkey" PRIMARY KEY ("i
 ALTER TABLE "public"."pay_platform_config" ADD CONSTRAINT "pay_platform_config_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table pay_reconcile_discrepancy
--- ----------------------------
-ALTER TABLE "public"."pay_reconcile_discrepancy" ADD CONSTRAINT "pay_reconcile_discrepancy_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table pay_reconcile_statement
--- ----------------------------
-ALTER TABLE "public"."pay_reconcile_statement" ADD CONSTRAINT "pay_reconcile_statement_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
 -- Indexes structure for table pay_refund_order
 -- ----------------------------
 CREATE INDEX "refund_biz_order_no" ON "public"."pay_refund_order" USING btree (
@@ -3439,11 +3215,6 @@ COMMENT ON INDEX "public"."refund_refund_no" IS '退款号索引';
 -- Primary Key structure for table pay_refund_order
 -- ----------------------------
 ALTER TABLE "public"."pay_refund_order" ADD CONSTRAINT "pay_refund_order_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table pay_terminal_const
--- ----------------------------
-ALTER TABLE "public"."pay_terminal_const" ADD CONSTRAINT "pay_terminal_type_const_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table pay_terminal_device

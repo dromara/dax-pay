@@ -21,13 +21,10 @@ public class AuthProperties {
     /** 不进行鉴权的路径 */
     private List<String> ignoreUrls = new ArrayList<>();
 
-    /** 盐值 */
-    private String salt = "salt";
-
-    /** 开启超级管理员(生产模式推荐关闭) */
+    /** 开启超级管理员(生产模式请关闭) */
     private boolean enableAdmin = true;
 
-    /** 用户管理列表中是否显示 */
+    /** 用户管理列表中是否显示超级管理员用户 */
     private boolean adminInList = true;
 
 }
