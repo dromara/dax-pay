@@ -75,7 +75,7 @@ public class WechatRefundCallbackService {
         callbackInfo.setCallbackType(TradeTypeEnum.REFUND)
                 .setChannel(isv? ChannelEnum.WECHAT_ISV.getCode():ChannelEnum.WECHAT.getCode());
 
-        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig(false);
+        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig(isv);
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // v2 或 v3
         if (Objects.equals(config.getApiVersion(), WechatPayCode.API_V2)) {

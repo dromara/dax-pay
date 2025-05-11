@@ -1,5 +1,6 @@
 package org.dromara.daxpay.channel.wechat.service.payment.refund;
 
+import cn.hutool.core.util.StrUtil;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.enums.WechatRefundStatusEnum;
 import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
@@ -48,6 +49,9 @@ public class WechatSubRefundV3Service {
                 .setOutTradeNo(refundOrder.getOrderNo())
                 .setAmount(amount)
                 .setSubMchid(config.getSubMchId());
+        if (StrUtil.isBlank(request.getReason())){
+            request.setReason("退款");
+        }
         try {
             WxPayRefundV3Result result = wxPayService.refundV3(request);
 
