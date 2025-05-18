@@ -1,5 +1,6 @@
 package org.dromara.daxpay.service.common.aop;
 
+import cn.bootx.platform.core.code.CommonCode;
 import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import cn.bootx.platform.core.util.ValidationUtil;
@@ -12,8 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 /**
  * 支付签名切面, 用于对支付参数进行校验和签名
@@ -60,6 +64,8 @@ public class PaymentVerifyAspect {
             proceed = pjp.proceed();
         } catch (BizException ex) {
             DaxResult<Void> result = new DaxResult<>(ex.getCode(), ex.getMessage());
+            result.setTraceId(MDC.get(CommonCode.TRACE_ID));
+            result.setResTime(LocalDateTime.now());
             paymentAssistService.sign(result);
             return result;
         }

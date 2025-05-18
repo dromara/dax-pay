@@ -1,7 +1,14 @@
 package org.dromara.daxpay.service.service.notice.callback;
 
+import cn.bootx.platform.core.code.CommonCode;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.ContentType;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.result.DaxNoticeResult;
 import org.dromara.daxpay.service.code.DaxPayCode;
 import org.dromara.daxpay.service.dao.notice.callback.MerchantCallbackRecordManager;
@@ -11,12 +18,7 @@ import org.dromara.daxpay.service.entity.notice.callback.MerchantCallbackTask;
 import org.dromara.daxpay.service.enums.NoticeSendTypeEnum;
 import org.dromara.daxpay.service.service.assist.PaymentAssistService;
 import org.dromara.daxpay.service.service.notice.MerchantNoticeAssistService;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.ContentType;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -62,6 +64,8 @@ public class MerchantCallbackSendService {
             // 构造通知消息并签名
             var daxResult = new DaxNoticeResult<Map<String, Object>>(SUCCESS_CODE, JsonUtil.parseObj(task.getContent()), SUCCESS_MSG)
                     .setAppId(task.getAppId());
+            daxResult.setTraceId(MDC.get(CommonCode.TRACE_ID));
+            daxResult.setResTime(LocalDateTime.now());
             paymentAssistService.sign(daxResult);
             HttpResponse execute = HttpUtil.createPost(task.getUrl())
                     .body(JsonUtil.toJsonStr(daxResult), ContentType.JSON.getValue())
