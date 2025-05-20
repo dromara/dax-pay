@@ -1,10 +1,8 @@
 package org.dromara.daxpay.core.result;
 
-import cn.bootx.platform.core.code.CommonCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.slf4j.MDC;
 
 import java.time.LocalDateTime;
 
@@ -35,11 +33,11 @@ public class DaxResult<T>{
     private String sign;
 
     @Schema(description = "响应时间")
-    private LocalDateTime resTime = LocalDateTime.now();
+    private LocalDateTime resTime;
 
     /** 追踪ID */
     @Schema(description = "追踪ID")
-    private String traceId = MDC.get(CommonCode.TRACE_ID);
+    private String traceId;
 
     public DaxResult(int successCode, T data, String msg) {
         this.code = successCode;
