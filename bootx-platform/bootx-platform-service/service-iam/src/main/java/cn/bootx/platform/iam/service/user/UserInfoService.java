@@ -100,7 +100,7 @@ public class UserInfoService {
             .orElseThrow(UserInfoNotExistsException::new);
 
         // 判断原密码是否正确
-        if (!BCrypt.checkpw(newPassword, userInfo.getPassword())) {
+        if (!BCrypt.checkpw(password, userInfo.getPassword())) {
             throw new BizException("旧密码错误");
         }
         userInfo.setPassword(newPassword);
