@@ -7,33 +7,33 @@
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
  <img src="https://img.shields.io/badge/Dax%20Pay-3.0.0-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Author-Daxpay-orange.svg" alt="Build Status"/>
- <img src="https://img.shields.io/badge/Spring%20Boot-3.4.3-blue.svg" alt="Downloads"/>
+ <img src="https://img.shields.io/badge/Spring%20Boot-3.5.4-blue.svg" alt="Downloads"/>
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
 </p>
 
-# Dromara Dax-Pay(单商户多应用版)
+# Dromara Dax-Pay(开源版)
 
-## ❗使用须知
+## 使用须知
 
 `DaxPay`是一款基于`Apache License 2.0`协议分发的开源软件，受中华人民共和国相关法律法规的保护和限制，可以在符合[《用户授权使用协议》](用户授权使用协议.txt)和
 [《Apache License 2.0》](LICENSE)开源协议情况下进行免费使用、学习和交流。**在使用前请阅读上述协议，如果不同意请勿进行使用。**
 
-## 🍈项目介绍
+## 项目介绍
 
 > DaxPay是一套开源支付网关系统，已经对接支付宝、微信支付、云闪付相关的接口。可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响。
 > 同时与商业版使用同样的底层代码，保证统一接口尽量兼容，可以方便的升级为商业版。
 
-## 🧭 特色功能
+## 特色功能
+- 支持支付、退款等支付相关的核心能力
 - 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
 - 已对接`微信支付`、`支付宝`和`云闪付`相关的接口，并以扩展包的方式支持更多类型的通道
 - 支持多应用配置，可以同时对接多个支付通道账号，方便多个业务系统对接
-- 支持支付、退款、分账等支付相关的能力
 - 提供网关支付功能：收银台、聚合支付、收款码牌等功能
 - 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
 - 接口请求和响应数据支持启用签名机制，保证交易安全可靠
 - 提供管理端，方便运营人员进行管理和操作
 
-## 📃 文档和源码地址
+## 文档和源码地址
 ### 文档地址
 在 [DaxPay文档站](https://daxpay.dromara.org/) 下的支付网关(DaxPay)模块下可以进行查阅相关文档，具体链接地址如下：
 [快速指南](https://daxpay.dromara.org/single/guides/overview/项目介绍.html)、
@@ -49,7 +49,7 @@
 | 网关前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |                                                |
 
 
-## 🏬 系统演示
+## 系统演示
 ### 开源版:
 > 注：演示账号部分功能权限未开放。
 
@@ -61,43 +61,33 @@
 
 ### 商业版
 
-商户端: https://merchant.dax-pay.test.yibeiguangnian.cn/
+运营端
+https://admin.web.daxpay.cn/
+代理端
+https://agent.web.daxpay.cn/
+商户端
+https://merchant.web.daxpay.cn/
 
-运营端: https://daxpay-web.test.yibeiguangnian.cn/
+运营端演示用户: csadmin/123123
 
-运营端测试: csadmin/123123
+代理端演示用户: csdls/123123
 
-商户端普通商户测试: cspt/123123
+商户端普通商户演示: cspt/123123
 
-商户端特约商户测试: csty/123123
+商户端特约商户演示: csdl/123123
 
 
-## 🥞 核心技术栈
+## 核心技术栈
 | 名称          | 描述     | 版本要求             |
 |-------------|--------|------------------|
 | Jdk         | Java环境 | 21+              |
-| Spring Boot | 开发框架   | 3.4.x            |
-| Redis       | 分布式缓存  | 5.x版本及以上         |
+| Spring Boot | 开发框架   | 3.5.x            |
+| Redis       | 分布式缓存  | 7.x版本及以上         |
 | Postgresql  | 数据库    | Postgresql 12及以上 |
+| MySQL       | 数据库    | MySQL 8.0及以上     |
 | Vue         | 前端框架   | 3.x              |
 
-## 🛠️ 业务系统接入
-> 业务系统想接入支付网关的话，不需要集成到业务系统里，只需要单独部署一份支付系统，然后业务系统通过接口调用即可拥有对应的支付能力，
-不会对原业务系统的架构产生影响。如果是Java项目，可以使用SDK简化接入流程， 其他语言可以参照中的说明使用HTTP接口方式接入。
-
-### Java客户端SDK
-> SDK版本号与支付网关的版本保持一致，如果需要使用，请在pom.xml中添加如下依赖。SDK使用方式参考[SDK使用说明](https://daxpay.dromara.org/single/gateway/overview/SDK使用说明.html)。
-
-```xml
- <!-- 支付SDK -->
-<dependency>
-    <groupId>org.dromara.daxpay</groupId>
-    <artifactId>daxpay-sdk</artifactId>
-    <version>${latest.version}</version>
-</dependency>
-```
-
-## 🍎 系统截图
+## 系统截图
 ### 通道配置
 <img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204334_543.lvxlxz86a.webp" alt="wechat_2025-04-27_204334_543"  />
 
@@ -115,8 +105,6 @@
 ### 小程序快捷收银
 <img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/cbe6e332c55b241215787254951dc7ec.969y3b848r.webp" alt="cbe6e332c55b241215787254951dc7ec" width = "270" height = "570" />
 
-## 🛣️ 路线图
-[**历史更新记录**](/_doc/ChangeLog.md)
 
 ##  🥪 关于我们
 
@@ -125,11 +113,6 @@
 交流三群: 879409917
 <p>
 <img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/1733360741745_d.83a33entp3.webp" width = "330" height = "500"/>
-</p>
-
-扫码加入钉钉交流群: [加群连接](https://qr.dingtalk.com/action/joingroup?code=v1,k1,AzkcWLa8J/OHXi+nTWwNRc68IAJ0ckWXEEIvrJofq2A=&_dt_no_comment=1&origin=11)
-<p>
-<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/png-(1).7egk526qnp.webp" width = "400" height = "400"/>
 </p>
 
 微信扫码加小助手拉群: sdcit2020

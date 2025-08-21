@@ -1,7 +1,7 @@
 version: '3'
 services:
   daxpay-single:
-    image: daxpay/daxpay-single:3.0.0.beta5
+    image: daxpay/daxpay-single:3.0.0
     restart: always
     # window上不支持host网络模式, 需要更改为 bridge 网络模式, 然后走端口映射
     network_mode: host

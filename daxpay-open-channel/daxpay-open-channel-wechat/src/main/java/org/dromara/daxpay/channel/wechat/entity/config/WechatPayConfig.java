@@ -3,6 +3,7 @@ package org.dromara.daxpay.channel.wechat.entity.config;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
@@ -114,7 +115,7 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
      * 从通道配置转换为微信支付配置
      */
     public static WechatPayConfig convertConfig(ChannelConfig channelConfig) {
-        WechatPayConfig config = JsonUtil.toBean(channelConfig.getExt(), WechatPayConfig.class);
+        WechatPayConfig config = JSONUtil.toBean(channelConfig.getExt(), WechatPayConfig.class);
 
         config.setId(channelConfig.getId())
                 .setWxAppId(channelConfig.getOutAppId())

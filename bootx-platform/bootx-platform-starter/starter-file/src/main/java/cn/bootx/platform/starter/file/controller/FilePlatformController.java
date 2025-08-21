@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.dromara.x.file.storage.core.FileStorageService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ import java.util.List;
  * @since 2024/8/12
  */
 @Validated
+@Deprecated
 @RequestGroup(groupCode = "FilePlatform", groupName = "文件存储平台管理", moduleCode = "starter")
 @Tag(name = "文件存储平台")
 @RestController
@@ -31,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilePlatformController {
     private final FilePlatformService filePlatformService;
+    private final FileStorageService fileStorageService;
 
     @IgnoreAuth
     @Operation(summary = "列表")
@@ -62,5 +65,13 @@ public class FilePlatformController {
     public Result<Void> setDefault(@NotNull(message = "主键不可为空") Long id){
         filePlatformService.setDefault(id);
         return Res.ok();
+    }
+
+    @IgnoreAuth
+    @Operation(summary = "获取当前默认的文件上传存储平台")
+    @GetMapping("/getDefaultUpload")
+    public Result<String> getDefault(){
+        String defaultPlatform = fileStorageService.getProperties().getDefaultPlatform();
+        return Res.ok(defaultPlatform);
     }
 }

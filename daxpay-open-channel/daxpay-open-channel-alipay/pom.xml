@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.dromara.daxpay</groupId>
         <artifactId>daxpay-open-channel</artifactId>
-        <version>3.0.0.beta5</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>daxpay-open-channel-alipay</artifactId>

@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-starter</artifactId>
-        <version>3.0.0.beta5</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>starter-quartz</artifactId>

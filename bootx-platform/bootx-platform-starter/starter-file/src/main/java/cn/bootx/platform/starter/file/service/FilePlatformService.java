@@ -22,11 +22,11 @@ import java.util.List;
  * @since 2024/8/12
  */
 @Slf4j
+@Deprecated
 @Service
 @RequiredArgsConstructor
 public class FilePlatformService {
     private final FilePlatformManager filePlatformManager;
-
 
     /**
      * 获取全部存储平台
@@ -62,12 +62,14 @@ public class FilePlatformService {
                 .eq(FilePlatform::isDefaultPlatform, true)
                 .set(FilePlatform::getLastModifiedTime, LocalDateTime.now())
                 .set(MpRealDelEntity::getLastModifier, SecurityUtil.getUserIdOrDefaultId())
+                .setIncrBy(MpRealDelEntity::getVersion, 1)
                 .update();
         filePlatformManager.lambdaUpdate()
                 .eq(FilePlatform::getId, id)
                 .set(FilePlatform::getLastModifiedTime, LocalDateTime.now())
                 .set(MpRealDelEntity::getLastModifier, SecurityUtil.getUserIdOrDefaultId())
                 .set(FilePlatform::isDefaultPlatform, true)
+                .setIncrBy(MpRealDelEntity::getVersion, 1)
                 .update();
     }
 }

@@ -98,13 +98,16 @@ public class UserInfoService {
     public void updatePassword(String password, String newPassword) {
         UserInfo userInfo = userInfoManager.findById(SecurityUtil.getUserId())
             .orElseThrow(UserInfoNotExistsException::new);
-
+        UserInfo update=new UserInfo();
+        update.setId(userInfo.getId());
+        update.setVersion(userInfo.getVersion());
         // 判断原密码是否正确
         if (!BCrypt.checkpw(password, userInfo.getPassword())) {
             throw new BizException("旧密码错误");
         }
-        userInfo.setPassword(newPassword);
-        userInfoManager.updateById(userInfo);
+        newPassword=BCrypt.hashpw(newPassword,BCrypt.gensalt());
+        update.setPassword(newPassword);
+        userInfoManager.updateById(update);
     }
 
 }

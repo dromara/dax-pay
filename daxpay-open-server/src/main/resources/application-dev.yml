@@ -68,9 +68,6 @@ bootx-platform:
         - '/css/**'
         - '/error'
         - '/favicon.ico'
-    file-upload:
-      # 使用后端代理访问, 线上请使用 Nginx 配置或者直连方式，效率更高
-      forward-server-url: http://127.0.0.1:9999
 dax-pay:
   env: DEV_
   machine-no: 70

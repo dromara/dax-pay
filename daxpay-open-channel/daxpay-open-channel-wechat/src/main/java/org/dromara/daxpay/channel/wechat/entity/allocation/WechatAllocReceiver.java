@@ -2,6 +2,7 @@ package org.dromara.daxpay.channel.wechat.entity.allocation;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.util.JsonUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.channel.wechat.convert.WechatAllocReceiverConvert;
@@ -66,7 +67,7 @@ public class WechatAllocReceiver implements ToResult<WechatAllocReceiverResult> 
      * 转换为通道接收方
      */
     public static WechatAllocReceiver convertChannel(AllocReceiver receiver) {
-        var leshuaAllocReceiver = JsonUtil.toBean(receiver.getExt(), WechatAllocReceiver.class);
+        var leshuaAllocReceiver = JSONUtil.toBean(receiver.getExt(), WechatAllocReceiver.class);
         leshuaAllocReceiver.setId(receiver.getId())
                 .setReceiverNo(receiver.getReceiverNo())
                 .setReceiverName(receiver.getReceiverName())

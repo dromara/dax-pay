@@ -1,8 +1,8 @@
 package cn.bootx.platform.common.mybatisplus.handler;
 
-import cn.bootx.platform.core.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.handlers.AbstractJsonTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
@@ -35,13 +35,13 @@ public class IntegerListTypeHandler extends AbstractJsonTypeHandler<List<Integer
     @Override
     public List<Integer> parse(String json) {
         if (StrUtil.isNotBlank(json)){
-            return JsonUtil.toBean(json, new TypeReference<>() {}, false);
+            return JSONUtil.toBean(json, new TypeReference<>() {}, false);
         }
         return List.of();
     }
 
     @Override
     public String toJson(List<Integer> obj) {
-        return JsonUtil.toJsonStr(obj);
+        return JSONUtil.toJsonStr(obj);
     }
 }

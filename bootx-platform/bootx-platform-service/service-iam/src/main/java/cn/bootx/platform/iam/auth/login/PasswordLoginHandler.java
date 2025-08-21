@@ -33,8 +33,10 @@ import java.util.Objects;
 @SuppressWarnings("FieldCanBeLocal")
 public class PasswordLoginHandler implements AbstractAuthentication {
 
+    @Getter
     private final String ACCOUNT_PARAMETER = "account";
 
+    @Getter
     private final String PASSWORD_PARAMETER = "password";
 
     @Resource

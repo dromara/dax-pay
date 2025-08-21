@@ -64,12 +64,12 @@ public class PermPathSyncService {
             List<String> clientCodes = bootxConfigProperties.getClientCodes();
             // 查询数据中的数据并转换为请求信息列表
             for (String clientCode : clientCodes) {
-                sync(clientCode);
+                this.sync(clientCode);
             }
         } else {
             // 分模块模式同步
             String clientCode = clientCodeService.getClientCode();
-            sync(clientCode);
+            this.sync(clientCode);
         }
     }
 
@@ -82,7 +82,7 @@ public class PermPathSyncService {
                 // 查询是否包含所有
                 .filter(o -> o.isAllClient() || CollUtil.contains(o.getClientCodes(),clientCode))
                 .toList();
-        List<PermPath> permPaths = permPathManager.findAllByLeafAndClient(true,clientCode);
+        List<PermPath> permPaths = permPathManager.findAllByLeafAndClient(true, clientCode);
         var requestPathMap = requestPathBos.stream()
                 .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
         var permPathMap = permPaths.stream()
@@ -95,8 +95,8 @@ public class PermPathSyncService {
         // 需要更新的数据
         List<PermPath> updateData = this.getUpdateData(requestPathMap, permPathMap);
 
-        // 保存新增的
-        addData.forEach(o -> o.setClientCode(clientCode));
+        // 保存新增的, ID 由不会变更的终端编码+请求方式+请求路径进行
+        addData.forEach(o -> o.setClientCode(clientCode).setId(this.genPathId(o.getClientCode()+o.getMethod()+o.getPath())));
         permPathManager.saveAll(addData);
         // 更新存在的
         permPathManager.updateAllById(updateData);
@@ -161,8 +161,7 @@ public class PermPathSyncService {
                 .map(permPathMap::get)
                 .peek(o -> {
                     RequestPathBo requestPathBo = requestPathMap.get(o.getPath() + ":" + o.getMethod());
-                    o.setName(requestPathBo.getName())
-                            .setParentCode(requestPathBo.getGroupCode());
+                    o.setName(requestPathBo.getName()).setParentCode(requestPathBo.getGroupCode());
                 }).toList();
     }
 
@@ -227,7 +226,7 @@ public class PermPathSyncService {
                 .stream()
                 .filter(pathKey -> {
                     HandlerMethod handlerMethod = map.get(pathKey);
-                    return Objects.nonNull(handlerMethod.getMethodAnnotation(cn.bootx.platform.core.annotation.RequestPath.class))
+                    return Objects.nonNull(handlerMethod.getMethodAnnotation(RequestPath.class))
                             &&Objects.nonNull(handlerMethod.getBeanType().getAnnotation(RequestGroup.class));
                 }).toList();
 
@@ -303,7 +302,7 @@ public class PermPathSyncService {
     }
 
     /**
-     * 给分组和模块生成ID, 防止每次更新ID都会发生变化
+     * 给分组/模块/请求路径资源生成ID, 防止每次更新ID都会发生变化
      */
     private long genPathId(String str) {
         String s = SecureUtil.sha256(str);

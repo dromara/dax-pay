@@ -8,8 +8,6 @@ import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.recorder.DefaultFileRecorder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 /**
  * x.file.storage 文件上传信息储存
  * @author xxm
@@ -27,7 +25,6 @@ public class FileDetailRecordHandler extends DefaultFileRecorder {
     @Override
     public boolean save(FileInfo fileInfo) {
         UploadFileInfo uploadFileInfo = UploadFileInfo.init(fileInfo);
-        uploadFileInfo.setCreateTime(LocalDateTime.now());
         uploadFileManager.save(uploadFileInfo);
         fileInfo.setId(String.valueOf(uploadFileInfo.getId()));
         return true;

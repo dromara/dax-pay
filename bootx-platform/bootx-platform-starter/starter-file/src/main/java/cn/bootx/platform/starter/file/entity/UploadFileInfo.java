@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 public class UploadFileInfo extends MpIdEntity implements ToResult<UploadFileResult> {
 
     /**
-     * 文件访问地址
+     * 文件访问地址(存储在S3中的唯一名称)
      */
     private String url;
 

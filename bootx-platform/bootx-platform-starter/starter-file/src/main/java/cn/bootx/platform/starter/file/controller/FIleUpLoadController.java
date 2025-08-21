@@ -8,20 +8,30 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
+import cn.bootx.platform.starter.file.param.FileUploadRequestParams;
+import cn.bootx.platform.starter.file.param.UploadFileInfoParam;
 import cn.bootx.platform.starter.file.param.UploadFileQuery;
+import cn.bootx.platform.starter.file.result.FileUploadParamsResult;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
 import cn.bootx.platform.starter.file.service.FileUploadService;
-import org.dromara.core.trans.anno.TransMethodResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.dromara.core.trans.anno.TransMethodResult;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 文件上传
@@ -52,14 +62,14 @@ public class FIleUpLoadController {
     @Operation(summary = "获取单条详情")
     @GetMapping("/findById")
     public Result<UploadFileResult> findById(@NotNull(message = "主键不可为空") Long id) {
-        return Res.ok(uploadService.findById(id));
+        return Res.ok(uploadService.findByUrl(id));
     }
 
     @IgnoreAuth
     @Operation(summary = "根据URL获取单条详情")
     @GetMapping("/findByUrl")
     public Result<UploadFileResult> findById(@NotBlank(message = "文件URL不可为空") String url) {
-        return Res.ok(uploadService.findById(url));
+        return Res.ok(uploadService.findByUrl(url));
     }
 
     @Operation(summary = "删除")
@@ -71,31 +81,37 @@ public class FIleUpLoadController {
         return Res.ok();
     }
 
-    @IgnoreAuth
-    @Operation(summary = "上传")
-    @PostMapping("/upload")
-    public Result<UploadFileResult> local(@RequestPart MultipartFile file, String fileName) {
-        return Res.ok(uploadService.upload(file, fileName));
+    @IgnoreAuth(login = true)
+    @Operation(summary = "下载文件")
+    @GetMapping("/downloadByServer")
+    public ResponseEntity<byte[]> downloadByServer(String attachName) {
+        var bytes = uploadService.downloadAndCheck(attachName);
+        // 设置header信息
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", URLEncoder.encode(attachName, StandardCharsets.UTF_8));
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    }
+
+    @IgnoreAuth(login = true)
+    @Operation(summary = "获取前端直传参数")
+    @PostMapping("/getUploadParams")
+    public Result<FileUploadParamsResult> getUploadParams(@RequestBody @Valid FileUploadRequestParams params) {
+        return Res.ok(uploadService.getUploadParams(params));
+    }
+
+    @IgnoreAuth(login = true)
+    @Operation(summary = "前端直传文件信息保存")
+    @PostMapping("/saveFileInfo")
+    public Result<Void> saveFileInfo(@RequestBody @Valid UploadFileInfoParam param) {
+        uploadService.saveFileInfo(param);
+        return Res.ok();
     }
 
     @IgnoreAuth
-    @Operation(summary = "获取文件预览地址前缀(流量会经过后端)")
-    @GetMapping("/forward/getFilePreviewUrlPrefix")
-    public Result<String> getFilePreviewUrlPrefix() {
-        return Res.ok(uploadService.getServerFilePreviewUrlPrefix());
-    }
-
-    @IgnoreAuth
-    @Operation(summary = "预览文件(流量会经过后端)")
-    @GetMapping("/forward/preview/{id}")
-    public void preview(@PathVariable Long id, HttpServletResponse response) {
-        uploadService.preview(id, response);
-    }
-
-    @IgnoreAuth
-    @Operation(summary = "下载文件(流量会经过后端)")
-    @GetMapping("/forward/download/{id}")
-    public ResponseEntity<byte[]> download(@PathVariable Long id) {
-        return uploadService.download(id);
+    @Operation(summary = "前端直传文件预览/下载(不需要登录)")
+    @GetMapping("/download/{attachName}")
+    public void download(HttpServletResponse httpServletResponse, @Schema(description = "附件名") @PathVariable("attachName") String attachName) {
+        uploadService.ossDownload(httpServletResponse, attachName);
     }
 }

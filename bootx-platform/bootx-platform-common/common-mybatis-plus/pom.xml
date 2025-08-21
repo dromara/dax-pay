@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-common</artifactId>
-        <version>3.0.0.beta5</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>common-mybatis-plus</artifactId>
@@ -62,6 +62,17 @@
             <groupId>cn.bootx.platform</groupId>
             <artifactId>common-spring</artifactId>
             <version>${bootx-platform.version}</version>
+        </dependency>
+        <!-- hutool 组件 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-db</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
         </dependency>
     </dependencies>
     <dependencyManagement>

@@ -2,6 +2,7 @@ package org.dromara.daxpay.channel.alipay.entity.allocation;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.util.JsonUtil;
+import cn.hutool.json.JSONUtil;
 import org.dromara.daxpay.channel.alipay.convert.AlipayAllocReceiverConvert;
 import org.dromara.daxpay.channel.alipay.result.allocation.AlipayAllocReceiverResult;
 import org.dromara.daxpay.core.enums.AllocReceiverTypeEnum;
@@ -71,7 +72,7 @@ public class AlipayAllocReceiver implements ToResult<AlipayAllocReceiverResult> 
      * 转换为通道接收方
      */
     public static AlipayAllocReceiver convertChannel(AllocReceiver receiver) {
-        var leshuaAllocReceiver = JsonUtil.toBean(receiver.getExt(), AlipayAllocReceiver.class);
+        var leshuaAllocReceiver = JSONUtil.toBean(receiver.getExt(), AlipayAllocReceiver.class);
         leshuaAllocReceiver.setId(receiver.getId())
                 .setReceiverNo(receiver.getReceiverNo())
                 .setReceiverName(receiver.getReceiverName())

@@ -3,6 +3,7 @@ package org.dromara.daxpay.channel.union.entity.config;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.annotation.BigField;
 import cn.bootx.platform.core.util.JsonUtil;
+import cn.hutool.json.JSONUtil;
 import org.dromara.daxpay.channel.union.code.UnionPayCode;
 import org.dromara.daxpay.channel.union.convert.UnionPayConfigConvert;
 import org.dromara.daxpay.channel.union.result.UnionPayConfigResult;
@@ -101,7 +102,7 @@ public class UnionPayConfig implements ToResult<UnionPayConfigResult> {
      * 从通道配置转换为支付宝配置
      */
     public static UnionPayConfig convertConfig(ChannelConfig channelConfig) {
-        UnionPayConfig config = JsonUtil.toBean(channelConfig.getExt(), UnionPayConfig.class);
+        UnionPayConfig config = JSONUtil.toBean(channelConfig.getExt(), UnionPayConfig.class);
         config.setId(channelConfig.getId())
                 .setUnionMachId(channelConfig.getOutMchNo())
                 .setEnable(channelConfig.isEnable());

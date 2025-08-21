@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-starter</artifactId>
-        <version>3.0.0.beta5</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>starter-file</artifactId>
@@ -25,11 +25,10 @@
             <version>${x-file-storage.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.qcloud</groupId>
-            <artifactId>cos_api</artifactId>
-            <version>${qcloud.version}</version>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${aws-s3.version}</version>
         </dependency>
-
         <!-- 数据库 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>

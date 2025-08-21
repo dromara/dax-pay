@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.core.result.DaxNoticeResult;
@@ -62,7 +63,7 @@ public class MerchantCallbackSendService {
         String body = null;
         try {
             // 构造通知消息并签名
-            var daxResult = new DaxNoticeResult<Map<String, Object>>(SUCCESS_CODE, JsonUtil.parseObj(task.getContent()), SUCCESS_MSG)
+            var daxResult = new DaxNoticeResult<Map<String, Object>>(SUCCESS_CODE, JSONUtil.parseObj(task.getContent()), SUCCESS_MSG)
                     .setAppId(task.getAppId());
             daxResult.setTraceId(MDC.get(CommonCode.TRACE_ID));
             daxResult.setResTime(LocalDateTime.now());

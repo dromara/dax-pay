@@ -14,7 +14,7 @@ public class FileUploadRequestParams {
     private String fileName;
 
     @Schema(description = "媒体类型 MEDIA_TYPE")
-    @NotBlank(message = "媒体类型不可为")
+    @NotBlank(message = "媒体类型不可为为空")
     private String mediaType;
 
     @Schema(description = "文件大小")

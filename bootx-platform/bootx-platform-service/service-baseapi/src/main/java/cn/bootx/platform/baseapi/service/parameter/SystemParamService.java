@@ -36,7 +36,7 @@ public class SystemParamService {
      */
     public void add(SystemParameterParam param) {
         SystemParameter systemParameter = SystemParameter.init(param);
-        if (systemParamManager.existsByKey(systemParameter.getKey())) {
+        if (systemParamManager.existsByKey(systemParameter.getParamKey())) {
             throw new BizException("key重复");
         }
         // 默认非内置
@@ -81,7 +81,7 @@ public class SystemParamService {
         if (Objects.equals(param.getEnable(), false)) {
             throw new BizException("该参数已停用");
         }
-        return param.getValue();
+        return param.getParamValue();
     }
 
     /**

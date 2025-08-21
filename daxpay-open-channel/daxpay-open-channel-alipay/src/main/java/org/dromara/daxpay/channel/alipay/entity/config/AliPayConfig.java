@@ -2,6 +2,7 @@ package org.dromara.daxpay.channel.alipay.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.util.JsonUtil;
+import cn.hutool.json.JSONUtil;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.convert.AlipayConfigConvert;
 import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
@@ -97,7 +98,7 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
      * 从通道配置转换为支付宝配置
      */
     public static AliPayConfig convertConfig(ChannelConfig channelConfig) {
-        var config = JsonUtil.toBean(channelConfig.getExt(), AliPayConfig.class);
+        var config = JSONUtil.toBean(channelConfig.getExt(), AliPayConfig.class);
         config.setId(channelConfig.getId())
                 .setAliAppId(channelConfig.getOutAppId())
                 .setAppId(channelConfig.getAppId())

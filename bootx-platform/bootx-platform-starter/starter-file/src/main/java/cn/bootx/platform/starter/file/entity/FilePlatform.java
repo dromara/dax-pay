@@ -14,6 +14,8 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
+import java.util.Objects;
+
 /**
  * 文件存储平台
  * @author xxm
@@ -41,10 +43,18 @@ public class FilePlatform extends MpRealDelEntity implements ToResult<FilePlatfo
     private boolean defaultPlatform;
 
     /** 访问地址 */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String url;
+
+    /** 前端直传 */
+    private Boolean frontendUpload;
 
     public String getUrl() {
         return StrUtil.removeSuffix(url, "/");
+    }
+
+    public Boolean getFrontendUpload() {
+        return Objects.equals(frontendUpload,true);
     }
 
     /**

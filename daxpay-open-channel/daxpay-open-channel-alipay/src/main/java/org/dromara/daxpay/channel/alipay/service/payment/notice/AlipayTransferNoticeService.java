@@ -1,6 +1,7 @@
 package org.dromara.daxpay.channel.alipay.service.payment.notice;
 
 import cn.bootx.platform.core.util.JsonUtil;
+import cn.hutool.json.JSONUtil;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.result.notice.AlipayOrderChangedResult;
 import org.dromara.daxpay.core.enums.CallbackStatusEnum;
@@ -57,7 +58,7 @@ public class AlipayTransferNoticeService {
         // 通过 biz_content 获取值
         try {
             String bizContent = map.get("biz_content");
-            var response = JsonUtil.toBean(bizContent, AlipayOrderChangedResult.class);
+            var response = JSONUtil.toBean(bizContent, AlipayOrderChangedResult.class);
             callbackInfo.setCallbackData(BeanUtil.beanToMap(response));
             this.resolveData(response);
             return "success";

@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>3.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-open</artifactId>
-    <version>3.0.0.beta5</version>
+    <version>3.0.0</version>
     <packaging>pom</packaging>
     <description>开源版支付核心功能实现</description>
 
@@ -34,8 +34,8 @@
         <easytrans.version>3.0.5</easytrans.version>
         <wxjava.version>4.7.4.B</wxjava.version>
 
-        <bootx-platform.version>3.0.0.beta5</bootx-platform.version>
-        <daxpay.version>3.0.0.beta5</daxpay.version>
+        <bootx-platform.version>3.0.0</bootx-platform.version>
+        <daxpay.version>3.0.0</daxpay.version>
     </properties>
 
     <dependencies>

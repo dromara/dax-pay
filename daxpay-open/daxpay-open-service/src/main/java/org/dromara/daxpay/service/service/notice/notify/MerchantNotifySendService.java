@@ -3,6 +3,7 @@ package org.dromara.daxpay.service.service.notice.notify;
 import cn.bootx.platform.core.code.CommonCode;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.bootx.platform.starter.redis.delay.service.DelayJobService;
+import cn.hutool.json.JSONUtil;
 import org.dromara.daxpay.core.enums.MerchantNotifyTypeEnum;
 import org.dromara.daxpay.core.result.DaxNoticeResult;
 import org.dromara.daxpay.service.code.DaxPayCode;
@@ -69,7 +70,7 @@ public class MerchantNotifySendService {
         String body = null;
         try {
             // 构造通知消息并签名
-            var daxResult = new DaxNoticeResult<Map<String, Object>>(SUCCESS_CODE, JsonUtil.parseObj(task.getContent()), SUCCESS_MSG)
+            var daxResult = new DaxNoticeResult<Map<String, Object>>(SUCCESS_CODE, JSONUtil.parseObj(task.getContent()), SUCCESS_MSG)
                     .setAppId(task.getAppId())
                     .setNoticeType(task.getNotifyType());
             daxResult.setTraceId(MDC.get(CommonCode.TRACE_ID));
