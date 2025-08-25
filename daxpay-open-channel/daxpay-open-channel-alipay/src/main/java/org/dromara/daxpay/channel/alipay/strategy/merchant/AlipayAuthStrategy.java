@@ -8,7 +8,7 @@ import org.dromara.daxpay.core.param.assist.AuthCodeParam;
 import org.dromara.daxpay.core.param.assist.GenerateAuthUrlParam;
 import org.dromara.daxpay.core.result.assist.AuthResult;
 import org.dromara.daxpay.core.result.assist.AuthUrlResult;
-import org.dromara.daxpay.service.strategy.AbsChannelAuthStrategy;
+import org.dromara.daxpay.service.pay.strategy.AbsChannelAuthStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

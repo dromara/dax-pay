@@ -3,10 +3,10 @@ package org.dromara.daxpay.channel.alipay.service.payment.extra;
 import cn.bootx.platform.core.exception.BizException;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
-import org.dromara.daxpay.core.context.MchAppLocal;
+import org.dromara.daxpay.core.context.PaymentReqInfoLocal;
 import org.dromara.daxpay.core.result.assist.AuthResult;
 import org.dromara.daxpay.core.result.assist.AuthUrlResult;
-import org.dromara.daxpay.service.common.local.PaymentContextLocal;
+import org.dromara.daxpay.service.pay.common.local.PaymentContextLocal;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
@@ -34,8 +34,8 @@ public class AlipayAuthService {
      */
     public AuthUrlResult generateAuthUrl(String authPath, String channel, String appId, String aliAppId) {
         String queryCode = RandomUtil.randomString(10);
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        String serverUrl = mchAppInfo.getGatewayMobileUrl();
+        PaymentReqInfoLocal reqInfo = PaymentContextLocal.get().getReqInfo();
+        String serverUrl = reqInfo.getGatewayH5Url();
         if (StrUtil.isBlank(authPath)){
             authPath = StrUtil.format("/auth/alipay/{}/{}/{}/{}", appId, channel, queryCode, aliAppId);
         }

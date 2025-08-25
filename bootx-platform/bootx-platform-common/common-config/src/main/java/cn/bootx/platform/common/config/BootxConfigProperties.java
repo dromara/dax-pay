@@ -19,10 +19,6 @@ import java.util.List;
 @ConfigurationProperties(prefix = "bootx-platform.config")
 public class BootxConfigProperties {
 
-    /** 终端编码 */
-    @Deprecated
-    private String clientCode = "";
-
     /**
      * 终端列表, 开启融合模式后才会生效, 表示当前系统集成了哪些终端模块
      */

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  * 通道认证类型
- * 字典值: channel_auth_type_enum
+ * 字典值: channel_auth_type
  * @author xxm
  * @since 2025/4/7
  */
@@ -28,7 +28,7 @@ public enum ChannelAuthTypeEnum {
         return Arrays.stream(values())
                 .filter(item -> Objects.equals(item.code, code))
                 .findFirst()
-                .orElseThrow(() -> new ConfigNotExistException("退款状态不存在"));
+                .orElseThrow(() -> new ConfigNotExistException("认证类型不存在"));
     }
 
 }

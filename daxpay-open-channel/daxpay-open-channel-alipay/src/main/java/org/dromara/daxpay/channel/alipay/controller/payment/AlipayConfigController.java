@@ -1,5 +1,6 @@
 package org.dromara.daxpay.channel.alipay.controller.payment;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.OperateLog;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
@@ -7,7 +8,9 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import org.dromara.daxpay.channel.alipay.param.config.AlipayConfigParam;
 import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
+import org.dromara.daxpay.channel.alipay.result.config.AlipaySubConfigResult;
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * @author xxm
  * @since 2024/6/26
  */
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @Validated
 @Tag(name = "支付宝支付配置控制器")
 @RestController
@@ -35,7 +39,6 @@ public class AlipayConfigController {
     public Result<AlipayConfigResult> findById(@NotNull(message = "ID不可为空") Long id) {
         return Res.ok(alipayConfigService.findById(id));
     }
-
     @RequestPath("新增或更新商户配置")
     @Operation(summary = "新增或更新商户配置")
     @PostMapping("/saveOrUpdate")
@@ -44,6 +47,7 @@ public class AlipayConfigController {
         alipayConfigService.saveOrUpdate(param);
         return Res.ok();
     }
+
 
 
 }

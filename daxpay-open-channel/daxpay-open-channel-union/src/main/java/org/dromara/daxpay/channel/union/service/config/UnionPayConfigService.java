@@ -7,18 +7,16 @@ import org.dromara.daxpay.channel.union.param.config.UnionPayConfigParam;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.exception.ConfigNotEnableException;
 import org.dromara.daxpay.core.exception.DataErrorException;
-import org.dromara.daxpay.service.common.cache.ChannelConfigCacheService;
-import org.dromara.daxpay.core.context.MchAppLocal;
-import org.dromara.daxpay.service.common.local.MchContextLocal;
-import org.dromara.daxpay.service.common.local.PaymentContextLocal;
-import org.dromara.daxpay.service.dao.config.ChannelConfigManager;
-import org.dromara.daxpay.service.entity.config.ChannelConfig;
-import org.dromara.daxpay.service.service.config.PlatformConfigService;
+import org.dromara.daxpay.core.context.PaymentReqInfoLocal;
+import org.dromara.daxpay.service.merchant.cache.ChannelConfigCacheService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.service.merchant.dao.config.ChannelConfigManager;
+import org.dromara.daxpay.service.pay.common.local.PaymentContextLocal;
+import org.dromara.daxpay.service.pay.entity.config.ChannelConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +32,6 @@ public class UnionPayConfigService {
 
     private final ChannelConfigManager channelConfigManager;
     private final ChannelConfigCacheService channelConfigCacheService;
-    private final PlatformConfigService platformConfigService;
 
     /**
      * 查询
@@ -91,8 +88,8 @@ public class UnionPayConfigService {
      * 获取支付宝支付配置
      */
     public UnionPayConfig getUnionPayConfig(){
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        ChannelConfig channelConfig = channelConfigCacheService.getMchChannelConfig(mchAppInfo.getAppId(), ChannelEnum.ALIPAY.getCode());
+        PaymentReqInfoLocal reqInfo = PaymentContextLocal.get().getReqInfo();
+        ChannelConfig channelConfig = channelConfigCacheService.getMchChannelConfig(reqInfo.getAppId(), ChannelEnum.ALIPAY.getCode());
         return UnionPayConfig.convertConfig(channelConfig);
     }
 
@@ -100,16 +97,16 @@ public class UnionPayConfigService {
      * 获取支步通知地址
      */
     public String getNotifyUrl() {
-        var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format("{}/unipay/callback/{}/union",mchAppInfo.getGatewayServiceUrl(), mchAppInfo.getAppId());
+        var reqInfo = PaymentContextLocal.get().getReqInfo();
+        return StrUtil.format("{}/unipay/callback/{}/union",reqInfo.getGatewayServiceUrl(), reqInfo.getAppId());
     }
 
     /**
      * 获取同步通知地址
      */
     public String getReturnUrl() {
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format("{}/unipay/return/{}/union",mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
+        PaymentReqInfoLocal reqInfo = PaymentContextLocal.get().getReqInfo();
+        return StrUtil.format("{}/unipay/return/{}/union",reqInfo.getGatewayServiceUrl(),reqInfo.getAppId());
     }
 
 }

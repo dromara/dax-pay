@@ -1,15 +1,17 @@
 package org.dromara.daxpay.controller.record;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.record.TradeFlowRecordQuery;
-import org.dromara.daxpay.service.result.record.flow.TradeFlowAmountResult;
-import org.dromara.daxpay.service.result.record.flow.TradeFlowRecordResult;
-import org.dromara.daxpay.service.service.record.flow.TradeFlowRecordService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.param.record.TradeFlowRecordQuery;
+import org.dromara.daxpay.service.pay.result.record.flow.TradeFlowAmountResult;
+import org.dromara.daxpay.service.pay.result.record.flow.TradeFlowRecordResult;
+import org.dromara.daxpay.service.pay.service.record.flow.TradeFlowRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "交易流水记录控制器")
 @RestController
 @RequestMapping("/record/flow")
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(moduleCode = "TradeRecord", groupCode = "TradeFlow", groupName = "交易流水记录")
 @RequiredArgsConstructor
 public class TradeFlowRecordController {

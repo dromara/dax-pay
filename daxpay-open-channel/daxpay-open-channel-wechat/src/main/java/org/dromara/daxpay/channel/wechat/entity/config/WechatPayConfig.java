@@ -1,17 +1,16 @@
 package org.dromara.daxpay.channel.wechat.entity.config;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
-import cn.bootx.platform.core.util.JsonUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
-import lombok.Data;
-import lombok.experimental.Accessors;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.convert.WechatPayConfigConvert;
 import org.dromara.daxpay.channel.wechat.enums.WechatAuthTypeEnum;
 import org.dromara.daxpay.channel.wechat.result.config.WechatPayConfigResult;
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.entity.config.ChannelConfig;
+import org.dromara.daxpay.service.pay.entity.config.ChannelConfig;
+import cn.hutool.core.util.StrUtil;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 微信支付配置
@@ -89,6 +88,9 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
     /** 备注 */
     private String remark;
 
+    /** 商户号 */
+    private String mchNo;
+
     /** 商户AppId */
     private String appId;
 
@@ -101,12 +103,13 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
         channelConfig.setOutAppId(this.getWxAppId());
         channelConfig.setOutMchNo(this.getWxMchId());
         channelConfig.setAppId(this.getAppId());
+        channelConfig.setMchNo(this.getMchNo());
         channelConfig.setEnable(this.getEnable());
         channelConfig.setChannel(this.isv?ChannelEnum.WECHAT_ISV.getCode():ChannelEnum.WECHAT.getCode());
         WechatPayConfig copy = WechatPayConfigConvert.CONVERT.copy(this);
         // 清空不需要序列化的字段
-        copy.setId(null).setAppId(null).setEnable(null).setWxMchId(null).setWxAppId(null);
-        String jsonStr = JsonUtil.toJsonStr(copy);
+        copy.setId(null).setMchNo(null).setAppId(null).setEnable(null).setWxMchId(null).setWxAppId(null);
+        String jsonStr = JacksonUtil.toJson(copy);
         channelConfig.setExt(jsonStr);
         return channelConfig;
     }
@@ -115,12 +118,13 @@ public class WechatPayConfig implements ToResult<WechatPayConfigResult> {
      * 从通道配置转换为微信支付配置
      */
     public static WechatPayConfig convertConfig(ChannelConfig channelConfig) {
-        WechatPayConfig config = JSONUtil.toBean(channelConfig.getExt(), WechatPayConfig.class);
+        WechatPayConfig config = JacksonUtil.toBean(channelConfig.getExt(), WechatPayConfig.class);
 
         config.setId(channelConfig.getId())
                 .setWxAppId(channelConfig.getOutAppId())
                 .setWxMchId(channelConfig.getOutMchNo())
                 .setAppId(channelConfig.getAppId())
+                .setMchNo(channelConfig.getMchNo())
                 .setEnable(channelConfig.isEnable());
         return config;
     }

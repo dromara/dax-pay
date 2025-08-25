@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PaymentClientLocal {
 
-    /** 客户端ip */
+    /** 客户端IP */
     private String clientIp;
 
     /** 请求IP */

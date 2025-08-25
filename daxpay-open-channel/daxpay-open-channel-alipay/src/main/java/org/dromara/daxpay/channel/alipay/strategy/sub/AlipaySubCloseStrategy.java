@@ -5,7 +5,7 @@ import org.dromara.daxpay.channel.alipay.service.payment.close.AlipayCloseServic
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.enums.CloseTypeEnum;
-import org.dromara.daxpay.service.strategy.AbsPayCloseStrategy;
+import org.dromara.daxpay.service.pay.strategy.AbsPayCloseStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;

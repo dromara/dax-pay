@@ -8,8 +8,8 @@ import org.dromara.daxpay.core.enums.PayMethodEnum;
 import org.dromara.daxpay.core.exception.TradeFailException;
 import org.dromara.daxpay.core.param.trade.pay.PayParam;
 import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.service.pay.entity.order.pay.PayOrder;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
@@ -238,6 +239,8 @@ public class AliPayService {
             request.putOtherTextParam(AlipayConstants.APP_AUTH_TOKEN, aliPayConfig.getAppAuthToken());
         }
         request.setBizModel(model);
+        // 异步回调必须到当前系统中
+        request.setNotifyUrl(aliPayConfigService.getNotifyUrl(aliPayConfig.isIsv()));
         try {
             AlipayTradeCreateResponse response = aliPayConfigService.execute(request,aliPayConfig);
             this.verifyErrorMsg(response);
@@ -315,7 +318,9 @@ public class AliPayService {
                 Date gmtPayment = response.getGmtPayment();
                 result.setOutOrderNo(response.getTradeNo())
                         .setComplete(true)
-                        .setFinishTime(LocalDateTimeUtil.of(gmtPayment));
+                        .setFinishTime(LocalDateTimeUtil.of(gmtPayment))
+                        .setRealAmount(new BigDecimal(response.getBuyerPayAmount()))
+                        .setBuyerId(response.getBuyerOpenId());
             }
             // 非支付中响应码, 进行错误处理
             if (!Objects.equals(response.getCode(), AlipayCode.ResponseCode.INPROCESS)) {

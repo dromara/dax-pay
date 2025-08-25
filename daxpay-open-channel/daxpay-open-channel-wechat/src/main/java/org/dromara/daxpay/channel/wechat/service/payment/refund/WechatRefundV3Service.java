@@ -6,8 +6,8 @@ import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigS
 import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
 import org.dromara.daxpay.core.exception.TradeFailException;
 import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.RefundResultBo;
-import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
+import org.dromara.daxpay.service.pay.bo.trade.RefundResultBo;
+import org.dromara.daxpay.service.pay.entity.order.refund.RefundOrder;
 import cn.hutool.core.util.StrUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundV3Result;

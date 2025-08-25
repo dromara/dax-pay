@@ -1,14 +1,16 @@
 package org.dromara.daxpay.controller.record;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.record.TradeCallbackRecordQuery;
-import org.dromara.daxpay.service.result.record.callback.TradeCallbackRecordResult;
-import org.dromara.daxpay.service.service.record.callback.TradeCallbackRecordService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.param.record.TradeCallbackRecordQuery;
+import org.dromara.daxpay.service.pay.result.record.callback.TradeCallbackRecordResult;
+import org.dromara.daxpay.service.pay.service.record.callback.TradeCallbackRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "交易记录")
 @RestController
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(groupCode = "TradeCallback", groupName = "交易回调记录", moduleCode = "TradeRecord", moduleName = "(DaxPay)交易记录")
 @RequestMapping("/record/callback")
 @RequiredArgsConstructor

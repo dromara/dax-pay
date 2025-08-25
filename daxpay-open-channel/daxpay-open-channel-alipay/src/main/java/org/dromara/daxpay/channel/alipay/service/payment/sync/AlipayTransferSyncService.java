@@ -1,12 +1,12 @@
 package org.dromara.daxpay.channel.alipay.service.payment.sync;
 
-import cn.bootx.platform.core.util.JsonUtil;
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode.TransferStatus;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
 import org.dromara.daxpay.core.enums.TransferStatusEnum;
-import org.dromara.daxpay.service.bo.sync.TransferSyncResultBo;
-import org.dromara.daxpay.service.entity.order.transfer.TransferOrder;
+import org.dromara.daxpay.service.pay.bo.sync.TransferSyncResultBo;
+import org.dromara.daxpay.service.pay.entity.order.transfer.TransferOrder;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayConstants;
 import com.alipay.api.domain.AlipayFundTransCommonQueryModel;
@@ -51,7 +51,7 @@ public class AlipayTransferSyncService {
         try {
             var response = aliPayConfigService.execute(request,aliPayConfig);
             // 设置网关订单号
-            syncResult.setSyncData(JsonUtil.toJsonStr(response));
+            syncResult.setSyncData(JacksonUtil.toJson(response));
             // 设置网关订单号
             syncResult.setOutTransferNo(response.getPayFundOrderId());
 

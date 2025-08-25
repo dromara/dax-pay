@@ -2,7 +2,7 @@ package org.dromara.daxpay.channel.alipay.controller.payment;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
 import org.dromara.daxpay.channel.alipay.service.payment.redirect.AlipayRedirectUrlService;
-import org.dromara.daxpay.service.service.assist.PaymentAssistService;
+import org.dromara.daxpay.service.pay.service.assist.PaymentAssistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 @IgnoreAuth
 @Tag(name = "支付宝同步通知")
 @RestController
-@RequestMapping("/unipay/return/{AppId}")
+@RequestMapping("/unipay/return/{mchNo}/{AppId}")
 @RequiredArgsConstructor
 public class AlipayRedirectUrlController {
     private final AlipayRedirectUrlService redirectUrlService;
@@ -31,15 +31,15 @@ public class AlipayRedirectUrlController {
 
     @Operation(summary = "支付宝同步跳转通知")
     @GetMapping("/alipay")
-    public ModelAndView alipay(@PathVariable("AppId") String appId, HttpServletRequest request){
-        paymentAssistService.initMchAndApp(appId);
+    public ModelAndView alipay(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request){
+        paymentAssistService.initMchAndApp(mchNo, appId);
         String redirect = redirectUrlService.redirect(request,false);
         return new ModelAndView("redirect:"+redirect);
     }
     @Operation(summary = "支付宝同步跳转通知")
     @GetMapping("/alipay/isv")
-    public ModelAndView alipayIsv(@PathVariable("AppId") String appId, HttpServletRequest request){
-        paymentAssistService.initMchAndApp(appId);
+    public ModelAndView alipayIsv(@PathVariable("mchNo") String mchNo, @PathVariable("AppId") String appId, HttpServletRequest request){
+        paymentAssistService.initMchAndApp(mchNo, appId);
         String redirect = redirectUrlService.redirect(request, true);
         return new ModelAndView("redirect:"+redirect);
     }

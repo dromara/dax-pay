@@ -6,8 +6,8 @@ import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigServ
 import org.dromara.daxpay.channel.alipay.service.payment.transfer.AlipayTransferService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.param.trade.transfer.TransferParam;
-import org.dromara.daxpay.service.bo.trade.TransferResultBo;
-import org.dromara.daxpay.service.strategy.AbsTransferStrategy;
+import org.dromara.daxpay.service.pay.bo.trade.TransferResultBo;
+import org.dromara.daxpay.service.pay.strategy.AbsTransferStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;

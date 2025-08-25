@@ -1,14 +1,13 @@
 package org.dromara.daxpay.controller.constant;
 
-import cn.bootx.platform.core.annotation.RequestGroup;
-import cn.bootx.platform.core.annotation.RequestPath;
+import cn.bootx.platform.core.annotation.IgnoreAuth;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.constant.MerchantNotifyConstQuery;
-import org.dromara.daxpay.service.result.constant.MerchantNotifyConstResult;
-import org.dromara.daxpay.service.service.constant.MerchantNotifyConstService;
+import org.dromara.daxpay.service.pay.param.constant.MerchantNotifyConstQuery;
+import org.dromara.daxpay.service.pay.result.constant.MerchantNotifyConstResult;
+import org.dromara.daxpay.service.pay.service.constant.MerchantNotifyConstService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2024/8/5
  */
+@IgnoreAuth
 @Validated
-@RequestGroup(groupCode = "PayConst", moduleCode = "PayConfig")
 @Tag(name = "商户订阅通知类型")
 @RestController
 @RequestMapping("/const/merchant/notify")
@@ -32,7 +31,6 @@ public class MerchantNotifyConstController {
 
     private final MerchantNotifyConstService merchantNotifyConstService;
 
-    @RequestPath("商户订阅通知类型分页")
     @Operation(summary = "商户订阅通知类型分页")
     @GetMapping("/page")
     public Result<PageResult<MerchantNotifyConstResult>> page(PageParam pageParam, MerchantNotifyConstQuery query) {

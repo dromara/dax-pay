@@ -20,6 +20,8 @@ public enum TradeTypeEnum {
     REFUND("refund","退款"),
     TRANSFER("transfer","转账"),
     ALLOCATION("allocation","分账"),
+    CASHOUTS("cashouts","提现"),
+    SETTLE("settle","结算"),
     ;
 
     private final String code;

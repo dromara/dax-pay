@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.alipay.strategy.sub;
 
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.strategy.AbsGatewayPayStrategy;
+import org.dromara.daxpay.service.pay.strategy.AbsGatewayPayStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AlipaySubGatewayPayStrategy extends AbsGatewayPayStrategy {
+
+
 
     /**
      * 策略标识, 可以自行进行扩展

@@ -1,16 +1,18 @@
 package org.dromara.daxpay.controller.notice;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.notice.notify.MerchantNotifyTaskQuery;
-import org.dromara.daxpay.service.result.notice.notify.MerchantNotifyRecordResult;
-import org.dromara.daxpay.service.result.notice.notify.MerchantNotifyTaskResult;
-import org.dromara.daxpay.service.service.notice.notify.MerchantNotifyQueryService;
-import org.dromara.daxpay.service.service.notice.notify.MerchantNotifySendService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.param.notice.notify.MerchantNotifyTaskQuery;
+import org.dromara.daxpay.service.pay.result.notice.notify.MerchantNotifyRecordResult;
+import org.dromara.daxpay.service.pay.result.notice.notify.MerchantNotifyTaskResult;
+import org.dromara.daxpay.service.pay.service.notice.notify.MerchantNotifyQueryService;
+import org.dromara.daxpay.service.pay.service.notice.notify.MerchantNotifySendService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024/8/5
  */
 @Validated
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(groupCode = "MerchantNotify", groupName = "商户订阅通知", moduleCode = "MerchantNotice")
 @Tag(name = "商户订阅通知控制器")
 @RestController

@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.alipay.strategy.merchant;
 
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.strategy.AbsGatewayPayStrategy;
+import org.dromara.daxpay.service.pay.strategy.AbsGatewayPayStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

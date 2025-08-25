@@ -1,5 +1,6 @@
 package org.dromara.daxpay.controller.order;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
@@ -7,11 +8,12 @@ import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
 import org.dromara.daxpay.core.result.trade.refund.RefundResult;
-import org.dromara.daxpay.service.param.order.refund.RefundCreateParam;
-import org.dromara.daxpay.service.param.order.refund.RefundOrderQuery;
-import org.dromara.daxpay.service.result.order.refund.RefundOrderVo;
-import org.dromara.daxpay.service.service.order.refund.RefundOrderQueryService;
-import org.dromara.daxpay.service.service.order.refund.RefundOrderService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.param.order.refund.RefundCreateParam;
+import org.dromara.daxpay.service.pay.param.order.refund.RefundOrderQuery;
+import org.dromara.daxpay.service.pay.result.order.refund.RefundOrderVo;
+import org.dromara.daxpay.service.pay.service.order.refund.RefundOrderQueryService;
+import org.dromara.daxpay.service.pay.service.order.refund.RefundOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +35,7 @@ import java.math.BigDecimal;
 @Tag(name = "退款订单控制器")
 @RestController
 @RequestMapping("/order/refund")
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(moduleCode = "TradeOrder", groupCode = "RefundOrder", groupName = "退款订单")
 @RequiredArgsConstructor
 public class RefundOrderController {

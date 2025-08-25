@@ -1,0 +1,75 @@
+spring:
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          # Postgresql连接
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://127.0.0.1:5432/dax-pay-plus?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+          username: postgresql
+          password: postgresql
+      hikari:
+        minimumIdle: 5 # 最小连接数
+        maximumPoolSize: 50 # 最大连接数
+        leak-detection-threshold: 5000 # 检测连接泄漏的时间阈值（毫秒）
+        connection-timeout: 30000 # 获取连接超时时间（毫秒）
+        idle-timeout: 600000      # 空闲连接超时时间（毫秒）
+        max-lifetime: 1800000     # 连接最大存活时间（毫秒）
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 13
+      password: bootx123
+      lettuce:
+        pool:
+          max-wait: 1000ms
+# 开发时显示debug日志
+logging:
+  level:
+    cn.bootx.**: info
+    cn.daxpay.**: info
+# swagger 配置
+knife4j:
+  # 是否开启Knife4j增强模式
+  enable: true
+  # 是否生产环境
+  production: true
+# 基础脚手架配置
+bootx-platform:
+  starter:
+    auth:
+      # 开启超级管理员
+      enable-admin: false
+      # 用户管理列表中是否显示超级管理员用户
+      admin-in-list: false
+      ignore-urls:
+        - '/actuator/**'
+        - '/token/**'
+        - '/ws/**'
+        - '/front/**'
+        - '/error'
+        - '/favicon.ico'
+# 支付系统配置
+dax-pay:
+  # 环境标识
+  env: DAX
+  # 通常为两位内 机器码, 用于区分不同机器生成的流水号
+  machine-no: 70
+dromara:
+  # 注意, 不要设置 domain 访问路径, 自行进行拼接访问路径, 来保证可迁移性
+  x-file-storage:
+    default-platform: amazon-s3
+    # 文件存储都是用S3协议方式存储
+    amazon-s3:
+      - platform: amazon-s3 # 存储平台标识
+        enable-storage: true  # 启用存储
+        access-key: test
+        secret-key: test
+        end-point: https://files.daxpay.com # 文件存储服务地址
+        bucket-name: daxpay # 桶名称，不要添加/后缀,
+        base-path: file/ # 基础路径, 不要添加/前缀, 但需要添加/后缀
+        attr:
+          # 开启路径样式访问, 不配置默认为二级域名方式
+          forcePathStyle: true

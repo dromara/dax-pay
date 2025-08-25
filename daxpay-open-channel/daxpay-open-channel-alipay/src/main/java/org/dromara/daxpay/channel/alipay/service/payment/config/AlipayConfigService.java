@@ -1,24 +1,22 @@
 package org.dromara.daxpay.channel.alipay.service.payment.config;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.core.util.CertUtil;
-import cn.bootx.platform.core.util.JsonUtil;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.convert.AlipayConfigConvert;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.param.config.AlipayConfigParam;
 import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
-import org.dromara.daxpay.core.context.MchAppLocal;
+import org.dromara.daxpay.core.context.PaymentReqInfoLocal;
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.enums.MerchantTypeEnum;
 import org.dromara.daxpay.core.exception.ChannelNotEnableException;
 import org.dromara.daxpay.core.exception.ConfigNotEnableException;
 import org.dromara.daxpay.core.exception.DataErrorException;
-import org.dromara.daxpay.service.common.cache.ChannelConfigCacheService;
-import org.dromara.daxpay.service.common.local.PaymentContextLocal;
-import org.dromara.daxpay.service.dao.config.ChannelConfigManager;
-import org.dromara.daxpay.service.entity.config.ChannelConfig;
-import org.dromara.daxpay.service.service.assist.PaymentAssistService;
-import org.dromara.daxpay.service.service.config.PlatformConfigService;
+import org.dromara.daxpay.service.merchant.cache.ChannelConfigCacheService;
+import org.dromara.daxpay.service.merchant.dao.config.ChannelConfigManager;
+import org.dromara.daxpay.service.pay.common.local.PaymentContextLocal;
+import org.dromara.daxpay.service.pay.entity.config.ChannelConfig;
+import org.dromara.daxpay.service.pay.service.assist.PaymentAssistService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.CharsetUtil;
@@ -45,7 +43,6 @@ import java.util.Objects;
 public class AlipayConfigService {
     private final ChannelConfigManager channelConfigManager;
     private final ChannelConfigCacheService channelConfigCacheService;
-    private final PlatformConfigService platformConfigService;
     private final PaymentAssistService paymentAssistService;
 
     /**
@@ -57,6 +54,7 @@ public class AlipayConfigService {
                 .map(AliPayConfig::toResult)
                 .orElseThrow(() -> new ConfigNotEnableException("支付宝商户配置不存在"));
     }
+
 
     /**
      * 新增或更新商户信息
@@ -75,13 +73,10 @@ public class AlipayConfigService {
      */
     public void save(AlipayConfigParam param) {
         paymentAssistService.initMchAndApp(param.getAppId());
-        var mchApp = PaymentContextLocal.get().getMchAppInfo();
-        // 判断商户配置类型
-        if (Objects.equals(mchApp.getMchType(), MerchantTypeEnum.PARTNER.getCode())){
-            throw new ChannelNotEnableException("请使用特约商户配置保存");
-        }
+        var mchApp = PaymentContextLocal.get().getReqInfo();
         // 转换类型
         var entity = AlipayConfigConvert.CONVERT.toEntity(param);
+        entity.setMchNo(mchApp.getMchNo());
         ChannelConfig channelConfig = entity.toChannelConfig();
         // 判断商户和应用下是否存在该配置
         if (channelConfigManager.existsByAppIdAndChannel(param.getAppId(), channelConfig.getChannel())){
@@ -95,48 +90,44 @@ public class AlipayConfigService {
      */
     public void update(AlipayConfigParam param){
         paymentAssistService.initMchAndApp(param.getAppId());
-        var mchApp = PaymentContextLocal.get().getMchAppInfo();
-        // 判断商户配置类型
-        if (Objects.equals(mchApp.getMchType(), MerchantTypeEnum.PARTNER.getCode())){
-            throw new ChannelNotEnableException("请使用特约商户配置更新");
-        }
         ChannelConfig channelConfig = channelConfigManager.findById(param.getId())
                 .orElseThrow(() -> new ConfigNotEnableException("支付宝配置不存在"));
         // 通道配置 --转换--> 支付宝配置  ----> 从更新参数赋值  --转换-->  通道配置 ----> 保存更新
         AliPayConfig alipayConfig = AliPayConfig.convertConfig(channelConfig);
         BeanUtil.copyProperties(param, alipayConfig, CopyOptions.create().ignoreNullValue());
         ChannelConfig channelConfigParam = alipayConfig.toChannelConfig();
-        // 手动清空一下默认的数据版本号
-        channelConfigParam.setVersion(null);
+        // 手动写入一下原来的数据版本号
+        channelConfigParam.setVersion(channelConfig.getVersion());
         BeanUtil.copyProperties(channelConfigParam, channelConfig, CopyOptions.create().ignoreNullValue());
         channelConfigManager.updateById(channelConfig);
     }
+
 
     /**
      * 获取异步通知地址
      */
     public String getNotifyUrl(boolean isv) {
-        String url = isv?"{}/unipay/callback/{}/alipay/isv":"{}/unipay/callback/{}/alipay";
-        var mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
+        String url = isv?"{}/unipay/callback/{}/{}/alipay/isv":"{}/unipay/callback/{}/{}/alipay";
+        var reqInfo = PaymentContextLocal.get().getReqInfo();
+        return StrUtil.format(url,reqInfo.getGatewayServiceUrl(), reqInfo.getMchNo(),reqInfo.getAppId());
     }
 
     /**
      * 获取同步通知地址
      */
     public String getReturnUrl(boolean isv) {
-        String url = isv?"{}/unipay/return/{}/alipay/isv":"{}/unipay/return/{}/alipay";
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        return StrUtil.format(url,mchAppInfo.getGatewayServiceUrl(),mchAppInfo.getAppId());
+        String url = isv?"{}/unipay/return/{}/{}/alipay/isv":"{}/unipay/return/{}/{}/alipay";
+        PaymentReqInfoLocal reqInfo = PaymentContextLocal.get().getReqInfo();
+        return StrUtil.format(url,reqInfo.getGatewayH5Url(), reqInfo.getMchNo(),reqInfo.getAppId());
     }
 
     /**
      * 获取支付宝支付配置
      */
     public AliPayConfig getAliPayConfig(boolean isv){
-        MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-        ChannelConfig channelConfig = channelConfigCacheService.getMchChannelConfig(mchAppInfo.getAppId(), isv?ChannelEnum.ALIPAY_ISV.getCode():ChannelEnum.ALIPAY.getCode());
-        return AliPayConfig.convertConfig(channelConfig);
+        PaymentReqInfoLocal reqInfo = PaymentContextLocal.get().getReqInfo();
+        ChannelConfig channelConfig = channelConfigCacheService.getMchChannelConfig(reqInfo.getAppId(), isv?ChannelEnum.ALIPAY_ISV.getCode():ChannelEnum.ALIPAY.getCode());
+            return AliPayConfig.convertConfig(channelConfig);
     }
 
     /**
@@ -183,7 +174,7 @@ public class AlipayConfigService {
      * 校验消息通知
      */
     public boolean verifyNotify(Map<String, String> params, boolean isv) {
-        String callReq = JsonUtil.toJsonStr(params);
+        String callReq = JacksonUtil.toJson(params);
         log.info("支付宝消息通知报文: {}", callReq);
         String appId = params.get("app_id");
         if (StrUtil.isBlank(appId)) {

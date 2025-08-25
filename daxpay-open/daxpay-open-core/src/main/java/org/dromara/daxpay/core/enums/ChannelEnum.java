@@ -30,9 +30,13 @@ public enum ChannelEnum {
     VBILL_PAY("vbill_pay"),
     /** 汇付天下AdaPay */
     ADA_PAY("ada_pay"),
-    /** 通联支付 */
-    ALLIN_PAY("allin_pay"),
-    /** 拉卡拉支付 */
+    /** 通联支付(云商通二代) */
+    ALLIN_YST2("allin_yst2"),
+    /** 通联支付(收银宝) */
+    ALLIN_SYB("allin_syb"),
+    /** 海科融通 */
+    HKRT_PAY("hkrt_pay"),
+    /** 拉卡拉 */
     LAKALA_PAY("lakala_pay"),
     /** 富友支付 */
     FU_YOU("fu_you"),

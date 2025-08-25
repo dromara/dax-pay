@@ -1,12 +1,12 @@
 package org.dromara.daxpay.channel.alipay.service.payment.sync;
 
-import cn.bootx.platform.core.util.JsonUtil;
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
 import org.dromara.daxpay.core.enums.RefundStatusEnum;
-import org.dromara.daxpay.service.bo.sync.RefundSyncResultBo;
-import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
+import org.dromara.daxpay.service.pay.bo.sync.RefundSyncResultBo;
+import org.dromara.daxpay.service.pay.entity.order.refund.RefundOrder;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayConstants;
@@ -54,7 +54,7 @@ public class AlipayRefundSyncService {
             }
             request.setBizModel(model);
             AlipayTradeFastpayRefundQueryResponse response = aliPayConfigService.execute(request,aliPayConfig);
-            syncResult.setSyncData(JsonUtil.toJsonStr(response));
+            syncResult.setSyncData(JacksonUtil.toJson(response));
             // 失败
             if (!response.isSuccess()) {
                 syncResult.setSyncSuccess(false)

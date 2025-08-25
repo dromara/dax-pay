@@ -1,14 +1,16 @@
 package org.dromara.daxpay.controller.record;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.record.TradeSyncRecordQuery;
-import org.dromara.daxpay.service.result.record.sync.TradeSyncRecordResult;
-import org.dromara.daxpay.service.service.record.sync.TradeSyncRecordService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.param.record.TradeSyncRecordQuery;
+import org.dromara.daxpay.service.pay.result.record.sync.TradeSyncRecordResult;
+import org.dromara.daxpay.service.pay.service.record.sync.TradeSyncRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "交易同步记录")
 @RestController
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(moduleCode = "TradeRecord", groupCode = "TradeSync", groupName = "交易同步记录")
 @RequestMapping("/record/sync")
 @RequiredArgsConstructor

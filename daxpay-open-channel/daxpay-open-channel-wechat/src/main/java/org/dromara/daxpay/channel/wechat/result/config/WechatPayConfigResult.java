@@ -108,6 +108,10 @@ public class WechatPayConfigResult {
     @Schema(description = "备注")
     private String remark;
 
+    /** 商户号 */
+    @Schema(description = "商户号")
+    private String mchNo;
+
     /** 商户AppId */
     @Schema(description = "商户AppId")
     private String appId;

@@ -1,15 +1,17 @@
 package org.dromara.daxpay.controller.order;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.order.transfer.TransferOrderQuery;
-import org.dromara.daxpay.service.result.order.transfer.TransferOrderVo;
-import org.dromara.daxpay.service.service.order.transfer.TransferOrderQueryService;
-import org.dromara.daxpay.service.service.order.transfer.TransferOrderService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.param.order.transfer.TransferOrderQuery;
+import org.dromara.daxpay.service.pay.result.order.transfer.TransferOrderVo;
+import org.dromara.daxpay.service.pay.service.order.transfer.TransferOrderQueryService;
+import org.dromara.daxpay.service.pay.service.order.transfer.TransferOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,6 +36,7 @@ import java.math.BigDecimal;
 @Tag(name = "转账订单控制器")
 @RestController
 @RequestMapping("/order/transfer")
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(moduleCode = "TradeOrder", groupCode = "TransferOrder", groupName = "转账订单")
 @RequiredArgsConstructor
 public class TransferOrderController {

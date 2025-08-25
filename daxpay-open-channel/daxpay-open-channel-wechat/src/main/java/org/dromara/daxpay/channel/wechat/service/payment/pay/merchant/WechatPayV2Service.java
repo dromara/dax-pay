@@ -1,7 +1,22 @@
 package org.dromara.daxpay.channel.wechat.service.payment.pay.merchant;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.exception.RetryableException;
-import cn.bootx.platform.core.util.JsonUtil;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
+import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
+import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
+import org.dromara.daxpay.core.enums.PayMethodEnum;
+import org.dromara.daxpay.core.enums.PayStatusEnum;
+import org.dromara.daxpay.core.exception.MethodNotExistException;
+import org.dromara.daxpay.core.exception.TradeFailException;
+import org.dromara.daxpay.core.param.trade.pay.PayParam;
+import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
+import org.dromara.daxpay.core.util.PayUtil;
+import org.dromara.daxpay.service.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.service.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.pay.service.assist.PaymentAssistService;
+import org.dromara.daxpay.service.pay.service.trade.pay.PaySyncService;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -18,20 +33,6 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
-import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
-import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
-import org.dromara.daxpay.core.enums.PayMethodEnum;
-import org.dromara.daxpay.core.enums.PayStatusEnum;
-import org.dromara.daxpay.core.exception.MethodNotExistException;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.core.param.trade.pay.PayParam;
-import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
-import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
-import org.dromara.daxpay.service.service.trade.pay.PaySyncService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,7 @@ import java.util.Objects;
 public class WechatPayV2Service {
     private final WechatPayConfigService wechatPayConfigService;
     private final PaySyncService paySyncService;
+    private final PaymentAssistService paymentAssistService;
 
     /**
      * 调起支付
@@ -112,7 +114,7 @@ public class WechatPayV2Service {
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.APP, request);
             Map<String, String> map = this.buildAppResult(result);
-            return JsonUtil.toJsonStr(map);
+            return JacksonUtil.toJson(map);
         } catch (WxPayException e) {
             log.error("微信V2App支付失败", e);
             throw new TradeFailException("微信V2App程序支付失败: "+e.getMessage());
@@ -130,7 +132,7 @@ public class WechatPayV2Service {
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.JSAPI, request);
             Map<String, String> map = this.buildJsapiResult(result);
-            return JsonUtil.toJsonStr(map);
+            return JacksonUtil.toJson(map);
         } catch (WxPayException e) {
             log.error("微信V2Jaspi支付失败", e);
             throw new TradeFailException("微信V2Jaspi支付失败: "+e.getMessage());
@@ -246,6 +248,7 @@ public class WechatPayV2Service {
      */
     @Async
     public void rotationSync(PayOrder payOrder) {
+        paymentAssistService.initMchAndApp(payOrder.getMchNo(), payOrder.getAppId());
         PaySyncResult paySyncResult = paySyncService.syncPayOrder(payOrder);
         // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
         if (Objects.equals(PayStatusEnum.PROGRESS.getCode(), paySyncResult.getOrderStatus())) {

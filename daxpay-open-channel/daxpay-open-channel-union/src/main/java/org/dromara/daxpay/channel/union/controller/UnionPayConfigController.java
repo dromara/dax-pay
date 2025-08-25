@@ -1,5 +1,6 @@
 package org.dromara.daxpay.channel.union.controller;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.OperateLog;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "云闪付支付配置")
 @RestController
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(groupCode = "UnionPayConfig", groupName = "云闪付配置", moduleCode = "UnionPay", moduleName = "(DaxPay通道)云闪付")
 @RequestMapping("/union/pay/config")
 @RequiredArgsConstructor

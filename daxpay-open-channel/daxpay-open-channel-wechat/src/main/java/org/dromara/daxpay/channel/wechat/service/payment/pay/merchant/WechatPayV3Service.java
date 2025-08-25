@@ -1,18 +1,7 @@
 package org.dromara.daxpay.channel.wechat.service.payment.pay.merchant;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.exception.RetryableException;
-import cn.bootx.platform.core.util.JsonUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest;
-import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
-import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
-import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
-import com.github.binarywang.wxpay.constant.WxPayConstants;
-import com.github.binarywang.wxpay.constant.WxPayErrorCode;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.WxPayService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
 import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
@@ -24,9 +13,21 @@ import org.dromara.daxpay.core.exception.TradeFailException;
 import org.dromara.daxpay.core.param.trade.pay.PayParam;
 import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
 import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
-import org.dromara.daxpay.service.service.trade.pay.PaySyncService;
+import org.dromara.daxpay.service.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.service.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.pay.service.assist.PaymentAssistService;
+import org.dromara.daxpay.service.pay.service.trade.pay.PaySyncService;
+import cn.hutool.extra.spring.SpringUtil;
+import com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
+import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
+import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
+import com.github.binarywang.wxpay.constant.WxPayConstants;
+import com.github.binarywang.wxpay.constant.WxPayErrorCode;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
@@ -48,6 +49,7 @@ public class WechatPayV3Service {
     private final WechatPayConfigService wechatPayConfigService;
 
     private final PaySyncService paySyncService;
+    private final PaymentAssistService paymentAssistService;
 
     /**
      * 调起支付
@@ -114,7 +116,7 @@ public class WechatPayV3Service {
         try {
             WxPayUnifiedOrderV3Result.AppResult result = wxPayService.createOrderV3(TradeTypeEnum.APP, request);
             Map<String, String> map = this.buildAppResult(result);
-            return JsonUtil.toJsonStr(map);
+            return JacksonUtil.toJson(map);
         } catch (WxPayException e) {
             log.error("微信V3程序支付失败", e);
             throw new TradeFailException("微信V3程序支付失败: "+e.getMessage());
@@ -133,7 +135,7 @@ public class WechatPayV3Service {
         try {
             WxPayUnifiedOrderV3Result.JsapiResult result = wxPayService.createOrderV3(TradeTypeEnum.JSAPI, request);
             Map<String, String> map = this.buildJsapiResult(result);
-            return JsonUtil.toJsonStr(map);
+            return JacksonUtil.toJson(map);
         } catch (WxPayException e) {
             log.error("微信V3JsApi支付失败", e);
             throw new TradeFailException("微信V3JsApi支付失败: "+e.getMessage());
@@ -192,23 +194,23 @@ public class WechatPayV3Service {
      */
     private void barCodePay(PayOrder payOrder, String authCode, WechatPayConfig config, PayResultBo payResult) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
-        com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest request = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest();
+        WxPayCodepayRequest request = new WxPayCodepayRequest();
         request.setDescription(payOrder.getTitle());
         request.setOutTradeNo(payOrder.getOrderNo());
         // 金额
-        var amount = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest.Amount();
+        var amount = new WxPayCodepayRequest.Amount();
         amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
         request.setAmount(amount);
 
         // 场景信息
-        var sceneInfo = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest.SceneInfo();
-        var storeInfo = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest.StoreInfo();
+        var sceneInfo = new WxPayCodepayRequest.SceneInfo();
+        var storeInfo = new WxPayCodepayRequest.StoreInfo();
         storeInfo.setOutId("1");
         sceneInfo.setStoreInfo(storeInfo);
         request.setSceneInfo(sceneInfo);
 
         // 付款码参数
-        var payer = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest.Payer();
+        var payer = new WxPayCodepayRequest.Payer();
         payer.setAuthCode(authCode);
         request.setPayer(payer);
 
@@ -268,6 +270,7 @@ public class WechatPayV3Service {
     @Async
     @Retryable(retryFor = RetryableException.class, maxAttempts = 10, backoff = @Backoff(value = 5000L))
     public void rotationSync(PayOrder payOrder) {
+        paymentAssistService.initMchAndApp(payOrder.getMchNo(), payOrder.getAppId());
         PaySyncResult paySyncResult = paySyncService.syncPayOrder(payOrder);
         // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
         if (Objects.equals(PayStatusEnum.PROGRESS.getCode(), paySyncResult.getOrderStatus())) {

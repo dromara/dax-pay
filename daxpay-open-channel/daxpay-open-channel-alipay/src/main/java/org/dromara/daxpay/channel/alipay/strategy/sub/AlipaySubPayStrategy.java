@@ -1,15 +1,14 @@
 package org.dromara.daxpay.channel.alipay.strategy.sub;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.core.exception.ValidationFailedException;
-import cn.bootx.platform.core.util.JsonUtil;
-import cn.hutool.json.JSONUtil;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.param.pay.AlipayParam;
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
 import org.dromara.daxpay.channel.alipay.service.payment.pay.AliPayService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.strategy.AbsPayStrategy;
+import org.dromara.daxpay.service.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.service.pay.strategy.AbsPayStrategy;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONException;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +49,7 @@ public class AlipaySubPayStrategy extends AbsPayStrategy {
             // 支付宝参数验证
             String channelParam = this.getPayParam().getExtraParam();
             if (StrUtil.isNotBlank(channelParam)) {
-                this.aliPayParam = JSONUtil.toBean(channelParam, AlipayParam.class);
+                this.aliPayParam = JacksonUtil.toBean(channelParam, AlipayParam.class);
             }
             else {
                 this.aliPayParam = new AlipayParam();

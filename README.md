@@ -53,28 +53,19 @@
 ### 开源版:
 > 注：演示账号部分功能权限未开放。
 
-地址：https://admin.web.daxpay.cn
+地址：https://open.web.daxpay.cn
 
 账号：daxpay
 
-密码：daxpay123
+密码：123123
 
 ### 商业版
 
-运营端
-https://admin.web.daxpay.cn/
-代理端
-https://agent.web.daxpay.cn/
-商户端
-https://merchant.web.daxpay.cn/
+运营端: https://admin.web.daxpay.cn/  演示用户: csadmin/123123
 
-运营端演示用户: csadmin/123123
+代理端: https://agent.web.daxpay.cn/   演示用户: csdls/123123
 
-代理端演示用户: csdls/123123
-
-商户端普通商户演示: cspt/123123
-
-商户端特约商户演示: csdl/123123
+商户端: https://merchant.web.daxpay.cn/  普通商户演示: cspt/123123  特约商户演示: csdl/123123
 
 
 ## 核心技术栈
@@ -89,12 +80,18 @@ https://merchant.web.daxpay.cn/
 
 ## 系统截图
 ### 通道配置
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204334_543.lvxlxz86a.webp" alt="wechat_2025-04-27_204334_543"  />
+
+### 系统界面
+
+<img height="570" alt="15ccf7650d7b05fb25654cfe669153c3_PicViewer" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250825/15ccf7650d7b05fb25654cfe669153c3_PicViewer.6t7gdqsgh7.webp"/>
+
+<img height="570" src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204334_543.lvxlxz86a.webp" alt="wechat_2025-04-27_204334_543"  />
 
 ### 收银台
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_203920_863.7phv2q931.webp" alt="wechat_2025-04-27_203920_863" />
 
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/wechat_2025-04-27_204208_069.6bh9xisxha.webp" alt="wechat_2025-04-27_204208_069" width = "270" height = "570" />
+<img height="570" alt="微信图片_20250825232829_66" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250825/微信图片_20250825232829_66.92qgx888jk.webp"/>
+
+<img alt="微信图片_2025-08-25_232403_439" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250825/微信图片_2025-08-25_232403_439.3d54ln66eh.webp" width="270" height="570"/>
 
 ### 聚合码牌
 
@@ -102,9 +99,13 @@ https://merchant.web.daxpay.cn/
 
 <img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/1b7671d183f279751460d42234c6eadb.2rvc7pq7p4.webp" alt="1b7671d183f279751460d42234c6eadb"  width = "270" height = "570" />
 
-### 小程序快捷收银
-<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/cbe6e332c55b241215787254951dc7ec.969y3b848r.webp" alt="cbe6e332c55b241215787254951dc7ec" width = "270" height = "570" />
+### 小程序(商业版)
 
+<img alt="微信图片_20250825232837_68" height="570" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250825/微信图片_20250825232837_68.8hgtaxds8y.webp" width="270"/>
+
+<img alt="微信图片_20250825232834_67" height="570" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250825/微信图片_20250825232834_67.8dx7d7kpj5.webp" width="270"/>
+
+<img src="https://cdn.jsdelivr.net/gh/xxm1995/picx-images-hosting@master/20250427/cbe6e332c55b241215787254951dc7ec.969y3b848r.webp" alt="cbe6e332c55b241215787254951dc7ec" width = "270" height = "570" />
 
 ##  🥪 关于我们
 

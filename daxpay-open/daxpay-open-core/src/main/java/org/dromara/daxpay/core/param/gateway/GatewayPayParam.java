@@ -41,6 +41,11 @@ public class GatewayPayParam extends PaymentCommonParam {
     @Size(max = 500, message = "支付描述不可超过500位")
     private String description;
 
+    /** 自定义OpenId 微信类通道可用 */
+    @Schema(description = "自定义OpenId")
+    @Size(max = 64, message = "自定义OpenId不可超过64位")
+    private String openId;
+
     /**
      * 网关支付类型
      * @see GatewayPayTypeEnum
@@ -56,6 +61,7 @@ public class GatewayPayParam extends PaymentCommonParam {
     /** 自动分账 */
     @Schema(description = "自动分账")
     private Boolean autoAllocation;
+
 
     /**
      * 限制用户支付类型, 目前支持限制信用卡

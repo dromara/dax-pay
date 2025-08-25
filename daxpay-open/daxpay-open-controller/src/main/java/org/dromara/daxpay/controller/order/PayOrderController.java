@@ -1,5 +1,6 @@
 package org.dromara.daxpay.controller.order;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.exception.DataNotExistException;
@@ -7,11 +8,13 @@ import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
-import org.dromara.daxpay.service.param.order.pay.PayOrderQuery;
-import org.dromara.daxpay.service.result.order.pay.PayOrderVo;
-import org.dromara.daxpay.service.service.order.pay.PayOrderQueryService;
-import org.dromara.daxpay.service.service.order.pay.PayOrderService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.pay.param.order.pay.PayOrderQuery;
+import org.dromara.daxpay.service.pay.result.order.pay.PayOrderExpandResult;
+import org.dromara.daxpay.service.pay.result.order.pay.PayOrderVo;
+import org.dromara.daxpay.service.pay.service.order.pay.PayOrderQueryService;
+import org.dromara.daxpay.service.pay.service.order.pay.PayOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,6 +39,7 @@ import java.math.BigDecimal;
 @Tag(name = "支付订单控制器")
 @RestController
 @RequestMapping("/order/pay")
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(groupCode = "PayOrder", groupName = "支付订单", moduleCode = "TradeOrder", moduleName = "(DaxPay)交易订单")
 @RequiredArgsConstructor
 public class PayOrderController {
@@ -59,6 +63,14 @@ public class PayOrderController {
                 .map(PayOrder::toResult)
                 .orElseThrow(() -> new DataNotExistException("支付订单不存在"));
         return Res.ok(order);
+    }
+
+    @TransMethodResult
+    @RequestPath("查询订单扩展详情")
+    @Operation(summary = "查询订单扩展详情")
+    @GetMapping("/findExpandByById")
+    public Result<PayOrderExpandResult> findExpandById(Long id){
+        return Res.ok(queryService.findExpandByById(id));
     }
 
     @TransMethodResult
@@ -103,11 +115,4 @@ public class PayOrderController {
         return Res.ok();
     }
 
-    @RequestPath("分账")
-    @Operation(summary = "分账")
-    @PostMapping("/allocation")
-    public Result<Void> allocation(@NotNull(message = "支付订单id不能为空") Long id){
-        payOrderService.allocation(id);
-        return Res.ok();
-    }
 }

@@ -5,8 +5,8 @@ import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.dto.LabelValue;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.result.config.ChannelConfigResult;
-import org.dromara.daxpay.service.service.config.ChannelConfigService;
+import org.dromara.daxpay.service.merchant.result.config.ChannelConfigResult;
+import org.dromara.daxpay.service.merchant.service.config.ChannelConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 通道配置
+ * 商户通道配置
  * @author xxm
  * @since 2024/6/25
  */
 @Validated
-@Tag(name = "通道配置")
+@Tag(name = "商户通道配置")
 @RestController
-@RequestGroup(groupCode = "ChannelConfig", groupName = "通道配置", moduleCode = "PayConfig")
+@RequestGroup(groupCode = "ChannelConfig", groupName = "商户通道配置", moduleCode = "merchant")
 @RequestMapping("/channel/config")
 @RequiredArgsConstructor
 public class ChannelConfigController {
@@ -46,5 +46,6 @@ public class ChannelConfigController {
     public Result<List<LabelValue>> dropdownByEnable(@NotNull(message = "应用AppId不可为空") @Parameter(description = "应用AppId") String appId){
         return Res.ok(channelConfigService.dropdownByEnable(appId));
     }
+
 }
 

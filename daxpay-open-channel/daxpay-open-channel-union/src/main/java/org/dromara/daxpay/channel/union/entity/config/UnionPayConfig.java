@@ -8,9 +8,9 @@ import org.dromara.daxpay.channel.union.code.UnionPayCode;
 import org.dromara.daxpay.channel.union.convert.UnionPayConfigConvert;
 import org.dromara.daxpay.channel.union.result.UnionPayConfigResult;
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.entity.config.ChannelConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.dromara.daxpay.service.pay.entity.config.ChannelConfig;
 
 import java.util.Objects;
 

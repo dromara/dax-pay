@@ -104,4 +104,14 @@ public class PayUtil {
         }
         throw new OperationFailException("不支持的条码类型");
     }
+
+    /**
+     * 佣金计算, 保留四位小数
+     * @param amount 金额
+     * @param profitRate 佣金比例, 百分比
+     */
+    public BigDecimal calculateProfit(BigDecimal amount, BigDecimal profitRate){
+        BigDecimal profit = amount.multiply(profitRate.divide(new BigDecimal(100), 4, RoundingMode.HALF_EVEN));
+        return profit.divide(BigDecimal.ONE, 4, RoundingMode.HALF_EVEN);
+    }
 }

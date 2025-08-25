@@ -1,13 +1,12 @@
 package org.dromara.daxpay.service.common.properties;
 
 import org.dromara.daxpay.core.util.TradeNoGenerateUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * 演示模块配置类
+ * daxpay配置类
  * @author xxm
  * @since 2024/2/8
  */
@@ -15,9 +14,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 @ConfigurationProperties(prefix = "dax-pay")
 public class DaxPayProperties {
-
-    /** 前端地址(h5) */
-    private String frontH5Url;
 
     /** 通常为两位内 机器码, 用于区分不同机器生成的流水号 */
     private String machineNo = "58";
@@ -33,9 +29,5 @@ public class DaxPayProperties {
     public void setEnv(String env) {
         this.env = env;
         TradeNoGenerateUtil.setEnv(env);
-    }
-
-    public String getFrontH5Url() {
-        return StrUtil.removeSuffix(frontH5Url, "/");
     }
 }

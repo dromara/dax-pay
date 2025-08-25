@@ -1,14 +1,16 @@
 package org.dromara.daxpay.controller.record;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.record.PayCloseRecordQuery;
-import org.dromara.daxpay.service.result.record.close.PayCloseRecordResult;
-import org.dromara.daxpay.service.service.record.close.PayCloseRecordService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.param.record.PayCloseRecordQuery;
+import org.dromara.daxpay.service.pay.result.record.close.PayCloseRecordResult;
+import org.dromara.daxpay.service.pay.service.record.close.PayCloseRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "支付订单关闭记录")
 @RestController
 @RequestMapping("/record/close")
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(moduleCode = "TradeRecord", groupCode = "CloseRecord", groupName = "支付关闭记录")
 @RequiredArgsConstructor
 public class PayCloseRecordController {

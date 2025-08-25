@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.union.controller;
 
 import cn.bootx.platform.core.annotation.IgnoreAuth;
-import org.dromara.daxpay.service.service.assist.PaymentAssistService;
+import org.dromara.daxpay.service.pay.service.assist.PaymentAssistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

@@ -6,11 +6,21 @@ spring:
         master:
           # Postgresql连接
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://postgresql:5432/dax-pay-single?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
-          username: bootx
-          password: bootx123
+          url: jdbc:postgresql://${DB_HOST:postgresql}:${DB_PORT:5432}/dax-pay-dev?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+          username: ${DB_USER:bootx}
+          password: ${DB_PASSWORD:bootx123}
+          # MySQL连接
+#          driver-class-name: com.mysql.cj.jdbc.Driver
+#          url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/dax-pay-dev?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
+#          username: ${DB_USER:root}
+#          password: ${DB_PASSWORD:bootx123}
       hikari:
-        keepalive-time: 300000
+        minimumIdle: 5 # 最小连接数
+        maximumPoolSize: 50 # 最大连接数
+        leak-detection-threshold: 5000 # 检测连接泄漏的时间阈值（毫秒）
+        connection-timeout: 30000 # 获取连接超时时间（毫秒）
+        idle-timeout: 600000      # 空闲连接超时时间（毫秒）
+        max-lifetime: 1800000     # 连接最大存活时间（毫秒）
   data:
     redis:
       host: redis
@@ -68,26 +78,26 @@ bootx-platform:
         - '/css/**'
         - '/error'
         - '/favicon.ico'
+# 支付系统配置
 dax-pay:
+  # 环境标识
   env: DEV_
+  # 通常为两位内 机器码, 用于区分不同机器生成的流水号
   machine-no: 70
 dromara:
-  # 注意, 不要设置 domain 访问路径, 自行进行拼接访问路径, 来保证可迁移性
   x-file-storage:
-    default-platform: local
-    # 使用Nginx映射到存储路径, 然后将nginx的地址设置到 bootx-platform.starter.file-upload.file-server-url参数
-    local-plus:
-      - platform: local
-        enable-storage: true
-        base-path: /file/ # 基础路径
-        storage-path: D:/data/files # 存储路径
-    # 将 minio访问地址+桶名称 进行组合, 然后设置到 bootx-platform.starter.file-upload.file-server-url
-    # 例如 minio地址 http://127.0.0.1:9001  桶名称 daxpay, 拼接后的地址为 http://127.0.0.1:9001/daxpay/
-    minio:
-      - platform: minio
-        enable-storage: true
-        access-key: yDAArSoyQAligC2IGf7C
-        secret-key: vDgpt5R4kR2UCapMzx32Rb6qZegok21dRsU6XJ1j
-        end-point: http://127.0.0.1:9002  # minio访问地址
-        bucket-name: daxpay # 存储桶名称
-        base-path: /file/ # 基础存储路径
+    default-platform: amazon-s3
+    # 文件存储都是用S3协议方式存储
+    amazon-s3:
+      - platform: amazon-s3 # 存储平台标识
+        enable-storage: true  # 启用存储
+        access-key: ${OSS_SECRET_ID:lwnS2DEQzveX3fIpRJBP}
+        secret-key: ${OSS_SECRET_KEY:LcBdOJzqD57wSXK9hxGlrnCgmojNpWET4I2yaekf}
+        end-point: ${OSS_DOMAIN:http://192.168.1.229:9000} #文件存储服务地址, 不要添加/后缀,
+        bucket-name: ${OSS_BUKET:daxpay} # 桶名称，不要添加/后缀
+        base-path: file/ # 基础路径, 不要添加/前缀, 但需要添加/后缀
+        region: ${OSS_REGION:''}
+        attr:
+          # 开启路径样式访问, 不配置默认为二级域名方式
+          forcePathStyle: true
+

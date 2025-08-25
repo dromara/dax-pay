@@ -4,12 +4,11 @@ import cn.bootx.platform.core.exception.DataNotExistException;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
-import org.dromara.daxpay.core.context.MchAppLocal;
+import org.dromara.daxpay.core.context.PaymentReqInfoLocal;
 import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.common.local.PaymentContextLocal;
-import org.dromara.daxpay.service.dao.order.pay.PayOrderManager;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
-import org.dromara.daxpay.service.service.config.PlatformConfigService;
+import org.dromara.daxpay.service.pay.common.local.PaymentContextLocal;
+import org.dromara.daxpay.service.pay.dao.order.pay.PayOrderManager;
+import org.dromara.daxpay.service.pay.entity.order.pay.PayOrder;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ import java.util.Map;
 public class AlipayRedirectUrlService {
     private final AlipayConfigService aliPayConfigService;
     private final PayOrderManager payOrderManager;
-    private final PlatformConfigService platformConfigService;
 
     /**
      * 回调地址处理
@@ -49,8 +47,8 @@ public class AlipayRedirectUrlService {
         if (StrUtil.isNotBlank(order.getReturnUrl())){
             return StrUtil.format("{}?biz_trade_no={}&trade_no={}", order.getReturnUrl(),order.getBizOrderNo(),order.getOrderNo() );
         } else {
-            MchAppLocal mchAppInfo = PaymentContextLocal.get().getMchAppInfo();
-            String serverUrl = mchAppInfo.getGatewayMobileUrl();
+            PaymentReqInfoLocal reqInfo = PaymentContextLocal.get().getReqInfo();
+            String serverUrl = reqInfo.getGatewayH5Url();
             return StrUtil.format("{}/paySuccess/{}", serverUrl,order.getOrderNo());
 
         }

@@ -17,24 +17,19 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum PayMethodEnum {
 
-    /** wap支付 */
-    WAP("wap"),
-    /** 应用支付 */
-    APP("app"),
-    /** web支付 */
-    WEB("web"),
-    /** 扫码支付 */
-    QRCODE("qrcode"),
-    /** 付款码支付 */
-    BARCODE("barcode"),
-    /** 小程序支付 */
-    JSAPI("jsapi"),
-    /** 其他支付 */
-    OTHER("other"),
+    WAP("wap", "H5支付"),
+    APP("app",  "应用支付"),
+    WEB("web", "PC支付"),
+    QRCODE("qrcode",  "扫码支付"),
+    BARCODE("barcode", "付款码支付"),
+    JSAPI("jsapi", "Jsapi支付"),
+    OTHER("other",  "其他支付方式"),
     ;
 
     /** 编码 */
     private final String code;
+    /** 名称 */
+    private final String name;
 
     /**
      * 根据编码获取枚举

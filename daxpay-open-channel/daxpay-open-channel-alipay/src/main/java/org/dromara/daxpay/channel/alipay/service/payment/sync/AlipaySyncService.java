@@ -1,13 +1,13 @@
 package org.dromara.daxpay.channel.alipay.service.payment.sync;
 
-import cn.bootx.platform.core.util.JsonUtil;
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode.PayStatus;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
-import org.dromara.daxpay.service.bo.sync.PaySyncResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
+import org.dromara.daxpay.service.pay.bo.sync.PaySyncResultBo;
+import org.dromara.daxpay.service.pay.entity.order.pay.PayOrder;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayConstants;
@@ -18,8 +18,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 
 /**
@@ -56,14 +58,18 @@ public class AlipaySyncService {
             request.setBizModel(model);
             AlipayTradeQueryResponse response = aliPayConfigService.execute(request,aliPayConfig);
             String tradeStatus = response.getTradeStatus();
-            syncResult.setSyncData(JsonUtil.toJsonStr(response));
+            syncResult.setSyncData(JacksonUtil.toJson(response));
             // 设置网关订单号
             syncResult.setOutOrderNo(response.getTradeNo());
             // 支付完成  部分退款无法进行区分, 需要借助对账进行处理
             if (Objects.equals(tradeStatus, PayStatus.TRADE_SUCCESS) || Objects.equals(tradeStatus, PayStatus.TRADE_FINISHED)) {
                 // 支付完成时间
                 LocalDateTime payTime = LocalDateTimeUtil.of(response.getSendPayDate());
-                return syncResult.setPayStatus(PayStatusEnum.SUCCESS).setFinishTime(payTime);
+                String userOrOpenId = Optional.ofNullable(response.getBuyerOpenId())
+                        .orElse(response.getBuyerUserId());
+                return syncResult.setPayStatus(PayStatusEnum.SUCCESS).setFinishTime(payTime)
+                        .setRealAmount(new BigDecimal(response.getBuyerPayAmount()))
+                        .setBuyerId(userOrOpenId);
             }
             // 待支付
             if (Objects.equals(tradeStatus, PayStatus.WAIT_BUYER_PAY)) {

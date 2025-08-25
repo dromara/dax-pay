@@ -1,14 +1,14 @@
 package org.dromara.daxpay.channel.wechat.service.payment.close;
 
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
+import org.dromara.daxpay.core.exception.TradeFailException;
+import org.dromara.daxpay.service.pay.entity.order.pay.PayOrder;
 import com.github.binarywang.wxpay.bean.request.WxPayOrderReverseV3Request;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -41,7 +41,7 @@ public class WechatPayCloseV3Service {
     public void cancel(PayOrder payOrder, WechatPayConfig config){
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         try {
-            com.github.binarywang.wxpay.bean.request.WxPayOrderReverseV3Request request = new WxPayOrderReverseV3Request();
+            WxPayOrderReverseV3Request request = new WxPayOrderReverseV3Request();
             request.setOutTradeNo(payOrder.getOutOrderNo());
             wxPayService.reverseOrderV3(request);
         } catch (WxPayException e) {

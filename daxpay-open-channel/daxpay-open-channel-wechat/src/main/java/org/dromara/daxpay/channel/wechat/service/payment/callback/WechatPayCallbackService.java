@@ -1,18 +1,5 @@
 package org.dromara.daxpay.channel.wechat.service.payment.callback;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.JakartaServletUtil;
-import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
-import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
-import com.github.binarywang.wxpay.bean.notify.WxPayNotifyV3Result;
-import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
-import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
-import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.WxPayService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
@@ -23,15 +10,26 @@ import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.enums.TradeTypeEnum;
 import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.common.local.PaymentContextLocal;
-import org.dromara.daxpay.service.service.record.callback.TradeCallbackRecordService;
-import org.dromara.daxpay.service.service.trade.pay.PayCallbackService;
+import org.dromara.daxpay.service.pay.common.local.PaymentContextLocal;
+import org.dromara.daxpay.service.pay.service.record.callback.TradeCallbackRecordService;
+import org.dromara.daxpay.service.pay.service.trade.pay.PayCallbackService;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
+import com.github.binarywang.wxpay.bean.notify.*;
+import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 微信支付回调处理服务
@@ -82,9 +80,9 @@ public class WechatPayCallbackService {
             callbackInfo.setRawData(xml);
             try {
                 // 转换请求
-                WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(xml);
+                var v2Result = wxPayService.parseOrderNotifyResult(xml);
                 // 解析数据
-                this.resolveV2Data(wxPayOrderNotifyResult);
+                this.resolveV2Data(v2Result);
                 return true;
             } catch (WxPayException e) {
                 log.error("微信支付回调V2处理失败", e);
@@ -103,9 +101,14 @@ public class WechatPayCallbackService {
             callbackInfo.setRawData(body);
             try {
                 // 转换请求
-                WxPayNotifyV3Result wxPayNotifyV3Result = wxPayService.parseOrderNotifyV3Result(body, signatureHeader);
-                // 解析数据
-                this.resolvePayData(wxPayNotifyV3Result,isv);
+                if (isv){
+                    var v3Result = wxPayService.parsePartnerOrderNotifyV3Result(body, signatureHeader);
+                    this.resolvePayData(v3Result);
+                } else {
+                    var v3Result = wxPayService.parseOrderNotifyV3Result(body, signatureHeader);
+                    // 解析数据
+                    this.resolvePayData(v3Result);
+                }
             } catch (Exception e) {
                 callbackInfo.setCallbackStatus(CallbackStatusEnum.FAIL);
                 log.error("微信支付回调V3处理失败", e);
@@ -132,16 +135,20 @@ public class WechatPayCallbackService {
         callbackInfo.setTradeStatus(payStatus.getCode());
         // 支付金额
         callbackInfo.setAmount(PayUtil.conversionAmount(result.getTotalFee()));
+        // 支付用户OpenId
+        String openId = Optional.ofNullable(result.getSubOpenid()).orElse(result.getOpenid());
+        callbackInfo.setBuyerId(openId);
         String timeEnd = result.getTimeEnd();
         if (StrUtil.isNotBlank(timeEnd)) {
             LocalDateTime time = WechatPayUtil.parseV2(timeEnd);
             callbackInfo.setFinishTime(time);
         }
     }
+
     /**
-     * 解析数据 v3
+     * 解析数据 v3 普通商户
      */
-    private void resolvePayData(WxPayNotifyV3Result v3Result, boolean isv){
+    private void resolvePayData(WxPayNotifyV3Result v3Result){
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         var result = v3Result.getResult();
         // 回调数据
@@ -153,6 +160,53 @@ public class WechatPayCallbackService {
         callbackInfo.setTradeNo(result.getOutTradeNo());
         // 支付状态 - 成功
         if (List.of(WxpayTradeStatus.SUCCESS,WxpayTradeStatus.REFUND).contains(result.getTradeState())){
+            // 支付用户OpenId
+            callbackInfo.setBuyerId(result.getPayer().getOpenid());
+            callbackInfo.setTradeStatus(PayStatusEnum.SUCCESS.getCode());
+        }
+        // 支付状态 - 支付中
+        if (Objects.equals(result.getTradeState(), WxpayTradeStatus.NOTPAY)){
+            callbackInfo.setTradeStatus(PayStatusEnum.PROGRESS.getCode());
+        }
+        // 支付状态 - 失败
+        if (Objects.equals(WxpayTradeStatus.PAY_ERROR, result.getTradeState())){
+            callbackInfo.setTradeStatus(PayStatusEnum.FAIL.getCode());
+        }
+        // 撤销
+        if (Objects.equals(result.getTradeState(), WxpayTradeStatus.REVOKED)){
+            callbackInfo.setTradeStatus(PayStatusEnum.CANCEL.getCode());
+        }
+        // 关闭
+        if (Objects.equals(result.getTradeState(), WxpayTradeStatus.CLOSED)){
+            callbackInfo.setTradeStatus(PayStatusEnum.CLOSE.getCode());
+        }
+
+        // 支付金额
+        callbackInfo.setAmount(PayUtil.conversionAmount(result.getAmount().getTotal()));
+        String timeEnd = result.getSuccessTime();
+        if (StrUtil.isNotBlank(timeEnd)) {
+            callbackInfo.setFinishTime(WechatPayUtil.parseV3(timeEnd));
+        }
+    }
+
+    /**
+     * 解析数据 v3 服务商
+     */
+    private void resolvePayData(WxPayPartnerNotifyV3Result v3Result){
+        CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
+        var result = v3Result.getResult();
+        // 回调数据
+        Map<String, Object> map = BeanUtil.beanToMap(result);
+        callbackInfo.setCallbackData(map);
+        // 网关支付号
+        callbackInfo.setOutTradeNo(result.getTransactionId());
+        // 支付号
+        callbackInfo.setTradeNo(result.getOutTradeNo());
+        // 支付状态 - 成功
+        if (List.of(WxpayTradeStatus.SUCCESS,WxpayTradeStatus.REFUND).contains(result.getTradeState())){
+            // 支付用户OpenId
+            String openId = Optional.ofNullable(result.getPayer().getSubOpenid()).orElse(result.getPayer().getSpOpenid());
+            callbackInfo.setBuyerId(openId);
             callbackInfo.setTradeStatus(PayStatusEnum.SUCCESS.getCode());
         }
         // 支付状态 - 支付中

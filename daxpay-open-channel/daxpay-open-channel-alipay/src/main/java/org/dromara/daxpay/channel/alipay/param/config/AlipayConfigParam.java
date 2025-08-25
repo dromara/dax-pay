@@ -82,6 +82,10 @@ public class AlipayConfigParam {
     @Schema(description = "是否沙箱环境")
     private boolean sandbox;
 
+    /** 商户号 */
+    @NotBlank(message = "商户号不可为空")
+    @Schema(description = "商户号")
+    private String mchNo;
 
     /** 商户AppId */
     @NotBlank(message = "商户AppId不可为空")

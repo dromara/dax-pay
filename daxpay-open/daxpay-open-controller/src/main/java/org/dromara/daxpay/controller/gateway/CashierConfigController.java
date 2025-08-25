@@ -1,15 +1,17 @@
 package org.dromara.daxpay.controller.gateway;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
 import cn.bootx.platform.core.validation.ValidationGroup;
-import org.dromara.daxpay.service.param.gateway.CashierGroupConfigParam;
-import org.dromara.daxpay.service.param.gateway.CashierItemConfigParam;
-import org.dromara.daxpay.service.result.gateway.config.CashierGroupConfigResult;
-import org.dromara.daxpay.service.result.gateway.config.CashierItemConfigResult;
-import org.dromara.daxpay.service.service.gateway.config.CashierConfigService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.merchant.param.gateway.CashierGroupConfigParam;
+import org.dromara.daxpay.service.merchant.param.gateway.CashierItemConfigParam;
+import org.dromara.daxpay.service.merchant.result.gateway.CashierGroupConfigResult;
+import org.dromara.daxpay.service.merchant.result.gateway.CashierItemConfigResult;
+import org.dromara.daxpay.service.merchant.service.gateway.CashierConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -29,6 +31,7 @@ import java.util.List;
 @Tag(name = "收银台支付配置")
 @RestController
 @RequestMapping("/cashier/config")
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(groupCode = "CashierConfig", groupName = "收银台支付配置", moduleCode = "GatewayPay")
 @RequiredArgsConstructor
 public class CashierConfigController {
@@ -67,6 +70,15 @@ public class CashierConfigController {
     @PostMapping("/saveGroup")
     public Result<Void> saveGroup(@RequestBody @Validated(ValidationGroup.add.class) CashierGroupConfigParam param) {
         cashierConfigService.saveGroup(param);
+        return Res.ok();
+    }
+
+
+    @RequestPath("保存默认收银台分组(H5)")
+    @Operation(summary = "保存默认收银台分组(H5)")
+    @PostMapping("/saveDefaultGroup")
+    public Result<Void> saveDefaultGroup(@NotBlank(message = "应用号不可为空") String appId) {
+        cashierConfigService.saveDefaultGroup(appId);
         return Res.ok();
     }
 

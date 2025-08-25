@@ -1,16 +1,18 @@
 package org.dromara.daxpay.controller.notice;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.notice.callback.MerchantCallbackTaskQuery;
-import org.dromara.daxpay.service.result.notice.callback.MerchantCallbackRecordResult;
-import org.dromara.daxpay.service.result.notice.callback.MerchantCallbackTaskResult;
-import org.dromara.daxpay.service.service.notice.callback.MerchantCallbackQueryService;
-import org.dromara.daxpay.service.service.notice.callback.MerchantCallbackSendService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.pay.param.notice.callback.MerchantCallbackTaskQuery;
+import org.dromara.daxpay.service.pay.result.notice.callback.MerchantCallbackRecordResult;
+import org.dromara.daxpay.service.pay.result.notice.callback.MerchantCallbackTaskResult;
+import org.dromara.daxpay.service.pay.service.notice.callback.MerchantCallbackQueryService;
+import org.dromara.daxpay.service.pay.service.notice.callback.MerchantCallbackSendService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024/8/5
  */
 @Validated
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(groupCode = "MerchantCallback", groupName = "商户回调通知", moduleCode = "MerchantNotice", moduleName = "(DaxPay)商户消息通知")
 @Tag(name = "商户回调通知控制器")
 @RestController

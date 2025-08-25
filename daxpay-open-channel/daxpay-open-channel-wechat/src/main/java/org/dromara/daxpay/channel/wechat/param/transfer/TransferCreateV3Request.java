@@ -2,7 +2,8 @@ package org.dromara.daxpay.channel.wechat.param.transfer;
 
 import com.github.binarywang.wxpay.bean.merchanttransfer.TransferCreateRequest;
 import com.google.gson.annotations.SerializedName;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**

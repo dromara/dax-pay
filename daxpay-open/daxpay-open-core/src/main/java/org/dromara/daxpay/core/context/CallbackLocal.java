@@ -1,10 +1,6 @@
 package org.dromara.daxpay.core.context;
 
-import org.dromara.daxpay.core.enums.PayStatusEnum;
-import org.dromara.daxpay.core.enums.RefundStatusEnum;
-import org.dromara.daxpay.core.enums.CallbackStatusEnum;
-import org.dromara.daxpay.core.enums.TradeTypeEnum;
-import org.dromara.daxpay.core.enums.TransferStatusEnum;
+import org.dromara.daxpay.core.enums.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -62,6 +58,9 @@ public class CallbackLocal {
     /** 金额(元) */
     private BigDecimal amount;
 
+    /** 实际金额(元) */
+    private BigDecimal realAmount;
+
     /** 完成时间(支付/退款) */
     private LocalDateTime finishTime;
 
@@ -77,4 +76,38 @@ public class CallbackLocal {
      * @see CallbackStatusEnum
      */
     private CallbackStatusEnum callbackStatus = CallbackStatusEnum.SUCCESS;
+
+    /* 扩展参数 */
+
+    /** 付款用户ID */
+    private String buyerId;
+
+    /** 用户标识 */
+    private String userId;
+
+    /**
+     * 支付产品
+     * 三方通道所使用的支付产品或类型
+     */
+    private String tradeProduct;
+
+    /**
+     * 交易方式
+     */
+    private String tradeWay;
+
+    /**
+     * 银行卡类型
+     * 借记卡/贷记卡
+     */
+    private String bankType;
+
+    /**
+     * 透传账号
+     * 三方通道使用微信/支付宝/银联支付时产生的订单号
+     */
+    private String transOrderNo;
+
+    /** 参加活动类型 */
+    private String promotionType;
 }

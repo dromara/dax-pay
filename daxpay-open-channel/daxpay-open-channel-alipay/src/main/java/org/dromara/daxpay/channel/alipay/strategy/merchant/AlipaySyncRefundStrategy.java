@@ -5,9 +5,9 @@ import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigServ
 import org.dromara.daxpay.channel.alipay.service.payment.sync.AlipayRefundSyncService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.exception.OperationFailException;
-import org.dromara.daxpay.service.bo.sync.RefundSyncResultBo;
-import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
-import org.dromara.daxpay.service.strategy.AbsSyncRefundOrderStrategy;
+import org.dromara.daxpay.service.pay.bo.sync.RefundSyncResultBo;
+import org.dromara.daxpay.service.pay.entity.order.refund.RefundOrder;
+import org.dromara.daxpay.service.pay.strategy.AbsSyncRefundOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

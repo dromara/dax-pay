@@ -1,6 +1,6 @@
 package org.dromara.daxpay.core.param.gateway;
 
-import org.dromara.daxpay.core.enums.CashierCodeTypeEnum;
+import org.dromara.daxpay.core.enums.CashierSceneEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -22,10 +22,10 @@ public class GatewayCashierCodeAuthUrlParam {
     private String cashierCode;
 
     /**
-     * 码牌类型
-     * @see CashierCodeTypeEnum
+     * 支付场景
+     * @see CashierSceneEnum
      */
-    @NotBlank(message = "码牌类型不可为空")
-    @Schema(description = "码牌类型")
-    private String cashierType;
+    @NotBlank(message = "支付场景不可为空")
+    @Schema(description = "支付场景")
+    private String cashierScene;
 }

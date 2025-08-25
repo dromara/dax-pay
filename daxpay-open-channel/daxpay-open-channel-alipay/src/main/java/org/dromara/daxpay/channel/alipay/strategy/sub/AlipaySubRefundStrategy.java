@@ -4,8 +4,8 @@ import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
 import org.dromara.daxpay.channel.alipay.service.payment.refund.AlipayRefundService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.bo.trade.RefundResultBo;
-import org.dromara.daxpay.service.strategy.AbsRefundStrategy;
+import org.dromara.daxpay.service.pay.bo.trade.RefundResultBo;
+import org.dromara.daxpay.service.pay.strategy.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -42,5 +42,8 @@ public class AlipaySubRefundStrategy extends AbsRefundStrategy {
     public RefundResultBo doRefundHandler() {
         AliPayConfig aliPayConfig = aliPayConfigService.getAliPayConfig(true);
         return aliRefundService.refund(this.getRefundOrder(), aliPayConfig);
+        // TODO 模拟调试用
+//        return new RefundResultBo().setStatus(RefundStatusEnum.SUCCESS)
+//        .setFinishTime(LocalDateTime.now());
     }
 }

@@ -1,16 +1,16 @@
 package org.dromara.daxpay.channel.alipay.service.payment.callback;
 
 import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
+import org.dromara.daxpay.core.context.CallbackLocal;
 import org.dromara.daxpay.core.enums.CallbackStatusEnum;
 import org.dromara.daxpay.core.enums.ChannelEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.enums.TradeTypeEnum;
 import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.core.context.CallbackLocal;
-import org.dromara.daxpay.service.common.local.PaymentContextLocal;
-import org.dromara.daxpay.service.service.record.callback.TradeCallbackRecordService;
-import org.dromara.daxpay.service.service.trade.pay.PayCallbackService;
-import org.dromara.daxpay.service.service.trade.refund.RefundCallbackService;
+import org.dromara.daxpay.service.pay.common.local.PaymentContextLocal;
+import org.dromara.daxpay.service.pay.service.record.callback.TradeCallbackRecordService;
+import org.dromara.daxpay.service.pay.service.trade.pay.PayCallbackService;
+import org.dromara.daxpay.service.pay.service.trade.refund.RefundCallbackService;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.dromara.daxpay.channel.alipay.code.AlipayCode.*;
 
@@ -120,7 +121,11 @@ public class AlipayCallbackService {
         // 支付金额
         String amountStr = callbackParam.get(ResponseParams.TOTAL_AMOUNT);
         callback.setAmount(new BigDecimal(amountStr));
-
+        // 实付金额
+        callback.setRealAmount(new BigDecimal(callbackParam.get("buyer_pay_amount")));
+        // 用户ID
+        String buyId = Optional.ofNullable(callbackParam.get("buyer_user_id")).orElse(callbackParam.get("buyer_open_id"));
+        callback.setBuyerId(buyId);
         // 支付时间
         String gmpTime = callbackParam.get(ResponseParams.GMT_PAYMENT);
         if (StrUtil.isNotBlank(gmpTime)) {

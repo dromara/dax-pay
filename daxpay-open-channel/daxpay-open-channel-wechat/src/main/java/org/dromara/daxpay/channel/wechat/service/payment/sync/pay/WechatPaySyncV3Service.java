@@ -1,19 +1,19 @@
 package org.dromara.daxpay.channel.wechat.service.payment.sync.pay;
 
-import cn.bootx.platform.core.util.JsonUtil;
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
+import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
+import org.dromara.daxpay.core.enums.PayStatusEnum;
+import org.dromara.daxpay.core.util.PayUtil;
+import org.dromara.daxpay.service.pay.bo.sync.PaySyncResultBo;
+import org.dromara.daxpay.service.pay.entity.order.pay.PayOrder;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryV3Result;
 import com.github.binarywang.wxpay.constant.WxPayConstants.WxpayTradeStatus;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
-import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
-import org.dromara.daxpay.core.enums.PayStatusEnum;
-import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.sync.PaySyncResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,13 +45,14 @@ public class WechatPaySyncV3Service {
                     .map(WxPayOrderQueryV3Result.Amount::getTotal)
                     .map(PayUtil::conversionAmount)
                     .orElse(null);
-            syncResult.setSyncData(JsonUtil.toJsonStr(result))
+            syncResult.setSyncData(JacksonUtil.toJson(result))
                     .setOutOrderNo(result.getTransactionId())
                     .setAmount(amount);
             // 支付状态 - 成功 SUCCESS：支付成功  REFUND：转入退款
             if (List.of(WxpayTradeStatus.SUCCESS, WxpayTradeStatus.REFUND).contains(result.getTradeState())){
                 syncResult.setPayStatus(PayStatusEnum.SUCCESS)
-                        .setFinishTime(WechatPayUtil.parseV3(result.getSuccessTime()));
+                        .setFinishTime(WechatPayUtil.parseV3(result.getSuccessTime()))
+                        .setBuyerId(result.getPayer().getOpenid());
             }
             // 支付状态 - 支付中  NOTPAY：未支付，等待扣款 USERPAYING：用户支付中（付款码支付）
             if (List.of(WxpayTradeStatus.NOTPAY, WxpayTradeStatus.USER_PAYING).contains(result.getTradeState())){

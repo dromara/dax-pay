@@ -1,14 +1,16 @@
 package org.dromara.daxpay.controller.gateway;
 
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
 import cn.bootx.platform.core.rest.result.Result;
-import org.dromara.daxpay.service.param.gateway.AggregateBarPayConfigParam;
-import org.dromara.daxpay.service.param.gateway.AggregatePayConfigParam;
-import org.dromara.daxpay.service.result.gateway.config.AggregateBarPayConfigResult;
-import org.dromara.daxpay.service.result.gateway.config.AggregatePayConfigResult;
-import org.dromara.daxpay.service.service.gateway.config.AggregateConfigService;
+import org.dromara.daxpay.service.common.code.DaxPayCode;
+import org.dromara.daxpay.service.merchant.param.gateway.AggregateBarPayConfigParam;
+import org.dromara.daxpay.service.merchant.param.gateway.AggregatePayConfigParam;
+import org.dromara.daxpay.service.merchant.result.gateway.AggregateBarPayConfigResult;
+import org.dromara.daxpay.service.merchant.result.gateway.AggregatePayConfigResult;
+import org.dromara.daxpay.service.merchant.service.gateway.AggregateConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -27,6 +29,7 @@ import java.util.List;
 @Tag(name = "聚合支付配置")
 @RestController
 @RequestMapping("/aggregate/config")
+@ClientCode({DaxPayCode.Client.ADMIN, DaxPayCode.Client.MERCHANT})
 @RequestGroup(groupCode = "AggregateConfig", groupName = "聚合支付配置", moduleCode = "GatewayPay")
 @RequiredArgsConstructor
 public class AggregateConfigController {

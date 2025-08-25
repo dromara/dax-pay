@@ -1,7 +1,5 @@
 package org.dromara.daxpay.channel.wechat.strategy.merchant;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
 import org.dromara.daxpay.core.enums.ChannelEnum;
@@ -9,8 +7,10 @@ import org.dromara.daxpay.core.param.assist.AuthCodeParam;
 import org.dromara.daxpay.core.param.assist.GenerateAuthUrlParam;
 import org.dromara.daxpay.core.result.assist.AuthResult;
 import org.dromara.daxpay.core.result.assist.AuthUrlResult;
-import org.dromara.daxpay.service.service.assist.WechatOpenAuthService;
-import org.dromara.daxpay.service.strategy.AbsChannelAuthStrategy;
+import org.dromara.daxpay.service.pay.service.assist.WechatOpenAuthService;
+import org.dromara.daxpay.service.pay.strategy.AbsChannelAuthStrategy;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**

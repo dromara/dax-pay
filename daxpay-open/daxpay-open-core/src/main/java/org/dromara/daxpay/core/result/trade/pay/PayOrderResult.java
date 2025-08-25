@@ -1,9 +1,9 @@
 package org.dromara.daxpay.core.result.trade.pay;
 
+import org.dromara.daxpay.core.enums.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.dromara.daxpay.core.enums.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -78,6 +78,10 @@ public class PayOrderResult {
     @Schema(description = "金额")
     private BigDecimal amount;
 
+    /** 实收金额 */
+    @Schema(description = "实收金额")
+    private BigDecimal realAmount;
+
     /** 可退款余额 */
     @Schema(description = "可退款余额")
     private BigDecimal refundableBalance;
@@ -102,6 +106,13 @@ public class PayOrderResult {
      */
     @Schema(description = "分账状态")
     private String allocStatus;
+
+    /**
+     * 结算状态
+     * @see SettleStatusEnum
+     */
+    @Schema(description = "结算状态")
+    private String settleStatus;
 
     /** 支付时间 */
     @Schema(description = "支付时间")
