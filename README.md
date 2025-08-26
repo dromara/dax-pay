@@ -52,8 +52,6 @@
 
 运营端: https://admin.open.daxpay.cn/  演示用户: csadmin/123123
 
-代理端: https://agent.open.daxpay.cn/   演示用户: csdls/123123
-
 商户端: https://merchant.open.daxpay.cn/  普通商户演示: cssh/123123
 
 
