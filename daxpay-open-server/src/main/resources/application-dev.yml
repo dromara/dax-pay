@@ -5,15 +5,15 @@ spring:
       datasource:
         master:
           # Postgresql连接
-          driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://${DB_HOST:postgresql}:${DB_PORT:5432}/dax-pay-dev?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
-          username: ${DB_USER:bootx}
-          password: ${DB_PASSWORD:bootx123}
-          # MySQL连接
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-#          url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/dax-pay-dev?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
-#          username: ${DB_USER:root}
+#          driver-class-name: org.postgresql.Driver
+#          url: jdbc:postgresql://${DB_HOST:postgresql}:${DB_PORT:5432}/dax-pay-dev?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+#          username: ${DB_USER:bootx}
 #          password: ${DB_PASSWORD:bootx123}
+          # MySQL连接
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/dax-pay-open?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
+          username: ${DB_USER:root}
+          password: ${DB_PASSWORD:bootx123}
       hikari:
         minimumIdle: 5 # 最小连接数
         maximumPoolSize: 50 # 最大连接数

@@ -1,4 +1,4 @@
-package org.dromara.daxpay.sdk.param.channel;
+package org.dromara.daxpay.sdk.param.channel.adapay;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,6 +18,4 @@ public class AdaPayParam {
     /** 买家支付宝账号 */
     private String buyerLogonId;
 
-    /** openid */
-    private String openId;
 }

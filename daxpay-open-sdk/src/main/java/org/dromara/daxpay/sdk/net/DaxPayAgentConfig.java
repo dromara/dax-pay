@@ -1,27 +1,22 @@
 package org.dromara.daxpay.sdk.net;
 
-import org.dromara.daxpay.sdk.code.SignTypeEnum;
-import cn.hutool.core.util.StrUtil;
 import lombok.Builder;
 import lombok.Getter;
+import org.dromara.daxpay.sdk.code.SignTypeEnum;
 
 /**
- * 支付配置
+ * 代理商配置
  * @author xxm
- * @since 2024/2/2
+ * @since 2025/8/24
  */
 @Getter
 @Builder
-public class DaxPayConfig {
-
+public class DaxPayAgentConfig {
     /** 服务地址 */
     private String serviceUrl;
 
-    /** 商户号 */
-    private String mchNo;
-
-    /** 应用号 */
-    private String appId;
+    /** 代理商号 */
+    private String agentNo;
 
     /** 签名方式 */
     @Builder.Default
@@ -33,9 +28,4 @@ public class DaxPayConfig {
     /** 请求超时时间 */
     @Builder.Default
     private int reqTimeout = 30000;
-
-
-    public String getServiceUrl() {
-        return StrUtil.removeSuffix(serviceUrl, "/");
-    }
 }

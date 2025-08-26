@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@Schema(title = "网关支付参数")
 public class GatewayPayParam extends DaxPayRequest<GatewayPayUrlResult> {
 
     /** 商户订单号 */
@@ -44,6 +45,11 @@ public class GatewayPayParam extends DaxPayRequest<GatewayPayUrlResult> {
     @Schema(description = "支付描述")
     @Size(max = 500, message = "支付描述不可超过500位")
     private String description;
+
+    /** 自定义OpenId 微信类通道可用 */
+    @Schema(description = "自定义OpenId")
+    @Size(max = 64, message = "自定义OpenId不可超过64位")
+    private String openId;
 
     /**
      * 网关支付类型

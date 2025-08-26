@@ -19,19 +19,13 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-public abstract class DaxPayRequest<T> {
+public abstract class DaxPayAgentRequest<T> {
 
-    /** 商户号 */
-    @Schema(description = "商户号")
-    @NotBlank(message = "商户号不可为空")
-    @Size(max = 32, message = "商户号不可超过32位")
-    private String mchNo;
-
-    /** 应用号 */
-    @Schema(description = "应用号")
-    @NotBlank(message = "应用号不可为空")
-    @Size(max = 32, message = "应用号不可超过32位")
-    private String appId;
+    /** 代理商号 */
+    @Schema(description = "代理商号")
+    @NotBlank(message = "代理商号不可为空")
+    @Size(max = 32, message = "代理商号不可超过32位")
+    private String agentNo;
 
     /** 客户端ip */
     @Schema(description = "客户端ip")

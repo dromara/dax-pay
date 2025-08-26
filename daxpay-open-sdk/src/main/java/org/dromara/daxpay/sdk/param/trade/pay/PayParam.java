@@ -12,8 +12,9 @@ import cn.hutool.core.lang.TypeReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,8 +24,10 @@ import java.time.LocalDateTime;
  * @author xxm
  * @since 2024/2/2
  */
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
+@Schema(title = "支付参数")
 public class PayParam extends DaxPayRequest<PayResult> {
 
     /** 商户订单号 */
@@ -141,7 +144,7 @@ public class PayParam extends DaxPayRequest<PayResult> {
     private String notifyUrl;
 
 
-/**
+    /**
      * 方法请求路径
      */
     @Override

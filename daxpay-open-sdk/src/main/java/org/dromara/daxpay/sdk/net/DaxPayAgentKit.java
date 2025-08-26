@@ -15,11 +15,11 @@ import java.util.Objects;
  * @since 2024/2/2
  */
 @Slf4j
-public class DaxPayKit {
+public class DaxPayAgentKit {
 
-    private final DaxPayConfig config;
+    private final DaxPayAgentConfig config;
 
-    public DaxPayKit(DaxPayConfig config) {
+    public DaxPayAgentKit(DaxPayAgentConfig config) {
         log.debug("DaxPayKit初始化...");
         this.config = config;
     }
@@ -31,7 +31,7 @@ public class DaxPayKit {
      * @param <T>     业务对象
      * @return DaxResult 响应类
      */
-    public <T> DaxResult<T> execute(DaxPayRequest<T> request) {
+    public <T> DaxResult<T> execute(DaxPayAgentRequest<T> request) {
         return execute(request, true);
     }
 
@@ -43,13 +43,10 @@ public class DaxPayKit {
      * @param <T>     业务对象
      * @return DaxResult 响应类
      */
-    public <T> DaxResult<T> execute(DaxPayRequest<T> request, boolean sign) {
+    public <T> DaxResult<T> execute(DaxPayAgentRequest<T> request, boolean sign) {
         // 判断是否需要填充商户号和应用号
-        if (Objects.isNull(request.getMchNo())) {
-            request.setMchNo(config.getMchNo());
-        }
-        if (Objects.isNull(request.getAppId())) {
-            request.setAppId(config.getAppId());
+        if (Objects.isNull(request.getAgentNo())) {
+            request.setAgentNo(config.getAgentNo());
         }
         // 判断是是否进行签名
         if (sign) {
@@ -71,7 +68,7 @@ public class DaxPayKit {
                 .body(data, ContentType.JSON.getValue())
                 .timeout(config.getReqTimeout())
                 .execute()) {
-            // 响应码只有200 才可以进行支付
+            // 响应码只有200 正常
             if (execute.getStatus() != HttpStatus.HTTP_OK) {
                 log.error("请求第支付网关失败，请排查配置的支付网关地址是否正常");
                 throw new HttpException("请求失败，内部异常");

@@ -3,10 +3,11 @@ package org.dromara.daxpay.sdk.util;
 import org.dromara.daxpay.sdk.code.ChannelEnum;
 import org.dromara.daxpay.sdk.code.PayLimitPayEnum;
 import org.dromara.daxpay.sdk.code.PayMethodEnum;
-import org.dromara.daxpay.sdk.net.DaxPayKit;
-import org.dromara.daxpay.sdk.param.channel.WechatPayParam;
+import org.dromara.daxpay.sdk.param.channel.wechat.WechatPayParam;
 import org.dromara.daxpay.sdk.param.trade.pay.PayParam;
 import org.dromara.daxpay.sdk.response.DaxNoticeResult;
+import org.dromara.daxpay.sdk.result.trade.pay.PayOrderResult;
+import cn.hutool.core.lang.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -51,9 +52,12 @@ public class ParamSignTest {
         log.info("参数: {}",JsonUtil.toJsonStr(param));
         Map<String, String> map = PaySignUtil.toMap(param);
         log.info("转换为有序MAP后的内容: {}",JsonUtil.toJsonStr(map));
+        // " 和 \ 特殊符号过滤
         String data = PaySignUtil.createLinkString(map);
         log.info("将MAP拼接字符串, 并过滤掉特殊字符: {}",data);
+        // 密钥为123456
         data = data+ "&key=123456";
+        // 转大写
         data = data.toUpperCase();
         log.info("添加秘钥并转换为大写的字符串: {}",data);
         log.info("MD5: {}",PaySignUtil.md5(data));
@@ -77,6 +81,7 @@ public class ParamSignTest {
 
         Map<String, String> map = PaySignUtil.toMap(param);
         log.info("转换为有序MAP后的内容: {}",map);
+        // " 和 \ 特殊符号过滤
         String data = PaySignUtil.createLinkString(map).replaceAll("\\\"","").replaceAll("\"","");
         log.info("将MAP拼接字符串, 并过滤掉特殊字符: {}",data);
         String sign = "123456";
@@ -87,27 +92,46 @@ public class ParamSignTest {
         log.info("HmacSHA256: {}",PaySignUtil.hmacSha256(data,sign));
     }
 
+
     /**
-     * 验签测试
+     * 响应结果和回调结果验签
      */
     @Test
-    public void verifySign(){
-        String json = "{\"noticeType\":\"pay\",\"mchNo\":\"M1723635576766\",\"appId\":\"M8088873888246277\",\"code\":0,\"msg\":\"success\",\"data\":{\"bizOrderNo\":\"20250221230917\",\"orderNo\":\"DEV_P2025022123091870000001\",\"title\":\"扫码支付\",\"allocation\":false,\"autoAllocation\":false,\"channel\":\"ali_pay\",\"method\":\"barcode\",\"amount\":0.01,\"refundableBalance\":0.01,\"status\":\"close\",\"refundStatus\":\"no_refund\",\"closeTime\":\"2025-02-21 23:40:00\",\"expiredTime\":\"2025-02-21 23:39:18\",\"errorMsg\":\"支付失败: 支付失败，获取顾客账户信息失败，请顾客刷新付款码后重新收款，如再次收款失败，请联系管理员处理。[SOUNDWAVE_PARSER_FAIL]\"},\"sign\":\"91ba428dc3a6ca17051d1835c8d24703cf2e10434acb337b0a43cc081f7fe45c\",\"resTime\":\"2025-04-10 23:45:42\",\"traceId\":\"BgSPIlOLsRBx\"}";
-        DaxNoticeResult<?> bean = JsonUtil.toBean(json, DaxNoticeResult.class);
-        boolean b = DaxPayKit.verifySign(bean);
-        System.out.println("验签结果: "+b);
-
-        log.info("参数: {}",JsonUtil.toJsonStr(bean));
-        Map<String, String> map = PaySignUtil.toMap(bean);
-        map.remove("sign");
-        log.info("转换为有序MAP后的内容: {}",JsonUtil.toJsonStr(map));
-        String data = PaySignUtil.createLinkString(map);
-        log.info("将MAP拼接字符串, 并过滤掉特殊字符: {}",data);
-        data = data+ "&key=123456";
-        data = data.toUpperCase();
-        log.info("添加秘钥并转换为大写的字符串: {}",data);
-        log.info("hmacSha256: {}",PaySignUtil.hmacSha256(data, "123456"));
-
+    public void callbackAndVerifySign(){
+        String data = "{\n" +
+                "  \"mchNo\" : \"M1745845174843\",\n" +
+                "  \"appId\" : \"A0646259306964009\",\n" +
+                "  \"code\" : 0,\n" +
+                "  \"msg\" : \"success\",\n" +
+                "  \"data\" : {\n" +
+                "    \"bizOrderNo\" : \"PAY_492854192101747473544745\",\n" +
+                "    \"orderNo\" : \"DEV_P2025051717190770000003\",\n" +
+                "    \"title\" : \"测试支付\",\n" +
+                "    \"allocation\" : false,\n" +
+                "    \"autoAllocation\" : false,\n" +
+                "    \"channel\" : \"alipay_isv\",\n" +
+                "    \"method\" : \"other\",\n" +
+                "    \"otherMethod\" : \"WX_JSAPI\",\n" +
+                "    \"amount\" : 0.01,\n" +
+                "    \"refundableBalance\" : 0.01,\n" +
+                "    \"status\" : \"close\",\n" +
+                "    \"refundStatus\" : \"no_refund\",\n" +
+                "    \"closeTime\" : \"2025-05-18 10:14:14\",\n" +
+                "    \"expiredTime\" : \"2025-05-17 21:41:28\"\n" +
+                "  },\n" +
+                "  \"sign\" : \"86604c1eb66dc3ef22de28be09d993cb91eb46bcd77ee51b0142240ae7ba50fe\",\n" +
+                "  \"resTime\" : \"2025-06-05 17:46:54\",\n" +
+                "  \"traceId\" : \"nu2Pezn0FvKd\"\n" +
+                "}";
+        log.info("notify/callback:{}",data);
+        // 转换成实体类, 使用sdk中内置的json工具类转换
+        DaxNoticeResult<PayOrderResult> x = JsonUtil.toBean(data, new TypeReference<DaxNoticeResult<PayOrderResult>>() {});
+        boolean s1 = PaySignUtil.verifyHmacSha256Sign(x, "bc5b5d592cc34434a27fb57fe923dacc5374da52a4174ff5874768a8215e5fd3", x.getSign());
+        log.info("验签结果: {}",s1);
+        // 使用map方式验签
+        DaxNoticeResult<Map<String,Object>> bean = JsonUtil.toBean(data, new TypeReference<DaxNoticeResult<Map<String,Object>>>() {});
+        boolean s2 = PaySignUtil.verifyHmacSha256Sign(bean, "bc5b5d592cc34434a27fb57fe923dacc5374da52a4174ff5874768a8215e5fd3", bean.getSign());
+        log.info("验签结果: {}",s2);
     }
 
 }

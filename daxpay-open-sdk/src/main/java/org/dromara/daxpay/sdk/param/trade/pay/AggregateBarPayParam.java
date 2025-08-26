@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "网关付款码支付参数")
+@Schema(title = "网关聚合付款码支付参数")
 public class AggregateBarPayParam extends DaxPayRequest<PayResult> {
 
     /** 商户订单号 */

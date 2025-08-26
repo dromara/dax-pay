@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -22,6 +21,7 @@ import java.util.Map;
  */
 @Slf4j
 public class NoticeTest {
+    private DaxPayKit daxPayKit;
 
 
     @Before
@@ -31,9 +31,10 @@ public class NoticeTest {
                 .serviceUrl("http://127.0.0.1:19999")
                 .signSecret("123456")
                 .signType(SignTypeEnum.HMAC_SHA256)
+                .mchNo("M1723635576766")
                 .appId("M8088873888246277")
                 .build();
-        DaxPayKit.initConfig(config);
+        this.daxPayKit =  new DaxPayKit(config);
     }
 
     /**
@@ -42,18 +43,8 @@ public class NoticeTest {
     @Test
     public void testNotice() {
         String json = "{\"noticeType\":\"pay\",\"mchNo\":\"M1723635576766\",\"appId\":\"M8088873888246277\",\"code\":0,\"msg\":\"success\",\"data\":{\"bizOrderNo\":\"20250221230917\",\"orderNo\":\"DEV_P2025022123091870000001\",\"title\":\"扫码支付\",\"allocation\":false,\"autoAllocation\":false,\"channel\":\"ali_pay\",\"method\":\"barcode\",\"amount\":0.01,\"refundableBalance\":0.01,\"status\":\"close\",\"refundStatus\":\"no_refund\",\"closeTime\":\"2025-02-21 23:40:00\",\"expiredTime\":\"2025-02-21 23:39:18\",\"errorMsg\":\"支付失败: 支付失败，获取顾客账户信息失败，请顾客刷新付款码后重新收款，如再次收款失败，请联系管理员处理。[SOUNDWAVE_PARSER_FAIL]\"},\"sign\":\"91ba428dc3a6ca17051d1835c8d24703cf2e10434acb337b0a43cc081f7fe45c\",\"resTime\":\"2025-04-10 23:45:42\",\"traceId\":\"BgSPIlOLsRBx\"}";
-        DaxNoticeResult<PayOrderResult> bean = JsonUtil.toBean(json, new TypeReference<DaxNoticeResult<PayOrderResult>>() {
-            /**
-             * 获取用户定义的泛型参数
-             *
-             * @return 泛型参数
-             */
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        });
-        boolean b = DaxPayKit.verifySign(bean);
+        DaxNoticeResult<PayOrderResult> bean = JsonUtil.toBean(json, new TypeReference<DaxNoticeResult<PayOrderResult>>() {});
+        boolean b = daxPayKit.verifySign(bean);
         System.out.println("验签结果: "+b);
 
         // 转换成对象

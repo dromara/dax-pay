@@ -1,4 +1,4 @@
-package org.dromara.daxpay.sdk.param.channel;
+package org.dromara.daxpay.sdk.param.channel.wechat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package org.dromara.daxpay.sdk.param.channel;
+package org.dromara.daxpay.sdk.param.channel.union;
 
 import lombok.Getter;
 import lombok.Setter;

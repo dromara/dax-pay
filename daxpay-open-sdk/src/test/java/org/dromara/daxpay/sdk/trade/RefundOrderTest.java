@@ -21,6 +21,7 @@ import java.math.BigDecimal;
  * @since 2024/2/5
  */
 public class RefundOrderTest {
+    private DaxPayKit daxPayKit;
 
     @Before
     public void init() {
@@ -29,9 +30,10 @@ public class RefundOrderTest {
                 .serviceUrl("http://127.0.0.1:19999")
                 .signSecret("123456")
                 .signType(SignTypeEnum.MD5)
+                .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();
-        DaxPayKit.initConfig(config);
+        this.daxPayKit =  new DaxPayKit(config);
     }
 
     /**
@@ -46,8 +48,8 @@ public class RefundOrderTest {
         param.setAttach("{回调参数}");
         param.setClientIp("127.0.0.1");
 
-        DaxResult<RefundResult> execute = DaxPayKit.execute(param);
+        DaxResult<RefundResult> execute = daxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
-        System.out.println(DaxPayKit.verifySign(execute));
+        System.out.println(daxPayKit.verifySign(execute));
     }
 }

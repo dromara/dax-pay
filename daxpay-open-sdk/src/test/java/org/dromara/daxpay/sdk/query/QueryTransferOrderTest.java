@@ -16,6 +16,7 @@ import org.junit.Test;
  * @since 2025/4/7
  */
 public class QueryTransferOrderTest {
+    private DaxPayKit daxPayKit;
 
 
     @Before
@@ -25,9 +26,10 @@ public class QueryTransferOrderTest {
                 .serviceUrl("http://127.0.0.1:19999")
                 .signSecret("123456")
                 .signType(SignTypeEnum.MD5)
+                .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();
-        DaxPayKit.initConfig(config);
+        this.daxPayKit =  new DaxPayKit(config);
     }
 
     /**
@@ -37,8 +39,8 @@ public class QueryTransferOrderTest {
     public void queryTransferOrder() {
         QueryTransferParam param = new QueryTransferParam();
         param.setTransferNo("DEV_T2025041111124570000021");
-        DaxResult<TransferOrderResult> execute = DaxPayKit.execute(param);
-        System.out.println("验签结果: " + DaxPayKit.verifySign(execute));
+        DaxResult<TransferOrderResult> execute = daxPayKit.execute(param);
+        System.out.println("验签结果: " + daxPayKit.verifySign(execute));
         System.out.println(JsonUtil.toJsonStr(execute));
     }
 }

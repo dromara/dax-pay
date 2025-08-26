@@ -21,6 +21,8 @@ import java.math.BigDecimal;
  * @since 2025/4/10
  */
 public class GatewayPayTest {
+    private DaxPayKit daxPayKit;
+
     @Before
     public void init() {
         // 初始化支付配置
@@ -28,9 +30,10 @@ public class GatewayPayTest {
                 .serviceUrl("http://127.0.0.1:19999")
                 .signSecret("123456")
                 .signType(SignTypeEnum.MD5)
+                .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();
-        DaxPayKit.initConfig(config);
+        this.daxPayKit =  new DaxPayKit(config);
     }
 
     /**
@@ -44,16 +47,15 @@ public class GatewayPayTest {
         param.setTitle("测试网关支付");
         param.setDescription("这是支付备注");
         param.setAmount(BigDecimal.valueOf(0.01));
-        param.setGatewayPayType(GatewayPayTypeEnum.H5.getCode());
+        param.setGatewayPayType(GatewayPayTypeEnum.PC.getCode());
         param.setAttach("{回调参数}");
         param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
-        DaxResult<GatewayPayUrlResult> execute = DaxPayKit.execute(param);
+        DaxResult<GatewayPayUrlResult> execute = daxPayKit.execute(param);
         // 验签
-        System.out.println("验签结果: " + DaxPayKit.verifySign(execute));
+        System.out.println("验签结果: " + daxPayKit.verifySign(execute));
         System.out.println(JsonUtil.toJsonStr(execute));
-
     }
 
     /**
@@ -72,9 +74,9 @@ public class GatewayPayTest {
         param.setTerminalNo("66888");
         param.setAuthCode("66888");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
-        DaxResult<PayResult> execute = DaxPayKit.execute(param);
+        DaxResult<PayResult> execute = daxPayKit.execute(param);
         // 验签
-        System.out.println("验签结果: " + DaxPayKit.verifySign(execute));
+        System.out.println("验签结果: " + daxPayKit.verifySign(execute));
         System.out.println(JsonUtil.toJsonStr(execute));
     }
 }

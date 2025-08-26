@@ -1,7 +1,7 @@
 version: '3'
 services:
   daxpay-single:
-    image: daxpay/daxpay-single:3.0.0
+    image: daxpay/daxpay-open:3.0.0
     restart: always
     # window上不支持host网络模式, 需要更改为 bridge 网络模式, 然后走端口映射
     network_mode: host
@@ -12,9 +12,7 @@ services:
     # 读取外部化配置文件(根据实际服务器环境做修改), 宿主机目录:容器目录
     volumes:
       # 日志
-      - ./data/logs/:/logs
-      # 上传文件目录
-      - ./data/files/:/data/files
+      - ./logs/:/logs
     environment:
       # pgsql数据库连接地址
       - DB_URL=jdbc:pgsql://127.0.0.1:3306/dax-pay-single?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true

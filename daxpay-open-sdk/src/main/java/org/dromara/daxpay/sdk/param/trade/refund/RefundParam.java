@@ -7,9 +7,9 @@ import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 
@@ -18,9 +18,10 @@ import java.math.BigDecimal;
  * @author xxm
  * @since 2023/12/18
  */
-@Getter
-@Setter
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
+@Schema(title = "退款参数")
 public class RefundParam extends DaxPayRequest<RefundResult> {
 
 

@@ -20,6 +20,7 @@ import java.math.BigDecimal;
  * @since 2024/6/20
  */
 public class TransferOrderTest {
+    private DaxPayKit daxPayKit;
 
 
     @Before
@@ -29,9 +30,10 @@ public class TransferOrderTest {
                 .serviceUrl("http://127.0.0.1:19999")
                 .signSecret("123456")
                 .signType(SignTypeEnum.MD5)
+                .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();
-        DaxPayKit.initConfig(config);
+        this.daxPayKit =  new DaxPayKit(config);
     }
 
 
@@ -52,8 +54,8 @@ public class TransferOrderTest {
         // 使用OpenId
         param.setPayeeAccount("-G8AkkjjVhUl_VAf");
         // 发起请求
-        DaxResult<TransferResult> execute = DaxPayKit.execute(param);
-        System.out.println("验签: "+ DaxPayKit.verifySign(execute));
+        DaxResult<TransferResult> execute = daxPayKit.execute(param);
+        System.out.println("验签: "+ daxPayKit.verifySign(execute));
         System.out.println(JsonUtil.toJsonStr(execute));
     }
 
@@ -74,7 +76,7 @@ public class TransferOrderTest {
         // 使用OpenId
         param.setPayeeAccount("");
         // 发起请求
-        DaxResult<TransferResult> execute = DaxPayKit.execute(param);
+        DaxResult<TransferResult> execute = daxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
     }
 }

@@ -1,8 +1,8 @@
 package org.dromara.daxpay.sdk.result.trade.pay;
 
+import org.dromara.daxpay.sdk.code.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.dromara.daxpay.sdk.code.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
