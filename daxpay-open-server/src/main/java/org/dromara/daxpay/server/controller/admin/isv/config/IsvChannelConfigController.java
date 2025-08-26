@@ -27,7 +27,7 @@ import java.util.List;
 @ClientCode({DaxPayCode.Client.ADMIN})
 @Tag(name = "服务商通道配置")
 @RestController
-@RequestGroup(groupCode = "IsvChannelConfig", groupName = "通道配置", moduleCode = "isv")
+@RequestGroup(groupCode = "IsvChannelConfig", groupName = "通道配置", moduleCode = "isv", moduleName = "(DaxPay)服务商")
 @RequestMapping("/isv/channel/config")
 @RequiredArgsConstructor
 public class IsvChannelConfigController {
