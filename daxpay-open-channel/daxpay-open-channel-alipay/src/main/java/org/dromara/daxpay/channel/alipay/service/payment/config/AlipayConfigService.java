@@ -118,7 +118,7 @@ public class AlipayConfigService {
     public String getReturnUrl(boolean isv) {
         String url = isv?"{}/unipay/return/{}/{}/alipay/isv":"{}/unipay/return/{}/{}/alipay";
         PaymentReqInfoLocal reqInfo = PaymentContextLocal.get().getReqInfo();
-        return StrUtil.format(url,reqInfo.getGatewayH5Url(), reqInfo.getMchNo(),reqInfo.getAppId());
+        return StrUtil.format(url,reqInfo.getGatewayServiceUrl(), reqInfo.getMchNo(),reqInfo.getAppId());
     }
 
     /**

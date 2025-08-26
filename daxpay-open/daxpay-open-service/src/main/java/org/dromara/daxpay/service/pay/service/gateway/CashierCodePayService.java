@@ -115,6 +115,8 @@ public class CashierCodePayService {
         // 查询码牌支付场景配置
         var sceneConfig = codeSceneConfigManager.findByConfigAndScene(cashierCode.getConfigId(), param.getCashierScene())
                 .orElseThrow(() -> new DataNotExistException("码牌支付场景配置不存在"));
+        // 初始化上下文信息
+        paymentAssistService.initMchAndApp(cashierCode.getMchNo(), cashierCode.getAppId());
         // 获取认证策略
         var channelAuthStrategy = PaymentStrategyFactory.create(sceneConfig.getChannel(), AbsChannelAuthStrategy.class);
         var cashierCodeType = CashierSceneEnum.findByCode(sceneConfig.getScene());
