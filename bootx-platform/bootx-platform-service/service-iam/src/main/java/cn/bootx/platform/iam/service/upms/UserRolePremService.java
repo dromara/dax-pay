@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -64,7 +65,7 @@ public class UserRolePremService {
     }
 
     /**
-     * 获取请求路径树
+     * 获取用户有权限的请求路径树
      */
     public List<PermPathResult> pathTreeByUser(Long userId, String clientCode){
         // 获取用户角色
@@ -77,7 +78,9 @@ public class UserRolePremService {
                 .toList();
         // 获取目录节点, 进行合并后生成树
         List<PermPath> catalogCodes = permPathManager.findAllByLeafAndClient(false, clientCode);
-        return rolePathService.buildPathTree(leafList, catalogCodes);
+        var tree = rolePathService.buildPathTree(leafList, catalogCodes);
+        tree.sort(Comparator.comparing(PermPathResult::getName));
+        return tree;
     }
 
     /**

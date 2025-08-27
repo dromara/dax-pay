@@ -2,11 +2,13 @@ package cn.bootx.platform.common.mybatisplus.util;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.core.annotation.BigField;
+import cn.bootx.platform.core.exception.BizException;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.core.rest.result.PageResult;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -20,7 +22,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.experimental.UtilityClass;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -157,6 +162,19 @@ public class MpUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * 获取当前数据库类型, 别忘了关闭, 不然会连接池泄露
+     */
+    public String getDbType(){
+        try {
+            try (Connection connection = SpringUtil.getBean(DataSource.class).getConnection()) {
+                    return connection.getMetaData().getDatabaseProductName();
+            }
+        } catch (SQLException e) {
+            throw new BizException("获取数据库类型失败");
+        }
     }
 
 }

@@ -1,0 +1,68 @@
+package org.dromara.daxpay.channel.wechat.service.payment.refund;
+
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.enums.WechatRefundStatusEnum;
+import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
+import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
+import org.dromara.daxpay.core.exception.TradeFailException;
+import org.dromara.daxpay.core.util.PayUtil;
+import org.dromara.daxpay.service.pay.bo.trade.RefundResultBo;
+import org.dromara.daxpay.service.pay.entity.order.refund.RefundOrder;
+import cn.hutool.core.util.StrUtil;
+import com.github.binarywang.wxpay.bean.request.WxPayPartnerRefundV3Request;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundV3Request;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundV3Result;
+import com.github.binarywang.wxpay.constant.WxPayConstants;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/**
+ * 微信退款 v3
+ * @author xxm
+ * @since 2024/7/21
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class WechatSubRefundV3Service {
+
+    private final WechatPayConfigService wechatPayConfigService;
+
+    /**
+     * 退款
+     */
+    public RefundResultBo refund(RefundOrder refundOrder, WechatPayConfig config) {
+        RefundResultBo refundInfo = new RefundResultBo();
+
+        WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
+        var amount = new WxPayRefundV3Request.Amount()
+                .setCurrency(WxPayConstants.CurrencyType.CNY)
+                .setRefund(PayUtil.convertCentAmount(refundOrder.getAmount()))
+                .setTotal(PayUtil.convertCentAmount(refundOrder.getOrderAmount()));
+        var request = new WxPayPartnerRefundV3Request();
+        request.setOutRefundNo(refundOrder.getRefundNo())
+                .setNotifyUrl(wechatPayConfigService.getRefundNotifyUrl(true))
+                .setReason(refundOrder.getReason())
+                .setOutTradeNo(refundOrder.getOrderNo())
+                .setAmount(amount)
+                .setSubMchid(config.getSubMchId());
+        if (StrUtil.isBlank(request.getReason())){
+            request.setReason("退款");
+        }
+        try {
+            WxPayRefundV3Result result = wxPayService.refundV3(request);
+
+            WechatRefundStatusEnum statusEnum = WechatRefundStatusEnum.findByCode(result.getStatus());
+            refundInfo.setStatus(statusEnum.getRefundStatus())
+                    .setFinishTime(WechatPayUtil.parseV3(result.getSuccessTime()))
+                    .setOutRefundNo(result.getRefundId());
+        } catch (WxPayException e) {
+            log.error("微信退款V3失败", e);
+            throw new TradeFailException("微信退款V3失败: "+e.getMessage());
+        }
+        return refundInfo;
+    }
+}

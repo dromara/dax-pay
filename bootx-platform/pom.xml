@@ -7,13 +7,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>cn.bootx.platform</groupId>
     <artifactId>bootx-platform</artifactId>
-    <version>3.0.0.beta4</version>
+    <version>3.0.0</version>
     <packaging>pom</packaging>
     <description>基础脚手架服务</description>
 
@@ -25,18 +25,19 @@
     </modules>
 
     <properties>
-        <bootx-platform.version>3.0.0.beta4</bootx-platform.version>
-        <!-- 再高的的新版本与会knife4j 4.5冲突 -->
-        <springdoc.version>2.5.0</springdoc.version>
-        <hutool.version>5.8.35</hutool.version>
-        <bouncycastle.version>1.79</bouncycastle.version>
-        <knife4j.version>4.5.0</knife4j.version>
-        <mybatis-plus.version>3.5.9</mybatis-plus.version>
-        <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
+        <bootx-platform.version>3.0.0</bootx-platform.version>
+        <!-- 再高的的新版本与会knife4j 4.5冲突, 目前使用三方的knife4j依赖 -->
+        <springdoc.version>2.7.0</springdoc.version>
+        <hutool.version>5.8.39</hutool.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <knife4j.version>4.6.0</knife4j.version>
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
+        <mybatis-plus-join.version>1.5.4</mybatis-plus-join.version>
         <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
         <lock4j.version>2.2.7</lock4j.version>
-        <x-file-storage.version>2.2.1</x-file-storage.version>
-        <minio.version>8.5.4</minio.version>
+        <x-file-storage.version>2.3.0</x-file-storage.version>
+        <aws-s3.version>1.12.429</aws-s3.version>
+        <qcloud.version>5.6.137</qcloud.version>
         <sa-token.version>1.39.0</sa-token.version>
         <justauth.version>1.16.6</justauth.version>
         <caffeine.version>3.1.8</caffeine.version>
@@ -47,7 +48,7 @@
         <kryo.version>5.6.0</kryo.version>
         <autopoi.version>1.4.8</autopoi.version>
         <easypoi.version>4.5.0</easypoi.version>
-        <easytrans.version>3.0.5</easytrans.version>
+        <easytrans.version>3.1.2</easytrans.version>
 
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>

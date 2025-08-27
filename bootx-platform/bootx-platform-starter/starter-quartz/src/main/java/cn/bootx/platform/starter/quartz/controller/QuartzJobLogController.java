@@ -10,6 +10,7 @@ import cn.bootx.platform.starter.quartz.param.QuartzJobLogQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xxm
  * @since 2022/5/2
  */
+@Validated
 @Tag(name = "定时任务执行日志")
 @RestController
 @RequestMapping("/quartz/log")
@@ -34,7 +36,7 @@ public class QuartzJobLogController {
 
     @Operation(summary = "单条")
     @GetMapping("/findById")
-    public Result<QuartzJobLogResult> findById(Long id) {
+    public Result<QuartzJobLogResult> findById(@NotNull(message = "主键不可为空") Long id) {
         return Res.ok(quartzJobLogService.findById(id));
     }
 

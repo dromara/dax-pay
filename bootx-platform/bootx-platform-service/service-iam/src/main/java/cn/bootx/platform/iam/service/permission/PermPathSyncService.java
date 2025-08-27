@@ -1,13 +1,18 @@
 package cn.bootx.platform.iam.service.permission;
 
 import cn.bootx.platform.common.config.BootxConfigProperties;
+import cn.bootx.platform.common.config.enums.DeployMode;
+import cn.bootx.platform.core.annotation.ClientCode;
 import cn.bootx.platform.core.annotation.RequestGroup;
+import cn.bootx.platform.core.annotation.RequestPath;
+import cn.bootx.platform.iam.bo.permission.RequestPathBo;
 import cn.bootx.platform.iam.dao.permission.PermPathManager;
 import cn.bootx.platform.iam.dao.upms.RolePathManager;
-import cn.bootx.platform.iam.bo.permission.RequestPathBo;
 import cn.bootx.platform.iam.entity.permission.PermPath;
+import cn.bootx.platform.iam.service.client.ClientCodeService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -19,6 +24,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -43,6 +49,8 @@ public class PermPathSyncService {
 
     private final BootxConfigProperties bootxConfigProperties;
 
+    private final ClientCodeService clientCodeService;
+
     private final static String REQUEST_MAPPING_HANDLER_MAPPING = "requestMappingHandlerMapping";
 
     /**
@@ -50,12 +58,31 @@ public class PermPathSyncService {
      */
     @CacheEvict(value = "cache:permPath", allEntries = true)
     public void sync() {
-        String clientCode = bootxConfigProperties.getClientCode();
-        // 获取系统中的请求路径
-        List<RequestPathBo> requestPathBos = this.getRequestPath();
+        // 判断使用融合部署模式还是分模块模式同步
+        if (bootxConfigProperties.getDeployMode() == DeployMode.FUSION){
+            // 融合同步
+            List<String> clientCodes = bootxConfigProperties.getClientCodes();
+            // 查询数据中的数据并转换为请求信息列表
+            for (String clientCode : clientCodes) {
+                this.sync(clientCode);
+            }
+        } else {
+            // 分模块模式同步
+            String clientCode = clientCodeService.getClientCode();
+            this.sync(clientCode);
+        }
+    }
 
-        // 查询数据中的数据并转换为请求信息列表
-        List<PermPath> permPaths = permPathManager.findAllByLeafAndClient(true,clientCode);
+    /**
+     * 数据同步
+     */
+    private void sync(String clientCode){
+        // 获取系统中的请求路径
+        List<RequestPathBo> requestPathBos = this.getRequestPath().stream()
+                // 查询是否包含所有
+                .filter(o -> o.isAllClient() || CollUtil.contains(o.getClientCodes(),clientCode))
+                .toList();
+        List<PermPath> permPaths = permPathManager.findAllByLeafAndClient(true, clientCode);
         var requestPathMap = requestPathBos.stream()
                 .collect(Collectors.toMap(o -> o.getPath() + ":" + o.getMethod(), Function.identity()));
         var permPathMap = permPaths.stream()
@@ -68,8 +95,8 @@ public class PermPathSyncService {
         // 需要更新的数据
         List<PermPath> updateData = this.getUpdateData(requestPathMap, permPathMap);
 
-        // 保存新增的
-        addData.forEach(o -> o.setClientCode(clientCode));
+        // 保存新增的, ID 由不会变更的终端编码+请求方式+请求路径进行
+        addData.forEach(o -> o.setClientCode(clientCode).setId(this.genPathId(o.getClientCode()+o.getMethod()+o.getPath())));
         permPathManager.saveAll(addData);
         // 更新存在的
         permPathManager.updateAllById(updateData);
@@ -81,17 +108,19 @@ public class PermPathSyncService {
         // 重建树结构 删除指定终端的非子节点
         permPathManager.deleteNotChild(clientCode);
         // 生成模块信息
-        var moduleMap = this.builderModule(requestPathBos);
+        var moduleList = this.builderModule(requestPathBos);
         // 生成分组信息
-        var groupMap = this.builderGroup(requestPathBos);
+        var groupList = this.builderGroup(requestPathBos);
         // 合并进行保存
         ArrayList<PermPath> list = new ArrayList<>();
-        list.addAll(moduleMap);
-        list.addAll(groupMap);
+        list.addAll(moduleList);
+        list.addAll(groupList);
         // 设置终端编码
         list.forEach(o -> o.setClientCode(clientCode));
+        // 根据编码生成ID, 保证每次同步时的模块和分组ID不变
+        list.forEach(o -> o.setId(this.genPathId(o.getParentCode()+o.getClientCode()+o.getCode())));
+        // 保存
         permPathManager.saveAll(list);
-
     }
 
     /**
@@ -132,8 +161,7 @@ public class PermPathSyncService {
                 .map(permPathMap::get)
                 .peek(o -> {
                     RequestPathBo requestPathBo = requestPathMap.get(o.getPath() + ":" + o.getMethod());
-                    o.setName(requestPathBo.getName())
-                            .setParentCode(requestPathBo.getGroupCode());
+                    o.setName(requestPathBo.getName()).setParentCode(requestPathBo.getGroupCode());
                 }).toList();
     }
 
@@ -198,7 +226,7 @@ public class PermPathSyncService {
                 .stream()
                 .filter(pathKey -> {
                     HandlerMethod handlerMethod = map.get(pathKey);
-                    return Objects.nonNull(handlerMethod.getMethodAnnotation(cn.bootx.platform.core.annotation.RequestPath.class))
+                    return Objects.nonNull(handlerMethod.getMethodAnnotation(RequestPath.class))
                             &&Objects.nonNull(handlerMethod.getBeanType().getAnnotation(RequestGroup.class));
                 }).toList();
 
@@ -240,15 +268,23 @@ public class PermPathSyncService {
                 .toList();
 
         // 读取控制器注解和请求方法注解
-        RequestGroup requestGroup = beanClass.getAnnotation(RequestGroup.class);
-        cn.bootx.platform.core.annotation.RequestPath requestPath = method.getAnnotation(cn.bootx.platform.core.annotation.RequestPath.class);
+        var requestGroup = beanClass.getAnnotation(RequestGroup.class);
+        var requestPath = method.getAnnotation(RequestPath.class);
 
+        // 判断所属的终端, 如果有@ClientCode注解说明该请求只属于部分终端
+        var clientCodes = Optional.ofNullable(method.getAnnotation(ClientCode.class))
+                .or(()-> Optional.ofNullable(beanClass.getAnnotation(ClientCode.class)))
+                .map(ClientCode::value)
+                .map(CollUtil::newArrayList)
+                .orElse(null);
         // 设置通用属性
         for (RequestPathBo path : list) {
             path.setModuleCode(requestGroup.moduleCode())
                     .setModuleName(requestGroup.moduleName())
                     .setGroupCode(requestGroup.groupCode())
                     .setGroupName(requestGroup.groupName())
+                    .setAllClient(Objects.isNull(clientCodes))
+                    .setClientCodes(clientCodes)
                     .setName(requestPath.value());
         }
         return list;
@@ -263,6 +299,21 @@ public class PermPathSyncService {
                         .setPath(path)
                         .setMethod(requestMethod))
                 .collect(toList());
+    }
+
+    /**
+     * 给分组/模块/请求路径资源生成ID, 防止每次更新ID都会发生变化
+     */
+    private long genPathId(String str) {
+        String s = SecureUtil.sha256(str);
+        byte[] hashBytes = s.getBytes(StandardCharsets.UTF_8);
+        // 将前8个字节转换为 long
+        long result = 0;
+        for (int i = 0; i < 8; i++) {
+            result = (result << 8) | (hashBytes[i] & 0xFF);
+        }
+        // 取绝对值，避免负数
+        return Math.abs(result);
     }
 
 }

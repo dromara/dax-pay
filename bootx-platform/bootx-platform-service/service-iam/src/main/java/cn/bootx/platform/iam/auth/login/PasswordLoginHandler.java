@@ -2,7 +2,7 @@ package cn.bootx.platform.iam.auth.login;
 
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.iam.result.user.UserInfoResult;
-import cn.bootx.platform.iam.service.service.UserQueryService;
+import cn.bootx.platform.iam.service.user.UserQueryService;
 import cn.bootx.platform.starter.auth.authentication.AbstractAuthentication;
 import cn.bootx.platform.starter.auth.code.AuthLoginTypeCode;
 import cn.bootx.platform.starter.auth.entity.AuthInfoResult;
@@ -33,8 +33,10 @@ import java.util.Objects;
 @SuppressWarnings("FieldCanBeLocal")
 public class PasswordLoginHandler implements AbstractAuthentication {
 
+    @Getter
     private final String ACCOUNT_PARAMETER = "account";
 
+    @Getter
     private final String PASSWORD_PARAMETER = "password";
 
     @Resource

@@ -5,6 +5,7 @@ import cn.bootx.platform.starter.auth.entity.LoginAuthContext;
 import cn.hutool.extra.spring.SpringUtil;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,11 +20,12 @@ public interface AbstractAuthentication {
      * 获取终端编码
      */
     String getLoginType();
+
     /**
      * 获取用户状态检查接口的实现类
      */
-    default UserInfoStatusCheck getUserInfoStatusCheck() {
-        return SpringUtil.getBean(UserInfoStatusCheck.class);
+    default List<UserInfoStatusCheck> getUserInfoStatusCheck() {
+        return SpringUtil.getBeansOfType(UserInfoStatusCheck.class).values().stream().toList();
     }
 
     /**
@@ -62,7 +64,9 @@ public interface AbstractAuthentication {
         // 添加用户信息到上下文中
         context.setUserDetail(authInfoResult.getUserDetail());
         // 检查用户信息和状态
-        this.getUserInfoStatusCheck().check(authInfoResult, context);
+        for (var userInfoStatusCheck : this.getUserInfoStatusCheck()) {
+            userInfoStatusCheck.check(authInfoResult, context);
+        }
         // 认证后处理
         this.authenticationAfter(authInfoResult, context);
         return authInfoResult;

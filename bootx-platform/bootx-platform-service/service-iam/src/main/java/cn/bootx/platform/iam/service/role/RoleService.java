@@ -46,7 +46,6 @@ public class RoleService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void add(RoleParam roleParam) {
-
         // 判断是否有权限修改
         if (!userRoleService.checkUserRole(roleParam.getPid())){
             throw new ValidationFailedException("你没有权限创建该角色");

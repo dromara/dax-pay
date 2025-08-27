@@ -31,7 +31,7 @@ public class SystemParameter extends MpBaseEntity implements ToResult<SystemPara
     private String paramKey;
 
     /** 参数值 */
-    private String value;
+    private String paramValue;
 
     /** 参数类型 */
     private String type;

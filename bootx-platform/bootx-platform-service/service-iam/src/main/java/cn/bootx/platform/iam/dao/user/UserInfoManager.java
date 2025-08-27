@@ -1,6 +1,7 @@
 package cn.bootx.platform.iam.dao.user;
 
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpRealDelEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
@@ -74,7 +75,11 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
     }
 
     public void setUpStatus(Long userId, String status) {
-        lambdaUpdate().eq(MpIdEntity::getId, userId).set(UserInfo::getStatus, status).update();
+        lambdaUpdate()
+                .eq(MpIdEntity::getId, userId)
+                .set(UserInfo::getStatus, status)
+                .setIncrBy(MpRealDelEntity::getVersion, 1)
+                .update();
     }
 
     /**
@@ -86,6 +91,7 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
                 .set(UserInfo::getStatus, status)
                 .set(UserInfo::getLastModifiedTime, LocalDateTime.now())
                 .set(UserInfo::getLastModifier, SecurityUtil.getUserIdOrDefaultId())
+                .setIncrBy(MpRealDelEntity::getVersion, 1)
                 .update();
     }
 
@@ -98,6 +104,7 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
                 .set(UserInfo::getPassword, password)
                 .set(UserInfo::getLastModifiedTime, LocalDateTime.now())
                 .set(UserInfo::getLastModifier, SecurityUtil.getUserIdOrDefaultId())
+                .setIncrBy(MpRealDelEntity::getVersion, 1)
                 .update();
     }
 

@@ -52,7 +52,7 @@ public class SystemParamService {
         SystemParameter systemParameter = systemParamManager.findById(param.getId())
             .orElseThrow(() -> new BizException("参数项不存在"));
 
-        if (systemParamManager.existsByKey(param.getParamKey(), param.getId())) {
+        if (systemParamManager.existsByKey(param.getKey(), param.getId())) {
             throw new BizException("key重复");
         }
         BeanUtil.copyProperties(param, systemParameter, CopyOptions.create().ignoreNullValue());
@@ -81,7 +81,7 @@ public class SystemParamService {
         if (Objects.equals(param.getEnable(), false)) {
             throw new BizException("该参数已停用");
         }
-        return param.getValue();
+        return param.getParamValue();
     }
 
     /**

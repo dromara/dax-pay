@@ -3,11 +3,13 @@ package cn.bootx.platform.common.mybatisplus.handler;
 import cn.bootx.platform.core.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.handlers.AbstractJsonTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -19,23 +21,23 @@ import java.util.List;
 @MappedJdbcTypes({JdbcType.VARCHAR,JdbcType.LONGVARCHAR})
 public class LongListTypeHandler  extends AbstractJsonTypeHandler<List<Long>> {
 
-    /**
-     * 默认初始化
-     */
     public LongListTypeHandler(Class<?> type) {
         super(type);
     }
 
+    public LongListTypeHandler(Class<?> type, Field field) {
+        super(type, field);
+    }
     @Override
     public List<Long> parse(String json) {
         if (StrUtil.isNotBlank(json)){
-            return JsonUtil.toBean(json, new TypeReference<>() {}, false);
+            return JSONUtil.toBean(json, new TypeReference<>() {}, false);
         }
         return List.of();
     }
 
     @Override
     public String toJson(List<Long> obj) {
-        return JsonUtil.toJsonStr(obj);
+        return JSONUtil.toJsonStr(obj);
     }
 }

@@ -8,6 +8,7 @@ import cn.bootx.platform.iam.result.permission.PermPathResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -29,10 +30,15 @@ public class PermPathService {
         return permPathManager.findById(id).map(PermPath::toResult).orElseThrow(DataNotExistException::new);
     }
 
+    /**
+     * 请求权限树
+     */
     public List<PermPathResult> tree(String clientCode) {
         List<PermPathResult> permPaths = permPathManager.findAllByField(PermPath::getClientCode, clientCode).stream()
                 .map(PermPath::toResult)
                 .toList();
-        return TreeBuildUtil.build(permPaths,null, PermPathResult::getCode, PermPathResult::getParentCode, PermPathResult::setChildren);
+        var tree = TreeBuildUtil.build(permPaths, null, PermPathResult::getCode, PermPathResult::getParentCode, PermPathResult::setChildren);
+        tree.sort(Comparator.comparing(PermPathResult::getName));
+        return tree;
     }
 }

@@ -2,9 +2,8 @@ package cn.bootx.platform.iam.param.permission;
 
 import cn.bootx.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -17,18 +16,18 @@ import lombok.experimental.Accessors;
 @Schema(title = "菜单权限")
 public class PermMenuParam {
 
-    @Null(groups = { ValidationGroup.edit.class })
-    @NotNull(groups = { ValidationGroup.add.class })
+    @NotNull(groups = { ValidationGroup.edit.class }, message = "主键不可为空")
     @Schema(description = "主键")
     private Long id;
 
     @Schema(description = "父id")
     private Long pid;
 
-    @NotEmpty(groups = { ValidationGroup.add.class, ValidationGroup.edit.class })
+    @NotBlank(message = "关联应用code不可为空")
     @Schema(description = "关联应用code")
     private String clientCode;
 
+    @NotBlank(message = "菜单标题不可为空")
     @Schema(description = "菜单标题")
     private String title;
 

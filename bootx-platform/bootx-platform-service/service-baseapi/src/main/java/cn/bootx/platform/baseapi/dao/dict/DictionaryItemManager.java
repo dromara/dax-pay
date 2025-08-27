@@ -2,6 +2,7 @@ package cn.bootx.platform.baseapi.dao.dict;
 
 import cn.bootx.platform.baseapi.entity.dict.DictionaryItem;
 import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpRealDelEntity;
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
@@ -63,7 +64,11 @@ public class DictionaryItemManager extends BaseManager<DictionaryItemMapper, Dic
     }
 
     public void updateDictCode(Long dictId, String dictCode) {
-        lambdaUpdate().set(DictionaryItem::getDictCode, dictCode).eq(DictionaryItem::getDictId, dictId).update();
+        lambdaUpdate()
+                .set(DictionaryItem::getDictCode, dictCode)
+                .eq(DictionaryItem::getDictId, dictId)
+                .setIncrBy(MpRealDelEntity::getVersion, 1)
+                .update();
     }
 
     public List<DictionaryItem> findAllByEnable(boolean enable) {

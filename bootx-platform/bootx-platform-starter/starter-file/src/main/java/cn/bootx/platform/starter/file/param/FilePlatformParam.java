@@ -20,8 +20,11 @@ public class FilePlatformParam {
     @Schema(description = "主键")
     private Long id;
 
-    @NotBlank(message = "平台地址不得为空")
     @Schema(description = "平台地址")
     private String url;
+
+    /** 前端直传 */
+    @Schema(description = "前端直传")
+    private Boolean frontendUpload;
 
 }

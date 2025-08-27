@@ -11,7 +11,7 @@ import cn.bootx.platform.starter.auth.entity.LoginAuthContext;
 public interface UserInfoStatusCheck {
 
     /**
-     *
+     *  检查用户状态
      * @param authInfoResult 认证返回结果
      * @param context 登录认证上下文
      */

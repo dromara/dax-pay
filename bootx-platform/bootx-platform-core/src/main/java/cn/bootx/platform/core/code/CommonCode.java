@@ -46,12 +46,20 @@ public interface CommonCode {
     int SUCCESS_CODE = 0;
 
     /**
+     * 响应成功
+     */
+    String SUCCESS_MSG = "success";
+
+    /**
      * 响应失败码
      */
     int FAIL_CODE = 1;
 
     /** 追踪Id */
     String TRACE_ID = "traceId";
+
+    /** 终端 */
+    String CLIENT = "x-client-code";
 
     /** 用户 */
     String USER = "user";

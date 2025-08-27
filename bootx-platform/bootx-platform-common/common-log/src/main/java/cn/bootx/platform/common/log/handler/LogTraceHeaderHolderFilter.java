@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.core.annotation.Order;
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,11 +21,10 @@ import java.io.IOException;
  * @author xxm
  * @since 2021/4/20
  */
-@Order(value = Integer.MIN_VALUE)
 @Component
 @RequiredArgsConstructor
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-public class LogTraceHeaderHolderFilter extends OncePerRequestFilter {
+public class LogTraceHeaderHolderFilter extends OncePerRequestFilter implements OrderedFilter {
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -41,4 +40,8 @@ public class LogTraceHeaderHolderFilter extends OncePerRequestFilter {
         }
     }
 
+    @Override
+    public int getOrder() {
+        return HIGHEST_PRECEDENCE+100;
+    }
 }

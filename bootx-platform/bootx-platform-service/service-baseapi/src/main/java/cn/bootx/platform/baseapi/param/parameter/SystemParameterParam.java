@@ -2,6 +2,7 @@ package cn.bootx.platform.baseapi.param.parameter;
 
 import cn.bootx.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -25,15 +26,15 @@ public class SystemParameterParam {
     @Schema(description = "主键")
     private Long id;
 
-    @NotEmpty(message = "参数名称不可为空", groups = ValidationGroup.add.class)
+    @NotBlank(message = "参数名称不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "参数名称")
     private String name;
 
-    @NotEmpty(message = "参数键名不可为空", groups = ValidationGroup.add.class)
+    @NotBlank(message = "参数键名不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "参数键名")
-    private String paramKey;
+    private String key;
 
-    @NotEmpty(message = "参数值不可为空", groups = ValidationGroup.add.class)
+    @NotBlank(message = "参数值不可为空", groups = ValidationGroup.add.class)
     @Schema(description = "参数值")
     private String value;
 

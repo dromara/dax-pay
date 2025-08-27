@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-service</artifactId>
-        <version>3.0.0.beta4</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>service-baseapi</artifactId>
@@ -46,19 +46,13 @@
         <!-- Spring 缓存配置 -->
         <dependency>
             <groupId>cn.bootx.platform</groupId>
-            <artifactId>common-cache</artifactId>
+            <artifactId>starter-cache</artifactId>
             <version>${bootx-platform.version}</version>
         </dependency>
         <!-- hutool 缓存 -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-cache</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
-        <!-- hutool 请求工具类 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-http</artifactId>
             <version>${hutool.version}</version>
         </dependency>
         <!-- 安全认证 -->

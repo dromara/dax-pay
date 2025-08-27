@@ -1,5 +1,6 @@
 package cn.bootx.platform.iam.controller.upms;
 
+import cn.bootx.platform.core.annotation.OperateLog;
 import cn.bootx.platform.core.annotation.RequestGroup;
 import cn.bootx.platform.core.annotation.RequestPath;
 import cn.bootx.platform.core.rest.Res;
@@ -9,6 +10,7 @@ import cn.bootx.platform.iam.result.permission.PermCodeResult;
 import cn.bootx.platform.iam.service.upms.RoleCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,7 @@ public class RoleCodeController {
     @RequestPath("保存请求权限关系")
     @Operation(summary = "保存请求权限关系")
     @PostMapping("/save")
+    @OperateLog(title = "保存请求权限关系", businessType = OperateLog.BusinessType.GRANT, saveParam = true)
     public Result<Boolean> save(@RequestBody @Validated PermCodeAssignParam param) {
         roleCodeService.saveAssign(param);
         return Res.ok(true);
@@ -40,14 +43,14 @@ public class RoleCodeController {
     @RequestPath("指定角色下的请求权限树(分配时用)")
     @Operation(summary = "指定角色下的请求权限树(分配时用)")
     @GetMapping("/treeByRole")
-    public Result<List<PermCodeResult>> treeByRole(Long roleId) {
+    public Result<List<PermCodeResult>> treeByRole(@NotNull(message = "角色id不可为空") Long roleId) {
         return Res.ok(roleCodeService.treeByRoleAssign(roleId));
     }
 
     @RequestPath("查询当前角色已经选择的菜单id")
     @Operation(summary = "查询当前角色已经选择的菜单id")
     @GetMapping("/findIdsByRole")
-    public Result<List<Long>> findIdsByRole(Long roleId) {
+    public Result<List<Long>> findIdsByRole(@NotNull(message = "角色id不可为空") Long roleId) {
         return Res.ok(roleCodeService.findCodeIdsByRole(roleId));
     }
 

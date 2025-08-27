@@ -67,6 +67,11 @@ public @interface OperateLog {
         GRANT,
 
         /**
+         * 同步
+         */
+        SYNC,
+
+        /**
          * 导出
          */
         EXPORT,

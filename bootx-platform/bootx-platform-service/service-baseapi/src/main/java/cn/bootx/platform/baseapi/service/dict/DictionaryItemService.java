@@ -22,9 +22,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author xxm
@@ -110,12 +108,16 @@ public class DictionaryItemService {
 
     /**
      * 查询指定目录下的所有内容
+     *
+     * @return
      */
-    public List<DictionaryItemResult> findEnableByDictCode(String dictCode) {
+    public Map<String, String> findEnableByDictCode(String dictCode) {
         return dictionaryItemManager.findByDictCodeAndEnable(dictCode, true)
                 .stream()
-                .map(DictionaryItem::toResult)
-                .toList();
+                .collect(HashMap::new,
+                        (map, item) -> map.put(item.getCode(), item.getName()),
+                        HashMap::putAll);
+
     }
 
     /**

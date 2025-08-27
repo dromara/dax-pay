@@ -1,7 +1,6 @@
 package cn.bootx.platform.common.headerholder;
 
 import cn.bootx.platform.common.headerholder.local.HolderContextHolder;
-import cn.bootx.platform.core.code.WebHeaderCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.context.request.RequestAttributes;
@@ -19,12 +18,6 @@ import java.util.Objects;
 @UtilityClass
 public class HeaderHolder {
 
-    /**
-     * 获取幂等令牌
-     */
-    public String getIdempotentToken() {
-        return getHeader(WebHeaderCode.IDEMPOTENT_TOKEN);
-    }
 
     /**
      * 获取请求头参数

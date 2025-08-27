@@ -28,14 +28,14 @@ public class UserInfoParam {
     @Schema(description = "登录账号")
     private String account;
 
+    @NotBlank(groups = ValidationGroup.add.class, message = "密码不可为空")
+    @Schema(description = "密码")
+    private String password;
+
     @Schema(description = "手机号")
     private String phone;
 
     @Schema(description = "邮箱")
     private String email;
-
-    @NotBlank(groups = ValidationGroup.add.class, message = "登录账号不可为空")
-    @Schema(description = "密码")
-    private String password;
 
 }

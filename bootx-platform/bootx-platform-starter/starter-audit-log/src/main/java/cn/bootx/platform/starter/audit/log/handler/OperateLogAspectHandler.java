@@ -1,12 +1,15 @@
 package cn.bootx.platform.starter.audit.log.handler;
 
 import cn.bootx.platform.common.headerholder.HeaderHolder;
+import cn.bootx.platform.common.headerholder.local.HolderContextHolder;
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.util.AopUtil;
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.core.annotation.OperateLog;
 import cn.bootx.platform.core.annotation.OperateLogs;
+import cn.bootx.platform.core.code.CommonCode;
 import cn.bootx.platform.core.code.ServletCode;
+import cn.bootx.platform.core.code.WebHeaderCode;
 import cn.bootx.platform.core.entity.UserDetail;
 import cn.bootx.platform.starter.audit.log.param.OperateLogParam;
 import cn.bootx.platform.starter.audit.log.service.ip2region.IpToRegionService;
@@ -16,7 +19,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
-import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.http.useragent.UserAgentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -24,7 +27,6 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -60,7 +62,7 @@ public class OperateLogAspectHandler {
      */
     @AfterReturning(pointcut = "logPointCut()", returning = "o")
     public void doAfterReturning(JoinPoint joinPoint, Object o) {
-        SpringUtil.getBean(this.getClass()).handleLog(joinPoint, null, o);
+        handleLog(joinPoint, null, o);
     }
 
     /**
@@ -68,30 +70,34 @@ public class OperateLogAspectHandler {
      */
     @AfterThrowing(value = "logPointCut()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Exception e) {
-        SpringUtil.getBean(this.getClass()).handleLog(joinPoint, e, null);
+        handleLog(joinPoint, e, null);
     }
 
     /**
      * 操作log处理
      */
-    @Async
     public void handleLog(JoinPoint joinPoint, Exception e, Object o) {
         List<OperateLog> logs = getMethodAnnotation(joinPoint);
         if (CollUtil.isEmpty(logs)) {
             return;
         }
         // ip信息
-        String ip = "未知";
+        var ip = "未知";
         String location = "未知";
         Optional<String> ipOpt = Optional.ofNullable(WebServletUtil.getRequest()).map(JakartaServletUtil::getClientIP);
         if (ipOpt.isPresent()){
             ip = ipOpt.get();
             location = ipToRegionService.getRegionStrByIp(ip);
         }
+        // 获取终端
+        String clientCode = HolderContextHolder.get(CommonCode.CLIENT);
+
+        var userAgent = UserAgentUtil.parse(HeaderHolder.getHeader(WebHeaderCode.USER_AGENT));
+        // 登录用户
         Optional<UserDetail> currentUser = SecurityUtil.getCurrentUser();
         // 设置方法名称
-        String className = joinPoint.getTarget().getClass().getName();
-        String methodName = joinPoint.getSignature().getName();
+        var className = joinPoint.getTarget().getClass().getName();
+        var methodName = joinPoint.getSignature().getName();
 
         for (OperateLog log : logs) {
             OperateLogParam operateLog = new OperateLogParam().setTitle(log.title())
@@ -101,24 +107,26 @@ public class OperateLogAspectHandler {
                     .setOperateUrl(HeaderHolder.getHeader(ServletCode.REQUEST_URI))
                     .setMethod(className + "#" + methodName)
                     .setRequestMethod(HeaderHolder.getHeader(ServletCode.METHOD))
+                    .setClient(clientCode)
+                    .setOs(userAgent.getOs().getName())
+                    .setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getVersion())
                     .setSuccess(true)
                     .setOperateIp(ip)
                     .setOperateLocation(location)
                     .setOperateTime(LocalDateTime.now());
-
             // 异常流
             if (Objects.nonNull(e)) {
                 operateLog.setSuccess(false).setErrorMsg(e.getMessage());
             }
 
             // 参数
-            if (log.saveParam()) {
+            if (log.saveParam() && Objects.nonNull(joinPoint.getArgs())) {
                 Object[] args = joinPoint.getArgs();
                 operateLog.setOperateParam(JacksonUtil.toJson(args));
             }
 
             // 返回值
-            if (log.saverReturn()) {
+            if (log.saverReturn()&& Objects.nonNull(o)) {
                 operateLog.setOperateReturn(JacksonUtil.toJson(o));
             }
             operateLogService.add(operateLog);

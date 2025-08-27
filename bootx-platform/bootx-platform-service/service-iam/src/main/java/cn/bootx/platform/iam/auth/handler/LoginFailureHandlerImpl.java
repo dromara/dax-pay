@@ -2,14 +2,13 @@ package cn.bootx.platform.iam.auth.handler;
 
 import cn.bootx.platform.common.spring.util.WebServletUtil;
 import cn.bootx.platform.core.code.WebHeaderCode;
-import cn.bootx.platform.starter.audit.log.service.ip2region.IpToRegionService;
 import cn.bootx.platform.starter.audit.log.param.LoginLogParam;
+import cn.bootx.platform.starter.audit.log.service.ip2region.IpToRegionService;
 import cn.bootx.platform.starter.audit.log.service.log.LoginLogService;
 import cn.bootx.platform.starter.auth.exception.LoginFailureException;
 import cn.bootx.platform.starter.auth.handler.LoginFailureHandler;
 import cn.bootx.platform.starter.auth.util.SecurityUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
-import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,7 +35,7 @@ public class LoginFailureHandlerImpl implements LoginFailureHandler {
     @Override
     public void onLoginFailure(HttpServletRequest request, HttpServletResponse response, LoginFailureException e) {
 
-        UserAgent userAgent = UserAgentUtil.parse(request.getHeader(WebHeaderCode.USER_AGENT));
+        var userAgent = UserAgentUtil.parse(request.getHeader(WebHeaderCode.USER_AGENT));
         // ip信息
         String ip = "未知";
         String location = "未知";

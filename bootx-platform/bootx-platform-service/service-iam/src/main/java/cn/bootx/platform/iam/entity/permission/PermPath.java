@@ -1,6 +1,6 @@
 package cn.bootx.platform.iam.entity.permission;
 
-import cn.bootx.platform.common.mybatisplus.base.MpCreateEntity;
+import cn.bootx.platform.common.mybatisplus.base.MpIdEntity;
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import cn.bootx.platform.iam.convert.permission.PermPathConvert;
 import cn.bootx.platform.iam.result.permission.PermPathResult;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Data
 @Accessors(chain = true)
 @TableName("iam_perm_path")
-public class PermPath extends MpCreateEntity implements ToResult<PermPathResult> {
+public class PermPath extends MpIdEntity implements ToResult<PermPathResult> {
 
     /** 上级编码 */
     private String parentCode;

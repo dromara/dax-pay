@@ -15,9 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,6 +39,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class RestExceptionHandler {
 
     private final ExceptionHandlerProperties properties;
+
 
     /**
      * 普通业务异常, 不需要进行堆栈跟踪
@@ -87,6 +91,19 @@ public class RestExceptionHandler {
     }
 
     /**
+     * 请求参数校验未通过
+     */
+    @ExceptionHandler({ MethodArgumentNotValidException.class })
+    public Result<Void> handleBusinessException(MethodArgumentNotValidException ex) {
+        log.info(ex.getMessage(), ex);
+        StringBuilder message = new StringBuilder();
+        for (var violation : ex.getAllErrors()) {
+            message.append(violation.getDefaultMessage()).append(System.lineSeparator());
+        }
+        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message.toString(), MDC.get(CommonCode.TRACE_ID));
+    }
+
+    /**
      * 不支持 HTTP 请求方法异常
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -114,12 +131,13 @@ public class RestExceptionHandler {
     }
 
     /**
-     * 请求参数校验未通过
+     * 页面或资源不存在
      */
     @ExceptionHandler({ NoResourceFoundException.class })
-    public Result<Void> handleBusinessException(NoResourceFoundException ex) {
+    public ResponseEntity<Result<Void>> handleBusinessException(NoResourceFoundException ex) {
         log.info(ex.getMessage(), ex);
-        return Res.response(CommonErrorCode.SOURCES_NOT_EXIST, "页面或资源不存在", MDC.get(CommonCode.TRACE_ID));
+        Result<Void> result = Res.response(CommonErrorCode.SOURCES_NOT_EXIST, "页面或资源不存在", MDC.get(CommonCode.TRACE_ID));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
     }
 
     /**

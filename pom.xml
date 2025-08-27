@@ -5,18 +5,18 @@
 
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay</artifactId>
-    <version>3.0.0.beta4</version>
+    <version>3.0.0</version>
     <packaging>pom</packaging>
 
-    <name>dax-pay-single</name>
-    <description>DaxPay单商户版支付系统</description>
+    <name>dax-pay-plus</name>
+    <description>DaxPay开源版支付系统</description>
 
     <modules>
         <module>bootx-platform</module>
-        <module>daxpay-single</module>
-        <module>daxpay-single-channel</module>
-        <module>daxpay-single-server</module>
-        <module>daxpay-single-sdk</module>
+        <module>daxpay-open</module>
+        <module>daxpay-open-channel</module>
+        <module>daxpay-open-server</module>
+        <module>daxpay-open-sdk</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

@@ -19,7 +19,6 @@ public class UserRoleParam {
     private Long userId;
 
     @Schema(description = "角色的ID集合")
-    @NotNull(message = "roleIds 不能为空")
     private List<Long> roleIds;
 
 }

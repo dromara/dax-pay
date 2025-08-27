@@ -9,6 +9,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -19,22 +20,25 @@ import java.util.List;
 @MappedTypes(List.class)
 @MappedJdbcTypes({JdbcType.VARCHAR,JdbcType.LONGVARCHAR})
 public class StringListTypeHandler extends AbstractJsonTypeHandler<List<String>> {
-    private static final String COMMA = ",";
 
-    public StringListTypeHandler() {
-        super(List.class);
+    public StringListTypeHandler(Class<?> type) {
+        super(type);
+    }
+
+    public StringListTypeHandler(Class<?> type, Field field) {
+        super(type, field);
     }
 
     @Override
     public List<String> parse(String json) {
         if (StrUtil.isNotBlank(json)){
-            return JsonUtil.toBean(json, new TypeReference<>() {}, false);
+            return JSONUtil.toBean(json, new TypeReference<>() {}, false);
         }
         return List.of();
     }
 
     @Override
     public String toJson(List<String> obj) {
-        return JsonUtil.toJsonStr(obj);
+        return JSONUtil.toJsonStr(obj);
     }
 }

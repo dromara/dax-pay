@@ -83,7 +83,8 @@ public class TokenService {
             try {
                 loginSuccessHandler.onLoginSuccess(request, response, authInfoResult);
             }
-            catch (Exception ignored) {
+            catch (Exception exception) {
+                log.error("登录成功处理出现异常: {}", exception.getMessage(), exception);
             }
         }
     }
@@ -97,7 +98,8 @@ public class TokenService {
             try {
                 loginFailureHandler.onLoginFailure(request, response, e);
             }
-            catch (Exception ignored) {
+            catch (Exception exception) {
+                log.error("登录失败处理出现异常: {}", exception.getMessage(), exception);
             }
         }
     }

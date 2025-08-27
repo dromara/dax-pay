@@ -1,11 +1,12 @@
 package cn.bootx.platform.starter.audit.log.dao;
 
 import cn.bootx.platform.common.mybatisplus.impl.BaseManager;
+import cn.bootx.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.bootx.platform.core.rest.param.PageParam;
 import cn.bootx.platform.starter.audit.log.entity.LoginLogDb;
-import cn.bootx.platform.starter.audit.log.param.LoginLogParam;
-import cn.hutool.core.util.StrUtil;
+import cn.bootx.platform.starter.audit.log.param.LoginLogQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +25,10 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class LoginLogDbManager extends BaseManager<LoginLogDbMapper, LoginLogDb> {
 
-    public Page<LoginLogDb> page(PageParam pageParam, LoginLogParam loginLogParam) {
-        Page<LoginLogDb> mpPage = MpUtil.getMpPage(pageParam);
-        return lambdaQuery().orderByDesc(LoginLogDb::getId)
-            .like(StrUtil.isNotBlank(loginLogParam.getAccount()), LoginLogDb::getAccount, loginLogParam.getAccount())
-            .like(StrUtil.isNotBlank(loginLogParam.getClient()), LoginLogDb::getClient, loginLogParam.getClient())
-            .like(StrUtil.isNotBlank(loginLogParam.getLoginType()), LoginLogDb::getLoginType,
-                    loginLogParam.getLoginType())
-            .page(mpPage);
+    public Page<LoginLogDb> page(PageParam pageParam, LoginLogQuery query) {
+        var mpPage = MpUtil.getMpPage(pageParam, LoginLogDb.class);
+        QueryWrapper<LoginLogDb> generator = QueryGenerator.generator(query);
+        return this.page(mpPage, generator);
     }
 
     public void deleteByOffset(LocalDateTime offset) {
