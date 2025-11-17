@@ -1,7 +1,22 @@
 package org.dromara.daxpay.channel.wechat.service.payment.pay.isv;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.exception.RetryableException;
-import cn.bootx.platform.core.util.JsonUtil;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.enums.WechatAuthTypeEnum;
+import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
+import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
+import org.dromara.daxpay.payment.pay.enums.PayMethodEnum;
+import org.dromara.daxpay.payment.pay.enums.PayStatusEnum;
+import org.dromara.daxpay.payment.common.exception.MethodNotExistException;
+import org.dromara.daxpay.payment.pay.exception.TradeFailException;
+import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
+import org.dromara.daxpay.payment.unipay.result.trade.pay.PaySyncResult;
+import org.dromara.daxpay.payment.common.util.PayUtil;
+import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.payment.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.payment.pay.service.trade.pay.PaySyncService;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -16,28 +31,13 @@ import com.github.binarywang.wxpay.constant.WxPayErrorCode;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
-import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
-import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
-import org.dromara.daxpay.core.enums.PayMethodEnum;
-import org.dromara.daxpay.core.enums.PayStatusEnum;
-import org.dromara.daxpay.core.exception.MethodNotExistException;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.core.param.trade.pay.PayParam;
-import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
-import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
-import org.dromara.daxpay.service.service.trade.pay.PaySyncService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -62,24 +62,24 @@ public class WechatPaySubV2Service {
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
         // wap支付
-        if (payMethodEnum == PayMethodEnum.WAP) {
-            payBody = this.wapPay(payOrder, config);
+        if (payMethodEnum == PayMethodEnum.WECHAT_H5) {
+            payBody = this.wapPay(payOrder, payParam, config);
         }
         // APP支付
-        else if (payMethodEnum == PayMethodEnum.APP) {
-            payBody = this.appPay(payOrder, config);
+        else if (payMethodEnum == PayMethodEnum.WECHAT_APP) {
+            payBody = this.appPay(payOrder, payParam, config);
         }
         // 微信公众号支付或者小程序支付
-        else if (payMethodEnum == PayMethodEnum.JSAPI) {
-            payBody = this.jsPay(payOrder, payParam.getOpenId(), wechatPayParam, config);
+        else if (List.of(PayMethodEnum.WECHAT_JSAPI, PayMethodEnum.WECHAT_MINI).contains(payMethodEnum)) {
+            payBody = this.jsPay(payOrder, payParam, payParam.getOpenId(), wechatPayParam, config);
         }
         // 二维码支付
-        else if (payMethodEnum == PayMethodEnum.QRCODE) {
-            payBody = this.qrCodePay(payOrder, config);
+        else if (payMethodEnum == PayMethodEnum.WECHAT_QR) {
+            payBody = this.qrCodePay(payOrder, payParam, config);
         }
         // 付款码支付
         else if (payMethodEnum == PayMethodEnum.BARCODE) {
-            this.barCodePay(payOrder, payParam.getAuthCode(), config, payInfo);
+            this.barCodePay(payOrder, payParam, config, payInfo);
             return payInfo;
         } else {
             throw new MethodNotExistException("不支持的支付方式");
@@ -91,10 +91,9 @@ public class WechatPaySubV2Service {
     /**
      * wap支付
      */
-    @SneakyThrows
-    private String wapPay(PayOrder payOrder, WechatPayConfig wechatPayConfig) {
+    private String wapPay(PayOrder payOrder, PayParam payParam, WechatPayConfig wechatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
-        WxPayUnifiedOrderRequest request = this.buildRequest(payOrder,wechatPayConfig);
+        WxPayUnifiedOrderRequest request = this.buildRequest(payOrder,payParam, wechatPayConfig);
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.MWEB, request);
             return result.getMwebUrl();
@@ -107,13 +106,13 @@ public class WechatPaySubV2Service {
     /**
      * 程序支付
      */
-    private String appPay(PayOrder payOrder, WechatPayConfig wechatPayConfig) {
+    private String appPay(PayOrder payOrder, PayParam payParam, WechatPayConfig wechatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
-        WxPayUnifiedOrderRequest request = this.buildRequest(payOrder, wechatPayConfig);
+        WxPayUnifiedOrderRequest request = this.buildRequest(payOrder, payParam, wechatPayConfig);
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.APP, request);
             Map<String, String> map = this.buildAppResult(result);
-            return JsonUtil.toJsonStr(map);
+            return JacksonUtil.toJson(map);
         } catch (WxPayException e) {
             log.error("微信V2App支付失败", e);
             throw new TradeFailException("微信V2App程序支付失败: "+e.getMessage());
@@ -123,10 +122,10 @@ public class WechatPaySubV2Service {
     /**
      * 微信公众号支付或者小程序支付
      */
-    private String jsPay(PayOrder payOrder, String openId, WechatPayParam wechatPayParam, WechatPayConfig wechatPayConfig) {
+    private String jsPay(PayOrder payOrder, PayParam payParam, String openId, WechatPayParam wechatPayParam, WechatPayConfig wechatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
-        WxPayUnifiedOrderRequest request = this.buildRequest(payOrder, wechatPayConfig);
-        if (Objects.equals(wechatPayParam.getOpenIdType(), WechatPayCode.SUB_OPENID)){
+        WxPayUnifiedOrderRequest request = this.buildRequest(payOrder, payParam, wechatPayConfig);
+        if (Objects.equals(wechatPayParam.getOpenIdType(), WechatAuthTypeEnum.SUB.getCode())){
             request.setSubOpenid(openId);
         } else {
             request.setOpenid(openId);
@@ -134,7 +133,7 @@ public class WechatPaySubV2Service {
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.JSAPI, request);
             Map<String, String> map = this.buildJsapiResult(result);
-            return JsonUtil.toJsonStr(map);
+            return JacksonUtil.toJson(map);
         } catch (WxPayException e) {
             log.error("微信V2Jaspi支付失败", e);
             throw new TradeFailException("微信V2Jaspi支付失败: "+e.getMessage());
@@ -144,9 +143,9 @@ public class WechatPaySubV2Service {
     /**
      * 二维码支付
      */
-    private String qrCodePay(PayOrder payOrder, WechatPayConfig wechatPayConfig) {
+    private String qrCodePay(PayOrder payOrder, PayParam payParam, WechatPayConfig wechatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
-        WxPayUnifiedOrderRequest request = this.buildRequest(payOrder, wechatPayConfig);
+        WxPayUnifiedOrderRequest request = this.buildRequest(payOrder, payParam, wechatPayConfig);
         request.setProductId(payOrder.getOrderNo());
         try {
             var result = wxPayService.createOrder(WxPayConstants.TradeType.Specific.NATIVE, request);
@@ -160,16 +159,15 @@ public class WechatPaySubV2Service {
     /**
      * 付款码支付
      */
-    public void barCodePay(PayOrder payOrder, String authCode, WechatPayConfig wechatPayConfig, PayResultBo payResult) {
+    public void barCodePay(PayOrder payOrder, PayParam payParam, WechatPayConfig wechatPayConfig, PayResultBo payResult) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         WxPayMicropayRequest request = new WxPayMicropayRequest();
-        request.setAuthCode(authCode);
+        request.setAuthCode(payParam.getAuthCode());
         request.setTotalFee(PayUtil.convertCentAmount(payOrder.getAmount()));
         request.setOutTradeNo(payOrder.getOrderNo());
-        request.setSpbillCreateIp(payOrder.getClientIp());
+        request.setSpbillCreateIp(payParam.getClientIp());
         request.setDetail(payOrder.getDescription());
         request.setBody(payOrder.getTitle());
-        request.setProfitSharing(payOrder.getAutoAllocation()?"Y":"N");
         try {
             WxPayMicropayResult result = wxPayService.micropay(request);
             // 支付成功处理, 如果不成功会走异常流
@@ -226,7 +224,7 @@ public class WechatPaySubV2Service {
     /**
      * 构建下单请求参数
      */
-    private WxPayUnifiedOrderRequest buildRequest(PayOrder payOrder, WechatPayConfig wechatPayConfig){
+    private WxPayUnifiedOrderRequest buildRequest(PayOrder payOrder, PayParam payParam, WechatPayConfig wechatPayConfig){
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setOutTradeNo(payOrder.getOrderNo());
         request.setBody(payOrder.getTitle());
@@ -234,7 +232,7 @@ public class WechatPaySubV2Service {
         request.setTimeExpire(this.getExpiredTime(payOrder.getExpiredTime()));
         request.setTotalFee(PayUtil.convertCentAmount(payOrder.getAmount()));
         request.setNotifyUrl(wechatPayConfigService.getPayNotifyUrl(true));
-        request.setSpbillCreateIp(payOrder.getClientIp());
+        request.setSpbillCreateIp(payParam.getClientIp());
         request.setSubMchId(wechatPayConfig.getSubMchId());
         request.setSubAppId(wechatPayConfig.getSubAppId());
         return request;

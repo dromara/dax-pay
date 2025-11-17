@@ -19,7 +19,7 @@ public class IgnoreAnnotationRouterCheck implements RouterCheck {
 
     @Override
     public int sortNo() {
-        return -99;
+        return Integer.MIN_VALUE;
     }
 
     @Override

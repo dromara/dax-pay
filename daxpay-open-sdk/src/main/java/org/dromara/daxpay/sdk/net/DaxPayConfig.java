@@ -17,6 +17,9 @@ public class DaxPayConfig {
     /** 服务地址 */
     private String serviceUrl;
 
+    /** 商户号 */
+    private String mchNo;
+
     /** 应用号 */
     private String appId;
 

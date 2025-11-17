@@ -5,7 +5,6 @@ import org.dromara.daxpay.sdk.response.DaxResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import org.dromara.daxpay.sdk.util.PaySignUtil;
 import cn.hutool.http.*;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
@@ -16,14 +15,13 @@ import java.util.Objects;
  * @since 2024/2/2
  */
 @Slf4j
-@UtilityClass
 public class DaxPayKit {
 
-    private DaxPayConfig config;
+    private final DaxPayConfig config;
 
-    public void initConfig(DaxPayConfig config) {
+    public DaxPayKit(DaxPayConfig config) {
         log.debug("DaxPayKit初始化...");
-        DaxPayKit.config = config;
+        this.config = config;
     }
 
     /**
@@ -46,6 +44,10 @@ public class DaxPayKit {
      * @return DaxResult 响应类
      */
     public <T> DaxResult<T> execute(DaxPayRequest<T> request, boolean sign) {
+        // 判断是否需要填充商户号和应用号
+        if (Objects.isNull(request.getMchNo())) {
+            request.setMchNo(config.getMchNo());
+        }
         if (Objects.isNull(request.getAppId())) {
             request.setAppId(config.getAppId());
         }

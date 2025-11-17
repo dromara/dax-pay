@@ -104,6 +104,11 @@ public class WechatPayConfigParam {
     @Schema(description = "备注")
     private String remark;
 
+    /** 商户号 */
+    @NotBlank(message = "商户号不可为空")
+    @Schema(description = "商户号")
+    private String mchNo;
+
     /** 商户AppId */
     @Schema(description = "商户AppId")
     @NotBlank(message = "商户AppId不可为空")

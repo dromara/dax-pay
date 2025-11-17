@@ -1,13 +1,13 @@
 package org.dromara.daxpay.channel.alipay.strategy.sub;
 
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
 import org.dromara.daxpay.channel.alipay.service.payment.sync.AlipayRefundSyncService;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.exception.OperationFailException;
-import org.dromara.daxpay.service.bo.sync.RefundSyncResultBo;
-import org.dromara.daxpay.service.entity.order.refund.RefundOrder;
-import org.dromara.daxpay.service.strategy.AbsSyncRefundOrderStrategy;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.common.exception.OperationFailException;
+import org.dromara.daxpay.payment.pay.bo.sync.RefundSyncResultBo;
+import org.dromara.daxpay.payment.pay.entity.order.refund.RefundOrder;
+import org.dromara.daxpay.payment.pay.strategy.AbsSyncRefundOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -54,7 +54,7 @@ public class AlipaySubSyncRefundStrategy extends AbsSyncRefundOrderStrategy {
     }
 
     /**
-     * 异步支付单与支付网关进行状态比对后的结果
+     * 查询通道网关方的退款订单状态信息
      *
      */
     @Override

@@ -1,14 +1,14 @@
 package org.dromara.daxpay.channel.alipay.strategy.merchant;
 
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
 import org.dromara.daxpay.channel.alipay.service.payment.extra.AlipayAuthService;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.param.assist.AuthCodeParam;
-import org.dromara.daxpay.core.param.assist.GenerateAuthUrlParam;
-import org.dromara.daxpay.core.result.assist.AuthResult;
-import org.dromara.daxpay.core.result.assist.AuthUrlResult;
-import org.dromara.daxpay.service.strategy.AbsChannelAuthStrategy;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.unipay.param.assist.AuthCodeParam;
+import org.dromara.daxpay.payment.unipay.param.assist.GenerateAuthUrlParam;
+import org.dromara.daxpay.payment.unipay.result.assist.AuthResult;
+import org.dromara.daxpay.payment.unipay.result.assist.AuthUrlResult;
+import org.dromara.daxpay.payment.pay.strategy.AbsChannelAuthStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

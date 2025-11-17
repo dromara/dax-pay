@@ -1,11 +1,11 @@
 package org.dromara.daxpay.channel.alipay.strategy.merchant;
 
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
 import org.dromara.daxpay.channel.alipay.service.payment.refund.AlipayRefundService;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.bo.trade.RefundResultBo;
-import org.dromara.daxpay.service.strategy.AbsRefundStrategy;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.pay.bo.trade.RefundResultBo;
+import org.dromara.daxpay.payment.pay.strategy.AbsRefundStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

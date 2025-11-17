@@ -1,11 +1,11 @@
 package org.dromara.daxpay.channel.wechat.strategy.merchant;
 
-import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.service.payment.sync.transfer.WechatTransferSyncV3Service;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.bo.sync.TransferSyncResultBo;
-import org.dromara.daxpay.service.strategy.AbsSyncTransferOrderStrategy;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.pay.bo.sync.TransferSyncResultBo;
+import org.dromara.daxpay.payment.pay.strategy.AbsSyncTransferOrderStrategy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +36,7 @@ public class WechatSyncTransferStrategy extends AbsSyncTransferOrderStrategy {
     }
 
     /**
-     * 异步支付单与支付网关进行状态比对后的结果
+     * 查询通道网关方的退款订单状态信息
      *
      */
     @Override

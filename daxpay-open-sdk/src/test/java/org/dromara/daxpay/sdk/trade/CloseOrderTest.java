@@ -15,6 +15,7 @@ import org.junit.Test;
  * @since 2024/2/5
  */
 public class CloseOrderTest {
+    private DaxPayKit daxPayKit;
 
 
     @Before
@@ -24,9 +25,10 @@ public class CloseOrderTest {
                 .serviceUrl("http://127.0.0.1:19999")
                 .signSecret("123456")
                 .signType(SignTypeEnum.MD5)
+                .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();
-        DaxPayKit.initConfig(config);
+        this.daxPayKit =  new DaxPayKit(config);
     }
 
     /**
@@ -37,7 +39,7 @@ public class CloseOrderTest {
         PayCloseParam param = new PayCloseParam();
         param.setOrderNo("DEVP24051019404463000001");
         param.setClientIp("127.0.0.1");
-        DaxResult<Void> execute = DaxPayKit.execute(param);
+        DaxResult<Void> execute = daxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
     }
 
@@ -50,7 +52,7 @@ public class CloseOrderTest {
         param.setOrderNo("DEV_P2025041017085370000011");
         param.setClientIp("127.0.0.1");
         param.setUseCancel(true);
-        DaxResult<Void> execute = DaxPayKit.execute(param);
+        DaxResult<Void> execute = daxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
     }
 }

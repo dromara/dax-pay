@@ -1,7 +1,22 @@
 package org.dromara.daxpay.channel.wechat.service.payment.pay.merchant;
 
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import cn.bootx.platform.common.spring.exception.RetryableException;
-import cn.bootx.platform.core.util.JsonUtil;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
+import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
+import org.dromara.daxpay.payment.pay.enums.PayMethodEnum;
+import org.dromara.daxpay.payment.pay.enums.PayStatusEnum;
+import org.dromara.daxpay.payment.common.exception.MethodNotExistException;
+import org.dromara.daxpay.payment.pay.exception.TradeFailException;
+import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
+import org.dromara.daxpay.payment.unipay.result.trade.pay.PaySyncResult;
+import org.dromara.daxpay.payment.common.util.PayUtil;
+import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.payment.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.payment.pay.service.assist.PaymentAssistService;
+import org.dromara.daxpay.payment.pay.service.trade.pay.PaySyncService;
 import cn.hutool.extra.spring.SpringUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
@@ -13,26 +28,13 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
-import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
-import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
-import org.dromara.daxpay.core.enums.PayMethodEnum;
-import org.dromara.daxpay.core.enums.PayStatusEnum;
-import org.dromara.daxpay.core.exception.MethodNotExistException;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.core.param.trade.pay.PayParam;
-import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
-import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
-import org.dromara.daxpay.service.service.trade.pay.PaySyncService;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,6 +50,7 @@ public class WechatPayV3Service {
     private final WechatPayConfigService wechatPayConfigService;
 
     private final PaySyncService paySyncService;
+    private final PaymentAssistService paymentAssistService;
 
     /**
      * 调起支付
@@ -58,19 +61,19 @@ public class WechatPayV3Service {
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
         // wap支付
-        if (payMethodEnum == PayMethodEnum.WAP) {
-            payBody = this.wapPay(payOrder, config);
+        if (payMethodEnum == PayMethodEnum.WECHAT_H5) {
+            payBody = this.wapPay(payOrder, payParam, config);
         }
         // APP支付
-        else if (payMethodEnum == PayMethodEnum.APP) {
+        else if (payMethodEnum == PayMethodEnum.WECHAT_APP) {
             payBody = this.appPay(payOrder, config);
         }
         // 微信公众号支付或者小程序支付
-        else if (payMethodEnum == PayMethodEnum.JSAPI) {
+        else if (List.of(PayMethodEnum.WECHAT_JSAPI, PayMethodEnum.WECHAT_MINI).contains(payMethodEnum)) {
             payBody = this.jsPay(payOrder, payParam.getOpenId(), config);
         }
         // 二维码支付
-        else if (payMethodEnum == PayMethodEnum.QRCODE) {
+        else if (payMethodEnum == PayMethodEnum.WECHAT_QR) {
             payBody = this.qrCodePay(payOrder, config);
         }
         // 付款码支付
@@ -87,11 +90,11 @@ public class WechatPayV3Service {
     /**
      * wap支付
      */
-    private String wapPay(PayOrder payOrder, WechatPayConfig wechatPayConfig) {
+    private String wapPay(PayOrder payOrder, PayParam payParam, WechatPayConfig wechatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(wechatPayConfig);
         var request = this.buildRequest(payOrder);
         var sceneInfo = new WxPayUnifiedOrderV3Request.SceneInfo();
-        sceneInfo.setPayerClientIp(payOrder.getClientIp());
+        sceneInfo.setPayerClientIp(payParam.getClientIp());
         var h5Info = new WxPayUnifiedOrderV3Request.H5Info();
         h5Info.setType("Wap");
         sceneInfo.setH5Info(h5Info);
@@ -114,7 +117,7 @@ public class WechatPayV3Service {
         try {
             WxPayUnifiedOrderV3Result.AppResult result = wxPayService.createOrderV3(TradeTypeEnum.APP, request);
             Map<String, String> map = this.buildAppResult(result);
-            return JsonUtil.toJsonStr(map);
+            return JacksonUtil.toJson(map);
         } catch (WxPayException e) {
             log.error("微信V3程序支付失败", e);
             throw new TradeFailException("微信V3程序支付失败: "+e.getMessage());
@@ -133,7 +136,7 @@ public class WechatPayV3Service {
         try {
             WxPayUnifiedOrderV3Result.JsapiResult result = wxPayService.createOrderV3(TradeTypeEnum.JSAPI, request);
             Map<String, String> map = this.buildJsapiResult(result);
-            return JsonUtil.toJsonStr(map);
+            return JacksonUtil.toJson(map);
         } catch (WxPayException e) {
             log.error("微信V3JsApi支付失败", e);
             throw new TradeFailException("微信V3JsApi支付失败: "+e.getMessage());
@@ -212,12 +215,6 @@ public class WechatPayV3Service {
         payer.setAuthCode(authCode);
         request.setPayer(payer);
 
-        // 分账参数
-        if (payOrder.getAllocation()){
-            var settleInfo = new WxPayCodepayRequest.SettleInfo();
-            settleInfo.setProfitSharing(true);
-            request.setSettleInfo(settleInfo);
-        }
         try {
             // 发送请求
             var result = wxPayService.codepay(request);
@@ -251,11 +248,6 @@ public class WechatPayV3Service {
         request.setDescription(payOrder.getTitle());
         request.setOutTradeNo(payOrder.getOrderNo());
         request.setTimeExpire(WechatPayUtil.formatV3(payOrder.getExpiredTime()));
-        if (payOrder.getAllocation()){
-            var settleInfo = new WxPayUnifiedOrderV3Request.SettleInfo();
-            settleInfo.setProfitSharing(true);
-            request.setSettleInfo(settleInfo);
-        }
         request.setNotifyUrl(wechatPayConfigService.getPayNotifyUrl(false));
         request.setAmount(amount);
         return request;
@@ -268,6 +260,7 @@ public class WechatPayV3Service {
     @Async
     @Retryable(retryFor = RetryableException.class, maxAttempts = 10, backoff = @Backoff(value = 5000L))
     public void rotationSync(PayOrder payOrder) {
+        paymentAssistService.initMchAndApp(payOrder.getMchNo(), payOrder.getAppId());
         PaySyncResult paySyncResult = paySyncService.syncPayOrder(payOrder);
         // 不为支付中状态后, 调用系统同步更新状态, 支付状态则继续重试
         if (Objects.equals(PayStatusEnum.PROGRESS.getCode(), paySyncResult.getOrderStatus())) {

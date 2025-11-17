@@ -1,0 +1,44 @@
+package org.dromara.daxpay.payment.pay.event;
+
+import cn.bootx.platform.starter.redis.delay.annotation.DelayEventListener;
+import cn.bootx.platform.starter.redis.delay.annotation.DelayJobEvent;
+import org.dromara.daxpay.payment.common.code.DaxPayCode;
+import org.dromara.daxpay.payment.pay.dao.notice.callback.MerchantCallbackTaskManager;
+import org.dromara.daxpay.payment.pay.service.assist.PaymentAssistService;
+import org.dromara.daxpay.payment.pay.service.notice.callback.MerchantCallbackSendService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/**
+ * 商户通知事件服务类
+ * @author xxm
+ * @since 2024/8/18
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class MerchantNoticeEventService {
+
+    private final MerchantCallbackSendService merchantCallbackSendService;
+    private final MerchantCallbackTaskManager merchantCallbackTaskManager;
+    private final PaymentAssistService paymentAssistService;
+
+    /**
+     * 接受商户回调消息发送任务的延时消息
+     */
+    @DelayEventListener(DaxPayCode.Event.MERCHANT_CALLBACK_SENDER)
+    public void callbackReceiveJob(DelayJobEvent<Long> event){
+        // 获取任务
+        Long taskId = event.getMessage();
+        var taskOpt = merchantCallbackTaskManager.findByIdNotTenant(taskId);
+        if (taskOpt.isPresent()){
+            var task = taskOpt.get();
+            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+            merchantCallbackSendService.sendData(task,true);
+        } else {
+            log.error("商户回调发送任务不存在，任务ID：{}",taskId);
+        }
+    }
+
+}

@@ -1,14 +1,14 @@
 package org.dromara.daxpay.channel.wechat.strategy.sub;
 
-import cn.hutool.json.JSONUtil;
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
+import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.pay.strategy.AbsGatewayPayStrategy;
+import org.dromara.daxpay.payment.unipay.param.gateway.AggregateQrPayParam;
+import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.param.gateway.GatewayCashierPayParam;
-import org.dromara.daxpay.core.param.trade.pay.PayParam;
-import org.dromara.daxpay.service.strategy.AbsGatewayPayStrategy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,11 +26,11 @@ public class WechatSubGatewayPayStrategy extends AbsGatewayPayStrategy {
      * 支付参数处理
      */
     @Override
-    public void handlePayParam(GatewayCashierPayParam cashierPayParam, PayParam payParam) {
+    public void handlePayParam(AggregateQrPayParam cashierPayParam, PayParam payParam) {
         var wechatPayConfig = wechatPayConfigService.getAndCheckConfig(true);
         var wechatPayParam = new WechatPayParam();
         wechatPayParam.setOpenIdType(wechatPayConfig.getAuthType());
-        payParam.setExtraParam(JSONUtil.toJsonStr(wechatPayParam));
+        payParam.setExtraParam(JacksonUtil.toJson(wechatPayParam));
     }
 
     /**

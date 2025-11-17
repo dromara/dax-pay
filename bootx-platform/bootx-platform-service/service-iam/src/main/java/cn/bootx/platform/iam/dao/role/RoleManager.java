@@ -44,10 +44,6 @@ public class RoleManager extends BaseManager<RoleMapper, Role> {
         return existedByField(Role::getName, name, id);
     }
 
-    public boolean existsById(Long roleId) {
-        return lambdaQuery().eq(Role::getId, roleId).exists();
-    }
-
     public List<KeyValue> findDropdown() {
         return lambdaQuery().select(Role::getId, Role::getName)
             .list()

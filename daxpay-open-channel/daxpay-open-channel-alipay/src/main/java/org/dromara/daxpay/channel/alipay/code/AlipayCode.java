@@ -1,5 +1,9 @@
 package org.dromara.daxpay.channel.alipay.code;
 
+import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
+
 /**
  * 支付宝支付参数
  *
@@ -7,6 +11,16 @@ package org.dromara.daxpay.channel.alipay.code;
  * @since 2021/2/27
  */
 public interface AlipayCode {
+
+    /** 费率产品 */
+    Map<String, String> RATE_PRODUCT_MAP = ImmutableMap.of(
+            "qrCodeRate", "扫码支付费率",
+            "barCodeRate", "条码支付费率",
+            "pcRate", "电脑网站支付费率",
+            "mobileRate", "手机网站支付费率",
+            "appRate", "APP支付费率",
+            "jsapiRate", "Jsapi支付费率"
+    );
 
     /**
      * 支付网管地址

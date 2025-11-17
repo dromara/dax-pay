@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.dromara.daxpay</groupId>
         <artifactId>daxpay-open-channel</artifactId>
-        <version>3.0.0.beta5</version>
+        <version>3.1.0.beta2</version>
     </parent>
 
     <artifactId>daxpay-open-channel-wechat</artifactId>
@@ -20,6 +20,12 @@
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
             <version>${wxjava.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- 表格工具 -->
@@ -27,6 +33,12 @@
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-base</artifactId>
             <version>${easypoi.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

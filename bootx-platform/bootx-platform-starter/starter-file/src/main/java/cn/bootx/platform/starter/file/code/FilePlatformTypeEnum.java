@@ -1,7 +1,11 @@
 package cn.bootx.platform.starter.file.code;
 
+import cn.bootx.platform.core.exception.BizException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 存储平台类型
@@ -12,22 +16,32 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum FilePlatformTypeEnum {
-    LOCAL("local"),
-    FTP("ftp"),
-    SFTP("sftp"),
-    WEB_DAV("web_dav"),
-    AMAZON("amazon"),
-    MINIO("minio"),
-    ALI("ali"),
-    HUAWEI("huawei"),
-    TENCENT("tencent"),
-    BAIDU("baidu"),
-    UPYUN("upyun"),
-    QINIU("qiniu"),
-    GOOGLE_CLOUD("google_cloud"),
-    FAST_DFS("fast_dfs"),
-    AZURE("azure");
+    LOCAL("local",false),
+    FTP("ftp",false),
+    SFTP("sftp",false),
+    WEB_DAV("web_dav",false),
+    // S3 存储， 现在系统只支持这一种方式
+    AMAZON_S3("amazon-s3",true),
+    MINIO("minio",true),
+    ALI("ali",true),
+    HUAWEI("huawei",true),
+    TENCENT("tencent",true),
+    BAIDU("baidu",true),
+    UPYUN("upyun",true),
+    QINIU("qiniu",true),
+    GOOGLE_CLOUD("google_cloud",true),
+    FAST_DFS("fast_dfs",true),
+    AZURE("azure",true);
 
     private final String code;
+    /** 前端直传 */
+    private final boolean frontendUpload;
+
+    public static FilePlatformTypeEnum findByCode(String code){
+        return Arrays.stream(values())
+                .filter(e -> Objects.equals(e.code, code))
+                .findFirst()
+                .orElseThrow(() -> new BizException("不支持的类型"));
+    }
 
 }

@@ -1,14 +1,15 @@
 package org.dromara.daxpay.sdk.param.trade.refund;
 
+import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.response.DaxResult;
 import org.dromara.daxpay.sdk.result.trade.refund.RefundOrderResult;
-import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * 查询退款订单参数类
@@ -17,6 +18,8 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
+@Schema(title = "查询退款订单参数类")
 public class QueryRefundParam extends DaxPayRequest<RefundOrderResult> {
 
     /** 退款号 */

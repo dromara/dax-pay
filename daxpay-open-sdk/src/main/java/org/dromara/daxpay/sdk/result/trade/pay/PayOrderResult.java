@@ -1,8 +1,8 @@
 package org.dromara.daxpay.sdk.result.trade.pay;
 
+import org.dromara.daxpay.sdk.code.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.dromara.daxpay.sdk.code.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,14 +35,6 @@ public class PayOrderResult {
     /** 描述 */
     @Schema(description = "描述")
     private String description;
-
-    /** 是否支持分账 */
-    @Schema(description = "是否需要分账")
-    private Boolean allocation;
-
-    /** 是否开启自动分账, 不传输为不开启 */
-    @Schema(description = "是否开启自动分账")
-    private Boolean autoAllocation;
 
     /**
      * 支付通道
@@ -92,13 +84,6 @@ public class PayOrderResult {
      */
     @Schema(description = "退款状态")
     private String refundStatus;
-
-    /**
-     * 分账状态
-     * @see PayAllocStatusEnum
-     */
-    @Schema(description = "分账状态")
-    private String allocStatus;
 
     /** 支付时间 */
     @Schema(description = "支付时间")

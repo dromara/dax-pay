@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 微信支付工具类
@@ -126,9 +128,10 @@ public class WechatPayUtil {
     }
 
     /**
-     * v3接口时间序列画
+     * v3接口时间序列化
      */
     public LocalDateTime parseV3(String dateStr) {
         return LocalDateTimeUtil.parse(dateStr, "yyyy-MM-dd'T'HH:mm:ss+08:00");
     }
+
 }

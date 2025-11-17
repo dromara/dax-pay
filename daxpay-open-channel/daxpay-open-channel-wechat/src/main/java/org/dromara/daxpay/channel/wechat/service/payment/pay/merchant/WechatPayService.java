@@ -3,8 +3,8 @@ package org.dromara.daxpay.channel.wechat.service.payment.pay.merchant;
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
-import org.dromara.daxpay.core.enums.PayMethodEnum;
-import org.dromara.daxpay.core.param.trade.pay.PayParam;
+import org.dromara.daxpay.payment.pay.enums.PayMethodEnum;
+import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,11 +28,11 @@ public class WechatPayService {
         // 判断是否是支持的支付方式
         String method = payParam.getMethod();
         PayMethodEnum methodEnum = PayMethodEnum.findByCode(method);
-        if (!List.of(PayMethodEnum.APP,PayMethodEnum.BARCODE,PayMethodEnum.WAP,PayMethodEnum.QRCODE,PayMethodEnum.JSAPI).contains(methodEnum)) {
+        if (!List.of(PayMethodEnum.WECHAT_APP,PayMethodEnum.BARCODE,PayMethodEnum.WECHAT_APP,PayMethodEnum.WECHAT_QR,PayMethodEnum.WECHAT_JSAPI, PayMethodEnum.WECHAT_H5, PayMethodEnum.WECHAT_MINI).contains(methodEnum)) {
             throw new ValidationFailedException("不支持的支付方式");
         }
-        // 微信JSAPI支付
-        if (Objects.equals(payParam.getMethod(), PayMethodEnum.JSAPI.getCode())){
+        // 微信JSAPI/小程序支付
+        if (List.of(PayMethodEnum.WECHAT_JSAPI, PayMethodEnum.WECHAT_MINI).contains(methodEnum)) {
             if (Objects.isNull(payParam.getOpenId())) {
                 throw new ValidationFailedException("微信JSAPI支付必须传入openId参数");
             }

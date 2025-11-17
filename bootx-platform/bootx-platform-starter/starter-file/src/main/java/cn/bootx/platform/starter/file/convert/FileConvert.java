@@ -1,6 +1,7 @@
 package cn.bootx.platform.starter.file.convert;
 
 import cn.bootx.platform.starter.file.entity.UploadFileInfo;
+import cn.bootx.platform.starter.file.param.UploadFileInfoParam;
 import cn.bootx.platform.starter.file.result.UploadFileResult;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.mapstruct.Mapper;
@@ -18,6 +19,8 @@ public interface FileConvert {
     UploadFileResult convert(UploadFileInfo in);
 
     UploadFileInfo convert(FileInfo in);
+
+    UploadFileInfo convert(UploadFileInfoParam in);
 
     FileInfo toFileInfo(UploadFileInfo in);
 

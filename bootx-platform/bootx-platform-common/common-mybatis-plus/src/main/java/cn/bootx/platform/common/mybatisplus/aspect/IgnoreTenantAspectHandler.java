@@ -11,7 +11,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 /**
- * 忽略租户(商户)数据权限切面服务商
+ * 忽略租户(商户)数据权限切面
  * @author xxm
  * @since 2024/6/25
  */

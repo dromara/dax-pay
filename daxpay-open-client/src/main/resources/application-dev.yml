@@ -1,0 +1,159 @@
+spring:
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          # Postgresql连接
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://${DB_HOST:postgresql}:${DB_PORT:5432}/dax-pay-dev?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+          username: ${DB_USER:bootx}
+          password: ${DB_PASSWORD:bootx123}
+          # MySQL连接
+#          driver-class-name: com.mysql.cj.jdbc.Driver
+#          url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/dax-pay-open?serverTimezone=GMT%2B8&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&nullCatalogMeansCurrent=true
+#          username: ${DB_USER:root}
+#          password: ${DB_PASSWORD:bootx123}
+      hikari:
+        minimumIdle: 5 # 最小连接数
+        maximumPoolSize: 50 # 最大连接数
+        leak-detection-threshold: 5000 # 检测连接泄漏的时间阈值（毫秒）
+        connection-timeout: 30000 # 获取连接超时时间（毫秒）
+        idle-timeout: 600000      # 空闲连接超时时间（毫秒）
+        max-lifetime: 1800000     # 连接最大存活时间（毫秒）
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: 6379
+      database: 8
+      password: ${REDIS_PASSWORD:bootx123}
+      lettuce:
+        pool:
+          max-wait: 1000ms
+# 开发时显示debug日志
+logging:
+  level:
+    cn.bootx.**: debug
+    cn.daxpay.**: debug
+    org.springframework.jdbc.core: debug
+# 接口文档配置
+springdoc:
+  # 默认展开对象类型的属性, 主要用在get类型的参数中
+  default-flat-param-object: true
+# swagger 配置
+knife4j:
+  # 是否开启Knife4j增强模式
+  enable: true
+  # 是否生产环境
+  production: false
+# 基础脚手架配置
+bootx-platform:
+  common:
+    # swagger相关配置
+    swagger:
+      author: DaxPay
+      title: DaxPay支付平台
+      description: DaxPay支付平台-开源版
+      version: 3.1.0.beta2
+      base-packages:
+        "[BootxPlatform接口]":
+          - cn.bootx.platform.common
+          - cn.bootx.platform.starter
+          - cn.bootx.platform.iam
+          - cn.bootx.platform.baseapi
+          - cn.bootx.platform.notice
+        "[支付平台接口]":
+          - org.dromara.daxpay.controller
+        "[支付通道接口]":
+          - org.dromara.daxpay.channel
+  starter:
+    auth:
+      # 开启超级管理员
+      enable-admin: true
+      # 用户管理列表中是否显示超级管理员用户
+      admin-in-list: true
+      ignore-urls:
+        - '/actuator/**'
+        - '/v3/api-docs/**'
+        - '/doc.html'
+        - '/swagger-resources/**'
+        - '/token/**'
+        - '/ws/**'
+        - '/demo/**'
+        - '/test/**'
+        - '/webjars/**'
+        - '/front/**'
+        - '/h5/**'
+        - '/css/**'
+        - '/error'
+        - '/favicon.ico'
+dax-pay:
+  # 业务环境前缀(最长10位,字符和数字)，会影响系统订单号的生成
+  env: DAXDEV
+  # 机器码(2位字符和数字), 用于区分不同机器生成的流水号
+  machine-no: 70
+  # 启动证书认证配置
+  license-key:
+    # 证书方法
+    clazz: org.dromara.daxpay.monitor.util.EncryptUtil
+    # 获取证书密码
+    password-method: generateFixedPwd
+    # 获取证书公钥
+    public-key-method: getPublicKey
+  # 证书配置
+  key-config:
+    # 私钥配置
+    private-key: '-----BEGIN PRIVATE KEY-----
+      MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQClTNVpzrAL9IgQ
+      Z6HeV8Ov05gV9DLvgEVOxmxneCyaMLeAZBMyxs8Uvudw4QhPHercHLhg0Slhnoif
+      XI7tKO+/nm2gxcatfQzzYy9AN7A2BWcJZB8Yu4bWayzK3X9lRt9kXMTyiLwvk4o7
+      9x/STFcyraIFWepyBEg272z34gGk8PH8YTjkM8TJ2nwYuR0Xvs/HdEm1TzCugywZ
+      N2cgr/6OLfg3+marx5pRvizBWOAnabSEylCgWAld9TC4HRuItMGp4zX50d4QLuTY
+      RvZhdkOoRh3HKNurO3GbRKZjCXzzmZwY8E09O30CmhFZHcIZF8TylxCJ64HRh2x1
+      KH35lJojAgMBAAECggEAOR28XCwLzoW3Ahwc5UvkFPwDAAr6EqF60UZkrLfsiXat
+      4VIzBAeIBD4WkH1hNp06ysWtu95p8w4pXQ9JX48WkFp4vOW5ybZ85BhwejsDyxbA
+      zJDo4c3iQHKV7p7sZx0/EVmwv7EZfUL4r9GrECpKsvsmEb1I8g6iuUCvoVNZiBkf
+      BMy7bkDXJDJ/KYuRqEkfPfgqOOicJlXgjyiwtV9RN9SKErvnHo3kyt8RrSbCEYh2
+      y787gtPYf2U1XH674SAxd2Ki0rQ3CqHRjBUQGix7l8G5Hcv+TBJITNIktj8aJfu3
+      CvMnslQU9HEjbU8dMclywRSrjW839rym5lf+ptU/aQKBgQDJ6Bt5gsJlysy8P7ag
+      JlmQS0D5GmTx3GELLim1Uhbwwt6gCsQJf2l+0CnuEOBfJPGRdAUi35Tv8gDTG+9X
+      ai0wunNki6AHIfCtvY+zDxdgFtut1eIyq1ASFbAkW1jQRlXshVILAcU5GNjv8wOp
+      V9KcgkMGIsqGUdGb5drsbKDUPwKBgQDRlgtjktHXxDFsdkxUXCObCu6LevgdqgMH
+      qZ4mfui/NkTAuLFaFPddR+cmJNPPsy6MrHj97rZsPSTpaP0vQfJykFDlkm0xfBwv
+      dp41jLhWDN+OxsSs0eyoXptl3XUArsfipQ84tUODp9h86DoPs2oS39LuZj0DncY7
+      yXq1jCOxHQKBgFj603DfcXCOyV+E7KTzgbEXmRCu0yHLr3DP7U2dWcLM/nOlivNs
+      lT9v2aqzAU6s51Dkwoa15dtA2aAvxXDOuA+re8MpzWKXUIwg6D1PP0v3huS7R65w
+      1R7DNBcxsphHBwLvVlLHevVIwAIvJMPykjyrI4KGvp4nXKrJx4s97DrdAoGBAJab
+      401HuWH7C6UskYdhuvh0b51t3ZS7knfULODu++REZD21u0THoka3H+UqO8eatI3E
+      dyHLg+3eNoNAvghStJ4dFPUUN0GDNWHqNKC4odK8Z35bWgPyysTnT3ZxIN4/u0Yk
+      ZP7US1L1r716yBZ2UHiFvTcx4xCRNV3LWFHUBeYFAoGBAJKdUemy9ZFhtox7vLOG
+      U9EPScsh7xcyDcR8dEk+Ixjh8T8TnYjFxg4URAk7/uTki8WF9xcp6YntA92W22+J
+      Eje42gDW9bDb8I7BDlMigVCkM2A8cAsr3sHDdfo4N/PISL0dHpt2izEKWb6HZriK
+      AxnJl5/NyDmL/YfSVksVOZud
+      -----END PRIVATE KEY-----'
+    # 公钥配置
+    public-key: '-----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApUzVac6wC/SIEGeh3lfD
+      r9OYFfQy74BFTsZsZ3gsmjC3gGQTMsbPFL7ncOEITx3q3By4YNEpYZ6In1yO7Sjv
+      v55toMXGrX0M82MvQDewNgVnCWQfGLuG1mssyt1/ZUbfZFzE8oi8L5OKO/cf0kxX
+      Mq2iBVnqcgRINu9s9+IBpPDx/GE45DPEydp8GLkdF77Px3RJtU8wroMsGTdnIK/+
+      ji34N/pmq8eaUb4swVjgJ2m0hMpQoFgJXfUwuB0biLTBqeM1+dHeEC7k2Eb2YXZD
+      qEYdxyjbqztxm0SmYwl885mcGPBNPTt9ApoRWR3CGRfE8pcQieuB0YdsdSh9+ZSa
+      IwIDAQAB
+      -----END PUBLIC KEY-----'
+dromara:
+  x-file-storage:
+    default-platform: amazon-s3
+    # 文件存储都是用S3协议方式存储
+    amazon-s3:
+      - platform: amazon-s3 # 存储平台标识
+        enable-storage: true  # 启用存储
+        access-key: ${OSS_SECRET_ID:lwnS2DEQzveX3fIpRJBP}
+        secret-key: ${OSS_SECRET_KEY:LcBdOJzqD57wSXK9hxGlrnCgmojNpWET4I2yaekf}
+        end-point: ${OSS_DOMAIN:http://192.168.1.229:9000} #文件存储服务地址, 不要添加/后缀,
+        bucket-name: ${OSS_BUKET:daxpay} # 桶名称，不要添加/后缀
+        base-path: file/ # 基础路径, 不要添加/前缀, 但需要添加/后缀
+        region: ${OSS_REGION:''}
+        attr:
+          # 开启路径样式访问, 不配置默认为二级域名方式
+          forcePathStyle: true

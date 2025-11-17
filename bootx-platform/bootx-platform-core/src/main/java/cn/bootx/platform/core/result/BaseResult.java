@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-public class BaseResult {
+public class BaseResult{
 
     @Schema(description = "主键")
     private Long id;

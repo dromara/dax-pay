@@ -3,13 +3,13 @@ package org.dromara.daxpay.channel.alipay.service.payment.pay;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
 import org.dromara.daxpay.channel.alipay.param.pay.AlipayParam;
-import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
-import org.dromara.daxpay.core.enums.PayMethodEnum;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.core.param.trade.pay.PayParam;
-import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
+import org.dromara.daxpay.payment.common.util.PayUtil;
+import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.payment.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.payment.pay.enums.PayMethodEnum;
+import org.dromara.daxpay.payment.pay.exception.TradeFailException;
+import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
@@ -57,23 +58,23 @@ public class AliPayService {
         // 异步线程存储
         PayResultBo payResult = new PayResultBo();
         // wap支付
-        if (Objects.equals(payOrder.getMethod(), PayMethodEnum.WAP.getCode())) {
+        if (Objects.equals(payOrder.getMethod(), PayMethodEnum.ALIPAY_H5.getCode())) {
             payBody = this.wapPay(amount, payOrder, aliPayConfig);
         }
         // 程序支付
-        else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.APP.getCode())) {
+        else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.ALIPAY_APP.getCode())) {
             payBody = this.appPay(amount, payOrder, aliPayConfig);
         }
         // pc支付
-        else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.WEB.getCode())) {
+        else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.ALIPAY_PC.getCode())) {
             payBody = this.webPay(amount, payOrder, aliPayConfig);
         }
         // jsapi支付
-        else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.JSAPI.getCode())) {
+        else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.ALIPAY_JSAPI.getCode())) {
             payBody = this.jsapiPay(amount, payOrder, payParam, aliPayParam, aliPayConfig);
         }
         // 二维码支付
-        else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.QRCODE.getCode())) {
+        else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.ALIPAY_QR.getCode())) {
             payBody = this.qrCodePay(amount, payOrder, aliPayConfig);
         }
         // 付款码支付, 付款码存在直接支付成功的情况, 所以返回结果特殊处理
@@ -100,12 +101,6 @@ public class AliPayService {
         // 过期时间
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setProductCode(AlipayCode.Products.QUICK_WAP_PAY);
-        // 是否分账
-        if (payOrder.getAllocation()){
-            ExtendParams extendParams = new ExtendParams();
-            extendParams.setRoyaltyFreeze(Boolean.TRUE.toString());
-            model.setExtendParams(extendParams);
-        }
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         // 特约商户调用
         if (aliPayConfig.isIsv()){
@@ -140,12 +135,6 @@ public class AliPayService {
         // 过期时间
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(amount);
-        // 是否分账
-        if (payOrder.getAllocation()){
-            ExtendParams extendParams = new ExtendParams();
-            extendParams.setRoyaltyFreeze(Boolean.TRUE.toString());
-            model.setExtendParams(extendParams);
-        }
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         // 特约商户调用
         if (aliPayConfig.isIsv()){
@@ -179,12 +168,6 @@ public class AliPayService {
         // 目前仅支持FAST_INSTANT_TRADE_PAY
         model.setProductCode(AlipayCode.Products.FAST_INSTANT_TRADE_PAY);
 
-        // 是否分账
-        if (payOrder.getAllocation()){
-            ExtendParams extendParams = new ExtendParams();
-            extendParams.setRoyaltyFreeze(Boolean.TRUE.toString());
-            model.setExtendParams(extendParams);
-        }
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         // 特约商户调用
         if (aliPayConfig.isIsv()){
@@ -225,12 +208,6 @@ public class AliPayService {
         }
 
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
-        // 是否分账
-        if (payOrder.getAllocation()){
-            ExtendParams extendParams = new ExtendParams();
-            extendParams.setRoyaltyFreeze(Boolean.TRUE.toString());
-            model.setExtendParams(extendParams);
-        }
         // 构造请求参数以调用接口
         AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
         // 特约商户调用
@@ -238,6 +215,8 @@ public class AliPayService {
             request.putOtherTextParam(AlipayConstants.APP_AUTH_TOKEN, aliPayConfig.getAppAuthToken());
         }
         request.setBizModel(model);
+        // 异步回调必须到当前系统中
+        request.setNotifyUrl(aliPayConfigService.getNotifyUrl(aliPayConfig.isIsv()));
         try {
             AlipayTradeCreateResponse response = aliPayConfigService.execute(request,aliPayConfig);
             this.verifyErrorMsg(response);
@@ -257,12 +236,6 @@ public class AliPayService {
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
         model.setTotalAmount(amount);
-        // 是否分账
-        if (payOrder.getAllocation()){
-            ExtendParams extendParams = new ExtendParams();
-            extendParams.setRoyaltyFreeze(Boolean.TRUE.toString());
-            model.setExtendParams(extendParams);
-        }
         // 过期时间
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
@@ -292,12 +265,6 @@ public class AliPayService {
         model.setOutTradeNo(payOrder.getOrderNo());
         model.setScene(AlipayCode.Products.BAR_CODE);
         model.setAuthCode(authCode);
-        // 是否分账
-        if (payOrder.getAllocation()){
-            ExtendParams extendParams = new ExtendParams();
-            extendParams.setRoyaltyFreeze(Boolean.TRUE.toString());
-            model.setExtendParams(extendParams);
-        }
         // 过期时间
         model.setTimeExpire(this.getAliTimeExpire(payOrder.getExpiredTime()));
         model.setTotalAmount(amount);
@@ -315,7 +282,9 @@ public class AliPayService {
                 Date gmtPayment = response.getGmtPayment();
                 result.setOutOrderNo(response.getTradeNo())
                         .setComplete(true)
-                        .setFinishTime(LocalDateTimeUtil.of(gmtPayment));
+                        .setFinishTime(LocalDateTimeUtil.of(gmtPayment))
+                        .setRealAmount(new BigDecimal(response.getBuyerPayAmount()))
+                        .setBuyerId(response.getBuyerOpenId());
             }
             // 非支付中响应码, 进行错误处理
             if (!Objects.equals(response.getCode(), AlipayCode.ResponseCode.INPROCESS)) {

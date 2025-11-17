@@ -1,18 +1,18 @@
 package org.dromara.daxpay.channel.wechat.strategy.sub;
 
 import cn.bootx.platform.common.jackson.util.JacksonUtil;
-import cn.hutool.core.util.StrUtil;
-import lombok.RequiredArgsConstructor;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.service.payment.pay.isv.WechatPaySubService;
 import org.dromara.daxpay.channel.wechat.service.payment.pay.isv.WechatPaySubV2Service;
 import org.dromara.daxpay.channel.wechat.service.payment.pay.isv.WechatPaySubV3Service;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.strategy.AbsPayStrategy;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.payment.pay.strategy.AbsPayStrategy;
+import cn.hutool.core.util.StrUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -68,10 +68,12 @@ public class WechatSubPayStrategy extends AbsPayStrategy {
      */
     @Override
     public PayResultBo doPayHandler() {
+        PayResultBo resultBo;
         if (Objects.equals(wechatPayConfig.getApiVersion(), WechatPayCode.API_V2)){
-            return wechatPayV2Service.pay(getOrder(), this.getPayParam(), wechatPayParam, wechatPayConfig);
+            resultBo = wechatPayV2Service.pay(getOrder(), this.getPayParam(), wechatPayParam, wechatPayConfig);
         } else {
-            return wechatPayV3Service.pay(getOrder(), this.getPayParam(), wechatPayParam, wechatPayConfig);
+            resultBo = wechatPayV3Service.pay(getOrder(), this.getPayParam(), wechatPayParam, wechatPayConfig);
         }
+        return resultBo;
     }
 }

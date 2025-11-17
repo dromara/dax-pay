@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "网关付款码支付参数")
+@Schema(title = "网关聚合付款码支付参数")
 public class AggregateBarPayParam extends DaxPayRequest<PayResult> {
 
     /** 商户订单号 */
@@ -55,14 +55,6 @@ public class AggregateBarPayParam extends DaxPayRequest<PayResult> {
     @Size(max = 128, message = "终端设备编码不可超过128位")
     @Schema(description = "终端设备编码")
     private String terminalNo;
-
-    /** 是否开启分账 */
-    @Schema(description = "是否开启分账")
-    private Boolean allocation;
-
-    /** 自动分账 */
-    @Schema(description = "自动分账")
-    private Boolean autoAllocation;
 
     /**
      * 限制用户支付类型, 目前支持限制信用卡

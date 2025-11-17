@@ -31,7 +31,7 @@ public class UserPathRouterCheck implements RouterCheck {
 
     @Override
     public int sortNo() {
-        return 10;
+        return 100;
     }
 
     @Override

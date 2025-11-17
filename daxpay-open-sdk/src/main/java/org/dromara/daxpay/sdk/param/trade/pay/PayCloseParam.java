@@ -6,16 +6,19 @@ import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * 支付关闭参数
  * @author xxm
  * @since 2023/12/17
  */
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
+@Schema(title = "支付关闭参数")
 public class PayCloseParam extends DaxPayRequest<Void> {
 
 

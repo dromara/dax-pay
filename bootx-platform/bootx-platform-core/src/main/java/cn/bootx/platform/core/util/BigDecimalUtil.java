@@ -20,14 +20,8 @@ public class BigDecimalUtil {
      * @return first > last =1 / first == last = 0 / first < last = -1
      */
     public int compareTo(BigDecimal first, BigDecimal last) {
-        BigDecimal newFirst = BigDecimal.ZERO;
-        BigDecimal newLast = BigDecimal.ZERO;
-        if (first != null) {
-            newFirst = first;
-        }
-        if (last != null) {
-            newLast = last;
-        }
+        BigDecimal newFirst = first != null ? first : BigDecimal.ZERO;
+        BigDecimal newLast = last != null ? last : BigDecimal.ZERO;
         return newFirst.compareTo(newLast);
     }
 

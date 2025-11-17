@@ -70,7 +70,7 @@ public class UserAdminController {
     @RequestPath("重置密码")
     @Operation(summary = "重置密码")
     @PostMapping("/restartPassword")
-    @OperateLog(title = "重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
+    @OperateLog(title = "重置密码", businessType = OperateLog.BusinessType.UPDATE)
     public Result<Void> restartPassword(@RequestBody @Validated RestartPwdParam param) {
         userAdminService.restartPassword(param.getUserId(), param.getNewPassword());
         return Res.ok();
@@ -79,7 +79,7 @@ public class UserAdminController {
     @RequestPath("批量重置密码")
     @Operation(summary = "批量重置密码")
     @PostMapping("/restartPasswordBatch")
-    @OperateLog(title = "批量重置密码", businessType = OperateLog.BusinessType.UPDATE, saveParam = true)
+    @OperateLog(title = "批量重置密码", businessType = OperateLog.BusinessType.UPDATE)
     public Result<Void> restartPasswordBatch(@RequestBody @Validated RestartPwdBatchParam param) {
         userAdminService.restartPasswordBatch(param.getUserIds(), param.getNewPassword());
         return Res.ok();

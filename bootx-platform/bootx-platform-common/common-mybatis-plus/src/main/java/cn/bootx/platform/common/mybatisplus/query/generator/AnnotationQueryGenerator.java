@@ -1,5 +1,6 @@
 package cn.bootx.platform.common.mybatisplus.query.generator;
 
+import cn.bootx.platform.common.mybatisplus.function.CollectorsFunction;
 import cn.bootx.platform.core.annotation.QueryParam;
 import cn.bootx.platform.common.mybatisplus.query.entity.SortParam;
 import cn.bootx.platform.common.mybatisplus.query.function.QueryBetween;
@@ -49,8 +50,7 @@ public class AnnotationQueryGenerator {
 
         // 读取实体类对象的字段
         Map<String, PropertyDescriptor> entityClassPropMap = Arrays.stream(BeanUtil.getPropertyDescriptors(clazz))
-            .collect(Collectors.toMap(PropertyDescriptor::getName, Function.identity(),
-                    (v1, v2) -> v1));
+            .collect(Collectors.toMap(PropertyDescriptor::getName, Function.identity(), CollectorsFunction::retainFirst));
 
         // 遍历参数上的对象, 生成查询构造器条件
         for (PropertyDescriptor paramProp : paramClassProps) {

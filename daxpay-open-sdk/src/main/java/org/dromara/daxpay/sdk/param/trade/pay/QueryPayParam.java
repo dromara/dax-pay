@@ -1,22 +1,25 @@
 package org.dromara.daxpay.sdk.param.trade.pay;
 
+import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.response.DaxResult;
 import org.dromara.daxpay.sdk.result.trade.pay.PayOrderResult;
-import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
- * 支付单查询参数
+ * 支付查询参数
  * @author xxm
  * @since 2024/1/16
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
+@Schema(title = "支付查询参数")
 public class QueryPayParam extends DaxPayRequest<PayOrderResult> {
 
 

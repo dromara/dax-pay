@@ -41,14 +41,16 @@ public class UserRoleService {
     private final UserRoleManager userRoleManager;
 
     /**
-     * 给用户分配角色, 可以忽略角色范围检查, 分配自身无权限进行分配的角色, 主要用于初始化业务场景
+     * 给用户分配角色, ignoreScopes = true 可以忽略角色范围检查, 分配自身无权限进行分配的角色, 主要用于初始化业务场景
      */
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(Long userId, List<Long> roleIds, boolean ignoreScopes) {
         // 判断是否越权
-        List<Long> roleIdsByUser = this.findRoleIdsByUser();
-        if (!ignoreScopes && !CollUtil.containsAll(roleIdsByUser, roleIds)){
-            throw new ValidationFailedException("角色分配超出了可分配的范围");
+        if (!ignoreScopes){
+            List<Long> roleIdsByUser = this.findRoleIdsByUser();
+            if (!CollUtil.containsAll(roleIdsByUser, roleIds)){
+                throw new ValidationFailedException("角色分配超出了可分配的范围");
+            }
         }
 
         // 先删除用户拥有的角色

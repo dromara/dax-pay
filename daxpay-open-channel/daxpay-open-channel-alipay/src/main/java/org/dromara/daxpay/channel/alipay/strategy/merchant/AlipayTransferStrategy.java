@@ -2,12 +2,12 @@ package org.dromara.daxpay.channel.alipay.strategy.merchant;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
 import org.dromara.daxpay.channel.alipay.service.payment.transfer.AlipayTransferService;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.param.trade.transfer.TransferParam;
-import org.dromara.daxpay.service.bo.trade.TransferResultBo;
-import org.dromara.daxpay.service.strategy.AbsTransferStrategy;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.unipay.param.trade.transfer.TransferParam;
+import org.dromara.daxpay.payment.pay.bo.trade.TransferResultBo;
+import org.dromara.daxpay.payment.pay.strategy.AbsTransferStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.dromara.daxpay.core.enums.TransferPayeeTypeEnum.*;
+import static org.dromara.daxpay.payment.pay.enums.TransferPayeeTypeEnum.*;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**

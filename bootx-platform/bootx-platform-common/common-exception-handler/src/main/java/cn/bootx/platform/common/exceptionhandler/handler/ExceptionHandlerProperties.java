@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties("bootx.common.exception")
+@ConfigurationProperties("bootx-platform.common.exception")
 public class ExceptionHandlerProperties {
 
     /** 是否显示详细异常信息 */

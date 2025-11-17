@@ -148,7 +148,7 @@ public class RoleQueryService {
         // 获取关联的角色和子角色
         List<RoleResult> unfold = TreeBuildUtil.unfold(tree, RoleResult::getChildren).stream()
                 .filter(role -> roleIds.contains(role.getId()))
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
         var list = new ArrayList<>(unfold);
         // 将子孙级别的角色移除, 只保留根角色
         for (var out : unfold) {

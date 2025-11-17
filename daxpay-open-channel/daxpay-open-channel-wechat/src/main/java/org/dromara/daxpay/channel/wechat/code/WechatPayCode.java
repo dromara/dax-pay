@@ -1,8 +1,11 @@
 package org.dromara.daxpay.channel.wechat.code;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 微信参数
@@ -17,11 +20,13 @@ public interface WechatPayCode {
 
     String API_V3 = "apiV3";
 
-    // OpenId类型
-    // 服务商
-    String SP_OPENID = "sp";
-    // 特约商户应用
-    String SUB_OPENID = "sub";
+    Map<String, String> RATE_PRODUCT_MAP = ImmutableMap.of(
+            "qrCodeRate", "扫码支付费率",
+            "barCodeRate", "条码支付费率",
+            "mobileRate", "手机网站支付费率",
+            "appRate", "APP支付费率",
+            "jsapiRate", "Jsapi支付费率"
+    );
 
 
     /**
@@ -48,5 +53,6 @@ public interface WechatPayCode {
     List<String> PRIMARY_API_DOMAIN =
             Collections.unmodifiableList(Arrays.asList("api.mch.weixin.qq.com", "api.wechatpay.cn"));
     String SECONDARY_API_DOMAIN = "api2.wechatpay.cn";
+
 
 }

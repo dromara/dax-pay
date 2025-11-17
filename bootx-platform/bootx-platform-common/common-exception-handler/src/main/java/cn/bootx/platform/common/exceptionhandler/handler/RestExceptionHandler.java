@@ -173,7 +173,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public Result<Void> handleNullPointerException(NullPointerException ex) {
         log.warn("空指针 ", ex);
-        return Res.response(CommonErrorCode.SYSTEM_ERROR, "数据错误", MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.SYSTEM_ERROR, "空数据错误", MDC.get(CommonCode.TRACE_ID));
     }
 
     /**
@@ -204,6 +204,9 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler(Throwable.class)
     public Result<Void> handleThrowable(Throwable ex) {
+        if (properties.isShowFullMessage()){
+            return Res.response(CommonErrorCode.SYSTEM_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+        }
         log.error("系统错误 {}", ex.getMessage(), ex);
         return Res.response(CommonErrorCode.SYSTEM_ERROR, "系统错误", MDC.get(CommonCode.TRACE_ID));
     }

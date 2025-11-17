@@ -47,7 +47,6 @@ public class UserAdminService {
 
     private final AuthProperties authProperties;
 
-
     /**
      * 分页查询
      */
@@ -143,8 +142,7 @@ public class UserAdminService {
 
         UserInfo userInfo = userInfoManager.findById(userId).orElseThrow(UserInfoNotExistsException::new);
         // 新密码进行加密
-        newPassword = BCrypt.hashpw(newPassword);
-        userInfo.setPassword(newPassword);
+        userInfo.setPassword(BCrypt.hashpw(newPassword));
         userInfoManager.updateById(userInfo);
     }
 
@@ -154,8 +152,7 @@ public class UserAdminService {
     @Transactional(rollbackFor = Exception.class)
     public void restartPasswordBatch(List<Long> userIds, String newPassword){
         // 新密码进行加密
-        String password = BCrypt.hashpw(newPassword);
-        userInfoManager.restartPasswordBatch(userIds,password);
+        userInfoManager.restartPasswordBatch(userIds,BCrypt.hashpw(newPassword));
     }
 
     /**

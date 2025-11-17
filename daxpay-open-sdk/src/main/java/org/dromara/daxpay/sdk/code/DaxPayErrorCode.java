@@ -57,9 +57,6 @@ public interface DaxPayErrorCode {
     /** 金额超过限额 */
     int AMOUNT_EXCEED_LIMIT = 20060;
 
-    /** 对账失败 */
-    int RECONCILE_FAIL = 20071;
-
     /** 操作失败 */
     int OPERATION_FAIL = 20080;
 

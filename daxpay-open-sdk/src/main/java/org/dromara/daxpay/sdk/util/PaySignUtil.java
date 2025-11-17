@@ -69,7 +69,7 @@ public class PaySignUtil {
                         map.put(fieldName, datetime);
                     }
                     // map类型
-                    else if (Map.class.isAssignableFrom(field.getType())) {
+                    else if (Map.class.isAssignableFrom(field.getType()) || fieldValue instanceof Map) {
                         Map<String, String> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                         m.putAll((Map) fieldValue);
                         map.put(fieldName, JsonUtil.toJsonStr(m));
@@ -134,7 +134,6 @@ public class PaySignUtil {
         String s = content.toString();
         s = StrUtil.replace(s,"\\","");
         s = StrUtil.replace(s,"\"","");
-        s = s.toUpperCase();
         return s;
     }
 

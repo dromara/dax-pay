@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.alipay.service.payment.notice;
 
-import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
-import org.dromara.daxpay.core.util.PayUtil;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
+import org.dromara.daxpay.payment.common.util.PayUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

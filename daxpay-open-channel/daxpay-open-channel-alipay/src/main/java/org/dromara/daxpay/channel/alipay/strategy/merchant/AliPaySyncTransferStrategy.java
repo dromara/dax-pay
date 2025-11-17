@@ -1,11 +1,11 @@
 package org.dromara.daxpay.channel.alipay.strategy.merchant;
 
 import org.dromara.daxpay.channel.alipay.entity.config.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.service.payment.config.AlipayConfigService;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
 import org.dromara.daxpay.channel.alipay.service.payment.sync.AlipayTransferSyncService;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.bo.sync.TransferSyncResultBo;
-import org.dromara.daxpay.service.strategy.AbsSyncTransferOrderStrategy;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.pay.bo.sync.TransferSyncResultBo;
+import org.dromara.daxpay.payment.pay.strategy.AbsSyncTransferOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ public class AliPaySyncTransferStrategy extends AbsSyncTransferOrderStrategy {
     }
 
     /**
-     * 异步支付单与支付网关进行状态比对后的结果
+     * 查询通道网关方的退款订单状态信息
      */
     @Override
     public TransferSyncResultBo doSync() {

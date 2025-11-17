@@ -21,9 +21,9 @@ public class AlipayParam {
 
     /**
      * 新商户建议使用buyer_open_id替代该字段。对于新商户，buyer_id字段未来计划逐步回收，存量商户可继续使用
+     * 需要传输 buyer_open_id 字段的话，直接设置PayParam中的OpenId参数即可
      */
     @Schema(description = "买家支付宝用户ID")
     private String buyerId;
-
 
 }

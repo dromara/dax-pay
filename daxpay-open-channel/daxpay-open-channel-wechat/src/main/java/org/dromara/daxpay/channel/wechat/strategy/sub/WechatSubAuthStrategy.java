@@ -1,15 +1,16 @@
 package org.dromara.daxpay.channel.wechat.strategy.sub;
 
+import org.dromara.daxpay.channel.wechat.enums.WechatAuthTypeEnum;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.unipay.param.assist.AuthCodeParam;
+import org.dromara.daxpay.payment.unipay.param.assist.GenerateAuthUrlParam;
+import org.dromara.daxpay.payment.unipay.result.assist.AuthResult;
+import org.dromara.daxpay.payment.unipay.result.assist.AuthUrlResult;
+import org.dromara.daxpay.payment.pay.service.assist.WechatOpenAuthService;
+import org.dromara.daxpay.payment.pay.strategy.AbsChannelAuthStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.param.assist.AuthCodeParam;
-import org.dromara.daxpay.core.param.assist.GenerateAuthUrlParam;
-import org.dromara.daxpay.core.result.assist.AuthResult;
-import org.dromara.daxpay.core.result.assist.AuthUrlResult;
-import org.dromara.daxpay.service.service.assist.WechatOpenAuthService;
-import org.dromara.daxpay.service.strategy.AbsChannelAuthStrategy;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,7 +38,12 @@ public class WechatSubAuthStrategy extends AbsChannelAuthStrategy {
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
         var config = wechatPayConfigService.getAndCheckConfig(true);
-        return wechatAuthService.generateInnerAuthUrl(param.getAuthPath(),config.getAuthUrl(), this.getChannel(), config.getAppId(), config.getWxAppId(),config.getAppSecret());
+        if (param.getAuthType().equals(WechatAuthTypeEnum.SUB.getCode())) {
+            // 二级商户获取
+            return wechatAuthService.generateInnerAuthUrl(param.getAuthPath(), config.getAuthUrl(), this.getChannel(), param.getAppId(), config.getSubAppId(), config.getAppSecret());
+        } else {
+            return wechatAuthService.generateInnerAuthUrl(param.getAuthPath(), config.getAuthUrl(), this.getChannel(), param.getAppId(), config.getWxAppId(), config.getAppSecret());
+        }
     }
 
     /**
@@ -46,6 +52,11 @@ public class WechatSubAuthStrategy extends AbsChannelAuthStrategy {
     @Override
     public AuthResult doAuth(AuthCodeParam param) {
         var config = wechatPayConfigService.getAndCheckConfig(true);
-        return wechatAuthService.getTokenAndOpenId(param.getAuthCode(), config.getWxAppId(), config.getAppSecret());
+        if (param.getAuthType().equals(WechatAuthTypeEnum.SUB.getCode())){
+            // 二级商户获取
+            return wechatAuthService.getTokenAndOpenId(param.getAuthCode(), config.getSubAppId(), config.getAppSecret());
+        } else {
+            return wechatAuthService.getTokenAndOpenId(param.getAuthCode(), config.getWxAppId(), config.getAppSecret());
+        }
     }
 }

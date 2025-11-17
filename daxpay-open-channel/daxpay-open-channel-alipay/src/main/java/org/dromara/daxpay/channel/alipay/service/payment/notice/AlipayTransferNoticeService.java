@@ -1,16 +1,16 @@
 package org.dromara.daxpay.channel.alipay.service.payment.notice;
 
-import cn.bootx.platform.core.util.JsonUtil;
+import cn.bootx.platform.common.jackson.util.JacksonUtil;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.result.notice.AlipayOrderChangedResult;
-import org.dromara.daxpay.core.enums.CallbackStatusEnum;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.core.enums.TradeTypeEnum;
-import org.dromara.daxpay.core.enums.TransferStatusEnum;
-import org.dromara.daxpay.core.context.CallbackLocal;
-import org.dromara.daxpay.service.common.local.PaymentContextLocal;
-import org.dromara.daxpay.service.service.record.callback.TradeCallbackRecordService;
-import org.dromara.daxpay.service.service.trade.transfer.TransferCallbackService;
+import org.dromara.daxpay.payment.common.context.CallbackLocal;
+import org.dromara.daxpay.payment.pay.enums.CallbackStatusEnum;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
+import org.dromara.daxpay.payment.pay.enums.TradeTypeEnum;
+import org.dromara.daxpay.payment.pay.enums.TransferStatusEnum;
+import org.dromara.daxpay.payment.pay.local.PaymentContextLocal;
+import org.dromara.daxpay.payment.pay.service.record.callback.TradeCallbackRecordService;
+import org.dromara.daxpay.payment.pay.service.trade.transfer.TransferCallbackService;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,14 +50,14 @@ public class AlipayTransferNoticeService {
      */
     public String callback(Map<String, String> map) {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
-        callbackInfo.setRawData(JsonUtil.toJsonStr(map))
+        callbackInfo.setRawData(JacksonUtil.toJson(map))
                 .setChannel(ChannelEnum.ALIPAY.getCode())
                 .setCallbackType(TradeTypeEnum.TRANSFER);
 
         // 通过 biz_content 获取值
         try {
             String bizContent = map.get("biz_content");
-            var response = JsonUtil.toBean(bizContent, AlipayOrderChangedResult.class);
+            var response = JacksonUtil.toBean(bizContent, AlipayOrderChangedResult.class);
             callbackInfo.setCallbackData(BeanUtil.beanToMap(response));
             this.resolveData(response);
             return "success";

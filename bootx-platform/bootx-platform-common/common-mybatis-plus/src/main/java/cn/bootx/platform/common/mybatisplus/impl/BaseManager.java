@@ -1,5 +1,6 @@
 package cn.bootx.platform.common.mybatisplus.impl;
 
+import cn.bootx.platform.common.mybatisplus.extension.DaxLambdaQueryChainWrapper;
 import cn.bootx.platform.common.mybatisplus.util.MpUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -21,6 +22,7 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.yulichang.base.MPJBaseMapper;
 import com.github.yulichang.interfaces.MPJBaseJoin;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -40,6 +42,7 @@ import java.util.function.BiConsumer;
  * @author xxm
  * @since 2020/4/15 14:26
  */
+@Slf4j
 public class BaseManager<M extends MPJBaseMapper<T>, T> {
 
     /**
@@ -48,7 +51,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     protected final int public_BATCH_SIZE = 1000;
 
     /** 日志 */
-    protected final Log log = LogFactory.getLog(getClass());
+    protected final Log mpLog = LogFactory.getLog(getClass());
 
     @Getter
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -78,17 +81,6 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     @SuppressWarnings("unchecked")
     protected Class<T> currentModelClass() {
         return (Class<T>) ReflectionKit.getSuperClassGenericType(this.getClass(), BaseManager.class, 1);
-    }
-
-    /**
-     * 获取主键明
-     */
-    protected String getKeyProperty() {
-        TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
-        Assert.notNull(tableInfo, "错误:无法执行.因为找不到实体的 TableInfo 缓存!");
-        String keyProperty = tableInfo.getKeyProperty();
-        Assert.notEmpty(keyProperty, "错误:无法执行.因为无法从实体中找到主键的列!");
-        return keyProperty;
     }
 
     /*
@@ -121,7 +113,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
      * @return LambdaQueryWrapper 的包装类
      */
     public LambdaQueryChainWrapper<T> lambdaQuery() {
-        return ChainWrappers.lambdaQueryChain(getBaseMapper());
+        return new DaxLambdaQueryChainWrapper<>(getBaseMapper(), getEntityClass());
     }
 
     /**
@@ -230,7 +222,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
      * @return 操作结果
      */
     protected <E> boolean executeBatch(Collection<E> list, int batchSize, BiConsumer<SqlSession, E> consumer) {
-        return SqlHelper.executeBatch(getSqlSessionFactory(), this.log, list, batchSize, consumer);
+        return SqlHelper.executeBatch(getSqlSessionFactory(), this.mpLog, list, batchSize, consumer);
     }
 
     /**
@@ -252,7 +244,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
         Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
         String keyProperty = tableInfo.getKeyProperty();
         Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
-        return SqlHelper.saveOrUpdateBatch(getSqlSessionFactory(), this.currentMapperClass(), this.log, entityList, batchSize, (sqlSession, entity) -> {
+        return SqlHelper.saveOrUpdateBatch(getSqlSessionFactory(), this.currentMapperClass(), this.mpLog, entityList, batchSize, (sqlSession, entity) -> {
             Object idVal = tableInfo.getPropertyValue(entity, keyProperty);
             return StringUtils.checkValNull(idVal)
                     || CollectionUtils.isEmpty(sqlSession.selectList(getSqlStatement(SqlMethod.SELECT_BY_ID), entity));
@@ -331,7 +323,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
         if (CollUtil.isEmpty(idList)) {
             return new ArrayList<>(0);
         }
-        return baseMapper.selectBatchIds(idList);
+        return baseMapper.selectByIds(idList);
     }
 
     /**
@@ -361,7 +353,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
      * 判断指定id对象是否存在
      */
     public boolean existedById(Serializable id) {
-        String keyProperty = this.getKeyProperty();
+        String keyProperty = MpUtil.getKeyProperty(this.getEntityClass());
         return query().eq(keyProperty, id).exists();
     }
 
@@ -383,7 +375,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
      * @return 是否存在
      */
     public boolean existedByField(SFunction<T, ?> field, Object fieldValue, Serializable id) {
-        String keyProperty = this.getKeyProperty();
+        String keyProperty = MpUtil.getKeyProperty(this.getEntityClass());
         return query().eq(MpUtil.getColumnName(field), fieldValue).ne(keyProperty, id).exists();
     }
 

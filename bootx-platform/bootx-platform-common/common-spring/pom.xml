@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.bootx.platform</groupId>
         <artifactId>bootx-platform-common</artifactId>
-        <version>3.0.0.beta5</version>
+        <version>3.1.0.beta2</version>
     </parent>
 
     <artifactId>common-spring</artifactId>
@@ -33,6 +33,11 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-extra</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+        <!-- 使用 Apache HttpClient 5 作为http请求的底层 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -1,5 +1,10 @@
 package org.dromara.daxpay.channel.wechat.service.payment.close;
 
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.param.close.WxPayPartnerOrderReverseV3Request;
+import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
+import org.dromara.daxpay.payment.pay.exception.TradeFailException;
+import org.dromara.daxpay.payment.pay.entity.order.pay.PayOrder;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -7,11 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
-import org.dromara.daxpay.channel.wechat.param.clode.WxPayPartnerOrderReverseV3Request;
-import org.dromara.daxpay.channel.wechat.service.payment.config.WechatPayConfigService;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,7 +32,7 @@ public class WechatPaySubCloseV3Service {
     public void close(PayOrder payOrder, WechatPayConfig weChatPayConfig) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(weChatPayConfig);
         try {
-            wxPayService.closeOrderV3(payOrder.getOrderNo());
+            wxPayService.closePartnerOrderV3(payOrder.getOrderNo());
         } catch (WxPayException e) {
             log.error("微信关闭支付V3失败", e);
             throw new TradeFailException("微信退款V3失败: "+e.getMessage());
@@ -47,14 +47,14 @@ public class WechatPaySubCloseV3Service {
         try {
             WxPayConfig wxPayConfig = wxPayService.getConfig();
             // 设置公共属性
-            WxPayPartnerOrderReverseV3Request request = new WxPayPartnerOrderReverseV3Request();
+            var request = new WxPayPartnerOrderReverseV3Request();
             request.setSpMchId(wxPayConfig.getMchId());
             request.setSpAppid(wxPayConfig.getAppId());
             request.setSubMchId(config.getSubMchId());
             request.setSubAppid(wxPayConfig.getSubAppId());
 
             // 拼接参数请求路径并发送
-            String url = String.format("%s/v3/pay/transactions/out-trade-no/%s/reverse",
+            String url = String.format("%s/v3/pay/partner/transactions/out-trade-no/%s/reverse",
                     wxPayService.getPayBaseUrl(), payOrder.getOrderNo());
             wxPayService.postV3(url, GSON.toJson(request));
         } catch (WxPayException e) {

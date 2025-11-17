@@ -1,13 +1,15 @@
 package org.dromara.daxpay.channel.alipay.entity.config;
 
 import cn.bootx.platform.common.mybatisplus.function.ToResult;
-import cn.bootx.platform.core.util.JsonUtil;
+import cn.bootx.platform.common.mybatisplus.handler.DataEncryptTypeHandler;
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
 import org.dromara.daxpay.channel.alipay.convert.AlipayConfigConvert;
 import org.dromara.daxpay.channel.alipay.result.config.AlipayConfigResult;
-import org.dromara.daxpay.core.enums.ChannelEnum;
-import org.dromara.daxpay.service.entity.config.ChannelConfig;
+import org.dromara.daxpay.payment.merchant.common.entity.MchAppBaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Objects;
@@ -17,12 +19,11 @@ import java.util.Objects;
  * @author xxm
  * @since 2024/6/25
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class AliPayConfig implements ToResult<AlipayConfigResult> {
-
-    /** 主键 */
-    private Long id;
+@TableName(value = "pay_alipay_config", autoResultMap = true)
+public class AliPayConfig extends MchAppBaseEntity implements ToResult<AlipayConfigResult> {
 
     /** 是否为ISV商户(特约商户) */
     private boolean isv;
@@ -51,59 +52,35 @@ public class AliPayConfig implements ToResult<AlipayConfigResult> {
     private String alipayUserId;
 
     /** 支付宝公钥 */
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     public String alipayPublicKey;
 
     /** 应用私钥 */
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String privateKey;
 
     /** 应用公钥证书 */
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String appCert;
 
     /** 支付宝公钥证书 */
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String alipayCert;
 
     /** 支付宝CA根证书 */
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String alipayRootCert;
 
     /** 是否沙箱环境 */
     private boolean sandbox;
 
+    /** 商户号 */
+    private String mchNo;
+
     /** 商户AppId */
     private String appId;
 
-    public boolean getEnable() {
-        return Objects.equals(enable, true);
-    }
-
-    /**
-     * 转换为通道配置
-     */
-    public ChannelConfig toChannelConfig() {
-        var channelConfig = new ChannelConfig();
-        channelConfig.setId(this.getId());
-        channelConfig.setOutAppId(this.getAliAppId());
-        channelConfig.setAppId(this.getAppId());
-        channelConfig.setEnable(this.getEnable());
-        channelConfig.setChannel(this.isv?ChannelEnum.ALIPAY_ISV.getCode():ChannelEnum.ALIPAY.getCode());
-        var copy = AlipayConfigConvert.CONVERT.copy(this);
-        // 清空不需要序列化的字段
-        copy.setId(null).setAppId(null).setEnable(null).setAliAppId(null);
-        String jsonStr = JsonUtil.toJsonStr(copy);
-        channelConfig.setExt(jsonStr);
-        return channelConfig;
-    }
-
-    /**
-     * 从通道配置转换为支付宝配置
-     */
-    public static AliPayConfig convertConfig(ChannelConfig channelConfig) {
-        var config = JsonUtil.toBean(channelConfig.getExt(), AliPayConfig.class);
-        config.setId(channelConfig.getId())
-                .setAliAppId(channelConfig.getOutAppId())
-                .setAppId(channelConfig.getAppId())
-                .setEnable(channelConfig.isEnable());
-        return config;
-    }
+    
 
     @Override
     public AlipayConfigResult toResult() {

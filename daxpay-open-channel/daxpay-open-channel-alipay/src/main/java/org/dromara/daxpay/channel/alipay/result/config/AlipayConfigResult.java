@@ -79,6 +79,10 @@ public class AlipayConfigResult {
     @Schema(description = "是否沙箱环境")
     private boolean sandbox;
 
+    /** 商户号 */
+    @Schema(description = "商户号")
+    private String mchNo;
+
     /** 商户AppId */
     @Schema(description = "商户AppId")
     private String appId;

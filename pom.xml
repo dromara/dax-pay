@@ -5,7 +5,7 @@
 
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay</artifactId>
-    <version>3.0.0.beta5</version>
+    <version>3.1.0.beta2</version>
     <packaging>pom</packaging>
 
     <name>dax-pay-plus</name>
@@ -13,9 +13,9 @@
 
     <modules>
         <module>bootx-platform</module>
-        <module>daxpay-open</module>
+        <module>daxpay-open-payment</module>
         <module>daxpay-open-channel</module>
-        <module>daxpay-open-server</module>
+        <module>daxpay-open-client</module>
         <module>daxpay-open-sdk</module>
     </modules>
     <properties>

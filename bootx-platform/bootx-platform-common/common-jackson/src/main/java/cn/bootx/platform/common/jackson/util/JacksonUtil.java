@@ -8,6 +8,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * jackson常用工具类封装
@@ -126,6 +127,26 @@ public class JacksonUtil {
             }
         }
         catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("json反序列化失败");
+        }
+    }
+
+    /**
+     * 对象转为map
+     */
+    public Map<String, Object> parseObj(Object mchApply) {
+       return parseObj(mchApply,true);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object>  parseObj(Object mchApply, boolean ignoreNull) {
+        try {
+            if (ignoreNull) {
+                return ignoreNullObjectMapper.convertValue(mchApply, Map.class);
+            }
+            return objectMapper.convertValue(mchApply, Map.class);
+        } catch (IllegalArgumentException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("json反序列化失败");
         }

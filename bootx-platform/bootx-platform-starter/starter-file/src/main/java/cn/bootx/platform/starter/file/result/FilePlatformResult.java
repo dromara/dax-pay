@@ -36,4 +36,9 @@ public class FilePlatformResult extends BaseResult {
     /** 访问地址 */
     @Schema(description = "访问地址")
     private String url;
+
+    /** 前端直传 */
+    @Schema(description = "前端直传")
+    private Boolean frontendUpload;
+
 }

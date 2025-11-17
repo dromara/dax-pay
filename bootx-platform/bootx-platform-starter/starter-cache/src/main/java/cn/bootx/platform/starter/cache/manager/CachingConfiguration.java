@@ -2,7 +2,7 @@ package cn.bootx.platform.starter.cache.manager;
 
 import cn.bootx.platform.starter.cache.configuration.BootxRedisCacheManager;
 import cn.bootx.platform.starter.cache.configuration.CachingProperties;
-import cn.bootx.platform.common.serializer.KryoRedisSerializer;
+import cn.bootx.platform.common.redis.serializer.KryoRedisSerializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

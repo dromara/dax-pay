@@ -1,5 +1,6 @@
 package org.dromara.daxpay.channel.wechat.param.pay;
 
+import org.dromara.daxpay.channel.wechat.enums.WechatAuthTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -16,6 +17,7 @@ public class WechatPayParam {
 
     /**
      * 服务商模式下分为 1、用户服务标识 sp 2、用户子标识 sub
+     * @see WechatAuthTypeEnum
      */
     @Schema(description = "openid类型")
     private String openIdType;
