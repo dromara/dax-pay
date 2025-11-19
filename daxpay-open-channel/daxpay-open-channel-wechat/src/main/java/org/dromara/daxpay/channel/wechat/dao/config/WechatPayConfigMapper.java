@@ -1,6 +1,6 @@
 package org.dromara.daxpay.channel.wechat.dao.config;
 
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfigEntity;
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,6 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2021/3/1
  */
 @Mapper
-public interface WechatPayConfigMapper extends MPJBaseMapper<WechatPayConfig> {
+public interface WechatPayConfigMapper extends MPJBaseMapper<WechatPayConfigEntity> {
 
 }

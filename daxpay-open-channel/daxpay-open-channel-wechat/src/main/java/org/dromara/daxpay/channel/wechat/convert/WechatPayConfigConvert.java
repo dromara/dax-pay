@@ -1,6 +1,7 @@
 package org.dromara.daxpay.channel.wechat.convert;
 
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfigEntity;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPaySubConfig;
 import org.dromara.daxpay.channel.wechat.param.config.WechatPayConfigParam;
 import org.dromara.daxpay.channel.wechat.param.config.WechatPaySubConfigParam;
@@ -19,13 +20,15 @@ import org.mapstruct.factory.Mappers;
 public interface WechatPayConfigConvert {
     WechatPayConfigConvert CONVERT = Mappers.getMapper(WechatPayConfigConvert.class);
 
-    WechatPayConfigResult toResult(WechatPayConfig in);
+    WechatPayConfigResult toResult(WechatPayConfigEntity in);
 
-    WechatPayConfig copy(WechatPayConfig in);
+    WechatPayConfigEntity copy(WechatPayConfigEntity in);
 
-    WechatPayConfig toEntity(WechatPayConfigParam in);
+    WechatPayConfigEntity toEntity(WechatPayConfigParam in);
 
-    void copy(WechatPayConfigParam param, @MappingTarget WechatPayConfig subConfig);
+    void copy(WechatPayConfigParam param, @MappingTarget WechatPayConfigEntity subConfig);
 
     void copy(WechatPaySubConfigParam param, @MappingTarget WechatPaySubConfig subConfig);
+
+    WechatPayConfig toConfig(WechatPayConfigEntity payConfig);
 }

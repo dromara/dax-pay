@@ -23,14 +23,14 @@ import lombok.experimental.Accessors;
 @TableName(value = "pay_wechat_isv_config", autoResultMap = true)
 public class WechatIsvConfig extends MpBaseEntity implements ToResult<WechatIsvConfigResult> {
 
+    /** 是否启用 */
+    private boolean enable;
+
     /** 微信商户Id */
     private String wxMchId;
 
     /** 微信应用appId */
     private String wxAppId;
-
-    /** 是否启用 */
-    private boolean enable;
 
     /**
      * 接口版本, 使用v2还是v3接口

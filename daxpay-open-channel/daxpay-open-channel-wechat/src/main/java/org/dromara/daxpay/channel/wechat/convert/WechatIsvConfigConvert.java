@@ -26,5 +26,4 @@ public interface WechatIsvConfigConvert {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     void copy(WechatIsvConfigParam param, @MappingTarget WechatIsvConfig wechatIsvConfig);
-
 }

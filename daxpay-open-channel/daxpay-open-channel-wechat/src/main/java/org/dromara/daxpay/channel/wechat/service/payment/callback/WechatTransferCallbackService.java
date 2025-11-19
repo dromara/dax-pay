@@ -1,14 +1,13 @@
 package org.dromara.daxpay.channel.wechat.service.payment.callback;
 
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.result.transfer.WxPayTransferBatchesNotifyV3Result;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
+import org.dromara.daxpay.payment.common.context.CallbackLocal;
 import org.dromara.daxpay.payment.pay.enums.CallbackStatusEnum;
 import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
 import org.dromara.daxpay.payment.pay.enums.TradeTypeEnum;
 import org.dromara.daxpay.payment.pay.enums.TransferStatusEnum;
-import org.dromara.daxpay.payment.common.context.CallbackLocal;
 import org.dromara.daxpay.payment.pay.local.PaymentContextLocal;
 import org.dromara.daxpay.payment.pay.service.record.callback.TradeCallbackRecordService;
 import org.dromara.daxpay.payment.pay.service.trade.transfer.TransferCallbackService;
@@ -66,7 +65,7 @@ public class WechatTransferCallbackService {
         CallbackLocal callbackInfo = PaymentContextLocal.get().getCallbackInfo();
         callbackInfo.setChannel(isv? ChannelEnum.WECHAT_ISV.getCode():ChannelEnum.WECHAT.getCode())
                 .setCallbackType(TradeTypeEnum.TRANSFER);
-        WechatPayConfig config = wechatPayConfigService.getAndCheckConfig(isv);
+        var config = wechatPayConfigService.getAndCheckConfig(isv);
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
         // V3 回调接收处理
         String body = JakartaServletUtil.getBody(request);

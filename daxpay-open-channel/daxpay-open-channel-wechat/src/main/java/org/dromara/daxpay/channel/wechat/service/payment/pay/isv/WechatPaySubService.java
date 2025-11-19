@@ -1,8 +1,6 @@
 package org.dromara.daxpay.channel.wechat.service.payment.pay.isv;
 
 import cn.bootx.platform.core.exception.ValidationFailedException;
-import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
-import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
 import org.dromara.daxpay.payment.pay.enums.PayMethodEnum;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +23,7 @@ public class WechatPaySubService {
     /**
      * 校验
      */
-    public void validation(PayParam payParam, WechatPayParam wechatPayParam, WechatPayConfig weChatPayConfig) {
+    public void validation(PayParam payParam) {
         PayMethodEnum methodEnum = PayMethodEnum.findByCode(payParam.getMethod());
         if (!List.of(PayMethodEnum.WECHAT_APP,PayMethodEnum.BARCODE,PayMethodEnum.WECHAT_APP,PayMethodEnum.WECHAT_QR,PayMethodEnum.WECHAT_JSAPI, PayMethodEnum.WECHAT_H5, PayMethodEnum.WECHAT_MINI).contains(methodEnum)) {
             throw new ValidationFailedException("不支持的支付方式");

@@ -25,11 +25,11 @@ import java.util.Objects;
 @TableName(value = "pay_wechat_sub_config", autoResultMap = true)
 public class WechatPaySubConfig extends MchAppBaseEntity implements ToResult<WechatPaySubConfigResult> {
 
-    /** 微信特约商户号/二级商户号 */
-    private String subMchId;
-
     /** 是否启用 */
     private boolean enable;
+
+    /** 微信特约商户号/二级商户号 */
+    private String subMchId;
 
     /**
      * 授权类型

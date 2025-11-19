@@ -10,7 +10,6 @@ import org.dromara.daxpay.payment.isv.dao.config.IsvChannelConfigManager;
 import org.dromara.daxpay.payment.isv.dao.isv.IsvInfoManager;
 import org.dromara.daxpay.payment.isv.entity.config.IsvChannelConfig;
 import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import com.github.binarywang.wxpay.config.WxPayConfig;
@@ -50,7 +49,7 @@ public class WechatIsvConfigService {
             var entity = new WechatIsvConfig();
             entity.setIsvNo(isvInfo.getIsvNo());
             IsvChannelConfig channelConfig = new IsvChannelConfig()
-                    .setChannel(ChannelEnum.WECHAT.getCode())
+                    .setChannel(ChannelEnum.WECHAT_ISV.getCode())
                     .setIsvNo(isvInfo.getIsvNo());
             channelConfigManager.save(channelConfig);
             wechatIsvConfigManager.save(entity);
@@ -62,6 +61,7 @@ public class WechatIsvConfigService {
     /**
      * 更新
      */
+    @Transactional(rollbackFor = Exception.class)
     public void update(WechatIsvConfigParam param) {
         WechatIsvConfig wechatIsvConfig = wechatIsvConfigManager.findByIsvNo(param.getIsvNo())
                 .orElseThrow(() -> new DataNotExistException("微信服务商配置不存在"));

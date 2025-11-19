@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.wechat.enums;
 
-import org.dromara.daxpay.payment.pay.enums.RefundStatusEnum;
 import org.dromara.daxpay.payment.common.exception.ConfigNotExistException;
+import org.dromara.daxpay.payment.pay.enums.RefundStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

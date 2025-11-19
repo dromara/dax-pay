@@ -1,9 +1,15 @@
 package org.dromara.daxpay.channel.wechat.entity.config;
 
+import cn.bootx.platform.common.mybatisplus.function.ToResult;
 import org.dromara.daxpay.channel.wechat.code.WechatPayCode;
+import org.dromara.daxpay.channel.wechat.convert.WechatPayConfigConvert;
 import org.dromara.daxpay.channel.wechat.enums.WechatAuthTypeEnum;
+import org.dromara.daxpay.channel.wechat.result.config.WechatPayConfigResult;
+import org.dromara.daxpay.payment.merchant.common.entity.MchAppBaseEntity;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -12,9 +18,11 @@ import lombok.experimental.Accessors;
  * @author xxm
  * @since 2021/3/1
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class WechatPayConfig {
+@TableName(value = "pay_wechat_pay_config",autoResultMap = true)
+public class WechatPayConfigEntity extends MchAppBaseEntity implements ToResult<WechatPayConfigResult> {
 
     /** 是否启用 */
     private boolean enable;
@@ -24,12 +32,6 @@ public class WechatPayConfig {
 
     /** 微信应用appId */
     private String wxAppId;
-
-    /** 特约商户号 */
-    private String subMchId;
-
-    /** 子应用号 */
-    private String subAppId;
 
     /**
      * 授权类型
@@ -73,15 +75,14 @@ public class WechatPayConfig {
     /** p12证书Base64 */
     private String p12;
 
-    /** 商户号 */
-    private String mchNo;
-
-    /** 应用号 */
-    private String appId;
-
 
 
     public String getAuthUrl() {
         return StrUtil.removeSuffix(authUrl, "/");
+    }
+
+    @Override
+    public WechatPayConfigResult toResult() {
+        return WechatPayConfigConvert.CONVERT.toResult(this);
     }
 }

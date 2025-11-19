@@ -2,10 +2,10 @@ package org.dromara.daxpay.channel.wechat.service.payment.sync.transfer;
 
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
-import org.dromara.daxpay.payment.pay.enums.TransferStatusEnum;
 import org.dromara.daxpay.payment.common.util.PayUtil;
 import org.dromara.daxpay.payment.pay.bo.sync.TransferSyncResultBo;
 import org.dromara.daxpay.payment.pay.entity.order.transfer.TransferOrder;
+import org.dromara.daxpay.payment.pay.enums.TransferStatusEnum;
 import com.github.binarywang.wxpay.bean.merchanttransfer.MerchantDetailsQueryRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.MerchantTransferService;

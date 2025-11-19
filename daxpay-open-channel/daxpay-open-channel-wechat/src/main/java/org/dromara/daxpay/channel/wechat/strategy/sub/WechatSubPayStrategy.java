@@ -8,8 +8,8 @@ import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.service.payment.pay.isv.WechatPaySubService;
 import org.dromara.daxpay.channel.wechat.service.payment.pay.isv.WechatPaySubV2Service;
 import org.dromara.daxpay.channel.wechat.service.payment.pay.isv.WechatPaySubV3Service;
-import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
 import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
 import org.dromara.daxpay.payment.pay.strategy.AbsPayStrategy;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +60,7 @@ public class WechatSubPayStrategy extends AbsPayStrategy {
             this.wechatPayParam = new WechatPayParam();
         }
         this.wechatPayConfig = wechatPayConfigService.getAndCheckConfig(true);
-        wechatPayService.validation(this.getPayParam(), this.wechatPayParam, wechatPayConfig);
+        wechatPayService.validation(this.getPayParam());
     }
 
     /**

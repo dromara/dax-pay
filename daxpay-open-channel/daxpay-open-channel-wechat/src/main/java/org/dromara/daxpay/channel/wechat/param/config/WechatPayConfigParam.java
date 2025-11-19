@@ -31,18 +31,6 @@ public class WechatPayConfigParam {
     @Schema(description = "微信应用appId")
     private String wxAppId;
 
-    /** 特约商户号 */
-    @Schema(description = "特约商户号")
-    private String subMchId;
-
-    /** 子应用号 */
-    @Schema(description = "子应用号")
-    private String subAppId;
-
-    /** 是否为ISV商户(特约商户) */
-    @Schema(description = "是否为ISV商户(特约商户)")
-    private boolean isv;
-
     /** 是否启用 */
     @NotNull(message = "是否启用不可为空")
     @Schema(description = "是否启用")

@@ -2,8 +2,8 @@ package org.dromara.daxpay.channel.wechat.strategy.merchant;
 
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.service.payment.sync.transfer.WechatTransferSyncV3Service;
-import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
 import org.dromara.daxpay.payment.pay.bo.sync.TransferSyncResultBo;
+import org.dromara.daxpay.payment.pay.enums.ChannelEnum;
 import org.dromara.daxpay.payment.pay.strategy.AbsSyncTransferOrderStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;

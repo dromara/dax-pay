@@ -5,6 +5,7 @@ import org.dromara.daxpay.channel.wechat.convert.WechatPayConfigConvert;
 import org.dromara.daxpay.channel.wechat.dao.config.WechatPayConfigManager;
 import org.dromara.daxpay.channel.wechat.dao.config.WechatPaySubConfigManager;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
+import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfigEntity;
 import org.dromara.daxpay.channel.wechat.entity.config.WechatPaySubConfig;
 import org.dromara.daxpay.channel.wechat.enums.WechatAuthTypeEnum;
 import org.dromara.daxpay.channel.wechat.param.config.WechatPayConfigParam;
@@ -53,12 +54,12 @@ public class WechatPayConfigService {
     /**
      * 查询
      */
-    public WechatPayConfig findByAppId(String appId) {
+    public WechatPayConfigEntity findByAppId(String appId) {
         var optional = wechatPayConfigManager.findByAppId(appId);
         if (optional.isEmpty()){
             MchApp mchApp = mchAppManager.findByAppId(appId)
                     .orElseThrow(() -> new DataNotExistException("商户应用不存在"));
-            var payConfig = new WechatPayConfig();
+            var payConfig = new WechatPayConfigEntity();
             payConfig.setAppId(appId)
                     .setMchNo(mchApp.getMchNo())
                     .setIsvNo(mchApp.getIsvNo());
@@ -109,10 +110,8 @@ public class WechatPayConfigService {
         if (!onbMchInfoService.existsByOnbMchNo(param.getWxMchId(), payConfig.getMchNo(), ChannelEnum.WECHAT.getCode())) {
             throw new OperationFailException("你没有设置该子商户的权限!");
         }
-
         ChannelConfig channelConfig = channelConfigManager.findByAppIdAndChannel(param.getAppId(), ChannelEnum.WECHAT.getCode())
                 .orElseThrow(() -> new ConfigNotEnableException("微信支付配置不存在"));
-
         channelConfig.setEnable(param.getEnable());
         WechatPayConfigConvert.CONVERT.copy(param, payConfig);
         channelConfigManager.updateById(channelConfig);
@@ -143,7 +142,7 @@ public class WechatPayConfigService {
      */
     public WechatPayConfig getAndCheckConfig(boolean isv){
         var payConfig = this.getWechatPayConfig(isv);
-        if (!payConfig.getEnable()){
+        if (!payConfig.isEnable()){
             throw new ChannelNotEnableException("商户或服务商微信支付通道未启用");
         }
         return payConfig;
@@ -176,7 +175,8 @@ public class WechatPayConfigService {
             wechatPayConfig.setEnable(wechatPaySubConfig.isEnable()&&wechatIsvConfig.isEnable());
             return wechatPayConfig;
         } else {
-            return findByAppId(reqInfo.getAppId());
+            var wechatPayConfig = findByAppId(reqInfo.getAppId());
+            return WechatPayConfigConvert.CONVERT.toConfig(wechatPayConfig);
         }
     }
 

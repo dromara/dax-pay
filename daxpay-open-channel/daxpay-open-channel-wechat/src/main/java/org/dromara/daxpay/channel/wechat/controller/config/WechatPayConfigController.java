@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "微信支付配置")
 @RestController
 @RequestMapping("/wechat/pay/config")
-@RequestGroup(groupCode = "WechatPayConfig", groupName = "微信支付配置", moduleCode = "wechatPay", moduleName = "(DaxPay通道)微信支付")
+@RequestGroup(groupCode = "WechatPayConfigEntity", groupName = "微信支付配置", moduleCode = "wechatPay", moduleName = "(DaxPay通道)微信支付")
 @AllArgsConstructor
 public class WechatPayConfigController {
 

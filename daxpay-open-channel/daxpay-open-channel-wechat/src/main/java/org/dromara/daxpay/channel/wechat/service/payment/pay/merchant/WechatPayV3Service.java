@@ -6,17 +6,17 @@ import org.dromara.daxpay.channel.wechat.entity.config.WechatPayConfig;
 import org.dromara.daxpay.channel.wechat.param.pay.WechatPayParam;
 import org.dromara.daxpay.channel.wechat.service.config.WechatPayConfigService;
 import org.dromara.daxpay.channel.wechat.util.WechatPayUtil;
-import org.dromara.daxpay.payment.pay.enums.PayMethodEnum;
-import org.dromara.daxpay.payment.pay.enums.PayStatusEnum;
 import org.dromara.daxpay.payment.common.exception.MethodNotExistException;
-import org.dromara.daxpay.payment.pay.exception.TradeFailException;
-import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
-import org.dromara.daxpay.payment.unipay.result.trade.pay.PaySyncResult;
 import org.dromara.daxpay.payment.common.util.PayUtil;
 import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
 import org.dromara.daxpay.payment.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.payment.pay.enums.PayMethodEnum;
+import org.dromara.daxpay.payment.pay.enums.PayStatusEnum;
+import org.dromara.daxpay.payment.pay.exception.TradeFailException;
 import org.dromara.daxpay.payment.pay.service.assist.PaymentAssistService;
 import org.dromara.daxpay.payment.pay.service.trade.pay.PaySyncService;
+import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
+import org.dromara.daxpay.payment.unipay.result.trade.pay.PaySyncResult;
 import cn.hutool.extra.spring.SpringUtil;
 import com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
@@ -195,23 +195,23 @@ public class WechatPayV3Service {
      */
     private void barCodePay(PayOrder payOrder, String authCode, WechatPayConfig config, PayResultBo payResult) {
         WxPayService wxPayService = wechatPayConfigService.wxJavaSdk(config);
-        com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest request = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest();
+        WxPayCodepayRequest request = new WxPayCodepayRequest();
         request.setDescription(payOrder.getTitle());
         request.setOutTradeNo(payOrder.getOrderNo());
         // 金额
-        var amount = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest.Amount();
+        var amount = new WxPayCodepayRequest.Amount();
         amount.setTotal(PayUtil.convertCentAmount(payOrder.getAmount()));
         request.setAmount(amount);
 
         // 场景信息
-        var sceneInfo = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest.SceneInfo();
-        var storeInfo = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest.StoreInfo();
+        var sceneInfo = new WxPayCodepayRequest.SceneInfo();
+        var storeInfo = new WxPayCodepayRequest.StoreInfo();
         storeInfo.setOutId("1");
         sceneInfo.setStoreInfo(storeInfo);
         request.setSceneInfo(sceneInfo);
 
         // 付款码参数
-        var payer = new com.github.binarywang.wxpay.bean.request.WxPayCodepayRequest.Payer();
+        var payer = new WxPayCodepayRequest.Payer();
         payer.setAuthCode(authCode);
         request.setPayer(payer);
 
